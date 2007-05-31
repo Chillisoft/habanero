@@ -1,0 +1,272 @@
+using System;
+using System.IO;
+using Chillisoft.Bo.ClassDefinition.v2;
+using Chillisoft.Bo.Loaders.v2;
+using Chillisoft.Bo.v2;
+using Chillisoft.Generic.v2;
+using NUnit.Framework;
+
+namespace Chillisoft.Test.Bo.Loaders.v2
+{
+    /// <summary>
+    /// Summary description for TestXmlLoader.
+    /// </summary>
+    [TestFixture]
+    public class TestXmlClassLoader
+    {
+        private XmlClassLoader loader;
+
+        [SetUp]
+        public void SetupTest()
+        {
+            loader = new XmlClassLoader();
+            ClassDef.GetClassDefCol().Clear();
+        }
+
+        [Test, ExpectedException(typeof(FileNotFoundException), "The dtd for class was not found in ''.")]
+        public void TestInvalidXmlFormatWrongRootElement()
+        {
+            loader.LoadClass("<class name=\"TestClass\" assembly=\"Chillisoft.Test.Bo.Loaders.v2\" />");
+        }
+
+        //[
+        //    Test,
+        //        ExpectedException(typeof (UnknownTypeNameException),
+        //            "The type TestClassNoExist does not exist in assembly Chillisoft.Test.Bo.Loaders.v2")]
+        //public void TestLoadingNonExistantClass()
+        //{
+        //    ClassDef def = loader.LoadClass("<classDef name=\"TestClassNoExist\" assembly=\"Chillisoft.Test.Bo.Loaders.v2\" />");
+        //    Assert.IsNull( def.)
+        //}
+
+        //[
+        //    Test,
+        //        ExpectedException(typeof (UnknownTypeNameException),
+        //            "The assembly Chillisoft.Test.Bo.v2.NoExist could not be found")]
+        //public void TestLoadingNonExistantAssembly()
+        //{
+        //    loader.LoadClass("<classDef name=\"TestClass\" assembly=\"Chillisoft.Test.Bo.v2.NoExist\" />");
+        //}
+
+        [Test]
+        public void TestNoTableName()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
+<propertyDef name=""TestProp"" />
+					</classDef>
+			");
+            Assert.AreEqual("tbTestClass", def.TableName);
+        }
+
+        [Test]
+        public void TestTableName()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" tableName=""myTable"">
+<propertyDef name=""TestProp"" />
+					</classDef>
+			");
+            Assert.AreEqual("myTable", def.TableName);
+        }
+
+        [Test]
+        public void TestSupportsSynchronisation()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" supportsSynchronising=""true"">
+<propertyDef name=""TestProp"" />
+					</classDef>
+			");
+            Assert.IsTrue(def.SupportsSynchronising);
+        }
+
+
+        [Test]
+        public void TestSupportsSynchronisationDefault()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" >
+<propertyDef name=""TestProp"" />
+					</classDef>
+			");
+            Assert.IsFalse(def.SupportsSynchronising);
+        }
+
+        [Test]
+        public void TestTwoPropClass()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
+					<propertyDef name=""TestProp"" />
+					<propertyDef name=""TestProp2"" />
+				</classDef>
+			");
+            Assert.AreEqual(2, def.PropDefcol.Count);
+            Assert.AreEqual("TestClass", def.ClassName);
+        }
+
+        [Test]
+        public void TestClassWithPrimaryKeyDef()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
+					<propertyDef name=""TestProp"" />
+					<primaryKeyDef>
+						<prop name=""TestProp"" />
+					</primaryKeyDef>
+				</classDef>
+			");
+            Assert.IsNotNull(def.PrimaryKeyDef);
+            Assert.AreEqual(1, def.PrimaryKeyDef.Count);
+        }
+
+        [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
+        public void TestClassWithMoreThanOnePrimaryKeyDef()
+        {
+            loader.LoadClass(
+                @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
+					<propertyDef name=""TestProp"" />
+					<propertyDef name=""TestProp2"" />
+					<primaryKeyDef>
+						<prop name=""TestProp"" />
+					</primaryKeyDef>
+					<primaryKeyDef>
+						<prop name=""TestProp2"" />
+					</primaryKeyDef>
+				</classDef>
+			");
+        }
+
+        [Test]
+        public void TestClassWithKeyDefs()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
+					<propertyDef name=""TestProp"" />
+					<propertyDef name=""TestProp2"" />
+					<propertyDef name=""TestProp3"" />
+					<keyDef>
+						<prop name=""TestProp"" />
+					</keyDef>
+					<keyDef>
+						<prop name=""TestProp2"" />
+						<prop name=""TestProp3"" />
+					</keyDef>
+				</classDef>
+			");
+            Assert.AreEqual(2, def.KeysCol.Count);
+        }
+
+        [Test]
+        public void TestClassWithSingleRelationship()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
+					<propertyDef name=""TestProp"" />
+					<relationshipDef 
+						name=""TestRelationship"" 
+						type=""single"" 
+						relatedType=""TestRelatedClass"" 
+						relatedAssembly=""Chillisoft.Test.Bo.Loaders.v2""
+					>
+						<relKeyDef>
+							<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />
+						</relKeyDef>
+					</relationshipDef>
+				</classDef>
+			");
+            RelationshipDefCol relDefCol = def.RelationshipDefCol;
+            Assert.AreEqual(1, relDefCol.Count, "There should be one relationship def from the given xml definition");
+            Assert.IsNotNull(relDefCol["TestRelationship"],
+                             "'TestRelationship' should be the name of the relationship created");
+        }
+
+        [Test]
+        public void TestClassWithSuperClass()
+        {
+            ClassDef.GetClassDefCol().Clear();
+            ClassDef.LoadClassDefs(
+                new XmlClassDefsLoader(
+                    @"
+					<classDefs>
+						<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" >
+							<propertyDef name=""TestClassID"" />
+						</classDef>
+					</classDefs>",
+                    ""));
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestRelatedClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
+					<superClassDesc className=""TestClass"" assemblyName=""Chillisoft.Test.Bo.Loaders.v2"" />
+					<propertyDef name=""TestProp"" />
+				</classDef>
+			");
+            Assert.IsNotNull(def.SuperClassDesc);
+            Assert.AreSame(ClassDef.GetClassDefCol()[typeof (TestClass)], def.SuperClassDesc.SuperClassDef);
+        }
+
+        [Test]
+        public void TestClassWithUIDef()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
+					<propertyDef name=""TestProp"" />
+					<propertyDef name=""TestProp2"" />
+					<primaryKeyDef>
+						<prop name=""TestProp"" />
+					</primaryKeyDef>
+					<uiDef>
+						<uiFormDef>
+							<uiFormTab name=""testtab"">
+								<uiFormColumn>
+									<uiFormProperty label=""Test Prop"" propertyName=""TestProp"" />
+								</uiFormColumn>
+							</uiFormTab>
+						</uiFormDef>
+					</uiDef>
+				</classDef>
+			");
+            UIDef uiDef = def.UIDefCol["default"];
+            Assert.IsNotNull(uiDef);
+            Assert.IsNotNull(uiDef.UIFormDef);
+            Assert.IsNull(uiDef.UIGridDef);
+        }
+    }
+
+    public class TestClass : BusinessObjectBase
+    {
+        protected override ClassDef ConstructClassDef()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TestRelatedClass : BusinessObjectBase
+    {
+        protected override ClassDef ConstructClassDef()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

@@ -1,0 +1,44 @@
+namespace Chillisoft.Generic.v2
+{
+    /// <summary>
+    /// A basic lookup-list content provider that stores a collection of
+    /// string-Guid pairs as provided in the constructor.
+    /// A lookup-list is typically used to populate features like a ComboBox,
+    /// where the string would be displayed, but the Guid would be the
+    /// value stored (for reasons of data integrity).
+    /// </summary>
+    public class SimpleLookupListSource : ILookupListSource
+    {
+        private StringGuidPairCollection itsLookupListCollection;
+
+        /// <summary>
+        /// Constructor to initialise the provider with a specified
+        /// collection of string-Guid pairs
+        /// </summary>
+        /// <param name="collection">The string-Guid pair collection</param>
+        public SimpleLookupListSource(StringGuidPairCollection collection)
+        {
+            itsLookupListCollection = collection;
+        }
+
+        /// <summary>
+        /// Returns the lookup list contents being held
+        /// </summary>
+        /// <returns>Returns a StringGuidPairCollection object</returns>
+        public StringGuidPairCollection GetLookupList()
+        {
+            return itsLookupListCollection;
+        }
+
+        /// <summary>
+        /// Returns the lookup list contents being held
+        /// </summary>
+        /// <param name="connection">This can be set to null as it plays
+        /// no role</param>
+        /// <returns>Returns a StringGuidPairCollection object</returns>
+        public StringGuidPairCollection GetLookupList(IDatabaseConnection connection)
+        {
+            return itsLookupListCollection;
+        }
+    }
+}

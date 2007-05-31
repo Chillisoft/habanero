@@ -1,0 +1,52 @@
+using System;
+using Chillisoft.Bo.ClassDefinition.v2;
+using Chillisoft.Generic.v2;
+
+namespace Chillisoft.Bo.v2
+{
+    /// <summary>
+    /// Serves as a broker between the application and the database, by
+    /// loading a specified business object by its ID
+    /// </summary>
+    public class Broker
+    {
+        /// <summary>
+        /// Constructor to initialise a new instance of the broker
+        /// </summary>
+        public Broker()
+        {
+            //
+            // TODO: Add constructor logic here
+            //
+        }
+
+        /// <summary>
+        /// Returns a business object with the ID specified as a Guid
+        /// </summary>
+        /// <param name="id">The ID as a Guid</param>
+        /// <param name="classDef">The class definition</param>
+        /// <returns>Returns a business object or null if not found</returns>
+        public static BusinessObjectBase GetBusinessObjectWithGuid(Guid id, ClassDef classDef)
+        {
+            if (!classDef.PrimaryKeyDef.IsObjectID)
+            {
+                throw new CoreBizApplicationException(
+                    "GetBusinessObjectWithGuid can only be used for objects that use Guids as primary keys.");
+            }
+            else
+            {
+                string primaryKeyField = classDef.PrimaryKeyDef.KeyName;
+                BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(classDef);
+                col.Load(primaryKeyField + " = '" + id.ToString("B").ToUpper() + "'", "");
+                if (col.Count == 1)
+                {
+                    return col[0];
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+    }
+}

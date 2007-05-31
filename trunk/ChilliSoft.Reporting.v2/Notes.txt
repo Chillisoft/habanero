@@ -1,0 +1,7 @@
+REPORT DEFINITION COMPONENT
+
+SUMMARY
+This component consists of a series of report definition classes. These classes map one to one to an XML Schema for a report definition. This component has a heirarchical structure with the report class at the top level. To use this component the user must declare a report and initiate it with the file name of an XML file containing a report definition. The user can then use the data stored in the definition to dyanmically build up a report. This component can also be used to update the XML file so it can be used to capture and/or edit a report definition. This allows users to dynamically change their reports at runtime and to save their changes.
+
+ADDITIONAL NOTES
+This component can easily be extended to include new properties. It is important to keep the XML schema and this component in sync. This compenent was designed with the ComponentOne Reporting tool in mind as the report renderer. The aim was to make the definitions as generic and platform independent as possible but it is likely that some additions would be necessary when additional reporting tools attempt to use it. A new renderer would have to be created for each new reporting technology (see Report Rendering component).

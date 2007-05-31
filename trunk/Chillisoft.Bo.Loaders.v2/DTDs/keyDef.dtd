@@ -1,0 +1,6 @@
+#include Prop.dtd
+<!ELEMENT keyDef (prop+)>
+<!ATTLIST keyDef 
+	name NMTOKEN #IMPLIED
+	ignoreNulls ( true | false ) "false"
+>

@@ -1,0 +1,18 @@
+<!ELEMENT relationshipDef (relKeyDef)>
+<!ATTLIST relationshipDef
+	name NMTOKEN #REQUIRED
+	type (single | multiple) #REQUIRED
+	relatedType NMTOKEN #REQUIRED
+	relatedAssembly	NMTOKEN #REQUIRED
+	keepReferenceToRelatedObject ( true | false ) "true"
+	orderBy CDATA ""
+	minNoOfRelatedObjects NMTOKEN "0"
+	maxNoOfRelatedObjects NMTOKEN "-1"
+	deleteParentAction ( cbsDeleteRelatedObjects | cbsDereferenceRelatedObjects | cbsPreventDeleteParent ) "cbsPreventDeleteParent"
+>
+	<!ELEMENT relKeyDef (relProp+)>
+		<!ELEMENT relProp EMPTY>
+		<!ATTLIST relProp
+			name NMTOKEN #REQUIRED
+			relatedPropName NMTOKEN #REQUIRED
+		>

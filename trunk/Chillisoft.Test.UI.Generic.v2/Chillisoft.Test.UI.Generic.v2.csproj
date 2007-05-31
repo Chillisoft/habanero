@@ -1,0 +1,180 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F9D27258-1DC0-4BC8-B11F-964EB2F473BB}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Chillisoft.Test.UI.Generic.v2</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Chillisoft.Test.UI.Generic.v2</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Chillisoft.Test.UI.Generic.v2.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chillisoft.Bo.v2\Chillisoft.Bo.v2.csproj">
+      <Name>Chillisoft.Bo.v2</Name>
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Generic.v2\Chillisoft.Generic.v2.csproj">
+      <Name>Chillisoft.Generic.v2</Name>
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Test.Setup.v2\Chillisoft.Test.Setup.v2.csproj">
+      <Name>Chillisoft.Test.Setup.v2</Name>
+      <Project>{8C2A0CEB-BCC4-450A-A8E5-5E1A0E06D3F1}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.UI.Generic.v2\Chillisoft.UI.Generic.v2.csproj">
+      <Name>Chillisoft.UI.Generic.v2</Name>
+      <Project>{4AAB316F-B7CA-480D-B2E8-530D7992FDD5}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Util.v2\Chillisoft.Util.v2.csproj">
+      <Name>Chillisoft.Util.v2</Name>
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement">
+      <Name>Microsoft.ApplicationBlocks.ExceptionManagement</Name>
+      <HintPath>..\lib\Microsoft.ApplicationBlocks.ExceptionManagement.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces">
+      <Name>Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces</Name>
+      <HintPath>..\lib\Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.2.9.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TestBorderLayoutManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestButtonControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestCollectionGridDataProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestColumnLayoutManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestControlCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestControlFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDataViewFilterClauseFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDataViewFilterClauseFactoryWithStrings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestFilterControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestFilterInputBoxCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestFlowLayoutManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestGridLayoutManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestLayoutManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestWizard.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

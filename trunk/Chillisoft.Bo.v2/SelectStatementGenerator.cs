@@ -1,0 +1,148 @@
+using System.Collections;
+using Chillisoft.Bo.ClassDefinition.v2;
+using Chillisoft.Generic.v2;
+
+namespace Chillisoft.Bo.v2
+{
+    /// <summary>
+    /// Generates "select" sql statements to read a specified business
+    /// object's properties from the database
+    /// </summary>
+    public class SelectStatementGenerator
+    {
+        private readonly IDatabaseConnection itsConnection;
+        private BusinessObjectBase itsBo;
+        private ClassDef itsClassDef;
+
+        /// <summary>
+        /// Constructor to initialise the generator
+        /// </summary>
+        /// <param name="bo">The business object whose properties are to
+        /// be read</param>
+        /// <param name="classDef">The class definition</param>
+        /// <param name="connection">A database connection</param>
+        public SelectStatementGenerator(BusinessObjectBase bo, ClassDef classDef, IDatabaseConnection connection)
+        {
+            itsBo = bo;
+            itsClassDef = classDef;
+            itsConnection = connection;
+        }
+
+        /// <summary>
+        /// Constructor to initialise the generator
+        /// </summary>
+        /// <param name="bo">The business object whose properties are to
+        /// be read</param>
+        /// <param name="connection">A database connection</param>
+        public SelectStatementGenerator(BusinessObjectBase bo, IDatabaseConnection connection)
+            : this(bo, bo.ClassDef, connection)
+        {
+        }
+
+        /// <summary>
+        /// Generates a sql statement to read the business
+        /// object's properties from the database
+        /// </summary>
+        /// <param name="limit">The limit</param>
+        /// <returns>Returns a string</returns>
+        public string Generate(int limit)
+        {
+            IList classDefs = new ArrayList();
+            ClassDef currentClassDef = itsClassDef;
+            while (currentClassDef != null)
+            {
+                classDefs.Add(currentClassDef);
+                currentClassDef = currentClassDef.SuperClassDef;
+            }
+
+            string statement = "SELECT ";
+            if (limit > 0)
+            {
+                statement += " " + itsConnection.GetLimitClauseForBeginning(limit) + " ";
+            }
+
+            foreach (BOProp prop in itsBo.GetBOPropCol().Values)
+            {
+                string tableName = GetTableName(prop, classDefs);
+                statement += tableName + ".";
+                statement += itsConnection.LeftFieldDelimiter;
+                statement += prop.DataBaseFieldName;
+                statement += itsConnection.RightFieldDelimiter;
+                statement += ", ";
+            }
+
+            statement = statement.Remove(statement.Length - 2, 2);
+            currentClassDef = itsClassDef;
+            while (currentClassDef.IsUsingSingleTableInheritance())
+            {
+                currentClassDef = currentClassDef.SuperClassDef;
+            }
+            statement += " FROM " + currentClassDef.TableName;
+            string where = " WHERE ";
+
+            while (currentClassDef.IsUsingClassTableInheritance())
+            {
+                statement += ", " + currentClassDef.SuperClassDef.TableName;
+                foreach (DictionaryEntry entry in currentClassDef.SuperClassDef.PrimaryKeyDef)
+                {
+                    PropDef def = (PropDef) entry.Value;
+                    where += currentClassDef.SuperClassDef.TableName + "." + def.FieldName;
+                    where += " = " + currentClassDef.TableName + "." + def.FieldName;
+                    where += " AND ";
+                }
+                currentClassDef = currentClassDef.SuperClassDef;
+            }
+            if (where.Length > 7)
+            {
+                statement += where.Substring(0, where.Length - 5);
+            }
+
+            if (limit > 0)
+            {
+                statement += " " + itsConnection.GetLimitClauseForEnd(limit) + " ";
+            }
+            return statement;
+        }
+
+        /// <summary>
+        /// Returns the table name
+        /// </summary>
+        /// <param name="prop">The property</param>
+        /// <param name="classDefs">The class definitions</param>
+        /// <returns>Returns a string</returns>
+        private string GetTableName(BOProp prop, IList classDefs)
+        {
+            int i = 0;
+            bool isSingleTableInheritance = false;
+            do
+            {
+                ClassDef classDef = (ClassDef) classDefs[i];
+                if (classDef.IsUsingConcreteTableInheritance())
+                {
+                    return classDef.TableName;
+                }
+                else if (classDef.PropDefcol.Contains(prop.PropertyName))
+                {
+                    if (classDef.SuperClassDef == null || classDef.IsUsingClassTableInheritance())
+                    {
+                        return classDef.TableName;
+                    }
+                    else if (classDef.IsUsingSingleTableInheritance())
+                    {
+                        isSingleTableInheritance = true;
+                    }
+                }
+                else if (classDef.IsUsingSingleTableInheritance())
+                {
+                    isSingleTableInheritance = true;
+                }
+                else if (isSingleTableInheritance)
+                {
+                    return classDef.TableName;
+                }
+                i++;
+            } while (i < classDefs.Count);
+            return "";
+        }
+    }
+}

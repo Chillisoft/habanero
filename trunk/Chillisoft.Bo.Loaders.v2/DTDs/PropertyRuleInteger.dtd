@@ -1,0 +1,7 @@
+<!ELEMENT propertyRuleInteger EMPTY>
+<!ATTLIST propertyRuleInteger
+	name NMTOKEN #REQUIRED
+	isCompulsory ( true | false ) "false"
+  minValue CDATA ""
+  maxValue CDATA ""
+>

@@ -1,0 +1,206 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4F9E7C07-6FAF-4EE9-82C6-B43283E6E44E}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Chillisoft.UI.Application.v2</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Chillisoft.UI.Application.v2</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Chillisoft.UI.Application.v2.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement">
+      <Name>Microsoft.ApplicationBlocks.ExceptionManagement</Name>
+      <HintPath>..\lib\Microsoft.ApplicationBlocks.ExceptionManagement.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces">
+      <Name>Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces</Name>
+      <HintPath>..\lib\Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Chillisoft.Bo.Loaders.v2\Chillisoft.Bo.Loaders.v2.csproj">
+      <Project>{E48EDD73-DDC2-456F-87A6-F4F15209095E}</Project>
+      <Name>Chillisoft.Bo.Loaders.v2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Bo.v2\Chillisoft.Bo.v2.csproj">
+      <Name>Chillisoft.Bo.v2</Name>
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Db.v2\Chillisoft.Db.v2.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Chillisoft.Db.v2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Generic.v2\Chillisoft.Generic.v2.csproj">
+      <Name>Chillisoft.Generic.v2</Name>
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.UI.BOControls.v2\Chillisoft.UI.BOControls.v2.csproj">
+      <Name>Chillisoft.UI.BOControls.v2</Name>
+      <Project>{EF132B07-A901-4D5A-BF44-0C62DB2FCEC1}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.UI.Generic.v2\Chillisoft.UI.Generic.v2.csproj">
+      <Name>Chillisoft.UI.Generic.v2</Name>
+      <Project>{4AAB316F-B7CA-480D-B2E8-530D7992FDD5}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.UI.Misc.v2\Chillisoft.UI.Misc.v2.csproj">
+      <Name>Chillisoft.UI.Misc.v2</Name>
+      <Project>{D3B7DB18-F7CF-43C6-B194-02F343B6DB7E}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Util.v2\Chillisoft.Util.v2.csproj">
+      <Name>Chillisoft.Util.v2</Name>
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BoTabColControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DefaultBOCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DefaultBOEditor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EditableGridButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormController.cs" />
+    <Compile Include="HabaneroApp.cs" />
+    <Compile Include="MessageBoxOKCancelConfirmer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MultiSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MultiSelector.Designer.cs">
+      <DependentUpon>MultiSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReadOnlyGridButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ReadOnlyGridWithButtons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SimpleGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SimpleGridWithButtons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SimpleReadOnlyGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TreeViewTableEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ApplicationVersionUpgrader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MultiSelector.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MultiSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TreeViewTableEditor.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TreeViewTableEditor.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

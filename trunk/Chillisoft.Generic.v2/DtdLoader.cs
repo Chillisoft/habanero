@@ -1,0 +1,78 @@
+using System;
+using System.Collections;
+using System.IO;
+
+namespace Chillisoft.Generic.v2
+{
+    /// <summary>
+    /// Loads document type definitions (dtd's)
+    /// </summary>
+    public class DtdLoader
+    {
+        private ITextFileLoader itsTextFileLoader;
+        private readonly string itsDtdPath;
+
+        /// <summary>
+        /// Constructor to initialise a new loader with a specified dtd path
+        /// </summary>
+        /// <param name="dtdPath">The dtd path</param>
+        public DtdLoader(string dtdPath) : this(new TextFileLoader(), dtdPath)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise a new loader with a specific text file 
+        /// loader and a dtd path
+        /// </summary>
+        /// <param name="textFileLoader">The text file loader</param>
+        /// <param name="dtdPath">The dtd path</param>
+        public DtdLoader(ITextFileLoader textFileLoader, string dtdPath)
+        {
+            this.itsTextFileLoader = textFileLoader;
+            itsDtdPath = dtdPath;
+        }
+
+        /// <summary>
+        /// Loads a dtd from the file name provided
+        /// </summary>
+        /// <param name="fileName">The file name</param>
+        /// <returns>Returns a string containing the dtd</returns>
+        public string LoadDtd(string fileName)
+        {
+            return LoadDtd(fileName, new ArrayList());
+        }
+
+        /// <summary>
+        /// Loads a dtd from the file name provided
+        /// </summary>
+        /// <param name="fileName">The file name</param>
+        /// <param name="alreadyIncludedFiles">A list of files already
+        /// included</param>
+        /// <returns>Returns a string containing the dtd</returns>
+        private string LoadDtd(string fileName, IList alreadyIncludedFiles)
+        {
+            string dtd = "";
+            TextReader reader = itsTextFileLoader.LoadTextFile(fileName);
+            string line;
+            do
+            {
+                line = reader.ReadLine().Trim();
+                if (line.StartsWith("#include"))
+                {
+                    string fileToInclude = line.Substring(9);
+                    if (!alreadyIncludedFiles.Contains(fileToInclude))
+                    {
+                        alreadyIncludedFiles.Add(fileToInclude);
+                        dtd += LoadDtd(itsDtdPath + fileToInclude, alreadyIncludedFiles);
+                    }
+                }
+                else
+                {
+                    dtd += line;
+                    dtd += Environment.NewLine;
+                }
+            } while (reader.Peek() != -1);
+            return dtd;
+        }
+    }
+}

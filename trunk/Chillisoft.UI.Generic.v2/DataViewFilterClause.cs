@@ -1,0 +1,87 @@
+using Chillisoft.Generic.v2;
+
+namespace Chillisoft.UI.Generic.v2
+{
+    /// <summary>
+    /// A super-class for filter clauses
+    /// </summary>
+    public abstract class DataViewFilterClause : FilterClause
+    {
+        protected readonly object itsFilterValue;
+        protected readonly FilterClauseOperator itsClauseOperator;
+        protected readonly string itsFilterColumn;
+
+        /// <summary>
+        /// Constructor to create a new filter clause
+        /// </summary>
+        /// <param name="filterColumn">The filter column</param>
+        /// <param name="clauseOperator">The clause operator</param>
+        /// <param name="filterValue">The filter value</param>
+        protected DataViewFilterClause(string filterColumn, FilterClauseOperator clauseOperator, object filterValue)
+        {
+            itsFilterColumn = filterColumn;
+            itsClauseOperator = clauseOperator;
+            itsFilterValue = filterValue;
+        }
+
+        /// <summary>
+        /// Returns the full filter clause as a string
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        public string GetFilterClauseString()
+        {
+            return CreateColumnClause() + CreateOperatorClause() + CreateValueClause();
+        }
+
+        /// <summary>
+        /// Returns the value part of the clause
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        protected abstract string CreateValueClause();
+
+        /// <summary>
+        /// Returns the column part of the clause.  If the column contains any
+        /// spaces or dashes, it is surrounded by square brackets.
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        private string CreateColumnClause()
+        {
+            if (itsFilterColumn.IndexOf(' ') == -1 && itsFilterColumn.IndexOf('-') == -1)
+            {
+                return itsFilterColumn;
+            }
+            else
+            {
+                return "[" + itsFilterColumn + "]";
+            }
+        }
+
+        /// <summary>
+        /// Returns the operator in the clause as a string
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        private string CreateOperatorClause()
+        {
+            string opClause;
+            switch (itsClauseOperator)
+            {
+                case FilterClauseOperator.OpEquals:
+                    opClause = " = ";
+                    break;
+                case FilterClauseOperator.OpLike:
+                    opClause = " like ";
+                    break;
+                case FilterClauseOperator.OpGreaterThanOrEqualTo:
+                    opClause = " >= ";
+                    break;
+                case FilterClauseOperator.OpLessThanOrEqualTo:
+                    opClause = " <= ";
+                    break;
+                default:
+                    opClause = " <unsupported operator> ";
+                    break;
+            }
+            return opClause;
+        }
+    }
+}

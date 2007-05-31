@@ -1,0 +1,53 @@
+using System;
+using System.Windows.Forms;
+
+namespace Chillisoft.UI.Generic.v2
+{
+    /// <summary>
+    /// Provides a text field with a file path and a button to choose 
+    /// a new file path
+    /// </summary>
+    public class FileChooser : UserControl
+    {
+        private TextBox itsFileTextBox;
+        private Button itsSelectFileButton;
+
+        /// <summary>
+        /// Constructor to initialise a FileChooser, which consists of a
+        /// text field with a file path, and a button labelled "Select", which
+        /// allows the user to open a file dialog and choose a new file
+        /// </summary>
+        public FileChooser()
+        {
+            FlowLayoutManager manager = new FlowLayoutManager(this);
+            itsFileTextBox = ControlFactory.CreateTextBox();
+            itsSelectFileButton = ControlFactory.CreateButton("Select...", new EventHandler(SelectButtonClickHandler));
+            manager.AddControl(itsFileTextBox);
+            manager.AddControl(itsSelectFileButton);
+        }
+
+        /// <summary>
+        /// A handler that responds to the user pressing the "Select" button.
+        /// This opens a standard file dialog and the chosen file name is
+        /// stored in this instance.
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private void SelectButtonClickHandler(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                itsFileTextBox.Text = dialog.FileName;
+            }
+        }
+
+        /// <summary>
+        /// Returns the current file path
+        /// </summary>
+        public string SelectedFilePath
+        {
+            get { return itsFileTextBox.Text; }
+        }
+    }
+}

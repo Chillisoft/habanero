@@ -1,0 +1,17 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="Build\Debug\Chillisoft.Test.Bo.Loaders.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Test.Bo.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Test.Db.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Test.General.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Test.Generic.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Test.UI.Application.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Test.UI.BOControls.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Test.UI.Generic.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Test.Utilities.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Bo.v2.dll" />
+    <assembly path="Build\Debug\Chillisoft.Util.v2.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto" />
+</NUnitProject>
