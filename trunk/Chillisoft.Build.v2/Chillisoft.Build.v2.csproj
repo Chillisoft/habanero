@@ -227,6 +227,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy $(SolutionDir)Build\debug\*.* $(SolutionDir)bin\</PostBuildEvent>
+    <PostBuildEvent>copy $(SolutionDir)Build\debug\*.* $(SolutionDir)bin\
+$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
 </Project>

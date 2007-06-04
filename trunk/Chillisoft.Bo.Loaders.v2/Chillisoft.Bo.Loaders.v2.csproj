@@ -222,6 +222,6 @@
     <PreBuildEvent>
     </PreBuildEvent>
     <PostBuildEvent>$(ProjectDir)CopyDTDsToBuild.cmd $(ProjectDir) . $(ProjectDir)..\Build\Debug
-</PostBuildEvent>
+$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
 </Project>
