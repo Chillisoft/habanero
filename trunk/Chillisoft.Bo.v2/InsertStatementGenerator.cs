@@ -91,9 +91,10 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         private void GenerateSingleInsertStatement(bool includeAllProps, BOPropCol propsToInclude, string tableName)
         {
             this.initialiseStatement();
-            foreach (DictionaryEntry item in mBO.GetBOPropCol())
+
+            foreach (BOProp prop in mBO.GetBOPropCol().SortedValues)
             {
-                BOProp prop = (BOProp) item.Value;
+               // BOProp prop = (BOProp) item.Value;
                 if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
                 {
                     AddPropToInsertStatement(prop);

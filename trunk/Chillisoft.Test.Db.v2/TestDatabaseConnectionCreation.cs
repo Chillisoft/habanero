@@ -36,17 +36,17 @@ namespace Chillisoft.Test.Db.v2
                             "Namespace of SQL connection is wrong.");
         }
 
-        [Test]
-        public void TestCreateDatabaseConnectionOracle()
-        {
+        //[Test]
+        //public void TestCreateDatabaseConnectionOracle()
+        //{
 
-            DatabaseConnection conn =
-                new DatabaseConnectionOracle("Oracle.DataAccess", "Oracle.DataAccess.Client.OracleConnection");
-            conn.ConnectionString =
-                new DatabaseConfig(DatabaseConfig.Oracle, "test", "test", "test", "test", "1000").GetConnectionString();
-            Assert.AreEqual("Oracle.DataAccess.Client", conn.GetTestConnection().GetType().Namespace,
-                            "Namespace of Oracle connection is wrong.");
-        }
+        //    DatabaseConnection conn =
+        //        new DatabaseConnectionOracle("Oracle.DataAccess", "Oracle.DataAccess.Client.OracleConnection");
+        //    conn.ConnectionString =
+        //        new DatabaseConfig(DatabaseConfig.Oracle, "test", "test", "test", "test", "1000").GetConnectionString();
+        //    Assert.AreEqual("Oracle.DataAccess.Client", conn.GetTestConnection().GetType().Namespace,
+        //                    "Namespace of Oracle connection is wrong.");
+        //}
         
         [Test]
         public void TestCreateDatabaseConnectionOracleMicrosoft()

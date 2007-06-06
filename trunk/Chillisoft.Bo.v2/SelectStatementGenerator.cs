@@ -61,7 +61,7 @@ namespace Chillisoft.Bo.v2
                 statement += " " + itsConnection.GetLimitClauseForBeginning(limit) + " ";
             }
 
-            foreach (BOProp prop in itsBo.GetBOPropCol().Values)
+            foreach (BOProp prop in itsBo.GetBOPropCol().SortedValues)
             {
                 string tableName = GetTableName(prop, classDefs);
                 statement += tableName + ".";

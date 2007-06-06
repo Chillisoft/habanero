@@ -85,9 +85,8 @@ namespace Chillisoft.Bo.v2
             get
             {
                 string dirtlyXml = "<Properties>";
-                foreach (DictionaryEntry item in this)
+                foreach (BOProp prop in this.SortedValues )
                 {
-                    BOProp prop = (BOProp) item.Value;
                     if (prop.IsDirty)
                     {
                         dirtlyXml += prop.DirtyXml;
@@ -162,11 +161,18 @@ namespace Chillisoft.Bo.v2
         /// <summary>
         /// Returns a collection containing all the values being held
         /// </summary>
-        public ICollection Values
+        public ICollection  Values
         {
             get { return base.Dictionary.Values; }
         }
+
+        public IEnumerable SortedValues {
+            get { return new SortedList(base.Dictionary ).Values ;
+                }
+            }
+        
     }
+
 
     #region Tests
 
@@ -268,7 +274,7 @@ namespace Chillisoft.Bo.v2
             mProp.InitialiseProp("Prop3-new");
             Assert.IsFalse(mProp.IsDirty);
             string dirtyXml =
-                "<Properties><PropName><PreviousValue>Propn-Orig</PreviousValue><NewValue>PropName-new</NewValue></PropName><Prop2><PreviousValue>Prop2-Orig</PreviousValue><NewValue>Prop2-New</NewValue></Prop2>";
+                "<Properties><Prop2><PreviousValue>Prop2-Orig</PreviousValue><NewValue>Prop2-New</NewValue></Prop2><PropName><PreviousValue>Propn-Orig</PreviousValue><NewValue>PropName-new</NewValue></PropName>";
             Assert.AreEqual(dirtyXml, mBOPropCol.DirtyXml);
         }
 

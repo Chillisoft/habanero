@@ -1161,7 +1161,7 @@ namespace Chillisoft.Bo.v2
         {
             //TODO_ERR: check that dr open valid etc.
             int i = 0;
-            foreach (BOProp prop  in GetBOPropCol().Values)
+            foreach (BOProp prop  in GetBOPropCol().SortedValues )
             {
                 try
                 {

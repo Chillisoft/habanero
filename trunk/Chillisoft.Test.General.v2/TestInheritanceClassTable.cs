@@ -77,14 +77,14 @@ namespace Chillisoft.Test.General.v2
                             "Parameter ShapeID has incorrect value in first insert statement using class table inheritance");
             Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
                             "Parameter ShapeName has incorrect value in first insert statement using class table inheritance");
-            Assert.AreEqual("INSERT INTO tbCircle (Radius, ShapeID, CircleID) VALUES (?Param0, ?Param1, ?Param2)",
+            Assert.AreEqual("INSERT INTO tbCircle (CircleID, Radius, ShapeID) VALUES (?Param0, ?Param1, ?Param2)",
                             itsInsertSql[1].Statement.ToString(),
                             "Class Table inheritance: Second Sql statement is incorrect.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[1].Parameters[2]).Value,
+            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[1].Parameters[0]).Value,
                             "Parameter CircleID has incorrect value in second insert statement using class table inheritance.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[1].Parameters[1]).Value,
+            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[1].Parameters[2]).Value,
                             "Parameter ShapeID has incorrect value in second insert statement using class table inheritance.");
-            Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[1].Parameters[0]).Value,
+            Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[1].Parameters[1]).Value,
                             "Parameter Radius has incorrect value in second insert statement using class table inheritance.");
         }
 
@@ -140,7 +140,7 @@ namespace Chillisoft.Test.General.v2
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                "SELECT tbCircle.Radius, tbShape.ShapeID, tbCircle.CircleID, tbShape.ShapeName FROM tbCircle, tbShape WHERE tbShape.ShapeID = tbCircle.ShapeID AND CircleID = ?Param0",
+                "SELECT tbCircle.CircleID, tbCircle.Radius, tbShape.ShapeID, tbShape.ShapeName FROM tbCircle, tbShape WHERE tbShape.ShapeID = tbCircle.ShapeID AND CircleID = ?Param0",
                 selectSql.Statement.ToString(), "Select sql is incorrect for class table inheritance.");
             Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
                             "Parameter CircleID is incorrect in select where clause for class table inheritance.");

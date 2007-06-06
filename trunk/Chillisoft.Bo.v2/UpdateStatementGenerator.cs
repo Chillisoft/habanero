@@ -76,9 +76,8 @@ namespace Chillisoft.Bo.SqlGeneration.v2
             updateSQL = new SqlStatement(mConn);
             updateSQL.Statement.Append(@"UPDATE " + tableName + " SET ");
             int includedProps = 0;
-            foreach (DictionaryEntry item in mBO.GetBOPropCol())
+            foreach (BOProp prop in mBO.GetBOPropCol().SortedValues)
             {
-                BOProp prop = (BOProp) item.Value;
                 if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
                 {
                     if (prop.IsDirty &&

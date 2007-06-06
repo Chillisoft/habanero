@@ -38,14 +38,14 @@ namespace Chillisoft.Test.General.v2
         {
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert statement for concrete table inheritance.");
-            Assert.AreEqual("INSERT INTO tbCircle (Radius, CircleID, ShapeName) VALUES (?Param0, ?Param1, ?Param2)",
+            Assert.AreEqual("INSERT INTO tbCircle (CircleID, Radius, ShapeName) VALUES (?Param0, ?Param1, ?Param2)",
                             itsInsertSql[0].Statement.ToString(),
                             "Concrete Table Inheritance insert SQL seems to be incorrect.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
+            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
                             "Parameter CircleID has incorrect value");
             Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[2]).Value,
                             "Parameter ShapeName has incorrect value");
-            Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
+            Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
                             "Parameter Radius has incorrect value");
         }
 
@@ -80,7 +80,7 @@ namespace Chillisoft.Test.General.v2
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                "SELECT tbCircle.Radius, tbCircle.CircleID, tbCircle.ShapeName FROM tbCircle WHERE CircleID = ?Param0",
+                "SELECT tbCircle.CircleID, tbCircle.Radius, tbCircle.ShapeName FROM tbCircle WHERE CircleID = ?Param0",
                 selectSql.Statement.ToString(), "Select sql is incorrect for concrete table inheritance.");
             Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
                             "Parameter CircleID is incorrect in select where clause for concrete table inheritance.");

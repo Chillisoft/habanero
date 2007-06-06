@@ -72,7 +72,7 @@ namespace Chillisoft.Test.General.v2
         [Test]
         public void TestCircleSelectSql()
         {
-            Assert.AreEqual("SELECT tbShape.ShapeName, tbShape.Radius, tbShape.ShapeID, tbShape.Colour FROM tbShape",
+            Assert.AreEqual("SELECT tbShape.Colour, tbShape.Radius, tbShape.ShapeID, tbShape.ShapeName FROM tbShape",
                             itsSelectSql.Statement.ToString().Substring(0, 86),
                             "select statement is incorrect for Single Table inheritance");
         }
@@ -83,11 +83,11 @@ namespace Chillisoft.Test.General.v2
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
             Assert.AreEqual(
-                "INSERT INTO tbShape (ShapeName, Radius, ShapeID, Colour) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+                "INSERT INTO tbShape (Colour, Radius, ShapeID, ShapeName) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
                 itsInsertSql[0].Statement.ToString(), "Concrete Table Inheritance insert SQL seems to be incorrect.");
-            Assert.AreEqual(3, ((IDbDataParameter) itsInsertSql[0].Parameters[3]).Value,
+            Assert.AreEqual(3, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
                             "Parameter Colour has incorrect value");
-            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
+            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter) itsInsertSql[0].Parameters[3]).Value,
                             "Parameter ShapeName has incorrect value");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsInsertSql[0].Parameters[2]).Value,
                             "Parameter ShapeID has incorrect value");
@@ -101,11 +101,11 @@ namespace Chillisoft.Test.General.v2
             Assert.AreEqual(1, itsUpdateSql.Count,
                             "There should only be one update sql statement when using single table inheritance.");
             Assert.AreEqual(
-                "UPDATE tbShape SET ShapeName = ?Param0, Radius = ?Param1, ShapeID = ?Param2, Colour = ?Param3 WHERE ShapeID = ?Param4",
+                "UPDATE tbShape SET Colour = ?Param0, Radius = ?Param1, ShapeID = ?Param2, ShapeName = ?Param3 WHERE ShapeID = ?Param4",
                 itsUpdateSql[0].Statement.ToString());
-            Assert.AreEqual(3, ((IDbDataParameter) itsUpdateSql[0].Parameters[3]).Value,
+            Assert.AreEqual(3, ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
                             "Parameter Colour has incorrect value");
-            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
+            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter) itsUpdateSql[0].Parameters[3]).Value,
                             "Parameter ShapeName has incorrect value");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
                             "Parameter ShapeID has incorrect value");

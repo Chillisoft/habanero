@@ -13,6 +13,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <param name="dtdPath">The dtd path</param>
         public XmlPropertyRuleGuidLoader(string dtdPath) : base(dtdPath)
         {
+
         }
 
         /// <summary>
