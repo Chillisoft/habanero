@@ -3,7 +3,7 @@ using Chillisoft.Generic.v2;
 namespace Chillisoft.UI.Generic.v2
 {
     /// <summary>
-    /// Manages a null filter clause
+    /// Manages a null filter clause, which carries out no filtering of data
     /// </summary>
     public class DataViewNullFilterClause : FilterClause
     {

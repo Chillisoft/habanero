@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace Chillisoft.UI.Generic.v2
 {
     /// <summary>
-    /// Provides arguments relating to the enabling of a wizard step
+    /// Provides arguments relating to a filter control event
     /// </summary>
     public class FilterControlEventArgs : EventArgs
     {

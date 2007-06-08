@@ -94,6 +94,34 @@ namespace Chillisoft.Test.UI.Generic.v2
         }
 
         [Test]
+        public void TestAddBooleanFilterCheckBox()
+        {
+            CheckBox cb = filterControl.AddStringFilterCheckBox("Test?", "TestColumn", true);
+            FilterClause clause =
+                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "true");
+            Assert.AreEqual(clause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+            cb.Checked = false;
+            clause =
+                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "false");
+            Assert.AreEqual(clause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+        }
+
+        [Test]
+        public void TestAddStringFilterDateTimeEditor()
+        {
+            DateTime testDate = DateTime.Now;
+            DateTimePicker dtp1 = filterControl.AddStringFilterDateTimeEditor("test:", "testcolumn", testDate, true);
+            DateTimePicker dtp2 = filterControl.AddStringFilterDateTimeEditor("test:", "testcolumn", testDate, false);
+            FilterClause clause1 =
+                itsFilterClauseFactory.CreateStringFilterClause("testcolumn", FilterClauseOperator.OpGreaterThanOrEqualTo, testDate.ToString("yyyy/MM/dd"));
+            FilterClause clause2 =
+                itsFilterClauseFactory.CreateStringFilterClause("testcolumn", FilterClauseOperator.OpLessThanOrEqualTo, testDate.ToString("yyyy/MM/dd"));
+            FilterClause compClause =
+                itsFilterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+            Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+        }
+
+        [Test]
         public void TestMultipleFilters()
         {
             TextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");

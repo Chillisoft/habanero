@@ -3,7 +3,8 @@ using Chillisoft.Generic.v2;
 namespace Chillisoft.UI.Generic.v2
 {
     /// <summary>
-    /// A super-class for filter clauses
+    /// A super-class for filter clauses that filter which data to
+    /// display in a DataView, according to some criteria
     /// </summary>
     public abstract class DataViewFilterClause : FilterClause
     {
@@ -14,9 +15,10 @@ namespace Chillisoft.UI.Generic.v2
         /// <summary>
         /// Constructor to create a new filter clause
         /// </summary>
-        /// <param name="filterColumn">The filter column</param>
+        /// <param name="filterColumn">The column of data on which to do the
+        /// filtering</param>
         /// <param name="clauseOperator">The clause operator</param>
-        /// <param name="filterValue">The filter value</param>
+        /// <param name="filterValue">The filter value to compare to</param>
         protected DataViewFilterClause(string filterColumn, FilterClauseOperator clauseOperator, object filterValue)
         {
             itsFilterColumn = filterColumn;
@@ -60,6 +62,7 @@ namespace Chillisoft.UI.Generic.v2
         /// Returns the operator in the clause as a string
         /// </summary>
         /// <returns>Returns a string</returns>
+        /// TODO ERIC - shouldn't this throw an error on default?
         private string CreateOperatorClause()
         {
             string opClause;

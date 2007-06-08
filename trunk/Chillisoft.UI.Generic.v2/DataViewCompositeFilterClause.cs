@@ -3,7 +3,9 @@ using Chillisoft.Generic.v2;
 namespace Chillisoft.UI.Generic.v2
 {
     /// <summary>
-    /// Manages a composite filter clause
+    /// Manages a composite filter clause, which is composed of individual
+    /// filter clauses that filter which data to display in a DataView, 
+    /// according to some criteria
     /// </summary>
     public class DataViewCompositeFilterClause : FilterClause
     {

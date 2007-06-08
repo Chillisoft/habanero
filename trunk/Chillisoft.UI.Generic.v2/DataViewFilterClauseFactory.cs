@@ -3,16 +3,17 @@ using Chillisoft.Generic.v2;
 namespace Chillisoft.UI.Generic.v2
 {
     /// <summary>
-    /// Creates new filter clauses for different data types
+    /// Creates filter clauses that determine which rows of data are displayed
     /// </summary>
     public class DataViewFilterClauseFactory : FilterClauseFactory
     {
         /// <summary>
-        /// Create a new filter clause that filters string values
+        /// Creates a new filter clause that filters string values
         /// </summary>
-        /// <param name="filterColumn">The filter column</param>
+        /// <param name="filterColumn">The column of data on which to do the
+        /// filtering</param>
         /// <param name="clauseOperator">The clause operator</param>
-        /// <param name="filterValue">The filter value</param>
+        /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
         public FilterClause CreateStringFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
                                                      string filterValue)
@@ -21,11 +22,12 @@ namespace Chillisoft.UI.Generic.v2
         }
 
         /// <summary>
-        /// Create a new filter clause that filters integer values
+        /// Creates a new filter clause that filters integer values
         /// </summary>
-        /// <param name="filterColumn">The filter column</param>
+        /// <param name="filterColumn">The column of data on which to do the
+        /// filtering</param>
         /// <param name="clauseOperator">The clause operator</param>
-        /// <param name="filterValue">The filter value</param>
+        /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
         public FilterClause CreateIntegerFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
                                                       int filterValue)
@@ -34,10 +36,12 @@ namespace Chillisoft.UI.Generic.v2
         }
 
         /// <summary>
-        /// Create a new composite filter clause
+        /// Creates a new composite filter clause combining two given filter
+        /// clauses the operator provided
         /// </summary>
         /// <param name="leftClause">The left filter clause</param>
-        /// <param name="compositeOperator">The composite operator</param>
+        /// <param name="compositeOperator">The composite operator, such as
+        /// "and" or "or"</param>
         /// <param name="rightClause">The right filter clause</param>
         /// <returns>Returns the new filter clause object</returns>
         public FilterClause CreateCompositeFilterClause(FilterClause leftClause,
@@ -48,7 +52,7 @@ namespace Chillisoft.UI.Generic.v2
         }
 
         /// <summary>
-        /// Create a new null filter clause
+        /// Creates a new null filter clause, which does no filtering
         /// </summary>
         public FilterClause CreateNullFilterClause()
         {
