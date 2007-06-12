@@ -30,7 +30,7 @@ namespace Chillisoft.Test.UI.Application.v2
             ClassDef.GetClassDefCol.Clear();
             ClassDef classDef = MyBo.LoadClassDefWithNoLookup();
             BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(classDef);
-            bo1 = MyBo.Create(); //classDef.CreateNewBusinessObject();
+			bo1 = MyBo.Create(); //classDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp", "Value1");
             bo1.SetPropertyValue("TestProp2", "Value2");
             bo2 = MyBo.Create(); //classDef.CreateNewBusinessObject();

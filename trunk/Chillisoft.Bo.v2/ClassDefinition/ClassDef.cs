@@ -99,7 +99,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             //_SelectSql = "SELECT * FROM " + tableName;
             _ClassType = classType;
 			_ClassName = _ClassType.Name;
-			_AssemblyName = _ClassType.Assembly.FullName;
+			_AssemblyName = _ClassType.Assembly.ManifestModule.ScopeName;
 			if (tableName == null || tableName.Length == 0)
 				_TableName = "tb" + _ClassName;
             else

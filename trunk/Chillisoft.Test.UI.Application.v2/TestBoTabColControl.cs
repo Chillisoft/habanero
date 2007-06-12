@@ -29,7 +29,7 @@ namespace Chillisoft.Test.UI.Application.v2
             itsClassDef = MyBo.LoadDefaultClassDef();
             itsCol = new BusinessObjectBaseCollection(itsClassDef);
 
-            itsBo1 = MyBo.Create();
+			itsBo1 = MyBo.Create();
             itsBo2 = MyBo.Create();
             itsCol.Add(itsBo1);
             itsCol.Add(itsBo2);

@@ -107,11 +107,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
 
             ClassDef classDef = MyBo.LoadDefaultClassDef();
 
-			Assert.AreEqual(0, ClassDef.GetClassDefCol.Count);
-
-			ClassDef.GetClassDefCol.Add(classDef);
-			
-            PropDef def =
+			PropDef def =
                 itsLoader.LoadProperty(
                     @"<propertyDef name=""TestProp""><databaseLookupListSource sqlString=""Source"" className=""MyBo"" assemblyName=""Chillisoft.Test.Setup.v2"" /></propertyDef>");
             DatabaseLookupListSource source = (DatabaseLookupListSource) def.LookupListSource;

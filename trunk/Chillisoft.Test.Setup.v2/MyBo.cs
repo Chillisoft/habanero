@@ -75,7 +75,8 @@ namespace Chillisoft.Test.Setup.v2
 
 
 			");
-            return itsClassDef;
+			ClassDef.GetClassDefCol.Add(itsClassDef);
+			return itsClassDef;
         }
 
         public static ClassDef LoadClassDefWithNoLookup()
@@ -108,7 +109,8 @@ namespace Chillisoft.Test.Setup.v2
 				</classDef>
 
 			");
-            return itsClassDef;
+			ClassDef.GetClassDefCol.Add(itsClassDef);
+			return itsClassDef;
         }
 
         public static ClassDef LoadClassDefWithBoolean()
@@ -144,7 +146,8 @@ namespace Chillisoft.Test.Setup.v2
 				</classDef>
 				
 			");
-            return itsClassDef;
+			ClassDef.GetClassDefCol.Add(itsClassDef);
+			return itsClassDef;
         }
 
         public static ClassDef LoadClassDefWithLookup()
@@ -183,7 +186,8 @@ namespace Chillisoft.Test.Setup.v2
 
 
 			");
-            return itsClassDef;
+			ClassDef.GetClassDefCol.Add(itsClassDef);
+			return itsClassDef;
         }
 
         public static ClassDef LoadClassDefWithRelationship()
@@ -233,6 +237,7 @@ namespace Chillisoft.Test.Setup.v2
 
 
 			");
+			ClassDef.GetClassDefCol.Add(itsClassDef);
             return itsClassDef;
         }
 
