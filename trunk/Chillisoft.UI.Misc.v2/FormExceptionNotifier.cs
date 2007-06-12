@@ -91,59 +91,63 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         private class CollapsibleExceptionNotifyForm : Form
         {
+            private Exception _exception;
+            private Panel _summary;
             private Panel _fullDetail;
             private Button _moreDetailButton;
+            private TextBox _errorDetails;
+            private CheckBox _showStackTrace;
+            private const int SUMMARY_HEIGHT = 150;
+            private const int FULL_DETAIL_HEIGHT = 300;
+            private const int BUTTONS_HEIGHT = 50;
 
+            /// <summary>
+            /// Constructor that sets up the error message form
+            /// </summary>
             public CollapsibleExceptionNotifyForm(Exception ex, string furtherMessage, string title)
             {
-                Panel simpleDetail = new Panel();
-                simpleDetail.Text = title;
-                simpleDetail.Height = 150;
+                _exception = ex;
+
+                _summary = new Panel();
+                _summary.Text = title;
+                _summary.Height = SUMMARY_HEIGHT;
                 TextBox messageTextBox = GetSimpleMessage(ex.Message);
                 Label messageLabel = GetErrorLabel(furtherMessage);
-                BorderLayoutManager messageTabPageManager = new BorderLayoutManager(simpleDetail);
-                messageTabPageManager.AddControl(messageLabel, BorderLayoutManager.Position.North);
-                messageTabPageManager.AddControl(messageTextBox, BorderLayoutManager.Position.Centre);
+                BorderLayoutManager summaryManager = new BorderLayoutManager(_summary);
+                summaryManager.AddControl(messageLabel, BorderLayoutManager.Position.North);
+                summaryManager.AddControl(messageTextBox, BorderLayoutManager.Position.Centre);
 
                 ButtonControl buttonsOK = new ButtonControl();
                 ButtonControl buttonsDetail = new ButtonControl();
                 buttonsOK.AddButton("&OK", new EventHandler(OKButtonClickHandler));
                 _moreDetailButton = buttonsDetail.AddButton("&More Detail »", new EventHandler(MoreDetailClickHandler));
-                buttonsOK.Height = 50;
-                buttonsDetail.Height = 50;
+                buttonsOK.Height = BUTTONS_HEIGHT;
+                buttonsDetail.Height = BUTTONS_HEIGHT;
                 buttonsDetail.Width = _moreDetailButton.Width + 9;
 
-                _fullDetail = new Panel();
-                _fullDetail.Text = "Error Detail";
-                _fullDetail.Height = 400;
-                _fullDetail.Visible = false;
-                TextBox detailsTextBox = ControlFactory.CreateTextBox();
-                //detailsTextBox.Text = ExceptionUtil.GetExceptionString(ex, 0);
-                detailsTextBox.Text = ExceptionUtil.GetCategorizedExceptionString(ex, 0);
-                detailsTextBox.Multiline = true;
-                detailsTextBox.ScrollBars = ScrollBars.Both;
-                BorderLayoutManager detailsTabPageManager = new BorderLayoutManager(_fullDetail);
-                detailsTabPageManager.AddControl(detailsTextBox, BorderLayoutManager.Position.Centre);
+                SetFullDetailsPanel();
 
                 BorderLayoutManager manager = new BorderLayoutManager(this);
-                manager.AddControl(simpleDetail, BorderLayoutManager.Position.North);
+                manager.AddControl(_summary, BorderLayoutManager.Position.North);
                 manager.AddControl(buttonsDetail, BorderLayoutManager.Position.West);
                 manager.AddControl(buttonsOK, BorderLayoutManager.Position.East);
                 manager.AddControl(_fullDetail, BorderLayoutManager.Position.South);
 
                 this.Text = title;
                 this.Width = 600;
-                this.Height = 216;
+                this.Height = SUMMARY_HEIGHT + BUTTONS_HEIGHT + 16;
                 this.StartPosition = FormStartPosition.Manual;
                 this.Location = new Point(50, 50);
-                
+                this.Resize += new EventHandler(ResizeForm);
             }
 
+            /// <summary>
+            /// Creates the red error label that appears at the top
+            /// </summary>
             private static Label GetErrorLabel(string message)
             {
                 Label messageLabel = ControlFactory.CreateLabel(" " + message, true);
                 messageLabel.TextAlign = ContentAlignment.BottomLeft;
-                //messageLabel.BorderStyle = BorderStyle.FixedSingle;
                 messageLabel.BackColor = Color.Red;
                 messageLabel.ForeColor = Color.White;
                 messageLabel.Font = new Font(messageLabel.Font.FontFamily, 10);
@@ -151,6 +155,9 @@ namespace Chillisoft.UI.Misc.v2
                 return messageLabel;
             }
 
+            /// <summary>
+            /// Creates the text box that shows the error summary at the top
+            /// </summary>
             private static TextBox GetSimpleMessage(string message)
             {
                 TextBox messageTextBox = ControlFactory.CreateTextBox();
@@ -163,36 +170,89 @@ namespace Chillisoft.UI.Misc.v2
             }
 
             /// <summary>
+            /// Sets up the panel that shows the error details
+            /// </summary>
+            private void SetFullDetailsPanel()
+            {
+                _fullDetail = new Panel();
+                _fullDetail.Text = "Error Detail";
+                _fullDetail.Height = FULL_DETAIL_HEIGHT;
+                _fullDetail.Visible = false;
+                _errorDetails = ControlFactory.CreateTextBox();
+                _errorDetails.Text = ExceptionUtil.GetSummarisedExceptionString(_exception, 0);
+                _errorDetails.Multiline = true;
+                _errorDetails.ScrollBars = ScrollBars.Both;
+                _showStackTrace = new CheckBox();
+                _showStackTrace.Text = "&Show stack trace";
+                _showStackTrace.CheckedChanged += new EventHandler(ShowStackTraceClicked);
+                BorderLayoutManager detailsManager = new BorderLayoutManager(_fullDetail);
+                detailsManager.AddControl(_errorDetails, BorderLayoutManager.Position.Centre);
+                detailsManager.AddControl(_showStackTrace, BorderLayoutManager.Position.South);
+            }
+
+            /// <summary>
             /// Handles the event of the OK button being pressed on the
             /// exception form, which closes the form
             /// </summary>
-            /// <param name="sender">The object that notified of the event</param>
-            /// <param name="e">Attached arguments regarding the event</param>
             private void OKButtonClickHandler(object sender, EventArgs e)
             {
                 this.Close();
             }
 
             /// <summary>
-            /// Handles the event of the More Detail button being pressed on the
-            /// exception form, which expands the form
+            /// Expands the form when the "More Details" button is clicked
             /// </summary>
-            /// <param name="sender">The object that notified of the event</param>
-            /// <param name="e">Attached arguments regarding the event</param>
             private void MoreDetailClickHandler(object sender, EventArgs e)
             {
                 if (!_fullDetail.Visible)
                 {
-                    this.Height = 616;
-                    this.Width = 750;
+                    Height = _summary.Height + BUTTONS_HEIGHT + 16 + FULL_DETAIL_HEIGHT;
+                    Width = 750;
                     _fullDetail.Visible = true;
                     _moreDetailButton.Text = "« &Less Detail";
                 }
                 else
                 {
-                    this.Height = 216;
+                    Height = _summary.Height + BUTTONS_HEIGHT + 16;
                     _fullDetail.Visible = false;
                     _moreDetailButton.Text = "&More Detail »";
+                }
+            }
+
+            /// <summary>
+            /// Toggles the showing of the stack trace in the error details
+            /// </summary>
+            private void ShowStackTraceClicked(object sender, EventArgs e)
+            {
+                if (_showStackTrace.Checked)
+                {
+                    _errorDetails.Text = ExceptionUtil.GetCategorizedExceptionString(_exception, 0);
+                }
+                else
+                {
+                    _errorDetails.Text = ExceptionUtil.GetSummarisedExceptionString(_exception, 0);
+                }
+            }
+
+            /// <summary>
+            /// Scales the components when the form is resized
+            /// </summary>
+            private void ResizeForm(object sender, EventArgs e)
+            {
+                int sdHeight = Height - BUTTONS_HEIGHT - 16;
+                if (sdHeight > SUMMARY_HEIGHT)
+                {
+                    sdHeight = SUMMARY_HEIGHT;
+                }
+                _summary.Height = sdHeight;
+                int heightRemaining = Height - BUTTONS_HEIGHT - sdHeight - 16;
+                if (heightRemaining > 0)
+                {
+                    _fullDetail.Height = heightRemaining;
+                }
+                else
+                {
+                    _fullDetail.Height = 0;
                 }
             }
         }

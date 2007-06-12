@@ -55,7 +55,37 @@ namespace Chillisoft.Generic.v2
                 str += Environment.NewLine + Environment.NewLine;
                 str += GetIndent(indent+8);
                 return
-                    str + "INNER EXCEPTION:" + Environment.NewLine + GetExceptionString(ex.InnerException, indent + 8);
+                    str + "INNER EXCEPTION:" + Environment.NewLine + GetCategorizedExceptionString(ex.InnerException, indent + 8);
+            }
+            return str;
+        }
+
+        /// <summary>
+        /// Temporary solution to above's ilegibility
+        /// </summary>
+        /// <param name="ex">The exception to display</param>
+        /// <param name="indent">The indentation as a number of spaces</param>
+        /// <returns>Returns a string</returns>
+        public static string GetSummarisedExceptionString(Exception ex, int indent)
+        {
+            string str = "";
+            str += GetIndent(indent);
+            str += "FINAL EXCEPTION:";
+            str += Environment.NewLine + GetIndent(indent);
+            str += ex.GetType() + ": " + ex.Message;
+            str += Environment.NewLine + Environment.NewLine + GetIndent(indent);
+            str += "BASE EXCEPTION:";
+            str += Environment.NewLine + GetIndent(indent);
+            str += ex.GetBaseException().GetType() + ": " + ex.GetBaseException().Message;
+            if (ex.InnerException != null)
+            {
+                str += Environment.NewLine + Environment.NewLine;
+                str += GetIndent(indent + 8);
+                str += "INNER EXCEPTION:";
+                str += Environment.NewLine + GetIndent(indent + 8);
+                str += ex.InnerException.GetType() + ": " + ex.InnerException.Message;
+                //return
+                //    str + "INNER EXCEPTION:" + Environment.NewLine + GetSummarisedExceptionString(ex.InnerException, indent + 8);
             }
             return str;
         }
