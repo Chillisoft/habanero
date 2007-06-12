@@ -121,7 +121,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 
         public static MockBO Create()
         {
-            return (MockBO) ClassDef.GetClassDefCol()[typeof (MockBO)].CreateNewBusinessObject();
+            return (MockBO) ClassDef.GetClassDefCol[typeof (MockBO)].CreateNewBusinessObject();
         }
 
 
@@ -133,7 +133,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             }
             else
             {
-                return ClassDef.GetClassDefCol()[typeof (MockBO)];
+                return ClassDef.GetClassDefCol[typeof (MockBO)];
             }
         }
 

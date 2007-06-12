@@ -55,7 +55,7 @@ namespace Chillisoft.Test.General.v2
             }
             else
             {
-                return ClassDef.GetClassDefCol()[typeof (ContactPerson)];
+                return ClassDef.GetClassDefCol[typeof (ContactPerson)];
             }
         }
 

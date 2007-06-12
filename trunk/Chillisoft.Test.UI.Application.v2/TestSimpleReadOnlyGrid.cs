@@ -27,7 +27,7 @@ namespace Chillisoft.Test.UI.Application.v2
         {
             grid = new SimpleReadOnlyGrid();
             grid.Name = "GridControl";
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef classDef = MyBo.LoadClassDefWithNoLookup();
             BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(classDef);
             bo1 = MyBo.Create(); //classDef.CreateNewBusinessObject();

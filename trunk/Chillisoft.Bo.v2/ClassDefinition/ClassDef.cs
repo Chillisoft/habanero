@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
+using Chillisoft.Util.v2;
 using log4net;
 
 namespace Chillisoft.Bo.ClassDefinition.v2
@@ -49,26 +50,29 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     /// </futureEnhancements>
     public class ClassDef
     {
+        protected static ClassDefCol _ClassDefCol;
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.ClassDefinition.v2.ClassDef");
-        protected static ClassDefCol mClassDefCol;
-        protected string mDatabaseName = "Default";
 
-        protected string mTableName = "";
-        protected readonly Type mClassType;
-        protected PropDefCol mPropDefCol;
-        protected string mSelectSql = "";
-        protected KeyDefCol mKeysCol;
-        protected PrimaryKeyDef mPrimaryKeyDef;
-        protected RelationshipDefCol mRelationshipDefCol;
-        protected bool mHasObjectID = true;
-        private SuperClassDesc mSuperClassDesc;
-        private UIDefCol itsUIDefCol;
-        private bool itsSupportsSynchronisation;
+        protected string _DatabaseName = "Default";
+        protected string _TableName = "";
+		protected string _ClassName;
+		protected string _AssemblyName;
+        protected string _SelectSql = "";
+        protected bool _HasObjectID = true;
+        protected PrimaryKeyDef _PrimaryKeyDef;
+		protected PropDefCol _PropDefCol;
+        protected KeyDefCol _KeysCol;
+        protected RelationshipDefCol _RelationshipDefCol;
 
-        private static PropDef itsVersionNumberAtLastSyncPropDef =
+		private Type _ClassType;
+		private SuperClassDesc _SuperClassDesc;
+        private UIDefCol _UIDefCol;
+        private bool _SupportsSynchronisation;
+
+        private static PropDef _VersionNumberAtLastSyncPropDef =
             new PropDef("SyncVersionNumberAtLastSync", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, 0);
 
-        private static PropDef itsVersionNumberPropDef =
+        private static PropDef _VersionNumberPropDef =
             new PropDef("SyncVersionNumber", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, 0);
 
 
@@ -90,32 +94,24 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                           PropDefCol propDefCol,
                           KeyDefCol keysCol,
                           RelationshipDefCol relationshipDefCol,
-                          UIDefCol uiDefCol
-            )
+                          UIDefCol uiDefCol)
         {
-            mTableName = tableName;
-            //mSelectSql = "SELECT * FROM " + tableName;
-            mClassType = classType;
-            mPropDefCol = propDefCol;
-            mKeysCol = keysCol;
-            mPrimaryKeyDef = primaryKeyDef;
-            mRelationshipDefCol = relationshipDefCol;
-            itsUIDefCol = uiDefCol;
-            GetClassDefCol().Add(mClassType, this);
+            //_SelectSql = "SELECT * FROM " + tableName;
+            _ClassType = classType;
+			_ClassName = _ClassType.Name;
+			_AssemblyName = _ClassType.Assembly.FullName;
+			if (tableName == null || tableName.Length == 0)
+				_TableName = "tb" + _ClassName;
+            else
+				_TableName = tableName;
+            _PropDefCol = propDefCol;
+            _KeysCol = keysCol;
+            _PrimaryKeyDef = primaryKeyDef;
+            _RelationshipDefCol = relationshipDefCol;
+            _UIDefCol = uiDefCol;
+            GetClassDefCol.Add(this);
 
             //			mConcurrencyControl= concurrencyControl;
-        }
-
-        /// <summary>
-        /// As before, but excludes the table name and UI def collection
-        /// </summary>
-        public ClassDef(Type classType,
-                        PrimaryKeyDef primaryKeyDef,
-                        PropDefCol propDefCol,
-                        KeyDefCol keysCol,
-                        RelationshipDefCol relationshipDefCol) :
-                            this(classType, primaryKeyDef, propDefCol, keysCol, relationshipDefCol, new UIDefCol())
-        {
         }
 
         /// <summary>
@@ -128,8 +124,20 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                         RelationshipDefCol relationshipDefCol,
                         UIDefCol uiDefCol) :
                             this(
-                            classType, primaryKeyDef, "tb" + classType.Name, propDefCol, keysCol, relationshipDefCol,
+                            classType, primaryKeyDef, "", propDefCol, keysCol, relationshipDefCol,
                             uiDefCol)
+        {
+        }
+
+        /// <summary>
+        /// As before, but excludes the table name and UI def collection
+        /// </summary>
+        public ClassDef(Type classType,
+                        PrimaryKeyDef primaryKeyDef,
+                        PropDefCol propDefCol,
+                        KeyDefCol keysCol,
+                        RelationshipDefCol relationshipDefCol) :
+                            this(classType, primaryKeyDef, propDefCol, keysCol, relationshipDefCol, new UIDefCol())
         {
         }
 
@@ -162,15 +170,39 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                         RelationshipDefCol relationshipDefCol,
                         UIDefCol uiDefCol)
         {
-            mDatabaseName = databaseName;
-            mTableName = tableName;
-            mClassType = classType;
-            mPropDefCol = propDefCol;
-            mKeysCol = keysCol;
-            mPrimaryKeyDef = primaryKeyDef;
-            mRelationshipDefCol = relationshipDefCol;
-            itsUIDefCol = uiDefCol;
+            _DatabaseName = databaseName;
+            _TableName = tableName;
+            _ClassType = classType;
+			_ClassName = _ClassType.Name;
+			_AssemblyName = _ClassType.Assembly.FullName;
+			_PropDefCol = propDefCol;
+            _KeysCol = keysCol;
+            _PrimaryKeyDef = primaryKeyDef;
+            _RelationshipDefCol = relationshipDefCol;
+            _UIDefCol = uiDefCol;
         }
+
+		/// <summary>
+		/// As before, but excludes the table name
+		/// </summary>
+		public ClassDef(string assemblyName,
+						string className,
+						PrimaryKeyDef primaryKeyDef,
+						PropDefCol propDefCol,
+						KeyDefCol keysCol,
+						RelationshipDefCol relationshipDefCol,
+						UIDefCol uiDefCol)
+		{
+			_ClassType = null;
+			_ClassName = className;
+			_AssemblyName = assemblyName;
+			_TableName = "tb" + _ClassName;
+			_PropDefCol = propDefCol;
+			_KeysCol = keysCol;
+			_PrimaryKeyDef = primaryKeyDef;
+			_RelationshipDefCol = relationshipDefCol;
+			_UIDefCol = uiDefCol;
+		}
 
         #endregion Constructors
 
@@ -182,15 +214,23 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public string ClassName
         {
-            get { return mClassType.Name; }
+            get { return _ClassName; }
         }
+
+		///<summary>
+		/// The full name of the class definition.
+		///</summary>
+		public string ClassFullName
+		{
+			get { return GetTypeId(_AssemblyName, _ClassName); }
+		}
 
         /// <summary>
         /// The type of the class definition
         /// </summary>
         internal Type ClassType
         {
-            get { return mClassType; }
+            get { return getMyClassType; }
         }
 
         /// <summary>
@@ -200,10 +240,10 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             get
             {
-                //log.Debug(mTableName.ToLower());
-                return mTableName; //.ToLower() ;
+                //log.Debug(_TableName.ToLower());
+                return _TableName; //.ToLower() ;
             }
-            set { mTableName = value; }
+            set { _TableName = value; }
         }
 
 
@@ -211,7 +251,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 //			get {
 //				return GetSelectSql(null);
 //			}
-//			set { mSelectSql = value; }
+//			set { _SelectSql = value; }
 //		}
 
         /// <summary>
@@ -219,7 +259,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public PropDefCol PropDefcol
         {
-            get { return mPropDefCol; }
+            get { return _PropDefCol; }
         }
 
         /// <summary>
@@ -227,7 +267,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public KeyDefCol KeysCol
         {
-            get { return mKeysCol; }
+            get { return _KeysCol; }
         }
 
         /// <summary>
@@ -235,7 +275,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public PrimaryKeyDef PrimaryKeyDef
         {
-            get { return mPrimaryKeyDef; }
+            get { return _PrimaryKeyDef; }
         }
 
         /// <summary>
@@ -243,8 +283,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public bool HasObjectID
         {
-            get { return mHasObjectID; }
-            set { mHasObjectID = value; }
+            get { return _HasObjectID; }
+            set { _HasObjectID = value; }
         }
 
         /// <summary>
@@ -252,7 +292,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public RelationshipDefCol RelationshipDefCol
         {
-            get { return mRelationshipDefCol; }
+            get { return _RelationshipDefCol; }
         }
 
         /// <summary>
@@ -260,7 +300,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public UIDefCol UIDefCol
         {
-            get { return itsUIDefCol; }
+            get { return _UIDefCol; }
         }
 
         /// <summary>
@@ -268,8 +308,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public bool SupportsSynchronising
         {
-            get { return itsSupportsSynchronisation; }
-            set { itsSupportsSynchronisation = value; }
+            get { return _SupportsSynchronisation; }
+            set { _SupportsSynchronisation = value; }
         }
 
         #endregion properties
@@ -282,13 +322,16 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// a part
         /// </summary>
         /// <returns>Returns a ClassDefCol object</returns>
-        public static ClassDefCol GetClassDefCol()
+        public static ClassDefCol GetClassDefCol
         {
-            if (mClassDefCol == null)
-            {
-                mClassDefCol = ClassDefCol.GetColClassDef();
-            }
-            return mClassDefCol;
+			get
+			{
+				if (_ClassDefCol == null)
+				{
+					_ClassDefCol = ClassDefCol.GetColClassDef();
+				}
+				return _ClassDefCol;
+			}
         }
 
         /// <summary>
@@ -299,7 +342,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <returns>Returns true if found, false if not</returns>
         public static bool IsDefined(Type classType)
         {
-            return GetClassDefCol().Contains(classType);
+            return GetClassDefCol.Contains(classType);
         }
 
         #endregion FactoryMethods
@@ -317,7 +360,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <returns>Returns the collection of BOProps</returns>
         public BOPropCol createBOPropertyCol(bool newObject)
         {
-            BOPropCol propCol = mPropDefCol.CreateBOPropertyCol(newObject);
+            BOPropCol propCol = _PropDefCol.CreateBOPropertyCol(newObject);
             if (this.SuperClassDesc != null)
             {
                 propCol.Add(SuperClassDesc.SuperClassDef.createBOPropertyCol(newObject));
@@ -341,8 +384,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             }
             if (this.SupportsSynchronising)
             {
-                propCol.Add(itsVersionNumberPropDef.CreateBOProp(newObject));
-                propCol.Add(itsVersionNumberAtLastSyncPropDef.CreateBOProp(newObject));
+                propCol.Add(_VersionNumberPropDef.CreateBOProp(newObject));
+                propCol.Add(_VersionNumberAtLastSyncPropDef.CreateBOProp(newObject));
             }
             return propCol;
         }
@@ -353,7 +396,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <returns>Returns a new business object</returns>
         internal BusinessObjectBase InstantiateBusinessObject()
         {
-            return (BusinessObjectBase) Activator.CreateInstance(mClassType, true);
+            return (BusinessObjectBase) Activator.CreateInstance(getMyClassType, true);
         }
 
         /// <summary>
@@ -362,7 +405,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <returns>Returns a new business object</returns>
         internal BusinessObjectBase InstantiateBusinessObjectWithClassDef()
         {
-            return (BusinessObjectBase) Activator.CreateInstance(mClassType, new object[] {this});
+            return (BusinessObjectBase) Activator.CreateInstance(getMyClassType, new object[] {this});
         }
 
         /// <summary>
@@ -373,7 +416,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <returns>Returns a new business object</returns>
         internal BusinessObjectBase InstantiateBusinessObjectWithClassDef(IDatabaseConnection conn)
         {
-            return (BusinessObjectBase) Activator.CreateInstance(mClassType, new object[] {this, conn});
+            return (BusinessObjectBase) Activator.CreateInstance(getMyClassType, new object[] {this, conn});
         }
 
         /// <summary>
@@ -385,12 +428,12 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// definition collection exists</returns>
         public RelationshipCol CreateRelationshipCol(BOPropCol propCol, BusinessObjectBase bo)
         {
-            if (mRelationshipDefCol == null)
+            if (_RelationshipDefCol == null)
             {
                 return null;
             }
             RelationshipCol relCol = new RelationshipCol(bo);
-            relCol = mRelationshipDefCol.CreateRelationshipCol(propCol, bo);
+            relCol = _RelationshipDefCol.CreateRelationshipCol(propCol, bo);
             if (this.SuperClassDef != null)
             {
                 relCol.Add(this.SuperClassDesc.SuperClassDef.CreateRelationshipCol(propCol, bo));
@@ -405,7 +448,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <returns>Returns the new key collection</returns>
         public BOKeyCol createBOKeyCol(BOPropCol col)
         {
-            BOKeyCol keyCol = mKeysCol.CreateBOKeyCol(col);
+            BOKeyCol keyCol = _KeysCol.CreateBOKeyCol(col);
             if (this.SuperClassDef != null)
             {
                 keyCol.Add(SuperClassDesc.SuperClassDef.createBOKeyCol(col));
@@ -433,6 +476,32 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             return this.InstantiateBusinessObjectWithClassDef(conn);
         }
 
+
+    	protected Type getMyClassType
+    	{
+			get
+			{
+				if (_ClassType == null)
+				{
+					try
+					{
+						_ClassType = TypeLoader.LoadType(_AssemblyName, _ClassName);
+					}
+					catch (UnknownTypeNameException ex)
+					{
+						//TODO: Is this the correct thing to do?
+						throw new UnknownTypeNameException("Unable to load the class type while " +
+							"attempting to load a type from a class definition, given the 'assembly' as: '" +
+							_AssemblyName + "', and the 'class' as: '" + _ClassName +
+							"'. Check that the class exists in the given assembly name and " +
+							"that spelling and capitalisation are correct.", ex);
+						//_ClassType = null;
+					}
+				}
+				return _ClassType;
+			}
+    	}
+
         #endregion //Creating BOs
 
 
@@ -443,8 +512,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public SuperClassDesc SuperClassDesc
         {
-            get { return mSuperClassDesc; }
-            set { mSuperClassDesc = value; }
+            get { return _SuperClassDesc; }
+            set { _SuperClassDesc = value; }
         }
 
         /// <summary>
@@ -466,7 +535,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             }
         }
 
-        /// <summary>
+    	/// <summary>
         /// Indicates whether ClassTableInheritance is being used. See
         /// the ORMapping enumeration for more detail.
         /// </summary>
@@ -518,9 +587,9 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             foreach (ClassDef classDef in loader.LoadClassDefs())
             {
-                if (!ClassDef.GetClassDefCol().Contains(classDef.mClassType))
+                if (!ClassDef.GetClassDefCol.Contains(classDef))
                 {
-                    ClassDef.GetClassDefCol().Add(classDef.mClassType, classDef);
+                    ClassDef.GetClassDefCol.Add(classDef);
                 }
                 else
                 {
@@ -607,5 +676,39 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 
         #endregion //Returning defs
 
-    }
+		///<summary>
+		/// This method combines the assembly name and class name to 
+		/// create a string that represents the Class Type.
+		///</summary>
+		///<param name="assemblyName">The class's assembly name</param>
+		///<param name="className">The class's name</param>
+		///<returns>A string representing the Class Type.</returns>
+		public static string GetTypeId(string assemblyName, string className)
+		{
+			string namespaceString = "";
+			int pos = className.LastIndexOf(".");
+			if (pos != -1)
+			{
+				namespaceString = " Namespace:" + className.Substring(0, pos);
+				className = className.Substring(pos + 1);
+			}
+			if (assemblyName.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase))
+				assemblyName = assemblyName.Remove(assemblyName.Length - 4);
+			string id = "Assembly:" + assemblyName + namespaceString + " ClassName:" + className;
+			return id.ToUpper();
+		}
+
+		///<summary>
+		/// This method returns a string that represents the given Class Type.
+		///</summary>
+		///<param name="classType">The class's Type object.</param>
+		///<returns>A string representing the Class Type.</returns>
+		public static string GetTypeId(Type classType, bool includeNamespace)
+		{
+			if (includeNamespace)
+				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.FullName);
+			else
+				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.Name);
+		}
+	}
 }

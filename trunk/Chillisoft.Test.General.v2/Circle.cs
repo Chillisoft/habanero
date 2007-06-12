@@ -20,7 +20,7 @@ namespace Chillisoft.Test.General.v2
             }
             else
             {
-                return ClassDef.GetClassDefCol()[typeof (Circle)];
+                return ClassDef.GetClassDefCol[typeof (Circle)];
             }
         }
 

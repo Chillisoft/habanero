@@ -21,7 +21,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestIntersection()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef itsClassDef = MyBo.LoadDefaultClassDef();
             BusinessObjectBase bo1 = itsClassDef.CreateNewBusinessObject();
             BusinessObjectBase bo2 = itsClassDef.CreateNewBusinessObject();
@@ -45,7 +45,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestUnion()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef itsClassDef = MyBo.LoadDefaultClassDef();
             BusinessObjectBase bo1 = itsClassDef.CreateNewBusinessObject();
             BusinessObjectBase bo2 = itsClassDef.CreateNewBusinessObject();
@@ -69,7 +69,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestDeletingRemovesObjectFromCollection()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef itsClassDef = MyBo.LoadDefaultClassDef();
             BusinessObjectBase bo1 = itsClassDef.CreateNewBusinessObject();
             BusinessObjectBaseCollection col1 = new BusinessObjectBaseCollection(itsClassDef);
@@ -86,7 +86,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestFindByGuid()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef itsClassDef = MyBo.LoadDefaultClassDef();
             BusinessObjectBase bo1 = itsClassDef.CreateNewBusinessObject();
             BusinessObjectBase bo2 = itsClassDef.CreateNewBusinessObject();

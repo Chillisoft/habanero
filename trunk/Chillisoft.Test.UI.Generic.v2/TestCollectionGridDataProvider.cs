@@ -21,7 +21,7 @@ namespace Chillisoft.Test.UI.Generic.v2
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
             itsCollection = new BusinessObjectBaseCollection(itsClassDef);
 

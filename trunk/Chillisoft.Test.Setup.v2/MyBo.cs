@@ -238,7 +238,7 @@ namespace Chillisoft.Test.Setup.v2
 
         public static MyBo Create()
         {
-            MyBo bo = new MyBo(ClassDef.GetClassDefCol()[typeof (MyBo)]);
+            MyBo bo = new MyBo(ClassDef.GetClassDefCol[typeof (MyBo)]);
             MyBo.AddToLoadedBusinessObjectCol(bo);
             return bo;
         }

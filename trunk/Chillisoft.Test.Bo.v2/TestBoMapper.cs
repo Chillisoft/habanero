@@ -27,7 +27,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestGetPropertyValueForUser()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadClassDefWithLookup();
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp2", "s1");
@@ -44,7 +44,7 @@ namespace Chillisoft.Test.Bo.v2
             Mock relColControl = new DynamicMock(typeof (IRelationshipCol));
             IRelationshipCol mockRelCol = (IRelationshipCol) relColControl.MockInstance;
 
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject(connection);
@@ -65,7 +65,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test, ExpectedException(typeof (RelationshipNotFoundException))]
         public void TestGetPropertyValueWithDot_IncorrectRelationshipName()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
@@ -82,7 +82,7 @@ namespace Chillisoft.Test.Bo.v2
             Mock relColControl = new DynamicMock(typeof (IRelationshipCol));
             IRelationshipCol mockRelCol = (IRelationshipCol) relColControl.MockInstance;
 
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject(connection);
@@ -105,7 +105,7 @@ namespace Chillisoft.Test.Bo.v2
             Mock mockDbConnection = new DynamicMock(typeof (IDatabaseConnection));
             IDatabaseConnection connection = (IDatabaseConnection) mockDbConnection.MockInstance;
 
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject(connection);
 

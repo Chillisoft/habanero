@@ -20,7 +20,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         public void SetupTest()
         {
             itsLoader = new XmlPropertyLoader();
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
         }
 
         [Test]
@@ -102,10 +102,15 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         [Test]
         public void TestDatabaseLookupListSourceWithClassDef()
         {
+        	ClassDef.GetClassDefCol.Clear();
             XmlClassLoader loader = new XmlClassLoader();
 
             ClassDef classDef = MyBo.LoadDefaultClassDef();
 
+			Assert.AreEqual(0, ClassDef.GetClassDefCol.Count);
+
+			ClassDef.GetClassDefCol.Add(classDef);
+			
             PropDef def =
                 itsLoader.LoadProperty(
                     @"<propertyDef name=""TestProp""><databaseLookupListSource sqlString=""Source"" className=""MyBo"" assemblyName=""Chillisoft.Test.Setup.v2"" /></propertyDef>");

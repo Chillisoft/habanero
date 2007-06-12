@@ -347,7 +347,7 @@ namespace Chillisoft.UI.BOControls.v2
             IGrid myGrid = (IGrid) Activator.CreateInstance(formGrid.GridType);
             //GridBase myGrid = myGridWithButtons.Grid;
             BusinessObjectBase bo = itsBOArray[0];
-            ClassDef classDef = ClassDef.GetClassDefCol()[bo.GetType()];
+            ClassDef classDef = ClassDef.GetClassDefCol[bo.GetType()];
             //Console.Out.WriteLine(classDef.RelationshipDefCol);
             myGrid.ObjectInitialiser =
                 new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),

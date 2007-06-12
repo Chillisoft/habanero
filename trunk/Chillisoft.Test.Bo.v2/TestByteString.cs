@@ -23,7 +23,7 @@ namespace Chillisoft.Test.Bo.v2
 
         public TestByteString()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             XmlClassLoader loader = new XmlClassLoader();
             itsClassDef =
                 loader.LoadClass(

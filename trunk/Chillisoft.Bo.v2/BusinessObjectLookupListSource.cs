@@ -48,7 +48,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a collection of string-Guid pairs</returns>
         public StringGuidPairCollection GetLookupList(IDatabaseConnection connection)
         {
-            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol()[itsBoType]);
+            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol[itsBoType]);
             col.Load("", "");
             return CreateStringGuidPairCollection(col);
         }
@@ -61,7 +61,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns an ICollection object</returns>
         public ICollection GetValueCollection()
         {
-            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol()[itsBoType]);
+            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol[itsBoType]);
             col.Load("", "");
             return CreateValueList(col);
         }

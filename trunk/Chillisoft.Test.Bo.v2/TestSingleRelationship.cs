@@ -17,7 +17,7 @@ namespace Chillisoft.Test.Bo.v2
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
         }

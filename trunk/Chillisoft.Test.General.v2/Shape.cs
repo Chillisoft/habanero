@@ -21,7 +21,7 @@ namespace Chillisoft.Test.General.v2
             }
             else
             {
-                return ClassDef.GetClassDefCol()[typeof (Shape)];
+                return ClassDef.GetClassDefCol[typeof (Shape)];
             }
         }
 

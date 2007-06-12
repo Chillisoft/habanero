@@ -216,7 +216,8 @@ namespace Chillisoft.Bo.v2
         [ReflectionPermission(SecurityAction.Demand)]
         protected internal BusinessObjectBase GetBusinessObject(IExpression searchExpression)
         {
-            BusinessObjectBase lTempBusObj = (BusinessObjectBase) Activator.CreateInstance(mClassDef.ClassType, true);
+			BusinessObjectBase lTempBusObj = mClassDef.InstantiateBusinessObject();
+            //BusinessObjectBase lTempBusObj = (BusinessObjectBase) Activator.CreateInstance(mClassDef.ClassType, true);
             lTempBusObj.SetDatabaseConnection(this.GetDatabaseConnection());
             IDataReader dr = lTempBusObj.LoadDataReader(this.GetDatabaseConnection(), searchExpression);
             try
@@ -330,7 +331,7 @@ namespace Chillisoft.Bo.v2
         /// expectations
         public static BusinessObjectBase GetBusinessObject(string criteria, Type boType)
         {
-            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol()[boType]);
+            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol[boType]);
             col.Load(criteria, "");
             if (col.Count < 1)
             {
@@ -391,8 +392,8 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a class definition</returns>
         protected virtual ClassDef ConstructClassDef()
         {
-            if (ClassDef.GetClassDefCol().Contains(this.GetType()))
-                return ClassDef.GetClassDefCol()[this.GetType()];
+            if (ClassDef.GetClassDefCol.Contains(this.GetType()))
+                return ClassDef.GetClassDefCol[this.GetType()];
             else
                 return null;
 

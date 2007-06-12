@@ -1,1 +1,1 @@
-xcopy /D %2*.* %1Testing_bin\
+xcopy /D /Y %2*.* %1Testing_bin\

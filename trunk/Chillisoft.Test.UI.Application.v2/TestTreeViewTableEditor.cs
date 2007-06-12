@@ -25,7 +25,7 @@ namespace Chillisoft.Test.UI.Application.v2
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDefMyBo = MyBo.LoadClassDefWithNoLookup();
         }
 

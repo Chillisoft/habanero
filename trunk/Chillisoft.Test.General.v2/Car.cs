@@ -31,7 +31,7 @@ namespace Chillisoft.Test.General.v2
             }
             else
             {
-                return ClassDef.GetClassDefCol()[typeof (Car)];
+                return ClassDef.GetClassDefCol[typeof (Car)];
             }
         }
 

@@ -24,7 +24,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestSettingLookupValueSetsGuid()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef classDef = MyBo.LoadClassDefWithLookup();
             BusinessObjectBase bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "s1");
@@ -35,7 +35,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestApplyEditResetsPreviousValues()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef classDef = MyBo.LoadDefaultClassDef();
 
             Mock itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));

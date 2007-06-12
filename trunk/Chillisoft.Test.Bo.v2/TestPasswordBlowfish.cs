@@ -18,7 +18,7 @@ namespace Chillisoft.Test.Bo.v2
 
         public TestPasswordBlowfish()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             XmlClassLoader loader = new XmlClassLoader();
             itsClassDef =
                 loader.LoadClass(

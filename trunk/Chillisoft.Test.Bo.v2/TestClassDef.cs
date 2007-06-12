@@ -17,7 +17,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestCreateBusinessObject()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             XmlClassLoader loader = new XmlClassLoader();
             itsClassDef =
                 loader.LoadClass(
@@ -52,9 +52,9 @@ namespace Chillisoft.Test.Bo.v2
 					</classDefs>
 			",
                     "");
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef.LoadClassDefs(loader);
-            Assert.AreEqual(2, ClassDef.GetClassDefCol().Count);
+            Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
         }
     }
 }

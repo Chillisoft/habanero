@@ -20,7 +20,7 @@ namespace Chillisoft.Test.UI.Application.v2
         public void SetupTest()
         {
             grid = new SimpleGrid();
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
         }
 
         [Test]

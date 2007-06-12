@@ -144,7 +144,7 @@ namespace Chillisoft.Bo.v2
                 }
                 else
                 {
-                    return ClassDef.GetClassDefCol()[itsLookupObjectType];
+                    return ClassDef.GetClassDefCol[itsLookupObjectType];
                 }
             }
         }

@@ -28,7 +28,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
             Mock relColControl = new DynamicMock(typeof (IRelationshipCol));
             IRelationshipCol mockRelCol = (IRelationshipCol) relColControl.MockInstance;
 
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef itsClassDef = MyBo.LoadClassDefWithRelationship();
             ClassDef itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             itsMyBo = (MyBo) itsClassDef.CreateNewBusinessObject(connection);

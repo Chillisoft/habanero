@@ -27,7 +27,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
         {
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
             this.SetupDBConnection();
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDefMyBo = MyBo.LoadClassDefWithNoLookup();
         }
 

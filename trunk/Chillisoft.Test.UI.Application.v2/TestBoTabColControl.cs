@@ -25,7 +25,7 @@ namespace Chillisoft.Test.UI.Application.v2
         [TestFixtureSetUp]
         public void SetupTextFixture()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
             itsCol = new BusinessObjectBaseCollection(itsClassDef);
 

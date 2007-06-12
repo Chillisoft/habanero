@@ -14,7 +14,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
         }
 
         [Test]

@@ -20,7 +20,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         public void SetupTest()
         {
             loader = new XmlClassLoader();
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
         }
 
         [Test, ExpectedException(typeof(FileNotFoundException), "The Document Type Definition (DTD) for " +
@@ -207,7 +207,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         [Test]
         public void TestClassWithSuperClass()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef.LoadClassDefs(
                 new XmlClassDefsLoader(
                     @"
@@ -226,7 +226,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
 				</classDef>
 			");
             Assert.IsNotNull(def.SuperClassDesc);
-            Assert.AreSame(ClassDef.GetClassDefCol()[typeof (TestClass)], def.SuperClassDesc.SuperClassDef);
+            Assert.AreSame(ClassDef.GetClassDefCol[typeof (TestClass)], def.SuperClassDesc.SuperClassDef);
         }
 
         [Test]

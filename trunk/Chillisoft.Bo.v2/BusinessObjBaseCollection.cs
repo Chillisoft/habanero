@@ -174,8 +174,9 @@ namespace Chillisoft.Bo.v2
                 try
                 {
                     BusinessObjectBase lTempBusObj;
-                    lTempBusObj = (BusinessObjectBase) Activator.CreateInstance(mBOClassDef.ClassType, true);
-                    while (dr.Read())
+					lTempBusObj = mBOClassDef.InstantiateBusinessObject();
+					//lTempBusObj = (BusinessObjectBase)Activator.CreateInstance(mBOClassDef.ClassType, true);
+					while (dr.Read())
                     {
                         //Load Business OBject from the data reader
                         Add(lTempBusObj.GetBusinessObject(dr));

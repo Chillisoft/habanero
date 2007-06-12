@@ -16,7 +16,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         public void SetupTest()
         {
             itsLoader = new XmlSuperClassDescLoader();
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             ClassDef.LoadClassDefs(
                 new XmlClassDefsLoader(
                     @"
@@ -38,7 +38,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
                 itsLoader.LoadSuperClassDesc(
                     @"<superClassDesc className=""TestClass"" assemblyName=""Chillisoft.Test.Bo.Loaders.v2"" />");
             Assert.AreEqual(ORMapping.ClassTableInheritance, desc.ORMapping);
-            Assert.AreSame(ClassDef.GetClassDefCol()[typeof (TestClass)], desc.SuperClassDef);
+            Assert.AreSame(ClassDef.GetClassDefCol[typeof (TestClass)], desc.SuperClassDef);
         }
 
         [Test]

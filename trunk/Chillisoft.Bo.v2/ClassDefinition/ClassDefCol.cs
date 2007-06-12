@@ -37,23 +37,60 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             }
         }
 
-        /// <summary>
-        /// Provides an indexing facility for the collection so that items
-        /// in the collection can be accessed like an array 
-        /// (e.g. collection["surname"])
-        /// </summary>
-        /// <param name="key">The name of the class definition</param>
-        /// <returns>Returns the class definition that matches the key
-        /// or null if none is found</returns>
-        public ClassDef this[Type key]
-        {
-            get
-            {
-                //TODO: Error if (this.Contains(key))
-                return ((ClassDef) Dictionary[key]);
-            }
-        }
+		private string GetTypeIdForItem(Type key, out bool found)
+		{
+			string typeId = ClassDef.GetTypeId(key, false);
+			found = false;
+			if (Dictionary.Contains(typeId))
+				found = true;
+			else
+			{
+				typeId = ClassDef.GetTypeId(key, true);
+				if (Dictionary.Contains(typeId))
+				{
+					found = true;
+				}
+			}
+			return typeId;
+		}
 
+		/// <summary>
+		/// Provides an indexing facility for the collection so that items
+		/// in the collection can be accessed like an array 
+		/// (e.g. collection["surname"])
+		/// </summary>
+		/// <param name="key">The name of the class definition</param>
+		/// <returns>Returns the class definition that matches the key
+		/// or null if none is found</returns>
+		public ClassDef this[Type key]
+		{
+			get
+			{
+				bool found;
+				string typeId = GetTypeIdForItem(key, out found);
+				if (found) return (ClassDef)Dictionary[typeId];
+				else return null;
+			}
+		}
+
+		/// <summary>
+		/// Provides an indexing facility for the collection so that items
+		/// in the collection can be accessed like an array 
+		/// (e.g. collection["surname"])
+		/// </summary>
+		/// <param name="assemblyName">The name of the class assembly</param>
+		/// <param name="className">The name of the class</param>
+		/// <returns>Returns the class definition that matches the key
+		/// or null if none is found</returns>
+		public ClassDef this[string assemblyName, string className]
+		{
+			get
+			{
+				//TODO: Error if (this.Contains(key))
+				return ((ClassDef)Dictionary[ClassDef.GetTypeId(assemblyName, className)]);
+			}
+		}
+		
         /// <summary>
         /// Returns a collection of the key names being stored
         /// </summary>
@@ -70,36 +107,61 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             get { return (Dictionary.Values); }
         }
 
-        /// <summary>
-        /// Adds a class definition to the collection
-        /// </summary>
-        /// <param name="key">The name of the class definition</param>
-        /// <param name="value">The class definition to add</param>
-        internal void Add(Type key, ClassDef value)
-        {
-            Dictionary.Add(key, value);
-        }
+		/// <summary>
+		/// Adds a class definition to the collection
+		/// </summary>
+		/// <param name="value">The class definition to add</param>
+		public void Add(ClassDef value)
+		{
+			Dictionary.Add(value.ClassFullName, value);
+		}
 
         /// <summary>
         /// Indicates whether the collection contains a class definition
-        /// by the name indicated
+        /// representing the passed type.
         /// </summary>
         /// <param name="key">The name of the class definition</param>
         /// <returns>Returns true if found, false if not</returns>
-        internal bool Contains(Type key)
+		public bool Contains(Type key)
         {
-            return (Dictionary.Contains(key));
+			bool found;
+			string typeId = GetTypeIdForItem(key, out found);
+			return found;
         }
 
-        /// <summary>
-        /// Removes the class definition with the specified name from the
-        /// collection.
-        /// </summary>
-        /// <param name="key">The name of the class definition</param>
-        internal void Remove(Type key)
-        {
-            Dictionary.Remove(key);
-        }
+		/// <summary>
+		/// Indicates whether the collection contains the class definition
+		/// that is passed as a parameter.
+		/// </summary>
+		/// <param name="classDef">The class definition to look for.</param>
+		/// <returns>Returns true if found, false if not</returns>
+		public bool Contains(ClassDef classDef)
+		{
+			return (Dictionary.Contains(classDef.ClassFullName));
+		}
+
+
+		/// <summary>
+		/// Removes the class definition for the specified type from the
+		/// collection.
+		/// </summary>
+		/// <param name="key">The name of the class definition</param>
+		public void Remove(Type key)
+		{
+			bool found;
+			string typeId = GetTypeIdForItem(key, out found);
+			Dictionary.Remove(typeId);
+			//TODO: should this throw an error if it is not found?
+		}
+
+		/// <summary>
+		/// Removes the specified class definition from the collection.
+		/// </summary>
+		/// <param name="classDef">The class definition to be removed</param>
+		public void Remove(ClassDef classDef)
+		{
+			Dictionary.Remove(classDef.ClassFullName);
+		}
 
         /// <summary>
         /// Removes a flag that indicates that a collection exists.  After
@@ -115,4 +177,4 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     #region "self Tests"
 
     #endregion
-}
+} 

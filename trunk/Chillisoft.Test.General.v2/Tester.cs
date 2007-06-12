@@ -725,7 +725,7 @@ namespace Chillisoft.Test.General.v2
             }
             else
             {
-                return ClassDef.GetClassDefCol()[typeof (TransactionLog)];
+                return ClassDef.GetClassDefCol[typeof (TransactionLog)];
             }
         }
 

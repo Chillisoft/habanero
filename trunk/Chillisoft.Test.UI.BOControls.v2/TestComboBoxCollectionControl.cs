@@ -32,7 +32,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
         [SetUp]
         public void SetupTest()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
 
             itsDataProviderMockControl = new DynamicMock(typeof (IFormDataProvider));

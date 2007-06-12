@@ -33,7 +33,7 @@ namespace Chillisoft.Test.Bo.v2
         public void SetupTestFixture()
         {
             this.SetupDBConnection();
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             itsLoader = new XmlClassLoader();
             itsClassDef = MyBo.LoadClassDefWithLookup();
         }

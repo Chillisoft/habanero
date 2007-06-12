@@ -12,8 +12,8 @@ namespace Chillisoft.Bo.Loaders.v2
     public class XmlRelationshipLoader : XmlLoader
     {
         private PropDefCol itsPropDefCol;
-        private Type itsRelatedClassType;
-        private RelKeyDef itsRelKeyDef;
+		private Type itsRelatedClassType;
+		private RelKeyDef itsRelKeyDef;
         private string itsName;
         private string itsType;
         private bool itsKeepReferenceToRelatedObject;

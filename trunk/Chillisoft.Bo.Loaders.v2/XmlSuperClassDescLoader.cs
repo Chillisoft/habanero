@@ -71,9 +71,8 @@ namespace Chillisoft.Bo.Loaders.v2
             itsReader.Read();
             string className = itsReader.GetAttribute("className");
             string assemblyName = itsReader.GetAttribute("assemblyName");
-            Type classType = TypeLoader.LoadType(assemblyName, className);
-            itsSuperClassDef = ClassDef.GetClassDefCol()[classType];
-            itsORMapping = (ORMapping) Enum.Parse(typeof (ORMapping), itsReader.GetAttribute("orMapping"));
+			itsSuperClassDef = ClassDef.GetClassDefCol[assemblyName, className];
+			itsORMapping = (ORMapping)Enum.Parse(typeof(ORMapping), itsReader.GetAttribute("orMapping"));
         }
     }
 }

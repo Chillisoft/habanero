@@ -20,7 +20,7 @@ namespace Chillisoft.Test.Bo.v2
 
         public TestLongText()
         {
-            ClassDef.GetClassDefCol().Clear();
+            ClassDef.GetClassDefCol.Clear();
             XmlClassLoader loader = new XmlClassLoader();
             itsClassDef =
                 loader.LoadClass(
