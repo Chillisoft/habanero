@@ -14,14 +14,14 @@ namespace Chillisoft.Test.Bo.Loaders.v2
     {
         private string dtd1 = "TestDtd";
         private string dtd2 = @"
-#include dtd1.dtd
+#include classdef.dtd
 TestDtd2";
         private string dtd2and1 = @"
 TestDtd
 TestDtd2";
         private string dtd3 = @"
-#include dtd1.dtd
-#include dtd2.dtd
+#include classdef.dtd
+#include propertydef.dtd
 TestDtd3";
         private string dtd3processed = @"
 TestDtd
@@ -37,8 +37,8 @@ TestDtd3";
 
             DtdLoader loader = new DtdLoader(textFileLoader, "");
 
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"dtd1.dtd"});
-            String dtdFileContents = loader.LoadDtd("dtd1.dtd");
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"classdef.dtd"});
+            String dtdFileContents = loader.LoadDtd("classdef.dtd");
             Assert.AreEqual(dtd1 + Environment.NewLine, dtdFileContents);
             mockControl.Verify();
         }
@@ -52,10 +52,10 @@ TestDtd3";
 
             DtdLoader loader = new DtdLoader(textFileLoader, "");
 
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] {"dtd2.dtd"});
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"dtd1.dtd"});
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] {"propertydef.dtd"});
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"classdef.dtd"});
 
-            String dtdFileContents = loader.LoadDtd("dtd2.dtd");
+            String dtdFileContents = loader.LoadDtd("propertydef.dtd");
             Assert.AreEqual(dtd2and1 + Environment.NewLine, dtdFileContents);
         }
 
@@ -67,12 +67,12 @@ TestDtd3";
 
             DtdLoader loader = new DtdLoader(textFileLoader, "");
 
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd3), new object[] {"dtd3.dtd"});
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"dtd1.dtd"});
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] {"dtd2.dtd"});
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"dtd1.dtd"});
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd3), new object[] {"keydef.dtd"});
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "classdef.dtd" });
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] { "propertydef.dtd" });
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "classdef.dtd" });
 
-            String dtdFileContents = loader.LoadDtd("dtd3.dtd");
+            String dtdFileContents = loader.LoadDtd("keydef.dtd");
             Assert.AreEqual(dtd3processed + Environment.NewLine, dtdFileContents);
         }
     }

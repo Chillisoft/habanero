@@ -52,6 +52,15 @@ namespace Chillisoft.Generic.v2
         private string LoadDtd(string fileName, IList alreadyIncludedFiles)
         {
             string dtd = "";
+            if (!File.Exists(fileName))
+            {
+                throw new FileNotFoundException("The Document Type Definition " +
+                    "(DTD) file, '" + fileName + "', was not found.  Please ensure " +
+                    "that you have a DTD for each type of XML element you are " +
+                    "using, and that these files are being copied to your application's " +
+                    "output folder (eg. bin/debug).  Alternatively, check that " +
+                    "the element name was spelt correctly and has the correct capitalisation.");
+            }
             TextReader reader = itsTextFileLoader.LoadTextFile(fileName);
             string line;
             do

@@ -61,12 +61,31 @@ namespace Chillisoft.Db.v2
         /// "port"</param>
         public DatabaseConfig(IDictionary settings)
         {
-            mVendor = (string) settings["vendor"];
-            mServer = (string) settings["server"];
-            mDatabase = (string) settings["database"];
-            mUserName = (string) settings["username"];
-            mPassword = (string) settings["password"];
-            mPort = (string) settings["port"];
+            if (settings != null)
+            {
+                mVendor = (string) settings["vendor"];
+                mServer = (string) settings["server"];
+                mDatabase = (string) settings["database"];
+                mUserName = (string) settings["username"];
+                mPassword = (string) settings["password"];
+                mPort = (string) settings["port"];
+
+                if (mVendor == null || mVendor.Length == 0)
+                {
+                    throw new ArgumentException("Missing database settings for the database configuration " +
+                                         "in the application configuration file. " +
+                                         "Ensure that you have a setting for 'vendor' " +
+                                         "- see documentation for possible options on the database " +
+                                         "vendor setting.");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("The database configuration could not be read. " +
+                                         "Check that your application configuration file exists (eg. app.config), " +
+                                         "that you have DatabaseConfig in the configSections, and that you have " +
+                                         "a section of settings in the DatabaseConfig category.");
+            }
         }
 
         /// <summary>

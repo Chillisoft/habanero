@@ -40,6 +40,14 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a property definition</returns>
         public PropDef LoadProperty(string xmlPropDef)
         {
+            if (xmlPropDef == null || xmlPropDef.Length == 0)
+            {
+                throw new XmlException("An error has occurred while attempting to " +
+                   "load a property definition, contained in a 'propertyDef' element. " +
+                   "Check that you have correctly specified at least one 'propertyDef' " +
+                   "element, which defines a property that is to be mapped from a " +
+                   "database field to a property in a class.");
+            }
             return LoadProperty(CreateXmlElement(xmlPropDef));
         }
 
@@ -106,6 +114,12 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadPropertyName()
         {
             itsPropertyName = itsReader.GetAttribute("name");
+            if (itsPropertyName == null || itsPropertyName.Length == 0)
+            {
+                throw new XmlException("A 'propertyDef' element has no 'name' attribute " +
+                   "set. Each 'propertyDef' element requires a 'name' attribute that " +
+                   "specifies the name of the property in the class to map to.");
+            }
         }
 
         /// <summary>
@@ -113,7 +127,20 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadPropertyType()
         {
-            itsPropertyType = TypeLoader.LoadType(itsReader.GetAttribute("assembly"), itsReader.GetAttribute("type"));
+            string assemblyName = itsReader.GetAttribute("assembly");
+            string typeName = itsReader.GetAttribute("type");
+            try
+            {
+                itsPropertyType = TypeLoader.LoadType(assemblyName, typeName);
+            }
+            catch (Exception ex)
+            {
+                throw new UnknownTypeNameException("Unable to load the property type while " +
+                       "attempting to load a property definition, given the 'assembly' as: '" +
+                       assemblyName + "', and the 'type' as: '" + typeName +
+                       "'. Check that the type exists in the given assembly name and " +
+                       "that spelling and capitalisation are correct.", ex);
+            }
         }
 
         /// <summary>

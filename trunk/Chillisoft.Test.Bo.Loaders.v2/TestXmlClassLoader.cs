@@ -23,7 +23,12 @@ namespace Chillisoft.Test.Bo.Loaders.v2
             ClassDef.GetClassDefCol().Clear();
         }
 
-        [Test, ExpectedException(typeof(FileNotFoundException), "The dtd for class was not found in ''.")]
+        [Test, ExpectedException(typeof(FileNotFoundException), "The Document Type Definition (DTD) for " +
+                    "the XML element 'class' was not found in the application's output/execution directory (eg. bin/debug). " +
+                    "Ensure that you have a .DTD file for each of the XML class " +
+                    "definition elements you will be using, and that they are being copied to the " +
+                    "application's output directory (eg. bin/debug).  Alternatively, check that " +
+                    "the element name was spelt correctly and has the correct capitalisation.")]
         public void TestInvalidXmlFormatWrongRootElement()
         {
             loader.LoadClass("<class name=\"TestClass\" assembly=\"Chillisoft.Test.Bo.Loaders.v2\" />");

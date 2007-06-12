@@ -22,6 +22,14 @@ namespace Chillisoft.Util.v2
         /// the assembly name or class name cannot be found</exception>
         public static Type LoadType(string assemblyName, string className)
         {
+            if (assemblyName == null || assemblyName.Length == 0)
+            {
+                throw new ArgumentNullException("assemblyName","A supplied assembly name was null. " +
+                    "There may be several reasons for this, including " +
+                    "an incorrectly named or incorrectly capitalised XML " +
+                    "element name, resulting in the default assembly for " +
+                    "that element not being loaded.");
+            }
             Assembly classAssembly;
             try
             {

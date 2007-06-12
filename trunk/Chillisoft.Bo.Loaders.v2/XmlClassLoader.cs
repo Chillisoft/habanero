@@ -48,6 +48,14 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns the class definition loaded</returns>
         public ClassDef LoadClass(string xmlClassDef)
         {
+            if (xmlClassDef == null || xmlClassDef.Length == 0)
+            {
+                throw new ArgumentException("The application is unable to read the " +
+                    "'classDef' element from the XML class definitions file.  " +
+                    "The definitions need one 'classDefs' root element and a 'classDef' " +
+                    "element for each class that you are mapping.  XML elements are " +
+                    "case-sensitive.");
+            }
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xmlClassDef);
             return LoadClass(doc.DocumentElement);
@@ -213,13 +221,39 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             itsClassName = itsReader.GetAttribute("name");
             itsAssemblyName = itsReader.GetAttribute("assembly");
+
+            if (itsAssemblyName == null || itsAssemblyName.Length == 0)
+            {
+                string errorMessage = "No assembly name has been specified for the " +
+                                      "class definition";
+                if (itsClassName != null && itsClassName.Length > 0)
+                {
+                    errorMessage += " of '" + itsClassName + "'";
+                }
+                errorMessage += ". Within each 'classDef' element you need to set " +
+                                "the 'assembly' attribute, which refers to the project or assembly " +
+                                "that contains the class which is being mapped to.";
+                throw new XmlException(errorMessage);
+            }
+            if (itsClassName == null || itsClassName.Length == 0)
+            {
+                throw new XmlException("No 'name' attribute has been specified for a " +
+                   "'classDef' element.  The 'name' attribute indicates the name of the " +
+                   "class to which a database table will be mapped.");
+            }
+
             try
             {
                 itsClassType = TypeLoader.LoadType(itsAssemblyName, itsClassName);
             }
             catch (UnknownTypeNameException ex)
             {
-                itsClassType = null;
+                throw new UnknownTypeNameException("Unable to load the class type while " +
+                       "attempting to load a class definition, given the 'assembly' as: '" +
+                       itsAssemblyName + "', and the 'class' as: '" + itsClassName +
+                       "'. Check that the class exists in the given assembly name and " +
+                       "that spelling and capitalisation are correct.", ex);
+                //itsClassType = null;
             }
         }
 

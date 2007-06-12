@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Xml;
 using Chillisoft.Bo.ClassDefinition.v2;
 using Chillisoft.Bo.Loaders.v2;
 using Chillisoft.Db.v2;
@@ -30,12 +31,11 @@ namespace Chillisoft.UI.Application.v2
     /// <li>Call the Startup() method to launch the application</li>
     /// </ol>
     /// </summary>
-    /// TODO ERIC - no default class definitions path?
     public class HabaneroApp
     {
         private readonly string itsAppName;
         private readonly string itsAppVersion;
-        private static readonly ILog log = LogManager.GetLogger("HabaneroApp");
+        private static ILog log;
         private ApplicationVersionUpgrader itsApplicationVersionUpgrader;
         private string itsClassDefsPath = "";
         private string itsClassDefsFileName = "ClassDefs.xml";
@@ -121,6 +121,25 @@ namespace Chillisoft.UI.Application.v2
         }
 
         /// <summary>
+        /// Gets the loader for the xml class definitions
+        /// </summary>
+        /// <returns>Returns the loader</returns>
+        private XmlClassDefsLoader GetXmlClassDefsLoader()
+        {
+            try
+            {
+                return new XmlClassDefsLoader(new StreamReader(itsClassDefsFileName).ReadToEnd(), itsClassDefsPath);
+            }
+            catch (Exception ex)
+            {
+                throw new FileNotFoundException("Unable to find Class Definitions file. " +
+                      "This file contains all the class definitions that match " +
+                      "objects to database tables. Ensure that you have a classdefs.xml file " +
+                      "and that the file is being copied to your output directory (eg. bin/debug).", ex);
+            }
+        }
+
+        /// <summary>
         /// Launches the application, initialising the logger, the database
         /// configuration and connection, the class definitions, the exception
         /// notifier and the synchronisation controller.  This method also
@@ -141,7 +160,19 @@ namespace Chillisoft.UI.Application.v2
                 GlobalRegistry.ApplicationName = itsAppName;
                 GlobalRegistry.ApplicationVersion = itsAppVersion;
 
-                DOMConfigurator.Configure();
+                try
+                {
+                    DOMConfigurator.Configure();
+                }
+                catch (Exception ex)
+                {
+                    throw new XmlException("There was an error reading the XML configuration file. " +
+                        "Check that all custom configurations, such as DatabaseConfig, are well-formed, " +
+                        "spelt correctly and have been declared correctly in configSections.  See the " +
+                        "Habanero tutorial for example usage or see official " +
+                        "documentation on configuration files if the error is not resolved.", ex);
+                }
+                log = LogManager.GetLogger("HabaneroApp");
 
                 log.Debug("---------------------------------------------------------------------");
                 log.Debug(itsAppName + "v" + itsAppVersion + " starting");
@@ -155,14 +186,18 @@ namespace Chillisoft.UI.Application.v2
 
                 if (itsApplicationVersionUpgrader != null) itsApplicationVersionUpgrader.Upgrade();
 
-                if (itsLoadClassDefs)
-                    ClassDef.LoadClassDefs(new XmlClassDefsLoader(new StreamReader(itsClassDefsFileName).ReadToEnd(), itsClassDefsPath));
+                if (itsLoadClassDefs) ClassDef.LoadClassDefs(GetXmlClassDefsLoader());
             }
             catch (Exception ex) {
-                log.Error(ExceptionUtil.GetExceptionString(ex, 0));
+                string errorMessage = "There was a problem starting the application.";
+                if (log != null && log.Logger.IsEnabledFor(log4net.spi.Level.ERROR))
+                {
+                    log.Error("---------------------------------------------" +
+                        Environment.NewLine + ExceptionUtil.GetCategorizedExceptionString(ex, 0));
+                    errorMessage += " Please look at the log file for details of the problem.";
+                }
                 GlobalRegistry.UIExceptionNotifier.Notify(
-                    new UserException(
-                        "There was a problem starting the application. Please look at the log file for details of the problem.", ex),
+                    new UserException(errorMessage, ex),
                     "Problem in Startup:", "Problem in Startup");
                 //MessageBox.Show("An error happened on program startup : " + Environment.NewLine + ex.Message + Environment.NewLine + "Please see log file for details.");
                 return false;

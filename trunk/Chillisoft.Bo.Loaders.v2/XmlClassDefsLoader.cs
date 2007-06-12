@@ -61,7 +61,11 @@ namespace Chillisoft.Bo.Loaders.v2
             }
             catch (XmlException ex)
             {
-                Console.Out.WriteLine(ExceptionUtil.GetExceptionString(ex, 0));
+                //Console.Out.WriteLine(ExceptionUtil.GetExceptionString(ex, 0));
+                throw new XmlException("The class definitions XML file has no root " +
+                    "element 'classDefs'.  The document needs a master 'classDefs' element " +
+                    "and individual 'classDef' elements for each of the classes you are " +
+                    "defining.", ex);
             }
             return LoadClassDefs(doc.DocumentElement);
         }

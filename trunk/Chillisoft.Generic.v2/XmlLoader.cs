@@ -75,8 +75,9 @@ namespace Chillisoft.Generic.v2
         {
             if (!itsDocumentValid)
             {
-                throw new InvalidXmlDefinitionException("The " + itsElement.Name + " node does not conform to its dtd." +
-                                                        itsInvalidDocumentArgs.Message);
+                throw new InvalidXmlDefinitionException("The '" + itsElement.Name + "' " +
+                    "node does not conform to its Document Type Definition (DTD). " +
+                    itsInvalidDocumentArgs.Message);
             }
         }
 
@@ -109,7 +110,21 @@ namespace Chillisoft.Generic.v2
             string dtdFileName = itsDtdPath + rootElementName + ".dtd";
             if (!File.Exists(dtdFileName))
             {
-                throw new FileNotFoundException("The dtd for " + rootElementName + " was not found in '" + itsDtdPath + "'.");
+                string errorMessage = "The Document Type Definition (DTD) for " +
+                    "the XML element '" + rootElementName + "' was not found in the ";
+                if (itsDtdPath == null || itsDtdPath.Length == 0)
+                {
+                    errorMessage += "application's output/execution directory (eg. bin/debug). ";
+                }
+                else
+                {
+                    errorMessage += "path: '" + itsDtdPath + "'. ";
+                }
+                errorMessage += "Ensure that you have a .DTD file for each of the XML class " +
+                    "definition elements you will be using, and that they are being copied to the " +
+                    "application's output directory (eg. bin/debug).  Alternatively, check that " +
+                    "the element name was spelt correctly and has the correct capitalisation.";
+                throw new FileNotFoundException(errorMessage);
             }
             return new DtdLoader(itsDtdPath).LoadDtd(dtdFileName);
             //return new StreamReader(dtdFileName).ReadToEnd();
