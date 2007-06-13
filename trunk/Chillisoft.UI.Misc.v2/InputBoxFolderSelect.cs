@@ -37,12 +37,12 @@ namespace Chillisoft.UI.Misc.v2
             messagePanelManager.AddControl(ControlFactory.CreateLabel(_message, false));
             messagePanelManager.AddControl(_textBox);
             messagePanelManager.AddGlue();
-            Button itsSelectButton =
+            Button selectButton =
                 ControlFactory.CreateButton("Select...", new EventHandler(SelectFolderButtonClickHandler));
-            messagePanelManager.AddControl(itsSelectButton);
+            messagePanelManager.AddControl(selectButton);
             messagePanel.Height = _textBox.Height + 40;
             messagePanel.Width = Math.Max(250, ControlFactory.CreateLabel(_message, false).PreferredWidth + 20);
-            _textBox.Width = messagePanel.Width - itsSelectButton.Width - 30;
+            _textBox.Width = messagePanel.Width - selectButton.Width - 30;
             return new OKCancelDialog(messagePanel).ShowDialog();
         }
 

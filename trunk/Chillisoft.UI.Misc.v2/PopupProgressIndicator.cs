@@ -59,8 +59,8 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         private class PopupProgressForm : Form
         {
-            private ProgressBar itsProgressIndicator;
-            private Label itsDescriptionLabel;
+            private ProgressBar _progressIndicator;
+            private Label _descriptionLabel;
 
             /// <summary>
             /// Constructor to initialise the form with a message to display
@@ -72,14 +72,14 @@ namespace Chillisoft.UI.Misc.v2
                 GridLayoutManager manager = new GridLayoutManager(contentPanel);
                 manager.SetGridSize(2, 1);
                 manager.FixAllRowsBasedOnContents();
-                itsDescriptionLabel = ControlFactory.CreateLabel(message, false);
-                manager.AddControl(itsDescriptionLabel);
-                itsProgressIndicator = ControlFactory.CreateProgressBar();
-                manager.AddControl(itsProgressIndicator);
+                _descriptionLabel = ControlFactory.CreateLabel(message, false);
+                manager.AddControl(_descriptionLabel);
+                _progressIndicator = ControlFactory.CreateProgressBar();
+                manager.AddControl(_progressIndicator);
                 contentPanel.Dock = DockStyle.Fill;
                 this.Controls.Add(contentPanel);
-                itsProgressIndicator.Maximum = 100;
-                itsProgressIndicator.Minimum = 0;
+                _progressIndicator.Maximum = 100;
+                _progressIndicator.Minimum = 0;
                 this.Text = message;
             }
 
@@ -89,7 +89,7 @@ namespace Chillisoft.UI.Misc.v2
             /// <param name="percentage">The progress percentage</param>
             public void SetProgress(int percentage)
             {
-                itsProgressIndicator.Value = percentage;
+                _progressIndicator.Value = percentage;
             }
 
             /// <summary>
@@ -98,7 +98,7 @@ namespace Chillisoft.UI.Misc.v2
             /// <param name="description">The description</param>
             public void SetDescription(string description)
             {
-                itsDescriptionLabel.Text = description;
+                _descriptionLabel.Text = description;
             }
         }
     }
