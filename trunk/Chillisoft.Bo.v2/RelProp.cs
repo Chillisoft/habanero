@@ -10,8 +10,8 @@ namespace Chillisoft.Bo.v2
     /// TODO ERIC - review
     public class RelProp
     {
-        private BOProp mBoProp;
-        private RelPropDef mRelPropDef;
+        private BOProp _boProp;
+        private RelPropDef _relPropDef;
 
         /// <summary>
         /// Constructor to initialise a new property
@@ -20,8 +20,8 @@ namespace Chillisoft.Bo.v2
         /// <param name="lBoProp">The property</param>
         internal RelProp(RelPropDef mRelPropDef, BOProp lBoProp)
         {
-            this.mRelPropDef = mRelPropDef;
-            mBoProp = lBoProp;
+            this._relPropDef = mRelPropDef;
+            _boProp = lBoProp;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal string OwnerPropertyName
         {
-            get { return mRelPropDef.OwnerPropertyName; }
+            get { return _relPropDef.OwnerPropertyName; }
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal string RelatedClassPropName
         {
-            get { return mRelPropDef.RelatedClassPropName; }
+            get { return _relPropDef.RelatedClassPropName; }
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal bool IsNull
         {
-            get { return mBoProp == null || mBoProp.PropertyValue == null; }
+            get { return _boProp == null || _boProp.PropertyValue == null; }
         }
 
         /// <summary>
@@ -54,11 +54,11 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns an IExpression object</returns>
         internal IExpression RelatedPropExpression()
         {
-            if (mBoProp.PropertyValue == null)
+            if (_boProp.PropertyValue == null)
             {
-                return new Parameter(mRelPropDef.RelatedClassPropName, "IS", "NULL");
+                return new Parameter(_relPropDef.RelatedClassPropName, "IS", "NULL");
             }
-            return new Parameter(mRelPropDef.RelatedClassPropName, "=", mBoProp.PropertyValueString);
+            return new Parameter(_relPropDef.RelatedClassPropName, "=", _boProp.PropertyValueString);
         }
     }
 

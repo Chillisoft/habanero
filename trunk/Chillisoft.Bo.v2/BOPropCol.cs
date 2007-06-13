@@ -241,16 +241,16 @@ namespace Chillisoft.Bo.v2
         //		[Test]
         //		public void TestPropDefColIsValid()
         //		{
-        //			mProp = mBOPropCol["Prop2"];
+        //			mProp = _boPropCol["Prop2"];
         //			try
         //			{
         //				mProp.PropertyValue = "Prop Value fdfdfdf ff";
         //			}
         //			catch (Exception e)
         //			{}
-        //			mProp = mBOPropCol["PropName"];
+        //			mProp = _boPropCol["PropName"];
         //			string reason;
-        //			Assert.IsFalse(mBOPropCol.IsValid(out reason));
+        //			Assert.IsFalse(_boPropCol.IsValid(out reason));
         //			Assert.IsTrue(reason.Length > 0);
         //			
         //		}

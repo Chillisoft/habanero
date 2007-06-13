@@ -54,7 +54,7 @@ namespace Chillisoft.UI.BOControls.v2
             itsCollection = collection;
             SetComboBoxCollection(itsComboBox, itsCollection, includeBlank);
 //			_comboBox.Items.Clear();
-//			foreach (BusinessObjectBase businessObjectBase in itsCollection) {
+//			foreach (BusinessObjectBase businessObjectBase in _collection) {
 //				itsComboBox.Items.Add(businessObjectBase);
 //			}
 

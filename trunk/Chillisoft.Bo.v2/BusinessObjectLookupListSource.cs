@@ -18,7 +18,7 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class BusinessObjectLookupListSource : ILookupListSource
     {
-        private readonly Type itsBoType;
+        private readonly Type _boType;
 
         /// <summary>
         /// Constructor to initialise a new lookup-list
@@ -26,7 +26,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="boType">The business object type</param>
         public BusinessObjectLookupListSource(Type boType)
         {
-            itsBoType = boType;
+            _boType = boType;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a collection of string-Guid pairs</returns>
         public StringGuidPairCollection GetLookupList(IDatabaseConnection connection)
         {
-            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol[itsBoType]);
+            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol[_boType]);
             col.Load("", "");
             return CreateStringGuidPairCollection(col);
         }
@@ -61,7 +61,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns an ICollection object</returns>
         public ICollection GetValueCollection()
         {
-            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol[itsBoType]);
+            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(ClassDef.GetClassDefCol[_boType]);
             col.Load("", "");
             return CreateValueList(col);
         }

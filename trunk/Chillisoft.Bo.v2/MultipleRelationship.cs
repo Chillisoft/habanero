@@ -9,7 +9,7 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class MultipleRelationship : Relationship
     {
-        private BusinessObjectBaseCollection mBOCol;
+        private BusinessObjectBaseCollection _boCol;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -32,21 +32,21 @@ namespace Chillisoft.Bo.v2
         internal BusinessObjectBaseCollection GetRelatedBusinessObjectCol()
         {
             BusinessObjectBase busObj =
-                (BusinessObjectBase) Activator.CreateInstance(mRelDef.RelatedObjectClassType, true);
-            if (this.mRelDef.KeepReferenceToRelatedObject)
+                (BusinessObjectBase) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
+            if (this._relDef.KeepReferenceToRelatedObject)
             {
                 // TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object
                 // gets added with the foreign key nothing will pick that up other than a reload.
-                //if (mBOCol == null) {
-                mBOCol = busObj.GetBusinessObjectCol(mRelKey.RelationshipExpression(),
-                                                     ((MultipleRelationshipDef) mRelDef).OrderBy);
+                //if (_boCol == null) {
+                _boCol = busObj.GetBusinessObjectCol(_relKey.RelationshipExpression(),
+                                                     ((MultipleRelationshipDef) _relDef).OrderBy);
                 //}
-                return mBOCol;
+                return _boCol;
             }
             else
             {
-                return busObj.GetBusinessObjectCol(mRelKey.RelationshipExpression(),
-                                                   ((MultipleRelationshipDef) mRelDef).OrderBy);
+                return busObj.GetBusinessObjectCol(_relKey.RelationshipExpression(),
+                                                   ((MultipleRelationshipDef) _relDef).OrderBy);
             }
         }
     }

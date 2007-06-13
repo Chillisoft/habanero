@@ -61,20 +61,20 @@ namespace Chillisoft.Test.General.v2
 
         protected override ClassDef ConstructClassDef()
         {
-            mClassDef = GetClassDef();
+            _classDef = GetClassDef();
 
 
-            return mClassDef;
+            return _classDef;
         }
 
         protected override void ConstructClass(bool newObject)
         {
             base.ConstructClass(newObject);
 
-            mPropDateLastUpdated = mBOPropCol["DateLastUpdated"];
-            mPropUserLastUpdated = mBOPropCol["UserLastUpdated"];
-            mPropMachineLastUpdated = mBOPropCol["MachineLastUpdated"];
-            mPropVersionNumber = mBOPropCol["VersionNumber"];
+            mPropDateLastUpdated = _boPropCol["DateLastUpdated"];
+            mPropUserLastUpdated = _boPropCol["UserLastUpdated"];
+            mPropMachineLastUpdated = _boPropCol["MachineLastUpdated"];
+            mPropVersionNumber = _boPropCol["VersionNumber"];
 
             SetConcurrencyControl(new OptimisticLockingVersionNumber(mPropDateLastUpdated,
                                                                      mPropUserLastUpdated, mPropMachineLastUpdated,
@@ -306,7 +306,7 @@ namespace Chillisoft.Test.General.v2
         //class
         protected internal string GetObjectNewID()
         {
-            return mPrimaryKey.GetObjectNewID();
+            return _primaryKey.GetObjectNewID();
         }
 
         protected internal static BusinessObjectBaseCollection LoadBusinessObjCol()

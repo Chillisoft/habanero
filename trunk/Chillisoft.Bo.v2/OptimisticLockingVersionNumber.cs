@@ -19,11 +19,11 @@ namespace Chillisoft.Bo.v2
     /// TODO ERIC - could knock all the "prop"s off these fields and parameters
     public class OptimisticLockingVersionNumber : IConcurrencyControl
     {
-        private BOProp mDateLastUpdatedProp;
-        private BOProp mUserLastUpdatedProp;
-        private BOProp mMachineLastUpdatedProp;
-        private BOProp mVersionNumberProp;
-        private BOProp mOperatingSystemUserProp;
+        private BOProp _dateLastUpdatedProp;
+        private BOProp _userLastUpdatedProp;
+        private BOProp _machineLastUpdatedProp;
+        private BOProp _versionNumberProp;
+        private BOProp _operatingSystemUserProp;
 
         /// <summary>
         /// Constructor to initialise a new instance with details of the last
@@ -41,10 +41,10 @@ namespace Chillisoft.Bo.v2
                                               BOProp machineLastUpdatedProp,
                                               BOProp versionNumberProp)
         {
-            mDateLastUpdatedProp = dateLastUpdatedProp;
-            mUserLastUpdatedProp = userLastUpdatedProp;
-            mMachineLastUpdatedProp = machineLastUpdatedProp;
-            mVersionNumberProp = versionNumberProp;
+            _dateLastUpdatedProp = dateLastUpdatedProp;
+            _userLastUpdatedProp = userLastUpdatedProp;
+            _machineLastUpdatedProp = machineLastUpdatedProp;
+            _versionNumberProp = versionNumberProp;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Chillisoft.Bo.v2
             : this(dateLastUpdatedProp, userLastUpdatedProp,
                    machineLastUpdatedProp, versionNumberProp)
         {
-            mOperatingSystemUserProp = operatingSystemUserProp;
+            _operatingSystemUserProp = operatingSystemUserProp;
         }
 
         /// <summary>
@@ -96,17 +96,17 @@ namespace Chillisoft.Bo.v2
                         }
                         else
                         {
-                            int versionNumber = (int) dr[mVersionNumberProp.DataBaseFieldName];
+                            int versionNumber = (int) dr[_versionNumberProp.DataBaseFieldName];
                             //Compare the value that the property has as its versionNumber
                             // to the value that the database currently has.
                             // if these two are not equal then the objects data has been 
                             // updated to the database since this object read it,
                             // we thus have a concurrency conflict.
-                            if (versionNumber != (int) mVersionNumberProp.PropertyValue)
+                            if (versionNumber != (int) _versionNumberProp.PropertyValue)
                             {
-                                String dateLastUpdatedInDB = dr[mDateLastUpdatedProp.DataBaseFieldName].ToString();
-                                string userNameLastUpdated = (string) dr[mUserLastUpdatedProp.DataBaseFieldName];
-                                string machineLastUpdated = (string) dr[mMachineLastUpdatedProp.DataBaseFieldName];
+                                String dateLastUpdatedInDB = dr[_dateLastUpdatedProp.DataBaseFieldName].ToString();
+                                string userNameLastUpdated = (string) dr[_userLastUpdatedProp.DataBaseFieldName];
+                                string machineLastUpdated = (string) dr[_machineLastUpdatedProp.DataBaseFieldName];
                                 throw new BusObjOptimisticConcurrencyControlException(busObj.ClassName,
                                                                                       userNameLastUpdated,
                                                                                       machineLastUpdated,
@@ -176,13 +176,13 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public void UpdatePropertiesWithLatestConcurrencyInfo()
         {
-            mDateLastUpdatedProp.PropertyValue = DateTime.Now;
+            _dateLastUpdatedProp.PropertyValue = DateTime.Now;
 
             try
             {
                 //TODO Temp code possibly integrate with a system to get the user as
                 // per custom code for now use the OS user.
-                mUserLastUpdatedProp.PropertyValue = WindowsIdentity.GetCurrent().Name;
+                _userLastUpdatedProp.PropertyValue = WindowsIdentity.GetCurrent().Name;
             }
             catch (SecurityException)
             {
@@ -190,18 +190,18 @@ namespace Chillisoft.Bo.v2
 
             try
             {
-                mMachineLastUpdatedProp.PropertyValue = Environment.MachineName;
+                _machineLastUpdatedProp.PropertyValue = Environment.MachineName;
             }
             catch (InvalidOperationException)
             {
             }
 
-            mVersionNumberProp.PropertyValue = (int) mVersionNumberProp.PropertyValue + 1;
-            if (!(mOperatingSystemUserProp == null))
+            _versionNumberProp.PropertyValue = (int) _versionNumberProp.PropertyValue + 1;
+            if (!(_operatingSystemUserProp == null))
             {
                 try
                 {
-                    mOperatingSystemUserProp.PropertyValue = WindowsIdentity.GetCurrent().Name;
+                    _operatingSystemUserProp.PropertyValue = WindowsIdentity.GetCurrent().Name;
                 }
                 catch (SecurityException)
                 {

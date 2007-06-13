@@ -8,9 +8,9 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public abstract class PropRuleBase
     {
-        protected readonly bool mIsCompulsory = false;
-        protected readonly string mRuleName;
-        protected readonly Type mPropType;
+        protected readonly bool _isCompulsory = false;
+        protected readonly string _ruleName;
+        protected readonly Type _propType;
 
         /// <summary>
         /// Constructor to initialise a new property rule
@@ -22,9 +22,9 @@ namespace Chillisoft.Bo.v2
         internal PropRuleBase(string ruleName, bool isCompulsory, Type propType)
         {
             //TODO_ErrCheck invalid inputs
-            mIsCompulsory = isCompulsory;
-            mRuleName = ruleName;
-            mPropType = propType;
+            _isCompulsory = isCompulsory;
+            _ruleName = ruleName;
+            _propType = propType;
         }
 
         /// <summary>
@@ -50,11 +50,11 @@ namespace Chillisoft.Bo.v2
                 return true;
             }
             //Check if propertyValue is of the correct type.
-            if (!mPropType.IsInstanceOfType(propValue))
+            if (!_propType.IsInstanceOfType(propValue))
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + mRuleName +
-                               " since it is not of type " + mPropType.ToString();
+                               " is not valid for " + _ruleName +
+                               " since it is not of type " + _propType.ToString();
                 return false;
             }
 
@@ -75,11 +75,11 @@ namespace Chillisoft.Bo.v2
         {
             //If value not set and is compulsory then return the
             //  appropriate error
-            if (mIsCompulsory && (propValue == null || (propValue is String && ((string) propValue).Length == 0)))
+            if (_isCompulsory && (propValue == null || (propValue is String && ((string) propValue).Length == 0)))
             {
                 errorMessage = errorMessage +
                                " Value is not valid since " +
-                               mRuleName +
+                               _ruleName +
                                " is compulsory \n";
                 return false;
             }
@@ -91,7 +91,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public bool IsCompulsory
         {
-            get { return mIsCompulsory; }
+            get { return _isCompulsory; }
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public string RuleName
         {
-            get { return mRuleName; }
+            get { return _ruleName; }
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public Type PropertyType
         {
-            get { return mPropType; }
+            get { return _propType; }
         }
     }
 }

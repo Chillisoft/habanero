@@ -173,12 +173,12 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 
         internal PropDefCol PropDefCol
         {
-            get { return mClassDef.PropDefcol; }
+            get { return _classDef.PropDefcol; }
         }
 
         internal BOPropCol PropCol
         {
-            get { return mBOPropCol; }
+            get { return _boPropCol; }
         }
 
         #endregion //For Testing

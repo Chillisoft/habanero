@@ -13,10 +13,10 @@ namespace Chillisoft.Bo.v2
     /// - include sets for max/min values
     public class PropRuleString : PropRuleBase
     {
-        protected readonly int mMaxLength = -1;
-        protected readonly int mMinLength = -1;
-        protected readonly string mPatternMatch = ""; //regex pattern match
-        protected readonly string mPatternMatchErrMsg = "";
+        protected readonly int _maxLength = -1;
+        protected readonly int _minLength = -1;
+        protected readonly string _patternMatch = ""; //regex pattern match
+        protected readonly string _patternMatchErrMsg = "";
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -24,15 +24,15 @@ namespace Chillisoft.Bo.v2
         /// <param name="ruleName">The rule name</param>
         /// <param name="isCompulsory">Whether a value is compulsory and
         /// null values are invalid</param>
-        /// <param name="minValue">The minimum length required for the string</param>
-        /// <param name="maxValue">The maximum length allowed for the string</param>
+        /// <param name="minLength">The minimum length required for the string</param>
+        /// <param name="maxLength">The maximum length allowed for the string</param>
         public PropRuleString(string ruleName,
                               bool isCompulsory,
                               int minLength,
                               int maxLength) : base(ruleName, isCompulsory, typeof (string))
         {
-            mMaxLength = maxLength;
-            mMinLength = minLength;
+            _maxLength = maxLength;
+            _minLength = minLength;
         }
 
         /// <summary>
@@ -41,8 +41,8 @@ namespace Chillisoft.Bo.v2
         /// <param name="ruleName">The rule name</param>
         /// <param name="isCompulsory">Whether a value is compulsory and
         /// null values are invalid</param>
-        /// <param name="minValue">The minimum length required for the string</param>
-        /// <param name="maxValue">The maximum length allowed for the string</param>
+        /// <param name="minLength">The minimum length required for the string</param>
+        /// <param name="maxLength">The maximum length allowed for the string</param>
         /// <param name="patternMatch">The pattern match as a regular
         /// expression that the string must conform to.  See 
         /// System.Text.RegularExpressions for more information on regular
@@ -57,8 +57,8 @@ namespace Chillisoft.Bo.v2
                                 string patternMatchErrorMessage) : this(ruleName, isCompulsory, minLength, maxLength)
         {
             //TODO_Err: how to test for a valid regexpression?
-            mPatternMatch = patternMatch;
-            mPatternMatchErrMsg = patternMatchErrorMessage;
+            _patternMatch = patternMatch;
+            _patternMatchErrMsg = patternMatchErrorMessage;
         }
 
         /// <summary>
@@ -103,24 +103,24 @@ namespace Chillisoft.Bo.v2
         protected bool CheckPatternMatchRule(Object propValue,
                                              ref string errorMessage)
         {
-            if (this.mPatternMatch.Length == 0)
+            if (this._patternMatch.Length == 0)
             {
                 return true;
             }
-            if (!Regex.IsMatch((string) propValue, this.mPatternMatch))
+            if (!Regex.IsMatch((string) propValue, this._patternMatch))
             {
-                if (mPatternMatchErrMsg.Length <= 0)
+                if (_patternMatchErrMsg.Length <= 0)
                 {
                     errorMessage = propValue.ToString() +
-                                   " is not valid for " + mRuleName +
+                                   " is not valid for " + _ruleName +
                                    " it must match the pattern " +
-                                   mPatternMatch;
+                                   _patternMatch;
                 }
                 else
                 {
                     errorMessage = propValue.ToString() +
-                                   " is not valid for " + mRuleName +
-                                   "\n" + mPatternMatchErrMsg;
+                                   " is not valid for " + _ruleName +
+                                   "\n" + _patternMatchErrMsg;
                 }
                 return false;
             }
@@ -139,20 +139,20 @@ namespace Chillisoft.Bo.v2
                                        ref string errorMessage)
         {
             //Check the appropriate length rules
-            if (mMinLength > 0 && ((string) propValue).Length < mMinLength)
+            if (_minLength > 0 && ((string) propValue).Length < _minLength)
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + mRuleName +
+                               " is not valid for " + _ruleName +
                                " it must be greater than or equal to " +
-                               mMinLength;
+                               _minLength;
                 return false;
             }
-            if (mMaxLength > 0 && ((string) propValue).Length > mMaxLength)
+            if (_maxLength > 0 && ((string) propValue).Length > _maxLength)
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + mRuleName +
+                               " is not valid for " + _ruleName +
                                " it must be less than or equal to " +
-                               mMaxLength;
+                               _maxLength;
                 return false;
             }
             return true;
@@ -163,7 +163,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public int MaxLength
         {
-            get { return mMaxLength; }
+            get { return _maxLength; }
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public int MinLength
         {
-            get { return mMinLength; }
+            get { return _minLength; }
         }
 
     }

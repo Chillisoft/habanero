@@ -14,9 +14,9 @@ namespace Chillisoft.Bo.v2
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.Transaction");
 
-        private SortedList colTransactions = null;
-        private IDatabaseConnection itsDatabaseConnection;
-        private IList listTransactions;
+        private SortedList _colTransactions = null;
+        private IDatabaseConnection _databaseConnection;
+        private IList _listTransactions;
 
         /// <summary>
         /// Constructor to initialise a transaction
@@ -32,7 +32,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="databaseConnection">A database connection</param>
         public Transaction(IDatabaseConnection databaseConnection)
         {
-            itsDatabaseConnection = databaseConnection;
+            _databaseConnection = databaseConnection;
             ClearTransactionCol();
         }
 
@@ -41,8 +41,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         private void ClearTransactionCol()
         {
-            colTransactions = new SortedList();
-            listTransactions = new ArrayList();
+            _colTransactions = new SortedList();
+            _listTransactions = new ArrayList();
         }
 
         /// <summary>
@@ -54,10 +54,10 @@ namespace Chillisoft.Bo.v2
             //check if the transaction object is in a valid state before adding to the col
             transaction.CheckPersistRules();
             //if the transaction already exists then ignore
-            if (!colTransactions.ContainsKey(transaction.StrID()))
+            if (!_colTransactions.ContainsKey(transaction.StrID()))
             {
-                colTransactions.Add(transaction.StrID(), transaction);
-                listTransactions.Add(transaction);
+                _colTransactions.Add(transaction.StrID(), transaction);
+                _listTransactions.Add(transaction);
             }
         }
 
@@ -67,7 +67,7 @@ namespace Chillisoft.Bo.v2
         public void CancelAllEdits()
         {
             ITransaction transaction;
-            foreach (DictionaryEntry item in colTransactions)
+            foreach (DictionaryEntry item in _colTransactions)
             {
                 transaction = (ITransaction) item.Value;
                 transaction.TransactionRolledBack();
@@ -85,7 +85,7 @@ namespace Chillisoft.Bo.v2
         private void TransactionRolledBack()
         {
             ITransaction transaction;
-            foreach (DictionaryEntry item in colTransactions)
+            foreach (DictionaryEntry item in _colTransactions)
             {
                 transaction = (ITransaction) item.Value;
                 transaction.TransactionRolledBack();
@@ -104,17 +104,17 @@ namespace Chillisoft.Bo.v2
             //ITransaction transaction;
             try
             {
-                foreach (ITransaction transaction in listTransactions)
+                foreach (ITransaction transaction in _listTransactions)
                 {
                     //transaction = (ITransaction)item.Value;
                     transaction.BeforeCommit();
                 }
-                foreach (ITransaction transaction in listTransactions)
+                foreach (ITransaction transaction in _listTransactions)
                 {
                     //transaction = (ITransaction)item.Value;
                     if (transaction.GetPersistSql().Count > 0)
                     {
-                        itsDatabaseConnection.ExecuteSql(transaction.GetPersistSql(), dbTransaction);
+                        _databaseConnection.ExecuteSql(transaction.GetPersistSql(), dbTransaction);
                     }
                 }
                 dbTransaction.Commit();
@@ -134,7 +134,7 @@ namespace Chillisoft.Bo.v2
                 }
             }
 
-            foreach (ITransaction transaction in listTransactions)
+            foreach (ITransaction transaction in _listTransactions)
             {
                 //transaction = (ITransaction)item.Value;
                 transaction.AfterCommit();
@@ -150,7 +150,7 @@ namespace Chillisoft.Bo.v2
         private void TransactionCommited()
         {
             ITransaction transaction;
-            foreach (DictionaryEntry item in colTransactions)
+            foreach (DictionaryEntry item in _colTransactions)
             {
                 transaction = (ITransaction) item.Value;
                 transaction.TransactionCommited();
@@ -165,7 +165,7 @@ namespace Chillisoft.Bo.v2
         public void CancelEdits()
         {
             ITransaction transaction;
-            foreach (DictionaryEntry item in colTransactions)
+            foreach (DictionaryEntry item in _colTransactions)
             {
                 transaction = (ITransaction) item.Value;
                 transaction.TransactionCancelEdits();

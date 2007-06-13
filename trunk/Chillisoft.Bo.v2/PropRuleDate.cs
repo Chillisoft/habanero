@@ -9,8 +9,8 @@ namespace Chillisoft.Bo.v2
     /// TODO ERIC - includes sets for min/max
     public class PropRuleDate : PropRuleBase
     {
-        protected readonly DateTime mMaxValue = DateTime.MaxValue;
-        protected readonly DateTime mMinValue = DateTime.MinValue;
+        protected readonly DateTime _maxValue = DateTime.MaxValue;
+        protected readonly DateTime _minValue = DateTime.MinValue;
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -36,8 +36,8 @@ namespace Chillisoft.Bo.v2
                             DateTime minValue,
                             DateTime maxValue) : this(ruleName, isCompulsory)
         {
-            mMaxValue = maxValue;
-            mMinValue = minValue;
+            _maxValue = maxValue;
+            _minValue = minValue;
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace Chillisoft.Bo.v2
             {
                 return true;
             }
-            if ((DateTime) propValue < mMinValue || (DateTime) propValue > mMaxValue)
+            if ((DateTime) propValue < _minValue || (DateTime) propValue > _maxValue)
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + mRuleName +
+                               " is not valid for " + _ruleName +
                                " since it is not of type DateTime";
                 return false;
             }
@@ -74,7 +74,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public DateTime MaxValue
         {
-            get { return mMaxValue; }
+            get { return _maxValue; }
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public DateTime MinValue
         {
-            get { return mMinValue; }
+            get { return _minValue; }
         }
     }
 

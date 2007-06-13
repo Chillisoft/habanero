@@ -17,10 +17,10 @@ namespace Chillisoft.Bo.v2
         private static readonly ILog log =
             LogManager.GetLogger("Chillisoft.Bo.v2.BusinessObjectCollectionEditableDataSetProvider");
 
-        private Hashtable itsRowStates;
-        private Hashtable itsDeletedRowIDs;
-        private IDatabaseConnection itsConnection;
-        private bool itsIsBeingAdded = false;
+        private Hashtable _rowStates;
+        private Hashtable _deletedRowIDs;
+        private IDatabaseConnection _connection;
+        private bool _isBeingAdded = false;
 
         /// <summary>
         /// An enumeration to specify the state of a row
@@ -49,7 +49,7 @@ namespace Chillisoft.Bo.v2
             itsTable.TableNewRow += new DataTableNewRowEventHandler(NewRowHandler);
             itsTable.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
             itsTable.RowDeleted += new DataRowChangeEventHandler(RowDeletedHandler);
-            itsCollection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
+            _collection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Chillisoft.Bo.v2
         {
             itsTable.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
             itsTable.RowDeleted -= new DataRowChangeEventHandler(RowDeletedHandler);
-            itsCollection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
+            _collection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
         }
 
         /// <summary>
@@ -80,8 +80,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public override void InitialiseLocalData()
         {
-            itsRowStates = new Hashtable();
-            itsDeletedRowIDs = new Hashtable();
+            _rowStates = new Hashtable();
+            _deletedRowIDs = new Hashtable();
         }
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public IDatabaseConnection Connection
         {
-            get { return itsConnection; }
-            set { itsConnection = value; }
+            get { return _connection; }
+            set { _connection = value; }
         }
 
         /// <summary>
@@ -100,12 +100,12 @@ namespace Chillisoft.Bo.v2
         /// <param name="e">Attached arguments regarding the event</param>
         protected void RowDeletedHandler(object sender, DataRowChangeEventArgs e)
         {
-            BusinessObjectBase changedBo = itsCollection.Find(e.Row["ID", DataRowVersion.Original].ToString());
+            BusinessObjectBase changedBo = _collection.Find(e.Row["ID", DataRowVersion.Original].ToString());
             if (changedBo != null)
             {
                 changedBo.Delete();
-                itsRowStates[e.Row] = RowState.Deleted;
-                itsDeletedRowIDs[e.Row] = changedBo.ID.ToString();
+                _rowStates[e.Row] = RowState.Deleted;
+                _deletedRowIDs[e.Row] = changedBo.ID.ToString();
             }
         }
 
@@ -140,21 +140,21 @@ namespace Chillisoft.Bo.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void RowRollback(DataRowChangeEventArgs e)
         {
-            if (itsRowStates[e.Row] != null)
+            if (_rowStates[e.Row] != null)
             {
                 BusinessObjectBase changedBo;
-                if ((RowState) itsRowStates[e.Row] != RowState.Deleted)
+                if ((RowState) _rowStates[e.Row] != RowState.Deleted)
                 {
-                    changedBo = itsCollection.Find(e.Row["ID"].ToString());
+                    changedBo = _collection.Find(e.Row["ID"].ToString());
                     changedBo.CancelEdit();
-                    itsRowStates.Remove(e.Row);
+                    _rowStates.Remove(e.Row);
                 }
                 else
                 {
-                    changedBo = itsCollection.Find((string) itsDeletedRowIDs[e.Row]);
+                    changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
                     changedBo.CancelEdit();
-                    itsRowStates.Remove(e.Row);
-                    itsDeletedRowIDs.Remove(e.Row);
+                    _rowStates.Remove(e.Row);
+                    _deletedRowIDs.Remove(e.Row);
                 }
             }
         }
@@ -165,24 +165,24 @@ namespace Chillisoft.Bo.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void RowCommitted(DataRowChangeEventArgs e)
         {
-            if (itsRowStates[e.Row] != null)
+            if (_rowStates[e.Row] != null)
             {
                 BusinessObjectBase changedBo;
                 try
                 {
-                    if ((RowState) itsRowStates[e.Row] != RowState.Deleted)
+                    if ((RowState) _rowStates[e.Row] != RowState.Deleted)
                     {
                         //log.Debug("Saving...");
-                        changedBo = itsCollection.Find(e.Row["ID"].ToString());
+                        changedBo = _collection.Find(e.Row["ID"].ToString());
                         changedBo.ApplyEdit();
-                        itsRowStates.Remove(e.Row);
+                        _rowStates.Remove(e.Row);
                     }
                     else
                     {
-                        changedBo = itsCollection.Find((string) itsDeletedRowIDs[e.Row]);
+                        changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
                         changedBo.ApplyEdit();
-                        itsRowStates.Remove(e.Row);
-                        itsDeletedRowIDs.Remove(e.Row);
+                        _rowStates.Remove(e.Row);
+                        _deletedRowIDs.Remove(e.Row);
                     }
                 }
                 catch (BaseApplicationException ex)
@@ -211,8 +211,8 @@ namespace Chillisoft.Bo.v2
         private void RowChanged(DataRowChangeEventArgs e)
         {
             //log.Debug("Row Changed " + e.Row["ID"]);
-            BusinessObjectBase changedBo = itsCollection.Find(e.Row["ID"].ToString());
-            if (changedBo != null && !itsIsBeingAdded)
+            BusinessObjectBase changedBo = _collection.Find(e.Row["ID"].ToString());
+            if (changedBo != null && !_isBeingAdded)
             {
                 foreach (UIGridProperty uiProperty in itsUIGridProperties)
                 {
@@ -235,15 +235,15 @@ namespace Chillisoft.Bo.v2
             try
             {
                 //log.Debug("Row Added");
-                itsIsBeingAdded = true;
+                _isBeingAdded = true;
                 BusinessObjectBase newBo;
-                if (itsConnection != null)
+                if (_connection != null)
                 {
-                    newBo = itsCollection.ClassDef.CreateNewBusinessObject(itsConnection);
+                    newBo = _collection.ClassDef.CreateNewBusinessObject(_connection);
                 }
                 else
                 {
-                    newBo = itsCollection.ClassDef.CreateNewBusinessObject();
+                    newBo = _collection.ClassDef.CreateNewBusinessObject();
                 }
                 //log.Debug("Initialising obj");
                 if (this.itsObjectInitialiser != null)
@@ -270,12 +270,12 @@ namespace Chillisoft.Bo.v2
 
                 //log.Debug("Row added complete.") ;
                 //log.Debug(newBo.GetDebugOutput()) ;
-                itsIsBeingAdded = false;
+                _isBeingAdded = false;
                 this.RowChanged(e);
             }
             catch (Exception ex)
             {
-                itsIsBeingAdded = false;
+                _isBeingAdded = false;
                 throw ex;
             }
         }
@@ -288,14 +288,14 @@ namespace Chillisoft.Bo.v2
         private void AddNewRowToCollection(BusinessObjectBase newBo)
         {
             //log.Debug("Adding new row to col");
-            itsCollection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
+            _collection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
             itsTable.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
 
             //log.Debug("Disabled handler, adding obj to col") ;
-            itsCollection.Add(newBo);
+            _collection.Add(newBo);
             //log.Debug("Done adding obj to col, enabling handler") ;
             itsTable.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
-            itsCollection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
+            _collection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
             //log.Debug("Done Adding new row to col");
         }
 
@@ -318,7 +318,7 @@ namespace Chillisoft.Bo.v2
                 values[i++] = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
             }
             itsTable.LoadDataRow(values, false);
-            itsRowStates.Add(this.itsTable.Rows[this.FindRow(e.BusinessObject)], RowState.Added);
+            _rowStates.Add(this.itsTable.Rows[this.FindRow(e.BusinessObject)], RowState.Added);
             itsTable.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
 
             //log.Debug("Done adding bo to collection " + e.BusinessObject.ID);
@@ -332,9 +332,9 @@ namespace Chillisoft.Bo.v2
         /// enumeration for more detail.</param>
         private void AddToRowStates(DataRow row, RowState rowState)
         {
-            if (!this.itsRowStates.ContainsKey(row))
+            if (!this._rowStates.ContainsKey(row))
             {
-                itsRowStates.Add(row, rowState);
+                _rowStates.Add(row, rowState);
             }
         }
     }

@@ -10,7 +10,7 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public abstract class BusinessObjectCollectionDataSetProvider : IDataSetProvider
     {
-        protected readonly BusinessObjectBaseCollection itsCollection;
+        protected readonly BusinessObjectBaseCollection _collection;
         protected ICollection itsUIGridProperties;
         protected DataTable itsTable;
         protected IObjectInitialiser itsObjectInitialiser;
@@ -22,7 +22,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="collection">The business object collection</param>
         public BusinessObjectCollectionDataSetProvider(BusinessObjectBaseCollection collection)
         {
-            this.itsCollection = collection;
+            this._collection = collection;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Chillisoft.Bo.v2
             itsTable = new DataTable();
             this.InitialiseLocalData();
 
-            BusinessObjectBase sampleBo = itsCollection.ClassDef.InstantiateBusinessObjectWithClassDef();
+            BusinessObjectBase sampleBo = _collection.ClassDef.InstantiateBusinessObjectWithClassDef();
             itsUIGridProperties = uiGridDef; //sampleBo.GetUserInterfaceMapper().GetUIGridProperties();
             DataColumn column = itsTable.Columns.Add();
             column.Caption = "ID";
@@ -48,11 +48,11 @@ namespace Chillisoft.Bo.v2
                 column.Caption = uiProperty.Heading;
                 column.ReadOnly = uiProperty.IsReadOnly;
                 column.ExtendedProperties.Add("LookupListSource",
-                                              itsCollection.ClassDef.GetLookupListSource(uiProperty.PropertyName));
+                                              _collection.ClassDef.GetLookupListSource(uiProperty.PropertyName));
                 column.ExtendedProperties.Add("Width", uiProperty.Width);
                 column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
             }
-            foreach (BusinessObjectBase businessObjectBase in itsCollection)
+            foreach (BusinessObjectBase businessObjectBase in _collection)
             {
                 object[] values = new object[itsUIGridProperties.Count + 1];
                 values[0] = businessObjectBase.ID.ToString();
@@ -102,7 +102,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a business object</returns>
         public BusinessObjectBase Find(int rowNum)
         {
-            return itsCollection.Find(this.itsTable.Rows[rowNum]["ID"].ToString());
+            return _collection.Find(this.itsTable.Rows[rowNum]["ID"].ToString());
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a business object</returns>
         public BusinessObjectBase Find(string strId)
         {
-            return itsCollection.Find(strId);
+            return _collection.Find(strId);
         }
 
         /// <summary>

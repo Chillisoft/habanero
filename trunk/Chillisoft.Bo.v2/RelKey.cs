@@ -10,7 +10,7 @@ namespace Chillisoft.Bo.v2
     /// TODO ERIC - what is the function of this class
     public class RelKey : DictionaryBase
     {
-        private RelKeyDef mRelKeyDef;
+        private RelKeyDef _relKeyDef;
 
         /// <summary>
         /// Constructor to initialise a new instance
@@ -18,7 +18,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="lRelKeyDef">The relationship key definition</param>
         public RelKey(RelKeyDef lRelKeyDef)
         {
-            mRelKeyDef = lRelKeyDef;
+            _relKeyDef = lRelKeyDef;
         }
 
         /// <summary>

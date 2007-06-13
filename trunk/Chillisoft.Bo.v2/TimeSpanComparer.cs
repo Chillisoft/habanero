@@ -9,7 +9,7 @@ namespace Chillisoft.Bo.v2
     /// TODO ERIC - no error checking to make sure property is a timespan
     public class TimeSpanComparer : IComparer
     {
-        private readonly string itsPropName;
+        private readonly string _propName;
 
         /// <summary>
         /// Constructor to initialise a new comparer
@@ -17,7 +17,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="propName">The name of the property to compare on</param>
         public TimeSpanComparer(string propName)
         {
-            itsPropName = propName;
+            _propName = propName;
             //
             // TODO: Add constructor logic here
             //
@@ -42,21 +42,21 @@ namespace Chillisoft.Bo.v2
             BusinessObjectBase boRight = (BusinessObjectBase) y;
             TimeSpan left;
             TimeSpan right;
-            if (boLeft.GetPropertyValue(itsPropName) == null)
+            if (boLeft.GetPropertyValue(_propName) == null)
             {
                 left = TimeSpan.MinValue;
             }
             else
             {
-                left = (TimeSpan) boLeft.GetPropertyValue(itsPropName);
+                left = (TimeSpan) boLeft.GetPropertyValue(_propName);
             }
-            if (boRight.GetPropertyValue(itsPropName) == null)
+            if (boRight.GetPropertyValue(_propName) == null)
             {
                 right = TimeSpan.MinValue;
             }
             else
             {
-                right = (TimeSpan) boRight.GetPropertyValue(itsPropName);
+                right = (TimeSpan) boRight.GetPropertyValue(_propName);
             }
             return left.CompareTo(right);
         }

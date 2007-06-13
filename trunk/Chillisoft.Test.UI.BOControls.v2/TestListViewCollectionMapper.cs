@@ -44,7 +44,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
         //    itsListView.Items[2].Selected = true;
         //    itsListView.Items[0].Focused = true;
         //    Assert.IsNotNull(mapper.SelectedBusinessObject);
-        //    Assert.AreSame(itsCollection[2], mapper.SelectedBusinessObject);
+        //    Assert.AreSame(_collection[2], mapper.SelectedBusinessObject);
         //}
 
         [Test]

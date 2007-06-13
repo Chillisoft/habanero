@@ -64,7 +64,7 @@ namespace Chillisoft.Bo.Loaders.v2
             //itsReader.Read();
             //string className = itsReader.GetAttribute("class");
             //string assemblyName = itsReader.GetAttribute("assembly");
-            //itsCollection.Class = TypeLoader.LoadType(assemblyName, className);
+            //_collection.Class = TypeLoader.LoadType(assemblyName, className);
             //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, itsReader.GetAttribute("name"));
 
             itsReader.Read();

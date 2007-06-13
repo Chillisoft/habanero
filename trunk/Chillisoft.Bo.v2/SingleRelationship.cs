@@ -16,8 +16,8 @@ namespace Chillisoft.Bo.v2
     public class SingleRelationship : Relationship
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.SingleRelationship");
-        private BusinessObjectBase itsRelatedBo;
-        private string itsStoredRelationshipExpression;
+        private BusinessObjectBase _relatedBo;
+        private string _storedRelationshipExpression;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -39,7 +39,7 @@ namespace Chillisoft.Bo.v2
         /// TODO ERIC - review
         protected internal virtual bool HasRelationship()
         {
-            return mRelKey.HasRelatedObject();
+            return _relKey.HasRelatedObject();
         }
 
         /// <summary>
@@ -49,23 +49,23 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the related business object</returns>
         internal BusinessObjectBase GetRelatedObject(IDatabaseConnection connection)
         {
-            if (itsRelatedBo == null ||
-                (itsStoredRelationshipExpression != mRelKey.RelationshipExpression().ExpressionString()))
+            if (_relatedBo == null ||
+                (_storedRelationshipExpression != _relKey.RelationshipExpression().ExpressionString()))
             {
                 //log.Debug("Retrieving related object, in relationship " + this.RelationshipName) ;
                 if (HasRelationship())
                 {
                     //log.Debug("HasRelationship returned true, loading object.") ;
                     BusinessObjectBase busObj =
-                        (BusinessObjectBase) Activator.CreateInstance(mRelDef.RelatedObjectClassType, true);
+                        (BusinessObjectBase) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
                     busObj.SetDatabaseConnection(connection);
 
-                    IExpression relExp = mRelKey.RelationshipExpression();
+                    IExpression relExp = _relKey.RelationshipExpression();
                     busObj = busObj.GetBusinessObject(relExp);
-                    if (mRelDef.KeepReferenceToRelatedObject)
+                    if (_relDef.KeepReferenceToRelatedObject)
                     {
-                        itsRelatedBo = busObj;
-                        itsStoredRelationshipExpression = relExp.ExpressionString();
+                        _relatedBo = busObj;
+                        _storedRelationshipExpression = relExp.ExpressionString();
                     }
                     else
                     {
@@ -77,7 +77,7 @@ namespace Chillisoft.Bo.v2
             {
                 //log.Debug("Related Object is already loaded, returning cached one.") ;
             }
-            return itsRelatedBo;
+            return _relatedBo;
         }
 
         /// <summary>
@@ -87,14 +87,14 @@ namespace Chillisoft.Bo.v2
         /// TODO ERIC - is the parameter appropriately named (relatedObject)?
         public void SetRelatedObject(BusinessObjectBase parentObject)
         {
-            itsRelatedBo = parentObject;
-            foreach (DictionaryEntry entry in this.mRelKey)
+            _relatedBo = parentObject;
+            foreach (DictionaryEntry entry in this._relKey)
             {
                 RelProp relProp = (RelProp) entry.Value;
-                itsOwningBo.SetPropertyValue(relProp.OwnerPropertyName,
-                                             itsRelatedBo.GetPropertyValue(relProp.RelatedClassPropName));
+                _owningBo.SetPropertyValue(relProp.OwnerPropertyName,
+                                             _relatedBo.GetPropertyValue(relProp.RelatedClassPropName));
             }
-            itsStoredRelationshipExpression = mRelKey.RelationshipExpression().ExpressionString();
+            _storedRelationshipExpression = _relKey.RelationshipExpression().ExpressionString();
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public void ClearCache()
         {
-            itsRelatedBo = null;
+            _relatedBo = null;
         }
     }
 

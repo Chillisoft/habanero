@@ -35,7 +35,7 @@ namespace Chillisoft.UI.Application.v2
         private ReadOnlyGridButtonControl itsButtons;
         private DelayedMethodCall itsItemSelectedMethodCaller;
         //private SetGridDataProviderDelegate setGridDataProvider;
-        //private BusinessObjectBaseCollection itsCollection;
+        //private BusinessObjectBaseCollection _collection;
 
         private int itsOldRowNumber = -1;
         private IGridDataProvider itsProvider;

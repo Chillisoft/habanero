@@ -20,7 +20,7 @@ namespace Chillisoft.Test.Setup.v2
 
         protected override ClassDef ConstructClassDef()
         {
-            return mClassDef;
+            return _classDef;
         }
 
         public string MyName

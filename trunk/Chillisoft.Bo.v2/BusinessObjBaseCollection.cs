@@ -24,14 +24,14 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class BusinessObjectBaseCollection : ICollection
     {
-        private ClassDef mBOClassDef;
-        private IExpression mCriteriaExpression;
-        private string mOrderByClause;
-        private BusinessObjectBase itsSampleBo;
-        private string itsExtraSearchCriteriaLiteral = "";
-        private int itsLimit = -1;
-        private Hashtable itsLookupTable;
-        private ArrayList itsList;
+        private ClassDef _boClassDef;
+        private IExpression _criteriaExpression;
+        private string _orderByClause;
+        private BusinessObjectBase _sampleBo;
+        private string _extraSearchCriteriaLiteral = "";
+        private int _limit = -1;
+        private Hashtable _lookupTable;
+        private ArrayList _list;
 
         /// <summary>
         /// Constructor to initialise a new collection with a
@@ -50,10 +50,10 @@ namespace Chillisoft.Bo.v2
         /// <param name="lClassDef">The class definition</param>
         public BusinessObjectBaseCollection(ClassDef lClassDef)
         {
-            itsList = new ArrayList();
-            mBOClassDef = lClassDef;
-            itsSampleBo = mBOClassDef.CreateNewBusinessObject();
-            itsLookupTable = new Hashtable();
+            _list = new ArrayList();
+            _boClassDef = lClassDef;
+            _sampleBo = _boClassDef.CreateNewBusinessObject();
+            _lookupTable = new Hashtable();
         }
 
         /// <summary>
@@ -96,8 +96,8 @@ namespace Chillisoft.Bo.v2
         /// <param name="bo">The business object to add</param>
         public void Add(BusinessObjectBase bo)
         {
-            itsList.Add(bo);
-            itsLookupTable.Add(bo.StrID(), bo);
+            _list.Add(bo);
+            _lookupTable.Add(bo.StrID(), bo);
             bo.Deleted += new BusinessObjectUpdatedHandler(BusinessObjectDeletedHandler);
             this.FireBusinessObjectAdded(bo);
         }
@@ -144,7 +144,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the business object at the position specified</returns>
         public BusinessObjectBase this[int index]
         {
-            get { return (BusinessObjectBase) itsList[index]; }
+            get { return (BusinessObjectBase) _list[index]; }
         }
 
         /// <summary>
@@ -155,27 +155,27 @@ namespace Chillisoft.Bo.v2
         {
             Clear();
             ISqlStatement refreshSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            refreshSql.Statement.Append(itsSampleBo.GetSelectSql(itsLimit));
-            if (mCriteriaExpression != null)
+            refreshSql.Statement.Append(_sampleBo.GetSelectSql(_limit));
+            if (_criteriaExpression != null)
             {
                 refreshSql.AppendWhere();
-                SQLCriteriaCreator creator = new SQLCriteriaCreator(mCriteriaExpression, mBOClassDef);
+                SQLCriteriaCreator creator = new SQLCriteriaCreator(_criteriaExpression, _boClassDef);
                 creator.AppendCriteriaToStatement(refreshSql);
             }
-            if (itsExtraSearchCriteriaLiteral.Length > 0)
+            if (_extraSearchCriteriaLiteral.Length > 0)
             {
                 refreshSql.AppendWhere();
-                refreshSql.Statement.Append(itsExtraSearchCriteriaLiteral);
+                refreshSql.Statement.Append(_extraSearchCriteriaLiteral);
             }
 
 
-            using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(refreshSql, mOrderByClause))
+            using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(refreshSql, _orderByClause))
             {
                 try
                 {
                     BusinessObjectBase lTempBusObj;
-					lTempBusObj = mBOClassDef.InstantiateBusinessObject();
-					//lTempBusObj = (BusinessObjectBase)Activator.CreateInstance(mBOClassDef.ClassType, true);
+					lTempBusObj = _boClassDef.InstantiateBusinessObject();
+					//lTempBusObj = (BusinessObjectBase)Activator.CreateInstance(_boClassDef.ClassType, true);
 					while (dr.Read())
                     {
                         //Load Business OBject from the data reader
@@ -215,10 +215,10 @@ namespace Chillisoft.Bo.v2
         {
             if (searchCriteria.Length > 0)
             {
-                mCriteriaExpression = Expression.CreateExpression(searchCriteria);
+                _criteriaExpression = Expression.CreateExpression(searchCriteria);
             }
-            mOrderByClause = orderByClause;
-            itsExtraSearchCriteriaLiteral = extraSearchCriteriaLiteral;
+            _orderByClause = orderByClause;
+            _extraSearchCriteriaLiteral = extraSearchCriteriaLiteral;
             Refresh();
         }
 
@@ -233,7 +233,7 @@ namespace Chillisoft.Bo.v2
         /// TODO ERIC - review, what does a limit do?
         public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
         {
-            itsLimit = limit;
+            _limit = limit;
             Load(searchCriteria, orderByClause);
         }
 
@@ -245,8 +245,8 @@ namespace Chillisoft.Bo.v2
         /// <param name="orderByClause">The order-by clause</param>
         public void Load(IExpression searchExpression, string orderByClause)
         {
-            mCriteriaExpression = searchExpression;
-            mOrderByClause = orderByClause;
+            _criteriaExpression = searchExpression;
+            _orderByClause = orderByClause;
             Refresh();
         }
 
@@ -257,7 +257,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the business object at that position</returns>
         public BusinessObjectBase item(int index)
         {
-            return (BusinessObjectBase) itsList[index];
+            return (BusinessObjectBase) _list[index];
         }
 
         /// <summary>
@@ -265,8 +265,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public void Clear()
         {
-            itsList.Clear();
-            itsLookupTable.Clear();
+            _list.Clear();
+            _lookupTable.Clear();
         }
 
         /// <summary>
@@ -276,8 +276,8 @@ namespace Chillisoft.Bo.v2
         public void RemoveAt(int index)
         {
             BusinessObjectBase boToRemove = this[index];
-            itsLookupTable.Remove(boToRemove.StrID());
-            itsList.RemoveAt(index);
+            _lookupTable.Remove(boToRemove.StrID());
+            _list.RemoveAt(index);
             this.FireBusinessObjectRemoved(boToRemove);
         }
 
@@ -287,8 +287,8 @@ namespace Chillisoft.Bo.v2
         /// <param name="bo">The business object to remove</param>
         public void RemoveAt(BusinessObjectBase bo)
         {
-            itsList.Remove(bo);
-            itsLookupTable.Remove(bo.StrID());
+            _list.Remove(bo);
+            _lookupTable.Remove(bo.StrID());
             this.FireBusinessObjectRemoved(bo);
         }
 
@@ -300,7 +300,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns true if contained</returns>
         public bool Contains(BusinessObjectBase bo)
         {
-            return itsList.Contains(bo);
+            return _list.Contains(bo);
         }
 
         /// <summary>
@@ -311,7 +311,7 @@ namespace Chillisoft.Bo.v2
         {
             get
             {
-                foreach (BusinessObjectBase child in itsList)
+                foreach (BusinessObjectBase child in _list)
                 {
                     if (child.IsDirty)
                     {
@@ -330,7 +330,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid()
         {
-            foreach (BusinessObjectBase child in itsList)
+            foreach (BusinessObjectBase child in _list)
             {
                 if (!child.IsValid())
                 {
@@ -350,7 +350,7 @@ namespace Chillisoft.Bo.v2
         public bool IsValid(out string errorMessage)
         {
             errorMessage = "";
-            foreach (BusinessObjectBase child in itsList)
+            foreach (BusinessObjectBase child in _list)
             {
                 if (!child.IsValid(out errorMessage))
                 {
@@ -372,15 +372,15 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the business object if found, or null if not</returns>
         public BusinessObjectBase Find(string key)
         {
-            if (itsLookupTable.ContainsKey(key))
+            if (_lookupTable.ContainsKey(key))
             {
-                return (BusinessObjectBase)itsLookupTable[key];
+                return (BusinessObjectBase)_lookupTable[key];
             }
             else
             {
                 return null;
             }
-//			foreach (BusinessObjectBase bo in this.itsList) {
+//			foreach (BusinessObjectBase bo in this._list) {
 //				if (bo.StrID() == strID) {
 //					return bo;
 //				}
@@ -400,13 +400,13 @@ namespace Chillisoft.Bo.v2
 //            string formattedSearchItem = searchTerm.ToString();
 //            formattedSearchItem.Replace("{", "");
 //            formattedSearchItem.Replace("}", "");
-//            formattedSearchItem.Insert(0, mBOClassDef.PrimaryKeyDef.KeyName + "=");
+//            formattedSearchItem.Insert(0, _boClassDef.PrimaryKeyDef.KeyName + "=");
 
-            string formattedSearchItem = mBOClassDef.PrimaryKeyDef.KeyName + "=" + searchTerm;
+            string formattedSearchItem = _boClassDef.PrimaryKeyDef.KeyName + "=" + searchTerm;
 
-            if (itsLookupTable.ContainsKey(formattedSearchItem))
+            if (_lookupTable.ContainsKey(formattedSearchItem))
             {
-                return (BusinessObjectBase)itsLookupTable[formattedSearchItem];
+                return (BusinessObjectBase)_lookupTable[formattedSearchItem];
             }
             else
             {
@@ -419,7 +419,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public ClassDef ClassDef
         {
-            get { return mBOClassDef; }
+            get { return _boClassDef; }
         }
 
         /// <summary>
@@ -428,7 +428,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public BusinessObjectBase SampleBo
         {
-            get { return itsSampleBo; }
+            get { return _sampleBo; }
         }
 
         /// <summary>
@@ -507,11 +507,11 @@ namespace Chillisoft.Bo.v2
         {
             if (isBoProperty)
             {
-                itsList.Sort(ClassDef.GetPropDef(propertyName).GetPropertyComparer());
+                _list.Sort(ClassDef.GetPropDef(propertyName).GetPropertyComparer());
             }
             else
             {
-                itsList.Sort(new PropertyComparer(propertyName));
+                _list.Sort(new PropertyComparer(propertyName));
             }
         }
 
@@ -651,7 +651,7 @@ namespace Chillisoft.Bo.v2
         public void ApplyEdit()
         {
             Transaction t = new Transaction(DatabaseConnection.CurrentConnection);
-            foreach (BusinessObjectBase bo in this.itsList)
+            foreach (BusinessObjectBase bo in this._list)
             {
                 if (bo.IsDirty || bo.IsNew)
                 {
@@ -677,7 +677,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public int Count
         {
-            get { return itsList.Count; }
+            get { return _list.Count; }
         }
 
         /// <summary>
@@ -702,7 +702,7 @@ namespace Chillisoft.Bo.v2
         /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
-            return itsList.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         /// <summary>
@@ -711,7 +711,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns an IList object</returns>
         public IList GetList()
         {
-            return itsList;
+            return _list;
         }
     }
 }

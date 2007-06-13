@@ -8,7 +8,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
     /// </summary>
     public class SqlOperator : IExpression
     {
-        private string mOperator;
+        private string _operator;
 
         /// <summary>
         /// Copies across the parameterised sql info (see IParameterSQLInfo for
@@ -28,7 +28,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         public SqlOperator(string sqlOperator)
         {
             //TODO: Error check valid inputs
-            mOperator = sqlOperator.ToUpper();
+            _operator = sqlOperator.ToUpper();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <returns>Returns the operator</returns>
         public string ExpressionString()
         {
-            return mOperator;
+            return _operator;
         }
 
         /// <summary>
@@ -49,14 +49,14 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         public void SqlExpressionString(ISqlStatement statement, string tableNameFieldNameLeftSeparator,
                                         string tableNameFieldNameRightSeparator)
         {
-            statement.Statement.Append(mOperator);
+            statement.Statement.Append(_operator);
         }
 
 //		public string SqlExpressionString(string tableNameFieldNameLeftSeperator,
 //		                                  string tableNameFieldNameRightSeperator,
 //		                                  string DateTimeLeftSeperator,
 //		                                  string DateTimeRightSeperator) {
-//			return mOperator;
+//			return _operator;
 //		}
     }
 }

@@ -34,13 +34,13 @@ namespace Chillisoft.Bo.CriteriaManager.v2
     /// must be null or not null
     public class Parameter : IExpression
     {
-        private string mParameterName;
-        private string mTableName = "";
-        private string mFieldName;
-        private string mSqlOperator;
-        private string mParameterValue;
-        private ParameterType mParameterType = ParameterType.String;
-        private const string mDefaultValueSeperator = "'";
+        private string _parameterName;
+        private string _tableName = "";
+        private string _fieldName;
+        private string _sqlOperator;
+        private string _parameterValue;
+        private ParameterType _parameterType = ParameterType.String;
+        private const string _defaultValueSeperator = "'";
 
         /// <summary>
         /// Constructor that creates a parameter based on the parameter clause
@@ -55,10 +55,10 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         public Parameter(string parameterClause)
         {
             CriteriaExpression c = new CriteriaExpression(parameterClause);
-            mParameterName = c.Left.Expression;
-            mFieldName = mParameterName;
-            mSqlOperator = c.Expression;
-            mParameterValue = c.Right.Expression;
+            _parameterName = c.Left.Expression;
+            _fieldName = _parameterName;
+            _sqlOperator = c.Expression;
+            _parameterValue = c.Right.Expression;
         }
 
         /// <summary>
@@ -75,10 +75,10 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         public Parameter(string parameterName, string sqlOperator, string parameterValue)
         {
             //TODO: Error check valid inputs
-            mParameterName = parameterName;
-            mSqlOperator = sqlOperator.ToUpper();
-            mParameterValue = parameterValue;
-            mFieldName = parameterName;
+            _parameterName = parameterName;
+            _sqlOperator = sqlOperator.ToUpper();
+            _parameterValue = parameterValue;
+            _fieldName = parameterName;
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
                          string parameterValue) : this(parameterName, sqlOperator, parameterValue)
         {
             //TODO: Error check valid inputs
-            mFieldName = fieldName;
+            _fieldName = fieldName;
         }
 
         /// <summary>
@@ -105,8 +105,8 @@ namespace Chillisoft.Bo.CriteriaManager.v2
                          string parameterValue) : this(parameterName, sqlOperator, parameterValue)
         {
             //TODO: Error check valid inputs
-            mTableName = tableName;
-            mFieldName = fieldName;
+            _tableName = tableName;
+            _fieldName = fieldName;
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
             : this(parameterName, tableName, fieldName, sqlOperator, parameterValue)
         {
             //TODO: Error check valid inputs
-            mParameterType = parameterType;
+            _parameterType = parameterType;
         }
 
         /// <summary>
@@ -134,8 +134,8 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         public string ExpressionString()
         {
             return
-                mParameterName + " " + mSqlOperator + " " + mDefaultValueSeperator + mParameterValue +
-                mDefaultValueSeperator;
+                _parameterName + " " + _sqlOperator + " " + _defaultValueSeperator + _parameterValue +
+                _defaultValueSeperator;
         }
 
         /// <summary>
@@ -163,14 +163,14 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <returns>Returns a string</returns>
         private string GetSqlStringWithNoParameters()
         {
-            string strOp = mSqlOperator.ToUpper().Trim();
+            string strOp = _sqlOperator.ToUpper().Trim();
             if (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS")
             {
-                return mParameterValue.ToUpper(); //return either NULL or NOT NULL 
+                return _parameterValue.ToUpper(); //return either NULL or NOT NULL 
             }
             if (strOp == "IN" || strOp == "NOT IN")
             {
-                return mParameterValue;
+                return _parameterValue;
             }
             return "";
         }
@@ -184,18 +184,18 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <returns>Returns the value as an object</returns>
         private object GetParameterValueAsObject()
         {
-            switch (mParameterType)
+            switch (_parameterType)
             {
                 case ParameterType.Bool:
-                    return Convert.ToBoolean(mParameterValue);
+                    return Convert.ToBoolean(_parameterValue);
                 case ParameterType.Date:
-                    return Convert.ToDateTime(mParameterValue);
+                    return Convert.ToDateTime(_parameterValue);
                 case ParameterType.Number:
-                    return Convert.ToDecimal(mParameterValue);
+                    return Convert.ToDecimal(_parameterValue);
                 case ParameterType.String:
-                    return mParameterValue;
+                    return _parameterValue;
             }
-            return mParameterValue;
+            return _parameterValue;
         }
 
 //		/// <summary>
@@ -237,11 +237,11 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <param name="tableName">The table name</param>
         public void SetParameterSqlInfo(IParameterSqlInfo info, String tableName)
         {
-            if (info.ParameterName.ToUpper() == this.mParameterName.ToUpper())
+            if (info.ParameterName.ToUpper() == this._parameterName.ToUpper())
             {
-                mTableName = tableName;
-                mFieldName = info.FieldName;
-                mParameterType = info.ParameterType;
+                _tableName = tableName;
+                _fieldName = info.FieldName;
+                _parameterType = info.ParameterType;
             }
         }
 
@@ -256,14 +256,14 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         private string FieldFullName(string tableFieldNameLeftSeperator,
                                      string tableFieldNameRightSeperator)
         {
-            if (mTableName.Length > 0)
+            if (_tableName.Length > 0)
             {
-                return tableFieldNameLeftSeperator + mTableName + tableFieldNameRightSeperator + "." +
-                       tableFieldNameLeftSeperator + mFieldName + tableFieldNameRightSeperator;
+                return tableFieldNameLeftSeperator + _tableName + tableFieldNameRightSeperator + "." +
+                       tableFieldNameLeftSeperator + _fieldName + tableFieldNameRightSeperator;
             }
             else
             {
-                return tableFieldNameLeftSeperator + mFieldName + tableFieldNameRightSeperator;
+                return tableFieldNameLeftSeperator + _fieldName + tableFieldNameRightSeperator;
             }
         }
 
@@ -273,7 +273,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <returns>Returns the operator as a string</returns>
         private string SqlOperator()
         {
-            return " " + mSqlOperator;
+            return " " + _sqlOperator;
         }
 
         /// <summary>
@@ -283,25 +283,25 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <returns>True if not required, false if required</returns>
         public bool DoesntRequireParametrisedValue()
         {
-            string strOp = mSqlOperator.ToUpper().Trim();
+            string strOp = _sqlOperator.ToUpper().Trim();
             return (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS" || strOp == "IN" || strOp == "NOT IN");
         }
 
         //		private string SqlParameterValue(string DateTimeLeftSeperator,
 //		                                 string DateTimeRightSeperator) {
-//			if (mSqlOperator.ToUpper().Trim() == "IS" ||
-//				mSqlOperator.ToUpper().Trim() == "IS NOT" ||
-//				mSqlOperator.ToUpper().Trim() == "NOT IS") {
-//				return " " + mParameterValue.ToUpper(); //return either NULL or NOT NULL 
+//			if (_sqlOperator.ToUpper().Trim() == "IS" ||
+//				_sqlOperator.ToUpper().Trim() == "IS NOT" ||
+//				_sqlOperator.ToUpper().Trim() == "NOT IS") {
+//				return " " + _parameterValue.ToUpper(); //return either NULL or NOT NULL 
 //			}
-//			if (mSqlOperator.ToUpper().Trim() == "IN" ||
-//				mSqlOperator.ToUpper().Trim() == "NOT IN") {
-//				return " " + mParameterValue;
+//			if (_sqlOperator.ToUpper().Trim() == "IN" ||
+//				_sqlOperator.ToUpper().Trim() == "NOT IN") {
+//				return " " + _parameterValue;
 //			}
-//			if (mParameterType == ParameterType.Date) {
-//				return " " + DateTimeLeftSeperator + mParameterValue + DateTimeRightSeperator;
+//			if (_parameterType == ParameterType.Date) {
+//				return " " + DateTimeLeftSeperator + _parameterValue + DateTimeRightSeperator;
 //			}
-//			return " " + mDefaultValueSeperator + ReplaceAllIllegalParameterValueCharacters() + mDefaultValueSeperator;
+//			return " " + _defaultValueSeperator + ReplaceAllIllegalParameterValueCharacters() + _defaultValueSeperator;
 //		}
 
 //		/// <summary>
@@ -309,7 +309,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
 //		/// </summary>
 //		/// <returns></returns>
 //		private string ReplaceAllIllegalParameterValueCharacters() {
-//			return mParameterValue.Replace("'", "''");
+//			return _parameterValue.Replace("'", "''");
 //		}
     }
 }

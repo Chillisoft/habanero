@@ -6,8 +6,8 @@ namespace Chillisoft.Bo.v2
     /// TODO ERIC - where is validity checked?
     public class PropRuleDecimal : PropRuleBase
     {
-        private decimal itsMinValue;
-        private decimal itsMaxValue;
+        private decimal _minValue;
+        private decimal _maxValue;
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -20,8 +20,8 @@ namespace Chillisoft.Bo.v2
         public PropRuleDecimal(string ruleName, bool isCompulsory, decimal minValue, decimal maxValue)
             : base(ruleName, isCompulsory, typeof(decimal))
         {
-            itsMinValue = minValue;
-            itsMaxValue = maxValue;
+            _minValue = minValue;
+            _maxValue = maxValue;
         }
 
         /// <summary>
@@ -29,8 +29,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public decimal MinValue
         {
-            get { return itsMinValue; }
-            set { itsMinValue = value; }
+            get { return _minValue; }
+            set { _minValue = value; }
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public decimal MaxValue
         {
-            get { return itsMaxValue; }
-            set { itsMaxValue = value; }
+            get { return _maxValue; }
+            set { _maxValue = value; }
         }
     }
 }

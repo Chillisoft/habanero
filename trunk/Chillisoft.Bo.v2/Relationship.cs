@@ -7,9 +7,9 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public abstract class Relationship
     {
-        protected RelationshipDef mRelDef;
-        protected readonly BusinessObjectBase itsOwningBo;
-        protected RelKey mRelKey;
+        protected RelationshipDef _relDef;
+        protected readonly BusinessObjectBase _owningBo;
+        protected RelKey _relKey;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -21,9 +21,9 @@ namespace Chillisoft.Bo.v2
         /// initialise the RelKey object</param>
         public Relationship(BusinessObjectBase owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
         {
-            mRelDef = lRelDef;
-            itsOwningBo = owningBo;
-            mRelKey = mRelDef.RelKeyDef.CreateRelKey(lBOPropCol);
+            _relDef = lRelDef;
+            _owningBo = owningBo;
+            _relKey = _relDef.RelKeyDef.CreateRelKey(lBOPropCol);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal string RelationshipName
         {
-            get { return mRelDef.RelationshipName; }
+            get { return _relDef.RelationshipName; }
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal RelationshipDef RelationshipDef
         {
-            get { return mRelDef; }
+            get { return _relDef; }
         }
     }
 }

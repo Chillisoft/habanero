@@ -15,7 +15,7 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class ByteString : CustomProperty
     {
-        private string itsTextValue;
+        private string _textValue;
 
         ///<summary>
         /// Constructor to initialise a new long text string
@@ -36,14 +36,14 @@ namespace Chillisoft.Bo.v2
         {
             if (value is string)
             {
-                itsTextValue = (string)value;
+                _textValue = (string)value;
             }
             else if (value is byte[])
             {
-                itsTextValue = Encoding.Unicode.GetString((byte[])value);
+                _textValue = Encoding.Unicode.GetString((byte[])value);
             } else 
             {
-                itsTextValue = value.ToString();
+                _textValue = value.ToString();
             }
             
         }
@@ -53,8 +53,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public string Value
         {
-            get { return itsTextValue; }
-            set { itsTextValue = value; }
+            get { return _textValue; }
+            set { _textValue = value; }
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a hashcode integer</returns>
         public override int GetHashCode()
         {
-            return itsTextValue.GetHashCode();
+            return _textValue.GetHashCode();
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Chillisoft.Bo.v2
             if (obj is ByteString)
             {
                 ByteString compareTo = (ByteString)obj;
-                return compareTo.Value.Equals(itsTextValue);
+                return compareTo.Value.Equals(_textValue);
             }
             else
             {
@@ -91,7 +91,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a string</returns>
         public override string ToString()
         {
-            return itsTextValue;
+            return _textValue;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the byte array value</returns>
         public override object GetPersistValue()
         {
-            byte[] byteArr = Encoding.Unicode.GetBytes(itsTextValue);
+            byte[] byteArr = Encoding.Unicode.GetBytes(_textValue);
             return byteArr;
         }
 

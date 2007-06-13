@@ -731,8 +731,8 @@ namespace Chillisoft.Test.General.v2
 
         protected override ClassDef ConstructClassDef()
         {
-            mClassDef = GetClassDef();
-            return mClassDef;
+            _classDef = GetClassDef();
+            return _classDef;
         }
 
         protected override void ConstructClass(bool newObject)
@@ -846,7 +846,7 @@ namespace Chillisoft.Test.General.v2
         //class
         protected internal string GetObjectNewID()
         {
-            return mPrimaryKey.GetObjectNewID();
+            return _primaryKey.GetObjectNewID();
         }
 
         protected internal static BusinessObjectBaseCollection LoadBusinessObjCol()

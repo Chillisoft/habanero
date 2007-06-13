@@ -11,10 +11,10 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class RelationshipObjectInitialiser : IObjectInitialiser
     {
-        private readonly string itsCorrespondingRelationshipName;
+        private readonly string _correspondingRelationshipName;
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.RelationshipObjectInitialiser");
-        private readonly RelationshipDef itsRelationship;
-        private readonly BusinessObjectBase itsParentObject;
+        private readonly RelationshipDef _relationship;
+        private readonly BusinessObjectBase _parentObject;
 
         /// <summary>
         /// Constructor for a new initialiser
@@ -27,9 +27,9 @@ namespace Chillisoft.Bo.v2
         public RelationshipObjectInitialiser(BusinessObjectBase parentObject, RelationshipDef relationship,
                                              string correspondingRelationshipName)
         {
-            itsParentObject = parentObject;
-            itsRelationship = relationship;
-            itsCorrespondingRelationshipName = correspondingRelationshipName;
+            _parentObject = parentObject;
+            _relationship = relationship;
+            _correspondingRelationshipName = correspondingRelationshipName;
         }
 
         /// <summary>
@@ -41,19 +41,19 @@ namespace Chillisoft.Bo.v2
             //log.Debug("Entered initialiseobject.") ;
             //log.Debug(objToInitialise.GetType().Name);
             BusinessObjectBase newBo = (BusinessObjectBase) objToInitialise;
-            //log.Debug(itsRelationship);
-            //log.Debug(itsRelationship.RelKeyDef.Count + " props in relkeydef. ");
+            //log.Debug(_relationship);
+            //log.Debug(_relationship.RelKeyDef.Count + " props in relkeydef. ");
 
             // TODO - this code should go in the SetRelatedBusinessObject method.
-            foreach (DictionaryEntry relKeyDef in itsRelationship.RelKeyDef)
+            foreach (DictionaryEntry relKeyDef in _relationship.RelKeyDef)
             {
                 RelPropDef propDef = (RelPropDef) relKeyDef.Value;
                 //log.Debug(propDef.OwnerPropertyName);
                 //log.Debug(propDef.RelatedClassPropName);
                 newBo.SetPropertyValue(propDef.OwnerPropertyName,
-                                       itsParentObject.GetPropertyValue(propDef.RelatedClassPropName));
+                                       _parentObject.GetPropertyValue(propDef.RelatedClassPropName));
             }
-            newBo.Relationships.SetRelatedBusinessObject(itsCorrespondingRelationshipName, itsParentObject);
+            newBo.Relationships.SetRelatedBusinessObject(_correspondingRelationshipName, _parentObject);
         }
 
         /// <summary>

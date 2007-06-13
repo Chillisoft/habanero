@@ -9,8 +9,8 @@ namespace Chillisoft.Bo.v2
     public class BOPrimaryKey : BOKey
     {
         //		BusinessObjectBase mBO;
-        private Guid mNewObjectID = Guid.Empty;
-        //		bool mIsObjectNew;
+        private Guid _newObjectID = Guid.Empty;
+        //		bool _isObjectNew;
 
         /// <summary>
         /// Constructor to initialise a new primary key
@@ -35,11 +35,11 @@ namespace Chillisoft.Bo.v2
                 Console.WriteLine("Error has occured prop for object id cannot be null");
             }
             //If the object id is not already set then set it.
-            if (mNewObjectID == Guid.Empty)
+            if (_newObjectID == Guid.Empty)
             {
-                mNewObjectID = id;
+                _newObjectID = id;
             }
-            else if (mNewObjectID != id)
+            else if (_newObjectID != id)
             {
                 //TODO raise appropriate error
                 Console.WriteLine("Error has occured prop for object id cannot be null");
@@ -49,8 +49,8 @@ namespace Chillisoft.Bo.v2
 
         //		internal bool IsObjectNew
         //		{
-        //			get{return mIsObjectNew;}
-        //			set{mIsObjectNew = value;}
+        //			get{return _isObjectNew;}
+        //			set{_isObjectNew = value;}
         //		}
 
 
@@ -60,9 +60,9 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a string</returns>
         public virtual string GetObjectId()
         {
-            if (IsObjectNew && (mNewObjectID != Guid.Empty))
+            if (IsObjectNew && (_newObjectID != Guid.Empty))
             {
-                return "ID=" + mNewObjectID.ToString();
+                return "ID=" + _newObjectID.ToString();
             }
             else if (!IsObjectNew)
             {
@@ -71,7 +71,7 @@ namespace Chillisoft.Bo.v2
             else
             {
                 //TODO_Err: raise appropriate error
-                Console.WriteLine("Error has occured mIsObjectNew = true but the mNewObjectID is not set");
+                Console.WriteLine("Error has occured _isObjectNew = true but the _newObjectID is not set");
                 return "";
             }
         }
@@ -93,9 +93,9 @@ namespace Chillisoft.Bo.v2
         /// TODO ERIC - review this? original ID or orig object?
         internal virtual string GetOrigObjectID()
         {
-            if (mNewObjectID != Guid.Empty)
+            if (_newObjectID != Guid.Empty)
             {
-                return "ID=" + mNewObjectID.ToString();
+                return "ID=" + _newObjectID.ToString();
             }
             else if (IsDirty)
             {

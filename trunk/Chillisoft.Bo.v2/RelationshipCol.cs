@@ -11,7 +11,7 @@ namespace Chillisoft.Bo.v2
     public class RelationshipCol : DictionaryBase, IRelationshipCol
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.RelationshipCol");
-        private BusinessObjectBase itsBo;
+        private BusinessObjectBase _bo;
 
         /// <summary>
         /// Constructor to initialise a new relationship, specifying the
@@ -20,7 +20,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="bo">The business object</param>
         public RelationshipCol(BusinessObjectBase bo)
         {
-            itsBo = bo;
+            _bo = bo;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Chillisoft.Bo.v2
                 {
                     throw new RelationshipNotFoundException("The relationship " + relationshipName +
                                                             " was not found on a BusinessObject of type " +
-                                                            this.itsBo.GetType().ToString());
+                                                            this._bo.GetType().ToString());
                 }
                 return foundRel;
             }
@@ -87,7 +87,7 @@ namespace Chillisoft.Bo.v2
                 throw new InvalidRelationshipAccessException("The 'multiple' relationship " + relationshipName +
                                                              " was accessed as a 'single' relationship (using GetRelatedBusinessObject()).");
             }
-            return ((SingleRelationship) relationship).GetRelatedObject(itsBo.GetDatabaseConnection());
+            return ((SingleRelationship) relationship).GetRelatedObject(_bo.GetDatabaseConnection());
         }
 
         /// <summary>

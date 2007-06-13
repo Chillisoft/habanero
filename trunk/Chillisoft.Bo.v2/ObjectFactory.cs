@@ -6,7 +6,7 @@ namespace Chillisoft.Bo.v2
     /// TODO ERIC - does this have any use?
     public class ObjectFactory
     {
-        private static ObjectFactory mObjectFactory;
+        private static ObjectFactory _objectFactory;
 
         /// <summary>
         /// Constructor to initialise a new factory
@@ -21,11 +21,11 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns an ObjectFactory object</returns>
         public static ObjectFactory GetObjectFactory()
         {
-            if (mObjectFactory == null)
+            if (_objectFactory == null)
             {
-                mObjectFactory = new ObjectFactory();
+                _objectFactory = new ObjectFactory();
             }
-            return mObjectFactory;
+            return _objectFactory;
         }
     }
 }

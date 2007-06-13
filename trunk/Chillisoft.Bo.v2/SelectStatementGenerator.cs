@@ -10,9 +10,9 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class SelectStatementGenerator
     {
-        private readonly IDatabaseConnection itsConnection;
-        private BusinessObjectBase itsBo;
-        private ClassDef itsClassDef;
+        private readonly IDatabaseConnection _connection;
+        private BusinessObjectBase _bo;
+        private ClassDef _classDef;
 
         /// <summary>
         /// Constructor to initialise the generator
@@ -23,9 +23,9 @@ namespace Chillisoft.Bo.v2
         /// <param name="connection">A database connection</param>
         public SelectStatementGenerator(BusinessObjectBase bo, ClassDef classDef, IDatabaseConnection connection)
         {
-            itsBo = bo;
-            itsClassDef = classDef;
-            itsConnection = connection;
+            _bo = bo;
+            _classDef = classDef;
+            _connection = connection;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Chillisoft.Bo.v2
         public string Generate(int limit)
         {
             IList classDefs = new ArrayList();
-            ClassDef currentClassDef = itsClassDef;
+            ClassDef currentClassDef = _classDef;
             while (currentClassDef != null)
             {
                 classDefs.Add(currentClassDef);
@@ -58,21 +58,21 @@ namespace Chillisoft.Bo.v2
             string statement = "SELECT ";
             if (limit > 0)
             {
-                statement += " " + itsConnection.GetLimitClauseForBeginning(limit) + " ";
+                statement += " " + _connection.GetLimitClauseForBeginning(limit) + " ";
             }
 
-            foreach (BOProp prop in itsBo.GetBOPropCol().SortedValues)
+            foreach (BOProp prop in _bo.GetBOPropCol().SortedValues)
             {
                 string tableName = GetTableName(prop, classDefs);
                 statement += tableName + ".";
-                statement += itsConnection.LeftFieldDelimiter;
+                statement += _connection.LeftFieldDelimiter;
                 statement += prop.DataBaseFieldName;
-                statement += itsConnection.RightFieldDelimiter;
+                statement += _connection.RightFieldDelimiter;
                 statement += ", ";
             }
 
             statement = statement.Remove(statement.Length - 2, 2);
-            currentClassDef = itsClassDef;
+            currentClassDef = _classDef;
             while (currentClassDef.IsUsingSingleTableInheritance())
             {
                 currentClassDef = currentClassDef.SuperClassDef;
@@ -99,7 +99,7 @@ namespace Chillisoft.Bo.v2
 
             if (limit > 0)
             {
-                statement += " " + itsConnection.GetLimitClauseForEnd(limit) + " ";
+                statement += " " + _connection.GetLimitClauseForEnd(limit) + " ";
             }
             return statement;
         }

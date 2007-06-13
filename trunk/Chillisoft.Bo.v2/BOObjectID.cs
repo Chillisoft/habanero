@@ -9,7 +9,7 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class BOObjectID : BOPrimaryKey
     {
-        protected BOProp mObjectIDProp;
+        protected BOProp _objectIDProp;
 
         /// <summary>
         /// Constructor to initialise a new ID
@@ -53,16 +53,16 @@ namespace Chillisoft.Bo.v2
         {
             get
             {
-                if (mObjectIDProp == null)
+                if (_objectIDProp == null)
                 {
-                    mObjectIDProp = base[mKeyDef.KeyName];
+                    _objectIDProp = base[_keyDef.KeyName];
                 }
-                if (mObjectIDProp == null)
+                if (_objectIDProp == null)
                 {
                     //TODO: raise serious error;
                     Console.WriteLine("Errors");
                 }
-                return mObjectIDProp;
+                return _objectIDProp;
             }
         }
 

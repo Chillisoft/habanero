@@ -12,10 +12,10 @@ namespace Chillisoft.Bo.SqlGeneration.v2
     /// </summary>
     public class UpdateStatementGenerator
     {
-        private BusinessObjectBase mBO;
-        private IDbConnection mConn;
-        private SqlStatementCollection statementCollection;
-        private SqlStatement updateSQL;
+        private BusinessObjectBase _bo;
+        private IDbConnection _conn;
+        private SqlStatementCollection _statementCollection;
+        private SqlStatement _updateSQL;
 
         /// <summary>
         /// Constructor to initialise the generator
@@ -25,8 +25,8 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         /// <param name="conn">A database connection</param>
         public UpdateStatementGenerator(BusinessObjectBase bo, IDbConnection conn)
         {
-            mBO = bo;
-            mConn = conn;
+            _bo = bo;
+            _conn = conn;
         }
 
         /// <summary>
@@ -36,11 +36,11 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         /// <returns>Returns a sql statement collection</returns>
         public SqlStatementCollection Generate()
         {
-            statementCollection = new SqlStatementCollection();
+            _statementCollection = new SqlStatementCollection();
             bool includeAllProps;
             BOPropCol propsToInclude;
             string tableName;
-            ClassDef currentClassDef = mBO.ClassDef;
+            ClassDef currentClassDef = _bo.ClassDef;
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 includeAllProps = false;
@@ -52,11 +52,11 @@ namespace Chillisoft.Bo.SqlGeneration.v2
                 }
                 currentClassDef = currentClassDef.SuperClassDef;
             }
-            includeAllProps = !mBO.ClassDef.IsUsingClassTableInheritance();
-            propsToInclude = mBO.ClassDef.PropDefcol.CreateBOPropertyCol(true);
-            tableName = mBO.TableName;
-            GenerateSingleUpdateStatement(tableName, includeAllProps, propsToInclude, false, mBO.ClassDef);
-            return statementCollection;
+            includeAllProps = !_bo.ClassDef.IsUsingClassTableInheritance();
+            propsToInclude = _bo.ClassDef.PropDefcol.CreateBOPropertyCol(true);
+            tableName = _bo.TableName;
+            GenerateSingleUpdateStatement(tableName, includeAllProps, propsToInclude, false, _bo.ClassDef);
+            return _statementCollection;
         }
 
         /// <summary>
@@ -73,39 +73,39 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         private void GenerateSingleUpdateStatement(string tableName, bool includeAllProps, BOPropCol propsToInclude,
                                                    bool isSuperClassStatement, ClassDef currentClassDef)
         {
-            updateSQL = new SqlStatement(mConn);
-            updateSQL.Statement.Append(@"UPDATE " + tableName + " SET ");
+            _updateSQL = new SqlStatement(_conn);
+            _updateSQL.Statement.Append(@"UPDATE " + tableName + " SET ");
             int includedProps = 0;
-            foreach (BOProp prop in mBO.GetBOPropCol().SortedValues)
+            foreach (BOProp prop in _bo.GetBOPropCol().SortedValues)
             {
                 if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
                 {
                     if (prop.IsDirty &&
-                        ((mBO.ClassDef.PrimaryKeyDef.IsObjectID &&
-                          !mBO.ClassDef.PrimaryKeyDef.Contains(prop.PropertyName)) ||
-                         !mBO.ClassDef.PrimaryKeyDef.IsObjectID))
+                        ((_bo.ClassDef.PrimaryKeyDef.IsObjectID &&
+                          !_bo.ClassDef.PrimaryKeyDef.Contains(prop.PropertyName)) ||
+                         !_bo.ClassDef.PrimaryKeyDef.IsObjectID))
                     {
                         includedProps++;
-                        updateSQL.Statement.Append(prop.DataBaseFieldName);
-                        updateSQL.Statement.Append(" = ");
-                        updateSQL.AddParameterToStatement(prop.PropertyValue);
-                        //updateSQL.AddParameterToStatement(DatabaseUtil.PrepareValue(prop.PropertyValue));
-                        updateSQL.Statement.Append(", ");
+                        _updateSQL.Statement.Append(prop.DataBaseFieldName);
+                        _updateSQL.Statement.Append(" = ");
+                        _updateSQL.AddParameterToStatement(prop.PropertyValue);
+                        //_updateSQL.AddParameterToStatement(DatabaseUtil.PrepareValue(prop.PropertyValue));
+                        _updateSQL.Statement.Append(", ");
                     }
                 }
             }
-            updateSQL.Statement.Remove(updateSQL.Statement.Length - 2, 2); //remove the last ", "
+            _updateSQL.Statement.Remove(_updateSQL.Statement.Length - 2, 2); //remove the last ", "
             if (isSuperClassStatement)
             {
-                updateSQL.Statement.Append(" WHERE " + mBO.WhereClauseForSuperClass(updateSQL, currentClassDef));
+                _updateSQL.Statement.Append(" WHERE " + _bo.WhereClauseForSuperClass(_updateSQL, currentClassDef));
             }
             else
             {
-                updateSQL.Statement.Append(" WHERE " + mBO.WhereClause(updateSQL));
+                _updateSQL.Statement.Append(" WHERE " + _bo.WhereClause(_updateSQL));
             }
             if (includedProps > 0)
             {
-                statementCollection.Add(updateSQL);
+                _statementCollection.Add(_updateSQL);
             }
         }
     }

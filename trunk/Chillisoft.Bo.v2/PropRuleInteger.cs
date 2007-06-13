@@ -7,8 +7,8 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class PropRuleInteger : PropRuleBase
     {
-        private int itsMinValue;
-        private int itsMaxValue;
+        private int _minValue;
+        private int _maxValue;
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -20,8 +20,8 @@ namespace Chillisoft.Bo.v2
         /// <param name="maxValue">The maximum value allowed for the integer</param>
         public PropRuleInteger(string ruleName, bool isCompulsory, int minValue, int maxValue) : base(ruleName, isCompulsory, typeof (int))
         {
-            itsMinValue = minValue;
-            itsMaxValue = maxValue;
+            _minValue = minValue;
+            _maxValue = maxValue;
         }
 
         /// <summary>
@@ -29,8 +29,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public int MinValue
         {
-            get { return itsMinValue; }
-            set { itsMinValue = value; }
+            get { return _minValue; }
+            set { _minValue = value; }
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public int MaxValue
         {
-            get { return itsMaxValue; }
-            set { itsMaxValue = value; }
+            get { return _maxValue; }
+            set { _maxValue = value; }
         }
 
         /// <summary>
@@ -55,15 +55,15 @@ namespace Chillisoft.Bo.v2
             if (propValue is int)
             {
                 int intPropRule = (int)propValue;
-                if (intPropRule < itsMinValue)
+                if (intPropRule < _minValue)
                 {
                     valueValid = false;
-                    errorMessage += Environment.NewLine + "Please enter a value greater than " + itsMinValue + " for rule " + RuleName;
+                    errorMessage += Environment.NewLine + "Please enter a value greater than " + _minValue + " for rule " + RuleName;
                 }
-                if (intPropRule > itsMaxValue)
+                if (intPropRule > _maxValue)
                 {
                     valueValid = false;
-                    errorMessage += Environment.NewLine + "Please enter a value less than " + itsMaxValue + " for rule " + RuleName;
+                    errorMessage += Environment.NewLine + "Please enter a value less than " + _maxValue + " for rule " + RuleName;
                 }
             }
             return valueValid;

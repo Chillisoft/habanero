@@ -16,7 +16,7 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class BOKey : DictionaryBase
     {
-        protected KeyDef mKeyDef;
+        protected KeyDef _keyDef;
 
         /// <summary>
         /// Constructor to initialise a new instance
@@ -25,7 +25,7 @@ namespace Chillisoft.Bo.v2
         internal BOKey(KeyDef lKeyDef)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(lKeyDef, "lKeyDef");
-            mKeyDef = lKeyDef;
+            _keyDef = lKeyDef;
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected bool IgnoreNulls
         {
-            get { return mKeyDef.IgnoreNulls; }
+            get { return _keyDef.IgnoreNulls; }
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected internal string KeyName
         {
-            get { return mKeyDef.KeyName; }
+            get { return _keyDef.KeyName; }
         }
 
         /// <summary>

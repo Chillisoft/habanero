@@ -15,7 +15,7 @@ namespace Chillisoft.Bo.v2
     {
 
 
-        private string itsLongTextValue;
+        private string _longTextValue;
 
         ///<summary>
         /// Constructor to initialise a new long text string
@@ -34,7 +34,7 @@ namespace Chillisoft.Bo.v2
         public LongText(object value, bool isLoading)
             : base(value, isLoading)
         {
-            itsLongTextValue = (string) value;
+            _longTextValue = (string) value;
         }
 
         /// <summary>
@@ -42,8 +42,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public string Value
         {
-            get { return itsLongTextValue; }
-            set { itsLongTextValue = value; }
+            get { return _longTextValue; }
+            set { _longTextValue = value; }
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a hashcode integer</returns>
         public override int GetHashCode()
         {
-            return itsLongTextValue.GetHashCode();
+            return _longTextValue.GetHashCode();
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Chillisoft.Bo.v2
             if (obj is LongText)
             {
                 LongText compareTo = (LongText)obj;
-                return compareTo.Value.Equals(itsLongTextValue);
+                return compareTo.Value.Equals(_longTextValue);
             }
             else
             {
@@ -80,7 +80,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a string</returns>
         public override string ToString()
         {
-            return itsLongTextValue;
+            return _longTextValue;
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the long text value</returns>
         public override object GetPersistValue()
         {
-            return itsLongTextValue;
+            return _longTextValue;
         }
 
     }

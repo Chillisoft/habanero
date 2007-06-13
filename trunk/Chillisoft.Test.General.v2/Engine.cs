@@ -163,7 +163,7 @@ namespace Chillisoft.Test.General.v2
         //class
         protected internal string GetObjectNewID()
         {
-            return mPrimaryKey.GetObjectNewID();
+            return _primaryKey.GetObjectNewID();
         }
 
         protected internal static BusinessObjectBaseCollection LoadBusinessObjCol()

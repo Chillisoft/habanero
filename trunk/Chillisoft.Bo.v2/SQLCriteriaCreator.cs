@@ -12,7 +12,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
     /// TODO ERIC - needs serious revision
     public class SQLCriteriaCreator
     {
-        private IExpression itsExpression;
+        private IExpression _expression;
 
         /// <summary>
         /// Constructor to initialise a new criteria creator
@@ -40,12 +40,12 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <param name="classDef">The class definition</param>
         private void ConstructSQLCriteriaCreator(IExpression exp, ClassDef classDef)
         {
-            itsExpression = exp;
+            _expression = exp;
             ClassDef lClassDef = classDef;
             String tableName = lClassDef.TableName;
             foreach (PropDef def in lClassDef.PropDefcol.Values)
             {
-                itsExpression.SetParameterSqlInfo(def, tableName);
+                _expression.SetParameterSqlInfo(def, tableName);
             }
 
             //		//TODO:Use DB Connection to get field/date separators - use parametrized sql
@@ -63,7 +63,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         public void AppendCriteriaToStatement(ISqlStatement sqlStatement)
         {
             //TODO:Use DB Connection to get field/date separators
-            itsExpression.SqlExpressionString(sqlStatement, "", "");
+            _expression.SqlExpressionString(sqlStatement, "", "");
         }
     }
 }

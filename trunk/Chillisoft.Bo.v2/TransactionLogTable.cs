@@ -10,14 +10,14 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class TransactionLogTable : ITransactionLog
     {
-        private string mTransactionLogTable;
-        private string mDateTimeUpdatedFieldName;
-        private string mWindowsUserFieldName;
-        private string mLogonUserFieldName;
-        private string mMachineUpdateName;
-        private string mBusinessObjectTypeNameFieldName;
-        private string mCrudActionFieldName;
-        private string mDirtyXmlFieldName;
+        private string _transactionLogTable;
+        private string _dateTimeUpdatedFieldName;
+        private string _windowsUserFieldName;
+        private string _logonUserFieldName;
+        private string _machineUpdateName;
+        private string _businessObjectTypeNameFieldName;
+        private string _crudActionFieldName;
+        private string _dirtyXmlFieldName;
 
         /// <summary>
         /// Constructor to initialise a new log table
@@ -35,14 +35,14 @@ namespace Chillisoft.Bo.v2
                                    string businessObjectTypeNameFieldName, string crudActionFieldName,
                                    string dirtyXMLFieldName)
         {
-            this.mTransactionLogTable = transactionLogTable;
-            this.mDateTimeUpdatedFieldName = dateTimeUpdatedFieldName;
-            this.mWindowsUserFieldName = windowsUserFieldName;
-            this.mLogonUserFieldName = logonUserFieldName;
-            this.mMachineUpdateName = machineUpdateName;
-            this.mBusinessObjectTypeNameFieldName = businessObjectTypeNameFieldName;
-            this.mCrudActionFieldName = crudActionFieldName;
-            this.mDirtyXmlFieldName = dirtyXMLFieldName;
+            this._transactionLogTable = transactionLogTable;
+            this._dateTimeUpdatedFieldName = dateTimeUpdatedFieldName;
+            this._windowsUserFieldName = windowsUserFieldName;
+            this._logonUserFieldName = logonUserFieldName;
+            this._machineUpdateName = machineUpdateName;
+            this._businessObjectTypeNameFieldName = businessObjectTypeNameFieldName;
+            this._crudActionFieldName = crudActionFieldName;
+            this._dirtyXmlFieldName = dirtyXMLFieldName;
         }
 
         /// <summary>
@@ -55,14 +55,14 @@ namespace Chillisoft.Bo.v2
         {
             //TODO: Peter - make this proper parametrized SQL
             SqlStatement tranSQL = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            string sql = "INSERT INTO " + this.mTransactionLogTable + " (" +
-                         this.mDateTimeUpdatedFieldName + ", " +
-                         this.mLogonUserFieldName + ", " +
-                         this.mWindowsUserFieldName + ", " +
-                         this.mMachineUpdateName + ", " +
-                         this.mBusinessObjectTypeNameFieldName + ", " +
-                         this.mCrudActionFieldName + ", " +
-                         this.mDirtyXmlFieldName + ") VALUES ( '" +
+            string sql = "INSERT INTO " + this._transactionLogTable + " (" +
+                         this._dateTimeUpdatedFieldName + ", " +
+                         this._logonUserFieldName + ", " +
+                         this._windowsUserFieldName + ", " +
+                         this._machineUpdateName + ", " +
+                         this._businessObjectTypeNameFieldName + ", " +
+                         this._crudActionFieldName + ", " +
+                         this._dirtyXmlFieldName + ") VALUES ( '" +
                          DatabaseUtil.FormatDatabaseDateTime(DateTime.Now) + "', '" +
                          logonUserName + "', '" +
                          WindowsIdentity.GetCurrent().Name + "', '" +

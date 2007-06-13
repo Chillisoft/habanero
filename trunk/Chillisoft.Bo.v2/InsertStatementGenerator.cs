@@ -13,14 +13,14 @@ namespace Chillisoft.Bo.SqlGeneration.v2
     /// </summary>
     public class InsertStatementGenerator
     {
-        private BusinessObjectBase mBO;
-        private StringBuilder dbFieldList;
-        private StringBuilder dbValueList;
-        private ParameterNameGenerator gen;
-        private SqlStatement insertSQL;
-        private SqlStatementCollection statementCollection;
-        private IDbConnection mConn;
-        private bool firstField;
+        private BusinessObjectBase _bo;
+        private StringBuilder _dbFieldList;
+        private StringBuilder _dbValueList;
+        private ParameterNameGenerator _gen;
+        private SqlStatement _insertSQL;
+        private SqlStatementCollection _statementCollection;
+        private IDbConnection _conn;
+        private bool _firstField;
 
         /// <summary>
         /// Constructor to initialise the generator
@@ -30,8 +30,8 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         /// <param name="conn">A database connection</param>
         public InsertStatementGenerator(BusinessObjectBase bo, IDbConnection conn)
         {
-            mBO = bo;
-            mConn = conn;
+            _bo = bo;
+            _conn = conn;
         }
 
         /// <summary>
@@ -41,30 +41,30 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         /// <returns>Returns a sql statement collection</returns>
         public SqlStatementCollection Generate()
         {
-            statementCollection = new SqlStatementCollection();
+            _statementCollection = new SqlStatementCollection();
             bool includeAllProps;
             BOPropCol propsToInclude;
             string tableName;
 
-            includeAllProps = !mBO.ClassDef.IsUsingClassTableInheritance();
-            propsToInclude = mBO.ClassDef.PropDefcol.CreateBOPropertyCol(true);
-            if (mBO.ClassDef.IsUsingClassTableInheritance())
+            includeAllProps = !_bo.ClassDef.IsUsingClassTableInheritance();
+            propsToInclude = _bo.ClassDef.PropDefcol.CreateBOPropertyCol(true);
+            if (_bo.ClassDef.IsUsingClassTableInheritance())
             {
                 propsToInclude.Add(
-                    mBO.ClassDef.SuperClassDef.PrimaryKeyDef.CreateBOKey(mBO.GetBOPropCol()).GetBOPropCol());
+                    _bo.ClassDef.SuperClassDef.PrimaryKeyDef.CreateBOKey(_bo.GetBOPropCol()).GetBOPropCol());
             }
-            tableName = mBO.TableName;
+            tableName = _bo.TableName;
             GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
 
-            if (mBO.ClassDef.IsUsingClassTableInheritance())
+            if (_bo.ClassDef.IsUsingClassTableInheritance())
             {
-                ClassDef currentClassDef = mBO.ClassDef.SuperClassDef;
+                ClassDef currentClassDef = _bo.ClassDef.SuperClassDef;
                 while (currentClassDef.IsUsingClassTableInheritance())
                 {
                     includeAllProps = false;
                     propsToInclude = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
                     propsToInclude.Add(
-                        currentClassDef.SuperClassDef.PrimaryKeyDef.CreateBOKey(mBO.GetBOPropCol()).GetBOPropCol());
+                        currentClassDef.SuperClassDef.PrimaryKeyDef.CreateBOKey(_bo.GetBOPropCol()).GetBOPropCol());
                     tableName = currentClassDef.TableName;
                     GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
                     currentClassDef = currentClassDef.SuperClassDef;
@@ -76,7 +76,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
             }
 
 
-            return statementCollection;
+            return _statementCollection;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         {
             this.initialiseStatement();
 
-            foreach (BOProp prop in mBO.GetBOPropCol().SortedValues)
+            foreach (BOProp prop in _bo.GetBOPropCol().SortedValues)
             {
                // BOProp prop = (BOProp) item.Value;
                 if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
@@ -100,9 +100,9 @@ namespace Chillisoft.Bo.SqlGeneration.v2
                     AddPropToInsertStatement(prop);
                 }
             }
-            insertSQL.Statement.Append(@"INSERT INTO " + tableName + " (" + dbFieldList.ToString() + ") VALUES (" +
-                                       dbValueList.ToString() + ")");
-            statementCollection.Insert(0, insertSQL);
+            _insertSQL.Statement.Append(@"INSERT INTO " + tableName + " (" + _dbFieldList.ToString() + ") VALUES (" +
+                                       _dbValueList.ToString() + ")");
+            _statementCollection.Insert(0, _insertSQL);
         }
 
         /// <summary>
@@ -111,11 +111,11 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         /// TODO ERIC - capitalise
         private void initialiseStatement()
         {
-            dbFieldList = new StringBuilder(mBO.GetBOPropCol().Count*20);
-            dbValueList = new StringBuilder(mBO.GetBOPropCol().Count*20);
-            insertSQL = new SqlStatement(mConn);
-            gen = new ParameterNameGenerator(mConn);
-            firstField = true;
+            _dbFieldList = new StringBuilder(_bo.GetBOPropCol().Count*20);
+            _dbValueList = new StringBuilder(_bo.GetBOPropCol().Count*20);
+            _insertSQL = new SqlStatement(_conn);
+            _gen = new ParameterNameGenerator(_conn);
+            _firstField = true;
         }
 
         /// <summary>
@@ -125,17 +125,17 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         private void AddPropToInsertStatement(BOProp prop)
         {
             string paramName;
-            if (!firstField)
+            if (!_firstField)
             {
-                dbFieldList.Append(", ");
-                dbValueList.Append(", ");
+                _dbFieldList.Append(", ");
+                _dbValueList.Append(", ");
             }
-            dbFieldList.Append(prop.DataBaseFieldName);
-            paramName = gen.GetNextParameterName();
-            dbValueList.Append(paramName);
-            insertSQL.AddParameter(paramName, prop.PropertyValue);
-            //insertSQL.AddParameter(paramName, DatabaseUtil.PrepareValue(prop.PropertyValue));
-            firstField = false;
+            _dbFieldList.Append(prop.DataBaseFieldName);
+            paramName = _gen.GetNextParameterName();
+            _dbValueList.Append(paramName);
+            _insertSQL.AddParameter(paramName, prop.PropertyValue);
+            //_insertSQL.AddParameter(paramName, DatabaseUtil.PrepareValue(prop.PropertyValue));
+            _firstField = false;
         }
     }
 }

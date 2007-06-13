@@ -14,7 +14,7 @@ namespace Chillisoft.Bo.v2
     public class BOMapper
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.BoMapper");
-        private BusinessObjectBase itsBusinessObject;
+        private BusinessObjectBase _businessObject;
 
         /// <summary>
         /// Constructor to initialise a new mapper
@@ -22,7 +22,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="bo">The business object to map</param>
         public BOMapper(BusinessObjectBase bo)
         {
-            itsBusinessObject = bo;
+            _businessObject = bo;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the BOProp object by that name</returns>
         public BOProp GetProperty(string propertyName)
         {
-            return itsBusinessObject.GetBOProp(propertyName);
+            return _businessObject.GetBOProp(propertyName);
         }
 
         /// <summary>
@@ -43,11 +43,11 @@ namespace Chillisoft.Bo.v2
         /// not available</returns>
         public StringGuidPairCollection GetLookupList(string propertyName)
         {
-            PropDef def = itsBusinessObject.ClassDef.GetPropDef(propertyName);
-            //return def.GetLookupList(itsBusinessObject.GetDatabaseConnection());
+            PropDef def = _businessObject.ClassDef.GetPropDef(propertyName);
+            //return def.GetLookupList(_businessObject.GetDatabaseConnection());
             if (def.LookupListSource != null)
             {
-                return def.LookupListSource.GetLookupList(itsBusinessObject.GetDatabaseConnection());
+                return def.LookupListSource.GetLookupList(_businessObject.GetDatabaseConnection());
             }
             else
             {
@@ -61,7 +61,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the interface mapper</returns>
         public IUserInterfaceMapper GetUserInterfaceMapper()
         {
-            return itsBusinessObject.GetUserInterfaceMapper();
+            return _businessObject.GetUserInterfaceMapper();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the interface mapper</returns>
         public IUserInterfaceMapper GetUserInterfaceMapper(string uiDefName)
         {
-            return itsBusinessObject.GetUserInterfaceMapper(uiDefName);
+            return _businessObject.GetUserInterfaceMapper(uiDefName);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Chillisoft.Bo.v2
             if (propName.IndexOf(".") != -1)
             {
                 //log.Debug("Prop with . found : " + propName);
-                BusinessObjectBase relatedBo = this.itsBusinessObject;
+                BusinessObjectBase relatedBo = this._businessObject;
                 string relationshipName = propName.Substring(0, propName.IndexOf("."));
                 propName = propName.Remove(0, propName.IndexOf(".") + 1);
                 if (relationshipName.IndexOf("|") != -1)
@@ -119,7 +119,7 @@ namespace Chillisoft.Bo.v2
                 if (relatedBo == null)
                 {
                     return null;
-                    //throw new HabaneroApplicationException("Unable to retrieve property " + thePropName + " from a business object of type " + this.itsBusinessObject.GetType().Name);
+                    //throw new HabaneroApplicationException("Unable to retrieve property " + thePropName + " from a business object of type " + this._businessObject.GetType().Name);
                 }
                 BOMapper relatedBoMapper = new BOMapper(relatedBo);
                 return relatedBoMapper.GetPropertyValueForUser(propName);
@@ -130,23 +130,23 @@ namespace Chillisoft.Bo.v2
                 try
                 {
                     PropertyInfo propInfo =
-                        this.itsBusinessObject.GetType().GetProperty(virtualPropName,
+                        this._businessObject.GetType().GetProperty(virtualPropName,
                                                                      BindingFlags.Public | BindingFlags.Instance);
-                    object propValue = propInfo.GetValue(this.itsBusinessObject, new object[] {});
+                    object propValue = propInfo.GetValue(this._businessObject, new object[] {});
                     return propValue;
                 }
 
                 catch (TargetInvocationException ex)
                 {
                     log.Error("Error retrieving virtual property " + virtualPropName + " from object of type " +
-                              this.itsBusinessObject.GetType().Name + Environment.NewLine +
+                              this._businessObject.GetType().Name + Environment.NewLine +
                               ExceptionUtil.GetExceptionString(ex.InnerException, 8));
                     throw ex.InnerException;
                 }
             }
             else
             {
-                return itsBusinessObject.GetPropertyValueForUser(propName);
+                return _businessObject.GetPropertyValueForUser(propName);
             }
         }
 
@@ -158,7 +158,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the lookup list or null if not available</returns>
         public ClassDef GetLookupListClassDef(string propertyName)
         {
-            PropDef def = itsBusinessObject.ClassDef.GetPropDef(propertyName);
+            PropDef def = _businessObject.ClassDef.GetPropDef(propertyName);
             if (def.LookupListSource != null && def.LookupListSource.GetType() == typeof (DatabaseLookupListSource))
             {
                 return ((DatabaseLookupListSource) def.LookupListSource).ClassDef;

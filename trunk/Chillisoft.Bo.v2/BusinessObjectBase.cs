@@ -48,19 +48,19 @@ namespace Chillisoft.Bo.v2
 
         #region Fields
 
-        protected static Hashtable mBusinessObjectBaseCol;
+        protected static Hashtable _businessObjectBaseCol;
 
         //set object as new by default.
-        protected States mFlagState = States.isNew; //TODO: | BOFlagState.isIndependent;
+        protected States _flagState = States.isNew; //TODO: | BOFlagState.isIndependent;
 
-        protected ClassDef mClassDef;
-        protected BOPropCol mBOPropCol;
-        protected BOKeyCol mKeysCol;
-        protected BOPrimaryKey mPrimaryKey;
-        protected IRelationshipCol mRelationshipCol;
-        private IConcurrencyControl mConcurrencyControl;
-        private ITransactionLog mTransactionLog;
-        protected IDatabaseConnection mConnection;
+        protected ClassDef _classDef;
+        protected BOPropCol _boPropCol;
+        protected BOKeyCol _keysCol;
+        protected BOPrimaryKey _primaryKey;
+        protected IRelationshipCol _relationshipCol;
+        private IConcurrencyControl _concurrencyControl;
+        private ITransactionLog _transactionLog;
+        protected IDatabaseConnection _connection;
 
         #endregion //Fields
 
@@ -101,10 +101,10 @@ namespace Chillisoft.Bo.v2
             SetIsDirty(false);
             SetIsEditing(false);
             SetIsNew(true);
-            mClassDef = def;
+            _classDef = def;
             ConstructClass(true);
             Guid myID = Guid.NewGuid();
-            mPrimaryKey.SetObjectID(myID);
+            _primaryKey.SetObjectID(myID);
             ClassDef currentClassDef = this.ClassDef;
             if (currentClassDef != null)
             {
@@ -116,11 +116,11 @@ namespace Chillisoft.Bo.v2
             }
             if (conn != null)
             {
-                mConnection = conn;
+                _connection = conn;
             }
             else
             {
-                mConnection = DatabaseConnection.CurrentConnection;
+                _connection = DatabaseConnection.CurrentConnection;
             }
         }
 
@@ -141,13 +141,13 @@ namespace Chillisoft.Bo.v2
         {
             //todo: Check if not already loaded in object manager if already loaded raise error
             //TODO: think about moving these to after load
-            mConnection = conn;
+            _connection = conn;
             SetIsNew(false);
             SetIsDeleted(false);
             SetIsDirty(false);
             SetIsEditing(false);
             ConstructClass(false);
-            mPrimaryKey = id;
+            _primaryKey = id;
             if (!Load())
             {
                 //If the item is not found then throw the appropriate exception
@@ -173,7 +173,7 @@ namespace Chillisoft.Bo.v2
         protected BusinessObjectBase(IExpression searchExpression, IDatabaseConnection conn)
         {
             //todo: Check if not already loaded in object manager if already loaded raise error
-            mConnection = conn;
+            _connection = conn;
             SetIsNew(false);
             SetIsDeleted(false);
             SetIsDirty(false);
@@ -192,11 +192,11 @@ namespace Chillisoft.Bo.v2
         ~BusinessObjectBase()
         {
             GetLoadedBusinessObjectBaseCol().Remove(this.ID);
-            if (mPrimaryKey.GetOrigObjectID().Length > 0)
+            if (_primaryKey.GetOrigObjectID().Length > 0)
             {
-                if (GetLoadedBusinessObjectBaseCol().Contains(mPrimaryKey.GetOrigObjectID()))
+                if (GetLoadedBusinessObjectBaseCol().Contains(_primaryKey.GetOrigObjectID()))
                 {
-                    GetLoadedBusinessObjectBaseCol().Remove(mPrimaryKey.GetOrigObjectID());
+                    GetLoadedBusinessObjectBaseCol().Remove(_primaryKey.GetOrigObjectID());
                 }
             }
             ReleaseWriteLocks();
@@ -216,8 +216,8 @@ namespace Chillisoft.Bo.v2
         [ReflectionPermission(SecurityAction.Demand)]
         protected internal BusinessObjectBase GetBusinessObject(IExpression searchExpression)
         {
-			BusinessObjectBase lTempBusObj = mClassDef.InstantiateBusinessObject();
-            //BusinessObjectBase lTempBusObj = (BusinessObjectBase) Activator.CreateInstance(mClassDef.ClassType, true);
+			BusinessObjectBase lTempBusObj = _classDef.InstantiateBusinessObject();
+            //BusinessObjectBase lTempBusObj = (BusinessObjectBase) Activator.CreateInstance(_classDef.ClassType, true);
             lTempBusObj.SetDatabaseConnection(this.GetDatabaseConnection());
             IDataReader dr = lTempBusObj.LoadDataReader(this.GetDatabaseConnection(), searchExpression);
             try
@@ -255,7 +255,7 @@ namespace Chillisoft.Bo.v2
             BOProp prop;
             BOPropCol propCol = new BOPropCol();
             BOPrimaryKey lPrimaryKey;
-            foreach (DictionaryEntry item in  mClassDef.PrimaryKeyDef)
+            foreach (DictionaryEntry item in  _classDef.PrimaryKeyDef)
             {
                 PropDef lPropDef = (PropDef) item.Value;
                 prop = lPropDef.CreateBOProp(false);
@@ -263,9 +263,9 @@ namespace Chillisoft.Bo.v2
                 prop.InitialiseProp(dr[prop.DataBaseFieldName]);
                 propCol.Add(prop);
 
-                mPrimaryKey = (BOPrimaryKey) mClassDef.PrimaryKeyDef.CreateBOKey(mBOPropCol);
+                _primaryKey = (BOPrimaryKey) _classDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
             }
-            lPrimaryKey = (BOPrimaryKey) mClassDef.PrimaryKeyDef.CreateBOKey(propCol);
+            lPrimaryKey = (BOPrimaryKey) _classDef.PrimaryKeyDef.CreateBOKey(propCol);
 
             BusinessObjectBase lTempBusObj =
                 BusinessObjectBase.GetLoadedBusinessObject(lPrimaryKey.GetObjectId(), false);
@@ -277,7 +277,7 @@ namespace Chillisoft.Bo.v2
             if (lTempBusObj == null || isReplacingSuperClassObject)
             {
                 lTempBusObj = (this.CreateNewBusinessObject());
-                // BusinessObjectBase)Activator.CreateInstance(mClassDef.ClassType, true);
+                // BusinessObjectBase)Activator.CreateInstance(_classDef.ClassType, true);
                 lTempBusObj.LoadFromDataReader(dr);
                 try
                 {
@@ -354,7 +354,7 @@ namespace Chillisoft.Bo.v2
         /// <returns></returns>
         public BusinessObjectBase CreateNewBusinessObject()
         {
-            return mClassDef.InstantiateBusinessObject();
+            return _classDef.InstantiateBusinessObject();
         }
 
         /// <summary>
@@ -363,10 +363,10 @@ namespace Chillisoft.Bo.v2
         /// <param name="newObject">Whether the object is new or not</param>
         protected virtual void ConstructClass(bool newObject)
         {
-            mClassDef = ConstructClassDef();
-            mBOPropCol = mClassDef.createBOPropertyCol(newObject);
-            mKeysCol = mClassDef.createBOKeyCol(mBOPropCol);
-            ClassDef classDefToUseForPrimaryKey = mClassDef;
+            _classDef = ConstructClassDef();
+            _boPropCol = _classDef.createBOPropertyCol(newObject);
+            _keysCol = _classDef.createBOKeyCol(_boPropCol);
+            ClassDef classDefToUseForPrimaryKey = _classDef;
             while (classDefToUseForPrimaryKey.SuperClassDesc != null &&
                    classDefToUseForPrimaryKey.SuperClassDesc.ORMapping == ORMapping.SingleTableInheritance)
             {
@@ -374,16 +374,16 @@ namespace Chillisoft.Bo.v2
             }
             if ((classDefToUseForPrimaryKey.SuperClassDesc == null) ||
                 (classDefToUseForPrimaryKey.SuperClassDesc.ORMapping == ORMapping.ConcreteTableInheritance) ||
-                (mClassDef.SuperClassDesc.ORMapping == ORMapping.ClassTableInheritance))
+                (_classDef.SuperClassDesc.ORMapping == ORMapping.ClassTableInheritance))
             {
-                mPrimaryKey = (BOPrimaryKey)classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(mBOPropCol);
+                _primaryKey = (BOPrimaryKey)classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(_boPropCol);
             }
             else
             {
-                mPrimaryKey =
-                    (BOPrimaryKey)classDefToUseForPrimaryKey.SuperClassDef.PrimaryKeyDef.CreateBOKey(mBOPropCol);
+                _primaryKey =
+                    (BOPrimaryKey)classDefToUseForPrimaryKey.SuperClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
             }
-            mRelationshipCol = mClassDef.CreateRelationshipCol(mBOPropCol, this);
+            _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
         }
 
         /// <summary>
@@ -507,11 +507,11 @@ namespace Chillisoft.Bo.v2
         /// <returns></returns>
         protected internal static Hashtable GetLoadedBusinessObjectBaseCol()
         {
-            if (mBusinessObjectBaseCol == null)
+            if (_businessObjectBaseCol == null)
             {
-                mBusinessObjectBaseCol = new Hashtable();
+                _businessObjectBaseCol = new Hashtable();
             }
-            return mBusinessObjectBaseCol;
+            return _businessObjectBaseCol;
         }
 
         /// <summary>
@@ -519,7 +519,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected internal static void ClearLoadedBusinessObjectBaseCol()
         {
-            mBusinessObjectBaseCol = null;
+            _businessObjectBaseCol = null;
             //TODO_Future: write to a log file since this 
             //   should only be allowed to be called in test mode.
         }
@@ -534,7 +534,7 @@ namespace Chillisoft.Bo.v2
         public virtual BusinessObjectBaseCollection GetBusinessObjectCol(string searchCriteria,
                                                                          string orderByClause)
         {
-            BusinessObjectBaseCollection bOCol = new BusinessObjectBaseCollection(mClassDef);
+            BusinessObjectBaseCollection bOCol = new BusinessObjectBaseCollection(_classDef);
             bOCol.Load(searchCriteria, orderByClause);
             return bOCol;
         }
@@ -549,7 +549,7 @@ namespace Chillisoft.Bo.v2
         public virtual BusinessObjectBaseCollection GetBusinessObjectCol(IExpression searchExpression,
                                                                          string orderByClause)
         {
-            BusinessObjectBaseCollection bOCol = new BusinessObjectBaseCollection(mClassDef);
+            BusinessObjectBaseCollection bOCol = new BusinessObjectBaseCollection(_classDef);
             bOCol.Load(searchExpression, orderByClause);
             return bOCol;
         }
@@ -563,7 +563,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public BOPrimaryKey ID
         {
-            get { return mPrimaryKey; }
+            get { return _primaryKey; }
         }
 
         /// <summary>
@@ -580,7 +580,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public BOPrimaryKey PrimaryKey
         {
-            get { return mPrimaryKey; }
+            get { return _primaryKey; }
         }
 
         /// <summary>
@@ -589,7 +589,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="concurrencyControl">The concurrency control</param>
         protected void SetConcurrencyControl(IConcurrencyControl concurrencyControl)
         {
-            mConcurrencyControl = concurrencyControl;
+            _concurrencyControl = concurrencyControl;
         }
 
         /// <summary>
@@ -601,7 +601,7 @@ namespace Chillisoft.Bo.v2
             get
             {
                 return "<" + this.ClassName + " ID=" + this.ID + ">" +
-                       mBOPropCol.DirtyXml + "<" + this.ClassName + ">";
+                       _boPropCol.DirtyXml + "<" + this.ClassName + ">";
             }
         }
 
@@ -611,7 +611,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="transactionLog">A transaction log</param>
         protected void SetTransactionLog(ITransactionLog transactionLog)
         {
-            mTransactionLog = transactionLog;
+            _transactionLog = transactionLog;
         }
 
         /// <summary>
@@ -619,14 +619,14 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public IRelationshipCol Relationships
         {
-            get { return mRelationshipCol; }
-            set { mRelationshipCol = value; }
+            get { return _relationshipCol; }
+            set { _relationshipCol = value; }
         }
 
         //		private Relationship GetRelationship(string relationshipName) 
         //		{
         //			//TODO: sensible errors if relationship not configured.
-        //			return mRelationshipCol[relationshipName];
+        //			return _relationshipCol[relationshipName];
         //		}
         //
         //		/// <summary>
@@ -637,7 +637,7 @@ namespace Chillisoft.Bo.v2
         //		public BusinessObjectBase GetRelatedBusinessObject(string relationshipName) 
         //		{
         //			ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
-        //			if (!(mRelationshipCol == null)) 
+        //			if (!(_relationshipCol == null)) 
         //			{
         //				SingleRelationship rel = (SingleRelationship) GetRelationship(relationshipName);
         //				if (!(rel == null)) 
@@ -656,7 +656,7 @@ namespace Chillisoft.Bo.v2
         //		public BusinessObjectBaseCollection GetRelatedBusinessObjectCol(string relationshipName) 
         //		{
         //			ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
-        //			if (!(mRelationshipCol == null)) 
+        //			if (!(_relationshipCol == null)) 
         //			{
         //				MultipleRelationship rel = (MultipleRelationship) GetRelationship(relationshipName);
         //				if (!(rel == null)) 
@@ -672,7 +672,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public ClassDef ClassDef
         {
-            get { return mClassDef; }
+            get { return _classDef; }
         }
 
         /// <summary>
@@ -680,7 +680,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected internal string ClassName
         {
-            get { return mClassDef.ClassName; }
+            get { return _classDef.ClassName; }
         }
 
         /// <summary>
@@ -690,7 +690,7 @@ namespace Chillisoft.Bo.v2
         {
             get
             {
-                ClassDef classDefToUseForPrimaryKey = mClassDef;
+                ClassDef classDefToUseForPrimaryKey = _classDef;
                 while (classDefToUseForPrimaryKey.SuperClassDesc != null &&
                        classDefToUseForPrimaryKey.SuperClassDesc.ORMapping == ORMapping.SingleTableInheritance)
                 {
@@ -743,7 +743,7 @@ namespace Chillisoft.Bo.v2
         /// TODO: This shouldn't be public, but how do we test without that?.
         public BOKeyCol GetBOKeyCol()
         {
-            return mKeysCol;
+            return _keysCol;
         }
 
         /// <summary>
@@ -754,7 +754,7 @@ namespace Chillisoft.Bo.v2
         {
             string output = "";
             output += "Type: " + this.GetType().Name + Environment.NewLine;
-            foreach (DictionaryEntry entry in mBOPropCol)
+            foreach (DictionaryEntry entry in _boPropCol)
             {
                 BOProp prop = (BOProp)entry.Value;
                 output += prop.PropertyName + " - " + prop.PropertyValueString + Environment.NewLine;
@@ -935,7 +935,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a BOPropCol object</returns>
         internal BOPropCol GetBOPropCol()
         {
-            return mBOPropCol;
+            return _boPropCol;
         }
 
         /// <summary>
@@ -947,7 +947,7 @@ namespace Chillisoft.Bo.v2
         /// property exists by the name specified</exception>
         protected internal BOProp GetBOProp(string propName)
         {
-            BOProp prop = mBOPropCol[propName];
+            BOProp prop = _boPropCol[propName];
             if (prop == null)
             {
                 throw new HabaneroArgumentException("propName", "Property with name " +
@@ -988,7 +988,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns an IDbConnection object</returns>
         protected IDbConnection GetConnection()
         {
-            return mConnection.GetConnection();
+            return _connection.GetConnection();
         }
 
         /// <summary>
@@ -997,7 +997,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns an IDatabaseConnection object</returns>
         public IDatabaseConnection GetDatabaseConnection()
         {
-            return mConnection;
+            return _connection;
         }
 
         /// <summary>
@@ -1006,7 +1006,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="connection">The database connection to set to</param>
         public void SetDatabaseConnection(IDatabaseConnection connection)
         {
-            this.mConnection = connection;
+            this._connection = connection;
         }
 
         /// <summary>
@@ -1014,7 +1014,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected virtual string ConnectionString
         {
-            get { return mConnection.ConnectionString; }
+            get { return _connection.ConnectionString; }
         }
 
         /// <summary>
@@ -1023,7 +1023,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected virtual string ErrorSafeConnectString
         {
-            get { return mConnection.ErrorSafeConnectString(); }
+            get { return _connection.ErrorSafeConnectString(); }
         }
 
         /// <summary>
@@ -1088,7 +1088,7 @@ namespace Chillisoft.Bo.v2
                     {
                         throw new BusinessObjectNotFoundException(
                             "A serious error has occured please contact your system administrator" +
-                            "There are no records in the database for the Class: " + mClassDef.ClassName +
+                            "There are no records in the database for the Class: " + _classDef.ClassName +
                             " identified by " + this.ID + " \n" + SelectStatement(null) + " \n" + ErrorSafeConnectString);
                     }
                 }
@@ -1201,15 +1201,15 @@ namespace Chillisoft.Bo.v2
                         BeforeUpdateToDB();
                         int numRowsUpdated;
                         ISqlStatementCollection statementCollection = GetPersistSql();
-                        numRowsUpdated = mConnection.ExecuteSql(statementCollection, null);
-                        if (mTransactionLog != null)
+                        numRowsUpdated = _connection.ExecuteSql(statementCollection, null);
+                        if (_transactionLog != null)
                         {
-                            mTransactionLog.RecordTransactionLog(this, CurrentLoggedOnUserName());
+                            _transactionLog.RecordTransactionLog(this, CurrentLoggedOnUserName());
                         }
                         if (numRowsUpdated == statementCollection.Count)
                         {
                             UpdateBusinessObjectBaseCol();
-                            mBOPropCol.BackupPropertyValues();
+                            _boPropCol.BackupPropertyValues();
                         }
                         else
                         {
@@ -1301,18 +1301,18 @@ namespace Chillisoft.Bo.v2
         protected void UpdateBusinessObjectBaseCol()
         {
             //No need to do anything if the object does not have an ID.
-            if (!mClassDef.HasObjectID)
+            if (!_classDef.HasObjectID)
             {
                 //If the primary key has not changed then do nothing.
-                if (mPrimaryKey.IsDirty)
+                if (_primaryKey.IsDirty)
                 {
                     //If there was an id before then
-                    if (mPrimaryKey.GetOrigObjectID().Length > 0)
+                    if (_primaryKey.GetOrigObjectID().Length > 0)
                     {
                         //If the ID was not a temp objectId then remove it from the collection
                         if (!IsNew)
                         {
-                            GetLoadedBusinessObjectBaseCol().Remove(mPrimaryKey.GetOrigObjectID());
+                            GetLoadedBusinessObjectBaseCol().Remove(_primaryKey.GetOrigObjectID());
                         }
                         //If the object with the new ID does not exist in the collection then 
                         // add it.
@@ -1331,7 +1331,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public void CancelEdit()
         {
-            mBOPropCol.RestorePropertyValues();
+            _boPropCol.RestorePropertyValues();
             SetIsDeleted(false);
             SetIsEditing(false);
             SetIsDirty(false);
@@ -1395,9 +1395,9 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected virtual void CheckConcurrencyBeforePersisting()
         {
-            if (!(mConcurrencyControl == null))
+            if (!(_concurrencyControl == null))
             {
-                mConcurrencyControl.CheckConcurrencyBeforePersisting(this);
+                _concurrencyControl.CheckConcurrencyBeforePersisting(this);
             }
         }
 
@@ -1406,9 +1406,9 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected virtual void CheckConcurrencyOnGettingObjectFromObjectManager()
         {
-            if (!(mConcurrencyControl == null))
+            if (!(_concurrencyControl == null))
             {
-                mConcurrencyControl.CheckConcurrencyOnGettingObjectFromObjectManager(this);
+                _concurrencyControl.CheckConcurrencyOnGettingObjectFromObjectManager(this);
             }
         }
 
@@ -1417,9 +1417,9 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected virtual void CheckConcurrencyBeforeBeginEditing()
         {
-            if (!(mConcurrencyControl == null))
+            if (!(_concurrencyControl == null))
             {
-                mConcurrencyControl.CheckConcurrencyBeforeBeginEditing(this);
+                _concurrencyControl.CheckConcurrencyBeforeBeginEditing(this);
             }
         }
 
@@ -1428,9 +1428,9 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected virtual void UpdatedConcurrencyControlProperties()
         {
-            if (!(mConcurrencyControl == null))
+            if (!(_concurrencyControl == null))
             {
-                mConcurrencyControl.UpdatePropertiesWithLatestConcurrencyInfo();
+                _concurrencyControl.UpdatePropertiesWithLatestConcurrencyInfo();
             }
         }
 
@@ -1439,9 +1439,9 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected virtual void ReleaseReadLocks()
         {
-            if (!(mConcurrencyControl == null))
+            if (!(_concurrencyControl == null))
             {
-                mConcurrencyControl.ReleaseReadLocks();
+                _concurrencyControl.ReleaseReadLocks();
             }
         }
 
@@ -1450,9 +1450,9 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected virtual void ReleaseWriteLocks()
         {
-            if (!(mConcurrencyControl == null))
+            if (!(_concurrencyControl == null))
             {
-                mConcurrencyControl.ReleaseWriteLocks();
+                _concurrencyControl.ReleaseWriteLocks();
             }
         }
 
@@ -1484,14 +1484,14 @@ namespace Chillisoft.Bo.v2
         /// if duplicates are found</exception>
         protected void CheckForDuplicates()
         {
-            if (mKeysCol == null)
+            if (_keysCol == null)
             {
                 return;
             }
 
             if (!IsDeleted)
             {
-                foreach (DictionaryEntry item in mKeysCol)
+                foreach (DictionaryEntry item in _keysCol)
                 {
                     BOKey lBOKey = (BOKey) item.Value;
                     if (lBOKey.MustCheckKey())
@@ -1504,9 +1504,9 @@ namespace Chillisoft.Bo.v2
                         checkDuplicateSQL.AppendCriteria(whereClause);
                         //string whereClause = " WHERE ( NOT " + WhereClause() +
                         //	") AND " + GetCheckForDuplicateWhereClause(lBOKey);
-                        using (IDataReader dr = this.mConnection.LoadDataReader(checkDuplicateSQL))
+                        using (IDataReader dr = this._connection.LoadDataReader(checkDuplicateSQL))
                         {
-                            //mClassDef.SelectSql + whereClause)) {  //)  DatabaseConnection.CurrentConnection.LoadDataReader
+                            //_classDef.SelectSql + whereClause)) {  //)  DatabaseConnection.CurrentConnection.LoadDataReader
                             try
                             {
                                 if (dr != null && dr.Read()) //There is already an object in the 
@@ -1541,19 +1541,19 @@ namespace Chillisoft.Bo.v2
         {
             //Only check if this does not have an object ID since an object id
             // is guaranteed to be unique
-            if (!mClassDef.HasObjectID && !IsDeleted)
+            if (!_classDef.HasObjectID && !IsDeleted)
             {
                 //Only check if the primaryKey is 
-                if (mPrimaryKey.MustCheckKey())
+                if (_primaryKey.MustCheckKey())
                 {
                     SqlStatement checkSQL = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
                     checkSQL.Statement.Append(this.GetSelectSql());
-                    string whereClause = " WHERE " + mPrimaryKey.DataBaseWhereClause(checkSQL);
+                    string whereClause = " WHERE " + _primaryKey.DataBaseWhereClause(checkSQL);
                     checkSQL.Statement.Append(whereClause);
 
                     using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(checkSQL))
                     {
-                        //mClassDef.SelectSql + whereClause)) {
+                        //_classDef.SelectSql + whereClause)) {
                         try
                         {
                             if (dr.Read()) //There is already an object in the 
@@ -1602,10 +1602,10 @@ namespace Chillisoft.Bo.v2
         private void ParseParameterInfo(IExpression searchExpression)
         {
             BOProp prop;
-            foreach (DictionaryEntry item in mBOPropCol)
+            foreach (DictionaryEntry item in _boPropCol)
             {
                 prop = (BOProp)item.Value;
-                searchExpression.SetParameterSqlInfo(prop, mClassDef.TableName);
+                searchExpression.SetParameterSqlInfo(prop, _classDef.TableName);
             }
         }
 
@@ -1617,7 +1617,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a string</returns>
         protected internal virtual string WhereClause(SqlStatement sql)
         {
-            return mPrimaryKey.PersistedDatabaseWhereClause(sql);
+            return _primaryKey.PersistedDatabaseWhereClause(sql);
         }
 
         /// <summary>
@@ -1671,7 +1671,7 @@ namespace Chillisoft.Bo.v2
         /// TODO ERIC - seems to add a "where" clause anyway
         protected virtual string SelectSQLWithNoSearchClause()
         {
-            return new SelectStatementGenerator(this, this.mConnection).Generate(-1);
+            return new SelectStatementGenerator(this, this._connection).Generate(-1);
         }
 
         /// <summary>
@@ -1774,7 +1774,7 @@ namespace Chillisoft.Bo.v2
         /// TODO ERIC - clarify on the limit
         public string GetSelectSql(int limit)
         {
-            return new SelectStatementGenerator(this, this.mConnection).Generate(limit);
+            return new SelectStatementGenerator(this, this._connection).Generate(limit);
         }
 
         /// <summary>
@@ -1864,9 +1864,9 @@ namespace Chillisoft.Bo.v2
         protected void SetIsNew(bool newValue)
         {
             SetBOFlagValue(States.isNew, newValue);
-            if (!(mBOPropCol == null))
+            if (!(_boPropCol == null))
             {
-                mBOPropCol.setIsObjectNew(newValue);
+                _boPropCol.setIsObjectNew(newValue);
             }
         }
 
@@ -1888,7 +1888,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns true if set, false if not</returns>
         protected bool GetBOFlagValue(States objFlag)
         {
-            return Convert.ToBoolean(mFlagState & objFlag);
+            return Convert.ToBoolean(_flagState & objFlag);
         }
 
         /// <summary>
@@ -1939,11 +1939,11 @@ namespace Chillisoft.Bo.v2
         {
             if (bValue)
             {
-                mFlagState = mFlagState | flag;
+                _flagState = _flagState | flag;
             }
             else
             {
-                mFlagState = mFlagState & ~flag;
+                _flagState = _flagState & ~flag;
             }
         }
 
@@ -1957,7 +1957,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public void TransactionCommited()
         {
-            mBOPropCol.BackupPropertyValues();
+            _boPropCol.BackupPropertyValues();
             this.UpdateAfterApplyEdit();
         }
 
@@ -2041,7 +2041,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns an IUserInterfaceMapper object</returns>
         public virtual IUserInterfaceMapper GetUserInterfaceMapper()
         {
-            return this.mClassDef.UIDefCol["default"];
+            return this._classDef.UIDefCol["default"];
         }
 
         /// <summary>
@@ -2051,7 +2051,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns an IUserInterfaceMapper object</returns>
         public virtual IUserInterfaceMapper GetUserInterfaceMapper(string uiDefName)
         {
-            return this.mClassDef.UIDefCol[uiDefName];
+            return this._classDef.UIDefCol[uiDefName];
         }
 
         #endregion //UI Support

@@ -23,12 +23,12 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public override void AddHandlersForUpdates()
         {
-            foreach (BusinessObjectBase businessObject in itsCollection)
+            foreach (BusinessObjectBase businessObject in _collection)
             {
                 businessObject.Updated += new BusinessObjectUpdatedHandler(UpdatedHandler);
             }
-            itsCollection.BusinessObjectAdded += new BusinessObjectEventHandler(AddedHandler);
-            itsCollection.BusinessObjectRemoved += new BusinessObjectEventHandler(RemovedHandler);
+            _collection.BusinessObjectAdded += new BusinessObjectEventHandler(AddedHandler);
+            _collection.BusinessObjectRemoved += new BusinessObjectEventHandler(RemovedHandler);
         }
 
         /// <summary>

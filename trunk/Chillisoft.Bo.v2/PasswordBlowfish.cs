@@ -11,8 +11,8 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class PasswordBlowfish : CustomProperty
     {
-        private string itsEncryptedValue;
-        private static Crypter itsCrypter;
+        private string _encryptedValue;
+        private static Crypter _crypter;
 
         /// <summary>
         /// Constructor to initialise a new password
@@ -32,11 +32,11 @@ namespace Chillisoft.Bo.v2
             {
                 if (isLoading)
                 {
-                    itsEncryptedValue = (string) value;
+                    _encryptedValue = (string) value;
                 }
                 else
                 {
-                    itsEncryptedValue = Encrypt((string) value);
+                    _encryptedValue = Encrypt((string) value);
                 }
             }
             else
@@ -53,11 +53,11 @@ namespace Chillisoft.Bo.v2
         {
             get
             {
-                if (itsCrypter == null)
+                if (_crypter == null)
                 {
-                    itsCrypter = new BlowfishCrypter();
+                    _crypter = new BlowfishCrypter();
                 }
-                return itsCrypter;
+                return _crypter;
             }
         }
 
@@ -86,7 +86,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public object Value
         {
-            get { return itsEncryptedValue; }
+            get { return _encryptedValue; }
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public string DecryptedValue
         {
-            get { return this.Decrypt(itsEncryptedValue); }
+            get { return this.Decrypt(_encryptedValue); }
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a string</returns>
         public override string ToString()
         {
-            return itsEncryptedValue;
+            return _encryptedValue;
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the encrypted value</returns>
         public override object GetPersistValue()
         {
-            return itsEncryptedValue;
+            return _encryptedValue;
         }
     }
 }

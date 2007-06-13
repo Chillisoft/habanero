@@ -17,11 +17,11 @@ namespace Chillisoft.Bo.v2
     /// TODO ERIC - a method to set the lookup type?
     public class DatabaseLookupListSource : ILookupListSource
     {
-        private readonly int itsTimeout;
-        private readonly Type itsLookupObjectType;
-        private DateTime itsLastCallTime;
-        private readonly string itsStatement;
-        private StringGuidPairCollection itsStringGuidPairCollection;
+        private readonly int _timeout;
+        private readonly Type _lookupObjectType;
+        private DateTime _lastCallTime;
+        private readonly string _statement;
+        private StringGuidPairCollection _stringGuidPairCollection;
 
         /// <summary>
         /// Constructor that specifies the sql statement
@@ -66,10 +66,10 @@ namespace Chillisoft.Bo.v2
         /// <param name="lookupObjectType">The object type</param>
         public DatabaseLookupListSource(string statement, int timeout, Type lookupObjectType)
         {
-            this.itsStatement = statement;
-            itsTimeout = timeout;
-            itsLookupObjectType = lookupObjectType;
-            itsLastCallTime = DateTime.MinValue;
+            this._statement = statement;
+            _timeout = timeout;
+            _lookupObjectType = lookupObjectType;
+            _lastCallTime = DateTime.MinValue;
         }
 
         /// <summary>
@@ -94,16 +94,16 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a collection of string-Guid pairs</returns>
         public StringGuidPairCollection GetLookupList(IDatabaseConnection connection)
         {
-            if (DateTime.Now.Subtract(itsLastCallTime).TotalMilliseconds < itsTimeout)
+            if (DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout)
             {
-                return itsStringGuidPairCollection;
+                return _stringGuidPairCollection;
             }
-            itsStringGuidPairCollection = new StringGuidPairCollection();
+            _stringGuidPairCollection = new StringGuidPairCollection();
             ISqlStatement statement = new SqlStatement(connection.GetConnection());
-            statement.Statement.Append(itsStatement);
-            itsStringGuidPairCollection.Load(connection, statement);
-            itsLastCallTime = DateTime.Now;
-            return itsStringGuidPairCollection;
+            statement.Statement.Append(_statement);
+            _stringGuidPairCollection.Load(connection, statement);
+            _lastCallTime = DateTime.Now;
+            return _stringGuidPairCollection;
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public string SqlString
         {
-            get { return itsStatement; }
+            get { return _statement; }
         }
 
         /// <summary>
@@ -138,13 +138,13 @@ namespace Chillisoft.Bo.v2
         {
             get
             {
-                if (itsLookupObjectType == null)
+                if (_lookupObjectType == null)
                 {
                     return null;
                 }
                 else
                 {
-                    return ClassDef.GetClassDefCol[itsLookupObjectType];
+                    return ClassDef.GetClassDefCol[_lookupObjectType];
                 }
             }
         }

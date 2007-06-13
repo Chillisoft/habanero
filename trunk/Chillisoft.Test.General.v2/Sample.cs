@@ -24,7 +24,7 @@ namespace Chillisoft.Test.General.v2
 
         public Sample(ClassDef classDef) : this()
         {
-            mClassDef = classDef;
+            _classDef = classDef;
         }
 
         public static Sample GetNewObject()
@@ -48,8 +48,8 @@ namespace Chillisoft.Test.General.v2
 
         protected override ClassDef ConstructClassDef()
         {
-            mClassDef = GetClassDef();
-            return mClassDef;
+            _classDef = GetClassDef();
+            return _classDef;
         }
 
         public override IUserInterfaceMapper GetUserInterfaceMapper()

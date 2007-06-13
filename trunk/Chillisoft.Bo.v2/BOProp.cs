@@ -17,15 +17,15 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class BOProp : IParameterSqlInfo
     {
-        protected object mCurrentValue = null;
-        protected PropDef mPropDef;
-        protected bool mIsValid = true;
-        protected string mInvalidReason = "";
-        protected object mPersistedValue;
-        protected bool mOrigValueIsValid = true;
-        protected string mOrigInvalidReason = "";
-        protected bool mIsObjectNew = false;
-        protected bool mIsDirty = false;
+        protected object _currentValue = null;
+        protected PropDef _propDef;
+        protected bool _isValid = true;
+        protected string _invalidReason = "";
+        protected object _persistedValue;
+        protected bool _origValueIsValid = true;
+        protected string _origInvalidReason = "";
+        protected bool _isObjectNew = false;
+        protected bool _isDirty = false;
 
         public event BOPropValueUpdatedHandler BOPropValueUpdated;
 
@@ -35,7 +35,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="propDef">The property definition</param>
         internal BOProp(PropDef propDef)
         {
-            mPropDef = propDef;
+            _propDef = propDef;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal string PropertyName
         {
-            get { return mPropDef.PropertyName; }
+            get { return _propDef.PropertyName; }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal string DataBaseFieldName
         {
-            get { return mPropDef.DataBaseFieldName; }
+            get { return _propDef.DataBaseFieldName; }
         }
 
 
@@ -133,15 +133,15 @@ namespace Chillisoft.Bo.v2
                 }
             }
 
-            mInvalidReason = "";
-            mIsValid = mPropDef.isValueValid(propValue, ref mInvalidReason);
+            _invalidReason = "";
+            _isValid = _propDef.isValueValid(propValue, ref _invalidReason);
 
-            mCurrentValue = propValue;
-            mIsObjectNew = isObjectNew;
+            _currentValue = propValue;
+            _isObjectNew = isObjectNew;
             //Set up origional properties s.t. property can be backed up and restored.
-            mOrigInvalidReason = mInvalidReason;
-            mOrigValueIsValid = mIsValid;
-            mPersistedValue = propValue;
+            _origInvalidReason = _invalidReason;
+            _origValueIsValid = _isValid;
+            _persistedValue = propValue;
         }
 
         /// <summary>
@@ -149,10 +149,10 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected internal void RestorePropValue()
         {
-            mIsValid = mOrigValueIsValid;
-            mInvalidReason = mOrigInvalidReason;
-            mCurrentValue = mPersistedValue;
-            mIsDirty = false;
+            _isValid = _origValueIsValid;
+            _invalidReason = _origInvalidReason;
+            _currentValue = _persistedValue;
+            _isDirty = false;
             FireBOPropValueUpdated();
         }
 
@@ -163,10 +163,10 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         protected internal void BackupPropValue()
         {
-            mPersistedValue = mCurrentValue;
-            mOrigInvalidReason = mInvalidReason;
-            mOrigValueIsValid = mIsValid;
-            mIsDirty = false;
+            _persistedValue = _currentValue;
+            _origInvalidReason = _invalidReason;
+            _origValueIsValid = _isValid;
+            _isDirty = false;
         }
 
         /// <summary>
@@ -174,14 +174,14 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public object PropertyValue
         {
-            get { return mCurrentValue; }
+            get { return _currentValue; }
             set
             {
                 if (value is Guid && Guid.Empty.Equals(value))
                 {
                     value = null;
                 }
-                if ((mCurrentValue == null) || (!mCurrentValue.Equals(value)))
+                if ((_currentValue == null) || (!_currentValue.Equals(value)))
                 {
                     object newValue = null;
                     if (value != null)
@@ -195,12 +195,12 @@ namespace Chillisoft.Bo.v2
                             newValue = value;
                         }
                     }
-                    mIsValid = mPropDef.isValueValid(newValue, ref mInvalidReason);
-                    mCurrentValue = newValue;
+                    _isValid = _propDef.isValueValid(newValue, ref _invalidReason);
+                    _currentValue = newValue;
                     FireBOPropValueUpdated();
-                    mIsDirty = true;
-//					if (!mIsValid) {
-//						throw new PropertyValueInvalidException(mInvalidReason);
+                    _isDirty = true;
+//					if (!_isValid) {
+//						throw new PropertyValueInvalidException(_invalidReason);
 //					}
                 }
             }
@@ -212,7 +212,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public object PersistedValue
         {
-            get { return mPersistedValue; }
+            get { return _persistedValue; }
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace Chillisoft.Bo.v2
                 {
                     return "";
                 }
-                if (mPropDef.PropType == typeof (DateTime))
+                if (_propDef.PropType == typeof (DateTime))
                 {
                     if (!(PropertyValue == DBNull.Value))
                     {
@@ -250,11 +250,11 @@ namespace Chillisoft.Bo.v2
                         return PersistedPropertyValue.ToString();
                     }
                 }
-                else if (mPropDef.PropType == typeof (Guid))
+                else if (_propDef.PropType == typeof (Guid))
                 {
                     return ((Guid) PersistedPropertyValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                 }
-                else if ((mPropDef.PropType == typeof (String)) && (PersistedPropertyValue is Guid))
+                else if ((_propDef.PropType == typeof (String)) && (PersistedPropertyValue is Guid))
                 {
                     return ((Guid) PersistedPropertyValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                 }
@@ -274,11 +274,11 @@ namespace Chillisoft.Bo.v2
             {
                 try
                 {
-                    if (mCurrentValue == null)
+                    if (_currentValue == null)
                     {
                         return "";
                     }
-                    else if (mPropDef.PropType == typeof (DateTime))
+                    else if (_propDef.PropType == typeof (DateTime))
                     {
                         if (!(PropertyValue == DBNull.Value))
                         {
@@ -290,9 +290,9 @@ namespace Chillisoft.Bo.v2
                             return PropertyValue.ToString();
                         }
                     }
-                    else if (mPropDef.PropType == typeof (Guid))
+                    else if (_propDef.PropType == typeof (Guid))
                     {
-                        if (mCurrentValue is Guid)
+                        if (_currentValue is Guid)
                         {
                             return ((Guid) PropertyValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                         }
@@ -302,19 +302,19 @@ namespace Chillisoft.Bo.v2
                                 (new Guid(PropertyValue.ToString())).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                         }
                     }
-                    else if ((mPropDef.PropType == typeof (String)) && (mCurrentValue is Guid))
+                    else if ((_propDef.PropType == typeof (String)) && (_currentValue is Guid))
                     {
-                        return ((Guid) mCurrentValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
+                        return ((Guid) _currentValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                     }
                     else
                     {
-                        return mCurrentValue.ToString();
+                        return _currentValue.ToString();
                     }
                 }
                 catch (Exception exc)
                 {
                     throw new HabaneroApplicationException(
-                        exc.Message + "/nError occured for Property " + mPropDef.PropertyName,
+                        exc.Message + "/nError occured for Property " + _propDef.PropertyName,
                         exc);
                 }
             }
@@ -326,7 +326,7 @@ namespace Chillisoft.Bo.v2
         /// TODO ERIC - this duplicates PersistedValue
         internal object PersistedPropertyValue
         {
-            get { return mPersistedValue; }
+            get { return _persistedValue; }
         }
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal bool isValid
         {
-            get { return mIsValid; }
+            get { return _isValid; }
         }
 
         /// <summary>
@@ -343,7 +343,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal string InvalidReason
         {
-            get { return mInvalidReason; }
+            get { return _invalidReason; }
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public bool IsDirty
         {
-            get { return mIsDirty; }
+            get { return _isDirty; }
         }
 
         /// <summary>
@@ -361,8 +361,8 @@ namespace Chillisoft.Bo.v2
         /// TODO ERIC - what does this actually mean?
         internal bool IsObjectNew
         {
-            get { return mIsObjectNew; }
-            set { mIsObjectNew = value; }
+            get { return _isObjectNew; }
+            set { _isObjectNew = value; }
         }
 
         /// <summary>
@@ -408,7 +408,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a string</returns>
         internal string DatabaseNameFieldNameValuePair(SqlStatement sql)
         {
-            if (mCurrentValue == null)
+            if (_currentValue == null)
             {
                 return this.DataBaseFieldName + " is NULL ";
             }
@@ -432,7 +432,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         internal Type PropertyType
         {
-            get { return mPropDef.PropType; }
+            get { return _propDef.PropType; }
         }
 
         /// <summary>
@@ -463,7 +463,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public string TableName
         {
-            get { return mPropDef.TableName; }
+            get { return _propDef.TableName; }
         }
 
         /// <summary>
@@ -479,7 +479,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public ParameterType ParameterType
         {
-            get { return mPropDef.ParameterType; }
+            get { return _propDef.ParameterType; }
         }
     }
 

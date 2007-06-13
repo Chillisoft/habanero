@@ -5,7 +5,7 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class BusinessObjectEventArgs
     {
-        private BusinessObjectBase itsBo;
+        private BusinessObjectBase _bo;
 
         /// <summary>
         /// Constructor to initialise a new set of arguments
@@ -13,7 +13,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="bo">The related business object</param>
         public BusinessObjectEventArgs(BusinessObjectBase bo)
         {
-            itsBo = bo;
+            _bo = bo;
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public BusinessObjectBase BusinessObject
         {
-            get { return itsBo; }
+            get { return _bo; }
         }
     }
 }
