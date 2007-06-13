@@ -31,7 +31,7 @@ namespace Chillisoft.Test.General.v2
         public void TestLoadBusinessObjects()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectBaseCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -46,7 +46,7 @@ namespace Chillisoft.Test.General.v2
         public void TestLoadBusinessObjectsFromObjectManager()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectBaseCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -64,7 +64,7 @@ namespace Chillisoft.Test.General.v2
         public void TestLoadBusinessObjectsFromObjectManagerAndFresh()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectBaseCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -86,7 +86,7 @@ namespace Chillisoft.Test.General.v2
         public void TestLoadBusinessObjectsSortOrder()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectBaseCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -108,7 +108,7 @@ namespace Chillisoft.Test.General.v2
         public void TestLoadBusinessObjectsSearchCriteria()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectBaseCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -130,7 +130,7 @@ namespace Chillisoft.Test.General.v2
         public void TestLoadBusinessObjectsSearchCriteriaWithOR()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectBaseCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -160,7 +160,7 @@ namespace Chillisoft.Test.General.v2
         public void TestRefreshBOCol()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectBaseCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";

@@ -17,8 +17,8 @@ namespace Chillisoft.Test.UI.Application.v2
     {
         private Form frm;
         private SimpleReadOnlyGrid grid;
-        private BusinessObjectBase bo1;
-        private BusinessObjectBase bo2;
+        private BusinessObject bo1;
+        private BusinessObject bo2;
         private DataTable itsDataSource;
         //private BusinessObjectBase itsClickedBo;
 
@@ -29,7 +29,7 @@ namespace Chillisoft.Test.UI.Application.v2
             grid.Name = "GridControl";
             ClassDef.GetClassDefCol.Clear();
             ClassDef classDef = MyBo.LoadClassDefWithNoLookup();
-            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(classDef);
+            BusinessObjectCollection col = new BusinessObjectCollection(classDef);
 			bo1 = MyBo.Create(); //classDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp", "Value1");
             bo1.SetPropertyValue("TestProp2", "Value2");
@@ -63,7 +63,7 @@ namespace Chillisoft.Test.UI.Application.v2
         public void TestSelectedBusinessObject()
         {
             grid.SelectedBusinessObject = bo2;
-            BusinessObjectBase selectedBo = grid.SelectedBusinessObject;
+            BusinessObject selectedBo = grid.SelectedBusinessObject;
             Assert.AreEqual("2Value1", selectedBo.GetPropertyValueString("TestProp"));
             Assert.AreEqual("2Value2", selectedBo.GetPropertyValueString("TestProp2"));
             Assert.AreSame(bo2, selectedBo);
@@ -87,7 +87,7 @@ namespace Chillisoft.Test.UI.Application.v2
         //
         //		}
         //
-        //		private void RowDoubleClicked(object sender, BusinessObjectEventArgs e) {
+        //		private void RowDoubleClicked(object sender, BOEventArgs e) {
         //			itsClickedBo = e.BusinessObject ;
         //			Console.Out.WriteLine("selected");
         //		}

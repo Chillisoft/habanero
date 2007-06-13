@@ -7,6 +7,7 @@ using Chillisoft.Bo.Loaders.v2;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using NUnit.Framework;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.Bo.v2
 {
@@ -107,7 +108,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestPropertyValue()
         {
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", new ByteString("test"));
             Assert.AreSame(typeof(ByteString), bo.GetPropertyValue("TestProp").GetType());
         }
@@ -115,7 +116,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestSetPropertyValueWithString()
         {
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             Assert.AreSame(typeof(ByteString), bo.GetPropertyValue("TestProp").GetType());
             Assert.AreEqual("test", bo.GetPropertyValueString("TestProp"));
@@ -125,7 +126,7 @@ namespace Chillisoft.Test.Bo.v2
         public void TestPersistSqlParameterValue()
         {
             base.SetupDBOracleConnection();
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             ISqlStatementCollection sqlCol = bo.GetPersistSql();
             ISqlStatement sqlStatement = sqlCol[0];

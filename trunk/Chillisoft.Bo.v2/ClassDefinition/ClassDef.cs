@@ -4,6 +4,7 @@ using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using Chillisoft.Util.v2;
 using log4net;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Bo.ClassDefinition.v2
 {
@@ -422,20 +423,20 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// Creates a new business object
         /// </summary>
         /// <returns>Returns a new business object</returns>
-        internal BusinessObjectBase InstantiateBusinessObject()
+        internal BusinessObject InstantiateBusinessObject()
         {
-            return (BusinessObjectBase) Activator.CreateInstance(getMyClassType, true);
+            return (BusinessObject) Activator.CreateInstance(getMyClassType, true);
         }
 
         /// <summary>
         /// Creates a new business object using this class definition
         /// </summary>
         /// <returns>Returns a new business object</returns>
-        internal BusinessObjectBase InstantiateBusinessObjectWithClassDef()
+        internal BusinessObject InstantiateBusinessObjectWithClassDef()
         {
             try
             {
-                return (BusinessObjectBase) Activator.CreateInstance(getMyClassType, new object[] {this});
+                return (BusinessObject) Activator.CreateInstance(getMyClassType, new object[] {this});
             }
             catch (MissingMethodException ex)
             {
@@ -452,9 +453,9 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         /// <param name="conn">A database connection</param>
         /// <returns>Returns a new business object</returns>
-        internal BusinessObjectBase InstantiateBusinessObjectWithClassDef(IDatabaseConnection conn)
+        internal BusinessObject InstantiateBusinessObjectWithClassDef(IDatabaseConnection conn)
         {
-            return (BusinessObjectBase) Activator.CreateInstance(getMyClassType, new object[] {this, conn});
+            return (BusinessObject) Activator.CreateInstance(getMyClassType, new object[] {this, conn});
         }
 
         /// <summary>
@@ -464,7 +465,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <param name="bo">The business object that owns this collection</param>
         /// <returns>Returns the new collection or null if no relationship 
         /// definition collection exists</returns>
-        public RelationshipCol CreateRelationshipCol(BOPropCol propCol, BusinessObjectBase bo)
+        public RelationshipCol CreateRelationshipCol(BOPropCol propCol, BusinessObject bo)
         {
             if (_RelationshipDefCol == null)
             {
@@ -498,7 +499,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// Creates a new business object using this class definition
         /// </summary>
         /// <returns>Returns the new object</returns>
-        public BusinessObjectBase CreateNewBusinessObject()
+        public BusinessObject CreateNewBusinessObject()
         {
             return this.InstantiateBusinessObjectWithClassDef();
         }
@@ -509,7 +510,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         /// <param name="conn">A database connection</param>
         /// <returns>Returns the new object</returns>
-        public BusinessObjectBase CreateNewBusinessObject(IDatabaseConnection conn)
+        public BusinessObject CreateNewBusinessObject(IDatabaseConnection conn)
         {
             return this.InstantiateBusinessObjectWithClassDef(conn);
         }

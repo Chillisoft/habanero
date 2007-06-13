@@ -13,7 +13,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
     /// </summary>
     public class InsertStatementGenerator
     {
-        private BusinessObjectBase _bo;
+        private BusinessObject _bo;
         private StringBuilder _dbFieldList;
         private StringBuilder _dbValueList;
         private ParameterNameGenerator _gen;
@@ -28,7 +28,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         /// <param name="bo">The business object whose properties are to
         /// be inserted</param>
         /// <param name="conn">A database connection</param>
-        public InsertStatementGenerator(BusinessObjectBase bo, IDbConnection conn)
+        public InsertStatementGenerator(BusinessObject bo, IDbConnection conn)
         {
             _bo = bo;
             _conn = conn;

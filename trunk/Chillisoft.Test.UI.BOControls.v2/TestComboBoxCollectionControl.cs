@@ -7,6 +7,7 @@ using Chillisoft.UI.BOControls.v2;
 using Chillisoft.UI.Generic.v2;
 using NMock;
 using NUnit.Framework;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.UI.BOControls.v2
 {
@@ -20,7 +21,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
         private ComboBoxCollectionControl itsControl;
         private Mock itsDataProviderMockControl;
         private Mock itsConfirmerMockControl;
-        private BusinessObjectBaseCollection itsCollection;
+        private BusinessObjectCollection itsCollection;
         Mock itsDatabaseConnectionMockControl;
 
         [TestFixtureSetUp]
@@ -63,7 +64,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
             bo2.SetPropertyValue("TestProp2", "jkl");
             bo2.ApplyEdit();
 
-            itsCollection = new BusinessObjectBaseCollection(itsClassDef);
+            itsCollection = new BusinessObjectCollection(itsClassDef);
             itsCollection.Add(bo1);
             itsCollection.Add(bo2);
 
@@ -109,7 +110,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
                                                     new object[] {"Do you want to want to save before moving on?"});
             itsControl.CollectionComboBox.SelectedIndex = 1;
 
-            BusinessObjectBase selectedBo = itsControl.SelectedBusinessObject;
+            BusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
             Assert.IsTrue(selectedBo.IsDirty);
 
@@ -133,7 +134,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
                                                     new object[] {"Do you want to want to save before moving on?"});
             itsControl.CollectionComboBox.SelectedIndex = 1;
 
-            BusinessObjectBase selectedBo = itsControl.SelectedBusinessObject;
+            BusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
             Assert.IsTrue(selectedBo.IsDirty);
 
@@ -145,7 +146,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
         public void TestSaveButton()
         {
             itsControl.CollectionComboBox.SelectedIndex = 1;
-            BusinessObjectBase selectedBo = itsControl.SelectedBusinessObject;
+            BusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
 
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
@@ -159,7 +160,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
         public void TestCancelButton()
         {
             itsControl.CollectionComboBox.SelectedIndex = 1;
-            BusinessObjectBase selectedBo = itsControl.SelectedBusinessObject;
+            BusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
             itsControl.Buttons.ClickButton("Cancel");
             Assert.AreEqual("abc", selectedBo.GetPropertyValue("TestProp"));

@@ -14,13 +14,13 @@ namespace Chillisoft.Bo.v2
     public class BOMapper
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.BoMapper");
-        private BusinessObjectBase _businessObject;
+        private BusinessObject _businessObject;
 
         /// <summary>
         /// Constructor to initialise a new mapper
         /// </summary>
         /// <param name="bo">The business object to map</param>
-        public BOMapper(BusinessObjectBase bo)
+        public BOMapper(BusinessObject bo)
         {
             _businessObject = bo;
         }
@@ -87,7 +87,7 @@ namespace Chillisoft.Bo.v2
             if (propertyName.IndexOf(".") != -1)
             {
                 //log.Debug("Prop with . found : " + propertyName);
-                BusinessObjectBase relatedBo = this._businessObject;
+                BusinessObject relatedBo = this._businessObject;
                 string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
                 propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
                 if (relationshipName.IndexOf("|") != -1)
@@ -102,7 +102,7 @@ namespace Chillisoft.Bo.v2
                         relationshipName = relationshipName.Remove(0, relationshipName.IndexOf("|") + 1);
                     }
                     relNames.Add(relationshipName);
-                    BusinessObjectBase oldBo = relatedBo;
+                    BusinessObject oldBo = relatedBo;
                     int i = 0;
                     do
                     {

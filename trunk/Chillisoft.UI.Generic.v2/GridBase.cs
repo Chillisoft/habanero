@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using log4net;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.Generic.v2
 {
@@ -20,8 +21,8 @@ namespace Chillisoft.UI.Generic.v2
 
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.Generic.v2.GridBase");
         protected DataTable _dataTable;
-        protected BusinessObjectCollectionDataSetProvider _dataSetProvider;
-        protected BusinessObjectBaseCollection _collection;
+        protected BOCollectionDataSetProvider _dataSetProvider;
+        protected BusinessObjectCollection _collection;
         private IObjectInitialiser _objectInitialiser;
         private IGridDataProvider _provider;
         protected DataView _dataTableDefaultView;
@@ -168,7 +169,7 @@ namespace Chillisoft.UI.Generic.v2
         /// Adds a business object to the collection being represented
         /// </summary>
         /// <param name="bo">The business object</param>
-        public void AddBusinessObject(BusinessObjectBase bo)
+        public void AddBusinessObject(BusinessObject bo)
         {
             _collection.Add(bo);
             int row = GetRowOfBusinessObject(bo);
@@ -183,8 +184,8 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <returns>Returns the new provider</returns>
-        protected abstract BusinessObjectCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
-            BusinessObjectBaseCollection col);
+        protected abstract BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
+            BusinessObjectCollection col);
 
         /// <summary>
         /// Sets the object initialiser
@@ -246,7 +247,7 @@ namespace Chillisoft.UI.Generic.v2
         /// Returns the currently selected business object
         /// </summary>
         /// <returns>Returns the business object</returns>
-        protected virtual BusinessObjectBase GetSelectedBusinessObject()
+        protected virtual BusinessObject GetSelectedBusinessObject()
         {
             if (this.CurrentCell == null) return null;
             int rownum = this.CurrentCell.RowIndex;
@@ -294,7 +295,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         /// <param name="bo">The business object in question</param>
         /// <returns>Returns the row number if found, or -1 if not found</returns>
-        public virtual int GetRowOfBusinessObject(BusinessObjectBase bo)
+        public virtual int GetRowOfBusinessObject(BusinessObject bo)
         {
             int rownum = 0;
 
@@ -315,7 +316,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="row">The row number in question</param>
         /// <returns>Returns the busines object at that row, or null
         /// if none is found</returns>
-        public BusinessObjectBase GetBusinessObjectAtRow(int row)
+        public BusinessObject GetBusinessObjectAtRow(int row)
         {
             int i = 0;
             foreach (DataRowView dataRowView in _dataTableDefaultView)

@@ -10,7 +10,7 @@ namespace Chillisoft.UI.BOControls.v2
     public class ControlMapperCollection : ICollection
     {
         private IList _collection;
-        private BusinessObjectBase _businessObject;
+        private BusinessObject _businessObject;
 
         /// <summary>
         /// Contructor to initialise an empty collection
@@ -113,7 +113,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// object represented by this collection and to each BO within the
         /// collection.
         /// </summary>
-        public BusinessObjectBase BusinessObject
+        public BusinessObject BusinessObject
         {
             get { return _businessObject; }
             set

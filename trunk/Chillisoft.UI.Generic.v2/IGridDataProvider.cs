@@ -13,7 +13,7 @@ namespace Chillisoft.UI.Generic.v2
         /// Returns the business object collection being represented
         /// </summary>
         /// <returns>Returns the business object collection</returns>
-        BusinessObjectBaseCollection GetCollection();
+        BusinessObjectCollection GetCollection();
 
         /// <summary>
         /// Returns the UIGridDef object

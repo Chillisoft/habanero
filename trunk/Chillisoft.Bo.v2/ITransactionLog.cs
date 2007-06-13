@@ -17,6 +17,6 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="busObj">The business object the transaction log is 
         /// being recorded for</param>
-        void RecordTransactionLog(BusinessObjectBase busObj, string logonUserName);
+        void RecordTransactionLog(BusinessObject busObj, string logonUserName);
     }
 }

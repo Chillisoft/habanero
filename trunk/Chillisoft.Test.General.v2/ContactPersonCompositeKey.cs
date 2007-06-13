@@ -11,7 +11,7 @@ namespace Chillisoft.Test.General.v2
     /// This is a test class used for testing Business Object architecture
     /// using composite keys as the primary object identifier.
     /// </summary>
-    public class ContactPersonCompositeKey : BusinessObjectBase
+    public class ContactPersonCompositeKey : BusinessObject
     {
         #region Constructors
 
@@ -150,7 +150,7 @@ namespace Chillisoft.Test.General.v2
 
         #region RelationShips
 
-        public BusinessObjectBaseCollection GetCarsDriven()
+        public BusinessObjectCollection GetCarsDriven()
         {
             return Relationships.GetRelatedBusinessObjectCol("Driver");
             //			return Car.LoadBusinessObjCol("DriverFK1 = " + 
@@ -164,12 +164,12 @@ namespace Chillisoft.Test.General.v2
 
         internal static void ClearContactPersonCol()
         {
-            BusinessObjectBase.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearLoadedBusinessObjectBaseCol();
         }
 
         internal static Hashtable GetContactPersonCol()
         {
-            return BusinessObjectBase.GetLoadedBusinessObjectBaseCol();
+            return BusinessObject.GetLoadedBusinessObjectBaseCol();
         }
 
         internal static void DeleteAllContactPeople()

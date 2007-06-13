@@ -14,14 +14,14 @@ namespace Chillisoft.Test.UI.BOControls.v2
     {
         ComboBox itsComboBox;
         CollectionComboBoxMapper mapper;
-        private BusinessObjectBaseCollection itsCollection;
+        private BusinessObjectCollection itsCollection;
 
         [SetUp]
         public void SetupTest()
         {
             itsComboBox = new ComboBox();
             mapper = new CollectionComboBoxMapper(itsComboBox);
-            itsCollection = new BusinessObjectBaseCollection(Sample.GetClassDef());
+            itsCollection = new BusinessObjectCollection(Sample.GetClassDef());
             itsCollection.Add(new Sample());
             itsCollection.Add(new Sample());
             itsCollection.Add(new Sample());

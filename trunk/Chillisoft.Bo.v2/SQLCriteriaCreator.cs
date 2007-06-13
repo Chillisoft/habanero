@@ -2,6 +2,7 @@ using System;
 using Chillisoft.Bo.ClassDefinition.v2;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Bo.CriteriaManager.v2
 {
@@ -19,7 +20,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// </summary>
         /// <param name="exp">The expression</param>
         /// <param name="bo">The business object</param>
-        public SQLCriteriaCreator(IExpression exp, BusinessObjectBase bo)
+        public SQLCriteriaCreator(IExpression exp, BusinessObject bo)
         {
             ClassDef lClassDef = bo.ClassDef;
             ConstructSQLCriteriaCreator(exp, lClassDef);

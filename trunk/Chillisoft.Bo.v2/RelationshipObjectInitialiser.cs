@@ -14,7 +14,7 @@ namespace Chillisoft.Bo.v2
         private readonly string _correspondingRelationshipName;
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.RelationshipObjectInitialiser");
         private readonly RelationshipDef _relationship;
-        private readonly BusinessObjectBase _parentObject;
+        private readonly BusinessObject _parentObject;
 
         /// <summary>
         /// Constructor for a new initialiser
@@ -24,7 +24,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="correspondingRelationshipName">The corresponding
         /// relationship name</param>
         /// TODO ERIC - corresponding?
-        public RelationshipObjectInitialiser(BusinessObjectBase parentObject, RelationshipDef relationship,
+        public RelationshipObjectInitialiser(BusinessObject parentObject, RelationshipDef relationship,
                                              string correspondingRelationshipName)
         {
             _parentObject = parentObject;
@@ -40,7 +40,7 @@ namespace Chillisoft.Bo.v2
         {
             //log.Debug("Entered initialiseobject.") ;
             //log.Debug(objToInitialise.GetType().Name);
-            BusinessObjectBase newBo = (BusinessObjectBase) objToInitialise;
+            BusinessObject newBo = (BusinessObject) objToInitialise;
             //log.Debug(_relationship);
             //log.Debug(_relationship.RelKeyDef.Count + " props in relkeydef. ");
 

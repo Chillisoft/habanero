@@ -117,7 +117,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="bo">A business object with attached database
         /// connection</param>
         /// <returns>Returns a collection of string-Guid pairs</returns>
-        public StringGuidPairCollection GetLookupList(BusinessObjectBase bo)
+        public StringGuidPairCollection GetLookupList(BusinessObject bo)
         {
             return this.GetLookupList(bo.GetDatabaseConnection());
         }

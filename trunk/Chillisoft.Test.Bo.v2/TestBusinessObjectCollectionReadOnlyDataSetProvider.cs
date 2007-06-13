@@ -1,6 +1,7 @@
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using NUnit.Framework;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.Bo.v2
 {
@@ -10,9 +11,9 @@ namespace Chillisoft.Test.Bo.v2
     [TestFixture]
     public class TestBusinessObjectCollectionReadOnlyDataSetProvider : TestBusinessObjectCollectionDataProvider
     {
-        protected override IDataSetProvider CreateDataSetProvider(BusinessObjectBaseCollection col)
+        protected override IDataSetProvider CreateDataSetProvider(BusinessObjectCollection col)
         {
-            return new BusinessObjectCollectionReadOnlyDataSetProvider(itsCollection);
+            return new BOCollectionReadOnlyDataSetProvider(itsCollection);
         }
 
         [Test]
@@ -25,7 +26,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestAddBusinessObjectAddsRow()
         {
-            BusinessObjectBase bo3 = itsClassDef.CreateNewBusinessObject(itsConnection);
+            BusinessObject bo3 = itsClassDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
             bo3.SetPropertyValue("TestProp2", "bo3prop2");
             itsCollection.Add(bo3);
@@ -36,7 +37,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestAddBusinessObjectAndUpdateUpdatesNewRow()
         {
-            BusinessObjectBase bo3 = itsClassDef.CreateNewBusinessObject(itsConnection);
+            BusinessObject bo3 = itsClassDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
             bo3.SetPropertyValue("TestProp2", "bo3prop2");
             itsCollection.Add(bo3);

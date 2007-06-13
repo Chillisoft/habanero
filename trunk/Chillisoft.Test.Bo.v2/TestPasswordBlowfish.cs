@@ -5,6 +5,7 @@ using Chillisoft.Bo.v2;
 using Chillisoft.Crypt.v2;
 using Chillisoft.Generic.v2;
 using NUnit.Framework;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.Bo.v2
 {
@@ -82,7 +83,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestPropertyValue()
         {
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", new PasswordBlowfish("test", false));
             Assert.AreSame(typeof (PasswordBlowfish), bo.GetPropertyValue("TestProp").GetType());
         }
@@ -90,7 +91,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestSetPropertyValueWithString()
         {
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             Assert.AreSame(typeof (PasswordBlowfish), bo.GetPropertyValue("TestProp").GetType());
             BlowfishCrypter crypter = new BlowfishCrypter();
@@ -100,7 +101,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestPersistSqlUsesString()
         {
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             ISqlStatementCollection sqlCol = bo.GetPersistSql();
             Assert.AreSame(typeof (string), ((IDbDataParameter) sqlCol[0].Parameters[1]).Value.GetType());

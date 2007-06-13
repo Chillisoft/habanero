@@ -4,6 +4,7 @@ using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using Chillisoft.UI.BOControls.v2;
 using Chillisoft.UI.Generic.v2;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.BOControls.v2
 {
@@ -13,7 +14,7 @@ namespace Chillisoft.UI.BOControls.v2
 	/// </summary>
 	public class BoPanelControl : UserControl
 	{
-		private BusinessObjectBase _bo;
+		private BusinessObject _bo;
 		private string _uiDefName;
 		private PanelFactoryInfo _panelFactoryInfo;
 		private Panel _boPanel;
@@ -23,7 +24,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         /// <param name="bo">The business object being represented</param>
         /// <param name="uiDefName">A string name for the control</param>
-		public BoPanelControl(BusinessObjectBase bo, string uiDefName) {
+		public BoPanelControl(BusinessObject bo, string uiDefName) {
 			_bo = bo;
 			_uiDefName = uiDefName;
 
@@ -60,7 +61,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// Sets the business object to be represented
         /// </summary>
         /// <param name="bo">The business object</param>
-        public void SetBusinessObject(BusinessObjectBase bo)
+        public void SetBusinessObject(BusinessObject bo)
         {
             _panelFactoryInfo.ControlMappers.BusinessObject = bo;
         }

@@ -7,7 +7,7 @@ namespace Chillisoft.Test.General.v2
     [TestFixture]
     public abstract class TestInheritanceBase : TestUsingDatabase
     {
-        protected BusinessObjectBase objCircle;
+        protected BusinessObject objCircle;
         protected SqlStatementCollection itsInsertSql;
         protected SqlStatementCollection itsUpdateSql;
         protected SqlStatementCollection itsDeleteSql;

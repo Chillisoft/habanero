@@ -6,6 +6,7 @@ using Chillisoft.Generic.v2;
 using Chillisoft.UI.Generic.v2;
 using Chillisoft.Util.v2;
 using log4net;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.Application.v2
 {
@@ -25,7 +26,7 @@ namespace Chillisoft.UI.Application.v2
         /// Sets the business object delegate
         /// </summary>
         /// <param name="bo">The business object</param>
-        public delegate void SetBusinessObjectDelegate(BusinessObjectBase bo);
+        public delegate void SetBusinessObjectDelegate(BusinessObject bo);
 
         private static ILog log = LogManager.GetLogger("Chillisoft.UI.Application.v2.ReadOnlyGridWithButtons");
         public event EventHandler ItemSelected;
@@ -172,11 +173,11 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         private void FireItemSelected()
         {
-            if (this.GetSelectedObject() != null || this.GetSelectedObject() is BusinessObjectBase)
+            if (this.GetSelectedObject() != null || this.GetSelectedObject() is BusinessObject)
             {
                 foreach (SetBusinessObjectDelegate selectedDelegate in _itemSelectedDelegates)
                 {
-                    selectedDelegate((BusinessObjectBase) this.GetSelectedObject());
+                    selectedDelegate((BusinessObject) this.GetSelectedObject());
                 }
             }
             _itemSelectedMethodCaller.Call(new VoidMethodWithSender(DelayedItemSelected));
@@ -260,7 +261,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="boCollection">The new business object collection
         /// to be shown in the grid. This collection must have been
         /// pre-loaded using the collection's Load() method</param>
-        public void SetBusinessObjectCollection(BusinessObjectBaseCollection boCollection)
+        public void SetBusinessObjectCollection(BusinessObjectCollection boCollection)
         {
             _provider = new CollectionGridDataProvider(boCollection);
             this.Grid.SetGridDataProvider(_provider);
@@ -294,7 +295,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="objectToRemove">The object to remove</param>
         public void RemoveObject(object objectToRemove)
         {
-            this.Grid.RemoveBusinessObject((BusinessObjectBase) objectToRemove);
+            this.Grid.RemoveBusinessObject((BusinessObject) objectToRemove);
             if (this.Grid.HasBusinessObjects)
             {
                 FireItemSelected();
@@ -307,7 +308,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="objectToAdd">The object to add</param>
         public void AddObject(object objectToAdd)
         {
-            this.Grid.AddBusinessObject((BusinessObjectBase) objectToAdd);
+            this.Grid.AddBusinessObject((BusinessObject) objectToAdd);
         }
 
         /// <summary>
@@ -324,7 +325,7 @@ namespace Chillisoft.UI.Application.v2
         /// Returns a cloned collection of the business objects in the grid
         /// </summary>
         /// <returns>Returns a business object collection</returns>
-        public BusinessObjectBaseCollection GetCollectionClone()
+        public BusinessObjectCollection GetCollectionClone()
         {
             return this.Grid.GetCollectionClone();
         }

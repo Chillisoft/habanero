@@ -43,7 +43,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a BusinessObjectLookupListSource object</returns>
         protected override object Create()
         {
-            return new BusinessObjectLookupListSource(_type);
+            return new BOLookupListSource(_type);
         }
     }
 }

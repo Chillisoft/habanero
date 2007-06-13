@@ -2,6 +2,7 @@ using Chillisoft.Bo.v2;
 using Chillisoft.Db.v2;
 using Chillisoft.Generic.v2;
 using NUnit.Framework;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.Bo.v2
 {
@@ -11,9 +12,9 @@ namespace Chillisoft.Test.Bo.v2
     [TestFixture]
     public class TestBusinessObjectCollectionEditableDataProvider : TestBusinessObjectCollectionDataProvider
     {
-        protected override IDataSetProvider CreateDataSetProvider(BusinessObjectBaseCollection col)
+        protected override IDataSetProvider CreateDataSetProvider(BusinessObjectCollection col)
         {
-            return new BusinessObjectCollectionEditableDataSetProvider(itsCollection);
+            return new BOCollectionEditableDataSetProvider(itsCollection);
         }
 
         [Test]
@@ -46,7 +47,7 @@ namespace Chillisoft.Test.Bo.v2
             itsTable.Rows[0].Delete();
             Assert.AreEqual(2, itsCollection.Count, "Deleting a row shouldn't remove any Bo's from the collection.");
             int numDeleted = 0;
-            foreach (BusinessObjectBase businessObjectBase in itsCollection)
+            foreach (BusinessObject businessObjectBase in itsCollection)
             {
                 if (businessObjectBase.IsDeleted)
                 {
@@ -62,7 +63,7 @@ namespace Chillisoft.Test.Bo.v2
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-            ((BusinessObjectCollectionEditableDataSetProvider) itsProvider).Connection = itsConnection;
+            ((BOCollectionEditableDataSetProvider) itsProvider).Connection = itsConnection;
             itsTable.Rows.Add(new object[] {null, "bo3prop1", "bo3prop2"});
             itsTable.AcceptChanges();
         }
@@ -95,7 +96,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestAddBOToCollectionAddsRow()
         {
-            BusinessObjectBase newBo = itsClassDef.CreateNewBusinessObject(itsConnection);
+            BusinessObject newBo = itsClassDef.CreateNewBusinessObject(itsConnection);
             itsCollection.Add(newBo);
             Assert.AreEqual(3, itsTable.Rows.Count);
         }
@@ -103,7 +104,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestAddBOToCollectionAddsCorrectValues()
         {
-            BusinessObjectBase newBo = itsClassDef.CreateNewBusinessObject(itsConnection);
+            BusinessObject newBo = itsClassDef.CreateNewBusinessObject(itsConnection);
             newBo.SetPropertyValue("TestProp", "TestVal");
             itsCollection.Add(newBo);
             Assert.AreEqual("TestVal", itsTable.Rows[2][1]);

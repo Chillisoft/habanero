@@ -12,7 +12,7 @@ namespace Chillisoft.UI.Generic.v2
     /// TODO ERIC - how does this differ from CollectionGridDataProvider?
     public class SimpleGridDataProvider : IGridDataProvider
     {
-        private BusinessObjectBaseCollection _collection;
+        private BusinessObjectCollection _collection;
         private UIGridDef _uiGridDef;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Chillisoft.UI.Generic.v2
         /// represent. This collection must have been preloaded using the 
         /// collection's Load() method.</param>
         /// <param name="uiGridDef">The UIGridDef object</param>
-        public SimpleGridDataProvider(BusinessObjectBaseCollection collection, UIGridDef uiGridDef)
+        public SimpleGridDataProvider(BusinessObjectCollection collection, UIGridDef uiGridDef)
         {
             _collection = collection;
             _uiGridDef = uiGridDef;
@@ -32,7 +32,7 @@ namespace Chillisoft.UI.Generic.v2
         /// Returns the business object collection being represented
         /// </summary>
         /// <returns>Returns the collection</returns>
-        public BusinessObjectBaseCollection GetCollection()
+        public BusinessObjectCollection GetCollection()
         {
             return _collection;
         }

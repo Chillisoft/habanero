@@ -13,7 +13,7 @@ namespace Chillisoft.Test.UI.Generic.v2
     public class TestCollectionGridDataProvider
     {
         private ClassDef itsClassDef;
-        private BusinessObjectBaseCollection itsCollection;
+        private BusinessObjectCollection itsCollection;
 
         private MyBo itsBo1;
         private MyBo itsBo2;
@@ -23,7 +23,7 @@ namespace Chillisoft.Test.UI.Generic.v2
         {
             ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
-            itsCollection = new BusinessObjectBaseCollection(itsClassDef);
+            itsCollection = new BusinessObjectCollection(itsClassDef);
 
             itsBo1 = MyBo.Create();
             itsBo2 = MyBo.Create();

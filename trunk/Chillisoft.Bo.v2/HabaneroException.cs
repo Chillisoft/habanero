@@ -255,7 +255,7 @@ namespace Chillisoft.Bo.v2
                                                            string machineName,
                                                            DateTime dateUpdated,
                                                            string objectID,
-                                                           BusinessObjectBase obj) :
+                                                           BusinessObject obj) :
                                                                base("You cannot save the changes to the " +
                                                                     className +
                                                                     ", as another user has edited the this record.\n" +
@@ -304,9 +304,9 @@ namespace Chillisoft.Bo.v2
         /// <summary>
         /// Returns the business object in question
         /// </summary>
-        public BusinessObjectBase BusinessObject
+        public BusinessObject BusinessObject
         {
-            get { return (BusinessObjectBase) mobj; }
+            get { return (BusinessObject) mobj; }
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace Chillisoft.Bo.v2
                                                           string machineName,
                                                           DateTime dateUpdated,
                                                           string objectID,
-                                                          BusinessObjectBase obj) :
+                                                          BusinessObject obj) :
                                                               base(
                                                               className, userName, machineName, dateUpdated, objectID,
                                                               obj)

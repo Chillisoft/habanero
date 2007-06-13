@@ -13,7 +13,7 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class CollectionGridDataProvider : IGridDataProvider
     {
-        private BusinessObjectBaseCollection _collection;
+        private BusinessObjectCollection _collection;
         private string _uiDefName;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="collection">The business objects to represent.
         /// This collection must have been preloaded using the collection's
         /// Load() method.</param>
-        public CollectionGridDataProvider(BusinessObjectBaseCollection collection) : this(collection, "")
+        public CollectionGridDataProvider(BusinessObjectCollection collection) : this(collection, "")
         {
         }
 
@@ -48,7 +48,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <summary>
         /// A constructor as before, but allows a UIDefName to be specified
         /// </summary>
-        public CollectionGridDataProvider(BusinessObjectBaseCollection collection, string uiDefName)
+        public CollectionGridDataProvider(BusinessObjectCollection collection, string uiDefName)
         {
             _collection = collection;
             _uiDefName = uiDefName;
@@ -58,7 +58,7 @@ namespace Chillisoft.UI.Generic.v2
         /// Returns the business object collection being represented
         /// </summary>
         /// <returns>Returns the collection</returns>
-        public BusinessObjectBaseCollection GetCollection()
+        public BusinessObjectCollection GetCollection()
         {
             return _collection;
         }

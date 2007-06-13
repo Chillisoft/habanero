@@ -11,6 +11,6 @@ namespace Chillisoft.UI.Generic.v2
         /// Specifies the business object being represented
         /// </summary>
         /// <param name="bo">The business object</param>
-        void SetBusinessObject(BusinessObjectBase bo);
+        void SetBusinessObject(BusinessObject bo);
     }
 }

@@ -12,7 +12,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
     /// </summary>
     public class UpdateStatementGenerator
     {
-        private BusinessObjectBase _bo;
+        private BusinessObject _bo;
         private IDbConnection _conn;
         private SqlStatementCollection _statementCollection;
         private SqlStatement _updateSQL;
@@ -23,7 +23,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         /// <param name="bo">The business object whose properties are to
         /// be updated</param>
         /// <param name="conn">A database connection</param>
-        public UpdateStatementGenerator(BusinessObjectBase bo, IDbConnection conn)
+        public UpdateStatementGenerator(BusinessObject bo, IDbConnection conn)
         {
             _bo = bo;
             _conn = conn;

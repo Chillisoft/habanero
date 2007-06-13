@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using log4net;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.BOControls.v2
 {
@@ -18,7 +19,7 @@ namespace Chillisoft.UI.BOControls.v2
         protected Control _control;
         protected string _propertyName;
         protected readonly bool _isReadOnceOnly;
-        protected BusinessObjectBase _businessObject;
+        protected BusinessObject _businessObject;
         protected Hashtable _attributes;
 
         /// <summary>
@@ -166,7 +167,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// altered, the ValueUpdated() method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
-        public BusinessObjectBase BusinessObject
+        public BusinessObject BusinessObject
         {
             set
             {

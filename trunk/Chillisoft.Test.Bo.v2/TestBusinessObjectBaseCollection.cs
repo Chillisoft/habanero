@@ -23,22 +23,22 @@ namespace Chillisoft.Test.Bo.v2
         {
             ClassDef.GetClassDefCol.Clear();
             ClassDef itsClassDef = MyBo.LoadDefaultClassDef();
-            BusinessObjectBase bo1 = itsClassDef.CreateNewBusinessObject();
-            BusinessObjectBase bo2 = itsClassDef.CreateNewBusinessObject();
-            BusinessObjectBaseCollection col1 = new BusinessObjectBaseCollection(itsClassDef);
+            BusinessObject bo1 = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo2 = itsClassDef.CreateNewBusinessObject();
+            BusinessObjectCollection col1 = new BusinessObjectCollection(itsClassDef);
 
             col1.Add(itsClassDef.CreateNewBusinessObject());
             col1.Add(bo2);
             col1.Add(itsClassDef.CreateNewBusinessObject());
             col1.Add(bo1);
 
-            BusinessObjectBaseCollection col2 = new BusinessObjectBaseCollection(itsClassDef);
+            BusinessObjectCollection col2 = new BusinessObjectCollection(itsClassDef);
             col2.Add(itsClassDef.CreateNewBusinessObject());
             col2.Add(bo1);
             col2.Add(bo2);
             col2.Add(itsClassDef.CreateNewBusinessObject());
 
-            BusinessObjectBaseCollection intersectionCol = col1.Intersection(col2);
+            BusinessObjectCollection intersectionCol = col1.Intersection(col2);
             Assert.AreEqual(2, intersectionCol.Count);
         }
 
@@ -47,22 +47,22 @@ namespace Chillisoft.Test.Bo.v2
         {
             ClassDef.GetClassDefCol.Clear();
             ClassDef itsClassDef = MyBo.LoadDefaultClassDef();
-            BusinessObjectBase bo1 = itsClassDef.CreateNewBusinessObject();
-            BusinessObjectBase bo2 = itsClassDef.CreateNewBusinessObject();
-            BusinessObjectBaseCollection col1 = new BusinessObjectBaseCollection(itsClassDef);
+            BusinessObject bo1 = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo2 = itsClassDef.CreateNewBusinessObject();
+            BusinessObjectCollection col1 = new BusinessObjectCollection(itsClassDef);
 
             col1.Add(itsClassDef.CreateNewBusinessObject());
             col1.Add(bo2);
             col1.Add(itsClassDef.CreateNewBusinessObject());
             col1.Add(bo1);
 
-            BusinessObjectBaseCollection col2 = new BusinessObjectBaseCollection(itsClassDef);
+            BusinessObjectCollection col2 = new BusinessObjectCollection(itsClassDef);
             col2.Add(itsClassDef.CreateNewBusinessObject());
             col2.Add(bo1);
             col2.Add(bo2);
             col2.Add(itsClassDef.CreateNewBusinessObject());
 
-            BusinessObjectBaseCollection unionCol = col1.Union(col2);
+            BusinessObjectCollection unionCol = col1.Union(col2);
             Assert.AreEqual(6, unionCol.Count);
         }
 
@@ -71,8 +71,8 @@ namespace Chillisoft.Test.Bo.v2
         {
             ClassDef.GetClassDefCol.Clear();
             ClassDef itsClassDef = MyBo.LoadDefaultClassDef();
-            BusinessObjectBase bo1 = itsClassDef.CreateNewBusinessObject();
-            BusinessObjectBaseCollection col1 = new BusinessObjectBaseCollection(itsClassDef);
+            BusinessObject bo1 = itsClassDef.CreateNewBusinessObject();
+            BusinessObjectCollection col1 = new BusinessObjectCollection(itsClassDef);
             col1.Add(bo1);
             col1.Add(itsClassDef.CreateNewBusinessObject());
 
@@ -88,9 +88,9 @@ namespace Chillisoft.Test.Bo.v2
         {
             ClassDef.GetClassDefCol.Clear();
             ClassDef itsClassDef = MyBo.LoadDefaultClassDef();
-            BusinessObjectBase bo1 = itsClassDef.CreateNewBusinessObject();
-            BusinessObjectBase bo2 = itsClassDef.CreateNewBusinessObject();
-            BusinessObjectBaseCollection col1 = new BusinessObjectBaseCollection(itsClassDef);
+            BusinessObject bo1 = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo2 = itsClassDef.CreateNewBusinessObject();
+            BusinessObjectCollection col1 = new BusinessObjectCollection(itsClassDef);
             col1.Add(bo1);
             col1.Add(itsClassDef.CreateNewBusinessObject());
 

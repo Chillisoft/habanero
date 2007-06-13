@@ -30,10 +30,10 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <returns>Returns a new data set provider</returns>
-        protected override BusinessObjectCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
-            BusinessObjectBaseCollection col)
+        protected override BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
+            BusinessObjectCollection col)
         {
-            return new BusinessObjectCollectionEditableDataSetProvider(col);
+            return new BOCollectionEditableDataSetProvider(col);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Chillisoft.UI.Application.v2
         /// <summary>
         /// Returns the selected business object
         /// </summary>
-        public BusinessObjectBase SelectedBusinessObject
+        public BusinessObject SelectedBusinessObject
         {
             get { return this.GetSelectedBusinessObject(); }
         }

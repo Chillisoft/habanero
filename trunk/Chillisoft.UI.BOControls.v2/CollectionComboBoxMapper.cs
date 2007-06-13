@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using Chillisoft.UI.Generic.v2;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.BOControls.v2
 {
@@ -14,7 +15,7 @@ namespace Chillisoft.UI.BOControls.v2
     public class CollectionComboBoxMapper
     {
         private readonly ComboBox _comboBox;
-        private BusinessObjectBaseCollection _collection;
+        private BusinessObjectCollection _collection;
         private string _uiDefName;
         private MouseEventHandler _mouseClickHandler;
 
@@ -44,7 +45,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="collection">The collection to represent</param>
         /// <param name="includeBlank">Whether to a put a blank item at the
         /// top of the list</param>
-        public void SetCollection(BusinessObjectBaseCollection collection, bool includeBlank)
+        public void SetCollection(BusinessObjectCollection collection, bool includeBlank)
         {
             if (_collection != null)
             {
@@ -69,7 +70,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         /// <param name="sender">The object that notified of the change</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void BusinessObjectRemovedHandler(object sender, BusinessObjectEventArgs e)
+        private void BusinessObjectRemovedHandler(object sender, BOEventArgs e)
         {
             _comboBox.Items.Remove(e.BusinessObject);
         }
@@ -81,7 +82,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         /// <param name="sender">The object that notified of the change</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void BusinessObjectAddedHandler(object sender, BusinessObjectEventArgs e)
+        private void BusinessObjectAddedHandler(object sender, BOEventArgs e)
         {
             _comboBox.Items.Add(e.BusinessObject);
         }
@@ -90,7 +91,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// Returns the business object, in object form, that is currently 
         /// selected in the ComboBox list
         /// </summary>
-        public BusinessObjectBase SelectedBusinessObject
+        public BusinessObject SelectedBusinessObject
         {
             get
             {
@@ -109,7 +110,7 @@ namespace Chillisoft.UI.BOControls.v2
                 }
                 else
                 {
-                    return (BusinessObjectBase)_comboBox.SelectedItem;
+                    return (BusinessObject)_comboBox.SelectedItem;
                 }
                 //}
             }
@@ -126,7 +127,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="col">The business object collection being represented</param>
         /// <param name="includeBlank">Whether to include a blank item at the
         /// top of the list</param>
-        public static void SetComboBoxCollection(ComboBox cbx, BusinessObjectBaseCollection col, bool includeBlank)
+        public static void SetComboBoxCollection(ComboBox cbx, BusinessObjectCollection col, bool includeBlank)
         {
             int width = cbx.Width;
             
@@ -136,7 +137,7 @@ namespace Chillisoft.UI.BOControls.v2
             {
                 cbx.Items.Add("");
             }
-            foreach (BusinessObjectBase businessObjectBase in col)
+            foreach (BusinessObject businessObjectBase in col)
             {
                 lbl.Text = businessObjectBase.ToString();
                 if (lbl.PreferredWidth > width)
@@ -205,7 +206,7 @@ namespace Chillisoft.UI.BOControls.v2
             {
                 return;
             }
-            BusinessObjectBase newBo = _collection.ClassDef.CreateNewBusinessObject();
+            BusinessObject newBo = _collection.ClassDef.CreateNewBusinessObject();
             DefaultBOEditorForm form = new DefaultBOEditorForm(newBo, _uiDefName);
             if (form.ShowDialog() == DialogResult.OK)
             {

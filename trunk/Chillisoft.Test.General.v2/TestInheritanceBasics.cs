@@ -9,8 +9,8 @@ namespace Chillisoft.Test.General.v2
     {
         private ClassDef shapeClassDef;
         private ClassDef circleClassDef;
-        private BusinessObjectBase objShape;
-        private BusinessObjectBase objCircle;
+        private BusinessObject objShape;
+        private BusinessObject objCircle;
 
         [TestFixtureSetUp]
         public void SetupTest()

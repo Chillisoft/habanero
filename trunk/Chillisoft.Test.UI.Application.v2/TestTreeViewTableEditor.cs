@@ -20,7 +20,7 @@ namespace Chillisoft.Test.UI.Application.v2
         private ControlTester itsGridControlTester;
         private Form frm;
         private ClassDef itsClassDefMyBo;
-        private BusinessObjectBase itsSampleMyBo;
+        private BusinessObject itsSampleMyBo;
 
         [TestFixtureSetUp]
         public void SetupFixture()
@@ -100,7 +100,7 @@ namespace Chillisoft.Test.UI.Application.v2
 //			TreeViewTester treeViewTester = new TreeViewTester("TreeView");
 //			PopulateTreeView();
 //
-//			BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(itsClassDefMyBo);
+//			BusinessObjectCollection col = new BusinessObjectBaseCollection(itsClassDefMyBo);
 //			BusinessObjectBase bo1 = itsClassDefMyBo.CreateNewBusinessObject();
 //			bo1.SetPropertyValue("TestProp", "Value");
 //			bo1.SetPropertyValue("TestProp2", "Value2");

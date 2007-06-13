@@ -71,7 +71,7 @@ namespace Chillisoft.UI.Application.v2
         /// <summary>
         /// Gets and sets the selected business object
         /// </summary>
-        public BusinessObjectBase SelectedBusinessObject
+        public BusinessObject SelectedBusinessObject
         {
             set
             {
@@ -113,19 +113,19 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <returns>Returns a new data set provider</returns>
-        protected override BusinessObjectCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
-            BusinessObjectBaseCollection col)
+        protected override BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
+            BusinessObjectCollection col)
         {
-            return new BusinessObjectCollectionReadOnlyDataSetProvider(col);
+            return new BOCollectionReadOnlyDataSetProvider(col);
         }
 
         /// <summary>
         /// Removes the specified business object
         /// </summary>
-        /// <param name="businessObjectBase">The business object to remove</param>
-        public void RemoveBusinessObject(BusinessObjectBase businessObjectBase)
+        /// <param name="businessObject">The business object to remove</param>
+        public void RemoveBusinessObject(BusinessObject businessObject)
         {
-            _collection.RemoveAt(businessObjectBase);
+            _collection.RemoveAt(businessObject);
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Chillisoft.UI.Application.v2
         /// Returns a cloned collection of the business objects in the grid
         /// </summary>
         /// <returns>Returns a business object collection</returns>
-        public BusinessObjectBaseCollection GetCollectionClone()
+        public BusinessObjectCollection GetCollectionClone()
         {
             return _collection.Clone();
         }
@@ -167,11 +167,11 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         /// <param name="selectedBo">The business object to which the
         /// double-click applies</param>
-        public void FireRowDoubleClicked(BusinessObjectBase selectedBo)
+        public void FireRowDoubleClicked(BusinessObject selectedBo)
         {
             if (this.RowDoubleClicked != null)
             {
-                this.RowDoubleClicked(this, new BusinessObjectEventArgs(selectedBo));
+                this.RowDoubleClicked(this, new BOEventArgs(selectedBo));
             }
         }
     }

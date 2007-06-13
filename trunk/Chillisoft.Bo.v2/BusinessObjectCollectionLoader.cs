@@ -11,6 +11,6 @@ namespace Chillisoft.Bo.v2
         /// Loads a business object collection
         /// </summary>
         /// <returns>Returns the collection loaded</returns>
-        BusinessObjectBaseCollection Load();
+        BusinessObjectCollection Load();
     }
 }

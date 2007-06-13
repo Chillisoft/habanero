@@ -7,6 +7,7 @@ using Chillisoft.Crypt.v2;
 using Chillisoft.Generic.v2;
 using Chillisoft.Util.v2;
 using NUnit.Framework;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.Bo.v2
 {
@@ -74,7 +75,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestPropertyValue()
         {
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", new LongText("test"));
             Assert.AreSame(typeof (LongText), bo.GetPropertyValue("TestProp").GetType());
         }
@@ -82,7 +83,7 @@ namespace Chillisoft.Test.Bo.v2
         [Test]
         public void TestSetPropertyValueWithString()
         {
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             Assert.AreSame(typeof (LongText), bo.GetPropertyValue("TestProp").GetType());
             Assert.AreEqual("test", bo.GetPropertyValueString("TestProp"));
@@ -92,7 +93,7 @@ namespace Chillisoft.Test.Bo.v2
         public void TestPersistSqlParameterType()
         {
             base.SetupDBOracleConnection();
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append('*', 2500);
             string value = stringBuilder.ToString();

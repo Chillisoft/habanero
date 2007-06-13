@@ -62,7 +62,7 @@ namespace Chillisoft.UI.Application.v2
         /// <summary>
         /// Returns the currently selected business object
         /// </summary>
-        public BusinessObjectBase SelectedBusinessObject
+        public BusinessObject SelectedBusinessObject
         {
             get { return this._grid.SelectedBusinessObject; }
         }

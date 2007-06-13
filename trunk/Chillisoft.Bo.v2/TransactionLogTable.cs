@@ -51,7 +51,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="busObj">The business object</param>
         /// <param name="logonUserName">The name of the user who carried 
         /// out the changes</param>
-        public void RecordTransactionLog(BusinessObjectBase busObj, string logonUserName)
+        public void RecordTransactionLog(BusinessObject busObj, string logonUserName)
         {
             //TODO: Peter - make this proper parametrized SQL
             SqlStatement tranSQL = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
@@ -80,7 +80,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="busObj">The business object in question</param>
         /// <returns>Returns a string</returns>
-        private string GetCrudAction(BusinessObjectBase busObj)
+        private string GetCrudAction(BusinessObject busObj)
         {
             if (busObj.IsNew)
             {

@@ -8,6 +8,7 @@ using Chillisoft.Generic.v2;
 using Chillisoft.Test.Setup.v2;
 using NMock;
 using NUnit.Framework;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.Bo.v2
 {
@@ -19,11 +20,11 @@ namespace Chillisoft.Test.Bo.v2
     {
         protected XmlClassLoader itsLoader;
         protected ClassDef itsClassDef;
-        protected BusinessObjectBaseCollection itsCollection;
+        protected BusinessObjectCollection itsCollection;
         protected DataTable itsTable;
-        protected BusinessObjectBase itsBo1;
-        protected BusinessObjectBase itsBo2;
-        protected BusinessObjectBase itsRelatedBo;
+        protected BusinessObject itsBo1;
+        protected BusinessObject itsBo2;
+        protected BusinessObject itsRelatedBo;
         protected IDataSetProvider itsProvider;
 
         protected Mock itsDatabaseConnectionMockControl;
@@ -43,7 +44,7 @@ namespace Chillisoft.Test.Bo.v2
         {
             itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
             itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
-            itsCollection = new BusinessObjectBaseCollection(itsClassDef);
+            itsCollection = new BusinessObjectCollection(itsClassDef);
             itsBo1 = itsClassDef.CreateNewBusinessObject(itsConnection);
             itsBo1.SetPropertyValue("TestProp", "bo1prop1");
             itsBo1.SetPropertyValue("TestProp2", "s1");
@@ -62,7 +63,7 @@ namespace Chillisoft.Test.Bo.v2
             itsDatabaseConnectionMockControl.Verify();
         }
 
-        protected abstract IDataSetProvider CreateDataSetProvider(BusinessObjectBaseCollection col);
+        protected abstract IDataSetProvider CreateDataSetProvider(BusinessObjectCollection col);
 
 
         [Test]

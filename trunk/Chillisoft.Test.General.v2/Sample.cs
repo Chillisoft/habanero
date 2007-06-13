@@ -4,13 +4,14 @@ using System.Windows.Forms;
 using Chillisoft.Bo.ClassDefinition.v2;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.General.v2
 {
     /// <summary>
     /// Summary description for Sample.
     /// </summary>
-    public class Sample : BusinessObjectBase
+    public class Sample : BusinessObject
     {
         private static StringGuidPairCollection itsLookupCollection;
 

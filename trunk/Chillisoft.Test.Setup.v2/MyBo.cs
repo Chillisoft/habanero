@@ -2,13 +2,14 @@ using Chillisoft.Bo.ClassDefinition.v2;
 using Chillisoft.Bo.Loaders.v2;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.Setup.v2
 {
     /// <summary>
     /// Summary description for MyBo.
     /// </summary>
-    public class MyBo : BusinessObjectBase
+    public class MyBo : BusinessObject
     {
         public MyBo(ClassDef def) : base(def)
         {
@@ -250,7 +251,7 @@ namespace Chillisoft.Test.Setup.v2
 
     }
 
-    public class MyRelatedBo : BusinessObjectBase
+    public class MyRelatedBo : BusinessObject
     {
         private static ClassDef itsClassDef;
 

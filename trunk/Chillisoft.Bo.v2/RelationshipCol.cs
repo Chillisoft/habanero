@@ -11,14 +11,14 @@ namespace Chillisoft.Bo.v2
     public class RelationshipCol : DictionaryBase, IRelationshipCol
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.RelationshipCol");
-        private BusinessObjectBase _bo;
+        private BusinessObject _bo;
 
         /// <summary>
         /// Constructor to initialise a new relationship, specifying the
         /// business object that owns the relationships
         /// </summary>
         /// <param name="bo">The business object</param>
-        public RelationshipCol(BusinessObjectBase bo)
+        public RelationshipCol(BusinessObject bo)
         {
             _bo = bo;
         }
@@ -78,7 +78,7 @@ namespace Chillisoft.Bo.v2
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship specified is a multiple relationship, when a
         /// single one was expected</exception>
-        public BusinessObjectBase GetRelatedBusinessObject(string relationshipName)
+        public BusinessObject GetRelatedBusinessObject(string relationshipName)
         {
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             Relationship relationship = this[relationshipName];
@@ -101,7 +101,7 @@ namespace Chillisoft.Bo.v2
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship specified is a single relationship, when a
         /// multiple one was expected</exception>
-        public BusinessObjectBaseCollection GetRelatedBusinessObjectCol(string relationshipName)
+        public BusinessObjectCollection GetRelatedBusinessObjectCol(string relationshipName)
         {
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             Relationship relationship = this[relationshipName];
@@ -123,7 +123,7 @@ namespace Chillisoft.Bo.v2
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship named is a multiple relationship instead of a
         /// single one</exception>
-        public void SetRelatedBusinessObject(string relationshipName, BusinessObjectBase relatedObject)
+        public void SetRelatedBusinessObject(string relationshipName, BusinessObject relatedObject)
         {
             Relationship relationship = this[relationshipName];
             if (relationship is MultipleRelationship)

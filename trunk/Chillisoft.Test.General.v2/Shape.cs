@@ -4,7 +4,7 @@ using Chillisoft.Bo.v2;
 
 namespace Chillisoft.Test.General.v2
 {
-    public class Shape : BusinessObjectBase
+    public class Shape : BusinessObject
     {
         public static Shape GetNewObject()
         {

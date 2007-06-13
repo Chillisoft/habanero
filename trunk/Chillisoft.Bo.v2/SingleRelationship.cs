@@ -16,7 +16,7 @@ namespace Chillisoft.Bo.v2
     public class SingleRelationship : Relationship
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.SingleRelationship");
-        private BusinessObjectBase _relatedBo;
+        private BusinessObject _relatedBo;
         private string _storedRelationshipExpression;
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public SingleRelationship(BusinessObjectBase owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        public SingleRelationship(BusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
         }
@@ -47,7 +47,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="connection">A database connection</param>
         /// <returns>Returns the related business object</returns>
-        internal BusinessObjectBase GetRelatedObject(IDatabaseConnection connection)
+        internal BusinessObject GetRelatedObject(IDatabaseConnection connection)
         {
             if (_relatedBo == null ||
                 (_storedRelationshipExpression != _relKey.RelationshipExpression().ExpressionString()))
@@ -56,8 +56,8 @@ namespace Chillisoft.Bo.v2
                 if (HasRelationship())
                 {
                     //log.Debug("HasRelationship returned true, loading object.") ;
-                    BusinessObjectBase busObj =
-                        (BusinessObjectBase) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
+                    BusinessObject busObj =
+                        (BusinessObject) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
                     busObj.SetDatabaseConnection(connection);
 
                     IExpression relExp = _relKey.RelationshipExpression();
@@ -85,7 +85,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="parentObject">The object to relate to</param>
         /// TODO ERIC - is the parameter appropriately named (relatedObject)?
-        public void SetRelatedObject(BusinessObjectBase parentObject)
+        public void SetRelatedObject(BusinessObject parentObject)
         {
             _relatedBo = parentObject;
             foreach (DictionaryEntry entry in this._relKey)

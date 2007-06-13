@@ -16,7 +16,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="relationshipName">The name of the relationship</param>
         /// <returns>Returns a business object</returns>
-        BusinessObjectBase GetRelatedBusinessObject(string relationshipName);
+        BusinessObject GetRelatedBusinessObject(string relationshipName);
 
         /// <summary>
         /// Returns a collection of business objects that are connected to
@@ -26,7 +26,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="relationshipName">The name of the relationship</param>
         /// <returns>Returns a business object collection</returns>
-        BusinessObjectBaseCollection GetRelatedBusinessObjectCol(string relationshipName);
+        BusinessObjectCollection GetRelatedBusinessObjectCol(string relationshipName);
 
         /// <summary>
         /// Relates a business object to this object through the type of
@@ -35,6 +35,6 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="relationshipName">The name of the relationship</param>
         /// <param name="parentObject">The object to relate to</param>
-        void SetRelatedBusinessObject(string relationshipName, BusinessObjectBase parentObject);
+        void SetRelatedBusinessObject(string relationshipName, BusinessObject parentObject);
     }
 }

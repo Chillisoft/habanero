@@ -15,14 +15,14 @@ namespace Chillisoft.Test.UI.BOControls.v2
 
         ListView itsListView;
         ListViewCollectionMapper mapper;
-        private BusinessObjectBaseCollection itsCollection;
+        private BusinessObjectCollection itsCollection;
 
         [SetUp]
         public void SetupTest()
         {
             itsListView = new ListView();
             mapper = new ListViewCollectionMapper(itsListView);
-            itsCollection = new BusinessObjectBaseCollection(Sample.GetClassDef());
+            itsCollection = new BusinessObjectCollection(Sample.GetClassDef());
             itsCollection.Add(new Sample());
             itsCollection.Add(new Sample());
             itsCollection.Add(new Sample());

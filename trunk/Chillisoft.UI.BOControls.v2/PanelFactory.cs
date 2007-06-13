@@ -7,6 +7,7 @@ using Chillisoft.Generic.v2;
 using Chillisoft.UI.Generic.v2;
 using log4net;
 using System.Collections.Generic;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.BOControls.v2
 {
@@ -18,7 +19,7 @@ namespace Chillisoft.UI.BOControls.v2
     public class PanelFactory
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.BoControls.PanelFactory");
-        private BusinessObjectBase[] _boArray;
+        private BusinessObject[] _boArray;
         //private IUserInterfaceMapper[] _uiArray;
         private UIFormDef _uiFormDef;
         private Control _firstControl;
@@ -29,9 +30,9 @@ namespace Chillisoft.UI.BOControls.v2
         /// Constructor to initialise a new PanelFactory object
         /// </summary>
         /// <param name="bo">The business object to be represented</param>
-        public PanelFactory(BusinessObjectBase bo)
+        public PanelFactory(BusinessObject bo)
         {
-            _boArray = new BusinessObjectBase[1];
+            _boArray = new BusinessObject[1];
             _boArray[0] = bo;
             BOMapper mapper = new BOMapper(bo);
             _uiFormDef = mapper.GetUserInterfaceMapper().GetUIFormProperties();
@@ -41,7 +42,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <summary>
         /// A constructor as before, but with a UIFormDef object specified
         /// </summary>
-        public PanelFactory(BusinessObjectBase bo, UIFormDef uiFormDef) : this(bo)
+        public PanelFactory(BusinessObject bo, UIFormDef uiFormDef) : this(bo)
         {
             _uiFormDef = uiFormDef;
         }
@@ -49,7 +50,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <summary>
         /// A constructor as before, but with a UIDefName specified
         /// </summary>
-        public PanelFactory(BusinessObjectBase bo, string uiDefName) : this(bo)
+        public PanelFactory(BusinessObject bo, string uiDefName) : this(bo)
         {
             BOMapper mapper = new BOMapper(bo);
             _uiFormDef = mapper.GetUserInterfaceMapper(uiDefName).GetUIFormProperties();
@@ -346,14 +347,14 @@ namespace Chillisoft.UI.BOControls.v2
             //log.Debug("Creating a panel with a grid on it with relationship " + formGrid.RelationshipName);
             IGrid myGrid = (IGrid) Activator.CreateInstance(formGrid.GridType);
             //GridBase myGrid = myGridWithButtons.Grid;
-            BusinessObjectBase bo = _boArray[0];
+            BusinessObject bo = _boArray[0];
             ClassDef classDef = ClassDef.GetClassDefCol[bo.GetType()];
             //Console.Out.WriteLine(classDef.RelationshipDefCol);
             myGrid.ObjectInitialiser =
                 new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
                                                   formGrid.CorrespondingRelationshipName);
             //log.Debug("Listing UI Grid properties");
-            BusinessObjectBaseCollection collection =
+            BusinessObjectCollection collection =
                 bo.Relationships.GetRelatedBusinessObjectCol(formGrid.RelationshipName);
             foreach (UIGridProperty property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
             {

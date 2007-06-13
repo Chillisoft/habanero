@@ -50,7 +50,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <param name="bo">The business object that will manage these
         /// relationships</param>
         /// <returns>Returns the new collection created</returns>
-        public RelationshipCol CreateRelationshipCol(BOPropCol lBoPropCol, BusinessObjectBase bo)
+        public RelationshipCol CreateRelationshipCol(BOPropCol lBoPropCol, BusinessObject bo)
         {
             RelationshipCol lRelationshipCol = new RelationshipCol(bo);
             RelationshipDef lRelationshipDef;

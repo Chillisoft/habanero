@@ -5,6 +5,7 @@ using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using Chillisoft.UI.Misc.v2;
 using Microsoft.ApplicationBlocks.ExceptionManagement;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.BOControls.v2
 {
@@ -61,7 +62,7 @@ namespace Chillisoft.UI.BOControls.v2
             {
                 return;
             }
-            BusinessObjectBase lookupBo = _lookupTypeClassDef.CreateNewBusinessObject();
+            BusinessObject lookupBo = _lookupTypeClassDef.CreateNewBusinessObject();
             BoPanelControl boCtl = new BoPanelControl(lookupBo, "");
             boCtl.Height = 180;
             boCtl.Width = 240;

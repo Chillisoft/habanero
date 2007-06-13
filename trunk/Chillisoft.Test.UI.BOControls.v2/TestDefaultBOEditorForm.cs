@@ -8,6 +8,7 @@ using Chillisoft.UI.BOControls.v2;
 using Chillisoft.UI.Generic.v2;
 using NMock;
 using NUnit.Framework;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.UI.BOControls.v2
 {
@@ -18,7 +19,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
     public class TestDefaultBOEditorForm : TestUsingDatabase
     {
         private ClassDef itsClassDefMyBo;
-        private BusinessObjectBase itsBo;
+        private BusinessObject itsBo;
         private DefaultBOEditorForm itsEditor;
         private Mock itsDatabaseConnectionMockControl;
 

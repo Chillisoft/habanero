@@ -11,7 +11,7 @@ namespace Chillisoft.Bo.v2
     public class SelectStatementGenerator
     {
         private readonly IDatabaseConnection _connection;
-        private BusinessObjectBase _bo;
+        private BusinessObject _bo;
         private ClassDef _classDef;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Chillisoft.Bo.v2
         /// be read</param>
         /// <param name="classDef">The class definition</param>
         /// <param name="connection">A database connection</param>
-        public SelectStatementGenerator(BusinessObjectBase bo, ClassDef classDef, IDatabaseConnection connection)
+        public SelectStatementGenerator(BusinessObject bo, ClassDef classDef, IDatabaseConnection connection)
         {
             _bo = bo;
             _classDef = classDef;
@@ -34,7 +34,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="bo">The business object whose properties are to
         /// be read</param>
         /// <param name="connection">A database connection</param>
-        public SelectStatementGenerator(BusinessObjectBase bo, IDatabaseConnection connection)
+        public SelectStatementGenerator(BusinessObject bo, IDatabaseConnection connection)
             : this(bo, bo.ClassDef, connection)
         {
         }

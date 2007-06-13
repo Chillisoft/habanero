@@ -7,7 +7,7 @@ namespace Chillisoft.Bo.v2
     /// <summary>
     /// Supplies additional functionality for business objects
     /// </summary>
-    public class BoHelper
+    public class BOHelper
     {
         /// <summary>
         /// Calls the BeforeApplyEdit() method which carries out additional
@@ -15,7 +15,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <returns>Returns the result of the call (true could indicate that
         /// the steps were carried out successfully)</returns>
-        public static bool CallBeforeApplyEdit(BusinessObjectBase bo) {
+        public static bool CallBeforeApplyEdit(BusinessObject bo) {
             return bo.BeforeApplyEdit();
         }
     }

@@ -35,7 +35,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// this relationship</param>
         /// <param name="lBOPropCol">The collection of properties</param>
         /// <returns></returns>
-        internal override Relationship CreateRelationship(BusinessObjectBase owningBo, BOPropCol lBOPropCol)
+        internal override Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol)
         {
             return new SingleRelationship(owningBo, this, lBOPropCol);
         }
@@ -109,7 +109,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         }
     }
 
-    internal class MockBO : BusinessObjectBase
+    internal class MockBO : BusinessObject
     {
         public MockBO() : base()
         {

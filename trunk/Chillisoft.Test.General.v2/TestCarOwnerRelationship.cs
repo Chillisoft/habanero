@@ -98,10 +98,10 @@ namespace Chillisoft.Test.General.v2
 
             Assert.AreEqual(1, person.GetCarsOwned().Count, "there should be one car for this person");
 
-            BusinessObjectBaseCollection carsOwned = person.GetCarsOwned();
+            BusinessObjectCollection carsOwned = person.GetCarsOwned();
             Car carOwned = (Car) carsOwned.item(0);
             Assert.AreEqual(car.ID, carOwned.ID);
-            BusinessObjectBaseCollection carsOwned2 = person.GetCarsOwned();
+            BusinessObjectCollection carsOwned2 = person.GetCarsOwned();
             Assert.IsFalse(object.ReferenceEquals(carsOwned, carsOwned2),
                            "The references should not be equal since the collection should be reloaded each time");
         }

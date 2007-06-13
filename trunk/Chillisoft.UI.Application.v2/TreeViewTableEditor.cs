@@ -99,8 +99,8 @@ namespace Chillisoft.UI.Application.v2
         {
             if (e.Node.Tag != null)
             {
-                BusinessObjectBase sampleBo = (BusinessObjectBase) e.Node.Tag;
-                BusinessObjectBaseCollection collectionForNode;
+                BusinessObject sampleBo = (BusinessObject) e.Node.Tag;
+                BusinessObjectCollection collectionForNode;
                 try
                 {
                     collectionForNode = _tableDataSource.GetCollection(sampleBo);
@@ -126,7 +126,7 @@ namespace Chillisoft.UI.Application.v2
             /// </summary>
             /// <param name="sampleBo">A sample business object</param>
             /// <returns>Returns the business object collection</returns>
-            BusinessObjectBaseCollection GetCollection(BusinessObjectBase sampleBo);
+            BusinessObjectCollection GetCollection(BusinessObject sampleBo);
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace Chillisoft.UI.Application.v2
             /// </summary>
             /// <param name="sampleBo">A sample business object</param>
             /// <returns>Returns the business object collection</returns>
-            public BusinessObjectBaseCollection GetCollection(BusinessObjectBase sampleBo)
+            public BusinessObjectCollection GetCollection(BusinessObject sampleBo)
             {
                 return sampleBo.GetBusinessObjectCol("", "");
             }

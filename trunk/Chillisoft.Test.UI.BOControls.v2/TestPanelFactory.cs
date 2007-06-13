@@ -71,7 +71,7 @@ namespace Chillisoft.Test.UI.BOControls.v2
         //		public void TestWithMoreThanOneBO() {
         //			Sample s = new Sample();
         //			Sample s1 = new Sample();
-        //			PanelFactory factory = new PanelFactory(new BusinessObjectBase[] {s, s1}, new IUserInterfaceMapper[] {null, new Sample.SampleUserInterfaceMapper3Props()});
+        //			PanelFactory factory = new PanelFactory(new BusinessObject[] {s, s1}, new IUserInterfaceMapper[] {null, new Sample.SampleUserInterfaceMapper3Props()});
         //			Panel pnl = factory.CreatePanel();
         //			Assert.AreEqual(8, pnl.Controls.Count, "The panel should have 8 controls.");
         //			Assert.AreSame(typeof (Label), pnl.Controls[0].GetType());

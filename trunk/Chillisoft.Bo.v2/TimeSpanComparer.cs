@@ -38,8 +38,8 @@ namespace Chillisoft.Bo.v2
         /// greater than y's</returns>
         public int Compare(object x, object y)
         {
-            BusinessObjectBase boLeft = (BusinessObjectBase) x;
-            BusinessObjectBase boRight = (BusinessObjectBase) y;
+            BusinessObject boLeft = (BusinessObject) x;
+            BusinessObject boRight = (BusinessObject) y;
             TimeSpan left;
             TimeSpan right;
             if (boLeft.GetPropertyValue(_propName) == null)

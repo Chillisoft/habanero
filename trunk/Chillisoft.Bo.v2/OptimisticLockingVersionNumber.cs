@@ -13,7 +13,7 @@ namespace Chillisoft.Bo.v2
     /// A version number is used to check if the object has been edited. 
     /// To use this class effectively, the update properties method 
     /// must be called before the database is updated (i.e. in  
-    /// <see cref="Chillisoft.Bo.v2.BusinessObjectBase.ApplyEdit"/> and 
+    /// <see cref="BusinessObject.ApplyEdit"/> and 
     /// <see cref= "Chillisoft.Bo.v2.OptimisticLockingVersionNumber.UpdatePropertiesWithLatestConcurrencyInfo"/>)
     /// </summary>
     public class OptimisticLockingVersionNumber : IConcurrencyControl
@@ -74,7 +74,7 @@ namespace Chillisoft.Bo.v2
         /// the object has been deleted by another process/user</exception>
         /// <exception cref="BusObjOptimisticConcurrencyControlException">Thrown 
         /// if the object has been edited by another process/user</exception>
-        public void CheckConcurrencyBeforePersisting(BusinessObjectBase busObj)
+        public void CheckConcurrencyBeforePersisting(BusinessObject busObj)
         {
             if (!busObj.IsNew) //you cannot have concurrency control issues on a new object 
                 // all you can have is duplicate data issues.
@@ -135,7 +135,7 @@ namespace Chillisoft.Bo.v2
         /// <exception cref="BusObjBeginEditConcurrencyControlException">Thrown
         /// if the object has been edited in the database since it was last
         /// loaded by the object manager</exception>
-        public void CheckConcurrencyBeforeBeginEditing(BusinessObjectBase busObj)
+        public void CheckConcurrencyBeforeBeginEditing(BusinessObject busObj)
         {
             try
             {
@@ -155,7 +155,7 @@ namespace Chillisoft.Bo.v2
         /// updated copy.
         /// </summary>
         /// <param name="busObj">The business object to be loaded</param>
-        public void CheckConcurrencyOnGettingObjectFromObjectManager(BusinessObjectBase busObj)
+        public void CheckConcurrencyOnGettingObjectFromObjectManager(BusinessObject busObj)
         {
             try
             {

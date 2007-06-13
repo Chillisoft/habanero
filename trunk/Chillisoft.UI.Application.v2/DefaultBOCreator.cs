@@ -2,6 +2,7 @@ using System;
 using Chillisoft.Bo.ClassDefinition.v2;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.Application.v2
 {
@@ -42,7 +43,7 @@ namespace Chillisoft.UI.Application.v2
         /// <returns>Returns the business object created</returns>
         public Object CreateObject(IObjectEditor editor, IObjectInitialiser initialiser)
         {
-            BusinessObjectBase newBo = _classDef.CreateNewBusinessObject();
+            BusinessObject newBo = _classDef.CreateNewBusinessObject();
             if (initialiser != null)
             {
                 initialiser.InitialiseObject(newBo);

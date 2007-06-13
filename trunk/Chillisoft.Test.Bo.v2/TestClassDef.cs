@@ -30,7 +30,7 @@ namespace Chillisoft.Test.Bo.v2
 					</primaryKeyDef>
 				</classDef>
 			");
-            BusinessObjectBase bo = itsClassDef.CreateNewBusinessObject();
+            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             Assert.AreSame(typeof (MyBo), bo.GetType());
             bo.SetPropertyValue("TestProp", "TestValue");
             Assert.AreEqual("TestValue", bo.GetPropertyValue("TestProp"));

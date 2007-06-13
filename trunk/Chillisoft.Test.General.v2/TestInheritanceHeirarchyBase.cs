@@ -6,7 +6,7 @@ namespace Chillisoft.Test.General.v2
 {
     public abstract class TestInheritanceHeirarchyBase : TestUsingDatabase
     {
-        protected BusinessObjectBase itsFilledCircle;
+        protected BusinessObject itsFilledCircle;
         protected SqlStatementCollection itsInsertSql;
         protected SqlStatementCollection itsUpdateSql;
         protected SqlStatementCollection itsDeleteSql;

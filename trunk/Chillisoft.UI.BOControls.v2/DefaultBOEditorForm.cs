@@ -5,6 +5,7 @@ using Chillisoft.Generic.v2;
 using Chillisoft.UI.Generic.v2;
 using log4net;
 using Microsoft.ApplicationBlocks.ExceptionManagement;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.BOControls.v2
 {
@@ -21,7 +22,7 @@ namespace Chillisoft.UI.BOControls.v2
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.BOControls.v2.DefaultBOEditorForm");
         private readonly string _uiDefName;
         private ButtonControl _buttons;
-        protected BusinessObjectBase _bo;
+        protected BusinessObject _bo;
         private Panel _boPanel;
         protected PanelFactoryInfo _panelFactoryInfo;
 
@@ -32,7 +33,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         /// <param name="bo">The business object to edit</param>
         /// <param name="uiDefName">The uiDefName</param>
-        public DefaultBOEditorForm(BusinessObjectBase bo, string uiDefName)
+        public DefaultBOEditorForm(BusinessObject bo, string uiDefName)
         {
             _bo = bo;
             _uiDefName = uiDefName;
@@ -71,7 +72,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// Constructor as before, but sets the uiDefName to an empty string
         /// </summary>
         /// <param name="bo">The business object to represent</param>
-        public DefaultBOEditorForm(BusinessObjectBase bo)
+        public DefaultBOEditorForm(BusinessObject bo)
             : this(bo, "")
         {
         }

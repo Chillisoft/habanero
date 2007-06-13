@@ -9,7 +9,7 @@ namespace Chillisoft.Bo.v2
     /// </summary>
     public class MultipleRelationship : Relationship
     {
-        private BusinessObjectBaseCollection _boCol;
+        private BusinessObjectCollection _boCol;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -19,7 +19,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        internal MultipleRelationship(BusinessObjectBase owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        internal MultipleRelationship(BusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
         }
@@ -29,10 +29,10 @@ namespace Chillisoft.Bo.v2
         /// through the specific relationship
         /// </summary>
         /// <returns>Returns a collection of business objects</returns>
-        internal BusinessObjectBaseCollection GetRelatedBusinessObjectCol()
+        internal BusinessObjectCollection GetRelatedBusinessObjectCol()
         {
-            BusinessObjectBase busObj =
-                (BusinessObjectBase) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
+            BusinessObject busObj =
+                (BusinessObject) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
             if (this._relDef.KeepReferenceToRelatedObject)
             {
                 // TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object

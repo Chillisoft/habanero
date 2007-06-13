@@ -534,7 +534,7 @@ namespace Chillisoft.Test.General.v2
             myContact_1.Delete();
             myContact_1.ApplyEdit();
 
-            BusinessObjectBaseCollection myCol = TransactionLog.LoadBusinessObjCol("", "TransactionSequenceNo");
+            BusinessObjectCollection myCol = TransactionLog.LoadBusinessObjCol("", "TransactionSequenceNo");
             Assert.AreEqual(myCol.Count, 3);
 
             TransactionLog myTransactionLog;
@@ -701,7 +701,7 @@ namespace Chillisoft.Test.General.v2
     /// <summary>
     /// This is used only for testing reading transactions
     /// </summary>
-    public class TransactionLog : BusinessObjectBase
+    public class TransactionLog : BusinessObject
     {
         #region Constructors
 
@@ -825,12 +825,12 @@ namespace Chillisoft.Test.General.v2
 
         internal static void ClearTransactionLogCol()
         {
-            BusinessObjectBase.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearLoadedBusinessObjectBaseCol();
         }
 
         internal static Hashtable GetTransactionLogCol()
         {
-            return BusinessObjectBase.GetLoadedBusinessObjectBaseCol();
+            return BusinessObject.GetLoadedBusinessObjectBaseCol();
         }
 
         internal static void DeleteAllTransactionLogs()
@@ -849,12 +849,12 @@ namespace Chillisoft.Test.General.v2
             return _primaryKey.GetObjectNewID();
         }
 
-        protected internal static BusinessObjectBaseCollection LoadBusinessObjCol()
+        protected internal static BusinessObjectCollection LoadBusinessObjCol()
         {
             return LoadBusinessObjCol("", "");
         }
 
-        protected internal static BusinessObjectBaseCollection LoadBusinessObjCol(string searchCriteria,
+        protected internal static BusinessObjectCollection LoadBusinessObjCol(string searchCriteria,
                                                                                   string orderByClause)
         {
             TransactionLog lTransactionLog = GetNewTransactionLog();
@@ -867,7 +867,7 @@ namespace Chillisoft.Test.General.v2
                     new SQLCriteriaCreator(Expression.CreateExpression(searchCriteria), lTransactionLog);
                 creator.AppendCriteriaToStatement(statement);
             }
-            BusinessObjectBaseCollection bOCol = new BusinessObjectBaseCollection(lTransactionLog);
+            BusinessObjectCollection bOCol = new BusinessObjectCollection(lTransactionLog);
             using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(statement, orderByClause))
             {
                 try

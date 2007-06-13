@@ -18,7 +18,7 @@ namespace Chillisoft.Test.UI.Application.v2
     {
         private BoTabColControl itsTabColControl;
         private ClassDef itsClassDef;
-        private BusinessObjectBaseCollection itsCol;
+        private BusinessObjectCollection itsCol;
         private MyBo itsBo1;
         private MyBo itsBo2;
 
@@ -27,7 +27,7 @@ namespace Chillisoft.Test.UI.Application.v2
         {
             ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
-            itsCol = new BusinessObjectBaseCollection(itsClassDef);
+            itsCol = new BusinessObjectCollection(itsClassDef);
 
 			itsBo1 = MyBo.Create();
             itsBo2 = MyBo.Create();
@@ -103,7 +103,7 @@ namespace Chillisoft.Test.UI.Application.v2
 
         private class NullBusinessObjectControl : Control, BusinessObjectControl
         {
-            public void SetBusinessObject(BusinessObjectBase bo)
+            public void SetBusinessObject(BusinessObject bo)
             {
             }
         }

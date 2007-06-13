@@ -2,6 +2,7 @@ using System;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using Chillisoft.UI.Generic.v2;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.Application.v2
 {
@@ -44,7 +45,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void RowDoubleClickedHandler(object sender, BusinessObjectEventArgs e)
+        private void RowDoubleClickedHandler(object sender, BOEventArgs e)
         {
             if (e.BusinessObject != null)
             {
@@ -59,7 +60,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void EditButtonClickHandler(object sender, EventArgs e)
         {
-            BusinessObjectBase selectedBo = _readOnlyGrid.SelectedBusinessObject;
+            BusinessObject selectedBo = _readOnlyGrid.SelectedBusinessObject;
             if (selectedBo != null)
             {
                 //if
@@ -77,7 +78,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddButtonClickHandler(object sender, EventArgs e)
         {
-            BusinessObjectBase newObject = (BusinessObjectBase) _objectCreator.CreateObject(this._objectEditor);
+            BusinessObject newObject = (BusinessObject) _objectCreator.CreateObject(this._objectEditor);
             if (newObject != null)
             {
                 _readOnlyGrid.AddBusinessObject(newObject);

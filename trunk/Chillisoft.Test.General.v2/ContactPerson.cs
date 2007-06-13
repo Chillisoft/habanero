@@ -17,7 +17,7 @@ namespace Chillisoft.Test.General.v2
     //		}
     //	}
 
-    public class ContactPerson : BusinessObjectBase
+    public class ContactPerson : BusinessObject
     {
         #region Fields
 
@@ -274,7 +274,7 @@ namespace Chillisoft.Test.General.v2
 
         #region RelationShips
 
-        public BusinessObjectBaseCollection GetCarsOwned()
+        public BusinessObjectCollection GetCarsOwned()
         {
             return Relationships.GetRelatedBusinessObjectCol("Owner");
         }
@@ -285,12 +285,12 @@ namespace Chillisoft.Test.General.v2
 
         internal static void ClearContactPersonCol()
         {
-            BusinessObjectBase.ClearLoadedBusinessObjectBaseCol();
+            BusinessObject.ClearLoadedBusinessObjectBaseCol();
         }
 
         internal static Hashtable GetContactPersonCol()
         {
-            return BusinessObjectBase.GetLoadedBusinessObjectBaseCol();
+            return BusinessObject.GetLoadedBusinessObjectBaseCol();
         }
 
         internal static void DeleteAllContactPeople()
@@ -309,15 +309,15 @@ namespace Chillisoft.Test.General.v2
             return _primaryKey.GetObjectNewID();
         }
 
-        protected internal static BusinessObjectBaseCollection LoadBusinessObjCol()
+        protected internal static BusinessObjectCollection LoadBusinessObjCol()
         {
             return LoadBusinessObjCol("", "");
         }
 
-        protected internal static BusinessObjectBaseCollection LoadBusinessObjCol(string searchCriteria,
+        protected internal static BusinessObjectCollection LoadBusinessObjCol(string searchCriteria,
                                                                                   string orderByClause)
         {
-            BusinessObjectBaseCollection bOCol = new BusinessObjectBaseCollection(GetClassDef());
+            BusinessObjectCollection bOCol = new BusinessObjectCollection(GetClassDef());
             bOCol.Load(searchCriteria, orderByClause);
             return bOCol;
         }

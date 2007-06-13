@@ -14,7 +14,7 @@ namespace Chillisoft.UI.BOControls.v2
     {
         private string _uiDefName;
         private ListView _listView;
-        private BusinessObjectBaseCollection _collection;
+        private BusinessObjectCollection _collection;
         private Hashtable _listItemsHash;
 
         /// <summary>
@@ -40,12 +40,12 @@ namespace Chillisoft.UI.BOControls.v2
         /// Returns the currently selected business object in the ListView
         /// or null if none is selected
         /// </summary>
-        public BusinessObjectBase SelectedBusinessObject
+        public BusinessObject SelectedBusinessObject
         {
             get {
                 if (_listView.SelectedItems.Count == 1)
                 {
-                    return (BusinessObjectBase)_listView.SelectedItems[0].Tag;
+                    return (BusinessObject)_listView.SelectedItems[0].Tag;
                 } else return null;
             }
         }
@@ -55,7 +55,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// ListView object
         /// </summary>
         /// <param name="collection">The collection of business objects</param>
-        public void SetCollection(BusinessObjectBaseCollection collection) {
+        public void SetCollection(BusinessObjectCollection collection) {
 
             if (_collection != null)
             {
@@ -75,7 +75,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void BusinessObjectRemovedHandler(object sender, BusinessObjectEventArgs e)
+        private void BusinessObjectRemovedHandler(object sender, BOEventArgs e)
         {
             _listView.Items.Remove((ListViewItem) _listItemsHash[e.BusinessObject]);
         }
@@ -86,7 +86,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void BusinessObjectAddedHandler(object sender, BusinessObjectEventArgs e)
+        private void BusinessObjectAddedHandler(object sender, BOEventArgs e)
         {
             _listView.Items.Add(CreateListViewItem(e.BusinessObject));
         }
@@ -97,7 +97,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         /// <param name="bo">The business object to represent</param>
         /// <returns>Returns a new ListViewItem</returns>
-        private ListViewItem CreateListViewItem(BusinessObjectBase bo) {
+        private ListViewItem CreateListViewItem(BusinessObject bo) {
             ListViewItem boItem = new ListViewItem(bo.ToString());
             boItem.Tag = bo;
             _listItemsHash.Add(bo, boItem);
@@ -110,11 +110,11 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         /// <param name="listView">The ListView object to add to</param>
         /// <param name="collection">The business object collection</param>
-        private void SetListViewCollection(ListView listView, BusinessObjectBaseCollection collection) {
+        private void SetListViewCollection(ListView listView, BusinessObjectCollection collection) {
             listView.Clear();
             _listItemsHash.Clear();
             listView.MultiSelect = true;
-            foreach (BusinessObjectBase bo in collection) {
+            foreach (BusinessObject bo in collection) {
                 listView.Items.Add(CreateListViewItem(bo));
                
             }

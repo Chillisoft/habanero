@@ -26,7 +26,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="id">The ID as a Guid</param>
         /// <param name="classDef">The class definition</param>
         /// <returns>Returns a business object or null if not found</returns>
-        public static BusinessObjectBase GetBusinessObjectWithGuid(Guid id, ClassDef classDef)
+        public static BusinessObject GetBusinessObjectWithGuid(Guid id, ClassDef classDef)
         {
             if (!classDef.PrimaryKeyDef.IsObjectID)
             {
@@ -36,7 +36,7 @@ namespace Chillisoft.Bo.v2
             else
             {
                 string primaryKeyField = classDef.PrimaryKeyDef.KeyName;
-                BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(classDef);
+                BusinessObjectCollection col = new BusinessObjectCollection(classDef);
                 col.Load(primaryKeyField + " = '" + id.ToString("B").ToUpper() + "'", "");
                 if (col.Count == 1)
                 {

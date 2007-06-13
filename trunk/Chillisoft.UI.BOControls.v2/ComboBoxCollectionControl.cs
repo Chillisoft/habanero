@@ -4,6 +4,7 @@ using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using Chillisoft.UI.Generic.v2;
 using log4net;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.BOControls.v2
 {
@@ -23,7 +24,7 @@ namespace Chillisoft.UI.BOControls.v2
         private CollectionComboBoxMapper _comboBoxMapper;
         private int _oldSelectedIndex;
         private ButtonControl _buttons;
-        private BusinessObjectBaseCollection _boCollection;
+        private BusinessObjectCollection _boCollection;
 
         /// <summary>
         /// Constructor to initialise a new control object that has a
@@ -203,7 +204,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <summary>
         /// Returns the business object that is currently selected
         /// </summary>
-        public BusinessObjectBase SelectedBusinessObject
+        public BusinessObject SelectedBusinessObject
         {
             get { return _panelFactoryInfo.ControlMappers.BusinessObject; }
         }

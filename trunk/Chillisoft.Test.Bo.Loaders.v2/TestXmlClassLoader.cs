@@ -5,6 +5,7 @@ using Chillisoft.Bo.Loaders.v2;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using NUnit.Framework;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.Test.Bo.Loaders.v2
 {
@@ -286,7 +287,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         }
     }
 
-    public class TestClass : BusinessObjectBase
+    public class TestClass : BusinessObject
     {
         protected override ClassDef ConstructClassDef()
         {
@@ -294,7 +295,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         }
     }
 
-    public class TestRelatedClass : BusinessObjectBase
+    public class TestRelatedClass : BusinessObject
     {
         protected override ClassDef ConstructClassDef()
         {

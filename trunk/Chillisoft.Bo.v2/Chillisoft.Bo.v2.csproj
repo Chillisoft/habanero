@@ -132,7 +132,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BoHelper.cs" />
+    <Compile Include="BOHelper.cs" />
     <Compile Include="BOKey.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -157,28 +157,28 @@
     <Compile Include="Broker.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessObjBaseCollection.cs">
+    <Compile Include="BusinessObjectCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessObjectBase.cs">
+    <Compile Include="BusinessObject.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessObjectCollectionDataSetProvider.cs">
+    <Compile Include="BOCollectionDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessObjectCollectionEditableDataSetProvider.cs">
+    <Compile Include="BOCollectionEditableDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessObjectCollectionLoader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessObjectCollectionReadOnlyDataSetProvider.cs">
+    <Compile Include="BOCollectionReadOnlyDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessObjectEventArgs.cs">
+    <Compile Include="BOEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessObjectLookupListSource.cs">
+    <Compile Include="BOLookupListSource.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ByteString.cs" />

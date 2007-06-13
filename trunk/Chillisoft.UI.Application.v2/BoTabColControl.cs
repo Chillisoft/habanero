@@ -62,7 +62,7 @@ namespace Chillisoft.UI.Application.v2
         {
             _tabControl.SelectedIndexChanged -= tabChangedHandler;
             ClearTabPages();
-            foreach (BusinessObjectBase bo in col)
+            foreach (BusinessObject bo in col)
             {
                 TabPage page = new TabPage(bo.ToString());
                 //page.Text =  ;
@@ -128,13 +128,13 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="tabPage">The tab page</param>
         /// <returns>Returns the business object, or null if not available
         /// </returns>
-        public BusinessObjectBase GetBo(TabPage tabPage)
+        public BusinessObject GetBo(TabPage tabPage)
         {
             if (tabPage == null) return null;
 
             if (_pageBoTable.ContainsKey(tabPage))
             {
-                return (BusinessObjectBase) _pageBoTable[tabPage];
+                return (BusinessObject) _pageBoTable[tabPage];
             }
             else
             {
@@ -147,7 +147,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         /// <param name="page">The TabPage object to add</param>
         /// <param name="bo">The business ojbect to represent</param>
-        private void AddTabPage(TabPage page, BusinessObjectBase bo)
+        private void AddTabPage(TabPage page, BusinessObject bo)
         {
             _tabControl.TabPages.Add(page);
             _pageBoTable.Add(page, bo);
@@ -176,7 +176,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         /// <param name="bo">The business object being represented</param>
         /// <returns>Returns the TabPage object, or null if not found</returns>
-        public TabPage GetTabPage(BusinessObjectBase bo)
+        public TabPage GetTabPage(BusinessObject bo)
         {
             if (_boPageTable.ContainsKey(bo))
             {
@@ -203,7 +203,7 @@ namespace Chillisoft.UI.Application.v2
         /// Returns the business object represented in the currently
         /// selected tab page
         /// </summary>
-        public BusinessObjectBase CurrentBusinessObject
+        public BusinessObject CurrentBusinessObject
         {
             get { return GetBo(_tabControl.SelectedTab); }
             set { _tabControl.SelectedTab = GetTabPage(value); }

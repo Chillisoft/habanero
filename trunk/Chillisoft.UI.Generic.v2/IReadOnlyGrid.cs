@@ -8,7 +8,7 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     /// <param name="sender">The object that notified of the event</param>
     /// <param name="e">Attached arguments regarding the event</param>
-    public delegate void RowDoubleClickedHandler(Object sender, BusinessObjectEventArgs e);
+    public delegate void RowDoubleClickedHandler(Object sender, BOEventArgs e);
 
     /// <summary>
     /// An interface to model a grid that cannot be edited directly
@@ -18,13 +18,13 @@ namespace Chillisoft.UI.Generic.v2
         /// <summary>
         /// Gets and sets the currently selected business object
         /// </summary>
-        BusinessObjectBase SelectedBusinessObject { set; get; }
+        BusinessObject SelectedBusinessObject { set; get; }
         
         /// <summary>
         /// Adds a business object to the collection being represented
         /// </summary>
         /// <param name="bo">The business object to add</param>
-        void AddBusinessObject(BusinessObjectBase bo);
+        void AddBusinessObject(BusinessObject bo);
 
         /// <summary>
         /// The event of a row being double-clicked

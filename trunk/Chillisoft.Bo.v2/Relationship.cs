@@ -8,7 +8,7 @@ namespace Chillisoft.Bo.v2
     public abstract class Relationship
     {
         protected RelationshipDef _relDef;
-        protected readonly BusinessObjectBase _owningBo;
+        protected readonly BusinessObject _owningBo;
         protected RelKey _relKey;
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public Relationship(BusinessObjectBase owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        public Relationship(BusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
         {
             _relDef = lRelDef;
             _owningBo = owningBo;

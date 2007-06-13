@@ -35,11 +35,11 @@ namespace Chillisoft.Test.UI.Application.v2
 
         private void SetupGrid(ClassDef classDef)
         {
-            BusinessObjectBaseCollection col = new BusinessObjectBaseCollection(classDef);
-            BusinessObjectBase bo1 = classDef.CreateNewBusinessObject();
+            BusinessObjectCollection col = new BusinessObjectCollection(classDef);
+            BusinessObject bo1 = classDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp", "Value1");
             bo1.SetPropertyValue("TestProp2", "Value2");
-            BusinessObjectBase bo2 = classDef.CreateNewBusinessObject();
+            BusinessObject bo2 = classDef.CreateNewBusinessObject();
             bo2.SetPropertyValue("TestProp", "2Value1");
             bo2.SetPropertyValue("TestProp2", "2Value2");
             col.Add(bo1);

@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Chillisoft.Bo.v2;
 using Chillisoft.Generic.v2;
 using Chillisoft.UI.BOControls.v2;
+using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
 
 namespace Chillisoft.UI.Application.v2
 {
@@ -25,7 +26,7 @@ namespace Chillisoft.UI.Application.v2
         /// false if the user cancelled the edits</returns>
         public bool EditObject(Object obj)
         {
-            BusinessObjectBase bo = (BusinessObjectBase) obj;
+            BusinessObject bo = (BusinessObject) obj;
             DefaultBOEditorForm form = CreateEditorForm(bo);
             if (form.ShowDialog() == DialogResult.OK)
             {
@@ -42,7 +43,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         /// <param name="bo">The business object to edit</param>
         /// <returns>Returns a DefaultBOEditorForm object</returns>
-        protected virtual DefaultBOEditorForm CreateEditorForm(BusinessObjectBase bo)
+        protected virtual DefaultBOEditorForm CreateEditorForm(BusinessObject bo)
         {
             return new DefaultBOEditorForm(bo);
         }

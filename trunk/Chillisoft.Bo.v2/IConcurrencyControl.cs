@@ -23,7 +23,7 @@ namespace Chillisoft.Bo.v2
         /// displayed to the user
         /// </summary>
         /// <param name="busObj">The business object to be loaded</param>
-        void CheckConcurrencyOnGettingObjectFromObjectManager(BusinessObjectBase busObj);
+        void CheckConcurrencyOnGettingObjectFromObjectManager(BusinessObject busObj);
 
         /// <summary>
         /// Checks concurrency before the user begins editing an object, in
@@ -32,14 +32,14 @@ namespace Chillisoft.Bo.v2
         /// failure
         /// </summary>
         /// <param name="busObj">The business object to be edited</param>
-        void CheckConcurrencyBeforeBeginEditing(BusinessObjectBase busObj);
+        void CheckConcurrencyBeforeBeginEditing(BusinessObject busObj);
 
         /// <summary>
         /// Checks concurrency before persisting an object to the database
         /// in order to prevent one of two conflicting copies from being lost
         /// </summary>
         /// <param name="busObj">The business object to be persisted</param>
-        void CheckConcurrencyBeforePersisting(BusinessObjectBase busObj);
+        void CheckConcurrencyBeforePersisting(BusinessObject busObj);
 
         /// <summary>
         /// Many optimistic concurrency control strategies rely on updating 

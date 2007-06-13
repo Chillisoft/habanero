@@ -136,7 +136,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="subClassDef">The sub-class definition</param>
         /// <param name="subClassObj">The sub-class</param>
         /// <returns>Returns a BOKey object</returns>
-        public static BOKey GetSuperClassKey(ClassDef subClassDef, BusinessObjectBase subClassObj)
+        public static BOKey GetSuperClassKey(ClassDef subClassDef, BusinessObject subClassObj)
         {
             BOKey superKey = subClassDef.SuperClassDef.PrimaryKeyDef.CreateBOKey(subClassObj.GetBOPropCol());
             return superKey;

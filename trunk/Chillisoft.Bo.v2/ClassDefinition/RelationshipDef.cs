@@ -32,7 +32,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             ArgumentValidationHelper.CheckArgumentNotNull(relKeyDef, "relKeyDef");
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             ArgumentValidationHelper.CheckArgumentIsSubType(relatedObjectClassType, "relatedObjectClassType",
-                                                            typeof (BusinessObjectBase));
+                                                            typeof (BusinessObject));
 
             _relatedObjectClassType = relatedObjectClassType;
             _relKeyDef = relKeyDef;
@@ -80,6 +80,6 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// manage this relationship</param>
         /// <param name="lBOPropCol">The collection of properties</param>
         /// <returns>The new relationship object created</returns>
-        internal abstract Relationship CreateRelationship(BusinessObjectBase owningBo, BOPropCol lBOPropCol);
+        internal abstract Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol);
     }
 }
