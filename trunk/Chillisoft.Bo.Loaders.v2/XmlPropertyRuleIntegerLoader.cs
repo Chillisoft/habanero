@@ -8,8 +8,8 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlPropertyRuleIntegerLoader : XmlPropertyRuleLoader
     {
-        private int itsMinValue;
-        private int itsMaxValue;
+        private int _minValue;
+        private int _maxValue;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -32,7 +32,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a PropRuleInteger object</returns>
         protected override object Create()
         {
-            return new PropRuleInteger(itsRuleName, itsIsCompulsory, itsMinValue, itsMaxValue);
+            return new PropRuleInteger(_ruleName, _isCompulsory, _minValue, _maxValue);
         }
 
         /// <summary>
@@ -42,19 +42,19 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             if (itsReader.GetAttribute("minValue") != "")
             {
-                itsMinValue = Convert.ToInt32(itsReader.GetAttribute("minValue"));
+                _minValue = Convert.ToInt32(itsReader.GetAttribute("minValue"));
             }
             else
             {
-                itsMinValue = int.MinValue;
+                _minValue = int.MinValue;
             }
             if (itsReader.GetAttribute("maxValue") != "")
             {
-                itsMaxValue = Convert.ToInt32(itsReader.GetAttribute("maxValue"));
+                _maxValue = Convert.ToInt32(itsReader.GetAttribute("maxValue"));
             }
             else
             {
-                itsMaxValue = int.MaxValue;
+                _maxValue = int.MaxValue;
             }
         }
     }

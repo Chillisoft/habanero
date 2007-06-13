@@ -11,16 +11,16 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlRelationshipLoader : XmlLoader
     {
-        private PropDefCol itsPropDefCol;
-		private Type itsRelatedClassType;
-		private RelKeyDef itsRelKeyDef;
-        private string itsName;
-        private string itsType;
-        private bool itsKeepReferenceToRelatedObject;
-        private string itsOrderBy;
-        private int itsMinNoOfRelatedObjects;
-        private int itsMaxNoOfRelatedObjects;
-        private DeleteParentAction itsDeleteParentAction;
+        private PropDefCol _propDefCol;
+		private Type _relatedClassType;
+		private RelKeyDef _relKeyDef;
+        private string _name;
+        private string _type;
+        private bool _keepReferenceToRelatedObject;
+        private string _orderBy;
+        private int _minNoOfRelatedObjects;
+        private int _maxNoOfRelatedObjects;
+        private DeleteParentAction _deleteParentAction;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -56,7 +56,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a relationship definition</returns>
         public RelationshipDef LoadRelationship(XmlElement relationshipElement, PropDefCol propDefs)
         {
-            itsPropDefCol = propDefs;
+            _propDefCol = propDefs;
             return (RelationshipDef) this.Load(relationshipElement);
         }
 
@@ -73,18 +73,18 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </exception>
         protected override object Create()
         {
-            if (itsType == "single")
+            if (_type == "single")
             {
                 return
-                    new SingleRelationshipDef(itsName, itsRelatedClassType, itsRelKeyDef,
-                                              itsKeepReferenceToRelatedObject);
+                    new SingleRelationshipDef(_name, _relatedClassType, _relKeyDef,
+                                              _keepReferenceToRelatedObject);
             }
-            else if (itsType == "multiple")
+            else if (_type == "multiple")
             {
                 return
-                    new MultipleRelationshipDef(itsName, itsRelatedClassType, itsRelKeyDef,
-                                                itsKeepReferenceToRelatedObject, itsOrderBy, itsMinNoOfRelatedObjects,
-                                                itsMaxNoOfRelatedObjects, itsDeleteParentAction);
+                    new MultipleRelationshipDef(_name, _relatedClassType, _relKeyDef,
+                                                _keepReferenceToRelatedObject, _orderBy, _minNoOfRelatedObjects,
+                                                _maxNoOfRelatedObjects, _deleteParentAction);
             }
             else
             {
@@ -113,21 +113,21 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             string relatedClassName = itsReader.GetAttribute("relatedType");
             string relatedAssemblyName = itsReader.GetAttribute("relatedAssembly");
-            itsRelatedClassType = TypeLoader.LoadType(relatedAssemblyName, relatedClassName);
-            itsName = itsReader.GetAttribute("name");
-            itsType = itsReader.GetAttribute("type");
+            _relatedClassType = TypeLoader.LoadType(relatedAssemblyName, relatedClassName);
+            _name = itsReader.GetAttribute("name");
+            _type = itsReader.GetAttribute("type");
             if (itsReader.GetAttribute("keepReferenceToRelatedObject") == "true")
             {
-                itsKeepReferenceToRelatedObject = true;
+                _keepReferenceToRelatedObject = true;
             }
             else
             {
-                itsKeepReferenceToRelatedObject = false;
+                _keepReferenceToRelatedObject = false;
             }
-            itsOrderBy = itsReader.GetAttribute("orderBy");
-            itsMinNoOfRelatedObjects = Convert.ToInt32(itsReader.GetAttribute("minNoOfRelatedObjects"));
-            itsMaxNoOfRelatedObjects = Convert.ToInt32(itsReader.GetAttribute("maxNoOfRelatedObjects"));
-            itsDeleteParentAction =
+            _orderBy = itsReader.GetAttribute("orderBy");
+            _minNoOfRelatedObjects = Convert.ToInt32(itsReader.GetAttribute("minNoOfRelatedObjects"));
+            _maxNoOfRelatedObjects = Convert.ToInt32(itsReader.GetAttribute("maxNoOfRelatedObjects"));
+            _deleteParentAction =
                 (DeleteParentAction)
                 Enum.Parse(typeof (DeleteParentAction), itsReader.GetAttribute("deleteParentAction"));
         }
@@ -138,12 +138,12 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadRelKeyDef()
         {
-            itsRelKeyDef = new RelKeyDef();
+            _relKeyDef = new RelKeyDef();
             itsReader.Read();
             do
             {
-                itsRelKeyDef.Add(
-                    new RelPropDef(itsPropDefCol[itsReader.GetAttribute("name")],
+                _relKeyDef.Add(
+                    new RelPropDef(_propDefCol[itsReader.GetAttribute("name")],
                                    itsReader.GetAttribute("relatedPropName")));
                 itsReader.Read();
             } while (itsReader.Name == "relProp");

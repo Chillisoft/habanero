@@ -9,7 +9,7 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlUIFormDefLoader : XmlLoader
     {
-        private UIFormDef itsUIFormDef;
+        private UIFormDef _uiFormDef;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -52,7 +52,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a UIFormDef object</returns>
         protected override object Create()
         {
-            return itsUIFormDef;
+            return _uiFormDef;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsUIFormDef = new UIFormDef();
+            _uiFormDef = new UIFormDef();
 
             //itsReader.Read();
             //string className = itsReader.GetAttribute("class");
@@ -69,15 +69,15 @@ namespace Chillisoft.Bo.Loaders.v2
             //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, itsReader.GetAttribute("name"));
 
             itsReader.Read();
-            itsUIFormDef.Width = Convert.ToInt32(itsReader.GetAttribute("width"));
-            itsUIFormDef.Height = Convert.ToInt32(itsReader.GetAttribute("height"));
-            itsUIFormDef.Heading = itsReader.GetAttribute("heading");
+            _uiFormDef.Width = Convert.ToInt32(itsReader.GetAttribute("width"));
+            _uiFormDef.Height = Convert.ToInt32(itsReader.GetAttribute("height"));
+            _uiFormDef.Heading = itsReader.GetAttribute("heading");
 
             itsReader.Read();
             XmlUIFormTabLoader loader = new XmlUIFormTabLoader(itsDtdPath);
             do
             {
-                itsUIFormDef.Add(loader.LoadUIFormTab(itsReader.ReadOuterXml()));
+                _uiFormDef.Add(loader.LoadUIFormTab(itsReader.ReadOuterXml()));
             } while (itsReader.Name == "uiFormTab");
         }
     }

@@ -8,8 +8,8 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlPropertyRuleDecimalLoader : XmlPropertyRuleLoader
     {
-        private decimal itsMinValue;
-        private decimal itsMaxValue;
+        private decimal _minValue;
+        private decimal _maxValue;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -32,7 +32,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a PropRuleDecimal object</returns>
         protected override object Create()
         {
-            return new PropRuleDecimal(itsRuleName, itsIsCompulsory, itsMinValue, itsMaxValue );
+            return new PropRuleDecimal(_ruleName, _isCompulsory, _minValue, _maxValue );
         }
 
         /// <summary>
@@ -42,19 +42,19 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             if (itsReader.GetAttribute("minValue") != "")
             {
-                itsMinValue = Convert.ToDecimal(itsReader.GetAttribute("minValue"));
+                _minValue = Convert.ToDecimal(itsReader.GetAttribute("minValue"));
             }
             else
             {
-                itsMinValue = int.MinValue;
+                _minValue = int.MinValue;
             }
             if (itsReader.GetAttribute("maxValue") != "")
             {
-                itsMaxValue = Convert.ToDecimal(itsReader.GetAttribute("maxValue"));
+                _maxValue = Convert.ToDecimal(itsReader.GetAttribute("maxValue"));
             }
             else
             {
-                itsMaxValue = int.MaxValue;
+                _maxValue = int.MaxValue;
             }            
         }
     }

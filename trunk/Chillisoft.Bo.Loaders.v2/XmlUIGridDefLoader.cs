@@ -8,7 +8,7 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlUIGridDefLoader : XmlLoader
     {
-        private UIGridDef itsCollection;
+        private UIGridDef _collection;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -51,7 +51,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a UIGridDef object</returns>
         protected override object Create()
         {
-            return itsCollection;
+            return _collection;
         }
 
         /// <summary>
@@ -59,20 +59,20 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsCollection = new UIGridDef();
+            _collection = new UIGridDef();
 
             //itsReader.Read();
             //string className = itsReader.GetAttribute("class");
             //string assemblyName = itsReader.GetAttribute("assembly");
-            //itsCollection.Class = TypeLoader.LoadType(assemblyName, className);
-            //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, itsReader.GetAttribute("name"));
+            //_collection.Class = TypeLoader.LoadType(assemblyName, className);
+            //_collection.Name = new UIPropertyCollectionName(_collection.Class, itsReader.GetAttribute("name"));
 
             itsReader.Read();
             itsReader.Read();
             XmlUIGridPropertyLoader propLoader = new XmlUIGridPropertyLoader(itsDtdPath);
             do
             {
-                itsCollection.Add(propLoader.LoadUIProperty(itsReader.ReadOuterXml()));
+                _collection.Add(propLoader.LoadUIProperty(itsReader.ReadOuterXml()));
             } while (itsReader.Name == "uiGridProperty");
         }
     }

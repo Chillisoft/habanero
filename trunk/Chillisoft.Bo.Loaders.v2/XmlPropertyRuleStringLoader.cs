@@ -8,8 +8,8 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlPropertyRuleStringLoader : XmlPropertyRuleLoader
     {
-        private int itsMinLength;
-        private int itsMaxLength;
+        private int _minLength;
+        private int _maxLength;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -32,7 +32,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a PropRuleString object</returns>
         protected override object Create()
         {
-            return new PropRuleString(itsRuleName, itsIsCompulsory, itsMinLength, itsMaxLength);
+            return new PropRuleString(_ruleName, _isCompulsory, _minLength, _maxLength);
         }
 
         /// <summary>
@@ -40,8 +40,8 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadPropertyRuleFromReader()
         {
-            itsMinLength = Convert.ToInt32(itsReader.GetAttribute("minLength"));
-            itsMaxLength = Convert.ToInt32(itsReader.GetAttribute("maxLength"));
+            _minLength = Convert.ToInt32(itsReader.GetAttribute("minLength"));
+            _maxLength = Convert.ToInt32(itsReader.GetAttribute("maxLength"));
         }
     }
 }

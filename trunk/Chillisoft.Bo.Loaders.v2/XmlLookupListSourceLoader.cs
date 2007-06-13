@@ -10,8 +10,8 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public abstract class XmlLookupListSourceLoader : XmlLoader
     {
-        protected string itsRuleName;
-        protected bool itsIsCompulsory;
+        protected string _ruleName;
+        protected bool _isCompulsory;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path

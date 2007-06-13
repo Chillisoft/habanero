@@ -8,7 +8,7 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlSimpleLookupListSourceLoader : XmlLookupListSourceLoader
     {
-        private StringGuidPairCollection itsStringGuidPairCollection;
+        private StringGuidPairCollection _stringGuidPairCollection;
 
         /// <summary>
         /// Constructor to initialise a loader
@@ -23,7 +23,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <param name="dtdPath">The dtd path</param>
         public XmlSimpleLookupListSourceLoader(string dtdPath) : base(dtdPath)
         {
-            itsStringGuidPairCollection = new StringGuidPairCollection();
+            _stringGuidPairCollection = new StringGuidPairCollection();
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Chillisoft.Bo.Loaders.v2
             itsReader.Read();
             while (itsReader.Name == "stringGuidPair")
             {
-                itsStringGuidPairCollection.Add(
+                _stringGuidPairCollection.Add(
                     new StringGuidPair(itsReader.GetAttribute("string"), new Guid(itsReader.GetAttribute("guid"))));
                 itsReader.Read();
             }
@@ -46,7 +46,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a SimpleLookupListSource object</returns>
         protected override object Create()
         {
-            return new SimpleLookupListSource(itsStringGuidPairCollection);
+            return new SimpleLookupListSource(_stringGuidPairCollection);
         }
     }
 }

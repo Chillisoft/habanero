@@ -29,7 +29,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a PropRuleGuid object</returns>
         protected override object Create()
         {
-            return new PropRuleGuid(itsRuleName, itsIsCompulsory);
+            return new PropRuleGuid(_ruleName, _isCompulsory);
         }
 
         /// <summary>

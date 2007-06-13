@@ -10,8 +10,8 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlKeyLoader : XmlLoader
     {
-        private KeyDef itsKeyDef;
-        private PropDefCol itsPropDefCol;
+        private KeyDef _keyDef;
+        private PropDefCol _propDefCol;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -49,7 +49,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns the key definition</returns>
         public KeyDef LoadKey(XmlElement keyElement, PropDefCol propDefs)
         {
-            itsPropDefCol = propDefs;
+            _propDefCol = propDefs;
             return (KeyDef) Load(keyElement);
         }
 
@@ -59,7 +59,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a KeyDef object</returns>
         protected override object Create()
         {
-            return itsKeyDef;
+            return _keyDef;
         }
 
         /// <summary>
@@ -84,11 +84,11 @@ namespace Chillisoft.Bo.Loaders.v2
             string name = itsReader.GetAttribute("name");
             if (name != null)
             {
-                itsKeyDef = new KeyDef(name);
+                _keyDef = new KeyDef(name);
             }
             else
             {
-                itsKeyDef = new KeyDef();
+                _keyDef = new KeyDef();
             }
         }
 
@@ -97,7 +97,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadKeyIgnoreNulls()
         {
-            itsKeyDef.IgnoreNulls = Convert.ToBoolean(itsReader.GetAttribute("ignoreNulls"));
+            _keyDef.IgnoreNulls = Convert.ToBoolean(itsReader.GetAttribute("ignoreNulls"));
         }
 
         /// <summary>
@@ -114,9 +114,9 @@ namespace Chillisoft.Bo.Loaders.v2
             do
             {
                 string propName = itsReader.GetAttribute("name");
-                if (itsPropDefCol[propName] != null)
+                if (_propDefCol[propName] != null)
                 {
-                    itsKeyDef.Add(itsPropDefCol[propName]);
+                    _keyDef.Add(_propDefCol[propName]);
                 }
                 else
                 {

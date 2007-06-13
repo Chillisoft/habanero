@@ -12,8 +12,8 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public abstract class XmlPropertyRuleLoader : XmlLoader
     {
-        protected string itsRuleName;
-        protected bool itsIsCompulsory;
+        protected string _ruleName;
+        protected bool _isCompulsory;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -58,14 +58,14 @@ namespace Chillisoft.Bo.Loaders.v2
         protected override sealed void LoadFromReader()
         {
             itsReader.Read();
-            itsRuleName = itsReader.GetAttribute("name");
+            _ruleName = itsReader.GetAttribute("name");
             if (itsReader.GetAttribute("isCompulsory") == "true")
             {
-                itsIsCompulsory = true;
+                _isCompulsory = true;
             }
             else
             {
-                itsIsCompulsory = false;
+                _isCompulsory = false;
             }
             LoadPropertyRuleFromReader();
         }

@@ -10,8 +10,8 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlPrimaryKeyLoader : XmlLoader
     {
-        private PrimaryKeyDef itsPrimaryKeyDef;
-        private PropDefCol itsPropDefCol;
+        private PrimaryKeyDef _primaryKeyDef;
+        private PropDefCol _propDefCol;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -49,7 +49,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns the primary key definition</returns>
         public PrimaryKeyDef LoadPrimaryKey(XmlElement primaryKeyElement, PropDefCol propDefs)
         {
-            itsPropDefCol = propDefs;
+            _propDefCol = propDefs;
             return (PrimaryKeyDef) Load(primaryKeyElement);
         }
 
@@ -59,7 +59,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a PrimaryKeyDef object</returns>
         protected override object Create()
         {
-            return itsPrimaryKeyDef;
+            return _primaryKeyDef;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsPrimaryKeyDef = new PrimaryKeyDef();
+            _primaryKeyDef = new PrimaryKeyDef();
 
             itsReader.Read();
             LoadIsObjectID();
@@ -82,11 +82,11 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             if (itsReader.GetAttribute("isObjectID") == "true")
             {
-                itsPrimaryKeyDef.IsObjectID = true;
+                _primaryKeyDef.IsObjectID = true;
             }
             else
             {
-                itsPrimaryKeyDef.IsObjectID = false;
+                _primaryKeyDef.IsObjectID = false;
             }
         }
 
@@ -110,9 +110,9 @@ namespace Chillisoft.Bo.Loaders.v2
                         "must have a 'name' attribute that provides the name of the " +
                         "property definition that serves as the primary key.");
                 }
-                if (itsPropDefCol[propName] != null)
+                if (_propDefCol[propName] != null)
                 {
-                    itsPrimaryKeyDef.Add(itsPropDefCol[propName]);
+                    _primaryKeyDef.Add(_propDefCol[propName]);
                 }
                 else
                 {

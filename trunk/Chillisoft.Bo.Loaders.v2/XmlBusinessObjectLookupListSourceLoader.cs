@@ -9,7 +9,7 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlBusinessObjectLookupListSourceLoader : XmlLookupListSourceLoader
     {
-        private Type itsType;
+        private Type _type;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -33,7 +33,7 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             string className = itsReader.GetAttribute("className");
             string assemblyName = itsReader.GetAttribute("assemblyName");
-            itsType = TypeLoader.LoadType(assemblyName, className);
+            _type = TypeLoader.LoadType(assemblyName, className);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a BusinessObjectLookupListSource object</returns>
         protected override object Create()
         {
-            return new BusinessObjectLookupListSource(itsType);
+            return new BusinessObjectLookupListSource(_type);
         }
     }
 }

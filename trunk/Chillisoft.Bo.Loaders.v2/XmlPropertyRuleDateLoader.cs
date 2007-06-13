@@ -8,8 +8,8 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlPropertyRuleDateLoader : XmlPropertyRuleLoader
     {
-        private DateTime itsMinValue = DateTime.MinValue;
-        private DateTime itsMaxValue = DateTime.MinValue;
+        private DateTime _minValue = DateTime.MinValue;
+        private DateTime _maxValue = DateTime.MinValue;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -32,13 +32,13 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a PropRuleDate object</returns>
         protected override object Create()
         {
-            if (!itsMinValue.Equals(DateTime.MinValue))
+            if (!_minValue.Equals(DateTime.MinValue))
             {
-                return new PropRuleDate(itsRuleName, itsIsCompulsory, itsMinValue, itsMaxValue);
+                return new PropRuleDate(_ruleName, _isCompulsory, _minValue, _maxValue);
             }
             else
             {
-                return new PropRuleDate(itsRuleName, itsIsCompulsory);
+                return new PropRuleDate(_ruleName, _isCompulsory);
             }
         }
 
@@ -49,8 +49,8 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             if (itsReader.GetAttribute("minValue") != null)
             {
-                itsMinValue = Convert.ToDateTime(itsReader.GetAttribute("minValue"));
-                itsMaxValue = Convert.ToDateTime(itsReader.GetAttribute("maxValue"));
+                _minValue = Convert.ToDateTime(itsReader.GetAttribute("minValue"));
+                _maxValue = Convert.ToDateTime(itsReader.GetAttribute("maxValue"));
             }
         }
     }

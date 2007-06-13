@@ -10,9 +10,9 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlUIFormGridLoader : XmlLoader
     {
-        private string itsRelationshipName;
-        private Type itsGridType;
-        private string itsCorrespondingRelationshipName;
+        private string _relationshipName;
+        private Type _gridType;
+        private string _correspondingRelationshipName;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -55,7 +55,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a UIFormGrid object</returns>
         protected override object Create()
         {
-            return new UIFormGrid(itsRelationshipName, itsGridType, itsCorrespondingRelationshipName);
+            return new UIFormGrid(_relationshipName, _gridType, _correspondingRelationshipName);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadCorrespondingRelationshipName()
         {
-            itsCorrespondingRelationshipName = itsReader.GetAttribute("correspondingRelationshipName");
+            _correspondingRelationshipName = itsReader.GetAttribute("correspondingRelationshipName");
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             string className = itsReader.GetAttribute("gridType");
             string assemblyName = itsReader.GetAttribute("gridTypeAssembly");
-            itsGridType = TypeLoader.LoadType(assemblyName, className);
+            _gridType = TypeLoader.LoadType(assemblyName, className);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadRelationshipName()
         {
-            itsRelationshipName = itsReader.GetAttribute("relationshipName");
+            _relationshipName = itsReader.GetAttribute("relationshipName");
         }
     }
 }

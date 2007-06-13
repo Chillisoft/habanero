@@ -11,12 +11,12 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlUIFormPropertyLoader : XmlLoader
     {
-        private string itsLabel;
-        private string itsPropertyName;
-        private string itsMapperTypeName;
-        private Type itsControlType;
-        private bool itsIsReadOnly;
-        private Hashtable itsPropertyAttributes;
+        private string _label;
+        private string _propertyName;
+        private string _mapperTypeName;
+        private Type _controlType;
+        private bool _isReadOnly;
+        private Hashtable _propertyAttributes;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -60,8 +60,8 @@ namespace Chillisoft.Bo.Loaders.v2
         protected override object Create()
         {
             return
-                new UIFormProperty(itsLabel, itsPropertyName, itsControlType, itsMapperTypeName, itsIsReadOnly,
-                                   itsPropertyAttributes);
+                new UIFormProperty(_label, _propertyName, _controlType, _mapperTypeName, _isReadOnly,
+                                   _propertyAttributes);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadMapperTypeName()
         {
-            itsMapperTypeName = itsReader.GetAttribute("mapperTypeName");
+            _mapperTypeName = itsReader.GetAttribute("mapperTypeName");
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             string controlTypeName = itsReader.GetAttribute("controlTypeName");
             string controlAssemblyName = itsReader.GetAttribute("controlAssemblyName");
-            itsControlType = TypeLoader.LoadType(controlAssemblyName, controlTypeName);
+            _controlType = TypeLoader.LoadType(controlAssemblyName, controlTypeName);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadPropertyName()
         {
-            itsPropertyName = itsReader.GetAttribute("propertyName");
+            _propertyName = itsReader.GetAttribute("propertyName");
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadLabel()
         {
-            itsLabel = itsReader.GetAttribute("label");
+            _label = itsReader.GetAttribute("label");
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadIsReadOnly()
         {
-            itsIsReadOnly = Convert.ToBoolean(itsReader.GetAttribute("isReadOnly"));
+            _isReadOnly = Convert.ToBoolean(itsReader.GetAttribute("isReadOnly"));
         }
 
         /// <summary>
@@ -131,14 +131,14 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadAttributes()
         {
-            itsPropertyAttributes = new Hashtable();
+            _propertyAttributes = new Hashtable();
             System.Console.WriteLine(itsReader.Name);
             itsReader.Read();
             System.Console.WriteLine(itsReader.Name);
 
             while (itsReader.Name == "uiFormPropertyAtt")
             {
-                itsPropertyAttributes.Add(itsReader.GetAttribute("name"), itsReader.GetAttribute("value"));
+                _propertyAttributes.Add(itsReader.GetAttribute("name"), itsReader.GetAttribute("value"));
                 itsReader.Read();
             }
         }

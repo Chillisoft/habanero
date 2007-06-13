@@ -8,9 +8,9 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlUIDefLoader : XmlLoader
     {
-        private UIFormDef itsUIFormDef;
-        private UIGridDef itsUIGridDef;
-        private string itsName;
+        private UIFormDef _uiFormDef;
+        private UIGridDef _uiGridDef;
+        private string _name;
 
         //private string itsXmlUICollections;
 
@@ -65,7 +65,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a UIDef object</returns>
         protected override object Create()
         {
-            return new UIDef(itsName, itsUIFormDef, itsUIGridDef);
+            return new UIDef(_name, _uiFormDef, _uiGridDef);
         }
 
         /// <summary>
@@ -74,17 +74,17 @@ namespace Chillisoft.Bo.Loaders.v2
         protected override void LoadFromReader()
         {
             itsReader.Read();
-            itsName = itsReader.GetAttribute("name");
+            _name = itsReader.GetAttribute("name");
             itsReader.Read();
             if (itsReader.Name == "uiGridDef")
             {
                 XmlUIGridDefLoader loader = new XmlUIGridDefLoader(itsDtdPath);
-                itsUIGridDef = loader.LoadUIGridDef(itsReader.ReadOuterXml());
+                _uiGridDef = loader.LoadUIGridDef(itsReader.ReadOuterXml());
             }
             if (itsReader.Name == "uiFormDef")
             {
                 XmlUIFormDefLoader loader = new XmlUIFormDefLoader(itsDtdPath);
-                itsUIFormDef = loader.LoadUIFormDef(itsReader.ReadOuterXml());
+                _uiFormDef = loader.LoadUIFormDef(itsReader.ReadOuterXml());
             }
         }
     }

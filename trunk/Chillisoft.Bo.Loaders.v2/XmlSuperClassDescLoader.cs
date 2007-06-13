@@ -13,10 +13,10 @@ namespace Chillisoft.Bo.Loaders.v2
     /// or def or nothing
     public class XmlSuperClassDescLoader : XmlLoader
     {
-        private ORMapping _ORMapping;
-        //private ClassDef itsSuperClassDef;
-    	private string _ClassName;
-    	private string _AssemblyName;
+        private ORMapping _orMapping;
+        //private ClassDef _superClassDef;
+    	private string _className;
+    	private string _assemblyName;
 
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a SuperClassDesc object</returns>
         protected override object Create()
         {
-			return new SuperClassDesc(_AssemblyName, _ClassName, _ORMapping);
-			//return new SuperClassDesc(itsSuperClassDef, _ORMapping);
+			return new SuperClassDesc(_assemblyName, _className, _orMapping);
+			//return new SuperClassDesc(_superClassDef, _orMapping);
 		}
 
         /// <summary>
@@ -73,10 +73,10 @@ namespace Chillisoft.Bo.Loaders.v2
         protected override void LoadFromReader()
         {
             itsReader.Read();
-            _ClassName = itsReader.GetAttribute("className");
-            _AssemblyName = itsReader.GetAttribute("assemblyName");
-			//itsSuperClassDef = ClassDef.GetClassDefCol[assemblyName, className];
-			_ORMapping = (ORMapping)Enum.Parse(typeof(ORMapping), itsReader.GetAttribute("orMapping"));
+            _className = itsReader.GetAttribute("className");
+            _assemblyName = itsReader.GetAttribute("assemblyName");
+			//_superClassDef = ClassDef.GetClassDefCol[assemblyName, className];
+			_orMapping = (ORMapping)Enum.Parse(typeof(ORMapping), itsReader.GetAttribute("orMapping"));
         }
     }
 }

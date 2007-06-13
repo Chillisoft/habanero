@@ -11,12 +11,12 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlPropertyLoader : XmlLoader
     {
-        private Type itsPropertyType;
-        private cbsPropReadWriteRule itsReadWriteRule;
-        private String itsPropertyName;
-        private object itsDefaultValue;
-        private string itsDatabaseFieldName;
-        private PropDef itsPropDef;
+        private Type _propertyType;
+        private cbsPropReadWriteRule _readWriteRule;
+        private String _propertyName;
+        private object _defaultValue;
+        private string _databaseFieldName;
+        private PropDef _propDef;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -67,7 +67,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a PropDef object</returns>
         protected override object Create()
         {
-            return itsPropDef;
+            return _propDef;
         }
 
         /// <summary>
@@ -84,26 +84,26 @@ namespace Chillisoft.Bo.Loaders.v2
 
             itsReader.Read();
 
-            if (itsDatabaseFieldName != null)
+            if (_databaseFieldName != null)
             {
-                itsPropDef =
-                    new PropDef(itsPropertyName, itsPropertyType, itsReadWriteRule, itsDatabaseFieldName,
-                                itsDefaultValue);
+                _propDef =
+                    new PropDef(_propertyName, _propertyType, _readWriteRule, _databaseFieldName,
+                                _defaultValue);
             }
             else
             {
-                itsPropDef = new PropDef(itsPropertyName, itsPropertyType, itsReadWriteRule, itsDefaultValue);
+                _propDef = new PropDef(_propertyName, _propertyType, _readWriteRule, _defaultValue);
             }
 
             if (itsReader.Name.Length >= 12 && itsReader.Name.Substring(0, 12) == "propertyRule")
             {
-                XmlPropertyRuleLoader.LoadRuleIntoProperty(itsReader.ReadOuterXml(), itsPropDef, itsDtdPath);
+                XmlPropertyRuleLoader.LoadRuleIntoProperty(itsReader.ReadOuterXml(), _propDef, itsDtdPath);
             }
             int len = "lookupListSource".Length;
             if (itsReader.Name.Length >= len &&
                 itsReader.Name.Substring(itsReader.Name.Length - len, len) == "LookupListSource")
             {
-                XmlLookupListSourceLoader.LoadLookupListSourceIntoProperty(itsReader.ReadOuterXml(), itsPropDef,
+                XmlLookupListSourceLoader.LoadLookupListSourceIntoProperty(itsReader.ReadOuterXml(), _propDef,
                                                                            itsDtdPath);
             }
         }
@@ -113,8 +113,8 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadPropertyName()
         {
-            itsPropertyName = itsReader.GetAttribute("name");
-            if (itsPropertyName == null || itsPropertyName.Length == 0)
+            _propertyName = itsReader.GetAttribute("name");
+            if (_propertyName == null || _propertyName.Length == 0)
             {
                 throw new XmlException("A 'propertyDef' element has no 'name' attribute " +
                    "set. Each 'propertyDef' element requires a 'name' attribute that " +
@@ -131,7 +131,7 @@ namespace Chillisoft.Bo.Loaders.v2
             string typeName = itsReader.GetAttribute("type");
             try
             {
-                itsPropertyType = TypeLoader.LoadType(assemblyName, typeName);
+                _propertyType = TypeLoader.LoadType(assemblyName, typeName);
             }
             catch (Exception ex)
             {
@@ -148,7 +148,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadReadWriteRule()
         {
-            itsReadWriteRule =
+            _readWriteRule =
                 (cbsPropReadWriteRule)
                 Enum.Parse(typeof (cbsPropReadWriteRule), itsReader.GetAttribute("readWriteRule"));
         }
@@ -161,18 +161,18 @@ namespace Chillisoft.Bo.Loaders.v2
             string strDefValue = itsReader.GetAttribute("defaultValue");
             if (strDefValue != null)
             {
-                if (itsPropertyType == typeof (Guid))
+                if (_propertyType == typeof (Guid))
                 {
-                    itsDefaultValue = new Guid(strDefValue);
+                    _defaultValue = new Guid(strDefValue);
                 }
                 else
                 {
-                    itsDefaultValue = Convert.ChangeType(strDefValue, itsPropertyType);
+                    _defaultValue = Convert.ChangeType(strDefValue, _propertyType);
                 }
             }
             else
             {
-                itsDefaultValue = null;
+                _defaultValue = null;
             }
         }
 
@@ -181,7 +181,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadDatabaseFieldName()
         {
-            itsDatabaseFieldName = itsReader.GetAttribute("databaseFieldName");
+            _databaseFieldName = itsReader.GetAttribute("databaseFieldName");
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlUIFormTabLoader : XmlLoader
     {
-        private UIFormTab itsTab;
+        private UIFormTab _tab;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -51,7 +51,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a UIFormTab object</returns>
         protected override object Create()
         {
-            return itsTab;
+            return _tab;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsTab = new UIFormTab();
+            _tab = new UIFormTab();
 
             //itsReader.Read();
             //string className = itsReader.GetAttribute("class");
@@ -68,19 +68,19 @@ namespace Chillisoft.Bo.Loaders.v2
             //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, itsReader.GetAttribute("name"));
 
             itsReader.Read();
-            itsTab.Name = itsReader.GetAttribute("name");
+            _tab.Name = itsReader.GetAttribute("name");
             itsReader.Read();
             if (itsReader.Name == "uiFormGrid")
             {
                 XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(itsDtdPath);
-                itsTab.UIFormGrid = gridLoader.LoadUIFormGrid(itsReader.ReadOuterXml());
+                _tab.UIFormGrid = gridLoader.LoadUIFormGrid(itsReader.ReadOuterXml());
             }
             else
             {
                 XmlUIFormColumnLoader loader = new XmlUIFormColumnLoader(itsDtdPath);
                 do
                 {
-                    itsTab.Add(loader.LoadUIFormColumn(itsReader.ReadOuterXml()));
+                    _tab.Add(loader.LoadUIFormColumn(itsReader.ReadOuterXml()));
                 } while (itsReader.Name == "uiFormColumn");
             }
         }

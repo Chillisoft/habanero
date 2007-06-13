@@ -9,7 +9,7 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlUIFormColumnLoader : XmlLoader
     {
-        private UIFormColumn itsColumn;
+        private UIFormColumn _column;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -52,7 +52,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a UIFormColumn object</returns>
         protected override object Create()
         {
-            return itsColumn;
+            return _column;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsColumn = new UIFormColumn();
+            _column = new UIFormColumn();
 
             //itsReader.Read();
             //string className = itsReader.GetAttribute("class");
@@ -69,12 +69,12 @@ namespace Chillisoft.Bo.Loaders.v2
             //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, itsReader.GetAttribute("name"));
 
             itsReader.Read();
-            itsColumn.Width = Convert.ToInt32(itsReader.GetAttribute("width"));
+            _column.Width = Convert.ToInt32(itsReader.GetAttribute("width"));
             itsReader.Read();
             XmlUIFormPropertyLoader propLoader = new XmlUIFormPropertyLoader(itsDtdPath);
             do
             {
-                itsColumn.Add(propLoader.LoadUIProperty(itsReader.ReadOuterXml()));
+                _column.Add(propLoader.LoadUIProperty(itsReader.ReadOuterXml()));
             } while (itsReader.Name == "uiFormProperty");
         }
     }

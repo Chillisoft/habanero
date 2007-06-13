@@ -12,8 +12,8 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlClassDefsLoader : XmlLoader, IClassDefsLoader
     {
-        private IList itsClassDefList;
-        private string itsXmlClassDefs;
+        private IList _classDefList;
+        private string _xmlClassDefs;
 
         /// <summary>
         /// Constructor to initialise a new loader. If you create the object
@@ -36,7 +36,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <param name="dtdPath">The dtd path</param>
         public XmlClassDefsLoader(string xmlClassDefs, string dtdPath) : base(dtdPath)
         {
-            itsXmlClassDefs = xmlClassDefs;
+            _xmlClassDefs = xmlClassDefs;
         }
 
 
@@ -78,7 +78,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns an IList object containing the definitions</returns>
         public IList LoadClassDefs()
         {
-            return LoadClassDefs(itsXmlClassDefs);
+            return LoadClassDefs(_xmlClassDefs);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns an IList object</returns>
         protected override object Create()
         {
-            return itsClassDefList;
+            return _classDefList;
         }
 
         /// <summary>
@@ -106,13 +106,13 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsClassDefList = new ArrayList();
+            _classDefList = new ArrayList();
             itsReader.Read();
             itsReader.Read();
             XmlClassLoader classLoader = new XmlClassLoader(itsDtdPath);
             do
             {
-                itsClassDefList.Add(classLoader.LoadClass(itsReader.ReadOuterXml()));
+                _classDefList.Add(classLoader.LoadClass(itsReader.ReadOuterXml()));
             } while (itsReader.Name == "classDef");
         }
     }

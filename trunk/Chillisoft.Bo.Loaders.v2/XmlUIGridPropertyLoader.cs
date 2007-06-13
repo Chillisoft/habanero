@@ -12,12 +12,12 @@ namespace Chillisoft.Bo.Loaders.v2
     public class XmlUIGridPropertyLoader : XmlLoader
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.Loaders.v2.XmlUIGridPropertyLoader");
-        private string itsHeading;
-        private string itsPropertyName;
-        private Type itsGridControlType;
-        private bool itsIsReadOnly;
-        private int itsWidth;
-        private UIGridProperty.PropAlignment itsAlignment;
+        private string _heading;
+        private string _propertyName;
+        private Type _gridControlType;
+        private bool _isReadOnly;
+        private int _width;
+        private UIGridProperty.PropAlignment _alignment;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -61,8 +61,8 @@ namespace Chillisoft.Bo.Loaders.v2
         protected override object Create()
         {
             return
-                new UIGridProperty(itsHeading, itsPropertyName, itsGridControlType, itsIsReadOnly, itsWidth,
-                                   itsAlignment);
+                new UIGridProperty(_heading, _propertyName, _gridControlType, _isReadOnly, _width,
+                                   _alignment);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadIsReadOnly()
         {
-            itsIsReadOnly = Convert.ToBoolean(itsReader.GetAttribute("isReadOnly"));
+            _isReadOnly = Convert.ToBoolean(itsReader.GetAttribute("isReadOnly"));
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Chillisoft.Bo.Loaders.v2
                 assemblyName = "Chillisoft.UI.Generic.v2";
             }
             //log.Debug("assembly: " + assemblyName + ", class: " + className) ;
-            itsGridControlType = TypeLoader.LoadType(assemblyName, className);
+            _gridControlType = TypeLoader.LoadType(assemblyName, className);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadPropertyName()
         {
-            itsPropertyName = itsReader.GetAttribute("propertyName");
+            _propertyName = itsReader.GetAttribute("propertyName");
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadHeading()
         {
-            itsHeading = itsReader.GetAttribute("heading");
+            _heading = itsReader.GetAttribute("heading");
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadWidth()
         {
-            itsWidth = Convert.ToInt32(itsReader.GetAttribute("width"));
+            _width = Convert.ToInt32(itsReader.GetAttribute("width"));
         }
 
         /// <summary>
@@ -145,15 +145,15 @@ namespace Chillisoft.Bo.Loaders.v2
             string alignmentStr = Convert.ToString(itsReader.GetAttribute("alignment"));
             if (alignmentStr == "left")
             {
-                itsAlignment = UIGridProperty.PropAlignment.left;
+                _alignment = UIGridProperty.PropAlignment.left;
             }
             else if (alignmentStr == "right")
             {
-                itsAlignment = UIGridProperty.PropAlignment.right;
+                _alignment = UIGridProperty.PropAlignment.right;
             }
             else
             {
-                itsAlignment = UIGridProperty.PropAlignment.centre;
+                _alignment = UIGridProperty.PropAlignment.centre;
             }
         }
     }
