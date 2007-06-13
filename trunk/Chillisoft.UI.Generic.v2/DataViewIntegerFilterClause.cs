@@ -21,7 +21,7 @@ namespace Chillisoft.UI.Generic.v2
         {
             if (itsClauseOperator == FilterClauseOperator.OpLike)
             {
-                throw new CoreBizArgumentException("clauseOperator",
+                throw new HabaneroArgumentException("clauseOperator",
                                                    "Operator Like is not supported for non string operands");
             }
         }

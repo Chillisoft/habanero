@@ -227,7 +227,7 @@
     <Compile Include="ClassDefinition\SuperClassDesc.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CoreBizException.cs">
+    <Compile Include="HabaneroException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CriteriaManager\CriteriaExpression.cs">

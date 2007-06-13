@@ -40,13 +40,13 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// a property by that name has not already been added.
         /// </summary>
         /// <param name="lRelPropDef">The RelPropDef object to be added.</param>
-        /// <exception cref="CoreBizArgumentException">Thrown if the
+        /// <exception cref="HabaneroArgumentException">Thrown if the
         /// argument passed is null</exception>
         public virtual void Add(RelPropDef lRelPropDef)
         {
             if (lRelPropDef == null)
             {
-                throw new CoreBizArgumentException("lPropDef",
+                throw new HabaneroArgumentException("lPropDef",
                                                    "ClassDef-Add. You cannot add a null prop def to a classdef");
             }
             if (!Dictionary.Contains(lRelPropDef.OwnerPropertyName))

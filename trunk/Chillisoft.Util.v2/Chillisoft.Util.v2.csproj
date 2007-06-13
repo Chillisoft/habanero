@@ -122,10 +122,10 @@
     <Compile Include="ConfigFileSettingsStorer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CoreBizArgumentException.cs">
+    <Compile Include="HabaneroArgumentException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CoreStringBuilder.cs">
+    <Compile Include="HabaneroStringBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CSVFileReader.cs">

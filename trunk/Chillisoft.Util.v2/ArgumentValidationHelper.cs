@@ -32,14 +32,14 @@ namespace Chillisoft.Util.v2
         /// <param name="obj">The object to check</param>
         /// <param name="parameterName">The parameter name, which will be
         /// displayed in the error message</param>
-        /// <exception cref="CoreBizArgumentException">Thrown if the
+        /// <exception cref="HabaneroArgumentException">Thrown if the
         /// object is null</exception>
         public static void CheckArgumentNotNull(object obj,
                                                 String parameterName)
         {
             if (IsNull(obj))
             {
-                throw new CoreBizArgumentException(parameterName, parameterName + " cannot be null");
+                throw new HabaneroArgumentException(parameterName, parameterName + " cannot be null");
             }
         }
 
@@ -51,7 +51,7 @@ namespace Chillisoft.Util.v2
         /// <param name="parameterName">The parameter name, which will be
         /// displayed in the error message</param>
         /// <param name="message">The error message to display</param>
-        /// /// <exception cref="CoreBizArgumentException">Thrown if the
+        /// /// <exception cref="HabaneroArgumentException">Thrown if the
         /// object is null</exception>
         public static void CheckArgumentNotNull(object obj,
                                                 string parameterName,
@@ -59,7 +59,7 @@ namespace Chillisoft.Util.v2
         {
             if (IsNull(obj))
             {
-                throw new CoreBizArgumentException(parameterName, message);
+                throw new HabaneroArgumentException(parameterName, message);
             }
         }
 
@@ -71,7 +71,7 @@ namespace Chillisoft.Util.v2
         /// <param name="str">The string to check</param>
         /// <param name="parameterName">The parameter name, which will be
         /// displayed in the error message</param>
-        /// <exception cref="CoreBizArgumentException">Thrown if the
+        /// <exception cref="HabaneroArgumentException">Thrown if the
         /// string is empty</exception>
         public static void CheckStringArgumentNotEmpty(string str,
                                                        string parameterName)
@@ -85,7 +85,7 @@ namespace Chillisoft.Util.v2
 
             if (str.Length == 0)
             {
-                throw new CoreBizArgumentException(parameterName,
+                throw new HabaneroArgumentException(parameterName,
                                                    "Argument cannot be a zero length string.");
             }
         }
@@ -99,7 +99,7 @@ namespace Chillisoft.Util.v2
         /// <param name="parameterName">The parameter name, which will be
         /// displayed in the error message</param>
         /// <param name="message">The error message to display</param>
-        /// <exception cref="CoreBizArgumentException">Thrown if the
+        /// <exception cref="HabaneroArgumentException">Thrown if the
         /// string is empty</exception>
         public static void CheckStringArgumentNotEmpty(string str,
                                                        string parameterName,
@@ -109,7 +109,7 @@ namespace Chillisoft.Util.v2
 
             if (str.Length == 0)
             {
-                throw new CoreBizArgumentException(parameterName,
+                throw new HabaneroArgumentException(parameterName,
                                                    "Argument cannot be a zero length string.\n" + message);
             }
         }
@@ -123,7 +123,7 @@ namespace Chillisoft.Util.v2
         /// displayed in the error message</param>
         /// <param name="expectedType">The type of which the argument should
         /// be a sub-type</param>
-        /// <exception cref="CoreBizArgumentException">Thrown if the
+        /// <exception cref="HabaneroArgumentException">Thrown if the
         /// argument is not a sub-type of that given</exception>
         public static void CheckArgumentIsSubType(Type parameterType,
                                                   string parameterName,
@@ -151,7 +151,7 @@ namespace Chillisoft.Util.v2
 
             if (! (parameterType.IsSubclassOf(expectedType)))
             {
-                throw new CoreBizArgumentException(parameterName,
+                throw new HabaneroArgumentException(parameterName,
                                                    parameterName + " Argument is expected to be of type " +
                                                    expectedType.Name + ".\n" + message);
             }

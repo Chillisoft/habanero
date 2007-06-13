@@ -22,9 +22,9 @@ namespace Chillisoft.Util.v2
         ///<param name="enumItemName">The name of the Enumerated value (eg. this value for "TypeCode.Int64" would be "Int64")</param>
         public static void setEnumPropertyValue(object obj, string propertyName, string enumItemName)
         {
-            if (obj == null) throw new CoreBizArgumentException("obj");
-            if (propertyName == "") throw new CoreBizArgumentException("propertyName");
-            if (enumItemName == "") throw new CoreBizArgumentException("enumItemName");
+            if (obj == null) throw new HabaneroArgumentException("obj");
+            if (propertyName == "") throw new HabaneroArgumentException("propertyName");
+            if (enumItemName == "") throw new HabaneroArgumentException("enumItemName");
             Type parameterType = obj.GetType();
             PropertyInfo propInfo = parameterType.GetProperty(
                 propertyName, BindingFlags.Instance | BindingFlags.Public);
@@ -68,8 +68,8 @@ namespace Chillisoft.Util.v2
         ///<param name="propertyName">The name of the property being set</param>
         public static string getEnumPropertyValue(object obj, string propertyName)
         {
-            if (obj == null) throw new CoreBizArgumentException("obj");
-            if (propertyName == "") throw new CoreBizArgumentException("propertyName");
+            if (obj == null) throw new HabaneroArgumentException("obj");
+            if (propertyName == "") throw new HabaneroArgumentException("propertyName");
             Type parameterType = obj.GetType();
             PropertyInfo propInfo = parameterType.GetProperty(
                 propertyName, BindingFlags.Instance | BindingFlags.Public);

@@ -88,7 +88,7 @@ namespace Chillisoft.Test.Bo.v2
             itsConnectionMock.Verify();
         }
 
-        [Test, ExpectedException(typeof (CoreBizArgumentException))]
+        [Test, ExpectedException(typeof (HabaneroArgumentException))]
         public void TestNonSyncSupporterDoesntHaveSyncProps()
         {
             itsMyBoNonSync.GetPropertyValue("SyncVersionNumber");

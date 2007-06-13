@@ -13,7 +13,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
     /// </summary>
     public class CriteriaExpression
     {
-        private static String[] defaultOperators = new String[]
+        private static String[] _defaultOperators = new String[]
             {
                 " OR ",
                 " AND ",
@@ -29,10 +29,10 @@ namespace Chillisoft.Bo.CriteriaManager.v2
                 " IN"
             };
 
-        private CriteriaExpression mLeft;
-        private CriteriaExpression mRight;
-        private String mExpression;
-        private String[] mOperators;
+        private CriteriaExpression _left;
+        private CriteriaExpression _right;
+        private String _expression;
+        private String[] _operators;
 
         /// <summary>
         /// A constructor that takes a given expression string and parses it
@@ -41,8 +41,8 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <param name="expression">The expression string to parse</param>
         public CriteriaExpression(String expression)
         {
-            this.mOperators = defaultOperators;
-            this.parseExpression(new CoreStringBuilder(expression.Trim()));
+            this._operators = _defaultOperators;
+            this.parseExpression(new HabaneroStringBuilder(expression.Trim()));
         }
 
         /// <summary>
@@ -53,17 +53,17 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <param name="operators">The set of operators</param>
         public CriteriaExpression(String expression, String[] operators)
         {
-            this.mOperators = operators;
-            this.parseExpression(new CoreStringBuilder(expression.Trim()));
+            this._operators = operators;
+            this.parseExpression(new HabaneroStringBuilder(expression.Trim()));
         }
 
         /// <summary>
         /// Parses the expression into a linked list of expression objects
         /// </summary>
         /// <param name="expression">The expression to parse</param>
-        private void parseExpression(CoreStringBuilder expression)
+        private void parseExpression(HabaneroStringBuilder expression)
         {
-            CoreStringBuilder quotesRemovedExpression = expression;
+            HabaneroStringBuilder quotesRemovedExpression = expression;
             //Remove any sections sorounded by opening and closing ' (single quote)
             quotesRemovedExpression.RemoveQuotedSections();
 
@@ -93,49 +93,49 @@ namespace Chillisoft.Bo.CriteriaManager.v2
                         quotesRemovedExpression.Substring(1, expressionWithoutQuotes.Length - 2).PutBackQuotedSections());
                     return;
                 }
-                mLeft =
+                _left =
                     new CriteriaExpression(
                         quotesRemovedExpression.Substring(1, bracketSearchPos - 1).PutBackQuotedSections().ToString().
-                            Trim(), mOperators);
-                foreach (String op in mOperators)
+                            Trim(), _operators);
+                foreach (String op in _operators)
                 {
                     int pos = expressionWithoutQuotes.IndexOf(op, bracketSearchPos);
                     if (pos != -1)
                     {
-                        mRight =
+                        _right =
                             new CriteriaExpression(
                                 quotesRemovedExpression.Substring(pos + op.Length).PutBackQuotedSections().ToString().
-                                    Trim(), mOperators);
-                        mExpression = op;
+                                    Trim(), _operators);
+                        _expression = op;
                         break;
                     }
                 }
             }
             else
             {
-                foreach (String op in mOperators)
+                foreach (String op in _operators)
                 {
                     int pos = expressionWithoutQuotes.IndexOf(op);
                     if (pos != -1 && !IsPosInsideBrackets(expressionWithoutQuotes, pos))
                     {
-                        mLeft =
+                        _left =
                             new CriteriaExpression(
                                 quotesRemovedExpression.Substring(0, pos).PutBackQuotedSections().ToString().Trim(),
-                                mOperators);
-                        mRight =
+                                _operators);
+                        _right =
                             new CriteriaExpression(
                                 quotesRemovedExpression.Substring(pos + op.Length).PutBackQuotedSections().ToString().
-                                    Trim(), mOperators);
-                        mExpression = op;
+                                    Trim(), _operators);
+                        _expression = op;
                         break;
                     }
                 }
             }
             //If this was a terminal criteria i.e. it has no more children then
             // this is the expression there will be no right and left expression.
-            if ((mExpression == null) || (mExpression.Length == 0))
+            if ((_expression == null) || (_expression.Length == 0))
             {
-                mExpression = quotesRemovedExpression.PutBackQuotedSections().DropOuterQuotes().ToString();
+                _expression = quotesRemovedExpression.PutBackQuotedSections().DropOuterQuotes().ToString();
             }
         }
 
@@ -170,8 +170,8 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// </summary>
         public CriteriaExpression Left
         {
-            get { return mLeft; }
-            set { mLeft = value; }
+            get { return _left; }
+            set { _left = value; }
         }
 
         /// <summary>
@@ -180,8 +180,8 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// </summary>
         public CriteriaExpression Right
         {
-            get { return mRight; }
-            set { mRight = value; }
+            get { return _right; }
+            set { _right = value; }
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// </summary>
         public String Expression
         {
-            get { return mExpression; }
+            get { return _expression; }
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
                 {
                     exp += this.Left.CompleteExpression + " ";
                 }
-                exp += mExpression;
+                exp += _expression;
                 if (this.Right != null)
                 {
                     exp += " " + this.Right.CompleteExpression;

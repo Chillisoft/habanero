@@ -313,7 +313,7 @@ namespace Chillisoft.Bo.v2
                 }
                 catch (Exception exc)
                 {
-                    throw new CoreBizApplicationException(
+                    throw new HabaneroApplicationException(
                         exc.Message + "/nError occured for Property " + mPropDef.PropertyName,
                         exc);
                 }

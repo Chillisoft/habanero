@@ -943,14 +943,14 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns a BOProp object</returns>
-        /// <exception cref="CoreBizArgumentException">Thrown if no
+        /// <exception cref="HabaneroArgumentException">Thrown if no
         /// property exists by the name specified</exception>
         protected internal BOProp GetBOProp(string propName)
         {
             BOProp prop = mBOPropCol[propName];
             if (prop == null)
             {
-                throw new CoreBizArgumentException("propName", "Property with name " +
+                throw new HabaneroArgumentException("propName", "Property with name " +
                                                                propName + " does not exist for class " + ClassName);
             }
             return prop;

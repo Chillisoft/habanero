@@ -433,7 +433,17 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <returns>Returns a new business object</returns>
         internal BusinessObjectBase InstantiateBusinessObjectWithClassDef()
         {
-            return (BusinessObjectBase) Activator.CreateInstance(getMyClassType, new object[] {this});
+            try
+            {
+                return (BusinessObjectBase) Activator.CreateInstance(getMyClassType, new object[] {this});
+            }
+            catch (MissingMethodException ex)
+            {
+                throw new MissingMethodException("Each class that implements " +
+                     "BusinessObject needs to have a constructor with an argument " +
+                     "to accept a ClassDef object and pass it to the base class " +
+                     "(eg. public ClassName(ClassDef classDef) : base(classDef) {} )", ex);
+            }
         }
 
         /// <summary>

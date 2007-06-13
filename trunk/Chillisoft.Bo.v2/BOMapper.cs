@@ -119,7 +119,7 @@ namespace Chillisoft.Bo.v2
                 if (relatedBo == null)
                 {
                     return null;
-                    //throw new CoreBizApplicationException("Unable to retrieve property " + thePropName + " from a business object of type " + this.itsBusinessObject.GetType().Name);
+                    //throw new HabaneroApplicationException("Unable to retrieve property " + thePropName + " from a business object of type " + this.itsBusinessObject.GetType().Name);
                 }
                 BOMapper relatedBoMapper = new BOMapper(relatedBo);
                 return relatedBoMapper.GetPropertyValueForUser(propName);

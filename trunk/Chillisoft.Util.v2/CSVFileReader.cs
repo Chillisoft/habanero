@@ -48,7 +48,7 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns a list of values</returns>
         public IList GetValues(int numValues)
         {
-            CoreStringBuilder stringBuilder = new CoreStringBuilder(_currentLine.Replace(",\"\",", ",,"));
+            HabaneroStringBuilder stringBuilder = new HabaneroStringBuilder(_currentLine.Replace(",\"\",", ",,"));
             stringBuilder.SetQuotes(new string[] {"\""});
             stringBuilder.RemoveQuotedSections();
             if (stringBuilder.IndexOf("\"") > -1)

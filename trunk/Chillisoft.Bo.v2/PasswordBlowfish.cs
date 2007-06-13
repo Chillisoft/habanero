@@ -21,7 +21,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="isLoading">Whether the value has already been
         /// encrypted (for instance, if an encrypted value is being loaded
         /// from the database)</param>
-        /// <exception cref="CoreBizApplicationException">Thrown if the
+        /// <exception cref="HabaneroApplicationException">Thrown if the
         /// data to encrypt is not a string type</exception>
         /// TODO ERIC - why not just make the parameter a string? and not
         /// throw an exception
@@ -41,7 +41,7 @@ namespace Chillisoft.Bo.v2
             }
             else
             {
-                throw new CoreBizApplicationException("A password must be of type string");
+                throw new HabaneroApplicationException("A password must be of type string");
             }
         }
 

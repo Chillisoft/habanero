@@ -46,7 +46,7 @@ namespace Chillisoft.Test.General.v2
             {
                 itsFilledCircle.PrimaryKey.Contains("ShapeID");
             }
-            catch (CoreBizArgumentException)
+            catch (HabaneroArgumentException)
             {
                 Assert.Fail("An object using SingleTableInheritance should receive its superclass as its primary key.");
             }
@@ -61,7 +61,7 @@ namespace Chillisoft.Test.General.v2
             itsFilledCircle.GetPropertyValue("Colour");
         }
 
-        [Test, ExpectedException(typeof (CoreBizArgumentException))]
+        [Test, ExpectedException(typeof (HabaneroArgumentException))]
         public void TestFilledCircleDoesntHaveCircleID()
         {
             itsFilledCircle.GetPropertyValue("CircleID");

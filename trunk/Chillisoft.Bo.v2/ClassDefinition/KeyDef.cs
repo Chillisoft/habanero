@@ -72,13 +72,13 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// the new property definition's name will be appended to the key name.
         /// </summary>
         /// <param name="lPropDef">The PropDef object to add</param>
-        /// <exeption cref="CoreBizArgumentException">Will throw an exception
+        /// <exeption cref="HabaneroArgumentException">Will throw an exception
         /// if the argument is null</exeption>
         public virtual void Add(PropDef lPropDef)
         {
             if (lPropDef == null)
             {
-                throw new CoreBizArgumentException("lPropDef",
+                throw new HabaneroArgumentException("lPropDef",
                                                    "ClassDef-Add. You cannot add a null prop def to a classdef");
             }
             if (!Dictionary.Contains(lPropDef.PropertyName))

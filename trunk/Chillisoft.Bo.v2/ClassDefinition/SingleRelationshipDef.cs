@@ -80,7 +80,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         }
 
         [Test]
-        [ExpectedException(typeof (CoreBizArgumentException))]
+        [ExpectedException(typeof (HabaneroArgumentException))]
         public void TestCreateRelationshipWithNonBOType()
         {
             RelationshipDef relDef = new SingleRelationshipDef("Relation1", typeof (String), mRelKeyDef, false);

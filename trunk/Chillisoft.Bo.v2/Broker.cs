@@ -30,7 +30,7 @@ namespace Chillisoft.Bo.v2
         {
             if (!classDef.PrimaryKeyDef.IsObjectID)
             {
-                throw new CoreBizApplicationException(
+                throw new HabaneroApplicationException(
                     "GetBusinessObjectWithGuid can only be used for objects that use Guids as primary keys.");
             }
             else

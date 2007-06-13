@@ -53,7 +53,7 @@ namespace Chillisoft.Test.UI.Generic.v2
 
         [
             Test,
-                ExpectedException(typeof (CoreBizArgumentException),
+                ExpectedException(typeof (HabaneroArgumentException),
                     "clauseOperator not valid. Operator Like is not supported for non string operands")]
         public void TestLikeWithNonString()
         {

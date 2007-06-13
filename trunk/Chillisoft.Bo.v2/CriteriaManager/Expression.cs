@@ -10,10 +10,10 @@ namespace Chillisoft.Bo.CriteriaManager.v2
     /// TODO ERIC - review
     public class Expression : IExpression
     {
-        private IExpression mLeftExpression;
-        private SqlOperator mSqlOperator;
-        private IExpression mRightExpression;
-        private static string[] Operators = new string[] {" OR ", " AND "};
+        private IExpression _leftExpression;
+        private SqlOperator _sqlOperator;
+        private IExpression _rightExpression;
+        private static string[] _operators = new string[] {" OR ", " AND "};
 
         /// <summary>
         /// Copies across the parameterised sql info (see IParameterSQLInfo for
@@ -23,8 +23,8 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <param name="tableName">The table name</param>
         public void SetParameterSqlInfo(IParameterSqlInfo info, String tableName)
         {
-            mLeftExpression.SetParameterSqlInfo(info, tableName);
-            mRightExpression.SetParameterSqlInfo(info, tableName);
+            _leftExpression.SetParameterSqlInfo(info, tableName);
+            _rightExpression.SetParameterSqlInfo(info, tableName);
         }
 
         /// <summary>
@@ -38,9 +38,9 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         public Expression(IExpression leftExpression, SqlOperator expressionSqlOperator, IExpression rightExpression)
         {
             //TODO: Error check valid inputs
-            mLeftExpression = leftExpression;
-            mSqlOperator = expressionSqlOperator;
-            mRightExpression = rightExpression;
+            _leftExpression = leftExpression;
+            _sqlOperator = expressionSqlOperator;
+            _rightExpression = rightExpression;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// Expression object is returned.</returns>
         public static IExpression CreateExpression(string expressionClause)
         {
-            CriteriaExpression c = new CriteriaExpression(expressionClause, Operators);
+            CriteriaExpression c = new CriteriaExpression(expressionClause, _operators);
             if (c.IsLeaf())
             {
                 return new Parameter(expressionClause);
@@ -88,7 +88,7 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         private Expression(string expressionString)
         {
             //TODO: Error check valid inputs
-            CriteriaExpression c = new CriteriaExpression(expressionString, Operators);
+            CriteriaExpression c = new CriteriaExpression(expressionString, _operators);
 
             //Create left expression
             if (c.IsLeaf())
@@ -96,24 +96,24 @@ namespace Chillisoft.Bo.CriteriaManager.v2
             }
             if (c.Left.IsLeaf())
             {
-                mLeftExpression = new Parameter(c.Left.CompleteExpression);
+                _leftExpression = new Parameter(c.Left.CompleteExpression);
             }
             else
             {
-                mLeftExpression = new Expression(c.Left.CompleteExpression);
+                _leftExpression = new Expression(c.Left.CompleteExpression);
             }
 
             //Create operator
-            mSqlOperator = new SqlOperator(c.Expression);
+            _sqlOperator = new SqlOperator(c.Expression);
 
             //Create right expression
             if (c.Right.IsLeaf())
             {
-                mRightExpression = new Parameter(c.Right.CompleteExpression);
+                _rightExpression = new Parameter(c.Right.CompleteExpression);
             }
             else
             {
-                mRightExpression = new Expression(c.Right.CompleteExpression);
+                _rightExpression = new Expression(c.Right.CompleteExpression);
             }
         }
 
@@ -124,8 +124,8 @@ namespace Chillisoft.Bo.CriteriaManager.v2
         /// <returns>Returns the full expression string</returns>
         public string ExpressionString()
         {
-            return "(" + mLeftExpression.ExpressionString() + " " + mSqlOperator.ExpressionString() +
-                   " " + mRightExpression.ExpressionString() + ")";
+            return "(" + _leftExpression.ExpressionString() + " " + _sqlOperator.ExpressionString() +
+                   " " + _rightExpression.ExpressionString() + ")";
         }
 
         /// <summary>
@@ -137,10 +137,10 @@ namespace Chillisoft.Bo.CriteriaManager.v2
                                         string tableNameFieldNameRightSeparator)
         {
             statement.Statement.Append("(");
-            mLeftExpression.SqlExpressionString(statement, tableNameFieldNameLeftSeparator,
+            _leftExpression.SqlExpressionString(statement, tableNameFieldNameLeftSeparator,
                                                 tableNameFieldNameRightSeparator);
-            statement.Statement.Append(" " + mSqlOperator.ExpressionString() + " ");
-            mRightExpression.SqlExpressionString(statement, tableNameFieldNameLeftSeparator,
+            statement.Statement.Append(" " + _sqlOperator.ExpressionString() + " ");
+            _rightExpression.SqlExpressionString(statement, tableNameFieldNameLeftSeparator,
                                                  tableNameFieldNameRightSeparator);
             statement.Statement.Append(")");
         }
@@ -149,10 +149,10 @@ namespace Chillisoft.Bo.CriteriaManager.v2
 //		                                  string tableNameFieldNameRightSeperator,
 //		                                  string dateTimeLeftSeperator,
 //		                                  string dateTimeRightSeperator) {
-//			return "(" + mLeftExpression.SqlExpressionString(tableNameFieldNameLeftSeperator,
+//			return "(" + _leftExpression.SqlExpressionString(tableNameFieldNameLeftSeperator,
 //			                                                 tableNameFieldNameRightSeperator, dateTimeLeftSeperator, dateTimeRightSeperator) +
-//				" " + mSqlOperator.ExpressionString() +
-//				" " + mRightExpression.SqlExpressionString(tableNameFieldNameLeftSeperator,
+//				" " + _sqlOperator.ExpressionString() +
+//				" " + _rightExpression.SqlExpressionString(tableNameFieldNameLeftSeperator,
 //				                                           tableNameFieldNameRightSeperator, dateTimeLeftSeperator, dateTimeRightSeperator) + ")";
 //		}
     }

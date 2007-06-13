@@ -44,7 +44,7 @@ namespace Chillisoft.Test.General.v2
                 Assert.AreEqual(1, itsFilledCircle.PrimaryKey.Count,
                                 "There should only be one item in the primary key (even when using class table inheritance).");
             }
-            catch (CoreBizArgumentException)
+            catch (HabaneroArgumentException)
             {
                 Assert.Fail("An object using ClassTableInheritance should have the subclass' primary key.");
             }
