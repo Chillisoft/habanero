@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 using Chillisoft.Bo.ClassDefinition.v2;
 using Chillisoft.Generic.v2;
@@ -12,16 +14,17 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlClassLoader : XmlLoader
     {
-        private PropDefCol _PropDefCol;
-        private PrimaryKeyDef _PrimaryKeyDef;
-        private KeyDefCol _KeyDefCol;
-        private RelationshipDefCol _RelationshipDefCol;
-        private string _ClassName;
-        private string _AssemblyName;
-        private SuperClassDesc _SuperClassDesc;
-        private UIDefCol _UIDefCol;
-        private string _TableName;
-        private bool _SupportsSynchronising;
+        private PropDefCol itsPropDefCol;
+        private PrimaryKeyDef itsPrimaryKeyDef;
+        private KeyDefCol itsKeyDefCol;
+        private RelationshipDefCol itsRelationshipDefCol;
+        private string itsClassName;
+        private string itsAssemblyName;
+        private Type itsClassType;
+        private SuperClassDesc itsSuperClassDesc;
+        private UIDefCol itsUIDefCol;
+        private string itsTableName;
+        private bool itsSupportsSynchronising;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -76,18 +79,18 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a class definition</returns>
         protected override object Create()
         {
-			ClassDef def =
-				new ClassDef(_AssemblyName,_ClassName, _PrimaryKeyDef, _PropDefCol, _KeyDefCol, _RelationshipDefCol,
-							 _UIDefCol);
-			if (_SuperClassDesc != null)
+            ClassDef def = new ClassDef(itsClassType, itsPrimaryKeyDef,
+                                        itsPropDefCol, itsKeyDefCol, 
+                                        itsRelationshipDefCol, itsUIDefCol);
+            if (itsSuperClassDesc != null)
             {
-                def.SuperClassDesc = _SuperClassDesc;
+                def.SuperClassDesc = itsSuperClassDesc;
             }
-            if (_TableName != null && _TableName.Length > 0)
+            if (itsTableName != null && itsTableName != "")
             {
-                def.TableName = _TableName;
+                def.TableName = itsTableName;
             }
-            def.SupportsSynchronising = _SupportsSynchronising;
+            def.SupportsSynchronising = itsSupportsSynchronising;
             return def;
         }
 
@@ -96,111 +99,155 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            _SuperClassDesc = null;
+            itsClassType = null;
+            itsSuperClassDesc = null;
             itsReader.Read();
-            LoadClassInfo();
+            LoadClassType();
             LoadTableName();
             LoadSupportsSynchronisation();
 
             itsReader.Read();
-            if (itsReader.Name == "superClassDesc")
+
+            List<string> keyDefXmls = new List<string>();
+            List<string> propDefXmls = new List<string>();
+            List<string> relationshipDefXmls = new List<string>();
+            List<string> uiDefXmls = new List<string>();
+            string superclassDescXML = null;
+            string primaryKeDefXML = null;
+            while (itsReader.Name != "classDef")
             {
-                LoadSuperClassDesc();
+                switch (itsReader.Name)
+                {
+                    case "superClassDesc":
+                        superclassDescXML = itsReader.ReadOuterXml();
+                        break;
+                    case "propertyDef":
+                        propDefXmls.Add(itsReader.ReadOuterXml());
+                        break;
+                    case "keyDef":
+                        keyDefXmls.Add(itsReader.ReadOuterXml());
+                        break;
+                    case "primaryKeyDef":
+                        primaryKeDefXML = itsReader.ReadOuterXml();
+                        break;
+                    case "relationshipDef":
+                        relationshipDefXmls.Add(itsReader.ReadOuterXml());
+                        break;
+                    case "uiDef":
+                        uiDefXmls.Add(itsReader.ReadOuterXml());
+                        break;
+                    default:
+                        throw new InvalidXmlDefinitionException("The element '" +
+                            itsReader.Name + "' is not a recognised class " +
+                            "definition element.  Ensure that you have the correct " +
+                            "spelling and capitalisation, or see the documentation " +
+                            "for available options.");
+                        break;
+                }
             }
 
-            LoadPropDefs();
-
-            _KeyDefCol = new KeyDefCol();
-            if (itsReader.Name == "keyDef")
-            {
-                LoadKeyDefs();
-            }
-            _PrimaryKeyDef = new PrimaryKeyDef();
-            if (itsReader.Name == "primaryKeyDef")
-            {
-                LoadPrimaryKeyDef();
-            }
-            _RelationshipDefCol = new RelationshipDefCol();
-            if (itsReader.Name == "relationshipDef")
-            {
-                LoadRelationshipDefs();
-            }
-            _UIDefCol = new UIDefCol();
-            if (itsReader.Name == "uiDef")
-            {
-                LoadUIDefs();
-            }
+            LoadSuperClassDesc(superclassDescXML);
+            LoadPropDefs(propDefXmls);
+            LoadKeyDefs(keyDefXmls);
+            LoadPrimaryKeyDef(primaryKeDefXML);
+            LoadRelationshipDefs(relationshipDefXmls);
+            LoadUIDefs(uiDefXmls);
         }
 
         /// <summary>
         /// Load the super-class data
         /// </summary>
-        private void LoadSuperClassDesc()
+        private void LoadSuperClassDesc(string xmlDef)
         {
-            XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(itsDtdPath);
-            _SuperClassDesc = superClassDescLoader.LoadSuperClassDesc(itsReader.ReadOuterXml());
+            if (xmlDef != null)
+            {
+                XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(itsDtdPath);
+                itsSuperClassDesc = superClassDescLoader.LoadSuperClassDesc(xmlDef);
+            }
         }
 
         /// <summary>
         /// Loads the relationship data
         /// </summary>
-        private void LoadRelationshipDefs()
+        private void LoadRelationshipDefs(List<string> xmlDefs)
         {
+            itsRelationshipDefCol = new RelationshipDefCol();
             XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(itsDtdPath);
-            do
+            foreach (string relDefXml in xmlDefs)
             {
-                _RelationshipDefCol.Add(relationshipLoader.LoadRelationship(itsReader.ReadOuterXml(), _PropDefCol));
-            } while (itsReader.Name == "relationshipDef");
+                itsRelationshipDefCol.Add(relationshipLoader.LoadRelationship(relDefXml, itsPropDefCol));
+            }
         }
 
         /// <summary>
         /// Loads the UIDef data
         /// </summary>
-        private void LoadUIDefs()
+        private void LoadUIDefs(List<string> xmlDefs)
         {
+            itsUIDefCol = new UIDefCol();
             XmlUIDefLoader loader = new XmlUIDefLoader(itsDtdPath);
-            do
+            foreach (string uiDefXml in xmlDefs)
             {
-                _UIDefCol.Add(loader.LoadUIDef(itsReader.ReadOuterXml()));
-            } while (itsReader.Name == "uiDef");
+                itsUIDefCol.Add(loader.LoadUIDef(uiDefXml));
+            }
         }
 
         /// <summary>
         /// Loads the key definition data
         /// </summary>
-        private void LoadKeyDefs()
+        private void LoadKeyDefs(List<string> xmlDefs)
         {
+            itsKeyDefCol = new KeyDefCol();
             XmlKeyLoader loader = new XmlKeyLoader(itsDtdPath);
-            do
+            foreach (string keyDefXml in xmlDefs)
             {
-                _KeyDefCol.Add(loader.LoadKey(itsReader.ReadOuterXml(), _PropDefCol));
-            } while (itsReader.Name == "keyDef");
+                itsKeyDefCol.Add(loader.LoadKey(keyDefXml, itsPropDefCol));
+            }
         }
 
         /// <summary>
         /// Loads the primary key definition data
         /// </summary>
-        private void LoadPrimaryKeyDef()
+        private void LoadPrimaryKeyDef(string xmlDef)
         {
+            if (xmlDef == null)
+            {
+                throw new InvalidXmlDefinitionException("Could not find a " +
+                    "'primaryKeyDef' element in the class definition for the class '" +
+                    itsClassType + "'.  Each class definition requires a primary key " +
+                    "definition, which is composed of one or more property definitions, " +
+                    "implying that you will need at least one 'propertyDef' element as " +
+                    "well.");
+            }
+            itsPrimaryKeyDef = new PrimaryKeyDef();
             XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(itsDtdPath);
-            _PrimaryKeyDef = primaryKeyLoader.LoadPrimaryKey(itsReader.ReadOuterXml(), _PropDefCol);
+            itsPrimaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, itsPropDefCol);
+            if (itsPrimaryKeyDef == null)
+            {
+                throw new InvalidXmlDefinitionException("There was an error loading " +
+                    "the 'primaryKeyDef' element in the class definition for the class '" +
+                    itsClassType + "'.  Each class definition requires a primary key " +
+                    "definition, which is composed of one or more property definitions, " +
+                    "implying that you will need at least one 'propertyDef' element as " +
+                    "well.");
+            }
         }
 
         /// <summary>
         /// Loads the property definition data
         /// </summary>
-        private void LoadPropDefs()
+        private void LoadPropDefs(List<string> xmlDefs)
         {
-            _PropDefCol = new PropDefCol();
+            itsPropDefCol = new PropDefCol();
             XmlPropertyLoader propLoader = new XmlPropertyLoader(itsDtdPath);
-            do
+            foreach (string propDefXml in xmlDefs)
             {
-                _PropDefCol.Add(propLoader.LoadProperty(itsReader.ReadOuterXml()));
-            } while (itsReader.Name == "propertyDef");
+                itsPropDefCol.Add(propLoader.LoadProperty(propDefXml));
+            }
             //			XmlNodeList xmlPropDefs = itsClassElement.GetElementsByTagName("propertyDef");
             //			XmlPropertyLoader propLoader = new XmlPropertyLoader(itsDtdPath);
             //			foreach (XmlNode xmlPropDef in xmlPropDefs) {
-            //				_PropDefCol.Add(propLoader.LoadProperty(xmlPropDef.OuterXml));
+            //				itsPropDefCol.Add(propLoader.LoadProperty(xmlPropDef.OuterXml));
             //			}
         }
 
@@ -209,35 +256,49 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadTableName()
         {
-            _TableName = itsReader.GetAttribute("tableName");
+            itsTableName = itsReader.GetAttribute("tableName");
         }
 
         /// <summary>
-        /// Loads the class type info data
+        /// Loads the class type data
         /// </summary>
-        private void LoadClassInfo()
+        private void LoadClassType()
         {
-            _ClassName = itsReader.GetAttribute("name");
-            _AssemblyName = itsReader.GetAttribute("assembly");
+            itsClassName = itsReader.GetAttribute("name");
+            itsAssemblyName = itsReader.GetAttribute("assembly");
 
-            if (_AssemblyName == null || _AssemblyName.Length == 0)
+            if (itsAssemblyName == null || itsAssemblyName.Length == 0)
             {
                 string errorMessage = "No assembly name has been specified for the " +
                                       "class definition";
-                if (_ClassName != null && _ClassName.Length > 0)
+                if (itsClassName != null && itsClassName.Length > 0)
                 {
-                    errorMessage += " of '" + _ClassName + "'";
+                    errorMessage += " of '" + itsClassName + "'";
                 }
                 errorMessage += ". Within each 'classDef' element you need to set " +
                                 "the 'assembly' attribute, which refers to the project or assembly " +
                                 "that contains the class which is being mapped to.";
                 throw new XmlException(errorMessage);
             }
-            if (_ClassName == null || _ClassName.Length == 0)
+            if (itsClassName == null || itsClassName.Length == 0)
             {
                 throw new XmlException("No 'name' attribute has been specified for a " +
                    "'classDef' element.  The 'name' attribute indicates the name of the " +
                    "class to which a database table will be mapped.");
+            }
+
+            try
+            {
+                itsClassType = TypeLoader.LoadType(itsAssemblyName, itsClassName);
+            }
+            catch (UnknownTypeNameException ex)
+            {
+                throw new UnknownTypeNameException("Unable to load the class type while " +
+                       "attempting to load a class definition, given the 'assembly' as: '" +
+                       itsAssemblyName + "', and the 'class' as: '" + itsClassName +
+                       "'. Check that the class exists in the given assembly name and " +
+                       "that spelling and capitalisation are correct.", ex);
+                //itsClassType = null;
             }
         }
 
@@ -247,7 +308,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadSupportsSynchronisation()
         {
-            _SupportsSynchronising = Convert.ToBoolean(itsReader.GetAttribute("supportsSynchronising"));
+            itsSupportsSynchronising = Convert.ToBoolean(itsReader.GetAttribute("supportsSynchronising"));
         }
     }
 }
