@@ -11,31 +11,31 @@ namespace Chillisoft.UI.Application.v2
     /// </summary>
     public partial class MultiSelector<T> : UserControl
     {
-        private Model itsModel;
+        private Model _model;
 
         /// <summary>
         /// A constructor to initialise a new selector
         /// </summary>
         public MultiSelector() {
             InitializeComponent();
-            itsModel = new Model();
-            itsModel.OptionAdded += delegate(object sender, Model.ModelEventArgs<T> e) {
+            _model = new Model();
+            _model.OptionAdded += delegate(object sender, Model.ModelEventArgs<T> e) {
                                         AvailableOptionsListBox.Items.Add(e.Item);
                                         UpdateButtonsStatus();
                                     };
 
-            itsModel.OptionRemoved += delegate(object sender, Model.ModelEventArgs<T> e) {
+            _model.OptionRemoved += delegate(object sender, Model.ModelEventArgs<T> e) {
                                           AvailableOptionsListBox.Items.Remove(e.Item);
                                           UpdateButtonsStatus();
                                       };
 
-            itsModel.Selected += delegate(object sender, Model.ModelEventArgs<T> e) {
+            _model.Selected += delegate(object sender, Model.ModelEventArgs<T> e) {
                                      AvailableOptionsListBox.Items.Remove(e.Item);
                                      SelectionsListBox.Items.Add(e.Item);
                                      SelectionsListBox.SelectedItem = e.Item;
                                      UpdateButtonsStatus();
                                  };
-            itsModel.Deselected += delegate(object sender, Model.ModelEventArgs<T> e) {
+            _model.Deselected += delegate(object sender, Model.ModelEventArgs<T> e) {
                                        AvailableOptionsListBox.Items.Add(e.Item);
                                        AvailableOptionsListBox.SelectedItem = e.Item;
                                        SelectionsListBox.Items.Remove(e.Item);
@@ -59,7 +59,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public Model ModelInstance
         {
-            get { return itsModel; }
+            get { return _model; }
         }
 
         /// <summary>
@@ -68,11 +68,11 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public List<T> Options {
             set {
-                itsModel.Options = value;
+                _model.Options = value;
                 AvailableOptionsListBox.Items.Clear();
-                itsModel.AvailableOptions.ForEach(delegate(T obj) { AvailableOptionsListBox.Items.Add(obj); });
+                _model.AvailableOptions.ForEach(delegate(T obj) { AvailableOptionsListBox.Items.Add(obj); });
                 SelectionsListBox.Items.Clear();
-                foreach (T obj in itsModel.SelectionsView)
+                foreach (T obj in _model.SelectionsView)
                 {
                     SelectionsListBox.Items.Add(obj);
                 }
@@ -85,9 +85,9 @@ namespace Chillisoft.UI.Application.v2
         ///</summary>
         public List<T> Selections {
             set {
-                itsModel.Selections = value;
+                _model.Selections = value;
                 SelectionsListBox.Items.Clear();
-                foreach (T obj in itsModel.SelectionsView) SelectionsListBox.Items.Add(obj);
+                foreach (T obj in _model.SelectionsView) SelectionsListBox.Items.Add(obj);
                 UpdateButtonsStatus();
             }
         }
@@ -116,7 +116,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
         private void SelectAllButton_Click(object sender, EventArgs e) {
-            itsModel.SelectAll();
+            _model.SelectAll();
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
         private void DeselectAllButton_Click(object sender, EventArgs e) {
-            itsModel.DeselectAll();
+            _model.DeselectAll();
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace Chillisoft.UI.Application.v2
         private void DoSelect() {
             List<T> items = new List<T>();
             foreach (T item in AvailableOptionsListBox.SelectedItems) items.Add(item);
-            itsModel.Select(items);
+            _model.Select(items);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Chillisoft.UI.Application.v2
         private void DoDeselect() {
             List<T> items = new List<T>();
             foreach (T item in SelectionsListBox.SelectedItems) items.Add(item);
-            itsModel.Deselect(items);
+            _model.Deselect(items);
         }
 
 

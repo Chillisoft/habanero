@@ -10,7 +10,7 @@ namespace Chillisoft.UI.Application.v2
     /// </summary>
     public class EditableGridButtonControl : ButtonControl
     {
-        private readonly IEditableGrid itsEditableGrid;
+        private readonly IEditableGrid _editableGrid;
 
         /// <summary>
         /// Constructor to initialise a new control
@@ -20,7 +20,7 @@ namespace Chillisoft.UI.Application.v2
         {
             this.AddButton("Save", new EventHandler(SaveButtonClickHandler));
             this.AddButton("Cancel", new EventHandler(CancelButtonClickHandler));
-            this.itsEditableGrid = editableGrid;
+            this._editableGrid = editableGrid;
         }
 
         /// <summary>
@@ -30,8 +30,8 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void CancelButtonClickHandler(object sender, EventArgs e)
         {
-            if (itsEditableGrid == null) return;
-            itsEditableGrid.RejectChanges();
+            if (_editableGrid == null) return;
+            _editableGrid.RejectChanges();
         }
 
         /// <summary>
@@ -41,10 +41,10 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void SaveButtonClickHandler(object sender, EventArgs e)
         {
-            if (itsEditableGrid == null) return;
+            if (_editableGrid == null) return;
             try
             {
-                itsEditableGrid.AcceptChanges();
+                _editableGrid.AcceptChanges();
             }
             catch (UserException ex)
             {

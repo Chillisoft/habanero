@@ -13,7 +13,7 @@ namespace Chillisoft.UI.Application.v2
     /// </summary>
     public class DefaultBOCreator : IObjectCreator
     {
-        private readonly ClassDef itsClassDef;
+        private readonly ClassDef _classDef;
 
         /// <summary>
         /// Constructor to initialise a new object creator
@@ -21,7 +21,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="classDef">The class definition</param>
         public DefaultBOCreator(ClassDef classDef)
         {
-            itsClassDef = classDef;
+            _classDef = classDef;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Chillisoft.UI.Application.v2
         /// <returns>Returns the business object created</returns>
         public Object CreateObject(IObjectEditor editor, IObjectInitialiser initialiser)
         {
-            BusinessObjectBase newBo = itsClassDef.CreateNewBusinessObject();
+            BusinessObjectBase newBo = _classDef.CreateNewBusinessObject();
             if (initialiser != null)
             {
                 initialiser.InitialiseObject(newBo);

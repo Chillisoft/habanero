@@ -10,9 +10,9 @@ namespace Chillisoft.UI.Application.v2
     /// </summary>
     public abstract class FormController
     {
-        private Hashtable myFormsbyHeading;
-        private Hashtable myFormsbyForm;
-        private Form itsParentForm;
+        private Hashtable _formsbyHeading;
+        private Hashtable _formsbyForm;
+        private Form _parentForm;
         
         /// <summary>
         /// Constructor to initialise a new controller
@@ -20,7 +20,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="parentForm">The parent form</param>
         public FormController(Form parentForm)
         {
-            itsParentForm = parentForm;
+            _parentForm = parentForm;
         }
 
         /// <summary>
@@ -30,14 +30,14 @@ namespace Chillisoft.UI.Application.v2
         /// <returns>Returns the relevant FormControl object</returns>
         public FormControl SetCurrentControl(String heading)
         {
-            if (myFormsbyHeading == null)
+            if (_formsbyHeading == null)
             {
-                myFormsbyHeading = new Hashtable();
-                myFormsbyForm = new Hashtable();
+                _formsbyHeading = new Hashtable();
+                _formsbyForm = new Hashtable();
             }
-            if (myFormsbyHeading.Contains(heading))
+            if (_formsbyHeading.Contains(heading))
             {
-                Form frm = (Form)myFormsbyHeading[heading];
+                Form frm = (Form)_formsbyHeading[heading];
                 frm.Show();
                 frm.Refresh();
                 frm.Focus();
@@ -51,7 +51,7 @@ namespace Chillisoft.UI.Application.v2
                 Form newMdiForm = new Form();
                 newMdiForm.Width = 800;
                 newMdiForm.Height = 600;
-                newMdiForm.MdiParent = itsParentForm;
+                newMdiForm.MdiParent = _parentForm;
                 newMdiForm.WindowState = FormWindowState.Maximized;
 
                 Control ctl = (Control)formCtl;
@@ -60,8 +60,8 @@ namespace Chillisoft.UI.Application.v2
                 newMdiForm.Controls.Clear();
                 newMdiForm.Controls.Add(ctl);
                 newMdiForm.Show();
-                myFormsbyHeading.Add(heading, newMdiForm);
-                myFormsbyForm.Add(newMdiForm, heading);
+                _formsbyHeading.Add(heading, newMdiForm);
+                _formsbyForm.Add(newMdiForm, heading);
                 formCtl.SetForm(newMdiForm);
                 newMdiForm.Closed += new EventHandler(MdiFormClosed);
 
@@ -82,7 +82,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="heading">The heading</param>
         /// <returns>Returns the control if found</returns>
         protected Control GetControl(string heading) {
-            Form frm = (Form)this.myFormsbyHeading[heading];
+            Form frm = (Form)this._formsbyHeading[heading];
             if (frm != null)
             {
                 return frm.Controls[0];
@@ -100,9 +100,9 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void MdiFormClosed(object sender, EventArgs e)
         {
-            string heading = (string)myFormsbyForm[sender];
-            myFormsbyHeading.Remove(heading);
-            myFormsbyForm.Remove(sender);
+            string heading = (string)_formsbyForm[sender];
+            _formsbyHeading.Remove(heading);
+            _formsbyForm.Remove(sender);
         }
 
 

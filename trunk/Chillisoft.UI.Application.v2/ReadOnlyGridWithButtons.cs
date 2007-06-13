@@ -31,35 +31,35 @@ namespace Chillisoft.UI.Application.v2
         public event EventHandler ItemSelected;
         public event EventHandler ItemActioned;
 
-        private SimpleReadOnlyGrid itsGrid;
-        private ReadOnlyGridButtonControl itsButtons;
-        private DelayedMethodCall itsItemSelectedMethodCaller;
-        //private SetGridDataProviderDelegate setGridDataProvider;
+        private SimpleReadOnlyGrid _grid;
+        private ReadOnlyGridButtonControl _buttons;
+        private DelayedMethodCall _itemSelectedMethodCaller;
+        //private SetGridDataProviderDelegate _setGridDataProvider;
         //private BusinessObjectBaseCollection _collection;
 
-        private int itsOldRowNumber = -1;
-        private IGridDataProvider itsProvider;
-        private IList itsItemSelectedDelegates;
+        private int _oldRowNumber = -1;
+        private IGridDataProvider _provider;
+        private IList _itemSelectedDelegates;
 
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
         public ReadOnlyGridWithButtons()
         {
-            itsItemSelectedMethodCaller = new DelayedMethodCall(500, this);
+            _itemSelectedMethodCaller = new DelayedMethodCall(500, this);
             BorderLayoutManager manager = new BorderLayoutManager(this);
-            itsGrid = new SimpleReadOnlyGrid();
-            itsGrid.Name = "GridControl";
-            manager.AddControl(itsGrid, BorderLayoutManager.Position.Centre);
-            itsButtons = new ReadOnlyGridButtonControl(itsGrid);
-            itsButtons.Name = "ButtonControl";
-            manager.AddControl(itsButtons, BorderLayoutManager.Position.South);
+            _grid = new SimpleReadOnlyGrid();
+            _grid.Name = "GridControl";
+            manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+            _buttons = new ReadOnlyGridButtonControl(_grid);
+            _buttons.Name = "ButtonControl";
+            manager.AddControl(_buttons, BorderLayoutManager.Position.South);
 
-            itsGrid.CurrentCellChanged += new EventHandler(CurrentCellChangedHandler);
-            itsGrid.DataProviderUpdated += new EventHandler(DataProviderUpdatedHandler);
-            itsGrid.FilterUpdated += new EventHandler(GridFilterUpdatedHandler);
-            itsItemSelectedDelegates = new ArrayList();
-            //setGridDataProvider = new SetGridDataProviderDelegate(Grid.SetGridDataProvider) ;
+            _grid.CurrentCellChanged += new EventHandler(CurrentCellChangedHandler);
+            _grid.DataProviderUpdated += new EventHandler(DataProviderUpdatedHandler);
+            _grid.FilterUpdated += new EventHandler(GridFilterUpdatedHandler);
+            _itemSelectedDelegates = new ArrayList();
+            //_setGridDataProvider = new SetGridDataProviderDelegate(Grid.SetGridDataProvider) ;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Chillisoft.UI.Application.v2
         public ReadOnlyGridWithButtons(IGridDataProvider dataProvider, IObjectEditor editor, IObjectCreator creator)
             : this()
         {
-            itsProvider = dataProvider;
+            _provider = dataProvider;
             this.Grid.SetGridDataProvider(dataProvider);
             this.Buttons.ObjectEditor = editor;
             if (creator != null)
@@ -81,7 +81,7 @@ namespace Chillisoft.UI.Application.v2
             }
             else
             {
-                this.Buttons.ObjectCreator = new DefaultBOCreator(itsProvider.GetCollection().ClassDef);
+                this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.GetCollection().ClassDef);
             }
         }
 
@@ -103,10 +103,10 @@ namespace Chillisoft.UI.Application.v2
         public ReadOnlyGridWithButtons(IGridDataProvider dataProvider)
             : this()
         {
-            itsProvider = dataProvider;
+            _provider = dataProvider;
             this.Grid.SetGridDataProvider(dataProvider);
             this.Buttons.ObjectEditor = new DefaultBOEditor();
-            this.Buttons.ObjectCreator = new DefaultBOCreator(itsProvider.ClassDef);
+            this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.ClassDef);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Chillisoft.UI.Application.v2
         private void GridFilterUpdatedHandler(object sender, EventArgs e)
         {
             //log.Debug("GridFilterUpdated - firing item selected");
-            itsOldRowNumber = -1;
+            _oldRowNumber = -1;
             FireItemSelectedIfCurrentRowChanged();
         }
 
@@ -128,7 +128,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void DataProviderUpdatedHandler(object sender, EventArgs e)
         {
-            itsOldRowNumber = -1;
+            _oldRowNumber = -1;
             FireItemSelectedIfCurrentRowChanged();
         }
 
@@ -147,11 +147,11 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         private void FireItemSelectedIfCurrentRowChanged()
         {
-            if (itsGrid.CurrentCell != null)
+            if (_grid.CurrentCell != null)
             {
-                if (itsOldRowNumber != itsGrid.CurrentCell.RowIndex)
+                if (_oldRowNumber != _grid.CurrentCell.RowIndex)
                 {
-                    itsOldRowNumber = itsGrid.CurrentCell.RowIndex;
+                    _oldRowNumber = _grid.CurrentCell.RowIndex;
                     FireItemSelected();
                 }
             }
@@ -163,7 +163,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="boDelegate">The delegate to add</param>
         public void AddItemSelectedDelegate(SetBusinessObjectDelegate boDelegate)
         {
-            itsItemSelectedDelegates.Add(boDelegate);
+            _itemSelectedDelegates.Add(boDelegate);
         }
 
         /// <summary>
@@ -174,12 +174,12 @@ namespace Chillisoft.UI.Application.v2
         {
             if (this.GetSelectedObject() != null || this.GetSelectedObject() is BusinessObjectBase)
             {
-                foreach (SetBusinessObjectDelegate selectedDelegate in itsItemSelectedDelegates)
+                foreach (SetBusinessObjectDelegate selectedDelegate in _itemSelectedDelegates)
                 {
                     selectedDelegate((BusinessObjectBase) this.GetSelectedObject());
                 }
             }
-            itsItemSelectedMethodCaller.Call(new VoidMethodWithSender(DelayedItemSelected));
+            _itemSelectedMethodCaller.Call(new VoidMethodWithSender(DelayedItemSelected));
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public SimpleReadOnlyGrid Grid
         {
-            get { return itsGrid; }
+            get { return _grid; }
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public ReadOnlyGridButtonControl Buttons
         {
-            get { return itsButtons; }
+            get { return _buttons; }
         }
 
         /// <summary>
@@ -231,10 +231,10 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="parentObject">The parent object to set to</param>
         public void SetParentObject(object parentObject)
         {
-            itsProvider.SetParentObject(parentObject);
-            //BeginInvoke(setGridDataProvider, new object[] {itsProvider}); // needed to do the call on the Forms thread.  See info about STA thread model.
+            _provider.SetParentObject(parentObject);
+            //BeginInvoke(_setGridDataProvider, new object[] {_provider}); // needed to do the call on the Forms thread.  See info about STA thread model.
 
-            this.Grid.SetGridDataProvider(itsProvider);
+            this.Grid.SetGridDataProvider(_provider);
         }
 
         /// <summary>
@@ -262,10 +262,10 @@ namespace Chillisoft.UI.Application.v2
         /// pre-loaded using the collection's Load() method</param>
         public void SetBusinessObjectCollection(BusinessObjectBaseCollection boCollection)
         {
-            itsProvider = new CollectionGridDataProvider(boCollection);
-            this.Grid.SetGridDataProvider(itsProvider);
+            _provider = new CollectionGridDataProvider(boCollection);
+            this.Grid.SetGridDataProvider(_provider);
             this.Buttons.ObjectEditor = new DefaultBOEditor();
-            this.Buttons.ObjectCreator = new DefaultBOCreator(itsProvider.ClassDef);
+            this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.ClassDef);
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace Chillisoft.UI.Application.v2
         public void ReselectSelectedRow()
         {
             this.Grid.SelectedBusinessObject = null;
-            itsOldRowNumber = -1;
+            _oldRowNumber = -1;
             FireItemSelectedIfCurrentRowChanged();
         }
 

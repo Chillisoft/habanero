@@ -14,10 +14,10 @@ namespace Chillisoft.UI.Application.v2
         //private delegate void AddTabPageDelegate(TabPage page, BusinessObjectBase bo);
         //private delegate void TabChangedDelegate();
 
-        private readonly BusinessObjectControl itsBoControl;
-        private TabControl itsTabControl;
-        private Hashtable itsPageBoTable;
-        private Hashtable itsBoPageTable;
+        private readonly BusinessObjectControl _boControl;
+        private TabControl _tabControl;
+        private Hashtable _pageBoTable;
+        private Hashtable _boPageTable;
 
         //private AddTabPageDelegate itsAddTabPageDelegate;
         //private TabChangedDelegate itsTabChanged; 
@@ -31,20 +31,20 @@ namespace Chillisoft.UI.Application.v2
         /// displaying the business object information in the tab page</param>
         public BoTabColControl(BusinessObjectControl boControl)
         {
-            itsBoControl = boControl;
+            _boControl = boControl;
             if (boControl is Control)
             {
-                ((Control) itsBoControl).Dock = DockStyle.Fill;
+                ((Control) _boControl).Dock = DockStyle.Fill;
             }
             else
             {
                 throw new ArgumentException("boControl must be of type Control or one of its subtypes.");
             }
             BorderLayoutManager manager = new BorderLayoutManager(this);
-            itsTabControl = new TabControl();
-            manager.AddControl(itsTabControl, BorderLayoutManager.Position.Centre);
-            itsPageBoTable = new Hashtable();
-            itsBoPageTable = new Hashtable();
+            _tabControl = new TabControl();
+            manager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
+            _pageBoTable = new Hashtable();
+            _boPageTable = new Hashtable();
 
             tabChangedHandler = new EventHandler(TabChangedHandler);
 
@@ -60,7 +60,7 @@ namespace Chillisoft.UI.Application.v2
         /// for</param>
         public void SetCollection(IList col)
         {
-            itsTabControl.SelectedIndexChanged -= tabChangedHandler;
+            _tabControl.SelectedIndexChanged -= tabChangedHandler;
             ClearTabPages();
             foreach (BusinessObjectBase bo in col)
             {
@@ -72,9 +72,9 @@ namespace Chillisoft.UI.Application.v2
 
             if (col.Count > 0)
             {
-                itsTabControl.SelectedIndex = 0;
+                _tabControl.SelectedIndex = 0;
             }
-            itsTabControl.SelectedIndexChanged += tabChangedHandler;
+            _tabControl.SelectedIndexChanged += tabChangedHandler;
             TabChanged();
         }
 
@@ -94,12 +94,12 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public void TabChanged()
         {
-            if (itsTabControl.SelectedTab != null)
+            if (_tabControl.SelectedTab != null)
             {
                 //BeginInvoke(itsTabChanged, new object[] {});
-                itsTabControl.SelectedTab.Controls.Clear();
-                itsTabControl.SelectedTab.Controls.Add((Control) itsBoControl);
-                itsBoControl.SetBusinessObject(GetBo(itsTabControl.SelectedTab));
+                _tabControl.SelectedTab.Controls.Clear();
+                _tabControl.SelectedTab.Controls.Add((Control) _boControl);
+                _boControl.SetBusinessObject(GetBo(_tabControl.SelectedTab));
             }
         }
 
@@ -109,9 +109,9 @@ namespace Chillisoft.UI.Application.v2
         /// TODO ERIC - sta thread?
         private void TabChangedInSTAThread()
         {
-            itsTabControl.SelectedTab.Controls.Clear();
-            itsTabControl.SelectedTab.Controls.Add((Control) itsBoControl);
-            itsBoControl.SetBusinessObject(GetBo(itsTabControl.SelectedTab));
+            _tabControl.SelectedTab.Controls.Clear();
+            _tabControl.SelectedTab.Controls.Add((Control) _boControl);
+            _boControl.SetBusinessObject(GetBo(_tabControl.SelectedTab));
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public TabControl TabControl
         {
-            get { return itsTabControl; }
+            get { return _tabControl; }
         }
 
         /// <summary>
@@ -132,9 +132,9 @@ namespace Chillisoft.UI.Application.v2
         {
             if (tabPage == null) return null;
 
-            if (itsPageBoTable.ContainsKey(tabPage))
+            if (_pageBoTable.ContainsKey(tabPage))
             {
-                return (BusinessObjectBase) itsPageBoTable[tabPage];
+                return (BusinessObjectBase) _pageBoTable[tabPage];
             }
             else
             {
@@ -149,9 +149,9 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="bo">The business ojbect to represent</param>
         private void AddTabPage(TabPage page, BusinessObjectBase bo)
         {
-            itsTabControl.TabPages.Add(page);
-            itsPageBoTable.Add(page, bo);
-            itsBoPageTable.Add(bo, page);
+            _tabControl.TabPages.Add(page);
+            _pageBoTable.Add(page, bo);
+            _boPageTable.Add(bo, page);
 //			try
 //			{
 //				BeginInvoke(itsAddTabPageDelegate, new object[] {page, bo}); // needed to do the call on the Forms thread.  See info about STA thread model.
@@ -165,9 +165,9 @@ namespace Chillisoft.UI.Application.v2
 
 //		private void AddTabPageInSTAThread(TabPage page, BusinessObjectBase bo)
 //		{
-//			itsTabControl.TabPages.Add(page);
-//			itsPageBoTable.Add(page, bo);
-//			itsBoPageTable.Add(bo, page);
+//			_tabControl.TabPages.Add(page);
+//			_pageBoTable.Add(page, bo);
+//			_boPageTable.Add(bo, page);
 //		}
 
         /// <summary>
@@ -178,9 +178,9 @@ namespace Chillisoft.UI.Application.v2
         /// <returns>Returns the TabPage object, or null if not found</returns>
         public TabPage GetTabPage(BusinessObjectBase bo)
         {
-            if (itsBoPageTable.ContainsKey(bo))
+            if (_boPageTable.ContainsKey(bo))
             {
-                return (TabPage) itsBoPageTable[bo];
+                return (TabPage) _boPageTable[bo];
             }
             else
             {
@@ -193,10 +193,10 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         private void ClearTabPages()
         {
-            itsTabControl.Controls.Clear();
-            //itsTabControl.TabPages.Clear() ;
-            itsPageBoTable.Clear();
-            itsBoPageTable.Clear();
+            _tabControl.Controls.Clear();
+            //_tabControl.TabPages.Clear() ;
+            _pageBoTable.Clear();
+            _boPageTable.Clear();
         }
 
         /// <summary>
@@ -205,8 +205,8 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public BusinessObjectBase CurrentBusinessObject
         {
-            get { return GetBo(itsTabControl.SelectedTab); }
-            set { itsTabControl.SelectedTab = GetTabPage(value); }
+            get { return GetBo(_tabControl.SelectedTab); }
+            set { _tabControl.SelectedTab = GetTabPage(value); }
         }
     }
 }

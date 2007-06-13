@@ -13,12 +13,12 @@ namespace Chillisoft.UI.Application.v2
     public class TreeViewTableEditor : UserControl
     {
 
-        private ITableDataSource itsTableDataSource;
-        private SplitContainer splitContainer1;
-        protected TreeView itsTreeView;
-        private GroupBox groupBox1;
-        private SimpleGridWithButtons gridAndButtons;
-        private ITreeViewDataSource itsTreeViewDataSource;
+        private ITableDataSource _tableDataSource;
+        private SplitContainer _splitContainer1;
+        protected TreeView _treeView;
+        private GroupBox _groupBox1;
+        private SimpleGridWithButtons _gridAndButtons;
+        private ITreeViewDataSource _treeViewDataSource;
 
         /// <summary>
         /// Constructor to initialise a new editor
@@ -26,12 +26,12 @@ namespace Chillisoft.UI.Application.v2
         public TreeViewTableEditor()
         {
             //BorderLayoutManager mainManager = new BorderLayoutManager(this);
-            //itsTreeView = ControlFactory.CreateTreeView("TreeView");
-            //mainManager.AddControl(itsTreeView, BorderLayoutManager.Position.West, true);
+            //_treeView = ControlFactory.CreateTreeView("TreeView");
+            //mainManager.AddControl(_treeView, BorderLayoutManager.Position.West, true);
             InitializeComponent();
 
-            itsTableDataSource = new DatabaseTableDataSource();
-            itsTreeViewDataSource = new NullTreeViewDataSource();
+            _tableDataSource = new DatabaseTableDataSource();
+            _treeViewDataSource = new NullTreeViewDataSource();
         }
 
         /// <summary>
@@ -39,8 +39,8 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public ITableDataSource TableDataSource
         {
-            get { return itsTableDataSource; }
-            set { itsTableDataSource = value; }
+            get { return _tableDataSource; }
+            set { _tableDataSource = value; }
         }
 
         /// <summary>
@@ -48,8 +48,8 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public ITreeViewDataSource TreeViewDataSource
         {
-            get { return itsTreeViewDataSource; }
-            set { itsTreeViewDataSource = value; }
+            get { return _treeViewDataSource; }
+            set { _treeViewDataSource = value; }
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public void PopulateTreeView()
         {
-            IList data = itsTreeViewDataSource.GetTreeViewData();
+            IList data = _treeViewDataSource.GetTreeViewData();
             TreeNode currentParentNode = null;
             foreach (DictionaryEntry entry in data)
             {
@@ -65,7 +65,7 @@ namespace Chillisoft.UI.Application.v2
                 {
                     if (currentParentNode != null)
                     {
-                        itsTreeView.Nodes.Add(currentParentNode);
+                        _treeView.Nodes.Add(currentParentNode);
                     }
                     currentParentNode = new TreeNode(entry.Key.ToString());
                 }
@@ -76,8 +76,8 @@ namespace Chillisoft.UI.Application.v2
                     currentParentNode.Nodes.Add(childNode);
                 }
             }
-            itsTreeView.Nodes.Add(currentParentNode);
-            itsTreeView.AfterSelect += new TreeViewEventHandler(AfterSelectHandler);
+            _treeView.Nodes.Add(currentParentNode);
+            _treeView.AfterSelect += new TreeViewEventHandler(AfterSelectHandler);
         }
 
         /// <summary>
@@ -103,8 +103,8 @@ namespace Chillisoft.UI.Application.v2
                 BusinessObjectBaseCollection collectionForNode;
                 try
                 {
-                    collectionForNode = itsTableDataSource.GetCollection(sampleBo);
-                    gridAndButtons.Grid .SetGridDataProvider(
+                    collectionForNode = _tableDataSource.GetCollection(sampleBo);
+                    _gridAndButtons.Grid .SetGridDataProvider(
                         new SimpleGridDataProvider(collectionForNode,
                                                    sampleBo.GetUserInterfaceMapper().GetUIGridProperties()));
                     //itsGrid.te = e.Node.Text;
@@ -177,68 +177,68 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         private void InitializeComponent()
         {
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.itsTreeView = new System.Windows.Forms.TreeView();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.gridAndButtons = new Chillisoft.UI.Application.v2.SimpleGridWithButtons();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this._splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this._treeView = new System.Windows.Forms.TreeView();
+            this._groupBox1 = new System.Windows.Forms.GroupBox();
+            this._gridAndButtons = new Chillisoft.UI.Application.v2.SimpleGridWithButtons();
+            this._splitContainer1.Panel1.SuspendLayout();
+            this._splitContainer1.Panel2.SuspendLayout();
+            this._splitContainer1.SuspendLayout();
+            this._groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // splitContainer1
+            // _splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
+            this._splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this._splitContainer1.Name = "_splitContainer1";
             // 
-            // splitContainer1.Panel1
+            // _splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.itsTreeView);
+            this._splitContainer1.Panel1.Controls.Add(this._treeView);
             // 
-            // splitContainer1.Panel2
+            // _splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(408, 231);
-            this.splitContainer1.SplitterDistance = 136;
-            this.splitContainer1.TabIndex = 0;
+            this._splitContainer1.Panel2.Controls.Add(this._groupBox1);
+            this._splitContainer1.Size = new System.Drawing.Size(408, 231);
+            this._splitContainer1.SplitterDistance = 136;
+            this._splitContainer1.TabIndex = 0;
             // 
-            // itsTreeView
+            // _treeView
             // 
-            this.itsTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.itsTreeView.Location = new System.Drawing.Point(0, 0);
-            this.itsTreeView.Name = "itsTreeView";
-            this.itsTreeView.Size = new System.Drawing.Size(136, 231);
-            this.itsTreeView.TabIndex = 1;
+            this._treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._treeView.Location = new System.Drawing.Point(0, 0);
+            this._treeView.Name = "_treeView";
+            this._treeView.Size = new System.Drawing.Size(136, 231);
+            this._treeView.TabIndex = 1;
             // 
-            // groupBox1
+            // _groupBox1
             // 
-            this.groupBox1.Controls.Add(this.gridAndButtons);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(268, 231);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
+            this._groupBox1.Controls.Add(this._gridAndButtons);
+            this._groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._groupBox1.Location = new System.Drawing.Point(0, 0);
+            this._groupBox1.Name = "_groupBox1";
+            this._groupBox1.Size = new System.Drawing.Size(268, 231);
+            this._groupBox1.TabIndex = 0;
+            this._groupBox1.TabStop = false;
             // 
-            // gridAndButtons
+            // _gridAndButtons
             // 
-            this.gridAndButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridAndButtons.Location = new System.Drawing.Point(3, 16);
-            this.gridAndButtons.Name = "gridAndButtons";
-            this.gridAndButtons.Size = new System.Drawing.Size(262, 212);
-            this.gridAndButtons.TabIndex = 0;
+            this._gridAndButtons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._gridAndButtons.Location = new System.Drawing.Point(3, 16);
+            this._gridAndButtons.Name = "_gridAndButtons";
+            this._gridAndButtons.Size = new System.Drawing.Size(262, 212);
+            this._gridAndButtons.TabIndex = 0;
             // 
             // TreeViewTableEditor
             // 
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this._splitContainer1);
             this.Name = "TreeViewTableEditor";
             this.Size = new System.Drawing.Size(408, 231);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this._splitContainer1.Panel1.ResumeLayout(false);
+            this._splitContainer1.Panel2.ResumeLayout(false);
+            this._splitContainer1.ResumeLayout(false);
+            this._groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

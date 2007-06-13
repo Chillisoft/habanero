@@ -12,11 +12,11 @@ namespace Chillisoft.UI.Application.v2
     /// </summary>
     public class ReadOnlyGridButtonControl : ButtonControl
     {
-        private readonly IReadOnlyGrid itsReadOnlyGrid;
+        private readonly IReadOnlyGrid _readOnlyGrid;
 
-        private IObjectEditor itsObjectEditor;
-        private IObjectCreator itsObjectCreator;
-        private RowDoubleClickedHandler itsDoubleClickedDelegate;
+        private IObjectEditor _objectEditor;
+        private IObjectCreator _objectCreator;
+        private RowDoubleClickedHandler _doubleClickedDelegate;
 
         /// <summary>
         /// Constructor to initialise a new button control
@@ -26,9 +26,9 @@ namespace Chillisoft.UI.Application.v2
         {
             this.AddButton("Add", new EventHandler(AddButtonClickHandler));
             this.AddButton("Edit", new EventHandler(EditButtonClickHandler));
-            this.itsReadOnlyGrid = readOnlyGrid;
-            itsDoubleClickedDelegate = new RowDoubleClickedHandler(RowDoubleClickedHandler);
-            this.itsReadOnlyGrid.RowDoubleClicked += itsDoubleClickedDelegate;
+            this._readOnlyGrid = readOnlyGrid;
+            _doubleClickedDelegate = new RowDoubleClickedHandler(RowDoubleClickedHandler);
+            this._readOnlyGrid.RowDoubleClicked += _doubleClickedDelegate;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public void DisableDefaultDoubleClickBehaviour()
         {
-            this.itsReadOnlyGrid.RowDoubleClicked -= itsDoubleClickedDelegate;
+            this._readOnlyGrid.RowDoubleClicked -= _doubleClickedDelegate;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Chillisoft.UI.Application.v2
         {
             if (e.BusinessObject != null)
             {
-                itsObjectEditor.EditObject(e.BusinessObject);
+                _objectEditor.EditObject(e.BusinessObject);
             }
         }
 
@@ -59,13 +59,13 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void EditButtonClickHandler(object sender, EventArgs e)
         {
-            BusinessObjectBase selectedBo = itsReadOnlyGrid.SelectedBusinessObject;
+            BusinessObjectBase selectedBo = _readOnlyGrid.SelectedBusinessObject;
             if (selectedBo != null)
             {
                 //if
-                itsObjectEditor.EditObject(selectedBo);
+                _objectEditor.EditObject(selectedBo);
                 //				{
-                //					itsReadOnlyGrid.RefreshRow(selectedBo) ;
+                //					_readOnlyGrid.RefreshRow(selectedBo) ;
                 //				}
             }
         }
@@ -77,10 +77,10 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddButtonClickHandler(object sender, EventArgs e)
         {
-            BusinessObjectBase newObject = (BusinessObjectBase) itsObjectCreator.CreateObject(this.itsObjectEditor);
+            BusinessObjectBase newObject = (BusinessObjectBase) _objectCreator.CreateObject(this._objectEditor);
             if (newObject != null)
             {
-                itsReadOnlyGrid.AddBusinessObject(newObject);
+                _readOnlyGrid.AddBusinessObject(newObject);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public IObjectEditor ObjectEditor
         {
-            set { itsObjectEditor = value; }
+            set { _objectEditor = value; }
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public IObjectCreator ObjectCreator
         {
-            set { itsObjectCreator = value; }
+            set { _objectCreator = value; }
         }
     }
 }

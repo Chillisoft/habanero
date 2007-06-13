@@ -33,17 +33,17 @@ namespace Chillisoft.UI.Application.v2
     /// </summary>
     public class HabaneroApp
     {
-        private readonly string itsAppName;
-        private readonly string itsAppVersion;
+        private readonly string _appName;
+        private readonly string _appVersion;
         private static ILog log;
-        private ApplicationVersionUpgrader itsApplicationVersionUpgrader;
-        private string itsClassDefsPath = "";
-        private string itsClassDefsFileName = "ClassDefs.xml";
-        private DatabaseConfig itsDatabaseConfig;
-        private IExceptionNotifier itsExceptionNotifier;
-        private SynchronisationController itsSynchronisationController;
-        private ISettingsStorer itsSettingsStorer;
-        private bool itsLoadClassDefs = true;
+        private ApplicationVersionUpgrader _applicationVersionUpgrader;
+        private string _classDefsPath = "";
+        private string _classDefsFileName = "ClassDefs.xml";
+        private DatabaseConfig _databaseConfig;
+        private IExceptionNotifier _exceptionNotifier;
+        private SynchronisationController _synchronisationController;
+        private ISettingsStorer _settingsStorer;
+        private bool _loadClassDefs = true;
 
         /// <summary>
         /// Constructor to initialise a new application with basic application
@@ -52,8 +52,8 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="appName">The application name</param>
         /// <param name="appVersion">The application version</param>
         public HabaneroApp(string appName, string appVersion) {
-            itsAppName = appName;
-            itsAppVersion = appVersion;
+            _appName = appName;
+            _appVersion = appVersion;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Chillisoft.UI.Application.v2
         /// the format and limitations of the data.
         /// </summary>
         public string ClassDefsPath {
-            set { itsClassDefsPath = value; }
+            set { _classDefsPath = value; }
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Chillisoft.UI.Application.v2
         /// the format and limitations of the data.
         /// </summary>
         public string ClassDefsFileName {
-            set { itsClassDefsFileName = value; }
+            set { _classDefsFileName = value; }
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Chillisoft.UI.Application.v2
         /// (eg. MySQL, Oracle).
         /// </summary>
         public DatabaseConfig DatabaseConfig {
-            set { itsDatabaseConfig = value; }
+            set { _databaseConfig = value; }
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Chillisoft.UI.Application.v2
         /// versions.
         /// </summary>
         public ApplicationVersionUpgrader ApplicationVersionUpgrader {
-            set { itsApplicationVersionUpgrader = value; }
+            set { _applicationVersionUpgrader = value; }
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Chillisoft.UI.Application.v2
         /// user of exceptions encountered.
         /// </summary>
         public IExceptionNotifier ExceptionNotifier {
-            set { itsExceptionNotifier = value; }
+            set { _exceptionNotifier = value; }
         }
 
         /// <summary>
@@ -103,21 +103,21 @@ namespace Chillisoft.UI.Application.v2
         /// synchronisation strategy for the application.
         /// </summary>
         public SynchronisationController SynchronisationController {
-            set { itsSynchronisationController = value; }
+            set { _synchronisationController = value; }
         }
 
         /// <summary>
         /// Sets the settings storer, which stores database settings
         /// </summary>
         public ISettingsStorer SettingsStorer {
-            set { itsSettingsStorer = value; }
+            set { _settingsStorer = value; }
         }
 
         /// <summary>
         /// Sets the class definitions to the object specified
         /// </summary>
         public bool LoadClassDefs {
-            set { itsLoadClassDefs = value; }
+            set { _loadClassDefs = value; }
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Chillisoft.UI.Application.v2
         {
             try
             {
-                return new XmlClassDefsLoader(new StreamReader(itsClassDefsFileName).ReadToEnd(), itsClassDefsPath);
+                return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath);
             }
             catch (Exception ex)
             {
@@ -151,14 +151,14 @@ namespace Chillisoft.UI.Application.v2
         /// with further information about the failure.</returns>
         public bool Startup() {
             try {
-                if (itsExceptionNotifier == null) itsExceptionNotifier = new FormExceptionNotifier();
-                GlobalRegistry.UIExceptionNotifier = itsExceptionNotifier;
+                if (_exceptionNotifier == null) _exceptionNotifier = new FormExceptionNotifier();
+                GlobalRegistry.UIExceptionNotifier = _exceptionNotifier;
 
-                if (itsSynchronisationController == null) itsSynchronisationController = new NullSynchronisationController();
-                GlobalRegistry.SynchronisationController = itsSynchronisationController;
+                if (_synchronisationController == null) _synchronisationController = new NullSynchronisationController();
+                GlobalRegistry.SynchronisationController = _synchronisationController;
 
-                GlobalRegistry.ApplicationName = itsAppName;
-                GlobalRegistry.ApplicationVersion = itsAppVersion;
+                GlobalRegistry.ApplicationName = _appName;
+                GlobalRegistry.ApplicationVersion = _appVersion;
 
                 try
                 {
@@ -175,18 +175,18 @@ namespace Chillisoft.UI.Application.v2
                 log = LogManager.GetLogger("HabaneroApp");
 
                 log.Debug("---------------------------------------------------------------------");
-                log.Debug(itsAppName + "v" + itsAppVersion + " starting");
+                log.Debug(_appName + "v" + _appVersion + " starting");
                 log.Debug("---------------------------------------------------------------------");
 
-                if (itsDatabaseConfig == null) itsDatabaseConfig = DatabaseConfig.ReadFromConfigFile();
-                DatabaseConnection.CurrentConnection = itsDatabaseConfig.GetDatabaseConnection();
+                if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
+                DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
 
-                if (itsSettingsStorer == null) itsSettingsStorer = new DatabaseSettingsStorer();
-                GlobalRegistry.SettingsStorer = itsSettingsStorer;
+                if (_settingsStorer == null) _settingsStorer = new DatabaseSettingsStorer();
+                GlobalRegistry.SettingsStorer = _settingsStorer;
 
-                if (itsApplicationVersionUpgrader != null) itsApplicationVersionUpgrader.Upgrade();
+                if (_applicationVersionUpgrader != null) _applicationVersionUpgrader.Upgrade();
 
-                if (itsLoadClassDefs) ClassDef.LoadClassDefs(GetXmlClassDefsLoader());
+                if (_loadClassDefs) ClassDef.LoadClassDefs(GetXmlClassDefsLoader());
             }
             catch (Exception ex) {
                 string errorMessage = "There was a problem starting the application.";

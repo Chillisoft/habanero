@@ -9,8 +9,8 @@ namespace Chillisoft.UI.Application.v2
     /// </summary>
     public class SimpleGridWithButtons : UserControl, IGridWithButtons
     {
-        private SimpleGrid itsGrid;
-        private EditableGridButtonControl itsButtons;
+        private SimpleGrid _grid;
+        private EditableGridButtonControl _buttons;
 
         /// <summary>
         /// Constructor to initialise a new grid
@@ -18,12 +18,12 @@ namespace Chillisoft.UI.Application.v2
         public SimpleGridWithButtons()
         {
             BorderLayoutManager manager = new BorderLayoutManager(this);
-            itsGrid = new SimpleGrid();
-            itsGrid.Name = "GridControl";
-            manager.AddControl(itsGrid, BorderLayoutManager.Position.Centre);
-            itsButtons = new EditableGridButtonControl(itsGrid);
-            itsButtons.Name = "ButtonControl";
-            manager.AddControl(itsButtons, BorderLayoutManager.Position.South);
+            _grid = new SimpleGrid();
+            _grid.Name = "GridControl";
+            manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+            _buttons = new EditableGridButtonControl(_grid);
+            _buttons.Name = "ButtonControl";
+            manager.AddControl(_buttons, BorderLayoutManager.Position.South);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="provider">The data provider</param>
         public SimpleGridWithButtons(IGridDataProvider provider) : this()
         {
-            itsGrid.SetGridDataProvider(provider);
+            _grid.SetGridDataProvider(provider);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public GridBase Grid
         {
-            get { return itsGrid; }
+            get { return _grid; }
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public void SaveChanges()
         {
-            itsGrid.AcceptChanges();
+            _grid.AcceptChanges();
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public EditableGridButtonControl Buttons
         {
-            get { return itsButtons; }
+            get { return _buttons; }
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public BusinessObjectBase SelectedBusinessObject
         {
-            get { return this.itsGrid.SelectedBusinessObject; }
+            get { return this._grid.SelectedBusinessObject; }
         }
     }
 }
