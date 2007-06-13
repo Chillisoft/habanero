@@ -14,12 +14,11 @@ namespace Chillisoft.UI.Misc.v2
         /// Constructor to initialise a new About form with the given
         /// information
         /// </summary>
-        /// <param name="programmeName">The program name</param>
+        /// <param name="programName">The program name</param>
         /// <param name="producedForName">Who the program is produced for</param>
         /// <param name="producedByName">Who produced the program</param>
         /// <param name="versionNumber">The version number</param>
-        /// TODO ERIC - rename param to programName
-        public HelpAboutBox(string programmeName, string producedForName, string producedByName, string versionNumber)
+        public HelpAboutBox(string programName, string producedForName, string producedByName, string versionNumber)
         {
             Panel mainPanel = new Panel();
             GridLayoutManager mainPanelManager = new GridLayoutManager(mainPanel);
@@ -28,7 +27,7 @@ namespace Chillisoft.UI.Misc.v2
             mainPanelManager.FixColumnBasedOnContents(0);
             mainPanelManager.FixColumnBasedOnContents(1);
             mainPanelManager.AddControl(ControlFactory.CreateLabel("Programme Name:", false));
-            mainPanelManager.AddControl(ControlFactory.CreateLabel(programmeName, false));
+            mainPanelManager.AddControl(ControlFactory.CreateLabel(programName, false));
             mainPanelManager.AddControl(ControlFactory.CreateLabel("Produced For:", false));
             mainPanelManager.AddControl(ControlFactory.CreateLabel(producedForName, false));
             mainPanelManager.AddControl(ControlFactory.CreateLabel("Produced By:", false));

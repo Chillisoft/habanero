@@ -52,27 +52,25 @@ namespace Chillisoft.Bo.v2
         /// <summary>
         /// Indicates whether the collection contains the property specified
         /// </summary>
-        /// <param name="key">The property name</param>
+        /// <param name="propName">The property name</param>
         /// <returns>Returns true if found</returns>
-        /// TODO ERIC - rename key to propName
-        internal bool Contains(string key)
+        internal bool Contains(string propName)
         {
-            return (Dictionary.Contains(key.ToUpper()));
+            return (Dictionary.Contains(propName.ToUpper()));
         }
 
         /// <summary>
         /// Provides an indexing facility so the contents of the collection
         /// can be accessed with square brackets like an array
         /// </summary>
-        /// <param name="key">The name of the property to access</param>
+        /// <param name="propName">The name of the property to access</param>
         /// <returns>Returns the property if found, or null if not</returns>
-        /// /// TODO ERIC - rename key to propName
-        public BOProp this[string key]
+        public BOProp this[string propName]
         {
             get
             {
                 //TODOErr: put appropriate err handling
-                return ((BOProp) Dictionary[key.ToUpper()]);
+                return ((BOProp) Dictionary[propName.ToUpper()]);
             }
         }
 

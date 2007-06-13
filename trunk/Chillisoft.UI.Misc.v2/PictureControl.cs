@@ -13,7 +13,7 @@ namespace Chillisoft.UI.Misc.v2
     /// to set picture path.
     public class PictureControl : UserControl
     {
-        private bool _fitToScreen;
+        private bool _stretchToFit;
         private Image _picture;
         private PictureBox _pictureControl;
         private bool _isPictureLoaded;
@@ -21,11 +21,10 @@ namespace Chillisoft.UI.Misc.v2
         /// <summary>
         /// Constructor to initialise the control
         /// </summary>
-        /// <param name="fitToScreen">Whether to stretch the image to fill
+        /// <param name="stretchToFit">Whether to stretch the image to fill
         /// the space in which the control is located, or rather to
         /// center the image</param>
-        /// TODO ERIC - rename fitToScreen to stretchToFit
-        public PictureControl(bool fitToScreen)
+        public PictureControl(bool stretchToFit)
         {
             try
             {
@@ -39,7 +38,7 @@ namespace Chillisoft.UI.Misc.v2
             _pictureControl = new PictureBox();
 
             _pictureControl.Image = _picture;
-            this.FitToScreen = fitToScreen;
+            this.StretchToFit = stretchToFit;
 
             this.Controls.Add(_pictureControl);
             this.Resize += new EventHandler(ResizeHandler);
@@ -60,14 +59,13 @@ namespace Chillisoft.UI.Misc.v2
         /// Gets and sets the attribute that determines whether to stretch
         /// the image to fill the space provided, or rather to centre it
         /// </summary>
-        /// TODO ERIC - rename to StretchToFit
-        public bool FitToScreen
+        public bool StretchToFit
         {
-            get { return _fitToScreen; }
+            get { return _stretchToFit; }
             set
             {
-                _fitToScreen = value;
-                if (_fitToScreen)
+                _stretchToFit = value;
+                if (_stretchToFit)
                 {
                     _pictureControl.SizeMode = PictureBoxSizeMode.StretchImage;
                 }
@@ -86,7 +84,7 @@ namespace Chillisoft.UI.Misc.v2
         {
             if (_isPictureLoaded)
             {
-                if (_fitToScreen)
+                if (_stretchToFit)
                 {
                     int width = _picture.Width;
                     int height = _picture.Height;

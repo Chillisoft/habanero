@@ -625,14 +625,13 @@ namespace Chillisoft.Bo.v2
         /// <param name="userName">The user name that duplicated the record</param>
         /// <param name="machineName">The machine name that duplicated the
         /// record</param>
-        /// <param name="dateUpdated">The date when the record was duplicated</param>
+        /// <param name="dateDuplicated">The date when the record was duplicated</param>
         /// <param name="duplicateWhereClause">The duplicate "where" clause</param>
         /// <param name="obj">The object in question</param>
-        /// TODO ERIC - rename dateUpdated to dateDuplicated
         public BusObjDuplicateConcurrencyControlException(string className,
                                                           string userName,
                                                           string machineName,
-                                                          DateTime dateUpdated,
+                                                          DateTime dateDuplicated,
                                                           string duplicateWhereClause,
                                                           object obj) :
                                                               base("You cannot save " +
@@ -643,7 +642,7 @@ namespace Chillisoft.Bo.v2
                                                                    "\nMachineName : " +
                                                                    (machineName.Length > 0 ? machineName : "[Unknown]") +
                                                                    "\nDateUpdated : " +
-                                                                   dateUpdated.ToString("dd MMM yyyy HH:mm:ss:fff") +
+                                                                   dateDuplicated.ToString("dd MMM yyyy HH:mm:ss:fff") +
                                                                    "\nDuplicateObject : " + duplicateWhereClause, obj)
         {
         }

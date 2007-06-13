@@ -80,19 +80,16 @@ namespace Chillisoft.Bo.v2
         /// user interface (sometimes the underlying value may be stored
         /// differently, as in a lookup-list)
         /// </summary>
-        /// <param name="thePropName">The property name</param>
+        /// <param name="propertyName">The property name</param>
         /// <returns>Returns the formatted object to display</returns>
-        /// TODO ERIC P - change parameter to propName and remove 1st line of code
-        /// - come back to this (mind is foggy now)
-        public object GetPropertyValueForUser(string thePropName)
+        public object GetPropertyValueForUser(string propertyName)
         {
-            string propName = thePropName;
-            if (propName.IndexOf(".") != -1)
+            if (propertyName.IndexOf(".") != -1)
             {
-                //log.Debug("Prop with . found : " + propName);
+                //log.Debug("Prop with . found : " + propertyName);
                 BusinessObjectBase relatedBo = this._businessObject;
-                string relationshipName = propName.Substring(0, propName.IndexOf("."));
-                propName = propName.Remove(0, propName.IndexOf(".") + 1);
+                string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
+                propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
                 if (relationshipName.IndexOf("|") != -1)
                 {
                     //log.Debug("| found in relationship name :" + relationshipName);
@@ -119,14 +116,14 @@ namespace Chillisoft.Bo.v2
                 if (relatedBo == null)
                 {
                     return null;
-                    //throw new HabaneroApplicationException("Unable to retrieve property " + thePropName + " from a business object of type " + this._businessObject.GetType().Name);
+                    //throw new HabaneroApplicationException("Unable to retrieve property " + propertyName + " from a business object of type " + this._businessObject.GetType().Name);
                 }
                 BOMapper relatedBoMapper = new BOMapper(relatedBo);
-                return relatedBoMapper.GetPropertyValueForUser(propName);
+                return relatedBoMapper.GetPropertyValueForUser(propertyName);
             }
-            else if (propName.IndexOf("-") != -1)
+            else if (propertyName.IndexOf("-") != -1)
             {
-                string virtualPropName = propName.Substring(1, propName.Length - 2);
+                string virtualPropName = propertyName.Substring(1, propertyName.Length - 2);
                 try
                 {
                     PropertyInfo propInfo =
@@ -146,7 +143,7 @@ namespace Chillisoft.Bo.v2
             }
             else
             {
-                return _businessObject.GetPropertyValueForUser(propName);
+                return _businessObject.GetPropertyValueForUser(propertyName);
             }
         }
 

@@ -18,19 +18,18 @@ namespace Chillisoft.Bo.v2
         /// Constructor to initialise a new password
         /// </summary>
         /// <param name="value">The data to encrypt</param>
-        /// <param name="isLoading">Whether the value has already been
+        /// <param name="isEncrypted">Whether the value has already been
         /// encrypted (for instance, if an encrypted value is being loaded
         /// from the database)</param>
         /// <exception cref="HabaneroApplicationException">Thrown if the
         /// data to encrypt is not a string type</exception>
         /// TODO ERIC - why not just make the parameter a string? and not
         /// throw an exception
-        /// - could rename isLoading to isEncrypted
-        public PasswordBlowfish(object value, bool isLoading) : base(value, isLoading)
+        public PasswordBlowfish(object value, bool isEncrypted) : base(value, isEncrypted)
         {
             if (value is string)
             {
-                if (isLoading)
+                if (isEncrypted)
                 {
                     _encryptedValue = (string) value;
                 }

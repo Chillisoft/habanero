@@ -1895,16 +1895,15 @@ namespace Chillisoft.Bo.v2
         /// Checks that the specified flag value matches the value specified,
         /// and throws an exception if it does not
         /// </summary>
-        /// <param name="flg">The flag to check. See the States
+        /// <param name="objFlag">The flag to check. See the States
         /// enumeration for more detail.</param>
         /// <param name="bValue">The value the flag should hold</param>
-        /// TODO ERIC - rename parameter (objFlag as above? or flag)
-        protected void CheckBOFlagValue(States flg, bool bValue)
+        protected void CheckBOFlagValue(States objFlag, bool bValue)
         {
-            if (GetBOFlagValue(flg) != bValue)
+            if (GetBOFlagValue(objFlag) != bValue)
             {
-                CheckBOFlagValue(flg, bValue, "The " + this.GetType().Name +
-                                              " object is " + (bValue ? "not " : "") + flg.ToString());
+                CheckBOFlagValue(objFlag, bValue, "The " + this.GetType().Name +
+                                              " object is " + (bValue ? "not " : "") + objFlag.ToString());
             }
         }
 
@@ -1913,19 +1912,18 @@ namespace Chillisoft.Bo.v2
         /// and throws an exception if it does not, using the exception message
         /// provided
         /// </summary>
-        /// <param name="flg">The flag to check. See the States
+        /// <param name="objFlag">The flag to check. See the States
         /// enumeration for more detail.</param>
         /// <param name="bValue">The value the flag should hold</param>
-        /// <param name="strMessage">The error message to display if the flag
+        /// <param name="errorMessage">The error message to display if the flag
         /// value is not as expected</param>
-        /// TODO ERIC - rename parameters as above and strMessage to errorMessage
-        protected void CheckBOFlagValue(States flg,
+        protected void CheckBOFlagValue(States objFlag,
                                         bool bValue,
-                                        string strMessage)
+                                        string errorMessage)
         {
-            if (GetBOFlagValue(flg) != bValue)
+            if (GetBOFlagValue(objFlag) != bValue)
             {
-                throw (new Exception(strMessage));
+                throw (new Exception(errorMessage));
             }
         }
 
