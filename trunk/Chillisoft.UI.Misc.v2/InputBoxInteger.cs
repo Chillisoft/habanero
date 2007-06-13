@@ -16,7 +16,7 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="defaultValue">The default integer value to display</param>
         public InputBoxInteger(string message, int defaultValue) : base(message)
         {
-            itsNumericUpDown.Value = defaultValue;
+            _numericUpDown.Value = defaultValue;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Chillisoft.UI.Misc.v2
         /// TODO ERIC - definitely need a set here
         public int Value
         {
-            get { return Convert.ToInt32(itsNumericUpDown.Value); }
+            get { return Convert.ToInt32(_numericUpDown.Value); }
         }
 
         /// <summary>

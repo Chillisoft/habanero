@@ -13,38 +13,38 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public class SqlScratchPad : UserControl, FormControl
     {
-        TextBox itsScriptTextBox;
-        DataGrid itsResultGrid;
-        TextBox itsStatusTextBox;
-        ButtonControl itsButtonControl;
+        TextBox _scriptTextBox;
+        DataGrid _resultGrid;
+        TextBox _statusTextBox;
+        ButtonControl _buttonControl;
 
-        private bool itsIsAuthenticated;
+        private bool _isAuthenticated;
 
         /// <summary>
         /// Constructor to initialise a new scratchpad
         /// </summary>
         public SqlScratchPad()
         {
-            itsScriptTextBox = ControlFactory.CreateTextBox();
-            itsScriptTextBox.Multiline = true;
-            itsScriptTextBox.ScrollBars = ScrollBars.Vertical;
+            _scriptTextBox = ControlFactory.CreateTextBox();
+            _scriptTextBox.Multiline = true;
+            _scriptTextBox.ScrollBars = ScrollBars.Vertical;
 
-            itsResultGrid = new DataGrid();
+            _resultGrid = new DataGrid();
 
-            itsStatusTextBox = ControlFactory.CreateTextBox();
+            _statusTextBox = ControlFactory.CreateTextBox();
 
-            itsButtonControl = new ButtonControl();
-            itsButtonControl.AddButton("Execute", new EventHandler(ExecuteButtonClickHandler));
+            _buttonControl = new ButtonControl();
+            _buttonControl.AddButton("Execute", new EventHandler(ExecuteButtonClickHandler));
             Panel topPanel = new Panel();
             BorderLayoutManager topPanelManager = new BorderLayoutManager(topPanel);
-            topPanelManager.AddControl(itsScriptTextBox, BorderLayoutManager.Position.Centre);
-            topPanelManager.AddControl(itsButtonControl, BorderLayoutManager.Position.South);
+            topPanelManager.AddControl(_scriptTextBox, BorderLayoutManager.Position.Centre);
+            topPanelManager.AddControl(_buttonControl, BorderLayoutManager.Position.South);
             topPanel.Height = 300;
 
             BorderLayoutManager manager = new BorderLayoutManager(this);
             manager.AddControl(topPanel, BorderLayoutManager.Position.North, true);
-            manager.AddControl(itsResultGrid, BorderLayoutManager.Position.Centre);
-            manager.AddControl(itsStatusTextBox, BorderLayoutManager.Position.South);
+            manager.AddControl(_resultGrid, BorderLayoutManager.Position.Centre);
+            manager.AddControl(_statusTextBox, BorderLayoutManager.Position.South);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void ExecuteButtonClickHandler(object sender, EventArgs e)
         {
-            if (!itsIsAuthenticated)
+            if (!_isAuthenticated)
             {
                 InputBoxTextBox passwordEntry = new InputBoxTextBox("Please enter the password:", 1);
                 passwordEntry.IsPasswordField = true;
@@ -67,7 +67,7 @@ namespace Chillisoft.UI.Misc.v2
                     }
                     else
                     {
-                        itsIsAuthenticated = true;
+                        _isAuthenticated = true;
                     }
                 }
                 else
@@ -77,25 +77,25 @@ namespace Chillisoft.UI.Misc.v2
             }
             try
             {
-                if (itsScriptTextBox.Text.Trim().Substring(0, 6).ToUpper() == "SELECT")
+                if (_scriptTextBox.Text.Trim().Substring(0, 6).ToUpper() == "SELECT")
                 {
                     DataTable table =
                         DatabaseConnection.CurrentConnection.LoadDataTable(
-                            new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(), itsScriptTextBox.Text),
+                            new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(), _scriptTextBox.Text),
                             "", "");
-                    itsResultGrid.DataSource = table;
-                    itsStatusTextBox.Text = Convert.ToString(table.Rows.Count) + " row returned.";
+                    _resultGrid.DataSource = table;
+                    _statusTextBox.Text = Convert.ToString(table.Rows.Count) + " row returned.";
                 }
                 else
                 {
-                    int numRows = DatabaseConnection.CurrentConnection.ExecutePlainSql(itsScriptTextBox.Text);
-                    itsStatusTextBox.Text = Convert.ToString(numRows) + " rows affected.";
+                    int numRows = DatabaseConnection.CurrentConnection.ExecutePlainSql(_scriptTextBox.Text);
+                    _statusTextBox.Text = Convert.ToString(numRows) + " rows affected.";
                 }
             }
             catch (Exception ex)
             {
                 GlobalRegistry.UIExceptionNotifier.Notify(
-                    new BaseApplicationException("Problem executing statement : " + itsScriptTextBox.Text, ex),
+                    new BaseApplicationException("Problem executing statement : " + _scriptTextBox.Text, ex),
                     "There was a problem executing the statement.  Please see below for details.", "Failure");
             }
         }

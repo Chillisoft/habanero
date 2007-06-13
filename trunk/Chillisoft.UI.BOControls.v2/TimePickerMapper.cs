@@ -34,7 +34,7 @@ namespace Chillisoft.UI.BOControls.v2
         {
             if (itsBusinessObject != null && !itsIsReadOnceOnly)
             {
-                //DateTime newValue = itsDateTimePicker.Value;
+                //DateTime newValue = _dateTimePicker.Value;
                 object newValue = itsTimePicker.Value;
                 object oldValue = itsBusinessObject.GetPropertyValue(itsPropertyName);
                 if (oldValue != null || newValue != null)

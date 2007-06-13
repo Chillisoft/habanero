@@ -10,9 +10,9 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public class InputBoxFolderSelect
     {
-        private readonly string itsMessage;
-        protected TextBox itsTextBox;
-        private string itsFolder;
+        private readonly string _message;
+        protected TextBox _textBox;
+        private string _folder;
 
         /// <summary>
         /// Initialises the form with a message to display to the user
@@ -20,8 +20,8 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="message">The message to display</param>
         public InputBoxFolderSelect(string message)
         {
-            itsMessage = message;
-            itsTextBox = ControlFactory.CreateTextBox();
+            _message = message;
+            _textBox = ControlFactory.CreateTextBox();
         }
 
         /// <summary>
@@ -34,15 +34,15 @@ namespace Chillisoft.UI.Misc.v2
         {
             Panel messagePanel = new Panel();
             FlowLayoutManager messagePanelManager = new FlowLayoutManager(messagePanel);
-            messagePanelManager.AddControl(ControlFactory.CreateLabel(itsMessage, false));
-            messagePanelManager.AddControl(itsTextBox);
+            messagePanelManager.AddControl(ControlFactory.CreateLabel(_message, false));
+            messagePanelManager.AddControl(_textBox);
             messagePanelManager.AddGlue();
             Button itsSelectButton =
                 ControlFactory.CreateButton("Select...", new EventHandler(SelectFolderButtonClickHandler));
             messagePanelManager.AddControl(itsSelectButton);
-            messagePanel.Height = itsTextBox.Height + 40;
-            messagePanel.Width = Math.Max(250, ControlFactory.CreateLabel(itsMessage, false).PreferredWidth + 20);
-            itsTextBox.Width = messagePanel.Width - itsSelectButton.Width - 30;
+            messagePanel.Height = _textBox.Height + 40;
+            messagePanel.Width = Math.Max(250, ControlFactory.CreateLabel(_message, false).PreferredWidth + 20);
+            _textBox.Width = messagePanel.Width - itsSelectButton.Width - 30;
             return new OKCancelDialog(messagePanel).ShowDialog();
         }
 
@@ -55,11 +55,11 @@ namespace Chillisoft.UI.Misc.v2
         private void SelectFolderButtonClickHandler(object sender, EventArgs e)
         {
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
-            if (itsFolder != "") folderDialog.SelectedPath = itsFolder;
+            if (_folder != "") folderDialog.SelectedPath = _folder;
             if (folderDialog.ShowDialog() == DialogResult.OK)
             {
-                itsTextBox.Text = folderDialog.SelectedPath;
-                itsFolder = folderDialog.SelectedPath;
+                _textBox.Text = folderDialog.SelectedPath;
+                _folder = folderDialog.SelectedPath;
             }
         }
 
@@ -68,11 +68,11 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public string FolderName
         {
-            get { return itsTextBox.Text; }
+            get { return _textBox.Text; }
             set
             {
-                itsFolder = value;
-                itsTextBox.Text = itsFolder;
+                _folder = value;
+                _textBox.Text = _folder;
             }
         }
     }

@@ -9,8 +9,8 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public class InputBoxComboBox
     {
-        private readonly string itsMessage;
-        protected ComboBox itsComboBox;
+        private readonly string _message;
+        protected ComboBox _comboBox;
 
         /// <summary>
         /// Initialises the form with a message to display to the user
@@ -19,9 +19,9 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="options">The List of options to display</param>
         public InputBoxComboBox(string message, List<object> options)
         {
-            itsMessage = message;
-            itsComboBox = ControlFactory.CreateComboBox();
-            options.ForEach(delegate(object obj) { itsComboBox.Items.Add(obj); });
+            _message = message;
+            _comboBox = ControlFactory.CreateComboBox();
+            options.ForEach(delegate(object obj) { _comboBox.Items.Add(obj); });
         }
 
         /// <summary>
@@ -34,11 +34,11 @@ namespace Chillisoft.UI.Misc.v2
         {
             Panel messagePanel = new Panel();
             FlowLayoutManager messagePanelManager = new FlowLayoutManager(messagePanel);
-            messagePanelManager.AddControl(ControlFactory.CreateLabel(itsMessage, false));
-            messagePanelManager.AddControl(itsComboBox );
-            messagePanel.Height = itsComboBox.Height + 100;
-            messagePanel.Width = ControlFactory.CreateLabel(itsMessage, true).PreferredWidth + 20;
-            itsComboBox.Width = messagePanel.Width - 30;
+            messagePanelManager.AddControl(ControlFactory.CreateLabel(_message, false));
+            messagePanelManager.AddControl(_comboBox );
+            messagePanel.Height = _comboBox.Height + 100;
+            messagePanel.Width = ControlFactory.CreateLabel(_message, true).PreferredWidth + 20;
+            _comboBox.Width = messagePanel.Width - 30;
             return new OKCancelDialog(messagePanel).ShowDialog();
         }
 
@@ -47,8 +47,8 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public object SelectedItem
         {
-            get { return itsComboBox.SelectedItem; }
-            set { itsComboBox.SelectedItem = value; }
+            get { return _comboBox.SelectedItem; }
+            set { _comboBox.SelectedItem = value; }
         }
     }
 }

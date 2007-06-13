@@ -16,7 +16,7 @@ namespace Chillisoft.UI.Misc.v2
         /// to display</param>
         public InputBoxMoney(string message, decimal defaultValue) : base(message)
         {
-            itsNumericUpDown.Value = defaultValue;
+            _numericUpDown.Value = defaultValue;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Chillisoft.UI.Misc.v2
         /// TODO ERIC - add a set here
         public decimal Value
         {
-            get { return itsNumericUpDown.Value; }
+            get { return _numericUpDown.Value; }
         }
 
         /// <summary>

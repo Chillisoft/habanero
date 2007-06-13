@@ -12,11 +12,11 @@ namespace Chillisoft.UI.Misc.v2
     /// - add a constructor that provides a default width and height
     public class TextBoxMessageBox
     {
-        private readonly string itsTitle;
-        private readonly int itsHeight;
-        private readonly int itsWidth;
-        private readonly string itsMessage;
-        private Form itsForm;
+        private readonly string _title;
+        private readonly int _height;
+        private readonly int _width;
+        private readonly string _message;
+        private Form _form;
 
         /// <summary>
         /// Constructor to initialise the form with some given details
@@ -27,10 +27,10 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="height">The height of the form</param>
         public TextBoxMessageBox(string title, string message, int width, int height)
         {
-            itsMessage = message;
-            itsWidth = width;
-            itsHeight = height;
-            itsTitle = title;
+            _message = message;
+            _width = width;
+            _height = height;
+            _title = title;
         }
 
         /// <summary>
@@ -38,24 +38,24 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public void ShowDialog()
         {
-            itsForm = new Form();
-            itsForm.Height = itsHeight;
-            itsForm.Width = itsWidth;
-            itsForm.Text = itsTitle;
+            _form = new Form();
+            _form.Height = _height;
+            _form.Width = _width;
+            _form.Text = _title;
 
-            BorderLayoutManager manager = new BorderLayoutManager(itsForm);
-            manager.AddControl(ControlFactory.CreateLabel(itsTitle, false), BorderLayoutManager.Position.North);
+            BorderLayoutManager manager = new BorderLayoutManager(_form);
+            manager.AddControl(ControlFactory.CreateLabel(_title, false), BorderLayoutManager.Position.North);
             TextBox tb = ControlFactory.CreateTextBox();
             tb.Multiline = true;
             tb.ScrollBars = ScrollBars.Vertical;
-            tb.Text = itsMessage;
+            tb.Text = _message;
             manager.AddControl(tb, BorderLayoutManager.Position.Centre);
 
             ButtonControl buttons = new ButtonControl();
             buttons.AddButton("OK", new EventHandler(OKButtonClickHandler));
             manager.AddControl(buttons, BorderLayoutManager.Position.South);
 
-            itsForm.ShowDialog();
+            _form.ShowDialog();
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void OKButtonClickHandler(object sender, EventArgs e)
         {
-            itsForm.Close();
+            _form.Close();
         }
     }
 }

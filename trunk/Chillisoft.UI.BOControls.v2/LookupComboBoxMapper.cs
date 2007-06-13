@@ -23,7 +23,7 @@ namespace Chillisoft.UI.BOControls.v2
             : base(cbx, propName, isReadOnceOnly)
         {
             itsComboBox = cbx;
-            //itsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            //_comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             itsComboBox.SelectedIndexChanged += new EventHandler(ValueChangedHandler);
             itsComboBox.KeyPress += delegate(object sender, KeyPressEventArgs e)
                                         {

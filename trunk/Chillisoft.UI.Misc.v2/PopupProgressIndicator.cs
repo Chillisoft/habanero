@@ -11,7 +11,7 @@ namespace Chillisoft.UI.Misc.v2
     public class PopupProgressIndicator : ProgressIndicator
     {
 
-        private PopupProgressForm itsPopupProgressForm;
+        private PopupProgressForm _popupProgressForm;
 
         /// <summary>
         /// Constructor to initialise the indicator with a message to display
@@ -19,12 +19,12 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="message">The message to display</param>
         public PopupProgressIndicator(string message)
         {
-            itsPopupProgressForm = new PopupProgressForm(message);
-            itsPopupProgressForm.SetProgress(0);
-            itsPopupProgressForm.Height = 100;
-            itsPopupProgressForm.Width = 400;
-            itsPopupProgressForm.Show();
-            itsPopupProgressForm.BringToFront();
+            _popupProgressForm = new PopupProgressForm(message);
+            _popupProgressForm.SetProgress(0);
+            _popupProgressForm.Height = 100;
+            _popupProgressForm.Width = 400;
+            _popupProgressForm.Show();
+            _popupProgressForm.BringToFront();
         }
 
 
@@ -36,9 +36,9 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="description">A description</param>
         public void UpdateProgress(int amountComplete, int totalToComplete, string description)
         {
-				itsPopupProgressForm.SetProgress(amountComplete*100/totalToComplete);
-                itsPopupProgressForm.SetDescription(description);
-                itsPopupProgressForm.Refresh();
+				_popupProgressForm.SetProgress(amountComplete*100/totalToComplete);
+                _popupProgressForm.SetDescription(description);
+                _popupProgressForm.Refresh();
 
 		}
 
@@ -51,7 +51,7 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public void Complete()
         {
-            itsPopupProgressForm.Close();
+            _popupProgressForm.Close();
         }
         
         /// <summary>

@@ -11,10 +11,10 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public class OKCancelDialog
     {
-        private readonly Control itsControlToNest;
-        private readonly string itsTitle;
-        private readonly Point itsPosition;
-        private Form itsForm;
+        private readonly Control _controlToNest;
+        private readonly string _title;
+        private readonly Point _position;
+        private Form _form;
 
         /// <summary>
         /// Constructor to initialise the dialog with a control to display
@@ -42,9 +42,9 @@ namespace Chillisoft.UI.Misc.v2
         /// dialog</param>
         public OKCancelDialog(Control controlToNest, string title, Point position)
         {
-            itsControlToNest = controlToNest;
-            itsTitle = title;
-            itsPosition = position;
+            _controlToNest = controlToNest;
+            _title = title;
+            _position = position;
         }
 
         /// <summary>
@@ -69,35 +69,35 @@ namespace Chillisoft.UI.Misc.v2
         /// combine this method into ShowDialog()
         public Form CreateDialog()
         {
-            itsForm = new Form();
+            _form = new Form();
 
             ButtonControl buttons = new ButtonControl();
             Button cancelButton = buttons.AddButton("Cancel", new EventHandler(CancelButtonClickHandler));
             Button okButton = buttons.AddButton("OK", new EventHandler(OKButtonClickHandler));
 
-            itsForm.Width = Math.Max( itsControlToNest.Width, okButton.Width * 2 + 30);
-            itsForm.Height = itsControlToNest.Height + buttons.Height + 40;
-            GridLayoutManager manager = new GridLayoutManager(itsForm);
+            _form.Width = Math.Max( _controlToNest.Width, okButton.Width * 2 + 30);
+            _form.Height = _controlToNest.Height + buttons.Height + 40;
+            GridLayoutManager manager = new GridLayoutManager(_form);
             manager.SetGridSize(2, 1);
             manager.FixAllRowsBasedOnContents();
 
-            manager.AddControl(itsControlToNest);
+            manager.AddControl(_controlToNest);
             manager.AddControl(buttons);
 
-            itsForm.Text = itsTitle;
-            if (itsPosition.X != 0 && itsPosition.Y != 0)
+            _form.Text = _title;
+            if (_position.X != 0 && _position.Y != 0)
             {
-                itsForm.StartPosition = FormStartPosition.Manual;
-                itsForm.Location = itsPosition;
+                _form.StartPosition = FormStartPosition.Manual;
+                _form.Location = _position;
             }
             else
             {
-                itsForm.StartPosition = FormStartPosition.CenterScreen;
+                _form.StartPosition = FormStartPosition.CenterScreen;
             }
-            itsForm.AcceptButton = okButton;
+            _form.AcceptButton = okButton;
             okButton.NotifyDefault(true);
-            itsForm.CancelButton = cancelButton;
-            return itsForm;
+            _form.CancelButton = cancelButton;
+            return _form;
         }
 
         /// <summary>
@@ -108,8 +108,8 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void CancelButtonClickHandler(object sender, EventArgs e)
         {
-            itsForm.DialogResult = DialogResult.Cancel;
-            itsForm.Close();
+            _form.DialogResult = DialogResult.Cancel;
+            _form.Close();
         }
 
         /// <summary>
@@ -120,8 +120,8 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void OKButtonClickHandler(object sender, EventArgs e)
         {
-            itsForm.DialogResult = DialogResult.OK;
-            itsForm.Close();
+            _form.DialogResult = DialogResult.OK;
+            _form.Close();
         }
     }
 }

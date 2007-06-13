@@ -10,14 +10,14 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public class InputBoxRadioButton
     {
-        private IList radioButtons;
+        private IList _radioButtons;
 
         /// <summary>
         /// Constructor to intialise a new form
         /// </summary>
         public InputBoxRadioButton()
         {
-            radioButtons = new ArrayList();
+            _radioButtons = new ArrayList();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Chillisoft.UI.Misc.v2
                 RadioButton rButton = ControlFactory.CreateRadioButton(s);
                 if (rButton.Width > maxWidth) maxWidth = rButton.Width;
                 messagePanelManager.AddControl(rButton);
-                radioButtons.Add(rButton);
+                _radioButtons.Add(rButton);
             }
             messagePanel.Height = ControlFactory.CreateRadioButton("Test").Height*options.Length + 10;
             messagePanel.Width = maxWidth + 10;
@@ -52,7 +52,7 @@ namespace Chillisoft.UI.Misc.v2
         {
             get
             {
-                foreach (RadioButton radioButton in radioButtons)
+                foreach (RadioButton radioButton in _radioButtons)
                 {
                     if (radioButton.Checked)
                     {

@@ -9,8 +9,8 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public class InputBoxDate
     {
-        private readonly string itsMessage;
-        protected DateTimePicker itsDateTimePicker;
+        private readonly string _message;
+        protected DateTimePicker _dateTimePicker;
 
         /// <summary>
         /// Initialises the form with a message to display to the user
@@ -18,8 +18,8 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="message">The message to display</param>
         public InputBoxDate(string message)
         {
-            itsMessage = message;
-            itsDateTimePicker = ControlFactory.CreateStandardDateTimePicker();
+            _message = message;
+            _dateTimePicker = ControlFactory.CreateStandardDateTimePicker();
         }
 
         /// <summary>
@@ -32,10 +32,10 @@ namespace Chillisoft.UI.Misc.v2
         {
             Panel messagePanel = new Panel();
             FlowLayoutManager messagePanelManager = new FlowLayoutManager(messagePanel);
-            messagePanelManager.AddControl(ControlFactory.CreateLabel(itsMessage, false));
-            messagePanelManager.AddControl(itsDateTimePicker);
-            messagePanel.Height = itsDateTimePicker.Height*2 + 20;
-            messagePanel.Width = ControlFactory.CreateLabel(itsMessage, false).PreferredWidth + 20;
+            messagePanelManager.AddControl(ControlFactory.CreateLabel(_message, false));
+            messagePanelManager.AddControl(_dateTimePicker);
+            messagePanel.Height = _dateTimePicker.Height*2 + 20;
+            messagePanel.Width = ControlFactory.CreateLabel(_message, false).PreferredWidth + 20;
             return new OKCancelDialog(messagePanel).ShowDialog();
         }
 
@@ -45,8 +45,8 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public DateTime Value
         {
-            get { return itsDateTimePicker.Value; }
-            set { itsDateTimePicker.Value = value; }
+            get { return _dateTimePicker.Value; }
+            set { _dateTimePicker.Value = value; }
         }
     }
 }

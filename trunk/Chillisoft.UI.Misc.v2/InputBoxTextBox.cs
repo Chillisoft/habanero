@@ -9,9 +9,9 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public class InputBoxTextBox
     {
-        private readonly string itsMessage;
-        protected TextBox itsTextBox;
-        private bool itsIsPasswordField = false;
+        private readonly string _message;
+        protected TextBox _textBox;
+        private bool _isPasswordField = false;
 
         /// <summary>
         /// Initialises the form with a message to display to the user
@@ -21,13 +21,13 @@ namespace Chillisoft.UI.Misc.v2
         /// in the text box (its height in lines)</param>
         public InputBoxTextBox(string message, int numLines)
         {
-            itsMessage = message;
-            itsTextBox = ControlFactory.CreateTextBox();
+            _message = message;
+            _textBox = ControlFactory.CreateTextBox();
             if (numLines > 1)
             {
-                itsTextBox.Multiline = true;
-                itsTextBox.Height = itsTextBox.Height*numLines;
-                itsTextBox.ScrollBars = ScrollBars.Vertical;
+                _textBox.Multiline = true;
+                _textBox.Height = _textBox.Height*numLines;
+                _textBox.ScrollBars = ScrollBars.Vertical;
             }
         }
 
@@ -38,17 +38,17 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public bool IsPasswordField
         {
-            get { return itsIsPasswordField; }
+            get { return _isPasswordField; }
             set
             {
-                itsIsPasswordField = value;
+                _isPasswordField = value;
                 if (value)
                 {
-                    itsTextBox.PasswordChar = '*';
+                    _textBox.PasswordChar = '*';
                 }
                 else
                 {
-                    itsTextBox.PasswordChar = (char) 0;
+                    _textBox.PasswordChar = (char) 0;
                 }
             }
         }
@@ -63,11 +63,11 @@ namespace Chillisoft.UI.Misc.v2
         {
             Panel messagePanel = new Panel();
             FlowLayoutManager messagePanelManager = new FlowLayoutManager(messagePanel);
-            messagePanelManager.AddControl(ControlFactory.CreateLabel(itsMessage, false));
-            messagePanelManager.AddControl(itsTextBox);
-            messagePanel.Height = itsTextBox.Height + 40;
-            messagePanel.Width = ControlFactory.CreateLabel(itsMessage, true).PreferredWidth + 20;
-            itsTextBox.Width = messagePanel.Width - 30;
+            messagePanelManager.AddControl(ControlFactory.CreateLabel(_message, false));
+            messagePanelManager.AddControl(_textBox);
+            messagePanel.Height = _textBox.Height + 40;
+            messagePanel.Width = ControlFactory.CreateLabel(_message, true).PreferredWidth + 20;
+            _textBox.Width = messagePanel.Width - 30;
             return new OKCancelDialog(messagePanel).ShowDialog();
         }
 
@@ -76,8 +76,8 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public string Text
         {
-            get { return itsTextBox.Text; }
-            set { itsTextBox.Text = value; }
+            get { return _textBox.Text; }
+            set { _textBox.Text = value; }
         }
     }
 }

@@ -9,9 +9,9 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public class InputBoxFileSelect
     {
-        private readonly string itsMessage;
-        protected TextBox itsTextBox;
-        private string itsFileName;
+        private readonly string _message;
+        protected TextBox _textBox;
+        private string _fileName;
 
         /// <summary>
         /// Initialises the form with a message to display to the user
@@ -19,8 +19,8 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="message">The message to display</param>
         public InputBoxFileSelect(string message)
         {
-            itsMessage = message;
-            itsTextBox = ControlFactory.CreateTextBox();
+            _message = message;
+            _textBox = ControlFactory.CreateTextBox();
         }
 
         /// <summary>
@@ -33,14 +33,14 @@ namespace Chillisoft.UI.Misc.v2
         {
             Panel messagePanel = new Panel();
             FlowLayoutManager messagePanelManager = new FlowLayoutManager(messagePanel);
-            messagePanelManager.AddControl(ControlFactory.CreateLabel(itsMessage, false));
-            messagePanelManager.AddControl(itsTextBox);
+            messagePanelManager.AddControl(ControlFactory.CreateLabel(_message, false));
+            messagePanelManager.AddControl(_textBox);
             messagePanelManager.AddGlue();
             messagePanelManager.AddControl(
                 ControlFactory.CreateButton("Select...", new EventHandler(SelectFolderButtonClickHandler)));
-            messagePanel.Height = itsTextBox.Height + 40;
-            messagePanel.Width = ControlFactory.CreateLabel(itsMessage, false).PreferredWidth + 20;
-            itsTextBox.Width = messagePanel.Width - 30;
+            messagePanel.Height = _textBox.Height + 40;
+            messagePanel.Width = ControlFactory.CreateLabel(_message, false).PreferredWidth + 20;
+            _textBox.Width = messagePanel.Width - 30;
             return new OKCancelDialog(messagePanel).ShowDialog();
         }
 
@@ -53,11 +53,11 @@ namespace Chillisoft.UI.Misc.v2
         private void SelectFolderButtonClickHandler(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
-            if (itsFileName != "") fileDialog.FileName = itsFileName;
+            if (_fileName != "") fileDialog.FileName = _fileName;
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                itsTextBox.Text = fileDialog.FileName;
-                itsFileName = fileDialog.FileName;
+                _textBox.Text = fileDialog.FileName;
+                _fileName = fileDialog.FileName;
             }
         }
 
@@ -66,11 +66,11 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public string FileName
         {
-            get { return itsTextBox.Text; }
+            get { return _textBox.Text; }
             set
             {
-                itsFileName = value;
-                itsTextBox.Text = itsFileName;
+                _fileName = value;
+                _textBox.Text = _fileName;
             }
         }
     }

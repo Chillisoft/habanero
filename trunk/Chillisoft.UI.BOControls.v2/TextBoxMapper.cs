@@ -20,7 +20,7 @@ namespace Chillisoft.UI.BOControls.v2
         public TextBoxMapper(TextBox tb, string propName, bool isReadOnceOnly) : base(tb, propName, isReadOnceOnly)
         {
             itsTextBox = tb;
-            //itsTextBox.Enabled = false;
+            //_textBox.Enabled = false;
             itsTextBox.TextChanged += new EventHandler(ValueChangedHandler);
             itsOldText = "";
         }

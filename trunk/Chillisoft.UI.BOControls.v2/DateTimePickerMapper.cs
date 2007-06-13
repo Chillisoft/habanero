@@ -27,7 +27,7 @@ namespace Chillisoft.UI.BOControls.v2
             itsDateTimePicker = dtp;
             EventInfo valueChangedEventInfo = dtp.GetType().GetEvent("ValueChanged");
             valueChangedEventInfo.AddEventHandler(itsDateTimePicker, new EventHandler(ValueChangedHandler));
-            //itsValuePropertyInfo = itsDateTimePicker.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);			
+            //itsValuePropertyInfo = _dateTimePicker.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);			
             //itsDateTimePicker.ValueChanged += new EventHandler(ValueChangedHandler);
         }
 

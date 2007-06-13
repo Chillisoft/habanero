@@ -10,10 +10,10 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public class InputBoxDateRange
     {
-        private readonly string itsMessage;
-        private DateTimePicker itsStartDateTimePicker;
-        private DateTimePicker itsEndDateTimePicker;
-        private string itsTitle;
+        private readonly string _message;
+        private DateTimePicker _startDateTimePicker;
+        private DateTimePicker _endDateTimePicker;
+        private string _title;
 
         /// <summary>
         /// Initialises the form with a message to display to the user
@@ -22,10 +22,10 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="title">The title</param>
         public InputBoxDateRange(string message, string title)
         {
-            itsMessage = message;
-            itsTitle = title;
-            itsStartDateTimePicker = ControlFactory.CreateStandardDateTimePicker();
-            itsEndDateTimePicker = ControlFactory.CreateStandardDateTimePicker();
+            _message = message;
+            _title = title;
+            _startDateTimePicker = ControlFactory.CreateStandardDateTimePicker();
+            _endDateTimePicker = ControlFactory.CreateStandardDateTimePicker();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Chillisoft.UI.Misc.v2
         {
             Panel mainPanel = new Panel();
             BorderLayoutManager manager = new BorderLayoutManager(mainPanel);
-            manager.AddControl(ControlFactory.CreateLabel(itsMessage, false), BorderLayoutManager.Position.North);
+            manager.AddControl(ControlFactory.CreateLabel(_message, false), BorderLayoutManager.Position.North);
 
             Panel messagePanel = new Panel();
             GridLayoutManager messagePanelManager = new GridLayoutManager(messagePanel);
@@ -46,15 +46,15 @@ namespace Chillisoft.UI.Misc.v2
             messagePanelManager.FixAllRowsBasedOnContents();
             messagePanelManager.FixColumnBasedOnContents(0);
             messagePanelManager.AddControl(ControlFactory.CreateLabel("Start Date", false));
-            messagePanelManager.AddControl(itsStartDateTimePicker);
+            messagePanelManager.AddControl(_startDateTimePicker);
             messagePanelManager.AddControl(ControlFactory.CreateLabel("End Date", false));
-            messagePanelManager.AddControl(itsEndDateTimePicker);
+            messagePanelManager.AddControl(_endDateTimePicker);
             messagePanel.Height = messagePanelManager.GetFixedHeightIncludingGaps();
-            messagePanel.Width = Math.Max(250, ControlFactory.CreateLabel(itsMessage, false).PreferredWidth + 10);
+            messagePanel.Width = Math.Max(250, ControlFactory.CreateLabel(_message, false).PreferredWidth + 10);
             mainPanel.Height = messagePanel.Height + ControlFactory.CreateLabel("Test", true).Height + 5;
             mainPanel.Width = messagePanel.Width;
             manager.AddControl(messagePanel, BorderLayoutManager.Position.Centre);
-            return new OKCancelDialog(mainPanel, itsTitle).ShowDialog();
+            return new OKCancelDialog(mainPanel, _title).ShowDialog();
         }
 
         /// <summary>
@@ -62,8 +62,8 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public DateTime StartDate
         {
-            get { return itsStartDateTimePicker.Value; }
-            set { itsStartDateTimePicker.Value = value; }
+            get { return _startDateTimePicker.Value; }
+            set { _startDateTimePicker.Value = value; }
         }
 
         /// <summary>
@@ -71,8 +71,8 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public DateTime EndDate
         {
-            get { return itsEndDateTimePicker.Value; }
-            set { itsEndDateTimePicker.Value = value; }
+            get { return _endDateTimePicker.Value; }
+            set { _endDateTimePicker.Value = value; }
         }
     }
 }

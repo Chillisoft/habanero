@@ -13,10 +13,10 @@ namespace Chillisoft.UI.Misc.v2
     /// to set picture path.
     public class PictureControl : UserControl
     {
-        private bool itsFitToScreen;
-        private Image itsPicture;
-        private PictureBox itsPictureControl;
-        private bool itsIsPictureLoaded;
+        private bool _fitToScreen;
+        private Image _picture;
+        private PictureBox _pictureControl;
+        private bool _isPictureLoaded;
 
         /// <summary>
         /// Constructor to initialise the control
@@ -29,19 +29,19 @@ namespace Chillisoft.UI.Misc.v2
         {
             try
             {
-                itsPicture = Image.FromFile("logo.jpg");
-                itsIsPictureLoaded = true;
+                _picture = Image.FromFile("logo.jpg");
+                _isPictureLoaded = true;
             }
             catch (FileNotFoundException)
             {
-                itsIsPictureLoaded = false;
+                _isPictureLoaded = false;
             }
-            itsPictureControl = new PictureBox();
+            _pictureControl = new PictureBox();
 
-            itsPictureControl.Image = itsPicture;
+            _pictureControl.Image = _picture;
             this.FitToScreen = fitToScreen;
 
-            this.Controls.Add(itsPictureControl);
+            this.Controls.Add(_pictureControl);
             this.Resize += new EventHandler(ResizeHandler);
             ResizePicBox();
         }
@@ -63,17 +63,17 @@ namespace Chillisoft.UI.Misc.v2
         /// TODO ERIC - rename to StretchToFit
         public bool FitToScreen
         {
-            get { return itsFitToScreen; }
+            get { return _fitToScreen; }
             set
             {
-                itsFitToScreen = value;
-                if (itsFitToScreen)
+                _fitToScreen = value;
+                if (_fitToScreen)
                 {
-                    itsPictureControl.SizeMode = PictureBoxSizeMode.StretchImage;
+                    _pictureControl.SizeMode = PictureBoxSizeMode.StretchImage;
                 }
                 else
                 {
-                    itsPictureControl.SizeMode = PictureBoxSizeMode.CenterImage;
+                    _pictureControl.SizeMode = PictureBoxSizeMode.CenterImage;
                 }
                 ResizePicBox();
             }
@@ -84,35 +84,35 @@ namespace Chillisoft.UI.Misc.v2
         /// </summary>
         public void ResizePicBox()
         {
-            if (itsIsPictureLoaded)
+            if (_isPictureLoaded)
             {
-                if (itsFitToScreen)
+                if (_fitToScreen)
                 {
-                    int width = itsPicture.Width;
-                    int height = itsPicture.Height;
+                    int width = _picture.Width;
+                    int height = _picture.Height;
                     int controlWidth = this.Width;
                     int controlHeight = this.Height;
                     double wr = controlWidth > 0 ? width/controlWidth : 0;
                     double hr = controlHeight > 0 ? height/controlHeight : 0;
                     if (wr > 1.0 && wr > hr)
                     {
-                        itsPictureControl.Width = (int) (width*1/wr);
-                        itsPictureControl.Height = (int) (height*1/wr);
+                        _pictureControl.Width = (int) (width*1/wr);
+                        _pictureControl.Height = (int) (height*1/wr);
                     }
                     else if (hr > 1.0)
                     {
-                        itsPictureControl.Width = (int) (width*1/hr);
-                        itsPictureControl.Height = (int) (height*1/hr);
+                        _pictureControl.Width = (int) (width*1/hr);
+                        _pictureControl.Height = (int) (height*1/hr);
                     }
-                    itsPictureControl.Left = (int) (this.Width/2 - (itsPictureControl.Width/2));
-                    itsPictureControl.Top = (int) (this.Height/2 - (itsPictureControl.Height/2));
+                    _pictureControl.Left = (int) (this.Width/2 - (_pictureControl.Width/2));
+                    _pictureControl.Top = (int) (this.Height/2 - (_pictureControl.Height/2));
                 }
                 else
                 {
-                    itsPictureControl.Left = 0;
-                    itsPictureControl.Top = 0;
-                    itsPictureControl.Height = this.Height;
-                    itsPictureControl.Width = this.Width;
+                    _pictureControl.Left = 0;
+                    _pictureControl.Top = 0;
+                    _pictureControl.Height = this.Height;
+                    _pictureControl.Width = this.Width;
                 }
             }
         }

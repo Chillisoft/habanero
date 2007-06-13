@@ -55,7 +55,7 @@ namespace Chillisoft.UI.BOControls.v2
                 decimal oldValue = Convert.ToDecimal(itsBusinessObject.GetPropertyValue(itsPropertyName));
                 if (newValue != oldValue)
                 {
-                    //log.Debug("setting property value to " + itsNumericUpDown.Value + " of type " + itsNumericUpDown.Value.GetType().Name);
+                    //log.Debug("setting property value to " + _numericUpDown.Value + " of type " + itsNumericUpDown.Value.GetType().Name);
                     itsBusinessObject.SetPropertyValue(itsPropertyName, newValue);
                 }
             }

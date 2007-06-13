@@ -8,8 +8,8 @@ namespace Chillisoft.UI.Misc.v2
     /// </summary>
     public abstract class InputBoxNumeric
     {
-        private readonly string itsMessage;
-        protected NumericUpDown itsNumericUpDown;
+        private readonly string _message;
+        protected NumericUpDown _numericUpDown;
 
         /// <summary>
         /// Initialises the form with a message to display to the user
@@ -17,8 +17,8 @@ namespace Chillisoft.UI.Misc.v2
         /// <param name="message">The message to display</param>
         public InputBoxNumeric(string message)
         {
-            itsMessage = message;
-            itsNumericUpDown = CreateNumericUpDown();
+            _message = message;
+            _numericUpDown = CreateNumericUpDown();
         }
 
         /// <summary>
@@ -37,10 +37,10 @@ namespace Chillisoft.UI.Misc.v2
         {
             Panel messagePanel = new Panel();
             FlowLayoutManager messagePanelManager = new FlowLayoutManager(messagePanel);
-            messagePanelManager.AddControl(ControlFactory.CreateLabel(itsMessage, false));
-            messagePanelManager.AddControl(itsNumericUpDown);
-            messagePanel.Height = itsNumericUpDown.Height*2 + 20;
-            messagePanel.Width = ControlFactory.CreateLabel(itsMessage, false).PreferredWidth + 20;
+            messagePanelManager.AddControl(ControlFactory.CreateLabel(_message, false));
+            messagePanelManager.AddControl(_numericUpDown);
+            messagePanel.Height = _numericUpDown.Height*2 + 20;
+            messagePanel.Width = ControlFactory.CreateLabel(_message, false).PreferredWidth + 20;
             return new OKCancelDialog(messagePanel).ShowDialog();
         }
     }
