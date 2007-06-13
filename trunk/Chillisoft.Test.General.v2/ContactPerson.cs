@@ -296,7 +296,7 @@ namespace Chillisoft.Test.General.v2
         internal static void DeleteAllContactPeople()
         {
             string sql = "DELETE FROM tbContactPerson";
-            DatabaseConnection.CurrentConnection.ExecutePlainSql(sql);
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
         #endregion

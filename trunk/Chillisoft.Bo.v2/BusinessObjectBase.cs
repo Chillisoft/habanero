@@ -260,7 +260,7 @@ namespace Chillisoft.Bo.v2
                 PropDef lPropDef = (PropDef) item.Value;
                 prop = lPropDef.CreateBOProp(false);
 
-                prop.InitialiseProp(dr[prop.DataBaseFieldName]);
+                prop.InitialiseProp(dr[prop.DatabaseFieldName]);
                 propCol.Add(prop);
 
                 _primaryKey = (BOPrimaryKey) _classDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
@@ -1089,7 +1089,7 @@ namespace Chillisoft.Bo.v2
                         throw new BusinessObjectNotFoundException(
                             "A serious error has occured please contact your system administrator" +
                             "There are no records in the database for the Class: " + _classDef.ClassName +
-                            " identified by " + this.ID + " \n" + SelectStatement(null) + " \n" + ErrorSafeConnectString);
+                            " identified by " + this.ID + " \n" + SelectSqlStatement(null) + " \n" + ErrorSafeConnectString);
                     }
                 }
                 finally
@@ -1125,7 +1125,7 @@ namespace Chillisoft.Bo.v2
             SqlStatement selectSQL = new SqlStatement(connection.GetConnection());
             if (searchExpression == null)
             {
-                selectSQL.Statement.Append(SelectStatement(selectSQL));
+                selectSQL.Statement.Append(SelectSqlStatement(selectSQL));
                 return DatabaseConnection.CurrentConnection.LoadDataReader(selectSQL);
             }
             else
@@ -1548,7 +1548,7 @@ namespace Chillisoft.Bo.v2
                 {
                     SqlStatement checkSQL = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
                     checkSQL.Statement.Append(this.GetSelectSql());
-                    string whereClause = " WHERE " + _primaryKey.DataBaseWhereClause(checkSQL);
+                    string whereClause = " WHERE " + _primaryKey.DatabaseWhereClause(checkSQL);
                     checkSQL.Statement.Append(whereClause);
 
                     using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(checkSQL))
@@ -1587,7 +1587,7 @@ namespace Chillisoft.Bo.v2
         private string GetCheckForDuplicateWhereClause(BOKey lBOKey, SqlStatement sql)
         {
             //TODO_Err: raise appropriate error if lBOKey == null
-            return lBOKey.DataBaseWhereClause(sql);
+            return lBOKey.DatabaseWhereClause(sql);
         }
 
         #endregion //Concurrency
@@ -1639,7 +1639,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="selectSQL">The sql statement used to generate and track
         /// parameters</param>
         /// <returns>Returns a string</returns>
-        public virtual string SelectStatement(SqlStatement selectSQL)
+        public virtual string SelectSqlStatement(SqlStatement selectSQL)
         {
             string statement = SelectSQLWithNoSearchClause();
             if (statement.IndexOf(" WHERE ") == -1)

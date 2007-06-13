@@ -33,16 +33,16 @@ namespace Chillisoft.Test.UI.Generic.v2
         [Test]
         public void TestNextToNextStepNumber()
         {
-            Assert.IsTrue(myWizard.nextStep(ref errMsg), "nextStep should return true");
+            Assert.IsTrue(myWizard.NextStep(ref errMsg), "NextStep should return true");
             Assert.AreEqual(2, myWizard.CurrentStepNumber, "After calling next step current num should be 2");
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             Assert.AreEqual(3, myWizard.CurrentStepNumber, "After calling next step again current num should be 3");
         }
 
         [Test]
         public void TestPreviousGoesToPrevious()
         {
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             myWizard.previousStep();
             Assert.AreEqual(1, myWizard.CurrentStepNumber, "IT should be back at 1");
         }
@@ -65,9 +65,9 @@ namespace Chillisoft.Test.UI.Generic.v2
         public void TestNextButtonDoesntGoPastMaxNumSteps()
         {
             myWizard.MaxNumberOfSteps = 3;
-            myWizard.nextStep(ref errMsg);
-            myWizard.nextStep(ref errMsg);
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             Assert.AreEqual(3, myWizard.CurrentStepNumber, "Shouldnt go past max number of steps");
         }
 
@@ -81,8 +81,8 @@ namespace Chillisoft.Test.UI.Generic.v2
         public void TestFinishWhenFinishIsAvailable()
         {
             myWizard.MaxNumberOfSteps = 3;
-            myWizard.nextStep(ref errMsg);
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             Assert.IsTrue(myWizard.Finish(ref errMsg), "Finish should return true.");
         }
 
@@ -98,7 +98,7 @@ namespace Chillisoft.Test.UI.Generic.v2
         public void TestAvailableButtonsAtStep2Outof3()
         {
             myWizard.MaxNumberOfSteps = 3;
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             Assert.AreEqual(2, myWizard.AvailableOperations().Count,
                             "There should be two ops available at step 2 out of 3");
             Assert.AreEqual("Next", myWizard.AvailableOperations()[0], "Next should be the only op available at start.");
@@ -110,8 +110,8 @@ namespace Chillisoft.Test.UI.Generic.v2
         public void TestAvailableButtonsAtStep3Outof3()
         {
             myWizard.MaxNumberOfSteps = 3;
-            myWizard.nextStep(ref errMsg);
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             Assert.AreEqual(2, myWizard.AvailableOperations().Count,
                             "There should be two ops available at step 3 out of 3");
             Assert.AreEqual("Previous", myWizard.AvailableOperations()[0],
@@ -124,7 +124,7 @@ namespace Chillisoft.Test.UI.Generic.v2
         public void TestSetStep()
         {
             myWizard.setWizardStep(1, new MockWizardStep(true, ""));
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             Assert.AreEqual(2, myWizard.CurrentStepNumber, "Should go to step 2 and pass validation.");
         }
 
@@ -141,8 +141,8 @@ namespace Chillisoft.Test.UI.Generic.v2
         public void TestStepFailing()
         {
             myWizard.setWizardStep(2, new MockWizardStep(false, "MockFail"));
-            myWizard.nextStep(ref errMsg);
-            Assert.IsFalse(myWizard.nextStep(ref errMsg), "Should not pass step 2.");
+            myWizard.NextStep(ref errMsg);
+            Assert.IsFalse(myWizard.NextStep(ref errMsg), "Should not pass step 2.");
             Assert.AreEqual(2, myWizard.CurrentStepNumber, "Should not pass step 2.");
             Assert.AreEqual("MockFail", errMsg, "Error message should be 'MockFail'");
         }
@@ -152,7 +152,7 @@ namespace Chillisoft.Test.UI.Generic.v2
         {
             MockWizardStep mock = new MockWizardStep(true, "");
             myWizard.setWizardStep(2, mock);
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             myWizard.previousStep();
             Assert.AreEqual("Cancelled", mock.CancelStatus, "PreviousStep didn't cancel wizard step");
         }
@@ -162,7 +162,7 @@ namespace Chillisoft.Test.UI.Generic.v2
         {
             myWizard.MaxNumberOfSteps = 2;
             myWizard.setWizardStep(2, new MockWizardStep(false, "MockFail"));
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             Assert.IsFalse(myWizard.Finish(ref errMsg), "Shouldn't be able to finish.");
             Assert.AreEqual(2, myWizard.CurrentStepNumber, "Should not pass step 2.");
             Assert.AreEqual("MockFail", errMsg, "Error message should be 'MockFail'");
@@ -173,7 +173,7 @@ namespace Chillisoft.Test.UI.Generic.v2
         {
             MockWizardStep mock = new MockWizardStep(true, "");
             myWizard.setWizardStep(2, mock);
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             Assert.AreSame(mock, myWizard.GetCurrentWizardStep(),
                            "GetCurrentStep is not returning the correct wizardstep");
         }
@@ -185,7 +185,7 @@ namespace Chillisoft.Test.UI.Generic.v2
             MockWizardStep mock2 = new MockWizardStep(true, "");
             myWizard.setWizardStep(1, mock1);
             myWizard.setWizardStep(2, mock2);
-            myWizard.nextStep(ref errMsg);
+            myWizard.NextStep(ref errMsg);
             Assert.AreSame(mock1, myWizard.GetPreviousWizardStep(),
                            "GetPreviousWizardStep is not returning the correct wizardstep");
             myWizard.previousStep();

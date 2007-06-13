@@ -16,50 +16,49 @@ namespace Chillisoft.Bo.v2
     /// <see cref="Chillisoft.Bo.v2.BusinessObjectBase.ApplyEdit"/> and 
     /// <see cref= "Chillisoft.Bo.v2.OptimisticLockingVersionNumber.UpdatePropertiesWithLatestConcurrencyInfo"/>)
     /// </summary>
-    /// TODO ERIC - could knock all the "prop"s off these fields and parameters
     public class OptimisticLockingVersionNumber : IConcurrencyControl
     {
-        private BOProp _dateLastUpdatedProp;
-        private BOProp _userLastUpdatedProp;
-        private BOProp _machineLastUpdatedProp;
-        private BOProp _versionNumberProp;
-        private BOProp _operatingSystemUserProp;
+        private BOProp _dateLastUpdated;
+        private BOProp _userLastUpdated;
+        private BOProp _machineLastUpdated;
+        private BOProp _versionNumber;
+        private BOProp _operatingSystemUser;
 
         /// <summary>
         /// Constructor to initialise a new instance with details of the last
         /// update of the object in the database
         /// </summary>
-        /// <param name="dateLastUpdatedProp">The date that the object was
+        /// <param name="dateLastUpdated">The date that the object was
         /// last updated</param>
-        /// <param name="userLastUpdatedProp">The user that last updated the
+        /// <param name="userLastUpdated">The user that last updated the
         /// object</param>
-        /// <param name="machineLastUpdatedProp">The machine name on which the
+        /// <param name="machineLastUpdated">The machine name on which the
         /// object was last updated</param>
-        /// <param name="versionNumberProp">The version number</param>
-        public OptimisticLockingVersionNumber(BOProp dateLastUpdatedProp,
-                                              BOProp userLastUpdatedProp,
-                                              BOProp machineLastUpdatedProp,
-                                              BOProp versionNumberProp)
+        /// <param name="versionNumber">The version number</param>
+        public OptimisticLockingVersionNumber(BOProp dateLastUpdated,
+                                              BOProp userLastUpdated,
+                                              BOProp machineLastUpdated,
+                                              BOProp versionNumber)
         {
-            _dateLastUpdatedProp = dateLastUpdatedProp;
-            _userLastUpdatedProp = userLastUpdatedProp;
-            _machineLastUpdatedProp = machineLastUpdatedProp;
-            _versionNumberProp = versionNumberProp;
+            _dateLastUpdated = dateLastUpdated;
+            _userLastUpdated = userLastUpdated;
+            _machineLastUpdated = machineLastUpdated;
+            _versionNumber = versionNumber;
         }
 
         /// <summary>
         /// Constructor as before, but allows the operating system on which
         /// the update was done to be specified
         /// </summary>
-        public OptimisticLockingVersionNumber(BOProp dateLastUpdatedProp,
-                                              BOProp userLastUpdatedProp,
-                                              BOProp machineLastUpdatedProp,
-                                              BOProp versionNumberProp,
-                                              BOProp operatingSystemUserProp)
-            : this(dateLastUpdatedProp, userLastUpdatedProp,
-                   machineLastUpdatedProp, versionNumberProp)
+        public OptimisticLockingVersionNumber(BOProp dateLastUpdated,
+                                              BOProp userLastUpdated,
+                                              BOProp machineLastUpdated,
+                                              BOProp versionNumber,
+                                              BOProp operatingSystemUser)
+            : this(dateLastUpdated, userLastUpdated,
+                   machineLastUpdated, versionNumber)
         {
-            _operatingSystemUserProp = operatingSystemUserProp;
+            _operatingSystemUser = operatingSystemUser;
         }
 
         /// <summary>
@@ -96,17 +95,17 @@ namespace Chillisoft.Bo.v2
                         }
                         else
                         {
-                            int versionNumber = (int) dr[_versionNumberProp.DataBaseFieldName];
+                            int versionNumber = (int) dr[_versionNumber.DatabaseFieldName];
                             //Compare the value that the property has as its versionNumber
                             // to the value that the database currently has.
                             // if these two are not equal then the objects data has been 
                             // updated to the database since this object read it,
                             // we thus have a concurrency conflict.
-                            if (versionNumber != (int) _versionNumberProp.PropertyValue)
+                            if (versionNumber != (int) _versionNumber.PropertyValue)
                             {
-                                String dateLastUpdatedInDB = dr[_dateLastUpdatedProp.DataBaseFieldName].ToString();
-                                string userNameLastUpdated = (string) dr[_userLastUpdatedProp.DataBaseFieldName];
-                                string machineLastUpdated = (string) dr[_machineLastUpdatedProp.DataBaseFieldName];
+                                String dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
+                                string userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
+                                string machineLastUpdated = (string) dr[_machineLastUpdated.DatabaseFieldName];
                                 throw new BusObjOptimisticConcurrencyControlException(busObj.ClassName,
                                                                                       userNameLastUpdated,
                                                                                       machineLastUpdated,
@@ -176,13 +175,13 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public void UpdatePropertiesWithLatestConcurrencyInfo()
         {
-            _dateLastUpdatedProp.PropertyValue = DateTime.Now;
+            _dateLastUpdated.PropertyValue = DateTime.Now;
 
             try
             {
                 //TODO Temp code possibly integrate with a system to get the user as
                 // per custom code for now use the OS user.
-                _userLastUpdatedProp.PropertyValue = WindowsIdentity.GetCurrent().Name;
+                _userLastUpdated.PropertyValue = WindowsIdentity.GetCurrent().Name;
             }
             catch (SecurityException)
             {
@@ -190,18 +189,18 @@ namespace Chillisoft.Bo.v2
 
             try
             {
-                _machineLastUpdatedProp.PropertyValue = Environment.MachineName;
+                _machineLastUpdated.PropertyValue = Environment.MachineName;
             }
             catch (InvalidOperationException)
             {
             }
 
-            _versionNumberProp.PropertyValue = (int) _versionNumberProp.PropertyValue + 1;
-            if (!(_operatingSystemUserProp == null))
+            _versionNumber.PropertyValue = (int) _versionNumber.PropertyValue + 1;
+            if (!(_operatingSystemUser == null))
             {
                 try
                 {
-                    _operatingSystemUserProp.PropertyValue = WindowsIdentity.GetCurrent().Name;
+                    _operatingSystemUser.PropertyValue = WindowsIdentity.GetCurrent().Name;
                 }
                 catch (SecurityException)
                 {

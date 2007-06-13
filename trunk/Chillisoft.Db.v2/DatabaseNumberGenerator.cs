@@ -70,7 +70,7 @@ namespace Chillisoft.Db.v2
                 else
                 {
                     _number = _seedValue;
-                    DatabaseConnection.CurrentConnection.ExecutePlainSql("insert into " + _tableName +
+                    DatabaseConnection.CurrentConnection.ExecuteRawSql("insert into " + _tableName +
                                                                          " (SettingName, SettingValue) values ('" +
                                                                          _settingName + "', " + _seedValue + ")");
                 }

@@ -50,8 +50,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="errMsg">The error message string to modify if
         /// an error prevents further progress in the wizard</param>
         /// <returns>Returns true if the advance is successful</returns>
-        /// TODO ERIC - capitalise
-        public bool nextStep(ref string errMsg)
+        public bool NextStep(ref string errMsg)
         {
             if (this.ValidateCurrentStep(ref errMsg))
             {

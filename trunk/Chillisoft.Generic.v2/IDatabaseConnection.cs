@@ -31,7 +31,7 @@ namespace Chillisoft.Generic.v2
         /// <summary>
         /// Loads a data reader
         /// </summary>
-        /// <param name="selectSQL">The sql statement object</param>
+        /// <param name="selectSql">The sql statement object</param>
         /// <returns>Returns an IDataReader object</returns>
         IDataReader LoadDataReader(ISqlStatement selectSql);
 
@@ -44,7 +44,7 @@ namespace Chillisoft.Generic.v2
         IDataReader LoadDataReader(ISqlStatement selectSql, string strOrderByCriteria);
 
         /// <summary>
-        /// Loads a data reader with the given plaintext select statement
+        /// Loads a data reader with the given raw sql select statement
         /// </summary>
         /// <param name="selectSql">The sql statement as a string</param>
         /// <returns>Returns an IDataReader object with the results of the query</returns>
@@ -67,7 +67,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         /// <param name="sql">The sql statement as a string</param>
         /// <returns>Returns the number of rows affected</returns>
-        int ExecutePlainSql(string sql);
+        int ExecuteRawSql(string sql);
 
         /// <summary>
         /// Executes a sql command that returns no result set and takes no 
@@ -77,7 +77,7 @@ namespace Chillisoft.Generic.v2
         /// <param name="transaction">A valid transaction object in which the 
         /// sql must be executed, or null</param>
         /// <returns>Returns the number of rows affected</returns>
-        int ExecutePlainSql(string sql, IDbTransaction transaction);
+        int ExecuteRawSql(string sql, IDbTransaction transaction);
         
         /// <summary>
         /// Executes a collection of sql statements

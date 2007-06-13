@@ -33,7 +33,7 @@ namespace Chillisoft.Db.v2
         }
 
         /// <summary>
-        /// Executes the sql given as a plain string, using the database
+        /// Executes the sql given as a raw string, using the database
         /// connection provided.  It is generally preferable to use the
         /// ExecuteSqlStatement() method, since this provides error
         /// checking for the components of the sql statement that you build up.

@@ -14,9 +14,9 @@ namespace Chillisoft.UI.Generic.v2
         private ControlCollection _controls;
         private Hashtable _controlInfoTable;
         private Point _currentPos;
-        private int[] _colWidths;
+        private int[] _columnWidths;
         private int[] _rowHeights;
-        private bool[] _fixedColsBasedOnContents;
+        private bool[] _fixedColumnsBasedOnContents;
         private bool _fixAllRowsBasedOnContents;
         private bool[] _fixedRowsBasedOnContents;
 
@@ -38,12 +38,12 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="cols">The number of columns</param>
         public void SetGridSize(int rows, int cols)
         {
-            _colWidths = new int[cols];
-            _fixedColsBasedOnContents = new bool[cols];
-            for (int i = 0; i < _colWidths.Length; i++)
+            _columnWidths = new int[cols];
+            _fixedColumnsBasedOnContents = new bool[cols];
+            for (int i = 0; i < _columnWidths.Length; i++)
             {
-                _colWidths[i] = -1;
-                _fixedColsBasedOnContents[i] = false;
+                _columnWidths[i] = -1;
+                _fixedColumnsBasedOnContents[i] = false;
             }
             _rowHeights = new int[rows];
             _fixedRowsBasedOnContents = new bool[rows];
@@ -65,10 +65,9 @@ namespace Chillisoft.UI.Generic.v2
         /// <summary>
         /// Returns the number of columns
         /// </summary>
-        /// TODO ERIC - rename this to ColumnCount
-        private int ColCount
+        private int ColumnCount
         {
-            get { return _colWidths.Length; }
+            get { return _columnWidths.Length; }
         }
 
         /// <summary>
@@ -82,11 +81,11 @@ namespace Chillisoft.UI.Generic.v2
                 for (int i = 0; i < RowCount; i++)
                 {
                     ControlCollection row = new ControlCollection();
-                    for (int j = 0; j < ColCount; j++)
+                    for (int j = 0; j < ColumnCount; j++)
                     {
-                        if ((i*ColCount + j) < this._controls.Count)
+                        if ((i*ColumnCount + j) < this._controls.Count)
                         {
-                            row.Add(this._controls[i*ColCount + j]);
+                            row.Add(this._controls[i*ColumnCount + j]);
                         }
                         else
                         {
@@ -107,14 +106,14 @@ namespace Chillisoft.UI.Generic.v2
             get
             {
                 IList cols = new ArrayList();
-                for (int i = 0; i < ColCount; i++)
+                for (int i = 0; i < ColumnCount; i++)
                 {
                     ControlCollection col = new ControlCollection();
                     for (int j = 0; j < RowCount; j++)
                     {
-                        if ((ColCount*j + i) < this._controls.Count)
+                        if ((ColumnCount*j + i) < this._controls.Count)
                         {
-                            col.Add(this._controls[ColCount*j + i]);
+                            col.Add(this._controls[ColumnCount*j + i]);
                         }
                         else
                         {
@@ -142,20 +141,20 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         /// <param name="control">The control to add</param>
         /// <param name="rowSpan">The row position to add to</param>
-        /// <param name="colSpan">The column position to add to</param>
+        /// <param name="columnSpan">The column position to add to</param>
         /// <returns>Returns the control once it has been added</returns>
-        public Control AddControl(Control control, int rowSpan, int colSpan)
+        public Control AddControl(Control control, int rowSpan, int columnSpan)
         {
             if (control == null)
             {
                 control = new Control();
                 control.Visible = false;
             }
-            int currentColNum = (this._controls.Count)%ColCount;
-            int currentRowNum = (this._controls.Count)/ColCount;
-            if (_fixedColsBasedOnContents[currentColNum])
+            int currentColNum = (this._controls.Count)%ColumnCount;
+            int currentRowNum = (this._controls.Count)/ColumnCount;
+            if (_fixedColumnsBasedOnContents[currentColNum])
             {
-                if (control.Width > _colWidths[currentColNum])
+                if (control.Width > _columnWidths[currentColNum])
                 {
                     FixColumn(currentColNum, control.Width);
                 }
@@ -176,7 +175,7 @@ namespace Chillisoft.UI.Generic.v2
             }
             this._controls.Add(control);
             this.ManagedControl.Controls.Add(control);
-            this._controlInfoTable.Add(control, new ControlInfo(control, colSpan, rowSpan));
+            this._controlInfoTable.Add(control, new ControlInfo(control, columnSpan, rowSpan));
             RefreshControlPositions();
             return control;
         }
@@ -189,8 +188,8 @@ namespace Chillisoft.UI.Generic.v2
             _currentPos = new Point(BorderSize, BorderSize);
             for (int i = 0; i < _controls.Count; i++)
             {
-                int currentRow = i/ColCount;
-                int currentCol = i%ColCount;
+                int currentRow = i/ColumnCount;
+                int currentCol = i%ColumnCount;
                 Control ctl = this._controls[i];
                 if ((i > 0) && (currentCol == 0))
                 {
@@ -201,18 +200,18 @@ namespace Chillisoft.UI.Generic.v2
                 ctl.Top = _currentPos.Y;
                 int width = 0;
                 ControlInfo ctlInfo = (ControlInfo) _controlInfoTable[ctl];
-                for (int cols = currentCol; cols < Math.Min(this.ColCount, currentCol + ctlInfo.ColSpan); cols++)
+                for (int cols = currentCol; cols < Math.Min(this.ColumnCount, currentCol + ctlInfo.ColumnSpan); cols++)
                 {
                     if (IsFixedColumn(cols))
                     {
-                        width += _colWidths[cols];
+                        width += _columnWidths[cols];
                     }
                     else
                     {
                         width += CalcColumnWidth();
                     }
                 }
-                width += (this.GapSize*(ctlInfo.ColSpan - 1));
+                width += (this.GapSize*(ctlInfo.ColumnSpan - 1));
                 ctl.Width = width;
 
                 int height = 0;
@@ -254,42 +253,42 @@ namespace Chillisoft.UI.Generic.v2
         /// <summary>
         /// Indicates whether the specified row has a fixed height
         /// </summary>
-        /// <param name="rowNum">The row number in question</param>
+        /// <param name="rowNumber">The row number in question</param>
         /// <returns>Returns true if fixed, false if not</returns>
-        private bool IsFixedRow(int rowNum)
+        private bool IsFixedRow(int rowNumber)
         {
-            return _rowHeights[rowNum] > -1;
+            return _rowHeights[rowNumber] > -1;
         }
 
         /// <summary>
         /// Indicates whether the specified column has a fixed width
         /// </summary>
-        /// <param name="colNum">The column number in question</param>
+        /// <param name="columnNumber">The column number in question</param>
         /// <returns>Returns true if fixed, false if not</returns>
-        private bool IsFixedColumn(int colNum)
+        private bool IsFixedColumn(int columnNumber)
         {
-            return _colWidths[colNum%ColCount] > -1;
+            return _columnWidths[columnNumber%ColumnCount] > -1;
         }
 
         /// <summary>
         /// Fixes the width of a column to a specified size
         /// </summary>
-        /// <param name="colNum">The column in question</param>
-        /// <param name="colWidth">The width to fix the column at</param>
-        public void FixColumn(int colNum, int colWidth)
+        /// <param name="columnNumber">The column in question</param>
+        /// <param name="columnWidth">The width to fix the column at</param>
+        public void FixColumn(int columnNumber, int columnWidth)
         {
-            _colWidths[colNum] = colWidth;
+            _columnWidths[columnNumber] = columnWidth;
             RefreshControlPositions();
         }
 
         /// <summary>
         /// Fixes the height of a row to a specified size
         /// </summary>
-        /// <param name="rowNum">The row in question</param>
+        /// <param name="rowNumber">The row in question</param>
         /// <param name="rowHeight">The height to fix the row at</param>
-        public void FixRow(int rowNum, int rowHeight)
+        public void FixRow(int rowNumber, int rowHeight)
         {
-            _rowHeights[rowNum] = rowHeight;
+            _rowHeights[rowNumber] = rowHeight;
             RefreshControlPositions();
         }
 
@@ -299,7 +298,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the total width</returns>
         private int GetFixedWidth()
         {
-            return GetFixedAmount(_colWidths);
+            return GetFixedAmount(_columnWidths);
         }
 
         /// <summary>
@@ -319,7 +318,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the total width</returns>
         public int GetFixedWidthIncludingGaps()
         {
-            return GetFixedWidth() + (2 * BorderSize) + ((ColCount - 1) * GapSize);
+            return GetFixedWidth() + (2 * BorderSize) + ((ColumnCount - 1) * GapSize);
         }
         
         /// <summary>
@@ -359,7 +358,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the count</returns>
         private int GetNumVariableColumns()
         {
-            return GetNumVariableEntries(_colWidths);
+            return GetNumVariableEntries(_columnWidths);
         }
 
         /// <summary>
@@ -396,10 +395,10 @@ namespace Chillisoft.UI.Generic.v2
         /// <summary>
         /// Fixes a specified column's width based on current or future contents
         /// </summary>
-        /// <param name="colNum">The column in question</param>
-        public void FixColumnBasedOnContents(int colNum)
+        /// <param name="columnNumber">The column in question</param>
+        public void FixColumnBasedOnContents(int columnNumber)
         {
-            _fixedColsBasedOnContents[colNum] = true;
+            _fixedColumnsBasedOnContents[columnNumber] = true;
         }
 
         /// <summary>
@@ -415,22 +414,22 @@ namespace Chillisoft.UI.Generic.v2
         /// <summary>
         /// Fixes a specified row's height based on current or future contents
         /// </summary>
-        /// <param name="rowNum">The row in question</param>
-        public void FixRowBasedOnContents(int rowNum)
+        /// <param name="rowNumber">The row in question</param>
+        public void FixRowBasedOnContents(int rowNumber)
         {
-            _fixedRowsBasedOnContents[rowNum] = true;
+            _fixedRowsBasedOnContents[rowNumber] = true;
         }
 
         /// <summary>
         /// Gets the fixed width set for a specified column.  The return
         /// value will be -1 if the width has not been fixed.
         /// </summary>
-        /// <param name="colNum">The column in question</param>
+        /// <param name="columnNumber">The column in question</param>
         /// <returns>Returns the fixed width or -1</returns>
         /// TODO ERIC - add a row equivalent
-        public int GetFixedColumnWidth(int colNum)
+        public int GetFixedColumnWidth(int columnNumber)
         {
-            return this._colWidths[colNum];
+            return this._columnWidths[columnNumber];
         }
 
         /// <summary>
@@ -439,7 +438,7 @@ namespace Chillisoft.UI.Generic.v2
         public class ControlInfo
         {
             private Control _control;
-            private int _colSpan;
+            private int _columnSpan;
             private readonly int _rowSpan;
 
             /// <summary>
@@ -455,10 +454,10 @@ namespace Chillisoft.UI.Generic.v2
             /// Constructor as before, but requiring the row and column
             /// spans to be specified
             /// </summary>
-            public ControlInfo(Control control, int colSpan, int rowSpan)
+            public ControlInfo(Control control, int columnSpan, int rowSpan)
             {
                 _control = control;
-                _colSpan = colSpan;
+                _columnSpan = columnSpan;
                 _rowSpan = rowSpan;
             }
 
@@ -482,11 +481,9 @@ namespace Chillisoft.UI.Generic.v2
             /// Returns the column span (how many columns this cell spans
             /// across)
             /// </summary>
-            /// TODO ERIC - rename to ColumnSpan (Col means collection in
-            /// some places)
-            public int ColSpan
+            public int ColumnSpan
             {
-                get { return _colSpan; }
+                get { return _columnSpan; }
             }
         }
     }

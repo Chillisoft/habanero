@@ -66,7 +66,7 @@ namespace Chillisoft.Bo.v2
                 string tableName = GetTableName(prop, classDefs);
                 statement += tableName + ".";
                 statement += _connection.LeftFieldDelimiter;
-                statement += prop.DataBaseFieldName;
+                statement += prop.DatabaseFieldName;
                 statement += _connection.RightFieldDelimiter;
                 statement += ", ";
             }

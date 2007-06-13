@@ -35,13 +35,13 @@ namespace Chillisoft.Test.General.v2
             //	@"data source=Core;database=WorkShopManagement;uid=sa;pwd=;";
 
             string sql = "DELETE from tbTestTableRead";
-            DatabaseConnection.CurrentConnection.ExecutePlainSql(sql);
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
             sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('aaa')";
-            DatabaseConnection.CurrentConnection.ExecutePlainSql(sql);
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
             sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('abb')";
-            DatabaseConnection.CurrentConnection.ExecutePlainSql(sql);
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
 
             using (
@@ -105,7 +105,7 @@ namespace Chillisoft.Test.General.v2
 
             Console.WriteLine("deleting from tbtesttableread");
             string sql = "DELETE from tbTestTableRead";
-            DatabaseConnection.CurrentConnection.ExecutePlainSql(sql);
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
             //Create transaction with Error
             Console.WriteLine("beginning transaction");
@@ -119,12 +119,12 @@ namespace Chillisoft.Test.General.v2
             {
                 Console.WriteLine("doing first insert.");
                 sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('Test')";
-                DatabaseConnection.CurrentConnection.ExecutePlainSql(sql, dbTransaction);
+                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
                 statementsExecutedPriorToRollBack++;
                 //insert second record
                 Console.WriteLine("doing second insert.");
                 sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('Test')";
-                DatabaseConnection.CurrentConnection.ExecutePlainSql(sql, dbTransaction);
+                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
                 statementsExecutedPriorToRollBack++;
                 Console.WriteLine("committing.");
                 dbTransaction.Commit();
@@ -157,10 +157,10 @@ namespace Chillisoft.Test.General.v2
             try
             {
                 sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('Test')";
-                DatabaseConnection.CurrentConnection.ExecutePlainSql(sql, dbTransaction);
+                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
                 //insert second record
                 sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('Test2')";
-                DatabaseConnection.CurrentConnection.ExecutePlainSql(sql, dbTransaction);
+                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
 
                 dbTransaction.Commit();
                 connection.Close();

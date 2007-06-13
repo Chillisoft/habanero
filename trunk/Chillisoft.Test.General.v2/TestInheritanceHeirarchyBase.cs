@@ -29,7 +29,7 @@ namespace Chillisoft.Test.General.v2
             itsUpdateSql = itsFilledCircle.GetUpdateSQL();
             itsDeleteSql = itsFilledCircle.GetDeleteSQL();
             itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            itsSelectSql.Statement.Append(itsFilledCircle.SelectStatement(itsSelectSql));
+            itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
         }
 
         protected abstract void SetupInheritanceSpecifics();

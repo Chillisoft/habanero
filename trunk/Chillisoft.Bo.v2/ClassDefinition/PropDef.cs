@@ -159,7 +159,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// property name, which is useful for migrating systems where
         /// the database has already been set up
         /// </summary>
-        protected internal string DataBaseFieldName
+        protected internal string DatabaseFieldName
         {
             get { return _databaseFieldName; }
 			protected set{ _databaseFieldName = value;}
@@ -398,7 +398,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         public void TestCreatePropDef()
         {
             Assert.AreEqual("PropName", mpropDef.PropertyName);
-            Assert.AreEqual("PropName", mpropDef.DataBaseFieldName);
+            Assert.AreEqual("PropName", mpropDef.DatabaseFieldName);
             Assert.AreEqual(typeof (string), mpropDef.PropType);
             PropDef lPropDef = new PropDef("prop", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, 1);
         }
@@ -421,7 +421,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             BOProp prop = mpropDef.CreateBOProp(false);
             Assert.AreEqual("PropName", prop.PropertyName);
-            Assert.AreEqual("PropName", prop.DataBaseFieldName);
+            Assert.AreEqual("PropName", prop.DatabaseFieldName);
         }
     }
 

@@ -153,7 +153,7 @@ namespace Chillisoft.Test.General.v2
         internal static void DeleteAllEngines()
         {
             string sql = "DELETE FROM " + GetClassDef().TableName;
-            DatabaseConnection.CurrentConnection.ExecutePlainSql(sql);
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
         #endregion

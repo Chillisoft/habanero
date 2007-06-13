@@ -88,7 +88,7 @@ namespace Chillisoft.UI.Misc.v2
                 }
                 else
                 {
-                    int numRows = DatabaseConnection.CurrentConnection.ExecutePlainSql(_scriptTextBox.Text);
+                    int numRows = DatabaseConnection.CurrentConnection.ExecuteRawSql(_scriptTextBox.Text);
                     _statusTextBox.Text = Convert.ToString(numRows) + " rows affected.";
                 }
             }

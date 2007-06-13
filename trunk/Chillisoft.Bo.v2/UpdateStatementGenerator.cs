@@ -86,7 +86,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
                          !_bo.ClassDef.PrimaryKeyDef.IsObjectID))
                     {
                         includedProps++;
-                        _updateSQL.Statement.Append(prop.DataBaseFieldName);
+                        _updateSQL.Statement.Append(prop.DatabaseFieldName);
                         _updateSQL.Statement.Append(" = ");
                         _updateSQL.AddParameterToStatement(prop.PropertyValue);
                         //_updateSQL.AddParameterToStatement(DatabaseUtil.PrepareValue(prop.PropertyValue));

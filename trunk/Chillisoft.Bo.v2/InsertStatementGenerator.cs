@@ -90,7 +90,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         /// <param name="tableName">The table name</param>
         private void GenerateSingleInsertStatement(bool includeAllProps, BOPropCol propsToInclude, string tableName)
         {
-            this.initialiseStatement();
+            this.InitialiseStatement();
 
             foreach (BOProp prop in _bo.GetBOPropCol().SortedValues)
             {
@@ -108,8 +108,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
         /// <summary>
         /// Initialises the sql statement
         /// </summary>
-        /// TODO ERIC - capitalise
-        private void initialiseStatement()
+        private void InitialiseStatement()
         {
             _dbFieldList = new StringBuilder(_bo.GetBOPropCol().Count*20);
             _dbValueList = new StringBuilder(_bo.GetBOPropCol().Count*20);
@@ -130,7 +129,7 @@ namespace Chillisoft.Bo.SqlGeneration.v2
                 _dbFieldList.Append(", ");
                 _dbValueList.Append(", ");
             }
-            _dbFieldList.Append(prop.DataBaseFieldName);
+            _dbFieldList.Append(prop.DatabaseFieldName);
             paramName = _gen.GetNextParameterName();
             _dbValueList.Append(paramName);
             _insertSQL.AddParameter(paramName, prop.PropertyValue);

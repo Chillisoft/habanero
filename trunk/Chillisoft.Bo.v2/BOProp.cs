@@ -59,9 +59,9 @@ namespace Chillisoft.Bo.v2
         /// <summary>
         /// Returns the database field name
         /// </summary>
-        internal string DataBaseFieldName
+        internal string DatabaseFieldName
         {
-            get { return _propDef.DataBaseFieldName; }
+            get { return _propDef.DatabaseFieldName; }
         }
 
 
@@ -379,19 +379,19 @@ namespace Chillisoft.Bo.v2
         {
             if (PersistedPropertyValue == null)
             {
-                return this.DataBaseFieldName + " is NULL ";
+                return this.DatabaseFieldName + " is NULL ";
             }
             else
             {
                 if (sql == null)
                 {
-                    return this.DataBaseFieldName + " = '" + this.PersistedPropertyValueString + "'";
+                    return this.DatabaseFieldName + " = '" + this.PersistedPropertyValueString + "'";
                 }
                 else
                 {
                     string paramName = sql.GetParameterNameGenerator().GetNextParameterName();
                     sql.AddParameter(paramName, PersistedPropertyValue);
-                    return this.DataBaseFieldName + " = " + paramName;
+                    return this.DatabaseFieldName + " = " + paramName;
                 }
             }
         }
@@ -410,19 +410,19 @@ namespace Chillisoft.Bo.v2
         {
             if (_currentValue == null)
             {
-                return this.DataBaseFieldName + " is NULL ";
+                return this.DatabaseFieldName + " is NULL ";
             }
             else
             {
                 if (sql == null)
                 {
-                    return this.DataBaseFieldName + " = '" + this.PropertyValueString + "'";
+                    return this.DatabaseFieldName + " = '" + this.PropertyValueString + "'";
                 }
                 else
                 {
                     String paramName = sql.GetParameterNameGenerator().GetNextParameterName();
                     sql.AddParameter(paramName, this.PropertyValue);
-                    return this.DataBaseFieldName + " = " + paramName;
+                    return this.DatabaseFieldName + " = " + paramName;
                 }
             }
         }
@@ -471,7 +471,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public string FieldName
         {
-            get { return DataBaseFieldName; }
+            get { return DatabaseFieldName; }
         }
 
         /// <summary>

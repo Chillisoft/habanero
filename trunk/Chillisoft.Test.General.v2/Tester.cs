@@ -836,7 +836,7 @@ namespace Chillisoft.Test.General.v2
         internal static void DeleteAllTransactionLogs()
         {
             string sql = "DELETE FROM tbTransactionLog";
-            DatabaseConnection.CurrentConnection.ExecutePlainSql(sql);
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
         #endregion

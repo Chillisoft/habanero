@@ -264,7 +264,7 @@ namespace Chillisoft.UI.BOControls.v2
                     }
                     else
                     {
-                        manager.AddControl(controls[i, j].Control, controls[i, j].ColSpan, controls[i, j].RowSpan);
+                        manager.AddControl(controls[i, j].Control, controls[i, j].ColumnSpan, controls[i, j].RowSpan);
                         controls[i, j].Control.TabIndex = rowCount*j + i;
                         //j += controls[i, j].ColSpan - 1;
                     }

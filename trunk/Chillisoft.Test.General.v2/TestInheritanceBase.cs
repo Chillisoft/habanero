@@ -27,7 +27,7 @@ namespace Chillisoft.Test.General.v2
             itsUpdateSql = objCircle.GetUpdateSQL();
             itsDeleteSql = objCircle.GetDeleteSQL();
             selectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            selectSql.Statement.Append(objCircle.SelectStatement(selectSql));
+            selectSql.Statement.Append(objCircle.SelectSqlStatement(selectSql));
         }
 
         protected abstract void SetupInheritanceSpecifics();

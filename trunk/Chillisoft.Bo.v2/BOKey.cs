@@ -237,8 +237,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="sql">The sql statement</param>
         /// <returns>Returns a string</returns>
-        /// TODO ERIC - rename to DatabaseWhereClause
-        protected internal virtual string DataBaseWhereClause(SqlStatement sql)
+        protected internal virtual string DatabaseWhereClause(SqlStatement sql)
         {
             StringBuilder whereClause = new StringBuilder(this.Count*30);
             foreach (DictionaryEntry item in this)

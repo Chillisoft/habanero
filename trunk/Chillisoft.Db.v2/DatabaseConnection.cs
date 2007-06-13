@@ -309,7 +309,7 @@ namespace Chillisoft.Db.v2
         }
 
         /// <summary>
-        /// Loads a data reader with the given plaintext select statement
+        /// Loads a data reader with the given raw sql select statement
         /// </summary>
         /// <param name="selectSql">The sql statement as a string</param>
         /// <returns>Returns an IDataReader object with the results of the query</returns>
@@ -400,10 +400,9 @@ namespace Chillisoft.Db.v2
         /// </summary>
         /// <param name="sql">The sql statement as a string</param>
         /// <returns>Returns the number of rows affected</returns>
-        /// TODO ERIC - elsewhere we use "raw", so change to either "raw" or "plain"
-        public int ExecutePlainSql(string sql)
+        public int ExecuteRawSql(string sql)
         {
-            return ExecutePlainSql(sql, null);
+            return ExecuteRawSql(sql, null);
         }
 
 
@@ -429,7 +428,7 @@ namespace Chillisoft.Db.v2
         /// In future override this method with methods that allow you to 
         /// pass in stored procedures and parameters.
         /// </future>
-        public virtual int ExecutePlainSql(string sql, IDbTransaction transaction)
+        public virtual int ExecuteRawSql(string sql, IDbTransaction transaction)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(sql, "sql");
             IDbConnection con = null;
@@ -458,7 +457,7 @@ namespace Chillisoft.Db.v2
                 {
                 }
                 cmd.CommandText = sql;
-                //log.Debug("ExecutePlainSql with sql statement: " + sql.ToString());
+                //log.Debug("ExecuteRawSql with sql statement: " + sql.ToString());
                 return cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
