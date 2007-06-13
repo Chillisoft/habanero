@@ -73,18 +73,18 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsReader.Read();
-            _name = itsReader.GetAttribute("name");
-            itsReader.Read();
-            if (itsReader.Name == "uiGridDef")
+            _reader.Read();
+            _name = _reader.GetAttribute("name");
+            _reader.Read();
+            if (_reader.Name == "uiGridDef")
             {
-                XmlUIGridDefLoader loader = new XmlUIGridDefLoader(itsDtdPath);
-                _uiGridDef = loader.LoadUIGridDef(itsReader.ReadOuterXml());
+                XmlUIGridDefLoader loader = new XmlUIGridDefLoader(_dtdPath);
+                _uiGridDef = loader.LoadUIGridDef(_reader.ReadOuterXml());
             }
-            if (itsReader.Name == "uiFormDef")
+            if (_reader.Name == "uiFormDef")
             {
-                XmlUIFormDefLoader loader = new XmlUIFormDefLoader(itsDtdPath);
-                _uiFormDef = loader.LoadUIFormDef(itsReader.ReadOuterXml());
+                XmlUIFormDefLoader loader = new XmlUIFormDefLoader(_dtdPath);
+                _uiFormDef = loader.LoadUIFormDef(_reader.ReadOuterXml());
             }
         }
     }

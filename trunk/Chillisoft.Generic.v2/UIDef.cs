@@ -7,9 +7,9 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class UIDef : IUserInterfaceMapper
     {
-        private string itsName;
-        private UIFormDef itsUIFormDef;
-        private UIGridDef itsUIGridDef;
+        private string _name;
+        private UIFormDef _uiFormDef;
+        private UIGridDef _uiGridDef;
 
         /// <summary>
         /// Constructor to initialise a new definition with the name, form
@@ -20,9 +20,9 @@ namespace Chillisoft.Generic.v2
         /// <param name="uiGridDef">The grid definition</param>
         public UIDef(string name, UIFormDef uiFormDef, UIGridDef uiGridDef)
         {
-            itsName = name;
-            itsUIFormDef = uiFormDef;
-            itsUIGridDef = uiGridDef;
+            _name = name;
+            _uiFormDef = uiFormDef;
+            _uiGridDef = uiGridDef;
         }
 
         //		private static Hashtable itsUIDefs;
@@ -50,7 +50,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public UIFormDef UIFormDef
         {
-            get { return itsUIFormDef; }
+            get { return _uiFormDef; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string Name
         {
-            get { return itsName; }
+            get { return _name; }
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public UIGridDef UIGridDef
         {
-            get { return itsUIGridDef; }
+            get { return _uiGridDef; }
         }
 
         /// <summary>

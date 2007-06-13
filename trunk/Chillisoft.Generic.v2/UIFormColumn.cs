@@ -10,8 +10,8 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class UIFormColumn : ICollection
     {
-        private IList itsList;
-        private int itsWidth;
+        private IList _list;
+        private int _width;
 
         /// <summary>
         /// Constructor to initialise a new column definition
@@ -27,8 +27,8 @@ namespace Chillisoft.Generic.v2
         /// <param name="width">The column width</param>
         public UIFormColumn(int width)
         {
-            itsWidth = width;
-            itsList = new ArrayList();
+            _width = width;
+            _list = new ArrayList();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Chillisoft.Generic.v2
         /// <param name="property">A form property definition</param>
         public void Add(UIFormProperty property)
         {
-            itsList.Add(property);
+            _list.Add(property);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public int Count
         {
-            get { return itsList.Count; }
+            get { return _list.Count; }
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public object SyncRoot
         {
-            get { return itsList.SyncRoot; }
+            get { return _list.SyncRoot; }
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public bool IsSynchronized
         {
-            get { return itsList.IsSynchronized; }
+            get { return _list.IsSynchronized; }
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns an IEnumerator-type object</returns>
         public IEnumerator GetEnumerator()
         {
-            return itsList.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Chillisoft.Generic.v2
         /// specified</returns>
         public UIFormProperty this[int index]
         {
-            get { return (UIFormProperty) itsList[index]; }
+            get { return (UIFormProperty) _list[index]; }
         }
 
         /// <summary>
@@ -101,8 +101,8 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public int Width
         {
-            get { return itsWidth; }
-            set { itsWidth = value; }
+            get { return _width; }
+            set { _width = value; }
         }
 
         //		public UIDefName Name {

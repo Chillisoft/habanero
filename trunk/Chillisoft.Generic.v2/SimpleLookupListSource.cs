@@ -9,7 +9,7 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class SimpleLookupListSource : ILookupListSource
     {
-        private StringGuidPairCollection itsLookupListCollection;
+        private StringGuidPairCollection _lookupListCollection;
 
         /// <summary>
         /// Constructor to initialise the provider with a specified
@@ -18,7 +18,7 @@ namespace Chillisoft.Generic.v2
         /// <param name="collection">The string-Guid pair collection</param>
         public SimpleLookupListSource(StringGuidPairCollection collection)
         {
-            itsLookupListCollection = collection;
+            _lookupListCollection = collection;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns a StringGuidPairCollection object</returns>
         public StringGuidPairCollection GetLookupList()
         {
-            return itsLookupListCollection;
+            return _lookupListCollection;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns a StringGuidPairCollection object</returns>
         public StringGuidPairCollection GetLookupList(IDatabaseConnection connection)
         {
-            return itsLookupListCollection;
+            return _lookupListCollection;
         }
     }
 }

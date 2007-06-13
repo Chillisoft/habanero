@@ -69,7 +69,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsReader.Read();
+            _reader.Read();
             LoadLabel();
             LoadPropertyName();
             LoadControlType();
@@ -84,7 +84,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadMapperTypeName()
         {
-            _mapperTypeName = itsReader.GetAttribute("mapperTypeName");
+            _mapperTypeName = _reader.GetAttribute("mapperTypeName");
         }
 
         /// <summary>
@@ -93,8 +93,8 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadControlType()
         {
-            string controlTypeName = itsReader.GetAttribute("controlTypeName");
-            string controlAssemblyName = itsReader.GetAttribute("controlAssemblyName");
+            string controlTypeName = _reader.GetAttribute("controlTypeName");
+            string controlAssemblyName = _reader.GetAttribute("controlAssemblyName");
             _controlType = TypeLoader.LoadType(controlAssemblyName, controlTypeName);
         }
 
@@ -104,7 +104,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadPropertyName()
         {
-            _propertyName = itsReader.GetAttribute("propertyName");
+            _propertyName = _reader.GetAttribute("propertyName");
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadLabel()
         {
-            _label = itsReader.GetAttribute("label");
+            _label = _reader.GetAttribute("label");
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadIsReadOnly()
         {
-            _isReadOnly = Convert.ToBoolean(itsReader.GetAttribute("isReadOnly"));
+            _isReadOnly = Convert.ToBoolean(_reader.GetAttribute("isReadOnly"));
         }
 
         /// <summary>
@@ -132,14 +132,14 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadAttributes()
         {
             _propertyAttributes = new Hashtable();
-            System.Console.WriteLine(itsReader.Name);
-            itsReader.Read();
-            System.Console.WriteLine(itsReader.Name);
+            System.Console.WriteLine(_reader.Name);
+            _reader.Read();
+            System.Console.WriteLine(_reader.Name);
 
-            while (itsReader.Name == "uiFormPropertyAtt")
+            while (_reader.Name == "uiFormPropertyAtt")
             {
-                _propertyAttributes.Add(itsReader.GetAttribute("name"), itsReader.GetAttribute("value"));
-                itsReader.Read();
+                _propertyAttributes.Add(_reader.GetAttribute("name"), _reader.GetAttribute("value"));
+                _reader.Read();
             }
         }
     }

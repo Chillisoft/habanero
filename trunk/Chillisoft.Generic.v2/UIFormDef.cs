@@ -9,17 +9,17 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class UIFormDef : ICollection
     {
-        private IList itsList;
-        private int itsWidth;
-        private int itsHeight;
-        private string itsHeading;
+        private IList _list;
+        private int _width;
+        private int _height;
+        private string _heading;
 
         /// <summary>
         /// Constructor to initialise a new definition
         /// </summary>
         public UIFormDef()
         {
-            itsList = new ArrayList();
+            _list = new ArrayList();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Chillisoft.Generic.v2
         /// <param name="tab">A UIFormTab object</param>
         public void Add(UIFormTab tab)
         {
-            itsList.Add(tab);
+            _list.Add(tab);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public int Count
         {
-            get { return itsList.Count; }
+            get { return _list.Count; }
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public object SyncRoot
         {
-            get { return itsList.SyncRoot; }
+            get { return _list.SyncRoot; }
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public bool IsSynchronized
         {
-            get { return itsList.IsSynchronized; }
+            get { return _list.IsSynchronized; }
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns an IEnumerator-type object</returns>
         public IEnumerator GetEnumerator()
         {
-            return itsList.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Chillisoft.Generic.v2
         /// specified</returns>
         public UIFormTab this[int index]
         {
-            get { return (UIFormTab) itsList[index]; }
+            get { return (UIFormTab) _list[index]; }
         }
 
         /// <summary>
@@ -92,8 +92,8 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public int Width
         {
-            set { itsWidth = value; }
-            get { return itsWidth; }
+            set { _width = value; }
+            get { return _width; }
         }
 
         /// <summary>
@@ -101,8 +101,8 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public int Height
         {
-            set { itsHeight = value; }
-            get { return itsHeight; }
+            set { _height = value; }
+            get { return _height; }
         }
 
         /// <summary>
@@ -110,8 +110,8 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string Heading
         {
-            set { itsHeading = value; }
-            get { return itsHeading; }
+            set { _heading = value; }
+            get { return _heading; }
         }
     }
 }

@@ -62,20 +62,20 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             _column = new UIFormColumn();
 
-            //itsReader.Read();
-            //string className = itsReader.GetAttribute("class");
-            //string assemblyName = itsReader.GetAttribute("assembly");
+            //_reader.Read();
+            //string className = _reader.GetAttribute("class");
+            //string assemblyName = _reader.GetAttribute("assembly");
             //_collection.Class = TypeLoader.LoadType(assemblyName, className);
-            //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, itsReader.GetAttribute("name"));
+            //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, _reader.GetAttribute("name"));
 
-            itsReader.Read();
-            _column.Width = Convert.ToInt32(itsReader.GetAttribute("width"));
-            itsReader.Read();
-            XmlUIFormPropertyLoader propLoader = new XmlUIFormPropertyLoader(itsDtdPath);
+            _reader.Read();
+            _column.Width = Convert.ToInt32(_reader.GetAttribute("width"));
+            _reader.Read();
+            XmlUIFormPropertyLoader propLoader = new XmlUIFormPropertyLoader(_dtdPath);
             do
             {
-                _column.Add(propLoader.LoadUIProperty(itsReader.ReadOuterXml()));
-            } while (itsReader.Name == "uiFormProperty");
+                _column.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
+            } while (_reader.Name == "uiFormProperty");
         }
     }
 }

@@ -8,8 +8,8 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class StringGuidPair
     {
-        private string itsString;
-        private Guid itsGuid;
+        private string _string;
+        private Guid _guid;
 
         /// <summary>
         /// Constructor to initialise a new pair
@@ -18,8 +18,8 @@ namespace Chillisoft.Generic.v2
         /// <param name="g">The Guid</param>
         public StringGuidPair(string str, Guid g)
         {
-            itsString = str;
-            itsGuid = g;
+            _string = str;
+            _guid = g;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string Str
         {
-            get { return itsString; }
+            get { return _string; }
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public Guid Id
         {
-            get { return itsGuid; }
+            get { return _guid; }
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Chillisoft.Generic.v2
             if (obj is StringGuidPair)
             {
                 StringGuidPair pair = (StringGuidPair) obj;
-                return (this.itsGuid.Equals(pair.Id) && this.itsString == pair.Str);
+                return (this._guid.Equals(pair.Id) && this._string == pair.Str);
             }
             else
             {

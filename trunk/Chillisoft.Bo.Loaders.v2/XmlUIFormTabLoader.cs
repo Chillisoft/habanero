@@ -61,27 +61,27 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             _tab = new UIFormTab();
 
-            //itsReader.Read();
-            //string className = itsReader.GetAttribute("class");
-            //string assemblyName = itsReader.GetAttribute("assembly");
+            //_reader.Read();
+            //string className = _reader.GetAttribute("class");
+            //string assemblyName = _reader.GetAttribute("assembly");
             //_collection.Class = TypeLoader.LoadType(assemblyName, className);
-            //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, itsReader.GetAttribute("name"));
+            //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, _reader.GetAttribute("name"));
 
-            itsReader.Read();
-            _tab.Name = itsReader.GetAttribute("name");
-            itsReader.Read();
-            if (itsReader.Name == "uiFormGrid")
+            _reader.Read();
+            _tab.Name = _reader.GetAttribute("name");
+            _reader.Read();
+            if (_reader.Name == "uiFormGrid")
             {
-                XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(itsDtdPath);
-                _tab.UIFormGrid = gridLoader.LoadUIFormGrid(itsReader.ReadOuterXml());
+                XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(_dtdPath);
+                _tab.UIFormGrid = gridLoader.LoadUIFormGrid(_reader.ReadOuterXml());
             }
             else
             {
-                XmlUIFormColumnLoader loader = new XmlUIFormColumnLoader(itsDtdPath);
+                XmlUIFormColumnLoader loader = new XmlUIFormColumnLoader(_dtdPath);
                 do
                 {
-                    _tab.Add(loader.LoadUIFormColumn(itsReader.ReadOuterXml()));
-                } while (itsReader.Name == "uiFormColumn");
+                    _tab.Add(loader.LoadUIFormColumn(_reader.ReadOuterXml()));
+                } while (_reader.Name == "uiFormColumn");
             }
         }
     }

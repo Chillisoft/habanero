@@ -61,19 +61,19 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             _collection = new UIGridDef();
 
-            //itsReader.Read();
-            //string className = itsReader.GetAttribute("class");
-            //string assemblyName = itsReader.GetAttribute("assembly");
+            //_reader.Read();
+            //string className = _reader.GetAttribute("class");
+            //string assemblyName = _reader.GetAttribute("assembly");
             //_collection.Class = TypeLoader.LoadType(assemblyName, className);
-            //_collection.Name = new UIPropertyCollectionName(_collection.Class, itsReader.GetAttribute("name"));
+            //_collection.Name = new UIPropertyCollectionName(_collection.Class, _reader.GetAttribute("name"));
 
-            itsReader.Read();
-            itsReader.Read();
-            XmlUIGridPropertyLoader propLoader = new XmlUIGridPropertyLoader(itsDtdPath);
+            _reader.Read();
+            _reader.Read();
+            XmlUIGridPropertyLoader propLoader = new XmlUIGridPropertyLoader(_dtdPath);
             do
             {
-                _collection.Add(propLoader.LoadUIProperty(itsReader.ReadOuterXml()));
-            } while (itsReader.Name == "uiGridProperty");
+                _collection.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
+            } while (_reader.Name == "uiGridProperty");
         }
     }
 }

@@ -34,9 +34,9 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadLookupListSourceFromReader()
         {
-            _sqlString = itsReader.GetAttribute("sqlString");
-            string className = itsReader.GetAttribute("className");
-            string assemblyName = itsReader.GetAttribute("assemblyName");
+            _sqlString = _reader.GetAttribute("sqlString");
+            string className = _reader.GetAttribute("className");
+            string assemblyName = _reader.GetAttribute("assemblyName");
             if (className != null && className.Length > 0 && assemblyName != null && assemblyName.Length > 0)
             {
                 _boType = TypeLoader.LoadType(assemblyName, className);

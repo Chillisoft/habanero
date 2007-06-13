@@ -99,12 +99,12 @@ namespace Chillisoft.Bo.Loaders.v2
         protected override void LoadFromReader()
         {
             _SuperClassDesc = null;
-            itsReader.Read();
+            _reader.Read();
             LoadClassInfo();
             LoadTableName();
             LoadSupportsSynchronisation();
 
-            itsReader.Read();
+            _reader.Read();
 
             List<string> keyDefXmls = new List<string>();
             List<string> propDefXmls = new List<string>();
@@ -112,31 +112,31 @@ namespace Chillisoft.Bo.Loaders.v2
             List<string> uiDefXmls = new List<string>();
             string superclassDescXML = null;
             string primaryKeDefXML = null;
-            while (itsReader.Name != "classDef")
+            while (_reader.Name != "classDef")
             {
-				switch (itsReader.Name)
+				switch (_reader.Name)
 				{
 					case "superClassDesc":
-						superclassDescXML = itsReader.ReadOuterXml();
+						superclassDescXML = _reader.ReadOuterXml();
 						break;
 					case "propertyDef":
-						propDefXmls.Add(itsReader.ReadOuterXml());
+						propDefXmls.Add(_reader.ReadOuterXml());
 						break;
 					case "keyDef":
-						keyDefXmls.Add(itsReader.ReadOuterXml());
+						keyDefXmls.Add(_reader.ReadOuterXml());
 						break;
 					case "primaryKeyDef":
-						primaryKeDefXML = itsReader.ReadOuterXml();
+						primaryKeDefXML = _reader.ReadOuterXml();
 						break;
 					case "relationshipDef":
-						relationshipDefXmls.Add(itsReader.ReadOuterXml());
+						relationshipDefXmls.Add(_reader.ReadOuterXml());
 						break;
 					case "uiDef":
-						uiDefXmls.Add(itsReader.ReadOuterXml());
+						uiDefXmls.Add(_reader.ReadOuterXml());
 						break;
 					default:
 						throw new InvalidXmlDefinitionException("The element '" +
-							itsReader.Name + "' is not a recognised class " +
+							_reader.Name + "' is not a recognised class " +
 							"definition element.  Ensure that you have the correct " +
 							"spelling and capitalisation, or see the documentation " +
 							"for available options.");
@@ -159,7 +159,7 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             if (xmlDef != null)
         {
-            XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(itsDtdPath);
+            XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(_dtdPath);
                 _SuperClassDesc = superClassDescLoader.LoadSuperClassDesc(xmlDef);
             }
         }
@@ -170,7 +170,7 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadRelationshipDefs(List<string> xmlDefs)
         {
             _RelationshipDefCol = new RelationshipDefCol();
-            XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(itsDtdPath);
+            XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(_dtdPath);
             foreach (string relDefXml in xmlDefs)
             {
                 _RelationshipDefCol.Add(relationshipLoader.LoadRelationship(relDefXml, _PropDefCol));
@@ -183,7 +183,7 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadUIDefs(List<string> xmlDefs)
         {
             _UIDefCol = new UIDefCol();
-            XmlUIDefLoader loader = new XmlUIDefLoader(itsDtdPath);
+            XmlUIDefLoader loader = new XmlUIDefLoader(_dtdPath);
             foreach (string uiDefXml in xmlDefs)
             {
                 _UIDefCol.Add(loader.LoadUIDef(uiDefXml));
@@ -196,7 +196,7 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadKeyDefs(List<string> xmlDefs)
         {
             _KeyDefCol = new KeyDefCol();
-            XmlKeyLoader loader = new XmlKeyLoader(itsDtdPath);
+            XmlKeyLoader loader = new XmlKeyLoader(_dtdPath);
             foreach (string keyDefXml in xmlDefs)
             {
                 _KeyDefCol.Add(loader.LoadKey(keyDefXml, _PropDefCol));
@@ -218,7 +218,7 @@ namespace Chillisoft.Bo.Loaders.v2
                     "well.");
             }
             _PrimaryKeyDef = new PrimaryKeyDef();
-            XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(itsDtdPath);
+            XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(_dtdPath);
             _PrimaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _PropDefCol);
             if (_PrimaryKeyDef == null)
             {
@@ -237,7 +237,7 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadPropDefs(List<string> xmlDefs)
         {
             _PropDefCol = new PropDefCol();
-            XmlPropertyLoader propLoader = new XmlPropertyLoader(itsDtdPath);
+            XmlPropertyLoader propLoader = new XmlPropertyLoader(_dtdPath);
             foreach (string propDefXml in xmlDefs)
             {
                 _PropDefCol.Add(propLoader.LoadProperty(propDefXml));
@@ -254,7 +254,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadTableName()
         {
-            _TableName = itsReader.GetAttribute("tableName");
+            _TableName = _reader.GetAttribute("tableName");
         }
 
         /// <summary>
@@ -262,8 +262,8 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadClassInfo()
         {
-            _ClassName = itsReader.GetAttribute("name");
-            _AssemblyName = itsReader.GetAttribute("assembly");
+            _ClassName = _reader.GetAttribute("name");
+            _AssemblyName = _reader.GetAttribute("assembly");
 
             if (_AssemblyName == null || _AssemblyName.Length == 0)
             {
@@ -292,7 +292,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadSupportsSynchronisation()
         {
-            _SupportsSynchronising = Convert.ToBoolean(itsReader.GetAttribute("supportsSynchronising"));
+            _SupportsSynchronising = Convert.ToBoolean(_reader.GetAttribute("supportsSynchronising"));
         }
     }
 }

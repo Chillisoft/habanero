@@ -31,8 +31,8 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadLookupListSourceFromReader()
         {
-            string className = itsReader.GetAttribute("className");
-            string assemblyName = itsReader.GetAttribute("assemblyName");
+            string className = _reader.GetAttribute("className");
+            string assemblyName = _reader.GetAttribute("assemblyName");
             _type = TypeLoader.LoadType(assemblyName, className);
         }
 

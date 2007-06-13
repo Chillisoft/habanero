@@ -62,23 +62,23 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             _uiFormDef = new UIFormDef();
 
-            //itsReader.Read();
-            //string className = itsReader.GetAttribute("class");
-            //string assemblyName = itsReader.GetAttribute("assembly");
+            //_reader.Read();
+            //string className = _reader.GetAttribute("class");
+            //string assemblyName = _reader.GetAttribute("assembly");
             //_collection.Class = TypeLoader.LoadType(assemblyName, className);
-            //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, itsReader.GetAttribute("name"));
+            //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, _reader.GetAttribute("name"));
 
-            itsReader.Read();
-            _uiFormDef.Width = Convert.ToInt32(itsReader.GetAttribute("width"));
-            _uiFormDef.Height = Convert.ToInt32(itsReader.GetAttribute("height"));
-            _uiFormDef.Heading = itsReader.GetAttribute("heading");
+            _reader.Read();
+            _uiFormDef.Width = Convert.ToInt32(_reader.GetAttribute("width"));
+            _uiFormDef.Height = Convert.ToInt32(_reader.GetAttribute("height"));
+            _uiFormDef.Heading = _reader.GetAttribute("heading");
 
-            itsReader.Read();
-            XmlUIFormTabLoader loader = new XmlUIFormTabLoader(itsDtdPath);
+            _reader.Read();
+            XmlUIFormTabLoader loader = new XmlUIFormTabLoader(_dtdPath);
             do
             {
-                _uiFormDef.Add(loader.LoadUIFormTab(itsReader.ReadOuterXml()));
-            } while (itsReader.Name == "uiFormTab");
+                _uiFormDef.Add(loader.LoadUIFormTab(_reader.ReadOuterXml()));
+            } while (_reader.Name == "uiFormTab");
         }
     }
 }

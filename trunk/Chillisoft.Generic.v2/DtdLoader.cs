@@ -9,8 +9,8 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class DtdLoader
     {
-        private ITextFileLoader itsTextFileLoader;
-        private readonly string itsDtdPath;
+        private ITextFileLoader _textFileLoader;
+        private readonly string _dtdPath;
 
         /// <summary>
         /// Constructor to initialise a new loader with a specified dtd path
@@ -28,8 +28,8 @@ namespace Chillisoft.Generic.v2
         /// <param name="dtdPath">The dtd path</param>
         public DtdLoader(ITextFileLoader textFileLoader, string dtdPath)
         {
-            this.itsTextFileLoader = textFileLoader;
-            itsDtdPath = dtdPath;
+            this._textFileLoader = textFileLoader;
+            _dtdPath = dtdPath;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Chillisoft.Generic.v2
                     "output folder (eg. bin/debug).  Alternatively, check that " +
                     "the element name was spelt correctly and has the correct capitalisation.");
             }
-            TextReader reader = itsTextFileLoader.LoadTextFile(fileName);
+            TextReader reader = _textFileLoader.LoadTextFile(fileName);
             string line;
             do
             {
@@ -72,7 +72,7 @@ namespace Chillisoft.Generic.v2
                     if (!alreadyIncludedFiles.Contains(fileToInclude))
                     {
                         alreadyIncludedFiles.Add(fileToInclude);
-                        dtd += LoadDtd(itsDtdPath + fileToInclude, alreadyIncludedFiles);
+                        dtd += LoadDtd(_dtdPath + fileToInclude, alreadyIncludedFiles);
                     }
                 }
                 else

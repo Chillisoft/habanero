@@ -70,7 +70,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsReader.Read();
+            _reader.Read();
             LoadHeading();
             LoadPropertyName();
             LoadGridControlType();
@@ -85,7 +85,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadIsReadOnly()
         {
-            _isReadOnly = Convert.ToBoolean(itsReader.GetAttribute("isReadOnly"));
+            _isReadOnly = Convert.ToBoolean(_reader.GetAttribute("isReadOnly"));
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadGridControlType()
         {
             string assemblyName;
-            string className = itsReader.GetAttribute("gridControlTypeName");
+            string className = _reader.GetAttribute("gridControlTypeName");
             if (className == "DataGridViewTextBoxColumn" || className == "DataGridViewCheckBoxColumn" ||
                 className == "DataGridViewComboBoxColumn")
             {
@@ -115,7 +115,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadPropertyName()
         {
-            _propertyName = itsReader.GetAttribute("propertyName");
+            _propertyName = _reader.GetAttribute("propertyName");
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadHeading()
         {
-            _heading = itsReader.GetAttribute("heading");
+            _heading = _reader.GetAttribute("heading");
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadWidth()
         {
-            _width = Convert.ToInt32(itsReader.GetAttribute("width"));
+            _width = Convert.ToInt32(_reader.GetAttribute("width"));
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadAlignment()
         {
-            string alignmentStr = Convert.ToString(itsReader.GetAttribute("alignment"));
+            string alignmentStr = Convert.ToString(_reader.GetAttribute("alignment"));
             if (alignmentStr == "left")
             {
                 _alignment = UIGridProperty.PropAlignment.left;

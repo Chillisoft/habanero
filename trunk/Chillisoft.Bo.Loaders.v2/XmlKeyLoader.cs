@@ -67,12 +67,12 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsReader.Read();
+            _reader.Read();
             LoadKeyName();
 
             LoadKeyIgnoreNulls();
 
-            itsReader.Read();
+            _reader.Read();
             LoadKeyProperties();
         }
 
@@ -81,7 +81,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadKeyName()
         {
-            string name = itsReader.GetAttribute("name");
+            string name = _reader.GetAttribute("name");
             if (name != null)
             {
                 _keyDef = new KeyDef(name);
@@ -97,7 +97,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadKeyIgnoreNulls()
         {
-            _keyDef.IgnoreNulls = Convert.ToBoolean(itsReader.GetAttribute("ignoreNulls"));
+            _keyDef.IgnoreNulls = Convert.ToBoolean(_reader.GetAttribute("ignoreNulls"));
         }
 
         /// <summary>
@@ -107,13 +107,13 @@ namespace Chillisoft.Bo.Loaders.v2
         /// occurs while loading the properties</exception>
         private void LoadKeyProperties()
         {
-            if (itsReader.Name != "prop")
+            if (_reader.Name != "prop")
             {
                 throw new InvalidXmlDefinitionException("A keyDef node must have one or more prop nodes");
             }
             do
             {
-                string propName = itsReader.GetAttribute("name");
+                string propName = _reader.GetAttribute("name");
                 if (_propDefCol[propName] != null)
                 {
                     _keyDef.Add(_propDefCol[propName]);
@@ -123,8 +123,8 @@ namespace Chillisoft.Bo.Loaders.v2
                     throw new InvalidXmlDefinitionException(
                         String.Format("The PropDef named {0} does not exist in the PropDefCol given", propName));
                 }
-                itsReader.Read();
-            } while (itsReader.Name == "prop");
+                _reader.Read();
+            } while (_reader.Name == "prop");
         }
     }
 }

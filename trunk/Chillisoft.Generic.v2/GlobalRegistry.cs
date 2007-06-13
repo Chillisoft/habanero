@@ -5,12 +5,12 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class GlobalRegistry
     {
-        private static ISettingsStorer itsSettingsStorer;
-        private static IExceptionNotifier itsExceptionNotifier;
-        private static SynchronisationController itsSynchronisationController;
-        private static string itsApplicationName;
-        private static string itsApplicationVersion;
-        private static int itsDatabaseVersion;
+        private static ISettingsStorer _settingsStorer;
+        private static IExceptionNotifier _exceptionNotifier;
+        private static SynchronisationController _synchronisationController;
+        private static string _applicationName;
+        private static string _applicationVersion;
+        private static int _databaseVersion;
 
         /// <summary>
         /// Gets and sets the application's settings storer, which stores
@@ -18,8 +18,8 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public static ISettingsStorer SettingsStorer
         {
-            get { return itsSettingsStorer; }
-            set { itsSettingsStorer = value; }
+            get { return _settingsStorer; }
+            set { _settingsStorer = value; }
         }
 
         /// <summary>
@@ -28,8 +28,8 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public static IExceptionNotifier UIExceptionNotifier
         {
-            get { return itsExceptionNotifier; }
-            set { itsExceptionNotifier = value; }
+            get { return _exceptionNotifier; }
+            set { _exceptionNotifier = value; }
         }
 
         /// <summary>
@@ -40,13 +40,13 @@ namespace Chillisoft.Generic.v2
         {
             get
             {
-                if (itsSynchronisationController == null)
+                if (_synchronisationController == null)
                 {
-                    itsSynchronisationController = new NullSynchronisationController();
+                    _synchronisationController = new NullSynchronisationController();
                 }
-                return itsSynchronisationController;
+                return _synchronisationController;
             }
-            set { itsSynchronisationController = value; }
+            set { _synchronisationController = value; }
         }
         
         /// <summary>
@@ -54,10 +54,10 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public static string ApplicationName {
             get {
-                return itsApplicationName;
+                return _applicationName;
             }
             set {
-                itsApplicationName = value;
+                _applicationName = value;
             }
         }
 
@@ -68,11 +68,11 @@ namespace Chillisoft.Generic.v2
         {
             get
             {
-                return itsApplicationVersion;
+                return _applicationVersion;
             }
             set
             {
-                itsApplicationVersion = value;
+                _applicationVersion = value;
             }
         }        
         
@@ -82,11 +82,11 @@ namespace Chillisoft.Generic.v2
         public static int DatabaseVersion {
             get
             {
-                return itsDatabaseVersion;
+                return _databaseVersion;
             }
             set
             {
-                itsDatabaseVersion = value;
+                _databaseVersion = value;
             }
         }
     }

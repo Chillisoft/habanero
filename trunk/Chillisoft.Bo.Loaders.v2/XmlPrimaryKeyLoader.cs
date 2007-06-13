@@ -69,9 +69,9 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             _primaryKeyDef = new PrimaryKeyDef();
 
-            itsReader.Read();
+            _reader.Read();
             LoadIsObjectID();
-            itsReader.Read();
+            _reader.Read();
             LoadPropertyDefs();
         }
 
@@ -80,7 +80,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadIsObjectID()
         {
-            if (itsReader.GetAttribute("isObjectID") == "true")
+            if (_reader.GetAttribute("isObjectID") == "true")
             {
                 _primaryKeyDef.IsObjectID = true;
             }
@@ -97,13 +97,13 @@ namespace Chillisoft.Bo.Loaders.v2
         /// error occurs while loading the data</exception>
         private void LoadPropertyDefs()
         {
-            if (itsReader.Name != "prop")
+            if (_reader.Name != "prop")
             {
                 throw new InvalidXmlDefinitionException("A primaryKeyDef node must have one or more prop nodes");
             }
             do
             {
-                string propName = itsReader.GetAttribute("name");
+                string propName = _reader.GetAttribute("name");
                 if (propName == null || propName.Length == 0)
                 {
                     throw new InvalidXmlDefinitionException("The 'prop' element " +
@@ -124,15 +124,15 @@ namespace Chillisoft.Bo.Loaders.v2
                         "attribute to match a property that has already been defined.",
                         propName));
                 }
-                if (itsReader.IsEmptyElement)
-                    itsReader.Read();
+                if (_reader.IsEmptyElement)
+                    _reader.Read();
                 else
                 {
-                    itsReader.Read();
-                    itsReader.Read();
+                    _reader.Read();
+                    _reader.Read();
                     
                 }
-            } while (itsReader.Name == "prop");
+            } while (_reader.Name == "prop");
         }
     }
 }

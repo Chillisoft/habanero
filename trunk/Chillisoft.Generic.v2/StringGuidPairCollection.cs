@@ -9,16 +9,16 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class StringGuidPairCollection : IEnumerable
     {
-        private IList itsList;
-        private Hashtable itsHashtable;
+        private IList _list;
+        private Hashtable _hashtable;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
         public StringGuidPairCollection()
         {
-            itsList = new ArrayList();
-            itsHashtable = new Hashtable();
+            _list = new ArrayList();
+            _hashtable = new Hashtable();
         }
 
         /// <summary>
@@ -27,10 +27,10 @@ namespace Chillisoft.Generic.v2
         /// <param name="pair">The string-Guid pair</param>
         public void Add(StringGuidPair pair)
         {
-            int i = itsList.Count - 1;
-            if (itsList.Count == 0)
+            int i = _list.Count - 1;
+            if (_list.Count == 0)
             {
-                itsList.Add(pair);
+                _list.Add(pair);
             }
             else
             {
@@ -38,25 +38,25 @@ namespace Chillisoft.Generic.v2
                 {
                     i--;
                 }
-                if (i == itsList.Count - 1)
+                if (i == _list.Count - 1)
                 {
-                    itsList.Add(pair);
+                    _list.Add(pair);
                 }
                 else
                 {
-                    itsList.Insert(i + 1, pair);
+                    _list.Insert(i + 1, pair);
                 }
 //				if (i == 0) {
 //					if (String.Compare(this[i].Str, pair.Str) < 0) {
-//						itsList.Insert(i - 1, pair);
+//						_list.Insert(i - 1, pair);
 //					} else {
-//						itsList.Add(pair);
+//						_list.Add(pair);
 //					}
 //				} else {
-                //itsList.Insert(i+1, pair);
+                //_list.Insert(i+1, pair);
                 //}
             }
-            itsHashtable.Add(pair.Id, pair);
+            _hashtable.Add(pair.Id, pair);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns an IEnumerator-type object</returns>
         public IEnumerator GetEnumerator()
         {
-            return itsList.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Chillisoft.Generic.v2
         /// specified</returns>
         public StringGuidPair this[int index]
         {
-            get { return (StringGuidPair) itsList[index]; }
+            get { return (StringGuidPair) _list[index]; }
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Chillisoft.Generic.v2
         /// empty pair if not found</returns>
         public StringGuidPair FindByGuid(Guid id)
         {
-            StringGuidPair pair = (StringGuidPair) itsHashtable[id];
+            StringGuidPair pair = (StringGuidPair) _hashtable[id];
             if (pair != null)
             {
                 return pair;
@@ -108,8 +108,8 @@ namespace Chillisoft.Generic.v2
         public void Load(IDatabaseConnection conn, ISqlStatement statement)
         {
             DataTable dt = conn.LoadDataTable(statement, "", "");
-            itsList = new ArrayList(dt.Rows.Count);
-            itsHashtable = new Hashtable(dt.Rows.Count);
+            _list = new ArrayList(dt.Rows.Count);
+            _hashtable = new Hashtable(dt.Rows.Count);
             foreach (DataRow row in dt.Rows)
             {
                 string stringValue = DBNull.Value.Equals(row[1]) ? "" : (string) row[1];
@@ -122,7 +122,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public int Count
         {
-            get { return itsList.Count; }
+            get { return _list.Count; }
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Chillisoft.Generic.v2
         /// empty pair if not found</returns>
         public StringGuidPair FindByValue(object value)
         {
-            foreach (StringGuidPair guidPair in itsList)
+            foreach (StringGuidPair guidPair in _list)
             {
                 if (guidPair.Str.Equals(value))
                 {

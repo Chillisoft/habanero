@@ -14,11 +14,11 @@ namespace Chillisoft.Generic.v2
     /// sure all XmlLoaders implement dtd validation. 
     public abstract class XmlLoader
     {
-        protected readonly string itsDtdPath;
-        protected XmlReader  itsReader;
-        private bool itsDocumentValid = true;
-        private ValidationEventArgs itsInvalidDocumentArgs;
-        private XmlElement itsElement;
+        protected readonly string _dtdPath;
+        protected XmlReader  _reader;
+        private bool _documentValid = true;
+        private ValidationEventArgs _invalidDocumentArgs;
+        private XmlElement _element;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -26,7 +26,7 @@ namespace Chillisoft.Generic.v2
         /// <param name="dtdPath">The dtd path</param>
         public XmlLoader(string dtdPath)
         {
-            itsDtdPath = dtdPath;
+            _dtdPath = dtdPath;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns the loaded object</returns>
         protected object Load(XmlElement el)
         {
-            itsElement = el;
+            _element = el;
             CreateValidatingReader(el);
             LoadFromReader();
             CheckDocumentValidity();
@@ -73,11 +73,11 @@ namespace Chillisoft.Generic.v2
         /// xml document is not valid</exception>
         private void CheckDocumentValidity()
         {
-            if (!itsDocumentValid)
+            if (!_documentValid)
             {
-                throw new InvalidXmlDefinitionException("The '" + itsElement.Name + "' " +
+                throw new InvalidXmlDefinitionException("The '" + _element.Name + "' " +
                     "node does not conform to its Document Type Definition (DTD). " +
-                    itsInvalidDocumentArgs.Message);
+                    _invalidDocumentArgs.Message);
             }
         }
 
@@ -100,10 +100,10 @@ namespace Chillisoft.Generic.v2
             settings.IgnoreWhitespace = true;
             settings.ValidationType = ValidationType.DTD;
             settings.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
-            itsReader = XmlReader.Create(new XmlTextReader(new StringReader(doc.OuterXml)), settings);
+            _reader = XmlReader.Create(new XmlTextReader(new StringReader(doc.OuterXml)), settings);
 
             
-            itsReader.Read();
+            _reader.Read();
         }
 
         /// <summary>
@@ -113,18 +113,18 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns a string</returns>
         private string GetDTD(string rootElementName)
         {
-            string dtdFileName = itsDtdPath + rootElementName + ".dtd";
+            string dtdFileName = _dtdPath + rootElementName + ".dtd";
             if (!File.Exists(dtdFileName))
             {
                 string errorMessage = "The Document Type Definition (DTD) for " +
                     "the XML element '" + rootElementName + "' was not found in the ";
-                if (itsDtdPath == null || itsDtdPath.Length == 0)
+                if (_dtdPath == null || _dtdPath.Length == 0)
                 {
                     errorMessage += "application's output/execution directory (eg. bin/debug). ";
                 }
                 else
                 {
-                    errorMessage += "path: '" + itsDtdPath + "'. ";
+                    errorMessage += "path: '" + _dtdPath + "'. ";
                 }
                 errorMessage += "Ensure that you have a .DTD file for each of the XML class " +
                     "definition elements you will be using, and that they are being copied to the " +
@@ -132,7 +132,7 @@ namespace Chillisoft.Generic.v2
                     "the element name was spelt correctly and has the correct capitalisation.";
                 throw new FileNotFoundException(errorMessage);
             }
-            return new DtdLoader(itsDtdPath).LoadDtd(dtdFileName);
+            return new DtdLoader(_dtdPath).LoadDtd(dtdFileName);
             //return new StreamReader(dtdFileName).ReadToEnd();
         }
 
@@ -143,8 +143,8 @@ namespace Chillisoft.Generic.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void ValidationHandler(object sender, ValidationEventArgs args)
         {
-            itsDocumentValid = false;
-            itsInvalidDocumentArgs = args;
+            _documentValid = false;
+            _invalidDocumentArgs = args;
         }
 
         /// <summary>

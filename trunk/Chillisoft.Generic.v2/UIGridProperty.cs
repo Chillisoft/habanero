@@ -8,12 +8,12 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class UIGridProperty
     {
-        private string itsHeading;
-        private string itsPropertyName;
-        private Type itsGridControlType;
-        private bool itsIsReadOnly;
-        private int itsWidth;
-        private readonly PropAlignment itsAlignment;
+        private string _heading;
+        private string _propertyName;
+        private Type _gridControlType;
+        private bool _isReadOnly;
+        private int _width;
+        private readonly PropAlignment _alignment;
 
         /// <summary>
         /// An enumeration to specify a horizontal alignment in a grid
@@ -38,12 +38,12 @@ namespace Chillisoft.Generic.v2
         public UIGridProperty(string heading, string propertyName, Type gridControlType, bool isReadOnly, int width,
                               PropAlignment alignment)
         {
-            itsHeading = heading;
-            itsPropertyName = propertyName;
-            itsGridControlType = gridControlType;
-            itsIsReadOnly = isReadOnly;
-            itsWidth = width;
-            this.itsAlignment = alignment;
+            _heading = heading;
+            _propertyName = propertyName;
+            _gridControlType = gridControlType;
+            _isReadOnly = isReadOnly;
+            _width = width;
+            this._alignment = alignment;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string Heading
         {
-            get { return itsHeading; }
+            get { return _heading; }
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string PropertyName
         {
-            get { return itsPropertyName; }
+            get { return _propertyName; }
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public Type GridControlType
         {
-            get { return itsGridControlType; }
+            get { return _gridControlType; }
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public bool IsReadOnly
         {
-            get { return itsIsReadOnly; }
+            get { return _isReadOnly; }
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public int Width
         {
-            get { return itsWidth; }
+            get { return _width; }
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public PropAlignment Alignment
         {
-            get { return itsAlignment; }
+            get { return _alignment; }
         }
     }
 }

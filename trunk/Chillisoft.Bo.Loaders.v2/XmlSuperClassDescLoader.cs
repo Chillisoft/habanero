@@ -72,11 +72,11 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsReader.Read();
-            _className = itsReader.GetAttribute("className");
-            _assemblyName = itsReader.GetAttribute("assemblyName");
+            _reader.Read();
+            _className = _reader.GetAttribute("className");
+            _assemblyName = _reader.GetAttribute("assemblyName");
 			//_superClassDef = ClassDef.GetClassDefCol[assemblyName, className];
-			_orMapping = (ORMapping)Enum.Parse(typeof(ORMapping), itsReader.GetAttribute("orMapping"));
+			_orMapping = (ORMapping)Enum.Parse(typeof(ORMapping), _reader.GetAttribute("orMapping"));
         }
     }
 }

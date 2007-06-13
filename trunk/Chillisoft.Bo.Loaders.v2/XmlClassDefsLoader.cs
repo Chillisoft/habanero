@@ -107,13 +107,13 @@ namespace Chillisoft.Bo.Loaders.v2
         protected override void LoadFromReader()
         {
             _classDefList = new ArrayList();
-            itsReader.Read();
-            itsReader.Read();
-            XmlClassLoader classLoader = new XmlClassLoader(itsDtdPath);
+            _reader.Read();
+            _reader.Read();
+            XmlClassLoader classLoader = new XmlClassLoader(_dtdPath);
             do
             {
-                _classDefList.Add(classLoader.LoadClass(itsReader.ReadOuterXml()));
-            } while (itsReader.Name == "classDef");
+                _classDefList.Add(classLoader.LoadClass(_reader.ReadOuterXml()));
+            } while (_reader.Name == "classDef");
         }
     }
 }

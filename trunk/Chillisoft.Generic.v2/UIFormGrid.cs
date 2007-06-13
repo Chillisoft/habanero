@@ -9,9 +9,9 @@ namespace Chillisoft.Generic.v2
     /// TODO ERIC - review - what does this do? relationships?
     public class UIFormGrid
     {
-        private string itsRelationshipName;
-        public Type itsGridType;
-        private string itsCorrespondingRelationshipName;
+        private string _relationshipName;
+        public Type _gridType;
+        private string _correspondingRelationshipName;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -22,9 +22,9 @@ namespace Chillisoft.Generic.v2
         /// relationship name</param>
         public UIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName)
         {
-            this.itsRelationshipName = relationshipName;
-            this.itsGridType = gridType;
-            this.itsCorrespondingRelationshipName = correspondingRelationshipName;
+            this._relationshipName = relationshipName;
+            this._gridType = gridType;
+            this._correspondingRelationshipName = correspondingRelationshipName;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string RelationshipName
         {
-            get { return itsRelationshipName; }
+            get { return _relationshipName; }
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public Type GridType
         {
-            get { return itsGridType; }
+            get { return _gridType; }
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string CorrespondingRelationshipName
         {
-            get { return itsCorrespondingRelationshipName; }
+            get { return _correspondingRelationshipName; }
         }
     }
 }

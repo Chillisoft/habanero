@@ -9,12 +9,12 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class UIFormProperty
     {
-        private string itsLabel;
-        private string itsPropertyName;
-        private string itsMapperTypeName;
-        private Type itsControlType;
-        private bool itsIsReadOnly;
-        private readonly Hashtable itsPropertyAttributes;
+        private string _label;
+        private string _propertyName;
+        private string _mapperTypeName;
+        private Type _controlType;
+        private bool _isReadOnly;
+        private readonly Hashtable _propertyAttributes;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -29,12 +29,12 @@ namespace Chillisoft.Generic.v2
         public UIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName,
                               bool isReadOnly, Hashtable propertyAttributes)
         {
-            this.itsLabel = label;
-            this.itsPropertyName = propertyName;
-            this.itsMapperTypeName = mapperTypeName;
-            this.itsIsReadOnly = isReadOnly;
-            this.itsPropertyAttributes = propertyAttributes;
-            this.itsControlType = controlType;
+            this._label = label;
+            this._propertyName = propertyName;
+            this._mapperTypeName = mapperTypeName;
+            this._isReadOnly = isReadOnly;
+            this._propertyAttributes = propertyAttributes;
+            this._controlType = controlType;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string Label
         {
-            get { return itsLabel; }
+            get { return _label; }
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string PropertyName
         {
-            get { return itsPropertyName; }
+            get { return _propertyName; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string MapperTypeName
         {
-            get { return itsMapperTypeName; }
+            get { return _mapperTypeName; }
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public Type ControlType
         {
-            get { return itsControlType; }
+            get { return _controlType; }
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public bool IsReadOnly
         {
-            get { return itsIsReadOnly; }
+            get { return _isReadOnly; }
         }
 
         /// <summary>
@@ -85,9 +85,9 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns the attribute value or null if not found</returns>
         public object GetAttributeValue(string attName)
         {
-            if (this.itsPropertyAttributes.ContainsKey(attName))
+            if (this._propertyAttributes.ContainsKey(attName))
             {
-                return this.itsPropertyAttributes[attName];
+                return this._propertyAttributes[attName];
             }
             else
             {
@@ -100,7 +100,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public Hashtable Attributes
         {
-            get { return this.itsPropertyAttributes; }
+            get { return this._propertyAttributes; }
         }
     }
 }

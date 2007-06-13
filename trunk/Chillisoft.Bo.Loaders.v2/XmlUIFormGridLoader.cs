@@ -63,7 +63,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsReader.Read();
+            _reader.Read();
             LoadRelationshipName();
             LoadGridType();
             LoadCorrespondingRelationshipName();
@@ -75,7 +75,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadCorrespondingRelationshipName()
         {
-            _correspondingRelationshipName = itsReader.GetAttribute("correspondingRelationshipName");
+            _correspondingRelationshipName = _reader.GetAttribute("correspondingRelationshipName");
         }
 
         /// <summary>
@@ -84,8 +84,8 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadGridType()
         {
-            string className = itsReader.GetAttribute("gridType");
-            string assemblyName = itsReader.GetAttribute("gridTypeAssembly");
+            string className = _reader.GetAttribute("gridType");
+            string assemblyName = _reader.GetAttribute("gridTypeAssembly");
             _gridType = TypeLoader.LoadType(assemblyName, className);
         }
 
@@ -95,7 +95,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadRelationshipName()
         {
-            _relationshipName = itsReader.GetAttribute("relationshipName");
+            _relationshipName = _reader.GetAttribute("relationshipName");
         }
     }
 }

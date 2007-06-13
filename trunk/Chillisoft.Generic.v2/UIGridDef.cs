@@ -9,14 +9,14 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class UIGridDef : ICollection
     {
-        private IList itsList;
+        private IList _list;
 
         /// <summary>
         /// Constructor to initialise a new collection of definitions
         /// </summary>
         public UIGridDef()
         {
-            itsList = new ArrayList();
+            _list = new ArrayList();
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Chillisoft.Generic.v2
         /// <param name="prop">The grid property definition</param>
         public void Add(UIGridProperty prop)
         {
-            itsList.Add(prop);
+            _list.Add(prop);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public int Count
         {
-            get { return itsList.Count; }
+            get { return _list.Count; }
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public object SyncRoot
         {
-            get { return itsList.SyncRoot; }
+            get { return _list.SyncRoot; }
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public bool IsSynchronized
         {
-            get { return itsList.IsSynchronized; }
+            get { return _list.IsSynchronized; }
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns an IEnumerator-type object</returns>
         public IEnumerator GetEnumerator()
         {
-            return itsList.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Chillisoft.Generic.v2
         /// specified</returns>
         public UIGridProperty this[int index]
         {
-            get { return (UIGridProperty) itsList[index]; }
+            get { return (UIGridProperty) _list[index]; }
         }
     }
 }

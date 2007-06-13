@@ -9,10 +9,10 @@ namespace Chillisoft.Generic.v2
     /// </summary>
     public class UIFormTab : ICollection
     {
-        private IList itsList;
-        private string itsName;
-        private UIFormGrid itsUIFormGrid;
-        //private UIDefName itsName;
+        private IList _list;
+        private string _name;
+        private UIFormGrid _uiFormGrid;
+        //private UIDefName _name;
 
         /// <summary>
         /// Constructor to initialise a new tab definition
@@ -27,8 +27,8 @@ namespace Chillisoft.Generic.v2
         /// <param name="name">The tab name</param>
         public UIFormTab(string name)
         {
-            itsName = name;
-            itsList = new ArrayList();
+            _name = name;
+            _list = new ArrayList();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Chillisoft.Generic.v2
         /// <param name="column">The UIFormColumn object</param>
         public void Add(UIFormColumn column)
         {
-            itsList.Add(column);
+            _list.Add(column);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public int Count
         {
-            get { return itsList.Count; }
+            get { return _list.Count; }
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public object SyncRoot
         {
-            get { return itsList.SyncRoot; }
+            get { return _list.SyncRoot; }
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public bool IsSynchronized
         {
-            get { return itsList.IsSynchronized; }
+            get { return _list.IsSynchronized; }
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Chillisoft.Generic.v2
         /// <returns>Returns an IEnumerator-type object</returns>
         public IEnumerator GetEnumerator()
         {
-            return itsList.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Chillisoft.Generic.v2
         /// specified</returns>
         public UIFormColumn this[int index]
         {
-            get { return (UIFormColumn) itsList[index]; }
+            get { return (UIFormColumn) _list[index]; }
         }
 
         /// <summary>
@@ -101,8 +101,8 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public string Name
         {
-            get { return itsName; }
-            set { itsName = value; }
+            get { return _name; }
+            set { _name = value; }
         }
 
         /// <summary>
@@ -110,13 +110,13 @@ namespace Chillisoft.Generic.v2
         /// </summary>
         public UIFormGrid UIFormGrid
         {
-            set { itsUIFormGrid = value; }
-            get { return itsUIFormGrid; }
+            set { _uiFormGrid = value; }
+            get { return _uiFormGrid; }
         }
 
         //		public UIDefName Name {
-        //			get { return itsName; }
-        //			set { itsName = value; }
+        //			get { return _name; }
+        //			set { _name = value; }
         //		}
     }
 }

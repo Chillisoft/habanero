@@ -40,17 +40,17 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadPropertyRuleFromReader()
         {
-            if (itsReader.GetAttribute("minValue") != "")
+            if (_reader.GetAttribute("minValue") != "")
             {
-                _minValue = Convert.ToInt32(itsReader.GetAttribute("minValue"));
+                _minValue = Convert.ToInt32(_reader.GetAttribute("minValue"));
             }
             else
             {
                 _minValue = int.MinValue;
             }
-            if (itsReader.GetAttribute("maxValue") != "")
+            if (_reader.GetAttribute("maxValue") != "")
             {
-                _maxValue = Convert.ToInt32(itsReader.GetAttribute("maxValue"));
+                _maxValue = Convert.ToInt32(_reader.GetAttribute("maxValue"));
             }
             else
             {

@@ -98,10 +98,10 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            itsReader.Read();
+            _reader.Read();
             LoadRelationshipDef();
 
-            itsReader.Read();
+            _reader.Read();
             LoadRelKeyDef();
         }
 
@@ -111,12 +111,12 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected void LoadRelationshipDef()
         {
-            string relatedClassName = itsReader.GetAttribute("relatedType");
-            string relatedAssemblyName = itsReader.GetAttribute("relatedAssembly");
+            string relatedClassName = _reader.GetAttribute("relatedType");
+            string relatedAssemblyName = _reader.GetAttribute("relatedAssembly");
             _relatedClassType = TypeLoader.LoadType(relatedAssemblyName, relatedClassName);
-            _name = itsReader.GetAttribute("name");
-            _type = itsReader.GetAttribute("type");
-            if (itsReader.GetAttribute("keepReferenceToRelatedObject") == "true")
+            _name = _reader.GetAttribute("name");
+            _type = _reader.GetAttribute("type");
+            if (_reader.GetAttribute("keepReferenceToRelatedObject") == "true")
             {
                 _keepReferenceToRelatedObject = true;
             }
@@ -124,12 +124,12 @@ namespace Chillisoft.Bo.Loaders.v2
             {
                 _keepReferenceToRelatedObject = false;
             }
-            _orderBy = itsReader.GetAttribute("orderBy");
-            _minNoOfRelatedObjects = Convert.ToInt32(itsReader.GetAttribute("minNoOfRelatedObjects"));
-            _maxNoOfRelatedObjects = Convert.ToInt32(itsReader.GetAttribute("maxNoOfRelatedObjects"));
+            _orderBy = _reader.GetAttribute("orderBy");
+            _minNoOfRelatedObjects = Convert.ToInt32(_reader.GetAttribute("minNoOfRelatedObjects"));
+            _maxNoOfRelatedObjects = Convert.ToInt32(_reader.GetAttribute("maxNoOfRelatedObjects"));
             _deleteParentAction =
                 (DeleteParentAction)
-                Enum.Parse(typeof (DeleteParentAction), itsReader.GetAttribute("deleteParentAction"));
+                Enum.Parse(typeof (DeleteParentAction), _reader.GetAttribute("deleteParentAction"));
         }
 
         /// <summary>
@@ -139,14 +139,14 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadRelKeyDef()
         {
             _relKeyDef = new RelKeyDef();
-            itsReader.Read();
+            _reader.Read();
             do
             {
                 _relKeyDef.Add(
-                    new RelPropDef(_propDefCol[itsReader.GetAttribute("name")],
-                                   itsReader.GetAttribute("relatedPropName")));
-                itsReader.Read();
-            } while (itsReader.Name == "relProp");
+                    new RelPropDef(_propDefCol[_reader.GetAttribute("name")],
+                                   _reader.GetAttribute("relatedPropName")));
+                _reader.Read();
+            } while (_reader.Name == "relProp");
         }
     }
 }

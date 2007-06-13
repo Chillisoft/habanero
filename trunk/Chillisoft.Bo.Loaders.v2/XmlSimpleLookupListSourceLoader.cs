@@ -31,12 +31,12 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadLookupListSourceFromReader()
         {
-            itsReader.Read();
-            while (itsReader.Name == "stringGuidPair")
+            _reader.Read();
+            while (_reader.Name == "stringGuidPair")
             {
                 _stringGuidPairCollection.Add(
-                    new StringGuidPair(itsReader.GetAttribute("string"), new Guid(itsReader.GetAttribute("guid"))));
-                itsReader.Read();
+                    new StringGuidPair(_reader.GetAttribute("string"), new Guid(_reader.GetAttribute("guid"))));
+                _reader.Read();
             }
         }
 

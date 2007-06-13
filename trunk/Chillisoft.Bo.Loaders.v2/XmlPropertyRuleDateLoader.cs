@@ -47,10 +47,10 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadPropertyRuleFromReader()
         {
-            if (itsReader.GetAttribute("minValue") != null)
+            if (_reader.GetAttribute("minValue") != null)
             {
-                _minValue = Convert.ToDateTime(itsReader.GetAttribute("minValue"));
-                _maxValue = Convert.ToDateTime(itsReader.GetAttribute("maxValue"));
+                _minValue = Convert.ToDateTime(_reader.GetAttribute("minValue"));
+                _maxValue = Convert.ToDateTime(_reader.GetAttribute("maxValue"));
             }
         }
     }

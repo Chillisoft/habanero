@@ -57,9 +57,9 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override sealed void LoadFromReader()
         {
-            itsReader.Read();
-            _ruleName = itsReader.GetAttribute("name");
-            if (itsReader.GetAttribute("isCompulsory") == "true")
+            _reader.Read();
+            _ruleName = _reader.GetAttribute("name");
+            if (_reader.GetAttribute("isCompulsory") == "true")
             {
                 _isCompulsory = true;
             }

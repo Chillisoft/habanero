@@ -54,7 +54,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override sealed void LoadFromReader()
         {
-            itsReader.Read();
+            _reader.Read();
             LoadLookupListSourceFromReader();
         }
 
