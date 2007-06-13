@@ -8,14 +8,14 @@ namespace Chillisoft.Crypt.v2
     /// </summary>
     public class BlowfishCrypter : Crypter
     {
-        private BlowfishSimple blowfish;
+        private BlowfishSimple _blowfish;
 
         /// <summary>
         /// Initialises the blowfish encrypter using a pre-determined key
         /// </summary>
         public BlowfishCrypter()
         {
-            blowfish = new BlowfishSimple("mistral");
+            _blowfish = new BlowfishSimple("mistral");
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Chillisoft.Crypt.v2
         /// <returns>Returns the decrypted form of the given string</returns>
         public string DecryptString(string value)
         {
-            return blowfish.Decrypt(value);
+            return _blowfish.Decrypt(value);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Chillisoft.Crypt.v2
         /// <returns>Returns the encrypted form of the given string</returns>
         public string EncryptString(string value)
         {
-            return blowfish.Encrypt(value);
+            return _blowfish.Encrypt(value);
         }
     }
 }

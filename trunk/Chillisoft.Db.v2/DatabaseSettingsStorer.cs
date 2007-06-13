@@ -16,14 +16,14 @@ namespace Chillisoft.Db.v2
     /// - no set decimal?
     public class DatabaseSettingsStorer : ISettingsStorer
     {
-        private Hashtable itsCachedSettings;
+        private Hashtable _cachedSettings;
 
         /// <summary>
         /// Constructor to initialise an empty store of settings
         /// </summary>
         public DatabaseSettingsStorer()
         {
-            itsCachedSettings = new Hashtable();
+            _cachedSettings = new Hashtable();
         }
 
         /// <summary>
@@ -120,9 +120,9 @@ namespace Chillisoft.Db.v2
         /// TODO ERIC - extra parameter not used
         private void UpdateCache(string settingName, string settingValue)
         {
-            if (itsCachedSettings[settingName] != null)
+            if (_cachedSettings[settingName] != null)
             {
-                itsCachedSettings.Remove(settingName);
+                _cachedSettings.Remove(settingName);
             }
             GetValue(settingName, DateTime.Now);
         }
@@ -140,16 +140,16 @@ namespace Chillisoft.Db.v2
         private object GetValue(string settingName, DateTime date)
         {
             settingName = settingName.ToUpper();
-            if (itsCachedSettings[settingName] != null)
+            if (_cachedSettings[settingName] != null)
             {
-                Setting setting = (Setting) itsCachedSettings[settingName];
+                Setting setting = (Setting) _cachedSettings[settingName];
                 if (!setting.IsExpired())
                 {
                     return setting.Value;
                 }
                 else
                 {
-                    itsCachedSettings.Remove(settingName);
+                    _cachedSettings.Remove(settingName);
                 }
             }
             SqlStatement statement = CreateSqlStatement(settingName, date);
@@ -161,7 +161,7 @@ namespace Chillisoft.Db.v2
                 if (reader.Read())
                 {
                     object val = reader.GetValue(0);
-                    itsCachedSettings.Add(settingName, new Setting(DateTime.Now, val));
+                    _cachedSettings.Add(settingName, new Setting(DateTime.Now, val));
                     return val;
                 }
                 else

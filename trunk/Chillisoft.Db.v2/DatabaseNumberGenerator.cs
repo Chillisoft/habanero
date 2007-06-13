@@ -12,10 +12,10 @@ namespace Chillisoft.Db.v2
     /// </summary>
     public class DatabaseNumberGenerator : INumberGenerator
     {
-        private readonly string itsSettingName;
-        private readonly string itsTableName;
-        private readonly int itsSeedValue;
-        private int itsNumber;
+        private readonly string _settingName;
+        private readonly string _tableName;
+        private readonly int _seedValue;
+        private int _number;
 
         /// <summary>
         /// Constructor to initialise a new generator. The table name is
@@ -51,28 +51,28 @@ namespace Chillisoft.Db.v2
         /// from</param>
         public DatabaseNumberGenerator(string settingName, string tableName, int seedValue)
         {
-            itsSettingName = settingName;
-            itsTableName = tableName;
-            itsSeedValue = seedValue;
+            _settingName = settingName;
+            _tableName = tableName;
+            _seedValue = seedValue;
 
             SqlStatement statement =
                 new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
-                                 "select SettingValue from " + itsTableName + " where SettingName = ");
-            statement.AddParameterToStatement(itsSettingName);
+                                 "select SettingValue from " + _tableName + " where SettingName = ");
+            statement.AddParameterToStatement(_settingName);
             IDataReader reader = null;
             try
             {
                 reader = DatabaseConnection.CurrentConnection.LoadDataReader(statement);
                 if (reader.Read())
                 {
-                    itsNumber = Convert.ToInt32(reader.GetValue(0));
+                    _number = Convert.ToInt32(reader.GetValue(0));
                 }
                 else
                 {
-                    itsNumber = itsSeedValue;
-                    DatabaseConnection.CurrentConnection.ExecutePlainSql("insert into " + itsTableName +
+                    _number = _seedValue;
+                    DatabaseConnection.CurrentConnection.ExecutePlainSql("insert into " + _tableName +
                                                                          " (SettingName, SettingValue) values ('" +
-                                                                         itsSettingName + "', " + itsSeedValue + ")");
+                                                                         _settingName + "', " + _seedValue + ")");
                 }
             }
             finally
@@ -91,7 +91,7 @@ namespace Chillisoft.Db.v2
         /// <returns>Returns an integer</returns>
         public int GetNextNumberInt()
         {
-            return ++itsNumber;
+            return ++_number;
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Chillisoft.Db.v2
         /// <returns>Returns an ITransaction object</returns>
         public ITransaction GetUpdateTransaction()
         {
-            return new NumberUpdate(itsNumber, itsSettingName, itsTableName);
+            return new NumberUpdate(_number, _settingName, _tableName);
         }
 
         /// <summary>

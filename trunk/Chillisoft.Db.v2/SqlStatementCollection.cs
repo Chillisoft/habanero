@@ -10,14 +10,14 @@ namespace Chillisoft.Db.v2
     /// </summary>
     public class SqlStatementCollection : ISqlStatementCollection
     {
-        private IList mList;
+        private IList _list;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
         public SqlStatementCollection()
         {
-            mList = new ArrayList();
+            _list = new ArrayList();
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Chillisoft.Db.v2
         /// <param name="statement">The sql statement object</param>
         public void Add(ISqlStatement statement)
         {
-            mList.Add(statement);
+            _list.Add(statement);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Chillisoft.Db.v2
         {
             foreach (ISqlStatement statement in statementCollection)
             {
-                mList.Add(statement);
+                _list.Add(statement);
             }
         }
 
@@ -57,7 +57,7 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public int Count
         {
-            get { return mList.Count; }
+            get { return _list.Count; }
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Chillisoft.Db.v2
         /// <returns>Returns the enumerator</returns>
         public IEnumerator GetEnumerator()
         {
-            return mList.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Chillisoft.Db.v2
         /// <returns>Returns the sql statement object at that position</returns>
         public ISqlStatement this[int pos]
         {
-            get { return (ISqlStatement) mList[pos]; }
+            get { return (ISqlStatement) _list[pos]; }
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Chillisoft.Db.v2
         /// <param name="sql">The sql statement object to add</param>
         public void Insert(int pos, ISqlStatement sql)
         {
-            mList.Insert(pos, sql);
+            _list.Insert(pos, sql);
         }
 
         /// <summary>

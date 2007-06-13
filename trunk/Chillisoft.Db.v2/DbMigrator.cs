@@ -14,23 +14,23 @@ namespace Chillisoft.Db.v2
     public class DbMigrator
     {
         public const string DATABASE_VERSION_SETTING = "DATABASE_VERSION";
-        private readonly IDatabaseConnection itsConnection;
-        private SortedDictionary<int, SqlStatement> itsMigrations;
-        private ISettingsStorer itsSettingsStorer;
+        private readonly IDatabaseConnection _connection;
+        private SortedDictionary<int, SqlStatement> _migrations;
+        private ISettingsStorer _settingsStorer;
 
         /// <summary>
         /// Constructor to initialise the migrator with the connection provided
         /// </summary>
         /// <param name="connection">The database connection</param>
         public DbMigrator(IDatabaseConnection connection) {
-            itsConnection = connection;
-            itsMigrations = new SortedDictionary<int, SqlStatement>();
+            _connection = connection;
+            _migrations = new SortedDictionary<int, SqlStatement>();
         }
 
         /// <summary>
         /// Returns the migration count
         /// </summary>
-        public int MigrationCount { get { return itsMigrations.Count; } }
+        public int MigrationCount { get { return _migrations.Count; } }
 
         /// <summary>
         /// Adds a sql migration that can be performed
@@ -38,7 +38,7 @@ namespace Chillisoft.Db.v2
         /// <param name="number">The migration number</param>
         /// <param name="sql">The sql statement string to add</param>
         public void AddMigration(int number, string sql) {
-            itsMigrations.Add(number, new SqlStatement(itsConnection.GetConnection() , sql));
+            _migrations.Add(number, new SqlStatement(_connection.GetConnection() , sql));
         }
         
         /// <summary>
@@ -47,7 +47,7 @@ namespace Chillisoft.Db.v2
         /// <param name="number">The migration number</param>
         /// <param name="sql">The sql statement object to add</param>
         public void AddMigration(int number, SqlStatement sql) {
-            itsMigrations.Add(number, sql);
+            _migrations.Add(number, sql);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Chillisoft.Db.v2
         /// - or rename the parameter
         public SqlStatementCollection  GetMigrationSql(int startVersion, int endVersion) {
             SqlStatementCollection migrationSql = new SqlStatementCollection();
-            foreach (KeyValuePair<int, SqlStatement> migration in itsMigrations)
+            foreach (KeyValuePair<int, SqlStatement> migration in _migrations)
             {
                 if (migration.Key > startVersion && migration.Key <= endVersion)
                 {
@@ -79,7 +79,7 @@ namespace Chillisoft.Db.v2
         /// <returns>Returns a sql statement object, or null if not found</returns>
         public SqlStatement GetMigration(int number)
         {
-            return itsMigrations[number];
+            return _migrations[number];
         }
 
         /// <summary>
@@ -93,11 +93,11 @@ namespace Chillisoft.Db.v2
         public void Migrate(int startVersion, int endVersion) {
             //for (int i = startVersion; i <= endVersion; i++)
             //{ 
-            //    itsConnection.ExecuteSql(GetMigrationSql(i, i));
+            //    _connection.ExecuteSql(GetMigrationSql(i, i));
             //    SetCurrentVersion(endVersion);
 
             //}
-            itsConnection.ExecuteSql(GetMigrationSql(startVersion, endVersion));
+            _connection.ExecuteSql(GetMigrationSql(startVersion, endVersion));
             SetCurrentVersion(endVersion);
         }
 
@@ -106,7 +106,7 @@ namespace Chillisoft.Db.v2
         /// </summary>
         /// <param name="storer">The settings storer</param>
         public void SetSettingsStorer(ISettingsStorer storer) {
-            itsSettingsStorer = storer;
+            _settingsStorer = storer;
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Chillisoft.Db.v2
         /// </summary>
         /// <param name="version">The version number to set to</param>
         public void SetCurrentVersion(int version) {
-            itsSettingsStorer.SetString(DATABASE_VERSION_SETTING, version.ToString( ));
+            _settingsStorer.SetString(DATABASE_VERSION_SETTING, version.ToString( ));
         }
 
         /// <summary>
@@ -124,15 +124,15 @@ namespace Chillisoft.Db.v2
         /// <exception cref="ArgumentNullException">Thrown if the
         /// settings storer has not been assigned</exception>
         public int GetCurrentVersion() {
-            if (this.itsSettingsStorer == null && GlobalRegistry.SettingsStorer == null)
+            if (this._settingsStorer == null && GlobalRegistry.SettingsStorer == null)
             {
                 throw new ArgumentNullException("SettingsStorer",
                                                 "Please set the setting storer before using GetCurrentVersion as it uses the SettingsStorer to read the current version (VERSION setting)");
             }
             try {
-                if (itsSettingsStorer == null) return Convert.ToInt32(GlobalRegistry.SettingsStorer.GetString(DATABASE_VERSION_SETTING));
+                if (_settingsStorer == null) return Convert.ToInt32(GlobalRegistry.SettingsStorer.GetString(DATABASE_VERSION_SETTING));
 
-                return Convert.ToInt32(itsSettingsStorer.GetString(DATABASE_VERSION_SETTING));
+                return Convert.ToInt32(_settingsStorer.GetString(DATABASE_VERSION_SETTING));
             } catch (UserException ) {
                 return 0;
             }
@@ -155,7 +155,7 @@ namespace Chillisoft.Db.v2
         /// <returns>Returns an integer</returns>
         public int GetLatestVersion() {
             int latestVersion = 0;
-            foreach (KeyValuePair<int, SqlStatement > migration in itsMigrations) {
+            foreach (KeyValuePair<int, SqlStatement > migration in _migrations) {
                 latestVersion = migration.Key;
             }
             return latestVersion;

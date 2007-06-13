@@ -9,8 +9,8 @@ namespace Chillisoft.Db.v2
     /// TODO ERIC - review
     public class XmlDatabaseConfig : DatabaseConfig
     {
-        private XmlNode itsNode;
-        private XmlWrapper itsXmlWrapper;
+        private XmlNode _node;
+        private XmlWrapper _xmlWrapper;
 
         /// <summary>
         /// Constructor to initialise a new configuration
@@ -19,8 +19,8 @@ namespace Chillisoft.Db.v2
         /// <param name="wrapper">The xml wrapper</param>
         public XmlDatabaseConfig(XmlNode node, XmlWrapper wrapper) : base()
         {
-            itsNode = node;
-            itsXmlWrapper = wrapper;
+            _node = node;
+            _xmlWrapper = wrapper;
         }
 
         /// <summary>
@@ -28,8 +28,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public override string Vendor
         {
-            get { return itsXmlWrapper.ReadXmlValue(itsNode, "Vendor"); }
-            set { itsXmlWrapper.WriteXmlValue(itsNode, "Vendor", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Vendor"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Vendor", value); }
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public override string Server
         {
-            get { return itsXmlWrapper.ReadXmlValue(itsNode, "Server"); }
-            set { itsXmlWrapper.WriteXmlValue(itsNode, "Server", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Server"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Server", value); }
         }
 
         /// <summary>
@@ -46,8 +46,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public override string Database
         {
-            get { return itsXmlWrapper.ReadXmlValue(itsNode, "Database"); }
-            set { itsXmlWrapper.WriteXmlValue(itsNode, "Database", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Database"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Database", value); }
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public override string UserName
         {
-            get { return itsXmlWrapper.ReadXmlValue(itsNode, "UserName"); }
-            set { itsXmlWrapper.WriteXmlValue(itsNode, "UserName", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "UserName"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "UserName", value); }
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public override string Password
         {
-            get { return itsXmlWrapper.ReadXmlValue(itsNode, "Password"); }
-            set { itsXmlWrapper.WriteXmlValue(itsNode, "Password", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Password"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Password", value); }
         }
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public override string Port
         {
-            get { return itsXmlWrapper.ReadXmlValue(itsNode, "Port"); }
-            set { itsXmlWrapper.WriteXmlValue(itsNode, "Port", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Port"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Port", value); }
         }
     }
 }

@@ -17,14 +17,14 @@ namespace Chillisoft.Db.v2
     /// what is the process
     public abstract class DatabaseConnection : IDatabaseConnection
     {
-        private readonly string itsAssemblyName;
-        private readonly string itsClassName;
-        protected string mConnectString;
-        protected IList itsConnections;
-        //protected IDbConnection itsCurrentDbConnection;
-        private static IDatabaseConnection CurrentDatabaseConnection;
+        private readonly string _assemblyName;
+        private readonly string _className;
+        protected string _connectString;
+        protected IList _connections;
+        //protected IDbConnection _currentDbConnection;
+        private static IDatabaseConnection _currentDatabaseConnection;
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Db.v2.DatabaseConnection");
-        private int itsTimeoutPeriod = 30;
+        private int _timeoutPeriod = 30;
 
         /// <summary>
         /// A class constructor that creates a new connection to a
@@ -41,7 +41,7 @@ namespace Chillisoft.Db.v2
         /// </summary>
         private DatabaseConnection()
         {
-            itsConnections = new ArrayList(5);
+            _connections = new ArrayList(5);
         }
 
         //private IDbConnection sampleCon;
@@ -54,8 +54,8 @@ namespace Chillisoft.Db.v2
         /// <param name="className">The database class name</param>
         protected DatabaseConnection(string assemblyName, string className) : this()
         {
-            itsAssemblyName = assemblyName;
-            itsClassName = className;
+            _assemblyName = assemblyName;
+            _className = className;
             //this.CreateDatabaseConnection(assemblyName, className);
         }
 
@@ -72,7 +72,7 @@ namespace Chillisoft.Db.v2
             : this(assemblyName, className)
         {
             this.ConnectionString = connectString;
-            //itsCurrentDbConnection = GetNewConnection();
+            //_currentDbConnection = GetNewConnection();
         }
 
         /// <summary>
@@ -83,13 +83,13 @@ namespace Chillisoft.Db.v2
         private IDbConnection CreateDatabaseConnection()
         {
             //Assembly dbAssembly;
-            //dbAssembly = Assembly.LoadWithPartialName(itsAssemblyName);
+            //dbAssembly = Assembly.LoadWithPartialName(_assemblyName);
             //if (dbAssembly == null)
             //{
-            //    dbAssembly = Assembly.LoadFrom(itsAssemblyName + ".dll");
+            //    dbAssembly = Assembly.LoadFrom(_assemblyName + ".dll");
             //}
-            //Type connectionType = dbAssembly.GetType(itsClassName);
-            Type connectionType = TypeLoader.LoadType(itsAssemblyName, itsClassName);
+            //Type connectionType = dbAssembly.GetType(_className);
+            Type connectionType = TypeLoader.LoadType(_assemblyName, _className);
             return (IDbConnection) Activator.CreateInstance(connectionType);
         }
 
@@ -103,7 +103,7 @@ namespace Chillisoft.Db.v2
             IDbConnection con = this.CreateDatabaseConnection();
                 //IDbConnection) Activator.CreateInstance(sampleCon.GetType()); // new MySqlConnection(ConnectionString));
             con.ConnectionString = this.ConnectionString;
-            if (con.State != ConnectionState.Open && this.itsClassName == "System.Data.OleDb.OleDbConnection") {
+            if (con.State != ConnectionState.Open && this._className == "System.Data.OleDb.OleDbConnection") {
                 con.Open();
             }
 //			if (con.State != ConnectionState.Open) 
@@ -118,8 +118,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public static IDatabaseConnection CurrentConnection
         {
-            get { return CurrentDatabaseConnection; }
-            set { CurrentDatabaseConnection = value; }
+            get { return _currentDatabaseConnection; }
+            set { _currentDatabaseConnection = value; }
         }
 
         /// <summary>
@@ -129,16 +129,16 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public string ConnectionString
         {
-            get { return mConnectString; }
+            get { return _connectString; }
             set
             {
-                foreach (IDbConnection dbConnection in itsConnections)
+                foreach (IDbConnection dbConnection in _connections)
                 {
                     dbConnection.Close();
                     dbConnection.Dispose();
                 }
-                itsConnections = new ArrayList(5);
-                mConnectString = value;
+                _connections = new ArrayList(5);
+                _connectString = value;
             }
         }
 
@@ -196,7 +196,7 @@ namespace Chillisoft.Db.v2
             {
                 // looks for closed connections for reading because open 
                 // connections could have readers still associated with them.
-                foreach (IDbConnection dbConnection in itsConnections)
+                foreach (IDbConnection dbConnection in _connections)
                 {
                     if (dbConnection.State == ConnectionState.Closed)
                     {
@@ -207,7 +207,7 @@ namespace Chillisoft.Db.v2
                 }
                 IDbConnection newDbConnection = this.GetNewConnection();
                 //newDbConnection.Open() ;
-                itsConnections.Add(newDbConnection);
+                _connections.Add(newDbConnection);
                 return newDbConnection;
             }
             catch (Exception ex)
@@ -228,7 +228,7 @@ namespace Chillisoft.Db.v2
         {
             try
             {
-                foreach (IDbConnection dbConnection in itsConnections)
+                foreach (IDbConnection dbConnection in _connections)
                 {
                     //if (dbConnection.State == ConnectionState.Open) {
                     //	return dbConnection;
@@ -240,22 +240,22 @@ namespace Chillisoft.Db.v2
                     }
                 }
                 IDbConnection newDbConnection = this.GetNewConnection();
-                itsConnections.Add(newDbConnection);
+                _connections.Add(newDbConnection);
                 return newDbConnection;
 
-                //				if (itsCurrentDbConnection == null || (itsCurrentDbConnection.State == ConnectionState.Broken) ||
-                //					(itsCurrentDbConnection.State == ConnectionState.Closed) ||
-                //					(itsCurrentDbConnection.State == ConnectionState.Executing)) 
+                //				if (_currentDbConnection == null || (_currentDbConnection.State == ConnectionState.Broken) ||
+                //					(_currentDbConnection.State == ConnectionState.Closed) ||
+                //					(_currentDbConnection.State == ConnectionState.Executing)) 
                 //				{
-                //					itsCurrentDbConnection = GetNewConnection();
-                //					itsCurrentDbConnection.Open();
+                //					_currentDbConnection = GetNewConnection();
+                //					_currentDbConnection.Open();
                 //				}
                 //				else 
                 //				{
                 //					//if the provided connection is not open, we will open it
-                //					if (itsCurrentDbConnection.State != ConnectionState.Open) 
+                //					if (_currentDbConnection.State != ConnectionState.Open) 
                 //					{
-                //						itsCurrentDbConnection.Open();
+                //						_currentDbConnection.Open();
                 //					}
                 //				}
             }
@@ -279,11 +279,11 @@ namespace Chillisoft.Db.v2
         }
 
 //		public IDbConnection GetConnection() {
-//			if (itsCurrentDbConnection == null) {
-//				itsCurrentDbConnection = GetNewConnection();
-//				itsConnections.Add(itsCurrentDbConnection);
+//			if (_currentDbConnection == null) {
+//				_currentDbConnection = GetNewConnection();
+//				_connections.Add(_currentDbConnection);
 //			}
-//			return itsCurrentDbConnection;
+//			return _currentDbConnection;
 //		}
 
         //		public IDataReader LoadDataReader(SqlStatement selectSql,
@@ -356,7 +356,7 @@ namespace Chillisoft.Db.v2
                 selectSQL.SetupCommand(cmd);
                 //log.Debug("LoadDataReader with sql statement: " + selectSQL.ToString() ) ;
                 //cmd.CommandText = selectSQL;
-                //itsCurrentDbConnection = null;
+                //_currentDbConnection = null;
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)
@@ -453,7 +453,7 @@ namespace Chillisoft.Db.v2
                     cmd = con.CreateCommand();
                 } try
                 {
-                    cmd.CommandTimeout = itsTimeoutPeriod;
+                    cmd.CommandTimeout = _timeoutPeriod;
                 } catch (NotSupportedException  )
                 {
                 }
@@ -628,7 +628,7 @@ namespace Chillisoft.Db.v2
         /// TODO ERIC - times out what?
         public void SetTimeoutPeriod(int timeoutSeconds)
         {
-            itsTimeoutPeriod = timeoutSeconds;
+            _timeoutPeriod = timeoutSeconds;
         }
 
         /// <summary>

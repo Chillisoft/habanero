@@ -11,9 +11,9 @@ namespace Chillisoft.Db.v2
     [Serializable()]
     public class DatabaseReadException : BaseApplicationException
     {
-        private string mSqlStatement;
-        private string mConnectString;
-        private string mDeveloperMessage;
+        private string _sqlStatement;
+        private string _connectString;
+        private string _developerMessage;
 
         /// <summary>
         /// Constructor to initialise a new exception
@@ -25,9 +25,9 @@ namespace Chillisoft.Db.v2
         public DatabaseReadException(string userMessage, string developerMessage,
                                      string SqlStatement, string ConnectString) : base(userMessage)
         {
-            mSqlStatement = SqlStatement;
-            mConnectString = ConnectString;
-            mDeveloperMessage = developerMessage;
+            _sqlStatement = SqlStatement;
+            _connectString = ConnectString;
+            _developerMessage = developerMessage;
         }
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace Chillisoft.Db.v2
         public DatabaseReadException(string userMessage, string developerMessage, Exception inner,
                                      string SqlStatement, string ConnectString) : base(userMessage, inner)
         {
-            mSqlStatement = SqlStatement;
-            mConnectString = ConnectString;
-            mDeveloperMessage = developerMessage;
+            _sqlStatement = SqlStatement;
+            _connectString = ConnectString;
+            _developerMessage = developerMessage;
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public string SqlStatement
         {
-            get { return mSqlStatement; }
+            get { return _sqlStatement; }
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public string ConnectString
         {
-            get { return mConnectString; }
+            get { return _connectString; }
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public string DeveloperMessage
         {
-            get { return mDeveloperMessage; }
+            get { return _developerMessage; }
         }
 
         /// <summary>

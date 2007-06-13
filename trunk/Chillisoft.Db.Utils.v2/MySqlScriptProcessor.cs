@@ -8,14 +8,14 @@ namespace Chillisoft.Db.Utils.v2
     /// </summary>
     public class MySqlScriptProcessor
     {
-        private string itsToFile;
-        private string itsFromFile;
-        private bool itsConstraintsOnly;
-        private StreamWriter sw;
-        private int intConstraintCount;
-        private int intTableCount;
-        private string strToConstraint;
-        private string strCurrentTableName;
+        private string _toFile;
+        private string _fromFile;
+        private bool _constraintsOnly;
+        private StreamWriter _sw;
+        private int _constraintCount;
+        private int _tableCount;
+        private string _toConstraint;
+        private string _currentTableName;
 
         /// <summary>
         /// Constructor to initialise a processor
@@ -25,9 +25,9 @@ namespace Chillisoft.Db.Utils.v2
         /// <param name="constraintsOnly">Whether to process constraints only</param>
         public MySqlScriptProcessor(string toFile, string fromFile, bool constraintsOnly)
         {
-            itsToFile = toFile;
-            itsFromFile = fromFile;
-            itsConstraintsOnly = constraintsOnly;
+            _toFile = toFile;
+            _fromFile = fromFile;
+            _constraintsOnly = constraintsOnly;
         }
 
         /// <summary>
@@ -38,14 +38,14 @@ namespace Chillisoft.Db.Utils.v2
         /// <returns>Returns true if done successfully</returns>
         public bool Replicate(ref string errMsg)
         {
-            if (!File.Exists(itsFromFile))
+            if (!File.Exists(_fromFile))
             {
-                errMsg = "File: " + itsFromFile + " does not exist. Please reenter.";
+                errMsg = "File: " + _fromFile + " does not exist. Please reenter.";
                 return false;
             }
-            StreamReader sr = File.OpenText(itsFromFile);
+            StreamReader sr = File.OpenText(_fromFile);
             string strFrom = sr.ReadLine();
-            sw = new StreamWriter(itsToFile);
+            _sw = new StreamWriter(_toFile);
 
             bool inCreateTable = false;
             bool firstLineInCreateTable = false;
@@ -57,7 +57,7 @@ namespace Chillisoft.Db.Utils.v2
                 {
                     int intFirstApostrophe = strFrom.IndexOf("`");
                     int intLastApostrophe = strFrom.IndexOf("`", intFirstApostrophe + 1);
-                    strCurrentTableName =
+                    _currentTableName =
                         strFrom.Substring(intFirstApostrophe + 1, intLastApostrophe - intFirstApostrophe - 1);
                     // 'As this is a new table, set constraint count to 0, so that only
                     // 'those tables which actually have constraints will be added to the second
@@ -65,7 +65,7 @@ namespace Chillisoft.Db.Utils.v2
                     // 'When this count is incremented to 1, ie the first constraint is added for this
                     // 'table, then the alter table tableName will be added to the second part
                     // 'of the document.
-                    intConstraintCount = 0;
+                    _constraintCount = 0;
                     //'add string to table creation part of document.
                     ConcatStrToCreateTable(strFrom);
                     inCreateTable = true;
@@ -126,8 +126,8 @@ namespace Chillisoft.Db.Utils.v2
                 }
                 strFrom = sr.ReadLine();
             }
-            sw.Write(strToConstraint);
-            sw.Close();
+            _sw.Write(_toConstraint);
+            _sw.Close();
             sr.Close();
             //'SaveReplicatedScript()
             return true;
@@ -142,9 +142,9 @@ namespace Chillisoft.Db.Utils.v2
         {
             //Create 'Top part' of the document ie the part that creates and sets the data.
             //the 'Bottom part' is the section which adds all the constraints. 
-            if (!itsConstraintsOnly)
+            if (!_constraintsOnly)
             {
-                sw.WriteLine(nextLine);
+                _sw.WriteLine(nextLine);
             }
         }
 
@@ -157,9 +157,9 @@ namespace Chillisoft.Db.Utils.v2
         {
             //'Create 'Top part' of the document ie the part that creates and sets the data.
             //'the 'Bottom part' is the section which adds all the constraints. 
-            if (!itsConstraintsOnly)
+            if (!_constraintsOnly)
             {
-                sw.Write(substring);
+                _sw.Write(substring);
             }
         }
 
@@ -169,20 +169,20 @@ namespace Chillisoft.Db.Utils.v2
         /// <param name="nextLine">The constraint to add</param>
         private void ConcatStrToConstraint(string nextLine)
         {
-            intConstraintCount = intConstraintCount + 1;
-            if (intConstraintCount == 1)
+            _constraintCount = _constraintCount + 1;
+            if (_constraintCount == 1)
             {
-                intTableCount = intTableCount + 1;
-                if (intTableCount > 1)
+                _tableCount = _tableCount + 1;
+                if (_tableCount > 1)
                 {
-                    strToConstraint = strToConstraint + ";" + Environment.NewLine + Environment.NewLine;
+                    _toConstraint = _toConstraint + ";" + Environment.NewLine + Environment.NewLine;
                 }
-                strToConstraint = strToConstraint + "Alter Table `" + strCurrentTableName + "`" + Environment.NewLine;
-                strToConstraint = strToConstraint + "ADD" + nextLine;
+                _toConstraint = _toConstraint + "Alter Table `" + _currentTableName + "`" + Environment.NewLine;
+                _toConstraint = _toConstraint + "ADD" + nextLine;
             }
             else
             {
-                strToConstraint = strToConstraint + Environment.NewLine + "ADD" + nextLine;
+                _toConstraint = _toConstraint + Environment.NewLine + "ADD" + nextLine;
             }
         }
     }

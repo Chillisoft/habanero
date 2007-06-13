@@ -8,10 +8,10 @@ namespace Chillisoft.Db.v2
     /// </summary>
     public class ParameterNameGenerator : IParameterNameGenerator
     {
-        private IDbConnection mConnection;
-        private int mNumber;
-        private string mParameterNameBase = "Param";
-        private string mPrefixCharacter;
+        private IDbConnection _connection;
+        private int _number;
+        private string _parameterNameBase = "Param";
+        private string _prefixCharacter;
 
         /// <summary>
         /// Constructor to initialise a new generator
@@ -19,24 +19,24 @@ namespace Chillisoft.Db.v2
         /// <param name="connection">A database connection</param>
         public ParameterNameGenerator(IDbConnection connection)
         {
-            mConnection = connection;
-            if (mConnection == null) {
-                mPrefixCharacter = "?";
+            _connection = connection;
+            if (_connection == null) {
+                _prefixCharacter = "?";
                 return;
             }
-            string connectionNamespace = mConnection.GetType().Namespace;
+            string connectionNamespace = _connection.GetType().Namespace;
             if (connectionNamespace == "System.Data.OracleClient")
 //            if (connectionNamespace.Substring(0, 17) == "Oracle.DataAccess")
             {
-                mPrefixCharacter = ":";
+                _prefixCharacter = ":";
             }
             else if (connectionNamespace == "MySql.Data.MySqlClient")
             {
-                mPrefixCharacter = "?";
+                _prefixCharacter = "?";
             }
             else
             {
-                mPrefixCharacter = "@";
+                _prefixCharacter = "@";
             }
         }
 
@@ -47,7 +47,7 @@ namespace Chillisoft.Db.v2
         /// <returns>Returns a string</returns>
         public string GetNextParameterName()
         {
-            return mPrefixCharacter + mParameterNameBase + mNumber++;
+            return _prefixCharacter + _parameterNameBase + _number++;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public void Reset()
         {
-            mNumber = 0;
+            _number = 0;
         }
     }
 }

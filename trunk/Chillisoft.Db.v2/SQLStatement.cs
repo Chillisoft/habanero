@@ -12,11 +12,11 @@ namespace Chillisoft.Db.v2
     /// </summary>
     public class SqlStatement : ISqlStatement
     {
-        private StringBuilder mStatement;
-        private IDbConnection mConnection;
-        private IList mParameters;
-        private IDbCommand mSampleCommand;
-        private ParameterNameGenerator gen;
+        private StringBuilder _statement;
+        private IDbConnection _connection;
+        private IList _parameters;
+        private IDbCommand _sampleCommand;
+        private ParameterNameGenerator _gen;
 
         /// <summary>
         /// Constructor to initialise a new sql statement
@@ -24,18 +24,18 @@ namespace Chillisoft.Db.v2
         /// <param name="connection">A database connection</param>
         public SqlStatement(IDbConnection connection)
         {
-            mParameters = new ArrayList();
-            mConnection = connection;
+            _parameters = new ArrayList();
+            _connection = connection;
             if (connection != null)
             {
-                mSampleCommand = mConnection.CreateCommand();
-                gen = new ParameterNameGenerator(connection);
+                _sampleCommand = _connection.CreateCommand();
+                _gen = new ParameterNameGenerator(connection);
             }
             else
             {
-                gen = new ParameterNameGenerator(null);
+                _gen = new ParameterNameGenerator(null);
             }
-            mStatement = new StringBuilder(100);
+            _statement = new StringBuilder(100);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Chillisoft.Db.v2
         /// <param name="statement">An existing sql statement</param>
         public SqlStatement(IDbConnection connection, string statement) : this(connection)
         {
-            mStatement = new StringBuilder(statement);
+            _statement = new StringBuilder(statement);
         }
 
         /// <summary>
@@ -54,8 +54,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public StringBuilder Statement
         {
-            get { return mStatement; }
-            set { mStatement = value; }
+            get { return _statement; }
+            set { _statement = value; }
         }
 
         /// <summary>
@@ -70,8 +70,8 @@ namespace Chillisoft.Db.v2
             {
                 paramValue = DBNull.Value;
             }
-            IDbDataParameter newParameter = mSampleCommand.CreateParameter();
-            //			if ((paramValue is string) && (mConnection is MySqlConnection)) {
+            IDbDataParameter newParameter = _sampleCommand.CreateParameter();
+            //			if ((paramValue is string) && (_connection is MySqlConnection)) {
             //				((MySqlParameter) newParameter).MySqlDbType = MySqlDbType.String ;
             //			}
             newParameter.ParameterName = paramName;
@@ -104,13 +104,13 @@ namespace Chillisoft.Db.v2
 
             databaseSpecificParameterSettings(newParameter, paramValue);
 
-            mParameters.Add(newParameter);
+            _parameters.Add(newParameter);
             return newParameter;
         }
 
         private void databaseSpecificParameterSettings(IDbDataParameter newParameter, object paramValue)
         {
-            string connectionNamespace = mConnection.GetType().Namespace;
+            string connectionNamespace = _connection.GetType().Namespace;
             if (connectionNamespace == "System.Data.OracleClient")
             {
                 if (paramValue.GetType().Name == "LongText")
@@ -126,7 +126,7 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public IList Parameters
         {
-            get { return mParameters; }
+            get { return _parameters; }
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Chillisoft.Db.v2
         public void SetupCommand(IDbCommand command)
         {
             command.CommandType = CommandType.Text;
-            command.CommandText = this.mStatement.ToString();
+            command.CommandText = this._statement.ToString();
             command.Parameters.Clear();
             foreach (IDbDataParameter param in this.Parameters)
             {
@@ -166,7 +166,7 @@ namespace Chillisoft.Db.v2
         /// <returns>Returns a ParameterNameGenerator object</returns>
         public ParameterNameGenerator GetParameterNameGenerator()
         {
-            return gen;
+            return _gen;
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Chillisoft.Db.v2
         /// <param name="obj">The parameter to add</param>
         public void AddParameterToStatement(object obj)
         {
-            string paramName = gen.GetNextParameterName();
+            string paramName = _gen.GetNextParameterName();
             this.AddParameter(paramName, obj);
             this.Statement.Append(paramName);
         }
@@ -191,18 +191,18 @@ namespace Chillisoft.Db.v2
             if (obj is SqlStatement)
             {
                 SqlStatement statement = (SqlStatement) obj;
-                if (!mStatement.ToString().Equals(statement.Statement.ToString()))
+                if (!_statement.ToString().Equals(statement.Statement.ToString()))
                 {
                     return false;
                 }
-                if (mParameters.Count != statement.Parameters.Count)
+                if (_parameters.Count != statement.Parameters.Count)
                 {
                     Console.WriteLine("Param count different");
                     return false;
                 }
-                for (int i = 0; i < mParameters.Count; i++)
+                for (int i = 0; i < _parameters.Count; i++)
                 {
-                    IDbDataParameter myParam = (IDbDataParameter) mParameters[i];
+                    IDbDataParameter myParam = (IDbDataParameter) _parameters[i];
                     IDbDataParameter theirParam = (IDbDataParameter) statement.Parameters[i];
                     if (!myParam.GetType().Equals(theirParam.GetType()) ||
                         !myParam.ParameterName.Equals(theirParam.ParameterName) ||

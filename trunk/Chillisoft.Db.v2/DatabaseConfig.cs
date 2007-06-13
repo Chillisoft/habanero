@@ -17,12 +17,12 @@ namespace Chillisoft.Db.v2
         public const string Oracle = "ORACLE";
         public const string Access = "ACCESS";
 
-        protected String mVendor;
-        protected String mServer;
-        protected String mDatabase;
-        protected String mUserName;
-        protected String mPassword;
-        protected String mPort;
+        protected String _vendor;
+        protected String _server;
+        protected String _database;
+        protected String _userName;
+        protected String _password;
+        protected String _port;
 
         /// <summary>
         /// A deparameterised constructor
@@ -44,12 +44,12 @@ namespace Chillisoft.Db.v2
         public DatabaseConfig(string vendor, string server, string database, string userName, string password,
                               string port)
         {
-            this.mVendor = vendor;
-            this.mServer = server;
-            this.mDatabase = database;
-            this.mUserName = userName;
-            this.mPassword = password;
-            this.mPort = port;
+            this._vendor = vendor;
+            this._server = server;
+            this._database = database;
+            this._userName = userName;
+            this._password = password;
+            this._port = port;
         }
 
         /// <summary>
@@ -63,14 +63,14 @@ namespace Chillisoft.Db.v2
         {
             if (settings != null)
             {
-                mVendor = (string) settings["vendor"];
-                mServer = (string) settings["server"];
-                mDatabase = (string) settings["database"];
-                mUserName = (string) settings["username"];
-                mPassword = (string) settings["password"];
-                mPort = (string) settings["port"];
+                _vendor = (string) settings["vendor"];
+                _server = (string) settings["server"];
+                _database = (string) settings["database"];
+                _userName = (string) settings["username"];
+                _password = (string) settings["password"];
+                _port = (string) settings["port"];
 
-                if (mVendor == null || mVendor.Length == 0)
+                if (_vendor == null || _vendor.Length == 0)
                 {
                     throw new ArgumentException("Missing database settings for the database configuration " +
                                          "in the application configuration file. " +
@@ -93,8 +93,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public virtual string Vendor
         {
-            get { return mVendor; }
-            set { mVendor = value; }
+            get { return _vendor; }
+            set { _vendor = value; }
         }
 
         /// <summary>
@@ -102,8 +102,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public virtual string Server
         {
-            get { return mServer; }
-            set { mServer = value; }
+            get { return _server; }
+            set { _server = value; }
         }
 
         /// <summary>
@@ -111,8 +111,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public virtual string Database
         {
-            get { return mDatabase; }
-            set { mDatabase = value; }
+            get { return _database; }
+            set { _database = value; }
         }
 
         /// <summary>
@@ -120,8 +120,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public virtual string UserName
         {
-            get { return mUserName; }
-            set { mUserName = value; }
+            get { return _userName; }
+            set { _userName = value; }
         }
 
         /// <summary>
@@ -129,8 +129,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public virtual string Password
         {
-            get { return mPassword; }
-            set { mPassword = value; }
+            get { return _password; }
+            set { _password = value; }
         }
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         public virtual string Port
         {
-            get { return mPort; }
-            set { mPort = value; }
+            get { return _port; }
+            set { _port = value; }
         }
 
         /// <summary>
