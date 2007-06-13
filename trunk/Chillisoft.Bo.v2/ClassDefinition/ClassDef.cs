@@ -53,18 +53,18 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         protected static ClassDefCol _ClassDefCol;
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.ClassDefinition.v2.ClassDef");
 
-        protected string _DatabaseName = "Default";
-        protected string _TableName = "";
-		protected string _ClassName;
-		protected string _AssemblyName;
-        protected string _SelectSql = "";
-        protected bool _HasObjectID = true;
-        protected PrimaryKeyDef _PrimaryKeyDef;
-		protected PropDefCol _PropDefCol;
-        protected KeyDefCol _KeysCol;
-        protected RelationshipDefCol _RelationshipDefCol;
-
+		private string _AssemblyName;
+		private string _ClassName;
 		private Type _ClassType;
+		private string _DatabaseName = "Default";
+		//private string _SelectSql = "";
+		private string _TableName = "";
+		private bool _HasObjectID = true;
+		private PrimaryKeyDef _PrimaryKeyDef;
+		private PropDefCol _PropDefCol;
+		private KeyDefCol _KeysCol;
+		private RelationshipDefCol _RelationshipDefCol;
+
 		private SuperClassDesc _SuperClassDesc;
         private UIDefCol _UIDefCol;
         private bool _SupportsSynchronisation;
@@ -209,20 +209,43 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 
         #region properties
 
-        /// <summary>
-        /// The name of the class definition
-        /// </summary>
-        public string ClassName
-        {
-            get { return _ClassName; }
-        }
+		/// <summary>
+		/// The name of the assembly for the class definition
+		/// </summary>
+		public string AssemblyName
+		{
+			get { return _AssemblyName; }
+			protected set 
+			{
+				if (_AssemblyName != value)
+				{
+					_ClassType = null;
+					_ClassName = null;
+				}
+				_AssemblyName = value;
+			}
+		}
+
+		/// <summary>
+		/// The name of the class definition
+		/// </summary>
+		public string ClassName
+		{
+			get { return _ClassName; }
+			protected set
+			{
+				if(_ClassName != value)
+					_ClassType = null;
+				_ClassName = value;
+			}
+		}
 
 		///<summary>
 		/// The full name of the class definition.
 		///</summary>
 		public string ClassFullName
 		{
-			get { return GetTypeId(_AssemblyName, _ClassName); }
+			get { return ClassDefCol.GetTypeId(_AssemblyName, _ClassName); }
 		}
 
         /// <summary>
@@ -260,6 +283,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         public PropDefCol PropDefcol
         {
             get { return _PropDefCol; }
+			protected set { _PropDefCol = value; }
         }
 
         /// <summary>
@@ -267,7 +291,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public KeyDefCol KeysCol
         {
-            get { return _KeysCol; }
+			get { return _KeysCol; }
+			protected set { _KeysCol = value; }
         }
 
         /// <summary>
@@ -276,6 +301,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         public PrimaryKeyDef PrimaryKeyDef
         {
             get { return _PrimaryKeyDef; }
+			protected set { _PrimaryKeyDef = value; }
         }
 
         /// <summary>
@@ -293,6 +319,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         public RelationshipDefCol RelationshipDefCol
         {
             get { return _RelationshipDefCol; }
+			protected set { _RelationshipDefCol = value; }
         }
 
         /// <summary>
@@ -301,6 +328,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         public UIDefCol UIDefCol
         {
             get { return _UIDefCol; }
+			protected set { _UIDefCol = value; }
         }
 
         /// <summary>
@@ -481,7 +509,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     	{
 			get
 			{
-				if (_ClassType == null)
+				//TODO error: What happens if the AssemblyName or Classname is null?
+				if (_ClassType == null && _AssemblyName != null && _ClassName != null)
 				{
 					try
 					{
@@ -675,40 +704,5 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         }
 
         #endregion //Returning defs
-
-		///<summary>
-		/// This method combines the assembly name and class name to 
-		/// create a string that represents the Class Type.
-		///</summary>
-		///<param name="assemblyName">The class's assembly name</param>
-		///<param name="className">The class's name</param>
-		///<returns>A string representing the Class Type.</returns>
-		public static string GetTypeId(string assemblyName, string className)
-		{
-			string namespaceString = "";
-			int pos = className.LastIndexOf(".");
-			if (pos != -1)
-			{
-				namespaceString = " Namespace:" + className.Substring(0, pos);
-				className = className.Substring(pos + 1);
-			}
-			if (assemblyName.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase))
-				assemblyName = assemblyName.Remove(assemblyName.Length - 4);
-			string id = "Assembly:" + assemblyName + namespaceString + " ClassName:" + className;
-			return id.ToUpper();
-		}
-
-		///<summary>
-		/// This method returns a string that represents the given Class Type.
-		///</summary>
-		///<param name="classType">The class's Type object.</param>
-		///<returns>A string representing the Class Type.</returns>
-		public static string GetTypeId(Type classType, bool includeNamespace)
-		{
-			if (includeNamespace)
-				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.FullName);
-			else
-				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.Name);
-		}
-	}
+    }
 }

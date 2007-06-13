@@ -20,7 +20,6 @@ namespace Chillisoft.Bo.Loaders.v2
         private RelationshipDefCol _RelationshipDefCol;
         private string _ClassName;
         private string _AssemblyName;
-        private Type _ClassType;
         private SuperClassDesc _SuperClassDesc;
         private UIDefCol _UIDefCol;
         private string _TableName;
@@ -79,14 +78,14 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a class definition</returns>
         protected override object Create()
         {
-            ClassDef def = new ClassDef(_ClassType, _PrimaryKeyDef,
-                                        _PropDefCol, _KeyDefCol, 
-                                        _RelationshipDefCol, _UIDefCol);
-            if (_SuperClassDesc != null)
+			ClassDef def =
+				new ClassDef(_AssemblyName,_ClassName, _PrimaryKeyDef, _PropDefCol, 
+							 _KeyDefCol, _RelationshipDefCol, _UIDefCol);
+			if (_SuperClassDesc != null)
             {
                 def.SuperClassDesc = _SuperClassDesc;
             }
-            if (_TableName != null && _TableName != "")
+            if (_TableName != null && _TableName.Length > 0)
             {
                 def.TableName = _TableName;
             }
@@ -99,10 +98,9 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadFromReader()
         {
-            _ClassType = null;
             _SuperClassDesc = null;
             itsReader.Read();
-            LoadClassType();
+            LoadClassInfo();
             LoadTableName();
             LoadSupportsSynchronisation();
 
@@ -116,34 +114,34 @@ namespace Chillisoft.Bo.Loaders.v2
             string primaryKeDefXML = null;
             while (itsReader.Name != "classDef")
             {
-                switch (itsReader.Name)
-                {
-                    case "superClassDesc":
-                        superclassDescXML = itsReader.ReadOuterXml();
-                        break;
-                    case "propertyDef":
-                        propDefXmls.Add(itsReader.ReadOuterXml());
-                        break;
-                    case "keyDef":
-                        keyDefXmls.Add(itsReader.ReadOuterXml());
-                        break;
-                    case "primaryKeyDef":
-                        primaryKeDefXML = itsReader.ReadOuterXml();
-                        break;
-                    case "relationshipDef":
-                        relationshipDefXmls.Add(itsReader.ReadOuterXml());
-                        break;
-                    case "uiDef":
-                        uiDefXmls.Add(itsReader.ReadOuterXml());
-                        break;
-                    default:
-                        throw new InvalidXmlDefinitionException("The element '" +
-                            itsReader.Name + "' is not a recognised class " +
-                            "definition element.  Ensure that you have the correct " +
-                            "spelling and capitalisation, or see the documentation " +
-                            "for available options.");
-                        break;
-                }
+				switch (itsReader.Name)
+				{
+					case "superClassDesc":
+						superclassDescXML = itsReader.ReadOuterXml();
+						break;
+					case "propertyDef":
+						propDefXmls.Add(itsReader.ReadOuterXml());
+						break;
+					case "keyDef":
+						keyDefXmls.Add(itsReader.ReadOuterXml());
+						break;
+					case "primaryKeyDef":
+						primaryKeDefXML = itsReader.ReadOuterXml();
+						break;
+					case "relationshipDef":
+						relationshipDefXmls.Add(itsReader.ReadOuterXml());
+						break;
+					case "uiDef":
+						uiDefXmls.Add(itsReader.ReadOuterXml());
+						break;
+					default:
+						throw new InvalidXmlDefinitionException("The element '" +
+							itsReader.Name + "' is not a recognised class " +
+							"definition element.  Ensure that you have the correct " +
+							"spelling and capitalisation, or see the documentation " +
+							"for available options.");
+						break;
+				}
             }
 
             LoadSuperClassDesc(superclassDescXML);
@@ -160,8 +158,8 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadSuperClassDesc(string xmlDef)
         {
             if (xmlDef != null)
-            {
-                XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(itsDtdPath);
+        {
+            XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(itsDtdPath);
                 _SuperClassDesc = superClassDescLoader.LoadSuperClassDesc(xmlDef);
             }
         }
@@ -214,7 +212,7 @@ namespace Chillisoft.Bo.Loaders.v2
             {
                 throw new InvalidXmlDefinitionException("Could not find a " +
                     "'primaryKeyDef' element in the class definition for the class '" +
-                    _ClassType + "'.  Each class definition requires a primary key " +
+                    _ClassName + "'.  Each class definition requires a primary key " +
                     "definition, which is composed of one or more property definitions, " +
                     "implying that you will need at least one 'propertyDef' element as " +
                     "well.");
@@ -226,7 +224,7 @@ namespace Chillisoft.Bo.Loaders.v2
             {
                 throw new InvalidXmlDefinitionException("There was an error loading " +
                     "the 'primaryKeyDef' element in the class definition for the class '" +
-                    _ClassType + "'.  Each class definition requires a primary key " +
+                    _ClassName + "'.  Each class definition requires a primary key " +
                     "definition, which is composed of one or more property definitions, " +
                     "implying that you will need at least one 'propertyDef' element as " +
                     "well.");
@@ -247,7 +245,7 @@ namespace Chillisoft.Bo.Loaders.v2
             //			XmlNodeList xmlPropDefs = itsClassElement.GetElementsByTagName("propertyDef");
             //			XmlPropertyLoader propLoader = new XmlPropertyLoader(itsDtdPath);
             //			foreach (XmlNode xmlPropDef in xmlPropDefs) {
-            //				itsPropDefCol.Add(propLoader.LoadProperty(xmlPropDef.OuterXml));
+            //				_PropDefCol.Add(propLoader.LoadProperty(xmlPropDef.OuterXml));
             //			}
         }
 
@@ -260,9 +258,9 @@ namespace Chillisoft.Bo.Loaders.v2
         }
 
         /// <summary>
-        /// Loads the class type data
+        /// Loads the class type info data
         /// </summary>
-        private void LoadClassType()
+        private void LoadClassInfo()
         {
             _ClassName = itsReader.GetAttribute("name");
             _AssemblyName = itsReader.GetAttribute("assembly");
@@ -285,20 +283,6 @@ namespace Chillisoft.Bo.Loaders.v2
                 throw new XmlException("No 'name' attribute has been specified for a " +
                    "'classDef' element.  The 'name' attribute indicates the name of the " +
                    "class to which a database table will be mapped.");
-            }
-
-            try
-            {
-                _ClassType = TypeLoader.LoadType(_AssemblyName, _ClassName);
-            }
-            catch (UnknownTypeNameException ex)
-            {
-                throw new UnknownTypeNameException("Unable to load the class type while " +
-                       "attempting to load a class definition, given the 'assembly' as: '" +
-                       _AssemblyName + "', and the 'class' as: '" + _ClassName +
-                       "'. Check that the class exists in the given assembly name and " +
-                       "that spelling and capitalisation are correct.", ex);
-                //itsClassType = null;
             }
         }
 

@@ -37,23 +37,6 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             }
         }
 
-		private string GetTypeIdForItem(Type key, out bool found)
-		{
-			string typeId = ClassDef.GetTypeId(key, false);
-			found = false;
-			if (Dictionary.Contains(typeId))
-				found = true;
-			else
-			{
-				typeId = ClassDef.GetTypeId(key, true);
-				if (Dictionary.Contains(typeId))
-				{
-					found = true;
-				}
-			}
-			return typeId;
-		}
-
 		/// <summary>
 		/// Provides an indexing facility for the collection so that items
 		/// in the collection can be accessed like an array 
@@ -87,7 +70,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 			get
 			{
 				//TODO: Error if (this.Contains(key))
-				return ((ClassDef)Dictionary[ClassDef.GetTypeId(assemblyName, className)]);
+				return ((ClassDef)Dictionary[ClassDefCol.GetTypeId(assemblyName, className)]);
 			}
 		}
 		
@@ -172,6 +155,58 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             instanceFlag = false;
         }
+
+		private string GetTypeIdForItem(Type key, out bool found)
+		{
+			string typeId = ClassDefCol.GetTypeId(key, false);
+			found = false;
+			if (Dictionary.Contains(typeId))
+				found = true;
+			else
+			{
+				typeId = ClassDefCol.GetTypeId(key, true);
+				if (Dictionary.Contains(typeId))
+				{
+					found = true;
+				}
+			}
+			return typeId;
+		}
+
+    	///<summary>
+    	/// This method combines the assembly name and class name to 
+    	/// create a string that represents the Class Type.
+    	///</summary>
+    	///<param name="assemblyName">The class's assembly name</param>
+    	///<param name="className">The class's name</param>
+    	///<returns>A string representing the Class Type.</returns>
+    	internal static string GetTypeId(string assemblyName, string className)
+    	{
+    		string namespaceString = "";
+    		int pos = className.LastIndexOf(".");
+    		if (pos != -1)
+    		{
+    			namespaceString = " Namespace:" + className.Substring(0, pos);
+    			className = className.Substring(pos + 1);
+    		}
+    		if (assemblyName.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase))
+    			assemblyName = assemblyName.Remove(assemblyName.Length - 4);
+    		string id = "Assembly:" + assemblyName + namespaceString + " ClassName:" + className;
+    		return id.ToUpper();
+    	}
+
+    	///<summary>
+    	/// This method returns a string that represents the given Class Type.
+    	///</summary>
+    	///<param name="classType">The class's Type object.</param>
+    	///<returns>A string representing the Class Type.</returns>
+    	internal static string GetTypeId(Type classType, bool includeNamespace)
+    	{
+    		if (includeNamespace)
+    			return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.FullName);
+    		else
+    			return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.Name);
+    	}
     }
 
     #region "self Tests"
