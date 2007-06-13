@@ -9,18 +9,18 @@ namespace Chillisoft.Reporting.v2
     /// </summary>
     public class Report
     {
-        private readonly ReportDef itsReportDef;
-        private readonly IReportDataSource itsDataSource;
+        private readonly ReportDef _reportDef;
+        private readonly IReportDataSource _dataSource;
 
         public Report(ReportDef reportDef, IReportDataSource dataSource)
         {
-            itsReportDef = reportDef;
-            itsDataSource = dataSource;
+            _reportDef = reportDef;
+            _dataSource = dataSource;
         }
 
         public DataTable DataTable
         {
-            get { return itsDataSource.GetDataTable(); }
+            get { return _dataSource.GetDataTable(); }
         }
 
 
@@ -32,8 +32,8 @@ namespace Chillisoft.Reporting.v2
 
                 object groupByValue = null;
                 ReportGroup group = null;
-                DataTable reportData = this.itsDataSource.GetDataTable();
-                string groupByColumn = itsReportDef.GroupByColumn;
+                DataTable reportData = this._dataSource.GetDataTable();
+                string groupByColumn = _reportDef.GroupByColumn;
                 for (int i = 0; i < reportData.Rows.Count; i++)
                 {
                     DataRow dataRow = reportData.Rows[i];
@@ -41,7 +41,7 @@ namespace Chillisoft.Reporting.v2
                     {
                         group = new ReportGroup();
                     }
-                    else if (itsReportDef.GroupByColumn != "")
+                    else if (_reportDef.GroupByColumn != "")
                     {
                         if ((groupByValue == null && dataRow[groupByColumn] != null) ||
                             (groupByValue != null && dataRow[groupByColumn] == null) ||
@@ -80,7 +80,7 @@ namespace Chillisoft.Reporting.v2
 
         public ReportDef ReportDef
         {
-            get { return itsReportDef; }
+            get { return _reportDef; }
         }
     }
 }

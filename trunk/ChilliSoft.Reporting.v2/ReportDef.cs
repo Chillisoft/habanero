@@ -15,8 +15,8 @@ namespace Chillisoft.Reporting.v2
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Reporting.v2.ReportDef");
 
-        private XmlNode itsNode;
-        private XmlWrapper itsXmlWrapper;
+        private XmlNode _node;
+        private XmlWrapper _xmlWrapper;
 
         //variables for storing sub-definition data
         //private IReportDataSource itsDataSource;
@@ -33,7 +33,7 @@ namespace Chillisoft.Reporting.v2
         //		public ReportDef( string filename )
         //		{
         //			LoadFromFile(filename);
-        //			itsDataSource = new SqlDataSource(itsNode.SelectSingleNode("DataSource"), itsXmlWrapper);
+        //			itsDataSource = new SqlDataSource(_node.SelectSingleNode("DataSource"), _xmlWrapper);
         //		}
 
         public ReportDef(string filename)
@@ -46,29 +46,29 @@ namespace Chillisoft.Reporting.v2
         {
             try
             {
-                itsXmlWrapper = new XmlWrapper(filename);
+                _xmlWrapper = new XmlWrapper(filename);
             }
             catch (Exception ex)
             {
                 log.Error(ExceptionUtil.GetExceptionString(ex, 0));
                 throw ex;
             }
-            itsNode = itsXmlWrapper.XmlDocument.DocumentElement;
+            _node = _xmlWrapper.XmlDocument.DocumentElement;
 
             //initialise sub-definition variables
 
-            itsDefaultLayout = new Layout(itsNode.SelectSingleNode("DefaultLayout"), itsXmlWrapper);
-            itsHeaderLayout = new Layout(itsNode.SelectSingleNode("HeaderLayout"), itsXmlWrapper);
-            itsGroupHeaderLayout = new Layout(itsNode.SelectSingleNode("GroupHeaderLayout"), itsXmlWrapper);
-            itsColumnHeaderLayout = new Layout(itsNode.SelectSingleNode("ColumnHeaderLayout"), itsXmlWrapper);
-            itsDetailLayout = new Layout(itsNode.SelectSingleNode("DetailLayout"), itsXmlWrapper);
-            itsGroupFooterLayout = new Layout(itsNode.SelectSingleNode("GroupFooterLayout"), itsXmlWrapper);
-            itsFooterLayout = new Layout(itsNode.SelectSingleNode("FooterLayout"), itsXmlWrapper);
+            itsDefaultLayout = new Layout(_node.SelectSingleNode("DefaultLayout"), _xmlWrapper);
+            itsHeaderLayout = new Layout(_node.SelectSingleNode("HeaderLayout"), _xmlWrapper);
+            itsGroupHeaderLayout = new Layout(_node.SelectSingleNode("GroupHeaderLayout"), _xmlWrapper);
+            itsColumnHeaderLayout = new Layout(_node.SelectSingleNode("ColumnHeaderLayout"), _xmlWrapper);
+            itsDetailLayout = new Layout(_node.SelectSingleNode("DetailLayout"), _xmlWrapper);
+            itsGroupFooterLayout = new Layout(_node.SelectSingleNode("GroupFooterLayout"), _xmlWrapper);
+            itsFooterLayout = new Layout(_node.SelectSingleNode("FooterLayout"), _xmlWrapper);
 
             itsColumns = new ColumnCollection();
-            foreach (XmlNode columnNode in itsNode.SelectNodes("Column"))
+            foreach (XmlNode columnNode in _node.SelectNodes("Column"))
             {
-                itsColumns.Add(new Column(columnNode, itsXmlWrapper));
+                itsColumns.Add(new Column(columnNode, _xmlWrapper));
             }
         }
 
@@ -81,15 +81,15 @@ namespace Chillisoft.Reporting.v2
             get
             {
                 return ((Orientation) Enum.Parse(typeof (Orientation),
-                                                 itsXmlWrapper.ReadXmlValue(itsNode, "Orientation")));
+                                                 _xmlWrapper.ReadXmlValue(_node, "Orientation")));
             }
-            set { itsXmlWrapper.WriteXmlValue(itsNode, "Orientation", value.ToString()); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Orientation", value.ToString()); }
         }
 
         public string Caption
         {
-            get { return itsXmlWrapper.ReadXmlValue(itsNode, "Caption"); }
-            set { itsXmlWrapper.WriteXmlValue(itsNode, "Caption", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Caption"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Caption", value); }
         }
 
         public Layout HeaderLayout
@@ -207,7 +207,7 @@ namespace Chillisoft.Reporting.v2
 
         public string Name
         {
-            get { return itsXmlWrapper.ReadXmlValue(itsNode, "Name"); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Name"); }
         }
     }
 }

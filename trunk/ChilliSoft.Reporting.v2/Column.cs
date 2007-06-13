@@ -9,14 +9,14 @@ namespace Chillisoft.Reporting.v2
     /// </summary>
     public class Column
     {
-        private XmlNode node;
-        private XmlWrapper xmlWrapper;
-        private NumericColumnSettings numSet;
+        private XmlNode _node;
+        private XmlWrapper _xmlWrapper;
+        private NumericColumnSettings _numSet;
 
         internal Column(XmlNode node, XmlWrapper wrapper)
         {
-            this.node = node;
-            xmlWrapper = wrapper;
+            this._node = node;
+            _xmlWrapper = wrapper;
 
             //only initalise the numeric setting if this column has a number
             //it is an error if this column is a number and does not have 
@@ -31,27 +31,27 @@ namespace Chillisoft.Reporting.v2
                 }
                 else
                 {
-                    numSet = new NumericColumnSettings(numSetNode, xmlWrapper);
+                    _numSet = new NumericColumnSettings(numSetNode, _xmlWrapper);
                 }
             }
         }
 
         public string Name
         {
-            get { return xmlWrapper.ReadXmlValue(node, "Name"); }
-            set { xmlWrapper.WriteXmlValue(node, "Name", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Name"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Name", value); }
         }
 
         public string Caption
         {
-            get { return xmlWrapper.ReadXmlValue(node, "Caption"); }
-            set { xmlWrapper.WriteXmlValue(node, "Caption", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Caption"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Caption", value); }
         }
 
         public int Width
         {
-            get { return int.Parse(xmlWrapper.ReadXmlValue(node, "Width")); }
-            set { xmlWrapper.WriteXmlValue(node, "Width", value.ToString()); }
+            get { return int.Parse(_xmlWrapper.ReadXmlValue(_node, "Width")); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Width", value.ToString()); }
         }
 
 
@@ -60,9 +60,9 @@ namespace Chillisoft.Reporting.v2
             get
             {
                 return ((ColumnType) Enum.Parse(typeof (ColumnType),
-                                                xmlWrapper.ReadXmlValue(node, "Type")));
+                                                _xmlWrapper.ReadXmlValue(_node, "Type")));
             }
-            set { xmlWrapper.WriteXmlValue(node, "Type", value.ToString()); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Type", value.ToString()); }
         }
 
         public ColumnSourceType SourceType
@@ -70,32 +70,32 @@ namespace Chillisoft.Reporting.v2
             get
             {
                 return ((ColumnSourceType) Enum.Parse(typeof (ColumnSourceType),
-                                                      xmlWrapper.ReadXmlValue(node, "SourceType")));
+                                                      _xmlWrapper.ReadXmlValue(_node, "SourceType")));
             }
-            set { xmlWrapper.WriteXmlValue(node, "SourceType", value.ToString()); }
+            set { _xmlWrapper.WriteXmlValue(_node, "SourceType", value.ToString()); }
         }
 
         public string Source
         {
-            get { return xmlWrapper.ReadXmlValue(node, "Source"); }
-            set { xmlWrapper.WriteXmlValue(node, "Source", value); }
+            get { return _xmlWrapper.ReadXmlValue(_node, "Source"); }
+            set { _xmlWrapper.WriteXmlValue(_node, "Source", value); }
         }
 
         public bool SortBy
         {
-            get { return bool.Parse(xmlWrapper.ReadXmlValue(node, "SortBy")); }
-            set { xmlWrapper.WriteXmlValue(node, "SortBy", value.ToString()); }
+            get { return bool.Parse(_xmlWrapper.ReadXmlValue(_node, "SortBy")); }
+            set { _xmlWrapper.WriteXmlValue(_node, "SortBy", value.ToString()); }
         }
 
         public bool GroupBy
         {
-            get { return bool.Parse(xmlWrapper.ReadXmlValue(node, "GroupBy")); }
-            set { xmlWrapper.WriteXmlValue(node, "GroupBy", value.ToString()); }
+            get { return bool.Parse(_xmlWrapper.ReadXmlValue(_node, "GroupBy")); }
+            set { _xmlWrapper.WriteXmlValue(_node, "GroupBy", value.ToString()); }
         }
 
         public NumericColumnSettings NumericColumnSettings
         {
-            get { return numSet; }
+            get { return _numSet; }
         }
 
         public bool ShowTotal()

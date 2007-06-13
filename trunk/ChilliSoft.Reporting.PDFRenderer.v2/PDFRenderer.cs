@@ -13,7 +13,7 @@ namespace Chillisoft.Reporting.PDFRenderer.v2
     /// </summary>
     public class PDFRenderer : IReportRenderer
     {
-        private Report itsReport;
+        private Report _report;
 
 
         public PDFRenderer()
@@ -22,11 +22,11 @@ namespace Chillisoft.Reporting.PDFRenderer.v2
 
         public void ShowReport(Report report)
         {
-            itsReport = report;
+            _report = report;
 
             Rectangle pageDimension;
 
-            if (itsReport.ReportDef.Orientation == Orientation.Landscape)
+            if (_report.ReportDef.Orientation == Orientation.Landscape)
             {
                 pageDimension = PageSize.A4.rotate();
             }
@@ -34,7 +34,7 @@ namespace Chillisoft.Reporting.PDFRenderer.v2
             {
                 pageDimension = PageSize.A4;
             }
-            Layout defaultLayout = itsReport.ReportDef.DefaultLayout;
+            Layout defaultLayout = _report.ReportDef.DefaultLayout;
             Document document =
                 new Document(pageDimension, defaultLayout.MarginLeft, defaultLayout.MarginRight, defaultLayout.MarginTop,
                              defaultLayout.MarginBottom);
@@ -46,7 +46,7 @@ namespace Chillisoft.Reporting.PDFRenderer.v2
             IList relativeColumnWidthsList = new ArrayList();
 
 
-            foreach (Column column in itsReport.ReportDef.Columns)
+            foreach (Column column in _report.ReportDef.Columns)
             {
                 if (!column.GroupBy)
                     relativeColumnWidthsList.Add(column.Width);
@@ -58,10 +58,10 @@ namespace Chillisoft.Reporting.PDFRenderer.v2
             }
 
             document.add(
-                new Phrase(report.ReportDef.Caption, FontCreator.CreateFontForLayout(itsReport.ReportDef.HeaderLayout)));
+                new Phrase(report.ReportDef.Caption, FontCreator.CreateFontForLayout(_report.ReportDef.HeaderLayout)));
 
             bool firstGroup = true;
-            foreach (ReportGroup reportGroup in itsReport.ReportGroups)
+            foreach (ReportGroup reportGroup in _report.ReportGroups)
             {
                 if (!firstGroup)
                 {
@@ -90,7 +90,7 @@ namespace Chillisoft.Reporting.PDFRenderer.v2
                     headerRows++;
                 }
 
-                foreach (Column column in itsReport.ReportDef.Columns)
+                foreach (Column column in _report.ReportDef.Columns)
                 {
                     if (!column.GroupBy)
                     {

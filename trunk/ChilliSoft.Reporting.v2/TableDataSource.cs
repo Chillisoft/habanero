@@ -7,8 +7,8 @@ namespace Chillisoft.Reporting.v2
     /// </summary>
     public class TableDataSource : IReportDataSource
     {
-        private readonly DataTable itsTable;
-        private readonly string itsGroupByColumn;
+        private readonly DataTable _table;
+        private readonly string _groupByColumn;
 
         public TableDataSource(DataTable table) : this(table, "")
         {
@@ -16,13 +16,13 @@ namespace Chillisoft.Reporting.v2
 
         public TableDataSource(DataTable table, string groupByColumn)
         {
-            itsTable = table;
-            itsGroupByColumn = groupByColumn;
+            _table = table;
+            _groupByColumn = groupByColumn;
         }
 
         private DataTable DataTable
         {
-            get { return itsTable; }
+            get { return _table; }
         }
 
         public DataTable GetDataTable()

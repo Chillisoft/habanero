@@ -103,9 +103,6 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Class1.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="FontCreator.cs">
       <SubType>Code</SubType>
     </Compile>

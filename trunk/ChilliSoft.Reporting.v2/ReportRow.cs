@@ -7,26 +7,26 @@ namespace Chillisoft.Reporting.v2
     /// </summary>
     public class ReportRow
     {
-        IList itsContents;
+        IList _contents;
 
         public ReportRow()
         {
-            itsContents = new ArrayList();
+            _contents = new ArrayList();
         }
 
         public void Add(object o)
         {
-            itsContents.Add(o);
+            _contents.Add(o);
         }
 
         public object this[int index]
         {
-            get { return itsContents[index]; }
+            get { return _contents[index]; }
         }
 
         public int Count
         {
-            get { return itsContents.Count; }
+            get { return _contents.Count; }
         }
     }
 }

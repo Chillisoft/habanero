@@ -10,21 +10,21 @@ namespace Chillisoft.Reporting.Export.v2
     /// </summary>
     public class ExcelExporter : ReportExporter
     {
-        private Worksheet itsWorksheet;
-        private Application itsExcelApp;
-        private int itsCurrentRow;
-        private int itsCurrentCol;
+        private Worksheet _worksheet;
+        private Application _excelApp;
+        private int _currentRow;
+        private int _currentCol;
 
         /// <summary>
         /// Constructor to initialise a new exporter
         /// </summary>
         public ExcelExporter()
         {
-            itsExcelApp = new Application();
-            Workbook workbook = itsExcelApp.Workbooks.Add(Type.Missing);
-            itsWorksheet = (Worksheet) workbook.ActiveSheet;
-            itsCurrentRow = 1;
-            itsCurrentCol = 1;
+            _excelApp = new Application();
+            Workbook workbook = _excelApp.Workbooks.Add(Type.Missing);
+            _worksheet = (Worksheet) workbook.ActiveSheet;
+            _currentRow = 1;
+            _currentCol = 1;
         }
 
         /// <summary>
@@ -35,18 +35,18 @@ namespace Chillisoft.Reporting.Export.v2
         {
             for (int i = 0; i < table.Columns.Count; i++)
             {
-                itsWorksheet.Cells[itsCurrentRow, itsCurrentCol + i] = table.Columns[i].ColumnName;
+                _worksheet.Cells[_currentRow, _currentCol + i] = table.Columns[i].ColumnName;
             }
 
-            itsCurrentRow++;
+            _currentRow++;
 
             foreach (DataRow row in table.Rows)
             {
                 for (int i = 0; i < table.Columns.Count; i++)
                 {
-                    itsWorksheet.Cells[itsCurrentRow, itsCurrentCol + i] = row[i];
+                    _worksheet.Cells[_currentRow, _currentCol + i] = row[i];
                 }
-                itsCurrentRow++;
+                _currentRow++;
             }
         }
 
@@ -55,7 +55,7 @@ namespace Chillisoft.Reporting.Export.v2
         /// </summary>
         public void ShowReport()
         {
-            itsExcelApp.Visible = true;
+            _excelApp.Visible = true;
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace Chillisoft.Reporting.Export.v2
         /// </summary>
         public void AddBlankRow()
         {
-            itsCurrentRow++;
-            itsCurrentRow++;
+            _currentRow++;
+            _currentRow++;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Chillisoft.Reporting.Export.v2
         /// </summary>
         public void AutoFitColumns()
         {
-            ((Excel.Range) itsWorksheet.Columns[1, Type.Missing]).AutoFit();
+            ((Excel.Range) _worksheet.Columns[1, Type.Missing]).AutoFit();
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Chillisoft.Reporting.Export.v2
         /// <param name="format">The specified Format</param>
         public void FormatColumn(int columnNumber, Format format)
         {
-            FormatRange((Range) itsWorksheet.Columns[columnNumber, Type.Missing], format);
+            FormatRange((Range) _worksheet.Columns[columnNumber, Type.Missing], format);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Chillisoft.Reporting.Export.v2
             {
                 for (int j = startCol; j <= endCol; j++)
                 {
-                    FormatRange((Range) itsWorksheet.Cells[i, j], format);
+                    FormatRange((Range) _worksheet.Cells[i, j], format);
                 }
             }
         }

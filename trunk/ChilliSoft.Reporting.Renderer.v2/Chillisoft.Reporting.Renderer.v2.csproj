@@ -115,9 +115,6 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Class1.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ReportRenderer.cs">
       <SubType>Code</SubType>
     </Compile>

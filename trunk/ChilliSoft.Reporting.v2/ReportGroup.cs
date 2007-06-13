@@ -7,28 +7,28 @@ namespace Chillisoft.Reporting.v2
     /// </summary>
     public class ReportGroup
     {
-        IList itsRows;
-        private string itsHeader;
+        IList _rows;
+        private string _header;
 
         public ReportGroup()
         {
-            itsRows = new ArrayList();
+            _rows = new ArrayList();
         }
 
         public IList Rows
         {
-            get { return itsRows; }
+            get { return _rows; }
         }
 
         public void Add(ReportRow row)
         {
-            itsRows.Add(row);
+            _rows.Add(row);
         }
 
         public string Header
         {
-            get { return itsHeader; }
-            set { itsHeader = value; }
+            get { return _header; }
+            set { _header = value; }
         }
     }
 }
