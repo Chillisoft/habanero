@@ -11,9 +11,9 @@ namespace Chillisoft.Bo.v2
     public abstract class BusinessObjectCollectionDataSetProvider : IDataSetProvider
     {
         protected readonly BusinessObjectBaseCollection _collection;
-        protected ICollection itsUIGridProperties;
-        protected DataTable itsTable;
-        protected IObjectInitialiser itsObjectInitialiser;
+        protected ICollection _uiGridProperties;
+        protected DataTable _table;
+        protected IObjectInitialiser _objectInitialiser;
 
         /// <summary>
         /// Constructor to initialise a provider with a specified business
@@ -32,17 +32,17 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a DataTable object</returns>
         public DataTable GetDataTable(UIGridDef uiGridDef)
         {
-            itsTable = new DataTable();
+            _table = new DataTable();
             this.InitialiseLocalData();
 
             BusinessObjectBase sampleBo = _collection.ClassDef.InstantiateBusinessObjectWithClassDef();
-            itsUIGridProperties = uiGridDef; //sampleBo.GetUserInterfaceMapper().GetUIGridProperties();
-            DataColumn column = itsTable.Columns.Add();
+            _uiGridProperties = uiGridDef; //sampleBo.GetUserInterfaceMapper().GetUIGridProperties();
+            DataColumn column = _table.Columns.Add();
             column.Caption = "ID";
             column.ColumnName = "ID";
-            foreach (UIGridProperty uiProperty in itsUIGridProperties)
+            foreach (UIGridProperty uiProperty in _uiGridProperties)
             {
-                column = itsTable.Columns.Add();
+                column = _table.Columns.Add();
                 // TODO: check that property exists in object.
                 column.ColumnName = uiProperty.PropertyName;
                 column.Caption = uiProperty.Heading;
@@ -54,11 +54,11 @@ namespace Chillisoft.Bo.v2
             }
             foreach (BusinessObjectBase businessObjectBase in _collection)
             {
-                object[] values = new object[itsUIGridProperties.Count + 1];
+                object[] values = new object[_uiGridProperties.Count + 1];
                 values[0] = businessObjectBase.ID.ToString();
                 int i = 1;
                 BOMapper mapper = new BOMapper(businessObjectBase);
-                foreach (UIGridProperty gridProperty in itsUIGridProperties)
+                foreach (UIGridProperty gridProperty in _uiGridProperties)
                 {
                     object val = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
                     // object val = businessObjectBase.GetPropertyValue(gridProperty.PropertyName);
@@ -79,10 +79,10 @@ namespace Chillisoft.Bo.v2
                     //values[i++] = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
                     //values[i++] = businessObjectBase.GetPropertyValueForUser(gridProperty.PropertyName);
                 }
-                itsTable.LoadDataRow(values, true);
+                _table.LoadDataRow(values, true);
             }
             this.AddHandlersForUpdates();
-            return itsTable;
+            return _table;
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns a business object</returns>
         public BusinessObjectBase Find(int rowNum)
         {
-            return _collection.Find(this.itsTable.Rows[rowNum]["ID"].ToString());
+            return _collection.Find(this._table.Rows[rowNum]["ID"].ToString());
         }
 
         /// <summary>
@@ -122,9 +122,9 @@ namespace Chillisoft.Bo.v2
         /// <returns>Returns the row number if found, or -1 if not found</returns>
         public int FindRow(BusinessObjectBase bo)
         {
-            for (int i = 0; i < itsTable.Rows.Count; i++)
+            for (int i = 0; i < _table.Rows.Count; i++)
             {
-                if (itsTable.Rows[i][0].ToString() == bo.ID.ToString())
+                if (_table.Rows[i][0].ToString() == bo.ID.ToString())
                 {
                     return i;
                 }
@@ -137,7 +137,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public IObjectInitialiser ObjectInitialiser
         {
-            set { itsObjectInitialiser = value; }
+            set { _objectInitialiser = value; }
         }
     }
 }

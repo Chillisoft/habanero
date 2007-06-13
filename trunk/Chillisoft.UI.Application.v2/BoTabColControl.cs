@@ -19,8 +19,8 @@ namespace Chillisoft.UI.Application.v2
         private Hashtable _pageBoTable;
         private Hashtable _boPageTable;
 
-        //private AddTabPageDelegate itsAddTabPageDelegate;
-        //private TabChangedDelegate itsTabChanged; 
+        //private AddTabPageDelegate _addTabPageDelegate;
+        //private TabChangedDelegate _tabChanged; 
 
         private EventHandler tabChangedHandler;
 
@@ -48,8 +48,8 @@ namespace Chillisoft.UI.Application.v2
 
             tabChangedHandler = new EventHandler(TabChangedHandler);
 
-            //itsAddTabPageDelegate = new AddTabPageDelegate(AddTabPageInSTAThread);
-            //itsTabChanged = new TabChangedDelegate(TabChangedInSTAThread) ;
+            //_addTabPageDelegate = new AddTabPageDelegate(AddTabPageInSTAThread);
+            //_tabChanged = new TabChangedDelegate(TabChangedInSTAThread) ;
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Chillisoft.UI.Application.v2
         {
             if (_tabControl.SelectedTab != null)
             {
-                //BeginInvoke(itsTabChanged, new object[] {});
+                //BeginInvoke(_tabChanged, new object[] {});
                 _tabControl.SelectedTab.Controls.Clear();
                 _tabControl.SelectedTab.Controls.Add((Control) _boControl);
                 _boControl.SetBusinessObject(GetBo(_tabControl.SelectedTab));
@@ -154,7 +154,7 @@ namespace Chillisoft.UI.Application.v2
             _boPageTable.Add(bo, page);
 //			try
 //			{
-//				BeginInvoke(itsAddTabPageDelegate, new object[] {page, bo}); // needed to do the call on the Forms thread.  See info about STA thread model.
+//				BeginInvoke(_addTabPageDelegate, new object[] {page, bo}); // needed to do the call on the Forms thread.  See info about STA thread model.
 //			}
 //			catch (InvalidOperationException)
 //			{

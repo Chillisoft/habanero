@@ -66,7 +66,7 @@ namespace Chillisoft.Bo.Loaders.v2
             //string className = _reader.GetAttribute("class");
             //string assemblyName = _reader.GetAttribute("assembly");
             //_collection.Class = TypeLoader.LoadType(assemblyName, className);
-            //itsCollection.Name = new UIPropertyCollectionName(itsCollection.Class, _reader.GetAttribute("name"));
+            //_collection.Name = new UIPropertyCollectionName(_collection.Class, _reader.GetAttribute("name"));
 
             _reader.Read();
             _uiFormDef.Width = Convert.ToInt32(_reader.GetAttribute("width"));

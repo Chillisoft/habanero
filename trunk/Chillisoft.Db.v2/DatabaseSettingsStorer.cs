@@ -245,8 +245,8 @@ namespace Chillisoft.Db.v2
         /// </summary>
         private class Setting
         {
-            private readonly DateTime itsTime;
-            private readonly object itsValue;
+            private readonly DateTime _time;
+            private readonly object _value;
 
             /// <summary>
             /// Constructor to initialise the setting
@@ -255,8 +255,8 @@ namespace Chillisoft.Db.v2
             /// <param name="value">The value</param>
             public Setting(DateTime time, object value)
             {
-                itsTime = time;
-                itsValue = value;
+                _time = time;
+                _value = value;
             }
 
             /// <summary>
@@ -264,7 +264,7 @@ namespace Chillisoft.Db.v2
             /// </summary>
             public DateTime Time
             {
-                get { return itsTime; }
+                get { return _time; }
             }
 
             /// <summary>
@@ -272,7 +272,7 @@ namespace Chillisoft.Db.v2
             /// </summary>
             public object Value
             {
-                get { return itsValue; }
+                get { return _value; }
             }
 
             /// <summary>
@@ -281,7 +281,7 @@ namespace Chillisoft.Db.v2
             /// <returns>Returns true if expired, false if not</returns>
             public bool IsExpired()
             {
-                return DateTime.Now.Subtract(itsTime).CompareTo(new TimeSpan(0, 10, 0)) > 0;
+                return DateTime.Now.Subtract(_time).CompareTo(new TimeSpan(0, 10, 0)) > 0;
             }
         }
     }

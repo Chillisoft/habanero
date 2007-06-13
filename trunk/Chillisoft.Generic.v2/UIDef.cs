@@ -25,13 +25,13 @@ namespace Chillisoft.Generic.v2
             _uiGridDef = uiGridDef;
         }
 
-        //		private static Hashtable itsUIDefs;
+        //		private static Hashtable _uiDefs;
         //
         //		public static Hashtable GetUIDefs() {
-        //			if (itsUIDefs == null) {
-        //				itsUIDefs = new Hashtable();
+        //			if (_uiDefs == null) {
+        //				_uiDefs = new Hashtable();
         //			}
-        //			return itsUIDefs;
+        //			return _uiDefs;
         //		}
         //
         //		public static void LoadUIDefs(IUIDefsLoader loader) {

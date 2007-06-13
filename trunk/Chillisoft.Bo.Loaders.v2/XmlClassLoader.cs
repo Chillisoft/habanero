@@ -242,8 +242,8 @@ namespace Chillisoft.Bo.Loaders.v2
             {
                 _PropDefCol.Add(propLoader.LoadProperty(propDefXml));
             }
-            //			XmlNodeList xmlPropDefs = itsClassElement.GetElementsByTagName("propertyDef");
-            //			XmlPropertyLoader propLoader = new XmlPropertyLoader(itsDtdPath);
+            //			XmlNodeList xmlPropDefs = _lassElement.GetElementsByTagName("propertyDef");
+            //			XmlPropertyLoader propLoader = new XmlPropertyLoader(_dtdPath);
             //			foreach (XmlNode xmlPropDef in xmlPropDefs) {
             //				_PropDefCol.Add(propLoader.LoadProperty(xmlPropDef.OuterXml));
             //			}

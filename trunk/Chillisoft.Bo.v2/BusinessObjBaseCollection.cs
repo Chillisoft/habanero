@@ -520,7 +520,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         private class PropertyComparer : IComparer
         {
-            private string itsPropertyName;
+            private string _propertyName;
 
             /// <summary>
             /// Constructor to instantiate a new comparer
@@ -528,7 +528,7 @@ namespace Chillisoft.Bo.v2
             /// <param name="propertyName">The property name to compare on</param>
             public PropertyComparer(string propertyName)
             {
-                itsPropertyName = propertyName;
+                _propertyName = propertyName;
             }
 
             /// <summary>
@@ -541,7 +541,7 @@ namespace Chillisoft.Bo.v2
             public int Compare(object bo1, object bo2)
             {
                 PropertyInfo propInfo =
-                    bo1.GetType().GetProperty(itsPropertyName, BindingFlags.Public | BindingFlags.Instance);
+                    bo1.GetType().GetProperty(_propertyName, BindingFlags.Public | BindingFlags.Instance);
                 object x = propInfo.GetValue(bo1, new object[] {});
                 object y = propInfo.GetValue(bo2, new object[] {});
 

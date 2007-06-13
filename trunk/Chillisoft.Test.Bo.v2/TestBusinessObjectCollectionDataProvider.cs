@@ -112,7 +112,7 @@ namespace Chillisoft.Test.Bo.v2
         //		[Test]
         //		public void TestUpdateBusinessObjectUpdatesRow() {
         //			 itsBo1.SetPropertyValue("TestProp", "bo1prop1updated");
-        //			Assert.AreEqual("bo1prop1updated", itsTable.Rows[0]["TestProp"]);
+        //			Assert.AreEqual("bo1prop1updated", _table.Rows[0]["TestProp"]);
         //		}
     }
 }

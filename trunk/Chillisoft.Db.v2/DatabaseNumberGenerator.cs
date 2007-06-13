@@ -110,9 +110,9 @@ namespace Chillisoft.Db.v2
         /// </summary>
         private class NumberUpdate : ITransaction
         {
-            private int itsNewNumber;
-            private readonly string itsSettingName;
-            private readonly string itsTableName;
+            private int _newNumber;
+            private readonly string _settingName;
+            private readonly string _tableName;
 
             /// <summary>
             /// Constructor to initialise a new update
@@ -122,9 +122,9 @@ namespace Chillisoft.Db.v2
             /// <param name="tableName">The database table name</param>
             public NumberUpdate(int newNumber, string settingName, string tableName)
             {
-                itsNewNumber = newNumber;
-                itsSettingName = settingName;
-                itsTableName = tableName;
+                _newNumber = newNumber;
+                _settingName = settingName;
+                _tableName = tableName;
             }
 
             /// <summary>
@@ -143,10 +143,10 @@ namespace Chillisoft.Db.v2
             public ISqlStatementCollection GetPersistSql()
             {
                 SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
-                                                          " update " + itsTableName + " set SettingValue = ");
-                statement.AddParameterToStatement(itsNewNumber.ToString());
+                                                          " update " + _tableName + " set SettingValue = ");
+                statement.AddParameterToStatement(_newNumber.ToString());
                 statement.Statement.Append(" where SettingName = ");
-                statement.AddParameterToStatement(itsSettingName);
+                statement.AddParameterToStatement(_settingName);
 
                 return new SqlStatementCollection(statement);
             }
@@ -187,7 +187,7 @@ namespace Chillisoft.Db.v2
             /// <returns>Returns a string</returns>
             public string StrID()
             {
-                return itsNewNumber.ToString();
+                return _newNumber.ToString();
             }
 
             /// <summary>

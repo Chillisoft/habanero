@@ -46,9 +46,9 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public override void AddHandlersForUpdates()
         {
-            itsTable.TableNewRow += new DataTableNewRowEventHandler(NewRowHandler);
-            itsTable.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
-            itsTable.RowDeleted += new DataRowChangeEventHandler(RowDeletedHandler);
+            _table.TableNewRow += new DataTableNewRowEventHandler(NewRowHandler);
+            _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
+            _table.RowDeleted += new DataRowChangeEventHandler(RowDeletedHandler);
             _collection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
         }
 
@@ -59,9 +59,9 @@ namespace Chillisoft.Bo.v2
         /// <param name="e">Attached arguments regarding the event</param>
         void NewRowHandler(object sender, DataTableNewRowEventArgs e)
         {
-            if (itsObjectInitialiser != null)
+            if (_objectInitialiser != null)
             {
-                itsObjectInitialiser.InitialiseDataRow(e.Row);
+                _objectInitialiser.InitialiseDataRow(e.Row);
             }
         }
 
@@ -70,8 +70,8 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         public void RemoveHandlersForUpdates()
         {
-            itsTable.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
-            itsTable.RowDeleted -= new DataRowChangeEventHandler(RowDeletedHandler);
+            _table.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
+            _table.RowDeleted -= new DataRowChangeEventHandler(RowDeletedHandler);
             _collection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
         }
 
@@ -214,7 +214,7 @@ namespace Chillisoft.Bo.v2
             BusinessObjectBase changedBo = _collection.Find(e.Row["ID"].ToString());
             if (changedBo != null && !_isBeingAdded)
             {
-                foreach (UIGridProperty uiProperty in itsUIGridProperties)
+                foreach (UIGridProperty uiProperty in _uiGridProperties)
                 {
                     if (uiProperty.PropertyName.IndexOf(".") == -1)
                     {
@@ -246,13 +246,13 @@ namespace Chillisoft.Bo.v2
                     newBo = _collection.ClassDef.CreateNewBusinessObject();
                 }
                 //log.Debug("Initialising obj");
-                if (this.itsObjectInitialiser != null)
+                if (this._objectInitialiser != null)
                 {
-                    this.itsObjectInitialiser.InitialiseObject(newBo);
+                    this._objectInitialiser.InitialiseObject(newBo);
                 }
                 // set all the values in the grid to the bo's current prop values (defaults)
                 // make sure the part entered to create the row is not changed.
-                foreach (UIGridProperty uiProperty in itsUIGridProperties)
+                foreach (UIGridProperty uiProperty in _uiGridProperties)
                 {
                     if (uiProperty.PropertyName.IndexOf(".") == -1)
                     {
@@ -289,12 +289,12 @@ namespace Chillisoft.Bo.v2
         {
             //log.Debug("Adding new row to col");
             _collection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
-            itsTable.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
+            _table.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
 
             //log.Debug("Disabled handler, adding obj to col") ;
             _collection.Add(newBo);
             //log.Debug("Done adding obj to col, enabling handler") ;
-            itsTable.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
+            _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
             _collection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
             //log.Debug("Done Adding new row to col");
         }
@@ -307,19 +307,19 @@ namespace Chillisoft.Bo.v2
         private void BusinessObjectAddedToCollectionHandler(object sender, BusinessObjectEventArgs e)
         {
             //log.Debug("BO Added to collection " + e.BusinessObject.ID);
-            itsTable.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
-            DataRow row = itsTable.NewRow();
-            object[] values = new object[itsUIGridProperties.Count + 1];
+            _table.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
+            DataRow row = _table.NewRow();
+            object[] values = new object[_uiGridProperties.Count + 1];
             values[0] = e.BusinessObject.ID.ToString();
             int i = 1;
             BOMapper mapper = new BOMapper(e.BusinessObject);
-            foreach (UIGridProperty gridProperty in itsUIGridProperties)
+            foreach (UIGridProperty gridProperty in _uiGridProperties)
             {
                 values[i++] = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
             }
-            itsTable.LoadDataRow(values, false);
-            _rowStates.Add(this.itsTable.Rows[this.FindRow(e.BusinessObject)], RowState.Added);
-            itsTable.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
+            _table.LoadDataRow(values, false);
+            _rowStates.Add(this._table.Rows[this.FindRow(e.BusinessObject)], RowState.Added);
+            _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
 
             //log.Debug("Done adding bo to collection " + e.BusinessObject.ID);
         }

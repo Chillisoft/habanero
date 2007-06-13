@@ -171,9 +171,9 @@ namespace Chillisoft.UI.Application.v2
         /// the lists is set by the template type.
         /// </summary>
         public class Model {
-            private List<T> itsOptions;
-            private List<T> itsSelections;
-            private List<T> itsOriginalSelections;
+            private List<T> _options;
+            private List<T> _selections;
+            private List<T> _originalSelections;
 
             internal event EventHandler<ModelEventArgs<T>> OptionAdded;
             internal event EventHandler<ModelEventArgs<T>> OptionRemoved;
@@ -194,9 +194,9 @@ namespace Chillisoft.UI.Application.v2
             /// Constructor to initialise a new model
             /// </summary>
             public Model() {
-                itsOriginalSelections = new List<T>();
-                itsSelections = new List<T>();
-                itsOptions = new List<T>();
+                _originalSelections = new List<T>();
+                _selections = new List<T>();
+                _options = new List<T>();
             }
 
             /// <summary>
@@ -205,12 +205,12 @@ namespace Chillisoft.UI.Application.v2
             /// </summary>
             public List<T> Options { set
             {
-                itsOptions = value.FindAll(delegate { return true; });
-                for (int i = itsSelections.Count - 1; i >= 0; i--)
+                _options = value.FindAll(delegate { return true; });
+                for (int i = _selections.Count - 1; i >= 0; i--)
                 {
-                    if (!itsOptions.Contains(itsSelections[i]))
+                    if (!_options.Contains(_selections[i]))
                     {
-                        itsSelections.RemoveAt(i);
+                        _selections.RemoveAt(i);
 
                     }
                 }
@@ -219,51 +219,51 @@ namespace Chillisoft.UI.Application.v2
             /// <summary>
             /// Returns a view of the Options collection
             /// </summary>
-            public ReadOnlyCollection<T> OptionsView { get { return new ReadOnlyCollection<T>(itsOptions); } }
+            public ReadOnlyCollection<T> OptionsView { get { return new ReadOnlyCollection<T>(_options); } }
 
             /// <summary>
             /// Sets the list of selected items (right hand side list).
             /// </summary>
             public List<T> Selections {
                 set {
-                    itsSelections = value;
-                    itsOriginalSelections = itsSelections.GetRange(0, itsSelections.Count);
+                    _selections = value;
+                    _originalSelections = _selections.GetRange(0, _selections.Count);
                 }
             }
 
             /// <summary>
             /// Returns a view of the Selections collection
             /// </summary>
-            public ReadOnlyCollection<T> SelectionsView { get { return new ReadOnlyCollection<T>(itsSelections); } }
+            public ReadOnlyCollection<T> SelectionsView { get { return new ReadOnlyCollection<T>(_selections); } }
 
 
-            private List<T> OriginalSelections { get { return itsOriginalSelections; } }
+            private List<T> OriginalSelections { get { return _originalSelections; } }
 
             /// <summary>
             /// Returns the list of available options, which is the set 
             /// of Options minus the set of Selections
             /// </summary>
-            public List<T> AvailableOptions { get { return itsOptions.FindAll(delegate(T obj) { return !itsSelections.Contains(obj); }); } }
+            public List<T> AvailableOptions { get { return _options.FindAll(delegate(T obj) { return !_selections.Contains(obj); }); } }
 
             /// <summary>
             /// Returns the list of added selections (items selected since 
             /// setting the selections)
             /// </summary>
-            public List<T> Added { get { return itsSelections.FindAll(delegate(T obj) { return !OriginalSelections.Contains(obj); }); } }
+            public List<T> Added { get { return _selections.FindAll(delegate(T obj) { return !OriginalSelections.Contains(obj); }); } }
 
             /// <summary>
             /// Returns the list of removed selections (items deselected 
             /// since setting the selections)
             /// </summary>
-            public List<T> Removed { get { return OriginalSelections.FindAll(delegate(T obj) { return !itsSelections.Contains(obj); }); } }
+            public List<T> Removed { get { return OriginalSelections.FindAll(delegate(T obj) { return !_selections.Contains(obj); }); } }
 
             /// <summary>
             /// Selects an option, removing it from the Options and adding 
             /// it to the Selections
             /// </summary>
             public void Select(T item) {
-                if (itsOptions.Contains(item) && !itsSelections.Contains(item)) {
-                    itsSelections.Add(item);
+                if (_options.Contains(item) && !_selections.Contains(item)) {
+                    _selections.Add(item);
                     FireSelected(item);
                 }
             }
@@ -285,7 +285,7 @@ namespace Chillisoft.UI.Application.v2
             /// adding it to the Options
             /// </summary>
             public void Deselect(T item) {
-                if (itsSelections.Remove(item)) FireDeselected(item);
+                if (_selections.Remove(item)) FireDeselected(item);
             }
 
             /// <summary>
@@ -311,7 +311,7 @@ namespace Chillisoft.UI.Application.v2
             /// Deselects all options
             /// </summary>
             public void DeselectAll() {
-                itsSelections.FindAll(delegate { return true; }).ForEach(delegate(T obj) { Deselect(obj); });
+                _selections.FindAll(delegate { return true; }).ForEach(delegate(T obj) { Deselect(obj); });
             }
 
             /// <summary>
@@ -319,7 +319,7 @@ namespace Chillisoft.UI.Application.v2
             /// </summary>
             /// <param name="item"></param>
             public void AddOption(T item) {
-                itsOptions.Add(item);
+                _options.Add(item);
                 FireOptionAdded(item);
             }
 
@@ -332,7 +332,7 @@ namespace Chillisoft.UI.Application.v2
             ///</summary>
             ///<param name="item">The item to remove</param>
             public void RemoveOption(T item) {
-                itsOptions.Remove(item);
+                _options.Remove(item);
                 FireOptionRemoved(item);
             }
 

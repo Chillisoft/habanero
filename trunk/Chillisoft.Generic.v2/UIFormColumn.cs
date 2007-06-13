@@ -106,8 +106,8 @@ namespace Chillisoft.Generic.v2
         }
 
         //		public UIDefName Name {
-        //			get { return itsName; }
-        //			set { itsName = value; }
+        //			get { return _name; }
+        //			set { _name = value; }
         //		}
     }
 }

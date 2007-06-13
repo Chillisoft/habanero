@@ -42,7 +42,7 @@ namespace Chillisoft.Bo.v2
             int rowNum = this.FindRow(e.BusinessObject);
             if (rowNum != -1)
             {
-                this.itsTable.Rows.RemoveAt(rowNum);
+                this._table.Rows.RemoveAt(rowNum);
             }
             e.BusinessObject.Updated -= new BusinessObjectUpdatedHandler(UpdatedHandler);
         }
@@ -55,11 +55,11 @@ namespace Chillisoft.Bo.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddedHandler(object sender, BusinessObjectEventArgs e)
         {
-            object[] values = new object[itsUIGridProperties.Count + 1];
+            object[] values = new object[_uiGridProperties.Count + 1];
             values[0] = e.BusinessObject.ID.ToString();
             int i = 1;
             BOMapper mapper = new BOMapper(e.BusinessObject);
-            foreach (UIGridProperty gridProperty in itsUIGridProperties)
+            foreach (UIGridProperty gridProperty in _uiGridProperties)
             {
                 object val = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
                 if (val != null && val is DateTime)
@@ -72,7 +72,7 @@ namespace Chillisoft.Bo.v2
                 }
                 values[i++] = val;
             }
-            itsTable.LoadDataRow(values, true);
+            _table.LoadDataRow(values, true);
             e.BusinessObject.Updated += new BusinessObjectUpdatedHandler(UpdatedHandler);
         }
 
@@ -89,11 +89,11 @@ namespace Chillisoft.Bo.v2
                 return;
             }
 
-            object[] values = new object[itsUIGridProperties.Count + 1];
+            object[] values = new object[_uiGridProperties.Count + 1];
             values[0] = e.BusinessObject.ID.ToString();
             int i = 1;
             BOMapper mapper = new BOMapper(e.BusinessObject);
-            foreach (UIGridProperty gridProperty in itsUIGridProperties)
+            foreach (UIGridProperty gridProperty in _uiGridProperties)
             {
                 object val = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
                 if (val != null && val is DateTime)
@@ -106,7 +106,7 @@ namespace Chillisoft.Bo.v2
                 }
                 values[i++] = val;
             }
-            itsTable.Rows[rowNum].ItemArray = values;
+            _table.Rows[rowNum].ItemArray = values;
         }
 
         /// <summary>

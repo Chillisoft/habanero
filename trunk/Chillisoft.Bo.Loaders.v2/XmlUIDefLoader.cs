@@ -12,7 +12,7 @@ namespace Chillisoft.Bo.Loaders.v2
         private UIGridDef _uiGridDef;
         private string _name;
 
-        //private string itsXmlUICollections;
+        //private string _xmlUICollections;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -31,12 +31,12 @@ namespace Chillisoft.Bo.Loaders.v2
 
 
         //		public XmlUIDefLoader(string xmlUICollections) {
-        //			itsXmlUICollections = xmlUICollections;
+        //			_xmlUICollections = xmlUICollections;
         //		}
 
         //		public IEnumerable LoadUIPropertyCollections() 
         //		{
-        //			return LoadUIDef(itsXmlUICollections );
+        //			return LoadUIDef(_xmlUICollections );
         //		}
 
         /// <summary>
