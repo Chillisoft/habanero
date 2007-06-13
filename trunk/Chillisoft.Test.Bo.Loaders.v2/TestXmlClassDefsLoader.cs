@@ -27,9 +27,15 @@ namespace Chillisoft.Test.Bo.Loaders.v2
 					<classDefs>
 						<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" >
 							<propertyDef name=""TestClassID"" />
+                            <primaryKeyDef>
+                                <prop name=""TestClassID""/>
+                            </primaryKeyDef>
 						</classDef>
 						<classDef name=""TestRelatedClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" >
 							<propertyDef name=""TestRelatedClassID"" />
+                            <primaryKeyDef>
+                                <prop name=""TestRelatedClassID""/>
+                            </primaryKeyDef>
 						</classDef>
 					</classDefs>
 			");

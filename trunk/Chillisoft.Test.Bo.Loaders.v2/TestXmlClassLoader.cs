@@ -60,8 +60,11 @@ namespace Chillisoft.Test.Bo.Loaders.v2
                 loader.LoadClass(
                     @"
 				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
-<propertyDef name=""TestProp"" />
-					</classDef>
+                    <propertyDef name=""TestProp"" />
+                    <primaryKeyDef>
+                        <prop name=""TestProp""/>
+                    </primaryKeyDef>
+				</classDef>
 			");
             Assert.AreEqual("tbTestClass", def.TableName);
         }
@@ -73,8 +76,11 @@ namespace Chillisoft.Test.Bo.Loaders.v2
                 loader.LoadClass(
                     @"
 				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" tableName=""myTable"">
-<propertyDef name=""TestProp"" />
-					</classDef>
+                    <propertyDef name=""TestProp"" />
+                    <primaryKeyDef>
+                        <prop name=""TestProp""/>
+                    </primaryKeyDef>
+				</classDef>
 			");
             Assert.AreEqual("myTable", def.TableName);
         }
@@ -86,8 +92,11 @@ namespace Chillisoft.Test.Bo.Loaders.v2
                 loader.LoadClass(
                     @"
 				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" supportsSynchronising=""true"">
-<propertyDef name=""TestProp"" />
-					</classDef>
+                    <propertyDef name=""TestProp"" />
+                    <primaryKeyDef>
+                        <prop name=""TestProp""/>
+                    </primaryKeyDef>
+				</classDef>
 			");
             Assert.IsTrue(def.SupportsSynchronising);
         }
@@ -100,8 +109,11 @@ namespace Chillisoft.Test.Bo.Loaders.v2
                 loader.LoadClass(
                     @"
 				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" >
-<propertyDef name=""TestProp"" />
-					</classDef>
+                    <propertyDef name=""TestProp"" />
+                    <primaryKeyDef>
+                        <prop name=""TestProp""/>
+                    </primaryKeyDef>
+				</classDef>
 			");
             Assert.IsFalse(def.SupportsSynchronising);
         }
@@ -115,6 +127,9 @@ namespace Chillisoft.Test.Bo.Loaders.v2
 				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" />
+                    <primaryKeyDef>
+                        <prop name=""TestProp""/>
+                    </primaryKeyDef>
 				</classDef>
 			");
             Assert.AreEqual(2, def.PropDefcol.Count);
@@ -173,6 +188,9 @@ namespace Chillisoft.Test.Bo.Loaders.v2
 						<prop name=""TestProp2"" />
 						<prop name=""TestProp3"" />
 					</keyDef>
+                    <primaryKeyDef>
+                        <prop name=""TestProp""/>
+                    </primaryKeyDef>
 				</classDef>
 			");
             Assert.AreEqual(2, def.KeysCol.Count);
@@ -186,6 +204,9 @@ namespace Chillisoft.Test.Bo.Loaders.v2
                     @"
 				<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
 					<propertyDef name=""TestProp"" />
+                    <primaryKeyDef>
+                        <prop name=""TestProp""/>
+                    </primaryKeyDef>
 					<relationshipDef 
 						name=""TestRelationship"" 
 						type=""single"" 
@@ -214,6 +235,9 @@ namespace Chillisoft.Test.Bo.Loaders.v2
 					<classDefs>
 						<classDef name=""TestClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"" >
 							<propertyDef name=""TestClassID"" />
+                            <primaryKeyDef>
+                                <prop name=""TestClassID""/>
+                            </primaryKeyDef>
 						</classDef>
 					</classDefs>",
                     ""));
@@ -223,6 +247,9 @@ namespace Chillisoft.Test.Bo.Loaders.v2
 				<classDef name=""TestRelatedClass"" assembly=""Chillisoft.Test.Bo.Loaders.v2"">
 					<superClassDesc className=""TestClass"" assemblyName=""Chillisoft.Test.Bo.Loaders.v2"" />
 					<propertyDef name=""TestProp"" />
+                    <primaryKeyDef>
+                        <prop name=""TestProp""/>
+                    </primaryKeyDef>
 				</classDef>
 			");
             Assert.IsNotNull(def.SuperClassDesc);

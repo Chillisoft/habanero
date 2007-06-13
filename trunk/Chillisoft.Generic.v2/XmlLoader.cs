@@ -15,7 +15,7 @@ namespace Chillisoft.Generic.v2
     public abstract class XmlLoader
     {
         protected readonly string itsDtdPath;
-        protected XmlValidatingReader itsReader;
+        protected XmlReader  itsReader;
         private bool itsDocumentValid = true;
         private ValidationEventArgs itsInvalidDocumentArgs;
         private XmlElement itsElement;
@@ -93,10 +93,16 @@ namespace Chillisoft.Generic.v2
             doc.InsertBefore(
                 doc.CreateDocumentType(doc.DocumentElement.Name, null, null, GetDTD(doc.DocumentElement.Name)),
                 doc.DocumentElement);
-            itsReader = new XmlValidatingReader(new XmlTextReader(new StringReader(doc.OuterXml)));
-            itsReader.ValidationType = ValidationType.DTD;
-            itsReader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.CheckCharacters = true;
+            settings.ConformanceLevel = ConformanceLevel.Auto;
+            settings.IgnoreComments = true;
+            settings.IgnoreWhitespace = true;
+            settings.ValidationType = ValidationType.DTD;
+            settings.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
+            itsReader = XmlReader.Create(new XmlTextReader(new StringReader(doc.OuterXml)), settings);
 
+            
             itsReader.Read();
         }
 

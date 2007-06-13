@@ -104,6 +104,12 @@ namespace Chillisoft.Bo.Loaders.v2
             do
             {
                 string propName = itsReader.GetAttribute("name");
+                if (propName == null || propName.Length == 0)
+                {
+                    throw new InvalidXmlDefinitionException("The 'prop' element " +
+                        "must have a 'name' attribute that provides the name of the " +
+                        "property definition that serves as the primary key.");
+                }
                 if (itsPropDefCol[propName] != null)
                 {
                     itsPrimaryKeyDef.Add(itsPropDefCol[propName]);
@@ -111,9 +117,21 @@ namespace Chillisoft.Bo.Loaders.v2
                 else
                 {
                     throw new InvalidXmlDefinitionException(
-                        String.Format("The PropDef named {0} does not exist in the PropDefCol given", propName));
+                        String.Format("A primary key definition has listed a 'prop' " +
+                        "definition for '{0}', which hasn't been defined among " +
+                        "the 'propertyDef's for the class.  Either add a 'propertyDef' " +
+                        "for '{0}' or correct the spelling or capitalisation of the " +
+                        "attribute to match a property that has already been defined.",
+                        propName));
                 }
-                itsReader.Read();
+                if (itsReader.IsEmptyElement)
+                    itsReader.Read();
+                else
+                {
+                    itsReader.Read();
+                    itsReader.Read();
+                    
+                }
             } while (itsReader.Name == "prop");
         }
     }

@@ -50,7 +50,11 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         [
             Test,
                 ExpectedException(typeof (InvalidXmlDefinitionException),
-                    "The PropDef named TestProp does not exist in the PropDefCol given")]
+                    "A primary key definition has listed a 'prop' " +
+                    "definition for 'TestProp', which hasn't been defined among " +
+                    "the 'propertyDef's for the class.  Either add a 'propertyDef' " +
+                    "for 'TestProp' or correct the spelling or capitalisation of the " +
+                    "attribute to match a property that has already been defined.")]
         public void TestWithPropThatDoesNotExist()
         {
             PropDefCol propDefs = new PropDefCol();
