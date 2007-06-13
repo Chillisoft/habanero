@@ -9,9 +9,9 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public abstract class LayoutManager : MarshalByRefObject
     {
-        private Control mManagedControl;
-        private int borderSize = 5;
-        private int gapSize = 2;
+        private Control _managedControl;
+        private int _borderSize = 5;
+        private int _gapSize = 2;
 
         /// <summary>
         /// Constructor to initialise a new layout manager
@@ -19,8 +19,8 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="managedControl">The control to manage</param>
         public LayoutManager(Control managedControl)
         {
-            mManagedControl = managedControl;
-            mManagedControl.Resize += new EventHandler(this.ManagedControlResizeHandler);
+            _managedControl = managedControl;
+            _managedControl.Resize += new EventHandler(this.ManagedControlResizeHandler);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public Control ManagedControl
         {
-            get { return mManagedControl; }
+            get { return _managedControl; }
         }
 
         /// <summary>
@@ -47,10 +47,10 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public int BorderSize
         {
-            get { return borderSize; }
+            get { return _borderSize; }
             set
             {
-                borderSize = value;
+                _borderSize = value;
                 RefreshControlPositions();
             }
         }
@@ -60,10 +60,10 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public int GapSize
         {
-            get { return gapSize; }
+            get { return _gapSize; }
             set
             {
-                gapSize = value;
+                _gapSize = value;
                 RefreshControlPositions();
             }
         }

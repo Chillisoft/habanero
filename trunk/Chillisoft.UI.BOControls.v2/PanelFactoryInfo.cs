@@ -9,12 +9,12 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public class PanelFactoryInfo
     {
-        private Panel itsPanel;
-        private ControlMapperCollection itsMappers;
-        private readonly Control itsFirstControlToFocus;
-        private int itsPreferredHeight;
-        private int itsPreferredWidth;
-        private IDictionary<string, IGrid> itsFormGrids;
+        private Panel _panel;
+        private ControlMapperCollection _mappers;
+        private readonly Control _firstControlToFocus;
+        private int _preferredHeight;
+        private int _preferredWidth;
+        private IDictionary<string, IGrid> _formGrids;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -24,10 +24,10 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="firstControlToFocus">The first control to focus on</param>
         public PanelFactoryInfo(Panel panel, ControlMapperCollection mappers, Control firstControlToFocus)
         {
-            itsPanel = panel;
-            itsMappers = mappers;
-            this.itsFirstControlToFocus = firstControlToFocus;
-            itsFormGrids = new Dictionary<string, IGrid>();
+            _panel = panel;
+            _mappers = mappers;
+            this._firstControlToFocus = firstControlToFocus;
+            _formGrids = new Dictionary<string, IGrid>();
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public Panel Panel
         {
-            get { return itsPanel; }
+            get { return _panel; }
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public ControlMapperCollection ControlMappers
         {
-            get { return itsMappers; }
+            get { return _mappers; }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// found</returns>
         public IGrid GetFormGrid(string gridName)
         {
-            return itsFormGrids[gridName];
+            return _formGrids[gridName];
         }
 
         /// <summary>
@@ -71,11 +71,11 @@ namespace Chillisoft.UI.BOControls.v2
         {
             get
             {
-                return itsFormGrids;
+                return _formGrids;
             }
             set
             {
-                itsFormGrids = value;
+                _formGrids = value;
             }
 
         }
@@ -85,8 +85,8 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public int PreferredHeight
         {
-            get { return itsPreferredHeight; }
-            set { itsPreferredHeight = value; }
+            get { return _preferredHeight; }
+            set { _preferredHeight = value; }
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public int PreferredWidth
         {
-            get { return itsPreferredWidth; }
-            set { itsPreferredWidth = value; }
+            get { return _preferredWidth; }
+            set { _preferredWidth = value; }
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public Control FirstControlToFocus
         {
-            get { return itsFirstControlToFocus; }
+            get { return _firstControlToFocus; }
         }
     }
 }

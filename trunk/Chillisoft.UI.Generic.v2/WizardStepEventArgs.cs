@@ -7,7 +7,7 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class WizardStepEventArgs : EventArgs
     {
-        private bool mEnabled;
+        private bool _enabled;
 
         /// <summary>
         /// Constructor to initialise a set of arguments
@@ -15,7 +15,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="enabled">Whether the wizard step is enabled</param>
         public WizardStepEventArgs(bool enabled) : base()
         {
-            mEnabled = enabled;
+            _enabled = enabled;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public bool Enabled
         {
-            get { return mEnabled; }
+            get { return _enabled; }
         }
     }
 }

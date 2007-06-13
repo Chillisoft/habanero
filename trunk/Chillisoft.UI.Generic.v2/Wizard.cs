@@ -9,19 +9,19 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public abstract class Wizard
     {
-        private int mCurrentStep = 1;
-        private int mMaxNumSteps = 100;
-        private IList mWizardSteps;
+        private int _currentStep = 1;
+        private int _maxNumSteps = 100;
+        private IList _wizardSteps;
 
         /// <summary>
         /// Constructor to initialise a new wizard
         /// </summary>
         public Wizard()
         {
-            mWizardSteps = new ArrayList(mMaxNumSteps);
-            for (int i = 1; i <= mMaxNumSteps; i++)
+            _wizardSteps = new ArrayList(_maxNumSteps);
+            for (int i = 1; i <= _maxNumSteps; i++)
             {
-                mWizardSteps.Add(null);
+                _wizardSteps.Add(null);
             }
         }
 
@@ -31,7 +31,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public int CurrentStepNumber
         {
-            get { return mCurrentStep; }
+            get { return _currentStep; }
         }
 
         /// <summary>
@@ -39,8 +39,8 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public int MaxNumberOfSteps
         {
-            get { return mMaxNumSteps; }
-            set { mMaxNumSteps = value; }
+            get { return _maxNumSteps; }
+            set { _maxNumSteps = value; }
         }
 
         /// <summary>
@@ -55,9 +55,9 @@ namespace Chillisoft.UI.Generic.v2
         {
             if (this.ValidateCurrentStep(ref errMsg))
             {
-                if (mCurrentStep < MaxNumberOfSteps)
+                if (_currentStep < MaxNumberOfSteps)
                 {
-                    mCurrentStep++;
+                    _currentStep++;
                     this.AfterNextStep();
                     if (this.GetCurrentWizardStep() != null)
                     {
@@ -80,10 +80,10 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public void previousStep()
         {
-            if (mCurrentStep > 1)
+            if (_currentStep > 1)
             {
                 this.CancelCurrentStepChanges();
-                mCurrentStep--;
+                _currentStep--;
             }
         }
 
@@ -128,7 +128,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         private void CancelCurrentStepChanges()
         {
-            if (mWizardSteps[this.CurrentStepNumber] != null)
+            if (_wizardSteps[this.CurrentStepNumber] != null)
             {
                 GetCurrentWizardStep().CancelChanges();
             }
@@ -142,7 +142,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns true if valid, false if not</returns>
         private bool ValidateCurrentStep(ref string errMsg)
         {
-            if (mWizardSteps[this.CurrentStepNumber] == null || GetCurrentWizardStep().Validate(ref errMsg))
+            if (_wizardSteps[this.CurrentStepNumber] == null || GetCurrentWizardStep().Validate(ref errMsg))
             {
                 return true;
             }
@@ -165,7 +165,7 @@ namespace Chillisoft.UI.Generic.v2
             {
                 ops.Add("Previous");
             }
-            if (this.CurrentStepNumber == mMaxNumSteps)
+            if (this.CurrentStepNumber == _maxNumSteps)
             {
                 ops.Remove("Next");
                 ops.Add("Finish");
@@ -180,7 +180,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="iWiz">The object to set the step to</param>
         public void setWizardStep(int stepNum, IWizardStep iWiz)
         {
-            mWizardSteps[stepNum] = iWiz;
+            _wizardSteps[stepNum] = iWiz;
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the step object</returns>
         public IWizardStep getWizardStep(int stepNum)
         {
-            return (IWizardStep) mWizardSteps[stepNum];
+            return (IWizardStep) _wizardSteps[stepNum];
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the step object</returns>
         public IWizardStep GetCurrentWizardStep()
         {
-            return (IWizardStep) mWizardSteps[this.CurrentStepNumber];
+            return (IWizardStep) _wizardSteps[this.CurrentStepNumber];
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace Chillisoft.UI.Generic.v2
         {
             if (this.CurrentStepNumber > 1)
             {
-                return (IWizardStep) mWizardSteps[this.CurrentStepNumber - 1];
+                return (IWizardStep) _wizardSteps[this.CurrentStepNumber - 1];
             }
             else
             {

@@ -28,8 +28,8 @@ namespace Chillisoft.UI.Generic.v2
         {
             string valueClause;
             string finalFilterValue =
-                Chillisoft.Util.v2.StringUtilities.ReplaceSingleQuotesWithTwo((string) itsFilterValue);
-            if (itsClauseOperator == FilterClauseOperator.OpLike)
+                Chillisoft.Util.v2.StringUtilities.ReplaceSingleQuotesWithTwo((string) _filterValue);
+            if (_clauseOperator == FilterClauseOperator.OpLike)
             {
                 valueClause = "'*" + finalFilterValue + "*'";
             }

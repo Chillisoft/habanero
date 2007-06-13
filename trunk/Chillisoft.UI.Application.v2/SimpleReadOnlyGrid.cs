@@ -83,7 +83,7 @@ namespace Chillisoft.UI.Application.v2
                     return;
                 }
                 int i = 0;
-                foreach (DataRowView dataRowView in itsDataTableDefaultView)
+                foreach (DataRowView dataRowView in _dataTableDefaultView)
                 {
                     if ((string) dataRowView.Row["ID"] == value.ID.ToString())
                     {
@@ -125,7 +125,7 @@ namespace Chillisoft.UI.Application.v2
         /// <param name="businessObjectBase">The business object to remove</param>
         public void RemoveBusinessObject(BusinessObjectBase businessObjectBase)
         {
-            itsCollection.RemoveAt(businessObjectBase);
+            _collection.RemoveAt(businessObjectBase);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public bool HasBusinessObjects
         {
-            get { return itsCollection.Count > 0; }
+            get { return _collection.Count > 0; }
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Chillisoft.UI.Application.v2
         /// <returns>Returns a business object collection</returns>
         public BusinessObjectBaseCollection GetCollectionClone()
         {
-            return itsCollection.Clone();
+            return _collection.Clone();
         }
 
         /// <summary>
@@ -153,10 +153,10 @@ namespace Chillisoft.UI.Application.v2
         {
             get
             {
-                IList filteredBos = new ArrayList(itsCollection.Count);
-                foreach (DataRowView dataRowView in itsDataTableDefaultView)
+                IList filteredBos = new ArrayList(_collection.Count);
+                foreach (DataRowView dataRowView in _dataTableDefaultView)
                 {
-                    filteredBos.Add(this.itsDataSetProvider.Find((string) dataRowView.Row["ID"]));
+                    filteredBos.Add(this._dataSetProvider.Find((string) dataRowView.Row["ID"]));
                 }
                 return filteredBos;
             }

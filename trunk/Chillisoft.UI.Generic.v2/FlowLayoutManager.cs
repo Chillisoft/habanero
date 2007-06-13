@@ -12,12 +12,12 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class FlowLayoutManager : LayoutManager
     {
-        private ControlCollection controls;
-        private IList itsNewLinePositions;
-        private Alignments alignment;
-        private Point currentPos;
-        private bool itsIsFlowDown = false;
-        private IList itsGluePositions;
+        private ControlCollection _controls;
+        private IList _newLinePositions;
+        private Alignments _alignment;
+        private Point _currentPos;
+        private bool _isFlowDown = false;
+        private IList _gluePositions;
 
         /// <summary>
         /// An enumeration that indicates whether a control should be
@@ -37,9 +37,9 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="managedControl">The control to manage</param>
         public FlowLayoutManager(Control managedControl) : base(managedControl)
         {
-            controls = new ControlCollection();
-            itsNewLinePositions = new ArrayList(3);
-            itsGluePositions = new ArrayList(5);
+            _controls = new ControlCollection();
+            _newLinePositions = new ArrayList(3);
+            _gluePositions = new ArrayList(5);
         }
 
         /// <summary>
@@ -49,16 +49,16 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the control once it has been added</returns>
         public Control AddControl(Control ctl)
         {
-            controls.Add(ctl);
+            _controls.Add(ctl);
             RefreshControlPositions();
             ctl.VisibleChanged += new EventHandler(ControlVisibleChangedHandler);
             ctl.Resize += new EventHandler(ControlResizedHandler);
-            //if (alignment == Alignments.Right)
+            //if (_alignment == Alignments.Right)
             //{
             //    this.ManagedControl.Controls.Clear();
-            //    for (int i = controls.Count - 1; i >= 0; i--)
+            //    for (int i = _controls.Count - 1; i >= 0; i--)
             //    {
-            //        Control control = controls[i];
+            //        Control control = _controls[i];
             //        this.ManagedControl.Controls.Add(control);
             //    }
             //}
@@ -75,7 +75,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="ctl">The control to remove</param>
         public void RemoveControl(Control ctl)
         {
-            controls.Remove(ctl);
+            _controls.Remove(ctl);
             this.ManagedControl.Controls.Remove(ctl);
             RefreshControlPositions();
         }
@@ -105,23 +105,23 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         protected override void RefreshControlPositions()
         {
-            if (itsIsFlowDown)
+            if (_isFlowDown)
             {
-                foreach (Control control in controls)
+                foreach (Control control in _controls)
                 {
                     control.Width = this.ManagedControl.Width;
                 }
             }
-            currentPos = new Point(BorderSize, BorderSize);
+            _currentPos = new Point(BorderSize, BorderSize);
             int rowStart = 0;
             int lastVisible = 0;
             int currentRowHeight = 0;
             int currentLine = 0;
             IList controlsInRow = new ArrayList();
-            for (int i = 0; i < this.controls.Count; i++)
+            for (int i = 0; i < this._controls.Count; i++)
             {
-                Control ctl = this.controls[i];
-                if (currentLine < itsNewLinePositions.Count && (int) itsNewLinePositions[currentLine] == i)
+                Control ctl = this._controls[i];
+                if (currentLine < _newLinePositions.Count && (int) _newLinePositions[currentLine] == i)
                 {
                     MoveCurrentPosToNextRow(currentRowHeight);
                     currentLine++;
@@ -132,21 +132,21 @@ namespace Chillisoft.UI.Generic.v2
                     {
                         if (IsGlueAtPosition(i))
                         {
-                            if (this.controls[i - 1].Left > BorderSize && this.controls[i - 1].Visible &&
-                                this.controls[i - 1].Width + this.controls[i].Width + BorderSize + BorderSize + GapSize <
+                            if (this._controls[i - 1].Left > BorderSize && this._controls[i - 1].Visible &&
+                                this._controls[i - 1].Width + this._controls[i].Width + BorderSize + BorderSize + GapSize <
                                 this.ManagedControl.Width)
                             {
                                 i--;
-                                ctl = this.controls[i];
+                                ctl = this._controls[i];
                             }
                         }
-                        if (alignment == Alignments.Centre)
+                        if (_alignment == Alignments.Centre)
                         {
                             ShiftControlsRightForCentering(rowStart, i - 1);
                         }
                         MoveCurrentPosToNextRow(currentRowHeight);
                         currentRowHeight = 0;
-                        if (alignment == Alignments.Right)
+                        if (_alignment == Alignments.Right)
                         {
                             for (int ctlCount = 0; ctlCount < controlsInRow.Count; ctlCount++)
                             {
@@ -163,22 +163,22 @@ namespace Chillisoft.UI.Generic.v2
                     }
                     controlsInRow.Add(ctl);
                     CalculateControlPosition(ctl);
-                    currentPos.X += ctl.Width + GapSize;
+                    _currentPos.X += ctl.Width + GapSize;
                     if (ctl.Height > currentRowHeight)
                     {
                         currentRowHeight = ctl.Height;
                     }
                     lastVisible = i;
                 }
-                if (alignment == Alignments.Centre)
+                if (_alignment == Alignments.Centre)
                 {
-                    if ((i == this.controls.Count - 1) && (lastVisible >= rowStart))
+                    if ((i == this._controls.Count - 1) && (lastVisible >= rowStart))
                     {
                         ShiftControlsRightForCentering(rowStart, lastVisible);
                     }
                 } 
             }
-            if (alignment == Alignments.Right && rowStart == 0)
+            if (_alignment == Alignments.Right && rowStart == 0)
             {
                 for (int ctlCount = 0; ctlCount < controlsInRow.Count; ctlCount++)
                 {
@@ -196,8 +196,8 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="currentRowHeight">The current row height</param>
         private void MoveCurrentPosToNextRow(int currentRowHeight)
         {
-            currentPos.X = BorderSize;
-            currentPos.Y += currentRowHeight + GapSize;
+            _currentPos.X = BorderSize;
+            _currentPos.Y += currentRowHeight + GapSize;
         }
 
         /// <summary>
@@ -206,15 +206,15 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="ctl">The control in question</param>
         private void CalculateControlPosition(Control ctl)
         {
-            if (alignment == Alignments.Right)
+            if (_alignment == Alignments.Right)
             {
-                ctl.Left = ManagedControl.Width - currentPos.X - ctl.Width;
+                ctl.Left = ManagedControl.Width - _currentPos.X - ctl.Width;
             }
             else
             {
-                ctl.Left = currentPos.X;
+                ctl.Left = _currentPos.X;
             }
-            ctl.Top = currentPos.Y;
+            ctl.Top = _currentPos.Y;
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace Chillisoft.UI.Generic.v2
         {
             for (int ctlNum = startControlNum; ctlNum <= endControlNum; ctlNum++)
             {
-                this.controls[ctlNum].Left += (ManagedControl.Width - this.controls[endControlNum].Right - BorderSize)/2;
+                this._controls[ctlNum].Left += (ManagedControl.Width - this._controls[endControlNum].Right - BorderSize)/2;
             }
         }
 
@@ -239,7 +239,7 @@ namespace Chillisoft.UI.Generic.v2
         /// does</returns>
         private bool DoesntFitOnCurrentRow(Control ctl)
         {
-            return (currentPos.X + ctl.Width >= ManagedControl.Width - BorderSize);
+            return (_currentPos.X + ctl.Width >= ManagedControl.Width - BorderSize);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace Chillisoft.UI.Generic.v2
         {
             set
             {
-                alignment = value;
+                _alignment = value;
                 RefreshControlPositions();
             }
         }
@@ -260,7 +260,7 @@ namespace Chillisoft.UI.Generic.v2
         /// TODO ERIC - what is this?
         public bool FlowDown
         {
-            set { itsIsFlowDown = value; }
+            set { _isFlowDown = value; }
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace Chillisoft.UI.Generic.v2
         /// TODO ERIC - what is this?
         public void NewLine()
         {
-            itsNewLinePositions.Add(this.controls.Count);
+            _newLinePositions.Add(this._controls.Count);
         }
 
         /// <summary>
@@ -279,7 +279,7 @@ namespace Chillisoft.UI.Generic.v2
         /// TODO ERIC - double-check this
         public void AddGlue()
         {
-            itsGluePositions.Add(this.controls.Count);
+            _gluePositions.Add(this._controls.Count);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Chillisoft.UI.Generic.v2
         /// TODO ERIC - review
         private bool IsGlueAtPosition(int pos)
         {
-            foreach (int gluePosition in itsGluePositions)
+            foreach (int gluePosition in _gluePositions)
             {
                 if (gluePosition == pos) return true;
             }

@@ -19,14 +19,14 @@ namespace Chillisoft.UI.Generic.v2
         private delegate void SetSortColumnDelegate(string columnName, bool isAscending);
 
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.Generic.v2.GridBase");
-        protected DataTable itsDataTable;
-        protected BusinessObjectCollectionDataSetProvider itsDataSetProvider;
-        protected BusinessObjectBaseCollection itsCollection;
-        private IObjectInitialiser itsObjectInitialiser;
-        private IGridDataProvider itsProvider;
-        protected DataView itsDataTableDefaultView;
-        private SetGridDataProviderDelegate setGridDataProvider;
-        private SetSortColumnDelegate setSortColumn;
+        protected DataTable _dataTable;
+        protected BusinessObjectCollectionDataSetProvider _dataSetProvider;
+        protected BusinessObjectBaseCollection _collection;
+        private IObjectInitialiser _objectInitialiser;
+        private IGridDataProvider _provider;
+        protected DataView _dataTableDefaultView;
+        private SetGridDataProviderDelegate _setGridDataProvider;
+        private SetSortColumnDelegate _setSortColumn;
         //private DelayedMethodCall filterUpdatedMethodCaller;
 
         public event EventHandler DataProviderUpdated;
@@ -38,8 +38,8 @@ namespace Chillisoft.UI.Generic.v2
         protected GridBase()
         {
             //filterUpdatedMethodCaller = new DelayedMethodCall(1000) ;
-            setGridDataProvider = new SetGridDataProviderDelegate(SetGridDataProviderInSTAThread);
-            setSortColumn = new SetSortColumnDelegate(SetSortColumnInSTAThread);
+            _setGridDataProvider = new SetGridDataProviderDelegate(SetGridDataProviderInSTAThread);
+            _setSortColumn = new SetSortColumnDelegate(SetSortColumnInSTAThread);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Chillisoft.UI.Generic.v2
         {
             try
             {
-                BeginInvoke(setGridDataProvider, new object[] {provider});
+                BeginInvoke(_setGridDataProvider, new object[] {provider});
                 // needed to do the call on the Forms thread.  See info about STA thread model.
             }
             catch (InvalidOperationException)
@@ -66,12 +66,12 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="provider">The grid data provider</param>
         private void SetGridDataProviderInSTAThread(IGridDataProvider provider)
         {
-            itsProvider = provider;
-            itsCollection = itsProvider.GetCollection();
-            itsDataSetProvider = CreateBusinessObjectCollectionDataSetProvider(itsCollection);
-            itsDataSetProvider.ObjectInitialiser = itsObjectInitialiser;
-            itsDataTable = itsDataSetProvider.GetDataTable(itsProvider.GetUIGridDef());
-            itsDataTable.TableName = "Table";
+            _provider = provider;
+            _collection = _provider.GetCollection();
+            _dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
+            _dataSetProvider.ObjectInitialiser = _objectInitialiser;
+            _dataTable = _dataSetProvider.GetDataTable(_provider.GetUIGridDef());
+            _dataTable.TableName = "Table";
 
             this.Columns.Clear();
 
@@ -83,13 +83,13 @@ namespace Chillisoft.UI.Generic.v2
             int colNum = 1;
             foreach (UIGridProperty gridProp in provider.GetUIGridDef())
             {
-                DataColumn dataColumn = itsDataTable.Columns[colNum];
+                DataColumn dataColumn = _dataTable.Columns[colNum];
 
                 if (gridProp.GridControlType == typeof (DataGridViewComboBoxColumn))
                 {
                     DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();
                     ILookupListSource source =
-                        (ILookupListSource) itsDataTable.Columns[colNum].ExtendedProperties["LookupListSource"];
+                        (ILookupListSource) _dataTable.Columns[colNum].ExtendedProperties["LookupListSource"];
                     DataTable table = new DataTable();
                     table.Columns.Add("id");
                     table.Columns.Add("str");
@@ -143,12 +143,12 @@ namespace Chillisoft.UI.Generic.v2
                 colNum++;
             }
 
-           itsDataTableDefaultView = itsDataTable.DefaultView;
+           _dataTableDefaultView = _dataTable.DefaultView;
 
             this.AutoGenerateColumns = false;
-            this.DataSource = itsDataTableDefaultView;
+            this.DataSource = _dataTableDefaultView;
 
-            //this.DataSource = itsDataTable;
+            //this.DataSource = _dataTable;
             FireDataProviderUpdated();
         }
 
@@ -170,7 +170,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="bo">The business object</param>
         public void AddBusinessObject(BusinessObjectBase bo)
         {
-            itsCollection.Add(bo);
+            _collection.Add(bo);
             int row = GetRowOfBusinessObject(bo);
             this.SetSelectedRowCore(row, true);
             //this.CurrentRowIndex = row ;
@@ -191,10 +191,10 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public virtual IObjectInitialiser ObjectInitialiser
         {
-            set { itsObjectInitialiser = value;
-            if (itsDataSetProvider != null)
+            set { _objectInitialiser = value;
+            if (_dataSetProvider != null)
             {
-                itsDataSetProvider.ObjectInitialiser = itsObjectInitialiser;
+                _dataSetProvider.ObjectInitialiser = _objectInitialiser;
             }
         }
         }
@@ -204,7 +204,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public DataTable DataTable
         {
-            get { return itsDataTable; }
+            get { return _dataTable; }
         }
 
         /// <summary>
@@ -212,10 +212,10 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public void Clear()
         {
-            if (itsCollection != null)
+            if (_collection != null)
             {
-                itsCollection.Clear();
-                itsDataTable.Rows.Clear();
+                _collection.Clear();
+                _dataTable.Rows.Clear();
             }
         }
 
@@ -225,7 +225,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="filterClause">The filter clause</param>
         public void ApplyFilter(FilterClause filterClause)
         {
-            itsDataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
+            _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
             FireFilterUpdated();
             //filterUpdatedMethodCaller.Call(new VoidMethod(FireFilterUpdated)) ;
         }
@@ -251,12 +251,12 @@ namespace Chillisoft.UI.Generic.v2
             if (this.CurrentCell == null) return null;
             int rownum = this.CurrentCell.RowIndex;
             int i = 0;
-            foreach (DataRowView dataRowView in itsDataTableDefaultView)
+            foreach (DataRowView dataRowView in _dataTableDefaultView)
             {
                 
                 if (i++ == rownum)
                 {
-                    return this.itsDataSetProvider.Find((string) dataRowView.Row["ID"]);
+                    return this._dataSetProvider.Find((string) dataRowView.Row["ID"]);
                 }
             }
             return null;
@@ -271,16 +271,16 @@ namespace Chillisoft.UI.Generic.v2
             IList busObjects = new ArrayList();
             foreach (DataGridViewRow row in this.SelectedRows)
             {
-                busObjects.Add(this.itsDataSetProvider.Find((string) row.Cells["ID"].Value));
+                busObjects.Add(this._dataSetProvider.Find((string) row.Cells["ID"].Value));
             }
-            //for (int i = 0; i < itsDataTableDefaultView.Count; i++ ) {
+            //for (int i = 0; i < _dataTableDefaultView.Count; i++ ) {
             //    if (this.IsSelected(i)) {
             //        int j = 0;
-            //        foreach (DataRowView dataRowView in itsDataTableDefaultView) 
+            //        foreach (DataRowView dataRowView in _dataTableDefaultView) 
             //        {
             //            if (j++ == i) 
             //            {
-            //                busObjects.Add(this.itsDataSetProvider.Find((string)dataRowView.Row["ID"])) ;
+            //                busObjects.Add(this._dataSetProvider.Find((string)dataRowView.Row["ID"])) ;
             //            }
             //        }
             //    }						 
@@ -298,9 +298,9 @@ namespace Chillisoft.UI.Generic.v2
         {
             int rownum = 0;
 
-            foreach (DataRowView dataRowView in itsDataTableDefaultView)
+            foreach (DataRowView dataRowView in _dataTableDefaultView)
             {
-                if (this.itsDataSetProvider.Find((string) dataRowView.Row["ID"]) == bo)
+                if (this._dataSetProvider.Find((string) dataRowView.Row["ID"]) == bo)
                 {
                     return rownum;
                 }
@@ -318,11 +318,11 @@ namespace Chillisoft.UI.Generic.v2
         public BusinessObjectBase GetBusinessObjectAtRow(int row)
         {
             int i = 0;
-            foreach (DataRowView dataRowView in itsDataTableDefaultView)
+            foreach (DataRowView dataRowView in _dataTableDefaultView)
             {
                 if (i++ == row)
                 {
-                    return this.itsDataSetProvider.Find((string)dataRowView.Row["ID"]);
+                    return this._dataSetProvider.Find((string)dataRowView.Row["ID"]);
                 }
             }
             return null;
@@ -339,7 +339,7 @@ namespace Chillisoft.UI.Generic.v2
         {
             try
             {
-                BeginInvoke(setSortColumn, new object[] {columnName, isAscending});
+                BeginInvoke(_setSortColumn, new object[] {columnName, isAscending});
                 // needed to do the call on the Forms thread.  See info about STA thread model.
             }
             catch (InvalidOperationException)
@@ -356,11 +356,11 @@ namespace Chillisoft.UI.Generic.v2
         {
             if (isAscending)
             {
-                itsDataTableDefaultView.Sort = columnName + " ASC";
+                _dataTableDefaultView.Sort = columnName + " ASC";
             }
             else
             {
-                itsDataTableDefaultView.Sort = columnName + " DESC";
+                _dataTableDefaultView.Sort = columnName + " DESC";
             }
         }
     }

@@ -13,7 +13,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public void AcceptChanges()
         {
-            this.itsDataTable.AcceptChanges();
+            this._dataTable.AcceptChanges();
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Chillisoft.UI.Application.v2
         /// </summary>
         public void RejectChanges()
         {
-            this.itsDataTable.RejectChanges();
+            this._dataTable.RejectChanges();
         }
 
         /// <summary>

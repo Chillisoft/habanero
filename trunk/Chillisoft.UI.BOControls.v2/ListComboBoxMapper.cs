@@ -14,8 +14,8 @@ namespace Chillisoft.UI.BOControls.v2
     /// - is list just a straight 1-d array and lookup a string-guid col?
     public class ListComboBoxMapper : ControlMapper
     {
-        private ComboBox itsComboBox;
-        IList itsList;
+        private ComboBox _comboBox;
+        IList _list;
 
         /// <summary>
         /// Constructor to initialise a new mapper, attaching a handler to
@@ -28,8 +28,8 @@ namespace Chillisoft.UI.BOControls.v2
         public ListComboBoxMapper(ComboBox cbx, string propName, bool isReadOnceOnly)
             : base(cbx, propName, isReadOnceOnly)
         {
-            itsComboBox = cbx;
-            itsComboBox.SelectedIndexChanged += new EventHandler(ValueChangedHandler);
+            _comboBox = cbx;
+            _comboBox.SelectedIndexChanged += new EventHandler(ValueChangedHandler);
         }
 
         /// <summary>
@@ -41,20 +41,20 @@ namespace Chillisoft.UI.BOControls.v2
         private void ValueChangedHandler(object sender, EventArgs e)
         {
             //log.Debug("ValueChanged in LookupComboBoxMapper") ;
-            if (itsBusinessObject != null && itsComboBox.SelectedIndex != -1)
+            if (_businessObject != null && _comboBox.SelectedIndex != -1)
             {
-                string newValue = (string)itsComboBox.SelectedItem;
+                string newValue = (string)_comboBox.SelectedItem;
                 if (newValue == null || newValue == "") 
                 {
-                    if (itsBusinessObject.GetPropertyValue(itsPropertyName) != null)
+                    if (_businessObject.GetPropertyValue(_propertyName) != null)
                     {
-                        itsBusinessObject.SetPropertyValue(itsPropertyName, null);
+                        _businessObject.SetPropertyValue(_propertyName, null);
                     }
                 }
-                else if (itsBusinessObject.GetPropertyValue(itsPropertyName) == null ||
-                         !newValue.Equals(itsBusinessObject.GetPropertyValue(itsPropertyName)))
+                else if (_businessObject.GetPropertyValue(_propertyName) == null ||
+                         !newValue.Equals(_businessObject.GetPropertyValue(_propertyName)))
                 {
-                    itsBusinessObject.SetPropertyValue(itsPropertyName, newValue);
+                    _businessObject.SetPropertyValue(_propertyName, newValue);
                 }
             }
             //log.Debug("ValueChanged in LookupComboBoxMapper complete") ;
@@ -66,11 +66,11 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         protected override void ValueUpdated()
         {
-            if (itsList == null)
+            if (_list == null)
             {
                 SetupList();
             }
-            itsComboBox.SelectedItem = itsBusinessObject.GetPropertyValueString(itsPropertyName);
+            _comboBox.SelectedItem = _businessObject.GetPropertyValueString(_propertyName);
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         private void SetupList()
         {
-            itsList = new ArrayList();
-            string optionList = (string)itsAttributes["options"];
+            _list = new ArrayList();
+            string optionList = (string)_attributes["options"];
             SetList(optionList, false);
         }
 
@@ -94,9 +94,9 @@ namespace Chillisoft.UI.BOControls.v2
         /// top of the list</param>
         public void SetList(string optionList, bool includeBlank)
         {
-            itsList = new ArrayList();
-            if (includeBlank) itsList.Add("");
-            int width = itsComboBox.Width;
+            _list = new ArrayList();
+            if (includeBlank) _list.Add("");
+            int width = _comboBox.Width;
             Label lbl = ControlFactory.CreateLabel("", false);
             if (optionList != null && optionList.Length > 0)
             {
@@ -105,21 +105,21 @@ namespace Chillisoft.UI.BOControls.v2
                 {
                     if (s.Trim().Length > 0)
                     {
-                        itsList.Add(s);
+                        _list.Add(s);
                     }
                 }
             }
-            itsComboBox.Items.Clear();
-            foreach (string str in itsList)
+            _comboBox.Items.Clear();
+            foreach (string str in _list)
             {
                 lbl.Text = str;
                 if (lbl.PreferredWidth > width)
                 {
                     width = lbl.PreferredWidth;
                 }
-                itsComboBox.Items.Add(str);
+                _comboBox.Items.Add(str);
             }
-            itsComboBox.DropDownWidth = width;
+            _comboBox.DropDownWidth = width;
         }
     }
 }

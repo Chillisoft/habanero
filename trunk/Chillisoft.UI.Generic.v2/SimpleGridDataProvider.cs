@@ -12,8 +12,8 @@ namespace Chillisoft.UI.Generic.v2
     /// TODO ERIC - how does this differ from CollectionGridDataProvider?
     public class SimpleGridDataProvider : IGridDataProvider
     {
-        private BusinessObjectBaseCollection itsCollection;
-        private UIGridDef itsUIGridDef;
+        private BusinessObjectBaseCollection _collection;
+        private UIGridDef _uiGridDef;
 
         /// <summary>
         /// Constructor to initialise a new provider
@@ -24,8 +24,8 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="uiGridDef">The UIGridDef object</param>
         public SimpleGridDataProvider(BusinessObjectBaseCollection collection, UIGridDef uiGridDef)
         {
-            itsCollection = collection;
-            itsUIGridDef = uiGridDef;
+            _collection = collection;
+            _uiGridDef = uiGridDef;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the collection</returns>
         public BusinessObjectBaseCollection GetCollection()
         {
-            return itsCollection;
+            return _collection;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the UIGridDef object</returns>
         public UIGridDef GetUIGridDef()
         {
-            return itsUIGridDef;
+            return _uiGridDef;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public ClassDef ClassDef
         {
-            get { return itsCollection.ClassDef; }
+            get { return _collection.ClassDef; }
         }
     }
 }

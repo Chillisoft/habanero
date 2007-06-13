@@ -10,7 +10,7 @@ namespace Chillisoft.UI.Generic.v2
     /// TODO ERIC - not sure what this does, the name is not intuitive
     public class MessageBoxDateProvider : IDateProvider
     {
-        private readonly string itsMessage;
+        private readonly string _message;
 
         /// <summary>
         /// Constructor to initialise the provider with the message provided
@@ -18,7 +18,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="message">The message to display</param>
         public MessageBoxDateProvider(string message)
         {
-            itsMessage = message;
+            _message = message;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the date given by the user</returns>
         public DateTime GetDate()
         {
-            DateInputForm frm = new DateInputForm(itsMessage);
+            DateInputForm frm = new DateInputForm(_message);
             frm.ShowDialog();
             return frm.DateTime;
         }
@@ -37,7 +37,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         private class DateInputForm : Form
         {
-            private DateTimePicker itsDateTimePicker;
+            private DateTimePicker _dateTimePicker;
 
             /// <summary>
             /// Constructor to initialise the form with a message provided
@@ -45,16 +45,16 @@ namespace Chillisoft.UI.Generic.v2
             /// <param name="message">The message to display</param>
             public DateInputForm(string message)
             {
-                itsDateTimePicker = new DateTimePicker();
+                _dateTimePicker = new DateTimePicker();
                 Panel pnl = new Panel();
                 GridLayoutManager manager = new GridLayoutManager(pnl);
                 manager.SetGridSize(1, 2);
                 manager.AddControl(ControlFactory.CreateLabel(message, false));
-                manager.AddControl(itsDateTimePicker);
+                manager.AddControl(_dateTimePicker);
 
                 ButtonControl buttons = new ButtonControl();
                 buttons.AddButton("OK", new EventHandler(OKButtonClickHandler));
-                this.Height = itsDateTimePicker.Height + 10 + buttons.Height;
+                this.Height = _dateTimePicker.Height + 10 + buttons.Height;
 
                 BorderLayoutManager mainManager = new BorderLayoutManager(this);
                 mainManager.AddControl(buttons, BorderLayoutManager.Position.South);
@@ -76,7 +76,7 @@ namespace Chillisoft.UI.Generic.v2
             /// </summary>
             public DateTime DateTime
             {
-                get { return itsDateTimePicker.Value; }
+                get { return _dateTimePicker.Value; }
             }
         }
     }

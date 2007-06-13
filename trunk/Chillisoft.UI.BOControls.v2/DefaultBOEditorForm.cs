@@ -18,12 +18,12 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public class DefaultBOEditorForm : Form
     {
-        private readonly string itsUiDefName;
-        private ButtonControl itsButtons;
-        protected BusinessObjectBase itsBo;
-        private Panel itsBoPanel;
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.BOControls.v2.DefaultBOEditorForm");
-        protected PanelFactoryInfo itsPanelFactoryInfo;
+        private readonly string _uiDefName;
+        private ButtonControl _buttons;
+        protected BusinessObjectBase _bo;
+        private Panel _boPanel;
+        protected PanelFactoryInfo _panelFactoryInfo;
 
         /// <summary>
         /// Constructor to initialise a new form with a panel containing the
@@ -34,27 +34,27 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="uiDefName">The uiDefName</param>
         public DefaultBOEditorForm(BusinessObjectBase bo, string uiDefName)
         {
-            itsBo = bo;
-            itsUiDefName = uiDefName;
+            _bo = bo;
+            _uiDefName = uiDefName;
 
             BOMapper mapper = new BOMapper(bo);
 
             UIFormDef def;
-            if (itsUiDefName.Length > 0)
+            if (_uiDefName.Length > 0)
             {
-                def = mapper.GetUserInterfaceMapper(itsUiDefName).GetUIFormProperties();
+                def = mapper.GetUserInterfaceMapper(_uiDefName).GetUIFormProperties();
             }
             else
             {
                 def = mapper.GetUserInterfaceMapper().GetUIFormProperties();
             }
 
-            PanelFactory factory = new PanelFactory(itsBo, def);
-            itsPanelFactoryInfo = factory.CreatePanel();
-            itsBoPanel = itsPanelFactoryInfo.Panel;
-            itsButtons = new ButtonControl();
-            itsButtons.AddButton("&Cancel", new EventHandler(CancelButtonHandler));
-            itsButtons.AddButton("&OK", new EventHandler(OKButtonHandler)).NotifyDefault(true);
+            PanelFactory factory = new PanelFactory(_bo, def);
+            _panelFactoryInfo = factory.CreatePanel();
+            _boPanel = _panelFactoryInfo.Panel;
+            _buttons = new ButtonControl();
+            _buttons.AddButton("&Cancel", new EventHandler(CancelButtonHandler));
+            _buttons.AddButton("&OK", new EventHandler(OKButtonHandler)).NotifyDefault(true);
  
             this.Text = def.Heading;
             this.Height = def.Height;
@@ -81,7 +81,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         protected Panel BoPanel
         {
-            get { return itsBoPanel; }
+            get { return _boPanel; }
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void CancelButtonHandler(object sender, EventArgs e)
         {
-            itsBo.CancelEdit();
+            _bo.CancelEdit();
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
@@ -125,10 +125,10 @@ namespace Chillisoft.UI.BOControls.v2
                 transaction.CommitTransaction();
 
                 //TODO: this is TERRIBLE!
-                if (itsBoPanel.Controls[0] is TabControl)
+                if (_boPanel.Controls[0] is TabControl)
                 {
                     //Console.Out.WriteLine("tabcontrol found.");
-                    TabControl tabControl = (TabControl) itsBoPanel.Controls[0];
+                    TabControl tabControl = (TabControl) _boPanel.Controls[0];
                     foreach (TabPage page in tabControl.TabPages)
                     {
                         foreach (Panel panel in page.Controls)
@@ -164,8 +164,8 @@ namespace Chillisoft.UI.BOControls.v2
         /// <returns>Returns the transaction object</returns>
         protected virtual Transaction CreateSaveTransaction()
         {
-            Transaction saveTransaction = new Transaction(itsBo.GetDatabaseConnection());
-            saveTransaction.AddTransactionObject(itsBo);
+            Transaction saveTransaction = new Transaction(_bo.GetDatabaseConnection());
+            saveTransaction.AddTransactionObject(_bo);
             return saveTransaction;
         }
 
@@ -184,7 +184,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public ButtonControl Buttons
         {
-            get { return itsButtons; }
+            get { return _buttons; }
         }
     }
 }

@@ -32,11 +32,11 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class FilterInputBoxCollection
     {
-        private readonly FilterClauseFactory itsClauseFactory;
-        private IList itsFilterUIs;
-        private IList itsControls;
-        private int itsFilterWidth;
-        private bool itsIsAutomaticUpdate = true;
+        private readonly FilterClauseFactory _clauseFactory;
+        private IList _filterUIs;
+        private IList _controls;
+        private int _filterWidth;
+        private bool _isAutomaticUpdate = true;
 
         public event EventHandler FilterClauseChanged;
 
@@ -46,10 +46,10 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="clauseFactory">The filter clause factory</param>
         public FilterInputBoxCollection(FilterClauseFactory clauseFactory)
         {
-            itsFilterUIs = new ArrayList();
-            itsClauseFactory = clauseFactory;
-            itsControls = new ArrayList(8);
-            itsFilterWidth = (new TextBox()).Width;
+            _filterUIs = new ArrayList();
+            _clauseFactory = clauseFactory;
+            _controls = new ArrayList(8);
+            _filterWidth = (new TextBox()).Width;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Chillisoft.UI.Generic.v2
         public Label AddLabel(string label)
         {
             Label labelControl = ControlFactory.CreateLabel(label, false);
-            itsControls.Add(labelControl);
+            _controls.Add(labelControl);
             return labelControl;
         }
 
@@ -77,12 +77,12 @@ namespace Chillisoft.UI.Generic.v2
         public TextBox AddStringFilterTextBox(string columnName)
         {
             TextBox tb = ControlFactory.CreateTextBox();
-            tb.Width = itsFilterWidth;
-            itsFilterUIs.Add(new FilterUIString(itsClauseFactory, columnName, tb));
+            tb.Width = _filterWidth;
+            _filterUIs.Add(new FilterUIString(_clauseFactory, columnName, tb));
             tb.KeyPress += new KeyPressEventHandler(FilterControlKeyPressedHandler);
             tb.TextChanged += new EventHandler(FilterControlValueChangedHandler);
             FireFilterClauseChanged(tb);
-            itsControls.Add(tb);
+            _controls.Add(tb);
             return tb;
         }
 
@@ -94,7 +94,7 @@ namespace Chillisoft.UI.Generic.v2
         /// TODO ERIC - this is not used
         private void FilterTextBoxValueChangedHandler(object sender, EventArgs e)
         {
-            if (itsIsAutomaticUpdate)
+            if (_isAutomaticUpdate)
             {
                 FireFilterClauseChanged(sender);
             }
@@ -142,13 +142,13 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the composite filter clause</returns>
         public FilterClause GetFilterClause()
         {
-            FilterUI filterUi = (FilterUI) itsFilterUIs[0];
+            FilterUI filterUi = (FilterUI) _filterUIs[0];
             FilterClause clause = filterUi.GetFilterClause();
-            for (int i = 1; i < itsFilterUIs.Count; i++)
+            for (int i = 1; i < _filterUIs.Count; i++)
             {
-                filterUi = (FilterUI) itsFilterUIs[i];
+                filterUi = (FilterUI) _filterUIs[i];
                 clause =
-                    itsClauseFactory.CreateCompositeFilterClause(clause, FilterClauseCompositeOperator.OpAnd,
+                    _clauseFactory.CreateCompositeFilterClause(clause, FilterClauseCompositeOperator.OpAnd,
                                                                  filterUi.GetFilterClause());
             }
             return clause;
@@ -166,12 +166,12 @@ namespace Chillisoft.UI.Generic.v2
         public ComboBox AddStringFilterComboBox(string columnName, ICollection options)
         {
             ComboBox cb = ControlFactory.CreateComboBox();
-            cb.Width = itsFilterWidth;
-            itsFilterUIs.Add(new FilterUIStringOptions(itsClauseFactory, columnName, cb, options));
+            cb.Width = _filterWidth;
+            _filterUIs.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options));
             cb.SelectedIndexChanged += new EventHandler(FilterControlValueChangedHandler);
             cb.TextChanged += new EventHandler(FilterControlValueChangedHandler);
             FireFilterClauseChanged(cb);
-            itsControls.Add(cb);
+            _controls.Add(cb);
             return cb;
         }
 
@@ -190,11 +190,11 @@ namespace Chillisoft.UI.Generic.v2
         public CheckBox AddBooleanFilterCheckBox(string columnName, string text, bool isChecked)
         {
             CheckBox cb = ControlFactory.CreateCheckBox();
-            cb.Width = itsFilterWidth;
-            itsFilterUIs.Add(new FilterUICheckBox(itsClauseFactory, columnName, cb, text, isChecked));
+            cb.Width = _filterWidth;
+            _filterUIs.Add(new FilterUICheckBox(_clauseFactory, columnName, cb, text, isChecked));
             cb.CheckedChanged += new EventHandler(FilterControlValueChangedHandler);
             FireFilterClauseChanged(cb);
-            itsControls.Add(cb);
+            _controls.Add(cb);
             return cb;
         }
 
@@ -227,12 +227,12 @@ namespace Chillisoft.UI.Generic.v2
             {
                 dte = (DateTimePicker) ControlFactory.CreateDateTimePicker((DateTime) defaultDate);
             }
-            dte.Width = itsFilterWidth;
+            dte.Width = _filterWidth;
 
-            itsFilterUIs.Add(new FilterUIDateString(itsClauseFactory, columnName, dte, filterGreaterThan));
+            _filterUIs.Add(new FilterUIDateString(_clauseFactory, columnName, dte, filterGreaterThan));
             dte.ValueChanged += new EventHandler(FilterControlValueChangedHandler);
             FireFilterClauseChanged(dte);
-            itsControls.Add(dte);
+            _controls.Add(dte);
             return dte;
         }
 
@@ -242,7 +242,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the controls as an IList object</returns>
         public IList GetControls()
         {
-            return itsControls;
+            return _controls;
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public void EnableControls()
         {
-            foreach (Control control in itsControls)
+            foreach (Control control in _controls)
             {
                 control.Enabled = true;
             }
@@ -261,7 +261,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public void DisableControls()
         {
-            foreach (Control control in itsControls)
+            foreach (Control control in _controls)
             {
                 control.Enabled = false;
             }
@@ -275,7 +275,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="width">The width in pixels</param>
         public void SetFilterWidth(int width)
         {
-            itsFilterWidth = width;
+            _filterWidth = width;
         }
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the width setting in pixels</returns>
         public int GetFilterWidth()
         {
-            return itsFilterWidth;
+            return _filterWidth;
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="auto">True for automatic updates, false if not</param>
         public void SetAutomaticUpdate(bool auto)
         {
-            itsIsAutomaticUpdate = auto;
+            _isAutomaticUpdate = auto;
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns true if automatic</returns>
         public bool GetAutomaticUpdate()
         {
-            return itsIsAutomaticUpdate;
+            return _isAutomaticUpdate;
         }
 
         /// <summary>
@@ -314,8 +314,8 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         private abstract class FilterUI
         {
-            protected readonly FilterClauseFactory itsClauseFactory;
-            protected readonly string itsColumnName;
+            protected readonly FilterClauseFactory _clauseFactory;
+            protected readonly string _columnName;
 
             /// <summary>
             /// Constructor to initialise a new instance
@@ -324,8 +324,8 @@ namespace Chillisoft.UI.Generic.v2
             /// <param name="columnName">The column name</param>
             protected FilterUI(FilterClauseFactory clauseFactory, string columnName)
             {
-                itsColumnName = columnName;
-                itsClauseFactory = clauseFactory;
+                _columnName = columnName;
+                _clauseFactory = clauseFactory;
             }
 
             /// <summary>
@@ -340,25 +340,25 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         private class FilterUIString : FilterUI
         {
-            private readonly TextBox itsTextBox;
+            private readonly TextBox _textBox;
 
             public FilterUIString(FilterClauseFactory clauseFactory, string columnName, TextBox textBox)
                 : base(clauseFactory, columnName)
             {
-                itsTextBox = textBox;
+                _textBox = textBox;
             }
 
             public override FilterClause GetFilterClause()
             {
-                if (itsTextBox.Text.Length > 0)
+                if (_textBox.Text.Length > 0)
                 {
                     return
-                        itsClauseFactory.CreateStringFilterClause(itsColumnName, FilterClauseOperator.OpLike,
-                                                                  itsTextBox.Text);
+                        _clauseFactory.CreateStringFilterClause(_columnName, FilterClauseOperator.OpLike,
+                                                                  _textBox.Text);
                 }
                 else
                 {
-                    return itsClauseFactory.CreateNullFilterClause();
+                    return _clauseFactory.CreateNullFilterClause();
                 }
             }
         }
@@ -370,23 +370,23 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         private class FilterUIDateString : FilterUI
         {
-            private readonly DateTimePicker itsDateTimePicker;
-            private readonly bool itsFilterGreaterThan;
+            private readonly DateTimePicker _dateTimePicker;
+            private readonly bool _filterGreaterThan;
 
             public FilterUIDateString(FilterClauseFactory clauseFactory, string columnName, DateTimePicker dtp,
                                       bool filterGreaterThan)
                 : base(clauseFactory, columnName)
             {
-                itsDateTimePicker = dtp;
-                this.itsFilterGreaterThan = filterGreaterThan;
+                _dateTimePicker = dtp;
+                this._filterGreaterThan = filterGreaterThan;
             }
 
             public override FilterClause GetFilterClause()
             {
-                if (itsDateTimePicker.Value != null)
+                if (_dateTimePicker.Value != null)
                 {
                     FilterClauseOperator op;
-                    if (itsFilterGreaterThan)
+                    if (_filterGreaterThan)
                     {
                         op = FilterClauseOperator.OpGreaterThanOrEqualTo;
                     }
@@ -395,13 +395,13 @@ namespace Chillisoft.UI.Generic.v2
                         op = FilterClauseOperator.OpLessThanOrEqualTo;
                     }
                     return
-                        itsClauseFactory.CreateStringFilterClause(itsColumnName, op,
-                                                                  ((DateTime)itsDateTimePicker.Value).ToString(
+                        _clauseFactory.CreateStringFilterClause(_columnName, op,
+                                                                  ((DateTime)_dateTimePicker.Value).ToString(
                                                                       "yyyy/MM/dd"));
                 }
                 else
                 {
-                    return itsClauseFactory.CreateNullFilterClause();
+                    return _clauseFactory.CreateNullFilterClause();
                 }
             }
         }
@@ -412,31 +412,31 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         private class FilterUIStringOptions : FilterUI
         {
-            private readonly ComboBox itsComboBox;
+            private readonly ComboBox _comboBox;
 
             public FilterUIStringOptions(FilterClauseFactory clauseFactory, string columnName, ComboBox comboBox,
                                          ICollection options)
                 : base(clauseFactory, columnName)
             {
-                itsComboBox = comboBox;
-                itsComboBox.Items.Add("");
+                _comboBox = comboBox;
+                _comboBox.Items.Add("");
                 foreach (string optionString in options)
                 {
-                    itsComboBox.Items.Add(optionString);
+                    _comboBox.Items.Add(optionString);
                 }
             }
 
             public override FilterClause GetFilterClause()
             {
-                if (itsComboBox.SelectedIndex != -1 && itsComboBox.SelectedItem.ToString().Length > 0)
+                if (_comboBox.SelectedIndex != -1 && _comboBox.SelectedItem.ToString().Length > 0)
                 {
                     return
-                        itsClauseFactory.CreateStringFilterClause(itsColumnName, FilterClauseOperator.OpEquals,
-                                                                  itsComboBox.SelectedItem.ToString());
+                        _clauseFactory.CreateStringFilterClause(_columnName, FilterClauseOperator.OpEquals,
+                                                                  _comboBox.SelectedItem.ToString());
                 }
                 else
                 {
-                    return itsClauseFactory.CreateNullFilterClause();
+                    return _clauseFactory.CreateNullFilterClause();
                 }
             }
         }
@@ -447,37 +447,37 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         private class FilterUICheckBox : FilterUI
         {
-            private readonly CheckBox itsCheckBox;
+            private readonly CheckBox _checkBox;
 
             public FilterUICheckBox(FilterClauseFactory clauseFactory, string columnName, CheckBox checkBox,
                                          string text, bool isChecked)
                 : base(clauseFactory, columnName)
             {
-                itsCheckBox = checkBox;
-                itsCheckBox.Checked = isChecked;
-                itsCheckBox.Text = text;
+                _checkBox = checkBox;
+                _checkBox.Checked = isChecked;
+                _checkBox.Text = text;
             }
 
             public override FilterClause GetFilterClause()
             {
-                if (itsCheckBox.Checked != null)
+                if (_checkBox.Checked != null)
                 {
-                    if (itsCheckBox.Checked)
+                    if (_checkBox.Checked)
                     {
                         return
-                            itsClauseFactory.CreateStringFilterClause(itsColumnName,
+                            _clauseFactory.CreateStringFilterClause(_columnName,
                                                                        FilterClauseOperator.OpEquals, "true");
                     }
                     else
                     {
                         return
-                            itsClauseFactory.CreateStringFilterClause(itsColumnName,
+                            _clauseFactory.CreateStringFilterClause(_columnName,
                                                                        FilterClauseOperator.OpEquals, "false");
                     }
                 }
                 else
                 {
-                    return itsClauseFactory.CreateNullFilterClause();
+                    return _clauseFactory.CreateNullFilterClause();
                 }
             }
         }

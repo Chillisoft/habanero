@@ -9,8 +9,8 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class FileChooser : UserControl
     {
-        private TextBox itsFileTextBox;
-        private Button itsSelectFileButton;
+        private TextBox _fileTextBox;
+        private Button _selectFileButton;
 
         /// <summary>
         /// Constructor to initialise a FileChooser, which consists of a
@@ -20,10 +20,10 @@ namespace Chillisoft.UI.Generic.v2
         public FileChooser()
         {
             FlowLayoutManager manager = new FlowLayoutManager(this);
-            itsFileTextBox = ControlFactory.CreateTextBox();
-            itsSelectFileButton = ControlFactory.CreateButton("Select...", new EventHandler(SelectButtonClickHandler));
-            manager.AddControl(itsFileTextBox);
-            manager.AddControl(itsSelectFileButton);
+            _fileTextBox = ControlFactory.CreateTextBox();
+            _selectFileButton = ControlFactory.CreateButton("Select...", new EventHandler(SelectButtonClickHandler));
+            manager.AddControl(_fileTextBox);
+            manager.AddControl(_selectFileButton);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Chillisoft.UI.Generic.v2
             OpenFileDialog dialog = new OpenFileDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                itsFileTextBox.Text = dialog.FileName;
+                _fileTextBox.Text = dialog.FileName;
             }
         }
 
@@ -47,7 +47,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public string SelectedFilePath
         {
-            get { return itsFileTextBox.Text; }
+            get { return _fileTextBox.Text; }
         }
     }
 }

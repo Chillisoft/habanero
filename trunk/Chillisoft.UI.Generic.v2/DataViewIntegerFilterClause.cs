@@ -19,7 +19,7 @@ namespace Chillisoft.UI.Generic.v2
         internal DataViewIntegerFilterClause(string filterColumn, FilterClauseOperator clauseOperator, int filterValue)
             : base(filterColumn, clauseOperator, filterValue)
         {
-            if (itsClauseOperator == FilterClauseOperator.OpLike)
+            if (_clauseOperator == FilterClauseOperator.OpLike)
             {
                 throw new HabaneroArgumentException("clauseOperator",
                                                    "Operator Like is not supported for non string operands");
@@ -32,7 +32,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns a string</returns>
         protected override string CreateValueClause()
         {
-            return itsFilterValue.ToString();
+            return _filterValue.ToString();
         }
     }
 }

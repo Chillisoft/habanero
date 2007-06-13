@@ -8,7 +8,7 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public class CheckBoxMapper : ControlMapper
     {
-        private CheckBox itsCheckBox;
+        private CheckBox _checkBox;
 
         /// <summary>
         /// Constructor to create a new CheckBox mapper object
@@ -18,8 +18,8 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="isReadOnceOnly">Whether this object can be read once only</param>
         public CheckBoxMapper(CheckBox cb, string propName, bool isReadOnceOnly) : base(cb, propName, isReadOnceOnly)
         {
-            itsCheckBox = cb;
-            itsCheckBox.CheckedChanged += new EventHandler(ValueChangedHandler);
+            _checkBox = cb;
+            _checkBox.CheckedChanged += new EventHandler(ValueChangedHandler);
         }
 
         /// <summary>
@@ -31,11 +31,11 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (itsIsReadOnceOnly)
+            if (_isReadOnceOnly)
             {
                 return;
             }
-            bool newValue = itsCheckBox.Checked;
+            bool newValue = _checkBox.Checked;
             bool valueChanged = false;
             if (GetPropertyValue() == null)
             {
@@ -52,7 +52,7 @@ namespace Chillisoft.UI.BOControls.v2
             if (valueChanged)
             {
                 //log.Debug("setting property value to " + newValue + " of type bool");
-                itsBusinessObject.SetPropertyValue(itsPropertyName, newValue);
+                _businessObject.SetPropertyValue(_propertyName, newValue);
             }
         }
 
@@ -72,9 +72,9 @@ namespace Chillisoft.UI.BOControls.v2
             {
                 newValue = false;
             }
-            if (newValue != itsCheckBox.Checked)
+            if (newValue != _checkBox.Checked)
             {
-                itsCheckBox.Checked = newValue;
+                _checkBox.Checked = newValue;
             }
         }
     }

@@ -9,7 +9,7 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public class TimePickerMapper : ControlMapper
     {
-        private TimePicker itsTimePicker;
+        private TimePicker _timePicker;
         //PropertyInfo itsValuePropertyInfo;
 
         /// <summary>
@@ -20,8 +20,8 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="isReadOnceOnly">Whether the object is read once only</param>
         public TimePickerMapper(Control dtp, string propName, bool isReadOnceOnly) : base(dtp, propName, isReadOnceOnly)
         {
-            itsTimePicker = (TimePicker) dtp;
-            itsTimePicker.ValueChanged += new EventHandler(ValueChangedHandler);
+            _timePicker = (TimePicker) dtp;
+            _timePicker.ValueChanged += new EventHandler(ValueChangedHandler);
         }
 
         /// <summary>
@@ -32,11 +32,11 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (itsBusinessObject != null && !itsIsReadOnceOnly)
+            if (_businessObject != null && !_isReadOnceOnly)
             {
                 //DateTime newValue = _dateTimePicker.Value;
-                object newValue = itsTimePicker.Value;
-                object oldValue = itsBusinessObject.GetPropertyValue(itsPropertyName);
+                object newValue = _timePicker.Value;
+                object oldValue = _businessObject.GetPropertyValue(_propertyName);
                 if (oldValue != null || newValue != null)
                 {
                     if (oldValue == null || !oldValue.Equals(newValue))
@@ -44,7 +44,7 @@ namespace Chillisoft.UI.BOControls.v2
                         TimeSpan newTime = (TimeSpan) newValue;
                         if (oldValue == null)
                         {
-                            itsBusinessObject.SetPropertyValue(itsPropertyName,
+                            _businessObject.SetPropertyValue(_propertyName,
                                                                new DateTime(1, 1, 1, newTime.Hours, newTime.Minutes,
                                                                             newTime.Seconds));
                         }
@@ -54,7 +54,7 @@ namespace Chillisoft.UI.BOControls.v2
                             DateTime newDateTime =
                                 new DateTime(oldDateTime.Year, oldDateTime.Month, oldDateTime.Day, newTime.Hours,
                                              newTime.Minutes, newTime.Seconds);
-                            itsBusinessObject.SetPropertyValue(itsPropertyName, newDateTime);
+                            _businessObject.SetPropertyValue(_propertyName, newDateTime);
                         }
                     }
                 }
@@ -64,7 +64,7 @@ namespace Chillisoft.UI.BOControls.v2
 //
 //		private object GetValueOfDateTimePicker() 
 //		{
-//			return DateTimePickerUtil.GetValue(itsTimePicker); 
+//			return DateTimePickerUtil.GetValue(_timePicker); 
 //		}
 
 //		private void SetValueOfDateTimePicker(object value)
@@ -74,7 +74,7 @@ namespace Chillisoft.UI.BOControls.v2
 //			 object dtpValue = GetValueOfDateTimePicker();
 //			 if (dtpValue != null && dtpValue.Equals(value)) return;
 //			 if (dtpValue == null && value == null) return;
-//			 DateTimePickerUtil.SetValue(itsTimePicker, value); 
+//			 DateTimePickerUtil.SetValue(_timePicker, value); 
 //			
 //		 }
 //		 catch(TargetInvocationException  ex) 
@@ -94,25 +94,25 @@ namespace Chillisoft.UI.BOControls.v2
             object propValue = GetPropertyValue();
             if (propValue == null)
             {
-                itsTimePicker.Text = "";
+                _timePicker.Text = "";
             }
             else
             {
                 if (propValue is DateTime)
                 {
-                    itsTimePicker.Value = ((DateTime) propValue).TimeOfDay;
+                    _timePicker.Value = ((DateTime) propValue).TimeOfDay;
                 }
                 else if (propValue is TimeSpan)
                 {
-                    itsTimePicker.Value = (TimeSpan) propValue;
+                    _timePicker.Value = (TimeSpan) propValue;
                 }
             }
-            //			if (itsBusinessObject.GetPropertyValue(itsPropertyName) == null) {
+            //			if (_businessObject.GetPropertyValue(_propertyName) == null) {
             //				itsDateTimePicker.Text = "";
             //			}
             //			else {
-            //				//itsDateTimePicker.Value = (DateTime)itsBusinessObject.GetPropertyValue(itsPropertyName);
-            //				SetValueOfDateTimePicker(itsBusinessObject.GetPropertyValue(itsPropertyName));
+            //				//itsDateTimePicker.Value = (DateTime)_businessObject.GetPropertyValue(_propertyName);
+            //				SetValueOfDateTimePicker(_businessObject.GetPropertyValue(_propertyName));
             //			}
         }
     }

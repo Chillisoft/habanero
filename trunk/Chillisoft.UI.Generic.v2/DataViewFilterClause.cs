@@ -8,9 +8,9 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public abstract class DataViewFilterClause : FilterClause
     {
-        protected readonly object itsFilterValue;
-        protected readonly FilterClauseOperator itsClauseOperator;
-        protected readonly string itsFilterColumn;
+        protected readonly object _filterValue;
+        protected readonly FilterClauseOperator _clauseOperator;
+        protected readonly string _filterColumn;
 
         /// <summary>
         /// Constructor to create a new filter clause
@@ -21,9 +21,9 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="filterValue">The filter value to compare to</param>
         protected DataViewFilterClause(string filterColumn, FilterClauseOperator clauseOperator, object filterValue)
         {
-            itsFilterColumn = filterColumn;
-            itsClauseOperator = clauseOperator;
-            itsFilterValue = filterValue;
+            _filterColumn = filterColumn;
+            _clauseOperator = clauseOperator;
+            _filterValue = filterValue;
         }
 
         /// <summary>
@@ -48,13 +48,13 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns a string</returns>
         private string CreateColumnClause()
         {
-            if (itsFilterColumn.IndexOf(' ') == -1 && itsFilterColumn.IndexOf('-') == -1)
+            if (_filterColumn.IndexOf(' ') == -1 && _filterColumn.IndexOf('-') == -1)
             {
-                return itsFilterColumn;
+                return _filterColumn;
             }
             else
             {
-                return "[" + itsFilterColumn + "]";
+                return "[" + _filterColumn + "]";
             }
         }
 
@@ -66,7 +66,7 @@ namespace Chillisoft.UI.Generic.v2
         private string CreateOperatorClause()
         {
             string opClause;
-            switch (itsClauseOperator)
+            switch (_clauseOperator)
             {
                 case FilterClauseOperator.OpEquals:
                     opClause = " = ";

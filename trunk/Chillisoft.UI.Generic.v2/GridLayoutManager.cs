@@ -11,14 +11,14 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class GridLayoutManager : LayoutManager
     {
-        private ControlCollection controls;
-        private Hashtable itsControlInfoTable;
-        private Point currentPos;
-        private int[] colWidths;
-        private int[] rowHeights;
-        private bool[] fixedColsBasedOnContents;
-        private bool fixAllRowsBasedOnContents;
-        private bool[] fixedRowsBasedOnContents;
+        private ControlCollection _controls;
+        private Hashtable _controlInfoTable;
+        private Point _currentPos;
+        private int[] _colWidths;
+        private int[] _rowHeights;
+        private bool[] _fixedColsBasedOnContents;
+        private bool _fixAllRowsBasedOnContents;
+        private bool[] _fixedRowsBasedOnContents;
 
         /// <summary>
         /// Constructor to initialise a new grid layout
@@ -26,8 +26,8 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="managedControl">The control to manage</param>
         public GridLayoutManager(Control managedControl) : base(managedControl)
         {
-            controls = new ControlCollection();
-            itsControlInfoTable = new Hashtable();
+            _controls = new ControlCollection();
+            _controlInfoTable = new Hashtable();
             this.SetGridSize(2, 2);
         }
 
@@ -38,19 +38,19 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="cols">The number of columns</param>
         public void SetGridSize(int rows, int cols)
         {
-            colWidths = new int[cols];
-            fixedColsBasedOnContents = new bool[cols];
-            for (int i = 0; i < colWidths.Length; i++)
+            _colWidths = new int[cols];
+            _fixedColsBasedOnContents = new bool[cols];
+            for (int i = 0; i < _colWidths.Length; i++)
             {
-                colWidths[i] = -1;
-                fixedColsBasedOnContents[i] = false;
+                _colWidths[i] = -1;
+                _fixedColsBasedOnContents[i] = false;
             }
-            rowHeights = new int[rows];
-            fixedRowsBasedOnContents = new bool[rows];
-            for (int i = 0; i < rowHeights.Length; i++)
+            _rowHeights = new int[rows];
+            _fixedRowsBasedOnContents = new bool[rows];
+            for (int i = 0; i < _rowHeights.Length; i++)
             {
-                rowHeights[i] = -1;
-                fixedRowsBasedOnContents[i] = false;
+                _rowHeights[i] = -1;
+                _fixedRowsBasedOnContents[i] = false;
             }
         }
 
@@ -59,7 +59,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         private int RowCount
         {
-            get { return rowHeights.Length; }
+            get { return _rowHeights.Length; }
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Chillisoft.UI.Generic.v2
         /// TODO ERIC - rename this to ColumnCount
         private int ColCount
         {
-            get { return colWidths.Length; }
+            get { return _colWidths.Length; }
         }
 
         /// <summary>
@@ -84,9 +84,9 @@ namespace Chillisoft.UI.Generic.v2
                     ControlCollection row = new ControlCollection();
                     for (int j = 0; j < ColCount; j++)
                     {
-                        if ((i*ColCount + j) < this.controls.Count)
+                        if ((i*ColCount + j) < this._controls.Count)
                         {
-                            row.Add(this.controls[i*ColCount + j]);
+                            row.Add(this._controls[i*ColCount + j]);
                         }
                         else
                         {
@@ -112,9 +112,9 @@ namespace Chillisoft.UI.Generic.v2
                     ControlCollection col = new ControlCollection();
                     for (int j = 0; j < RowCount; j++)
                     {
-                        if ((ColCount*j + i) < this.controls.Count)
+                        if ((ColCount*j + i) < this._controls.Count)
                         {
-                            col.Add(this.controls[ColCount*j + i]);
+                            col.Add(this._controls[ColCount*j + i]);
                         }
                         else
                         {
@@ -151,32 +151,32 @@ namespace Chillisoft.UI.Generic.v2
                 control = new Control();
                 control.Visible = false;
             }
-            int currentColNum = (this.controls.Count)%ColCount;
-            int currentRowNum = (this.controls.Count)/ColCount;
-            if (fixedColsBasedOnContents[currentColNum])
+            int currentColNum = (this._controls.Count)%ColCount;
+            int currentRowNum = (this._controls.Count)/ColCount;
+            if (_fixedColsBasedOnContents[currentColNum])
             {
-                if (control.Width > colWidths[currentColNum])
+                if (control.Width > _colWidths[currentColNum])
                 {
                     FixColumn(currentColNum, control.Width);
                 }
             }
-            if (fixAllRowsBasedOnContents)
+            if (_fixAllRowsBasedOnContents)
             {
-                if (control.Height > rowHeights[currentRowNum])
+                if (control.Height > _rowHeights[currentRowNum])
                 {
                     FixRow(currentRowNum, control.Height);
                 }
             }
-            else if (fixedRowsBasedOnContents[currentRowNum])
+            else if (_fixedRowsBasedOnContents[currentRowNum])
             {
-                if (control.Height > rowHeights[currentRowNum])
+                if (control.Height > _rowHeights[currentRowNum])
                 {
                     FixRow(currentRowNum, control.Height);
                 }
             }
-            this.controls.Add(control);
+            this._controls.Add(control);
             this.ManagedControl.Controls.Add(control);
-            this.itsControlInfoTable.Add(control, new ControlInfo(control, colSpan, rowSpan));
+            this._controlInfoTable.Add(control, new ControlInfo(control, colSpan, rowSpan));
             RefreshControlPositions();
             return control;
         }
@@ -186,26 +186,26 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         protected override void RefreshControlPositions()
         {
-            currentPos = new Point(BorderSize, BorderSize);
-            for (int i = 0; i < controls.Count; i++)
+            _currentPos = new Point(BorderSize, BorderSize);
+            for (int i = 0; i < _controls.Count; i++)
             {
                 int currentRow = i/ColCount;
                 int currentCol = i%ColCount;
-                Control ctl = this.controls[i];
+                Control ctl = this._controls[i];
                 if ((i > 0) && (currentCol == 0))
                 {
-                    currentPos.X = BorderSize;
-                    currentPos.Y += this.controls[i - 1].Height + GapSize;
+                    _currentPos.X = BorderSize;
+                    _currentPos.Y += this._controls[i - 1].Height + GapSize;
                 }
-                ctl.Left = currentPos.X;
-                ctl.Top = currentPos.Y;
+                ctl.Left = _currentPos.X;
+                ctl.Top = _currentPos.Y;
                 int width = 0;
-                ControlInfo ctlInfo = (ControlInfo) itsControlInfoTable[ctl];
+                ControlInfo ctlInfo = (ControlInfo) _controlInfoTable[ctl];
                 for (int cols = currentCol; cols < Math.Min(this.ColCount, currentCol + ctlInfo.ColSpan); cols++)
                 {
                     if (IsFixedColumn(cols))
                     {
-                        width += colWidths[cols];
+                        width += _colWidths[cols];
                     }
                     else
                     {
@@ -220,7 +220,7 @@ namespace Chillisoft.UI.Generic.v2
                 {
                     if (IsFixedRow(currentRow))
                     {
-                        height += rowHeights[currentRow];
+                        height += _rowHeights[currentRow];
                     }
                     else
                     {
@@ -229,7 +229,7 @@ namespace Chillisoft.UI.Generic.v2
                 }
                 height += (this.GapSize*(ctlInfo.RowSpan - 1));
                 ctl.Height = height;
-                currentPos.X += ctl.Width + GapSize;
+                _currentPos.X += ctl.Width + GapSize;
             }
         }
 
@@ -258,7 +258,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns true if fixed, false if not</returns>
         private bool IsFixedRow(int rowNum)
         {
-            return rowHeights[rowNum] > -1;
+            return _rowHeights[rowNum] > -1;
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns true if fixed, false if not</returns>
         private bool IsFixedColumn(int colNum)
         {
-            return colWidths[colNum%ColCount] > -1;
+            return _colWidths[colNum%ColCount] > -1;
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="colWidth">The width to fix the column at</param>
         public void FixColumn(int colNum, int colWidth)
         {
-            colWidths[colNum] = colWidth;
+            _colWidths[colNum] = colWidth;
             RefreshControlPositions();
         }
 
@@ -289,7 +289,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="rowHeight">The height to fix the row at</param>
         public void FixRow(int rowNum, int rowHeight)
         {
-            rowHeights[rowNum] = rowHeight;
+            _rowHeights[rowNum] = rowHeight;
             RefreshControlPositions();
         }
 
@@ -299,7 +299,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the total width</returns>
         private int GetFixedWidth()
         {
-            return GetFixedAmount(colWidths);
+            return GetFixedAmount(_colWidths);
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace Chillisoft.UI.Generic.v2
         /// TODO ERIC - not used
         private int GetFixedHeight()
         {
-            return GetFixedAmount(rowHeights);
+            return GetFixedAmount(_rowHeights);
         }
 
         /// <summary>
@@ -329,7 +329,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the total height</returns>
         public int GetFixedHeightIncludingGaps()
         {
-            return GetFixedAmount(rowHeights) + (2*BorderSize) + ((RowCount - 1)*GapSize);
+            return GetFixedAmount(_rowHeights) + (2*BorderSize) + ((RowCount - 1)*GapSize);
         }
 
         /// <summary>
@@ -359,7 +359,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the count</returns>
         private int GetNumVariableColumns()
         {
-            return GetNumVariableEntries(colWidths);
+            return GetNumVariableEntries(_colWidths);
         }
 
         /// <summary>
@@ -369,7 +369,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the count</returns>
         private int GetNumVariableRows()
         {
-            return GetNumVariableEntries(rowHeights);
+            return GetNumVariableEntries(_rowHeights);
         }
 
         /// <summary>
@@ -399,7 +399,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="colNum">The column in question</param>
         public void FixColumnBasedOnContents(int colNum)
         {
-            fixedColsBasedOnContents[colNum] = true;
+            _fixedColsBasedOnContents[colNum] = true;
         }
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace Chillisoft.UI.Generic.v2
         /// TODO ERIC - a column equivalent?
         public void FixAllRowsBasedOnContents()
         {
-            fixAllRowsBasedOnContents = true;
+            _fixAllRowsBasedOnContents = true;
         }
 
         /// <summary>
@@ -418,7 +418,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="rowNum">The row in question</param>
         public void FixRowBasedOnContents(int rowNum)
         {
-            fixedRowsBasedOnContents[rowNum] = true;
+            _fixedRowsBasedOnContents[rowNum] = true;
         }
 
         /// <summary>
@@ -430,7 +430,7 @@ namespace Chillisoft.UI.Generic.v2
         /// TODO ERIC - add a row equivalent
         public int GetFixedColumnWidth(int colNum)
         {
-            return this.colWidths[colNum];
+            return this._colWidths[colNum];
         }
 
         /// <summary>
@@ -438,9 +438,9 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public class ControlInfo
         {
-            private Control itsControl;
-            private int itsColSpan;
-            private readonly int itsRowSpan;
+            private Control _control;
+            private int _colSpan;
+            private readonly int _rowSpan;
 
             /// <summary>
             /// Constructor to initialise a new instance.  Sets the spans 
@@ -457,9 +457,9 @@ namespace Chillisoft.UI.Generic.v2
             /// </summary>
             public ControlInfo(Control control, int colSpan, int rowSpan)
             {
-                itsControl = control;
-                itsColSpan = colSpan;
-                itsRowSpan = rowSpan;
+                _control = control;
+                _colSpan = colSpan;
+                _rowSpan = rowSpan;
             }
 
             /// <summary>
@@ -467,7 +467,7 @@ namespace Chillisoft.UI.Generic.v2
             /// </summary>
             public Control Control
             {
-                get { return itsControl; }
+                get { return _control; }
             }
 
             /// <summary>
@@ -475,7 +475,7 @@ namespace Chillisoft.UI.Generic.v2
             /// </summary>
             public int RowSpan
             {
-                get { return itsRowSpan; }
+                get { return _rowSpan; }
             }
 
             /// <summary>
@@ -486,7 +486,7 @@ namespace Chillisoft.UI.Generic.v2
             /// some places)
             public int ColSpan
             {
-                get { return itsColSpan; }
+                get { return _colSpan; }
             }
         }
     }

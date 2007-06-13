@@ -12,10 +12,10 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public class ListViewCollectionMapper
     {
-        private string itsUIDefName;
-        private ListView itsListView;
-        private BusinessObjectBaseCollection itsCollection;
-        private Hashtable itsListItemsHash;
+        private string _uiDefName;
+        private ListView _listView;
+        private BusinessObjectBaseCollection _collection;
+        private Hashtable _listItemsHash;
 
         /// <summary>
         /// Constructor to initialise a new mapper.  Sets the UIDefName to
@@ -31,9 +31,9 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public ListViewCollectionMapper(ListView listView, string uiDefName)
         {
-            itsListView = listView;
-            itsUIDefName = uiDefName;
-            itsListItemsHash = new Hashtable();
+            _listView = listView;
+            _uiDefName = uiDefName;
+            _listItemsHash = new Hashtable();
         }
 
         /// <summary>
@@ -43,9 +43,9 @@ namespace Chillisoft.UI.BOControls.v2
         public BusinessObjectBase SelectedBusinessObject
         {
             get {
-                if (itsListView.SelectedItems.Count == 1)
+                if (_listView.SelectedItems.Count == 1)
                 {
-                    return (BusinessObjectBase)itsListView.SelectedItems[0].Tag;
+                    return (BusinessObjectBase)_listView.SelectedItems[0].Tag;
                 } else return null;
             }
         }
@@ -57,16 +57,16 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="collection">The collection of business objects</param>
         public void SetCollection(BusinessObjectBaseCollection collection) {
 
-            if (itsCollection != null)
+            if (_collection != null)
             {
-                itsCollection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedHandler);
-                itsCollection.BusinessObjectRemoved -= new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
+                _collection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedHandler);
+                _collection.BusinessObjectRemoved -= new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
             }
-            itsCollection = collection;
-            SetListViewCollection(itsListView, itsCollection);
+            _collection = collection;
+            SetListViewCollection(_listView, _collection);
             //SetupRightClickBehaviour();
-            itsCollection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedHandler);
-            itsCollection.BusinessObjectRemoved += new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
+            _collection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedHandler);
+            _collection.BusinessObjectRemoved += new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectRemovedHandler(object sender, BusinessObjectEventArgs e)
         {
-            itsListView.Items.Remove((ListViewItem) itsListItemsHash[e.BusinessObject]);
+            _listView.Items.Remove((ListViewItem) _listItemsHash[e.BusinessObject]);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectAddedHandler(object sender, BusinessObjectEventArgs e)
         {
-            itsListView.Items.Add(CreateListViewItem(e.BusinessObject));
+            _listView.Items.Add(CreateListViewItem(e.BusinessObject));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Chillisoft.UI.BOControls.v2
         private ListViewItem CreateListViewItem(BusinessObjectBase bo) {
             ListViewItem boItem = new ListViewItem(bo.ToString());
             boItem.Tag = bo;
-            itsListItemsHash.Add(bo, boItem);
+            _listItemsHash.Add(bo, boItem);
             return boItem;
         }
 
@@ -112,7 +112,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="collection">The business object collection</param>
         private void SetListViewCollection(ListView listView, BusinessObjectBaseCollection collection) {
             listView.Clear();
-            itsListItemsHash.Clear();
+            _listItemsHash.Clear();
             listView.MultiSelect = true;
             foreach (BusinessObjectBase bo in collection) {
                 listView.Items.Add(CreateListViewItem(bo));

@@ -9,9 +9,9 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class DataViewCompositeFilterClause : FilterClause
     {
-        private readonly FilterClause itsRightClause;
-        private readonly FilterClauseCompositeOperator itsCompositeOperator;
-        private readonly FilterClause itsLeftClause;
+        private readonly FilterClause _rightClause;
+        private readonly FilterClauseCompositeOperator _compositeOperator;
+        private readonly FilterClause _leftClause;
 
         /// <summary>
         /// Constructor to initialise a new composite filter clause
@@ -23,9 +23,9 @@ namespace Chillisoft.UI.Generic.v2
         public DataViewCompositeFilterClause(FilterClause leftClause, FilterClauseCompositeOperator compositeOperator,
                                              FilterClause rightClause)
         {
-            itsLeftClause = leftClause;
-            itsCompositeOperator = compositeOperator;
-            itsRightClause = rightClause;
+            _leftClause = leftClause;
+            _compositeOperator = compositeOperator;
+            _rightClause = rightClause;
         }
 
         /// <summary>
@@ -34,17 +34,17 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>The completed string</returns>
         public string GetFilterClauseString()
         {
-            if (itsLeftClause.GetFilterClauseString().Length > 0 && itsRightClause.GetFilterClauseString().Length > 0)
+            if (_leftClause.GetFilterClauseString().Length > 0 && _rightClause.GetFilterClauseString().Length > 0)
             {
                 return GetLeftClause() + GetOperatorClause() + GetRightClause();
             }
-            else if (itsLeftClause.GetFilterClauseString().Length > 0)
+            else if (_leftClause.GetFilterClauseString().Length > 0)
             {
-                return itsLeftClause.GetFilterClauseString();
+                return _leftClause.GetFilterClauseString();
             }
-            else if (itsRightClause.GetFilterClauseString().Length > 0)
+            else if (_rightClause.GetFilterClauseString().Length > 0)
             {
-                return itsRightClause.GetFilterClauseString();
+                return _rightClause.GetFilterClauseString();
             }
             else
             {
@@ -58,7 +58,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the clause as a string</returns>
         private string GetRightClause()
         {
-            return "(" + itsRightClause.GetFilterClauseString() + ")";
+            return "(" + _rightClause.GetFilterClauseString() + ")";
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the operator</returns>
         private string GetOperatorClause()
         {
-            switch (this.itsCompositeOperator)
+            switch (this._compositeOperator)
             {
                 case FilterClauseCompositeOperator.OpAnd:
                     return " and ";
@@ -84,7 +84,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the clause as a string</returns>
         private string GetLeftClause()
         {
-            return "(" + itsLeftClause.GetFilterClauseString() + ")";
+            return "(" + _leftClause.GetFilterClauseString() + ")";
         }
     }
 }

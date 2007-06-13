@@ -8,7 +8,7 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public abstract class NumericUpDownMapper : ControlMapper
     {
-        protected NumericUpDown itsNumericUpDown;
+        protected NumericUpDown _numericUpDown;
 
         /// <summary>
         /// Constructor to initialise the mapper
@@ -19,7 +19,7 @@ namespace Chillisoft.UI.BOControls.v2
         public NumericUpDownMapper(NumericUpDown control, string propName, bool isReadOnceOnly)
             : base(control, propName, isReadOnceOnly)
         {
-            itsNumericUpDown = control;
+            _numericUpDown = control;
         }
 
         /// <summary>
@@ -31,11 +31,11 @@ namespace Chillisoft.UI.BOControls.v2
             object propValue = GetPropertyValue();
             if (propValue == null)
             {
-                itsNumericUpDown.Value = new Decimal(0);
+                _numericUpDown.Value = new Decimal(0);
             }
-            else if (!propValue.Equals(itsNumericUpDown.Value))
+            else if (!propValue.Equals(_numericUpDown.Value))
             {
-                itsNumericUpDown.Value = Convert.ToDecimal(propValue);
+                _numericUpDown.Value = Convert.ToDecimal(propValue);
             }
         }
     }

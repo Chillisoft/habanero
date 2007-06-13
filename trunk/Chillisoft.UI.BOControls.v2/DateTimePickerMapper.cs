@@ -11,8 +11,8 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public class DateTimePickerMapper : ControlMapper
     {
-        private Control itsDateTimePicker;
-        //PropertyInfo itsValuePropertyInfo;
+        private Control _dateTimePicker;
+        //PropertyInfo _valuePropertyInfo;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class and assign
@@ -24,11 +24,11 @@ namespace Chillisoft.UI.BOControls.v2
         public DateTimePickerMapper(Control dtp, string propName, bool isReadOnceOnly)
             : base(dtp, propName, isReadOnceOnly)
         {
-            itsDateTimePicker = dtp;
+            _dateTimePicker = dtp;
             EventInfo valueChangedEventInfo = dtp.GetType().GetEvent("ValueChanged");
-            valueChangedEventInfo.AddEventHandler(itsDateTimePicker, new EventHandler(ValueChangedHandler));
-            //itsValuePropertyInfo = _dateTimePicker.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);			
-            //itsDateTimePicker.ValueChanged += new EventHandler(ValueChangedHandler);
+            valueChangedEventInfo.AddEventHandler(_dateTimePicker, new EventHandler(ValueChangedHandler));
+            //_valuePropertyInfo = _dateTimePicker.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);			
+            //_dateTimePicker.ValueChanged += new EventHandler(ValueChangedHandler);
         }
 
         /// <summary>
@@ -39,16 +39,16 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (itsBusinessObject != null && !itsIsReadOnceOnly)
+            if (_businessObject != null && !_isReadOnceOnly)
             {
-                //DateTime newValue = itsDateTimePicker.Value;
+                //DateTime newValue = _dateTimePicker.Value;
                 object newValue = GetValueOfDateTimePicker();
-                object oldValue = itsBusinessObject.GetPropertyValue(itsPropertyName);
+                object oldValue = _businessObject.GetPropertyValue(_propertyName);
                 if (oldValue != null || newValue != null)
                 {
                     if (oldValue == null || !oldValue.Equals(newValue))
                     {
-                        itsBusinessObject.SetPropertyValue(itsPropertyName, newValue);
+                        _businessObject.SetPropertyValue(_propertyName, newValue);
                     }
                 }
             }
@@ -60,7 +60,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <returns>Returns the value held</returns>
         private object GetValueOfDateTimePicker()
         {
-            return DateTimePickerUtil.GetValue(itsDateTimePicker);
+            return DateTimePickerUtil.GetValue(_dateTimePicker);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Chillisoft.UI.BOControls.v2
                 object dtpValue = GetValueOfDateTimePicker();
                 if (dtpValue != null && dtpValue.Equals(value)) return;
                 if (dtpValue == null && value == null) return;
-                DateTimePickerUtil.SetValue(itsDateTimePicker, value);
+                DateTimePickerUtil.SetValue(_dateTimePicker, value);
             }
             catch (TargetInvocationException  ex)
             {
@@ -91,18 +91,18 @@ namespace Chillisoft.UI.BOControls.v2
             object propValue = GetPropertyValue();
             if (propValue == null)
             {
-                itsDateTimePicker.Text = "";
+                _dateTimePicker.Text = "";
             }
             else
             {
                 SetValueOfDateTimePicker(Convert.ToDateTime(propValue));
             }
-//			if (itsBusinessObject.GetPropertyValue(itsPropertyName) == null) {
-//				itsDateTimePicker.Text = "";
+//			if (_businessObject.GetPropertyValue(_propertyName) == null) {
+//				_dateTimePicker.Text = "";
 //			}
 //			else {
-//				//itsDateTimePicker.Value = (DateTime)itsBusinessObject.GetPropertyValue(itsPropertyName);
-//				SetValueOfDateTimePicker(itsBusinessObject.GetPropertyValue(itsPropertyName));
+//				//_dateTimePicker.Value = (DateTime)_businessObject.GetPropertyValue(_propertyName);
+//				SetValueOfDateTimePicker(_businessObject.GetPropertyValue(_propertyName));
 //			}
         }
     }

@@ -21,11 +21,11 @@ namespace Chillisoft.UI.BOControls.v2
         public NumericUpDownIntegerMapper(NumericUpDown control, string propName, bool isReadOnceOnly)
             : base(control, propName, isReadOnceOnly)
         {
-            itsNumericUpDown.DecimalPlaces = 0;
-            itsNumericUpDown.Maximum = Int32.MaxValue;
-            itsNumericUpDown.Minimum = Int32.MinValue;
-            itsNumericUpDown.ValueChanged += new EventHandler(ValueChangedHandler);
-            itsNumericUpDown.Leave += new EventHandler(ValueChangedHandler);
+            _numericUpDown.DecimalPlaces = 0;
+            _numericUpDown.Maximum = Int32.MaxValue;
+            _numericUpDown.Minimum = Int32.MinValue;
+            _numericUpDown.ValueChanged += new EventHandler(ValueChangedHandler);
+            _numericUpDown.Leave += new EventHandler(ValueChangedHandler);
         }
 
         /// <summary>
@@ -36,14 +36,14 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (itsBusinessObject != null && !itsIsReadOnceOnly)
+            if (_businessObject != null && !_isReadOnceOnly)
             {
-                int newValue = Convert.ToInt32(itsNumericUpDown.Value);
-                int oldValue = Convert.ToInt32(itsBusinessObject.GetPropertyValue(itsPropertyName));
+                int newValue = Convert.ToInt32(_numericUpDown.Value);
+                int oldValue = Convert.ToInt32(_businessObject.GetPropertyValue(_propertyName));
                 if (newValue != oldValue)
                 {
                     //log.Debug("setting property value to " + _numericUpDown.Value + " of type " + itsNumericUpDown.Value.GetType().Name);
-                    itsBusinessObject.SetPropertyValue(itsPropertyName, newValue);
+                    _businessObject.SetPropertyValue(_propertyName, newValue);
                 }
             }
         }

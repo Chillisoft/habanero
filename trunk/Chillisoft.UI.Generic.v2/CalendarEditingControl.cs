@@ -13,9 +13,9 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     class CalendarEditingControl : DateTimePicker, IDataGridViewEditingControl
     {
-        DataGridView dataGridView;
-        private bool valueChanged = false;
-        int rowIndex;
+        DataGridView _dataGridView;
+        private bool _valueChanged = false;
+        int _rowIndex;
 
         /// <summary>
         /// Constructor to initialise a new editing control with the short
@@ -74,11 +74,11 @@ namespace Chillisoft.UI.Generic.v2
         {
             get
             {
-                return rowIndex;
+                return _rowIndex;
             }
             set
             {
-                rowIndex = value;
+                _rowIndex = value;
             }
         }
 
@@ -139,11 +139,11 @@ namespace Chillisoft.UI.Generic.v2
         {
             get
             {
-                return dataGridView;
+                return _dataGridView;
             }
             set
             {
-                dataGridView = value;
+                _dataGridView = value;
             }
         }
 
@@ -155,11 +155,11 @@ namespace Chillisoft.UI.Generic.v2
         {
             get
             {
-                return valueChanged;
+                return _valueChanged;
             }
             set
             {
-                valueChanged = value;
+                _valueChanged = value;
             }
         }
 
@@ -182,7 +182,7 @@ namespace Chillisoft.UI.Generic.v2
         {
             // Notify the DataGridView that the contents of the cell
             // have changed.
-            valueChanged = true;
+            _valueChanged = true;
             this.EditingControlDataGridView.NotifyCurrentCellDirty(true);
             base.OnValueChanged(eventargs);
         }

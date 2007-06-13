@@ -13,9 +13,9 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public abstract class ComboBoxMapper : ControlMapper
     {
-        protected ClassDef itsLookupTypeClassDef;
-        protected ComboBox itsComboBox;
-        protected StringGuidPairCollection itsCollection;
+        protected ClassDef _lookupTypeClassDef;
+        protected ComboBox _comboBox;
+        protected StringGuidPairCollection _collection;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -27,7 +27,7 @@ namespace Chillisoft.UI.BOControls.v2
         public ComboBoxMapper(ComboBox comboBox, string propName, bool isReadOnceOnly)
             : base(comboBox, propName, isReadOnceOnly)
         {
-            itsComboBox = comboBox;
+            _comboBox = comboBox;
         }
 
         /// <summary>
@@ -38,13 +38,13 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         protected void SetupRightClickBehaviour()
         {
-            BOMapper mapper = new BOMapper(itsBusinessObject);
-            itsLookupTypeClassDef = mapper.GetLookupListClassDef(itsPropertyName);
-            if (itsLookupTypeClassDef != null)
+            BOMapper mapper = new BOMapper(_businessObject);
+            _lookupTypeClassDef = mapper.GetLookupListClassDef(_propertyName);
+            if (_lookupTypeClassDef != null)
             {
                 ToolTip toolTip = new ToolTip();
-                toolTip.SetToolTip(itsComboBox, "Right click to add a new entry.");
-                itsComboBox.MouseUp += new MouseEventHandler(ComboBoxMouseUpHandler);
+                toolTip.SetToolTip(_comboBox, "Right click to add a new entry.");
+                _comboBox.MouseUp += new MouseEventHandler(ComboBoxMouseUpHandler);
             }
         }
 
@@ -61,25 +61,25 @@ namespace Chillisoft.UI.BOControls.v2
             {
                 return;
             }
-            BusinessObjectBase lookupBo = itsLookupTypeClassDef.CreateNewBusinessObject();
+            BusinessObjectBase lookupBo = _lookupTypeClassDef.CreateNewBusinessObject();
             BoPanelControl boCtl = new BoPanelControl(lookupBo, "");
             boCtl.Height = 180;
             boCtl.Width = 240;
             OKCancelDialog dialog =
-                new OKCancelDialog(boCtl, "Add a new entry", itsComboBox.PointToScreen(new Point(0, 0)));
+                new OKCancelDialog(boCtl, "Add a new entry", _comboBox.PointToScreen(new Point(0, 0)));
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     lookupBo.ApplyEdit();
                     SetupComboBoxItems();
-                    itsComboBox.SelectedItem = lookupBo;
+                    _comboBox.SelectedItem = lookupBo;
                 }
                 catch (BaseApplicationException ex)
                 {
                     GlobalRegistry.UIExceptionNotifier.Notify(ex,
                                                               "There was an problem adding a new " +
-                                                              itsLookupTypeClassDef.ClassName + " to the list: ",
+                                                              _lookupTypeClassDef.ClassName + " to the list: ",
                                                               "Error adding");
                 }
             }

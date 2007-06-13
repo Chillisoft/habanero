@@ -26,8 +26,8 @@ namespace Chillisoft.UI.Generic.v2
             South = 4
         }
 
-        private ControlCollection controls;
-        private bool[] splitters;
+        private ControlCollection _controls;
+        private bool[] _splitters;
 
         /// <summary>
         /// Constructor to initalise a new layout manager
@@ -35,12 +35,12 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="managedControl">The control to manage</param>
         public BorderLayoutManager(Control managedControl) : base(managedControl)
         {
-            controls = new ControlCollection();
-            splitters = new bool[5];
+            _controls = new ControlCollection();
+            _splitters = new bool[5];
             for (int i = 0; i < 5; i++)
             {
-                controls.Add(null);
-                splitters[i] = false;
+                _controls.Add(null);
+                _splitters[i] = false;
             }
         }
 
@@ -89,20 +89,20 @@ namespace Chillisoft.UI.Generic.v2
                     ctl.Dock = DockStyle.Left;
                     break;
             }
-            controls[(int) pos] = ctl;
-            splitters[(int) pos] = includeSplitter;
+            _controls[(int) pos] = ctl;
+            _splitters[(int) pos] = includeSplitter;
             this.ManagedControl.Controls.Clear();
             for (int i = 0; i < 5; i++)
             {
-                if (controls[i] != null)
+                if (_controls[i] != null)
                 {
-                    if (splitters[i])
+                    if (_splitters[i])
                     {
                         Splitter splt = ControlFactory.CreateSplitter();
-                        splt.Dock = controls[i].Dock;
+                        splt.Dock = _controls[i].Dock;
                         ManagedControl.Controls.Add(splt);
                     }
-                    ManagedControl.Controls.Add(controls[i]);
+                    ManagedControl.Controls.Add(_controls[i]);
                 }
             }
             return ctl;

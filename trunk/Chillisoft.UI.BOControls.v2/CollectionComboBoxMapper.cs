@@ -13,10 +13,10 @@ namespace Chillisoft.UI.BOControls.v2
     /// TODO ERIC - need to compare more with ComboBoxMaper
     public class CollectionComboBoxMapper
     {
-        private readonly ComboBox itsComboBox;
-        private BusinessObjectBaseCollection itsCollection;
-        private string itsUIDefName;
-        private MouseEventHandler itsMouseClickHandler;
+        private readonly ComboBox _comboBox;
+        private BusinessObjectBaseCollection _collection;
+        private string _uiDefName;
+        private MouseEventHandler _mouseClickHandler;
 
         /// <summary>
         /// Constructor to create a new collection ComboBox mapper object.
@@ -33,8 +33,8 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public CollectionComboBoxMapper(ComboBox comboBox, string uiDefName)
         {
-            itsComboBox = comboBox;
-            itsUIDefName = uiDefName;
+            _comboBox = comboBox;
+            _uiDefName = uiDefName;
         }
 
         /// <summary>
@@ -46,20 +46,20 @@ namespace Chillisoft.UI.BOControls.v2
         /// top of the list</param>
         public void SetCollection(BusinessObjectBaseCollection collection, bool includeBlank)
         {
-            if (itsCollection != null)
+            if (_collection != null)
             {
-                itsCollection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedHandler);
-                itsCollection.BusinessObjectRemoved -= new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
+                _collection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedHandler);
+                _collection.BusinessObjectRemoved -= new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
             }
-            itsCollection = collection;
-            SetComboBoxCollection(itsComboBox, itsCollection, includeBlank);
+            _collection = collection;
+            SetComboBoxCollection(_comboBox, _collection, includeBlank);
 //			_comboBox.Items.Clear();
 //			foreach (BusinessObjectBase businessObjectBase in _collection) {
-//				itsComboBox.Items.Add(businessObjectBase);
+//				_comboBox.Items.Add(businessObjectBase);
 //			}
 
-            itsCollection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedHandler);
-            itsCollection.BusinessObjectRemoved += new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
+            _collection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedHandler);
+            _collection.BusinessObjectRemoved += new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectRemovedHandler(object sender, BusinessObjectEventArgs e)
         {
-            itsComboBox.Items.Remove(e.BusinessObject);
+            _comboBox.Items.Remove(e.BusinessObject);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectAddedHandler(object sender, BusinessObjectEventArgs e)
         {
-            itsComboBox.Items.Add(e.BusinessObject);
+            _comboBox.Items.Add(e.BusinessObject);
         }
 
         /// <summary>
@@ -94,22 +94,22 @@ namespace Chillisoft.UI.BOControls.v2
         {
             get
             {
-                //if (itsComboBox.SelectedText == "")
+                //if (_comboBox.SelectedText == "")
                 //{
                 //    return null;
                 //}
                 //else
                 //{
-                if (itsComboBox.SelectedIndex == -1)
+                if (_comboBox.SelectedIndex == -1)
                 {
                     return null;
-                } else if (itsComboBox.SelectedItem is string && (itsComboBox.SelectedItem == null || (string)itsComboBox.SelectedItem == ""))
+                } else if (_comboBox.SelectedItem is string && (_comboBox.SelectedItem == null || (string)_comboBox.SelectedItem == ""))
                 {
                     return null;
                 }
                 else
                 {
-                    return (BusinessObjectBase)itsComboBox.SelectedItem;
+                    return (BusinessObjectBase)_comboBox.SelectedItem;
                 }
                 //}
             }
@@ -182,13 +182,13 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public void SetupRightClickBehaviour()
         {
-            BOMapper mapper = new BOMapper(itsCollection.SampleBo);
-            if (mapper.GetUserInterfaceMapper(itsUIDefName) != null)
+            BOMapper mapper = new BOMapper(_collection.SampleBo);
+            if (mapper.GetUserInterfaceMapper(_uiDefName) != null)
             {
                 ToolTip toolTip = new ToolTip();
-                toolTip.SetToolTip(itsComboBox, "Right click to add a new entry.");
-                itsMouseClickHandler = new MouseEventHandler(ComboBoxMouseUpHandler);
-                itsComboBox.MouseUp += itsMouseClickHandler; 
+                toolTip.SetToolTip(_comboBox, "Right click to add a new entry.");
+                _mouseClickHandler = new MouseEventHandler(ComboBoxMouseUpHandler);
+                _comboBox.MouseUp += _mouseClickHandler; 
             }
         }
 
@@ -205,12 +205,12 @@ namespace Chillisoft.UI.BOControls.v2
             {
                 return;
             }
-            BusinessObjectBase newBo = itsCollection.ClassDef.CreateNewBusinessObject();
-            DefaultBOEditorForm form = new DefaultBOEditorForm(newBo, itsUIDefName);
+            BusinessObjectBase newBo = _collection.ClassDef.CreateNewBusinessObject();
+            DefaultBOEditorForm form = new DefaultBOEditorForm(newBo, _uiDefName);
             if (form.ShowDialog() == DialogResult.OK)
             {
-                itsCollection.Add(newBo);
-                itsComboBox.SelectedItem = newBo;
+                _collection.Add(newBo);
+                _comboBox.SelectedItem = newBo;
             }
         }
     }

@@ -18,12 +18,12 @@ namespace Chillisoft.UI.BOControls.v2
     public class PanelFactory
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.BoControls.PanelFactory");
-        private BusinessObjectBase[] itsBOArray;
+        private BusinessObjectBase[] _boArray;
         //private IUserInterfaceMapper[] itsUIArray;
-        private UIFormDef itsUIFormDef;
-        private Control itsFirstControl;
+        private UIFormDef _uiFormDef;
+        private Control _firstControl;
 
-        private EventHandler itsEmailTextBoxDoubleClickedHandler;
+        private EventHandler _emailTextBoxDoubleClickedHandler;
 
         /// <summary>
         /// Constructor to initialise a new PanelFactory object
@@ -31,11 +31,11 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="bo">The business object to be represented</param>
         public PanelFactory(BusinessObjectBase bo)
         {
-            itsBOArray = new BusinessObjectBase[1];
-            itsBOArray[0] = bo;
+            _boArray = new BusinessObjectBase[1];
+            _boArray[0] = bo;
             BOMapper mapper = new BOMapper(bo);
-            itsUIFormDef = mapper.GetUserInterfaceMapper().GetUIFormProperties();
-            itsEmailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
+            _uiFormDef = mapper.GetUserInterfaceMapper().GetUIFormProperties();
+            _emailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public PanelFactory(BusinessObjectBase bo, UIFormDef uiFormDef) : this(bo)
         {
-            itsUIFormDef = uiFormDef;
+            _uiFormDef = uiFormDef;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Chillisoft.UI.BOControls.v2
         public PanelFactory(BusinessObjectBase bo, string uiDefName) : this(bo)
         {
             BOMapper mapper = new BOMapper(bo);
-            itsUIFormDef = mapper.GetUserInterfaceMapper(uiDefName).GetUIFormProperties();
+            _uiFormDef = mapper.GetUserInterfaceMapper(uiDefName).GetUIFormProperties();
             ;
         }
 
@@ -62,10 +62,10 @@ namespace Chillisoft.UI.BOControls.v2
         /// <returns>Returns the object containing the panel</returns>
         public PanelFactoryInfo CreatePanel()
         {
-            //log.Debug("Creating panel for object of type " + itsBOArray[0].GetType().Name ) ;
+            //log.Debug("Creating panel for object of type " + _boArray[0].GetType().Name ) ;
             PanelFactoryInfo factoryInfo;
-            itsFirstControl = null;
-            if (itsUIFormDef.Count > 1)
+            _firstControl = null;
+            if (_uiFormDef.Count > 1)
             {
                 Panel mainPanel = new Panel();
                 ControlMapperCollection controlMappers = new ControlMapperCollection();
@@ -73,7 +73,7 @@ namespace Chillisoft.UI.BOControls.v2
                 TabControl tabControl = new TabControl();
                 tabControl.Dock = DockStyle.Fill;
                 mainPanel.Controls.Add(tabControl);
-                foreach (UIFormTab formTab in itsUIFormDef)
+                foreach (UIFormTab formTab in _uiFormDef)
                 {
                     PanelFactoryInfo onePanelInfo = CreateOnePanel(formTab);
                     foreach (ControlMapper controlMapper in onePanelInfo.ControlMappers)
@@ -90,24 +90,24 @@ namespace Chillisoft.UI.BOControls.v2
                     page.Controls.Add(onePanelInfo.Panel);
                     tabControl.TabPages.Add(page);
                 }
-                factoryInfo = new PanelFactoryInfo(mainPanel, controlMappers, itsFirstControl);
+                factoryInfo = new PanelFactoryInfo(mainPanel, controlMappers, _firstControl);
                 factoryInfo.FormGrids = formGrids;
             }
             else
             {
-                factoryInfo = CreateOnePanel(itsUIFormDef[0]);
+                factoryInfo = CreateOnePanel(_uiFormDef[0]);
             }
-            if (itsUIFormDef.Height > -1)
+            if (_uiFormDef.Height > -1)
             {
-                factoryInfo.PreferredHeight = itsUIFormDef.Height;
-                //factoryInfo.Panel.Height = itsUIFormDef.Height;
+                factoryInfo.PreferredHeight = _uiFormDef.Height;
+                //factoryInfo.Panel.Height = _uiFormDef.Height;
             }
-            if (itsUIFormDef.Width > -1)
+            if (_uiFormDef.Width > -1)
             {
-                factoryInfo.PreferredWidth = itsUIFormDef.Width;
-                //factoryInfo.Panel.Width = itsUIFormDef.Width;
+                factoryInfo.PreferredWidth = _uiFormDef.Width;
+                //factoryInfo.Panel.Width = _uiFormDef.Width;
             }
-            //log.Debug("Done Creating panel for object of type " + itsBOArray[0].GetType().Name ) ;
+            //log.Debug("Done Creating panel for object of type " + _boArray[0].GetType().Name ) ;
             return factoryInfo;
         }
 
@@ -159,7 +159,7 @@ namespace Chillisoft.UI.BOControls.v2
                 {
                     //log.Debug("Creating label and control for property " + property.PropertyName + " with mapper type " + property.MapperTypeName) ;
                     bool isCompulsory = false;
-                    PropDef propDef = itsBOArray[0].ClassDef.GetPropDef(property.PropertyName);
+                    PropDef propDef = _boArray[0].ClassDef.GetPropDef(property.PropertyName);
                     if (propDef != null && propDef.PropRule != null)
                     {
                         isCompulsory = propDef.PropRule.IsCompulsory;
@@ -179,9 +179,9 @@ namespace Chillisoft.UI.BOControls.v2
                     }
                     else
                     {
-                        if (itsFirstControl == null)
+                        if (_firstControl == null)
                         {
-                            itsFirstControl = ctl;
+                            _firstControl = ctl;
                         }
                     }
                     if (ctl is TextBox)
@@ -203,7 +203,7 @@ namespace Chillisoft.UI.BOControls.v2
                             if (isEmail)
                             {
                                 TextBox tb = (TextBox) ctl;
-                                tb.DoubleClick += itsEmailTextBoxDoubleClickedHandler;
+                                tb.DoubleClick += _emailTextBoxDoubleClickedHandler;
                             }
                         }
                     }
@@ -230,7 +230,7 @@ namespace Chillisoft.UI.BOControls.v2
                         ControlMapper.Create(property.MapperTypeName, ctl, property.PropertyName, property.IsReadOnly);
                     ctlMapper.SetPropertyAttributes(property.Attributes);
                     controlMappers.Add(ctlMapper);
-                    ctlMapper.BusinessObject = itsBOArray[0];
+                    ctlMapper.BusinessObject = _boArray[0];
 
                     int colSpan = 1;
                     if (property.GetAttributeValue("colSpan") != null)
@@ -279,7 +279,7 @@ namespace Chillisoft.UI.BOControls.v2
             }
 
             p.Height = manager.GetFixedHeightIncludingGaps();
-            return new PanelFactoryInfo(p, controlMappers, itsFirstControl);
+            return new PanelFactoryInfo(p, controlMappers, _firstControl);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// TODO ERIC - entered? is this used?
         private void PanelEnteredHandler(object sender, EventArgs e)
         {
-            itsFirstControl.Focus();
+            _firstControl.Focus();
         }
 
         /// <summary>
@@ -346,7 +346,7 @@ namespace Chillisoft.UI.BOControls.v2
             //log.Debug("Creating a panel with a grid on it with relationship " + formGrid.RelationshipName);
             IGrid myGrid = (IGrid) Activator.CreateInstance(formGrid.GridType);
             //GridBase myGrid = myGridWithButtons.Grid;
-            BusinessObjectBase bo = itsBOArray[0];
+            BusinessObjectBase bo = _boArray[0];
             ClassDef classDef = ClassDef.GetClassDefCol[bo.GetType()];
             //Console.Out.WriteLine(classDef.RelationshipDefCol);
             myGrid.ObjectInitialiser =

@@ -9,15 +9,15 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public class ControlMapperCollection : ICollection
     {
-        private IList itsCollection;
-        private BusinessObjectBase itsBusinessObject;
+        private IList _collection;
+        private BusinessObjectBase _businessObject;
 
         /// <summary>
         /// Contructor to initialise an empty collection
         /// </summary>
         public ControlMapperCollection()
         {
-            itsCollection = new ArrayList();
+            _collection = new ArrayList();
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public int Count
         {
-            get { return itsCollection.Count; }
+            get { return _collection.Count; }
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public object SyncRoot
         {
-            get { return itsCollection.SyncRoot; }
+            get { return _collection.SyncRoot; }
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public bool IsSynchronized
         {
-            get { return itsCollection.IsSynchronized; }
+            get { return _collection.IsSynchronized; }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <returns>Returns an enumerator</returns>
         public IEnumerator GetEnumerator()
         {
-            return itsCollection.GetEnumerator();
+            return _collection.GetEnumerator();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <returns>Returns the mapper at the position specified</returns>
         public ControlMapper this[int index]
         {
-            get { return (ControlMapper) itsCollection[index]; }
+            get { return (ControlMapper) _collection[index]; }
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Chillisoft.UI.BOControls.v2
         {
             get
             {
-                foreach (ControlMapper controlMapper in itsCollection)
+                foreach (ControlMapper controlMapper in _collection)
                 {
                     if (controlMapper.PropertyName == propertyName)
                     {
@@ -104,7 +104,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// sub-type of ControlMapper</param>
         public void Add(ControlMapper mapper)
         {
-            this.itsCollection.Add(mapper);
+            this._collection.Add(mapper);
         }
 
         /// <summary>
@@ -115,14 +115,14 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public BusinessObjectBase BusinessObject
         {
-            get { return itsBusinessObject; }
+            get { return _businessObject; }
             set
             {
-                foreach (ControlMapper controlMapper in itsCollection)
+                foreach (ControlMapper controlMapper in _collection)
                 {
                     controlMapper.BusinessObject = value;
                 }
-                itsBusinessObject = value;
+                _businessObject = value;
             }
         }
     }

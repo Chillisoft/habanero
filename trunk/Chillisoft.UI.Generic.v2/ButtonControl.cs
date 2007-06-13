@@ -8,8 +8,8 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class ButtonControl : UserControl
     {
-        private FlowLayoutManager layoutManager;
-        private v2.ControlCollection itsButtons;
+        private FlowLayoutManager _layoutManager;
+        private v2.ControlCollection _buttons;
 
         /// <summary>
         /// Constructor to initialise a new button controller.  Sets up a new
@@ -17,9 +17,9 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public ButtonControl()
         {
-            layoutManager = new FlowLayoutManager(this);
-            layoutManager.Alignment = FlowLayoutManager.Alignments.Right;
-            itsButtons = new v2.ControlCollection();
+            _layoutManager = new FlowLayoutManager(this);
+            _layoutManager.Alignment = FlowLayoutManager.Alignments.Right;
+            _buttons = new v2.ControlCollection();
             Button sample = ControlFactory.CreateButton("Sample");
             this.Height = sample.Height + 10;
         }
@@ -34,8 +34,8 @@ namespace Chillisoft.UI.Generic.v2
             Button btn = ControlFactory.CreateButton(name);
             btn.Text = name;
 
-            itsButtons.Add(btn);
-            layoutManager.AddControl(btn);
+            _buttons.Add(btn);
+            _layoutManager.AddControl(btn);
             RecalcButtonSizes();
             return btn;
         }
@@ -59,7 +59,7 @@ namespace Chillisoft.UI.Generic.v2
         public void RecalcButtonSizes()
         {
             int maxButtonWidth = 0;
-            foreach (Button btn in itsButtons)
+            foreach (Button btn in _buttons)
             {
                 Label lbl = new Label();
                 lbl.Text = btn.Text;
@@ -72,7 +72,7 @@ namespace Chillisoft.UI.Generic.v2
             {
                 maxButtonWidth = Screen.PrimaryScreen.Bounds.Width/16;
             }
-            foreach (Button btn in itsButtons)
+            foreach (Button btn in _buttons)
             {
                 btn.Width = maxButtonWidth;
             }
@@ -113,7 +113,7 @@ namespace Chillisoft.UI.Generic.v2
         {
             get
             {
-                foreach (Button button in itsButtons)
+                foreach (Button button in _buttons)
                 {
                     if (button.Name.Replace("&", "") == buttonName)
                     {

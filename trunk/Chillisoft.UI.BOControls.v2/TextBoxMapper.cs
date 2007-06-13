@@ -8,8 +8,8 @@ namespace Chillisoft.UI.BOControls.v2
     /// </summary>
     public class TextBoxMapper : ControlMapper
     {
-        private TextBox itsTextBox;
-        private string itsOldText;
+        private TextBox _textBox;
+        private string _oldText;
 
         /// <summary>
         /// Constructor to initialise a new instance of the mapper
@@ -19,10 +19,10 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="isReadOnceOnly">Whether the object is read once only</param>
         public TextBoxMapper(TextBox tb, string propName, bool isReadOnceOnly) : base(tb, propName, isReadOnceOnly)
         {
-            itsTextBox = tb;
+            _textBox = tb;
             //_textBox.Enabled = false;
-            itsTextBox.TextChanged += new EventHandler(ValueChangedHandler);
-            itsOldText = "";
+            _textBox.TextChanged += new EventHandler(ValueChangedHandler);
+            _oldText = "";
         }
 
         /// <summary>
@@ -33,17 +33,17 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (itsBusinessObject != null && !itsIsReadOnceOnly)
+            if (_businessObject != null && !_isReadOnceOnly)
             {
                 try
                 {
-                    itsBusinessObject.SetPropertyValue(itsPropertyName, itsTextBox.Text);
+                    _businessObject.SetPropertyValue(_propertyName, _textBox.Text);
                 }
                 catch (FormatException)
                 {
-                    itsTextBox.Text = itsOldText;
+                    _textBox.Text = _oldText;
                 }
-                itsOldText = itsTextBox.Text;
+                _oldText = _textBox.Text;
             }
         }
 
@@ -53,7 +53,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         protected override void ValueUpdated()
         {
-            itsTextBox.Text = Convert.ToString(this.GetPropertyValue());
+            _textBox.Text = Convert.ToString(this.GetPropertyValue());
         }
     }
 }

@@ -16,14 +16,14 @@ namespace Chillisoft.UI.BOControls.v2
     public class ComboBoxCollectionControl : UserControl
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.v2.BOControls.ComboBoxCollectionControl");
-        private readonly IDatabaseConnection itsDatabaseConnection;
-        private readonly IConfirmer itsConfirmer;
-        private PanelFactoryInfo itsPanelFactoryInfo;
-        private ComboBox itsCollectionComboBox;
-        private CollectionComboBoxMapper itsComboBoxMapper;
-        private int itsOldSelectedIndex;
-        private ButtonControl itsButtons;
-        private BusinessObjectBaseCollection itsBoCollection;
+        private readonly IDatabaseConnection _databaseConnection;
+        private readonly IConfirmer _confirmer;
+        private PanelFactoryInfo _panelFactoryInfo;
+        private ComboBox _collectionComboBox;
+        private CollectionComboBoxMapper _comboBoxMapper;
+        private int _oldSelectedIndex;
+        private ButtonControl _buttons;
+        private BusinessObjectBaseCollection _boCollection;
 
         /// <summary>
         /// Constructor to initialise a new control object that has a
@@ -38,12 +38,12 @@ namespace Chillisoft.UI.BOControls.v2
                                          IDatabaseConnection databaseConnection)
         {
             //log.Debug("Creating comboboxcollectioncontrol") ;
-            itsDatabaseConnection = databaseConnection;
+            _databaseConnection = databaseConnection;
             BorderLayoutManager manager = new BorderLayoutManager(this);
-            itsCollectionComboBox = new ComboBox();
-            itsComboBoxMapper = new CollectionComboBoxMapper(itsCollectionComboBox);
-            itsBoCollection = provider.GetCollection();
-            itsComboBoxMapper.SetCollection(itsBoCollection, true);
+            _collectionComboBox = new ComboBox();
+            _comboBoxMapper = new CollectionComboBoxMapper(_collectionComboBox);
+            _boCollection = provider.GetCollection();
+            _comboBoxMapper.SetCollection(_boCollection, true);
 
             Panel comboBoxPanel = new Panel();
             GridLayoutManager comboBoxPanelManager = new GridLayoutManager(comboBoxPanel);
@@ -51,28 +51,28 @@ namespace Chillisoft.UI.BOControls.v2
             comboBoxPanelManager.FixColumnBasedOnContents(0);
             comboBoxPanelManager.FixAllRowsBasedOnContents();
             comboBoxPanelManager.AddControl(ControlFactory.CreateLabel(label, false));
-            comboBoxPanelManager.AddControl(itsCollectionComboBox);
+            comboBoxPanelManager.AddControl(_collectionComboBox);
             comboBoxPanel.Height = comboBoxPanelManager.GetFixedHeightIncludingGaps();
 
             PanelFactory panelFactory =
-                new PanelFactory(itsBoCollection.ClassDef.CreateNewBusinessObject(), provider.GetUIFormDef());
-            itsPanelFactoryInfo = panelFactory.CreatePanel();
-            itsPanelFactoryInfo.Panel.Enabled = false;
+                new PanelFactory(_boCollection.ClassDef.CreateNewBusinessObject(), provider.GetUIFormDef());
+            _panelFactoryInfo = panelFactory.CreatePanel();
+            _panelFactoryInfo.Panel.Enabled = false;
 
-            itsButtons = new ButtonControl();
-            itsButtons.AddButton("Save", new EventHandler(SaveButtonClickHander));
-            itsButtons.AddButton("Cancel", new EventHandler(CancelButtonClickHandler));
-            itsButtons.AddButton("Add", new EventHandler(AddButtonClickHandler));
+            _buttons = new ButtonControl();
+            _buttons.AddButton("Save", new EventHandler(SaveButtonClickHander));
+            _buttons.AddButton("Cancel", new EventHandler(CancelButtonClickHandler));
+            _buttons.AddButton("Add", new EventHandler(AddButtonClickHandler));
 
-            this.Height = comboBoxPanel.Height + itsPanelFactoryInfo.Panel.Height + itsButtons.Height;
-            this.Width = itsPanelFactoryInfo.Panel.Width;
-            manager.AddControl(itsPanelFactoryInfo.Panel, BorderLayoutManager.Position.Centre);
+            this.Height = comboBoxPanel.Height + _panelFactoryInfo.Panel.Height + _buttons.Height;
+            this.Width = _panelFactoryInfo.Panel.Width;
+            manager.AddControl(_panelFactoryInfo.Panel, BorderLayoutManager.Position.Centre);
             manager.AddControl(comboBoxPanel, BorderLayoutManager.Position.North);
-            manager.AddControl(itsButtons, BorderLayoutManager.Position.South);
+            manager.AddControl(_buttons, BorderLayoutManager.Position.South);
 
-            itsCollectionComboBox.SelectedIndexChanged += new EventHandler(CollectionComboBoxIndexChangedHandler);
-            itsConfirmer = confirmer;
-            itsOldSelectedIndex = -1;
+            _collectionComboBox.SelectedIndexChanged += new EventHandler(CollectionComboBoxIndexChangedHandler);
+            _confirmer = confirmer;
+            _oldSelectedIndex = -1;
             //log.Debug("Done Creating comboboxcollectioncontrol") ;
         }
 
@@ -84,11 +84,11 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddButtonClickHandler(object sender, EventArgs e)
         {
-            itsPanelFactoryInfo.ControlMappers.BusinessObject =
-                itsBoCollection.ClassDef.CreateNewBusinessObject(itsDatabaseConnection);
-            itsCollectionComboBox.SelectedIndex = -1;
-            itsCollectionComboBox.Enabled = false;
-            itsButtons["Add"].Enabled = false;
+            _panelFactoryInfo.ControlMappers.BusinessObject =
+                _boCollection.ClassDef.CreateNewBusinessObject(_databaseConnection);
+            _collectionComboBox.SelectedIndex = -1;
+            _collectionComboBox.Enabled = false;
+            _buttons["Add"].Enabled = false;
             this.BusinessObjectPanel.Enabled = true;
         }
 
@@ -101,8 +101,8 @@ namespace Chillisoft.UI.BOControls.v2
         private void CancelButtonClickHandler(object sender, EventArgs e)
         {
             this.SelectedBusinessObject.CancelEdit();
-            itsCollectionComboBox.Enabled = true;
-            itsButtons["Add"].Enabled = true;
+            _collectionComboBox.Enabled = true;
+            _buttons["Add"].Enabled = true;
         }
 
         /// <summary>
@@ -117,18 +117,18 @@ namespace Chillisoft.UI.BOControls.v2
             if (this.SelectedBusinessObject.IsNew)
             {
                 this.SelectedBusinessObject.ApplyEdit();
-                itsBoCollection.Add(this.SelectedBusinessObject);
+                _boCollection.Add(this.SelectedBusinessObject);
                 this.CollectionComboBox.SelectedItem = this.SelectedBusinessObject;
             }
             else
             {
                 this.SelectedBusinessObject.ApplyEdit();
             }
-            itsCollectionComboBox.Enabled = true;
-            itsButtons["Add"].Enabled = true;
-            int index = itsCollectionComboBox.Items.IndexOf(this.SelectedBusinessObject);
-            itsCollectionComboBox.Items.RemoveAt(index);
-            itsCollectionComboBox.Items.Insert(index, this.SelectedBusinessObject);
+            _collectionComboBox.Enabled = true;
+            _buttons["Add"].Enabled = true;
+            int index = _collectionComboBox.Items.IndexOf(this.SelectedBusinessObject);
+            _collectionComboBox.Items.RemoveAt(index);
+            _collectionComboBox.Items.Insert(index, this.SelectedBusinessObject);
         }
 
         /// <summary>
@@ -141,31 +141,31 @@ namespace Chillisoft.UI.BOControls.v2
         private void CollectionComboBoxIndexChangedHandler(object sender, EventArgs e)
         {
             //log.Debug("index changed ");
-            if (itsCollectionComboBox.SelectedIndex == -1)
+            if (_collectionComboBox.SelectedIndex == -1)
             {
-                this.itsPanelFactoryInfo.Panel.Enabled = false;
-                itsOldSelectedIndex = -1;
+                this._panelFactoryInfo.Panel.Enabled = false;
+                _oldSelectedIndex = -1;
                 return;
             }
             else
             {
-                this.itsPanelFactoryInfo.Panel.Enabled = true;
+                this._panelFactoryInfo.Panel.Enabled = true;
             }
-            if (itsOldSelectedIndex != -1 && itsOldSelectedIndex != itsCollectionComboBox.SelectedIndex &&
+            if (_oldSelectedIndex != -1 && _oldSelectedIndex != _collectionComboBox.SelectedIndex &&
                 SelectedBusinessObject.IsDirty)
             {
-                if (itsConfirmer.Confirm("Do you want to want to save before moving on?"))
+                if (_confirmer.Confirm("Do you want to want to save before moving on?"))
                 {
                     SelectedBusinessObject.ApplyEdit();
                 }
                 else
                 {
-                    itsCollectionComboBox.SelectedIndex = itsOldSelectedIndex;
+                    _collectionComboBox.SelectedIndex = _oldSelectedIndex;
                 }
             }
-            itsPanelFactoryInfo.ControlMappers.BusinessObject = itsComboBoxMapper.SelectedBusinessObject;
-            itsPanelFactoryInfo.Panel.Enabled = true;
-            itsOldSelectedIndex = itsCollectionComboBox.SelectedIndex;
+            _panelFactoryInfo.ControlMappers.BusinessObject = _comboBoxMapper.SelectedBusinessObject;
+            _panelFactoryInfo.Panel.Enabled = true;
+            _oldSelectedIndex = _collectionComboBox.SelectedIndex;
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public ComboBox CollectionComboBox
         {
-            get { return itsCollectionComboBox; }
+            get { return _collectionComboBox; }
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public Panel BusinessObjectPanel
         {
-            get { return itsPanelFactoryInfo.Panel; }
+            get { return _panelFactoryInfo.Panel; }
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public PanelFactoryInfo PanelFactoryInfo
         {
-            get { return itsPanelFactoryInfo; }
+            get { return _panelFactoryInfo; }
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public ButtonControl Buttons
         {
-            get { return itsButtons; }
+            get { return _buttons; }
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public BusinessObjectBase SelectedBusinessObject
         {
-            get { return itsPanelFactoryInfo.ControlMappers.BusinessObject; }
+            get { return _panelFactoryInfo.ControlMappers.BusinessObject; }
         }
     }
 }

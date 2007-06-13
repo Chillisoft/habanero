@@ -8,8 +8,8 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class ColumnLayoutManager : LayoutManager
     {
-        private ControlCollection controls;
-        private int itsNumCols;
+        private ControlCollection _controls;
+        private int _numCols;
 
         /// <summary>
         /// Constructor to initialise a new layout manager
@@ -17,8 +17,8 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="managedControl">The control to manage</param>
         public ColumnLayoutManager(Control managedControl) : base(managedControl)
         {
-            controls = new ControlCollection();
-            itsNumCols = 1;
+            _controls = new ControlCollection();
+            _numCols = 1;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the control after it has been added</returns>
         public Control AddControl(Control control)
         {
-            controls.Add(control);
+            _controls.Add(control);
             this.ManagedControl.Controls.Add(control);
             RefreshControlPositions();
             return control;
@@ -40,7 +40,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="control">The control to be removed</param>
         public void RemoveControl(Control control)
         {
-            controls.Remove(control);
+            _controls.Remove(control);
             this.ManagedControl.Controls.Remove(control);
             RefreshControlPositions();
         }
@@ -50,12 +50,12 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         protected override void RefreshControlPositions()
         {
-            double colWidth = (this.ManagedControl.Width - (2*this.BorderSize) - ((itsNumCols - 1)*this.GapSize))/
-                              itsNumCols;
+            double colWidth = (this.ManagedControl.Width - (2*this.BorderSize) - ((_numCols - 1)*this.GapSize))/
+                              _numCols;
             int currentCol = 0;
             int currentTop = this.BorderSize;
             int highestControlheight = 0;
-            foreach (Control control in controls)
+            foreach (Control control in _controls)
             {
                 control.Width = Convert.ToInt32(Math.Round(colWidth));
                 control.Left =
@@ -65,7 +65,7 @@ namespace Chillisoft.UI.Generic.v2
                 {
                     highestControlheight = control.Height;
                 }
-                currentCol = (currentCol + 1)%itsNumCols;
+                currentCol = (currentCol + 1)%_numCols;
                 if (currentCol == 0)
                 {
                     currentTop = currentTop + highestControlheight + this.GapSize;
@@ -80,7 +80,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="numCols">The number of columns to set to</param>
         public void SetColumns(int numCols)
         {
-            itsNumCols = numCols;
+            _numCols = numCols;
         }
     }
 }

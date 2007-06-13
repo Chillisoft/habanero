@@ -13,10 +13,10 @@ namespace Chillisoft.UI.BOControls.v2
 	/// </summary>
 	public class BoPanelControl : UserControl
 	{
-		private BusinessObjectBase itsBo;
-		private string itsUiDefName;
-		private PanelFactoryInfo itsPanelFactoryInfo;
-		private Panel itsBoPanel;
+		private BusinessObjectBase _bo;
+		private string _uiDefName;
+		private PanelFactoryInfo _panelFactoryInfo;
+		private Panel _boPanel;
 
         /// <summary>
         /// Constructor to create a new control object
@@ -24,28 +24,28 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="bo">The business object being represented</param>
         /// <param name="uiDefName">A string name for the control</param>
 		public BoPanelControl(BusinessObjectBase bo, string uiDefName) {
-			itsBo = bo;
-			itsUiDefName = uiDefName;
+			_bo = bo;
+			_uiDefName = uiDefName;
 
 			BOMapper mapper = new BOMapper(bo);
 			
-			UIFormDef def = (itsUiDefName.Length > 0) 
-				? mapper.GetUserInterfaceMapper(itsUiDefName).GetUIFormProperties() 
+			UIFormDef def = (_uiDefName.Length > 0) 
+				? mapper.GetUserInterfaceMapper(_uiDefName).GetUIFormProperties() 
 				: mapper.GetUserInterfaceMapper().GetUIFormProperties();
 
-			PanelFactory factory = new PanelFactory(itsBo, def );
-			itsPanelFactoryInfo = factory.CreatePanel() ;
-			itsBoPanel = itsPanelFactoryInfo.Panel ;
+			PanelFactory factory = new PanelFactory(_bo, def );
+			_panelFactoryInfo = factory.CreatePanel() ;
+			_boPanel = _panelFactoryInfo.Panel ;
 
 			BorderLayoutManager manager = new BorderLayoutManager(this) ;
-			manager.AddControl(itsBoPanel, BorderLayoutManager.Position.Centre ) ;
+			manager.AddControl(_boPanel, BorderLayoutManager.Position.Centre ) ;
 		}
 
         /// <summary>
         /// Returns the panel object being controlled
         /// </summary>
         public Panel Panel {
-            get { return itsBoPanel; }
+            get { return _boPanel; }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public PanelFactoryInfo PanelFactoryInfo
         {
-            get { return itsPanelFactoryInfo; }
+            get { return _panelFactoryInfo; }
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="bo">The business object</param>
         public void SetBusinessObject(BusinessObjectBase bo)
         {
-            itsPanelFactoryInfo.ControlMappers.BusinessObject = bo;
+            _panelFactoryInfo.ControlMappers.BusinessObject = bo;
         }
 	}
 }

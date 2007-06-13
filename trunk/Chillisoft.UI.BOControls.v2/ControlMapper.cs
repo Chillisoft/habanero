@@ -15,11 +15,11 @@ namespace Chillisoft.UI.BOControls.v2
     public abstract class ControlMapper
     {
         protected static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.BoControls.ControlMapper");
-        protected Control itsControl;
-        protected string itsPropertyName;
-        protected readonly bool itsIsReadOnceOnly;
-        protected BusinessObjectBase itsBusinessObject;
-        protected Hashtable itsAttributes;
+        protected Control _control;
+        protected string _propertyName;
+        protected readonly bool _isReadOnceOnly;
+        protected BusinessObjectBase _businessObject;
+        protected Hashtable _attributes;
 
         /// <summary>
         /// Constructor to instantiate a new instance of the class
@@ -31,14 +31,14 @@ namespace Chillisoft.UI.BOControls.v2
         /// handlers are assigned to manage key presses.</param>
         protected ControlMapper(Control ctl, string propName, bool isReadOnceOnly)
         {
-            itsControl = ctl;
-            itsPropertyName = propName;
-            itsIsReadOnceOnly = isReadOnceOnly;
+            _control = ctl;
+            _propertyName = propName;
+            _isReadOnceOnly = isReadOnceOnly;
             if (isReadOnceOnly)
             {
-                itsControl.Enabled = false;
-                itsControl.ForeColor = Color.Black;
-                itsControl.BackColor = Color.Beige;
+                _control.Enabled = false;
+                _control.ForeColor = Color.Black;
+                _control.BackColor = Color.Beige;
             }
             else
             {
@@ -88,8 +88,8 @@ namespace Chillisoft.UI.BOControls.v2
                 e.Handled = true;
 
 
-                Control nextControl = GetNextControlInTabOrder(itsControl.Parent, itsControl);
-                //itsControl.FindForm().GetNextControl(itsControl, true) ;
+                Control nextControl = GetNextControlInTabOrder(_control.Parent, _control);
+                //_control.FindForm().GetNextControl(_control, true) ;
 
                 if (nextControl != null)
                 {
@@ -148,7 +148,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         public Control Control
         {
-            get { return itsControl; }
+            get { return _control; }
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// TODO ERIC - need to clarify property name in this and other usage
         public string PropertyName
         {
-            get { return itsPropertyName; }
+            get { return _propertyName; }
         }
 
         /// <summary>
@@ -170,16 +170,16 @@ namespace Chillisoft.UI.BOControls.v2
         {
             set
             {
-                itsBusinessObject = value;
+                _businessObject = value;
                 ValueUpdated();
-                if (!itsIsReadOnceOnly)
+                if (!_isReadOnceOnly)
                 {
-                    BOMapper mapper = new BOMapper(itsBusinessObject);
-                    mapper.GetProperty(itsPropertyName).BOPropValueUpdated +=
+                    BOMapper mapper = new BOMapper(_businessObject);
+                    mapper.GetProperty(_propertyName).BOPropValueUpdated +=
                         new BOPropValueUpdatedHandler(this.BOPropValueUpdatedHandler);
                 }
             }
-            get { return itsBusinessObject; }
+            get { return _businessObject; }
         }
 
         /// <summary>
@@ -237,8 +237,8 @@ namespace Chillisoft.UI.BOControls.v2
         /// <returns>Returns the property value in appropriate object form</returns>
         protected virtual object GetPropertyValue()
         {
-            BOMapper mapper = new BOMapper(itsBusinessObject);
-            return mapper.GetPropertyValueForUser(itsPropertyName);
+            BOMapper mapper = new BOMapper(_businessObject);
+            return mapper.GetPropertyValueForUser(_propertyName);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Chillisoft.UI.BOControls.v2
         /// TODO ERIC - clarify, what regulations?
         public void SetPropertyAttributes(Hashtable attributes)
         {
-            itsAttributes = attributes;
+            _attributes = attributes;
             InitialiseWithAttributes();
         }
 

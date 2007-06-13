@@ -10,7 +10,7 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class FilterControlEventArgs : EventArgs
     {
-        private readonly Control itsSendingControl;
+        private readonly Control _sendingControl;
 
         /// <summary>
         /// Constructor to initialise a set of arguments
@@ -18,12 +18,12 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="sendingControl">The sending control</param>
         public FilterControlEventArgs(Control sendingControl)
         {
-            itsSendingControl = sendingControl;
+            _sendingControl = sendingControl;
         }
 
         /// <summary>
         /// Returns the sending control object
         /// </summary>
-        public Control SendingControl { get { return itsSendingControl; } }
+        public Control SendingControl { get { return _sendingControl; } }
     }
 }

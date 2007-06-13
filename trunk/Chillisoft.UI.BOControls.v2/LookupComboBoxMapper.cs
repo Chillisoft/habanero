@@ -22,10 +22,10 @@ namespace Chillisoft.UI.BOControls.v2
         public LookupComboBoxMapper(ComboBox cbx, string propName, bool isReadOnceOnly)
             : base(cbx, propName, isReadOnceOnly)
         {
-            itsComboBox = cbx;
+            _comboBox = cbx;
             //_comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            itsComboBox.SelectedIndexChanged += new EventHandler(ValueChangedHandler);
-            itsComboBox.KeyPress += delegate(object sender, KeyPressEventArgs e)
+            _comboBox.SelectedIndexChanged += new EventHandler(ValueChangedHandler);
+            _comboBox.KeyPress += delegate(object sender, KeyPressEventArgs e)
                                         {
                                             if (e.KeyChar == 13)
                                             {
@@ -48,20 +48,20 @@ namespace Chillisoft.UI.BOControls.v2
         private void ValueChangedHandler(object sender, EventArgs e)
         {
             //log.Debug("ValueChanged in LookupComboBoxMapper") ;
-            if (itsBusinessObject != null && itsComboBox.SelectedIndex != -1)
+            if (_businessObject != null && _comboBox.SelectedIndex != -1)
             {
-                Guid newValue = ((StringGuidPair) itsComboBox.SelectedItem).Id;
+                Guid newValue = ((StringGuidPair) _comboBox.SelectedItem).Id;
                 if (newValue.Equals(Guid.Empty))
                 {
-                    if (itsBusinessObject.GetPropertyValue(itsPropertyName) != null)
+                    if (_businessObject.GetPropertyValue(_propertyName) != null)
                     {
-                        itsBusinessObject.SetPropertyValue(itsPropertyName, null);
+                        _businessObject.SetPropertyValue(_propertyName, null);
                     }
                 }
-                else if (itsBusinessObject.GetPropertyValue(itsPropertyName) == null ||
-                         !newValue.Equals(itsBusinessObject.GetPropertyValue(itsPropertyName)))
+                else if (_businessObject.GetPropertyValue(_propertyName) == null ||
+                         !newValue.Equals(_businessObject.GetPropertyValue(_propertyName)))
                 {
-                    itsBusinessObject.SetPropertyValue(itsPropertyName, newValue);
+                    _businessObject.SetPropertyValue(_propertyName, newValue);
                 }
             }
             //log.Debug("ValueChanged in LookupComboBoxMapper complete") ;
@@ -73,24 +73,24 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         protected override void ValueUpdated()
         {
-            if (itsCollection == null)
+            if (_collection == null)
             {
                 SetupLookupList();
             }
             else
             {
-                if (itsBusinessObject.GetPropertyValue(itsPropertyName) == null)
+                if (_businessObject.GetPropertyValue(_propertyName) == null)
                 {
-                    itsComboBox.SelectedIndex = -1;
+                    _comboBox.SelectedIndex = -1;
                 }
                 else
                 {
                     try
                     {
-                        itsComboBox.SelectedItem =
-                            itsCollection.FindByGuid((Guid) itsBusinessObject.GetPropertyValue(itsPropertyName));
-                        itsComboBox.SelectionStart = 0;
-                        itsComboBox.SelectionLength = 0;
+                        _comboBox.SelectedItem =
+                            _collection.FindByGuid((Guid) _businessObject.GetPropertyValue(_propertyName));
+                        _comboBox.SelectionStart = 0;
+                        _comboBox.SelectionLength = 0;
                     }
                     catch (System.ObjectDisposedException)
                     {
@@ -105,9 +105,9 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         private void SetupLookupList()
         {
-            BOMapper mapper = new BOMapper(itsBusinessObject);
-            StringGuidPairCollection col = mapper.GetLookupList(itsPropertyName);
-            if (itsLookupTypeClassDef == null)
+            BOMapper mapper = new BOMapper(_businessObject);
+            StringGuidPairCollection col = mapper.GetLookupList(_propertyName);
+            if (_lookupTypeClassDef == null)
             {
                 SetupRightClickBehaviour();
             }
@@ -116,12 +116,12 @@ namespace Chillisoft.UI.BOControls.v2
             //} else {
             SetLookupList(col);
             //}
-            if (col.Count > 0 && itsBusinessObject.GetPropertyValue(itsPropertyName) != null)
+            if (col.Count > 0 && _businessObject.GetPropertyValue(_propertyName) != null)
             {
-                itsComboBox.SelectedItem =
-                    itsCollection.FindByGuid((Guid) itsBusinessObject.GetPropertyValue(itsPropertyName));
-                itsComboBox.SelectionStart = 0;
-                itsComboBox.SelectionLength = 0;
+                _comboBox.SelectedItem =
+                    _collection.FindByGuid((Guid) _businessObject.GetPropertyValue(_propertyName));
+                _comboBox.SelectionStart = 0;
+                _comboBox.SelectionLength = 0;
             }
         }
 
@@ -132,11 +132,11 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="col">The items used to populate the list</param>
         public void SetLookupList(StringGuidPairCollection col)
         {
-            int width = itsComboBox.Width;
+            int width = _comboBox.Width;
             Label lbl = ControlFactory.CreateLabel("", false);
-            itsCollection = col;
-            itsComboBox.Items.Clear();
-            itsComboBox.Items.Add(new StringGuidPair("", Guid.Empty));
+            _collection = col;
+            _comboBox.Items.Clear();
+            _comboBox.Items.Add(new StringGuidPair("", Guid.Empty));
             foreach (StringGuidPair pair in col)
             {
                 lbl.Text = pair.Str;
@@ -144,9 +144,9 @@ namespace Chillisoft.UI.BOControls.v2
                 {
                     width = lbl.PreferredWidth;
                 }
-                itsComboBox.Items.Add(pair);
+                _comboBox.Items.Add(pair);
             }
-            itsComboBox.DropDownWidth = width;
+            _comboBox.DropDownWidth = width;
         }
 
         /// <summary>

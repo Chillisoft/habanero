@@ -21,11 +21,11 @@ namespace Chillisoft.UI.BOControls.v2
         public NumericUpDownMoneyMapper(NumericUpDown control, string propName, bool isReadOnceOnly)
             : base(control, propName, isReadOnceOnly)
         {
-            itsNumericUpDown.DecimalPlaces = 2;
-            itsNumericUpDown.Maximum = Int32.MaxValue;
-            itsNumericUpDown.Minimum = Int32.MinValue;
-            itsNumericUpDown.ValueChanged += new EventHandler(ValueChangedHandler);
-            itsNumericUpDown.Leave += new EventHandler(ValueChangedHandler);
+            _numericUpDown.DecimalPlaces = 2;
+            _numericUpDown.Maximum = Int32.MaxValue;
+            _numericUpDown.Minimum = Int32.MinValue;
+            _numericUpDown.ValueChanged += new EventHandler(ValueChangedHandler);
+            _numericUpDown.Leave += new EventHandler(ValueChangedHandler);
         }
 
         /// <summary>
@@ -34,10 +34,10 @@ namespace Chillisoft.UI.BOControls.v2
         /// </summary>
         protected override void InitialiseWithAttributes()
         {
-            if (itsAttributes.ContainsKey("decimalPlaces"))
+            if (_attributes.ContainsKey("decimalPlaces"))
             {
-                int decimalPlaces = Convert.ToInt32(itsAttributes["decimalPlaces"]);
-                itsNumericUpDown.DecimalPlaces = decimalPlaces;
+                int decimalPlaces = Convert.ToInt32(_attributes["decimalPlaces"]);
+                _numericUpDown.DecimalPlaces = decimalPlaces;
             }
         }
 
@@ -49,14 +49,14 @@ namespace Chillisoft.UI.BOControls.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (itsBusinessObject != null && !itsIsReadOnceOnly)
+            if (_businessObject != null && !_isReadOnceOnly)
             {
-                decimal newValue = Convert.ToDecimal(itsNumericUpDown.Value);
-                decimal oldValue = Convert.ToDecimal(itsBusinessObject.GetPropertyValue(itsPropertyName));
+                decimal newValue = Convert.ToDecimal(_numericUpDown.Value);
+                decimal oldValue = Convert.ToDecimal(_businessObject.GetPropertyValue(_propertyName));
                 if (newValue != oldValue)
                 {
-                    //log.Debug("setting property value to " + _numericUpDown.Value + " of type " + itsNumericUpDown.Value.GetType().Name);
-                    itsBusinessObject.SetPropertyValue(itsPropertyName, newValue);
+                    //log.Debug("setting property value to " + _numericUpDown.Value + " of type " + _numericUpDown.Value.GetType().Name);
+                    _businessObject.SetPropertyValue(_propertyName, newValue);
                 }
             }
         }

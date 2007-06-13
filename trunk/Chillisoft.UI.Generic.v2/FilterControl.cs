@@ -32,8 +32,8 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class FilterControl : UserControl
     {
-        private FilterInputBoxCollection itsFilterInputBoxCollection;
-        private FlowLayoutManager itsManager;
+        private FilterInputBoxCollection _filterInputBoxCollection;
+        private FlowLayoutManager _layoutManager;
         
         //public event EventHandler FilterClauseChanged;
 
@@ -45,9 +45,9 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="clauseFactory">The filter clause factory</param>
         public FilterControl(FilterClauseFactory clauseFactory)
         {
-            itsManager = new FlowLayoutManager(this);
-            itsFilterInputBoxCollection = new FilterInputBoxCollection(clauseFactory);
-            itsFilterInputBoxCollection.FilterClauseChanged += new EventHandler(FilterControlValueChangedHandler);
+            _layoutManager = new FlowLayoutManager(this);
+            _filterInputBoxCollection = new FilterInputBoxCollection(clauseFactory);
+            _filterInputBoxCollection.FilterClauseChanged += new EventHandler(FilterControlValueChangedHandler);
             this.Height = new TextBox().Height + 10;
         }
 
@@ -62,9 +62,9 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the new TextBox added</returns>
         public TextBox AddStringFilterTextBox(string label, string columnName)
         {
-            itsManager.AddControl(itsFilterInputBoxCollection.AddLabel(label));
-            TextBox tb = itsFilterInputBoxCollection.AddStringFilterTextBox(columnName);
-            itsManager.AddControl(tb);
+            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
+            TextBox tb = _filterInputBoxCollection.AddStringFilterTextBox(columnName);
+            _layoutManager.AddControl(tb);
             return tb;
         }
 
@@ -80,9 +80,9 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the new ComboBox added</returns>
         public ComboBox AddStringFilterComboBox(string label, string columnName, ICollection options)
         {
-            itsManager.AddControl(itsFilterInputBoxCollection.AddLabel(label));
-            ComboBox cb = itsFilterInputBoxCollection.AddStringFilterComboBox(columnName, options);
-            itsManager.AddControl(cb);
+            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
+            ComboBox cb = _filterInputBoxCollection.AddStringFilterComboBox(columnName, options);
+            _layoutManager.AddControl(cb);
             return cb;
         }
 
@@ -100,8 +100,8 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the new CheckBox added</returns>
         public CheckBox AddStringFilterCheckBox(string label, string columnName, bool isChecked)
         {
-            CheckBox cb = itsFilterInputBoxCollection.AddBooleanFilterCheckBox(columnName, label, isChecked);
-            itsManager.AddControl(cb);
+            CheckBox cb = _filterInputBoxCollection.AddBooleanFilterCheckBox(columnName, label, isChecked);
+            _layoutManager.AddControl(cb);
             return cb;
         }
 
@@ -123,10 +123,10 @@ namespace Chillisoft.UI.Generic.v2
         public DateTimePicker AddStringFilterDateTimeEditor(string label, string columnName, object defaultValue,
                                                             bool filterGreaterThan)
         {
-            itsManager.AddControl(itsFilterInputBoxCollection.AddLabel(label));
+            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
             DateTimePicker picker =
-                itsFilterInputBoxCollection.AddStringFilterDateTimeEditor(columnName, defaultValue, filterGreaterThan);
-            itsManager.AddControl(picker);
+                _filterInputBoxCollection.AddStringFilterDateTimeEditor(columnName, defaultValue, filterGreaterThan);
+            _layoutManager.AddControl(picker);
             return picker;
         }
 
@@ -159,7 +159,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the filter clause</returns>
         public FilterClause GetFilterClause()
         {
-            return itsFilterInputBoxCollection.GetFilterClause();
+            return _filterInputBoxCollection.GetFilterClause();
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="width">The width in pixels</param>
         public void SetFilterWidth(int width)
         {
-            itsFilterInputBoxCollection.SetFilterWidth(width);
+            _filterInputBoxCollection.SetFilterWidth(width);
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <param name="auto">Returns true if automatic, false if not</param>
         public void SetAutomaticUpdate(bool auto)
         {
-            itsFilterInputBoxCollection.SetAutomaticUpdate(auto);
+            _filterInputBoxCollection.SetAutomaticUpdate(auto);
         }
     }
 }

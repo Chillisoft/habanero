@@ -13,8 +13,8 @@ namespace Chillisoft.UI.Generic.v2
     /// </summary>
     public class CollectionGridDataProvider : IGridDataProvider
     {
-        private BusinessObjectBaseCollection itsCollection;
-        private string itsUiDefName;
+        private BusinessObjectBaseCollection _collection;
+        private string _uiDefName;
 
         /// <summary>
         /// Constructor to initialise a new provider
@@ -41,8 +41,8 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public CollectionGridDataProvider(BusinessObjectCollectionLoader loader, string uiDefName)
         {
-            itsCollection = loader.Load();
-            itsUiDefName = uiDefName;
+            _collection = loader.Load();
+            _uiDefName = uiDefName;
         }
 
         /// <summary>
@@ -50,8 +50,8 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public CollectionGridDataProvider(BusinessObjectBaseCollection collection, string uiDefName)
         {
-            itsCollection = collection;
-            itsUiDefName = uiDefName;
+            _collection = collection;
+            _uiDefName = uiDefName;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Chillisoft.UI.Generic.v2
         /// <returns>Returns the collection</returns>
         public BusinessObjectBaseCollection GetCollection()
         {
-            return itsCollection;
+            return _collection;
         }
 
         /// <summary>
@@ -70,13 +70,13 @@ namespace Chillisoft.UI.Generic.v2
         public UIGridDef GetUIGridDef()
         {
             IUserInterfaceMapper uiDef;
-            if (itsUiDefName != null && itsUiDefName.Length > 0)
+            if (_uiDefName != null && _uiDefName.Length > 0)
             {
-                uiDef = itsCollection.SampleBo.GetUserInterfaceMapper(itsUiDefName);
+                uiDef = _collection.SampleBo.GetUserInterfaceMapper(_uiDefName);
             }
             else
             {
-                uiDef = itsCollection.SampleBo.GetUserInterfaceMapper();
+                uiDef = _collection.SampleBo.GetUserInterfaceMapper();
             }
             return uiDef.GetUIGridProperties();
         }
@@ -96,7 +96,7 @@ namespace Chillisoft.UI.Generic.v2
         /// </summary>
         public ClassDef ClassDef
         {
-            get { return itsCollection.ClassDef; }
+            get { return _collection.ClassDef; }
         }
     }
 }
