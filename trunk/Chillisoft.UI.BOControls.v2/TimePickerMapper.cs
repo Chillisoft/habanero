@@ -10,7 +10,7 @@ namespace Chillisoft.UI.BOControls.v2
     public class TimePickerMapper : ControlMapper
     {
         private TimePicker _timePicker;
-        //PropertyInfo itsValuePropertyInfo;
+        //PropertyInfo _valuePropertyInfo;
 
         /// <summary>
         /// Constructor to initialise a new mapper

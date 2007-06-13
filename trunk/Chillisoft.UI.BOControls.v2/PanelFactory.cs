@@ -19,7 +19,7 @@ namespace Chillisoft.UI.BOControls.v2
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.BoControls.PanelFactory");
         private BusinessObjectBase[] _boArray;
-        //private IUserInterfaceMapper[] itsUIArray;
+        //private IUserInterfaceMapper[] _uiArray;
         private UIFormDef _uiFormDef;
         private Control _firstControl;
 

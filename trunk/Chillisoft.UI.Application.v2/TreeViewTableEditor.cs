@@ -107,7 +107,7 @@ namespace Chillisoft.UI.Application.v2
                     _gridAndButtons.Grid .SetGridDataProvider(
                         new SimpleGridDataProvider(collectionForNode,
                                                    sampleBo.GetUserInterfaceMapper().GetUIGridProperties()));
-                    //itsGrid.te = e.Node.Text;
+                    //_grid.te = e.Node.Text;
                 }
                 catch (BaseApplicationException ex)
                 {

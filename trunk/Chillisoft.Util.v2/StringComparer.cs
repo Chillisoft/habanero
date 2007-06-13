@@ -9,7 +9,7 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class StringComparer : IComparer
     {
-        private readonly string itsPropName;
+        private readonly string _propName;
 
         /// <summary>
         /// Constructor to initialise a comparer, specifying the string property
@@ -20,7 +20,7 @@ namespace Chillisoft.Util.v2
         /// business objects will be compared</param>
         public StringComparer(string propName)
         {
-            itsPropName = propName;
+            _propName = propName;
         }
 
         /// <summary>
@@ -36,8 +36,8 @@ namespace Chillisoft.Util.v2
         {
             BusinessObject boLeft = (BusinessObject) x;
             BusinessObject boRight = (BusinessObject) y;
-            string left = (string) boLeft.GetPropertyValue(itsPropName);
-            string right = (string) boRight.GetPropertyValue(itsPropName);
+            string left = (string) boLeft.GetPropertyValue(_propName);
+            string right = (string) boRight.GetPropertyValue(_propName);
             if (left == null) left = "";
             if (right == null) right = "";
             return left.CompareTo(right);

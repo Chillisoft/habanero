@@ -11,7 +11,7 @@ namespace Chillisoft.Util.v2
     public class EmailSender
     {
         private readonly string _fromAddress;
-        //private readonly string itsAttachmentPath;
+        //private readonly string _attachmentPath;
         private readonly string _content;
         private readonly string _subject;
         private readonly IList _toAddresses = new ArrayList(1);
@@ -36,7 +36,7 @@ namespace Chillisoft.Util.v2
             _toAddresses = emailAddresses;
             _subject = subject;
             _content = content;
-            //itsAttachmentPath = attachmentPath;
+            //_attachmentPath = attachmentPath;
             if (attachmentPath != null && attachmentPath.Length > 0)
                 _attachmentPaths.Add(attachmentPath);
             _fromAddress = fromAddress;
@@ -104,9 +104,9 @@ namespace Chillisoft.Util.v2
             //{
             //    message.Recipients.Add((string) itsEmailAddresses[i]);
             //}
-            //if (itsAttachmentPath != null && itsAttachmentPath.Length > 0)
+            //if (_attachmentPath != null && _attachmentPath.Length > 0)
             //{
-            //    message.Attachments.Add(itsAttachmentPath);
+            //    message.Attachments.Add(_attachmentPath);
             //}
             //SMTP server = new SMTP(GlobalRegistry.SettingsStorer.GetString("SmtpServer"));
             //server.Send(message);
