@@ -10,7 +10,7 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class DateTimeComparer : IComparer
     {
-        private readonly string itsPropName;
+        private readonly string _propName;
 
         /// <summary>
         /// Constructor to initialise a comparer, specifying the date-time property
@@ -21,7 +21,7 @@ namespace Chillisoft.Util.v2
         /// business objects will be compared</param>
         public DateTimeComparer(string propName)
         {
-            itsPropName = propName;
+            _propName = propName;
             //
             // TODO: Add constructor logic here
             //
@@ -42,21 +42,21 @@ namespace Chillisoft.Util.v2
             BusinessObject boRight = (BusinessObject) y;
             DateTime left;
             DateTime right;
-            if (boLeft.GetPropertyValue(itsPropName) == null)
+            if (boLeft.GetPropertyValue(_propName) == null)
             {
                 left = DateTime.MinValue;
             }
             else
             {
-                left = (DateTime) boLeft.GetPropertyValue(itsPropName);
+                left = (DateTime) boLeft.GetPropertyValue(_propName);
             }
-            if (boRight.GetPropertyValue(itsPropName) == null)
+            if (boRight.GetPropertyValue(_propName) == null)
             {
                 right = DateTime.MinValue;
             }
             else
             {
-                right = (DateTime) boRight.GetPropertyValue(itsPropName);
+                right = (DateTime) boRight.GetPropertyValue(_propName);
             }
             return left.CompareTo(right);
         }

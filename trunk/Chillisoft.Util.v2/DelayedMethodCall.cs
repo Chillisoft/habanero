@@ -12,10 +12,10 @@ namespace Chillisoft.Util.v2
     public class DelayedMethodCall
     {
         private static ILog log = LogManager.GetLogger("CorChillisoftil.DelayedMethodCall");
-        private readonly double itsDelayInMilliseconds;
-        private readonly object itsCaller;
-        private VoidMethodWithSender itsMethodToCall;
-        private Timer itsTimer;
+        private readonly double _delayInMilliseconds;
+        private readonly object _caller;
+        private VoidMethodWithSender _methodToCall;
+        private Timer _timer;
 
         /// <summary>
         /// Constructor to initialise a new instance
@@ -24,8 +24,8 @@ namespace Chillisoft.Util.v2
         /// <param name="caller">The caller</param>
         public DelayedMethodCall(double delayInMilliseconds, object caller)
         {
-            itsDelayInMilliseconds = delayInMilliseconds;
-            itsCaller = caller;
+            _delayInMilliseconds = delayInMilliseconds;
+            _caller = caller;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Chillisoft.Util.v2
         /// <param name="e">Attached arguments regarding the event</param>
         private void TimerElapsedHandler(object sender, ElapsedEventArgs e)
         {
-            itsMethodToCall(itsCaller);
+            _methodToCall(_caller);
         }
 
         /// <summary>
@@ -47,16 +47,16 @@ namespace Chillisoft.Util.v2
         public void Call(VoidMethodWithSender methodToCall)
         {
             //log.Debug("Delayed method call requested: " + methodToCall.Method.Name ) ;
-            if (itsTimer != null)
+            if (_timer != null)
             {
-                itsTimer.Stop();
-                itsTimer.Elapsed -= new ElapsedEventHandler(TimerElapsedHandler);
+                _timer.Stop();
+                _timer.Elapsed -= new ElapsedEventHandler(TimerElapsedHandler);
             }
-            itsMethodToCall = methodToCall;
-            itsTimer = new Timer(itsDelayInMilliseconds);
-            itsTimer.AutoReset = false;
-            itsTimer.Elapsed += new ElapsedEventHandler(TimerElapsedHandler);
-            itsTimer.Start();
+            _methodToCall = methodToCall;
+            _timer = new Timer(_delayInMilliseconds);
+            _timer.AutoReset = false;
+            _timer.Elapsed += new ElapsedEventHandler(TimerElapsedHandler);
+            _timer.Start();
         }
     }
 }

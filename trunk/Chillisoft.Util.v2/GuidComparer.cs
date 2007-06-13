@@ -10,7 +10,7 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class GuidComparer : IComparer
     {
-        private readonly string itsPropName;
+        private readonly string _propName;
 
         /// <summary>
         /// Constructor to initialise a comparer, specifying the Guid property on
@@ -21,7 +21,7 @@ namespace Chillisoft.Util.v2
         /// business objects will be compared</param>
         public GuidComparer(string propName)
         {
-            itsPropName = propName;
+            _propName = propName;
         }
 
         /// <summary>
@@ -39,21 +39,21 @@ namespace Chillisoft.Util.v2
             BusinessObject boRight = (BusinessObject) y;
             Guid left;
             Guid right;
-            if (boLeft.GetPropertyValue(itsPropName) == null)
+            if (boLeft.GetPropertyValue(_propName) == null)
             {
                 left = Guid.Empty;
             }
             else
             {
-                left = (Guid) boLeft.GetPropertyValue(itsPropName);
+                left = (Guid) boLeft.GetPropertyValue(_propName);
             }
-            if (boRight.GetPropertyValue(itsPropName) == null)
+            if (boRight.GetPropertyValue(_propName) == null)
             {
                 right = Guid.Empty;
             }
             else
             {
-                right = (Guid) boRight.GetPropertyValue(itsPropName);
+                right = (Guid) boRight.GetPropertyValue(_propName);
             }
             return left.CompareTo(right);
         }

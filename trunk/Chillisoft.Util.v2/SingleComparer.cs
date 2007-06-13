@@ -10,7 +10,7 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class SingleComparer : IComparer
     {
-        private readonly string itsPropName;
+        private readonly string _propName;
 
         /// <summary>
         /// Constructor to initialise a comparer, specifying the Single property
@@ -21,7 +21,7 @@ namespace Chillisoft.Util.v2
         /// business objects will be compared</param>
         public SingleComparer(string propName)
         {
-            itsPropName = propName;
+            _propName = propName;
         }
 
         /// <summary>
@@ -39,21 +39,21 @@ namespace Chillisoft.Util.v2
             BusinessObject boRight = (BusinessObject) y;
             Single left;
             Single right;
-            if (boLeft.GetPropertyValue(itsPropName) == null)
+            if (boLeft.GetPropertyValue(_propName) == null)
             {
                 left = 0;
             }
             else
             {
-                left = (Single) boLeft.GetPropertyValue(itsPropName);
+                left = (Single) boLeft.GetPropertyValue(_propName);
             }
-            if (boRight.GetPropertyValue(itsPropName) == null)
+            if (boRight.GetPropertyValue(_propName) == null)
             {
                 right = 0;
             }
             else
             {
-                right = (Single) boRight.GetPropertyValue(itsPropName);
+                right = (Single) boRight.GetPropertyValue(_propName);
             }
             return left.CompareTo(right);
         }

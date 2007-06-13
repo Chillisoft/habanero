@@ -8,14 +8,14 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class SortedStringCollection : ICollection
     {
-        private IList itsList;
+        private IList _list;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
         public SortedStringCollection()
         {
-            itsList = new ArrayList();
+            _list = new ArrayList();
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Chillisoft.Util.v2
         /// </summary>
         public int Count
         {
-            get { return itsList.Count; }
+            get { return _list.Count; }
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Chillisoft.Util.v2
         /// </summary>
         public object SyncRoot
         {
-            get { return itsList.SyncRoot; }
+            get { return _list.SyncRoot; }
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Chillisoft.Util.v2
         /// </summary>
         public bool IsSynchronized
         {
-            get { return itsList.IsSynchronized; }
+            get { return _list.IsSynchronized; }
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns an IEnumerator-type object</returns>
         public IEnumerator GetEnumerator()
         {
-            return itsList.GetEnumerator();
+            return _list.GetEnumerator();
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns the string found at the specified position</returns>
         public string this[int index]
         {
-            get { return (string) itsList[index]; }
+            get { return (string) _list[index]; }
         }
 
         /// <summary>
@@ -80,31 +80,31 @@ namespace Chillisoft.Util.v2
         /// <param name="s">The string to add</param>
         public void Add(string s)
         {
-            if (itsList.Count == 0)
+            if (_list.Count == 0)
             {
-                itsList.Add(s);
+                _list.Add(s);
             }
             else
             {
                 int i = 0;
-                while (i < itsList.Count && String.Compare(this[i], s) < 0)
+                while (i < _list.Count && String.Compare(this[i], s) < 0)
                 {
                     i++;
                 }
-                if (i == itsList.Count)
+                if (i == _list.Count)
                 {
                     if (String.Compare(this[i - 1], s) > 0)
                     {
-                        itsList.Insert(i - 1, s);
+                        _list.Insert(i - 1, s);
                     }
                     else
                     {
-                        itsList.Add(s);
+                        _list.Add(s);
                     }
                 }
                 else
                 {
-                    itsList.Insert(i, s);
+                    _list.Insert(i, s);
                 }
             }
         }

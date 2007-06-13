@@ -9,9 +9,9 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class CSVFileReader
     {
-        StreamReader itsReader;
-        string itsCurrentLine;
-        int itsLineNo;
+        StreamReader _reader;
+        string _currentLine;
+        int _lineNo;
 
         /// <summary>
         /// Constructor to initialise a new reader
@@ -19,8 +19,8 @@ namespace Chillisoft.Util.v2
         /// <param name="strFileName">The file name</param>
         public CSVFileReader(string strFileName)
         {
-            itsLineNo = 0;
-            itsReader = new StreamReader(strFileName);
+            _lineNo = 0;
+            _reader = new StreamReader(strFileName);
         }
 
         /// <summary>
@@ -32,13 +32,13 @@ namespace Chillisoft.Util.v2
         {
             do
             {
-                itsCurrentLine = itsReader.ReadLine();
-                if (itsCurrentLine == null) itsCurrentLine = "";
-                itsLineNo++;
-            } while (itsCurrentLine.Trim() == "" && itsReader.Peek() != -1);
+                _currentLine = _reader.ReadLine();
+                if (_currentLine == null) _currentLine = "";
+                _lineNo++;
+            } while (_currentLine.Trim() == "" && _reader.Peek() != -1);
 
-            return (itsCurrentLine.Trim().Length != 0);
-            //return (itsReader.Peek() != -1) ;
+            return (_currentLine.Trim().Length != 0);
+            //return (_reader.Peek() != -1) ;
         }
 
         /// <summary>
@@ -48,20 +48,20 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns a list of values</returns>
         public IList GetValues(int numValues)
         {
-            CoreStringBuilder stringBuilder = new CoreStringBuilder(itsCurrentLine.Replace(",\"\",", ",,"));
+            CoreStringBuilder stringBuilder = new CoreStringBuilder(_currentLine.Replace(",\"\",", ",,"));
             stringBuilder.SetQuotes(new string[] {"\""});
             stringBuilder.RemoveQuotedSections();
             if (stringBuilder.IndexOf("\"") > -1)
             {
-                string nextLine = itsReader.ReadLine();
+                string nextLine = _reader.ReadLine();
                 if (nextLine == null)
                 {
                     nextLine = "";
-                    throw new UserException("Unclosed quote in CSV file, line " + itsLineNo);
+                    throw new UserException("Unclosed quote in CSV file, line " + _lineNo);
                 }
-                itsCurrentLine = itsCurrentLine + nextLine;
+                _currentLine = _currentLine + nextLine;
 
-                itsLineNo++;
+                _lineNo++;
                 return GetValues(numValues);
             }
             IList values = new ArrayList();
@@ -101,7 +101,7 @@ namespace Chillisoft.Util.v2
         /// </summary>
         public void Close()
         {
-            itsReader.Close();
+            _reader.Close();
         }
     }
 }

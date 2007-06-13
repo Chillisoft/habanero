@@ -11,8 +11,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     /// TODO ERIC - review
     public class RelPropDef
     {
-        protected PropDef mOwnerPropDef;
-        protected string mRelatedClassPropName;
+        protected PropDef _ownerPropDef;
+        protected string _relatedClassPropName;
 
         /// <summary>
         /// Constructor to create new RelPropDef object
@@ -25,8 +25,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                           string relatedObjectPropName)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(ownerClassPropDef, "ownerClassPropDef");
-            mOwnerPropDef = ownerClassPropDef;
-            mRelatedClassPropName = relatedObjectPropName;
+            _ownerPropDef = ownerClassPropDef;
+            _relatedClassPropName = relatedObjectPropName;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public string OwnerPropertyName
         {
-            get { return mOwnerPropDef.PropertyName; }
+            get { return _ownerPropDef.PropertyName; }
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// TODO ERIC - may need clarification
         public string RelatedClassPropName
         {
-            get { return mRelatedClassPropName; }
+            get { return _relatedClassPropName; }
         }
 
         /// <summary>

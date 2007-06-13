@@ -8,7 +8,7 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class CSVFileWriter
     {
-        private StreamWriter itsWriter;
+        private StreamWriter _writer;
 
         /// <summary>
         /// Constructor to initialise the writer
@@ -16,7 +16,7 @@ namespace Chillisoft.Util.v2
         /// <param name="strFileName">The file name</param>
         public CSVFileWriter(string strFileName)
         {
-            itsWriter = new StreamWriter(strFileName, false);
+            _writer = new StreamWriter(strFileName, false);
         }
 
         /// <summary>
@@ -30,13 +30,13 @@ namespace Chillisoft.Util.v2
             {
                 if (!firstCol)
                 {
-                    itsWriter.Write(",");
+                    _writer.Write(",");
                 }
-                itsWriter.Write(column.Caption);
+                _writer.Write(column.Caption);
                 firstCol = false;
             }
 
-            itsWriter.WriteLine();
+            _writer.WriteLine();
 
             foreach (DataRow row in table.Rows)
             {
@@ -44,16 +44,16 @@ namespace Chillisoft.Util.v2
                 {
                     if (i > 0)
                     {
-                        itsWriter.Write(",");
+                        _writer.Write(",");
                     }
                     string val = Chillisoft.Util.v2.StringUtilities.ReplaceSingleQuotesWithTwo(row[i].ToString());
                     if (val.IndexOf(",") != -1)
                     {
                         val = "\"" + val + "\"";
                     }
-                    itsWriter.Write(val);
+                    _writer.Write(val);
                 }
-                itsWriter.WriteLine();
+                _writer.WriteLine();
             }
         }
 
@@ -62,7 +62,7 @@ namespace Chillisoft.Util.v2
         /// </summary>
         public void Close()
         {
-            itsWriter.Close();
+            _writer.Close();
         }
     }
 }

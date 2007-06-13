@@ -27,10 +27,10 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     /// </summary>
     public class MultipleRelationshipDef : RelationshipDef
     {
-        protected string mOrderBy;
-        protected int mMinNoOfRelatedObjects;
-        protected int mMaxNoOfRelatedObjects;
-        protected DeleteParentAction mDeleteParentAction;
+        protected string _orderBy;
+        protected int _minNoOfRelatedObjects;
+        protected int _maxNoOfRelatedObjects;
+        protected DeleteParentAction _deleteParentAction;
 
         /// <summary>
         /// Constructor to create a new Multiple Relationship Definition
@@ -63,10 +63,10 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
 
-            mOrderBy = orderBy;
-            mMinNoOfRelatedObjects = minNoOfRelatedObjects;
-            mMaxNoOfRelatedObjects = maxNoOfRelatedObjects;
-            mDeleteParentAction = deleteParentAction;
+            _orderBy = orderBy;
+            _minNoOfRelatedObjects = minNoOfRelatedObjects;
+            _maxNoOfRelatedObjects = maxNoOfRelatedObjects;
+            _deleteParentAction = deleteParentAction;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public string OrderBy
         {
-            get { return mOrderBy; }
+            get { return _orderBy; }
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public int MinNoOfRelatedObjects
         {
-            get { return mMinNoOfRelatedObjects; }
+            get { return _minNoOfRelatedObjects; }
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public int MaxNoOfRelatedObjects
         {
-            get { return mMaxNoOfRelatedObjects; }
+            get { return _maxNoOfRelatedObjects; }
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public DeleteParentAction DeleteParentAction
         {
-            get { return mDeleteParentAction; }
+            get { return _deleteParentAction; }
         }
     }
 

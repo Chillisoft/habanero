@@ -20,19 +20,19 @@ namespace Chillisoft.Util.v2
     /// TODO ERIC - rename to contemporary
     public class CoreStringBuilder
     {
-        private StringBuilder mString;
-        private ArrayList quotedSections = new ArrayList(); //this stores an 
+        private StringBuilder _string;
+        private ArrayList _quotedSections = new ArrayList(); //this stores an 
             // array list of all quoted sections that have been removed from 
             // the original string, along with the position the quoted section 
             // was removed from (so that it can be replaced when required)
-        private String[] itsQuotes = new String[] {"'", "\""};
+        private String[] _quotes = new String[] {"'", "\""};
 
         /// <summary>
         /// Constructor to initialise a new builder
         /// </summary>
         public CoreStringBuilder() : base()
         {
-            mString = new StringBuilder();
+            _string = new StringBuilder();
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Chillisoft.Util.v2
         /// <param name="s">The initial string</param>
         public CoreStringBuilder(String s) : base()
         {
-            mString = new StringBuilder(s);
+            _string = new StringBuilder(s);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Chillisoft.Util.v2
         /// TODO ERIC - hmm?
         public void SetQuotes(string[] quotes)
         {
-            itsQuotes = quotes;
+            _quotes = quotes;
         }
 
         /// <summary>
@@ -61,10 +61,10 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns a CoreStringBuilder string without quotes</returns>
         public CoreStringBuilder RemoveQuotedSections()
         {
-            quotedSections.Clear();
-            String s = mString.ToString();
+            _quotedSections.Clear();
+            String s = _string.ToString();
             IList doubleQuotedSections = new ArrayList();
-            foreach (String quote in itsQuotes)
+            foreach (String quote in _quotes)
             {
                 int pos = s.IndexOf(quote);
                 while (pos != -1)
@@ -78,7 +78,7 @@ namespace Chillisoft.Util.v2
                     pos = s.IndexOf(quote, pos + 1);
                 }
             }
-            foreach (String quote in itsQuotes)
+            foreach (String quote in _quotes)
             {
                 int pos = s.IndexOf(quote);
                 while (pos != -1)
@@ -87,7 +87,7 @@ namespace Chillisoft.Util.v2
                     if (pos2 != -1)
                     {
                         //if (pos2 == 0) {
-                        //	quotedSections.Add(new QuotedSection(pos, quote)) ;
+                        //	_quotedSections.Add(new QuotedSection(pos, quote)) ;
                         //} 
                         //else 
                         //{
@@ -113,7 +113,7 @@ namespace Chillisoft.Util.v2
                                 doubleQuotedSections.Remove(doubleQuotedSection);
                             }
                         }
-                        quotedSections.Add(new QuotedSection(pos, quoteString));
+                        _quotedSections.Add(new QuotedSection(pos, quoteString));
                         //}
                         s = s.Remove(pos, pos2 + 2);
                         pos = s.IndexOf(quote);
@@ -126,12 +126,12 @@ namespace Chillisoft.Util.v2
             }
 
 
-            mString = new StringBuilder(s);
+            _string = new StringBuilder(s);
             if (doubleQuotedSections.Count > 0)
             {
                 for (int i = doubleQuotedSections.Count - 1; i >= 0; i--)
                 {
-                    mString.Insert(((QuotedSection) doubleQuotedSections[i]).pos,
+                    _string.Insert(((QuotedSection) doubleQuotedSections[i]).pos,
                                    ((QuotedSection) doubleQuotedSections[i]).quotedSection);
                 }
             }
@@ -147,14 +147,14 @@ namespace Chillisoft.Util.v2
         /// removed quoted sections put back</returns>
         public CoreStringBuilder PutBackQuotedSections()
         {
-            if (this.quotedSections.Count > 0)
+            if (this._quotedSections.Count > 0)
             {
-                for (int i = quotedSections.Count - 1; i >= 0; i--)
+                for (int i = _quotedSections.Count - 1; i >= 0; i--)
                 {
-                    mString.Insert(((QuotedSection) this.quotedSections[i]).pos,
-                                   ((QuotedSection) this.quotedSections[i]).quotedSection);
+                    _string.Insert(((QuotedSection) this._quotedSections[i]).pos,
+                                   ((QuotedSection) this._quotedSections[i]).quotedSection);
                 }
-                this.quotedSections.Clear();
+                this._quotedSections.Clear();
             }
             return this;
         }
@@ -165,7 +165,7 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns the string</returns>
         public override String ToString()
         {
-            return mString.ToString();
+            return _string.ToString();
         }
 
         /// <summary>
@@ -196,14 +196,14 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns a CoreStringBuilder object</returns>
         public CoreStringBuilder Substring(int startIndex, int length)
         {
-            CoreStringBuilder s = new CoreStringBuilder(mString.ToString().Substring(startIndex, length));
-            if (this.quotedSections != null)
+            CoreStringBuilder s = new CoreStringBuilder(_string.ToString().Substring(startIndex, length));
+            if (this._quotedSections != null)
             {
-                foreach (QuotedSection quote in this.quotedSections)
+                foreach (QuotedSection quote in this._quotedSections)
                 {
                     if ((quote.pos >= startIndex) && (quote.pos <= startIndex + length))
                     {
-                        s.quotedSections.Add(new QuotedSection(quote.pos - startIndex, quote.quotedSection));
+                        s._quotedSections.Add(new QuotedSection(quote.pos - startIndex, quote.quotedSection));
                     }
                 }
             }
@@ -217,14 +217,14 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns a CoreStringBuilder object</returns>
         public CoreStringBuilder Substring(int startIndex)
         {
-            CoreStringBuilder s = new CoreStringBuilder(mString.ToString().Substring(startIndex));
-            if (this.quotedSections != null)
+            CoreStringBuilder s = new CoreStringBuilder(_string.ToString().Substring(startIndex));
+            if (this._quotedSections != null)
             {
-                foreach (QuotedSection quote in this.quotedSections)
+                foreach (QuotedSection quote in this._quotedSections)
                 {
                     if (quote.pos >= startIndex)
                     {
-                        s.quotedSections.Add(new QuotedSection(quote.pos - startIndex, quote.quotedSection));
+                        s._quotedSections.Add(new QuotedSection(quote.pos - startIndex, quote.quotedSection));
                     }
                 }
             }
@@ -238,7 +238,7 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns the index position if found, or -1</returns>
         public int IndexOf(String value)
         {
-            return mString.ToString().IndexOf(value);
+            return _string.ToString().IndexOf(value);
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns the index position if found, or -1</returns>
         public int IndexOf(String value, int startIndex)
         {
-            return mString.ToString().IndexOf(value, startIndex);
+            return _string.ToString().IndexOf(value, startIndex);
         }
 
         /// <summary>
@@ -261,12 +261,12 @@ namespace Chillisoft.Util.v2
         /// removed</returns>
         public CoreStringBuilder DropOuterQuotes()
         {
-            if (mString.Length > 0)
+            if (_string.Length > 0)
             {
-                if ((mString[0] == '\'') && (mString[mString.Length - 1] == '\''))
+                if ((_string[0] == '\'') && (_string[_string.Length - 1] == '\''))
                 {
-                    mString.Remove(0, 1);
-                    mString.Remove(mString.Length - 1, 1);
+                    _string.Remove(0, 1);
+                    _string.Remove(_string.Length - 1, 1);
                 }
             }
             return this;
@@ -298,14 +298,14 @@ namespace Chillisoft.Util.v2
             public void TestPutBackQuotedSections()
             {
                 CoreStringBuilder s = new CoreStringBuilder("A quoted  is needed to test this functionality");
-                s.quotedSections = new ArrayList();
-                s.quotedSections.Add(new QuotedSection(9, "'test'"));
+                s._quotedSections = new ArrayList();
+                s._quotedSections.Add(new QuotedSection(9, "'test'"));
                 s.PutBackQuotedSections();
                 Assert.AreEqual("A quoted 'test' is needed to test this functionality", s.ToString());
                 s = new CoreStringBuilder("A quoted  is needed to  this functionality");
-                s.quotedSections = new ArrayList();
-                s.quotedSections.Add(new QuotedSection(9, "'test'"));
-                s.quotedSections.Add(new QuotedSection(23, "\"test\""));
+                s._quotedSections = new ArrayList();
+                s._quotedSections.Add(new QuotedSection(9, "'test'"));
+                s._quotedSections.Add(new QuotedSection(23, "\"test\""));
                 s.PutBackQuotedSections();
                 Assert.AreEqual("A quoted 'test' is needed to \"test\" this functionality", s.ToString());
                 s = new CoreStringBuilder("A quoted  is needed to  this functionality");
@@ -331,9 +331,9 @@ namespace Chillisoft.Util.v2
                 Assert.AreEqual("llo", s.Substring(2).ToString());
 
                 s = new CoreStringBuilder("A quoted  is needed to  this functionality");
-                s.quotedSections = new ArrayList();
-                s.quotedSections.Add(new QuotedSection(9, "'test'"));
-                s.quotedSections.Add(new QuotedSection(23, "\"test\""));
+                s._quotedSections = new ArrayList();
+                s._quotedSections.Add(new QuotedSection(9, "'test'"));
+                s._quotedSections.Add(new QuotedSection(23, "\"test\""));
                 CoreStringBuilder sub = s.Substring(9);
                 Assert.AreEqual(" is needed to  this functionality", sub.ToString());
                 CoreStringBuilder sub2 = sub.Substring(10, 4);

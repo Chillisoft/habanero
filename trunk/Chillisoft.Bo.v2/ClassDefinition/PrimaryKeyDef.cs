@@ -16,7 +16,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public PrimaryKeyDef() : base()
         {
-            mIgnoreNulls = false; //you cannot ingnore nulls for a primary key.
+            _ignoreNulls = false; //you cannot ingnore nulls for a primary key.
         }
 
         /// <summary>

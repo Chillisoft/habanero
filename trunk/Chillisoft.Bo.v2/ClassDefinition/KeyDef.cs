@@ -15,9 +15,9 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     /// </summary>
     public class KeyDef : DictionaryBase
     {
-        protected bool mIgnoreNulls = false;
-        protected string mKeyName = "";
-        protected bool mBuildKeyName = true; //this is a flag used to 
+        protected bool _ignoreNulls = false;
+        protected string _keyName = "";
+        protected bool _buildKeyName = true; //this is a flag used to 
                 //indicate whether the the keyname should be built up 
                 //from the property names or not
         
@@ -32,10 +32,10 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         public KeyDef(string keyName)
         {
             //TODO_Err check that keyName is valid.
-            mKeyName = keyName;
-            if (mKeyName.Length > 0)
+            _keyName = keyName;
+            if (_keyName.Length > 0)
             {
-                mBuildKeyName = true;
+                _buildKeyName = true;
             }
         }
 
@@ -84,13 +84,13 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             if (!Dictionary.Contains(lPropDef.PropertyName))
             {
                 Dictionary.Add(lPropDef.PropertyName, lPropDef);
-                if (mBuildKeyName)
+                if (_buildKeyName)
                 {
-                    if (mKeyName.Length > 0)
+                    if (_keyName.Length > 0)
                     {
-                        mKeyName += "_";
+                        _keyName += "_";
                     }
-                    mKeyName += lPropDef.PropertyName;
+                    _keyName += lPropDef.PropertyName;
                 }
             }
         }
@@ -127,8 +127,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public virtual bool IgnoreNulls
         {
-            get { return mIgnoreNulls; }
-            set { mIgnoreNulls = value; }
+            get { return _ignoreNulls; }
+            set { _ignoreNulls = value; }
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public string KeyName
         {
-            get { return mKeyName; }
+            get { return _keyName; }
         }
     }
 

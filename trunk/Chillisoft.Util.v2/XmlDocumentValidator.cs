@@ -10,9 +10,9 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class XmlDocumentValidator
     {
-        private bool itsDocumentValid = true;
-        private ValidationEventArgs itsInvalidDocumentArgs;
-        private XmlDocument itsXmlDocument;
+        private bool _documentValid = true;
+        private ValidationEventArgs _invalidDocumentArgs;
+        private XmlDocument _xmlDocument;
 
         /// <summary>
         /// Handles a validation failure
@@ -21,8 +21,8 @@ namespace Chillisoft.Util.v2
         /// <param name="args">Attached arguments regarding the event</param>
         private void ValidationHandler(object sender, ValidationEventArgs args)
         {
-            itsDocumentValid = false;
-            itsInvalidDocumentArgs = args;
+            _documentValid = false;
+            _invalidDocumentArgs = args;
         }
 
         /// <summary>
@@ -37,10 +37,10 @@ namespace Chillisoft.Util.v2
         /// is a validation failure</exception>
         public void ValidateDocument(string xmlDocument, string rootElementName, string dtd)
         {
-            itsXmlDocument = new XmlDocument();
-            itsXmlDocument.LoadXml(xmlDocument);
-            itsXmlDocument.InsertBefore(itsXmlDocument.CreateDocumentType(rootElementName, null, null, dtd),
-                                        itsXmlDocument.DocumentElement);
+            _xmlDocument = new XmlDocument();
+            _xmlDocument.LoadXml(xmlDocument);
+            _xmlDocument.InsertBefore(_xmlDocument.CreateDocumentType(rootElementName, null, null, dtd),
+                                        _xmlDocument.DocumentElement);
             ValidateCurrentDocument();
         }
 
@@ -52,17 +52,17 @@ namespace Chillisoft.Util.v2
         private void ValidateCurrentDocument()
         {
             XmlValidatingReader validatingReader =
-                new XmlValidatingReader(new XmlTextReader(new StringReader(itsXmlDocument.OuterXml)));
+                new XmlValidatingReader(new XmlTextReader(new StringReader(_xmlDocument.OuterXml)));
             validatingReader.ValidationType = ValidationType.DTD;
             validatingReader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
             while (validatingReader.Read())
             {
                 ;
             }
-            if (!itsDocumentValid)
+            if (!_documentValid)
             {
                 throw new InvalidXmlDefinitionException("The relationship node does not conform to the dtd." +
-                                                        itsInvalidDocumentArgs.Message);
+                                                        _invalidDocumentArgs.Message);
             }
         }
 
@@ -74,8 +74,8 @@ namespace Chillisoft.Util.v2
         /// is a validation failure</exception>
         public void ValidateDocument(XmlDocument xmlDocument)
         {
-            itsXmlDocument = xmlDocument;
-            itsXmlDocument.InsertBefore(
+            _xmlDocument = xmlDocument;
+            _xmlDocument.InsertBefore(
                 xmlDocument.CreateDocumentType(xmlDocument.DocumentElement.Name, null, null,
                                                GetDTD(xmlDocument.DocumentElement.Name)), xmlDocument.DocumentElement);
             ValidateCurrentDocument();
@@ -89,9 +89,9 @@ namespace Chillisoft.Util.v2
         /// is a validation failure</exception>
         public void ValidateElement(XmlElement xmlElement)
         {
-            itsXmlDocument = new XmlDocument();
-            itsXmlDocument.LoadXml(xmlElement.OuterXml);
-            ValidateDocument(itsXmlDocument);
+            _xmlDocument = new XmlDocument();
+            _xmlDocument.LoadXml(xmlElement.OuterXml);
+            ValidateDocument(_xmlDocument);
         }
 
         /// <summary>

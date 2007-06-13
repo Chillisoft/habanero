@@ -9,7 +9,7 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class IntComparer : IComparer
     {
-        private readonly string itsPropName;
+        private readonly string _propName;
         
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Chillisoft.Util.v2
         /// business objects will be compared</param>
         public IntComparer(string propName)
         {
-            itsPropName = propName;
+            _propName = propName;
         }
 
         /// <summary>
@@ -39,21 +39,21 @@ namespace Chillisoft.Util.v2
             BusinessObject boRight = (BusinessObject) y;
             int left;
             int right;
-            if (boLeft.GetPropertyValue(itsPropName) == null)
+            if (boLeft.GetPropertyValue(_propName) == null)
             {
                 left = 0;
             }
             else
             {
-                left = (int) boLeft.GetPropertyValue(itsPropName);
+                left = (int) boLeft.GetPropertyValue(_propName);
             }
-            if (boRight.GetPropertyValue(itsPropName) == null)
+            if (boRight.GetPropertyValue(_propName) == null)
             {
                 right = 0;
             }
             else
             {
-                right = (int) boRight.GetPropertyValue(itsPropName);
+                right = (int) boRight.GetPropertyValue(_propName);
             }
             return left.CompareTo(right);
         }

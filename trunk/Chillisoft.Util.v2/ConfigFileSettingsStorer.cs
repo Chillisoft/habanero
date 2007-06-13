@@ -9,14 +9,14 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class ConfigFileSettingsStorer : ISettingsStorer
     {
-        private AppSettingsReader itsReader;
+        private AppSettingsReader _reader;
 
         /// <summary>
         /// Constructor to initialise a new storer
         /// </summary>
         public ConfigFileSettingsStorer()
         {
-            itsReader = new AppSettingsReader();
+            _reader = new AppSettingsReader();
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Chillisoft.Util.v2
         /// <returns>Returns a string</returns>
         public string GetString(string settingName)
         {
-            return (string) itsReader.GetValue(settingName, typeof (string));
+            return (string) _reader.GetValue(settingName, typeof (string));
         }
 
         /// <summary>

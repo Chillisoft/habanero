@@ -9,10 +9,10 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     /// </summary>
     public abstract class RelationshipDef
     {
-        protected Type mRelatedObjectClassType;
-        protected RelKeyDef mRelKeyDef;
-        protected string mRelationshipName;
-        protected bool mKeepReferenceToRelatedObject;
+        protected Type _relatedObjectClassType;
+        protected RelKeyDef _relKeyDef;
+        protected string _relationshipName;
+        protected bool _keepReferenceToRelatedObject;
 
         /// <summary>
         /// Constructor to create a new relationship definition
@@ -34,10 +34,10 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             ArgumentValidationHelper.CheckArgumentIsSubType(relatedObjectClassType, "relatedObjectClassType",
                                                             typeof (BusinessObjectBase));
 
-            mRelatedObjectClassType = relatedObjectClassType;
-            mRelKeyDef = relKeyDef;
-            mRelationshipName = relationshipName;
-            mKeepReferenceToRelatedObject = keepReferenceToRelatedObject;
+            _relatedObjectClassType = relatedObjectClassType;
+            _relKeyDef = relKeyDef;
+            _relationshipName = relationshipName;
+            _keepReferenceToRelatedObject = keepReferenceToRelatedObject;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         internal string RelationshipName
         {
-            get { return mRelationshipName; }
+            get { return _relationshipName; }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public Type RelatedObjectClassType
         {
-            get { return mRelatedObjectClassType; }
+            get { return _relatedObjectClassType; }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public RelKeyDef RelKeyDef
         {
-            get { return mRelKeyDef; }
+            get { return _relKeyDef; }
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// TODO ERIC - review
         public bool KeepReferenceToRelatedObject
         {
-            get { return mKeepReferenceToRelatedObject; }
+            get { return _keepReferenceToRelatedObject; }
         }
 
         /// <summary>

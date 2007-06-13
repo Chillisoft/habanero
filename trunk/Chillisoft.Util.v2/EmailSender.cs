@@ -10,16 +10,16 @@ namespace Chillisoft.Util.v2
     /// </summary>
     public class EmailSender
     {
-        private readonly string itsFromAddress;
+        private readonly string _fromAddress;
         //private readonly string itsAttachmentPath;
-        private readonly string itsContent;
-        private readonly string itsSubject;
-        private readonly IList itsToAddresses = new ArrayList(1);
-        private readonly IList itsCcAddresses = new ArrayList(1);
-        private readonly IList itsBccAddresses = new ArrayList(1);
-        private readonly IList itsAttachmentPaths = new ArrayList(1);
-        private string itsSmtpServerHost;
-        private int itsSmtpServerPort;
+        private readonly string _content;
+        private readonly string _subject;
+        private readonly IList _toAddresses = new ArrayList(1);
+        private readonly IList _ccAddresses = new ArrayList(1);
+        private readonly IList _bccAddresses = new ArrayList(1);
+        private readonly IList _attachmentPaths = new ArrayList(1);
+        private string _smtpServerHost;
+        private int _smtpServerPort;
 
         /// <summary>
         /// Constructor to initialise a new sender
@@ -33,16 +33,16 @@ namespace Chillisoft.Util.v2
         public EmailSender(IList emailAddresses, string fromAddress, string subject, string content,
                            string attachmentPath)
         {
-            itsToAddresses = emailAddresses;
-            itsSubject = subject;
-            itsContent = content;
+            _toAddresses = emailAddresses;
+            _subject = subject;
+            _content = content;
             //itsAttachmentPath = attachmentPath;
             if (attachmentPath != null && attachmentPath.Length > 0)
-                itsAttachmentPaths.Add(attachmentPath);
-            itsFromAddress = fromAddress;
+                _attachmentPaths.Add(attachmentPath);
+            _fromAddress = fromAddress;
             if (GlobalRegistry.SettingsStorer != null)
-                itsSmtpServerHost = GlobalRegistry.SettingsStorer.GetString("SmtpServer");
-            itsSmtpServerPort = 25;
+                _smtpServerHost = GlobalRegistry.SettingsStorer.GetString("SmtpServer");
+            _smtpServerPort = 25;
         }
 
         ///<summary>
@@ -50,8 +50,8 @@ namespace Chillisoft.Util.v2
         ///</summary>
         public string SmtpServerHost
         {
-            get { return itsSmtpServerHost; }
-            set{ itsSmtpServerHost = value;}
+            get { return _smtpServerHost; }
+            set{ _smtpServerHost = value;}
         }
 
         ///<summary>
@@ -59,8 +59,8 @@ namespace Chillisoft.Util.v2
         ///</summary>
         public int SmtpServerPort
         {
-            get { return itsSmtpServerPort; }
-            set { itsSmtpServerPort = value; }
+            get { return _smtpServerPort; }
+            set { _smtpServerPort = value; }
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Chillisoft.Util.v2
         private void doSend(string authUsername, string authPassword, string authDomain)
         {
             //EmailMessage message =
-            //    new EmailMessage((string) itsEmailAddresses[0], itsFromAddress, itsSubject, itsContent,
+            //    new EmailMessage((string) itsEmailAddresses[0], _fromAddress, _subject, _content,
             //                     BodyPartFormat.Plain);
             //for (int i = 1; i < itsEmailAddresses.Count; i++)
             //{
@@ -111,25 +111,25 @@ namespace Chillisoft.Util.v2
             //SMTP server = new SMTP(GlobalRegistry.SettingsStorer.GetString("SmtpServer"));
             //server.Send(message);
 
-            if (itsSmtpServerHost == null)
+            if (_smtpServerHost == null)
             {
                 throw new System.Exception("Please specify the SMTP Host Name before attempting to send.");
             }
             MailMessage message = new MailMessage();
-            message.From = new MailAddress(itsFromAddress);
-            addAddresses(message.To, itsToAddresses);
-            addAddresses(message.CC, itsCcAddresses);
-            addAddresses(message.Bcc, itsBccAddresses);
-            message.Subject = itsSubject;
-            message.Body = itsContent;
+            message.From = new MailAddress(_fromAddress);
+            addAddresses(message.To, _toAddresses);
+            addAddresses(message.CC, _ccAddresses);
+            addAddresses(message.Bcc, _bccAddresses);
+            message.Subject = _subject;
+            message.Body = _content;
             AttachmentCollection attachments = message.Attachments;
-            foreach (string attachmentPath in itsAttachmentPaths)
+            foreach (string attachmentPath in _attachmentPaths)
             {
                 attachments.Add(new Attachment(attachmentPath));
             }
             SmtpClient smtpServer = new SmtpClient();
-            smtpServer.Host = itsSmtpServerHost;
-            smtpServer.Port = itsSmtpServerPort;
+            smtpServer.Host = _smtpServerHost;
+            smtpServer.Port = _smtpServerPort;
             if (authUsername != null && authPassword != null)
             {
                 NetworkCredential auth = new NetworkCredential(authUsername,authPassword);

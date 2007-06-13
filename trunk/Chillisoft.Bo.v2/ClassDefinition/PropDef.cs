@@ -47,18 +47,19 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     public class PropDef : IParameterSqlInfo
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.ClassDefinition.v2.PropDef");
-        protected string mPropName;
-        protected Type mPropType;
-        protected cbsPropReadWriteRule mpropRWStatus;
-        protected string mDatabaseFieldName; //This allows you to have a 
+        private string _propName;
+		private Type _propType;
+		private cbsPropReadWriteRule _propRWStatus;
+		private string _databaseFieldName; //This allows you to have a 
             //database field name different from your property name. 
             //We have customers whose standard for naming database 
             //fields is DATABASE_FIELD_NAME. 
             //This is also powerful for migrating systems 
             //where the database has already been set up.
-        protected readonly object mDefaultValue = null;
-        private PropRuleBase mPropRule;
-        private ILookupListSource itsLookupListSource = new NullLookupListSource();
+		//TODO: I changed this field from ReadOnly, was there any point to this. Please Review. (-Mark)
+		private object _defaultValue = null;
+        private PropRuleBase _propRule;
+        private ILookupListSource _lookupListSource = new NullLookupListSource();
 
         
         #region "Constuctor and destructors"
@@ -92,19 +93,19 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                     "A property name cannot contain any of the following characters: [.-|]  Invalid property name " +
                     propName);
             }
-            mPropName = propName;
-            mPropType = propType;
-            mpropRWStatus = propRWStatus;
-            mDatabaseFieldName = databaseFieldName;
-            if ((defaultValue == null) || mPropType.IsInstanceOfType(defaultValue))
+            _propName = propName;
+            _propType = propType;
+            _propRWStatus = propRWStatus;
+            _databaseFieldName = databaseFieldName;
+            if ((defaultValue == null) || _propType.IsInstanceOfType(defaultValue))
             {
-                mDefaultValue = defaultValue;
+                _defaultValue = defaultValue;
             }
             else
             {
                 throw new ArgumentException("default value " + defaultValue +
                                             " is invalid since it is not of type " +
-                                            mPropType.ToString(), "defaultValue");
+                                            _propType.ToString(), "defaultValue");
             }
         }
 
@@ -130,7 +131,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public string PropertyName
         {
-            get { return mPropName; }
+            get { return _propName; }
+			protected set{ _propName = value;}
         }
 
         /// <summary>
@@ -138,7 +140,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public Type PropertyType
         {
-            get { return mPropType; }
+            get { return _propType; }
+			protected set{ _propType = value;}
         }
 
         /// <summary>
@@ -146,7 +149,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public PropRuleBase PropRule
         {
-            get { return mPropRule; }
+            get { return _propRule; }
+			protected set{ _propRule = value;}
         }
 
         /// <summary>
@@ -157,7 +161,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         protected internal string DataBaseFieldName
         {
-            get { return mDatabaseFieldName; }
+            get { return _databaseFieldName; }
+			protected set{ _databaseFieldName = value;}
         }
 
         /// <summary>
@@ -165,7 +170,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public object DefaultValue
         {
-            get { return mDefaultValue; }
+            get { return _defaultValue; }
+			protected set{ _defaultValue = value;}
         }
 
         #endregion
@@ -179,7 +185,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <param name="lPropRule">A rule of type PropRuleBase</param>
         public void assignPropRule(PropRuleBase lPropRule)
         {
-            mPropRule = lPropRule;
+            _propRule = lPropRule;
         }
 
         /// <summary>
@@ -195,9 +201,9 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                                              ref string errorMessage)
         {
             errorMessage = "";
-            if (!(mPropRule == null))
+            if (!(_propRule == null))
             {
-                return mPropRule.isPropValueValid(propValue, ref errorMessage);
+                return _propRule.isPropValueValid(propValue, ref errorMessage);
             }
             else
             {
@@ -223,11 +229,11 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             if (isNewObject)
             {
-                if (mDefaultValue != null)
+                if (_defaultValue != null)
                 {
-                    //log.Debug("Creating BoProp with default value " + mDefaultValue );
+                    //log.Debug("Creating BoProp with default value " + _defaultValue );
                 }
-                return new BOProp(this, mDefaultValue);
+                return new BOProp(this, _defaultValue);
             }
             else
             {
@@ -246,7 +252,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// TODO ERIC: what is this?
         protected internal Type PropType
         {
-            get { return mPropType; }
+            get { return _propType; }
         }
 
         #endregion
@@ -262,7 +268,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             get
             {
-                if (this.mPropType == typeof (DateTime))
+                if (this._propType == typeof (DateTime))
                 {
                     return ParameterType.Date;
                 }
@@ -278,7 +284,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public string FieldName
         {
-            get { return mDatabaseFieldName; }
+            get { return _databaseFieldName; }
         }
 
         /// <summary>
@@ -286,7 +292,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public string ParameterName
         {
-            get { return mPropName; }
+            get { return _propName; }
         }
 
         /// <summary>
@@ -303,8 +309,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public ILookupListSource LookupListSource
         {
-            get { return itsLookupListSource; }
-            set { itsLookupListSource = value; }
+            get { return _lookupListSource; }
+            set { _lookupListSource = value; }
         }
 
         /// <summary>
@@ -313,7 +319,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public cbsPropReadWriteRule ReadWriteRule
         {
-            get { return mpropRWStatus; }
+            get { return _propRWStatus; }
+			protected set{ _propRWStatus = value;}
         }
 
         /// <summary>
@@ -323,7 +330,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// LookupListSource equates to NullLookupListSource</returns>
         public bool HasLookupList()
         {
-            return (!(this.itsLookupListSource is NullLookupListSource));
+            return (!(_lookupListSource is NullLookupListSource));
         }
 
         #endregion

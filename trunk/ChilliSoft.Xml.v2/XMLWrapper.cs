@@ -9,8 +9,8 @@ namespace Chillisoft.Xml.v2
     /// </summary>
     public class XmlWrapper
     {
-        private XmlDocument doc;
-        private string filename;
+        private XmlDocument _doc;
+        private string _filename;
 
         /// <summary>
         /// Constructor that initialises the new object with an XML document
@@ -20,7 +20,7 @@ namespace Chillisoft.Xml.v2
         /// <param name="doc">The xml document object to wrap</param>
         public XmlWrapper(XmlDocument doc)
         {
-            this.doc = doc;
+            this._doc = doc;
         }
 
 
@@ -31,9 +31,9 @@ namespace Chillisoft.Xml.v2
         /// <param name="xmlFilename">The path to the XML file to wrap</param>
         public XmlWrapper(string xmlFilename)
         {
-            filename = xmlFilename;
-            doc = new XmlDocument();
-            doc.Load(xmlFilename);
+            _filename = xmlFilename;
+            _doc = new XmlDocument();
+            _doc.Load(xmlFilename);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Chillisoft.Xml.v2
         /// </summary>
         public XmlDocument XmlDocument
         {
-            get { return doc; }
+            get { return _doc; }
         }
 
 
@@ -78,7 +78,7 @@ namespace Chillisoft.Xml.v2
             if (node != null)
                 node.InnerText = newValue;
             {
-                XmlNode newNode = doc.CreateNode(XmlNodeType.Element,
+                XmlNode newNode = _doc.CreateNode(XmlNodeType.Element,
                                                  elementName, parentNode.NamespaceURI);
                 newNode.InnerText = newValue;
                 parentNode.AppendChild(newNode);
@@ -89,17 +89,17 @@ namespace Chillisoft.Xml.v2
         /// Updates the XML document file with changes made to the XML
         /// structure.<br/>
         /// NOTE: This method will only execute if the object was originally
-        /// created with the constructor that specifies a filename.  Alternatively,
+        /// created with the constructor that specifies a _filename.  Alternatively,
         /// use the variant of this method that takes a file name as a parameter.
         /// </summary>
         /// TODO: No testing has been done on this
         public void WriteXmlDocToFile()
         {
-            if (filename != string.Empty)
+            if (_filename != string.Empty)
             {
-                XmlTextWriter writer = new XmlTextWriter(filename,
+                XmlTextWriter writer = new XmlTextWriter(_filename,
                                                          System.Text.Encoding.UTF8);
-                doc.WriteTo(writer);
+                _doc.WriteTo(writer);
                 writer.Close();
             }
         }
@@ -112,7 +112,7 @@ namespace Chillisoft.Xml.v2
         /// TODO: No testing has been done on this
         public void WriteXmlDocToFile(string filename)
         {
-            this.filename = filename;
+            this._filename = filename;
             WriteXmlDocToFile();
         }
     }
