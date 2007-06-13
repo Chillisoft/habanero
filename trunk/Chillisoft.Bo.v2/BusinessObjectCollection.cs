@@ -617,8 +617,7 @@ namespace Chillisoft.Bo.v2
         /// <param name="isAscending">True for ascending, false for descending
         /// </param>
         /// <returns>Returns a sorted business object collection</returns>
-        /// TODO ERIC - for consistency, rename to Collection
-        public BusinessObjectCollection GetSortedCol(string propertyName, bool isAscending)
+        public BusinessObjectCollection GetSortedCollection(string propertyName, bool isAscending)
         {
             //test
             BusinessObjectCollection sortedCol = new BusinessObjectCollection(this.ClassDef);

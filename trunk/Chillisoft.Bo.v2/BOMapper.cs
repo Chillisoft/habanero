@@ -82,7 +82,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="propertyName">The property name</param>
         /// <returns>Returns the formatted object to display</returns>
-        public object GetPropertyValueForUser(string propertyName)
+        public object GetPropertyValueToDisplay(string propertyName)
         {
             if (propertyName.IndexOf(".") != -1)
             {
@@ -119,7 +119,7 @@ namespace Chillisoft.Bo.v2
                     //throw new HabaneroApplicationException("Unable to retrieve property " + propertyName + " from a business object of type " + this._businessObject.GetType().Name);
                 }
                 BOMapper relatedBoMapper = new BOMapper(relatedBo);
-                return relatedBoMapper.GetPropertyValueForUser(propertyName);
+                return relatedBoMapper.GetPropertyValueToDisplay(propertyName);
             }
             else if (propertyName.IndexOf("-") != -1)
             {
@@ -143,7 +143,7 @@ namespace Chillisoft.Bo.v2
             }
             else
             {
-                return _businessObject.GetPropertyValueForUser(propertyName);
+                return _businessObject.GetPropertyValueToDisplay(propertyName);
             }
         }
 

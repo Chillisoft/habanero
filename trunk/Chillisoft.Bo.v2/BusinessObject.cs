@@ -820,9 +820,7 @@ namespace Chillisoft.Bo.v2
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the property value</returns>
-        /// TODO ERIC - come back to this.  is the method name intuitive?
-        ///  for user interface?
-        public object GetPropertyValueForUser(string propName)
+        public object GetPropertyValueToDisplay(string propName)
         {
             if (this.GetBOProp(propName).PropertyType == typeof (Guid) && this.GetPropertyValue(propName) != null &&
                 !this.PrimaryKey.Contains(propName))
@@ -845,14 +843,14 @@ namespace Chillisoft.Bo.v2
         }
 
         /// <summary>
-        /// Returns the property value as in GetPropertyValueForUser(), but
+        /// Returns the property value as in GetPropertyValueToDisplay(), but
         /// returns the value as a string
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns a string</returns>
-        public string GetPropertyStringValueForUser(string propName)
+        public string GetPropertyStringValueToDisplay(string propName)
         {
-            object val = this.GetPropertyValueForUser(propName);
+            object val = this.GetPropertyValueToDisplay(propName);
             if (val != null)
             {
                 return val.ToString();

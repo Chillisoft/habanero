@@ -25,14 +25,14 @@ namespace Chillisoft.Test.Bo.v2
         }
 
         [Test]
-        public void TestGetPropertyValueForUser()
+        public void TestGetPropertyValueToDisplay()
         {
             ClassDef.GetClassDefCol.Clear();
             itsClassDef = MyBo.LoadClassDefWithLookup();
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp2", "s1");
             BOMapper mapper = new BOMapper(bo1);
-            Assert.AreEqual("s1", mapper.GetPropertyValueForUser("TestProp2"));
+            Assert.AreEqual("s1", mapper.GetPropertyValueToDisplay("TestProp2"));
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace Chillisoft.Test.Bo.v2
 
             mockDbConnection.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
                                              new object[] {});
-            Assert.AreEqual("MyValue", mapper.GetPropertyValueForUser("MyRelationship.MyRelatedTestProp"));
+            Assert.AreEqual("MyValue", mapper.GetPropertyValueToDisplay("MyRelationship.MyRelatedTestProp"));
         }
 
         [Test, ExpectedException(typeof (RelationshipNotFoundException))]
@@ -70,7 +70,7 @@ namespace Chillisoft.Test.Bo.v2
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
             BOMapper mapper = new BOMapper(bo1);
-            Assert.AreEqual(null, mapper.GetPropertyValueForUser("MyIncorrectRelationship.MyRelatedTestProp"));
+            Assert.AreEqual(null, mapper.GetPropertyValueToDisplay("MyIncorrectRelationship.MyRelatedTestProp"));
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace Chillisoft.Test.Bo.v2
 
             mockDbConnection.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
                                              new object[] {});
-            Assert.AreEqual(null, mapper.GetPropertyValueForUser("MyRelationship.MyRelatedTestProp"));
+            Assert.AreEqual(null, mapper.GetPropertyValueToDisplay("MyRelationship.MyRelatedTestProp"));
         }
 
         public void TestVirtualPropertyValue()
@@ -110,7 +110,7 @@ namespace Chillisoft.Test.Bo.v2
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject(connection);
 
             BOMapper mapper = new BOMapper(bo1);
-            Assert.AreEqual("MyNameIsMyBo", mapper.GetPropertyValueForUser("-MyName-"));
+            Assert.AreEqual("MyNameIsMyBo", mapper.GetPropertyValueToDisplay("-MyName-"));
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Chillisoft.Bo.v2
             BOMapper mapper = new BOMapper(e.BusinessObject);
             foreach (UIGridProperty gridProperty in _uiGridProperties)
             {
-                object val = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
+                object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
                 if (val != null && val is DateTime)
                 {
                     val = ((DateTime) val).ToString("yyyy/MM/dd");
@@ -95,7 +95,7 @@ namespace Chillisoft.Bo.v2
             BOMapper mapper = new BOMapper(e.BusinessObject);
             foreach (UIGridProperty gridProperty in _uiGridProperties)
             {
-                object val = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
+                object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
                 if (val != null && val is DateTime)
                 {
                     val = ((DateTime) val).ToString("yyyy/MM/dd");

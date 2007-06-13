@@ -60,7 +60,7 @@ namespace Chillisoft.Bo.v2
                 BOMapper mapper = new BOMapper(businessObjectBase);
                 foreach (UIGridProperty gridProperty in _uiGridProperties)
                 {
-                    object val = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
+                    object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
                     // object val = businessObjectBase.GetPropertyValue(gridProperty.PropertyName);
 
                     if (val != null && val is DateTime)
@@ -76,8 +76,8 @@ namespace Chillisoft.Bo.v2
                         val = ((Guid) val).ToString("B");
                     }
                     values[i++] = val;
-                    //values[i++] = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
-                    //values[i++] = businessObjectBase.GetPropertyValueForUser(gridProperty.PropertyName);
+                    //values[i++] = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
+                    //values[i++] = businessObjectBase.GetPropertyValueToDisplay(gridProperty.PropertyName);
                 }
                 _table.LoadDataRow(values, true);
             }

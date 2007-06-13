@@ -152,7 +152,7 @@ namespace Chillisoft.Db.v2
                     _cachedSettings.Remove(settingName);
                 }
             }
-            SqlStatement statement = CreateSqlStatement(settingName, date);
+            SqlStatement statement = CreateSelectStatement(settingName, date);
             IDataReader reader = null;
             try
             {
@@ -186,8 +186,7 @@ namespace Chillisoft.Db.v2
         /// <param name="settingName">The setting name</param>
         /// <param name="date">The date</param>
         /// <returns>Returns a sql statement object</returns>
-        /// TODO ERIC - could rename this to include "select"
-        private static SqlStatement CreateSqlStatement(string settingName, DateTime date)
+        private static SqlStatement CreateSelectStatement(string settingName, DateTime date)
         {
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
             statement.Statement.Append("select SettingValue from tbsetting where SettingName = ");

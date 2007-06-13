@@ -29,7 +29,7 @@ namespace Chillisoft.Test.Bo.v2
             ClassDef classDef = MyBo.LoadClassDefWithLookup();
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "s1");
-            Assert.AreEqual("s1", bo.GetPropertyValueForUser("TestProp2"));
+            Assert.AreEqual("s1", bo.GetPropertyValueToDisplay("TestProp2"));
             Assert.AreEqual(new Guid("{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"), bo.GetPropertyValue("TestProp2"));
         }
 

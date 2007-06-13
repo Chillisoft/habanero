@@ -258,7 +258,7 @@ namespace Chillisoft.Bo.v2
                     {
                         if (DBNull.Value.Equals(e.Row[uiProperty.PropertyName]))
                         {
-                            e.Row[uiProperty.PropertyName] = newBo.GetPropertyValueForUser(uiProperty.PropertyName);
+                            e.Row[uiProperty.PropertyName] = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
                         }
                     }
                 }
@@ -315,7 +315,7 @@ namespace Chillisoft.Bo.v2
             BOMapper mapper = new BOMapper(e.BusinessObject);
             foreach (UIGridProperty gridProperty in _uiGridProperties)
             {
-                values[i++] = mapper.GetPropertyValueForUser(gridProperty.PropertyName);
+                values[i++] = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
             }
             _table.LoadDataRow(values, false);
             _rowStates.Add(this._table.Rows[this.FindRow(e.BusinessObject)], RowState.Added);

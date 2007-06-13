@@ -239,7 +239,7 @@ namespace Chillisoft.UI.BOControls.v2
         protected virtual object GetPropertyValue()
         {
             BOMapper mapper = new BOMapper(_businessObject);
-            return mapper.GetPropertyValueForUser(_propertyName);
+            return mapper.GetPropertyValueToDisplay(_propertyName);
         }
 
         /// <summary>
