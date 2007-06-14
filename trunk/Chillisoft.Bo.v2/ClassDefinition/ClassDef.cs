@@ -75,8 +75,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 
         private static PropDef _VersionNumberPropDef =
             new PropDef("SyncVersionNumber", typeof (int), PropReadWriteRule.ReadManyWriteMany, 0);
-
-
+		
         #region Constructors
 
         /// <summary>
@@ -206,8 +205,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		}
 
         #endregion Constructors
-
-
+		
         #region Properties
 
 		/// <summary>
@@ -246,7 +244,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/////</summary>
 		//public string ClassFullName
 		//{
-		//    get { return ClassDefCol.GetTypeId(_AssemblyName, _ClassName); }
+		//    get { return ClassDefCol.GetTypeId(__assemblyName, __className); }
 		//}
 
         /// <summary>
@@ -343,8 +341,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         }
 
         #endregion Properties
-
-
+		
         #region FactoryMethods
 
         /// <summary>
@@ -376,8 +373,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         }
 
         #endregion FactoryMethods
-
-
+		
         #region Creating BOs
 
         /// <summary>
@@ -444,7 +440,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                 throw new MissingMethodException("Each class that implements " +
                      "BusinessObject needs to have a constructor with an argument " +
                      "to accept a ClassDef object and pass it to the base class " +
-                     "(eg. public ClassName(ClassDef classDef) : base(classDef) {} )", ex);
+                     "(eg. public _className(ClassDef classDef) : base(classDef) {} )", ex);
             }
         }
 
@@ -514,54 +510,57 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         public BusinessObject CreateNewBusinessObject(IDatabaseConnection conn)
         {
             return this.InstantiateBusinessObjectWithClassDef(conn);
-        }
+		}
 
+		#endregion //Creating BOs
 
-    	private Type MyClassType
+		#region Type Initialisation
+
+		private Type MyClassType
     	{
 			get
 			{
-				//TODO error: What happens if the AssemblyName or Classname is null?
-				if (_ClassType == null && _AssemblyName != null && _ClassName != null)
-				{
-					try
-					{
-						_ClassType = TypeLoader.LoadType(_AssemblyName, _ClassName);
-					}
-					catch (UnknownTypeNameException ex)
-					{
-						//TODO: Is this the correct thing to do?
-						throw new UnknownTypeNameException("Unable to load the class type while " +
-							"attempting to load a type from a class definition, given the 'assembly' as: '" +
-							_AssemblyName + "', and the 'class' as: '" + _ClassName +
-							"'. Check that the class exists in the given assembly name and " +
-							"that spelling and capitalisation are correct.", ex);
-						//_ClassType = null;
-					}
-				}
+				TypeLoader.LoadClassType(ref _ClassType,_AssemblyName, _ClassName,
+					"class", "class definition");
+				//if (_ClassType == null && _AssemblyName != null && _ClassName != null)
+				//{
+				//    try
+				//    {
+				//        _ClassType = TypeLoader.LoadType(_AssemblyName, _ClassName);
+				//    }
+				//    catch (UnknownTypeNameException ex)
+				//    {
+				//        //TODO: Is this the correct thing to do?
+				//        throw new UnknownTypeNameException("Unable to load the class type while " +
+				//            "attempting to load a type from a class definition, given the 'assembly' as: '" +
+				//            _AssemblyName + "', and the 'class' as: '" + _ClassName +
+				//            "'. Check that the class exists in the given assembly name and " +
+				//            "that spelling and capitalisation are correct.", ex);
+				//    }
+				//}
 				return _ClassType;
 			}
 			set
 			{
 				_ClassType = value;
-				if (_ClassType != null)
-				{
-					_AssemblyName = ClassDefCol.CleanUpAssemblyName(_ClassType.Assembly.ManifestModule.ScopeName);
-					_ClassName = _ClassType.FullName;
-				} else
-				{
-					_AssemblyName = null;
-					_ClassName = null;
-				}
+				TypeLoader.ClassTypeInfo(_ClassType, out _AssemblyName, out _ClassName);
+				//if (_ClassType != null)
+				//{
+				//    _AssemblyName = ClassDefCol.CleanUpAssemblyName(_ClassType.Assembly.ManifestModule.ScopeName);
+				//    _ClassName = _ClassType.FullName;
+				//} else
+				//{
+				//    _AssemblyName = null;
+				//    _ClassName = null;
+				//}
 			}
-    	}
+		}
 
-        #endregion //Creating BOs
+		#endregion Type Initialisation
 
+		#region Superclasses & Inheritance
 
-        #region Superclasses & Inheritance
-
-        /// <summary>
+		/// <summary>
         /// Gets and sets the super-class of this class definition
         /// </summary>
         public SuperClassDesc SuperClassDesc
@@ -624,8 +623,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         }
 
         #endregion //Superclasses&inheritance
-
-
+		
         #region Returning Defs
 
         /// <summary>

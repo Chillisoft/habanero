@@ -362,7 +362,7 @@ namespace Chillisoft.Bo.v2
             mMachineNameEdited = (string) info.GetValue("MachineNameEdited", typeof (string));
             mDateUpdated = (DateTime) info.GetValue("DateUpdated", typeof (DateTime));
             mObjectID = (string) info.GetValue("ObjectID", typeof (string));
-            mClassName = (string) info.GetValue("ClassName", typeof (string));
+            mClassName = (string) info.GetValue("_className", typeof (string));
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace Chillisoft.Bo.v2
             info.AddValue("MachineNameEdited", mMachineNameEdited);
             info.AddValue("DateUpdated", mDateUpdated);
             info.AddValue("ObjectID", mObjectID);
-            info.AddValue("ClassName", mClassName);
+            info.AddValue("_className", mClassName);
             base.GetObjectData(info, context);
         }
     }

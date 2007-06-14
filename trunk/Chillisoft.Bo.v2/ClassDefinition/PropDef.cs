@@ -483,36 +483,39 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     	{
 			get
 			{
-				if (_propType == null && _propTypeAssemblyName != null && _propTypeName != null)
-				{
-					try
-					{
-						_propType = TypeLoader.LoadType(_propTypeAssemblyName, _propTypeName);
-					}
-					catch (Exception ex)
-					{
-						throw new UnknownTypeNameException(string.Format(
-							"Unable to load the property type while attempting to " +
-							"load a property definition, given the 'assembly' as: '{0}', " +
-							"and the 'type' as: '{1}'. Check that the type exists in the " +
-							"given assembly name and that spelling and capitalisation are correct.",
-							_propTypeAssemblyName, _propTypeName), ex);
-					}
-				}
+				TypeLoader.LoadClassType(ref _propType, _propTypeAssemblyName, _propTypeName,
+					"property", "property definition");
+				//if (_propType == null && _propTypeAssemblyName != null && _propTypeName != null)
+				//{
+				//    try
+				//    {
+				//        _propType = TypeLoader.LoadType(_propTypeAssemblyName, _propTypeName);
+				//    }
+				//    catch (Exception ex)
+				//    {
+				//        throw new UnknownTypeNameException(string.Format(
+				//            "Unable to load the property type while attempting to " +
+				//            "load a property definition, given the 'assembly' as: '{0}', " +
+				//            "and the 'type' as: '{1}'. Check that the type exists in the " +
+				//            "given assembly name and that spelling and capitalisation are correct.",
+				//            _propTypeAssemblyName, _propTypeName), ex);
+				//    }
+				//}
 				return _propType;
 			}
 			set
 			{
 				_propType = value;
-				if (_propType != null)
-				{
-					_propTypeAssemblyName = ClassDefCol.CleanUpAssemblyName(_propType.Assembly.ManifestModule.ScopeName);
-					_propTypeName = _propType.FullName;
-				}else
-				{
-					_propTypeAssemblyName = null;
-					_propTypeName = null;
-				}
+				TypeLoader.ClassTypeInfo(_propType, out _propTypeAssemblyName, out _propTypeName);
+				//if (_propType != null)
+				//{
+				//    _propTypeAssemblyName = ClassDefCol.CleanUpAssemblyName(_propType.Assembly.ManifestModule.ScopeName);
+				//    _propTypeName = _propType.FullName;
+				//}else
+				//{
+				//    _propTypeAssemblyName = null;
+				//    _propTypeName = null;
+				//}
 			}
     	}
 

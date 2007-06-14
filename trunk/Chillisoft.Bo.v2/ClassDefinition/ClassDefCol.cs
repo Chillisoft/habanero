@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Chillisoft.Util.v2;
 
 namespace Chillisoft.Bo.ClassDefinition.v2
 {
@@ -226,8 +227,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 				}
     			className = className.Substring(pos + 1);
     		}
-			assemblyName = CleanUpAssemblyName(assemblyName);
-    		string id = "Assembly:" + assemblyName + namespaceString + " ClassName:" + className;
+			assemblyName = TypeLoader.CleanUpAssemblyName(assemblyName);
+    		string id = "Assembly:" + assemblyName + namespaceString + " _className:" + className;
     		return id.ToUpper();
     	}
 
@@ -244,14 +245,6 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     		else
 				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.Name, includeNamespace);
     	}
-
-		internal static string CleanUpAssemblyName(string assemblyName)
-		{
-			if (assemblyName.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase)
-				|| assemblyName.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase))
-				assemblyName = assemblyName.Remove(assemblyName.Length - 4);
-			return assemblyName;
-		}
 
 		#endregion
 
