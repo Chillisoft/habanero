@@ -105,7 +105,7 @@ namespace Chillisoft.Util.v2
                                                        string parameterName,
                                                        string message)
         {
-            CheckArgumentNotNull(str, parameterName);
+			CheckArgumentNotNull(str, parameterName, parameterName + " cannot be null.\n" + message);
 
             if (str.Length == 0)
             {

@@ -53,6 +53,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 				string typeId = GetTypeIdForItem(key, out found);
 				if (found) return (ClassDef)Dictionary[typeId];
 				else return null;
+				//TODO error: When converted to use generic collection then 
+				// an error (KeyNotFoundException) should be thrown if the item is not in the collection?
 			}
 		}
 
@@ -69,8 +71,12 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		{
 			get
 			{
-				//TODO: Error if (this.Contains(key))
-				return ((ClassDef)Dictionary[ClassDefCol.GetTypeId(assemblyName, className)]);
+				bool found;
+				string typeId = GetTypeIdForItem(assemblyName, className, out found);
+				if (found) return (ClassDef)Dictionary[typeId];
+				else return null;
+				//TODO error: When converted to use generic collection then 
+				// an error (KeyNotFoundException) should be thrown if the item is not in the collection?
 			}
 		}
 		
@@ -96,7 +102,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// <param name="value">The class definition to add</param>
 		public void Add(ClassDef value)
 		{
-			Dictionary.Add(value.ClassFullName, value);
+			string typeId = GetTypeId(value.AssemblyName, value.ClassName, true);
+			Dictionary.Add(typeId, value);
 		}
 
         /// <summary>
@@ -120,7 +127,9 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// <returns>Returns true if found, false if not</returns>
 		public bool Contains(ClassDef classDef)
 		{
-			return (Dictionary.Contains(classDef.ClassFullName));
+			bool found;
+			string typeId = GetTypeIdForItem(classDef.AssemblyName, classDef.ClassName, out found);
+			return found;
 		}
 
 
@@ -133,8 +142,9 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		{
 			bool found;
 			string typeId = GetTypeIdForItem(key, out found);
-			Dictionary.Remove(typeId);
-			//TODO: should this throw an error if it is not found?
+			if (found) Dictionary.Remove(typeId);
+			//TODO error: When converted to use generic collection then 
+			// an the value of found should be returned (method type should be bool).
 		}
 
 		/// <summary>
@@ -143,7 +153,11 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// <param name="classDef">The class definition to be removed</param>
 		public void Remove(ClassDef classDef)
 		{
-			Dictionary.Remove(classDef.ClassFullName);
+			bool found;
+			string typeId = GetTypeIdForItem(classDef.AssemblyName, classDef.ClassName, out found);
+			if (found) Dictionary.Remove(typeId);
+			//TODO error: When converted to use generic collection then 
+			// an the value of found should be returned (method type should be bool).
 		}
 
         /// <summary>
@@ -155,6 +169,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             instanceFlag = false;
         }
+
+		#region TypeId Methods
 
 		private string GetTypeIdForItem(Type key, out bool found)
 		{
@@ -173,6 +189,23 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 			return typeId;
 		}
 
+		private string GetTypeIdForItem(string assemblyName, string className, out bool found)
+		{
+			string typeId = ClassDefCol.GetTypeId(assemblyName, className, false);
+			found = false;
+			if (Dictionary.Contains(typeId))
+				found = true;
+			else
+			{
+				typeId = ClassDefCol.GetTypeId(assemblyName, className, true);
+				if (Dictionary.Contains(typeId))
+				{
+					found = true;
+				}
+			}
+			return typeId;
+		}
+
     	///<summary>
     	/// This method combines the assembly name and class name to 
     	/// create a string that represents the Class Type.
@@ -180,17 +213,20 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     	///<param name="assemblyName">The class's assembly name</param>
     	///<param name="className">The class's name</param>
     	///<returns>A string representing the Class Type.</returns>
-    	internal static string GetTypeId(string assemblyName, string className)
+		///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
+		internal static string GetTypeId(string assemblyName, string className, bool includeNamespace)
     	{
     		string namespaceString = "";
     		int pos = className.LastIndexOf(".");
     		if (pos != -1)
     		{
-    			namespaceString = " Namespace:" + className.Substring(0, pos);
+				if (includeNamespace)
+				{
+					namespaceString = " Namespace:" + className.Substring(0, pos);
+				}
     			className = className.Substring(pos + 1);
     		}
-    		if (assemblyName.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase))
-    			assemblyName = assemblyName.Remove(assemblyName.Length - 4);
+			assemblyName = CleanUpAssemblyName(assemblyName);
     		string id = "Assembly:" + assemblyName + namespaceString + " ClassName:" + className;
     		return id.ToUpper();
     	}
@@ -200,13 +236,25 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     	///</summary>
     	///<param name="classType">The class's Type object.</param>
     	///<returns>A string representing the Class Type.</returns>
+		///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
     	internal static string GetTypeId(Type classType, bool includeNamespace)
     	{
     		if (includeNamespace)
-    			return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.FullName);
+				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.FullName, includeNamespace);
     		else
-    			return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.Name);
+				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.Name, includeNamespace);
     	}
+
+		internal static string CleanUpAssemblyName(string assemblyName)
+		{
+			if (assemblyName.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase)
+				|| assemblyName.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase))
+				assemblyName = assemblyName.Remove(assemblyName.Length - 4);
+			return assemblyName;
+		}
+
+		#endregion
+
     }
 
     #region "self Tests"

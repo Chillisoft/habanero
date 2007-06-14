@@ -48,6 +48,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.Bo.ClassDefinition.v2.PropDef");
         private string _propName;
+		private string _propTypeAssemblyName;
+    	private string _propTypeName;
 		private Type _propType;
 		private cbsPropReadWriteRule _propRWStatus;
 		private string _databaseFieldName; //This allows you to have a 
@@ -58,6 +60,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             //where the database has already been set up.
 		//TODO: I changed this field from ReadOnly, was there any point to this. Please Review. (-Mark)
 		private object _defaultValue = null;
+    	private string _defaultValueString;
+    	private bool _hasDefaultValueBeenValidated;
         private PropRuleBase _propRule;
         private ILookupListSource _lookupListSource = new NullLookupListSource();
 
@@ -65,68 +69,114 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         #region "Constuctor and destructors"
 
         /// <summary>
-        /// This constructor is used when you do not want to set the 
-        /// property without any rules or property controls. This should seldom be 
-        /// used, except in the case of calculated fields that are not 
-        /// updated to the database (i.e. isPersistable = false)
+        /// This constructor is used to create a propdef using it's property type and other information. 
         /// </summary>
-        /// <param name="propName">The name of the property (e.g. surname)</param>
+        /// <param name="propName">The name of the property (e.g. "surname")</param>
         /// <param name="propType">The type of the property (e.g. string)</param>
-        /// <param name="propRWStatus">Rules for how a property can be
-        /// accessed. See cbsPropReadWriteRule enumeration for more detail.
-        /// </param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+		/// See cbsPropReadWriteRule enumeration for more detail.</param>
         /// <param name="databaseFieldName">The database field name - this
         /// allows you to have a database field name that is different to the
         /// property name, which is useful for migrating systems where
-        /// the database has already been set up</param>
+        /// the database has already been set up.</param>
         /// <param name="defaultValue">The default value that a property 
         /// of a new object will be set to</param>
         public PropDef(string propName,
                        Type propType,
                        cbsPropReadWriteRule propRWStatus,
                        string databaseFieldName,
-                       object defaultValue)
+                       object defaultValue) :
+							this(propName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null)
         {
-            if (propName.IndexOfAny(new char[] {'.', '-', '|'}) != -1)
-            {
-                throw new ArgumentException(
-                    "A property name cannot contain any of the following characters: [.-|]  Invalid property name " +
-                    propName);
-            }
-            _propName = propName;
-            _propType = propType;
-            _propRWStatus = propRWStatus;
-            _databaseFieldName = databaseFieldName;
-            if ((defaultValue == null) || _propType.IsInstanceOfType(defaultValue))
-            {
-                _defaultValue = defaultValue;
-            }
-            else
-            {
-                throw new ArgumentException("default value " + defaultValue +
-                                            " is invalid since it is not of type " +
-                                            _propType.ToString(), "defaultValue");
-            }
         }
 
-        /// <summary>
-        /// A second constructor similar to the other, but assumes that the 
-        /// databaseFieldName will be the same as the propName
-        /// </summary>
+		/// <summary>
+		/// This constructor is used to create a propdef using it's property type and other information. 
+		/// The database field name is presumed to be the same as the property name.
+		/// </summary>
+		/// <param name="propName">The name of the property (e.g. "surname")</param>
+		/// <param name="propType">The type of the property (e.g. string)</param>
+		/// <param name="propRWStatus">Rules for how a property can be accessed.
+		/// See cbsPropReadWriteRule enumeration for more detail.</param>
+		/// <param name="defaultValue">The default value that a property 
+		/// of a new object will be set to</param>
         public PropDef(string propName,
                        Type propType,
                        cbsPropReadWriteRule propRWStatus,
-                       object defaultValue) :
-                           this(propName, propType, propRWStatus, propName, defaultValue)
+                       object defaultValue) 
+			:this(propName, propType,null,null, propRWStatus, null, defaultValue, null)
         {
         }
 
-        #endregion
+		/// <summary>
+		/// This constructor is used to create a propdef using property type assembly and class name and other information. 
+		/// The default value and the property type are loaded when they are needed.
+		/// </summary>
+		/// <param name="propName">The name of the property (e.g. "surname")</param>
+		/// <param name="assemblyName">The assembly name of the property type</param>
+		/// <param name="typeName">The type name of the property type (e.g. "string")</param>
+		/// <param name="propRWStatus">Rules for how a property can be accessed.
+		/// See cbsPropReadWriteRule enumeration for more detail.</param>
+		/// <param name="databaseFieldName">The database field name - this
+		/// allows you to have a database field name that is different to the
+		/// property name, which is useful for migrating systems where
+		/// the database has already been set up.</param>
+		/// <param name="defaultValue">The default value that a property 
+		/// of a new object will be set to</param>
+		public PropDef(string propName,
+					string assemblyName, string typeName,
+					cbsPropReadWriteRule propRWStatus,
+					string databaseFieldName,
+					string defaultValue) 
+			:this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue)
+		{
+		}
 
-        
-        #region "properties"
+		private PropDef(string propName,
+					   Type propType, string assemblyName, string typeName,
+					   cbsPropReadWriteRule propRWStatus,
+					   string databaseFieldName,
+					   object defaultValue, string defaultValueString)
+		{
+			if (propName.IndexOfAny(new char[] { '.', '-', '|' }) != -1)
+			{
+				throw new ArgumentException(
+					"A property name cannot contain any of the following characters: [.-|]  Invalid property name " +
+					propName);
+			}
+			ArgumentValidationHelper.CheckStringArgumentNotEmpty(propName, "propName","This field is compulsary for the PropDef class.");
+			_propName = propName;
+			if (propType != null)
+			{
+				MyPropertyType = propType;
+			}else
+			{
+				_propTypeAssemblyName = assemblyName;
+				_propTypeName = typeName;
+			}
+			_propRWStatus = propRWStatus;
+			if (databaseFieldName != null)
+			{
+				_databaseFieldName = databaseFieldName;
+			}else
+			{
+				_databaseFieldName = propName;
+			}
+			if (defaultValue != null)
+			{
+				MyDefaultValue = defaultValue;
+			}else
+			{
+				_defaultValueString = defaultValueString;
+			}
+		}
 
-        /// <summary>
+		#endregion
+
+
+		#region "properties"
+
+		/// <summary>
         /// The name of the property, e.g. surname
         /// </summary>
         public string PropertyName
@@ -134,14 +184,47 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             get { return _propName; }
 			protected set{ _propName = value;}
         }
+		
+		/// <summary>
+		/// The name of the property type assembly
+		/// </summary>
+		protected string PropertyTypeAssemblyName
+		{
+			get { return _propTypeAssemblyName; }
+			set
+			{
+				if (_propTypeAssemblyName != value)
+				{
+					_propTypeName = null;
+					_propType = null;
+				}
+				_propTypeAssemblyName = value;
+			}
+		}
+
+		/// <summary>
+		/// The name of the property type
+		/// </summary>
+		protected string PropertyTypeName
+		{
+			get { return _propTypeName; }
+			set
+			{
+				if (_propTypeName != value)
+				{
+					_propType = null;
+				}
+				_propTypeName = value;
+			}
+		}
 
         /// <summary>
         /// The type of the property, e.g. string
         /// </summary>
         public Type PropertyType
         {
-            get { return _propType; }
-			protected set{ _propType = value;}
+			get { return MyPropertyType; }
+			protected set { MyPropertyType = value; }
         }
 
         /// <summary>
@@ -170,11 +253,27 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public object DefaultValue
         {
-            get { return _defaultValue; }
-			protected set{ _defaultValue = value;}
+            get { return MyDefaultValue; }
+			protected set{ MyDefaultValue = value;}
         }
 
-        #endregion
+		/// <summary>
+		/// The default value that a property of a new object will be set to
+		/// </summary>
+		public string DefaultValueString
+		{
+			get { return _defaultValueString; }
+			protected set
+			{
+				if (_defaultValueString != value)
+				{
+					_defaultValue = null;
+				}
+				_defaultValueString = value;
+			}
+		}
+		
+		#endregion
 
         
         #region "Rules"
@@ -229,30 +328,31 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             if (isNewObject)
             {
-                if (_defaultValue != null)
+                if (MyDefaultValue != null)
                 {
                     //log.Debug("Creating BoProp with default value " + _defaultValue );
                 }
-                return new BOProp(this, _defaultValue);
+				return new BOProp(this, MyDefaultValue);
             }
             else
             {
                 return new BOProp(this);
             }
-        }
+		}
 
-        #endregion //BOProps
+		#endregion //BOProps
 
-        
-        #region "For Testing"
 
-        /// <summary>
+		#region "For Testing"
+
+		/// <summary>
         /// Returns the type of the property
         /// </summary>
         /// TODO ERIC: what is this?
         protected internal Type PropType
         {
-            get { return _propType; }
+            get { return MyPropertyType; }
+			protected set { MyPropertyType = value; }
         }
 
         #endregion
@@ -268,7 +368,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             get
             {
-                if (this._propType == typeof (DateTime))
+                if (MyPropertyType == typeof (DateTime))
                 {
                     return ParameterType.Date;
                 }
@@ -378,7 +478,115 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 
         #endregion //PropertyComparer
 
-    }
+		#region Type and Default Value Initialisation
+
+    	private Type MyPropertyType
+    	{
+			get
+			{
+				if (_propType == null && _propTypeAssemblyName != null && _propTypeName != null)
+				{
+					try
+					{
+						_propType = TypeLoader.LoadType(_propTypeAssemblyName, _propTypeName);
+					}
+					catch (Exception ex)
+					{
+						throw new UnknownTypeNameException(string.Format(
+							"Unable to load the property type while attempting to " +
+							"load a property definition, given the 'assembly' as: '{0}', " +
+							"and the 'type' as: '{1}'. Check that the type exists in the " +
+							"given assembly name and that spelling and capitalisation are correct.",
+							_propTypeAssemblyName, _propTypeName), ex);
+					}
+				}
+				return _propType;
+			}
+			set
+			{
+				_propType = value;
+				if (_propType != null)
+				{
+					_propTypeAssemblyName = ClassDefCol.CleanUpAssemblyName(_propType.Assembly.ManifestModule.ScopeName);
+					_propTypeName = _propType.FullName;
+				}else
+				{
+					_propTypeAssemblyName = null;
+					_propTypeName = null;
+				}
+			}
+    	}
+
+		private object MyDefaultValue
+		{
+			get
+			{
+				object defaultValue = null;
+				if (_defaultValue == null && _defaultValueString != null)
+				{
+					_hasDefaultValueBeenValidated = false;
+					if (MyPropertyType == typeof(Guid))
+					{
+						defaultValue = new Guid(_defaultValueString);
+					} else
+					{
+						try
+						{
+							defaultValue = Convert.ChangeType(_defaultValueString, MyPropertyType);
+						}catch(InvalidCastException ex)
+						{
+							throw new InvalidCastException(String.Format(
+								"The default value '{0}' cannot be cast to " +
+								"the property type ({1}).", _defaultValueString, _propTypeName), ex);
+						}catch(FormatException ex)
+						{
+							throw new FormatException( String.Format(
+								"The default value '{0}' cannot be converted to " +
+								"the property type ({1}).",_defaultValueString,_propTypeName), ex);
+						}
+					}
+				} else
+				{
+					defaultValue = _defaultValue;
+				}
+				validateDefaultValue(defaultValue);
+				return _defaultValue;
+			}
+			set
+			{
+				_hasDefaultValueBeenValidated = false;
+				validateDefaultValue(value);
+				if (_defaultValue != null)
+				{
+					_defaultValueString = _defaultValue.ToString();
+				} else
+				{
+					_defaultValueString = null;
+				}
+			}
+		}
+
+    	private void validateDefaultValue(object defaultValue)
+    	{
+    		if (!_hasDefaultValueBeenValidated)
+    		{
+    			if ((defaultValue == null) || MyPropertyType.IsInstanceOfType(defaultValue))
+    			{
+    				_defaultValue = defaultValue;
+    				_hasDefaultValueBeenValidated = true;
+    			}
+    			else
+    			{
+    				throw new ArgumentException(string.Format(
+						"Default value {0} is invalid since it is " +
+						"not of type {1}.", defaultValue, _propTypeName), "defaultValue");
+    			}
+    		}
+		}
+
+		#endregion
+
+	}
 
 
     #region Tests
@@ -386,40 +594,71 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     [TestFixture]
     public class PropDefTester
     {
-        private PropDef mpropDef;
+        private PropDef _propDef;
 
         [SetUp]
         public void Init()
         {
-            mpropDef = new PropDef("PropName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            _propDef = new PropDef("PropName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
         }
 
         [Test]
         public void TestCreatePropDef()
         {
-            Assert.AreEqual("PropName", mpropDef.PropertyName);
-            Assert.AreEqual("PropName", mpropDef.DatabaseFieldName);
-            Assert.AreEqual(typeof (string), mpropDef.PropType);
+            Assert.AreEqual("PropName", _propDef.PropertyName);
+            Assert.AreEqual("PropName", _propDef.DatabaseFieldName);
+            Assert.AreEqual(typeof (string), _propDef.PropType);
             PropDef lPropDef = new PropDef("prop", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, 1);
         }
 
-        [Test]
-        [ExpectedException(typeof (ArgumentException))]
-        public void TestCreatePropDefInvalidDefault()
-        {
-            PropDef lPropDef = new PropDef("prop", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, "");
-        }
+		[Test]
+		public void TestCreateLatePropDefInvalidTypeNotAccessed()
+		{
+			PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", cbsPropReadWriteRule.ReadManyWriteMany, null, "");
+		}
 
-        [Test]
-        [ExpectedException(typeof (ArgumentException))]
-        public void TestCreatePropDefInvalidDefault2()
-        {
-            PropDef lPropDef = new PropDef("prop", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, 1);
-        }
+		[Test]
+		[ExpectedException(typeof(UnknownTypeNameException))]
+		public void TestCreateLatePropDefInvalidType()
+		{
+			PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", cbsPropReadWriteRule.ReadManyWriteMany, null, "");
+			Type propType = propDef.PropertyType;
+			Assert.Fail("This line should not be reached because the previous line should have failed.");
+		}
 
-        public void TestCreateBOProp()
+		[Test]
+		[ExpectedException(typeof(ArgumentException))]
+		public void TestCreatePropDefInvalidDefault()
+		{
+			PropDef lPropDef = new PropDef("prop", typeof(int), cbsPropReadWriteRule.ReadManyWriteMany, "");
+		}
+
+		[Test]
+		[ExpectedException(typeof(ArgumentException))]
+		public void TestCreatePropDefInvalidDefault2()
+		{
+			PropDef lPropDef = new PropDef("prop", typeof(string), cbsPropReadWriteRule.ReadManyWriteMany, 1);
+		}
+
+		[Test]
+		public void TestCreateLatePropDefInvalidDefaultNotAccessed()
+		{
+			PropDef lPropDef = new PropDef("prop", "System", "Int32", cbsPropReadWriteRule.ReadManyWriteMany, null, "");
+			//No error
+		}
+
+		[Test]
+		[ExpectedException(typeof(FormatException))]
+		public void TestCreateLatePropDefInvalidDefault()
+		{
+			PropDef lPropDef = new PropDef("prop", "System", "Int32", cbsPropReadWriteRule.ReadManyWriteMany, null, "");
+			object defaultValue = lPropDef.DefaultValue;
+			Assert.Fail("This line should not be reached because the previous line should have failed.");
+		}
+
+		public void TestCreateBOProp()
         {
-            BOProp prop = mpropDef.CreateBOProp(false);
+            BOProp prop = _propDef.CreateBOProp(false);
             Assert.AreEqual("PropName", prop.PropertyName);
             Assert.AreEqual("PropName", prop.DatabaseFieldName);
         }

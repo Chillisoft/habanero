@@ -11,10 +11,13 @@ namespace Chillisoft.Bo.Loaders.v2
     /// </summary>
     public class XmlPropertyLoader : XmlLoader
     {
-        private Type _propertyType;
+        //private Type _propertyType;
+    	private string _assemblyName;
+    	private string _typeName;
         private cbsPropReadWriteRule _readWriteRule;
-        private String _propertyName;
-        private object _defaultValue;
+        private string _propertyName;
+        //private object _defaultValue;
+    	private string _defaultValueString;
         private string _databaseFieldName;
         private PropDef _propDef;
 
@@ -84,16 +87,19 @@ namespace Chillisoft.Bo.Loaders.v2
 
             _reader.Read();
 
-            if (_databaseFieldName != null)
-            {
-                _propDef =
-                    new PropDef(_propertyName, _propertyType, _readWriteRule, _databaseFieldName,
-                                _defaultValue);
-            }
-            else
-            {
-                _propDef = new PropDef(_propertyName, _propertyType, _readWriteRule, _defaultValue);
-            }
+			_propDef = new PropDef(_propertyName, _assemblyName, _typeName, 
+				_readWriteRule, _databaseFieldName, _defaultValueString);
+
+			//if (_databaseFieldName != null)
+			//{
+			//    _propDef =
+			//        new PropDef(_propertyName, _propertyType, _readWriteRule, _databaseFieldName,
+			//                    _defaultValue);
+			//}
+			//else
+			//{
+			//    _propDef = new PropDef(_propertyName, _propertyType, _readWriteRule, _defaultValue);
+			//}
 
             if (_reader.Name.Length >= 12 && _reader.Name.Substring(0, 12) == "propertyRule")
             {
@@ -127,20 +133,20 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadPropertyType()
         {
-            string assemblyName = _reader.GetAttribute("assembly");
-            string typeName = _reader.GetAttribute("type");
-            try
-            {
-                _propertyType = TypeLoader.LoadType(assemblyName, typeName);
-            }
-            catch (Exception ex)
-            {
-                throw new UnknownTypeNameException("Unable to load the property type while " +
-                       "attempting to load a property definition, given the 'assembly' as: '" +
-                       assemblyName + "', and the 'type' as: '" + typeName +
-                       "'. Check that the type exists in the given assembly name and " +
-                       "that spelling and capitalisation are correct.", ex);
-            }
+            _assemblyName = _reader.GetAttribute("assembly");
+            _typeName = _reader.GetAttribute("type");
+			//try
+			//{
+			//    _propertyType = TypeLoader.LoadType(assemblyName, typeName);
+			//}
+			//catch (Exception ex)
+			//{
+			//    throw new UnknownTypeNameException("Unable to load the property type while " +
+			//           "attempting to load a property definition, given the 'assembly' as: '" +
+			//           assemblyName + "', and the 'type' as: '" + typeName +
+			//           "'. Check that the type exists in the given assembly name and " +
+			//           "that spelling and capitalisation are correct.", ex);
+			//}
         }
 
         /// <summary>
@@ -158,22 +164,22 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadDefaultValue()
         {
-            string strDefValue = _reader.GetAttribute("defaultValue");
-            if (strDefValue != null)
-            {
-                if (_propertyType == typeof (Guid))
-                {
-                    _defaultValue = new Guid(strDefValue);
-                }
-                else
-                {
-                    _defaultValue = Convert.ChangeType(strDefValue, _propertyType);
-                }
-            }
-            else
-            {
-                _defaultValue = null;
-            }
+			_defaultValueString = _reader.GetAttribute("defaultValue");
+			//if (_defaultValueString != null)
+			//{
+			//    if (_propertyType == typeof (Guid))
+			//    {
+			//        _defaultValue = new Guid(_defaultValueString);
+			//    }
+			//    else
+			//    {
+			//        _defaultValue = Convert.ChangeType(_defaultValueString, _propertyType);
+			//    }
+			//}
+			//else
+			//{
+			//    _defaultValue = null;
+			//}
         }
 
         /// <summary>

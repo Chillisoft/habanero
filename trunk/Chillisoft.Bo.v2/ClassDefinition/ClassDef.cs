@@ -208,7 +208,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         #endregion Constructors
 
 
-        #region properties
+        #region Properties
 
 		/// <summary>
 		/// The name of the assembly for the class definition
@@ -241,20 +241,21 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 			}
 		}
 
-		///<summary>
-		/// The full name of the class definition.
-		///</summary>
-		public string ClassFullName
-		{
-			get { return ClassDefCol.GetTypeId(_AssemblyName, _ClassName); }
-		}
+		/////<summary>
+		///// The full name of the class definition.
+		/////</summary>
+		//public string ClassFullName
+		//{
+		//    get { return ClassDefCol.GetTypeId(_AssemblyName, _ClassName); }
+		//}
 
         /// <summary>
         /// The type of the class definition
         /// </summary>
-        internal Type ClassType
+        public Type ClassType
         {
-            get { return getMyClassType; }
+            get { return MyClassType; }
+			protected set {MyClassType = value;}
         }
 
         /// <summary>
@@ -341,7 +342,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             set { _SupportsSynchronisation = value; }
         }
 
-        #endregion properties
+        #endregion Properties
 
 
         #region FactoryMethods
@@ -425,7 +426,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <returns>Returns a new business object</returns>
         internal BusinessObject InstantiateBusinessObject()
         {
-            return (BusinessObject) Activator.CreateInstance(getMyClassType, true);
+            return (BusinessObject) Activator.CreateInstance(MyClassType, true);
         }
 
         /// <summary>
@@ -436,7 +437,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             try
             {
-                return (BusinessObject) Activator.CreateInstance(getMyClassType, new object[] {this});
+                return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this});
             }
             catch (MissingMethodException ex)
             {
@@ -455,7 +456,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <returns>Returns a new business object</returns>
         internal BusinessObject InstantiateBusinessObjectWithClassDef(IDatabaseConnection conn)
         {
-            return (BusinessObject) Activator.CreateInstance(getMyClassType, new object[] {this, conn});
+            return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this, conn});
         }
 
         /// <summary>
@@ -516,7 +517,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         }
 
 
-    	protected Type getMyClassType
+    	private Type MyClassType
     	{
 			get
 			{
@@ -539,6 +540,19 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 					}
 				}
 				return _ClassType;
+			}
+			set
+			{
+				_ClassType = value;
+				if (_ClassType != null)
+				{
+					_AssemblyName = ClassDefCol.CleanUpAssemblyName(_ClassType.Assembly.ManifestModule.ScopeName);
+					_ClassName = _ClassType.FullName;
+				} else
+				{
+					_AssemblyName = null;
+					_ClassName = null;
+				}
 			}
     	}
 
