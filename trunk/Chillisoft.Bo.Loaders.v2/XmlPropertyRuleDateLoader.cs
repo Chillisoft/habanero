@@ -1,5 +1,6 @@
 using System;
 using Chillisoft.Bo.v2;
+using Chillisoft.Generic.v2;
 
 namespace Chillisoft.Bo.Loaders.v2
 {
@@ -47,10 +48,20 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadPropertyRuleFromReader()
         {
-            if (_reader.GetAttribute("minValue") != null)
+            try
             {
-                _minValue = Convert.ToDateTime(_reader.GetAttribute("minValue"));
-                _maxValue = Convert.ToDateTime(_reader.GetAttribute("maxValue"));
+                if (_reader.GetAttribute("minValue") != null)
+                {
+                    _minValue = Convert.ToDateTime(_reader.GetAttribute("minValue"));
+                    _maxValue = Convert.ToDateTime(_reader.GetAttribute("maxValue"));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("In a 'propertyRuleDate' " +
+                    "element, the 'minValue' or 'maxValue' was not set to a valid " +
+                    "date format. A typical date string would be in the form of " +
+                    "yyyy/mm/dd.", ex);
             }
         }
     }

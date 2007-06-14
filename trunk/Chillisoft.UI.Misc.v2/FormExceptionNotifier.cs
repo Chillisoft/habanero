@@ -179,7 +179,7 @@ namespace Chillisoft.UI.Misc.v2
                 _fullDetail.Height = FULL_DETAIL_HEIGHT;
                 _fullDetail.Visible = false;
                 _errorDetails = ControlFactory.CreateTextBox();
-                _errorDetails.Text = ExceptionUtil.GetSummarisedExceptionString(_exception, 0);
+                _errorDetails.Text = ExceptionUtil.GetExceptionString(_exception, 0, false);
                 _errorDetails.Multiline = true;
                 _errorDetails.ScrollBars = ScrollBars.Both;
                 _showStackTrace = new CheckBox();
@@ -224,14 +224,7 @@ namespace Chillisoft.UI.Misc.v2
             /// </summary>
             private void ShowStackTraceClicked(object sender, EventArgs e)
             {
-                if (_showStackTrace.Checked)
-                {
-                    _errorDetails.Text = ExceptionUtil.GetCategorizedExceptionString(_exception, 0);
-                }
-                else
-                {
-                    _errorDetails.Text = ExceptionUtil.GetSummarisedExceptionString(_exception, 0);
-                }
+                _errorDetails.Text = ExceptionUtil.GetExceptionString(_exception, 0, _showStackTrace.Checked);
             }
 
             /// <summary>

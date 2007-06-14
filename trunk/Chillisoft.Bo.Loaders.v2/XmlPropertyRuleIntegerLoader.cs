@@ -1,5 +1,6 @@
 using System;
 using Chillisoft.Bo.v2;
+using Chillisoft.Generic.v2;
 
 namespace Chillisoft.Bo.Loaders.v2
 {
@@ -40,21 +41,30 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadPropertyRuleFromReader()
         {
-            if (_reader.GetAttribute("minValue") != "")
+            try
             {
-                _minValue = Convert.ToInt32(_reader.GetAttribute("minValue"));
+                if (_reader.GetAttribute("minValue") != "")
+                {
+                    _minValue = Convert.ToInt32(_reader.GetAttribute("minValue"));
+                }
+                else
+                {
+                    _minValue = int.MinValue;
+                }
+                if (_reader.GetAttribute("maxValue") != "")
+                {
+                    _maxValue = Convert.ToInt32(_reader.GetAttribute("maxValue"));
+                }
+                else
+                {
+                    _maxValue = int.MaxValue;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _minValue = int.MinValue;
-            }
-            if (_reader.GetAttribute("maxValue") != "")
-            {
-                _maxValue = Convert.ToInt32(_reader.GetAttribute("maxValue"));
-            }
-            else
-            {
-                _maxValue = int.MaxValue;
+                throw new InvalidXmlDefinitionException("In a " +
+                    "'PropertyRuleInteger' element, either the 'minValue' or " +
+                    "'maxValue' attribute was set to an invalid integer value.", ex);
             }
         }
     }

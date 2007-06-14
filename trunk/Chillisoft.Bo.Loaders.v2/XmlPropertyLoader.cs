@@ -182,9 +182,20 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadReadWriteRule()
         {
-            _readWriteRule =
-                (PropReadWriteRule)
-                Enum.Parse(typeof (PropReadWriteRule), _reader.GetAttribute("readWriteRule"));
+            try
+            {
+                _readWriteRule =
+                    (PropReadWriteRule)
+                    Enum.Parse(typeof (PropReadWriteRule), _reader.GetAttribute("readWriteRule"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException(String.Format(
+                    "In the property definition for '{0}', the 'readWriteRule' " +
+                    "was set to an invalid value. The valid options are " +
+                    "ReadManyWriteMany, ReadOnly, WriteOnly, ReadManyWriteNew " +
+                    "and ReadManyWriteOnce.", _propertyName), ex);
+            }
         }
 
         /// <summary>

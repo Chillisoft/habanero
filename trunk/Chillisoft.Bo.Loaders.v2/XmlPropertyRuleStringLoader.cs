@@ -1,5 +1,6 @@
 using System;
 using Chillisoft.Bo.v2;
+using Chillisoft.Generic.v2;
 
 namespace Chillisoft.Bo.Loaders.v2
 {
@@ -40,8 +41,17 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected override void LoadPropertyRuleFromReader()
         {
-            _minLength = Convert.ToInt32(_reader.GetAttribute("minLength"));
-            _maxLength = Convert.ToInt32(_reader.GetAttribute("maxLength"));
+            try
+            {
+                _minLength = Convert.ToInt32(_reader.GetAttribute("minLength"));
+                _maxLength = Convert.ToInt32(_reader.GetAttribute("maxLength"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("In a 'propertyRuleString' " +
+                    "element, the 'minLength' or 'maxLength' was not set to a valid " +
+                    "integer format.", ex);
+            }
         }
     }
 }
