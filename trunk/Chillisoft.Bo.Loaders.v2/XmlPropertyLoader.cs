@@ -192,22 +192,32 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadDefaultValue()
         {
-			_defaultValueString = _reader.GetAttribute("defaultValue");
-			//if (_defaultValueString != null)
-			//{
-			//    if (_propertyType == typeof (Guid))
-			//    {
-			//        _defaultValue = new Guid(_defaultValueString);
-			//    }
-			//    else
-			//    {
-			//        _defaultValue = Convert.ChangeType(_defaultValueString, _propertyType);
-			//    }
-			//}
-			//else
-			//{
-			//    _defaultValue = null;
-			//}
+            _defaultValueString = _reader.GetAttribute("defaultValue");
+//            try
+//            {
+//                if (_defaultValueString != null)
+//                {
+//                    if (_propertyType == typeof(Guid))
+//                    {
+//                        _defaultValue = new Guid(_defaultValueString);
+//                    }
+//                    else
+//                    {
+//                        _defaultValue = Convert.ChangeType(_defaultValueString, _propertyType);
+//                    }
+//                }
+//                else
+//                {
+//                    _defaultValue = null;
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                throw new InvalidXmlDefinitionException(String.Format(
+//                    "The supplied default value for the property definition of " +
+//                    "'{0}' is not of the same {1} type as that specified in the " +
+//                    "'type' attribute.", _propertyName, _propertyType));
+//            }
         }
 
         /// <summary>
