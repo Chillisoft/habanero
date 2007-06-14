@@ -18,12 +18,12 @@ namespace Chillisoft.Bo.v2
     /// TODO ERIC - a method to set the lookup type?
     public class DatabaseLookupListSource : ILookupListSource
     {
-        private readonly int _timeout;
+        private string _statement;
         private Type _lookupObjectType;
-		private string _className;
 		private string _assemblyName;
+		private string _className;
+        private int _timeout;
 		private DateTime _lastCallTime;
-        private readonly string _statement;
         private StringGuidPairCollection _stringGuidPairCollection;
 
 		#region Constructors
@@ -49,6 +49,34 @@ namespace Chillisoft.Bo.v2
         {
         }
 
+		/// <summary>
+		/// Constructor that specifies the sql statement and the type of 
+		/// object represented in the lookup-list
+		/// </summary>
+		/// <param name="statement">The sql statement used to specify which
+		/// objects to load for the lookup-list</param>
+		/// <param name="assemblyName">The class type assembly name.</param>
+		/// <param name="className">The class type name</param>
+		public DatabaseLookupListSource(string statement, string assemblyName, string className)
+			: this(statement, 10000, null, assemblyName, className)
+		{
+		}
+
+		/// <summary>
+		/// Constructor that specifies the sql statement and the type of 
+		/// object represented in the lookup-list
+		/// </summary>
+		/// <param name="statement">The sql statement used to specify which
+		/// objects to load for the lookup-list</param>
+		/// <param name="timeout">The time-out period in milliseconds after
+		/// which a fresh copy will be loaded</param>
+		/// <param name="assemblyName">The class type assembly name.</param>
+		/// <param name="className">The class type name</param>
+		public DatabaseLookupListSource(string statement, int timeout, string assemblyName, string className)
+			: this(statement, timeout, null, assemblyName, className)
+		{
+		}
+
         /// <summary>
         /// Constructor that specifies the sql statement and time-out period
         /// </summary>
@@ -60,21 +88,35 @@ namespace Chillisoft.Bo.v2
         {
         }
 
-        /// <summary>
-        /// Constructor that specifies the sql statement, time-out period and
-        /// the type of object represented in the lookup-list
-        /// </summary>
-        /// <param name="statement">The sql statement used to specify which
-        /// objects to load for the lookup-list</param>
-        /// <param name="timeout">The time-out period in milliseconds after
-        /// which a fresh copy will be loaded</param>
-        /// <param name="lookupObjectType">The object type</param>
-        public DatabaseLookupListSource(string statement, int timeout, Type lookupObjectType)
+    	/// <summary>
+    	/// Constructor that specifies the sql statement, time-out period and
+    	/// the type of object represented in the lookup-list
+    	/// </summary>
+    	/// <param name="statement">The sql statement used to specify which
+    	/// objects to load for the lookup-list</param>
+    	/// <param name="timeout">The time-out period in milliseconds after
+    	/// which a fresh copy will be loaded</param>
+    	/// <param name="lookupObjectType">The object type</param>
+    	public DatabaseLookupListSource(string statement, int timeout, Type lookupObjectType)
+    		: this(statement, timeout, lookupObjectType, null, null)
         {
-            this._statement = statement;
-            _timeout = timeout;
-            _lookupObjectType = lookupObjectType;
-            _lastCallTime = DateTime.MinValue;
+		}
+
+		private DatabaseLookupListSource(string statement, int timeout, 
+			Type lookupObjectType, string assemblyName, string className)
+		{
+			_statement = statement;
+			_timeout = timeout;
+			if (lookupObjectType != null)
+			{
+				MyLookupObjectType = lookupObjectType;
+			}else
+			{
+				_assemblyName = assemblyName;
+				_className = className;
+				_lookupObjectType = null;
+			}
+			_lastCallTime = DateTime.MinValue;
 		}
 
 		#endregion Constructors
@@ -115,7 +157,17 @@ namespace Chillisoft.Bo.v2
 		public string SqlString
 		{
 			get { return _statement; }
+			protected set { _statement = value; }
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected int TimeOut
+    	{
+			get { return _timeout; }
+    		set { _timeout = value; }
+    	}
 
 		/// <summary>
 		/// Returns the class definition of the lookup type
@@ -180,37 +232,14 @@ namespace Chillisoft.Bo.v2
 		{
 			get
 			{
-				if (_lookupObjectType == null && _assemblyName != null && _className != null)
-				{
-					try
-					{
-						_lookupObjectType = TypeLoader.LoadType(_assemblyName, _className);
-					}
-					catch (Exception ex)
-					{
-						throw new UnknownTypeNameException(string.Format(
-							"Unable to load the source class type while attempting to " +
-							"load a Database Lookup List Source definition, given the 'assembly' as: '{0}', " +
-							"and the 'type' as: '{1}'. Check that the type exists in the " +
-							"given assembly name and that spelling and capitalisation are correct.",
-							_assemblyName, _className), ex);
-					}
-				}
+				TypeLoader.LoadClassType(ref _lookupObjectType,_assemblyName,_className,
+					"source class", "Database Lookup List Source Definition");
 				return _lookupObjectType;
 			}
 			set
 			{
 				_lookupObjectType = value;
 				TypeLoader.ClassTypeInfo(_lookupObjectType, out _assemblyName, out _className);
-				//if (_lookupObjectType != null)
-				//{
-				//    _assemblyName = ClassDefCol.CleanUpAssemblyName(_lookupObjectType.Assembly.ManifestModule.ScopeName);
-				//    _className = _lookupObjectType.FullName;
-				//} else
-				//{
-				//    _assemblyName = null;
-				//    _className = null;
-				//}
 			}
 		}
 

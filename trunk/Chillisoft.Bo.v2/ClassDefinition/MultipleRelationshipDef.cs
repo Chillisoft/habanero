@@ -32,7 +32,9 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         protected int _maxNoOfRelatedObjects;
         protected DeleteParentAction _deleteParentAction;
 
-        /// <summary>
+		#region Constructors
+
+		/// <summary>
         /// Constructor to create a new Multiple Relationship Definition
         /// </summary>
         /// <param name="relationshipName">A name for the relationship</param>
@@ -67,27 +69,53 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             _minNoOfRelatedObjects = minNoOfRelatedObjects;
             _maxNoOfRelatedObjects = maxNoOfRelatedObjects;
             _deleteParentAction = deleteParentAction;
-        }
+		}
 
-        /// <summary>
-        /// Overrides abstract method of parent to facilitate creation of 
-        /// a new Multiple Relationship
-        /// </summary>
-        /// <param name="owningBo">The business object that will manage
-        /// this relationship</param>
-        /// <param name="lBOPropCol">The collection of properties</param>
-        /// <returns>Returns the new relationship that has been created</returns>
-        internal override Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol)
-        {
-            return new MultipleRelationship(owningBo, this, lBOPropCol);
-        }
+    	/// <summary>
+    	/// Constructor to create a new single relationship definition
+    	/// </summary>
+    	/// <param name="relationshipName">A name for the relationship</param>
+    	/// <param name="relatedObjectAssemblyName">The assembly name of the related object</param>
+    	/// <param name="relatedObjectClassName">The class name of the related object</param>
+    	/// <param name="relKeyDef">The related key definition</param>
+    	/// <param name="keepReferenceToRelatedObject">Whether to keep a
+    	/// reference to the related object</param>
+    	/// <param name="orderBy">The sql order-by clause</param>
+    	/// <param name="minNoOfRelatedObjects">Minimum required number of objects
+    	/// to relate to</param>
+    	/// <param name="maxNoOfRelatedObjects">Maximum possible number of objects
+    	/// to relate to</param>
+    	/// <param name="deleteParentAction">Provides specific instructions 
+    	/// with regards to deleting a parent object.  See the DeleteParentAction 
+    	/// enumeration for more detail.</param>
+    	/// TODO ERIC - review keepref param
+    	public MultipleRelationshipDef(string relationshipName, string relatedObjectAssemblyName,
+    	                               string relatedObjectClassName, RelKeyDef relKeyDef,
+    	                               bool keepReferenceToRelatedObject, string orderBy,
+    	                               int minNoOfRelatedObjects,
+    	                               int maxNoOfRelatedObjects,
+    	                               DeleteParentAction deleteParentAction)
+    		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject)
+		{
+			ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
+			
+			_orderBy = orderBy;
+			_minNoOfRelatedObjects = minNoOfRelatedObjects;
+			_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
+			_deleteParentAction = deleteParentAction;
+		}
 
-        /// <summary>
+		#endregion Constructors
+
+		#region Properties
+
+		/// <summary>
         /// Returns the sql order-by clause
         /// </summary>
         public string OrderBy
         {
             get { return _orderBy; }
+			protected set { _orderBy = value; }
         }
 
         /// <summary>
@@ -96,7 +124,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public int MinNoOfRelatedObjects
         {
-            get { return _minNoOfRelatedObjects; }
+			get { return _minNoOfRelatedObjects; }
+			protected set { _minNoOfRelatedObjects = value; }
         }
 
         /// <summary>
@@ -106,7 +135,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public int MaxNoOfRelatedObjects
         {
-            get { return _maxNoOfRelatedObjects; }
+			get { return _maxNoOfRelatedObjects; }
+			protected set { _maxNoOfRelatedObjects = value; }
         }
 
         /// <summary>
@@ -115,8 +145,24 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public DeleteParentAction DeleteParentAction
         {
-            get { return _deleteParentAction; }
-        }
+			get { return _deleteParentAction; }
+			protected set { _deleteParentAction = value; }
+		}
+
+		#endregion Properties
+
+		/// <summary>
+		/// Overrides abstract method of parent to facilitate creation of 
+		/// a new Multiple Relationship
+		/// </summary>
+		/// <param name="owningBo">The business object that will manage
+		/// this relationship</param>
+		/// <param name="lBOPropCol">The collection of properties</param>
+		/// <returns>Returns the new relationship that has been created</returns>
+		internal override Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol)
+		{
+			return new MultipleRelationship(owningBo, this, lBOPropCol);
+		}
     }
 
     #region testing

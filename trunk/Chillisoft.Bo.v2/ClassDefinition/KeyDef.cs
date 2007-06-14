@@ -19,9 +19,21 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         protected string _keyName = "";
         protected bool _buildKeyName = true; //this is a flag used to 
                 //indicate whether the the keyname should be built up 
-                //from the property names or not
-        
-        /// <summary>
+				//from the property names or not
+
+		#region Constructors
+
+		/// <summary>
+		/// A deparameterised constructor that causes the keyName to be
+		/// set as a concatenation of the PropDef.PropertyNames separated
+		/// by an underscore.
+		/// </summary>
+		public KeyDef()
+			: this("")
+		{
+		}
+
+		/// <summary>
         /// Constructor that initialises the object with the name
         /// of the key.
         /// </summary>
@@ -32,21 +44,46 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         public KeyDef(string keyName)
         {
             //TODO_Err check that keyName is valid.
-            _keyName = keyName;
-            if (_keyName.Length > 0)
-            {
-                _buildKeyName = true;
-            }
+            KeyName = keyName;
         }
 
-        /// <summary>
-        /// A deparameterised constructor that causes the keyName to be
-        /// set as a concatenation of the PropDef.PropertyNames separated
-        /// by an underscore.
-        /// </summary>
-        public KeyDef() : this("")
-        {
-        }
+		#endregion Constructors
+
+		#region Properties
+
+		/// <summary>
+		/// A method used by BOKey to determine whether to check for
+		/// duplicate keys.  It will always check if either
+		/// IgnoreNulls is set to false or if it encounters null
+		/// properties.<br/>
+		/// NOTE: If the BOKey is a primary key, then this cannot be
+		/// set to true.
+		/// </summary>
+		public virtual bool IgnoreNulls
+		{
+			get { return _ignoreNulls; }
+			set { _ignoreNulls = value; }
+		}
+
+		/// <summary>
+		/// Returns the key name for this key definition
+		/// </summary>
+		public string KeyName
+		{
+			get { return _keyName; }
+			protected set
+			{
+				_keyName = value;
+				if (_keyName == null || _keyName.Length == 0)
+				{
+					_buildKeyName = true;
+				}
+			}
+		}
+
+		#endregion Properties
+
+		#region Dictionary Methods
 
         /// <summary>
         /// Provides an indexing facility for the collection of property
@@ -104,9 +141,11 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         internal bool Contains(string propName)
         {
             return (Dictionary.Contains(propName));
-        }
+		}
 
-        /// <summary>
+		#endregion Dictionary Methods
+		
+		/// <summary>
         /// Indicates whether the key definition is valid based on
         /// whether it contains one or more properties.
         /// </summary>
@@ -117,21 +156,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             return (Count > 0);
         }
 
-        /// <summary>
-        /// A method used by BOKey to determine whether to check for
-        /// duplicate keys.  It will always check if either
-        /// IgnoreNulls is set to false or if it encounters null
-        /// properties.<br/>
-        /// NOTE: If the BOKey is a primary key, then this cannot be
-        /// set to true.
-        /// </summary>
-        public virtual bool IgnoreNulls
-        {
-            get { return _ignoreNulls; }
-            set { _ignoreNulls = value; }
-        }
-
-        /// <summary>
+		/// <summary>
         /// Creates a new business object key (BOKey) using this key
         /// definition and its property definitions
         /// </summary>
@@ -149,13 +174,6 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             return lBOKey;
         }
 
-        /// <summary>
-        /// Returns the key name for this key definition
-        /// </summary>
-        public string KeyName
-        {
-            get { return _keyName; }
-        }
     }
 
 

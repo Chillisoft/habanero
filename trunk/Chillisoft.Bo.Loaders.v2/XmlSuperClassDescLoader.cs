@@ -14,8 +14,7 @@ namespace Chillisoft.Bo.Loaders.v2
     public class XmlSuperClassDescLoader : XmlLoader
     {
         private ORMapping _orMapping;
-        //private ClassDef _superClassDef;
-    	private string _className;
+        private string _className;
     	private string _assemblyName;
 
 
@@ -64,7 +63,6 @@ namespace Chillisoft.Bo.Loaders.v2
         protected override object Create()
         {
 			return new SuperClassDesc(_assemblyName, _className, _orMapping);
-			//return new SuperClassDesc(_superClassDef, _orMapping);
 		}
 
         /// <summary>
@@ -75,8 +73,7 @@ namespace Chillisoft.Bo.Loaders.v2
             _reader.Read();
             _className = _reader.GetAttribute("className");
             _assemblyName = _reader.GetAttribute("assemblyName");
-			//_superClassDef = ClassDef.GetClassDefCol[assemblyName, className];
-            string orMappingType = _reader.GetAttribute("orMapping");
+			string orMappingType = _reader.GetAttribute("orMapping");
 			try
             {
                 _orMapping = (ORMapping)Enum.Parse(typeof(ORMapping), orMappingType);

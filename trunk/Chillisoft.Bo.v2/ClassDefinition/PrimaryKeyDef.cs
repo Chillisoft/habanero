@@ -34,6 +34,8 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             base.Add(lPropDef);
         }
 
+		#region Properties
+
         /// <summary>
         /// Returns true if the Primary Key is also the object ID
         /// </summary>
@@ -57,14 +59,17 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             set
             {
                 if (value)
-                    //TODO:Raise appropriate error.
+                    //TODO error:Raise appropriate error.
                 {
                     Console.WriteLine("Error occured since you cannot set primary key to ignore nulls");
                 }
             }
-        }
+		}
 
-        /// <summary>
+		#endregion Properties
+
+
+		/// <summary>
         /// Creates a new business object key (BOKey) using this key
         /// definition and its property definitions. Creates either a new
         /// BOObjectID object (if the primary key is the object ID) 

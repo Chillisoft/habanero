@@ -130,38 +130,12 @@ namespace Chillisoft.Bo.v2
 			{
 				TypeLoader.LoadClassType(ref _boType, _assemblyName, _className,
 					"property", "property definition");
-				
-				//if (_boType == null && _assemblyName != null && _className != null)
-				//{
-				//    try
-				//    {
-				//        _boType = TypeLoader.LoadType(_assemblyName, _className);
-				//    }
-				//    catch (Exception ex)
-				//    {
-				//        throw new UnknownTypeNameException(string.Format(
-				//            "Unable to load the property type while attempting to " +
-				//            "load a Bo Lookup List Source definition, given the 'assembly' as: '{0}', " +
-				//            "and the 'type' as: '{1}'. Check that the type exists in the " +
-				//            "given assembly name and that spelling and capitalisation are correct.",
-				//            _assemblyName, _className), ex);
-				//    }
-				//}
 				return _boType;
 			}
 			set
 			{
 				_boType = value;
 				TypeLoader.ClassTypeInfo(_boType, out _assemblyName, out _className);
-				//if (_boType != null)
-				//{
-				//    _assemblyName = ClassDefCol.CleanUpAssemblyName(_boType.Assembly.ManifestModule.ScopeName);
-				//    _className = _boType.FullName;
-				//} else
-				//{
-				//    _assemblyName = null;
-				//    _className = null;
-				//}
 			}
 		}
 

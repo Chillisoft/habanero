@@ -12,7 +12,9 @@ namespace Chillisoft.Bo.Loaders.v2
     public class XmlRelationshipLoader : XmlLoader
     {
         private PropDefCol _propDefCol;
-		private Type _relatedClassType;
+		//private Type _relatedClassType;
+    	private string _relatedAssemblyName;
+    	private string _relatedClassName;
 		private RelKeyDef _relKeyDef;
         private string _name;
         private string _type;
@@ -75,16 +77,21 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             if (_type == "single")
             {
-                return
-                    new SingleRelationshipDef(_name, _relatedClassType, _relKeyDef,
-                                              _keepReferenceToRelatedObject);
-            }
+				return new SingleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
+					_relKeyDef, _keepReferenceToRelatedObject);
+				//return
+				//    new SingleRelationshipDef(_name, _relatedClassType, _relKeyDef,
+				//                  _keepReferenceToRelatedObject);
+			}
             else if (_type == "multiple")
             {
-                return
-                    new MultipleRelationshipDef(_name, _relatedClassType, _relKeyDef,
-                                                _keepReferenceToRelatedObject, _orderBy, _minNoOfRelatedObjects,
-                                                _maxNoOfRelatedObjects, _deleteParentAction);
+				return new MultipleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
+					_relKeyDef, _keepReferenceToRelatedObject, _orderBy, _minNoOfRelatedObjects,
+					_maxNoOfRelatedObjects, _deleteParentAction);
+				//return
+				//    new MultipleRelationshipDef(_name, _relatedClassType, _relKeyDef,
+				//                                _keepReferenceToRelatedObject, _orderBy, _minNoOfRelatedObjects,
+				//                                _maxNoOfRelatedObjects, _deleteParentAction);
             }
             else
             {
@@ -111,9 +118,9 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         protected void LoadRelationshipDef()
         {
-            string relatedClassName = _reader.GetAttribute("relatedType");
-            string relatedAssemblyName = _reader.GetAttribute("relatedAssembly");
-            _relatedClassType = TypeLoader.LoadType(relatedAssemblyName, relatedClassName);
+            _relatedClassName = _reader.GetAttribute("relatedType");
+			_relatedAssemblyName = _reader.GetAttribute("relatedAssembly");
+            //_relatedClassType = TypeLoader.LoadType(relatedAssemblyName, relatedClassName);
             _name = _reader.GetAttribute("name");
             _type = _reader.GetAttribute("type");
             if (_reader.GetAttribute("keepReferenceToRelatedObject") == "true")

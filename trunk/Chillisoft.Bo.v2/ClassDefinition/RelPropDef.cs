@@ -11,10 +11,12 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     /// TODO ERIC - review
     public class RelPropDef
     {
-        protected PropDef _ownerPropDef;
-        protected string _relatedClassPropName;
+        private PropDef _ownerPropDef;
+		private string _relatedClassPropName;
 
-        /// <summary>
+		#region Constructors
+
+		/// <summary>
         /// Constructor to create new RelPropDef object
         /// </summary>
         /// <param name="ownerClassPropDef">The property definition of the 
@@ -27,9 +29,13 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             ArgumentValidationHelper.CheckArgumentNotNull(ownerClassPropDef, "ownerClassPropDef");
             _ownerPropDef = ownerClassPropDef;
             _relatedClassPropName = relatedObjectPropName;
-        }
+		}
 
-        /// <summary>
+		#endregion Constructors
+
+		#region Properties
+
+		/// <summary>
         /// The property definition name of the owner object
         /// </summary>
         public string OwnerPropertyName
@@ -43,10 +49,13 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// TODO ERIC - may need clarification
         public string RelatedClassPropName
         {
-            get { return _relatedClassPropName; }
-        }
+			get { return _relatedClassPropName; }
+			protected set { _relatedClassPropName = value; }
+		}
 
-        /// <summary>
+		#endregion Properties
+		
+		/// <summary>
         /// Creates a new RelProp object based on this property definition
         /// </summary>
         /// <param name="lBoPropCol">The collection of properties</param>

@@ -11,7 +11,8 @@ namespace Chillisoft.Bo.Loaders.v2
     public class XmlDatabaseLookupListSourceLoader : XmlLookupListSourceLoader
     {
         private string _sqlString;
-        private Type _boType;
+    	private string _assemblyName;
+    	private string _className;
 
         /// <summary>
         /// Constructor to initialise a loader with a dtd path
@@ -35,18 +36,8 @@ namespace Chillisoft.Bo.Loaders.v2
         protected override void LoadLookupListSourceFromReader()
         {
             _sqlString = _reader.GetAttribute("sqlString");
-            string className = _reader.GetAttribute("className");
-            string assemblyName = _reader.GetAttribute("assemblyName");
-            if (className != null && className.Length > 0 && assemblyName != null && assemblyName.Length > 0)
-            {
-                _boType = TypeLoader.LoadType(assemblyName, className);
-                if (_boType == null)
-                {
-                    throw new TypeLoadException("The type with class name " + className + " and assembly " +
-                                                assemblyName +
-                                                " was not found when creating a database lookup list source");
-                }
-            }
+            _className = _reader.GetAttribute("className");
+            _assemblyName = _reader.GetAttribute("assemblyName");
         }
 
         /// <summary>
@@ -56,7 +47,7 @@ namespace Chillisoft.Bo.Loaders.v2
         /// <returns>Returns a DatabaseLookupListSource object</returns>
         protected override object Create()
         {
-            return new DatabaseLookupListSource(_sqlString, _boType);
-        }
+			return new DatabaseLookupListSource(_sqlString, _assemblyName, _className);
+		}
     }
 }

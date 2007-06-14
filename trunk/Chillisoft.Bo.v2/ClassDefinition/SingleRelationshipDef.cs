@@ -12,6 +12,9 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     /// </summary>
     public class SingleRelationshipDef : RelationshipDef
     {
+	
+		#region Constructors
+
         /// <summary>
         /// Constructor to create a new single relationship definition
         /// </summary>
@@ -25,9 +28,27 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                                      bool keepReferenceToRelatedObject)
             : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject)
         {
-        }
+		}
 
-        /// <summary>
+		/// <summary>
+		/// Constructor to create a new single relationship definition
+		/// </summary>
+		/// <param name="relationshipName">A name for the relationship</param>
+		/// <param name="relatedObjectAssemblyName">The assembly name of the related object</param>
+		/// <param name="relatedObjectClassName">The class name of the related object</param>
+		/// <param name="relKeyDef">The related key definition</param>
+		/// <param name="keepReferenceToRelatedObject">Whether to keep a
+		/// reference to the related object</param>
+		/// TODO ERIC - review last param
+		public SingleRelationshipDef(string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, RelKeyDef relKeyDef,
+									 bool keepReferenceToRelatedObject)
+			: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject)
+		{
+		}
+
+		#endregion Constructors
+
+		/// <summary>
         /// Overrides abstract method of RelationshipDef to create a new
         /// relationship
         /// </summary>

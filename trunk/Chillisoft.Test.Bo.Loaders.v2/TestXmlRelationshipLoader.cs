@@ -90,8 +90,9 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         [Test, ExpectedException(typeof (UnknownTypeNameException))]
         public void TestWithUnknownRelatedType()
         {
-            itsLoader.LoadRelationship(
+            RelationshipDef relDef = itsLoader.LoadRelationship(
                 singleRelationshipString.Replace("TestRelatedClass", "NonExistantTestRelatedClass"), itsPropDefs);
+        	Type classType = relDef.RelatedObjectClassType;
         }
 
         [Test]
