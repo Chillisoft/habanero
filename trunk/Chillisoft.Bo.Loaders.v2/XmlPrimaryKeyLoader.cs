@@ -130,7 +130,6 @@ namespace Chillisoft.Bo.Loaders.v2
                 {
                     _reader.Read();
                     _reader.Read();
-                    
                 }
             } while (_reader.Name == "prop");
         }

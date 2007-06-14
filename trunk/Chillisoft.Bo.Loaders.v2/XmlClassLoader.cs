@@ -236,6 +236,14 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadPropDefs(List<string> xmlDefs)
         {
+            if (xmlDefs.Count == 0)
+            {
+                throw new InvalidXmlDefinitionException(String.Format("No property " +
+                    "definitions have been specified for the class definition of '{0}'. " +
+                    "Each class requires at least one 'propertyDef' and 'primaryKeyDef' " +
+                    "element which define the mapping from the database table fields to " +
+                    "properties in the class that is being mapped to.", _ClassName));
+            }
             _PropDefCol = new PropDefCol();
             XmlPropertyLoader propLoader = new XmlPropertyLoader(_dtdPath);
             foreach (string propDefXml in xmlDefs)

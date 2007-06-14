@@ -109,11 +109,22 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             if (_reader.Name != "prop")
             {
-                throw new InvalidXmlDefinitionException("A keyDef node must have one or more prop nodes");
+                throw new InvalidXmlDefinitionException("A 'keyDef' node is " +
+                    "missing 'prop' nodes. Each key definition specifies " +
+                    "limitations on a property, and the prop nodes have a 'name' " +
+                    "attribute that specifies which existing property definition " +
+                    "is being referred to in the key definition.");
             }
             do
             {
                 string propName = _reader.GetAttribute("name");
+                if (propName == null || propName.Length == 0)
+                {
+                    throw new InvalidXmlDefinitionException("The 'prop' node " +
+                        "under a key definition is missing a valid 'name' attribute, " +
+                        "which specifies the name of an existing property definition " +
+                        "which is being further defined by the key definition.");
+                }
                 if (_propDefCol[propName] != null)
                 {
                     _keyDef.Add(_propDefCol[propName]);
@@ -121,9 +132,19 @@ namespace Chillisoft.Bo.Loaders.v2
                 else
                 {
                     throw new InvalidXmlDefinitionException(
-                        String.Format("The PropDef named {0} does not exist in the PropDefCol given", propName));
+                        String.Format("The property definition '{0}' being named by a " +
+                        "'prop' element in a key definition does not exist. The property " +
+                        "definition being referred to must have been defined in a " +
+                        "'propertyDef' element.  Add the property definition or check " +
+                        "that the spelling and capitalisation are correct.", propName));
                 }
-                _reader.Read();
+                if (_reader.IsEmptyElement)
+                    _reader.Read();
+                else
+                {
+                    _reader.Read();
+                    _reader.Read();
+                }
             } while (_reader.Name == "prop");
         }
     }

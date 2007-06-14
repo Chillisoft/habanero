@@ -42,7 +42,7 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             if (xmlPropDef == null || xmlPropDef.Length == 0)
             {
-                throw new XmlException("An error has occurred while attempting to " +
+                throw new InvalidXmlDefinitionException("An error has occurred while attempting to " +
                    "load a property definition, contained in a 'propertyDef' element. " +
                    "Check that you have correctly specified at least one 'propertyDef' " +
                    "element, which defines a property that is to be mapped from a " +
@@ -116,7 +116,7 @@ namespace Chillisoft.Bo.Loaders.v2
             _propertyName = _reader.GetAttribute("name");
             if (_propertyName == null || _propertyName.Length == 0)
             {
-                throw new XmlException("A 'propertyDef' element has no 'name' attribute " +
+                throw new InvalidXmlDefinitionException("A 'propertyDef' element has no 'name' attribute " +
                    "set. Each 'propertyDef' element requires a 'name' attribute that " +
                    "specifies the name of the property in the class to map to.");
             }

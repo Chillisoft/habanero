@@ -76,7 +76,19 @@ namespace Chillisoft.Bo.Loaders.v2
             _className = _reader.GetAttribute("className");
             _assemblyName = _reader.GetAttribute("assemblyName");
 			//_superClassDef = ClassDef.GetClassDefCol[assemblyName, className];
-			_orMapping = (ORMapping)Enum.Parse(typeof(ORMapping), _reader.GetAttribute("orMapping"));
+            string orMappingType = _reader.GetAttribute("orMapping");
+			try
+            {
+                _orMapping = (ORMapping)Enum.Parse(typeof(ORMapping), orMappingType);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException(String.Format(
+                    "The specified ORMapping type, '{0}', is not a valid inheritance " +
+                    "type.  The valid options are ClassTableInheritance (the default), " +
+                    "SingleTableInheritance and ConcreteTableInheritance.", orMappingType), ex);
+            }
+
         }
     }
 }
