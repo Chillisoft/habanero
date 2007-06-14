@@ -71,10 +71,10 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         private bool _SupportsSynchronisation;
 
         private static PropDef _VersionNumberAtLastSyncPropDef =
-            new PropDef("SyncVersionNumberAtLastSync", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, 0);
+            new PropDef("SyncVersionNumberAtLastSync", typeof (int), PropReadWriteRule.ReadManyWriteMany, 0);
 
         private static PropDef _VersionNumberPropDef =
-            new PropDef("SyncVersionNumber", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, 0);
+            new PropDef("SyncVersionNumber", typeof (int), PropReadWriteRule.ReadManyWriteMany, 0);
 
 
         #region Constructors

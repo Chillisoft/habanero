@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using System.Collections;
 using Chillisoft.Bo.ClassDefinition.v2;
 using Chillisoft.Generic.v2;
 using Chillisoft.Util.v2;
@@ -14,7 +15,7 @@ namespace Chillisoft.Bo.Loaders.v2
         //private Type _propertyType;
     	private string _assemblyName;
     	private string _typeName;
-        private cbsPropReadWriteRule _readWriteRule;
+        private PropReadWriteRule _readWriteRule;
         private string _propertyName;
         //private object _defaultValue;
     	private string _defaultValueString;
@@ -135,6 +136,33 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             _assemblyName = _reader.GetAttribute("assembly");
             _typeName = _reader.GetAttribute("type");
+
+            if (_assemblyName == "System")
+            {
+                Hashtable typeConverter = new Hashtable();
+                typeConverter.Add("byte", "Byte");
+                typeConverter.Add("sbyte", "Sbyte");
+                typeConverter.Add("short", "Int16");
+                typeConverter.Add("int", "Int32");
+                typeConverter.Add("long", "Int64");
+                typeConverter.Add("ushort", "UInt16");
+                typeConverter.Add("uint", "UInt32");
+                typeConverter.Add("ulong", "UInt64");
+                typeConverter.Add("float", "Single");
+                typeConverter.Add("object", "Object");
+                typeConverter.Add("char", "Char");
+                typeConverter.Add("string", "String");
+                typeConverter.Add("decimal", "Decimal");
+                typeConverter.Add("boolean", "Boolean");
+                typeConverter.Add("bool", "Boolean");
+                typeConverter.Add("guid", "Guid");
+
+                if (typeConverter.ContainsKey(_typeName))
+                {
+                    _typeName = (string)typeConverter[_typeName];
+                }
+            }
+
 			//try
 			//{
 			//    _propertyType = TypeLoader.LoadType(assemblyName, typeName);
@@ -155,8 +183,8 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadReadWriteRule()
         {
             _readWriteRule =
-                (cbsPropReadWriteRule)
-                Enum.Parse(typeof (cbsPropReadWriteRule), _reader.GetAttribute("readWriteRule"));
+                (PropReadWriteRule)
+                Enum.Parse(typeof (PropReadWriteRule), _reader.GetAttribute("readWriteRule"));
         }
 
         /// <summary>

@@ -94,7 +94,7 @@ namespace Chillisoft.Bo.v2
         [Test]
         public void TestDateRule()
         {
-            //	PropDef lPropDef = new PropDef("Surname", typeof(string),cbsPropReadWriteRule.ReadManyWriteMany);
+            //	PropDef lPropDef = new PropDef("Surname", typeof(string),PropReadWriteRule.ReadManyWriteMany);
             PropRuleDate rule =
                 new PropRuleDate("BirthDate", true, new DateTime(1900, 01, 01), new DateTime(2010, 12, 31));
 

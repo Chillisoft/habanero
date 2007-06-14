@@ -73,7 +73,7 @@ namespace Chillisoft.Bo.v2
         [SetUp]
         public void init()
         {
-            PropDef propDef = new PropDef("Prop", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, null);
+            PropDef propDef = new PropDef("Prop", typeof (string), PropReadWriteRule.ReadManyWriteMany, null);
             mRelPropDef = new RelPropDef(propDef, "PropName");
             mPropDefCol = new PropDefCol();
             mPropDefCol.Add(propDef);
@@ -94,7 +94,7 @@ namespace Chillisoft.Bo.v2
         [Test]
         public void TestCreateRelPropNotNull()
         {
-            PropDef propDef = new PropDef("Prop1", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, "1");
+            PropDef propDef = new PropDef("Prop1", typeof (string), PropReadWriteRule.ReadManyWriteMany, "1");
             RelPropDef relPropDef = new RelPropDef(propDef, "PropName1");
             PropDefCol propDefCol = new PropDefCol();
 

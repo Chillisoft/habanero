@@ -99,12 +99,14 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             mRelKeyDef = new RelKeyDef();
             mPropDefCol = new PropDefCol();
 
-            PropDef propDef = new PropDef("Prop", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, "1");
+            PropDef propDef = new PropDef("Prop", typeof (string), PropReadWriteRule.ReadManyWriteMany, "1");
+
             mPropDefCol.Add(propDef);
             RelPropDef lRelPropDef = new RelPropDef(propDef, "PropName");
             mRelKeyDef.Add(lRelPropDef);
 
-            propDef = new PropDef("Prop2", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, "2");
+            propDef = new PropDef("Prop2", typeof (string), PropReadWriteRule.ReadManyWriteMany, "2");
+
             mPropDefCol.Add(propDef);
             lRelPropDef = new RelPropDef(propDef, "PropName2");
             mRelKeyDef.Add(lRelPropDef);

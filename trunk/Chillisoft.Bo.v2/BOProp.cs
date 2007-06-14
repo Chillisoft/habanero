@@ -494,7 +494,7 @@ namespace Chillisoft.Bo.v2
         [SetUp]
         public void init()
         {
-            mPropDef = new PropDef("PropName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            mPropDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
             mProp = mPropDef.CreateBOProp(false);
         }
 
@@ -524,7 +524,7 @@ namespace Chillisoft.Bo.v2
         {
             //Test compulsory with no default set
             PropDef lPropDefWithRules = new PropDef("PropNameWithRules", typeof (string),
-                                                    cbsPropReadWriteRule.ReadManyWriteMany, null);
+                                                    PropReadWriteRule.ReadManyWriteMany, null);
             lPropDefWithRules.assignPropRule(new PropRuleString(lPropDefWithRules.PropertyName, true, -1, -1));
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsFalse(lBOProp.isValid);
@@ -542,7 +542,7 @@ namespace Chillisoft.Bo.v2
         {
             //Test compulsory with no default set
             PropDef lPropDefWithRules = new PropDef("PropNameWithRules", typeof (string),
-                                                    cbsPropReadWriteRule.ReadManyWriteMany, null);
+                                                    PropReadWriteRule.ReadManyWriteMany, null);
             lPropDefWithRules.assignPropRule(new PropRuleString(lPropDefWithRules.PropertyName, false, 50, 51));
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsTrue(lBOProp.isValid);

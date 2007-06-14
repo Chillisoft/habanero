@@ -11,7 +11,7 @@
 	name NMTOKEN #REQUIRED
 	type NMTOKEN "String"
 	assembly NMTOKEN "System"
-	readWriteRule (	ReadManyWriteMany | OnlyRead | OnlyWrite | ReadManyWriteNew | ReadManyWriteOnce ) "ReadManyWriteMany"
+	readWriteRule (	ReadManyWriteMany | ReadOnly | WriteOnly | ReadManyWriteNew | ReadManyWriteOnce ) "ReadManyWriteMany"
 	databaseFieldName CDATA #IMPLIED
 	defaultValue CDATA #IMPLIED
 >

@@ -345,21 +345,21 @@ namespace Chillisoft.Bo.v2
         public void init()
         {
             //Props for KeyDef 1
-            PropDef lPropDef = new PropDef("PropName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            PropDef lPropDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
             mBOPropCol1.Add(lPropDef.CreateBOProp(false));
             mKeyDef1.Add(lPropDef);
 
-            lPropDef = new PropDef("PropName1", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            lPropDef = new PropDef("PropName1", typeof (string), PropReadWriteRule.ReadOnly, null);
             mBOPropCol1.Add(lPropDef.CreateBOProp(false));
             mKeyDef1.Add(lPropDef);
 
             //Props for KeyDef 2
 
-            lPropDef = new PropDef("PropName1", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            lPropDef = new PropDef("PropName1", typeof (string), PropReadWriteRule.ReadOnly, null);
             mBOPropCol2.Add(lPropDef.CreateBOProp(false));
             mKeyDef2.Add(lPropDef);
 
-            lPropDef = new PropDef("PropName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            lPropDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
             mBOPropCol2.Add(lPropDef.CreateBOProp(false));
             mKeyDef2.Add(lPropDef);
         }

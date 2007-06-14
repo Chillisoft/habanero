@@ -132,7 +132,7 @@ namespace Chillisoft.Test.General.v2
 
             RelationshipDef relDef = new MultipleRelationshipDef("Owner", typeof (Car),
                                                                  relKeyDef, false, "", -1, -1,
-                                                                 DeleteParentAction.cbsDereferenceRelatedObjects);
+                                                                 DeleteParentAction.DereferenceRelatedObjects);
 
             relDefCol.Add(relDef);
 
@@ -143,39 +143,39 @@ namespace Chillisoft.Test.General.v2
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Surname", typeof (String), cbsPropReadWriteRule.ReadManyWriteMany, "Surname", null);
+                new PropDef("Surname", typeof (String), PropReadWriteRule.ReadManyWriteMany, "Surname", null);
             propDef.assignPropRule(new PropRuleString("ContactPerson-" + propDef.PropertyName, true, 2, 50));
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("FirstName", typeof (String), cbsPropReadWriteRule.ReadManyWriteMany, null);
+            propDef = new PropDef("FirstName", typeof (String), PropReadWriteRule.ReadManyWriteMany, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("DateOfBirth", typeof (DateTime), cbsPropReadWriteRule.ReadManyWriteOnce, null);
+            propDef = new PropDef("DateOfBirth", typeof (DateTime), PropReadWriteRule.ReadManyWriteOnce, null);
             lPropDefCol.Add(propDef);
 
             //Create concurrency control properties
-            propDef = new PropDef("DateLastUpdated", typeof (DateTime), cbsPropReadWriteRule.OnlyRead, DateTime.Now);
+            propDef = new PropDef("DateLastUpdated", typeof (DateTime), PropReadWriteRule.ReadOnly, DateTime.Now);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("UserLastUpdated", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            propDef = new PropDef("UserLastUpdated", typeof (string), PropReadWriteRule.ReadOnly, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("MachineLastUpdated", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            propDef = new PropDef("MachineLastUpdated", typeof (string), PropReadWriteRule.ReadOnly, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("VersionNumber", typeof (int), cbsPropReadWriteRule.OnlyRead, 1);
+            propDef = new PropDef("VersionNumber", typeof (int), PropReadWriteRule.ReadOnly, 1);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("PK2Prop1", typeof (string), cbsPropReadWriteRule.OnlyRead, "PK2_Prop1", null);
+            propDef = new PropDef("PK2Prop1", typeof (string), PropReadWriteRule.ReadOnly, "PK2_Prop1", null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("PK2Prop2", typeof (string), cbsPropReadWriteRule.OnlyRead, "PK2_Prop2", null);
+            propDef = new PropDef("PK2Prop2", typeof (string), PropReadWriteRule.ReadOnly, "PK2_Prop2", null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("PK3Prop", typeof (string), cbsPropReadWriteRule.OnlyRead, "PK3_Prop", null);
+            propDef = new PropDef("PK3Prop", typeof (string), PropReadWriteRule.ReadOnly, "PK3_Prop", null);
             lPropDefCol.Add(propDef);
 
-            propDef = lPropDefCol.Add("ContactPersonID", typeof (Guid), cbsPropReadWriteRule.ReadManyWriteOnce, null);
+            propDef = lPropDefCol.Add("ContactPersonID", typeof (Guid), PropReadWriteRule.ReadManyWriteOnce, null);
             return lPropDefCol;
         }
 

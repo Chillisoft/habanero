@@ -20,7 +20,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         {
             itsLoader = new XmlKeyLoader();
             itsPropDefs = new PropDefCol();
-            itsPropDefs.Add(new PropDef("TestProp", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         [Test]
         public void TestLoadKeyWithMultipleProps()
         {
-            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
             KeyDef def =
                 itsLoader.LoadKey(
                     @"<keyDef name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></keyDef>", itsPropDefs);

@@ -14,14 +14,14 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     /// <summary>
     /// An enumeration used to specify different file access modes.
     /// </summary>
-    public enum cbsPropReadWriteRule
+    public enum PropReadWriteRule
     {
         /// <summary>Full access</summary>
         ReadManyWriteMany,
         /// <summary>Read but not write/edit</summary>
-        OnlyRead,
+        ReadOnly,
         /// <summary>Write/edit but not read from</summary>
-        OnlyWrite,
+        WriteOnly,
         /// <summary>Can only be edited when the object is new</summary>
         ReadManyWriteNew,
         /// <summary>Can only be edited it if was never edited before 
@@ -41,7 +41,6 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     /// <ul>
     /// <li>Add ability to calculated properties.</li>
     /// <li>Lazy initialisation of properties.</li>
-    /// <li>TODO ERIC: Rename OnlyRead/Write to Read/WriteOnly?</li>
     /// </ul>
     /// </futureEnhancements>
     public class PropDef : IParameterSqlInfo
@@ -51,7 +50,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		private string _propTypeAssemblyName;
     	private string _propTypeName;
 		private Type _propType;
-		private cbsPropReadWriteRule _propRWStatus;
+		private PropReadWriteRule _propRWStatus;
 		private string _databaseFieldName; //This allows you to have a 
             //database field name different from your property name. 
             //We have customers whose standard for naming database 
@@ -74,7 +73,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <param name="propName">The name of the property (e.g. "surname")</param>
         /// <param name="propType">The type of the property (e.g. string)</param>
         /// <param name="propRWStatus">Rules for how a property can be accessed.
-		/// See cbsPropReadWriteRule enumeration for more detail.</param>
+		/// See PropReadWriteRule enumeration for more detail.</param>
         /// <param name="databaseFieldName">The database field name - this
         /// allows you to have a database field name that is different to the
         /// property name, which is useful for migrating systems where
@@ -83,7 +82,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// of a new object will be set to</param>
         public PropDef(string propName,
                        Type propType,
-                       cbsPropReadWriteRule propRWStatus,
+                       PropReadWriteRule propRWStatus,
                        string databaseFieldName,
                        object defaultValue) :
 							this(propName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null)
@@ -102,7 +101,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// of a new object will be set to</param>
         public PropDef(string propName,
                        Type propType,
-                       cbsPropReadWriteRule propRWStatus,
+                       PropReadWriteRule propRWStatus,
                        object defaultValue) 
 			:this(propName, propType,null,null, propRWStatus, null, defaultValue, null)
         {
@@ -125,7 +124,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// of a new object will be set to</param>
 		public PropDef(string propName,
 					string assemblyName, string typeName,
-					cbsPropReadWriteRule propRWStatus,
+					PropReadWriteRule propRWStatus,
 					string databaseFieldName,
 					string defaultValue) 
 			:this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue)
@@ -134,7 +133,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 
 		private PropDef(string propName,
 					   Type propType, string assemblyName, string typeName,
-					   cbsPropReadWriteRule propRWStatus,
+					   PropReadWriteRule propRWStatus,
 					   string databaseFieldName,
 					   object defaultValue, string defaultValueString)
 		{
@@ -415,9 +414,9 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 
         /// <summary>
         /// Returns the rule for how the property can be accessed. 
-        /// See the cbsPropReadWriteRule enumeration for more detail.
+        /// See the PropReadWriteRule enumeration for more detail.
         /// </summary>
-        public cbsPropReadWriteRule ReadWriteRule
+        public PropReadWriteRule ReadWriteRule
         {
             get { return _propRWStatus; }
 			protected set{ _propRWStatus = value;}
@@ -599,7 +598,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         [SetUp]
         public void Init()
         {
-            _propDef = new PropDef("PropName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            _propDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
         }
 
         [Test]
@@ -608,42 +607,42 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             Assert.AreEqual("PropName", _propDef.PropertyName);
             Assert.AreEqual("PropName", _propDef.DatabaseFieldName);
             Assert.AreEqual(typeof (string), _propDef.PropType);
-            PropDef lPropDef = new PropDef("prop", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, 1);
+            PropDef lPropDef = new PropDef("prop", typeof (int), PropReadWriteRule.ReadManyWriteMany, 1);
+        }
+
+        [Test]
+        [ExpectedException(typeof (ArgumentException))]
+        public void TestCreatePropDefInvalidDefault()
+        {
+            PropDef lPropDef = new PropDef("prop", typeof (int), PropReadWriteRule.ReadManyWriteMany, "");
         }
 
 		[Test]
 		public void TestCreateLatePropDefInvalidTypeNotAccessed()
 		{
-			PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", cbsPropReadWriteRule.ReadManyWriteMany, null, "");
+			PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadManyWriteMany, null, "");
 		}
+
+        [Test]
+        [ExpectedException(typeof (ArgumentException))]
+        public void TestCreatePropDefInvalidDefault2()
+        {
+            PropDef lPropDef = new PropDef("prop", typeof (string), PropReadWriteRule.ReadManyWriteMany, 1);
+        }
 
 		[Test]
 		[ExpectedException(typeof(UnknownTypeNameException))]
 		public void TestCreateLatePropDefInvalidType()
 		{
-			PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", cbsPropReadWriteRule.ReadManyWriteMany, null, "");
+			PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadManyWriteMany, null, "");
 			Type propType = propDef.PropertyType;
 			Assert.Fail("This line should not be reached because the previous line should have failed.");
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void TestCreatePropDefInvalidDefault()
-		{
-			PropDef lPropDef = new PropDef("prop", typeof(int), cbsPropReadWriteRule.ReadManyWriteMany, "");
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void TestCreatePropDefInvalidDefault2()
-		{
-			PropDef lPropDef = new PropDef("prop", typeof(string), cbsPropReadWriteRule.ReadManyWriteMany, 1);
-		}
-
-		[Test]
 		public void TestCreateLatePropDefInvalidDefaultNotAccessed()
 		{
-			PropDef lPropDef = new PropDef("prop", "System", "Int32", cbsPropReadWriteRule.ReadManyWriteMany, null, "");
+			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadManyWriteMany, null, "");
 			//No error
 		}
 
@@ -651,7 +650,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		[ExpectedException(typeof(FormatException))]
 		public void TestCreateLatePropDefInvalidDefault()
 		{
-			PropDef lPropDef = new PropDef("prop", "System", "Int32", cbsPropReadWriteRule.ReadManyWriteMany, null, "");
+			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadManyWriteMany, null, "");
 			object defaultValue = lPropDef.DefaultValue;
 			Assert.Fail("This line should not be reached because the previous line should have failed.");
 		}

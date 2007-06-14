@@ -185,16 +185,16 @@ namespace Chillisoft.Bo.v2
         public void init()
         {
             mBOPropCol = new BOPropCol();
-            mPropDef = new PropDef("PropName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            mPropDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
             mBOPropCol.Add(mPropDef.CreateBOProp(false));
 
-            mPropDef = new PropDef("Prop2", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            mPropDef = new PropDef("Prop2", typeof (string), PropReadWriteRule.ReadOnly, null);
             mPropDef.assignPropRule(new PropRuleString(mPropDef.PropertyName, true, 1, 10));
             mBOPropCol.Add(mPropDef.CreateBOProp(false));
 
             BOPropCol anotherPropCol = new BOPropCol();
             PropDef anotherPropDef =
-                new PropDef("TestAddPropCol", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, null);
+                new PropDef("TestAddPropCol", typeof (string), PropReadWriteRule.ReadManyWriteMany, null);
             anotherPropCol.Add(anotherPropDef.CreateBOProp(false));
 
             mBOPropCol.Add(anotherPropCol);
@@ -265,7 +265,7 @@ namespace Chillisoft.Bo.v2
             mProp.PropertyValue = "PropName-new";
             Assert.IsTrue(mProp.IsDirty);
 
-            mPropDef = new PropDef("Prop3", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            mPropDef = new PropDef("Prop3", typeof (string), PropReadWriteRule.ReadOnly, null);
             mPropDef.assignPropRule(new PropRuleString(mPropDef.PropertyName, true, 1, 40));
             mBOPropCol.Add(mPropDef.CreateBOProp(false));
             mProp = mBOPropCol["Prop3"];
@@ -279,7 +279,7 @@ namespace Chillisoft.Bo.v2
         [Test]
         public void TestRemove()
         {
-            PropDef propDef = new PropDef("Prop3", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            PropDef propDef = new PropDef("Prop3", typeof (string), PropReadWriteRule.ReadOnly, null);
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef.CreateBOProp(false));
             Assert.AreEqual(1, propCol.Count);

@@ -300,7 +300,18 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadSupportsSynchronisation()
         {
-            _SupportsSynchronising = Convert.ToBoolean(_reader.GetAttribute("supportsSynchronising"));
+            string supportsSynch = _reader.GetAttribute("supportsSynchronising");
+            try
+            {
+                _SupportsSynchronising = Convert.ToBoolean(supportsSynch);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException(String.Format(
+                    "In the class definition for '{0}', the value provided for " +
+                    "the 'supportsSynchronising' attribute is not valid. The value " +
+                    "needs to be 'true' or 'false'.", _ClassName));
+            }
         }
     }
 }

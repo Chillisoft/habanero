@@ -8,7 +8,7 @@
 	orderBy CDATA ""
 	minNoOfRelatedObjects NMTOKEN "0"
 	maxNoOfRelatedObjects NMTOKEN "-1"
-	deleteParentAction ( cbsDeleteRelatedObjects | cbsDereferenceRelatedObjects | cbsPreventDeleteParent ) "cbsPreventDeleteParent"
+	deleteParentAction ( DeleteRelatedObjects | DereferenceRelatedObjects | PreventDeleteParent ) "PreventDeleteParent"
 >
 	<!ELEMENT relKeyDef (relProp+)>
 		<!ELEMENT relProp EMPTY>

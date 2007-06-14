@@ -70,7 +70,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         [SetUp]
         public void init()
         {
-            PropDef propDef = new PropDef("Prop", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, null);
+            PropDef propDef = new PropDef("Prop", typeof (string), PropReadWriteRule.ReadManyWriteMany, null);
             mRelPropDef = new RelPropDef(propDef, "PropName");
             mPropDefCol = new PropDefCol();
             mPropDefCol.Add(propDef);

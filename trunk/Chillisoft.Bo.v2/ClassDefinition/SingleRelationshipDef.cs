@@ -159,13 +159,13 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("MockBOProp1", typeof (Guid), cbsPropReadWriteRule.ReadManyWriteMany, "MockBOProp1", null);
+                new PropDef("MockBOProp1", typeof (Guid), PropReadWriteRule.ReadManyWriteMany, "MockBOProp1", null);
             lPropDefCol.Add(propDef);
 
-            lPropDefCol.Add("MockBOProp2", typeof (string), cbsPropReadWriteRule.ReadManyWriteOnce, "MockBOProp2", null);
+            lPropDefCol.Add("MockBOProp2", typeof (string), PropReadWriteRule.ReadManyWriteOnce, "MockBOProp2", null);
 
             propDef =
-                lPropDefCol.Add("MockBOID", typeof (Guid), cbsPropReadWriteRule.ReadManyWriteOnce, "MockBOID", null);
+                lPropDefCol.Add("MockBOID", typeof (Guid), PropReadWriteRule.ReadManyWriteOnce, "MockBOID", null);
             return lPropDefCol;
         }
 

@@ -15,11 +15,11 @@ namespace Chillisoft.Bo.ClassDefinition.v2
     public enum DeleteParentAction
     {
         /// <summary>Delete all related objects when the parent is deleted</summary>
-        cbsDeleteRelatedObjects = 1,
+        DeleteRelatedObjects = 1,
         /// <summary>Dereference all related objects when the parent is deleted</summary>
-        cbsDereferenceRelatedObjects = 2,
+        DereferenceRelatedObjects = 2,
         /// <summary>Prevent deletion of parent if it has related objects</summary>
-        cbsPreventDeleteParent = 3,
+        PreventDeleteParent = 3,
     }
 
     /// <summary>
@@ -149,7 +149,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 
             mRelationshipDef = new MultipleRelationshipDef("Relation1", typeof (MockBO),
                                                            mRelKeyDef, false, "",
-                                                           -1, -1, DeleteParentAction.cbsDeleteRelatedObjects);
+                                                           -1, -1, DeleteParentAction.DeleteRelatedObjects);
             DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetConnectionString();
         }
 
@@ -166,7 +166,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         public void TestCreateRelationshipWithNonBOType()
         {
             RelationshipDef relDef = new MultipleRelationshipDef("Relation1", typeof (String), mRelKeyDef, false, "",
-                                                                 -1, -1, DeleteParentAction.cbsDeleteRelatedObjects);
+                                                                 -1, -1, DeleteParentAction.DeleteRelatedObjects);
         }
 
         [Test]

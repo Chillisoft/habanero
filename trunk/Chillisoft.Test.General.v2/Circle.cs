@@ -34,9 +34,9 @@ namespace Chillisoft.Test.General.v2
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Radius", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, "Radius", null);
+                new PropDef("Radius", typeof (int), PropReadWriteRule.ReadManyWriteMany, "Radius", null);
             lPropDefCol.Add(propDef);
-            propDef = lPropDefCol.Add("CircleID", typeof (Guid), cbsPropReadWriteRule.ReadManyWriteOnce, null);
+            propDef = lPropDefCol.Add("CircleID", typeof (Guid), PropReadWriteRule.ReadManyWriteOnce, null);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["CircleID"]);

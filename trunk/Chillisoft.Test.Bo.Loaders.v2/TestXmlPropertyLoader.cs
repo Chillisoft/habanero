@@ -46,8 +46,8 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         [Test]
         public void TestPropertyWithReadWriteRule()
         {
-            PropDef def = itsLoader.LoadProperty(@"<propertyDef name=""TestProp"" readWriteRule=""OnlyRead"" />");
-            Assert.AreEqual(cbsPropReadWriteRule.OnlyRead, def.ReadWriteRule,
+            PropDef def = itsLoader.LoadProperty(@"<propertyDef name=""TestProp"" readWriteRule=""ReadOnly"" />");
+            Assert.AreEqual(PropReadWriteRule.ReadOnly, def.ReadWriteRule,
                             "Property read write rule should be same as that specified in xml");
         }
 

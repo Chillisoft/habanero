@@ -20,7 +20,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         {
             itsLoader = new XmlPrimaryKeyLoader();
             itsPropDefs = new PropDefCol();
-            itsPropDefs.Add(new PropDef("TestProp", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         [Test]
         public void TestCompositeKey()
         {
-            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
             PrimaryKeyDef def =
                 itsLoader.LoadPrimaryKey(
                     @"<primaryKeyDef isObjectID=""false""><prop name=""TestProp"" /><prop name=""TestProp2"" /></primaryKeyDef>",

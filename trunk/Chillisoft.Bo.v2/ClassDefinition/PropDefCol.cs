@@ -67,7 +67,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <param name="propName">The name of the property, e.g. surname</param>
         /// <param name="propType">The type of the property, e.g. string</param>
         /// <param name="propRWStatus">Rules for how a property can be
-        /// accessed. See cbsPropReadWriteRule enumeration for more detail.</param>
+        /// accessed. See PropReadWriteRule enumeration for more detail.</param>
         /// <param name="databaseFieldName">The database field name - this
         /// allows you to have a database field name that is different to the
         /// property name, which is useful for migrating systems where
@@ -78,7 +78,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// been added to the collection</returns>
         public PropDef Add(string propName,
                            Type propType,
-                           cbsPropReadWriteRule propRWStatus,
+                           PropReadWriteRule propRWStatus,
                            string databaseFieldName,
                            object defaultValue)
         {
@@ -94,7 +94,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// </summary>
         public PropDef Add(string propName,
                            Type propType,
-                           cbsPropReadWriteRule propRWStatus,
+                           PropReadWriteRule propRWStatus,
                            object defaultValue)
         {
             PropDef lPropDef = new PropDef(propName, propType, propRWStatus,

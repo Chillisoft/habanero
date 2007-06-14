@@ -17,7 +17,7 @@ namespace Chillisoft.Test.Bo.v2
                     )]
         public void TestDotIsNotAllowedInName()
         {
-            PropDef def = new PropDef("This.That", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, "");
+            PropDef def = new PropDef("This.That", typeof (string), PropReadWriteRule.ReadManyWriteMany, "");
         }
 
 
@@ -28,7 +28,7 @@ namespace Chillisoft.Test.Bo.v2
                     )]
         public void TestDashIsNotAllowedInName()
         {
-            PropDef def = new PropDef("This-That", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, "");
+            PropDef def = new PropDef("This-That", typeof (string), PropReadWriteRule.ReadManyWriteMany, "");
         }
 
         [
@@ -38,7 +38,7 @@ namespace Chillisoft.Test.Bo.v2
                     )]
         public void TestPipeIsNotAllowedInName()
         {
-            PropDef def = new PropDef("This|That", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, "");
+            PropDef def = new PropDef("This|That", typeof (string), PropReadWriteRule.ReadManyWriteMany, "");
         }
     }
 }

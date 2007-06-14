@@ -47,7 +47,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         {
             itsLoader = new XmlRelationshipLoader();
             itsPropDefs = new PropDefCol();
-            itsPropDefs.Add(new PropDef("TestProp", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
         }
 
         [Test]
@@ -77,8 +77,8 @@ namespace Chillisoft.Test.Bo.Loaders.v2
             Assert.AreEqual("TestOrder", multipleRelDef.OrderBy);
             Assert.AreEqual(0, multipleRelDef.MinNoOfRelatedObjects);
             Assert.AreEqual(-1, multipleRelDef.MaxNoOfRelatedObjects);
-            Assert.AreEqual(DeleteParentAction.cbsPreventDeleteParent, multipleRelDef.DeleteParentAction,
-                            "Default delete action according to dtd is cbsPreventDeleteParent.");
+            Assert.AreEqual(DeleteParentAction.PreventDeleteParent, multipleRelDef.DeleteParentAction,
+                            "Default delete action according to dtd is PreventDeleteParent.");
         }
 
         [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
@@ -97,7 +97,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
         [Test]
         public void TestWithTwoRelatedProps()
         {
-            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), cbsPropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
             string relationshipWithTwoProps = singleRelationshipString.Replace
                 (@"<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />",
                  @"<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />

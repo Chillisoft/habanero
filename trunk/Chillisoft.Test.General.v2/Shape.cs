@@ -35,9 +35,9 @@ namespace Chillisoft.Test.General.v2
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("ShapeName", typeof (String), cbsPropReadWriteRule.ReadManyWriteMany, "ShapeName", null);
+                new PropDef("ShapeName", typeof (String), PropReadWriteRule.ReadManyWriteMany, "ShapeName", null);
             lPropDefCol.Add(propDef);
-            propDef = lPropDefCol.Add("ShapeID", typeof (Guid), cbsPropReadWriteRule.ReadManyWriteOnce, null);
+            propDef = lPropDefCol.Add("ShapeID", typeof (Guid), PropReadWriteRule.ReadManyWriteOnce, null);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["ShapeID"]);
@@ -50,7 +50,7 @@ namespace Chillisoft.Test.General.v2
             relKeyDef.Add(lRelPropDef);
             RelationshipDef relDef = new MultipleRelationshipDef("Owner", typeof (Shape),
                                                                  relKeyDef, false, "", -1, -1,
-                                                                 DeleteParentAction.cbsDereferenceRelatedObjects);
+                                                                 DeleteParentAction.DereferenceRelatedObjects);
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             relDefCol.Add(relDef);
             ClassDef lClassDef = new ClassDef(typeof (Shape), primaryKey, lPropDefCol, keysCol, relDefCol);

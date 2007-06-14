@@ -171,7 +171,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             mKeyDef = new KeyDef();
             mKeyDef.IgnoreNulls = true;
-            PropDef lPropDef = new PropDef("PropName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            PropDef lPropDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
             mKeyDef.Add(lPropDef);
         }
 

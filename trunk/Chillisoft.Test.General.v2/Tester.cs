@@ -765,28 +765,28 @@ namespace Chillisoft.Test.General.v2
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("TransactionSequenceNo", typeof (int), cbsPropReadWriteRule.ReadManyWriteMany, null);
+                new PropDef("TransactionSequenceNo", typeof (int), PropReadWriteRule.ReadManyWriteMany, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("DateTimeUpdated", typeof (DateTime), cbsPropReadWriteRule.ReadManyWriteMany, null);
+            propDef = new PropDef("DateTimeUpdated", typeof (DateTime), PropReadWriteRule.ReadManyWriteMany, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("WindowsUser", typeof (String), cbsPropReadWriteRule.ReadManyWriteOnce, null);
+            propDef = new PropDef("WindowsUser", typeof (String), PropReadWriteRule.ReadManyWriteOnce, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("LogonUser", typeof (String), cbsPropReadWriteRule.OnlyRead, null);
+            propDef = new PropDef("LogonUser", typeof (String), PropReadWriteRule.ReadOnly, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("BusinessObjectTypeName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            propDef = new PropDef("BusinessObjectTypeName", typeof (string), PropReadWriteRule.ReadOnly, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("CRUDAction", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            propDef = new PropDef("CRUDAction", typeof (string), PropReadWriteRule.ReadOnly, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("DirtyXML", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            propDef = new PropDef("DirtyXML", typeof (string), PropReadWriteRule.ReadOnly, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("MachineName", typeof (string), cbsPropReadWriteRule.OnlyRead, null);
+            propDef = new PropDef("MachineName", typeof (string), PropReadWriteRule.ReadOnly, null);
             lPropDefCol.Add(propDef);
             return lPropDefCol;
         }
