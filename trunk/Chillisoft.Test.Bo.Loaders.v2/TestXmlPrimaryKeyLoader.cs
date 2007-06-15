@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Chillisoft.Bo.ClassDefinition.v2;
 using Chillisoft.Bo.Loaders.v2;
@@ -49,12 +50,9 @@ namespace Chillisoft.Test.Bo.Loaders.v2
 
         [
             Test,
-                ExpectedException(typeof (InvalidXmlDefinitionException),
-                    "A primary key definition has listed a 'prop' " +
-                    "definition for 'TestProp', which hasn't been defined among " +
-                    "the 'propertyDef's for the class.  Either add a 'propertyDef' " +
-                    "for 'TestProp' or correct the spelling or capitalisation of the " +
-                    "attribute to match a property that has already been defined.")]
+                ExpectedException(typeof(ArgumentException),
+                    "The property name 'TestProp' does not exist in the " +
+                    "collection of property definitions.")]
         public void TestWithPropThatDoesNotExist()
         {
             PropDefCol propDefs = new PropDefCol();

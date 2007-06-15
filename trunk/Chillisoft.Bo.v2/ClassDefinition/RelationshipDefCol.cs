@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Chillisoft.Bo.v2;
 
@@ -21,7 +22,12 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <param name="lRelationshipDef">The existing relationship to add</param>
         public void Add(RelationshipDef lRelationshipDef)
         {
-            //TODO_Err: Add sensible error handling if prop already exists etc
+            if (Dictionary.Contains(lRelationshipDef.RelationshipName))
+            {
+                throw new ArgumentException(String.Format(
+                    "A relationship definition with the name '{0}' already " +
+                    "exists.", lRelationshipDef.RelationshipName));
+            }
             base.Dictionary.Add(lRelationshipDef.RelationshipName, lRelationshipDef);
         }
 
@@ -38,7 +44,12 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             get
             {
-                //TODOErr: put appropriate err handling
+                if (!Dictionary.Contains(relationshipName))
+                {
+                    throw new ArgumentException(String.Format(
+                        "The relationship name '{0}' does not exist in the " +
+                        "collection of relationship definitions.", relationshipName));
+                }
                 return ((RelationshipDef) Dictionary[relationshipName]);
             }
         }
@@ -60,6 +71,17 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                 lRelationshipCol.Add(lRelationshipDef.CreateRelationship(bo, lBoPropCol));
             }
             return lRelationshipCol;
+        }
+
+        /// <summary>
+        /// Indicates whether the collection contains the relationship
+        /// definition specified
+        /// </summary>
+        /// <param name="keyName">The name of the definition</param>
+        /// <returns>Returns true if found, false if not</returns>
+        public bool Contains(string keyName)
+        {
+            return Dictionary.Contains(keyName);
         }
     }
 }

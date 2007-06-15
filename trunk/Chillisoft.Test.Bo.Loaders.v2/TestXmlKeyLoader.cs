@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Chillisoft.Bo.ClassDefinition.v2;
 using Chillisoft.Bo.Loaders.v2;
@@ -71,12 +72,9 @@ namespace Chillisoft.Test.Bo.Loaders.v2
 
         [
             Test,
-                ExpectedException(typeof (InvalidXmlDefinitionException),
-                    "The property definition 'TestProp2' being named by a " +
-                        "'prop' element in a key definition does not exist. The property " +
-                        "definition being referred to must have been defined in a " +
-                        "'propertyDef' element.  Add the property definition or check " +
-                        "that the spelling and capitalisation are correct.")]
+                ExpectedException(typeof(ArgumentException),
+                    "The property name 'TestProp2' does not exist in the " +
+                    "collection of property definitions.")]
         public void TestLoadKeyNonExistentProp()
         {
             itsLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></keyDef>",

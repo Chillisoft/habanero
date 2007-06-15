@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Chillisoft.Bo.v2;
 
@@ -21,7 +22,12 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <param name="lKeyDef"></param>
         public void Add(KeyDef lKeyDef)
         {
-            //TODO_Err: Add sensible error handling if prop already exists etc
+            if (Dictionary.Contains(lKeyDef.KeyName))
+            {
+                throw new ArgumentException(String.Format(
+                    "A key definition with the name '{0}' already " +
+                    "exists.", lKeyDef.KeyName));
+            }
             base.Dictionary.Add(lKeyDef.KeyName, lKeyDef);
         }
 
@@ -37,7 +43,12 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         {
             get
             {
-                //TODOErr: put appropriate err handling
+                if (!Dictionary.Contains(keyName))
+                {
+                    throw new ArgumentException(String.Format(
+                        "The key name '{0}' does not exist in the " +
+                        "collection of key definitions.", keyName));
+                }
                 return ((KeyDef) Dictionary[keyName]);
             }
         }
@@ -59,6 +70,16 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                 lBOKeyCol.Add(lKeyDef.CreateBOKey(lBOPropCol));
             }
             return lBOKeyCol;
+        }
+
+        /// <summary>
+        /// Indicates whether the collection contains the key definition specified
+        /// </summary>
+        /// <param name="keyName">The name of the key definition</param>
+        /// <returns>Returns true if found, false if not</returns>
+        public bool Contains(string keyName)
+        {
+            return Dictionary.Contains(keyName);
         }
     }
 }

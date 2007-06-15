@@ -750,7 +750,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             ClassDef currentClassDef = this;
             while (currentClassDef != null)
             {
-                if (currentClassDef.PropDefcol[propertyName] != null)
+                if (currentClassDef.PropDefcol.Contains(propertyName))
                 {
                     return currentClassDef.PropDefcol[propertyName];
                 }

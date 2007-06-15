@@ -21,12 +21,19 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// in the collection can be accessed like an array 
         /// (e.g. collection["surname"])
         /// </summary>
+        /// <exception cref="ArgumentException">Thrown if the key is not
+        /// found. If you are checking for the existence of a key, use the
+        /// Contains() method.</exception>
         public PropDef this[string key]
         {
             get
             {
-                //TODOErr: put appropriate err handling
-                //if (this.Contains(key))
+                if (!Dictionary.Contains(key.ToUpper()))
+                {
+                    throw new ArgumentException(String.Format(
+                        "The property name '{0}' does not exist in the " +
+                        "collection of property definitions.", key));
+                }
                 return ((PropDef) Dictionary[key.ToUpper()]);
 
                 //else
@@ -58,6 +65,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <param name="propDef">The existing property definition</param>
         public void Add(PropDef propDef)
         {
+            CheckPropNotAlreadyAdded(propDef.PropertyName);
             Dictionary.Add(propDef.PropertyName.ToUpper(), propDef);
         }
 
@@ -82,6 +90,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                            string databaseFieldName,
                            object defaultValue)
         {
+            CheckPropNotAlreadyAdded(propName);
             PropDef lPropDef = new PropDef(propName, propType, propRWStatus,
                                            databaseFieldName, defaultValue);
             Dictionary.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
@@ -97,6 +106,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                            PropReadWriteRule propRWStatus,
                            object defaultValue)
         {
+            CheckPropNotAlreadyAdded(propName);
             PropDef lPropDef = new PropDef(propName, propType, propRWStatus,
                                            defaultValue);
             Dictionary.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
@@ -134,6 +144,21 @@ namespace Chillisoft.Bo.ClassDefinition.v2
                 lBOPropertyCol.Add(lPropDef.CreateBOProp(newObject));
             }
             return lBOPropertyCol;
+        }
+
+        /// <summary>
+        /// Checks if a property definition with that name has already been added
+        /// and throws an exception if so
+        /// </summary>
+        /// <param name="propName">The property name</param>
+        private void CheckPropNotAlreadyAdded(string propName)
+        {
+            if (Dictionary.Contains(propName) || Dictionary.Contains(propName.ToUpper()))
+            {
+                throw new ArgumentException(String.Format(
+                    "A property definition with the name '{0}' already " +
+                    "exists.", propName));
+            }
         }
     }
 }
