@@ -158,5 +158,20 @@ namespace Chillisoft.Generic.v2
             doc.LoadXml(element);
             return doc.DocumentElement;
         }
+
+        /// <summary>
+        /// Carries out the next read, but makes provision to ignore the end
+        /// tag if there is one (and not treat it as an element itself)
+        /// </summary>
+        protected void ReadAndIgnoreEndTag()
+        {
+            if (_reader.IsEmptyElement)
+                _reader.Read();
+            else
+            {
+                _reader.Read();
+                _reader.Read();
+            }
+        }
     }
 }

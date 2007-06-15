@@ -34,9 +34,43 @@ namespace Chillisoft.Bo.Loaders.v2
             _reader.Read();
             while (_reader.Name == "stringGuidPair")
             {
-                _stringGuidPairCollection.Add(
-                    new StringGuidPair(_reader.GetAttribute("string"), new Guid(_reader.GetAttribute("guid"))));
-                _reader.Read();
+                string stringPart = _reader.GetAttribute("string");
+                string guidPart = _reader.GetAttribute("guid");
+                if (stringPart == null || stringPart.Length == 0)
+                {
+                    throw new InvalidXmlDefinitionException("A 'stringGuidPair' " +
+                        "is missing a 'string' attribute that specifies the " +
+                        "string to show to the user in a display.");
+                }
+                if (guidPart == null || guidPart.Length == 0)
+                {
+                    throw new InvalidXmlDefinitionException("A 'stringGuidPair' " +
+                        "is missing a 'guid' attribute that specifies the " +
+                        "guid to store for the given property.");
+                }
+
+                try
+                {
+                    Guid newGuid = new Guid(guidPart);
+                    _stringGuidPairCollection.Add(
+                        new StringGuidPair(stringPart, newGuid));
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidXmlDefinitionException(String.Format(
+                        "In a 'stringGuidPair', a 'guid' attribute provides '{0}', " +
+                        "which is not a valid Guid.", guidPart), ex);
+                }
+                
+                ReadAndIgnoreEndTag();
+            }
+
+            if (_stringGuidPairCollection.Count == 0)
+            {
+                throw new InvalidXmlDefinitionException("A 'simpleLookupListSource' " +
+                    "element does not contain any 'stringGuidPair' elements.  It " +
+                    "should contain one or more 'stringGuidPair' elements that " +
+                    "specify each of the available options in the lookup list.");
             }
         }
 

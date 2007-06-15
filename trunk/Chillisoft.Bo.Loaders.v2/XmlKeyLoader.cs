@@ -138,13 +138,8 @@ namespace Chillisoft.Bo.Loaders.v2
                         "'propertyDef' element.  Add the property definition or check " +
                         "that the spelling and capitalisation are correct.", propName));
                 }
-                if (_reader.IsEmptyElement)
-                    _reader.Read();
-                else
-                {
-                    _reader.Read();
-                    _reader.Read();
-                }
+                ReadAndIgnoreEndTag();
+
             } while (_reader.Name == "prop");
         }
     }

@@ -124,13 +124,8 @@ namespace Chillisoft.Bo.Loaders.v2
                         "attribute to match a property that has already been defined.",
                         propName));
                 }
-                if (_reader.IsEmptyElement)
-                    _reader.Read();
-                else
-                {
-                    _reader.Read();
-                    _reader.Read();
-                }
+                ReadAndIgnoreEndTag();
+
             } while (_reader.Name == "prop");
         }
     }
