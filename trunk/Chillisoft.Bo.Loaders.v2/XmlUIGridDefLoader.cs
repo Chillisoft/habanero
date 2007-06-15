@@ -1,3 +1,4 @@
+using System;
 using System.Xml;
 using Chillisoft.Generic.v2;
 
@@ -74,6 +75,15 @@ namespace Chillisoft.Bo.Loaders.v2
             {
                 _collection.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
             } while (_reader.Name == "uiGridProperty");
+
+
+//            catch (Exception ex)
+//            {
+//                throw new InvalidXmlDefinitionException("An error occurred while " +
+//                    "loading a 'uiGridDef' element.  Ensure that the element " +
+//                    "contains one or more 'uiGridProperty' elements, which " +
+//                    "specify the columns to appear in the grid.");
+//            }
         }
     }
 }

@@ -116,6 +116,13 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadPropertyName()
         {
             _propertyName = _reader.GetAttribute("propertyName");
+            if (_propertyName == null || _propertyName.Length == 0)
+            {
+                throw new InvalidXmlDefinitionException("In a 'uiGridProperty' " +
+                    "element, the 'propertyName' attribute was not specified. This " +
+                    "attribute specifies which property of the class to display " +
+                    "in the column.");
+            }
         }
 
         /// <summary>
@@ -125,6 +132,12 @@ namespace Chillisoft.Bo.Loaders.v2
         private void LoadHeading()
         {
             _heading = _reader.GetAttribute("heading");
+            if (_heading == null || _heading.Length == 0)
+            {
+                throw new InvalidXmlDefinitionException("In a 'uiGridProperty' " +
+                    "element, the 'heading' attribute was not specified. This " +
+                    "attribute sets the heading of the column as seen by the user.");
+            }
         }
 
         /// <summary>
