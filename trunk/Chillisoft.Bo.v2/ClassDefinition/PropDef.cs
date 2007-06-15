@@ -96,7 +96,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// <param name="propName">The name of the property (e.g. "surname")</param>
 		/// <param name="propType">The type of the property (e.g. string)</param>
 		/// <param name="propRWStatus">Rules for how a property can be accessed.
-		/// See cbsPropReadWriteRule enumeration for more detail.</param>
+		/// See PropReadWriteRule enumeration for more detail.</param>
 		/// <param name="defaultValue">The default value that a property 
 		/// of a new object will be set to</param>
         public PropDef(string propName,
@@ -115,7 +115,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// <param name="assemblyName">The assembly name of the property type</param>
 		/// <param name="typeName">The type name of the property type (e.g. "string")</param>
 		/// <param name="propRWStatus">Rules for how a property can be accessed.
-		/// See cbsPropReadWriteRule enumeration for more detail.</param>
+		/// See PropReadWriteRule enumeration for more detail.</param>
 		/// <param name="databaseFieldName">The database field name - this
 		/// allows you to have a database field name that is different to the
 		/// property name, which is useful for migrating systems where

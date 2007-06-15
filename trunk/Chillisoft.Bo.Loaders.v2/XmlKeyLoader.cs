@@ -97,7 +97,16 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadKeyIgnoreNulls()
         {
-            _keyDef.IgnoreNulls = Convert.ToBoolean(_reader.GetAttribute("ignoreNulls"));
+            try
+            {
+                _keyDef.IgnoreNulls = Convert.ToBoolean(_reader.GetAttribute("ignoreNulls"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("In a 'keyDef' element, " +
+                    "the 'ignoreNulls' attribute provided " +
+                    "an invalid boolean value. Use 'true' or 'false'.", ex);
+            }
         }
 
         /// <summary>
