@@ -217,16 +217,12 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
 		internal static string GetTypeId(string assemblyName, string className, bool includeNamespace)
     	{
-    		string namespaceString = "";
-    		int pos = className.LastIndexOf(".");
-    		if (pos != -1)
-    		{
-				if (includeNamespace)
-				{
-					namespaceString = " Namespace:" + className.Substring(0, pos);
-				}
-    			className = className.Substring(pos + 1);
-    		}
+    		string namespaceString;
+    		className = StripOutNameSpace(className, out namespaceString);
+			if (includeNamespace && namespaceString != null && namespaceString.Length > 0)
+			{
+				namespaceString = " Namespace:" + namespaceString;
+			}
 			assemblyName = TypeLoader.CleanUpAssemblyName(assemblyName);
     		string id = "Assembly:" + assemblyName + namespaceString + " _className:" + className;
     		return id.ToUpper();
@@ -246,7 +242,34 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.Name, includeNamespace);
     	}
 
+		internal static string StripOutNameSpace(string className)
+		{
+			string namespaceString;
+			return StripOutNameSpace(className, out namespaceString);
+		}
+
+		internal static string StripOutNameSpace(string className, out string namespaceString)
+		{
+			if (className != null)
+			{
+				int pos = className.LastIndexOf(".");
+				if (pos != -1)
+				{
+					namespaceString = className.Substring(0, pos);
+					className = className.Substring(pos + 1);
+				}else
+				{
+					namespaceString = "";
+				}
+			} else
+			{
+				namespaceString = null;
+			}
+			return className;
+		}
+
 		#endregion
+
 
     }
 

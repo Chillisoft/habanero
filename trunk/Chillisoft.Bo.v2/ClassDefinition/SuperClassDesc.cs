@@ -117,7 +117,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 				if (_superClassDef != null)
 				{
 					_assemblyName = _superClassDef.AssemblyName;
-					_className = _superClassDef.ClassName;
+					_className = _superClassDef.ClassNameFull;
 				}
 				else
 				{

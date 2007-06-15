@@ -116,6 +116,7 @@ namespace Chillisoft.Test.General.v2
             RelationshipDefCol relDefs = CreateRelationshipDefCol(lPropDefCol);
 
             ClassDef lClassDef = new ClassDef(typeof (ContactPerson), primaryKey, lPropDefCol, keysCol, relDefs);
+			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }
 

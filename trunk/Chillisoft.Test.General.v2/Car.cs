@@ -54,6 +54,7 @@ namespace Chillisoft.Test.General.v2
 
 
             ClassDef lClassDef = new ClassDef(typeof (Car), primaryKey, lPropDefCol, keysCol, relDefCol);
+			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }
 

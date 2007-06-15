@@ -173,6 +173,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["MockBOID"]);
             ClassDef lClassDef = new ClassDef(typeof (MockBO), primaryKey, lPropDefCol, keysCol, null);
+			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }
 

@@ -758,6 +758,7 @@ namespace Chillisoft.Test.General.v2
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["TransactionSequenceNo"]);
             ClassDef lClassDef = new ClassDef(typeof (TransactionLog), primaryKey, lPropDefCol, keysCol, null);
+			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }
 

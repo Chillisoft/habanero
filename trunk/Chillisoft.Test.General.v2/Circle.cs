@@ -44,6 +44,7 @@ namespace Chillisoft.Test.General.v2
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             ClassDef lClassDef = new ClassDef(typeof (Circle), primaryKey, lPropDefCol, keysCol, relDefCol);
             lClassDef.SuperClassDesc = new SuperClassDesc(Shape.GetClassDef(), ORMapping.ConcreteTableInheritance);
+			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }
     }

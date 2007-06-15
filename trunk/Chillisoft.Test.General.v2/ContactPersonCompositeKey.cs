@@ -54,6 +54,7 @@ namespace Chillisoft.Test.General.v2
             ClassDef lClassDef =
                 new ClassDef(typeof (ContactPersonCompositeKey), primaryKey, lPropDefCol, keysCol, relDefs);
             lClassDef.HasObjectID = false;
+			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }
 

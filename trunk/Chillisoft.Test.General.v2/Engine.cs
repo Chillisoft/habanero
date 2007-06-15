@@ -52,6 +52,7 @@ namespace Chillisoft.Test.General.v2
 
             ClassDef lClassDef = new ClassDef(typeof (Engine), primaryKey, lPropDefCol, keysCol, relDefCol);
             lClassDef.TableName = "Table_Engine";
+			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }
 

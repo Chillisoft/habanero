@@ -54,6 +54,7 @@ namespace Chillisoft.Test.General.v2
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             relDefCol.Add(relDef);
             ClassDef lClassDef = new ClassDef(typeof (Shape), primaryKey, lPropDefCol, keysCol, relDefCol);
+			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }
 

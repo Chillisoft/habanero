@@ -94,6 +94,7 @@ namespace Chillisoft.Test.General.v2
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             ClassDef lClassDef = new ClassDef(typeof (Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
+			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }
 

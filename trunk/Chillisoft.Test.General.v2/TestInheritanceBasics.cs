@@ -24,7 +24,7 @@ namespace Chillisoft.Test.General.v2
         [Test]
         public void TestSuperClassDefProperty()
         {
-            Assert.AreSame(shapeClassDef, circleClassDef.SuperClassDesc.SuperClassDef,
+        	Assert.AreSame(shapeClassDef, circleClassDef.SuperClassDesc.SuperClassDef,
                            "SuperClassDesc.ClassDef property on ClassDef should return the SuperClass's ClassDef");
         }
 
