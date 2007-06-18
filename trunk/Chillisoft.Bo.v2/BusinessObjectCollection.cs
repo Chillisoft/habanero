@@ -194,7 +194,8 @@ namespace Chillisoft.Bo.v2
 
         /// <summary>
         /// Loads business objects that match the search criteria provided,
-        /// loaded in the order specified
+        /// loaded in the order specified.  Use empty quotes to load the
+        /// entire collection for the type of object.
         /// </summary>
         /// <param name="searchCriteria">The search criteria</param>
         /// <param name="orderByClause">The order-by clause</param>

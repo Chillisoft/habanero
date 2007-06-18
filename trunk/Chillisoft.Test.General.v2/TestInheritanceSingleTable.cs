@@ -1,5 +1,6 @@
 using System.Data;
 using Chillisoft.Bo.ClassDefinition.v2;
+using Chillisoft.Bo.v2;
 using Chillisoft.Db.v2;
 using Chillisoft.Util.v2;
 using NUnit.Framework;
@@ -54,7 +55,7 @@ namespace Chillisoft.Test.General.v2
             objCircle.GetPropertyValue("ShapeID");
         }
 
-        [Test, ExpectedException(typeof (HabaneroArgumentException))]
+        [Test, ExpectedException(typeof (PropertyNameInvalidException))]
         public void TestCircleDoesntHaveCircleID()
         {
             objCircle.GetPropertyValue("CircleID");

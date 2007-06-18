@@ -89,8 +89,23 @@ namespace Chillisoft.Db.v2
             //    dbAssembly = Assembly.LoadFrom(_assemblyName + ".dll");
             //}
             //Type connectionType = dbAssembly.GetType(_className);
-            Type connectionType = TypeLoader.LoadType(_assemblyName, _className);
-            return (IDbConnection) Activator.CreateInstance(connectionType);
+            try
+            {
+                Type connectionType = TypeLoader.LoadType(_assemblyName, _className);
+                return (IDbConnection) Activator.CreateInstance(connectionType);
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseConnectionException(String.Format(
+                    "An error occurred while attempting to connect to the " +
+                    "database.  The assembly, '{0}', required for the " +
+                    "database vendor specified in the configuration (eg. " +
+                    "app.config) could not be loaded.  Please check that it " +
+                    "has been included in the dependencies or references, " +
+                    "or that it has been copied to the output/execution " +
+                    "folder for this application.", _assemblyName),
+                    ex);
+            }
         }
 
         /// <summary>
@@ -102,7 +117,21 @@ namespace Chillisoft.Db.v2
         {
             IDbConnection con = this.CreateDatabaseConnection();
                 //IDbConnection) Activator.CreateInstance(sampleCon.GetType()); // new MySqlConnection(ConnectionString));
-            con.ConnectionString = this.ConnectionString;
+            try
+            {
+                con.ConnectionString = this.ConnectionString;
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseConnectionException("There was an error " +
+                      "connecting to the database. The connection information was " +
+                      "rejected by the database - connection information is either " +
+                      "missing or incorrect.  In your configuration (eg. in app." +
+                      "config), you require settings for vendor, server and " +
+                      "database.  Depending on your setup, you may also need " +
+                      "username, password and port. Consult the documentation for " +
+                      "more detail on available options for these settings.", ex);
+            }
             if (con.State != ConnectionState.Open && this._className == "System.Data.OleDb.OleDbConnection") {
                 con.Open();
             }
@@ -263,7 +292,9 @@ namespace Chillisoft.Db.v2
             {
                 log.Error("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine +
                           ExceptionUtil.GetExceptionString(ex, 8));
-                throw ex;
+                //throw ex;
+                throw new DatabaseConnectionException("An error occurred while attempting " +
+                    "to connect to the database.", ex);
             }
         }
 

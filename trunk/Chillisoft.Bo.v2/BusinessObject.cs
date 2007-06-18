@@ -948,8 +948,11 @@ namespace Chillisoft.Bo.v2
             BOProp prop = _boPropCol[propName];
             if (prop == null)
             {
-                throw new HabaneroArgumentException("propName", "Property with name " +
-                                                               propName + " does not exist for class " + ClassName);
+                throw new PropertyNameInvalidException("The property '" + propName + 
+                    "' for the class '" + ClassName + "' has not been declared " +
+                    "in the class definitions.  Add the property to the class " +
+                    "definitions and add the property to the class, or check that " +
+                    "spelling and capitalisation are correct.");
             }
             return prop;
         }

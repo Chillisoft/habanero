@@ -145,6 +145,7 @@
     <Compile Include="DatabaseConnectionAccess.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DatabaseConnectionException.cs" />
     <Compile Include="DatabaseConnectionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
