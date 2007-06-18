@@ -35,11 +35,11 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		{}
 
 		public RelationshipDef(string relationshipName,
-								string relatedObjectassemblyName,
+								string relatedObjectAssemblyName,
 								string relatedObjectClassName,
 								RelKeyDef relKeyDef,
 								bool keepReferenceToRelatedObject)
-			:this(relationshipName, null, relatedObjectassemblyName,relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject)
+			:this(relationshipName, null, relatedObjectAssemblyName,relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject)
 		{}
 
     	private RelationshipDef(string relationshipName,
@@ -75,28 +75,28 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// <summary>
 		/// A name for the relationship
 		/// </summary>
-		internal protected string RelationshipName
+		public string RelationshipName
 		{
 			get { return _relationshipName; }
-			set { _relationshipName = value; }
+			protected set { _relationshipName = value; }
 		}
 
 		/// <summary>
 		/// The assembly name of the related object type
 		/// </summary>
-		protected string RelatedObjectAssemblyName
+		public string RelatedObjectAssemblyName
 		{
 			get { return _relatedObjectAssemblyName; }
-			set { _relatedObjectAssemblyName = value; }
+			protected set { _relatedObjectAssemblyName = value; }
 		}
 
 		/// <summary>
 		/// The class name of the related object type
 		/// </summary>
-		protected string RelatedObjectClassName
+		public string RelatedObjectClassName
 		{
 			get { return _relatedObjectClassName; }
-			set { _relatedObjectClassName = value; }
+			protected set { _relatedObjectClassName = value; }
 		}
 
         /// <summary>

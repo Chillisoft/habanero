@@ -48,10 +48,10 @@ namespace Chillisoft.Bo.v2
 
 		#region Properties
 
-		protected string AssemblyName
+		public string AssemblyName
 		{
 			get { return _assemblyName; }
-			set
+			protected set
 			{
 				if (_assemblyName != value)
 				{
@@ -62,10 +62,10 @@ namespace Chillisoft.Bo.v2
 			}
 		}
 
-		protected string ClassName
+		public string ClassName
 		{
 			get { return _className; }
-			set
+			protected set
 			{
 				if (_className != value)
 				{

@@ -187,10 +187,10 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// <summary>
 		/// The name of the property type assembly
 		/// </summary>
-		protected string PropertyTypeAssemblyName
+		public string PropertyTypeAssemblyName
 		{
 			get { return _propTypeAssemblyName; }
-			set
+			protected set
 			{
 				if (_propTypeAssemblyName != value)
 				{
@@ -204,10 +204,10 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 		/// <summary>
 		/// The name of the property type
 		/// </summary>
-		protected string PropertyTypeName
+		public string PropertyTypeName
 		{
 			get { return _propTypeName; }
-			set
+			protected set
 			{
 				if (_propTypeName != value)
 				{
