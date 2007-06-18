@@ -32,7 +32,9 @@ namespace Chillisoft.UI.Generic.v2
         /// <summary>
         /// Constructor to initalise a new layout manager
         /// </summary>
-        /// <param name="managedControl">The control to manage</param>
+        /// <param name="managedControl">The control to manage (eg. use "this"
+        /// if you create the manager inside a form class that you will be
+        /// managing)</param>
         public BorderLayoutManager(Control managedControl) : base(managedControl)
         {
             _controls = new ControlCollection();

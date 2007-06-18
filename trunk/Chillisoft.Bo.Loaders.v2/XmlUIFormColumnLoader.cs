@@ -69,13 +69,33 @@ namespace Chillisoft.Bo.Loaders.v2
             //_collection.Name = new UIPropertyCollectionName(_collection.Class, _reader.GetAttribute("name"));
 
             _reader.Read();
-            _column.Width = Convert.ToInt32(_reader.GetAttribute("width"));
+            try
+            {
+                _column.Width = Convert.ToInt32(_reader.GetAttribute("width"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("In a 'uiFormColumn' " + 
+                    "element, the 'width' attribute has been given " +
+                    "an invalid integer pixel value.", ex);
+            }
+
             _reader.Read();
             XmlUIFormPropertyLoader propLoader = new XmlUIFormPropertyLoader(_dtdPath);
-            do
+            while (_reader.Name == "uiFormProperty")
             {
                 _column.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
-            } while (_reader.Name == "uiFormProperty");
+            }
+
+            if (_column.Count == 0)
+            {
+                throw new InvalidXmlDefinitionException("No 'uiFormProperty' " +
+                    "elements were specified in a 'uiFormColumn' element.  Ensure " +
+                    "that the element " +
+                    "contains one or more 'uiFormProperty' elements, which " +
+                    "specify the property editing controls to appear in the " +
+                    "editing form column.");
+            }
         }
     }
 }

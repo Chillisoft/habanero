@@ -78,10 +78,20 @@ namespace Chillisoft.Bo.Loaders.v2
             else
             {
                 XmlUIFormColumnLoader loader = new XmlUIFormColumnLoader(_dtdPath);
-                do
+                while (_reader.Name == "uiFormColumn")
                 {
                     _tab.Add(loader.LoadUIFormColumn(_reader.ReadOuterXml()));
-                } while (_reader.Name == "uiFormColumn");
+                }
+
+                if (_tab.Count == 0)
+                {
+                    throw new InvalidXmlDefinitionException("In a 'uiFormTab' " +
+                        "element, there were no 'uiFormGrid' or 'uiFormColumn' " +
+                        "elements specified.  Ensure that the element " +
+                        "contains either a 'uiFormGrid' element or one or more " +
+                        "'uiFormColumn' elements, which specify the columns of " +
+                        "controls to appear in the editing form.");
+                }
             }
         }
     }

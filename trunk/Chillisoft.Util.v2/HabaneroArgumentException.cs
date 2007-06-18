@@ -21,7 +21,7 @@ namespace Chillisoft.Util.v2
         /// Constructor to initialise a new exception with the parameter name
         /// </summary>
         /// <param name="parameterName">The parameter name</param>
-        public HabaneroArgumentException(string parameterName) : base(parameterName + " not valid. ")
+        public HabaneroArgumentException(string parameterName) : base("The property '" + parameterName + "' is not valid. ")
         {
         }
 
@@ -34,7 +34,8 @@ namespace Chillisoft.Util.v2
         /// <param name="inner">The inner exception</param>
         public HabaneroArgumentException(string parameterName,
                                         string message,
-                                        Exception inner) : base(parameterName + " not valid. " + message, inner)
+                                        Exception inner)
+            : base("The property '" + parameterName + "' is not valid. " + message, inner)
         {
         }
 
@@ -45,7 +46,8 @@ namespace Chillisoft.Util.v2
         /// <param name="parameterName">The parameter name</param>
         /// <param name="inner">The inner exception</param>
         public HabaneroArgumentException(string parameterName
-                                        , Exception inner) : base(parameterName + " not valid. ", inner)
+                                        , Exception inner)
+            : base("The property '" + parameterName + "' is not valid. ", inner)
         {
         }
 
@@ -56,7 +58,8 @@ namespace Chillisoft.Util.v2
         /// <param name="parameterName">The parameter name</param>
         /// <param name="message">The error message to display</param>
         public HabaneroArgumentException(string parameterName,
-                                        string message) : base(parameterName + " not valid. " + message)
+                                        string message)
+            : base("The property '" + parameterName + "' is not valid. " + message)
         {
         }
 

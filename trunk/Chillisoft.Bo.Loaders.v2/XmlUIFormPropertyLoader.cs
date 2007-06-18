@@ -95,7 +95,19 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             string controlTypeName = _reader.GetAttribute("controlTypeName");
             string controlAssemblyName = _reader.GetAttribute("controlAssemblyName");
-            _controlType = TypeLoader.LoadType(controlAssemblyName, controlTypeName);
+            try
+            {
+                _controlType = TypeLoader.LoadType(controlAssemblyName, controlTypeName);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException(String.Format(
+                    "While attempting to load a 'uiFormProperty' element, an " +
+                    "error occurred while loading the control type. " +
+                    "The type supplied was '{0}' and the assembly was '{1}'. " +
+                    "Please ensure that the type exists in the assembly provided.",
+                    controlTypeName, controlAssemblyName), ex);
+            }
         }
 
         /// <summary>
@@ -122,7 +134,16 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadIsReadOnly()
         {
-            _isReadOnly = Convert.ToBoolean(_reader.GetAttribute("isReadOnly"));
+            try
+            {
+                _isReadOnly = Convert.ToBoolean(_reader.GetAttribute("isReadOnly"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("The 'isReadOnly' attribute " +
+                    "in a 'uiFormProperty' element is invalid. The valid options " +
+                    "are 'true' and 'false'.", ex);
+            }
         }
 
         /// <summary>
@@ -138,8 +159,27 @@ namespace Chillisoft.Bo.Loaders.v2
 
             while (_reader.Name == "uiFormPropertyAtt")
             {
-                _propertyAttributes.Add(_reader.GetAttribute("name"), _reader.GetAttribute("value"));
-                _reader.Read();
+                string attName = _reader.GetAttribute("name");
+                string attValue = _reader.GetAttribute("value");
+                if (attName == null || attName.Length == 0 ||
+                    attValue == null || attValue.Length == 0)
+                {
+                    throw new InvalidXmlDefinitionException("In a " +
+                        "'uiFormPropertyAtt' element, either the 'name' or " +
+                        "'value' attribute has been omitted.");
+                }
+
+                try
+                {
+                    _propertyAttributes.Add(attName, attValue);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidXmlDefinitionException("An error occurred " +
+                        "while loading a 'uiFormPropertyAtt' element.  There may " +
+                        "be duplicates with the same 'name' attribute.", ex);
+                }
+                ReadAndIgnoreEndTag();
             }
         }
     }

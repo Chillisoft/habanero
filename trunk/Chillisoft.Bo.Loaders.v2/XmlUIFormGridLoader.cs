@@ -86,7 +86,19 @@ namespace Chillisoft.Bo.Loaders.v2
         {
             string className = _reader.GetAttribute("gridType");
             string assemblyName = _reader.GetAttribute("gridTypeAssembly");
-            _gridType = TypeLoader.LoadType(assemblyName, className);
+            try
+            {
+                _gridType = TypeLoader.LoadType(assemblyName, className);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException(String.Format(
+                    "While attempting to load a 'uiFormGrid' element, an " +
+                    "error occurred while loading the grid type. " +
+                    "The type supplied was '{0}' and the assembly was '{1}'. " +
+                    "Please ensure that the type exists in the assembly provided.",
+                    className, assemblyName), ex);
+            }
         }
 
         /// <summary>

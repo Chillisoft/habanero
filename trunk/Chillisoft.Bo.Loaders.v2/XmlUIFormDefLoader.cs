@@ -69,16 +69,35 @@ namespace Chillisoft.Bo.Loaders.v2
             //_collection.Name = new UIPropertyCollectionName(_collection.Class, _reader.GetAttribute("name"));
 
             _reader.Read();
-            _uiFormDef.Width = Convert.ToInt32(_reader.GetAttribute("width"));
-            _uiFormDef.Height = Convert.ToInt32(_reader.GetAttribute("height"));
             _uiFormDef.Heading = _reader.GetAttribute("heading");
+            try
+            {
+                _uiFormDef.Width = Convert.ToInt32(_reader.GetAttribute("width"));
+                _uiFormDef.Height = Convert.ToInt32(_reader.GetAttribute("height"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("In a 'uiFormDef' element, " +
+                    "either the 'width' or 'height' attribute has been given " +
+                    "an invalid integer pixel value.", ex);
+            }
+
 
             _reader.Read();
             XmlUIFormTabLoader loader = new XmlUIFormTabLoader(_dtdPath);
-            do
+            while (_reader.Name == "uiFormTab")
             {
                 _uiFormDef.Add(loader.LoadUIFormTab(_reader.ReadOuterXml()));
-            } while (_reader.Name == "uiFormTab");
+            }
+
+            if (_uiFormDef.Count == 0)
+            {
+                throw new InvalidXmlDefinitionException("No 'uiFormTab' " +
+                    "elements were specified in a 'uiFormDef' element.  Ensure " +
+                    "that the element contains one or more 'uiFormTab' elements, " +
+                    "which each define a tab to appear in the editing form for " +
+                    "the business object.");
+            }
         }
     }
 }

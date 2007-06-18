@@ -85,7 +85,16 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadIsReadOnly()
         {
-            _isReadOnly = Convert.ToBoolean(_reader.GetAttribute("isReadOnly"));
+            try
+            {
+                _isReadOnly = Convert.ToBoolean(_reader.GetAttribute("isReadOnly"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("The 'isReadOnly' attribute " +
+                    "in a 'uiGridProperty' element is invalid. The valid options " +
+                    "are 'true' and 'false'.", ex);
+            }
         }
 
         /// <summary>
@@ -106,7 +115,18 @@ namespace Chillisoft.Bo.Loaders.v2
                 assemblyName = "Chillisoft.UI.Generic.v2";
             }
             //log.Debug("assembly: " + assemblyName + ", class: " + className) ;
-            _gridControlType = TypeLoader.LoadType(assemblyName, className);
+            try
+            {
+                _gridControlType = TypeLoader.LoadType(assemblyName, className);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("In a 'uiGridProperty' " +
+                    "element, the 'gridControlTypeName' attribute has an invalid " +
+                    "type. The available options are: DataGridViewTextBoxColumn, " +
+                    "DataGridViewCheckBoxColumn, DataGridViewComboBoxColumn and " +
+                    "DataGridViewDateTimeColumn.", ex);
+            }
         }
 
         /// <summary>
@@ -146,7 +166,16 @@ namespace Chillisoft.Bo.Loaders.v2
         /// </summary>
         private void LoadWidth()
         {
-            _width = Convert.ToInt32(_reader.GetAttribute("width"));
+            try
+            {
+                _width = Convert.ToInt32(_reader.GetAttribute("width"));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("In the 'width' attribute " +
+                    "of a 'uiGridProperty' element, the value provided was " +
+                    "invalid.  This should be an integer value in pixels.", ex);
+            }
         }
 
         /// <summary>
