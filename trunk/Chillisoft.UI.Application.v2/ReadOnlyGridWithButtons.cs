@@ -43,7 +43,10 @@ namespace Chillisoft.UI.Application.v2
         private IList _itemSelectedDelegates;
 
         /// <summary>
-        /// Constructor to initialise a new grid
+        /// Constructor to initialise a new grid.  Unless you plan to assign
+        /// a data provider, editing form and object creation form yourself,
+        /// rather use the other available constructors, such as
+        /// ReadOnlyGridWithButtons(IGridDataProvider).
         /// </summary>
         public ReadOnlyGridWithButtons()
         {
@@ -65,11 +68,17 @@ namespace Chillisoft.UI.Application.v2
 
         /// <summary>
         /// Constructor to initialise the grid with a data provider, object
-        /// editor and object creator
+        /// editor and object creator.  This constructor is suitable if you are
+        /// using customised object creation and editing forms, otherwise it may
+        /// be better to use ReadOnlyGridWithButtons(IGridDataProvider).
         /// </summary>
-        /// <param name="dataProvider">The data provider</param>
-        /// <param name="editor">The object editor</param>
-        /// <param name="creator">The object creator</param>
+        /// <param name="dataProvider">The data provider to the grid.  An example
+        /// usage would be "new CollectionGridDataProvider(yourBOCollection)".
+        /// </param>
+        /// <param name="editor">The form in which the user edits the object
+        /// when "Edit" is clicked</param>
+        /// <param name="creator">The form in which the user edits a new object
+        /// when "Add" is clicked</param>
         public ReadOnlyGridWithButtons(IGridDataProvider dataProvider, IObjectEditor editor, IObjectCreator creator)
             : this()
         {
@@ -88,19 +97,29 @@ namespace Chillisoft.UI.Application.v2
 
         /// <summary>
         /// Constructor to initialise a grid with a data provider and object
-        /// editor
+        /// editor, setting the object creator to null.
+        /// This constructor is suitable if you are
+        /// using a customised object editing form, otherwise it may
+        /// be better to use ReadOnlyGridWithButtons(IGridDataProvider).
         /// </summary>
-        /// <param name="dataProvider">The data provider</param>
-        /// <param name="editor">The object editor</param>
+        /// <param name="dataProvider">The data provider to the grid.  An example
+        /// usage would be "new CollectionGridDataProvider(yourBOCollection)".
+        /// </param>
+        /// <param name="editor">The form in which the user edits the object
+        /// when "Edit" is clicked</param>
         public ReadOnlyGridWithButtons(IGridDataProvider dataProvider, IObjectEditor editor)
             : this(dataProvider, editor, null)
         {
         }
 
         /// <summary>
-        /// Constructor to initialise a grid with a data provider
+        /// Constructor to initialise a grid with a data provider.  This
+        /// constructor assigns the default object creation and editing forms
+        /// to the grid (for use when the user clicks the Add or Edit buttons).
         /// </summary>
-        /// <param name="dataProvider">The data provider</param>
+        /// <param name="dataProvider">The data provider to the grid.  An example
+        /// usage would be "new CollectionGridDataProvider(yourBOCollection)".
+        /// </param>
         public ReadOnlyGridWithButtons(IGridDataProvider dataProvider)
             : this()
         {

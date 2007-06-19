@@ -43,11 +43,35 @@ namespace Chillisoft.UI.BOControls.v2
             UIFormDef def;
             if (_uiDefName.Length > 0)
             {
-                def = mapper.GetUserInterfaceMapper(_uiDefName).GetUIFormProperties();
+                IUserInterfaceMapper uiMapper = mapper.GetUserInterfaceMapper(_uiDefName);
+                if (uiMapper == null)
+                {
+                    throw new NullReferenceException("An error occurred while " +
+                        "attempting to load an object editing form.  A possible " +
+                        "cause is that the class definitions do not have a " +
+                        "'uiFormDef' section for the class, under the 'uiDef' " +
+                        "with the name '" + _uiDefName + "'.");
+                }
+                def = uiMapper.GetUIFormProperties();
             }
             else
             {
-                def = mapper.GetUserInterfaceMapper().GetUIFormProperties();
+                IUserInterfaceMapper uiMapper = mapper.GetUserInterfaceMapper();
+                if (uiMapper == null)
+                {
+                    throw new NullReferenceException("An error occurred while " +
+                        "attempting to load an object editing form.  A possible " +
+                        "cause is that the class definitions do not have a " +
+                        "'uiFormDef' section for the class.");
+                }
+                def = uiMapper.GetUIFormProperties();
+            }
+            if (def == null)
+            {
+                throw new NullReferenceException("An error occurred while " +
+                    "attempting to load an object editing form.  A possible " +
+                    "cause is that the class definitions do not have a " +
+                    "'uiFormDef' section for the class.");
             }
 
             PanelFactory factory = new PanelFactory(_bo, def);
