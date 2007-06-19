@@ -115,7 +115,9 @@ namespace Chillisoft.UI.Application.v2
             BusinessObject newObject = (BusinessObject) _objectCreator.CreateObject(this._objectEditor);
             if (newObject != null)
             {
+                _readOnlyGrid.SelectedBusinessObject = null;
                 _readOnlyGrid.AddBusinessObject(newObject);
+                _readOnlyGrid.SelectedBusinessObject = newObject;
             }
         }
 

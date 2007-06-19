@@ -363,7 +363,7 @@ namespace Chillisoft.Db.v2
                           ExceptionUtil.GetExceptionString(ex, 10));
                 log.Error("Sql: " + selectSql);
                 throw new DatabaseReadException(
-                    "There was an error reading the database. \n Please contact your system administrator.",
+                    "There was an error reading the database. Please contact your system administrator.",
                     "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
             }
         }
@@ -403,7 +403,7 @@ namespace Chillisoft.Db.v2
                                       ExceptionUtil.GetExceptionString(ex, 10));
                 Console.Out.WriteLine("Sql: " + selectSQL.ToString());
                 throw new DatabaseReadException(
-                    "There was an error reading the database. \n Please contact your system administrator.",
+                    "There was an error reading the database. Please contact your system administrator.",
                     "The DataReader could not be filled with", ex, selectSQL.ToString(), ErrorSafeConnectString());
             }
         }
@@ -500,7 +500,7 @@ namespace Chillisoft.Db.v2
                                   ExceptionUtil.GetExceptionString(ex, 10));
                 Console.WriteLine("Connect string: " + this.ErrorSafeConnectString());
                 throw new DatabaseWriteException(
-                    "There was an error writing to the database. \n Please contact your system administrator.",
+                    "There was an error writing to the database. Please contact your system administrator.",
                     "The command executeNonQuery could not be completed.", ex, sql.ToString(), ErrorSafeConnectString());
             }
             finally
@@ -589,7 +589,7 @@ namespace Chillisoft.Db.v2
                     transaction.Rollback();
                 }
                 throw new DatabaseWriteException(
-                    "There was an error writing to the database. \n Please contact your system administrator.",
+                    "There was an error writing to the database. Please contact your system administrator.",
                     "The command executeNonQuery could not be completed.", ex, sql.ToString(), ErrorSafeConnectString());
             }
             finally
@@ -714,7 +714,7 @@ namespace Chillisoft.Db.v2
                 //					con.Close();
                 //				}
                 throw new DatabaseReadException(
-                    "There was an error reading the database. \n Please contact your system administrator.",
+                    "There was an error reading the database. Please contact your system administrator.",
                     "The DataReader could not be filled with", ex, selectSQL.ToString(), ErrorSafeConnectString());
             }
         }

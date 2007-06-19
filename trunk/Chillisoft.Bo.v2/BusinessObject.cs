@@ -1215,7 +1215,7 @@ namespace Chillisoft.Bo.v2
                         else
                         {
                             throw new DatabaseReadException(
-                                "An Error occured while saving an object to the database. \n Please contact your system administrator",
+                                "An Error occured while saving an object to the database. Please contact your system administrator",
                                 "An Error occured while saving an object to the database: " + numRowsUpdated +
                                 " were updated whereas " + statementCollection.Count +
                                 " row(s) should have been updated ",
