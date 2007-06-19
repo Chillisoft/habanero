@@ -19,11 +19,11 @@ namespace Chillisoft.Db.v2
 
         /// <summary>
         /// Constructor to initialise a new generator. The table name is
-        /// initialised to "tbnumbers".
+        /// initialised to "numbers".
         /// </summary>
         /// <param name="settingName">The database setting name that
         /// stores the number</param>
-        public DatabaseNumberGenerator(string settingName) : this(settingName, "tbnumbers")
+        public DatabaseNumberGenerator(string settingName) : this(settingName, "numbers")
         {
         }
 

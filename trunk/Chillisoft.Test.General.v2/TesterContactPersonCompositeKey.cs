@@ -50,9 +50,9 @@ namespace Chillisoft.Test.General.v2
             //IDbConnection con = new SqlConnection(connectstring);
             //con.Open();
             //IDbCommand cmd = con.CreateCommand();
-            //cmd.CommandText = "DELETE FROM tbContactPersonCompositeKey";
+            //cmd.CommandText = "DELETE FROM ContactPersonCompositeKey";
             //cmd.ExecuteNonQuery();
-            Database.ExecuteRawSql("DELETE FROM tbContactPersonCompositeKey",
+            Database.ExecuteRawSql("DELETE FROM ContactPersonCompositeKey",
                                    DatabaseConnection.CurrentConnection.GetConnection());
         }
 

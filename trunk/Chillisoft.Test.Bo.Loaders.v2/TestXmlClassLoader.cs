@@ -67,7 +67,7 @@ namespace Chillisoft.Test.Bo.Loaders.v2
                     </primaryKeyDef>
 				</classDef>
 			");
-            Assert.AreEqual("tbTestClass", def.TableName);
+            Assert.AreEqual("TestClass", def.TableName);
         }
 
         [Test]

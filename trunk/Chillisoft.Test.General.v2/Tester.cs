@@ -738,7 +738,7 @@ namespace Chillisoft.Test.General.v2
         protected override void ConstructClass(bool newObject)
         {
             base.ConstructClass(newObject);
-            SetTransactionLog(new TransactionLogTable("tbTransactionLog",
+            SetTransactionLog(new TransactionLogTable("TransactionLog",
                                                       "DateTimeUpdated",
                                                       "WindowsUser",
                                                       "LogonUser",
@@ -836,7 +836,7 @@ namespace Chillisoft.Test.General.v2
 
         internal static void DeleteAllTransactionLogs()
         {
-            string sql = "DELETE FROM tbTransactionLog";
+            string sql = "DELETE FROM TransactionLog";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

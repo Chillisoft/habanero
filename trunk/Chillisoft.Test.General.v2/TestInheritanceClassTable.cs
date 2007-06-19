@@ -70,14 +70,14 @@ namespace Chillisoft.Test.General.v2
         {
             Assert.AreEqual(2, itsInsertSql.Count,
                             "There should be 2 insert sql statements when using class table inheritance");
-            Assert.AreEqual("INSERT INTO tbShape (ShapeID, ShapeName) VALUES (?Param0, ?Param1)",
+            Assert.AreEqual("INSERT INTO Shape (ShapeID, ShapeName) VALUES (?Param0, ?Param1)",
                             itsInsertSql[0].Statement.ToString(),
                             "Class Table inheritance: First insert Sql statement is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value in first insert statement using class table inheritance");
             Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
                             "Parameter ShapeName has incorrect value in first insert statement using class table inheritance");
-            Assert.AreEqual("INSERT INTO tbCircle (CircleID, Radius, ShapeID) VALUES (?Param0, ?Param1, ?Param2)",
+            Assert.AreEqual("INSERT INTO Circle (CircleID, Radius, ShapeID) VALUES (?Param0, ?Param1, ?Param2)",
                             itsInsertSql[1].Statement.ToString(),
                             "Class Table inheritance: Second Sql statement is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[1].Parameters[0]).Value,
@@ -103,7 +103,7 @@ namespace Chillisoft.Test.General.v2
         {
             Assert.AreEqual(2, itsUpdateSql.Count,
                             "There should be 2 update sql statements when using class table inheritance");
-            Assert.AreEqual("UPDATE tbShape SET ShapeID = ?Param0, ShapeName = ?Param1 WHERE ShapeID = ?Param2",
+            Assert.AreEqual("UPDATE Shape SET ShapeID = ?Param0, ShapeName = ?Param1 WHERE ShapeID = ?Param2",
                             itsUpdateSql[0].Statement.ToString(),
                             "Class table inheritance: first update sql statement is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
@@ -112,7 +112,7 @@ namespace Chillisoft.Test.General.v2
                             "Parameter ShapeName has incorrect value in first update statement using class table inheritance");
             Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
                             "Parameter ShapeID in where clause has incorrect value in first update statement using class table inheritance");
-            Assert.AreEqual("UPDATE tbCircle SET Radius = ?Param0 WHERE CircleID = ?Param1",
+            Assert.AreEqual("UPDATE Circle SET Radius = ?Param0 WHERE CircleID = ?Param1",
                             itsUpdateSql[1].Statement.ToString(),
                             "Class table inheritance: second update sql statement is incorrect.");
             Assert.AreEqual(10, ((IDbDataParameter) itsUpdateSql[1].Parameters[0]).Value,
@@ -126,11 +126,11 @@ namespace Chillisoft.Test.General.v2
         {
             Assert.AreEqual(2, itsDeleteSql.Count,
                             "There should be 2 delete sql statements when using class table inheritance.");
-            Assert.AreEqual("DELETE FROM tbCircle WHERE CircleID = ?Param0", itsDeleteSql[0].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM Circle WHERE CircleID = ?Param0", itsDeleteSql[0].Statement.ToString(),
                             "Class table inheritance: first delete sql statement is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
                             "Parameter CircleID has incorrect value in first delete statement in where clause.");
-            Assert.AreEqual("DELETE FROM tbShape WHERE ShapeID = ?Param0", itsDeleteSql[1].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM Shape WHERE ShapeID = ?Param0", itsDeleteSql[1].Statement.ToString(),
                             "Class table inheritance: second delete sql statement is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[1].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value in second delete statement in where clause.");
@@ -140,7 +140,7 @@ namespace Chillisoft.Test.General.v2
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                "SELECT tbCircle.CircleID, tbCircle.Radius, tbShape.ShapeID, tbShape.ShapeName FROM tbCircle, tbShape WHERE tbShape.ShapeID = tbCircle.ShapeID AND CircleID = ?Param0",
+                "SELECT Circle.CircleID, Circle.Radius, Shape.ShapeID, Shape.ShapeName FROM Circle, Shape WHERE Shape.ShapeID = Circle.ShapeID AND CircleID = ?Param0",
                 selectSql.Statement.ToString(), "Select sql is incorrect for class table inheritance.");
             Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
                             "Parameter CircleID is incorrect in select where clause for class table inheritance.");

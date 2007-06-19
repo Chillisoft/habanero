@@ -34,13 +34,13 @@ namespace Chillisoft.Test.General.v2
             //DatabaseConnection.CurrentConnection.ConnectionString =
             //	@"data source=Core;database=WorkShopManagement;uid=sa;pwd=;";
 
-            string sql = "DELETE from tbTestTableRead";
+            string sql = "DELETE from TestTableRead";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
-            sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('aaa')";
+            sql = "Insert into TestTableRead (TestTableReadData) VALUES ('aaa')";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
-            sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('abb')";
+            sql = "Insert into TestTableRead (TestTableReadData) VALUES ('abb')";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
 
@@ -48,7 +48,7 @@ namespace Chillisoft.Test.General.v2
                 IDataReader dr =
                     DatabaseConnection.CurrentConnection.LoadDataReader(
                         new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
-                                         "SELECT * FROM tbTestTableRead Order By TestTableReadData")))
+                                         "SELECT * FROM TestTableRead Order By TestTableReadData")))
             {
                 try
                 {
@@ -85,11 +85,11 @@ namespace Chillisoft.Test.General.v2
             IDataReader dr =
                 DatabaseConnection.CurrentConnection.LoadDataReader(
                     new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
-                                     "SELECT * FROM tbTestTableRead Order By TestTableReadData"));
+                                     "SELECT * FROM TestTableRead Order By TestTableReadData"));
             IDataReader dr2 =
                 DatabaseConnection.CurrentConnection.LoadDataReader(
                     new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
-                                     "SELECT * FROM tbTestTableRead Order By TestTableReadData"));
+                                     "SELECT * FROM TestTableRead Order By TestTableReadData"));
             Assert.IsNotNull(dr);
             Assert.IsNotNull(dr2);
             dr.Close();
@@ -103,8 +103,8 @@ namespace Chillisoft.Test.General.v2
             //	@"data source=Core;database=WorkShopManagement;uid=sa;pwd=;";
             //Clean all data from table before starting
 
-            Console.WriteLine("deleting from tbtesttableread");
-            string sql = "DELETE from tbTestTableRead";
+            Console.WriteLine("deleting from testtableread");
+            string sql = "DELETE from TestTableRead";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
             //Create transaction with Error
@@ -118,12 +118,12 @@ namespace Chillisoft.Test.General.v2
             try
             {
                 Console.WriteLine("doing first insert.");
-                sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('Test')";
+                sql = "Insert into TestTableRead (TestTableReadData) VALUES ('Test')";
                 DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
                 statementsExecutedPriorToRollBack++;
                 //insert second record
                 Console.WriteLine("doing second insert.");
-                sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('Test')";
+                sql = "Insert into TestTableRead (TestTableReadData) VALUES ('Test')";
                 DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
                 statementsExecutedPriorToRollBack++;
                 Console.WriteLine("committing.");
@@ -142,7 +142,7 @@ namespace Chillisoft.Test.General.v2
             IDataReader dr2 =
                 DatabaseConnection.CurrentConnection.LoadDataReader(
                     new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
-                                     "SELECT * FROM tbTestTableRead Order By TestTableReadData"));
+                                     "SELECT * FROM TestTableRead Order By TestTableReadData"));
             Assert.IsTrue(rolledBack);
             Console.WriteLine("reading from second datareader.");
             Assert.IsFalse(dr2.Read());
@@ -156,10 +156,10 @@ namespace Chillisoft.Test.General.v2
             //insert first record
             try
             {
-                sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('Test')";
+                sql = "Insert into TestTableRead (TestTableReadData) VALUES ('Test')";
                 DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
                 //insert second record
-                sql = "Insert into tbTestTableRead (TestTableReadData) VALUES ('Test2')";
+                sql = "Insert into TestTableRead (TestTableReadData) VALUES ('Test2')";
                 DatabaseConnection.CurrentConnection.ExecuteRawSql(sql, dbTransaction);
 
                 dbTransaction.Commit();
@@ -174,7 +174,7 @@ namespace Chillisoft.Test.General.v2
             dr2 =
                 DatabaseConnection.CurrentConnection.LoadDataReader(
                     new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
-                                     "SELECT * FROM tbTestTableRead Order By TestTableReadData"));
+                                     "SELECT * FROM TestTableRead Order By TestTableReadData"));
             Assert.IsTrue(dr2.Read());
             Assert.IsTrue(dr2.Read());
             Assert.IsFalse(dr2.Read());

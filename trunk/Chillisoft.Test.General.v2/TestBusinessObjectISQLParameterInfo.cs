@@ -29,7 +29,7 @@ namespace Chillisoft.Test.General.v2
             SQLCriteriaCreator creator = new SQLCriteriaCreator(exp, cp);
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
             creator.AppendCriteriaToStatement(statement);
-            Assert.AreEqual("tbContactPerson.PK3_Prop = ?Param0", statement.Statement.ToString());
+            Assert.AreEqual("ContactPerson.PK3_Prop = ?Param0", statement.Statement.ToString());
             Assert.AreEqual("test", ((IDbDataParameter) statement.Parameters[0]).Value);
         }
     }

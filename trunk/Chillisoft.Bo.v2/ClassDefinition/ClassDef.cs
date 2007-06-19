@@ -105,7 +105,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 			//_className = _classType.Name;
 			//_assemblyName = _classType.Assembly.ManifestModule.ScopeName;
 			//if (tableName == null || tableName.Length == 0)
-			//    _tableName = "tb" + _className;
+			//    _tableName = _className;
 			//else
 			//    _tableName = tableName;
 			//_propDefCol = propDefCol;
@@ -208,7 +208,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
 			}
 			_databaseName = databaseName;
 			if (tableName == null || tableName.Length == 0)
-				_tableName = "tb" + _className;
+				_tableName = _className;
 			else
 				_tableName = tableName;
 			_primaryKeyDef = primaryKeyDef;

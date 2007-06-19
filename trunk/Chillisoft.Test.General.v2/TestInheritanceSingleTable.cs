@@ -66,7 +66,7 @@ namespace Chillisoft.Test.General.v2
         {
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
-            Assert.AreEqual("INSERT INTO tbShape (Radius, ShapeID, ShapeName) VALUES (?Param0, ?Param1, ?Param2)",
+            Assert.AreEqual("INSERT INTO Shape (Radius, ShapeID, ShapeName) VALUES (?Param0, ?Param1, ?Param2)",
                             itsInsertSql[0].Statement.ToString(),
                             "Concrete Table Inheritance insert SQL seems to be incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
@@ -83,7 +83,7 @@ namespace Chillisoft.Test.General.v2
             Assert.AreEqual(1, itsUpdateSql.Count,
                             "There should only be one update sql statement when using single table inheritance.");
             Assert.AreEqual(
-                "UPDATE tbShape SET Radius = ?Param0, ShapeID = ?Param1, ShapeName = ?Param2 WHERE ShapeID = ?Param3",
+                "UPDATE Shape SET Radius = ?Param0, ShapeID = ?Param1, ShapeName = ?Param2 WHERE ShapeID = ?Param3",
                 itsUpdateSql[0].Statement.ToString());
             Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
                             "Parameter ShapeID has incorrect value");
@@ -100,7 +100,7 @@ namespace Chillisoft.Test.General.v2
         {
             Assert.AreEqual(1, itsDeleteSql.Count,
                             "There should only be one delete sql statement when using single table inheritance.");
-            Assert.AreEqual("DELETE FROM tbShape WHERE ShapeID = ?Param0", itsDeleteSql[0].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM Shape WHERE ShapeID = ?Param0", itsDeleteSql[0].Statement.ToString(),
                             "Delete SQL for single table inheritance is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");
@@ -110,7 +110,7 @@ namespace Chillisoft.Test.General.v2
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                "SELECT tbShape.Radius, tbShape.ShapeID, tbShape.ShapeName FROM tbShape WHERE ShapeID = ?Param0",
+                "SELECT Shape.Radius, Shape.ShapeID, Shape.ShapeName FROM Shape WHERE ShapeID = ?Param0",
                 selectSql.Statement.ToString(), "Select sql is incorrect for single table inheritance.");
             Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
                             "Parameter ShapeID is incorrect in select where clause for single table inheritance.");

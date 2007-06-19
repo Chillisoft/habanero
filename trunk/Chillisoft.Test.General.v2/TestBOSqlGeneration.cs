@@ -21,7 +21,7 @@ namespace Chillisoft.Test.General.v2
         public void TestInsertSQL()
         {
             Assert.AreEqual(1, insertSql.Count, "There should only be one insert statement.");
-            Assert.AreEqual("INSERT INTO tbShape (ShapeID, ShapeName) VALUES (?Param0, ?Param1)",
+            Assert.AreEqual("INSERT INTO Shape (ShapeID, ShapeName) VALUES (?Param0, ?Param1)",
                             insertSql[0].Statement.ToString(), "Insert SQL is being created incorrectly");
         }
     }

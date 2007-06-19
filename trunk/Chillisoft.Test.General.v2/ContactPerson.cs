@@ -79,7 +79,7 @@ namespace Chillisoft.Test.General.v2
             SetConcurrencyControl(new OptimisticLockingVersionNumber(mPropDateLastUpdated,
                                                                      mPropUserLastUpdated, mPropMachineLastUpdated,
                                                                      mPropVersionNumber));
-            SetTransactionLog(new TransactionLogTable("tbTransactionLog",
+            SetTransactionLog(new TransactionLogTable("TransactionLog",
                                                       "DateTimeUpdated",
                                                       "WindowsUser",
                                                       "LogonUser",
@@ -296,7 +296,7 @@ namespace Chillisoft.Test.General.v2
 
         internal static void DeleteAllContactPeople()
         {
-            string sql = "DELETE FROM tbContactPerson";
+            string sql = "DELETE FROM ContactPerson";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

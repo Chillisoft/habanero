@@ -175,7 +175,7 @@ namespace Chillisoft.Test.General.v2
 
         internal static void DeleteAllContactPeople()
         {
-            string sql = "DELETE FROM tbContactPersonCompositeKey";
+            string sql = "DELETE FROM ContactPersonCompositeKey";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

@@ -196,7 +196,7 @@ namespace Chillisoft.Test.General.v2
 
         internal static void DeleteAllCars()
         {
-            string sql = "DELETE FROM tbCar";
+            string sql = "DELETE FROM Car";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

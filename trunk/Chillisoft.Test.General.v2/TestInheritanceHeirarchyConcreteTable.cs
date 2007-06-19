@@ -45,7 +45,7 @@ namespace Chillisoft.Test.General.v2
         public void TestCircleSelectSql()
         {
             Assert.AreEqual(
-                "SELECT tbFilledCircle.Colour, tbFilledCircle.FilledCircleID, tbFilledCircle.Radius, tbFilledCircle.ShapeName FROM tbFilledCircle WHERE FilledCircleID = ?Param0",
+                "SELECT FilledCircle.Colour, FilledCircle.FilledCircleID, FilledCircle.Radius, FilledCircle.ShapeName FROM FilledCircle WHERE FilledCircleID = ?Param0",
                 itsSelectSql.Statement.ToString(), "select statement is incorrect for Concrete Table inheritance");
         }
 
@@ -55,7 +55,7 @@ namespace Chillisoft.Test.General.v2
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert statement for concrete table inheritance.");
             Assert.AreEqual(
-                "INSERT INTO tbFilledCircle (Colour, FilledCircleID, Radius, ShapeName) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+                "INSERT INTO FilledCircle (Colour, FilledCircleID, Radius, ShapeName) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
                 itsInsertSql[0].Statement.ToString(), "Concrete Table Inheritance insert SQL seems to be incorrect.");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
                             "Parameter FilledCircleID has incorrect value");
@@ -73,7 +73,7 @@ namespace Chillisoft.Test.General.v2
             Assert.AreEqual(1, itsUpdateSql.Count,
                             "There should only be one update statement for concrete table inheritance.");
             Assert.AreEqual(
-                "UPDATE tbFilledCircle SET Colour = ?Param0, Radius = ?Param1, ShapeName = ?Param2 WHERE FilledCircleID = ?Param3",
+                "UPDATE FilledCircle SET Colour = ?Param0, Radius = ?Param1, ShapeName = ?Param2 WHERE FilledCircleID = ?Param3",
                 itsUpdateSql[0].Statement.ToString(), "Concrete Table Inheritance update SQL seems to be incorrect.");
             Assert.AreEqual(3, ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
                             "Parameter Colour has incorrect value");
@@ -90,7 +90,7 @@ namespace Chillisoft.Test.General.v2
         {
             Assert.AreEqual(1, itsDeleteSql.Count,
                             "There should only be one delete statement for concrete table inheritance.");
-            Assert.AreEqual("DELETE FROM tbFilledCircle WHERE FilledCircleID = ?Param0",
+            Assert.AreEqual("DELETE FROM FilledCircle WHERE FilledCircleID = ?Param0",
                             itsDeleteSql[0].Statement.ToString(),
                             "Concrete Table Inheritance delete SQL seems to be incorrect.");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
@@ -101,7 +101,7 @@ namespace Chillisoft.Test.General.v2
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                "SELECT tbFilledCircle.Colour, tbFilledCircle.FilledCircleID, tbFilledCircle.Radius, tbFilledCircle.ShapeName FROM tbFilledCircle WHERE FilledCircleID = ?Param0",
+                "SELECT FilledCircle.Colour, FilledCircle.FilledCircleID, FilledCircle.Radius, FilledCircle.ShapeName FROM FilledCircle WHERE FilledCircleID = ?Param0",
                 itsSelectSql.Statement.ToString(), "Select sql is incorrect for concrete table inheritance.");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsSelectSql.Parameters[0]).Value,
                             "Parameter CircleID is incorrect in select where clause for concrete table inheritance.");
