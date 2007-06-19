@@ -15,7 +15,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <summary>
         /// Initialises an empty collection
         /// </summary>
-        private ClassDefCol() : base()
+        protected ClassDefCol() : base()
         {
         }
 

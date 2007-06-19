@@ -39,7 +39,7 @@ namespace Chillisoft.Bo.ClassDefinition.v2
         /// <param name="keyName">The name of the key definition</param>
         /// <returns>Returns the definition matching the name
         /// provided or null if none are found</returns>
-        internal KeyDef this[string keyName]
+        protected internal KeyDef this[string keyName]
         {
             get
             {
