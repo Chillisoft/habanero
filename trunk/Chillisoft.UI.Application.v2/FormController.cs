@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Drawing;
 using System.Windows.Forms;
 using Chillisoft.UI.Misc.v2;
 
@@ -13,6 +14,7 @@ namespace Chillisoft.UI.Application.v2
         private Hashtable _formsbyHeading;
         private Hashtable _formsbyForm;
         private Form _parentForm;
+        private float _fontSize = 0.0f;
         
         /// <summary>
         /// Constructor to initialise a new controller
@@ -21,6 +23,14 @@ namespace Chillisoft.UI.Application.v2
         public FormController(Form parentForm)
         {
             _parentForm = parentForm;
+        }
+
+        /// <summary>
+        /// Sets the default font size for the mdi forms.  Don't set this to get the default font size.
+        /// </summary>
+        public float FontSize {
+            get { return _fontSize; }
+            set { _fontSize = value; }
         }
 
         /// <summary>
@@ -38,6 +48,7 @@ namespace Chillisoft.UI.Application.v2
             if (_formsbyHeading.Contains(heading))
             {
                 Form frm = (Form)_formsbyHeading[heading];
+                if (_fontSize != 0.0f) frm.Font = new Font(frm.Font.FontFamily, _fontSize );
                 frm.Show();
                 frm.Refresh();
                 frm.Focus();
@@ -52,6 +63,7 @@ namespace Chillisoft.UI.Application.v2
                 newMdiForm.Width = 800;
                 newMdiForm.Height = 600;
                 newMdiForm.MdiParent = _parentForm;
+
                 newMdiForm.WindowState = FormWindowState.Maximized;
 
                 Control ctl = (Control)formCtl;

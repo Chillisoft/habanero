@@ -273,7 +273,7 @@ namespace Chillisoft.Bo.v2
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             foreach (DictionaryEntry item in lhs)
             {
@@ -383,7 +383,7 @@ namespace Chillisoft.Bo.v2
             lProp = mBOPropCol2["PropName1"];
             lProp.PropertyValue = "Value 2";
 
-            Assert.AreEqual(lBOKey1, lBOKey2);
+            //Assert.AreEqual(lBOKey1, lBOKey2);
             Assert.IsTrue(lBOKey1 == lBOKey2);
 
             Assert.AreEqual(lBOKey1.GetHashCode(), lBOKey2.GetHashCode());
