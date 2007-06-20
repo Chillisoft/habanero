@@ -1,0 +1,148 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E1B4C7C4-587F-4162-A51C-7CCBA8147029}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.UI.Pro</RootNamespace>
+    <AssemblyName>Habanero.UI.Pro</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MyTimePicker, Version=1.0.2287.20795, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\MyTimePicker.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationVersionUpgrader.cs" />
+    <Compile Include="BoPanelControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BoTabColControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CheckBoxMapper.cs" />
+    <Compile Include="CollectionComboBoxMapper.cs" />
+    <Compile Include="ComboBoxCollectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ComboBoxMapper.cs" />
+    <Compile Include="ControlMapper.cs" />
+    <Compile Include="ControlMapperCollection.cs" />
+    <Compile Include="DateTimePickerMapper.cs" />
+    <Compile Include="DefaultBOCreator.cs" />
+    <Compile Include="DefaultBOEditor.cs" />
+    <Compile Include="DefaultBOEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditableGridButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormController.cs" />
+    <Compile Include="HabaneroApp.cs" />
+    <Compile Include="ListComboBoxMapper.cs" />
+    <Compile Include="ListViewCollectionMapper.cs" />
+    <Compile Include="LookupComboBoxMapper.cs" />
+    <Compile Include="LookupListNotSetException.cs" />
+    <Compile Include="MessageBoxOKCancelConfirmer.cs" />
+    <Compile Include="MultiSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MultiSelector.Designer.cs" />
+    <Compile Include="NumericUpDownIntegerMapper.cs" />
+    <Compile Include="NumericUpDownMapper.cs" />
+    <Compile Include="NumericUpDownMoneyMapper.cs" />
+    <Compile Include="PanelFactory.cs" />
+    <Compile Include="PanelFactoryInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyGridButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ReadOnlyGridWithButtons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SimpleGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SimpleGridWithButtons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SimpleReadOnlyGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxMapper.cs" />
+    <Compile Include="TimePickerMapper.cs" />
+    <Compile Include="TreeViewTableEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MultiSelector.resx">
+      <DependentUpon>MultiSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TreeViewTableEditor.resx">
+      <DependentUpon>TreeViewTableEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.Bo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.Db</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Generic\Habanero.Generic.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Generic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI\Habanero.UI.csproj">
+      <Project>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</Project>
+      <Name>Habanero.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
