@@ -1,4 +1,4 @@
-using Chillisoft.Db.v2;
+using Habanero.Db;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.Db.v2

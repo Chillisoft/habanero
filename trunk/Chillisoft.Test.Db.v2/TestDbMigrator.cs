@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Chillisoft.Db.v2;
-using Chillisoft.Generic.v2;
+using Habanero.Db;
+using Habanero.Generic;
 using NMock;
 using NUnit.Framework;
 

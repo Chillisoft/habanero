@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using System.Text;
-using Chillisoft.Db.v2;
+using Habanero.Db;
 using NUnit.Framework;
 //using ByteFX.Data.MySqlClient;
 
