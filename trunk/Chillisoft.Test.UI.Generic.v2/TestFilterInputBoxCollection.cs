@@ -1,5 +1,5 @@
 using System.Windows.Forms;
-using Chillisoft.UI.Generic.v2;
+using Habanero.Ui.Generic;
 using NUnit.Framework;
 using System;
 using System.Collections;

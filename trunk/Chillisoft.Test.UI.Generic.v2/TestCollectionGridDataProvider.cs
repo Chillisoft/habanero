@@ -1,7 +1,8 @@
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.v2;
+
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo;
 using Chillisoft.Test.Setup.v2;
-using Chillisoft.UI.Generic.v2;
+using Habanero.Ui.Generic;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.UI.Generic.v2

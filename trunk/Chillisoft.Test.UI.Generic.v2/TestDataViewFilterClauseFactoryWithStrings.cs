@@ -1,6 +1,6 @@
 using System.Data;
-using Chillisoft.Generic.v2;
-using Chillisoft.UI.Generic.v2;
+using Habanero.Generic;
+using Habanero.Ui.Generic;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.UI.Generic.v2
