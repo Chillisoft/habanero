@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 using Chillisoft.Test.General.v2;
-using Chillisoft.UI.BOControls.v2;
+using Habanero.Ui.BoControls;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.UI.BOControls.v2

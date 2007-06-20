@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using Chillisoft.Bo.v2;
+using Habanero.Bo;
 using Chillisoft.Test.General.v2;
-using Chillisoft.UI.BOControls.v2;
+using Habanero.Ui.BoControls;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.UI.BOControls.v2
