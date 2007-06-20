@@ -1,0 +1,23 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="Testing_bin\Chillisoft.Test.Bo.Loaders.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.Bo.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.Db.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.General.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.Generic.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.Setup.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.UI.Application.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.UI.BOControls.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.UI.Generic.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.Utilities.v2.dll" />
+    <assembly path="Testing_bin\Chillisoft.Test.v2.dll" />
+    <assembly path="Testing_bin\Habanero.Bo.dll" />
+    <assembly path="Testing_bin\Habanero.Db.dll" />
+    <assembly path="Testing_bin\Habanero.Generic.dll" />
+    <assembly path="Testing_bin\Habanero.UI.dll" />
+    <assembly path="Testing_bin\Habanero.UI.Pro.dll" />
+    <assembly path="Testing_bin\Habanero.Util.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto" />
+</NUnitProject>

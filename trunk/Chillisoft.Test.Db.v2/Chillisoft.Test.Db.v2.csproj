@@ -138,6 +138,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>copy $(SolutionDir)\lib\MySql.Data.dll  $(TargetDir)
+$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
 </Project>
