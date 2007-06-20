@@ -10,8 +10,12 @@
     <assembly path="Build\Debug\Chillisoft.Test.UI.BOControls.v2.dll" />
     <assembly path="Build\Debug\Chillisoft.Test.UI.Generic.v2.dll" />
     <assembly path="Build\Debug\Chillisoft.Test.Utilities.v2.dll" />
-    <assembly path="Build\Debug\Chillisoft.Bo.v2.dll" />
-    <assembly path="Build\Debug\Chillisoft.Util.v2.dll" />
+    <assembly path="Build\Debug\Habanero.Bo.dll" />
+    <assembly path="Build\Debug\Habanero.Db.dll" />
+    <assembly path="Build\Debug\Habanero.Generic.dll" />
+    <assembly path="Build\Debug\Habanero.UI.dll" />
+    <assembly path="Build\Debug\Habanero.UI.Pro.dll" />
+    <assembly path="Build\Debug\Habanero.Util.dll" />
   </Config>
   <Config name="Release" binpathtype="Auto" />
 </NUnitProject>
