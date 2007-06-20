@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using Chillisoft.UI.Application.v2;
+using Habanero.Ui.Application;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.UI.Application.v2

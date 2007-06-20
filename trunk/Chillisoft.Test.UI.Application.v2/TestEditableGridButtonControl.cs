@@ -1,5 +1,5 @@
-using Chillisoft.UI.Application.v2;
-using Chillisoft.UI.Generic.v2;
+using Habanero.Ui.Application;
+using Habanero.Ui.Generic;
 using NMock;
 using NUnit.Framework;
 

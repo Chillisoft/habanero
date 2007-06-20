@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Windows.Forms;
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.v2;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo;
 using Chillisoft.Test.Setup.v2;
-using Chillisoft.UI.Application.v2;
+using Habanero.Ui.Application;
 using NMock;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Chillisoft.UI.Application.v2;
+using Habanero.Ui.Application;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.UI.Application.v2
