@@ -1,5 +1,0 @@
-<!ELEMENT propertyRuleGuid EMPTY>
-<!ATTLIST propertyRuleGuid
-	name NMTOKEN #REQUIRED
-	isCompulsory ( true | false ) "false"
->

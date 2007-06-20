@@ -1,5 +1,0 @@
-#include GridProperty.dtd
-<!ELEMENT gridPropertyCollection (gridProperty+)>
-<!ATTLIST gridPropertyCollection
-	name NMTOKEN #REQUIRED
->

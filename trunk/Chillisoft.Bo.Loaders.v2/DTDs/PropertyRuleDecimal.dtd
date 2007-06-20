@@ -1,7 +1,0 @@
-<!ELEMENT propertyRuleDecimal EMPTY>
-<!ATTLIST propertyRuleDecimal
-	name NMTOKEN #REQUIRED
-	isCompulsory ( true | false ) "false"
-  minValue CDATA ""
-  maxValue CDATA ""  
->

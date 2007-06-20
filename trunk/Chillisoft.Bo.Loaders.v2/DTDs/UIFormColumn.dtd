@@ -1,5 +1,0 @@
-#include UIFormProperty.dtd
-<!ELEMENT uiFormColumn (uiFormProperty+)>
-<!ATTLIST uiFormColumn
-	width CDATA "-1"
->

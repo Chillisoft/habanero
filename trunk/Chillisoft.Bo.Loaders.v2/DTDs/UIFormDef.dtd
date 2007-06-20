@@ -1,7 +1,0 @@
-#include UIFormTab.dtd
-<!ELEMENT uiFormDef (uiFormTab+)>
-<!ATTLIST uiFormDef
-	width CDATA "-1"
-	height CDATA "-1"
-	heading CDATA ""
->

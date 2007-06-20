@@ -1,5 +1,0 @@
-#include Prop.dtd
-<!ELEMENT primaryKeyDef (prop+)>
-<!ATTLIST primaryKeyDef 
-	isObjectID ( true | false ) "true"
->

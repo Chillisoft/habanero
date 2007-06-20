@@ -1,2 +1,0 @@
-#include ClassDef.dtd
-<!ELEMENT classDefs (classDef+)>

@@ -1,4 +1,0 @@
-<!ELEMENT prop EMPTY>
-<!ATTLIST prop
-	name NMTOKEN #REQUIRED
->

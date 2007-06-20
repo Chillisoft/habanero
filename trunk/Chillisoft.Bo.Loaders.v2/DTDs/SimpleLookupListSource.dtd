@@ -1,6 +1,0 @@
-<!ELEMENT simpleLookupListSource (stringGuidPair*)>
-<!ELEMENT stringGuidPair EMPTY>
-<!ATTLIST stringGuidPair
-	string CDATA #REQUIRED
-	guid   CDATA #REQUIRED
->

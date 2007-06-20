@@ -1,2 +1,0 @@
-#include UIGridProperty.dtd
-<!ELEMENT uiGridDef (uiGridProperty+)>

@@ -1,9 +1,0 @@
-<!ELEMENT uiGridProperty EMPTY>
-<!ATTLIST uiGridProperty
-	heading CDATA #REQUIRED
-	propertyName CDATA #REQUIRED
-	gridControlTypeName NMTOKEN	"DataGridViewTextBoxColumn"
-	isReadOnly ( true | false ) "false"
-	width CDATA "100"
-	alignment ( left | right | center | centre ) "left"
->

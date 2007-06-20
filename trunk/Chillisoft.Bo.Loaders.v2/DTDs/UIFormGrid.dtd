@@ -1,7 +1,0 @@
-<!ELEMENT uiFormGrid EMPTY>
-<!ATTLIST uiFormGrid
-	relationshipName NMTOKEN #REQUIRED
-	gridType NMTOKEN "SimpleGrid"
-	gridTypeAssembly NMTOKEN "Chillisoft.UI.Application.v2"
-	correspondingRelationshipName NMTOKEN #REQUIRED
->
