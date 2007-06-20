@@ -37,7 +37,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <returns>Returns true if related object exists</returns>
         /// TODO ERIC - review
-        protected internal virtual bool HasRelationship()
+        public virtual bool HasRelationship()
         {
             return _relKey.HasRelatedObject();
         }
@@ -47,7 +47,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="connection">A database connection</param>
         /// <returns>Returns the related business object</returns>
-        internal BusinessObject GetRelatedObject(IDatabaseConnection connection)
+        public BusinessObject GetRelatedObject(IDatabaseConnection connection)
         {
             if (_relatedBo == null ||
                 (_storedRelationshipExpression != _relKey.RelationshipExpression().ExpressionString()))
@@ -107,84 +107,5 @@ namespace Habanero.Bo
         }
     }
 
-    #region Test
-
-    [TestFixture]
-    public class TestRelationShip
-    {
-        private RelationshipDef mRelationshipDef;
-        private RelKeyDef mRelKeyDef;
-        private PropDefCol mPropDefCol;
-        private MockBO mMockBo;
-
-        [SetUp]
-        public void init()
-        {
-            mMockBo = new MockBO();
-            mPropDefCol = mMockBo.PropDefCol;
-
-            mRelKeyDef = new RelKeyDef();
-            PropDef propDef = mPropDefCol["MockBOProp1"];
-
-            RelPropDef lRelPropDef = new RelPropDef(propDef, "MockBOID");
-            mRelKeyDef.Add(lRelPropDef);
-
-            mRelationshipDef = new SingleRelationshipDef("Relation1", typeof (MockBO), mRelKeyDef, false);
-        }
-
-        [Test]
-        public void TestCreateRelationship()
-        {
-            SingleRelationship rel = (SingleRelationship) mRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
-            Assert.AreEqual(mRelationshipDef.RelationshipName, rel.RelationshipName);
-            Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
-            Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
-            mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
-            mMockBo.ApplyEdit();
-            Assert.IsTrue(rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
-
-            Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), mMockBo.GetPropertyValue("MockBOID"));
-            MockBO ltempBO = (MockBO) rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
-            Assert.IsFalse(ltempBO == null);
-            Assert.AreEqual(mMockBo.GetPropertyValue("MockBOID"), ltempBO.GetPropertyValue("MockBOID"),
-                            "The object returned should be the one with the ID = MockBOID");
-            Assert.AreEqual(mMockBo.GetPropertyValueString("MockBOProp1"), ltempBO.GetPropertyValueString("MockBOID"),
-                            "The object returned should be the one with the ID = MockBOID");
-            Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), ltempBO.GetPropertyValue("MockBOID"),
-                            "The object returned should be the one with the ID = MockBOID");
-
-            Assert.IsTrue(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
-            MockBO.ClearLoadedBusinessObjectBaseCol();
-            Assert.IsFalse(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
-        }
-
-        [Test]
-        public void TestCreateRelationshipHoldRelRef()
-        {
-            RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof (MockBO), mRelKeyDef, true);
-            SingleRelationship rel = (SingleRelationship) lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
-            Assert.AreEqual(lRelationshipDef.RelationshipName, rel.RelationshipName);
-            Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
-            Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
-            mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
-            mMockBo.ApplyEdit();
-            Assert.IsTrue(rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
-
-            Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), mMockBo.GetPropertyValue("MockBOID"));
-            MockBO ltempBO = (MockBO) rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
-            Assert.IsFalse(ltempBO == null);
-            Assert.AreEqual(mMockBo.GetPropertyValue("MockBOID"), ltempBO.GetPropertyValue("MockBOID"),
-                            "The object returned should be the one with the ID = MockBOID");
-            Assert.AreEqual(mMockBo.GetPropertyValueString("MockBOProp1"), ltempBO.GetPropertyValueString("MockBOID"),
-                            "The object returned should be the one with the ID = MockBOID");
-            Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), ltempBO.GetPropertyValue("MockBOID"),
-                            "The object returned should be the one with the ID = MockBOID");
-
-            Assert.IsTrue(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
-            MockBO.ClearLoadedBusinessObjectBaseCol();
-            Assert.IsTrue(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
-        }
-    }
-
-    #endregion Test
+    
 }

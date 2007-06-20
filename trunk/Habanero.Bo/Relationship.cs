@@ -29,7 +29,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Returns the relationship name
         /// </summary>
-        internal string RelationshipName
+        public string RelationshipName
         {
             get { return _relDef.RelationshipName; }
         }

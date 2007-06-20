@@ -1,0 +1,131 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{979540B1-0154-4870-8BD7-B70AA61492D7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.Test.UI</RootNamespace>
+    <AssemblyName>Habanero.Test.UI</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MyTimePicker, Version=1.0.2287.20795, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\MyTimePicker.dll</HintPath>
+    </Reference>
+    <Reference Include="nmock, Version=1.0.1536.20687, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\nmock.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NUnitForms, Version=1.3.1771.29165, Culture=neutral, PublicKeyToken=9df516afcc0d4103">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\NUnitForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestBorderLayoutManager.cs" />
+    <Compile Include="TestBoTabColControl.cs" />
+    <Compile Include="TestButtonControl.cs" />
+    <Compile Include="TestCheckBoxMapper.cs" />
+    <Compile Include="TestCollectionComboBoxMapper.cs" />
+    <Compile Include="TestCollectionGridDataProvider.cs" />
+    <Compile Include="TestColumnLayoutManager.cs" />
+    <Compile Include="TestComboBoxCollectionControl.cs" />
+    <Compile Include="TestControlCollection.cs" />
+    <Compile Include="TestControlFactory.cs" />
+    <Compile Include="TestControlMapper.cs" />
+    <Compile Include="TestDataViewFilterClauseFactory.cs" />
+    <Compile Include="TestDataViewFilterClauseFactoryWithStrings.cs" />
+    <Compile Include="TestDateTimePickerMapper.cs" />
+    <Compile Include="TestDefaultBOEditorForm.cs" />
+    <Compile Include="TestEditableGridButtonControl.cs" />
+    <Compile Include="TestFilterControl.cs" />
+    <Compile Include="TestFilterInputBoxCollection.cs" />
+    <Compile Include="TestFlowLayoutManager.cs" />
+    <Compile Include="TestGridLayoutManager.cs" />
+    <Compile Include="TestLayoutManager.cs" />
+    <Compile Include="TestListComboBoxMapper.cs" />
+    <Compile Include="TestListViewCollectionMapper.cs" />
+    <Compile Include="TestLookupComboBoxMapper.cs" />
+    <Compile Include="TestMapperBase.cs" />
+    <Compile Include="TestMultiSelector.cs" />
+    <Compile Include="TestMultiSelectorModel.cs" />
+    <Compile Include="TestNumericUpDownIntegerMapper.cs" />
+    <Compile Include="TestNumericUpDownMoneyMapper.cs" />
+    <Compile Include="TestPanelFactory.cs" />
+    <Compile Include="TestReadOnlyGridButtonControl.cs" />
+    <Compile Include="TestSimpleGrid.cs" />
+    <Compile Include="TestSimpleReadOnlyGrid.cs" />
+    <Compile Include="TestTextBoxMapper.cs" />
+    <Compile Include="TestTimePickerMapper.cs" />
+    <Compile Include="TestTreeViewTableEditor.cs" />
+    <Compile Include="TestWizard.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.Bo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.Db</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Generic\Habanero.Generic.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Generic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
+      <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
+      <Name>Habanero.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.Pro\Habanero.UI.Pro.csproj">
+      <Project>{E1B4C7C4-587F-4162-A51C-7CCBA8147029}</Project>
+      <Name>Habanero.UI.Pro</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI\Habanero.UI.csproj">
+      <Project>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</Project>
+      <Name>Habanero.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

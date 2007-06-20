@@ -1,0 +1,29 @@
+using Chillisoft.Test;
+using Habanero.Db;
+using NUnit.Framework;
+
+namespace Habanero.Test.General
+{
+    [TestFixture]
+    public class TestBOSqlGeneration : TestUsingDatabase
+    {
+        private Shape shape;
+        private SqlStatementCollection insertSql;
+
+        [TestFixtureSetUp]
+        public void SetupTestFixture()
+        {
+            this.SetupDBConnection();
+            shape = Shape.GetNewObject();
+            insertSql = shape.GetInsertSQL();
+        }
+
+        [Test]
+        public void TestInsertSQL()
+        {
+            Assert.AreEqual(1, insertSql.Count, "There should only be one insert statement.");
+            Assert.AreEqual("INSERT INTO Shape (ShapeID, ShapeName) VALUES (?Param0, ?Param1)",
+                            insertSql[0].Statement.ToString(), "Insert SQL is being created incorrectly");
+        }
+    }
+}

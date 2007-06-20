@@ -217,9 +217,6 @@
     <Compile Include="CriteriaManager\SqlOperator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CriteriaManager\TestExpression.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DatabaseLookupListSource.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -372,10 +369,6 @@
     <None Include="Loaders\DTDs\UIGridProperty.dtd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chillisoft.Test.v2\Chillisoft.Test.v2.csproj">
-      <Project>{4122B18E-280B-4DC4-9FAC-8711EF4F4923}</Project>
-      <Name>Chillisoft.Test.v2</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
       <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
       <Name>Habanero.Db</Name>

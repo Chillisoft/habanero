@@ -1,7 +1,6 @@
 using System;
 using System.Data;
 using Habanero.Db;
-using Chillisoft.Test;
 using NUnit.Framework;
 
 namespace Habanero.Bo.CriteriaManager

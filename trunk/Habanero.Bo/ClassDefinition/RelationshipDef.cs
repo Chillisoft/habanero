@@ -157,6 +157,6 @@ namespace Habanero.Bo.ClassDefinition
         /// manage this relationship</param>
         /// <param name="lBOPropCol">The collection of properties</param>
         /// <returns>The new relationship object created</returns>
-        internal abstract Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol);
+        public abstract Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol);
     }
 }

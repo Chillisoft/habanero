@@ -29,7 +29,7 @@ namespace Habanero.Bo
         /// through the specific relationship
         /// </summary>
         /// <returns>Returns a collection of business objects</returns>
-        internal BusinessObjectCollection GetRelatedBusinessObjectCol()
+        public BusinessObjectCollection GetRelatedBusinessObjectCol()
         {
             BusinessObject busObj =
                 (BusinessObject) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);

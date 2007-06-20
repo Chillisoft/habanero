@@ -517,7 +517,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Clears the loaded objects collection
         /// </summary>
-        protected internal static void ClearLoadedBusinessObjectBaseCol()
+        public static void ClearLoadedBusinessObjectBaseCol()
         {
             _businessObjectBaseCol = null;
             //TODO_Future: write to a log file since this 

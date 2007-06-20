@@ -14,27 +14,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.Std", "Habanero
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Util", "Habanero.Util\Habanero.Util.csproj", "{D3B50C81-590B-429F-9761-3B676D607DFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.v2", "Chillisoft.Test.v2\Chillisoft.Test.v2.csproj", "{4122B18E-280B-4DC4-9FAC-8711EF4F4923}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.UI", "Habanero.Test.UI\Habanero.Test.UI.csproj", "{979540B1-0154-4870-8BD7-B70AA61492D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.Bo.Loaders.v2", "Chillisoft.Test.Bo.Loaders.v2\Chillisoft.Test.Bo.Loaders.v2.csproj", "{7C7A8ED1-78AB-4DDF-9E4C-62A760F13CF9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "Habanero.Test\Habanero.Test.csproj", "{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.Bo.v2", "Chillisoft.Test.Bo.v2\Chillisoft.Test.Bo.v2.csproj", "{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.Bo", "Habanero.Test.Bo\Habanero.Test.Bo.csproj", "{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.Db.v2", "Chillisoft.Test.Db.v2\Chillisoft.Test.Db.v2.csproj", "{1484CDE2-0A30-466F-9FEA-E79CE2751489}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.Db", "Habanero.Test.Db\Habanero.Test.Db.csproj", "{1484CDE2-0A30-466F-9FEA-E79CE2751489}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.General.v2", "Chillisoft.Test.General.v2\Chillisoft.Test.General.v2.csproj", "{F30A2151-F894-44E4-8F71-492B8C245745}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.General", "Habanero.Test.General\Habanero.Test.General.csproj", "{F30A2151-F894-44E4-8F71-492B8C245745}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.Generic.v2", "Chillisoft.Test.Generic.v2\Chillisoft.Test.Generic.v2.csproj", "{C2F78E27-878C-44A4-8BF8-E1B8013FBBA0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.Setup.v2", "Chillisoft.Test.Setup.v2\Chillisoft.Test.Setup.v2.csproj", "{8C2A0CEB-BCC4-450A-A8E5-5E1A0E06D3F1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.UI.Application.v2", "Chillisoft.Test.UI.Application.v2\Chillisoft.Test.UI.Application.v2.csproj", "{0523F726-3AED-412D-91C1-58987E450474}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.UI.BOControls.v2", "Chillisoft.Test.UI.BOControls.v2\Chillisoft.Test.UI.BOControls.v2.csproj", "{1062F495-E275-44A9-9448-98F15012A6E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.UI.Generic.v2", "Chillisoft.Test.UI.Generic.v2\Chillisoft.Test.UI.Generic.v2.csproj", "{F9D27258-1DC0-4BC8-B11F-964EB2F473BB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chillisoft.Test.Utilities.v2", "Chillisoft.Test.Utilities.v2\Chillisoft.Test.Utilities.v2.csproj", "{456989A4-82C3-4227-A4A3-BA23F35A36C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Build", "Habanero.Build\Habanero.Build.csproj", "{C05D164E-5F5C-45F7-AD49-DA06C46249D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,14 +60,14 @@ Global
 		{D3B50C81-590B-429F-9761-3B676D607DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3B50C81-590B-429F-9761-3B676D607DFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3B50C81-590B-429F-9761-3B676D607DFF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4122B18E-280B-4DC4-9FAC-8711EF4F4923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4122B18E-280B-4DC4-9FAC-8711EF4F4923}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4122B18E-280B-4DC4-9FAC-8711EF4F4923}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4122B18E-280B-4DC4-9FAC-8711EF4F4923}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C7A8ED1-78AB-4DDF-9E4C-62A760F13CF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C7A8ED1-78AB-4DDF-9E4C-62A760F13CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C7A8ED1-78AB-4DDF-9E4C-62A760F13CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C7A8ED1-78AB-4DDF-9E4C-62A760F13CF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{979540B1-0154-4870-8BD7-B70AA61492D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979540B1-0154-4870-8BD7-B70AA61492D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979540B1-0154-4870-8BD7-B70AA61492D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979540B1-0154-4870-8BD7-B70AA61492D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -90,30 +80,10 @@ Global
 		{F30A2151-F894-44E4-8F71-492B8C245745}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2F78E27-878C-44A4-8BF8-E1B8013FBBA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2F78E27-878C-44A4-8BF8-E1B8013FBBA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2F78E27-878C-44A4-8BF8-E1B8013FBBA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2F78E27-878C-44A4-8BF8-E1B8013FBBA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C2A0CEB-BCC4-450A-A8E5-5E1A0E06D3F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C2A0CEB-BCC4-450A-A8E5-5E1A0E06D3F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C2A0CEB-BCC4-450A-A8E5-5E1A0E06D3F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C2A0CEB-BCC4-450A-A8E5-5E1A0E06D3F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0523F726-3AED-412D-91C1-58987E450474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0523F726-3AED-412D-91C1-58987E450474}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0523F726-3AED-412D-91C1-58987E450474}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0523F726-3AED-412D-91C1-58987E450474}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1062F495-E275-44A9-9448-98F15012A6E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1062F495-E275-44A9-9448-98F15012A6E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1062F495-E275-44A9-9448-98F15012A6E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1062F495-E275-44A9-9448-98F15012A6E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9D27258-1DC0-4BC8-B11F-964EB2F473BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9D27258-1DC0-4BC8-B11F-964EB2F473BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9D27258-1DC0-4BC8-B11F-964EB2F473BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9D27258-1DC0-4BC8-B11F-964EB2F473BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{456989A4-82C3-4227-A4A3-BA23F35A36C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{456989A4-82C3-4227-A4A3-BA23F35A36C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{456989A4-82C3-4227-A4A3-BA23F35A36C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{456989A4-82C3-4227-A4A3-BA23F35A36C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C05D164E-5F5C-45F7-AD49-DA06C46249D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C05D164E-5F5C-45F7-AD49-DA06C46249D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C05D164E-5F5C-45F7-AD49-DA06C46249D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C05D164E-5F5C-45F7-AD49-DA06C46249D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

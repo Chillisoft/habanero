@@ -1,0 +1,223 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F30A2151-F894-44E4-8F71-492B8C245745}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Chillisoft.Test.General.v2</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Chillisoft.Test.General.v2</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>bin\Debug\Chillisoft.Test.General.v2.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nmock">
+      <Name>nmock</Name>
+      <HintPath>..\lib\nmock.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.Bo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.Db</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Generic\Habanero.Generic.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Generic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
+      <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
+      <Name>Habanero.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Car.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Circle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ColContactPeople.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContactPerson.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContactPersonCompositeKey.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Engine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FilledCircle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sample.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shape.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestBOSqlGeneration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestBusinessObjectISQLParameterInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestCarDriverRelationship.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestCarOwnerRelationship.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestCarsDrivenRelationship.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestCarsOwnedRelationship.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDatabaseConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestDatabaseErrorSafeConnectString.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tester.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TesterBusinessObjCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TesterContactPersonCompositeKey.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestInheritanceBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestInheritanceBasics.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestInheritanceClassTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestInheritanceConcreteTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestInheritanceHeirarchyBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestInheritanceHeirarchyClassTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestInheritanceHeirarchyConcreteTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestInheritanceHeirarchySingleTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestInheritanceSingleTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestOneToOneRelationship.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
+</Project>
