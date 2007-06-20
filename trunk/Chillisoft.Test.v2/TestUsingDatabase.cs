@@ -1,4 +1,4 @@
-using Chillisoft.Db.v2;
+using Habanero.Db;
 using Chillisoft.Test.General.v2;
 
 namespace Chillisoft.Test

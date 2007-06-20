@@ -86,16 +86,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Chillisoft.Db.v2\Chillisoft.Db.v2.csproj">
-      <Name>Chillisoft.Db.v2</Name>
-      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.Generic.v2\Chillisoft.Generic.v2.csproj">
-      <Name>Chillisoft.Generic.v2</Name>
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchitectureTest.cs">
@@ -110,6 +100,16 @@
     <Compile Include="TestUsingDatabase.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.Db</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Generic\Habanero.Generic.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Generic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

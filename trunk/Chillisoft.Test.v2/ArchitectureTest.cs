@@ -1,4 +1,4 @@
-using Chillisoft.Generic.v2;
+using Habanero.Generic;
 
 namespace Chillisoft.Test
 {
