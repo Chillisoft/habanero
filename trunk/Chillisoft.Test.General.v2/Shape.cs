@@ -1,6 +1,6 @@
 using System;
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.v2;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo;
 
 namespace Chillisoft.Test.General.v2
 {

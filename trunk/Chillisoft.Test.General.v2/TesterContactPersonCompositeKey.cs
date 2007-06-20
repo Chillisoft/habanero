@@ -1,6 +1,6 @@
 using System;
-using Chillisoft.Bo.v2;
-using Chillisoft.Db.v2;
+using Habanero.Bo;
+using Habanero.Db;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.General.v2

@@ -1,6 +1,6 @@
 using System.Data;
-using Chillisoft.Bo.CriteriaManager.v2;
-using Chillisoft.Db.v2;
+using Habanero.Bo.CriteriaManager;
+using Habanero.Db;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.General.v2

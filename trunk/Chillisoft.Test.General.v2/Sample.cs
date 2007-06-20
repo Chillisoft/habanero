@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.v2;
-using Chillisoft.Generic.v2;
-using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo;
+using Habanero.Generic;
+using BusinessObject=Habanero.Bo.BusinessObject;
 
 namespace Chillisoft.Test.General.v2
 {

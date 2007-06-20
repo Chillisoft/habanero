@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.v2;
-using Chillisoft.Db.v2;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo;
+using Habanero.Db;
 
 namespace Chillisoft.Test.General.v2
 {
@@ -107,7 +107,7 @@ namespace Chillisoft.Test.General.v2
         /// </remarks>
         /// <param name="id">The object primary Key</param>
         /// <returns>The loaded business object</returns>
-        /// <exception cref="Chillisoft.Bo.v2.BusObjDeleteConcurrencyControlException">
+        /// <exception cref="Habanero.Bo.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
         public static Engine GetEngine(BOPrimaryKey id)
         {

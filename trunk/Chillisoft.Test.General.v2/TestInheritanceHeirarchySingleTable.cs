@@ -1,8 +1,8 @@
 using System.Data;
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Db.v2;
-using Chillisoft.Util.v2;
-using Chillisoft.Bo.v2;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Db;
+using Habanero.Util;
+using Habanero.Bo;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.General.v2

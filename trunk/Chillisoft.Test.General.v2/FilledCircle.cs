@@ -1,5 +1,5 @@
 using System;
-using Chillisoft.Bo.ClassDefinition.v2;
+using Habanero.Bo.ClassDefinition;
 
 namespace Chillisoft.Test.General.v2
 {

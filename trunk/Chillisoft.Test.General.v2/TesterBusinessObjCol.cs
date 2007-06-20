@@ -1,4 +1,4 @@
-using Chillisoft.Bo.v2;
+using Habanero.Bo;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.General.v2

@@ -1,9 +1,9 @@
 using System.Data;
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.v2;
-using Chillisoft.Db.v2;
-using Chillisoft.Generic.v2;
-using Chillisoft.Util.v2;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo;
+using Habanero.Db;
+using Habanero.Generic;
+using Habanero.Util;
 using NMock;
 using NUnit.Framework;
 
