@@ -86,19 +86,6 @@
     <Reference Include="System.XML">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Chillisoft.Bo.Loaders.v2\Chillisoft.Bo.Loaders.v2.csproj">
-      <Project>{E48EDD73-DDC2-456F-87A6-F4F15209095E}</Project>
-      <Name>Chillisoft.Bo.Loaders.v2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.Bo.v2\Chillisoft.Bo.v2.csproj">
-      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
-      <Name>Chillisoft.Bo.v2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.Generic.v2\Chillisoft.Generic.v2.csproj">
-      <Name>Chillisoft.Generic.v2</Name>
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
@@ -107,6 +94,16 @@
     <Compile Include="MyBo.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.Bo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Generic\Habanero.Generic.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Generic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
