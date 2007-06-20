@@ -1,0 +1,5 @@
+<!ELEMENT uiFormPropertyAtt EMPTY>
+<!ATTLIST uiFormPropertyAtt
+	name NMTOKEN #REQUIRED
+	value CDATA #REQUIRED
+>

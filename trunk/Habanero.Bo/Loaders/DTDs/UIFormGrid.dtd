@@ -1,0 +1,7 @@
+<!ELEMENT uiFormGrid EMPTY>
+<!ATTLIST uiFormGrid
+	relationshipName NMTOKEN #REQUIRED
+	gridType NMTOKEN "Chillisoft.UI.Application.v2.SimpleGrid"
+	gridTypeAssembly NMTOKEN "Habanero.UI.Pro"
+	correspondingRelationshipName NMTOKEN #REQUIRED
+>

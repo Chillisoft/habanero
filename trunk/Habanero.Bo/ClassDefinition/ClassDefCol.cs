@@ -1,0 +1,279 @@
+using System;
+using System.Collections;
+using Habanero.Util;
+
+namespace Habanero.Bo.ClassDefinition
+{
+    /// <summary>
+    /// Manages a collection of class definitions.
+    /// </summary>
+    public class ClassDefCol : DictionaryBase
+    {
+        private static ClassDefCol mClassDefcol;
+        private static bool instanceFlag = false;
+
+        /// <summary>
+        /// Initialises an empty collection
+        /// </summary>
+        protected ClassDefCol() : base()
+        {
+        }
+
+        /// <summary>
+        /// Returns the existing collection, or creates and returns a 
+        /// new empty collection.
+        /// </summary>
+        /// <returns>A collection of class definitions</returns>
+        internal static ClassDefCol GetColClassDef()
+        {
+            if (! instanceFlag)
+            {
+                mClassDefcol = new ClassDefCol();
+                instanceFlag = true;
+                return mClassDefcol;
+            }
+            else
+            {
+                return mClassDefcol;
+            }
+        }
+
+		/// <summary>
+		/// Provides an indexing facility for the collection so that items
+		/// in the collection can be accessed like an array 
+		/// (e.g. collection["surname"])
+		/// </summary>
+		/// <param name="key">The name of the class definition</param>
+		/// <returns>Returns the class definition that matches the key
+		/// or null if none is found</returns>
+		public ClassDef this[Type key]
+		{
+			get
+			{
+				bool found;
+				string typeId = GetTypeIdForItem(key, out found);
+				if (found) return (ClassDef)Dictionary[typeId];
+				else return null;
+				//TODO error: When converted to use generic collection then 
+				// an error (KeyNotFoundException) should be thrown if the item is not in the collection?
+			}
+		}
+
+		/// <summary>
+		/// Provides an indexing facility for the collection so that items
+		/// in the collection can be accessed like an array 
+		/// (e.g. collection["surname"])
+		/// </summary>
+		/// <param name="assemblyName">The name of the class assembly</param>
+		/// <param name="className">The name of the class</param>
+		/// <returns>Returns the class definition that matches the key
+		/// or null if none is found</returns>
+		public ClassDef this[string assemblyName, string className]
+		{
+			get
+			{
+				bool found;
+				string typeId = GetTypeIdForItem(assemblyName, className, out found);
+				if (found) return (ClassDef)Dictionary[typeId];
+				else return null;
+				//TODO error: When converted to use generic collection then 
+				// an error (KeyNotFoundException) should be thrown if the item is not in the collection?
+			}
+		}
+		
+        /// <summary>
+        /// Returns a collection of the key names being stored
+        /// </summary>
+        internal ICollection Keys
+        {
+            get { return (Dictionary.Keys); }
+        }
+
+        /// <summary>
+        /// Returns a collection of the values being stored
+        /// </summary>
+        internal ICollection Values
+        {
+            get { return (Dictionary.Values); }
+        }
+
+		/// <summary>
+		/// Adds a class definition to the collection
+		/// </summary>
+		/// <param name="value">The class definition to add</param>
+		public void Add(ClassDef value)
+		{
+			string typeId = GetTypeId(value.AssemblyName, value.ClassName, true);
+			Dictionary.Add(typeId, value);
+		}
+
+        /// <summary>
+        /// Indicates whether the collection contains a class definition
+        /// representing the passed type.
+        /// </summary>
+        /// <param name="key">The name of the class definition</param>
+        /// <returns>Returns true if found, false if not</returns>
+		public bool Contains(Type key)
+        {
+			bool found;
+			string typeId = GetTypeIdForItem(key, out found);
+			return found;
+        }
+
+		/// <summary>
+		/// Indicates whether the collection contains the class definition
+		/// that is passed as a parameter.
+		/// </summary>
+		/// <param name="classDef">The class definition to look for.</param>
+		/// <returns>Returns true if found, false if not</returns>
+		public bool Contains(ClassDef classDef)
+		{
+			bool found;
+			string typeId = GetTypeIdForItem(classDef.AssemblyName, classDef.ClassName, out found);
+			return found;
+		}
+
+
+		/// <summary>
+		/// Removes the class definition for the specified type from the
+		/// collection.
+		/// </summary>
+		/// <param name="key">The name of the class definition</param>
+		public void Remove(Type key)
+		{
+			bool found;
+			string typeId = GetTypeIdForItem(key, out found);
+			if (found) Dictionary.Remove(typeId);
+			//TODO error: When converted to use generic collection then 
+			// an the value of found should be returned (method type should be bool).
+		}
+
+		/// <summary>
+		/// Removes the specified class definition from the collection.
+		/// </summary>
+		/// <param name="classDef">The class definition to be removed</param>
+		public void Remove(ClassDef classDef)
+		{
+			bool found;
+			string typeId = GetTypeIdForItem(classDef.AssemblyName, classDef.ClassName, out found);
+			if (found) Dictionary.Remove(typeId);
+			//TODO error: When converted to use generic collection then 
+			// an the value of found should be returned (method type should be bool).
+		}
+
+        /// <summary>
+        /// Removes a flag that indicates that a collection exists.  After
+        /// this flag is removed, calling GetColClassDef will result in a
+        /// new empty collection replacing the existing one.
+        /// </summary>
+        protected void Finalize()
+        {
+            instanceFlag = false;
+        }
+
+		#region TypeId Methods
+
+		private string GetTypeIdForItem(Type key, out bool found)
+		{
+			string typeId = ClassDefCol.GetTypeId(key, false);
+			found = false;
+			if (Dictionary.Contains(typeId))
+				found = true;
+			else
+			{
+				typeId = ClassDefCol.GetTypeId(key, true);
+				if (Dictionary.Contains(typeId))
+				{
+					found = true;
+				}
+			}
+			return typeId;
+		}
+
+		private string GetTypeIdForItem(string assemblyName, string className, out bool found)
+		{
+			string typeId = ClassDefCol.GetTypeId(assemblyName, className, false);
+			found = false;
+			if (Dictionary.Contains(typeId))
+				found = true;
+			else
+			{
+				typeId = ClassDefCol.GetTypeId(assemblyName, className, true);
+				if (Dictionary.Contains(typeId))
+				{
+					found = true;
+				}
+			}
+			return typeId;
+		}
+
+    	///<summary>
+    	/// This method combines the assembly name and class name to 
+    	/// create a string that represents the Class Type.
+    	///</summary>
+    	///<param name="assemblyName">The class's assembly name</param>
+    	///<param name="className">The class's name</param>
+    	///<returns>A string representing the Class Type.</returns>
+		///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
+		internal static string GetTypeId(string assemblyName, string className, bool includeNamespace)
+    	{
+    		string namespaceString;
+    		className = StripOutNameSpace(className, out namespaceString);
+			if (includeNamespace && namespaceString != null && namespaceString.Length > 0)
+			{
+				namespaceString = " Namespace:" + namespaceString;
+			}
+			assemblyName = TypeLoader.CleanUpAssemblyName(assemblyName);
+    		string id = "Assembly:" + assemblyName + namespaceString + " _className:" + className;
+    		return id.ToUpper();
+    	}
+
+    	///<summary>
+    	/// This method returns a string that represents the given Class Type.
+    	///</summary>
+    	///<param name="classType">The class's Type object.</param>
+    	///<returns>A string representing the Class Type.</returns>
+		///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
+    	internal static string GetTypeId(Type classType, bool includeNamespace)
+    	{
+    		if (includeNamespace)
+				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.FullName, includeNamespace);
+    		else
+				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.Name, includeNamespace);
+    	}
+
+		internal static string StripOutNameSpace(string className)
+		{
+			string namespaceString;
+			return StripOutNameSpace(className, out namespaceString);
+		}
+
+		internal static string StripOutNameSpace(string className, out string namespaceString)
+		{
+			if (className != null)
+			{
+				int pos = className.LastIndexOf(".");
+				if (pos != -1)
+				{
+					namespaceString = className.Substring(0, pos);
+					className = className.Substring(pos + 1);
+				}else
+				{
+					namespaceString = "";
+				}
+			} else
+			{
+				namespaceString = null;
+			}
+			return className;
+		}
+
+		#endregion
+
+
+    }
+
+    #region "self Tests"
+
+    #endregion
+} 

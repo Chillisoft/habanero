@@ -1,0 +1,401 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Habanero.Bo</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Habanero.Bo</RootNamespace>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Chillisoft.Bo.v2.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Chillisoft.Db.v2\Chillisoft.Db.v2.csproj">
+      <Name>Chillisoft.Db.v2</Name>
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Generic.v2\Chillisoft.Generic.v2.csproj">
+      <Name>Chillisoft.Generic.v2</Name>
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Test.v2\Chillisoft.Test.v2.csproj">
+      <Name>Chillisoft.Test.v2</Name>
+      <Project>{4122B18E-280B-4DC4-9FAC-8711EF4F4923}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Chillisoft.Util.v2\Chillisoft.Util.v2.csproj">
+      <Name>Chillisoft.Util.v2</Name>
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOHelper.cs" />
+    <Compile Include="BOKey.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOKeyCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOObjectID.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOPrimaryKey.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOProp.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOPropCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Broker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessObjectCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOCollectionDataSetProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOCollectionEditableDataSetProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessObjectCollectionLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOCollectionReadOnlyDataSetProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOLookupListSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ByteString.cs" />
+    <Compile Include="ClassDefinition\ClassDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\ClassDefCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\KeyDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\KeyDefCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\MultipleRelationshipDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\ORMapping.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\PrimaryKeyDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\PropDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\PropDefCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\RelationshipDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\RelationshipDefCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\RelKeyDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\RelPropDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\SingleRelationshipDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ClassDefinition\SuperClassDesc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HabaneroException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CriteriaManager\CriteriaExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CriteriaManager\CriteriaManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CriteriaManager\Expression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CriteriaManager\IExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CriteriaManager\IParameterSQLInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CriteriaManager\Parameter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CriteriaManager\SqlOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CriteriaManager\TestExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseLookupListSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IConcurrencyControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InsertStatementGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InvalidRelationshipAccessException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IRelationshipCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITransactionLog.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Loaders\XmlBusinessObjectLookupListSourceLoader.cs" />
+    <Compile Include="Loaders\XmlClassDefsLoader.cs" />
+    <Compile Include="Loaders\XmlClassLoader.cs" />
+    <Compile Include="Loaders\XmlDatabaseLookupListSourceLoader.cs" />
+    <Compile Include="Loaders\XmlKeyLoader.cs" />
+    <Compile Include="Loaders\XmlLookupListSourceLoader.cs" />
+    <Compile Include="Loaders\XmlPrimaryKeyLoader.cs" />
+    <Compile Include="Loaders\XmlPropertyLoader.cs" />
+    <Compile Include="Loaders\XmlPropertyRuleDateLoader.cs" />
+    <Compile Include="Loaders\XmlPropertyRuleDecimalLoader.cs" />
+    <Compile Include="Loaders\XmlPropertyRuleGuidLoader.cs" />
+    <Compile Include="Loaders\XmlPropertyRuleIntegerLoader.cs" />
+    <Compile Include="Loaders\XmlPropertyRuleLoader.cs" />
+    <Compile Include="Loaders\XmlPropertyRuleStringLoader.cs" />
+    <Compile Include="Loaders\XmlRelationshipLoader.cs" />
+    <Compile Include="Loaders\XmlSimpleLookupListSourceLoader.cs" />
+    <Compile Include="Loaders\XmlSuperClassDescLoader.cs" />
+    <Compile Include="Loaders\XmlUIDefLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormColumnLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormDefLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormPropertyLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormTabLoader.cs" />
+    <Compile Include="Loaders\XmlUIGridDefLoader.cs" />
+    <Compile Include="Loaders\XmlUIGridPropertyLoader.cs" />
+    <Compile Include="LongText.cs" />
+    <Compile Include="MultipleRelationship.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NullLookupListSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ObjectFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OptimisticLockingVersionNumber.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PasswordBlowfish.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PropRuleBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PropRuleDate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PropRuleDecimal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PropRuleGuid.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PropRuleInteger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PropRuleObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PropRuleString.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Relationship.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RelationshipCol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RelationshipNotFoundException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RelationshipObjectInitialiser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RelKey.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RelProp.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SelectStatementGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SingleRelationship.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SQLCriteriaCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TimeSpanComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transaction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TransactionLogTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UpdateStatementGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VersionNumberSynchronisationController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Loaders\DTDs\BusinessObjectLookupListSource.dtd" />
+    <None Include="Loaders\DTDs\ClassDef.dtd" />
+    <None Include="Loaders\DTDs\ClassDefs.dtd" />
+    <None Include="Loaders\DTDs\DatabaseLookupListSource.dtd" />
+    <None Include="Loaders\DTDs\GridPropertyCollection.dtd" />
+    <None Include="Loaders\DTDs\keyDef.dtd" />
+    <None Include="Loaders\DTDs\PrimaryKeyDef.dtd" />
+    <None Include="Loaders\DTDs\Prop.dtd" />
+    <None Include="Loaders\DTDs\PropertyDef.dtd" />
+    <None Include="Loaders\DTDs\PropertyRuleDate.dtd" />
+    <None Include="Loaders\DTDs\PropertyRuleDecimal.dtd" />
+    <None Include="Loaders\DTDs\PropertyRuleGuid.dtd" />
+    <None Include="Loaders\DTDs\PropertyRuleInteger.dtd" />
+    <None Include="Loaders\DTDs\PropertyRuleString.dtd" />
+    <None Include="Loaders\DTDs\RelationshipDef.dtd" />
+    <None Include="Loaders\DTDs\SimpleLookupListSource.dtd" />
+    <None Include="Loaders\DTDs\SuperClassDesc.dtd" />
+    <None Include="Loaders\DTDs\UIDef.dtd" />
+    <None Include="Loaders\DTDs\UIFormColumn.dtd" />
+    <None Include="Loaders\DTDs\UIFormDef.dtd" />
+    <None Include="Loaders\DTDs\UIFormGrid.dtd" />
+    <None Include="Loaders\DTDs\UIFormProperty.dtd" />
+    <None Include="Loaders\DTDs\UIFormPropertyAtt.dtd" />
+    <None Include="Loaders\DTDs\UIFormTab.dtd" />
+    <None Include="Loaders\DTDs\UIGridDef.dtd" />
+    <None Include="Loaders\DTDs\UIGridProperty.dtd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)\Loaders\DTDs\*.dtd $(ProjectDir)..\Build\Debug
+$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
+</Project>

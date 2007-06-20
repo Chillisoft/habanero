@@ -1,0 +1,7 @@
+<!ELEMENT propertyRuleString EMPTY>
+<!ATTLIST propertyRuleString
+	name NMTOKEN #REQUIRED
+	isCompulsory ( true | false ) "false"
+	minLength NMTOKEN "0"
+	maxLength NMTOKEN "-1"
+>

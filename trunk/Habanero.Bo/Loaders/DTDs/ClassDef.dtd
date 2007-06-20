@@ -1,0 +1,14 @@
+#include KeyDef.dtd
+#include PrimaryKeyDef.dtd
+#include PropertyDef.dtd
+#include RelationshipDef.dtd
+#include SuperClassDesc.dtd
+#include UIDef.dtd
+<!ELEMENT classDef (superClassDesc?, propertyDef*, keyDef*, primaryKeyDef?, relationshipDef*, uiDef*)>
+<!ATTLIST classDef
+		name NMTOKEN #REQUIRED
+		assembly NMTOKEN #REQUIRED
+		tableName NMTOKEN #IMPLIED
+		supportsSynchronising ( true | false ) "false"
+>
+
