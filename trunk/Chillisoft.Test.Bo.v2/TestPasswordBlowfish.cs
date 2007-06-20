@@ -1,11 +1,10 @@
 using System.Data;
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.Loaders.v2;
-using Chillisoft.Bo.v2;
-using Chillisoft.Crypt.v2;
-using Chillisoft.Generic.v2;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo.Loaders;
+using Habanero.Bo;
+using Habanero.Generic;
 using NUnit.Framework;
-using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
+using BusinessObject=Habanero.Bo.BusinessObject;
 
 namespace Chillisoft.Test.Bo.v2
 {
@@ -26,7 +25,7 @@ namespace Chillisoft.Test.Bo.v2
                     @"
 				<classDef name=""MyBo"" assembly=""Chillisoft.Test.Setup.v2"">
 					<propertyDef name=""MyBoID"" type=""Guid"" />
-					<propertyDef name=""TestProp"" type=""PasswordBlowfish"" assembly=""Chillisoft.Bo.v2"" />
+					<propertyDef name=""TestProp"" type=""PasswordBlowfish"" assembly=""Habanero.Bo"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>

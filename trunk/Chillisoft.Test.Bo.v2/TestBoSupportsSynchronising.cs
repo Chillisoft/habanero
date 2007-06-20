@@ -1,10 +1,10 @@
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.Loaders.v2;
-using Chillisoft.Bo.v2;
-using Chillisoft.Db.v2;
-using Chillisoft.Generic.v2;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo.Loaders;
+using Habanero.Bo;
+using Habanero.Db;
+using Habanero.Generic;
 using Chillisoft.Test.Setup.v2;
-using Chillisoft.Util.v2;
+using Habanero.Util;
 using NMock;
 using NUnit.Framework;
 

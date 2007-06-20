@@ -1,5 +1,5 @@
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.v2;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo;
 using Chillisoft.Test.Setup.v2;
 using NUnit.Framework;
 

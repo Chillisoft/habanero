@@ -1,8 +1,8 @@
-using Chillisoft.Bo.v2;
-using Chillisoft.Db.v2;
-using Chillisoft.Generic.v2;
+using Habanero.Bo;
+using Habanero.Db;
+using Habanero.Generic;
 using NUnit.Framework;
-using BusinessObject=Chillisoft.Bo.v2.BusinessObject;
+using BusinessObject=Habanero.Bo.BusinessObject;
 
 namespace Chillisoft.Test.Bo.v2
 {
