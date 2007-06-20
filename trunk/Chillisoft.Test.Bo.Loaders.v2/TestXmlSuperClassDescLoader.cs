@@ -1,5 +1,5 @@
-using Chillisoft.Bo.ClassDefinition.v2;
-using Chillisoft.Bo.Loaders.v2;
+using Habanero.Bo.ClassDefinition;
+using Habanero.Bo.Loaders;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.Bo.Loaders.v2

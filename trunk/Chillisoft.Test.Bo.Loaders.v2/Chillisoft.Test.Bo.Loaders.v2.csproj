@@ -73,14 +73,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement">
-      <Name>Microsoft.ApplicationBlocks.ExceptionManagement</Name>
-      <HintPath>..\lib\Microsoft.ApplicationBlocks.ExceptionManagement.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces">
-      <Name>Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces</Name>
-      <HintPath>..\lib\Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces.dll</HintPath>
-    </Reference>
     <Reference Include="nmock">
       <Name>nmock</Name>
       <HintPath>..\lib\nmock.dll</HintPath>
@@ -101,21 +93,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Chillisoft.Bo.Loaders.v2\Chillisoft.Bo.Loaders.v2.csproj">
-      <Name>Chillisoft.Bo.Loaders.v2</Name>
-      <Project>{E48EDD73-DDC2-456F-87A6-F4F15209095E}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.Bo.v2\Chillisoft.Bo.v2.csproj">
-      <Name>Chillisoft.Bo.v2</Name>
-      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.Generic.v2\Chillisoft.Generic.v2.csproj">
-      <Name>Chillisoft.Generic.v2</Name>
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
     <ProjectReference Include="..\Chillisoft.Test.Bo.v2\Chillisoft.Test.Bo.v2.csproj">
       <Name>Chillisoft.Test.Bo.v2</Name>
       <Project>{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}</Project>
@@ -126,15 +103,21 @@
       <Project>{8C2A0CEB-BCC4-450A-A8E5-5E1A0E06D3F1}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.UI.Application.v2\Chillisoft.UI.Application.v2.csproj">
-      <Name>Chillisoft.UI.Application.v2</Name>
-      <Project>{4F9E7C07-6FAF-4EE9-82C6-B43283E6E44E}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.Bo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.UI.Generic.v2\Chillisoft.UI.Generic.v2.csproj">
-      <Name>Chillisoft.UI.Generic.v2</Name>
-      <Project>{4AAB316F-B7CA-480D-B2E8-530D7992FDD5}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    <ProjectReference Include="..\Habanero.Generic\Habanero.Generic.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Generic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.Pro\Habanero.UI.Pro.csproj">
+      <Project>{E1B4C7C4-587F-4162-A51C-7CCBA8147029}</Project>
+      <Name>Habanero.UI.Pro</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI\Habanero.UI.csproj">
+      <Project>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</Project>
+      <Name>Habanero.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

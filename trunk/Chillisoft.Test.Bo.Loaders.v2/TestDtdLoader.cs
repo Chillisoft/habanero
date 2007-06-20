@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Chillisoft.Generic.v2;
+using Habanero.Generic;
 using NMock;
 using NUnit.Framework;
 
