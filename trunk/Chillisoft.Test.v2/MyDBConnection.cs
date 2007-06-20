@@ -20,7 +20,7 @@ namespace Chillisoft.Test.General.v2
 
             settings.Add("vendor", DatabaseConfig.MySQL);
             settings.Add("server", "localhost");
-            settings.Add("database", "ArchitectureTest");
+            settings.Add("database", "HabaneroTest");
             settings.Add("username", "root");
             settings.Add("password", "root");
             settings.Add("port", "3306");
