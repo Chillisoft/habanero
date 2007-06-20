@@ -82,49 +82,9 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\ChilliSoft.Reporting.ExcelRenderer.v2\Chillisoft.Reporting.ExcelRenderer.v2.csproj">
-      <Name>Chillisoft.Reporting.ExcelRenderer.v2</Name>
-      <Project>{D73908ED-3B0B-48C2-A1B1-56774E43EE1A}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\ChilliSoft.Reporting.Export.v2\Chillisoft.Reporting.Export.v2.csproj">
-      <Name>Chillisoft.Reporting.Export.v2</Name>
-      <Project>{BAB4EF8E-ABC5-47C0-A2DC-78ADC5FA0271}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\ChilliSoft.Reporting.PDFRenderer.v2\Chillisoft.Reporting.PDFRenderer.v2.csproj">
-      <Name>Chillisoft.Reporting.PDFRenderer.v2</Name>
-      <Project>{2DE930ED-778D-4385-A078-8D6429779D2A}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\ChilliSoft.Reporting.Renderer.v2\Chillisoft.Reporting.Renderer.v2.csproj">
-      <Name>Chillisoft.Reporting.Renderer.v2</Name>
-      <Project>{1270D63F-E152-4654-B4C6-CAC980B43838}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\ChilliSoft.Reporting.v2\Chillisoft.Reporting.v2.csproj">
-      <Name>Chillisoft.Reporting.v2</Name>
-      <Project>{6C07BF39-E400-488C-A067-B0068D3997E7}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\ChilliSoft.Xml.v2\Chillisoft.Xml.v2.csproj">
-      <Name>Chillisoft.Xml.v2</Name>
-      <Project>{004FABC1-9918-423E-AAA5-419BC770B178}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.Bo.Loaders.v2\Chillisoft.Bo.Loaders.v2.csproj">
-      <Name>Chillisoft.Bo.Loaders.v2</Name>
-      <Project>{E48EDD73-DDC2-456F-87A6-F4F15209095E}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
     <ProjectReference Include="..\Chillisoft.Bo.v2\Chillisoft.Bo.v2.csproj">
       <Name>Chillisoft.Bo.v2</Name>
       <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.Db.Utils.v2\Chillisoft.Db.Utils.v2.csproj">
-      <Name>Chillisoft.Db.Utils.v2</Name>
-      <Project>{E0F3FABF-4040-4608-AE16-6EEB459BF391}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
     <ProjectReference Include="..\Chillisoft.Db.v2\Chillisoft.Db.v2.csproj">
@@ -185,26 +145,6 @@
     <ProjectReference Include="..\Chillisoft.Test.v2\Chillisoft.Test.v2.csproj">
       <Name>Chillisoft.Test.v2</Name>
       <Project>{4122B18E-280B-4DC4-9FAC-8711EF4F4923}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.UI.Application.v2\Chillisoft.UI.Application.v2.csproj">
-      <Name>Chillisoft.UI.Application.v2</Name>
-      <Project>{4F9E7C07-6FAF-4EE9-82C6-B43283E6E44E}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.UI.BOControls.v2\Chillisoft.UI.BOControls.v2.csproj">
-      <Name>Chillisoft.UI.BOControls.v2</Name>
-      <Project>{EF132B07-A901-4D5A-BF44-0C62DB2FCEC1}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.UI.Generic.v2\Chillisoft.UI.Generic.v2.csproj">
-      <Name>Chillisoft.UI.Generic.v2</Name>
-      <Project>{4AAB316F-B7CA-480D-B2E8-530D7992FDD5}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Chillisoft.UI.Misc.v2\Chillisoft.UI.Misc.v2.csproj">
-      <Name>Chillisoft.UI.Misc.v2</Name>
-      <Project>{D3B7DB18-F7CF-43C6-B194-02F343B6DB7E}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
     <ProjectReference Include="..\Chillisoft.Util.v2\Chillisoft.Util.v2.csproj">
