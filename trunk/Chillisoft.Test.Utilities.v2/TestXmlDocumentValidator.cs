@@ -1,5 +1,5 @@
-using Chillisoft.Generic.v2;
-using Chillisoft.Util.v2;
+using Habanero.Generic;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Chillisoft.Test.Utilities
