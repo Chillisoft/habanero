@@ -31,7 +31,7 @@ namespace Habanero.Ui.Generic
         /// the business objects to represent
         /// </summary>
         /// <param name="loader">The business object loader</param>
-        public CollectionGridDataProvider(BusinessObjectCollectionLoader loader) : this(loader, "")
+        public CollectionGridDataProvider(IBusinessObjectCollectionLoader loader) : this(loader, "")
         {
         }
 
@@ -39,7 +39,7 @@ namespace Habanero.Ui.Generic
         /// A constructor as before, but allows a loader and a UIDefName 
         /// to be specified
         /// </summary>
-        public CollectionGridDataProvider(BusinessObjectCollectionLoader loader, string uiDefName)
+        public CollectionGridDataProvider(IBusinessObjectCollectionLoader loader, string uiDefName)
         {
             _collection = loader.Load();
             _uiDefName = uiDefName;
