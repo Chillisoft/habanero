@@ -45,7 +45,7 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a BusinessObjectLookupListSource object</returns>
         protected override object Create()
         {
-			return new BOLookupListSource(_assemblyName, _className);
+			return new BusinessObjectLookupListSource(_assemblyName, _className);
 			//return new BOLookupListSource(_type);
 		}
     }

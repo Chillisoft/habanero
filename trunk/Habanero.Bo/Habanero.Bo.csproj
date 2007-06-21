@@ -144,7 +144,7 @@
     <Compile Include="BOEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BOLookupListSource.cs">
+    <Compile Include="BusinessObjectLookupListSource.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ByteString.cs" />

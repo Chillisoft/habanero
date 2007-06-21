@@ -16,7 +16,7 @@ namespace Habanero.Bo
     /// Note: this class does not provide criteria, so the entire collection
     /// will be loaded.
     /// </summary>
-    public class BOLookupListSource : ILookupListSource
+    public class BusinessObjectLookupListSource : ILookupListSource
     {
         private Type _boType;
     	private string _assemblyName;
@@ -28,7 +28,7 @@ namespace Habanero.Bo
         /// Constructor to initialise a new lookup-list
         /// </summary>
         /// <param name="boType">The business object type</param>
-        public BOLookupListSource(Type boType)
+        public BusinessObjectLookupListSource(Type boType)
         {
             MyBoType = boType;
 		}
@@ -37,7 +37,7 @@ namespace Habanero.Bo
 		/// Constructor to initialise a new lookup-list
 		/// </summary>
 		/// <param name="boType">The business object type</param>
-		public BOLookupListSource(string assemblyName, string className)
+		public BusinessObjectLookupListSource(string assemblyName, string className)
 		{
 			_assemblyName = assemblyName;
 			_className = className;

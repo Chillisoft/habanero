@@ -5,7 +5,7 @@ namespace Habanero.Bo
     /// collection
     /// </summary>
     /// TODO ERIC - rename to IBusinessObjectCollectionLoader
-    public interface BusinessObjectCollectionLoader
+    public interface IBusinessObjectCollectionLoader
     {
         /// <summary>
         /// Loads a business object collection
