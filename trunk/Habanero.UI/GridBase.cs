@@ -224,7 +224,7 @@ namespace Habanero.Ui.Generic
         /// Applies a filter clause to the data table and updates the filter
         /// </summary>
         /// <param name="filterClause">The filter clause</param>
-        public void ApplyFilter(FilterClause filterClause)
+        public void ApplyFilter(IFilterClause filterClause)
         {
             _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
             FireFilterUpdated();

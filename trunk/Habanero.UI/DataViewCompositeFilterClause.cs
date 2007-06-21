@@ -7,11 +7,11 @@ namespace Habanero.Ui.Generic
     /// filter clauses that filter which data to display in a DataView, 
     /// according to some criteria
     /// </summary>
-    public class DataViewCompositeFilterClause : FilterClause
+    public class DataViewCompositeFilterClause : IFilterClause
     {
-        private readonly FilterClause _rightClause;
+        private readonly IFilterClause _rightClause;
         private readonly FilterClauseCompositeOperator _compositeOperator;
-        private readonly FilterClause _leftClause;
+        private readonly IFilterClause _leftClause;
 
         /// <summary>
         /// Constructor to initialise a new composite filter clause
@@ -20,8 +20,8 @@ namespace Habanero.Ui.Generic
         /// <param name="compositeOperator">The operator to connect the
         /// clauses</param>
         /// <param name="rightClause">The right filter clause</param>
-        public DataViewCompositeFilterClause(FilterClause leftClause, FilterClauseCompositeOperator compositeOperator,
-                                             FilterClause rightClause)
+        public DataViewCompositeFilterClause(IFilterClause leftClause, FilterClauseCompositeOperator compositeOperator,
+                                             IFilterClause rightClause)
         {
             _leftClause = leftClause;
             _compositeOperator = compositeOperator;

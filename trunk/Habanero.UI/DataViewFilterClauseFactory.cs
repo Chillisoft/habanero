@@ -15,7 +15,7 @@ namespace Habanero.Ui.Generic
         /// <param name="clauseOperator">The clause operator</param>
         /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
-        public FilterClause CreateStringFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
+        public IFilterClause CreateStringFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
                                                      string filterValue)
         {
             return new DataViewStringFilterClause(filterColumn, clauseOperator, filterValue);
@@ -29,7 +29,7 @@ namespace Habanero.Ui.Generic
         /// <param name="clauseOperator">The clause operator</param>
         /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
-        public FilterClause CreateIntegerFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
+        public IFilterClause CreateIntegerFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
                                                       int filterValue)
         {
             return new DataViewIntegerFilterClause(filterColumn, clauseOperator, filterValue);
@@ -44,9 +44,9 @@ namespace Habanero.Ui.Generic
         /// "and" or "or"</param>
         /// <param name="rightClause">The right filter clause</param>
         /// <returns>Returns the new filter clause object</returns>
-        public FilterClause CreateCompositeFilterClause(FilterClause leftClause,
+        public IFilterClause CreateCompositeFilterClause(IFilterClause leftClause,
                                                         FilterClauseCompositeOperator compositeOperator,
-                                                        FilterClause rightClause)
+                                                        IFilterClause rightClause)
         {
             return new DataViewCompositeFilterClause(leftClause, compositeOperator, rightClause);
         }
@@ -54,7 +54,7 @@ namespace Habanero.Ui.Generic
         /// <summary>
         /// Creates a new null filter clause, which does no filtering
         /// </summary>
-        public FilterClause CreateNullFilterClause()
+        public IFilterClause CreateNullFilterClause()
         {
             return new DataViewNullFilterClause();
         }

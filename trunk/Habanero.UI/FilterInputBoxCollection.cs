@@ -140,10 +140,10 @@ namespace Habanero.Ui.Generic
         /// clauses in each filter control in the set
         /// </summary>
         /// <returns>Returns the composite filter clause</returns>
-        public FilterClause GetFilterClause()
+        public IFilterClause GetFilterClause()
         {
             FilterUI filterUi = (FilterUI) _filterUIs[0];
-            FilterClause clause = filterUi.GetFilterClause();
+            IFilterClause clause = filterUi.GetFilterClause();
             for (int i = 1; i < _filterUIs.Count; i++)
             {
                 filterUi = (FilterUI) _filterUIs[i];
@@ -332,7 +332,7 @@ namespace Habanero.Ui.Generic
             /// Returns the filter clause
             /// </summary>
             /// <returns>Returns the filter clause</returns>
-            public abstract FilterClause GetFilterClause();
+            public abstract IFilterClause GetFilterClause();
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace Habanero.Ui.Generic
                 _textBox = textBox;
             }
 
-            public override FilterClause GetFilterClause()
+            public override IFilterClause GetFilterClause()
             {
                 if (_textBox.Text.Length > 0)
                 {
@@ -381,7 +381,7 @@ namespace Habanero.Ui.Generic
                 this._filterGreaterThan = filterGreaterThan;
             }
 
-            public override FilterClause GetFilterClause()
+            public override IFilterClause GetFilterClause()
             {
                 if (_dateTimePicker.Value != null)
                 {
@@ -426,7 +426,7 @@ namespace Habanero.Ui.Generic
                 }
             }
 
-            public override FilterClause GetFilterClause()
+            public override IFilterClause GetFilterClause()
             {
                 if (_comboBox.SelectedIndex != -1 && _comboBox.SelectedItem.ToString().Length > 0)
                 {
@@ -458,7 +458,7 @@ namespace Habanero.Ui.Generic
                 _checkBox.Text = text;
             }
 
-            public override FilterClause GetFilterClause()
+            public override IFilterClause GetFilterClause()
             {
                 if (_checkBox.Checked != null)
                 {

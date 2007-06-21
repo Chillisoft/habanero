@@ -6,7 +6,7 @@ namespace Habanero.Ui.Generic
     /// A super-class for filter clauses that filter which data to
     /// display in a DataView, according to some criteria
     /// </summary>
-    public abstract class DataViewFilterClause : FilterClause
+    public abstract class DataViewFilterClause : IFilterClause
     {
         protected readonly object _filterValue;
         protected readonly FilterClauseOperator _clauseOperator;

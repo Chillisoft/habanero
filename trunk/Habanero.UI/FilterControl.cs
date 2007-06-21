@@ -157,7 +157,7 @@ namespace Habanero.Ui.Generic
         /// clauses in each filter control in the set
         /// </summary>
         /// <returns>Returns the filter clause</returns>
-        public FilterClause GetFilterClause()
+        public IFilterClause GetFilterClause()
         {
             return _filterInputBoxCollection.GetFilterClause();
         }

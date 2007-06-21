@@ -48,11 +48,11 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestCompositeEqualsWithAnd()
         {
-            FilterClause clause1 =
+            IFilterClause clause1 =
                 filterClauseFactory.CreateStringFilterClause("h a", FilterClauseOperator.OpEquals, "Peter");
-            FilterClause clause2 =
+            IFilterClause clause2 =
                 filterClauseFactory.CreateStringFilterClause("h a", FilterClauseOperator.OpEquals, "Kelly");
-            FilterClause compositeClause =
+            IFilterClause compositeClause =
                 filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
             dv.RowFilter = compositeClause.GetFilterClauseString();
             Assert.AreEqual(0, dv.Count);
@@ -61,11 +61,11 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestCompositeEqualsWithOr()
         {
-            FilterClause clause1 =
+            IFilterClause clause1 =
                 filterClauseFactory.CreateStringFilterClause("h a", FilterClauseOperator.OpEquals, "Peter");
-            FilterClause clause2 =
+            IFilterClause clause2 =
                 filterClauseFactory.CreateStringFilterClause("h a", FilterClauseOperator.OpEquals, "Kelly");
-            FilterClause compositeClause =
+            IFilterClause compositeClause =
                 filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpOr, clause2);
             dv.RowFilter = compositeClause.GetFilterClauseString();
             Assert.AreEqual(2, dv.Count);

@@ -22,7 +22,7 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestEqualsWithString()
         {
-            FilterClause filterClause =
+            IFilterClause filterClause =
                 itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "testvalue");
             Assert.AreEqual("TestColumn = 'testvalue'", filterClause.GetFilterClauseString());
         }
@@ -30,7 +30,7 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestEqualsWithInteger()
         {
-            FilterClause filterClause =
+            IFilterClause filterClause =
                 itsFilterClauseFactory.CreateIntegerFilterClause("TestColumn", FilterClauseOperator.OpEquals, 12);
             Assert.AreEqual("TestColumn = 12", filterClause.GetFilterClauseString());
         }
@@ -38,7 +38,7 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestWithColumnNameMoreThanOneWord()
         {
-            FilterClause filterClause =
+            IFilterClause filterClause =
                 itsFilterClauseFactory.CreateIntegerFilterClause("Test Column", FilterClauseOperator.OpEquals, 12);
             Assert.AreEqual("[Test Column] = 12", filterClause.GetFilterClauseString());
         }
@@ -46,7 +46,7 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestLikeWithString()
         {
-            FilterClause filterClause =
+            IFilterClause filterClause =
                 itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
             Assert.AreEqual("TestColumn like '*testvalue*'", filterClause.GetFilterClauseString());
         }
@@ -63,12 +63,12 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestCompositeWithAnd()
         {
-            FilterClause stringFilterClause =
+            IFilterClause stringFilterClause =
                 itsFilterClauseFactory.CreateStringFilterClause("TestColumnString", FilterClauseOperator.OpEquals,
                                                                 "testvalue");
-            FilterClause intFilterClause =
+            IFilterClause intFilterClause =
                 itsFilterClauseFactory.CreateIntegerFilterClause("TestColumnInt", FilterClauseOperator.OpEquals, 12);
-            FilterClause compositeClause =
+            IFilterClause compositeClause =
                 itsFilterClauseFactory.CreateCompositeFilterClause(stringFilterClause,
                                                                    FilterClauseCompositeOperator.OpAnd, intFilterClause);
             Assert.AreEqual("(TestColumnString = 'testvalue') and (TestColumnInt = 12)",
@@ -78,12 +78,12 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestCompositeWithOr()
         {
-            FilterClause stringFilterClause =
+            IFilterClause stringFilterClause =
                 itsFilterClauseFactory.CreateStringFilterClause("TestColumnString", FilterClauseOperator.OpEquals,
                                                                 "testvalue");
-            FilterClause intFilterClause =
+            IFilterClause intFilterClause =
                 itsFilterClauseFactory.CreateIntegerFilterClause("TestColumnInt", FilterClauseOperator.OpEquals, 12);
-            FilterClause compositeClause =
+            IFilterClause compositeClause =
                 itsFilterClauseFactory.CreateCompositeFilterClause(stringFilterClause,
                                                                    FilterClauseCompositeOperator.OpOr, intFilterClause);
             Assert.AreEqual("(TestColumnString = 'testvalue') or (TestColumnInt = 12)",
@@ -93,10 +93,10 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestCompositeWithNullClauses()
         {
-            FilterClause nullFilterClause = itsFilterClauseFactory.CreateNullFilterClause();
-            FilterClause intFilterClause =
+            IFilterClause nullFilterClause = itsFilterClauseFactory.CreateNullFilterClause();
+            IFilterClause intFilterClause =
                 itsFilterClauseFactory.CreateIntegerFilterClause("TestColumnInt", FilterClauseOperator.OpEquals, 12);
-            FilterClause compositeClause =
+            IFilterClause compositeClause =
                 itsFilterClauseFactory.CreateCompositeFilterClause(nullFilterClause, FilterClauseCompositeOperator.OpOr,
                                                                    intFilterClause);
             Assert.AreEqual("TestColumnInt = 12", compositeClause.GetFilterClauseString());
@@ -105,7 +105,7 @@ namespace Habanero.Test.Ui.Generic
         [Test]
         public void TestEqualsWithSingleQuote()
         {
-            FilterClause filterClause =
+            IFilterClause filterClause =
                 itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals,
                                                                 "test'value");
             Assert.AreEqual("TestColumn = 'test''value'", filterClause.GetFilterClauseString());

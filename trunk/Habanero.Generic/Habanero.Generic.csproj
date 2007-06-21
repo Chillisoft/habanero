@@ -115,7 +115,7 @@
     <Compile Include="ExceptionUtil.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FilterClause.cs">
+    <Compile Include="IFilterClause.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FilterClauseCompositeOperator.cs">
@@ -128,9 +128,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GlobalRegistry.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IBusinessObject.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IClassDefsLoader.cs">

@@ -39,7 +39,7 @@ namespace Habanero.Bo
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
     /// </summary>
-    public abstract class BusinessObject : ITransaction, ISynchronisable, Generic.BusinessObject
+    public abstract class BusinessObject : ITransaction, ISynchronisable, Generic.IBusinessObject
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BusinessObject");
 

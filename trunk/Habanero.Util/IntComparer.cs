@@ -35,8 +35,8 @@ namespace Habanero.Util
         /// than the second</returns>
         public int Compare(object x, object y)
         {
-            BusinessObject boLeft = (BusinessObject) x;
-            BusinessObject boRight = (BusinessObject) y;
+            IBusinessObject boLeft = (IBusinessObject) x;
+            IBusinessObject boRight = (IBusinessObject) y;
             int left;
             int right;
             if (boLeft.GetPropertyValue(_propName) == null)

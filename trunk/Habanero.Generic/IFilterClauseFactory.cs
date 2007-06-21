@@ -14,7 +14,7 @@ namespace Habanero.Generic
         /// <param name="clauseOperator">The clause operator</param>
         /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
-        FilterClause CreateStringFilterClause(string columnName, FilterClauseOperator clauseOperator, string filterValue);
+        IFilterClause CreateStringFilterClause(string columnName, FilterClauseOperator clauseOperator, string filterValue);
 
         /// <summary>
         /// Creates a new filter clause that filters integer values
@@ -24,7 +24,7 @@ namespace Habanero.Generic
         /// <param name="clauseOperator">The clause operator</param>
         /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
-        FilterClause CreateIntegerFilterClause(string columnName, FilterClauseOperator clauseOperator, int filterValue);
+        IFilterClause CreateIntegerFilterClause(string columnName, FilterClauseOperator clauseOperator, int filterValue);
 
         /// <summary>
         /// Creates a new composite filter clause combining two given filter
@@ -35,13 +35,13 @@ namespace Habanero.Generic
         /// "and" or "or"</param>
         /// <param name="rightClause">The right filter clause</param>
         /// <returns>Returns the new filter clause object</returns>
-        FilterClause CreateCompositeFilterClause(FilterClause leftClause,
+        IFilterClause CreateCompositeFilterClause(IFilterClause leftClause,
                                                  FilterClauseCompositeOperator compositeOperator,
-                                                 FilterClause rightClause);
+                                                 IFilterClause rightClause);
 
         /// <summary>
         /// Creates a new null filter clause, which does no filtering
         /// </summary>
-        FilterClause CreateNullFilterClause();
+        IFilterClause CreateNullFilterClause();
     }
 }
