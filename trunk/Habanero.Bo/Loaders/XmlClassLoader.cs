@@ -173,7 +173,8 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadRelationshipDefs(List<string> xmlDefs)
         {
-            _RelationshipDefCol = new RelationshipDefCol();
+			_RelationshipDefCol = _defClassFactory.CreateRelationshipDefCol();
+			//_RelationshipDefCol = new RelationshipDefCol();
 			XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(_dtdPath, _defClassFactory);
             foreach (string relDefXml in xmlDefs)
             {
@@ -186,7 +187,8 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadUIDefs(List<string> xmlDefs)
         {
-            _UIDefCol = new UIDefCol();
+			_UIDefCol = _defClassFactory.CreateUIDefCol();
+			//_UIDefCol = new UIDefCol();
 			XmlUIDefLoader loader = new XmlUIDefLoader(_dtdPath, _defClassFactory);
             foreach (string uiDefXml in xmlDefs)
             {
@@ -199,7 +201,8 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadKeyDefs(List<string> xmlDefs)
         {
-            _KeyDefCol = new KeyDefCol();
+			_KeyDefCol = _defClassFactory.CreateKeyDefCol();
+			//_KeyDefCol = new KeyDefCol();
 			XmlKeyLoader loader = new XmlKeyLoader(_dtdPath, _defClassFactory);
             foreach (string keyDefXml in xmlDefs)
             {
@@ -221,7 +224,7 @@ namespace Habanero.Bo.Loaders
                     "implying that you will need at least one 'propertyDef' element as " +
                     "well.");
             }
-            _PrimaryKeyDef = new PrimaryKeyDef();
+			//_PrimaryKeyDef = new PrimaryKeyDef();
 			XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(_dtdPath, _defClassFactory);
             _PrimaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _PropDefCol);
             if (_PrimaryKeyDef == null)
@@ -248,7 +251,8 @@ namespace Habanero.Bo.Loaders
                     "element which define the mapping from the database table fields to " +
                     "properties in the class that is being mapped to.", _ClassName));
             }
-            _PropDefCol = new PropDefCol();
+			_PropDefCol = _defClassFactory.CreatePropDefCol();
+            //_PropDefCol = new PropDefCol();
 			XmlPropertyLoader propLoader = new XmlPropertyLoader(_dtdPath, _defClassFactory);
             foreach (string propDefXml in xmlDefs)
             {

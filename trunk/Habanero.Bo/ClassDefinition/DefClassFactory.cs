@@ -8,7 +8,7 @@ namespace Habanero.Bo.ClassDefinition
 {
 	internal class DefClassFactory : IDefClassFactory
 	{
-		#region IDefClassFactory Implementation
+		#region IDefClassFactory Members
 
 		public BusinessObjectLookupListSource CreateBusinessObjectLookupListSource(string assemblyName, string className)
 		{
@@ -142,6 +142,26 @@ namespace Habanero.Bo.ClassDefinition
 			return new UIGridProperty(heading, propertyName, gridControlType, isReadOnly, width, alignment);
 		}
 
-		#endregion IDefClassFactory Implementation
+		public PropDefCol CreatePropDefCol()
+		{
+			return new PropDefCol();
+		}
+
+		public KeyDefCol CreateKeyDefCol()
+		{
+			return new KeyDefCol();
+		}
+
+		public UIDefCol CreateUIDefCol()
+		{
+			return new UIDefCol();
+		}
+
+		public RelationshipDefCol CreateRelationshipDefCol()
+		{
+			return new RelationshipDefCol();
+		}
+
+		#endregion
 	}
 }

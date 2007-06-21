@@ -52,5 +52,13 @@ namespace Habanero.Bo.ClassDefinition
 		UIGridDef CreateUIGridDef();
 
 		UIGridProperty CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool isReadOnly, int width, UIGridProperty.PropAlignment alignment);
+
+		PropDefCol CreatePropDefCol();
+
+		KeyDefCol CreateKeyDefCol();
+
+		UIDefCol CreateUIDefCol();
+
+		RelationshipDefCol CreateRelationshipDefCol();
 	}
 }

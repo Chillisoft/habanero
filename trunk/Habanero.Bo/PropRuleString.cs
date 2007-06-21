@@ -49,7 +49,7 @@ namespace Habanero.Bo
         /// expression formatting.</param>
         /// <param name="patternMatchErrorMessage">The error message that must 
         /// be displayed if the pattern does not match</param>
-        internal PropRuleString(string ruleName,
+        public PropRuleString(string ruleName,
                                 bool isCompulsory,
                                 int minLength,
                                 int maxLength,
