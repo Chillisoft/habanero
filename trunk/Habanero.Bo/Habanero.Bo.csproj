@@ -135,7 +135,7 @@
     <Compile Include="BOCollectionEditableDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessObjectCollectionLoader.cs">
+    <Compile Include="IBusinessObjectCollectionLoader.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BOCollectionReadOnlyDataSetProvider.cs">
