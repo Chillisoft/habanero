@@ -1,5 +1,6 @@
 using System;
 using Habanero.Bo;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Util;
 
 namespace Habanero.Bo.Loaders
@@ -16,8 +17,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlBusinessObjectLookupListSourceLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlBusinessObjectLookupListSourceLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -45,7 +48,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a BusinessObjectLookupListSource object</returns>
         protected override object Create()
         {
-			return new BusinessObjectLookupListSource(_assemblyName, _className);
+			return _defClassFactory.CreateBusinessObjectLookupListSource(_assemblyName, _className);
+			//return new BOLookupListSource(_assemblyName, _className);
 			//return new BOLookupListSource(_type);
 		}
     }

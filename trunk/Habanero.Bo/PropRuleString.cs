@@ -15,8 +15,8 @@ namespace Habanero.Bo
     {
         protected readonly int _maxLength = -1;
         protected readonly int _minLength = -1;
-        protected readonly string _patternMatch = ""; //regex pattern match
-        protected readonly string _patternMatchErrMsg = "";
+    	protected readonly string _patternMatch = ""; //regex pattern match
+    	protected readonly string _patternMatchErrorMessage = "";
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -57,8 +57,8 @@ namespace Habanero.Bo
                                 string patternMatchErrorMessage) : this(ruleName, isCompulsory, minLength, maxLength)
         {
             //TODO_Err: how to test for a valid regexpression?
-            _patternMatch = patternMatch;
-            _patternMatchErrMsg = patternMatchErrorMessage;
+            _patternMatch = patternMatch ?? "";
+            _patternMatchErrorMessage = patternMatchErrorMessage ?? "";
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Habanero.Bo
             }
             if (!Regex.IsMatch((string) propValue, this._patternMatch))
             {
-                if (_patternMatchErrMsg.Length <= 0)
+                if (_patternMatchErrorMessage.Length <= 0)
                 {
                     errorMessage = propValue.ToString() +
                                    " is not valid for " + _ruleName +
@@ -120,7 +120,7 @@ namespace Habanero.Bo
                 {
                     errorMessage = propValue.ToString() +
                                    " is not valid for " + _ruleName +
-                                   "\n" + _patternMatchErrMsg;
+                                   "\n" + _patternMatchErrorMessage;
                 }
                 return false;
             }
@@ -174,6 +174,22 @@ namespace Habanero.Bo
             get { return _minLength; }
         }
 
+		/// <summary>
+		/// Returns the pattern match regular expression for the string
+		/// </summary>
+		public string PatternMatch
+		{
+			get { return _patternMatch; }
+		}
+
+		/// <summary>
+		/// Returns the error message raised when the pattern is not matched
+		/// </summary>
+		public string PatternMatchErrorMessage
+		{
+			get { return _patternMatchErrorMessage; }
+		}
+		
     }
 
     #region Tests

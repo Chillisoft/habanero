@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 using Habanero.Util;
 
@@ -17,8 +18,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlUIFormGridLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlUIFormGridLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -55,7 +58,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a UIFormGrid object</returns>
         protected override object Create()
         {
-            return new UIFormGrid(_relationshipName, _gridType, _correspondingRelationshipName);
+			return _defClassFactory.CreateUIFormGrid(_relationshipName, _gridType, _correspondingRelationshipName);
+			//return new UIFormGrid(_relationshipName, _gridType, _correspondingRelationshipName);
         }
 
         /// <summary>

@@ -39,6 +39,7 @@ namespace Habanero.Ui.Application
         private ApplicationVersionUpgrader _applicationVersionUpgrader;
         private string _classDefsPath = "";
         private string _classDefsFileName = "ClassDefs.xml";
+    	private IDefClassFactory _defClassFactory;
         private DatabaseConfig _databaseConfig;
         private IExceptionNotifier _exceptionNotifier;
         private SynchronisationController _synchronisationController;
@@ -71,6 +72,14 @@ namespace Habanero.Ui.Application
         public string ClassDefsFileName {
             set { _classDefsFileName = value; }
         }
+
+        /// <summary>
+        /// Sets the definition class factory.
+        /// </summary>
+		public IDefClassFactory DefClassFactory
+		{
+			set { _defClassFactory = value; }
+		}
 
         /// <summary>
         /// Sets the database configuration object, which contains basic 
@@ -128,8 +137,13 @@ namespace Habanero.Ui.Application
         {
             try
             {
-                return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath);
-            }
+				if (_defClassFactory != null)
+				{
+					return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath, _defClassFactory);
+				} else {
+					return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath);
+				}
+			}
             catch (Exception ex)
             {
                 throw new FileNotFoundException("Unable to find Class Definitions file. " +

@@ -18,8 +18,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlPropertyRuleLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlPropertyRuleLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -83,15 +85,16 @@ namespace Habanero.Bo.Loaders
         /// <param name="propertyRuleElement">The xml string containing the
         /// property rule</param>
         /// <param name="def">The property definition</param>
-        /// <param name="dtdPath">The dtd path</param>
-        public static void LoadRuleIntoProperty(string propertyRuleElement, PropDef def, string dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+        public static void LoadRuleIntoProperty(string propertyRuleElement, PropDef def, string dtdPath, IDefClassFactory defClassFactory)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(propertyRuleElement);
             string loaderClassName = "Xml" + doc.DocumentElement.Name + "Loader";
             Type loaderType = Type.GetType(typeof (XmlPropertyRuleLoader).Namespace + "." + loaderClassName, true, true);
             XmlPropertyRuleLoader loader =
-                (XmlPropertyRuleLoader) Activator.CreateInstance(loaderType, new object[] {dtdPath});
+                (XmlPropertyRuleLoader) Activator.CreateInstance(loaderType, new object[] {dtdPath, defClassFactory});
             def.assignPropRule(loader.LoadPropertyRule(doc.DocumentElement));
         }
     }

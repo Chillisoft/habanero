@@ -154,6 +154,8 @@
     <Compile Include="ClassDefinition\ClassDefCol.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassDefinition\DefClassFactory.cs" />
+    <Compile Include="ClassDefinition\IDefClassFactory.cs" />
     <Compile Include="ClassDefinition\KeyDef.cs">
       <SubType>Code</SubType>
     </Compile>

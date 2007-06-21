@@ -1,4 +1,5 @@
 using System.Xml;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 
 namespace Habanero.Bo.Loaders
@@ -24,8 +25,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlUIDefLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlUIDefLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -65,7 +68,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a UIDef object</returns>
         protected override object Create()
         {
-            return new UIDef(_name, _uiFormDef, _uiGridDef);
+			return _defClassFactory.CreateUIDef(_name, _uiFormDef, _uiGridDef);
+			//return new UIDef(_name, _uiFormDef, _uiGridDef);
         }
 
         /// <summary>
@@ -78,12 +82,12 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             if (_reader.Name == "uiGridDef")
             {
-                XmlUIGridDefLoader loader = new XmlUIGridDefLoader(_dtdPath);
+				XmlUIGridDefLoader loader = new XmlUIGridDefLoader(_dtdPath, _defClassFactory);
                 _uiGridDef = loader.LoadUIGridDef(_reader.ReadOuterXml());
             }
             if (_reader.Name == "uiFormDef")
             {
-                XmlUIFormDefLoader loader = new XmlUIFormDefLoader(_dtdPath);
+				XmlUIFormDefLoader loader = new XmlUIFormDefLoader(_dtdPath, _defClassFactory);
                 _uiFormDef = loader.LoadUIFormDef(_reader.ReadOuterXml());
             }
         }

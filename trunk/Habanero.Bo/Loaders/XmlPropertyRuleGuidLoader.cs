@@ -1,4 +1,5 @@
 using Habanero.Bo;
+using Habanero.Bo.ClassDefinition;
 
 namespace Habanero.Bo.Loaders
 {
@@ -10,8 +11,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlPropertyRuleGuidLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlPropertyRuleGuidLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
 
         }
@@ -29,7 +32,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a PropRuleGuid object</returns>
         protected override object Create()
         {
-            return new PropRuleGuid(_ruleName, _isCompulsory);
+			return _defClassFactory.CreatePropRuleGuid(_ruleName, _isCompulsory);
+			//return new PropRuleGuid(_ruleName, _isCompulsory);
         }
 
         /// <summary>

@@ -16,8 +16,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlKeyLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlKeyLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -82,14 +84,15 @@ namespace Habanero.Bo.Loaders
         private void LoadKeyName()
         {
             string name = _reader.GetAttribute("name");
-            if (name != null)
-            {
-                _keyDef = new KeyDef(name);
-            }
-            else
-            {
-                _keyDef = new KeyDef();
-            }
+			_keyDef = _defClassFactory.CreateKeyDef(name);
+			//if (name != null)
+			//{
+			//    _keyDef = new KeyDef(name);
+			//}
+			//else
+			//{
+			//    _keyDef = new KeyDef();
+			//}
         }
 
         /// <summary>

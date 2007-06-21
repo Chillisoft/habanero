@@ -1,4 +1,5 @@
 using System;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 
 namespace Habanero.Bo.Loaders
@@ -13,15 +14,17 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a loader
         /// </summary>
-        public XmlSimpleLookupListSourceLoader() : this("")
+        public XmlSimpleLookupListSourceLoader() : this("", null)
         {
         }
 
         /// <summary>
         /// Constructor to initialise a loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlSimpleLookupListSourceLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlSimpleLookupListSourceLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
             _stringGuidPairCollection = new StringGuidPairCollection();
         }
@@ -80,7 +83,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a SimpleLookupListSource object</returns>
         protected override object Create()
         {
-            return new SimpleLookupListSource(_stringGuidPairCollection);
+			return _defClassFactory.CreateSimpleLookupListSource(_stringGuidPairCollection);
+			//return new SimpleLookupListSource(_stringGuidPairCollection);
         }
     }
 }

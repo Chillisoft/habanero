@@ -1,5 +1,6 @@
 using System;
 using Habanero.Bo;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 
 namespace Habanero.Bo.Loaders
@@ -15,8 +16,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlPropertyRuleDecimalLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlPropertyRuleDecimalLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -33,8 +36,9 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a PropRuleDecimal object</returns>
         protected override object Create()
         {
-            return new PropRuleDecimal(_ruleName, _isCompulsory, _minValue, _maxValue );
-        }
+			return _defClassFactory.CreatePropRuleDecimal(_ruleName, _isCompulsory, _minValue, _maxValue);
+			//return new PropRuleDecimal(_ruleName, _isCompulsory, _minValue, _maxValue);
+		}
 
         /// <summary>
         /// Loads the property rule from the reader

@@ -2,6 +2,8 @@
 <!ATTLIST propertyRuleString
 	name NMTOKEN #REQUIRED
 	isCompulsory ( true | false ) "false"
+	patternMatch CDATA ""
+	patternMatchErrorMessage CDATA ""
 	minLength NMTOKEN "0"
 	maxLength NMTOKEN "-1"
 >

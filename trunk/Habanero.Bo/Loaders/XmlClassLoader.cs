@@ -35,8 +35,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlClassLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlClassLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -78,9 +80,11 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a class definition</returns>
         protected override object Create()
         {
-			ClassDef def =
-				new ClassDef(_AssemblyName,_ClassName, _PrimaryKeyDef, _PropDefCol, 
+			ClassDef def = _defClassFactory.CreateClassDef(_AssemblyName, _ClassName, _PrimaryKeyDef, _PropDefCol, 
 							 _KeyDefCol, _RelationshipDefCol, _UIDefCol);
+			//ClassDef def =
+			//    new ClassDef(_AssemblyName,_ClassName, _PrimaryKeyDef, _PropDefCol, 
+			//                 _KeyDefCol, _RelationshipDefCol, _UIDefCol);
 			if (_SuperClassDesc != null)
             {
                 def.SuperClassDesc = _SuperClassDesc;
@@ -159,7 +163,7 @@ namespace Habanero.Bo.Loaders
         {
             if (xmlDef != null)
         {
-            XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(_dtdPath);
+            XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(_dtdPath, _defClassFactory);
                 _SuperClassDesc = superClassDescLoader.LoadSuperClassDesc(xmlDef);
             }
         }
@@ -170,7 +174,7 @@ namespace Habanero.Bo.Loaders
         private void LoadRelationshipDefs(List<string> xmlDefs)
         {
             _RelationshipDefCol = new RelationshipDefCol();
-            XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(_dtdPath);
+			XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(_dtdPath, _defClassFactory);
             foreach (string relDefXml in xmlDefs)
             {
                 _RelationshipDefCol.Add(relationshipLoader.LoadRelationship(relDefXml, _PropDefCol));
@@ -183,7 +187,7 @@ namespace Habanero.Bo.Loaders
         private void LoadUIDefs(List<string> xmlDefs)
         {
             _UIDefCol = new UIDefCol();
-            XmlUIDefLoader loader = new XmlUIDefLoader(_dtdPath);
+			XmlUIDefLoader loader = new XmlUIDefLoader(_dtdPath, _defClassFactory);
             foreach (string uiDefXml in xmlDefs)
             {
                 _UIDefCol.Add(loader.LoadUIDef(uiDefXml));
@@ -196,7 +200,7 @@ namespace Habanero.Bo.Loaders
         private void LoadKeyDefs(List<string> xmlDefs)
         {
             _KeyDefCol = new KeyDefCol();
-            XmlKeyLoader loader = new XmlKeyLoader(_dtdPath);
+			XmlKeyLoader loader = new XmlKeyLoader(_dtdPath, _defClassFactory);
             foreach (string keyDefXml in xmlDefs)
             {
                 _KeyDefCol.Add(loader.LoadKey(keyDefXml, _PropDefCol));
@@ -218,7 +222,7 @@ namespace Habanero.Bo.Loaders
                     "well.");
             }
             _PrimaryKeyDef = new PrimaryKeyDef();
-            XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(_dtdPath);
+			XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(_dtdPath, _defClassFactory);
             _PrimaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _PropDefCol);
             if (_PrimaryKeyDef == null)
             {
@@ -245,7 +249,7 @@ namespace Habanero.Bo.Loaders
                     "properties in the class that is being mapped to.", _ClassName));
             }
             _PropDefCol = new PropDefCol();
-            XmlPropertyLoader propLoader = new XmlPropertyLoader(_dtdPath);
+			XmlPropertyLoader propLoader = new XmlPropertyLoader(_dtdPath, _defClassFactory);
             foreach (string propDefXml in xmlDefs)
             {
                 _PropDefCol.Add(propLoader.LoadProperty(propDefXml));

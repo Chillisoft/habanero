@@ -9,8 +9,8 @@ namespace Habanero.Bo
     /// TODO ERIC - includes sets for min/max
     public class PropRuleDate : PropRuleBase
     {
-        protected readonly DateTime _maxValue = DateTime.MaxValue;
-        protected readonly DateTime _minValue = DateTime.MinValue;
+        private DateTime _minValue = DateTime.MinValue;
+		private DateTime _maxValue = DateTime.MaxValue;
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -19,7 +19,8 @@ namespace Habanero.Bo
         /// <param name="isCompulsory">Whether a value is compulsory and
         /// null values are invalid</param>
         public PropRuleDate(string ruleName,
-                            bool isCompulsory) : base(ruleName, isCompulsory, typeof (DateTime))
+                            bool isCompulsory) 
+			: this(ruleName, isCompulsory, null, null)
         {
         }
 
@@ -33,11 +34,14 @@ namespace Habanero.Bo
         /// <param name="maxValue">The maximum date that can be set</param>
         public PropRuleDate(string ruleName,
                             bool isCompulsory,
-                            DateTime minValue,
-                            DateTime maxValue) : this(ruleName, isCompulsory)
+                            DateTime? minValue,
+							DateTime? maxValue)
+			: base(ruleName, isCompulsory, typeof(DateTime))
         {
-            _maxValue = maxValue;
-            _minValue = minValue;
+			// if the nullable minvalue is null, then set it to DateTime.MinValue.
+			_minValue = minValue ?? DateTime.MinValue;
+			// if the nullable maxValue is null, then set it to DateTime.MaxValue.
+			_maxValue = maxValue ?? DateTime.MaxValue;
         }
 
         /// <summary>
@@ -69,20 +73,22 @@ namespace Habanero.Bo
             return true;
         }
 
-        /// <summary>
-        /// Returns the maximum value the date can be
-        /// </summary>
-        public DateTime MaxValue
-        {
-            get { return _maxValue; }
-        }
-
-        /// <summary>
+         /// <summary>
         /// Returns the minimum value the date can be
         /// </summary>
         public DateTime MinValue
         {
             get { return _minValue; }
+			protected set { _minValue = value; }
+		}
+
+       /// <summary>
+        /// Returns the maximum value the date can be
+        /// </summary>
+        public DateTime MaxValue
+        {
+            get { return _maxValue; }
+			protected set { _maxValue = value; }
         }
     }
 

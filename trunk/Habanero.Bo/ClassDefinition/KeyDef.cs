@@ -76,6 +76,7 @@ namespace Habanero.Bo.ClassDefinition
 				_keyName = value;
 				if (_keyName == null || _keyName.Length == 0)
 				{
+					_keyName = "";
 					_buildKeyName = true;
 				}
 			}

@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 using Habanero.Util;
 using log4net;
@@ -22,8 +23,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlUIGridPropertyLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlUIGridPropertyLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -60,9 +63,11 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a UIGridProperty object</returns>
         protected override object Create()
         {
-            return
-                new UIGridProperty(_heading, _propertyName, _gridControlType, _isReadOnly, _width,
-                                   _alignment);
+			return _defClassFactory.CreateUIGridProperty(_heading, _propertyName, 
+				_gridControlType, _isReadOnly, _width, _alignment);
+			//return
+			//    new UIGridProperty(_heading, _propertyName, _gridControlType, _isReadOnly, _width,
+			//                       _alignment);
         }
 
         /// <summary>

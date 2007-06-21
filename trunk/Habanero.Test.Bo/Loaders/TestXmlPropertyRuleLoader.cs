@@ -57,9 +57,13 @@ namespace Habanero.Test.Bo.Loaders
             Assert.AreEqual("TestString", propRule.RuleName, "Rule name is not being read from xml correctly.");
             Assert.AreSame(typeof (string), propRule.PropertyType,
                            "A PropRuleString should have string as its property type.");
-            Assert.AreEqual(0, ((PropRuleString) propRule).MinLength,
-                            "0 should be the default minlength according to the dtd.");
-            Assert.AreEqual(-1, ((PropRuleString) propRule).MaxLength,
+			Assert.AreEqual("", ((PropRuleString)propRule).PatternMatch,
+							"An empty string should be the default pattern match string according to the dtd.");
+			Assert.AreEqual("", ((PropRuleString)propRule).PatternMatchErrorMessage,
+							"An empty string should be the default pattern match error message according to the dtd.");
+			Assert.AreEqual(0, ((PropRuleString)propRule).MinLength,
+							"0 should be the default minlength according to the dtd.");
+			Assert.AreEqual(-1, ((PropRuleString)propRule).MaxLength,
                             "-1 should be the default maxlength according to the dtd.");
         }
 
@@ -67,11 +71,13 @@ namespace Habanero.Test.Bo.Loaders
         public void TestPropRuleStringAttributes()
         {
             XmlPropertyRuleLoader loader = new XmlPropertyRuleStringLoader();
-            PropRuleBase propRule =
-                loader.LoadPropertyRule(
-                    @"<propertyRuleString name=""TestString"" minLength=""5"" maxLength=""10""></propertyRuleString>");
-            Assert.AreEqual("PropRuleString", propRule.GetType().Name, "Incorrect property rule type created.");
-            Assert.AreEqual(5, ((PropRuleString) propRule).MinLength);
+			PropRuleBase propRule =
+				loader.LoadPropertyRule(
+					@"<propertyRuleString name=""TestString"" patternMatch=""Test Pattern"" patternMatchErrorMessage=""Test Pattern Error Message"" minLength=""5"" maxLength=""10""></propertyRuleString>");
+			Assert.AreEqual("PropRuleString", propRule.GetType().Name, "Incorrect property rule type created.");
+			Assert.AreEqual("Test Pattern", ((PropRuleString)propRule).PatternMatch);
+			Assert.AreEqual("Test Pattern Error Message", ((PropRuleString)propRule).PatternMatchErrorMessage);
+			Assert.AreEqual(5, ((PropRuleString)propRule).MinLength);
             Assert.AreEqual(10, ((PropRuleString) propRule).MaxLength);
         }
 

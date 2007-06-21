@@ -1,5 +1,6 @@
 using System;
 using Habanero.Bo;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 
 namespace Habanero.Bo.Loaders
@@ -9,14 +10,16 @@ namespace Habanero.Bo.Loaders
     /// </summary>
     public class XmlPropertyRuleDateLoader : XmlPropertyRuleLoader
     {
-        private DateTime _minValue = DateTime.MinValue;
-        private DateTime _maxValue = DateTime.MinValue;
+        private DateTime? _minValue;
+        private DateTime? _maxValue;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlPropertyRuleDateLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlPropertyRuleDateLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -33,14 +36,15 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a PropRuleDate object</returns>
         protected override object Create()
         {
-            if (!_minValue.Equals(DateTime.MinValue))
-            {
-                return new PropRuleDate(_ruleName, _isCompulsory, _minValue, _maxValue);
-            }
-            else
-            {
-                return new PropRuleDate(_ruleName, _isCompulsory);
-            }
+			return _defClassFactory.CreatePropRuleDate(_ruleName, _isCompulsory, _minValue, _maxValue);
+			//if (!_minValue.Equals(DateTime.MinValue))
+			//{
+			//    return new PropRuleDate(_ruleName, _isCompulsory, _minValue, _maxValue);
+			//}
+			//else
+			//{
+			//    return new PropRuleDate(_ruleName, _isCompulsory);
+			//}
         }
 
         /// <summary>
@@ -48,21 +52,46 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         protected override void LoadPropertyRuleFromReader()
         {
-            try
-            {
-                if (_reader.GetAttribute("minValue") != null)
-                {
-                    _minValue = Convert.ToDateTime(_reader.GetAttribute("minValue"));
-                    _maxValue = Convert.ToDateTime(_reader.GetAttribute("maxValue"));
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidXmlDefinitionException("In a 'propertyRuleDate' " +
-                    "element, the 'minValue' or 'maxValue' was not set to a valid " +
-                    "date format. A typical date string would be in the form of " +
-                    "yyyy/mm/dd.", ex);
-            }
+			_minValue = readDateTimeAttribute("minValue");
+			_maxValue = readDateTimeAttribute("maxValue");
+			//try
+			//{
+			//    if (_reader.GetAttribute("minValue") != null)
+			//    {
+			//        _minValue = Convert.ToDateTime(_reader.GetAttribute("minValue"));
+			//        _maxValue = Convert.ToDateTime(_reader.GetAttribute("maxValue"));
+			//    }
+			//}
+			//catch (Exception ex)
+			//{
+			//    throw new InvalidXmlDefinitionException("In a 'propertyRuleDate' " +
+			//        "element, the 'minValue' or 'maxValue' was not set to a valid " +
+			//        "date format. A typical date string would be in the form of " +
+			//        "yyyy/mm/dd.", ex);
+			//}
         }
+
+		private DateTime? readDateTimeAttribute(string attributeName)
+		{
+			try
+			{
+				string attributeValue = _reader.GetAttribute(attributeName);
+				if (attributeValue != null)
+				{
+					return Convert.ToDateTime(attributeValue);
+				}
+				else
+				{
+					return null;
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new InvalidXmlDefinitionException(String.Format(
+					"In a 'propertyRuleDate' element, the '{0}' " +
+					"was not set to a valid date format. A typical date " +
+					"string would be in the form of yyyy/mm/dd.", attributeName), ex);
+			}
+		}
     }
 }

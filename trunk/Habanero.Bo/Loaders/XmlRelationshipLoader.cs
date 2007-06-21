@@ -27,8 +27,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlRelationshipLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlRelationshipLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -77,17 +79,21 @@ namespace Habanero.Bo.Loaders
         {
             if (_type == "single")
             {
-				return new SingleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
+				return _defClassFactory.CreateSingleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
 					_relKeyDef, _keepReferenceToRelatedObject);
-				//return
+				//return new SingleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
+				//    _relKeyDef, _keepReferenceToRelatedObject);				//return
 				//    new SingleRelationshipDef(_name, _relatedClassType, _relKeyDef,
 				//                  _keepReferenceToRelatedObject);
 			}
             else if (_type == "multiple")
             {
-				return new MultipleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
+				return _defClassFactory.CreateMultipleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
 					_relKeyDef, _keepReferenceToRelatedObject, _orderBy, _minNoOfRelatedObjects,
 					_maxNoOfRelatedObjects, _deleteParentAction);
+				//return new MultipleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
+				//    _relKeyDef, _keepReferenceToRelatedObject, _orderBy, _minNoOfRelatedObjects,
+				//    _maxNoOfRelatedObjects, _deleteParentAction);
 				//return
 				//    new MultipleRelationshipDef(_name, _relatedClassType, _relKeyDef,
 				//                                _keepReferenceToRelatedObject, _orderBy, _minNoOfRelatedObjects,

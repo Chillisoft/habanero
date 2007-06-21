@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Xml;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 
 namespace Habanero.Bo.Loaders
@@ -24,6 +25,21 @@ namespace Habanero.Bo.Loaders
         {
         }
 
+		/// <summary>
+		/// Constructor to create a new list of class definitions from the
+		/// string provided, using the dtd path provided
+		/// </summary>
+		/// <param name="xmlClassDefs">The string containing all the
+		/// class definitions. If you are loading these from 
+		/// a file, you can use 
+		/// <code>new StreamReader("filename.xml").ReadToEnd()</code>
+		/// to create a continuous string.</param>
+		/// <param name="dtdPath">The dtd path</param>
+		public XmlClassDefsLoader(string xmlClassDefs, string dtdPath)
+			: this(xmlClassDefs, dtdPath, null)
+		{
+		}
+
         /// <summary>
         /// Constructor to create a new list of class definitions from the
         /// string provided, using the dtd path provided
@@ -33,8 +49,10 @@ namespace Habanero.Bo.Loaders
         /// a file, you can use 
         /// <code>new StreamReader("filename.xml").ReadToEnd()</code>
         /// to create a continuous string.</param>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlClassDefsLoader(string xmlClassDefs, string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlClassDefsLoader(string xmlClassDefs, string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
             _xmlClassDefs = xmlClassDefs;
         }
@@ -109,7 +127,7 @@ namespace Habanero.Bo.Loaders
             _classDefList = new ArrayList();
             _reader.Read();
             _reader.Read();
-            XmlClassLoader classLoader = new XmlClassLoader(_dtdPath);
+			XmlClassLoader classLoader = new XmlClassLoader(_dtdPath, _defClassFactory);
             do
             {
                 _classDefList.Add(classLoader.LoadClass(_reader.ReadOuterXml()));

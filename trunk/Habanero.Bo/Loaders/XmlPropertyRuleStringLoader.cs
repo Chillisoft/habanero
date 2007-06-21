@@ -1,5 +1,6 @@
 using System;
 using Habanero.Bo;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 
 namespace Habanero.Bo.Loaders
@@ -11,12 +12,16 @@ namespace Habanero.Bo.Loaders
     {
         private int _minLength;
         private int _maxLength;
+		private string _patternMatch;
+		private string _patternMatchErrorMesssage;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlPropertyRuleStringLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlPropertyRuleStringLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -33,7 +38,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a PropRuleString object</returns>
         protected override object Create()
         {
-            return new PropRuleString(_ruleName, _isCompulsory, _minLength, _maxLength);
+			return _defClassFactory.CreatePropRuleString(_ruleName, _isCompulsory, _minLength, _maxLength, _patternMatch, _patternMatchErrorMesssage);
+            //return new PropRuleString(_ruleName, _isCompulsory, _minLength, _maxLength);
         }
 
         /// <summary>
@@ -41,7 +47,9 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         protected override void LoadPropertyRuleFromReader()
         {
-            try
+			_patternMatch = _reader.GetAttribute("patternMatch");
+			_patternMatchErrorMesssage = _reader.GetAttribute("patternMatchErrorMessage");
+			try
             {
                 _minLength = Convert.ToInt32(_reader.GetAttribute("minLength"));
                 _maxLength = Convert.ToInt32(_reader.GetAttribute("maxLength"));

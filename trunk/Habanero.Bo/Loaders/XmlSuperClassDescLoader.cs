@@ -21,8 +21,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlSuperClassDescLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlSuperClassDescLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -62,7 +64,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a SuperClassDesc object</returns>
         protected override object Create()
         {
-			return new SuperClassDesc(_assemblyName, _className, _orMapping);
+			return _defClassFactory.CreateSuperClassDesc(_assemblyName, _className, _orMapping);
+			//return new SuperClassDesc(_assemblyName, _className, _orMapping);
 		}
 
         /// <summary>

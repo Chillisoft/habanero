@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Xml;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 using Habanero.Util;
 
@@ -28,8 +29,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlUIFormPropertyLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlUIFormPropertyLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -59,9 +62,11 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a UIFormProperty object</returns>
         protected override object Create()
         {
-            return
-                new UIFormProperty(_label, _propertyName, _controlType, _mapperTypeName, _isReadOnly,
-                                   _propertyAttributes);
+			return _defClassFactory.CreateUIFormProperty(_label, _propertyName, 
+				_controlType, _mapperTypeName, _isReadOnly, _propertyAttributes);
+			//return
+			//    new UIFormProperty(_label, _propertyName, _controlType, _mapperTypeName, _isReadOnly,
+			//                       _propertyAttributes);
         }
 
         /// <summary>

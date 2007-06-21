@@ -1,5 +1,6 @@
 using System;
 using Habanero.Bo;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Util;
 
 namespace Habanero.Bo.Loaders
@@ -17,8 +18,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a loader with a dtd path
         /// </summary>
-        /// <param name="dtdPath">The dtd path</param>
-        public XmlDatabaseLookupListSourceLoader(string dtdPath) : base(dtdPath)
+		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlDatabaseLookupListSourceLoader(string dtdPath, IDefClassFactory defClassFactory)
+			: base(dtdPath, defClassFactory)
         {
         }
 
@@ -47,7 +50,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a DatabaseLookupListSource object</returns>
         protected override object Create()
         {
-			return new DatabaseLookupListSource(_sqlString, _assemblyName, _className);
+			return _defClassFactory.CreateDatabaseLookupListSource(_sqlString, _assemblyName, _className);
+			//return new DatabaseLookupListSource(_sqlString, _assemblyName, _className);
 		}
     }
 }

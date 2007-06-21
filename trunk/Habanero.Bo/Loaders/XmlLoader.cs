@@ -1,6 +1,7 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Generic;
 
 namespace Habanero.Bo.Loaders
@@ -16,6 +17,7 @@ namespace Habanero.Bo.Loaders
 	public abstract class XmlLoader
 	{
 		protected readonly string _dtdPath;
+		protected IDefClassFactory _defClassFactory;
 		protected XmlReader  _reader;
 		private bool _documentValid = true;
 		private ValidationEventArgs _invalidDocumentArgs;
@@ -25,15 +27,23 @@ namespace Habanero.Bo.Loaders
 		/// Constructor to initialise a new loader with a dtd path
 		/// </summary>
 		/// <param name="dtdPath">The dtd path</param>
-		public XmlLoader(string dtdPath)
+		/// <param name="defClassFactory">The factory for the definition classes</param>
+		public XmlLoader(string dtdPath, IDefClassFactory defClassFactory)
 		{
 			_dtdPath = dtdPath;
+			if (defClassFactory != null)
+			{
+				_defClassFactory = defClassFactory;
+			} else
+			{
+				_defClassFactory = new DefClassFactory();
+			}
 		}
 
 		/// <summary>
 		/// Constructor to initialise a new loader
 		/// </summary>
-		public XmlLoader() : this("")
+		public XmlLoader() : this("", null)
 		{
 		}
 
