@@ -101,7 +101,7 @@
     <Compile Include="ConsoleProgressIndicator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Crypter.cs" />
+    <Compile Include="ICrypter.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="HabaneroException.cs">
       <SubType>Code</SubType>

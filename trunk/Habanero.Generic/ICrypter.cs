@@ -3,7 +3,7 @@ namespace Habanero.Generic
     /// <summary>
     /// Interface for classes that provide an encryption facility.
     /// </summary>
-    public interface Crypter
+    public interface ICrypter
     {
         string DecryptString(string value);
         string EncryptString(string value);

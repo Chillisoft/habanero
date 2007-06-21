@@ -6,7 +6,7 @@ namespace Habanero.Generic
     /// An encrypter that uses the Blowfish encryption algorithm to
     /// encrypt or decrypt a given string.
     /// </summary>
-    public class BlowfishCrypter : Crypter
+    public class BlowfishCrypter : ICrypter
     {
         private BlowfishSimple _blowfish;
 

@@ -5,7 +5,7 @@ namespace Habanero.Generic
     /// In other words, both the decrypt and encrypt methods simply return the
     /// string provided without changing it.
     /// </summary>
-    public class NullCrypter : Crypter
+    public class NullCrypter : ICrypter
     {
         /// <summary>
         /// Returns the given string without carrying out any changes.

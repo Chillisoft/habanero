@@ -11,7 +11,7 @@ namespace Habanero.Bo
     public class PasswordBlowfish : CustomProperty
     {
         private string _encryptedValue;
-        private static Crypter _crypter;
+        private static ICrypter _crypter;
 
         /// <summary>
         /// Constructor to initialise a new password
@@ -47,7 +47,7 @@ namespace Habanero.Bo
         /// Returns the encryption device, which in this case uses the Blowfish
         /// algorithm
         /// </summary>
-        protected static Crypter Crypter
+        protected static ICrypter Crypter
         {
             get
             {
