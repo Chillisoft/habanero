@@ -83,7 +83,7 @@
     <Compile Include="FilterControlEventArgs.cs" />
     <Compile Include="FilterInputBoxCollection.cs" />
     <Compile Include="FlowLayoutManager.cs" />
-    <Compile Include="FormControl.cs" />
+    <Compile Include="IFormControl.cs" />
     <Compile Include="FormExceptionNotifier.cs" />
     <Compile Include="GridBase.cs">
       <SubType>Component</SubType>

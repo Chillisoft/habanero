@@ -32,7 +32,7 @@ namespace Habanero.Ui.Generic
     /// </summary>
     public class FilterInputBoxCollection
     {
-        private readonly FilterClauseFactory _clauseFactory;
+        private readonly IFilterClauseFactory _clauseFactory;
         private IList _filterUIs;
         private IList _controls;
         private int _filterWidth;
@@ -44,7 +44,7 @@ namespace Habanero.Ui.Generic
         /// Constructor to initialise a new collection
         /// </summary>
         /// <param name="clauseFactory">The filter clause factory</param>
-        public FilterInputBoxCollection(FilterClauseFactory clauseFactory)
+        public FilterInputBoxCollection(IFilterClauseFactory clauseFactory)
         {
             _filterUIs = new ArrayList();
             _clauseFactory = clauseFactory;
@@ -314,7 +314,7 @@ namespace Habanero.Ui.Generic
         /// </summary>
         private abstract class FilterUI
         {
-            protected readonly FilterClauseFactory _clauseFactory;
+            protected readonly IFilterClauseFactory _clauseFactory;
             protected readonly string _columnName;
 
             /// <summary>
@@ -322,7 +322,7 @@ namespace Habanero.Ui.Generic
             /// </summary>
             /// <param name="clauseFactory">The filter clause factory</param>
             /// <param name="columnName">The column name</param>
-            protected FilterUI(FilterClauseFactory clauseFactory, string columnName)
+            protected FilterUI(IFilterClauseFactory clauseFactory, string columnName)
             {
                 _columnName = columnName;
                 _clauseFactory = clauseFactory;
@@ -342,7 +342,7 @@ namespace Habanero.Ui.Generic
         {
             private readonly TextBox _textBox;
 
-            public FilterUIString(FilterClauseFactory clauseFactory, string columnName, TextBox textBox)
+            public FilterUIString(IFilterClauseFactory clauseFactory, string columnName, TextBox textBox)
                 : base(clauseFactory, columnName)
             {
                 _textBox = textBox;
@@ -373,7 +373,7 @@ namespace Habanero.Ui.Generic
             private readonly DateTimePicker _dateTimePicker;
             private readonly bool _filterGreaterThan;
 
-            public FilterUIDateString(FilterClauseFactory clauseFactory, string columnName, DateTimePicker dtp,
+            public FilterUIDateString(IFilterClauseFactory clauseFactory, string columnName, DateTimePicker dtp,
                                       bool filterGreaterThan)
                 : base(clauseFactory, columnName)
             {
@@ -414,7 +414,7 @@ namespace Habanero.Ui.Generic
         {
             private readonly ComboBox _comboBox;
 
-            public FilterUIStringOptions(FilterClauseFactory clauseFactory, string columnName, ComboBox comboBox,
+            public FilterUIStringOptions(IFilterClauseFactory clauseFactory, string columnName, ComboBox comboBox,
                                          ICollection options)
                 : base(clauseFactory, columnName)
             {
@@ -449,7 +449,7 @@ namespace Habanero.Ui.Generic
         {
             private readonly CheckBox _checkBox;
 
-            public FilterUICheckBox(FilterClauseFactory clauseFactory, string columnName, CheckBox checkBox,
+            public FilterUICheckBox(IFilterClauseFactory clauseFactory, string columnName, CheckBox checkBox,
                                          string text, bool isChecked)
                 : base(clauseFactory, columnName)
             {

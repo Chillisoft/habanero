@@ -4,8 +4,7 @@ namespace Habanero.Generic
     /// An interface to model a class that creates filter clauses that determine
     /// which rows of data are displayed
     /// </summary>
-    /// TODO ERIC - rename to IFilterClauseFactory
-    public interface FilterClauseFactory
+    public interface IFilterClauseFactory
     {
         /// <summary>
         /// Creates a new filter clause that filters string values

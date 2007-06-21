@@ -4,8 +4,7 @@ namespace Habanero.Generic
     /// An interface to model a progress indicator that informs the user
     /// how much progress has been made in completing a task
     /// </summary>
-    /// TODO ERIC - rename to IProgressIndicator
-    public interface ProgressIndicator
+    public interface IProgressIndicator
     {
         /// <summary>
         /// Updates the indicator with progress information

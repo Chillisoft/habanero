@@ -6,7 +6,7 @@ namespace Habanero.Generic
     /// Indicates to the user how much progress has been made in 
     /// completing a task, by adding text output to the console
     /// </summary>
-    public class ConsoleProgressIndicator : ProgressIndicator
+    public class ConsoleProgressIndicator : IProgressIndicator
     {
         /// <summary>
         /// Constructor to initialise a new indicator

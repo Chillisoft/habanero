@@ -5,8 +5,7 @@ namespace Habanero.Ui.Misc
     /// <summary>
     /// An interface to model an interface control for a form
     /// </summary>
-    /// TODO ERIC - rename to IFormControl
-    public interface FormControl
+    public interface IFormControl
     {
         /// <summary>
         /// Sets the form to control

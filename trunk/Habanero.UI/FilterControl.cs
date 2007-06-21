@@ -43,7 +43,7 @@ namespace Habanero.Ui.Generic
         /// Constructor to initialise a new filter control
         /// </summary>
         /// <param name="clauseFactory">The filter clause factory</param>
-        public FilterControl(FilterClauseFactory clauseFactory)
+        public FilterControl(IFilterClauseFactory clauseFactory)
         {
             _layoutManager = new FlowLayoutManager(this);
             _filterInputBoxCollection = new FilterInputBoxCollection(clauseFactory);

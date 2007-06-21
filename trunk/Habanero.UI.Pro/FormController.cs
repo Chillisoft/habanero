@@ -37,8 +37,8 @@ namespace Habanero.Ui.Application
         /// Sets the current control to the one with the specified heading
         /// </summary>
         /// <param name="heading">The heading</param>
-        /// <returns>Returns the relevant FormControl object</returns>
-        public FormControl SetCurrentControl(String heading)
+        /// <returns>Returns the relevant IFormControl object</returns>
+        public IFormControl SetCurrentControl(String heading)
         {
             if (_formsbyHeading == null)
             {
@@ -53,11 +53,11 @@ namespace Habanero.Ui.Application
                 frm.Refresh();
                 frm.Focus();
                 frm.PerformLayout();
-                return (FormControl)frm.Controls[0];
+                return (IFormControl)frm.Controls[0];
             }
             else
             {
-                FormControl formCtl = GetFormControl(heading);
+                IFormControl formCtl = GetFormControl(heading);
 
                 Form newMdiForm = new Form();
                 newMdiForm.Width = 800;
@@ -85,8 +85,8 @@ namespace Habanero.Ui.Application
         /// Returns the form control with the heading specified
         /// </summary>
         /// <param name="heading">The heading</param>
-        /// <returns>Returns the FormControl object if found</returns>
-        protected abstract FormControl GetFormControl(string heading);
+        /// <returns>Returns the IFormControl object if found</returns>
+        protected abstract IFormControl GetFormControl(string heading);
 
         /// <summary>
         /// Returns the control with the heading specified

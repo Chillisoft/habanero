@@ -7,7 +7,7 @@ namespace Habanero.Bo
     /// <summary>
     /// Provides a synchronisation controller for incrementing version numbers
     /// </summary>
-    public class VersionNumberSynchronisationController : SynchronisationController
+    public class VersionNumberSynchronisationController : ISynchronisationController
     {
         private static readonly ILog log =
             LogManager.GetLogger("Habanero.Bo.VersionNumberSynchronisationController");
@@ -28,7 +28,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="syncObject">The synchronisable object whose
         /// synchronisation properties need to be updated</param>
-        public void UpdateSynchronisationProperties(Synchronisable syncObject)
+        public void UpdateSynchronisationProperties(ISynchronisable syncObject)
         {
             try
             {

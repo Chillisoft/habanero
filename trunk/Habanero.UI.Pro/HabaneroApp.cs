@@ -42,7 +42,7 @@ namespace Habanero.Ui.Application
     	private IDefClassFactory _defClassFactory;
         private DatabaseConfig _databaseConfig;
         private IExceptionNotifier _exceptionNotifier;
-        private SynchronisationController _synchronisationController;
+        private ISynchronisationController _synchronisationController;
         private ISettingsStorer _settingsStorer;
         private bool _loadClassDefs = true;
 
@@ -111,7 +111,7 @@ namespace Habanero.Ui.Application
         /// Sets the synchronisation controller, which implements a
         /// synchronisation strategy for the application.
         /// </summary>
-        public SynchronisationController SynchronisationController {
+        public ISynchronisationController SynchronisationController {
             set { _synchronisationController = value; }
         }
 

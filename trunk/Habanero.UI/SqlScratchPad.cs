@@ -11,7 +11,7 @@ namespace Habanero.Ui.Misc
     /// <summary>
     /// Provides a pad in which raw sql can be typed and executed
     /// </summary>
-    public class SqlScratchPad : UserControl, FormControl
+    public class SqlScratchPad : UserControl, IFormControl
     {
         TextBox _scriptTextBox;
         DataGrid _resultGrid;

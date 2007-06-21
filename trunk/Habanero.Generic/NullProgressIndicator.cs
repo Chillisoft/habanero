@@ -4,7 +4,7 @@ namespace Habanero.Generic
     /// Provides a null progress indicator that does nothing with the inputs
     /// it receives
     /// </summary>
-    public class NullProgressIndicator : ProgressIndicator
+    public class NullProgressIndicator : IProgressIndicator
     {
         /// <summary>
         /// Constructor to initialise a new indicator

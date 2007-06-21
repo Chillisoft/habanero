@@ -11,7 +11,7 @@ namespace Habanero.Test.Ui.Generic
     [TestFixture]
     public class TestDataViewFilterClauseFactory
     {
-        FilterClauseFactory itsFilterClauseFactory;
+        IFilterClauseFactory itsFilterClauseFactory;
 
         [TestFixtureSetUp]
         public void SetupFixture()

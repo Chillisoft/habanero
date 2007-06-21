@@ -3,8 +3,7 @@ namespace Habanero.Generic
     /// <summary>
     /// An interface to model objects that are synchronisable
     /// </summary>
-    /// TODO ERIC - rename to ISynchronisable
-    public interface Synchronisable
+    public interface ISynchronisable
     {
         /// <summary>
         /// Increments a version number used for synchronisation

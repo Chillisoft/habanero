@@ -13,7 +13,7 @@ namespace Habanero.Test.Ui.Generic
     [TestFixture]
     public class TestFilterControl
     {
-        FilterClauseFactory itsFilterClauseFactory;
+        IFilterClauseFactory itsFilterClauseFactory;
         private bool itsIsFilterClauseChanged;
         FilterControl filterControl;
         FilterClause nullClause;

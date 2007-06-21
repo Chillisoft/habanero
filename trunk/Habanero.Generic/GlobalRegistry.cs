@@ -7,7 +7,7 @@ namespace Habanero.Generic
     {
         private static ISettingsStorer _settingsStorer;
         private static IExceptionNotifier _exceptionNotifier;
-        private static SynchronisationController _synchronisationController;
+        private static ISynchronisationController _synchronisationController;
         private static string _applicationName;
         private static string _applicationVersion;
         private static int _databaseVersion;
@@ -36,7 +36,7 @@ namespace Habanero.Generic
         /// Gets and sets the application's synchronisation controller,
         /// which implements a synchronisation strategy for the application
         /// </summary>
-        public static SynchronisationController SynchronisationController
+        public static ISynchronisationController SynchronisationController
         {
             get
             {

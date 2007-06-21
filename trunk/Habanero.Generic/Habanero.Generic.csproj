@@ -121,7 +121,7 @@
     <Compile Include="FilterClauseCompositeOperator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FilterClauseFactory.cs">
+    <Compile Include="IFilterClauseFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FilterClauseOperator.cs">
@@ -213,7 +213,7 @@
     <Compile Include="NullUserInterfaceMapper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProgressIndicator.cs">
+    <Compile Include="IProgressIndicator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SimpleLookupListSource.cs">
@@ -225,10 +225,10 @@
     <Compile Include="StringGuidPairCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Synchronisable.cs">
+    <Compile Include="ISynchronisable.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SynchronisationController.cs">
+    <Compile Include="ISynchronisationController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TextFileLoader.cs">

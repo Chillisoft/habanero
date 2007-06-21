@@ -8,7 +8,7 @@ namespace Habanero.Ui.Misc
     /// <summary>
     /// Provides a form that displays a progress indicator to the user
     /// </summary>
-    public class PopupProgressIndicator : ProgressIndicator
+    public class PopupProgressIndicator : IProgressIndicator
     {
 
         private PopupProgressForm _popupProgressForm;

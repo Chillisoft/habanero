@@ -5,7 +5,7 @@ namespace Habanero.Ui.Generic
     /// <summary>
     /// Creates filter clauses that determine which rows of data are displayed
     /// </summary>
-    public class DataViewFilterClauseFactory : FilterClauseFactory
+    public class DataViewFilterClauseFactory : IFilterClauseFactory
     {
         /// <summary>
         /// Creates a new filter clause that filters string values
