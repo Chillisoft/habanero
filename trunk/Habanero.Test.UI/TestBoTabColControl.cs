@@ -45,8 +45,8 @@ namespace Habanero.Test.Ui.Application
                     "boControl must be of type Control or one of its subtypes.")]
         public void TestCheckForControlSubClass()
         {
-            Mock mock = new DynamicMock(typeof (BusinessObjectControl));
-            BusinessObjectControl mockBoControl = (BusinessObjectControl) mock.MockInstance;
+            Mock mock = new DynamicMock(typeof (IBusinessObjectControl));
+            IBusinessObjectControl mockBoControl = (IBusinessObjectControl) mock.MockInstance;
             BoTabColControl testControl = new BoTabColControl(mockBoControl);
         }
 
@@ -102,7 +102,7 @@ namespace Habanero.Test.Ui.Application
         }
 
 
-        private class NullBusinessObjectControl : Control, BusinessObjectControl
+        private class NullBusinessObjectControl : Control, IBusinessObjectControl
         {
             public void SetBusinessObject(BusinessObject bo)
             {

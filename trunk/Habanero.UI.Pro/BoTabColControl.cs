@@ -14,7 +14,7 @@ namespace Habanero.Ui.Application
         //private delegate void AddTabPageDelegate(TabPage page, BusinessObjectBase bo);
         //private delegate void TabChangedDelegate();
 
-        private readonly BusinessObjectControl _boControl;
+        private readonly IBusinessObjectControl _boControl;
         private TabControl _tabControl;
         private Hashtable _pageBoTable;
         private Hashtable _boPageTable;
@@ -29,7 +29,7 @@ namespace Habanero.Ui.Application
         /// </summary>
         /// <param name="boControl">The business object control that is
         /// displaying the business object information in the tab page</param>
-        public BoTabColControl(BusinessObjectControl boControl)
+        public BoTabColControl(IBusinessObjectControl boControl)
         {
             _boControl = boControl;
             if (boControl is Control)

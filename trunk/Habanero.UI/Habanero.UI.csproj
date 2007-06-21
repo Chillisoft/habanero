@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BorderLayoutManager.cs" />
-    <Compile Include="BusinessObjectControl.cs" />
+    <Compile Include="IBusinessObjectControl.cs" />
     <Compile Include="ButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
