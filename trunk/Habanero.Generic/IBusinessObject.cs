@@ -3,9 +3,7 @@ namespace Habanero.Generic
     /// <summary>
     /// An interface to model a business object
     /// </summary>
-    /// TODO ERIC - rename this IBusinessObject (delete existing one)
-    /// - is this interface needed?
-    public interface BusinessObject
+    public interface IBusinessObject
     {
         /// <summary>
         /// Returns the value held under the named property
