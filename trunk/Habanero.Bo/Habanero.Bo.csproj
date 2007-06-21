@@ -240,6 +240,7 @@
     <Compile Include="Loaders\XmlClassLoader.cs" />
     <Compile Include="Loaders\XmlDatabaseLookupListSourceLoader.cs" />
     <Compile Include="Loaders\XmlKeyLoader.cs" />
+    <Compile Include="Loaders\XmlLoader.cs" />
     <Compile Include="Loaders\XmlLookupListSourceLoader.cs" />
     <Compile Include="Loaders\XmlPrimaryKeyLoader.cs" />
     <Compile Include="Loaders\XmlPropertyLoader.cs" />

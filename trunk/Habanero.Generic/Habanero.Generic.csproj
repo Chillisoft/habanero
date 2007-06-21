@@ -267,9 +267,6 @@
     <Compile Include="UnknownTypeNameException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="XmlLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="XMLWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
