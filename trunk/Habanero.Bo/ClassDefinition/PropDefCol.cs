@@ -113,6 +113,18 @@ namespace Habanero.Bo.ClassDefinition
             return lPropDef;
         }
 
+		/// <summary>
+		/// Removes a property definition from the collection
+		/// </summary>
+		/// <param name="propDef">The Property definition to remove</param>
+		protected void Remove(PropDef propDef)
+		{
+			if (Contains(propDef.PropertyName.ToUpper()))
+			{
+				base.Dictionary.Remove(propDef.PropertyName.ToUpper());
+			}
+		}
+
         /// <summary>
         /// Indicates if a property definition with the given key exists
         /// in the collection.

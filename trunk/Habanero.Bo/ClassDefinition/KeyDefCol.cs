@@ -31,6 +31,18 @@ namespace Habanero.Bo.ClassDefinition
             base.Dictionary.Add(lKeyDef.KeyName, lKeyDef);
         }
 
+		/// <summary>
+		/// Removes a key definition from the collection
+		/// </summary>
+		/// <param name="lKeyDef">The Key Definition to remove</param>
+		protected void Remove(KeyDef lKeyDef)
+		{
+			if (Dictionary.Contains(lKeyDef.KeyName))
+			{
+				base.Dictionary.Remove(lKeyDef.KeyName);
+			}
+		}
+
         /// <summary>
         /// Provides an indexing facility for the collection so that items
         /// in the collection can be accessed like an array 

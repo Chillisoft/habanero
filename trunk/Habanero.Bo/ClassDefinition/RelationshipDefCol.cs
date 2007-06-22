@@ -31,6 +31,18 @@ namespace Habanero.Bo.ClassDefinition
             base.Dictionary.Add(lRelationshipDef.RelationshipName, lRelationshipDef);
         }
 
+		/// <summary>
+		/// Removes a relationship definition from the collection
+		/// </summary>
+		/// <param name="relationshipDef">The Relationship definition to remove</param>
+		protected void Remove(RelationshipDef relationshipDef)
+		{
+			if (Contains(relationshipDef.RelationshipName))
+			{
+				base.Dictionary.Remove(relationshipDef.RelationshipName);
+			}
+		}
+
         /// <summary>
         /// Provides an indexing facility for the collection so that items
         /// in the collection can be accessed like an array 
