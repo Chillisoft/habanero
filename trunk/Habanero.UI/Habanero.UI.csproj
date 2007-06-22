@@ -43,105 +43,105 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BorderLayoutManager.cs" />
-    <Compile Include="IBusinessObjectControl.cs" />
-    <Compile Include="ButtonControl.cs">
+    <Compile Include="Base\BorderLayoutManager.cs" />
+    <Compile Include="Base\IBusinessObjectControl.cs" />
+    <Compile Include="Forms\ButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CalendarCell.cs" />
-    <Compile Include="CalendarEditingControl.cs">
+    <Compile Include="Grid\CalendarCell.cs" />
+    <Compile Include="Grid\CalendarEditingControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CollectionGridDataProvider.cs" />
-    <Compile Include="ColumnLayoutManager.cs" />
-    <Compile Include="ControlCollection.cs" />
-    <Compile Include="ControlFactory.cs" />
-    <Compile Include="DataGridCheckBoxColumn.cs" />
-    <Compile Include="DataGridComboBoxColumn.cs" />
-    <Compile Include="DataGridDateTimePickerColumn.cs" />
-    <Compile Include="DataGridViewDateTimeColumn.cs" />
-    <Compile Include="DataGridViewNumericUpDownColumn.cs" />
-    <Compile Include="DataViewCompositeFilterClause.cs" />
-    <Compile Include="DataViewFilterClause.cs" />
-    <Compile Include="DataViewFilterClauseFactory.cs" />
-    <Compile Include="DataViewIntegerFilterClause.cs" />
-    <Compile Include="DataViewNullFilterClause.cs" />
-    <Compile Include="DataViewStringFilterClause.cs" />
-    <Compile Include="DateTimePickerUtil.cs" />
-    <Compile Include="DbConnectionControl.cs">
+    <Compile Include="Base\CollectionGridDataProvider.cs" />
+    <Compile Include="Base\ColumnLayoutManager.cs" />
+    <Compile Include="Base\ControlCollection.cs" />
+    <Compile Include="Base\ControlFactory.cs" />
+    <Compile Include="Grid\DataGridCheckBoxColumn.cs" />
+    <Compile Include="Grid\DataGridComboBoxColumn.cs" />
+    <Compile Include="Grid\DataGridDateTimePickerColumn.cs" />
+    <Compile Include="Grid\DataGridViewDateTimeColumn.cs" />
+    <Compile Include="Grid\DataGridViewNumericUpDownColumn.cs" />
+    <Compile Include="Grid\DataViewCompositeFilterClause.cs" />
+    <Compile Include="Grid\DataViewFilterClause.cs" />
+    <Compile Include="Grid\DataViewFilterClauseFactory.cs" />
+    <Compile Include="Grid\DataViewIntegerFilterClause.cs" />
+    <Compile Include="Grid\DataViewNullFilterClause.cs" />
+    <Compile Include="Grid\DataViewStringFilterClause.cs" />
+    <Compile Include="Util\DateTimePickerUtil.cs" />
+    <Compile Include="Forms\DbConnectionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DropShadowForm.cs">
+    <Compile Include="Util\DropShadowForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FileChooser.cs">
+    <Compile Include="Forms\FileChooser.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FilterControl.cs">
+    <Compile Include="Grid\FilterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FilterControlEventArgs.cs" />
-    <Compile Include="FilterInputBoxCollection.cs" />
-    <Compile Include="FlowLayoutManager.cs" />
-    <Compile Include="IFormControl.cs" />
-    <Compile Include="FormExceptionNotifier.cs" />
-    <Compile Include="GridBase.cs">
+    <Compile Include="Grid\FilterControlEventArgs.cs" />
+    <Compile Include="Grid\FilterInputBoxCollection.cs" />
+    <Compile Include="Base\FlowLayoutManager.cs" />
+    <Compile Include="Base\IFormControl.cs" />
+    <Compile Include="Forms\FormExceptionNotifier.cs" />
+    <Compile Include="Grid\GridBase.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GridLayoutManager.cs" />
-    <Compile Include="HelpAboutBox.cs">
+    <Compile Include="Base\GridLayoutManager.cs" />
+    <Compile Include="Util\HelpAboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="IEditableGrid.cs" />
-    <Compile Include="IFormDataProvider.cs" />
-    <Compile Include="IGrid.cs" />
-    <Compile Include="IGridDataProvider.cs" />
-    <Compile Include="IGridWithButtons.cs" />
-    <Compile Include="InputBoxComboBox.cs" />
-    <Compile Include="InputBoxDate.cs" />
-    <Compile Include="InputBoxDateRange.cs" />
-    <Compile Include="InputBoxFileSelect.cs" />
-    <Compile Include="InputBoxFolderSelect.cs" />
-    <Compile Include="InputBoxInteger.cs" />
-    <Compile Include="InputBoxMoney.cs" />
-    <Compile Include="InputBoxNumeric.cs" />
-    <Compile Include="InputBoxRadioButton.cs" />
-    <Compile Include="InputBoxTextBox.cs" />
-    <Compile Include="IReadOnlyGrid.cs" />
-    <Compile Include="ISearch.cs" />
-    <Compile Include="IWizardStep.cs" />
-    <Compile Include="LayoutManager.cs" />
-    <Compile Include="MessageBoxDateProvider.cs" />
-    <Compile Include="NumericUpDownCell.cs" />
-    <Compile Include="NumericUpDownEditingControl.cs">
+    <Compile Include="Grid\IEditableGrid.cs" />
+    <Compile Include="Base\IFormDataProvider.cs" />
+    <Compile Include="Grid\IGrid.cs" />
+    <Compile Include="Base\IGridDataProvider.cs" />
+    <Compile Include="Grid\IGridWithButtons.cs" />
+    <Compile Include="Forms\InputBoxComboBox.cs" />
+    <Compile Include="Forms\InputBoxDate.cs" />
+    <Compile Include="Forms\InputBoxDateRange.cs" />
+    <Compile Include="Forms\InputBoxFileSelect.cs" />
+    <Compile Include="Forms\InputBoxFolderSelect.cs" />
+    <Compile Include="Forms\InputBoxInteger.cs" />
+    <Compile Include="Forms\InputBoxMoney.cs" />
+    <Compile Include="Forms\InputBoxNumeric.cs" />
+    <Compile Include="Forms\InputBoxRadioButton.cs" />
+    <Compile Include="Forms\InputBoxTextBox.cs" />
+    <Compile Include="Grid\IReadOnlyGrid.cs" />
+    <Compile Include="Base\ISearch.cs" />
+    <Compile Include="Util\IWizardStep.cs" />
+    <Compile Include="Base\LayoutManager.cs" />
+    <Compile Include="Forms\MessageBoxDateProvider.cs" />
+    <Compile Include="Grid\NumericUpDownCell.cs" />
+    <Compile Include="Grid\NumericUpDownEditingControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="OKCancelDialog.cs" />
-    <Compile Include="PasswordTextBox.cs">
+    <Compile Include="Forms\OKCancelDialog.cs" />
+    <Compile Include="Forms\PasswordTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PictureControl.cs">
+    <Compile Include="Forms\PictureControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PopupProgressIndicator.cs" />
+    <Compile Include="Util\PopupProgressIndicator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleGridDataProvider.cs" />
-    <Compile Include="SplashScreen.cs">
+    <Compile Include="Base\SimpleGridDataProvider.cs" />
+    <Compile Include="Util\SplashScreen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SqlScratchPad.cs">
+    <Compile Include="Util\SqlScratchPad.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TextBoxMessageBox.cs" />
-    <Compile Include="Wizard.cs" />
-    <Compile Include="WizardStepEventArgs.cs" />
+    <Compile Include="Forms\TextBoxMessageBox.cs" />
+    <Compile Include="Util\Wizard.cs" />
+    <Compile Include="Util\WizardStepEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ButtonControl.resx">
+    <EmbeddedResource Include="Forms\ButtonControl.resx">
       <DependentUpon>ButtonControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="DbConnectionControl.resx">
+    <EmbeddedResource Include="Forms\DbConnectionControl.resx">
       <DependentUpon>DbConnectionControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
