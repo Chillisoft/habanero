@@ -67,6 +67,9 @@
     <Compile Include="Grid\DataViewIntegerFilterClause.cs" />
     <Compile Include="Grid\DataViewNullFilterClause.cs" />
     <Compile Include="Grid\DataViewStringFilterClause.cs" />
+    <Compile Include="Grid\SimpleReadOnlyGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Util\DateTimePickerUtil.cs" />
     <Compile Include="Forms\DbConnectionControl.cs">
       <SubType>UserControl</SubType>
@@ -111,7 +114,6 @@
     <Compile Include="Base\ISearch.cs" />
     <Compile Include="Util\IWizardStep.cs" />
     <Compile Include="Base\LayoutManager.cs" />
-    <Compile Include="Forms\MessageBoxDateProvider.cs" />
     <Compile Include="Grid\NumericUpDownCell.cs" />
     <Compile Include="Grid\NumericUpDownEditingControl.cs">
       <SubType>Component</SubType>

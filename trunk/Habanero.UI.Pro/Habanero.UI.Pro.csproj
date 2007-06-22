@@ -96,9 +96,6 @@
     <Compile Include="Grid\SimpleGridWithButtons.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Grid\SimpleReadOnlyGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Forms\TextBoxMapper.cs" />
     <Compile Include="Forms\TimePickerMapper.cs" />
     <Compile Include="Forms\TreeViewTableEditor.cs">
