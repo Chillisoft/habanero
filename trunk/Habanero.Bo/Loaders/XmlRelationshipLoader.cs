@@ -183,7 +183,8 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadRelKeyDef()
         {
-            _relKeyDef = new RelKeyDef();
+			_relKeyDef = _defClassFactory.CreateRelKeyDef();
+			//_relKeyDef = new RelKeyDef();
             _reader.Read();
             while (_reader.Name == "relProp")
             {
@@ -213,7 +214,8 @@ namespace Habanero.Bo.Loaders
                         "the property definition or check the spelling and " +
                         "capitalisation.", defName));
                 }
-                _relKeyDef.Add(new RelPropDef(_propDefCol[defName], relPropName));
+				_relKeyDef.Add(_defClassFactory.CreateRelPropDef(_propDefCol[defName], relPropName));
+				//_relKeyDef.Add(new RelPropDef(_propDefCol[defName], relPropName));
                 ReadAndIgnoreEndTag();
             }
         }

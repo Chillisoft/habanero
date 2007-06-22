@@ -162,6 +162,16 @@ namespace Habanero.Bo.ClassDefinition
 			return new RelationshipDefCol();
 		}
 
+		public RelPropDef CreateRelPropDef(PropDef propDef, string relPropName)
+		{
+			return new RelPropDef(propDef, relPropName);
+		}
+
+		public RelKeyDef CreateRelKeyDef()
+		{
+			return new RelKeyDef();
+		}
+
 		#endregion
 	}
 }

@@ -60,5 +60,9 @@ namespace Habanero.Bo.ClassDefinition
 		UIDefCol CreateUIDefCol();
 
 		RelationshipDefCol CreateRelationshipDefCol();
+
+		RelPropDef CreateRelPropDef(PropDef propDef, string relPropName);
+
+		RelKeyDef CreateRelKeyDef();
 	}
 }

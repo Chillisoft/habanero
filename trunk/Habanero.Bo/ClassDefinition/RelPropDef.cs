@@ -35,6 +35,19 @@ namespace Habanero.Bo.ClassDefinition
 
 		#region Properties
 
+    	///<summary>
+    	/// Gets or sets the Owner Property Def
+    	///</summary>
+    	protected PropDef OwnerProperty
+    	{
+			get { return _ownerPropDef; }
+			set
+			{
+				ArgumentValidationHelper.CheckArgumentNotNull(value, "value");
+				_ownerPropDef = value;
+			}
+    	}
+
 		/// <summary>
         /// The property definition name of the owner object
         /// </summary>
