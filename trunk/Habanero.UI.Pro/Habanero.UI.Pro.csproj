@@ -43,74 +43,74 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationVersionUpgrader.cs" />
-    <Compile Include="BoPanelControl.cs">
+    <Compile Include="Base\ApplicationVersionUpgrader.cs" />
+    <Compile Include="Forms\BoPanelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BoTabColControl.cs">
+    <Compile Include="Forms\BoTabColControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CheckBoxMapper.cs" />
-    <Compile Include="CollectionComboBoxMapper.cs" />
-    <Compile Include="ComboBoxCollectionControl.cs">
+    <Compile Include="Forms\CheckBoxMapper.cs" />
+    <Compile Include="Forms\CollectionComboBoxMapper.cs" />
+    <Compile Include="Forms\ComboBoxCollectionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ComboBoxMapper.cs" />
-    <Compile Include="ControlMapper.cs" />
-    <Compile Include="ControlMapperCollection.cs" />
-    <Compile Include="DateTimePickerMapper.cs" />
-    <Compile Include="DefaultBOCreator.cs" />
-    <Compile Include="DefaultBOEditor.cs" />
-    <Compile Include="DefaultBOEditorForm.cs">
+    <Compile Include="Forms\ComboBoxMapper.cs" />
+    <Compile Include="Forms\ControlMapper.cs" />
+    <Compile Include="Forms\ControlMapperCollection.cs" />
+    <Compile Include="Forms\DateTimePickerMapper.cs" />
+    <Compile Include="Forms\DefaultBOCreator.cs" />
+    <Compile Include="Forms\DefaultBOEditor.cs" />
+    <Compile Include="Forms\DefaultBOEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditableGridButtonControl.cs">
+    <Compile Include="Forms\EditableGridButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FormController.cs" />
-    <Compile Include="HabaneroApp.cs" />
-    <Compile Include="ListComboBoxMapper.cs" />
-    <Compile Include="ListViewCollectionMapper.cs" />
-    <Compile Include="LookupComboBoxMapper.cs" />
-    <Compile Include="LookupListNotSetException.cs" />
-    <Compile Include="MessageBoxOKCancelConfirmer.cs" />
-    <Compile Include="MultiSelector.cs">
+    <Compile Include="Forms\FormController.cs" />
+    <Compile Include="Base\HabaneroApp.cs" />
+    <Compile Include="Forms\ListComboBoxMapper.cs" />
+    <Compile Include="Forms\ListViewCollectionMapper.cs" />
+    <Compile Include="Forms\LookupComboBoxMapper.cs" />
+    <Compile Include="Forms\LookupListNotSetException.cs" />
+    <Compile Include="Forms\MessageBoxOKCancelConfirmer.cs" />
+    <Compile Include="Forms\MultiSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MultiSelector.Designer.cs" />
-    <Compile Include="NumericUpDownIntegerMapper.cs" />
-    <Compile Include="NumericUpDownMapper.cs" />
-    <Compile Include="NumericUpDownMoneyMapper.cs" />
-    <Compile Include="PanelFactory.cs" />
-    <Compile Include="PanelFactoryInfo.cs" />
+    <Compile Include="Forms\MultiSelector.Designer.cs" />
+    <Compile Include="Forms\NumericUpDownIntegerMapper.cs" />
+    <Compile Include="Forms\NumericUpDownMapper.cs" />
+    <Compile Include="Forms\NumericUpDownMoneyMapper.cs" />
+    <Compile Include="Forms\PanelFactory.cs" />
+    <Compile Include="Forms\PanelFactoryInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadOnlyGridButtonControl.cs">
+    <Compile Include="Forms\ReadOnlyGridButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ReadOnlyGridWithButtons.cs">
+    <Compile Include="Grid\ReadOnlyGridWithButtons.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SimpleGrid.cs">
+    <Compile Include="Grid\SimpleGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SimpleGridWithButtons.cs">
+    <Compile Include="Grid\SimpleGridWithButtons.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SimpleReadOnlyGrid.cs">
+    <Compile Include="Grid\SimpleReadOnlyGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="TextBoxMapper.cs" />
-    <Compile Include="TimePickerMapper.cs" />
-    <Compile Include="TreeViewTableEditor.cs">
+    <Compile Include="Forms\TextBoxMapper.cs" />
+    <Compile Include="Forms\TimePickerMapper.cs" />
+    <Compile Include="Forms\TreeViewTableEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MultiSelector.resx">
+    <EmbeddedResource Include="Forms\MultiSelector.resx">
       <DependentUpon>MultiSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TreeViewTableEditor.resx">
+    <EmbeddedResource Include="Forms\TreeViewTableEditor.resx">
       <DependentUpon>TreeViewTableEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -136,6 +136,9 @@
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
       <Name>Habanero.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
