@@ -34,6 +34,18 @@ namespace Habanero.Bo.ClassDefinition
             base.Add(lPropDef);
         }
 
+		/// <summary>
+		/// Removes a Property definition from the key
+		/// </summary>
+		/// <param name="propDef">The Property Definition to remove</param>
+		protected void Remove(PropDef propDef)
+		{
+			if (Dictionary.Contains(propDef.PropertyName))
+			{
+				base.Dictionary.Remove(propDef.PropertyName);
+			}
+		}
+
 		#region Properties
 
         /// <summary>

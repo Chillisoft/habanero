@@ -55,6 +55,18 @@ namespace Habanero.Bo.ClassDefinition
             }
         }
 
+		/// <summary>
+		/// Removes a Related Property definition from the key
+		/// </summary>
+		/// <param name="relPropDef">The Related Property Definition to remove</param>
+		protected void Remove(RelPropDef relPropDef)
+		{
+			if (Dictionary.Contains(relPropDef.OwnerPropertyName))
+			{
+				base.Dictionary.Remove(relPropDef.OwnerPropertyName);
+			}
+		}
+
         /// <summary>
         /// Returns true if a property with this name is part of this key.
         /// </summary>
