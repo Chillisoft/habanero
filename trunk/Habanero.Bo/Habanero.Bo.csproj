@@ -237,6 +237,7 @@
     <Compile Include="ITransactionLog.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Loaders\IClassDefsLoader.cs" />
     <Compile Include="Loaders\XmlBusinessObjectLookupListSourceLoader.cs" />
     <Compile Include="Loaders\XmlClassDefsLoader.cs" />
     <Compile Include="Loaders\XmlClassLoader.cs" />

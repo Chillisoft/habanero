@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Habanero.Bo;
+using Habanero.Bo.Loaders;
 using Habanero.Generic;
 using Habanero.Util;
 using log4net;

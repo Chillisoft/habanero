@@ -130,9 +130,6 @@
     <Compile Include="GlobalRegistry.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IClassDefsLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IConfirmer.cs">
       <SubType>Code</SubType>
     </Compile>

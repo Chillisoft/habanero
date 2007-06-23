@@ -12,12 +12,13 @@ namespace Habanero.Bo.ClassDefinition
         private static ClassDefCol mClassDefcol;
         private static bool instanceFlag = false;
 
-        /// <summary>
-        /// Initialises an empty collection
-        /// </summary>
-        protected ClassDefCol() : base()
-        {
-        }
+		/// <summary>
+		/// Initialises an empty collection
+		/// </summary>
+		internal protected ClassDefCol()
+			: base()
+		{
+		}
 
         /// <summary>
         /// Returns the existing collection, or creates and returns a 
