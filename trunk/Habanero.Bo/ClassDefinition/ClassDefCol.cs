@@ -9,8 +9,8 @@ namespace Habanero.Bo.ClassDefinition
     /// </summary>
     public class ClassDefCol : DictionaryBase
     {
-        private static ClassDefCol mClassDefcol;
-        private static bool instanceFlag = false;
+        private static ClassDefCol _classDefcol;
+        private static bool _instanceFlag = false;
 
 		/// <summary>
 		/// Initialises an empty collection
@@ -19,26 +19,7 @@ namespace Habanero.Bo.ClassDefinition
 			: base()
 		{
 		}
-
-        /// <summary>
-        /// Returns the existing collection, or creates and returns a 
-        /// new empty collection.
-        /// </summary>
-        /// <returns>A collection of class definitions</returns>
-        internal static ClassDefCol GetColClassDef()
-        {
-            if (! instanceFlag)
-            {
-                mClassDefcol = new ClassDefCol();
-                instanceFlag = true;
-                return mClassDefcol;
-            }
-            else
-            {
-                return mClassDefcol;
-            }
-        }
-
+		
 		/// <summary>
 		/// Provides an indexing facility for the collection so that items
 		/// in the collection can be accessed like an array 
@@ -164,13 +145,72 @@ namespace Habanero.Bo.ClassDefinition
 
         /// <summary>
         /// Removes a flag that indicates that a collection exists.  After
-        /// this flag is removed, calling GetColClassDef will result in a
+        /// this flag is removed, calling LoadColClassDef will result in a
         /// new empty collection replacing the existing one.
         /// </summary>
         protected void Finalize()
         {
-            instanceFlag = false;
+            _instanceFlag = false;
         }
+
+		#region Singleton ClassDefCol
+
+		/// <summary>
+		/// Returns the existing collection, or creates and returns a 
+		/// new empty collection.
+		/// </summary>
+		/// <returns>A collection of class definitions</returns>
+		internal static ClassDefCol GetColClassDef()
+		{
+			if (_instanceFlag)
+			{
+				return _classDefcol;
+			} else
+			{
+				return LoadColClassDef(new ClassDefCol());
+				//TODO: Is throwing an error correct? Maybe return null?
+				//TODO error: TODO Eric, please check that you are happy with this error.
+				//throw new Generic.HabaneroApplicationException(
+				//    "The Class Definitions cannot be accessed before they have been loaded.");
+			}
+		}
+
+		/// <summary>
+		/// Returns the existing collection, or creates and returns a 
+		/// new empty collection.
+		/// </summary>
+		/// <param name="classDefCol">A loaded collection of class definitions to initialise the collection with</param>
+		/// <returns>A collection of class definitions</returns>
+		internal static ClassDefCol LoadColClassDef(ClassDefCol classDefCol)
+		{
+			if (classDefCol == null)
+			{
+				//TODO error: TODO Eric, please check that you are happy with this error.
+				throw new HabaneroArgumentException("classDefCol", "Cannot load a ClassDefCol if it is null.");
+			}
+			if (!_instanceFlag || _classDefcol.Count == 0)
+			{
+				_classDefcol = classDefCol;
+				_instanceFlag = true;
+			} else
+			{
+				foreach (DictionaryEntry entry in classDefCol)
+				{
+					ClassDef classDef = (ClassDef)entry.Value;
+					if (!_classDefcol.Contains(classDef))
+					{
+						_classDefcol.Add(classDef);
+					} else
+					{
+						//TODO: Shouldn't this be removed?
+						Console.Out.WriteLine("Attempted to load a class def when it was already defined.");
+					}
+				}
+			}
+			return _classDefcol;
+		}
+
+		#endregion
 
 		#region TypeId Methods
 

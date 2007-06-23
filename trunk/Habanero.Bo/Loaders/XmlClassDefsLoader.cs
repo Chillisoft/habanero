@@ -13,8 +13,9 @@ namespace Habanero.Bo.Loaders
     /// </summary>
     public class XmlClassDefsLoader : XmlLoader, IClassDefsLoader
     {
-        private IList _classDefList;
-        private string _xmlClassDefs;
+		private ClassDefCol _classDefList;
+		//private IList _classDefList;
+		private string _xmlClassDefs;
 
         /// <summary>
         /// Constructor to initialise a new loader. If you create the object
@@ -69,9 +70,11 @@ namespace Habanero.Bo.Loaders
         /// a file, you can use 
         /// <code>new StreamReader("filename.xml").ReadToEnd()</code>
         /// to create a continuous string.</param>
-        /// <returns>Returns an IList object containing the definitions</returns>
-        public IList LoadClassDefs(string xmlClassDefs)
-        {
+		/// <returns>Returns an IList object containing the definitions</returns>
+		public ClassDefCol LoadClassDefs(string xmlClassDefs)
+		///// <returns>Returns an IList object containing the definitions</returns>
+		//public IList LoadClassDefs(string xmlClassDefs)
+{
             XmlDocument doc = new XmlDocument();
             try
             {
@@ -88,26 +91,31 @@ namespace Habanero.Bo.Loaders
             return LoadClassDefs(doc.DocumentElement);
         }
 
-        /// <summary>
-        /// As with LoadClassDefs(string), but uses the definition string 
-        /// provided on instatiation of the object if you used the
-        /// parameterised constructor.
-        /// </summary>
-        /// <returns>Returns an IList object containing the definitions</returns>
-        public IList LoadClassDefs()
-        {
-            return LoadClassDefs(_xmlClassDefs);
-        }
+		/// <summary>
+		/// As with LoadClassDefs(string), but uses the definition string 
+		/// provided on instatiation of the object if you used the
+		/// parameterised constructor.
+		/// </summary>
+		/// <returns>Returns a ClassDefCol containing the definitions</returns>
+		public ClassDefCol LoadClassDefs()
+		///// <returns>Returns an IList object containing the definitions</returns>
+		//public IList LoadClassDefs()
+		{
+			return LoadClassDefs(_xmlClassDefs);
+		}
+		
 
         /// <summary>
         /// As with LoadClassDefs(string), but uses the root element as a
         /// starting reference point.
         /// </summary>
         /// <param name="allClassesElement">The root element</param>
-        /// <returns>Returns an IList object containing the definitions</returns>
-        public IList LoadClassDefs(XmlElement allClassesElement)
-        {
-            return (IList) this.Load(allClassesElement);
+		/// <returns>Returns an IList object containing the definitions</returns>
+		public ClassDefCol LoadClassDefs(XmlElement allClassesElement)
+		///// <returns>Returns an IList object containing the definitions</returns>
+		//public IList LoadClassDefs(XmlElement allClassesElement)
+		{
+            return (ClassDefCol) this.Load(allClassesElement);
         }
 
         /// <summary>
@@ -124,7 +132,8 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         protected override void LoadFromReader()
         {
-            _classDefList = new ArrayList();
+        	_classDefList = _defClassFactory.CreateClassDefCol();
+            //_classDefList = new ArrayList();
             _reader.Read();
             _reader.Read();
 			XmlClassLoader classLoader = new XmlClassLoader(_dtdPath, _defClassFactory);

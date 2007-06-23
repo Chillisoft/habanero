@@ -1,3 +1,4 @@
+using System;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Bo;
@@ -41,26 +42,59 @@ namespace Habanero.Test.Bo
         {
             XmlClassDefsLoader loader =
                 new XmlClassDefsLoader(
-                    @"
-					<classDefs>
-						<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
-							<propertyDef name=""TestClassID"" />
-                            <primaryKeyDef>
-                                <prop name=""TestClassID""/>
-                            </primaryKeyDef>
-						</classDef>
-						<classDef name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"" >
-							<propertyDef name=""TestRelatedClassID"" />
-                            <primaryKeyDef>
-                                <prop name=""TestRelatedClassID""/>
-                            </primaryKeyDef>
-						</classDef>
-					</classDefs>
-			",
+                    GetTestClassDefinition(""),
                     "");
             ClassDef.GetClassDefCol.Clear();
             ClassDef.LoadClassDefs(loader);
             Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
         }
+
+    	private string GetTestClassDefinition(string suffix)
+    	{
+    		string classDefString = String.Format(
+				@"
+					<classDefs>
+						<classDef name=""TestClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
+							<propertyDef name=""TestClass{0}ID"" />
+                            <primaryKeyDef>
+                                <prop name=""TestClass{0}ID""/>
+                            </primaryKeyDef>
+						</classDef>
+						<classDef name=""TestRelatedClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
+							<propertyDef name=""TestRelatedClass{0}ID"" />
+                            <primaryKeyDef>
+                                <prop name=""TestRelatedClass{0}ID""/>
+                            </primaryKeyDef>
+						</classDef>
+					</classDefs>
+			", suffix);
+    		return classDefString;
+    	}
+
+    	public void TestLoadRepeatedClassDefs()
+		{
+			XmlClassDefsLoader loader;
+    		loader = new XmlClassDefsLoader(GetTestClassDefinition(""), "");
+    		ClassDef.GetClassDefCol.Clear();
+			ClassDef.LoadClassDefs(loader);
+			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
+			//Now load the same again.
+			loader = new XmlClassDefsLoader(GetTestClassDefinition(""), "");
+			ClassDef.LoadClassDefs(loader);
+			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
+		}
+
+		public void TestLoadMultipleClassDefs()
+		{
+			XmlClassDefsLoader loader;
+			loader = new XmlClassDefsLoader(GetTestClassDefinition(""), "");
+			ClassDef.GetClassDefCol.Clear();
+			ClassDef.LoadClassDefs(loader);
+			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
+			// Now load some more classes
+			loader = new XmlClassDefsLoader(GetTestClassDefinition("Other"), "");
+			ClassDef.LoadClassDefs(loader);
+			Assert.AreEqual(4, ClassDef.GetClassDefCol.Count);
+		}
     }
 }

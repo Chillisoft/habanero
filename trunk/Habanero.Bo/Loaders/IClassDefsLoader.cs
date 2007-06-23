@@ -1,4 +1,5 @@
 using System.Collections;
+using Habanero.Bo.ClassDefinition;
 
 namespace Habanero.Bo.Loaders
 {
@@ -9,9 +10,15 @@ namespace Habanero.Bo.Loaders
 	public interface IClassDefsLoader
 	{
 		/// <summary>
-		/// Loads class definitions from pre-specified xml data
+		/// Loads class definitions from loader source data
 		/// </summary>
-		/// <returns>Returns an IList object containing the definitions</returns>
-		IList LoadClassDefs();
+		/// <returns>Returns an ClassDefCol containing the definitions</returns>
+		ClassDefCol LoadClassDefs();
+
+		///// <summary>
+		///// Loads class definitions from pre-specified xml data
+		///// </summary>
+		///// <returns>Returns an IList object containing the definitions</returns>
+		//IList LoadClassDefs();	
 	}
 }

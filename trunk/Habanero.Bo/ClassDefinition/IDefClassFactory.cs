@@ -10,7 +10,7 @@ namespace Habanero.Bo.ClassDefinition
 		BusinessObjectLookupListSource CreateBusinessObjectLookupListSource(string assemblyName, string className);
 
 		ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
-		
+
 		DatabaseLookupListSource CreateDatabaseLookupListSource(string sqlString, string assemblyName, string className);
 		
 		KeyDef CreateKeyDef(string keyName);
@@ -64,5 +64,7 @@ namespace Habanero.Bo.ClassDefinition
 		RelPropDef CreateRelPropDef(PropDef propDef, string relPropName);
 
 		RelKeyDef CreateRelKeyDef();
+
+		ClassDefCol CreateClassDefCol();
 	}
 }

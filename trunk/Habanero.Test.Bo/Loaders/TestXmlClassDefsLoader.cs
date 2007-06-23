@@ -21,7 +21,7 @@ namespace Habanero.Test.Bo.Loaders
         public void TestLoadClassDefs()
         {
             XmlClassDefsLoader loader = new XmlClassDefsLoader();
-            IList classDefList =
+            ClassDefCol classDefList =
                 loader.LoadClassDefs(
                     @"
 					<classDefs>

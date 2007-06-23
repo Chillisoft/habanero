@@ -172,6 +172,11 @@ namespace Habanero.Bo.ClassDefinition
 			return new RelKeyDef();
 		}
 
+		public ClassDefCol CreateClassDefCol()
+		{
+			return new ClassDefCol();
+		}
+
 		#endregion
 	}
 }

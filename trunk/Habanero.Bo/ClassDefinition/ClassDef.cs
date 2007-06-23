@@ -388,11 +388,12 @@ namespace Habanero.Bo.ClassDefinition
         {
 			get
 			{
-				if (_classDefCol == null)
-				{
-					_classDefCol = ClassDefCol.GetColClassDef();
-				}
-				return _classDefCol;
+				return ClassDefCol.GetColClassDef();
+				//if (_classDefCol == null)
+				//{
+				//    _classDefCol = ClassDefCol.GetColClassDef();
+				//}
+				//return _classDefCol;
 			}
         }
 
@@ -674,17 +675,19 @@ namespace Habanero.Bo.ClassDefinition
         /// or of its descendants</param>
         public static void LoadClassDefs(IClassDefsLoader loader)
         {
-            foreach (ClassDef classDef in loader.LoadClassDefs())
-            {
-                if (!ClassDef.GetClassDefCol.Contains(classDef))
-                {
-                    ClassDef.GetClassDefCol.Add(classDef);
-                }
-                else
-                {
-                    Console.Out.WriteLine("Attempted to load a class def when it was already defined.");
-                }
-            }
+        	ClassDefCol classDefCol = loader.LoadClassDefs();
+        	ClassDefCol.LoadColClassDef(classDefCol);
+			//foreach (ClassDef classDef in loader.LoadClassDefs())
+			//{
+			//    if (!ClassDef.GetClassDefCol.Contains(classDef))
+			//    {
+			//        ClassDef.GetClassDefCol.Add(classDef);
+			//    }
+			//    else
+			//    {
+			//        Console.Out.WriteLine("Attempted to load a class def when it was already defined.");
+			//    }
+			//}
         }
 
         /// <summary>
