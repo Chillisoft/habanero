@@ -1,7 +1,7 @@
 using Habanero.Bo;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Grid;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Manages a simple grid

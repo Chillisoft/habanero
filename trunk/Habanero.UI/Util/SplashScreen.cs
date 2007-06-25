@@ -2,8 +2,9 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using Habanero.Ui.Util;
 
-namespace Habanero.Ui.Misc
+namespace Habanero.Ui.Util
 {
     /// <summary>
     ///	Represents a splash screen that is displayed to the user while the

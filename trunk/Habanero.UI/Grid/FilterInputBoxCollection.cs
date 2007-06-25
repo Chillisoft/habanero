@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Generic;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Manages a collection of filter input controls, that allow rows of
@@ -149,7 +150,7 @@ namespace Habanero.Ui.Generic
                 filterUi = (FilterUI) _filterUIs[i];
                 clause =
                     _clauseFactory.CreateCompositeFilterClause(clause, FilterClauseCompositeOperator.OpAnd,
-                                                                 filterUi.GetFilterClause());
+                                                               filterUi.GetFilterClause());
             }
             return clause;
         }
@@ -354,7 +355,7 @@ namespace Habanero.Ui.Generic
                 {
                     return
                         _clauseFactory.CreateStringFilterClause(_columnName, FilterClauseOperator.OpLike,
-                                                                  _textBox.Text);
+                                                                _textBox.Text);
                 }
                 else
                 {
@@ -396,8 +397,8 @@ namespace Habanero.Ui.Generic
                     }
                     return
                         _clauseFactory.CreateStringFilterClause(_columnName, op,
-                                                                  ((DateTime)_dateTimePicker.Value).ToString(
-                                                                      "yyyy/MM/dd"));
+                                                                ((DateTime)_dateTimePicker.Value).ToString(
+                                                                    "yyyy/MM/dd"));
                 }
                 else
                 {
@@ -432,7 +433,7 @@ namespace Habanero.Ui.Generic
                 {
                     return
                         _clauseFactory.CreateStringFilterClause(_columnName, FilterClauseOperator.OpEquals,
-                                                                  _comboBox.SelectedItem.ToString());
+                                                                _comboBox.SelectedItem.ToString());
                 }
                 else
                 {
@@ -450,7 +451,7 @@ namespace Habanero.Ui.Generic
             private readonly CheckBox _checkBox;
 
             public FilterUICheckBox(IFilterClauseFactory clauseFactory, string columnName, CheckBox checkBox,
-                                         string text, bool isChecked)
+                                    string text, bool isChecked)
                 : base(clauseFactory, columnName)
             {
                 _checkBox = checkBox;
@@ -466,13 +467,13 @@ namespace Habanero.Ui.Generic
                     {
                         return
                             _clauseFactory.CreateStringFilterClause(_columnName,
-                                                                       FilterClauseOperator.OpEquals, "true");
+                                                                    FilterClauseOperator.OpEquals, "true");
                     }
                     else
                     {
                         return
                             _clauseFactory.CreateStringFilterClause(_columnName,
-                                                                       FilterClauseOperator.OpEquals, "false");
+                                                                    FilterClauseOperator.OpEquals, "false");
                     }
                 }
                 else

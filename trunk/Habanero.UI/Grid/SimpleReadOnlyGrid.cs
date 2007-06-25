@@ -4,10 +4,10 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Bo;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Grid;
 using log4net;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Manages a simple read-only grid (a grid that cannot be edited directly)

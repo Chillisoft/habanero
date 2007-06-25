@@ -2,7 +2,7 @@
 //using System.Drawing;
 //using System.Windows.Forms;
 
-//namespace Habanero.Ui.Generic
+//namespace Habanero.Ui.Grid
 //{
 //    // This example shows how to create your own column style that
 //    // hosts a control, in this case, a DateTimePicker.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Provides arguments relating to a filter control event

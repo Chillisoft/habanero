@@ -1,7 +1,7 @@
 using System;
 using Habanero.Bo;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Handles the event of a user double-clicking on a row

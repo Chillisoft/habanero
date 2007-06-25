@@ -1,6 +1,6 @@
 using Habanero.Generic;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// A super-class for filter clauses that filter which data to

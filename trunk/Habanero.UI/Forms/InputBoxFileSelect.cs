@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Misc
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a form in which a user can choose a file name

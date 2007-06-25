@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Bo;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
+using Habanero.Ui.Grid;
 using Habanero.Util;
 
-
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Manages an editor that uses a tree view
@@ -181,7 +181,7 @@ namespace Habanero.Ui.Application
             this._splitContainer1 = new System.Windows.Forms.SplitContainer();
             this._treeView = new System.Windows.Forms.TreeView();
             this._groupBox1 = new System.Windows.Forms.GroupBox();
-            this._gridAndButtons = new Habanero.Ui.Application.SimpleGridWithButtons();
+            this._gridAndButtons = new SimpleGridWithButtons();
             this._splitContainer1.Panel1.SuspendLayout();
             this._splitContainer1.Panel2.SuspendLayout();
             this._splitContainer1.SuspendLayout();

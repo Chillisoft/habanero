@@ -3,9 +3,10 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Generic;
+using Habanero.Ui.Forms;
 using Noogen.WinForms;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// Produces a range of user interface objects as requested

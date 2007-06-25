@@ -2,10 +2,10 @@ using System;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// This mapper represents a user interface ComboBox object that represents

@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a variation of a standard TextBox for passwords, masking

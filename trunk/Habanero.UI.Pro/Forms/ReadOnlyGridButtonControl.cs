@@ -1,10 +1,11 @@
 using System;
 using Habanero.Bo;
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Forms;
+using Habanero.Ui.Grid;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Manages the buttons attached to a ReadOnlyGridWithButtons. By default,
@@ -56,11 +57,11 @@ namespace Habanero.Ui.Application
                 if (_objectEditor == null)
                 {
                     throw new NullReferenceException("There was an attempt to edit " +
-                        "a business object when the object editor has not been " +
-                        "set.  When the ReadOnlyGridWithButtons is instantiated, " +
-                        "either use the single-parameter constructor that assigns a " +
-                        "default editor or create a customised object editor and " +
-                        "assign that through the appropriate constructor.");
+                                                     "a business object when the object editor has not been " +
+                                                     "set.  When the ReadOnlyGridWithButtons is instantiated, " +
+                                                     "either use the single-parameter constructor that assigns a " +
+                                                     "default editor or create a customised object editor and " +
+                                                     "assign that through the appropriate constructor.");
                 }
 
                 _objectEditor.EditObject(e.BusinessObject);
@@ -80,11 +81,11 @@ namespace Habanero.Ui.Application
                 if (_objectEditor == null)
                 {
                     throw new NullReferenceException("There was an attempt to edit " +
-                        "a business object when the object editor has not been " +
-                        "set.  When the ReadOnlyGridWithButtons is instantiated, " +
-                        "either use the single-parameter constructor that assigns a " +
-                        "default editor or create a customised object editor and " +
-                        "assign that through the appropriate constructor.");
+                                                     "a business object when the object editor has not been " +
+                                                     "set.  When the ReadOnlyGridWithButtons is instantiated, " +
+                                                     "either use the single-parameter constructor that assigns a " +
+                                                     "default editor or create a customised object editor and " +
+                                                     "assign that through the appropriate constructor.");
                 }
 
                 //if
@@ -105,11 +106,11 @@ namespace Habanero.Ui.Application
             if (_objectCreator == null)
             {
                 throw new NullReferenceException("There was an attempt to create " +
-                    "a new business object when the object creator has not been " +
-                    "set.  When the ReadOnlyGridWithButtons is instantiated, " +
-                    "either use the single-parameter constructor that assigns a " +
-                    "default creator or create a customised object creator and " +
-                    "assign that through the appropriate constructor.");
+                                                 "a new business object when the object creator has not been " +
+                                                 "set.  When the ReadOnlyGridWithButtons is instantiated, " +
+                                                 "either use the single-parameter constructor that assigns a " +
+                                                 "default creator or create a customised object creator and " +
+                                                 "assign that through the appropriate constructor.");
             }
 
             BusinessObject newObject = (BusinessObject) _objectCreator.CreateObject(this._objectEditor);

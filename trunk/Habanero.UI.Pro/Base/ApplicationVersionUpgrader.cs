@@ -1,4 +1,4 @@
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// An interface to model a version upgrade tool for an application

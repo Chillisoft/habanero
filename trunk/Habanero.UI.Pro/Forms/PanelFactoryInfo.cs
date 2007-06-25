@@ -1,8 +1,9 @@
 using System.Windows.Forms;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Forms;
 using System.Collections.Generic;
+using Habanero.Ui.Grid;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Manages the panel object for a user interface

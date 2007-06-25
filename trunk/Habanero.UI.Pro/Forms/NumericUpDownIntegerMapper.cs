@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using log4net;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// A mapper for the numeric up-down facility where the values are integers
@@ -10,7 +10,7 @@ namespace Habanero.Ui.BoControls
     public class NumericUpDownIntegerMapper : NumericUpDownMapper
     {
         private static readonly new ILog log =
-            LogManager.GetLogger("Habanero.Ui.BoControls.NumericUpDownIntegerMapper");
+            LogManager.GetLogger("Habanero.Ui.Forms.NumericUpDownIntegerMapper");
 
         /// <summary>
         /// Constructor to initialise the mapper

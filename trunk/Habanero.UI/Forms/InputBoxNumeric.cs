@@ -1,7 +1,7 @@
 using System.Windows.Forms;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Misc
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a super-class for a form in which a user can edit a numeric value

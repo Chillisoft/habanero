@@ -2,10 +2,9 @@ using System;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Generic;
-using Habanero.Ui.BoControls;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides an editing facility for a business object.

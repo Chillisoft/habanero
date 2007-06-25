@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Bo;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Manages a collection of tab pages that hold business object controls

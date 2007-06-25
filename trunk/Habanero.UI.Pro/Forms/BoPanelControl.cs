@@ -2,45 +2,44 @@ using System;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Generic;
-using Habanero.Ui.BoControls;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
-	/// <summary>
-	/// Provides control for panels that represent a business object
+    /// <summary>
+    /// Provides control for panels that represent a business object
     /// in a user interface.
-	/// </summary>
-	public class BoPanelControl : UserControl
-	{
-		private BusinessObject _bo;
-		private string _uiDefName;
-		private PanelFactoryInfo _panelFactoryInfo;
-		private Panel _boPanel;
+    /// </summary>
+    public class BoPanelControl : UserControl
+    {
+        private BusinessObject _bo;
+        private string _uiDefName;
+        private PanelFactoryInfo _panelFactoryInfo;
+        private Panel _boPanel;
 
         /// <summary>
         /// Constructor to create a new control object
         /// </summary>
         /// <param name="bo">The business object being represented</param>
         /// <param name="uiDefName">A string name for the control</param>
-		public BoPanelControl(BusinessObject bo, string uiDefName) {
-			_bo = bo;
-			_uiDefName = uiDefName;
+        public BoPanelControl(BusinessObject bo, string uiDefName) {
+            _bo = bo;
+            _uiDefName = uiDefName;
 
-			BOMapper mapper = new BOMapper(bo);
+            BOMapper mapper = new BOMapper(bo);
 			
-			UIFormDef def = (_uiDefName.Length > 0) 
-				? mapper.GetUserInterfaceMapper(_uiDefName).GetUIFormProperties() 
-				: mapper.GetUserInterfaceMapper().GetUIFormProperties();
+            UIFormDef def = (_uiDefName.Length > 0) 
+                                ? mapper.GetUserInterfaceMapper(_uiDefName).GetUIFormProperties() 
+                                : mapper.GetUserInterfaceMapper().GetUIFormProperties();
 
-			PanelFactory factory = new PanelFactory(_bo, def );
-			_panelFactoryInfo = factory.CreatePanel() ;
-			_boPanel = _panelFactoryInfo.Panel ;
+            PanelFactory factory = new PanelFactory(_bo, def );
+            _panelFactoryInfo = factory.CreatePanel() ;
+            _boPanel = _panelFactoryInfo.Panel ;
 
-			BorderLayoutManager manager = new BorderLayoutManager(this) ;
-			manager.AddControl(_boPanel, BorderLayoutManager.Position.Centre ) ;
-		}
+            BorderLayoutManager manager = new BorderLayoutManager(this) ;
+            manager.AddControl(_boPanel, BorderLayoutManager.Position.Centre ) ;
+        }
 
         /// <summary>
         /// Returns the panel object being controlled
@@ -65,5 +64,5 @@ namespace Habanero.Ui.BoControls
         {
             _panelFactoryInfo.ControlMappers.BusinessObject = bo;
         }
-	}
+    }
 }

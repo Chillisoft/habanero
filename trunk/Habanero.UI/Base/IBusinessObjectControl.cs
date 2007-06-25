@@ -1,6 +1,6 @@
 using Habanero.Bo;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// An interface for controls that manage business objects

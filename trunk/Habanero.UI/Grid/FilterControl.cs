@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Generic;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Manages a collection of filter input controls, that allow rows of

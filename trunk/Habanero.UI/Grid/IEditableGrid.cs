@@ -1,4 +1,4 @@
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// An interface to model a grid that can be edited

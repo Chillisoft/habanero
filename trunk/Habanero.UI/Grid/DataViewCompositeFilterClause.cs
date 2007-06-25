@@ -1,6 +1,6 @@
 using Habanero.Generic;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Manages a composite filter clause, which is composed of individual

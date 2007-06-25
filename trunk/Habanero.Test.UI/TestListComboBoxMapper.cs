@@ -2,7 +2,7 @@ using System.Windows.Forms;
 using Chillisoft.Test;
 using Habanero.Generic;
 using Habanero.Test.General;
-using Habanero.Ui.BoControls;
+using Habanero.Ui.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.BoControls

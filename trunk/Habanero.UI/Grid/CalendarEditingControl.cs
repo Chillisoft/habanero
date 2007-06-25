@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// A control for editing date and time values
@@ -187,5 +187,4 @@ namespace Habanero.Ui.Generic
             base.OnValueChanged(eventargs);
         }
     }
-
 }

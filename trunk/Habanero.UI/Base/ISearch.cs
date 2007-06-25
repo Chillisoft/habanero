@@ -1,4 +1,6 @@
-namespace Habanero.Ui.Generic
+using Habanero.Ui.Base;
+
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// An interface to model a search facility

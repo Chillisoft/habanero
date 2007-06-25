@@ -2,7 +2,7 @@ using System;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Misc
+namespace Habanero.Ui.Util
 {
     /// <summary>
     /// Provides a form that has a drop shadow

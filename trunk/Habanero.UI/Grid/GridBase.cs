@@ -4,10 +4,12 @@ using System.Data;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Generic;
+using Habanero.Ui.Base;
+using Habanero.Ui.Grid;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Serves as a super-class for grid implementations
@@ -19,7 +21,7 @@ namespace Habanero.Ui.Generic
 
         private delegate void SetSortColumnDelegate(string columnName, bool isAscending);
 
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Generic.GridBase");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Grid.GridBase");
         protected DataTable _dataTable;
         protected BOCollectionDataSetProvider _dataSetProvider;
         protected BusinessObjectCollection _collection;
@@ -144,7 +146,7 @@ namespace Habanero.Ui.Generic
                 colNum++;
             }
 
-           _dataTableDefaultView = _dataTable.DefaultView;
+            _dataTableDefaultView = _dataTable.DefaultView;
 
             this.AutoGenerateColumns = false;
             this.DataSource = _dataTableDefaultView;
@@ -193,11 +195,11 @@ namespace Habanero.Ui.Generic
         public virtual IObjectInitialiser ObjectInitialiser
         {
             set { _objectInitialiser = value;
-            if (_dataSetProvider != null)
-            {
-                _dataSetProvider.ObjectInitialiser = _objectInitialiser;
+                if (_dataSetProvider != null)
+                {
+                    _dataSetProvider.ObjectInitialiser = _objectInitialiser;
+                }
             }
-        }
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Habanero.Ui.Application;
+using Habanero.Ui.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.Application

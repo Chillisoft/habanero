@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using Habanero.Bo;
+using Habanero.Ui.Forms;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Manages a collection of objects that are sub-types of ControlMapper

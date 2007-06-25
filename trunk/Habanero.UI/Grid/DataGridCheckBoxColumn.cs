@@ -3,7 +3,7 @@
 //using System.Windows.Forms;
 //using log4net;
 
-//namespace Habanero.Ui.Generic
+//namespace Habanero.Ui.Grid
 //{
 //    /// <summary>
 //    /// Summary description for DataGridComboBoxColumn.

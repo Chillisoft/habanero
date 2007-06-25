@@ -1,7 +1,7 @@
 using System.Windows.Forms;
 using Habanero.Generic;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a message box giving the user the choice of proceeding with

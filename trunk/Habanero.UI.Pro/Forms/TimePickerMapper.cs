@@ -1,8 +1,9 @@
 using System;
 using System.Windows.Forms;
+using Habanero.Ui.Forms;
 using MyTimePicker;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides mapping for a TimePicker control
@@ -45,8 +46,8 @@ namespace Habanero.Ui.BoControls
                         if (oldValue == null)
                         {
                             _businessObject.SetPropertyValue(_propertyName,
-                                                               new DateTime(1, 1, 1, newTime.Hours, newTime.Minutes,
-                                                                            newTime.Seconds));
+                                                             new DateTime(1, 1, 1, newTime.Hours, newTime.Minutes,
+                                                                          newTime.Seconds));
                         }
                         else
                         {

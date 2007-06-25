@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a multiselector control. The type to be displayed in the 
@@ -20,27 +20,27 @@ namespace Habanero.Ui.Application
             InitializeComponent();
             _model = new Model();
             _model.OptionAdded += delegate(object sender, Model.ModelEventArgs<T> e) {
-                                        AvailableOptionsListBox.Items.Add(e.Item);
-                                        UpdateButtonsStatus();
-                                    };
+                                                                                         AvailableOptionsListBox.Items.Add(e.Item);
+                                                                                         UpdateButtonsStatus();
+            };
 
             _model.OptionRemoved += delegate(object sender, Model.ModelEventArgs<T> e) {
-                                          AvailableOptionsListBox.Items.Remove(e.Item);
-                                          UpdateButtonsStatus();
-                                      };
+                                                                                           AvailableOptionsListBox.Items.Remove(e.Item);
+                                                                                           UpdateButtonsStatus();
+            };
 
             _model.Selected += delegate(object sender, Model.ModelEventArgs<T> e) {
-                                     AvailableOptionsListBox.Items.Remove(e.Item);
-                                     SelectionsListBox.Items.Add(e.Item);
-                                     SelectionsListBox.SelectedItem = e.Item;
-                                     UpdateButtonsStatus();
-                                 };
+                                                                                      AvailableOptionsListBox.Items.Remove(e.Item);
+                                                                                      SelectionsListBox.Items.Add(e.Item);
+                                                                                      SelectionsListBox.SelectedItem = e.Item;
+                                                                                      UpdateButtonsStatus();
+            };
             _model.Deselected += delegate(object sender, Model.ModelEventArgs<T> e) {
-                                       AvailableOptionsListBox.Items.Add(e.Item);
-                                       AvailableOptionsListBox.SelectedItem = e.Item;
-                                       SelectionsListBox.Items.Remove(e.Item);
-                                       UpdateButtonsStatus();
-                                   };
+                                                                                        AvailableOptionsListBox.Items.Add(e.Item);
+                                                                                        AvailableOptionsListBox.SelectedItem = e.Item;
+                                                                                        SelectionsListBox.Items.Remove(e.Item);
+                                                                                        UpdateButtonsStatus();
+            };
 
             AvailableOptionsListBox.SelectedIndexChanged += delegate { SelectButton.Enabled = (AvailableOptionsListBox.SelectedIndex != -1); };
             SelectionsListBox.SelectedIndexChanged += delegate { DeselectButton.Enabled = (SelectionsListBox.SelectedIndex != -1); };

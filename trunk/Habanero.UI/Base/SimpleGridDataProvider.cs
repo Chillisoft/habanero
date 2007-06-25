@@ -2,8 +2,9 @@ using System;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Generic;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// Provides data to a facility

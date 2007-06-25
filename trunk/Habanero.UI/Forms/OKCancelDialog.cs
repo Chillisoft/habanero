@@ -1,9 +1,10 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
+using Habanero.Ui.Forms;
 
-namespace Habanero.Ui.Misc
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a form that contains a specified control and "OK" and

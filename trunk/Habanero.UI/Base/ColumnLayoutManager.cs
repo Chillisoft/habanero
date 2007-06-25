@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// Manages a layout with multiple columns

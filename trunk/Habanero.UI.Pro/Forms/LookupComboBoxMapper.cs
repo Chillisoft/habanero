@@ -2,9 +2,10 @@ using System;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
+using Habanero.Ui.Forms;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Maps the lookup ComboBox
@@ -26,12 +27,12 @@ namespace Habanero.Ui.BoControls
             //_comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             _comboBox.SelectedIndexChanged += new EventHandler(ValueChangedHandler);
             _comboBox.KeyPress += delegate(object sender, KeyPressEventArgs e)
-                                        {
-                                            if (e.KeyChar == 13)
-                                            {
-                                                ValueChangedHandler(sender, e);
-                                            }
-                                        };
+                                      {
+                                          if (e.KeyChar == 13)
+                                          {
+                                              ValueChangedHandler(sender, e);
+                                          }
+                                      };
         }
 
         //

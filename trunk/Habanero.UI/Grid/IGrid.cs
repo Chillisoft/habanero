@@ -1,6 +1,7 @@
 using Habanero.Generic;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// An interface to model a grid in a user interface

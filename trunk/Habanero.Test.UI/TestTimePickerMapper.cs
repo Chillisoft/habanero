@@ -1,6 +1,6 @@
 using System;
 using Habanero.Test.General;
-using Habanero.Ui.BoControls;
+using Habanero.Ui.Forms;
 using MyTimePicker;
 using NUnit.Framework;
 

@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Windows.Forms;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.Generic

@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
-using Habanero.Ui.Misc;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a super-class for form controllers

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Test;
-using Habanero.Ui.Application;
+using Habanero.Ui.Forms;
 using NMock;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;

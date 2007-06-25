@@ -1,7 +1,8 @@
 using Habanero.Generic;
+using Habanero.Ui.Grid;
 using Habanero.Util;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Manages a filter clause that filters which data to
@@ -22,7 +23,7 @@ namespace Habanero.Ui.Generic
             if (_clauseOperator == FilterClauseOperator.OpLike)
             {
                 throw new HabaneroArgumentException("clauseOperator",
-                                                   "Operator Like is not supported for non string operands");
+                                                    "Operator Like is not supported for non string operands");
             }
         }
 

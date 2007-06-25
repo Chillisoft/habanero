@@ -4,7 +4,7 @@ using Habanero.Bo;
 using Habanero.Generic;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Creates business objects.  The default creator is used by facilities

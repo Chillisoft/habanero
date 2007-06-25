@@ -1,6 +1,7 @@
 using Habanero.Generic;
+using Habanero.Ui.Grid;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Creates filter clauses that determine which rows of data are displayed
@@ -16,7 +17,7 @@ namespace Habanero.Ui.Generic
         /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
         public IFilterClause CreateStringFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
-                                                     string filterValue)
+                                                      string filterValue)
         {
             return new DataViewStringFilterClause(filterColumn, clauseOperator, filterValue);
         }
@@ -30,7 +31,7 @@ namespace Habanero.Ui.Generic
         /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
         public IFilterClause CreateIntegerFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
-                                                      int filterValue)
+                                                       int filterValue)
         {
             return new DataViewIntegerFilterClause(filterColumn, clauseOperator, filterValue);
         }
@@ -45,8 +46,8 @@ namespace Habanero.Ui.Generic
         /// <param name="rightClause">The right filter clause</param>
         /// <returns>Returns the new filter clause object</returns>
         public IFilterClause CreateCompositeFilterClause(IFilterClause leftClause,
-                                                        FilterClauseCompositeOperator compositeOperator,
-                                                        IFilterClause rightClause)
+                                                         FilterClauseCompositeOperator compositeOperator,
+                                                         IFilterClause rightClause)
         {
             return new DataViewCompositeFilterClause(leftClause, compositeOperator, rightClause);
         }

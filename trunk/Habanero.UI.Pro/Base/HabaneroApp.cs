@@ -6,11 +6,12 @@ using Habanero.Bo.Loaders;
 using Habanero.Db;
 using Habanero.Generic;
 //using Habanero.Ui.Misc;
-using Habanero.Ui.Misc;
+using Habanero.Ui.Base;
+using Habanero.Ui.Forms;
 using log4net;
 using log4net.Config;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// Provides a template for a standard Habanero application, including
@@ -39,7 +40,7 @@ namespace Habanero.Ui.Application
         private ApplicationVersionUpgrader _applicationVersionUpgrader;
         private string _classDefsPath = "";
         private string _classDefsFileName = "ClassDefs.xml";
-    	private IDefClassFactory _defClassFactory;
+        private IDefClassFactory _defClassFactory;
         private DatabaseConfig _databaseConfig;
         private IExceptionNotifier _exceptionNotifier;
         private ISynchronisationController _synchronisationController;
@@ -76,10 +77,10 @@ namespace Habanero.Ui.Application
         /// <summary>
         /// Sets the definition class factory.
         /// </summary>
-		public IDefClassFactory DefClassFactory
-		{
-			set { _defClassFactory = value; }
-		}
+        public IDefClassFactory DefClassFactory
+        {
+            set { _defClassFactory = value; }
+        }
 
         /// <summary>
         /// Sets the database configuration object, which contains basic 
@@ -137,19 +138,19 @@ namespace Habanero.Ui.Application
         {
             try
             {
-				if (_defClassFactory != null)
-				{
-					return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath, _defClassFactory);
-				} else {
-					return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath);
-				}
-			}
+                if (_defClassFactory != null)
+                {
+                    return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath, _defClassFactory);
+                } else {
+                    return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath);
+                }
+            }
             catch (Exception ex)
             {
                 throw new FileNotFoundException("Unable to find Class Definitions file. " +
-                      "This file contains all the class definitions that match " +
-                      "objects to database tables. Ensure that you have a classdefs.xml file " +
-                      "and that the file is being copied to your output directory (eg. bin/debug).", ex);
+                                                "This file contains all the class definitions that match " +
+                                                "objects to database tables. Ensure that you have a classdefs.xml file " +
+                                                "and that the file is being copied to your output directory (eg. bin/debug).", ex);
             }
         }
 
@@ -181,10 +182,10 @@ namespace Habanero.Ui.Application
                 catch (Exception ex)
                 {
                     throw new XmlException("There was an error reading the XML configuration file. " +
-                        "Check that all custom configurations, such as DatabaseConfig, are well-formed, " +
-                        "spelt correctly and have been declared correctly in configSections.  See the " +
-                        "Habanero tutorial for example usage or see official " +
-                        "documentation on configuration files if the error is not resolved.", ex);
+                                           "Check that all custom configurations, such as DatabaseConfig, are well-formed, " +
+                                           "spelt correctly and have been declared correctly in configSections.  See the " +
+                                           "Habanero tutorial for example usage or see official " +
+                                           "documentation on configuration files if the error is not resolved.", ex);
                 }
                 log = LogManager.GetLogger("HabaneroApp");
 
@@ -207,7 +208,7 @@ namespace Habanero.Ui.Application
                 if (log != null && log.Logger.IsEnabledFor(log4net.spi.Level.ERROR))
                 {
                     log.Error("---------------------------------------------" +
-                        Environment.NewLine + ExceptionUtil.GetCategorizedExceptionString(ex, 0));
+                              Environment.NewLine + ExceptionUtil.GetCategorizedExceptionString(ex, 0));
                     errorMessage += " Please look at the log file for details of the problem.";
                 }
                 GlobalRegistry.UIExceptionNotifier.Notify(

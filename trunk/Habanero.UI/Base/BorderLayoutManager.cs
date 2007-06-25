@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// Manages the layout of controls in a user interface by having

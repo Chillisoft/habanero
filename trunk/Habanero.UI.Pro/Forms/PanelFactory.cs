@@ -4,12 +4,14 @@ using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
+using Habanero.Ui.Forms;
+using Habanero.Ui.Grid;
 using log4net;
 using System.Collections.Generic;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Creates panels that display business object information in a user

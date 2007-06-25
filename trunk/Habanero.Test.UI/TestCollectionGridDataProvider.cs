@@ -2,7 +2,7 @@
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Test;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.Generic

@@ -1,9 +1,9 @@
 using System.Threading;
 using System.Windows.Forms;
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Misc
+namespace Habanero.Ui.Util
 {
     /// <summary>
     /// Provides a form that displays a progress indicator to the user
@@ -36,11 +36,11 @@ namespace Habanero.Ui.Misc
         /// <param name="description">A description</param>
         public void UpdateProgress(int amountComplete, int totalToComplete, string description)
         {
-				_popupProgressForm.SetProgress(amountComplete*100/totalToComplete);
-                _popupProgressForm.SetDescription(description);
-                _popupProgressForm.Refresh();
+            _popupProgressForm.SetProgress(amountComplete*100/totalToComplete);
+            _popupProgressForm.SetDescription(description);
+            _popupProgressForm.Refresh();
 
-		}
+        }
 
 
             

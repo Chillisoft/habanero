@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
+using Habanero.Ui.Util;
 
-
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Util
 {
     /// <summary>
     /// Provides a super-class for wizard helpers that lead the user 

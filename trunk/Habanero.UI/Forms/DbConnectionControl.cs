@@ -1,6 +1,6 @@
 using Habanero.Db;
 
-namespace Habanero.Ui.Misc
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a control form listing database settings

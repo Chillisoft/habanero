@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using Habanero.Bo;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Maps a ListView object in a user interface

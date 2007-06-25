@@ -2,8 +2,8 @@ using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Test;
-using Habanero.Ui.Application;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
+using Habanero.Ui.Grid;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.Application

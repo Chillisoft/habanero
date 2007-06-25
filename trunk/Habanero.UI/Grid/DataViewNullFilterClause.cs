@@ -1,6 +1,6 @@
 using Habanero.Generic;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Manages a null filter clause, which carries out no filtering of data

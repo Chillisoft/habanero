@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Test.General;
-using Habanero.Ui.BoControls;
+using Habanero.Ui.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.BoControls

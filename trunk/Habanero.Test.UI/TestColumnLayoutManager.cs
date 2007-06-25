@@ -1,5 +1,5 @@
 using System.Windows.Forms;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.Generic

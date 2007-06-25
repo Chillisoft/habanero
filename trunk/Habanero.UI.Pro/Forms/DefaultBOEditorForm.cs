@@ -2,12 +2,14 @@ using System;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
+using Habanero.Ui.Forms;
+using Habanero.Ui.Grid;
 using log4net;
 
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a form to edit a business object.  This form is initiated
@@ -19,7 +21,7 @@ namespace Habanero.Ui.BoControls
     /// </summary>
     public class DefaultBOEditorForm : Form
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.BoControls.DefaultBOEditorForm");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Forms.DefaultBOEditorForm");
         private readonly string _uiDefName;
         private ButtonControl _buttons;
         protected BusinessObject _bo;
@@ -47,10 +49,10 @@ namespace Habanero.Ui.BoControls
                 if (uiMapper == null)
                 {
                     throw new NullReferenceException("An error occurred while " +
-                        "attempting to load an object editing form.  A possible " +
-                        "cause is that the class definitions do not have a " +
-                        "'uiFormDef' section for the class, under the 'uiDef' " +
-                        "with the name '" + _uiDefName + "'.");
+                                                     "attempting to load an object editing form.  A possible " +
+                                                     "cause is that the class definitions do not have a " +
+                                                     "'uiFormDef' section for the class, under the 'uiDef' " +
+                                                     "with the name '" + _uiDefName + "'.");
                 }
                 def = uiMapper.GetUIFormProperties();
             }
@@ -60,18 +62,18 @@ namespace Habanero.Ui.BoControls
                 if (uiMapper == null)
                 {
                     throw new NullReferenceException("An error occurred while " +
-                        "attempting to load an object editing form.  A possible " +
-                        "cause is that the class definitions do not have a " +
-                        "'uiFormDef' section for the class.");
+                                                     "attempting to load an object editing form.  A possible " +
+                                                     "cause is that the class definitions do not have a " +
+                                                     "'uiFormDef' section for the class.");
                 }
                 def = uiMapper.GetUIFormProperties();
             }
             if (def == null)
             {
                 throw new NullReferenceException("An error occurred while " +
-                    "attempting to load an object editing form.  A possible " +
-                    "cause is that the class definitions do not have a " +
-                    "'uiFormDef' section for the class.");
+                                                 "attempting to load an object editing form.  A possible " +
+                                                 "cause is that the class definitions do not have a " +
+                                                 "'uiFormDef' section for the class.");
             }
 
             PanelFactory factory = new PanelFactory(_bo, def);

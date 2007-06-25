@@ -2,10 +2,10 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
+using Habanero.Ui.Forms;
 
-
-namespace Habanero.Ui.Misc
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a form that displays an exception to the user

@@ -1,7 +1,8 @@
 using System;
 using System.Windows.Forms;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Provides a text field with a file path and a button to choose 

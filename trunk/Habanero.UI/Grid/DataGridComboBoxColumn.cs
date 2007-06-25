@@ -5,7 +5,7 @@
 //using log4net;
 //using Noogen.WinForms;
 
-//namespace Habanero.Ui.Generic
+//namespace Habanero.Ui.Grid
 //{
 //    /// <summary>
 //    /// Summary description for DataGridComboBoxColumn.

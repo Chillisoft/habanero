@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// This mapper represents a CheckBox object in a user interface

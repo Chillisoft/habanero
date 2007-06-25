@@ -3,10 +3,10 @@ using System.Data;
 using System.Windows.Forms;
 using Habanero.Db;
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Base;
+using Habanero.Ui.Forms;
 
-
-namespace Habanero.Ui.Misc
+namespace Habanero.Ui.Util
 {
     /// <summary>
     /// Provides a pad in which raw sql can be typed and executed

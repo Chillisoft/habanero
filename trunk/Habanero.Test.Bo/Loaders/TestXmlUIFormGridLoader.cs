@@ -1,6 +1,6 @@
 using Habanero.Bo.Loaders;
 using Habanero.Generic;
-using Habanero.Ui.Application;
+using Habanero.Ui.Grid;
 using NUnit.Framework;
 
 namespace Habanero.Test.Bo.Loaders

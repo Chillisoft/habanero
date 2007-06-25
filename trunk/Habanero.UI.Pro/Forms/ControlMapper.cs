@@ -7,7 +7,7 @@ using Habanero.Generic;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.BoControls
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// This provides a super class for objects that map user interface

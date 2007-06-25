@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// A super-class for layout managers that dictate how and where controls

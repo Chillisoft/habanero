@@ -2,7 +2,7 @@ using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Generic;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Base
 {
     /// <summary>
     /// An interface to model a provider of data to a grid

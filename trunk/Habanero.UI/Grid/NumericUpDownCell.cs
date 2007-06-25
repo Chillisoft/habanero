@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Manages a cell that holds a calendar date
@@ -29,11 +29,11 @@ namespace Habanero.Ui.Generic
         /// <param name="initialFormattedValue">The initial value</param>
         /// <param name="dataGridViewCellStyle">The cell style</param>
         public override void InitializeEditingControl(int rowIndex, object
-            initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
+                                                                        initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
         {
             // Set the value of the editing control to the current cell value.
             base.InitializeEditingControl(rowIndex, initialFormattedValue,
-                dataGridViewCellStyle);
+                                          dataGridViewCellStyle);
             NumericUpDownEditingControl ctl =
                 DataGridView.EditingControl as NumericUpDownEditingControl;
 
@@ -82,5 +82,4 @@ namespace Habanero.Ui.Generic
             }
         }
     }
-
 }

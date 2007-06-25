@@ -1,5 +1,5 @@
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Grid;
 using Habanero.Util;
 using NUnit.Framework;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using Habanero.Ui.Application;
+using Habanero.Ui.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.Application

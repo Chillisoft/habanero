@@ -1,7 +1,8 @@
 using System;
 using System.Windows.Forms;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// A control for a set of buttons in a user interface
@@ -9,7 +10,7 @@ namespace Habanero.Ui.Generic
     public class ButtonControl : UserControl
     {
         private FlowLayoutManager _layoutManager;
-        private Generic.ControlCollection _buttons;
+        private Base.ControlCollection _buttons;
 
         /// <summary>
         /// Constructor to initialise a new button controller.  Sets up a new
@@ -19,7 +20,7 @@ namespace Habanero.Ui.Generic
         {
             _layoutManager = new FlowLayoutManager(this);
             _layoutManager.Alignment = FlowLayoutManager.Alignments.Right;
-            _buttons = new Generic.ControlCollection();
+            _buttons = new Base.ControlCollection();
             Button sample = ControlFactory.CreateButton("Sample");
             this.Height = sample.Height + 10;
         }

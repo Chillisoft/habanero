@@ -1,9 +1,10 @@
 using System;
 using System.Windows.Forms;
 using Habanero.Generic;
-using Habanero.Ui.Generic;
+using Habanero.Ui.Forms;
+using Habanero.Ui.Grid;
 
-namespace Habanero.Ui.Application
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Manages buttons in an editable grid
