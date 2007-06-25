@@ -328,9 +328,6 @@
     <Compile Include="SQLCriteriaCreator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TimeSpanComparer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Transaction.cs">
       <SubType>Code</SubType>
     </Compile>

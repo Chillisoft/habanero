@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
+using Habanero.Base;
 
-namespace Habanero.Bo
+namespace Habanero.Util
 {
     /// <summary>
     /// Compares timespan properties
@@ -38,8 +39,8 @@ namespace Habanero.Bo
         /// greater than y's</returns>
         public int Compare(object x, object y)
         {
-            BusinessObject boLeft = (BusinessObject) x;
-            BusinessObject boRight = (BusinessObject) y;
+            IBusinessObject boLeft = (IBusinessObject) x;
+            IBusinessObject boRight = (IBusinessObject) y;
             TimeSpan left;
             TimeSpan right;
             if (boLeft.GetPropertyValue(_propName) == null)

@@ -157,6 +157,7 @@
     <Compile Include="StringUtilities.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TimeSpanComparer.cs" />
     <Compile Include="TypeLoader.cs">
       <SubType>Code</SubType>
     </Compile>
