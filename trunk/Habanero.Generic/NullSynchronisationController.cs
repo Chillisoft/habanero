@@ -1,4 +1,4 @@
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Provides a synchronisation controller that does not implement

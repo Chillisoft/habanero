@@ -1,4 +1,4 @@
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// An enumeration that provides an operator used by a composite filter

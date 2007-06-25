@@ -3,7 +3,7 @@ using System.Data;
 using Chillisoft.Test;
 using Habanero.Bo;
 using Habanero.Db;
-using Habanero.Generic;
+using Habanero.Base;
 using NMock;
 using NUnit.Framework;
 

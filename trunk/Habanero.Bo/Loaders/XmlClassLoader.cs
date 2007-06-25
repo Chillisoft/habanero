@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Util;
 
 namespace Habanero.Bo.Loaders

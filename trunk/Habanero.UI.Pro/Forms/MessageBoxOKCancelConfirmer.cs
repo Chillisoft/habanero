@@ -1,5 +1,5 @@
 using System.Windows.Forms;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Ui.Forms
 {

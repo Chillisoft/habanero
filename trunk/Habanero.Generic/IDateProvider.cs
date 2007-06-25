@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// An interface that models a date provider

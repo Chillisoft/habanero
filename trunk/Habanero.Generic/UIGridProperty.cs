@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Manages property definitions for a column in a user interface grid,

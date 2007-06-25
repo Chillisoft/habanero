@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 using Habanero.Bo.Loaders;
-using Habanero.Generic;
+using Habanero.Base;
 using NUnit.Framework;
 
 namespace Habanero.Test.Bo.Loaders

@@ -4,7 +4,7 @@ using Chillisoft.Test;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Bo;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Util;
 using NUnit.Framework;
 using BusinessObject=Habanero.Bo.BusinessObject;

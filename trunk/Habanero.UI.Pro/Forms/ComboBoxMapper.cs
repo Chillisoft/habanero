@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Ui.Forms;
 using BusinessObject=Habanero.Bo.BusinessObject;
 

@@ -1,4 +1,4 @@
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Stores key global settings for an application

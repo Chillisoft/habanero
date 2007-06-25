@@ -3,7 +3,7 @@ using System.Collections;
 using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Generic;
+using Habanero.Base;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
 namespace Habanero.Test

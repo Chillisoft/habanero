@@ -2,7 +2,7 @@ using System.Collections;
 using System.Data;
 using System.Text;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// An interface that models a sql statement

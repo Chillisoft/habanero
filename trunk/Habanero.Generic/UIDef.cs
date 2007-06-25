@@ -1,4 +1,4 @@
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Defines how the properties of a class are displayed in a user

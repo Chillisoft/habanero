@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// An interface to model a tool that lists objects

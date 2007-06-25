@@ -8,7 +8,7 @@ using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Bo.SqlGeneration;
 using Habanero.Db;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Util;
 using log4net;
 
@@ -39,7 +39,7 @@ namespace Habanero.Bo
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
     /// </summary>
-    public abstract class BusinessObject : ITransaction, ISynchronisable, Generic.IBusinessObject
+    public abstract class BusinessObject : ITransaction, ISynchronisable, Base.IBusinessObject
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BusinessObject");
 

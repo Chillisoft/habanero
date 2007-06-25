@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Provides extra utilities for dealing with exceptions, such as

@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Indicates to the user how much progress has been made in 

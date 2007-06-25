@@ -1,6 +1,6 @@
 using System;
 using Habanero.Bo;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Ui.Forms;
 using Habanero.Ui.Grid;
 using BusinessObject=Habanero.Bo.BusinessObject;

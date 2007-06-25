@@ -1,6 +1,6 @@
 using System.Collections;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Bo
 {

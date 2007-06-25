@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Bo.ClassDefinition
 {

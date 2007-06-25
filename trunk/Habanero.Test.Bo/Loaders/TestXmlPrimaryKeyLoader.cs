@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
-using Habanero.Generic;
+using Habanero.Base;
 using NUnit.Framework;
 
 namespace Habanero.Test.Bo.Loaders

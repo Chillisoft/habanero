@@ -1,6 +1,6 @@
 using System.Collections;
 using System.IO;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Util
 {

@@ -2,7 +2,7 @@ using System;
 using System.Xml;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Bo.Loaders
 {

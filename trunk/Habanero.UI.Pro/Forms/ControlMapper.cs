@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Bo;
-using Habanero.Generic;
+using Habanero.Base;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;
 

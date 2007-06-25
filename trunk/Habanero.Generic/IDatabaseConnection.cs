@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// An interface to model a class that manages a database connection 

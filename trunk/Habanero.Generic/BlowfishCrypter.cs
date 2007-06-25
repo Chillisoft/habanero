@@ -1,6 +1,6 @@
 using Blowfish_NET;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// An encrypter that uses the Blowfish encryption algorithm to

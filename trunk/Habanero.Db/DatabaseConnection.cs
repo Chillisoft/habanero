@@ -3,7 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Globalization;
 using System.Reflection;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Util;
 using log4net;
 

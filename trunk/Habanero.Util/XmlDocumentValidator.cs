@@ -1,7 +1,7 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Util
 {

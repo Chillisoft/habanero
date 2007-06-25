@@ -1,5 +1,5 @@
 using Habanero.Bo;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Ui.Base
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Holds the property definitions for a column of controls in a user 

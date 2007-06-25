@@ -1,6 +1,6 @@
 using System;
 using System.Configuration;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Util
 {

@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Util
 {

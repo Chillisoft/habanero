@@ -1,6 +1,6 @@
 using System.Collections;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Generic;
+using Habanero.Base;
 using log4net;
 using System.Data;
 

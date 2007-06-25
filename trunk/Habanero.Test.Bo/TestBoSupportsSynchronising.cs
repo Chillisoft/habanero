@@ -3,7 +3,7 @@ using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Bo;
 using Habanero.Db;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Test;
 using Habanero.Util;
 using NMock;

@@ -2,7 +2,7 @@ using System.Data;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Db;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Util;
 using NMock;
 using NUnit.Framework;

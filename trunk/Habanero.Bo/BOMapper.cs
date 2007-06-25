@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Generic;
+using Habanero.Base;
 using log4net;
 
 namespace Habanero.Bo

@@ -1,7 +1,7 @@
 using System;
 
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Displays exception message output to the console

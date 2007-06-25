@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// An interface to model data-set providers

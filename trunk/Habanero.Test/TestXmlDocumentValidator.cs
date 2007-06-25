@@ -1,4 +1,4 @@
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Util;
 using NUnit.Framework;
 

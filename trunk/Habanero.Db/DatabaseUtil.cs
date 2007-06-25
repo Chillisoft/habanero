@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Util;
 
 namespace Habanero.Db

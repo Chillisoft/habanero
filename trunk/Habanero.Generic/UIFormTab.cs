@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Manages property definitions for a tab in a user interface editing 

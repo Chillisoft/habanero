@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Manages a property definition for a control in a user interface editing

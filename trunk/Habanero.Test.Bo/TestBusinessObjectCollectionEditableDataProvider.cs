@@ -1,6 +1,6 @@
 using Habanero.Bo;
 using Habanero.Db;
-using Habanero.Generic;
+using Habanero.Base;
 using NUnit.Framework;
 using BusinessObject=Habanero.Bo.BusinessObject;
 

@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// An interface to model a collection of sql statements

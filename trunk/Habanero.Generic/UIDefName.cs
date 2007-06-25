@@ -1,6 +1,6 @@
 //using System;
 //
-//namespace Habanero.Generic
+//namespace Habanero.Base
 //{
 //	/// <summary>
 //	/// Summary description for UIDefName.

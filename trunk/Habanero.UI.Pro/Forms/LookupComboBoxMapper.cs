@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 using Habanero.Bo;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Ui.Base;
 using Habanero.Ui.Forms;
 

@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Provides a StreamReader to load a text file

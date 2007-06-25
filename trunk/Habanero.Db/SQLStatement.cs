@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Text;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Util;
 
 namespace Habanero.Db

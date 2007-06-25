@@ -4,7 +4,7 @@ using System.Xml;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Db;
-using Habanero.Generic;
+using Habanero.Base;
 //using Habanero.Ui.Misc;
 using Habanero.Ui.Base;
 using Habanero.Ui.Forms;

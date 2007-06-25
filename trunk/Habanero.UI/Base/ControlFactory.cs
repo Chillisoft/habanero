@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Ui.Forms;
 using Noogen.WinForms;
 

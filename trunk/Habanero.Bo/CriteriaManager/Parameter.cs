@@ -1,5 +1,5 @@
 using System;
-using Habanero.Generic;
+using Habanero.Base;
 //using Habanero.Bo;
 
 namespace Habanero.Bo.CriteriaManager

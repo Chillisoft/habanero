@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Db;
-using Habanero.Generic;
+using Habanero.Base;
 using NMock;
 using NUnit.Framework;
 

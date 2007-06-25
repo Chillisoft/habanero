@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Windows.Forms;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Ui.Base;
 
 namespace Habanero.Ui.Util

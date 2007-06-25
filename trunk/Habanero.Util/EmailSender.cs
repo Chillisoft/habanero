@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Net;
-using Habanero.Generic;
+using Habanero.Base;
 using System.Net.Mail;
 
 namespace Habanero.Util

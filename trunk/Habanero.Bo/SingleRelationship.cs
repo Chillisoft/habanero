@@ -3,7 +3,7 @@ using System.Collections;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Db;
-using Habanero.Generic;
+using Habanero.Base;
 using log4net;
 using NUnit.Framework;
 

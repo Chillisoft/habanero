@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Loads document type definitions (dtd's)

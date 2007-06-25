@@ -1,5 +1,5 @@
 using System.Xml;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Db
 {

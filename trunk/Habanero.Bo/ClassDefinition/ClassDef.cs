@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Habanero.Bo;
 using Habanero.Bo.Loaders;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Util;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;

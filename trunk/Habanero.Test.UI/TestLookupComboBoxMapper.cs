@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 using Chillisoft.Test;
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Test.General;
 using Habanero.Ui.Forms;
 using NUnit.Framework;

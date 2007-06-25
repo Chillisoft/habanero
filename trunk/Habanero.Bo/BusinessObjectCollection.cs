@@ -8,7 +8,7 @@ using System.Security.Permissions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Db;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Bo
 {

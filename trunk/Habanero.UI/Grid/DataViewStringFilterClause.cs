@@ -1,4 +1,4 @@
-using Habanero.Generic;
+using Habanero.Base;
 using Habanero.Ui.Grid;
 
 namespace Habanero.Ui.Grid

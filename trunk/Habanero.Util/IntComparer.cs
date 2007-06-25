@@ -1,5 +1,5 @@
 using System.Collections;
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Util
 {

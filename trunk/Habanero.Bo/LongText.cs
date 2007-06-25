@@ -1,4 +1,4 @@
-using Habanero.Generic;
+using Habanero.Base;
 
 namespace Habanero.Bo
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// Manages a collection of string-Guid pairs

@@ -1,6 +1,6 @@
 using System.Xml;
 
-namespace Habanero.Generic
+namespace Habanero.Base
 {
     /// <summary>
     /// This class is used to retrieve and update data in an XML document.
