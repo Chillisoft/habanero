@@ -4,9 +4,11 @@ using Habanero.Bo.CriteriaManager;
 using Habanero.Bo;
 using Habanero.Base;
 using Habanero.Util;
+using Habanero.Util.Comparer;
+using Habanero.Util.File;
 using log4net;
 using NUnit.Framework;
-using StringComparer=Habanero.Util.StringComparer;
+using StringComparer=Habanero.Util.Comparer.StringComparer;
 
 namespace Habanero.Bo.ClassDefinition
 {

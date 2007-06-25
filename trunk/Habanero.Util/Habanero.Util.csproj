@@ -120,13 +120,13 @@
     <Compile Include="HabaneroStringBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CSVFileReader.cs">
+    <Compile Include="File\CSVFileReader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CSVFileWriter.cs">
+    <Compile Include="File\CSVFileWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DateTimeComparer.cs" />
+    <Compile Include="Comparer\DateTimeComparer.cs" />
     <Compile Include="DelayedMethodCall.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -136,12 +136,12 @@
     <Compile Include="ExceptionUtilities.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GuidComparer.cs" />
+    <Compile Include="Comparer\GuidComparer.cs" />
     <Compile Include="IdNumberUtilities.cs" />
     <Compile Include="ImageThumbnailCreator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IntComparer.cs" />
+    <Compile Include="Comparer\IntComparer.cs" />
     <Compile Include="JpgMetaData.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -149,16 +149,16 @@
     <Compile Include="SerialisationUtilities.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SingleComparer.cs" />
+    <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="SortedStringList.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StringComparer.cs" />
+    <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="StringUtilities.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TimeSpanComparer.cs" />
-    <Compile Include="TypeLoader.cs">
+    <Compile Include="Comparer\TimeSpanComparer.cs" />
+    <Compile Include="File\TypeLoader.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XmlDocumentValidator.cs">

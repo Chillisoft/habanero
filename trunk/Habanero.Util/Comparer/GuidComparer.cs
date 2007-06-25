@@ -2,61 +2,58 @@ using System;
 using System.Collections;
 using Habanero.Base;
 
-namespace Habanero.Util
+namespace Habanero.Util.Comparer
 {
     /// <summary>
-    /// Compares two business objects on the date-time property specified 
+    /// Compares two business objects on the Guid property specified 
     /// in the constructor
     /// </summary>
-    public class DateTimeComparer : IComparer
+    public class GuidComparer : IComparer
     {
         private readonly string _propName;
 
         /// <summary>
-        /// Constructor to initialise a comparer, specifying the date-time property
-        /// on which two business objects will be compared using the Compare()
+        /// Constructor to initialise a comparer, specifying the Guid property on
+        /// which two business objects will be compared using the Compare()
         /// method
         /// </summary>
-        /// <param name="propName">The integer property name on which two
+        /// <param name="propName">The Guid property name on which two
         /// business objects will be compared</param>
-        public DateTimeComparer(string propName)
+        public GuidComparer(string propName)
         {
             _propName = propName;
-            //
-            // TODO: Add constructor logic here
-            //
         }
 
         /// <summary>
-        /// Compares two business objects on the date-time property specified in 
+        /// Compares two business objects on the Guid property specified in 
         /// the constructor
         /// </summary>
         /// <param name="x">The first object to compare</param>
         /// <param name="y">The second object to compare</param>
         /// <returns>Returns a negative number, zero or a positive number,
-        /// depending on whether the first date is less, equal to or more
+        /// depending on whether the first Guid is less, equal to or more
         /// than the second</returns>
         public int Compare(object x, object y)
         {
             IBusinessObject boLeft = (IBusinessObject) x;
             IBusinessObject boRight = (IBusinessObject) y;
-            DateTime left;
-            DateTime right;
+            Guid left;
+            Guid right;
             if (boLeft.GetPropertyValue(_propName) == null)
             {
-                left = DateTime.MinValue;
+                left = Guid.Empty;
             }
             else
             {
-                left = (DateTime) boLeft.GetPropertyValue(_propName);
+                left = (Guid) boLeft.GetPropertyValue(_propName);
             }
             if (boRight.GetPropertyValue(_propName) == null)
             {
-                right = DateTime.MinValue;
+                right = Guid.Empty;
             }
             else
             {
-                right = (DateTime) boRight.GetPropertyValue(_propName);
+                right = (Guid) boRight.GetPropertyValue(_propName);
             }
             return left.CompareTo(right);
         }

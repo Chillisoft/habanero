@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Habanero.Base;
 
-namespace Habanero.Util
+namespace Habanero.Util.Comparer
 {
     /// <summary>
     /// Compares two business objects on the Single property specified 

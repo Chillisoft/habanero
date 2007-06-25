@@ -3,6 +3,7 @@ using System.Xml;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
 using Habanero.Util;
+using Habanero.Util.File;
 using log4net;
 
 namespace Habanero.Bo.Loaders

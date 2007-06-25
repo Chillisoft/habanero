@@ -104,7 +104,7 @@ namespace Habanero.Util
         private string GetDTD(string rootElementName)
         {
             string dtdFileName = rootElementName + ".dtd";
-            if (!File.Exists(dtdFileName))
+            if (!System.IO.File.Exists(dtdFileName))
             {
                 throw new FileNotFoundException("The dtd for " + rootElementName + " was not found.");
             }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.IO;
 using Habanero.Base;
 
-namespace Habanero.Util
+namespace Habanero.Util.File
 {
     /// <summary>
     /// Provides a reader for a CSV (Comma-separated value) file

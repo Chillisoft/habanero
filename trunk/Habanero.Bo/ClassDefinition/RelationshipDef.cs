@@ -1,6 +1,7 @@
 using System;
 using Habanero.Bo;
 using Habanero.Util;
+using Habanero.Util.File;
 
 namespace Habanero.Bo.ClassDefinition
 {
