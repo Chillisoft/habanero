@@ -209,7 +209,7 @@ namespace Habanero.Ui.Base
                 if (log != null && log.Logger.IsEnabledFor(log4net.spi.Level.ERROR))
                 {
                     log.Error("---------------------------------------------" +
-                              Environment.NewLine + ExceptionUtil.GetCategorizedExceptionString(ex, 0));
+                              Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true));
                     errorMessage += " Please look at the log file for details of the problem.";
                 }
                 GlobalRegistry.UIExceptionNotifier.Notify(

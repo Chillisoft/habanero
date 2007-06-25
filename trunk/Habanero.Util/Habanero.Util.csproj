@@ -105,16 +105,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentValidationHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConfigFileSettingsStorer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="HabaneroArgumentException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HabaneroStringBuilder.cs">
@@ -131,9 +125,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EmailSender.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ExceptionUtilities.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Comparer\GuidComparer.cs" />

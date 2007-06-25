@@ -138,7 +138,7 @@ namespace Habanero.Bo
                 {
                     log.Error("Error retrieving virtual property " + virtualPropName + " from object of type " +
                               this._businessObject.GetType().Name + Environment.NewLine +
-                              ExceptionUtil.GetExceptionString(ex.InnerException, 8));
+                              ExceptionUtilities.GetExceptionString(ex.InnerException, 8));
                     throw ex.InnerException;
                 }
             }

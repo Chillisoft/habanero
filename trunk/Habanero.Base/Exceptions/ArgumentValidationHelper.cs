@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Util
+namespace Habanero.Base.Exceptions
 {
     /// <summary>
     /// Provides methods to check the validity of arguments/parameters
@@ -86,7 +86,7 @@ namespace Habanero.Util
             if (str.Length == 0)
             {
                 throw new HabaneroArgumentException(parameterName,
-                                                   "Argument cannot be a zero length string.");
+                                                    "Argument cannot be a zero length string.");
             }
         }
 
@@ -105,12 +105,12 @@ namespace Habanero.Util
                                                        string parameterName,
                                                        string message)
         {
-			CheckArgumentNotNull(str, parameterName, parameterName + " cannot be null.\n" + message);
+            CheckArgumentNotNull(str, parameterName, parameterName + " cannot be null.\n" + message);
 
             if (str.Length == 0)
             {
                 throw new HabaneroArgumentException(parameterName,
-                                                   "Argument cannot be a zero length string.\n" + message);
+                                                    "Argument cannot be a zero length string.\n" + message);
             }
         }
 
@@ -152,8 +152,8 @@ namespace Habanero.Util
             if (! (parameterType.IsSubclassOf(expectedType)))
             {
                 throw new HabaneroArgumentException(parameterName,
-                                                   parameterName + " Argument is expected to be of type " +
-                                                   expectedType.Name + ".\n" + message);
+                                                    parameterName + " Argument is expected to be of type " +
+                                                    expectedType.Name + ".\n" + message);
             }
         }
 

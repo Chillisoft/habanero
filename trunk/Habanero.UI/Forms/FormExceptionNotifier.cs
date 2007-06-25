@@ -60,8 +60,7 @@ namespace Habanero.Ui.Forms
                 TabPage detailsTabPage = ControlFactory.CreateTabPage("Details");
                 Label detailsLabel = ControlFactory.CreateLabel("Below are further details for the error.", false);
                 TextBox detailsTextBox = ControlFactory.CreateTextBox();
-                //detailsTextBox.Text = ExceptionUtil.GetExceptionString(ex, 0);
-                detailsTextBox.Text = ExceptionUtil.GetCategorizedExceptionString(ex, 0);
+                detailsTextBox.Text = ExceptionUtilities.GetExceptionString(ex, 0, true);
                 detailsTextBox.Multiline = true;
                 detailsTextBox.ScrollBars = ScrollBars.Both;
                 BorderLayoutManager detailsTabPageManager = new BorderLayoutManager(detailsTabPage);
@@ -180,7 +179,7 @@ namespace Habanero.Ui.Forms
                 _fullDetail.Height = FULL_DETAIL_HEIGHT;
                 _fullDetail.Visible = false;
                 _errorDetails = ControlFactory.CreateTextBox();
-                _errorDetails.Text = ExceptionUtil.GetExceptionString(_exception, 0, false);
+                _errorDetails.Text = ExceptionUtilities.GetExceptionString(_exception, 0, false);
                 _errorDetails.Multiline = true;
                 _errorDetails.ScrollBars = ScrollBars.Both;
                 _showStackTrace = new CheckBox();
@@ -225,7 +224,7 @@ namespace Habanero.Ui.Forms
             /// </summary>
             private void ShowStackTraceClicked(object sender, EventArgs e)
             {
-                _errorDetails.Text = ExceptionUtil.GetExceptionString(_exception, 0, _showStackTrace.Checked);
+                _errorDetails.Text = ExceptionUtilities.GetExceptionString(_exception, 0, _showStackTrace.Checked);
             }
 
             /// <summary>

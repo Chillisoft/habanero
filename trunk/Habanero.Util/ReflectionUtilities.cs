@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
 {

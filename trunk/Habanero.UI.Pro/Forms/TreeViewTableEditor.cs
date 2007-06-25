@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
+using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Ui.Base;
 using Habanero.Ui.Grid;

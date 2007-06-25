@@ -179,7 +179,7 @@ namespace Habanero.Ui.Forms
             }
             catch (Exception ex)
             {
-                log.Error(ExceptionUtil.GetExceptionString(ex, 0));
+                log.Error(ExceptionUtilities.GetExceptionString(ex, 0));
                 GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem saving for the following reason(s):",
                                                           "Saving Problem");
             }

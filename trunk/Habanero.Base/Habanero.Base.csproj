@@ -83,6 +83,7 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -92,6 +93,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BlowfishCrypter.cs" />
+    <Compile Include="Exceptions\ArgumentValidationHelper.cs" />
     <Compile Include="Exceptions\CannotSaveException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -101,6 +103,8 @@
     <Compile Include="ConsoleProgressIndicator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exceptions\ExceptionUtilities.cs" />
+    <Compile Include="Exceptions\HabaneroArgumentException.cs" />
     <Compile Include="ICrypter.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="Exceptions\HabaneroException.cs">

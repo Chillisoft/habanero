@@ -244,7 +244,7 @@ namespace Habanero.Db
             catch (Exception ex)
             {
                 log.Error("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine +
-                          ExceptionUtil.GetExceptionString(ex, 8));
+                          ExceptionUtilities.GetExceptionString(ex, 8));
                 throw ex;
             }
         }
@@ -293,7 +293,7 @@ namespace Habanero.Db
             catch (Exception ex)
             {
                 log.Error("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine +
-                          ExceptionUtil.GetExceptionString(ex, 8));
+                          ExceptionUtilities.GetExceptionString(ex, 8));
                 //throw ex;
                 throw new DatabaseConnectionException("An error occurred while attempting " +
                     "to connect to the database.", ex);
@@ -362,7 +362,7 @@ namespace Habanero.Db
             catch (Exception ex)
             {
                 log.Error("Error reading from database : " + Environment.NewLine +
-                          ExceptionUtil.GetExceptionString(ex, 10));
+                          ExceptionUtilities.GetExceptionString(ex, 10));
                 log.Error("Sql: " + selectSql);
                 throw new DatabaseReadException(
                     "There was an error reading the database. Please contact your system administrator.",
@@ -395,14 +395,14 @@ namespace Habanero.Db
             catch (Exception ex)
             {
                 log.Error("Error reading from database : " + Environment.NewLine +
-                          ExceptionUtil.GetExceptionString(ex, 10));
+                          ExceptionUtilities.GetExceptionString(ex, 10));
                 log.Error("Sql: " + selectSQL.ToString());
                 //				if (con != null && con.State != ConnectionState.Closed) 
                 //				{
                 //					con.Close();
                 //				}
                 Console.Out.WriteLine("Error reading from database : " + Environment.NewLine +
-                                      ExceptionUtil.GetExceptionString(ex, 10));
+                                      ExceptionUtilities.GetExceptionString(ex, 10));
                 Console.Out.WriteLine("Sql: " + selectSQL.ToString());
                 throw new DatabaseReadException(
                     "There was an error reading the database. Please contact your system administrator.",
@@ -496,10 +496,10 @@ namespace Habanero.Db
             catch (Exception ex)
             {
                 log.Error("Error writing to database : " + Environment.NewLine +
-                          ExceptionUtil.GetExceptionString(ex, 10));
+                          ExceptionUtilities.GetExceptionString(ex, 10));
                 log.Error("Sql: " + sql.ToString());
                 Console.WriteLine("Error writing to database : " + Environment.NewLine +
-                                  ExceptionUtil.GetExceptionString(ex, 10));
+                                  ExceptionUtilities.GetExceptionString(ex, 10));
                 Console.WriteLine("Connect string: " + this.ErrorSafeConnectString());
                 throw new DatabaseWriteException(
                     "There was an error writing to the database. Please contact your system administrator.",
@@ -584,7 +584,7 @@ namespace Habanero.Db
             catch (Exception ex)
             {
                 log.Error("Error writing to database : " + Environment.NewLine +
-                          ExceptionUtil.GetExceptionString(ex, 10));
+                          ExceptionUtilities.GetExceptionString(ex, 10));
                 log.Error("Sql: " + sql.ToString());
                 if (!inTransaction && transaction != null)
                 {
@@ -710,7 +710,7 @@ namespace Habanero.Db
             }
             catch (Exception ex)
             {
-                log.Error("Error in LoadDataTable:" + Environment.NewLine + ExceptionUtil.GetExceptionString(ex, 8));
+                log.Error("Error in LoadDataTable:" + Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 8));
                 log.Error("Sql string: " + selectSQL.ToString());
                 //				if (con != null && con.State != ConnectionState.Closed) {
                 //					con.Close();

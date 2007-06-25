@@ -80,7 +80,7 @@ namespace Habanero.Ui.Forms
             }
             catch (TargetInvocationException  ex)
             {
-                MessageBox.Show(ExceptionUtil.GetExceptionString(ex.InnerException, 0));
+                MessageBox.Show(ExceptionUtilities.GetExceptionString(ex.InnerException, 0));
             }
         }
 

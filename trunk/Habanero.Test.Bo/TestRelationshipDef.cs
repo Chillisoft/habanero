@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Db;

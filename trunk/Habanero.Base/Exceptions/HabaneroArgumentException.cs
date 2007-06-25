@@ -1,8 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-
-namespace Habanero.Util
+namespace Habanero.Base.Exceptions
 {
     /// <summary>
     /// Provides an exception to throw for an invalid argument
@@ -33,8 +32,8 @@ namespace Habanero.Util
         /// <param name="message">The error message to display</param>
         /// <param name="inner">The inner exception</param>
         public HabaneroArgumentException(string parameterName,
-                                        string message,
-                                        Exception inner)
+                                         string message,
+                                         Exception inner)
             : base("The argument '" + parameterName + "' is not valid. " + message, inner)
         {
         }
@@ -46,7 +45,7 @@ namespace Habanero.Util
         /// <param name="parameterName">The parameter name</param>
         /// <param name="inner">The inner exception</param>
         public HabaneroArgumentException(string parameterName
-                                        , Exception inner)
+                                         , Exception inner)
             : base("The argument '" + parameterName + "' is not valid. ", inner)
         {
         }
@@ -58,7 +57,7 @@ namespace Habanero.Util
         /// <param name="parameterName">The parameter name</param>
         /// <param name="message">The error message to display</param>
         public HabaneroArgumentException(string parameterName,
-                                        string message)
+                                         string message)
             : base("The argument '" + parameterName + "' is not valid. " + message)
         {
         }
