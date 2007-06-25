@@ -320,6 +320,7 @@
     <Compile Include="SelectStatementGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SimpleLookupListSource.cs" />
     <Compile Include="SingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -211,9 +211,6 @@
     <Compile Include="IProgressIndicator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SimpleLookupListSource.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="StringGuidPair.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,4 +1,6 @@
-namespace Habanero.Base
+using Habanero.Base;
+
+namespace Habanero.Bo
 {
     /// <summary>
     /// A basic lookup-list content provider that stores a collection of
