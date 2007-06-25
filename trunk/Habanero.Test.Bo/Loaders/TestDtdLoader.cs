@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Habanero.Base;
+using Habanero.Util;
 using NMock;
 using NUnit.Framework;
 

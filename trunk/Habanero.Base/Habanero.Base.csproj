@@ -113,9 +113,6 @@
     <Compile Include="CustomProperty.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DtdLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Exceptions\ExceptionUtil.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -227,9 +224,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ISynchronisationController.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TextFileLoader.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UIDef.cs">

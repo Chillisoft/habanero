@@ -3,6 +3,7 @@ using System.Xml;
 using System.Xml.Schema;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
+using Habanero.Util;
 
 namespace Habanero.Bo.Loaders
 {

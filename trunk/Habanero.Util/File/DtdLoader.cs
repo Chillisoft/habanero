@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.IO;
+using Habanero.Base;
+using Habanero.Util.File;
 
-namespace Habanero.Base
+namespace Habanero.Util
 {
     /// <summary>
     /// Loads document type definitions (dtd's)
@@ -52,14 +54,14 @@ namespace Habanero.Base
         private string LoadDtd(string fileName, IList alreadyIncludedFiles)
         {
             string dtd = "";
-            if (!File.Exists(fileName))
+            if (!System.IO.File.Exists(fileName))
             {
                 throw new FileNotFoundException("The Document Type Definition " +
-                    "(DTD) file, '" + fileName + "', was not found.  Please ensure " +
-                    "that you have a DTD for each type of XML element you are " +
-                    "using, and that these files are being copied to your application's " +
-                    "output folder (eg. bin/debug).  Alternatively, check that " +
-                    "the element name was spelt correctly and has the correct capitalisation.");
+                                                "(DTD) file, '" + fileName + "', was not found.  Please ensure " +
+                                                "that you have a DTD for each type of XML element you are " +
+                                                "using, and that these files are being copied to your application's " +
+                                                "output folder (eg. bin/debug).  Alternatively, check that " +
+                                                "the element name was spelt correctly and has the correct capitalisation.");
             }
             TextReader reader = _textFileLoader.LoadTextFile(fileName);
             string line;
