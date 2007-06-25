@@ -523,9 +523,9 @@ namespace Habanero.Bo
         public void TestPropCompulsoryRestore()
         {
             //Test compulsory with no default set
-            PropDef lPropDefWithRules = new PropDef("PropNameWithRules", typeof (string),
-                                                    PropReadWriteRule.ReadManyWriteMany, null);
-            lPropDefWithRules.assignPropRule(new PropRuleString(lPropDefWithRules.PropertyName, true, -1, -1));
+            PropDef lPropDefWithRules = new PropDef("PropNameWithRules", "System", "String",
+                                                    PropReadWriteRule.ReadManyWriteMany, null, null, true);
+            lPropDefWithRules.assignPropRule(new PropRuleString(lPropDefWithRules.PropertyName, "", -1, -1, null, null));
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsFalse(lBOProp.isValid);
             Assert.IsTrue(lBOProp.InvalidReason.Length > 0);
@@ -543,7 +543,7 @@ namespace Habanero.Bo
             //Test compulsory with no default set
             PropDef lPropDefWithRules = new PropDef("PropNameWithRules", typeof (string),
                                                     PropReadWriteRule.ReadManyWriteMany, null);
-            lPropDefWithRules.assignPropRule(new PropRuleString(lPropDefWithRules.PropertyName, false, 50, 51));
+            lPropDefWithRules.assignPropRule(new PropRuleString(lPropDefWithRules.PropertyName, "", 50, 51, null, null));
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsTrue(lBOProp.isValid);
             try

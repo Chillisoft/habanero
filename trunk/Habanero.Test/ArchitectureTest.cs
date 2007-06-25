@@ -1,7 +1,7 @@
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
-namespace Chillisoft.Test
+namespace Habanero.Test
 {
     /// <summary>
     /// Summary description for ArchitectureTest.

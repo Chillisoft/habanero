@@ -38,7 +38,7 @@ namespace Habanero.Bo.Loaders
         protected override object Create()
         {
 			return _defClassFactory.CreatePropRuleDecimal(_ruleName, _isCompulsory, _minValue, _maxValue);
-			//return new PropRuleDecimal(_ruleName, _isCompulsory, _minValue, _maxValue);
+			//return new PropRuleDecimal(_name, _isCompulsory, _minValue, _maxValue);
 		}
 
         /// <summary>

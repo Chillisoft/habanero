@@ -8,7 +8,7 @@ using Habanero.Db;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Chillisoft.Test.Bo.v2
+namespace Habanero.Test.Bo
 {
 
 

@@ -1,5 +1,4 @@
 using System.Windows.Forms;
-using Chillisoft.Test;
 using Habanero.Test.General;
 using Habanero.Ui.Forms;
 using NUnit.Framework;

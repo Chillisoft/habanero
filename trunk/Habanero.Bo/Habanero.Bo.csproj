@@ -252,13 +252,8 @@
     <Compile Include="Loaders\XmlLookupListSourceLoader.cs" />
     <Compile Include="Loaders\XmlPrimaryKeyLoader.cs" />
     <Compile Include="Loaders\XmlPropertyLoader.cs" />
-    <Compile Include="Loaders\XmlPropertyRuleDateLoader.cs" />
-    <Compile Include="Loaders\XmlPropertyRuleDecimalLoader.cs" />
-    <Compile Include="Loaders\XmlPropertyRuleGuidLoader.cs" />
-    <Compile Include="Loaders\XmlPropertyRuleIntegerLoader.cs" />
-    <Compile Include="Loaders\XmlPropertyRuleLoader.cs" />
-    <Compile Include="Loaders\XmlPropertyRuleStringLoader.cs" />
     <Compile Include="Loaders\XmlRelationshipLoader.cs" />
+    <Compile Include="Loaders\XmlRuleLoader.cs" />
     <Compile Include="Loaders\XmlSimpleLookupListSourceLoader.cs" />
     <Compile Include="Loaders\XmlSuperClassDescLoader.cs" />
     <Compile Include="Loaders\XmlUIDefLoader.cs" />
@@ -291,9 +286,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PropRuleDecimal.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PropRuleGuid.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PropRuleInteger.cs">
@@ -356,11 +348,6 @@
     <None Include="Loaders\DTDs\PrimaryKeyDef.dtd" />
     <None Include="Loaders\DTDs\Prop.dtd" />
     <None Include="Loaders\DTDs\PropertyDef.dtd" />
-    <None Include="Loaders\DTDs\PropertyRuleDate.dtd" />
-    <None Include="Loaders\DTDs\PropertyRuleDecimal.dtd" />
-    <None Include="Loaders\DTDs\PropertyRuleGuid.dtd" />
-    <None Include="Loaders\DTDs\PropertyRuleInteger.dtd" />
-    <None Include="Loaders\DTDs\PropertyRuleString.dtd" />
     <None Include="Loaders\DTDs\RelationshipDef.dtd" />
     <None Include="Loaders\DTDs\SimpleLookupListSource.dtd" />
     <None Include="Loaders\DTDs\SuperClassDesc.dtd" />
@@ -373,6 +360,7 @@
     <None Include="Loaders\DTDs\UIFormTab.dtd" />
     <None Include="Loaders\DTDs\UIGridDef.dtd" />
     <None Include="Loaders\DTDs\UIGridProperty.dtd" />
+    <None Include="Loaders\DTDs\Rule.dtd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">

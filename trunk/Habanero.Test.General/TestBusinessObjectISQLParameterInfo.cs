@@ -1,5 +1,4 @@
 using System.Data;
-using Chillisoft.Test;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Db;
 using NUnit.Framework;

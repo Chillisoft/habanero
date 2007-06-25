@@ -9,23 +9,37 @@ namespace Habanero.Bo
     public abstract class PropRuleBase
     {
         protected readonly bool _isCompulsory = false;
-        protected readonly string _ruleName;
-        protected readonly Type _propType;
+        protected readonly string _name;
+        private string _message;
+        //protected readonly Type _propType;
+
+        ///// <summary>
+        ///// Constructor to initialise a new property rule
+        ///// </summary>
+        ///// <param name="ruleName">The name of the rule</param>
+        ///// <param name="isCompulsory">Whether having a value is compulsory
+        ///// (otherwise null is acceptable)</param>
+        ///// <param name="propType">The property type</param>
+        //internal PropRuleBase(string ruleName, Type propType)
+        //{
+        //    //TODO_ErrCheck invalid inputs
+        //    _isCompulsory = isCompulsory;
+        //    _name = ruleName;
+        //   // _propType = propType;
+        //}
 
         /// <summary>
         /// Constructor to initialise a new property rule
         /// </summary>
-        /// <param name="ruleName">The name of the rule</param>
-        /// <param name="isCompulsory">Whether having a value is compulsory
-        /// (otherwise null is acceptable)</param>
-        /// <param name="propType">The property type</param>
-        internal PropRuleBase(string ruleName, bool isCompulsory, Type propType)
+        /// <param name="name">The name of the rule</param>
+        /// <param name="message">This rule's failure message</param>
+        protected internal PropRuleBase(string name, string message)
         {
             //TODO_ErrCheck invalid inputs
-            _isCompulsory = isCompulsory;
-            _ruleName = ruleName;
-            _propType = propType;
-        }
+            _name = name;
+            _message = message;
+       }
+
 
         /// <summary>
         /// Indicates whether the property value is valid against the rules
@@ -39,24 +53,24 @@ namespace Habanero.Bo
         {
             errorMessage = "";
 
-            if (!CheckCompulsoryRule(propValue, ref errorMessage))
-            {
-                return false;
-            }
+            //if (!CheckCompulsoryRule(propValue, ref errorMessage))
+            //{
+            //    return false;
+            //}
 
-            //Else if the value is not set and not compulsory then it is ok
-            if (propValue == null)
-            {
-                return true;
-            }
-            //Check if propertyValue is of the correct type.
-            if (!_propType.IsInstanceOfType(propValue))
-            {
-                errorMessage = propValue.ToString() +
-                               " is not valid for " + _ruleName +
-                               " since it is not of type " + _propType.ToString();
-                return false;
-            }
+            ////Else if the value is not set and not compulsory then it is ok
+            //if (propValue == null)
+            //{
+            //    return true;
+            //}
+            ////Check if propertyValue is of the correct type.
+            //if (!_propType.IsInstanceOfType(propValue))
+            //{
+            //    errorMessage = propValue.ToString() +
+            //                   " is not valid for " + _name +
+            //                   " since it is not of type " + _propType.ToString();
+            //    return false;
+            //}
 
             return true;
         }
@@ -79,7 +93,7 @@ namespace Habanero.Bo
             {
                 errorMessage = errorMessage +
                                " Value is not valid since " +
-                               _ruleName +
+                               _name +
                                " is compulsory \n";
                 return false;
             }
@@ -97,17 +111,21 @@ namespace Habanero.Bo
         /// <summary>
         /// Returns the rule name
         /// </summary>
-        public string RuleName
+        public string Name
         {
-            get { return _ruleName; }
+            get { return _name; }
         }
 
-        /// <summary>
-        /// Returns the property type
-        /// </summary>
-        public Type PropertyType
-        {
-            get { return _propType; }
+        public string  Message {
+            get { return _message; }
         }
+
+        ///// <summary>
+        ///// Returns the property type
+        ///// </summary>
+        //public Type PropertyType
+        //{
+        //    get { return _propType; }
+        //}
     }
 }

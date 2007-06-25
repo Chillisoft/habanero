@@ -6,7 +6,7 @@ using Habanero.Bo.ClassDefinition;
 using Habanero.Db;
 using NUnit.Framework;
 
-namespace Chillisoft.Test.Bo.v2
+namespace Habanero.Test.Bo
 {
     [TestFixture]
     public class TestRelationship

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 
@@ -14,33 +15,48 @@ namespace Habanero.Bo
     public class PropRuleString : PropRuleBase
     {
         protected readonly int _maxLength = -1;
-        protected readonly int _minLength = -1;
+        protected readonly int _minLength = 0;
     	protected readonly string _patternMatch = ""; //regex pattern match
     	protected readonly string _patternMatchErrorMessage = "";
 
+        ///// <summary>
+        ///// Constructor to initialise a new rule
+        ///// </summary>
+        ///// <param name="ruleName">The rule name</param>
+        ///// <param name="isCompulsory">Whether a value is compulsory and
+        ///// null values are invalid</param>
+        ///// <param name="minLength">The minimum length required for the string</param>
+        ///// <param name="maxLength">The maximum length allowed for the string</param>
+        //public PropRuleString(string ruleName,
+        //                      int minLength,
+        //                      int maxLength) : base(ruleName, typeof (string))
+        //{
+        //    _maxLength = maxLength;
+        //    _minLength = minLength;
+        //}
+
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
-        /// <param name="ruleName">The rule name</param>
-        /// <param name="isCompulsory">Whether a value is compulsory and
-        /// null values are invalid</param>
-        /// <param name="minLength">The minimum length required for the string</param>
-        /// <param name="maxLength">The maximum length allowed for the string</param>
-        public PropRuleString(string ruleName,
-                              bool isCompulsory,
-                              int minLength,
-                              int maxLength) : base(ruleName, isCompulsory, typeof (string))
+        /// <param name="name">The rule name</param>
+        /// <param name="message">This rule's failure message</param>
+        /// <param name="parameters">The parameters for this rule.</param>
+        public PropRuleString(string name, string message, Dictionary<string, object> parameters)
+            : base(name, message)
         {
-            _maxLength = maxLength;
-            _minLength = minLength;
+            if (parameters.ContainsKey("patternMatch")) _patternMatch = Convert.ToString(parameters["patternMatch"]);
+            if (parameters.ContainsKey("patternMatchErrorMessage"))
+                _patternMatchErrorMessage = Convert.ToString(parameters["patternMatchErrorMessage"]);
+            if (parameters.ContainsKey("minLength")) _minLength = Convert.ToInt32(parameters["minLength"]);
+            if (parameters.ContainsKey("maxLength")) _maxLength = Convert.ToInt32(parameters["maxLength"]);
         }
+
 
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
         /// <param name="ruleName">The rule name</param>
-        /// <param name="isCompulsory">Whether a value is compulsory and
-        /// null values are invalid</param>
+        /// <param name="message">The rule failure message</param>
         /// <param name="minLength">The minimum length required for the string</param>
         /// <param name="maxLength">The maximum length allowed for the string</param>
         /// <param name="patternMatch">The pattern match as a regular
@@ -50,13 +66,15 @@ namespace Habanero.Bo
         /// <param name="patternMatchErrorMessage">The error message that must 
         /// be displayed if the pattern does not match</param>
         public PropRuleString(string ruleName,
-                                bool isCompulsory,
+                               string message,
                                 int minLength,
                                 int maxLength,
                                 string patternMatch,
-                                string patternMatchErrorMessage) : this(ruleName, isCompulsory, minLength, maxLength)
+                                string patternMatchErrorMessage) : base(ruleName, message)
         {
             //TODO_Err: how to test for a valid regexpression?
+            _minLength = minLength;
+            _maxLength = maxLength;
             _patternMatch = patternMatch ?? "";
             _patternMatchErrorMessage = patternMatchErrorMessage ?? "";
         }
@@ -72,14 +90,23 @@ namespace Habanero.Bo
                                                           ref string errorMessage)
         {
             errorMessage = "";
-            if (!base.isPropValueValid(propValue, ref errorMessage))
-            {
-                return false;
-            }
+            //Check if propertyValue is of the correct type.
             if (propValue == null)
             {
                 return true;
             }
+            if (!(propValue is string))
+            {
+                errorMessage = propValue +
+                               " is not valid for " + _name +
+                               " since it is not of type String";
+                return false;
+            }
+            if (!base.isPropValueValid(propValue, ref errorMessage))
+            {
+                return false;
+            }
+ 
             if (!CheckLengthRule(propValue, ref errorMessage))
             {
                 return false;
@@ -112,14 +139,14 @@ namespace Habanero.Bo
                 if (_patternMatchErrorMessage.Length <= 0)
                 {
                     errorMessage = propValue.ToString() +
-                                   " is not valid for " + _ruleName +
+                                   " is not valid for " + _name +
                                    " it must match the pattern " +
                                    _patternMatch;
                 }
                 else
                 {
                     errorMessage = propValue.ToString() +
-                                   " is not valid for " + _ruleName +
+                                   " is not valid for " + _name +
                                    "\n" + _patternMatchErrorMessage;
                 }
                 return false;
@@ -142,7 +169,7 @@ namespace Habanero.Bo
             if (_minLength > 0 && ((string) propValue).Length < _minLength)
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + _ruleName +
+                               " is not valid for " + _name +
                                " it must be greater than or equal to " +
                                _minLength;
                 return false;
@@ -150,7 +177,7 @@ namespace Habanero.Bo
             if (_maxLength > 0 && ((string) propValue).Length > _maxLength)
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + _ruleName +
+                               " is not valid for " + _name +
                                " it must be less than or equal to " +
                                _maxLength;
                 return false;
@@ -200,13 +227,10 @@ namespace Habanero.Bo
         [Test]
         public void TestStringRule()
         {
-            PropRuleString rule = new PropRuleString("Surname", true, 2, 50);
+            PropRuleString rule = new PropRuleString("Surname", "Test", 2, 50, null, null);
 
             string errorMessage = "";
 
-            //try set the property to null.
-            Assert.IsFalse(rule.isPropValueValid(null, ref errorMessage));
-            Assert.IsTrue(errorMessage.Length > 0);
             //Test less than max length
             Assert.IsFalse(rule.isPropValueValid("", ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
@@ -219,7 +243,7 @@ namespace Habanero.Bo
             Assert.IsTrue(errorMessage.Length > 0);
             //Test lengths and not compulsory
 
-            rule = new PropRuleString("Surname", false, 10, 20);
+            rule = new PropRuleString("Surname", "Test", 10, 20, null, null);
             errorMessage = "";
 
             Assert.IsTrue(rule.isPropValueValid(null, ref errorMessage));
@@ -230,7 +254,7 @@ namespace Habanero.Bo
             errorMessage = "";
 
             //Test that it ignores negative max length
-            rule = new PropRuleString("Surname", false, -10, -1);
+            rule = new PropRuleString("Surname", "Test", -10, -1, null, null);
             Assert.IsTrue(rule.isPropValueValid("", ref errorMessage)); //test zero length strings
             Assert.IsFalse(errorMessage.Length > 0);
             errorMessage = "";
@@ -249,7 +273,7 @@ namespace Habanero.Bo
         {
             //Pattern match no numeric characters allowed
             string errorMessage = "";
-            PropRuleString rule = new PropRuleString("Surname", false, 10, 20, @"^[a-zA-Z\- ]*$", "");
+            PropRuleString rule = new PropRuleString("Surname", "Test", 10, 20, @"^[a-zA-Z\- ]*$", "");
             Assert.IsFalse(rule.isPropValueValid("fdfasd 3dfasdf", ref errorMessage), "fdfasd 3dfasdf");
             Assert.IsTrue(errorMessage.Length > 0);
             errorMessage = "";

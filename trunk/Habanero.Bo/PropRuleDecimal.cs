@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Habanero.Bo
 {
     /// <summary>
@@ -6,22 +9,34 @@ namespace Habanero.Bo
     /// TODO ERIC - where is validity checked?
     public class PropRuleDecimal : PropRuleBase
     {
-        private decimal _minValue;
-        private decimal _maxValue;
+        private decimal _minValue = Decimal.MinValue;
+        private decimal _maxValue = Decimal.MaxValue;
 
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
         /// <param name="ruleName">The rule name</param>
-        /// <param name="isCompulsory">Whether a value is compulsory and
-        /// null values are invalid</param>
+        /// <param name="message">The rule failure message</param>
         /// <param name="minValue">The minimum value allowed for the decimal</param>
         /// <param name="maxValue">The maximum value allowed for the decimal</param>
-        public PropRuleDecimal(string ruleName, bool isCompulsory, decimal minValue, decimal maxValue)
-            : base(ruleName, isCompulsory, typeof(decimal))
+        public PropRuleDecimal(string ruleName, string message, decimal minValue, decimal maxValue)
+            : base(ruleName, message)
         {
             _minValue = minValue;
             _maxValue = maxValue;
+        }
+
+        /// <summary>
+        /// Constructor to initialise a new rule
+        /// </summary>
+        /// <param name="name">The rule name</param>
+        /// <param name="message">This rule's failure message</param>
+        /// <param name="parameters">The parameters for this rule.</param>
+        public PropRuleDecimal(string name, string message, Dictionary<string, object> parameters)
+            : base(name, message)
+        {
+            if (parameters.ContainsKey("min")) _minValue = Convert.ToDecimal(parameters["min"]);
+            if (parameters.ContainsKey("max")) _maxValue = Convert.ToDecimal(parameters["max"]);
         }
 
         /// <summary>

@@ -40,11 +40,11 @@ namespace Habanero.Bo.Loaders
 			return _defClassFactory.CreatePropRuleDate(_ruleName, _isCompulsory, _minValue, _maxValue);
 			//if (!_minValue.Equals(DateTime.MinValue))
 			//{
-			//    return new PropRuleDate(_ruleName, _isCompulsory, _minValue, _maxValue);
+			//    return new PropRuleDate(_name, _isCompulsory, _minValue, _maxValue);
 			//}
 			//else
 			//{
-			//    return new PropRuleDate(_ruleName, _isCompulsory);
+			//    return new PropRuleDate(_name, _isCompulsory);
 			//}
         }
 

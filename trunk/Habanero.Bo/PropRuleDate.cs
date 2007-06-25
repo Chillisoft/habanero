@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Habanero.Bo
@@ -16,11 +17,10 @@ namespace Habanero.Bo
         /// Constructor to initialise a new rule
         /// </summary>
         /// <param name="ruleName">The rule name</param>
-        /// <param name="isCompulsory">Whether a value is compulsory and
-        /// null values are invalid</param>
+        /// <param name="message">The rule failure message</param>
         public PropRuleDate(string ruleName,
-                            bool isCompulsory) 
-			: this(ruleName, isCompulsory, null, null)
+                            string message) 
+			: this(ruleName, message, null, null)
         {
         }
 
@@ -28,20 +28,32 @@ namespace Habanero.Bo
         /// Constructor to initialise a new rule
         /// </summary>
         /// <param name="ruleName">The rule name</param>
-        /// <param name="isCompulsory">Whether a value is compulsory and
-        /// null values are invalid</param>
+        /// <param name="message">The rule failure message</param>
         /// <param name="minValue">The minimum date that can be set</param>
         /// <param name="maxValue">The maximum date that can be set</param>
         public PropRuleDate(string ruleName,
-                            bool isCompulsory,
+                            string message,
                             DateTime? minValue,
 							DateTime? maxValue)
-			: base(ruleName, isCompulsory, typeof(DateTime))
+			: base(ruleName, message)
         {
 			// if the nullable minvalue is null, then set it to DateTime.MinValue.
 			_minValue = minValue ?? DateTime.MinValue;
 			// if the nullable maxValue is null, then set it to DateTime.MaxValue.
 			_maxValue = maxValue ?? DateTime.MaxValue;
+        }
+
+        /// <summary>
+        /// Constructor to initialise a new rule
+        /// </summary>
+        /// <param name="name">The rule name</param>
+        /// <param name="message">This rule's failure message</param>
+        /// <param name="parameters">The parameters for this rule.</param>
+        public PropRuleDate(string name, string message, Dictionary<string, object> parameters)
+            : base(name, message)
+        {
+            if (parameters.ContainsKey("min")) _minValue = Convert.ToDateTime(parameters["min"]);
+            if (parameters.ContainsKey("max")) _maxValue = Convert.ToDateTime(parameters["max"]);
         }
 
         /// <summary>
@@ -66,7 +78,7 @@ namespace Habanero.Bo
             if ((DateTime) propValue < _minValue || (DateTime) propValue > _maxValue)
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + _ruleName +
+                               " is not valid for " + _name +
                                " since it is not of type DateTime";
                 return false;
             }
@@ -102,13 +114,10 @@ namespace Habanero.Bo
         {
             //	PropDef lPropDef = new PropDef("Surname", typeof(string),PropReadWriteRule.ReadManyWriteMany);
             PropRuleDate rule =
-                new PropRuleDate("BirthDate", true, new DateTime(1900, 01, 01), new DateTime(2010, 12, 31));
+                new PropRuleDate("BirthDate", "Test", new DateTime(1900, 01, 01), new DateTime(2010, 12, 31));
 
             string errorMessage = "";
 
-            //try set the property to null.
-            Assert.IsFalse(rule.isPropValueValid(null, ref errorMessage));
-            Assert.IsTrue(errorMessage.Length > 0);
             //Test less than max length
             Assert.IsFalse(rule.isPropValueValid(new DateTime(1891, 01, 14), ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
@@ -120,7 +129,7 @@ namespace Habanero.Bo
             Assert.IsTrue(errorMessage.Length > 0);
 
 
-            rule = new PropRuleDate("BirthDate", false);
+            rule = new PropRuleDate("BirthDate", "Test");
             errorMessage = "";
 
             Assert.IsTrue(rule.isPropValueValid(null, ref errorMessage));

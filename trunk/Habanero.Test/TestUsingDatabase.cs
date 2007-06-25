@@ -1,7 +1,8 @@
 using Habanero.Db;
+using Habanero.Test;
 using Habanero.Test.General;
 
-namespace Chillisoft.Test
+namespace Habanero.Test
 {
     /// <summary>
     /// Summary description for TestUsingDatabase.

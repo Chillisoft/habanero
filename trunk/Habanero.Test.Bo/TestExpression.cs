@@ -2,10 +2,9 @@ using System;
 using System.Data;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Db;
-using Chillisoft.Test;
 using NUnit.Framework;
 
-namespace Chillisoft.Test.Bo.v2
+namespace Habanero.Test.Bo
 {
     /// <summary>
     /// Summary description for TestExpression.

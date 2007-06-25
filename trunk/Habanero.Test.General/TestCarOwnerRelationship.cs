@@ -1,4 +1,3 @@
-using Chillisoft.Test;
 using Habanero.Bo;
 using NUnit.Framework;
 

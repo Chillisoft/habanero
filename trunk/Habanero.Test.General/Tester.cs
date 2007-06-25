@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Data;
-using Chillisoft.Test;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Bo;

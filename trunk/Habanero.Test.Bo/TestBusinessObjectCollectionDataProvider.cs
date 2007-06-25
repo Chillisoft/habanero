@@ -1,6 +1,5 @@
 using System;
 using System.Data;
-using Chillisoft.Test;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Bo;

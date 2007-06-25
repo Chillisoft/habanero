@@ -1,7 +1,0 @@
-<!ELEMENT propertyRuleDate EMPTY>
-<!ATTLIST propertyRuleDate
-	name NMTOKEN #REQUIRED
-	isCompulsory ( true | false ) "false"
-	minValue CDATA #IMPLIED
-	maxValue CDATA #IMPLIED
->

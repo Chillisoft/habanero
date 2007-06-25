@@ -1,5 +1,4 @@
 using System;
-using Chillisoft.Test;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Db;

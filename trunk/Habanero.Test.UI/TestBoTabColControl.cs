@@ -1,6 +1,5 @@
 using System;
 using System.Windows.Forms;
-using Chillisoft.Test;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Test;

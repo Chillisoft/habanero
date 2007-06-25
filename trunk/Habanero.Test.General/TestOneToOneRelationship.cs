@@ -1,4 +1,3 @@
-using Chillisoft.Test;
 using NUnit.Framework;
 
 namespace Habanero.Test.General

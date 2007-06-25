@@ -1,12 +1,8 @@
-#include PropertyRuleString.dtd
-#include propertyRuleGuid.dtd
-#include propertyRuleInteger.dtd
-#include propertyRuleDate.dtd
-#include propertyRuleDecimal.dtd
+#include rule.dtd
 #include databaseLookupListSource.dtd
 #include simpleLookupListSource.dtd
 #include businessObjectLookupListSource.dtd
-<!ELEMENT propertyDef (propertyRuleString*, propertyRuleGuid*, propertyRuleInteger*, propertyRuleDate*, propertyRuleDecimal*, databaseLookupListSource*, simpleLookupListSource*, businessObjectLookupListSource*)>
+<!ELEMENT propertyDef (rule*, databaseLookupListSource*, simpleLookupListSource*, businessObjectLookupListSource*)>
 <!ATTLIST propertyDef
 	name NMTOKEN #REQUIRED
 	type NMTOKEN "String"
@@ -14,4 +10,5 @@
 	readWriteRule (	ReadManyWriteMany | ReadOnly | WriteOnly | ReadManyWriteNew | ReadManyWriteOnce ) "ReadManyWriteMany"
 	databaseFieldName CDATA #IMPLIED
 	defaultValue CDATA #IMPLIED
+  compulsory ( true | false ) "false"
 >

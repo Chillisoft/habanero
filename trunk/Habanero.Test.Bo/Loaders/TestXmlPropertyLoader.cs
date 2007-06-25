@@ -81,7 +81,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(
-                    @"<propertyDef name=""TestProp""><propertyRuleString name=""StringRule"" minLength=""8"" maxLength=""8"" /></propertyDef>");
+                    @"<propertyDef name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/><add key=""max"" value=""8"" /></rule></propertyDef>");
             Assert.AreEqual("PropRuleString", def.PropRule.GetType().Name);
         }
 

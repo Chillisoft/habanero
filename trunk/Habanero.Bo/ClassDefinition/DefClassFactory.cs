@@ -38,35 +38,30 @@ namespace Habanero.Bo.ClassDefinition
 		}
 
 		public PropDef CreatePropDef(string propertyName, string assemblyName, string typeName,
-		                             PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString)
+		                             PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory)
 		{
-			return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString);
+			return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString, compulsory);
 		}
 
-		public PropRuleDate CreatePropRuleDate(string ruleName, bool isCompulsory, DateTime? minValue, DateTime? maxValue)
+		public PropRuleDate CreatePropRuleDate(string ruleName, string message, DateTime? minValue, DateTime? maxValue)
 		{
-			return new PropRuleDate(ruleName, isCompulsory, minValue, maxValue);
+			return new PropRuleDate(ruleName, message, minValue, maxValue);
 		}
 
-		public PropRuleDecimal CreatePropRuleDecimal(string ruleName, bool isCompulsory, decimal minValue, decimal maxValue)
+        public PropRuleDecimal CreatePropRuleDecimal(string ruleName, string message, decimal minValue, decimal maxValue)
 		{
-			return new PropRuleDecimal(ruleName, isCompulsory, minValue, maxValue);
+			return new PropRuleDecimal(ruleName, message, minValue, maxValue);
 		}
 
-		public PropRuleGuid CreatePropRuleGuid(string ruleName, bool isCompulsory)
+        public PropRuleInteger CreatePropRuleInteger(string ruleName, string message, int minValue, int maxValue)
 		{
-			return new PropRuleGuid(ruleName, isCompulsory);
+			return new PropRuleInteger(ruleName, message, minValue, maxValue);
 		}
 
-		public PropRuleInteger CreatePropRuleInteger(string ruleName, bool isCompulsory, int minValue, int maxValue)
-		{
-			return new PropRuleInteger(ruleName, isCompulsory, minValue, maxValue);
-		}
-
-		public PropRuleString CreatePropRuleString(string ruleName, bool isCompulsory, int minLength, int maxLength,
+        public PropRuleString CreatePropRuleString(string ruleName, string message, int minLength, int maxLength,
 		                                           string patternMatch, string patternMatchErrorMessage)
 		{
-			return new PropRuleString(ruleName, isCompulsory, minLength, maxLength, patternMatch, patternMatchErrorMessage);
+			return new PropRuleString(ruleName, message, minLength, maxLength, patternMatch, patternMatchErrorMessage);
 		}
 
 		public SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName,

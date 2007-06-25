@@ -17,17 +17,15 @@ namespace Habanero.Bo.ClassDefinition
 		
 		PrimaryKeyDef CreatePrimaryKeyDef();
 
-		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString);
+		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory);
 
-		PropRuleDate CreatePropRuleDate(string ruleName, bool isCompulsory, DateTime? minValue, DateTime? maxValue);
+        PropRuleDate CreatePropRuleDate(string ruleName, string message, DateTime? minValue, DateTime? maxValue);
 
-		PropRuleDecimal CreatePropRuleDecimal(string ruleName, bool isCompulsory, decimal minValue, decimal maxValue);
+        PropRuleDecimal CreatePropRuleDecimal(string ruleName, string message, decimal minValue, decimal maxValue);
 
-		PropRuleGuid CreatePropRuleGuid(string ruleName, bool isCompulsory);
+        PropRuleInteger CreatePropRuleInteger(string ruleName, string message, int minValue, int maxValue);
 
-		PropRuleInteger CreatePropRuleInteger(string ruleName, bool isCompulsory, int minValue, int maxValue);
-
-		PropRuleString CreatePropRuleString(string ruleName, bool isCompulsory, int minLength, int maxLength, string patternMatch, string patternMatchErrorMessage);
+        PropRuleString CreatePropRuleString(string ruleName, string message, int minLength, int maxLength, string patternMatch, string patternMatchErrorMessage);
 
 		SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject);
 

@@ -189,7 +189,7 @@ namespace Habanero.Bo
             mBOPropCol.Add(mPropDef.CreateBOProp(false));
 
             mPropDef = new PropDef("Prop2", typeof (string), PropReadWriteRule.ReadOnly, null);
-            mPropDef.assignPropRule(new PropRuleString(mPropDef.PropertyName, true, 1, 10));
+            mPropDef.assignPropRule(new PropRuleString(mPropDef.PropertyName, "Test Message", 1, 10, null, null));
             mBOPropCol.Add(mPropDef.CreateBOProp(false));
 
             BOPropCol anotherPropCol = new BOPropCol();
@@ -266,7 +266,7 @@ namespace Habanero.Bo
             Assert.IsTrue(mProp.IsDirty);
 
             mPropDef = new PropDef("Prop3", typeof (string), PropReadWriteRule.ReadOnly, null);
-            mPropDef.assignPropRule(new PropRuleString(mPropDef.PropertyName, true, 1, 40));
+            mPropDef.assignPropRule(new PropRuleString(mPropDef.PropertyName, "Test", 1, 40, null, null));
             mBOPropCol.Add(mPropDef.CreateBOProp(false));
             mProp = mBOPropCol["Prop3"];
             mProp.InitialiseProp("Prop3-new");

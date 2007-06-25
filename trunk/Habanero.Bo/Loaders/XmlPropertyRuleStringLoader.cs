@@ -40,7 +40,7 @@ namespace Habanero.Bo.Loaders
         protected override object Create()
         {
 			return _defClassFactory.CreatePropRuleString(_ruleName, _isCompulsory, _minLength, _maxLength, _patternMatch, _patternMatchErrorMesssage);
-            //return new PropRuleString(_ruleName, _isCompulsory, _minLength, _maxLength);
+            //return new PropRuleString(_name, _isCompulsory, _minLength, _maxLength);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Habanero.Bo.Loaders;
 using Habanero.Bo;
 using NUnit.Framework;
@@ -11,115 +12,157 @@ namespace Habanero.Test.Bo.Loaders
     [TestFixture]
     public class TestXmlPropertyRuleLoader
     {
+
         [Test]
-        public void TestPropRuleInteger()
-        {
-            XmlPropertyRuleLoader loader = new XmlPropertyRuleIntegerLoader();
-            PropRuleBase propRule =
-                loader.LoadPropertyRule(@"<propertyRuleInteger name=""TestInt"" minValue=""1"" maxValue=""5""></propertyRuleInteger>");
-            Assert.AreEqual("PropRuleInteger", propRule.GetType().Name, "Incorrect property rule type created.");
-            Assert.IsFalse(propRule.IsCompulsory, "Not compulsory should be the default behaviour");
-            Assert.AreEqual("TestInt", propRule.RuleName, "Rule name is not being read from xml correctly.");
-            Assert.AreSame(typeof (int), propRule.PropertyType,
-                           "A propRuleInteger should have int as its property type.");
-            Assert.AreEqual(1, ((PropRuleInteger) propRule).MinValue);
-            Assert.AreEqual(5, ((PropRuleInteger) propRule).MaxValue);
+        public void TestRuleOfInteger() {
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
+            Assert.AreEqual("PropRuleInteger", rule.GetType().Name, "Incorrect rule type created.");
+            Assert.AreEqual("TestRule", rule.Name, "Name name is not being read from xml correctly.");
+            Assert.AreEqual("Test Message", rule.Message, "Message is not being read from xml correctly.");
+            //Assert.AreSame(typeof(int), rule.PropertyType,
+            //                   "A propRuleInteger should have int as its property type.");
+            Assert.AreEqual(2, ((PropRuleInteger)rule).MinValue);
+            Assert.AreEqual(10, ((PropRuleInteger)rule).MaxValue);
         }
 
         [Test]
         public void TestPropRuleIntegerNoValues()
         {
-            XmlPropertyRuleLoader loader = new XmlPropertyRuleIntegerLoader();
-            PropRuleBase propRule =
-                loader.LoadPropertyRule(@"<propertyRuleInteger name=""TestInt""></propertyRuleInteger>");
-            Assert.AreEqual(int.MinValue , ((PropRuleInteger)propRule).MinValue);
-            Assert.AreEqual(int.MaxValue , ((PropRuleInteger)propRule).MaxValue);
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""/>");
+            Assert.AreEqual(int.MinValue, ((PropRuleInteger)rule).MinValue);
+            Assert.AreEqual(int.MaxValue, ((PropRuleInteger)rule).MaxValue);
         }
 
-        [Test]
-        public void TestIsCompulsory()
-        {
-            XmlPropertyRuleLoader loader = new XmlPropertyRuleIntegerLoader();
-            PropRuleBase propRule =
-                loader.LoadPropertyRule(
-                    @"<propertyRuleInteger name=""TestInt"" isCompulsory=""true""></propertyRuleInteger>");
-            Assert.IsTrue(propRule.IsCompulsory, "Property should be compulsory as defined in the xml");
-        }
+        //[Test]
+        //public void TestIsCompulsory()
+        //{
+        //    XmlPropertyRuleLoader loader = new XmlPropertyRuleIntegerLoader();
+        //    PropRuleBase propRule =
+        //        loader.LoadPropertyRule(
+        //            @"<propertyRuleInteger name=""TestInt"" isCompulsory=""true""></propertyRuleInteger>");
+        //    Assert.IsTrue(propRule.IsCompulsory, "Property should be compulsory as defined in the xml");
+        //}
 
         [Test]
         public void TestPropRuleString()
         {
-            XmlPropertyRuleLoader loader = new XmlPropertyRuleStringLoader();
-            PropRuleBase propRule =
-                loader.LoadPropertyRule(@"<propertyRuleString name=""TestString""></propertyRuleString>");
-            Assert.AreEqual("PropRuleString", propRule.GetType().Name, "Incorrect property rule type created.");
-            Assert.IsFalse(propRule.IsCompulsory, "Not compulsory should be the default behaviour");
-            Assert.AreEqual("TestString", propRule.RuleName, "Rule name is not being read from xml correctly.");
-            Assert.AreSame(typeof (string), propRule.PropertyType,
-                           "A PropRuleString should have string as its property type.");
-			Assert.AreEqual("", ((PropRuleString)propRule).PatternMatch,
-							"An empty string should be the default pattern match string according to the dtd.");
-			Assert.AreEqual("", ((PropRuleString)propRule).PatternMatchErrorMessage,
-							"An empty string should be the default pattern match error message according to the dtd.");
-			Assert.AreEqual(0, ((PropRuleString)propRule).MinLength,
-							"0 should be the default minlength according to the dtd.");
-			Assert.AreEqual(-1, ((PropRuleString)propRule).MaxLength,
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(string).Name, @"<rule name=""TestString"" message=""String Test Message""/>");
+
+            Assert.AreEqual("PropRuleString", rule.GetType().Name, "Incorrect property rule type created.");
+            Assert.AreEqual("TestString", rule.Name, "Rule name is not being read from xml correctly.");
+            Assert.AreEqual("String Test Message", rule.Message, "Message is not being read from xml correctly");
+            //Assert.AreSame(typeof(string), propRule.PropertyType,
+            //               "A PropRuleString should have string as its property type.");
+            Assert.AreEqual("", ((PropRuleString)rule).PatternMatch,
+                            "An empty string should be the default pattern match string according to the dtd.");
+            Assert.AreEqual("", ((PropRuleString)rule).PatternMatchErrorMessage,
+                            "An empty string should be the default pattern match error message according to the dtd.");
+            Assert.AreEqual(0, ((PropRuleString)rule).MinLength,
+                            "0 should be the default minlength according to the dtd.");
+            Assert.AreEqual(-1, ((PropRuleString)rule).MaxLength,
                             "-1 should be the default maxlength according to the dtd.");
         }
 
         [Test]
         public void TestPropRuleStringAttributes()
         {
-            XmlPropertyRuleLoader loader = new XmlPropertyRuleStringLoader();
-			PropRuleBase propRule =
-				loader.LoadPropertyRule(
-					@"<propertyRuleString name=""TestString"" patternMatch=""Test Pattern"" patternMatchErrorMessage=""Test Pattern Error Message"" minLength=""5"" maxLength=""10""></propertyRuleString>");
-			Assert.AreEqual("PropRuleString", propRule.GetType().Name, "Incorrect property rule type created.");
-			Assert.AreEqual("Test Pattern", ((PropRuleString)propRule).PatternMatch);
-			Assert.AreEqual("Test Pattern Error Message", ((PropRuleString)propRule).PatternMatchErrorMessage);
-			Assert.AreEqual(5, ((PropRuleString)propRule).MinLength);
-            Assert.AreEqual(10, ((PropRuleString) propRule).MaxLength);
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(string).Name,
+                        @"<rule name=""TestString"" message=""String Test Message"" >
+                            <add key=""patternMatch"" value=""Test Pattern"" />
+                            <add key=""patternMatchErrorMessage"" value=""Test Pattern Error Message"" />
+                            <add key=""minLength"" value=""5"" />          
+                            <add key=""maxLength"" value=""10"" />
+                        </rule>                          
+");
+
+            Assert.AreEqual("PropRuleString", rule.GetType().Name, "Incorrect property rule type created.");
+            Assert.AreEqual("Test Pattern", ((PropRuleString)rule).PatternMatch);
+            Assert.AreEqual("Test Pattern Error Message", ((PropRuleString)rule).PatternMatchErrorMessage);
+            Assert.AreEqual(5, ((PropRuleString)rule).MinLength);
+            Assert.AreEqual(10, ((PropRuleString)rule).MaxLength);
         }
 
         [Test]
         public void TestPropRuleDate()
         {
-            XmlPropertyRuleLoader loader = new XmlPropertyRuleDateLoader();
-            PropRuleBase propRule =
-                loader.LoadPropertyRule(
-                    @"<propertyRuleDate name=""TestDate"" minValue=""01 Feb 2004"" maxValue=""09 Oct 2004""></propertyRuleDate>");
-            Assert.AreEqual("PropRuleDate", propRule.GetType().Name, "Incorrect property rule type created.");
-            Assert.IsFalse(propRule.IsCompulsory, "Not compulsory should be the default behaviour");
-            Assert.AreEqual("TestDate", propRule.RuleName, "Rule name is not being read from xml correctly.");
-            Assert.AreSame(typeof (DateTime), propRule.PropertyType,
-                           "A PropRuleDate should have DateTime as its property type.");
-            Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate) propRule).MinValue);
-            Assert.AreEqual(new DateTime(2004, 10, 09), ((PropRuleDate) propRule).MaxValue);
+
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(DateTime).Name,
+                        @"<rule name=""TestDate""  >
+                            <add key=""min"" value=""01 Feb 2004"" />
+                            <add key=""max"" value=""09 Oct 2004"" />
+                        </rule>                          
+");
+            Assert.AreEqual("PropRuleDate", rule.GetType().Name, "Incorrect property rule type created.");
+            Assert.AreEqual("TestDate", rule.Name, "Rule name is not being read from xml correctly.");
+            //Assert.AreSame(typeof(DateTime), rule.PropertyType,
+            //               "A PropRuleDate should have DateTime as its property type.");
+            Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
+            Assert.AreEqual(new DateTime(2004, 10, 09), ((PropRuleDate)rule).MaxValue);
         }
 
         [Test]
         public void TestPropRuleDecimal()
         {
-            XmlPropertyRuleLoader loader = new XmlPropertyRuleDecimalLoader();
-            PropRuleBase propRule =
-                loader.LoadPropertyRule(@"<propertyRuleDecimal name=""TestDec"" minValue=""1.5"" maxValue=""8.2""></propertyRuleDecimal>");
-            Assert.AreEqual("PropRuleDecimal", propRule.GetType().Name, "Incorrect property rule type created.");
-            Assert.IsFalse(propRule.IsCompulsory, "Not compulsory should be the default behaviour");
-            Assert.AreEqual("TestDec", propRule.RuleName, "Rule name is not being read from xml correctly.");
-            Assert.AreSame(typeof(decimal), propRule.PropertyType,
-                           "A propRuleDecimal should have int as its property type.");
-            Assert.AreEqual(1.5, ((PropRuleDecimal)propRule).MinValue);
-            Assert.AreEqual(8.2, ((PropRuleDecimal)propRule).MaxValue);
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(Decimal).Name,
+                        @"<rule name=""TestDec"" >
+                            <add key=""min"" value=""1.5"" />
+                            <add key=""max"" value=""8.2"" />
+                        </rule>                          
+");
+            Assert.AreEqual("PropRuleDecimal", rule.GetType().Name, "Incorrect property rule type created.");
+            Assert.AreEqual("TestDec", rule.Name, "Rule name is not being read from xml correctly.");
+            Assert.AreEqual(1.5, ((PropRuleDecimal)rule).MinValue);
+            Assert.AreEqual(8.2, ((PropRuleDecimal)rule).MaxValue);
         }
 
         [Test]
         public void TestPropRuleDecimalNoValues()
         {
-            XmlPropertyRuleLoader loader = new XmlPropertyRuleIntegerLoader();
-            PropRuleBase propRule =
-                loader.LoadPropertyRule(@"<propertyRuleInteger name=""TestInt""></propertyRuleInteger>");
-            Assert.AreEqual(int.MinValue, ((PropRuleInteger)propRule).MinValue);
-            Assert.AreEqual(int.MaxValue, ((PropRuleInteger)propRule).MaxValue);
-        }        
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(Decimal).Name,
+                        @"<rule name=""TestDec"" >
+                            
+                        </rule>                          
+");
+
+            Assert.AreEqual(Decimal.MinValue, ((PropRuleDecimal)rule).MinValue);
+            Assert.AreEqual(Decimal.MaxValue, ((PropRuleDecimal)rule).MaxValue);
+        }     
+   
+        [Test]
+        public void TestCustomRuleClass() {
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule("CustomProperty",
+                        @"<rule name=""TestCustom"" class=""Habanero.Test.Bo.Loaders.MyRule"" assembly=""Habanero.Test.Bo"">
+                            <add key=""bob"" value=""billy"" />
+                        </rule>                          
+");
+            Assert.AreEqual("MyRule", rule.GetType().Name, "Incorrect property rule type created.");
+            Assert.AreEqual("billy", ((MyRule)rule).Bob);
+        }
+
+
+    }
+
+    public class MyRule : PropRuleBase
+    {
+        private string _bob;
+
+        public MyRule(string name, string message, Dictionary<string, object> parameters)
+            : base(name, message)
+        {
+            _bob = (string)parameters["bob"];
+        }
+
+        public string Bob
+        {
+            get { return _bob; }
+        }
     }
 }

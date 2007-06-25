@@ -19,6 +19,7 @@ namespace Habanero.Bo.Loaders
         private string _defaultValueString;
         private string _databaseFieldName;
         private PropDef _propDef;
+        private bool _compulsory;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -85,17 +86,20 @@ namespace Habanero.Bo.Loaders
             LoadReadWriteRule();
             LoadDefaultValue();
             LoadDatabaseFieldName();
+            LoadCompulsory();
 
             _reader.Read();
 
 			_propDef = _defClassFactory.CreatePropDef(_propertyName, _assemblyName, _typeName, 
-				_readWriteRule, _databaseFieldName, _defaultValueString);
+				_readWriteRule, _databaseFieldName, _defaultValueString, _compulsory);
 			//_propDef = new PropDef(_propertyName, _assemblyName, _typeName, 
 			//    _readWriteRule, _databaseFieldName, _defaultValueString);
 
-            if (_reader.Name.Length >= 12 && _reader.Name.Substring(0, 12) == "propertyRule")
+            if (_reader.Name == "rule")
             {
-                XmlPropertyRuleLoader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef, DtdLoader, _defClassFactory);
+                XmlRuleLoader loader = new XmlRuleLoader(DtdLoader, _defClassFactory);
+                loader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef);
+                //XmlPropertyRuleLoader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef, DtdLoader, _defClassFactory);
             }
             int len = "lookupListSource".Length;
             if (_reader.Name.Length >= len &&
@@ -105,6 +109,7 @@ namespace Habanero.Bo.Loaders
                                                                            DtdLoader, _defClassFactory);
             }
         }
+
 
         /// <summary>
         /// Loads the property name attribute from the reader
@@ -191,6 +196,12 @@ namespace Habanero.Bo.Loaders
         private void LoadDatabaseFieldName()
         {
             _databaseFieldName = _reader.GetAttribute("databaseFieldName");
+        }
+
+
+        private void LoadCompulsory()
+        {
+            _compulsory = Convert.ToBoolean(_reader.GetAttribute("compulsory"));
         }
     }
 }

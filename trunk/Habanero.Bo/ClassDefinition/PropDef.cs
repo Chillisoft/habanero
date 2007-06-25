@@ -66,6 +66,7 @@ namespace Habanero.Bo.ClassDefinition
     	private bool _hasDefaultValueBeenValidated;
         private PropRuleBase _propRule;
         private ILookupListSource _lookupListSource = new NullLookupListSource();
+        private bool _compulsory = false;
 
         
         #region "Constuctor and destructors"
@@ -88,7 +89,7 @@ namespace Habanero.Bo.ClassDefinition
                        PropReadWriteRule propRWStatus,
                        string databaseFieldName,
                        object defaultValue) :
-							this(propName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null)
+							this(propName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, false)
         {
         }
 
@@ -106,7 +107,7 @@ namespace Habanero.Bo.ClassDefinition
                        Type propType,
                        PropReadWriteRule propRWStatus,
                        object defaultValue) 
-			:this(propName, propType,null,null, propRWStatus, null, defaultValue, null)
+			:this(propName, propType,null,null, propRWStatus, null, defaultValue, null, false)
         {
         }
 
@@ -125,12 +126,14 @@ namespace Habanero.Bo.ClassDefinition
 		/// the database has already been set up.</param>
 		/// <param name="defaultValue">The default value that a property 
 		/// of a new object will be set to</param>
+		/// <param name="compulsory">Whether this property is a required field or not.</param>
 		public PropDef(string propName,
 					string assemblyName, string typeName,
 					PropReadWriteRule propRWStatus,
 					string databaseFieldName,
-					string defaultValue) 
-			:this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue)
+					string defaultValue, 
+                    bool compulsory)
+            : this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue, compulsory)
 		{
 		}
 
@@ -138,7 +141,7 @@ namespace Habanero.Bo.ClassDefinition
 					   Type propType, string assemblyName, string typeName,
 					   PropReadWriteRule propRWStatus,
 					   string databaseFieldName,
-					   object defaultValue, string defaultValueString)
+					   object defaultValue, string defaultValueString, bool compulsory)
 		{
 			if (propName.IndexOfAny(new char[] { '.', '-', '|' }) != -1)
 			{
@@ -171,6 +174,7 @@ namespace Habanero.Bo.ClassDefinition
 			{
 				_defaultValueString = defaultValueString;
 			}
+		    _compulsory = compulsory;
 		}
 
 		#endregion
@@ -301,6 +305,10 @@ namespace Habanero.Bo.ClassDefinition
         protected internal bool isValueValid(Object propValue,
                                              ref string errorMessage)
         {
+            if (_compulsory && propValue == null) {
+                errorMessage = this.PropertyName + " is a compulsory field and has no value.";
+                return false;
+            }
             errorMessage = "";
             if (!(_propRule == null))
             {
@@ -601,7 +609,7 @@ namespace Habanero.Bo.ClassDefinition
 		[Test]
 		public void TestCreateLatePropDefInvalidTypeNotAccessed()
 		{
-			PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadManyWriteMany, null, "");
+			PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadManyWriteMany, null, "", false);
 		}
 
         [Test]
@@ -615,7 +623,7 @@ namespace Habanero.Bo.ClassDefinition
 		[ExpectedException(typeof(UnknownTypeNameException))]
 		public void TestCreateLatePropDefInvalidType()
 		{
-			PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadManyWriteMany, null, "");
+			PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadManyWriteMany, null, "", false);
 			Type propType = propDef.PropertyType;
 			Assert.Fail("This line should not be reached because the previous line should have failed.");
 		}
@@ -623,7 +631,7 @@ namespace Habanero.Bo.ClassDefinition
 		[Test]
 		public void TestCreateLatePropDefInvalidDefaultNotAccessed()
 		{
-			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadManyWriteMany, null, "");
+			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadManyWriteMany, null, "", false);
 			//No error
 		}
 
@@ -631,7 +639,7 @@ namespace Habanero.Bo.ClassDefinition
 		[ExpectedException(typeof(FormatException))]
 		public void TestCreateLatePropDefInvalidDefault()
 		{
-			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadManyWriteMany, null, "");
+			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadManyWriteMany, null, "", false);
 			object defaultValue = lPropDef.DefaultValue;
 			Assert.Fail("This line should not be reached because the previous line should have failed.");
 		}

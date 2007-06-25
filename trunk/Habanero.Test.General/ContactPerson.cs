@@ -144,8 +144,8 @@ namespace Habanero.Test.General
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Surname", typeof (String), PropReadWriteRule.ReadManyWriteMany, "Surname", null);
-            propDef.assignPropRule(new PropRuleString("ContactPerson-" + propDef.PropertyName, true, 2, 50));
+                new PropDef("Surname", "System", "String", PropReadWriteRule.ReadManyWriteMany, "Surname", null, true);
+            propDef.assignPropRule(new PropRuleString("ContactPerson-" + propDef.PropertyName, "", 2, 50, null, null));
             lPropDefCol.Add(propDef);
 
             propDef = new PropDef("FirstName", typeof (String), PropReadWriteRule.ReadManyWriteMany, null);
