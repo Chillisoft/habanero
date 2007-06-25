@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
+using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Base;
 using log4net;

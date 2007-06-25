@@ -1,7 +1,6 @@
 using System;
 
-
-namespace Habanero.Base
+namespace Habanero.Base.Exceptions
 {
     /// <summary>
     /// Displays exception message output to the console

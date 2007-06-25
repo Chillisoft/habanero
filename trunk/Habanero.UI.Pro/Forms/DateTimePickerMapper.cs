@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.Ui.Forms;
 using Habanero.Ui.Util;
 

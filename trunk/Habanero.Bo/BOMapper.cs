@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
 using log4net;

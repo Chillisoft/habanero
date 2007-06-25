@@ -4,6 +4,7 @@ using System.Data;
 using System.Globalization;
 using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.Util;
 using Habanero.Util.File;
 using log4net;

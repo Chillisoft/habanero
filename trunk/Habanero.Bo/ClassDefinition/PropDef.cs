@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Habanero.Base.Exceptions;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Bo;
 using Habanero.Base;

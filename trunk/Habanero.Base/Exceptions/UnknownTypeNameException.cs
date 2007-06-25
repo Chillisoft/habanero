@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 
 
-namespace Habanero.Base
+namespace Habanero.Base.Exceptions
 {
     /// <summary>
     /// Provides an exception to throw when a method receives the name of a class
