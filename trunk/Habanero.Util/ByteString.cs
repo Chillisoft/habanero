@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 
-namespace Habanero.Bo
+namespace Habanero.Util
 {
     /// <summary>
     /// Manages a long string that, when stored in the database, will need 

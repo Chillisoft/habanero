@@ -108,6 +108,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ByteString.cs" />
     <Compile Include="ConfigFileSettingsStorer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -136,6 +137,7 @@
     <Compile Include="JpgMetaData.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LongText.cs" />
     <Compile Include="ReflectionUtilities.cs" />
     <Compile Include="SerialisationUtilities.cs">
       <SubType>Code</SubType>

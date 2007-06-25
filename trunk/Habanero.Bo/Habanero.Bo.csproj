@@ -147,7 +147,6 @@
     <Compile Include="BusinessObjectLookupListSource.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ByteString.cs" />
     <Compile Include="ClassDefinition\ClassDef.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -264,7 +263,6 @@
     <Compile Include="Loaders\XmlUIFormTabLoader.cs" />
     <Compile Include="Loaders\XmlUIGridDefLoader.cs" />
     <Compile Include="Loaders\XmlUIGridPropertyLoader.cs" />
-    <Compile Include="LongText.cs" />
     <Compile Include="MultipleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>

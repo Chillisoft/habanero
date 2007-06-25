@@ -28,7 +28,7 @@ namespace Habanero.Test.Bo
                     @"
 				<classDef name=""MyBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyBoID"" type=""Guid"" />
-					<propertyDef name=""TestProp"" type=""LongText"" assembly=""Habanero.Bo"" />
+					<propertyDef name=""TestProp"" type=""LongText"" assembly=""Habanero.Util"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>

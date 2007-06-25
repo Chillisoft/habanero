@@ -7,6 +7,7 @@ using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Bo;
 using Habanero.Base;
+using Habanero.Util;
 using NUnit.Framework;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
@@ -32,7 +33,7 @@ namespace Habanero.Test.Bo
                     @"
 				<classDef name=""MyBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyBoID"" type=""Guid"" />
-					<propertyDef name=""TestProp"" type=""ByteString"" assembly=""Habanero.Bo"" />
+					<propertyDef name=""TestProp"" type=""ByteString"" assembly=""Habanero.Util"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>
