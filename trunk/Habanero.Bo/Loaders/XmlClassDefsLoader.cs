@@ -3,6 +3,7 @@ using System.Collections;
 using System.Xml;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
+using Habanero.Util;
 
 namespace Habanero.Bo.Loaders
 {
@@ -35,9 +36,9 @@ namespace Habanero.Bo.Loaders
 		/// a file, you can use 
 		/// <code>new StreamReader("filename.xml").ReadToEnd()</code>
 		/// to create a continuous string.</param>
-		/// <param name="dtdPath">The dtd path</param>
-		public XmlClassDefsLoader(string xmlClassDefs, string dtdPath)
-			: this(xmlClassDefs, dtdPath, null)
+		/// <param name="dtdLoader">The dtd loader</param>
+        public XmlClassDefsLoader(string xmlClassDefs, DtdLoader dtdLoader)
+			: this(xmlClassDefs, dtdLoader, null)
 		{
 		}
 
@@ -50,10 +51,10 @@ namespace Habanero.Bo.Loaders
         /// a file, you can use 
         /// <code>new StreamReader("filename.xml").ReadToEnd()</code>
         /// to create a continuous string.</param>
-		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-		public XmlClassDefsLoader(string xmlClassDefs, string dtdPath, IDefClassFactory defClassFactory)
-			: base(dtdPath, defClassFactory)
+        public XmlClassDefsLoader(string xmlClassDefs, DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+			: base(dtdLoader, defClassFactory)
         {
             _xmlClassDefs = xmlClassDefs;
         }
@@ -136,7 +137,7 @@ namespace Habanero.Bo.Loaders
             //_classDefList = new ArrayList();
             _reader.Read();
             _reader.Read();
-			XmlClassLoader classLoader = new XmlClassLoader(_dtdPath, _defClassFactory);
+            XmlClassLoader classLoader = new XmlClassLoader(DtdLoader, _defClassFactory);
             do
             {
                 _classDefList.Add(classLoader.LoadClass(_reader.ReadOuterXml()));

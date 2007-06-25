@@ -33,7 +33,8 @@ namespace Habanero.Test.Bo.Loaders
             Assert.AreEqual(true, def.IsObjectID, "Def should by default be an objectID");
         }
 
-        [Test, ExpectedException(typeof (FileNotFoundException))]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'primaryKey' was encountered when loading the class definitions.")]
+
         public void TestWrongElementName()
         {
             itsLoader.LoadPrimaryKey(@"<primaryKey><prop name=""TestProp"" /></primaryKey>", itsPropDefs);

@@ -1,5 +1,6 @@
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.Bo.Loaders
@@ -34,7 +35,7 @@ namespace Habanero.Test.Bo.Loaders
                             </primaryKeyDef>
 						</classDef>
 					</classDefs>",
-                    ""));
+                    new DtdLoader()));
         }
 
         [Test]

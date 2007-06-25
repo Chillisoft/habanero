@@ -17,21 +17,21 @@ namespace Habanero.Bo.Loaders
 	/// sure all XmlLoaders implement dtd validation. 
 	public abstract class XmlLoader
 	{
-		protected readonly string _dtdPath;
 		protected IDefClassFactory _defClassFactory;
 		protected XmlReader  _reader;
 		private bool _documentValid = true;
 		private ValidationEventArgs _invalidDocumentArgs;
 		private XmlElement _element;
+	    private DtdLoader _dtdLoader;
 
-		/// <summary>
+	    /// <summary>
 		/// Constructor to initialise a new loader with a dtd path
 		/// </summary>
-		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="dtdLoader">The loader for the dtds (pass through a DtdLoader object using the standard constructor for the default behaviour)</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-		public XmlLoader(string dtdPath, IDefClassFactory defClassFactory)
+		public XmlLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 		{
-			_dtdPath = dtdPath;
+			_dtdLoader = dtdLoader;
 			if (defClassFactory != null)
 			{
 				_defClassFactory = defClassFactory;
@@ -44,7 +44,7 @@ namespace Habanero.Bo.Loaders
 		/// <summary>
 		/// Constructor to initialise a new loader
 		/// </summary>
-		public XmlLoader() : this("", null)
+		public XmlLoader() : this(new DtdLoader(), null)
 		{
 		}
 
@@ -125,27 +125,8 @@ namespace Habanero.Bo.Loaders
 		/// <returns>Returns a string</returns>
 		private string GetDTD(string rootElementName)
 		{
-			string dtdFileName = _dtdPath + rootElementName + ".dtd";
-			if (!File.Exists(dtdFileName))
-			{
-				string errorMessage = "The Document Type Definition (DTD) for " +
-				                      "the XML element '" + rootElementName + "' was not found in the ";
-				if (_dtdPath == null || _dtdPath.Length == 0)
-				{
-					errorMessage += "application's output/execution directory (eg. bin/debug). ";
-				}
-				else
-				{
-					errorMessage += "path: '" + _dtdPath + "'. ";
-				}
-				errorMessage += "Ensure that you have a .DTD file for each of the XML class " +
-				                "definition elements you will be using, and that they are being copied to the " +
-				                "application's output directory (eg. bin/debug).  Alternatively, check that " +
-				                "the element name was spelt correctly and has the correct capitalisation.";
-				throw new FileNotFoundException(errorMessage);
-			}
-			return new DtdLoader(_dtdPath).LoadDtd(dtdFileName);
-			//return new StreamReader(dtdFileName).ReadToEnd();
+		    return _dtdLoader.LoadDtd(rootElementName);
+
 		}
 
 		/// <summary>
@@ -185,5 +166,14 @@ namespace Habanero.Bo.Loaders
 				_reader.Read();
 			}
 		}
+
+        /// <summary>
+        /// Retrieves the dtd loader this XmlLoader was initialised with.
+        /// </summary>
+	    protected DtdLoader DtdLoader {
+	         get {
+	             return _dtdLoader;
+	         }
+	    }
 	}
 }

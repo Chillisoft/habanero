@@ -9,6 +9,7 @@ using Habanero.Base;
 //using Habanero.Ui.Misc;
 using Habanero.Ui.Base;
 using Habanero.Ui.Forms;
+using Habanero.Util;
 using log4net;
 using log4net.Config;
 
@@ -141,9 +142,9 @@ namespace Habanero.Ui.Base
             {
                 if (_defClassFactory != null)
                 {
-                    return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath, _defClassFactory);
+                    return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), new DtdLoader(), _defClassFactory);
                 } else {
-                    return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), _classDefsPath);
+                    return new XmlClassDefsLoader(new StreamReader(_classDefsFileName).ReadToEnd(), new DtdLoader());
                 }
             }
             catch (Exception ex)

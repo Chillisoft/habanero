@@ -18,10 +18,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a loader with a dtd path
         /// </summary>
-		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-		public XmlDatabaseLookupListSourceLoader(string dtdPath, IDefClassFactory defClassFactory)
-			: base(dtdPath, defClassFactory)
+        public XmlDatabaseLookupListSourceLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+			: base(dtdLoader, defClassFactory)
         {
         }
 

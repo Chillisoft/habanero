@@ -2,6 +2,7 @@ using System;
 using Habanero.Bo;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
+using Habanero.Util;
 
 namespace Habanero.Bo.Loaders
 {
@@ -16,10 +17,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-		public XmlPropertyRuleIntegerLoader(string dtdPath, IDefClassFactory defClassFactory)
-			: base(dtdPath, defClassFactory)
+        public XmlPropertyRuleIntegerLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+			: base(dtdLoader, defClassFactory)
         {
         }
 

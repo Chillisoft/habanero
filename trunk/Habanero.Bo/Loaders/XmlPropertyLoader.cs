@@ -23,10 +23,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-		public XmlPropertyLoader(string dtdPath, IDefClassFactory defClassFactory)
-			: base(dtdPath, defClassFactory)
+        public XmlPropertyLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+			: base(dtdLoader, defClassFactory)
         {
         }
 
@@ -95,14 +95,14 @@ namespace Habanero.Bo.Loaders
 
             if (_reader.Name.Length >= 12 && _reader.Name.Substring(0, 12) == "propertyRule")
             {
-                XmlPropertyRuleLoader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef, _dtdPath, _defClassFactory);
+                XmlPropertyRuleLoader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef, DtdLoader, _defClassFactory);
             }
             int len = "lookupListSource".Length;
             if (_reader.Name.Length >= len &&
                 _reader.Name.Substring(_reader.Name.Length - len, len) == "LookupListSource")
             {
                 XmlLookupListSourceLoader.LoadLookupListSourceIntoProperty(_reader.ReadOuterXml(), _propDef,
-																		   _dtdPath, _defClassFactory);
+                                                                           DtdLoader, _defClassFactory);
             }
         }
 

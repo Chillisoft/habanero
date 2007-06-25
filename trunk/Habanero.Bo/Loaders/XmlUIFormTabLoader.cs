@@ -1,6 +1,7 @@
 using System.Xml;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
+using Habanero.Util;
 
 namespace Habanero.Bo.Loaders
 {
@@ -21,10 +22,10 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
-		/// <param name="dtdPath">The dtd path</param>
+		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-		public XmlUIFormTabLoader(string dtdPath, IDefClassFactory defClassFactory)
-			: base(dtdPath, defClassFactory)
+        public XmlUIFormTabLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+			: base(dtdLoader, defClassFactory)
         {
         }
 
@@ -76,12 +77,12 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             if (_reader.Name == "uiFormGrid")
             {
-				XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(_dtdPath, _defClassFactory);
+                XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
                 _tab.UIFormGrid = gridLoader.LoadUIFormGrid(_reader.ReadOuterXml());
             }
             else
             {
-				XmlUIFormColumnLoader loader = new XmlUIFormColumnLoader(_dtdPath, _defClassFactory);
+                XmlUIFormColumnLoader loader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
                 while (_reader.Name == "uiFormColumn")
                 {
                     _tab.Add(loader.LoadUIFormColumn(_reader.ReadOuterXml()));

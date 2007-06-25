@@ -112,7 +112,6 @@
     <Compile Include="ConfigFileSettingsStorer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="File\DtdLoader.cs" />
     <Compile Include="File\TextFileLoader.cs" />
     <Compile Include="HabaneroStringBuilder.cs">
       <SubType>Code</SubType>

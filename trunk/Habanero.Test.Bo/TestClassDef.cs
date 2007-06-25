@@ -3,6 +3,7 @@ using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Bo;
 using Habanero.Test;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.Bo
@@ -43,7 +44,7 @@ namespace Habanero.Test.Bo
             XmlClassDefsLoader loader =
                 new XmlClassDefsLoader(
                     GetTestClassDefinition(""),
-                    "");
+                     new DtdLoader());
             ClassDef.GetClassDefCol.Clear();
             ClassDef.LoadClassDefs(loader);
             Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
@@ -74,12 +75,12 @@ namespace Habanero.Test.Bo
     	public void TestLoadRepeatedClassDefs()
 		{
 			XmlClassDefsLoader loader;
-    		loader = new XmlClassDefsLoader(GetTestClassDefinition(""), "");
+            loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
     		ClassDef.GetClassDefCol.Clear();
 			ClassDef.LoadClassDefs(loader);
 			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
 			//Now load the same again.
-			loader = new XmlClassDefsLoader(GetTestClassDefinition(""), "");
+            loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
 			ClassDef.LoadClassDefs(loader);
 			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
 		}
@@ -87,12 +88,12 @@ namespace Habanero.Test.Bo
 		public void TestLoadMultipleClassDefs()
 		{
 			XmlClassDefsLoader loader;
-			loader = new XmlClassDefsLoader(GetTestClassDefinition(""), "");
+            loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
 			ClassDef.GetClassDefCol.Clear();
 			ClassDef.LoadClassDefs(loader);
 			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
 			// Now load some more classes
-			loader = new XmlClassDefsLoader(GetTestClassDefinition("Other"), "");
+            loader = new XmlClassDefsLoader(GetTestClassDefinition("Other"), new DtdLoader());
 			ClassDef.LoadClassDefs(loader);
 			Assert.AreEqual(4, ClassDef.GetClassDefCol.Count);
 		}

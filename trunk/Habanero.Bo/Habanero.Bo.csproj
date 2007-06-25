@@ -236,6 +236,12 @@
     <Compile Include="ITransactionLog.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Loaders\DtdLoader.cs" />
+    <Compile Include="Loaders\Dtds.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dtds.resx</DependentUpon>
+    </Compile>
     <Compile Include="Loaders\IClassDefsLoader.cs" />
     <Compile Include="Loaders\XmlBusinessObjectLookupListSourceLoader.cs" />
     <Compile Include="Loaders\XmlClassDefsLoader.cs" />
@@ -381,6 +387,13 @@
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
       <Name>Habanero.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Loaders\Dtds.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Dtds.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

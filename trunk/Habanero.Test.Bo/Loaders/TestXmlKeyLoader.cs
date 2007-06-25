@@ -59,12 +59,7 @@ namespace Habanero.Test.Bo.Loaders
             Assert.IsTrue(def.IgnoreNulls);
         }
 
-        [Test, ExpectedException(typeof(FileNotFoundException), "The Document Type Definition (DTD) for " +
-                    "the XML element 'key' was not found in the application's output/execution directory (eg. bin/debug). " +
-                    "Ensure that you have a .DTD file for each of the XML class " +
-                    "definition elements you will be using, and that they are being copied to the " +
-                    "application's output directory (eg. bin/debug).  Alternatively, check that " +
-                    "the element name was spelt correctly and has the correct capitalisation.")]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'key' was encountered when loading the class definitions.")]
         public void TestLoadKeyWithWrongElementName()
         {
             itsLoader.LoadKey(@"<key name=""Key1""><prop name=""TestProp"" /></key>", itsPropDefs);
