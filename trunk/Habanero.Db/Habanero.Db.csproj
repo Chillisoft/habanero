@@ -35,7 +35,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>bin\Debug\Chillisoft.Db.v2.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Habanero.Db.XML</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -165,9 +165,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Habanero.Generic\Habanero.Generic.csproj">
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
       <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Name>Habanero.Generic</Name>
+      <Name>Habanero.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
