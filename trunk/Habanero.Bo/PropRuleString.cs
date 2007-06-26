@@ -42,7 +42,7 @@ namespace Habanero.Bo
         /// <param name="message">This rule's failure message</param>
         /// <param name="parameters">The parameters for this rule.</param>
         public PropRuleString(string name, string message, Dictionary<string, object> parameters)
-            : base(name, message)
+			: base(name, message, parameters)
         {
             if (parameters.ContainsKey("patternMatch")) _patternMatch = Convert.ToString(parameters["patternMatch"]);
             if (parameters.ContainsKey("patternMatchErrorMessage"))
@@ -70,7 +70,7 @@ namespace Habanero.Bo
                                 int minLength,
                                 int maxLength,
                                 string patternMatch,
-                                string patternMatchErrorMessage) : base(ruleName, message)
+                                string patternMatchErrorMessage) : base(ruleName, message, null)
         {
             //TODO_Err: how to test for a valid regexpression?
             _minLength = minLength;

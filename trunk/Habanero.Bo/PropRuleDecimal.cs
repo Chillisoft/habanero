@@ -20,7 +20,7 @@ namespace Habanero.Bo
         /// <param name="minValue">The minimum value allowed for the decimal</param>
         /// <param name="maxValue">The maximum value allowed for the decimal</param>
         public PropRuleDecimal(string ruleName, string message, decimal minValue, decimal maxValue)
-            : base(ruleName, message)
+            : base(ruleName, message, null)
         {
             _minValue = minValue;
             _maxValue = maxValue;
@@ -33,7 +33,7 @@ namespace Habanero.Bo
         /// <param name="message">This rule's failure message</param>
         /// <param name="parameters">The parameters for this rule.</param>
         public PropRuleDecimal(string name, string message, Dictionary<string, object> parameters)
-            : base(name, message)
+			: base(name, message, parameters)
         {
             if (parameters.ContainsKey("min")) _minValue = Convert.ToDecimal(parameters["min"]);
             if (parameters.ContainsKey("max")) _maxValue = Convert.ToDecimal(parameters["max"]);

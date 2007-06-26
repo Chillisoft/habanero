@@ -163,9 +163,9 @@ namespace Habanero.Ui.Forms
                     //log.Debug("Creating label and control for property " + property.PropertyName + " with mapper type " + property.MapperTypeName) ;
                     bool isCompulsory = false;
                     PropDef propDef = _boArray[0].ClassDef.GetPropDef(property.PropertyName);
-                    if (propDef != null && propDef.PropRule != null)
+                    if (propDef != null)
                     {
-                        isCompulsory = propDef.PropRule.IsCompulsory;
+                        isCompulsory = propDef.Compulsory;
                     }
                     else
                     {

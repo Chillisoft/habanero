@@ -43,25 +43,24 @@ namespace Habanero.Bo.ClassDefinition
 			return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString, compulsory);
 		}
 
-		public PropRuleDate CreatePropRuleDate(string ruleName, string message, DateTime? minValue, DateTime? maxValue)
+		public PropRuleDate CreatePropRuleDate(string name, string message, Dictionary<string, object> parameters)
 		{
-			return new PropRuleDate(ruleName, message, minValue, maxValue);
+			return new PropRuleDate(name, message, parameters);
 		}
 
-        public PropRuleDecimal CreatePropRuleDecimal(string ruleName, string message, decimal minValue, decimal maxValue)
+		public PropRuleDecimal CreatePropRuleDecimal(string name, string message, Dictionary<string, object> parameters)
 		{
-			return new PropRuleDecimal(ruleName, message, minValue, maxValue);
+			return new PropRuleDecimal(name, message, parameters);
 		}
 
-        public PropRuleInteger CreatePropRuleInteger(string ruleName, string message, int minValue, int maxValue)
+		public PropRuleInteger CreatePropRuleInteger(string name, string message, Dictionary<string, object> parameters)
 		{
-			return new PropRuleInteger(ruleName, message, minValue, maxValue);
+			return new PropRuleInteger(name, message, parameters);
 		}
 
-        public PropRuleString CreatePropRuleString(string ruleName, string message, int minLength, int maxLength,
-		                                           string patternMatch, string patternMatchErrorMessage)
+		public PropRuleString CreatePropRuleString(string name, string message, Dictionary<string, object> parameters)
 		{
-			return new PropRuleString(ruleName, message, minLength, maxLength, patternMatch, patternMatchErrorMessage);
+			return new PropRuleString(name, message, parameters);
 		}
 
 		public SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName,

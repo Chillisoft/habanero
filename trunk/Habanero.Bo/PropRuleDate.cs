@@ -35,7 +35,7 @@ namespace Habanero.Bo
                             string message,
                             DateTime? minValue,
 							DateTime? maxValue)
-			: base(ruleName, message)
+			: base(ruleName, message, null)
         {
 			// if the nullable minvalue is null, then set it to DateTime.MinValue.
 			_minValue = minValue ?? DateTime.MinValue;
@@ -50,7 +50,7 @@ namespace Habanero.Bo
         /// <param name="message">This rule's failure message</param>
         /// <param name="parameters">The parameters for this rule.</param>
         public PropRuleDate(string name, string message, Dictionary<string, object> parameters)
-            : base(name, message)
+			: base(name, message, parameters)
         {
             if (parameters.ContainsKey("min")) _minValue = Convert.ToDateTime(parameters["min"]);
             if (parameters.ContainsKey("max")) _maxValue = Convert.ToDateTime(parameters["max"]);

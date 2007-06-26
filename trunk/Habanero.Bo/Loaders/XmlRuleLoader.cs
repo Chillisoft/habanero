@@ -115,17 +115,28 @@ namespace Habanero.Bo.Loaders
         }
 
         protected override object Create() {
-            if (_class != null && _class.Length > 0 && _assembly != null && _assembly.Length > 0) {
-                return Activator.CreateInstance(TypeLoader.LoadType(_assembly, _class), new object[] {_name, _message, _ruleParameters});
-            }
+            if (_class != null && _class.Length > 0 && _assembly != null && _assembly.Length > 0) 
+			{
+				Type customPropRuleType = null;
+				TypeLoader.LoadClassType(ref customPropRuleType, _assembly, _class, 
+					"Prop Rule Base Subclass", "Property Rule Definition");
+				if (customPropRuleType.IsSubclassOf(typeof(PropRuleBase)))
+				{
+					return Activator.CreateInstance(customPropRuleType, new object[] {_name, _message, _ruleParameters});
+				} else
+				{
+					//TODO error: Throw a descriptive error.
+					throw new TypeLoadException("The prop rule must inherit from Prop Rule Base.");
+				}
+			}
             if (_propTypeName == typeof(int).Name) {
-                return new PropRuleInteger(_name, _message, _ruleParameters);
+				return _defClassFactory.CreatePropRuleInteger(_name, _message, _ruleParameters);
             } else if (_propTypeName == typeof(string).Name ) {
-                return new PropRuleString(_name, _message, _ruleParameters);
+				return _defClassFactory.CreatePropRuleString(_name, _message, _ruleParameters);
             } else if (_propTypeName == typeof(DateTime).Name ) {
-                return new PropRuleDate(_name, _message, _ruleParameters);
+				return _defClassFactory.CreatePropRuleDate(_name, _message, _ruleParameters);
             } else if (_propTypeName == typeof(Decimal).Name) {
-                return new PropRuleDecimal(_name, _message, _ruleParameters);
+				return _defClassFactory.CreatePropRuleDecimal(_name, _message, _ruleParameters);
             }
             return null;
         }

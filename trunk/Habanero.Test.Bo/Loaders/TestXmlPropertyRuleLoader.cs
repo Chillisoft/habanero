@@ -155,7 +155,7 @@ namespace Habanero.Test.Bo.Loaders
         private string _bob;
 
         public MyRule(string name, string message, Dictionary<string, object> parameters)
-            : base(name, message)
+            : base(name, message, parameters)
         {
             _bob = (string)parameters["bob"];
         }

@@ -18,7 +18,8 @@ namespace Habanero.Bo
         /// <param name="message">This rule's failure message</param> 
         /// <param name="min">The minimum value allowed for the integer</param>
         /// <param name="max">The maximum value allowed for the integer</param>
-        public PropRuleInteger(string name, string message, int min, int max) : base(name, message)
+        public PropRuleInteger(string name, string message, int min, int max)
+			: base(name, message, null)
         {
             _minValue = min;
             _maxValue = max;
@@ -32,7 +33,7 @@ namespace Habanero.Bo
         /// <param name="message">This rule's failure message</param>
         /// <param name="parameters">The parameters for this rule.  Valid parameters are "min" and "max"</param>
         public PropRuleInteger(string name, string message, Dictionary<string, object> parameters)
-            : base(name, message)
+            : base(name, message, parameters)
         {
             if (parameters.ContainsKey("min")) _minValue = Convert.ToInt32(parameters["min"]);
             if (parameters.ContainsKey("max")) _maxValue = Convert.ToInt32(parameters["max"]);

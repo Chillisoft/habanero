@@ -66,7 +66,7 @@ namespace Habanero.Bo.ClassDefinition
     	private bool _hasDefaultValueBeenValidated;
         private PropRuleBase _propRule;
         private ILookupListSource _lookupListSource = new NullLookupListSource();
-        private bool _compulsory = false;
+    	private bool _compulsory = false;
 
         
         #region "Constuctor and destructors"
@@ -278,7 +278,15 @@ namespace Habanero.Bo.ClassDefinition
 				_defaultValueString = value;
 			}
 		}
-		
+
+		///<summary>
+		/// Is this property compulsary or not
+		///</summary>
+		public bool Compulsory
+		{
+			get { return _compulsory; }
+		}
+
 		#endregion
 
         

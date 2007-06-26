@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Habanero.Bo
 {
@@ -8,8 +9,8 @@ namespace Habanero.Bo
     /// </summary>
     public abstract class PropRuleBase
     {
-        protected readonly bool _isCompulsory = false;
-        protected readonly string _name;
+		//protected readonly bool _isCompulsory = false;
+		protected readonly string _name;
         private string _message;
         //protected readonly Type _propType;
 
@@ -28,17 +29,28 @@ namespace Habanero.Bo
         //   // _propType = propType;
         //}
 
-        /// <summary>
-        /// Constructor to initialise a new property rule
-        /// </summary>
-        /// <param name="name">The name of the rule</param>
-        /// <param name="message">This rule's failure message</param>
-        protected internal PropRuleBase(string name, string message)
-        {
-            //TODO_ErrCheck invalid inputs
-            _name = name;
-            _message = message;
-       }
+		/// <summary>
+		/// Constructor to initialise a new property rule
+		/// </summary>
+		/// <param name="name">The name of the rule</param>
+		/// <param name="message">This rule's failure message</param>
+		/// <param name="parameters">The parameters for this rule.</param>
+		public PropRuleBase(string name, string message, Dictionary<string, object> parameters)
+		{
+			_name = name;
+			_message = message;
+		}
+	   // /// <summary>
+	   // /// Constructor to initialise a new property rule
+	   // /// </summary>
+	   // /// <param name="name">The name of the rule</param>
+	   // /// <param name="message">This rule's failure message</param>
+	   // protected internal PropRuleBase(string name, string message)
+	   // {
+	   //     //TODO_ErrCheck invalid inputs
+	   //     _name = name;
+	   //     _message = message;
+	   //}
 
 
         /// <summary>
@@ -76,37 +88,37 @@ namespace Habanero.Bo
         }
 
 
-        /// <summary>
-        /// Checks the given value against the compulsory rule
-        /// </summary>
-        /// <param name="propValue">The value to check</param>
-        /// <param name="errorMessage">An error message to amend with a reason
-        /// for a value being invalid</param>
-        /// <returns>Returns true if valid and false if the value is null
-        /// or empty when the compulsory rule is being enforced</returns>
-        protected bool CheckCompulsoryRule(Object propValue,
-                                           ref string errorMessage)
-        {
-            //If value not set and is compulsory then return the
-            //  appropriate error
-            if (_isCompulsory && (propValue == null || (propValue is String && ((string) propValue).Length == 0)))
-            {
-                errorMessage = errorMessage +
-                               " Value is not valid since " +
-                               _name +
-                               " is compulsory \n";
-                return false;
-            }
-            return true;
-        }
+		///// <summary>
+		///// Checks the given value against the compulsory rule
+		///// </summary>
+		///// <param name="propValue">The value to check</param>
+		///// <param name="errorMessage">An error message to amend with a reason
+		///// for a value being invalid</param>
+		///// <returns>Returns true if valid and false if the value is null
+		///// or empty when the compulsory rule is being enforced</returns>
+		//protected bool CheckCompulsoryRule(Object propValue,
+		//                                   ref string errorMessage)
+		//{
+		//    //If value not set and is compulsory then return the
+		//    //  appropriate error
+		//    if (_isCompulsory && (propValue == null || (propValue is String && ((string) propValue).Length == 0)))
+		//    {
+		//        errorMessage = errorMessage +
+		//                       " Value is not valid since " +
+		//                       _name +
+		//                       " is compulsory \n";
+		//        return false;
+		//    }
+		//    return true;
+		//}
 
-        /// <summary>
-        /// Indicates whether values are compulsory (ie. null not allowed)
-        /// </summary>
-        public bool IsCompulsory
-        {
-            get { return _isCompulsory; }
-        }
+		///// <summary>
+		///// Indicates whether values are compulsory (ie. null not allowed)
+		///// </summary>
+		//public bool IsCompulsory
+		//{
+		//    get { return _isCompulsory; }
+		//}
 
         /// <summary>
         /// Returns the rule name
