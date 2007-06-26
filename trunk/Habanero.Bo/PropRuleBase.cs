@@ -10,7 +10,7 @@ namespace Habanero.Bo
     public abstract class PropRuleBase
     {
 		//protected readonly bool _isCompulsory = false;
-		protected readonly string _name;
+		private string _name;
         private string _message;
         //protected readonly Type _propType;
 
@@ -126,10 +126,12 @@ namespace Habanero.Bo
         public string Name
         {
             get { return _name; }
+			protected set { _name = value; }
         }
 
         public string  Message {
-            get { return _message; }
+			get { return _message; }
+			protected set { _message = value; }
         }
 
         ///// <summary>

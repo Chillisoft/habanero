@@ -47,7 +47,7 @@ namespace Habanero.Bo
         public int MinValue
         {
             get { return _minValue; }
-            set { _minValue = value; }
+        	protected set { _minValue = value; }
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Habanero.Bo
         public int MaxValue
         {
             get { return _maxValue; }
-            set { _maxValue = value; }
+        	protected set { _maxValue = value; }
         }
 
         /// <summary>

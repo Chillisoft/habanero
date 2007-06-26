@@ -78,7 +78,7 @@ namespace Habanero.Bo
             if ((DateTime) propValue < _minValue || (DateTime) propValue > _maxValue)
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + _name +
+							   " is not valid for " + Name +
                                " since it is not of type DateTime";
                 return false;
             }

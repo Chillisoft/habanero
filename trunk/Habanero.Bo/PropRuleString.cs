@@ -14,10 +14,10 @@ namespace Habanero.Bo
     /// - include sets for max/min values
     public class PropRuleString : PropRuleBase
     {
-        protected readonly int _maxLength = -1;
-        protected readonly int _minLength = 0;
-    	protected readonly string _patternMatch = ""; //regex pattern match
-    	protected readonly string _patternMatchErrorMessage = "";
+        private int _maxLength = -1;
+        private int _minLength = 0;
+    	private string _patternMatch = ""; //regex pattern match
+    	private string _patternMatchErrorMessage = "";
 
         ///// <summary>
         ///// Constructor to initialise a new rule
@@ -98,7 +98,7 @@ namespace Habanero.Bo
             if (!(propValue is string))
             {
                 errorMessage = propValue +
-                               " is not valid for " + _name +
+                               " is not valid for " + Name +
                                " since it is not of type String";
                 return false;
             }
@@ -139,14 +139,14 @@ namespace Habanero.Bo
                 if (_patternMatchErrorMessage.Length <= 0)
                 {
                     errorMessage = propValue.ToString() +
-                                   " is not valid for " + _name +
+								   " is not valid for " + Name +
                                    " it must match the pattern " +
                                    _patternMatch;
                 }
                 else
                 {
                     errorMessage = propValue.ToString() +
-                                   " is not valid for " + _name +
+								   " is not valid for " + Name +
                                    "\n" + _patternMatchErrorMessage;
                 }
                 return false;
@@ -169,7 +169,7 @@ namespace Habanero.Bo
             if (_minLength > 0 && ((string) propValue).Length < _minLength)
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + _name +
+							   " is not valid for " + Name +
                                " it must be greater than or equal to " +
                                _minLength;
                 return false;
@@ -177,7 +177,7 @@ namespace Habanero.Bo
             if (_maxLength > 0 && ((string) propValue).Length > _maxLength)
             {
                 errorMessage = propValue.ToString() +
-                               " is not valid for " + _name +
+							   " is not valid for " + Name +
                                " it must be less than or equal to " +
                                _maxLength;
                 return false;
@@ -190,7 +190,8 @@ namespace Habanero.Bo
         /// </summary>
         public int MaxLength
         {
-            get { return _maxLength; }
+			get { return _maxLength; }
+			protected set { _maxLength = value; }
         }
 
         /// <summary>
@@ -198,7 +199,8 @@ namespace Habanero.Bo
         /// </summary>
         public int MinLength
         {
-            get { return _minLength; }
+			get { return _minLength; }
+			protected set { _minLength = value; }
         }
 
 		/// <summary>
@@ -207,6 +209,7 @@ namespace Habanero.Bo
 		public string PatternMatch
 		{
 			get { return _patternMatch; }
+			protected set { _patternMatch = value; }
 		}
 
 		/// <summary>
@@ -215,6 +218,7 @@ namespace Habanero.Bo
 		public string PatternMatchErrorMessage
 		{
 			get { return _patternMatchErrorMessage; }
+			protected set { _patternMatchErrorMessage = value; }
 		}
 		
     }

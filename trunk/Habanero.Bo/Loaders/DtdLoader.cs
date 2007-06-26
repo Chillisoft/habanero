@@ -110,11 +110,10 @@ namespace Habanero.Bo.Loaders
                 }
                 reader = new StringReader((string) o);
             }
-            string line;
-            do
-            {
-                line = reader.ReadLine().Trim();
-                if (line.StartsWith("#include"))
+        	do
+        	{
+        		string line = reader.ReadLine().Trim();
+        		if (line.StartsWith("#include"))
                 {
                     string fileToInclude = line.Substring(9);
                     if (!alreadyIncludedFiles.Contains(fileToInclude))
@@ -128,7 +127,7 @@ namespace Habanero.Bo.Loaders
                     dtd += line;
                     dtd += Environment.NewLine;
                 }
-            } while (reader.Peek() != -1);
+        	} while (reader.Peek() != -1);
             return dtd;
         }
     }
