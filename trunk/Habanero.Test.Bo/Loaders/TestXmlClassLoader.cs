@@ -178,13 +178,13 @@ namespace Habanero.Test.Bo.Loaders
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<property  name=""TestProp3"" />
-					<keyDef>
+					<key>
 						<prop name=""TestProp"" />
-					</keyDef>
-					<keyDef>
+					</key>
+					<key>
 						<prop name=""TestProp2"" />
 						<prop name=""TestProp3"" />
-					</keyDef>
+					</key>
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>

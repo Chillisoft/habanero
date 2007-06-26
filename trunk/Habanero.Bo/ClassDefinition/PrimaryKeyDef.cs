@@ -16,7 +16,7 @@ namespace Habanero.Bo.ClassDefinition
         /// </summary>
         public PrimaryKeyDef() : base()
         {
-            _ignoreNulls = false; //you cannot ingnore nulls for a primary key.
+            _ignoreIfNull = false; //you cannot ingnore nulls for a primary key.
         }
 
         /// <summary>
@@ -60,12 +60,12 @@ namespace Habanero.Bo.ClassDefinition
         /// <summary>
         /// A method used by BOKey to determine whether to check for
         /// duplicate keys.  It will always check if either
-        /// IgnoreNulls is set to false or if it encounters null
+        /// IgnoreIfNull is set to false or if it encounters null
         /// properties.<br/>
         /// NOTE: Because this is a primary key, a warning will be sent to
         /// the console if you try to set this to true
         /// </summary>
-        public override bool IgnoreNulls
+        public override bool IgnoreIfNull
         {
             get { return false; }
             set

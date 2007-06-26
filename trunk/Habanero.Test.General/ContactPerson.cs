@@ -94,7 +94,7 @@ namespace Habanero.Test.General
             PropDefCol lPropDefCol = CreateBOPropDef();
 
             KeyDef lKeyDef = new KeyDef();
-            lKeyDef.IgnoreNulls = true;
+            lKeyDef.IgnoreIfNull = true;
             lKeyDef.Add(lPropDefCol["PK2Prop1"]);
             lKeyDef.Add(lPropDefCol["PK2Prop2"]);
             KeyDefCol keysCol = new KeyDefCol();
@@ -102,7 +102,7 @@ namespace Habanero.Test.General
             keysCol.Add(lKeyDef);
 
             lKeyDef = new KeyDef();
-            lKeyDef.IgnoreNulls = false;
+            lKeyDef.IgnoreIfNull = false;
 
             lKeyDef.Add(lPropDefCol["PK3Prop"]);
             keysCol.Add(lKeyDef);

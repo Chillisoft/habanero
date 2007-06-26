@@ -23,7 +23,7 @@ TestDtd
 TestDtd2";
         private string dtd3 = @"
 #include class.dtd
-#include propertydef.dtd
+#include property.dtd
 TestDtd3";
         private string dtd3processed = @"
 TestDtd
@@ -34,14 +34,14 @@ TestDtd3";
         [TestFixtureSetUp]
         public void SetupFixture() {
             
-                if (!File.Exists("propertydef.dtd")) {
-                    File.Create("propertydef.dtd");
+                if (!File.Exists("property.dtd")) {
+                    File.Create("property.dtd");
                 }
                 if (!File.Exists("class.dtd")) {
                     File.Create("class.dtd");
                 }
-                if (!File.Exists("keydef.dtd")) {
-                    File.Create("keydef.dtd");
+                if (!File.Exists("key.dtd")) {
+                    File.Create("key.dtd");
                 }
 
         }
@@ -50,17 +50,17 @@ TestDtd3";
         public void TearDownFixture() {
             try
             {
-                if (File.Exists("propertydef.dtd"))
+                if (File.Exists("property.dtd"))
                 {
-                    File.Delete("propertydef.dtd");
+                    File.Delete("property.dtd");
                 }
                 if (File.Exists("class.dtd"))
                 {
                     File.Delete("class.dtd");
                 }
-                if (File.Exists("keydef.dtd"))
+                if (File.Exists("key.dtd"))
                 {
-                    File.Delete("keydef.dtd");
+                    File.Delete("key.dtd");
                 }
             }
             catch (Exception ex) {
@@ -107,12 +107,12 @@ TestDtd3";
 
             DtdLoader loader = new DtdLoader(textFileLoader, "");
 
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd3), new object[] {"keydef.dtd"});
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd3), new object[] {"key.dtd"});
             mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "class.dtd" });
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] { "propertydef.dtd" });
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] { "property.dtd" });
             mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "class.dtd" });
 
-            String dtdFileContents = loader.LoadDtd("keydef");
+            String dtdFileContents = loader.LoadDtd("key");
             Assert.AreEqual(dtd3processed + Environment.NewLine, dtdFileContents);
         }
 

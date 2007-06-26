@@ -126,7 +126,7 @@ namespace Habanero.Bo.Loaders
 					case "property":
 						propDefXmls.Add(_reader.ReadOuterXml());
 						break;
-					case "keyDef":
+					case "key":
 						keyDefXmls.Add(_reader.ReadOuterXml());
 						break;
 					case "primaryKeyDef":

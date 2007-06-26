@@ -16,7 +16,7 @@ namespace Habanero.Bo.ClassDefinition
     /// </summary>
     public class KeyDef : DictionaryBase
     {
-        protected bool _ignoreNulls = false;
+        protected bool _ignoreIfNull = false;
         protected string _keyName = "";
         protected bool _buildKeyName = true; //this is a flag used to 
                 //indicate whether the the keyname should be built up 
@@ -55,15 +55,15 @@ namespace Habanero.Bo.ClassDefinition
 		/// <summary>
 		/// A method used by BOKey to determine whether to check for
 		/// duplicate keys.  It will always check if either
-		/// IgnoreNulls is set to false or if it encounters null
+		/// IgnoreIfNull is set to false or if it there are no null
 		/// properties.<br/>
 		/// NOTE: If the BOKey is a primary key, then this cannot be
 		/// set to true.
 		/// </summary>
-		public virtual bool IgnoreNulls
+		public virtual bool IgnoreIfNull
 		{
-			get { return _ignoreNulls; }
-			set { _ignoreNulls = value; }
+			get { return _ignoreIfNull; }
+			set { _ignoreIfNull = value; }
 		}
 
 		/// <summary>
@@ -202,7 +202,7 @@ namespace Habanero.Bo.ClassDefinition
         public void init()
         {
             mKeyDef = new KeyDef();
-            mKeyDef.IgnoreNulls = true;
+            mKeyDef.IgnoreIfNull = true;
             PropDef lPropDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
             mKeyDef.Add(lPropDef);
         }
@@ -219,7 +219,7 @@ namespace Habanero.Bo.ClassDefinition
             Assert.IsTrue(mKeyDef.Contains("PropName"));
             PropDef lPropDef = mKeyDef["PropName"];
             Assert.AreEqual("PropName", lPropDef.PropertyName);
-            Assert.IsTrue(mKeyDef.IgnoreNulls);
+            Assert.IsTrue(mKeyDef.IgnoreIfNull);
         }
     }
 

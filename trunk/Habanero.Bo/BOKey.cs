@@ -95,14 +95,14 @@ namespace Habanero.Bo
         /// whether to check for duplicate keys (if this is set to false,
         /// then duplicates will always be checked for)
         /// </summary>
-        protected bool IgnoreNulls
+        protected bool IgnoreIfNull
         {
-            get { return _keyDef.IgnoreNulls; }
+            get { return _keyDef.IgnoreIfNull; }
         }
 
         /// <summary>
         /// Indicates whether to check for duplicates.
-        /// This will be false when the IgnoreNulls is true and one or more 
+        /// This will be false when the IgnoreIfNull is true and one or more 
         /// of the BOProperties is null.
         /// </summary>
         /// <returns>Returns true if duplicates need to be checked for</returns>
@@ -118,7 +118,7 @@ namespace Habanero.Bo
 
             //If the relevant props are dirty and ignore nulls is false
             // then you must always check for duplicates
-            if (!IgnoreNulls)
+            if (!IgnoreIfNull)
             {
                 return true;
             }

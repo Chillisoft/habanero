@@ -85,8 +85,8 @@ namespace Habanero.Bo.Loaders {
         /// <summary>
         ///   Looks up a localized string similar to &lt;!ELEMENT businessObjectLookupList EMPTY&gt;
         ///&lt;!ATTLIST businessObjectLookupList 
-        ///	className NMTOKEN #REQUIRED
-        ///	assemblyName NMTOKEN #REQUIRED
+        ///	class NMTOKEN #REQUIRED
+        ///	assembly NMTOKEN #REQUIRED
         ///&gt;.
         /// </summary>
         internal static string businessObjectLookupList {
@@ -135,16 +135,16 @@ namespace Habanero.Bo.Loaders {
         
         /// <summary>
         ///   Looks up a localized string similar to #include Prop.dtd
-        ///&lt;!ELEMENT keyDef (prop+)&gt;
+        ///&lt;!ELEMENT key (prop+)&gt;
         ///&lt;!ATTLIST keyDef 
         ///	name NMTOKEN #IMPLIED
-        ///	ignoreNulls ( true | false ) &quot;false&quot;
+        ///	ignoreIfNull ( true | false ) &quot;false&quot;
         ///&gt;
         ///.
         /// </summary>
-        internal static string KeyDef {
+        internal static string key {
             get {
-                return ResourceManager.GetString("KeyDef", resourceCulture);
+                return ResourceManager.GetString("key", resourceCulture);
             }
         }
         

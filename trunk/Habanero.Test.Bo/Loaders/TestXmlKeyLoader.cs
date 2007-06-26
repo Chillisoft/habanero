@@ -27,15 +27,15 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestLoadSimpleKey()
         {
-            KeyDef def = itsLoader.LoadKey(@"<keyDef><prop name=""TestProp"" /></keyDef>", itsPropDefs);
+            KeyDef def = itsLoader.LoadKey(@"<key><prop name=""TestProp"" /></key>", itsPropDefs);
             Assert.AreEqual(1, def.Count);
-            Assert.IsFalse(def.IgnoreNulls);
+            Assert.IsFalse(def.IgnoreIfNull);
         }
 
         [Test]
         public void TestLoadKeyWithName()
         {
-            KeyDef def = itsLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /></keyDef>", itsPropDefs);
+            KeyDef def = itsLoader.LoadKey(@"<key name=""Key1""><prop name=""TestProp"" /></key>", itsPropDefs);
             Assert.AreEqual(1, def.Count);
             Assert.AreEqual("Key1_TestProp", def.KeyName);
         }
@@ -46,7 +46,7 @@ namespace Habanero.Test.Bo.Loaders
             itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
             KeyDef def =
                 itsLoader.LoadKey(
-                    @"<keyDef name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></keyDef>", itsPropDefs);
+                    @"<key name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>", itsPropDefs);
             Assert.AreEqual(2, def.Count);
         }
 
@@ -54,15 +54,15 @@ namespace Habanero.Test.Bo.Loaders
         public void TestLoadKeyWithIgnoreNulls()
         {
             KeyDef def =
-                itsLoader.LoadKey(@"<keyDef name=""Key1"" ignoreNulls=""true""><prop name=""TestProp"" /></keyDef>",
+                itsLoader.LoadKey(@"<key name=""Key1"" ignoreIfNull=""true""><prop name=""TestProp"" /></key>",
                                   itsPropDefs);
-            Assert.IsTrue(def.IgnoreNulls);
+            Assert.IsTrue(def.IgnoreIfNull);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'key' was encountered when loading the class definitions.")]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'keyDef' was encountered when loading the class definitions.")]
         public void TestLoadKeyWithWrongElementName()
         {
-            itsLoader.LoadKey(@"<key name=""Key1""><prop name=""TestProp"" /></key>", itsPropDefs);
+            itsLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /></keyDef>", itsPropDefs);
         }
 
         [
@@ -72,7 +72,7 @@ namespace Habanero.Test.Bo.Loaders
                     "collection of property definitions.")]
         public void TestLoadKeyNonExistentProp()
         {
-            itsLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></keyDef>",
+            itsLoader.LoadKey(@"<key name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>",
                               itsPropDefs);
         }
     }

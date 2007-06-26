@@ -103,12 +103,12 @@ namespace Habanero.Bo.Loaders
         {
             try
             {
-                _keyDef.IgnoreNulls = Convert.ToBoolean(_reader.GetAttribute("ignoreNulls"));
+                _keyDef.IgnoreIfNull = Convert.ToBoolean(_reader.GetAttribute("ignoreIfNull"));
             }
             catch (Exception ex)
             {
                 throw new InvalidXmlDefinitionException("In a 'keyDef' element, " +
-                    "the 'ignoreNulls' attribute provided " +
+                    "the 'ignoreIfNull' attribute provided " +
                     "an invalid boolean value. Use 'true' or 'false'.", ex);
             }
         }

@@ -1,10 +1,10 @@
-#include KeyDef.dtd
+#include key.dtd
 #include PrimaryKeyDef.dtd
 #include property.dtd
 #include RelationshipDef.dtd
 #include superClass.dtd
 #include UIDef.dtd
-<!ELEMENT class (superClass?, property*, keyDef*, primaryKeyDef?, relationshipDef*, uiDef*)>
+<!ELEMENT class (superClass?, property*, key*, primaryKeyDef?, relationshipDef*, uiDef*)>
 <!ATTLIST class
 		name NMTOKEN #REQUIRED
 		assembly NMTOKEN #REQUIRED
