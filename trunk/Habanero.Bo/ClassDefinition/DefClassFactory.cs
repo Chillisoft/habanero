@@ -89,7 +89,7 @@ namespace Habanero.Bo.ClassDefinition
 			return new SimpleLookupListSource(stringGuidPairCollection);
 		}
 
-		public SuperClassDef CreateSuperClassDesc(string assemblyName, string className, ORMapping orMapping)
+		public SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping)
 		{
 			return new SuperClassDef(assemblyName, className, orMapping);
 		}

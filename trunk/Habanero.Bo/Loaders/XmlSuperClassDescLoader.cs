@@ -64,7 +64,7 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a SuperClassDef object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateSuperClassDesc(_assemblyName, _className, _orMapping);
+			return _defClassFactory.CreateSuperClassDef(_assemblyName, _className, _orMapping);
 			//return new SuperClassDef(_assemblyName, _className, _orMapping);
 		}
 
