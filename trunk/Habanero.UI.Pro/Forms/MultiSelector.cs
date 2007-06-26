@@ -19,31 +19,53 @@ namespace Habanero.Ui.Forms
         public MultiSelector() {
             InitializeComponent();
             _model = new Model();
-            _model.OptionAdded += delegate(object sender, Model.ModelEventArgs<T> e) {
-                                                                                         AvailableOptionsListBox.Items.Add(e.Item);
-                                                                                         UpdateButtonsStatus();
+			_model.OptionsChanged +=delegate 
+			{
+				UpdateListBoxes();
             };
 
-            _model.OptionRemoved += delegate(object sender, Model.ModelEventArgs<T> e) {
-                                                                                           AvailableOptionsListBox.Items.Remove(e.Item);
-                                                                                           UpdateButtonsStatus();
+			_model.SelectionsChanged += delegate
+			{
+				UpdateListBoxes();
+			};
+
+			_model.OptionAdded += delegate(object sender, Model.ModelEventArgs<T> e)
+			{
+				 AvailableOptionsListBox.Items.Add(e.Item);
+				 UpdateButtonsStatus();
             };
 
-            _model.Selected += delegate(object sender, Model.ModelEventArgs<T> e) {
-                                                                                      AvailableOptionsListBox.Items.Remove(e.Item);
-                                                                                      SelectionsListBox.Items.Add(e.Item);
-                                                                                      SelectionsListBox.SelectedItem = e.Item;
-                                                                                      UpdateButtonsStatus();
-            };
-            _model.Deselected += delegate(object sender, Model.ModelEventArgs<T> e) {
-                                                                                        AvailableOptionsListBox.Items.Add(e.Item);
-                                                                                        AvailableOptionsListBox.SelectedItem = e.Item;
-                                                                                        SelectionsListBox.Items.Remove(e.Item);
-                                                                                        UpdateButtonsStatus();
-            };
+			_model.OptionRemoved += delegate(object sender, Model.ModelEventArgs<T> e)
+        	{
+        		AvailableOptionsListBox.Items.Remove(e.Item);
+        		UpdateButtonsStatus();
+        	};
 
-            AvailableOptionsListBox.SelectedIndexChanged += delegate { SelectButton.Enabled = (AvailableOptionsListBox.SelectedIndex != -1); };
-            SelectionsListBox.SelectedIndexChanged += delegate { DeselectButton.Enabled = (SelectionsListBox.SelectedIndex != -1); };
+			_model.Selected += delegate(object sender, Model.ModelEventArgs<T> e)
+           	{
+           		AvailableOptionsListBox.Items.Remove(e.Item);
+           		SelectionsListBox.Items.Add(e.Item);
+           		SelectionsListBox.SelectedItem = e.Item;
+           		UpdateButtonsStatus();
+           	};
+
+			_model.Deselected += delegate(object sender, Model.ModelEventArgs<T> e)
+         	{
+         		AvailableOptionsListBox.Items.Add(e.Item);
+         		AvailableOptionsListBox.SelectedItem = e.Item;
+         		SelectionsListBox.Items.Remove(e.Item);
+         		UpdateButtonsStatus();
+         	};
+
+			AvailableOptionsListBox.SelectedIndexChanged += delegate
+        	{
+        		SelectButton.Enabled = (AvailableOptionsListBox.SelectedIndex != -1);
+        	};
+
+            SelectionsListBox.SelectedIndexChanged += delegate
+          	{
+          		DeselectButton.Enabled = (SelectionsListBox.SelectedIndex != -1);
+          	};
         }
 
         /// <summary>
@@ -66,31 +88,39 @@ namespace Habanero.Ui.Forms
         /// Sets the list of options, initially filling the "Available 
         /// Options" listbox with all the options
         /// </summary>
-        public List<T> Options {
-            set {
-                _model.Options = value;
-                AvailableOptionsListBox.Items.Clear();
-                _model.AvailableOptions.ForEach(delegate(T obj) { AvailableOptionsListBox.Items.Add(obj); });
-                SelectionsListBox.Items.Clear();
-                foreach (T obj in _model.SelectionsView)
-                {
-                    SelectionsListBox.Items.Add(obj);
-                }
-                UpdateButtonsStatus();
-            }
-        }
+		public List<T> Options
+		{
+			set
+			{
+				_model.Options = value;
+				//UpdateListBoxes();
+			}
+		}
 
-        ///<summary>
+
+    	///<summary>
         /// Gets or sets the list of selections
         ///</summary>
         public List<T> Selections {
             set {
                 _model.Selections = value;
-                SelectionsListBox.Items.Clear();
-                foreach (T obj in _model.SelectionsView) SelectionsListBox.Items.Add(obj);
-                UpdateButtonsStatus();
+				//SelectionsListBox.Items.Clear();
+				//foreach (T obj in _model.SelectionsView) SelectionsListBox.Items.Add(obj);
+				//UpdateButtonsStatus();
             }
         }
+		
+		private void UpdateListBoxes()
+		{
+			AvailableOptionsListBox.Items.Clear();
+			_model.AvailableOptions.ForEach(delegate(T obj) { AvailableOptionsListBox.Items.Add(obj); });
+			SelectionsListBox.Items.Clear();
+			foreach (T obj in _model.SelectionsView)
+			{
+				SelectionsListBox.Items.Add(obj);
+			}
+			UpdateButtonsStatus();
+		}
 
         /// <summary>
         /// Handles the event of the "Select" button being clicked
@@ -175,8 +205,10 @@ namespace Habanero.Ui.Forms
             private List<T> _selections;
             private List<T> _originalSelections;
 
-            internal event EventHandler<ModelEventArgs<T>> OptionAdded;
-            internal event EventHandler<ModelEventArgs<T>> OptionRemoved;
+			internal event EventHandler OptionsChanged;
+			internal event EventHandler SelectionsChanged;
+			internal event EventHandler<ModelEventArgs<T>> OptionAdded;
+			internal event EventHandler<ModelEventArgs<T>> OptionRemoved;
             internal event EventHandler<ModelEventArgs<T>> Selected;
             internal event EventHandler<ModelEventArgs<T>> Deselected;
 
@@ -203,20 +235,29 @@ namespace Habanero.Ui.Forms
             /// Sets the list of options (left hand side list).
             /// Note that this creates a shallow copy of the List.
             /// </summary>
-            public List<T> Options { set
-            {
-                _options = value.FindAll(delegate { return true; });
-                for (int i = _selections.Count - 1; i >= 0; i--)
-                {
-                    if (!_options.Contains(_selections[i]))
-                    {
-                        _selections.RemoveAt(i);
+			public List<T> Options
+			{
+				set
+				{
+					_options = ShallowCopy(value);
+					for (int i = _selections.Count - 1; i >= 0; i--)
+					{
+						//Remove all selections that dont exist in the options list
+						if (!_options.Contains(_selections[i]))
+						{
+							_selections.RemoveAt(i);
+						}
+					}
+					FireOptionsChanged();
+				}
+			}
 
-                    }
-                }
-            } }
+			private void FireOptionsChanged()
+			{
+				if (OptionsChanged != null) OptionsChanged(this, new EventArgs());
+			}
 
-            /// <summary>
+			/// <summary>
             /// Returns a view of the Options collection
             /// </summary>
             public ReadOnlyCollection<T> OptionsView { get { return new ReadOnlyCollection<T>(_options); } }
@@ -224,12 +265,21 @@ namespace Habanero.Ui.Forms
             /// <summary>
             /// Sets the list of selected items (right hand side list).
             /// </summary>
-            public List<T> Selections {
-                set {
-                    _selections = value;
-                    _originalSelections = _selections.GetRange(0, _selections.Count);
-                }
-            }
+			public List<T> Selections
+			{
+				set
+				{
+					_selections = value;
+					_originalSelections = ShallowCopy(_selections);
+					//_originalSelections = .GetRange(0, _selections.Count);
+					FireSelectionsChanged();
+				}
+			}
+
+			private void FireSelectionsChanged()
+			{
+				if (SelectionsChanged != null) SelectionsChanged(this, new EventArgs());
+			}
 
             /// <summary>
             /// Returns a view of the Selections collection
@@ -258,6 +308,14 @@ namespace Habanero.Ui.Forms
             public List<T> Removed { get { return OriginalSelections.FindAll(delegate(T obj) { return !_selections.Contains(obj); }); } }
 
             /// <summary>
+            /// Selects multiple items at the same time.
+            /// </summary>
+            /// <param name="items">The list of items to select</param>
+            public void Select(List<T> items) {
+                items.ForEach(delegate(T obj) { Select(obj); });
+            }
+
+            /// <summary>
             /// Selects an option, removing it from the Options and adding 
             /// it to the Selections
             /// </summary>
@@ -267,33 +325,25 @@ namespace Habanero.Ui.Forms
                     FireSelected(item);
                 }
             }
-
-            /// <summary>
-            /// Selects multiple items at the same time.
-            /// </summary>
-            /// <param name="items">The list of items to select</param>
-            public void Select(List<T> items) {
-                items.ForEach(delegate(T obj) { Select(obj); });
-            }
-
+			
             private void FireSelected(T item) {
                 if (Selected != null) Selected(this, new ModelEventArgs<T>(item));
             }
 
-            /// <summary>
-            /// Deselects an option, removing it from the Selections and 
-            /// adding it to the Options
-            /// </summary>
-            public void Deselect(T item) {
-                if (_selections.Remove(item)) FireDeselected(item);
-            }
-
-            /// <summary>
+             /// <summary>
             /// Deselects a list of items at once
             /// </summary>
             /// <param name="items">The list of items to deselect</param>
             public void Deselect(List<T> items) {
                 items.ForEach(delegate(T obj) { Deselect(obj); });
+            }
+
+           /// <summary>
+            /// Deselects an option, removing it from the Selections and 
+            /// adding it to the Options
+            /// </summary>
+            public void Deselect(T item) {
+                if (_selections.Remove(item)) FireDeselected(item);
             }
 
             private void FireDeselected(T item) {
@@ -304,14 +354,16 @@ namespace Habanero.Ui.Forms
             /// Selects all available options
             /// </summary>
             public void SelectAll() {
-                AvailableOptions.ForEach(delegate(T obj) { Select(obj); });
+				Select(AvailableOptions);
+                //AvailableOptions.ForEach(delegate(T obj) { Select(obj); });
             }
 
             /// <summary>
             /// Deselects all options
             /// </summary>
             public void DeselectAll() {
-                _selections.FindAll(delegate { return true; }).ForEach(delegate(T obj) { Deselect(obj); });
+				Deselect(ShallowCopy(_selections));
+                //_selections.FindAll(delegate { return true; }).ForEach(delegate(T obj) { Deselect(obj); });
             }
 
             /// <summary>
@@ -339,6 +391,12 @@ namespace Habanero.Ui.Forms
             private void FireOptionRemoved(T item) {
                 if (OptionRemoved != null) OptionRemoved(this, new ModelEventArgs<T>(item));
             }
+
+			private static List<T> ShallowCopy(List<T> list)
+			{
+				return list.FindAll(delegate { return true; });
+			}
+
         }
     }
 }

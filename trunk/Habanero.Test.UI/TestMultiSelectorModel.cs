@@ -16,7 +16,7 @@ namespace Habanero.Test.Ui.Application
         private List<TestT> itsOptions;
         private List<TestT> itsSelections;
 
-        [SetUp ]
+        [SetUp]
         public void SetupTest() {
             itsModel = new MultiSelector<TestT>.Model ();
             itsOptions = new List<TestT>();
