@@ -36,8 +36,8 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         protected override void LoadLookupListSourceFromReader()
         {
-            _className = _reader.GetAttribute("className");
-            _assemblyName = _reader.GetAttribute("assemblyName");
+            _className = _reader.GetAttribute("class");
+            _assemblyName = _reader.GetAttribute("assembly");
             //_type = TypeLoader.LoadType(assemblyName, className);
         }
 

@@ -1,5 +1,5 @@
 <!ELEMENT businessObjectLookupList EMPTY>
 <!ATTLIST businessObjectLookupList 
-	className NMTOKEN #REQUIRED
-	assemblyName NMTOKEN #REQUIRED
+	class NMTOKEN #REQUIRED
+	assembly NMTOKEN #REQUIRED
 >
