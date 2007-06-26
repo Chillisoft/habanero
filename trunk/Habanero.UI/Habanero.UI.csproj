@@ -57,9 +57,6 @@
     <Compile Include="Base\ColumnLayoutManager.cs" />
     <Compile Include="Base\ControlCollection.cs" />
     <Compile Include="Base\ControlFactory.cs" />
-    <Compile Include="Grid\DataGridCheckBoxColumn.cs" />
-    <Compile Include="Grid\DataGridComboBoxColumn.cs" />
-    <Compile Include="Grid\DataGridDateTimePickerColumn.cs" />
     <Compile Include="Grid\DataGridViewDateTimeColumn.cs" />
     <Compile Include="Grid\DataGridViewNumericUpDownColumn.cs" />
     <Compile Include="Grid\DataViewCompositeFilterClause.cs" />

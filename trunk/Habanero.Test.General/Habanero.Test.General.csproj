@@ -166,9 +166,6 @@
     <Compile Include="TestDatabaseConnection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestDatabaseErrorSafeConnectString.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Tester.cs">
       <SubType>Code</SubType>
     </Compile>

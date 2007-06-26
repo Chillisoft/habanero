@@ -205,9 +205,6 @@
     <Compile Include="NullSynchronisationController.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NullUserInterfaceMapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IProgressIndicator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -227,9 +224,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UIDefCol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIDefName.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UIFormColumn.cs">
