@@ -65,14 +65,13 @@ namespace Habanero.Bo.Loaders {
         ///#include PrimaryKeyDef.dtd
         ///#include PropertyDef.dtd
         ///#include RelationshipDef.dtd
-        ///#include SuperClassDesc.dtd
+        ///#include superClass.dtd
         ///#include UIDef.dtd
-        ///&lt;!ELEMENT class (superClassDesc?, propertyDef*, keyDef*, primaryKeyDef?, relationshipDef*, uiDef*)&gt;
+        ///&lt;!ELEMENT class (superClass?, property*, keyDef*, primaryKeyDef?, relationshipDef*, uiDef*)&gt;
         ///&lt;!ATTLIST class
         ///		name NMTOKEN #REQUIRED
         ///		assembly NMTOKEN #REQUIRED
-        ///		tableName NMTOKEN #IMPLIED
-        ///		supportsSynchronising ( true | false ) &quot;false&quot;
+        ///		table NMTOKEN #IMPLIED
         ///&gt;
         ///
         ///.
@@ -97,8 +96,8 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #include ClassDef.dtd
-        ///&lt;!ELEMENT classes (classDef+)&gt;
+        ///   Looks up a localized string similar to #include class.dtd
+        ///&lt;!ELEMENT classes (class+)&gt;
         ///.
         /// </summary>
         internal static string classes {
@@ -189,9 +188,9 @@ namespace Habanero.Bo.Loaders {
         ///	databaseFieldName CDATA #IMPLIED
         /// [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string PropertyDef {
+        internal static string property {
             get {
-                return ResourceManager.GetString("PropertyDef", resourceCulture);
+                return ResourceManager.GetString("property", resourceCulture);
             }
         }
         
@@ -253,16 +252,16 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT superClassDesc EMPTY&gt;
-        ///&lt;!ATTLIST superClassDesc
-        ///		className NMTOKEN #REQUIRED
-        ///		assemblyName NMTOKEN #REQUIRED
+        ///   Looks up a localized string similar to &lt;!ELEMENT superClass EMPTY&gt;
+        ///&lt;!ATTLIST superClass
+        ///		class NMTOKEN #REQUIRED
+        ///		assembly NMTOKEN #REQUIRED
         ///		orMapping ( ClassTableInheritance | SingleTableInheritance | ConcreteTableInheritance ) &quot;ClassTableInheritance&quot;
         ///&gt;.
         /// </summary>
-        internal static string SuperClassDesc {
+        internal static string superClass {
             get {
-                return ResourceManager.GetString("SuperClassDesc", resourceCulture);
+                return ResourceManager.GetString("superClass", resourceCulture);
             }
         }
         

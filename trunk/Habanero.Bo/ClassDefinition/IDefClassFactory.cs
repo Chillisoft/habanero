@@ -33,7 +33,7 @@ namespace Habanero.Bo.ClassDefinition
 
 		SimpleLookupListSource CreateSimpleLookupListSource(StringGuidPairCollection stringGuidPairCollection);
 
-		SuperClassDesc CreateSuperClassDesc(string assemblyName, string className, ORMapping orMapping);
+		SuperClassDef CreateSuperClassDesc(string assemblyName, string className, ORMapping orMapping);
 
 		UIDef CreateUIDef(string name, UIFormDef uiFormDef, UIGridDef uiGridDef);
 

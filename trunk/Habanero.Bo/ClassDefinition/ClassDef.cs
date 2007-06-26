@@ -71,7 +71,7 @@ namespace Habanero.Bo.ClassDefinition
 		private KeyDefCol _keysCol;
 		private RelationshipDefCol _relationshipDefCol;
 
-		private SuperClassDesc _superClassDesc;
+		private SuperClassDef _superClassDef;
         private UIDefCol _uiDefCol;
         private bool _supportsSynchronisation;
 
@@ -424,18 +424,18 @@ namespace Habanero.Bo.ClassDefinition
         public BOPropCol createBOPropertyCol(bool newObject)
         {
             BOPropCol propCol = _propDefCol.CreateBOPropertyCol(newObject);
-            if (this.SuperClassDesc != null)
+            if (this.SuperClassDef != null)
             {
-				ClassDef superClassDef = SuperClassDesc.SuperClassDef;
+				ClassDef superClassDef = SuperClassDef.SuperClassClassDef;
 				propCol.Add(superClassDef.createBOPropertyCol(newObject));
-                if (this.SuperClassDesc.ORMapping == ORMapping.ConcreteTableInheritance)
+                if (this.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance)
                 {
 					foreach (DictionaryEntry entry in superClassDef.PrimaryKeyDef)
                     {
                         propCol.Remove((string) entry.Key);
                     }
                 } 
-                else if (this.SuperClassDesc.ORMapping == ORMapping.SingleTableInheritance)
+                else if (this.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
                 {
                     if (this.PrimaryKeyDef != null)
                     {
@@ -508,9 +508,9 @@ namespace Habanero.Bo.ClassDefinition
             }
             RelationshipCol relCol = new RelationshipCol(bo);
             relCol = _relationshipDefCol.CreateRelationshipCol(propCol, bo);
-            if (this.SuperClassDef != null)
+            if (this.SuperClassClassDef != null)
             {
-                relCol.Add(this.SuperClassDesc.SuperClassDef.CreateRelationshipCol(propCol, bo));
+                relCol.Add(this.SuperClassDef.SuperClassClassDef.CreateRelationshipCol(propCol, bo));
             }
             return relCol;
         }
@@ -523,9 +523,9 @@ namespace Habanero.Bo.ClassDefinition
         public BOKeyCol createBOKeyCol(BOPropCol col)
         {
             BOKeyCol keyCol = _keysCol.CreateBOKeyCol(col);
-            if (this.SuperClassDef != null)
+            if (this.SuperClassClassDef != null)
             {
-                keyCol.Add(SuperClassDesc.SuperClassDef.createBOKeyCol(col));
+                keyCol.Add(SuperClassDef.SuperClassClassDef.createBOKeyCol(col));
             }
             return keyCol;
         }
@@ -602,23 +602,23 @@ namespace Habanero.Bo.ClassDefinition
 		/// <summary>
         /// Gets and sets the super-class of this class definition
         /// </summary>
-        public SuperClassDesc SuperClassDesc
+        public SuperClassDef SuperClassDef
         {
-            get { return _superClassDesc; }
-            set { _superClassDesc = value; }
+            get { return _superClassDef; }
+            set { _superClassDef = value; }
         }
 
         /// <summary>
         /// Returns the class definition of the super-class, or null
         /// if there is no super-class
         /// </summary>
-        internal ClassDef SuperClassDef
+        internal ClassDef SuperClassClassDef
         {
             get
             {
-                if (this.SuperClassDesc != null)
+                if (this.SuperClassDef != null)
                 {
-                    return this.SuperClassDesc.SuperClassDef;
+                    return this.SuperClassDef.SuperClassClassDef;
                 }
                 else
                 {
@@ -635,7 +635,7 @@ namespace Habanero.Bo.ClassDefinition
         /// super class or another type of inheritance is being used</returns>
         protected internal bool IsUsingClassTableInheritance()
         {
-            return (this.SuperClassDesc != null) && (this.SuperClassDesc.ORMapping == ORMapping.ClassTableInheritance);
+            return (this.SuperClassDef != null) && (this.SuperClassDef.ORMapping == ORMapping.ClassTableInheritance);
         }
 
         /// <summary>
@@ -647,7 +647,7 @@ namespace Habanero.Bo.ClassDefinition
         public bool IsUsingConcreteTableInheritance()
         {
             return
-                (this.SuperClassDesc != null) && (this.SuperClassDesc.ORMapping == ORMapping.ConcreteTableInheritance);
+                (this.SuperClassDef != null) && (this.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance);
         }
 
         /// <summary>
@@ -658,7 +658,7 @@ namespace Habanero.Bo.ClassDefinition
         /// super class or another type of inheritance is being used</returns>
         public bool IsUsingSingleTableInheritance()
         {
-            return (this.SuperClassDesc != null) && (this.SuperClassDesc.ORMapping == ORMapping.SingleTableInheritance);
+            return (this.SuperClassDef != null) && (this.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance);
         }
 
         #endregion //Superclasses&inheritance
@@ -707,9 +707,9 @@ namespace Habanero.Bo.ClassDefinition
             }
             else
             {
-                if (this.SuperClassDesc != null)
+                if (this.SuperClassDef != null)
                 {
-                    return this.SuperClassDef.GetLookupListSource(propertyName);
+                    return this.SuperClassClassDef.GetLookupListSource(propertyName);
                 }
                 else
                 {
@@ -737,7 +737,7 @@ namespace Habanero.Bo.ClassDefinition
                 }
                 else
                 {
-                    currentClassDef = currentClassDef.SuperClassDef;
+                    currentClassDef = currentClassDef.SuperClassClassDef;
                 }
             }
             return null;
@@ -761,7 +761,7 @@ namespace Habanero.Bo.ClassDefinition
                 }
                 else
                 {
-                    currentClassDef = currentClassDef.SuperClassDef;
+                    currentClassDef = currentClassDef.SuperClassClassDef;
                 }
             }
             return null;

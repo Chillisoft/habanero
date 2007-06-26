@@ -26,13 +26,13 @@ namespace Habanero.Test.Bo.Loaders
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
-							<propertyDef name=""TestClassID"" />
+							<property  name=""TestClassID"" />
                             <primaryKeyDef>
                                 <prop name=""TestClassID""/>
                             </primaryKeyDef>
 						</class>
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"" >
-							<propertyDef name=""TestRelatedClassID"" />
+							<property  name=""TestRelatedClassID"" />
                             <primaryKeyDef>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKeyDef>

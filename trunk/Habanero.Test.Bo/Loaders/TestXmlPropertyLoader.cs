@@ -26,7 +26,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestSimpleProperty()
         {
-            PropDef def = itsLoader.LoadProperty(@"<propertyDef name=""TestProp"" />");
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" />");
             Assert.AreEqual("TestProp", def.PropertyName, "Property name should be same as that specified in xml");
             Assert.AreEqual(typeof (string), def.PropertyType,
                             "Property type should be the default as defined in the dtd");
@@ -39,14 +39,14 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestPropertyWithType()
         {
-            PropDef def = itsLoader.LoadProperty(@"<propertyDef name=""TestProp"" type=""Int32"" />");
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" type=""Int32"" />");
             Assert.AreEqual(typeof (int), def.PropertyType, "Property type should be same as that specified in xml");
         }
 
         [Test]
         public void TestPropertyWithReadWriteRule()
         {
-            PropDef def = itsLoader.LoadProperty(@"<propertyDef name=""TestProp"" readWriteRule=""ReadOnly"" />");
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadOnly"" />");
             Assert.AreEqual(PropReadWriteRule.ReadOnly, def.ReadWriteRule,
                             "Property read write rule should be same as that specified in xml");
         }
@@ -54,7 +54,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestPropertyWithDefaultValue()
         {
-            PropDef def = itsLoader.LoadProperty(@"<propertyDef name=""TestProp"" defaultValue=""TestValue"" />");
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" defaultValue=""TestValue"" />");
             Assert.AreEqual("TestValue", def.DefaultValue, "Default value should be same as that specified in xml");
         }
 
@@ -63,7 +63,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(
-                    @"<propertyDef name=""TestProp"" type=""Guid"" defaultValue=""{38373667-B06A-40c5-B4CE-299CE925E121}"" />");
+                    @"<property  name=""TestProp"" type=""Guid"" defaultValue=""{38373667-B06A-40c5-B4CE-299CE925E121}"" />");
             Assert.AreEqual(new Guid("{38373667-B06A-40c5-B4CE-299CE925E121}"), def.DefaultValue,
                             "Default value should be same as that specified in xml");
         }
@@ -72,7 +72,7 @@ namespace Habanero.Test.Bo.Loaders
         public void TestPropertyWithDatabaseFieldName()
         {
             PropDef def =
-                itsLoader.LoadProperty(@"<propertyDef name=""TestProp"" databaseFieldName=""TestFieldName"" />");
+                itsLoader.LoadProperty(@"<property  name=""TestProp"" databaseFieldName=""TestFieldName"" />");
             Assert.AreEqual("TestFieldName", def.FieldName, "Field Name should be the same as that specified in xml");
         }
 
@@ -81,7 +81,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(
-                    @"<propertyDef name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/><add key=""max"" value=""8"" /></rule></propertyDef>");
+                    @"<property  name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/><add key=""max"" value=""8"" /></rule></property>");
             Assert.AreEqual("PropRuleString", def.PropRule.GetType().Name);
         }
 
@@ -90,7 +90,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(
-                    @"<propertyDef name=""TestProp""><databaseLookupListSource sqlString=""Source"" /></propertyDef>");
+                    @"<property  name=""TestProp""><databaseLookupListSource sqlString=""Source"" /></property>");
             Assert.AreSame(typeof (DatabaseLookupListSource), def.LookupListSource.GetType(),
                            "LookupListSource should be of type DatabaseLookupListSource but is of type " +
                            def.LookupListSource.GetType().Name);
@@ -109,7 +109,7 @@ namespace Habanero.Test.Bo.Loaders
 
 			PropDef def =
                 itsLoader.LoadProperty(
-                    @"<propertyDef name=""TestProp""><databaseLookupListSource sqlString=""Source"" className=""MyBo"" assemblyName=""Habanero.Test"" /></propertyDef>");
+                    @"<property  name=""TestProp""><databaseLookupListSource sqlString=""Source"" className=""MyBo"" assemblyName=""Habanero.Test"" /></property>");
             DatabaseLookupListSource source = (DatabaseLookupListSource) def.LookupListSource;
             Assert.IsNotNull(source.ClassDef);
             Assert.AreEqual(classDef.ClassName, source.ClassDef.ClassName);
@@ -122,12 +122,12 @@ namespace Habanero.Test.Bo.Loaders
             PropDef def =
                 itsLoader.LoadProperty(
                     @"
-					<propertyDef name=""TestProp"">
+					<property  name=""TestProp"">
 						<simpleLookupListSource>
 							<stringGuidPair string=""s1"" guid=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
 							<stringGuidPair string=""s2"" guid=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
 						</simpleLookupListSource>
-					</propertyDef>");
+					</property>");
             Assert.AreSame(typeof (SimpleLookupListSource), def.LookupListSource.GetType(),
                            "LookupListSource should be of type SimpleLookupListSource");
             SimpleLookupListSource source = (SimpleLookupListSource) def.LookupListSource;

@@ -44,13 +44,13 @@ namespace Habanero.Bo.SqlGeneration
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 includeAllProps = false;
-                propsToInclude = currentClassDef.SuperClassDef.PropDefcol.CreateBOPropertyCol(true);
+                propsToInclude = currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true);
                 if (propsToInclude.Count > 0)
                 {
-                    tableName = currentClassDef.SuperClassDef.TableName;
+                    tableName = currentClassDef.SuperClassClassDef.TableName;
                     GenerateSingleUpdateStatement(tableName, includeAllProps, propsToInclude, true, currentClassDef);
                 }
-                currentClassDef = currentClassDef.SuperClassDef;
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
             includeAllProps = !_bo.ClassDef.IsUsingClassTableInheritance();
             propsToInclude = _bo.ClassDef.PropDefcol.CreateBOPropertyCol(true);

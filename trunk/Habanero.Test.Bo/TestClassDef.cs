@@ -25,8 +25,8 @@ namespace Habanero.Test.Bo
                 loader.LoadClass(
                     @"
 				<class name=""MyBo"" assembly=""Habanero.Test"">
-					<propertyDef name=""MyBoID"" type=""Guid"" />
-					<propertyDef name=""TestProp"" />
+					<property  name=""MyBoID"" type=""Guid"" />
+					<property  name=""TestProp"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>
@@ -56,13 +56,13 @@ namespace Habanero.Test.Bo
                 @"
 					<classes>
 						<class name=""TestClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
-							<propertyDef name=""TestClass{0}ID"" />
+							<property  name=""TestClass{0}ID"" />
                             <primaryKeyDef>
                                 <prop name=""TestClass{0}ID""/>
                             </primaryKeyDef>
 						</class>
 						<class name=""TestRelatedClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
-							<propertyDef name=""TestRelatedClass{0}ID"" />
+							<property  name=""TestRelatedClass{0}ID"" />
                             <primaryKeyDef>
                                 <prop name=""TestRelatedClass{0}ID""/>
                             </primaryKeyDef>

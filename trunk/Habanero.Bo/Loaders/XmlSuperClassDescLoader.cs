@@ -41,7 +41,7 @@ namespace Habanero.Bo.Loaders
         /// <param name="xmlSuperClassDesc">The xml string containing the
         /// super class definition</param>
         /// <returns>Returns the property rule object</returns>
-        public SuperClassDesc LoadSuperClassDesc(string xmlSuperClassDesc)
+        public SuperClassDef LoadSuperClassDesc(string xmlSuperClassDesc)
         {
             return this.LoadSuperClassDesc(this.CreateXmlElement(xmlSuperClassDesc));
         }
@@ -52,20 +52,20 @@ namespace Habanero.Bo.Loaders
         /// <param name="xmlSuperClassDesc">The xml element containing the
         /// super class definition</param>
         /// <returns>Returns the property rule object</returns>
-        public SuperClassDesc LoadSuperClassDesc(XmlElement xmlSuperClassDesc)
+        public SuperClassDef LoadSuperClassDesc(XmlElement xmlSuperClassDesc)
         {
-            return (SuperClassDesc) this.Load(xmlSuperClassDesc);
+            return (SuperClassDef) this.Load(xmlSuperClassDesc);
         }
 
         /// <summary>
-        /// Creates a new SuperClassDesc object using the data that
+        /// Creates a new SuperClassDef object using the data that
         /// has been loaded for the object
         /// </summary>
-        /// <returns>Returns a SuperClassDesc object</returns>
+        /// <returns>Returns a SuperClassDef object</returns>
         protected override object Create()
         {
 			return _defClassFactory.CreateSuperClassDesc(_assemblyName, _className, _orMapping);
-			//return new SuperClassDesc(_assemblyName, _className, _orMapping);
+			//return new SuperClassDef(_assemblyName, _className, _orMapping);
 		}
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace Habanero.Bo.Loaders
         protected override void LoadFromReader()
         {
             _reader.Read();
-            _className = _reader.GetAttribute("className");
-            _assemblyName = _reader.GetAttribute("assemblyName");
+            _className = _reader.GetAttribute("class");
+            _assemblyName = _reader.GetAttribute("assembly");
 			string orMappingType = _reader.GetAttribute("orMapping");
 			try
             {

@@ -10,8 +10,8 @@ namespace Habanero.Test.General
     {
         protected override void SetupInheritanceSpecifics()
         {
-            Circle.GetClassDef().SuperClassDesc =
-                new SuperClassDesc(Shape.GetClassDef(), ORMapping.ConcreteTableInheritance);
+            Circle.GetClassDef().SuperClassDef =
+                new SuperClassDef(Shape.GetClassDef(), ORMapping.ConcreteTableInheritance);
         }
 
         protected override void SetStrID()
@@ -22,7 +22,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestCircleIsUsingConcreteTableInheritance()
         {
-            Assert.AreEqual(ORMapping.ConcreteTableInheritance, Circle.GetClassDef().SuperClassDesc.ORMapping);
+            Assert.AreEqual(ORMapping.ConcreteTableInheritance, Circle.GetClassDef().SuperClassDef.ORMapping);
         }
 
         [Test]

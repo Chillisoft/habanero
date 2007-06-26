@@ -138,7 +138,7 @@ namespace Habanero.Bo
         /// <returns>Returns a BOKey object</returns>
         public static BOKey GetSuperClassKey(ClassDef subClassDef, BusinessObject subClassObj)
         {
-            BOKey superKey = subClassDef.SuperClassDef.PrimaryKeyDef.CreateBOKey(subClassObj.GetBOPropCol());
+            BOKey superKey = subClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(subClassObj.GetBOPropCol());
             return superKey;
         }
 

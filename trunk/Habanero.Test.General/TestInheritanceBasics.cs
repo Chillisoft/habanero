@@ -24,8 +24,8 @@ namespace Habanero.Test.General
         [Test]
         public void TestSuperClassDefProperty()
         {
-        	Assert.AreSame(shapeClassDef, circleClassDef.SuperClassDesc.SuperClassDef,
-                           "SuperClassDesc.ClassDef property on ClassDef should return the SuperClass's ClassDef");
+        	Assert.AreSame(shapeClassDef, circleClassDef.SuperClassDef.SuperClassClassDef,
+                           "SuperClassDef.ClassDef property on ClassDef should return the SuperClass's ClassDef");
         }
 
         [Test]

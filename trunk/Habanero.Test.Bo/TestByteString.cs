@@ -31,8 +31,8 @@ namespace Habanero.Test.Bo
                 loader.LoadClass(
                     @"
 				<class name=""MyBo"" assembly=""Habanero.Test"">
-					<propertyDef name=""MyBoID"" type=""Guid"" />
-					<propertyDef name=""TestProp"" type=""ByteString"" assembly=""Habanero.Util"" />
+					<property  name=""MyBoID"" type=""Guid"" />
+					<property  name=""TestProp"" type=""ByteString"" assembly=""Habanero.Util"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>

@@ -36,9 +36,9 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBo"" assembly=""Habanero.Test"">
-					<propertyDef name=""MyBoID"" />
-					<propertyDef name=""TestProp"" />
-					<propertyDef name=""TestProp2"" />
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>
@@ -87,9 +87,9 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBo"" assembly=""Habanero.Test"">
-					<propertyDef name=""MyBoID"" />
-					<propertyDef name=""TestProp"" />
-					<propertyDef name=""TestProp2"" />
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>
@@ -121,10 +121,10 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBo"" assembly=""Habanero.Test"">
-					<propertyDef name=""MyBoID"" />
-					<propertyDef name=""TestProp"" />
-					<propertyDef name=""TestProp2"" />
-					<propertyDef name=""TestBoolean"" type=""Boolean"" />
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<property  name=""TestBoolean"" type=""Boolean"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>
@@ -158,14 +158,14 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBo"" assembly=""Habanero.Test"">
-					<propertyDef name=""MyBoID"" />
-					<propertyDef name=""TestProp"" />
-					<propertyDef name=""TestProp2"" type=""Guid"" >
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" type=""Guid"" >
 						<simpleLookupListSource>
 							<stringGuidPair string=""s1"" guid=""{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"" />
 							<stringGuidPair string=""s2"" guid=""{F428FADC-3740-412c-91A7-ECEB4D414414}"" />
 						</simpleLookupListSource>
-					</propertyDef>
+					</property>
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>
@@ -198,15 +198,15 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyBo"" assembly=""Habanero.Test"">
-					<propertyDef name=""MyBoID"" />
-					<propertyDef name=""TestProp"" />
-					<propertyDef name=""TestProp2"" type=""Guid"" >
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" type=""Guid"" >
 						<simpleLookupListSource>
 							<stringGuidPair string=""s1"" guid=""{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"" />
 							<stringGuidPair string=""s2"" guid=""{F428FADC-3740-412c-91A7-ECEB4D414414}"" />
 						</simpleLookupListSource>
-					</propertyDef>
-					<propertyDef name=""RelatedID"" type=""Guid"" />
+					</property>
+					<property  name=""RelatedID"" type=""Guid"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>
@@ -279,9 +279,9 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"">
-					<propertyDef name=""MyRelatedBoID"" />
-					<propertyDef name=""MyRelatedTestProp"" />
-					<propertyDef name=""MyBoID"" />
+					<property  name=""MyRelatedBoID"" />
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" />
 					<primaryKeyDef>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKeyDef>

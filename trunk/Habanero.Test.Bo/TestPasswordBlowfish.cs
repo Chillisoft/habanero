@@ -24,8 +24,8 @@ namespace Habanero.Test.Bo
                 loader.LoadClass(
                     @"
 				<class name=""MyBo"" assembly=""Habanero.Test"">
-					<propertyDef name=""MyBoID"" type=""Guid"" />
-					<propertyDef name=""TestProp"" type=""PasswordBlowfish"" assembly=""Habanero.Bo"" />
+					<property  name=""MyBoID"" type=""Guid"" />
+					<property  name=""TestProp"" type=""PasswordBlowfish"" assembly=""Habanero.Bo"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>

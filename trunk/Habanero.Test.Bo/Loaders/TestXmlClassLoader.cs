@@ -57,7 +57,7 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClass(
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
-                    <propertyDef name=""TestProp"" />
+                    <property  name=""TestProp"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
@@ -73,7 +73,7 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClass(
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" table=""myTable"">
-                    <propertyDef name=""TestProp"" />
+                    <property  name=""TestProp"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
@@ -89,7 +89,7 @@ namespace Habanero.Test.Bo.Loaders
 //                loader.LoadClass(
 //                    @"
 //				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" supportsSynchronising=""true"">
-//                    <propertyDef name=""TestProp"" />
+//                    <property  name=""TestProp"" />
 //                    <primaryKeyDef>
 //                        <prop name=""TestProp""/>
 //                    </primaryKeyDef>
@@ -106,7 +106,7 @@ namespace Habanero.Test.Bo.Loaders
 //                loader.LoadClass(
 //                    @"
 //				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
-//                    <propertyDef name=""TestProp"" />
+//                    <property  name=""TestProp"" />
 //                    <primaryKeyDef>
 //                        <prop name=""TestProp""/>
 //                    </primaryKeyDef>
@@ -122,8 +122,8 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClass(
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
-					<propertyDef name=""TestProp"" />
-					<propertyDef name=""TestProp2"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
@@ -140,7 +140,7 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClass(
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
-					<propertyDef name=""TestProp"" />
+					<property  name=""TestProp"" />
 					<primaryKeyDef>
 						<prop name=""TestProp"" />
 					</primaryKeyDef>
@@ -156,8 +156,8 @@ namespace Habanero.Test.Bo.Loaders
             loader.LoadClass(
                 @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
-					<propertyDef name=""TestProp"" />
-					<propertyDef name=""TestProp2"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
 					<primaryKeyDef>
 						<prop name=""TestProp"" />
 					</primaryKeyDef>
@@ -175,9 +175,9 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClass(
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
-					<propertyDef name=""TestProp"" />
-					<propertyDef name=""TestProp2"" />
-					<propertyDef name=""TestProp3"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<property  name=""TestProp3"" />
 					<keyDef>
 						<prop name=""TestProp"" />
 					</keyDef>
@@ -200,7 +200,7 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClass(
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
-					<propertyDef name=""TestProp"" />
+					<property  name=""TestProp"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
@@ -231,7 +231,7 @@ namespace Habanero.Test.Bo.Loaders
                     @"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
-							<propertyDef name=""TestClassID"" />
+							<property  name=""TestClassID"" />
                             <primaryKeyDef>
                                 <prop name=""TestClassID""/>
                             </primaryKeyDef>
@@ -242,15 +242,15 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClass(
                     @"
 				<class name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"">
-					<superClassDesc className=""Habanero.Test.Bo.Loaders.TestClass"" assemblyName=""Habanero.Test.Bo"" />
-					<propertyDef name=""TestProp"" />
+					<superClass class=""Habanero.Test.Bo.Loaders.TestClass"" assembly=""Habanero.Test.Bo"" />
+					<property  name=""TestProp"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
 				</class>
 			");
-            Assert.IsNotNull(def.SuperClassDesc);
-            Assert.AreSame(ClassDef.GetClassDefCol[typeof (TestClass)], def.SuperClassDesc.SuperClassDef);
+            Assert.IsNotNull(def.SuperClassDef);
+            Assert.AreSame(ClassDef.GetClassDefCol[typeof (TestClass)], def.SuperClassDef.SuperClassClassDef);
         }
 
         [Test]
@@ -260,8 +260,8 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClass(
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
-					<propertyDef name=""TestProp"" />
-					<propertyDef name=""TestProp2"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
 					<primaryKeyDef>
 						<prop name=""TestProp"" />
 					</primaryKeyDef>

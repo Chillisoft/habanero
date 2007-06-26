@@ -142,8 +142,8 @@
   <data name="Prop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\Prop.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="PropertyDef" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\PropertyDef.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="property" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\property.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="RelationshipDef" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\RelationshipDef.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -154,8 +154,8 @@
   <data name="SimpleLookupListSource" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\SimpleLookupListSource.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SuperClassDesc" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\SuperClassDesc.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="superClass" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\superClass.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="UIDef" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\UIDef.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

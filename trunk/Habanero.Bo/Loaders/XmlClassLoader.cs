@@ -20,7 +20,7 @@ namespace Habanero.Bo.Loaders
         private RelationshipDefCol _RelationshipDefCol;
         private string _ClassName;
         private string _AssemblyName;
-        private SuperClassDesc _SuperClassDesc;
+        private SuperClassDef _SuperClassDef;
         private UIDefCol _UIDefCol;
         private string _TableName;
         //private bool _SupportsSynchronising;
@@ -85,9 +85,9 @@ namespace Habanero.Bo.Loaders
 			//ClassDef def =
 			//    new ClassDef(_AssemblyName,_ClassName, _PrimaryKeyDef, _PropDefCol, 
 			//                 _KeyDefCol, _RelationshipDefCol, _UIDefCol);
-			if (_SuperClassDesc != null)
+			if (_SuperClassDef != null)
             {
-                def.SuperClassDesc = _SuperClassDesc;
+                def.SuperClassDef = _SuperClassDef;
             }
             if (_TableName != null && _TableName.Length > 0)
             {
@@ -102,7 +102,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         protected override void LoadFromReader()
         {
-            _SuperClassDesc = null;
+            _SuperClassDef = null;
             _reader.Read();
             LoadClassInfo();
             LoadTableName();
@@ -120,10 +120,10 @@ namespace Habanero.Bo.Loaders
             {
 				switch (_reader.Name)
 				{
-					case "superClassDesc":
+					case "superClass":
 						superclassDescXML = _reader.ReadOuterXml();
 						break;
-					case "propertyDef":
+					case "property":
 						propDefXmls.Add(_reader.ReadOuterXml());
 						break;
 					case "keyDef":
@@ -164,7 +164,7 @@ namespace Habanero.Bo.Loaders
             if (xmlDef != null)
         {
             XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(DtdLoader, _defClassFactory);
-                _SuperClassDesc = superClassDescLoader.LoadSuperClassDesc(xmlDef);
+                _SuperClassDef = superClassDescLoader.LoadSuperClassDesc(xmlDef);
             }
         }
 

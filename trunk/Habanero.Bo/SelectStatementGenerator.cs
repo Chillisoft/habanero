@@ -52,7 +52,7 @@ namespace Habanero.Bo
             while (currentClassDef != null)
             {
                 classDefs.Add(currentClassDef);
-                currentClassDef = currentClassDef.SuperClassDef;
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
 
             string statement = "SELECT ";
@@ -75,22 +75,22 @@ namespace Habanero.Bo
             currentClassDef = _classDef;
             while (currentClassDef.IsUsingSingleTableInheritance())
             {
-                currentClassDef = currentClassDef.SuperClassDef;
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
             statement += " FROM " + currentClassDef.TableName;
             string where = " WHERE ";
 
             while (currentClassDef.IsUsingClassTableInheritance())
             {
-                statement += ", " + currentClassDef.SuperClassDef.TableName;
-                foreach (DictionaryEntry entry in currentClassDef.SuperClassDef.PrimaryKeyDef)
+                statement += ", " + currentClassDef.SuperClassClassDef.TableName;
+                foreach (DictionaryEntry entry in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
                 {
                     PropDef def = (PropDef) entry.Value;
-                    where += currentClassDef.SuperClassDef.TableName + "." + def.FieldName;
+                    where += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
                     where += " = " + currentClassDef.TableName + "." + def.FieldName;
                     where += " AND ";
                 }
-                currentClassDef = currentClassDef.SuperClassDef;
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
             if (where.Length > 7)
             {
@@ -123,7 +123,7 @@ namespace Habanero.Bo
                 }
                 else if (classDef.PropDefcol.Contains(prop.PropertyName))
                 {
-                    if (classDef.SuperClassDef == null || classDef.IsUsingClassTableInheritance())
+                    if (classDef.SuperClassClassDef == null || classDef.IsUsingClassTableInheritance())
                     {
                         return classDef.TableName;
                     }

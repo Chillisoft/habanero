@@ -4,10 +4,10 @@ namespace Habanero.Bo.ClassDefinition
 	/// Manages a super-class in the case where inheritance is being used.
 	/// </summary>
 	/// TODO ERIC - what is desc? description?  maybe this could be renamed
-	public class SuperClassDesc
+	public class SuperClassDef
 	{
 		private ORMapping _orMapping;
-		private ClassDef _superClassDef;
+		private ClassDef _superClassClassDef;
 		private string _className;
 		private string _assemblyName;
 
@@ -19,7 +19,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <param name="superClassDef">The class definition</param>
 		/// <param name="mapping">The type of OR-Mapping to use. See
 		/// the ORMapping enumeration for more detail.</param>
-		public SuperClassDesc(ClassDef superClassDef, ORMapping mapping)
+		public SuperClassDef(ClassDef superClassDef, ORMapping mapping)
 		{
 			_orMapping = mapping;
 			MySuperClassDef = superClassDef;
@@ -32,10 +32,10 @@ namespace Habanero.Bo.ClassDefinition
 		/// <param name="className">The class name of the superClass</param>
 		/// <param name="mapping">The type of OR-Mapping to use. See
 		/// the ORMapping enumeration for more detail.</param>
-		public SuperClassDesc(string assemblyName, string className, ORMapping mapping)
+		public SuperClassDef(string assemblyName, string className, ORMapping mapping)
 		{
 			_orMapping = mapping;
-			_superClassDef = null;
+			_superClassClassDef = null;
 			_assemblyName = assemblyName;
 			_className = className;
 		}
@@ -65,7 +65,7 @@ namespace Habanero.Bo.ClassDefinition
 			{
 				if (_assemblyName != value)
 				{
-					_superClassDef = null;
+					_superClassClassDef = null;
 					_className = null;
 				}
 				_assemblyName = value;
@@ -81,7 +81,7 @@ namespace Habanero.Bo.ClassDefinition
 			protected set
 			{
 				if (_className != value)
-					_superClassDef = null;
+					_superClassClassDef = null;
 				_className = value;
 			}
 		}
@@ -89,7 +89,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <summary>
 		/// Returns the class definition for this super-class
 		/// </summary>
-		public ClassDef SuperClassDef
+		public ClassDef SuperClassClassDef
 		{
 			get { return MySuperClassDef; }
 			protected set { MySuperClassDef = value; }
@@ -103,21 +103,21 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			get
 			{
-				if (_superClassDef == null && _assemblyName != null && _className != null)
+				if (_superClassClassDef == null && _assemblyName != null && _className != null)
 				{
 					//TODO error: What happens if the ClassDef does not exist?
-					_superClassDef = ClassDef.GetClassDefCol[_assemblyName, _className];
+					_superClassClassDef = ClassDef.GetClassDefCol[_assemblyName, _className];
 				}
-				return _superClassDef;
+				return _superClassClassDef;
 			}
 			set
 			{
 				//TODO error: What happens if it is null?
-				_superClassDef = value;
-				if (_superClassDef != null)
+				_superClassClassDef = value;
+				if (_superClassClassDef != null)
 				{
-					_assemblyName = _superClassDef.AssemblyName;
-					_className = _superClassDef.ClassNameFull;
+					_assemblyName = _superClassClassDef.AssemblyName;
+					_className = _superClassClassDef.ClassNameFull;
 				}
 				else
 				{

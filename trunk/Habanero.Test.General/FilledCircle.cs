@@ -46,7 +46,7 @@ namespace Habanero.Test.General
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             ClassDef lClassDef = new ClassDef(typeof (FilledCircle), primaryKey, lPropDefCol, keysCol, relDefCol);
-            lClassDef.SuperClassDesc = new SuperClassDesc(Circle.GetClassDef(), ORMapping.ConcreteTableInheritance);
+            lClassDef.SuperClassDef = new SuperClassDef(Circle.GetClassDef(), ORMapping.ConcreteTableInheritance);
 			ClassDef.GetClassDefCol.Add(lClassDef);
             return lClassDef;
         }

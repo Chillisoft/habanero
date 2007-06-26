@@ -110,8 +110,8 @@ namespace Habanero.Bo
             {
                 while (currentClassDef.IsUsingClassTableInheritance())
                 {
-                    this.InitialisePropertyValue(currentClassDef.SuperClassDef.PrimaryKeyDef.KeyName, myID);
-                    currentClassDef = currentClassDef.SuperClassDef;
+                    this.InitialisePropertyValue(currentClassDef.SuperClassClassDef.PrimaryKeyDef.KeyName, myID);
+                    currentClassDef = currentClassDef.SuperClassClassDef;
                 }
             }
             if (conn != null)
@@ -367,21 +367,21 @@ namespace Habanero.Bo
             _boPropCol = _classDef.createBOPropertyCol(newObject);
             _keysCol = _classDef.createBOKeyCol(_boPropCol);
             ClassDef classDefToUseForPrimaryKey = _classDef;
-            while (classDefToUseForPrimaryKey.SuperClassDesc != null &&
-                   classDefToUseForPrimaryKey.SuperClassDesc.ORMapping == ORMapping.SingleTableInheritance)
+            while (classDefToUseForPrimaryKey.SuperClassDef != null &&
+                   classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
             {
-                classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassDef;
+                classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
             }
-            if ((classDefToUseForPrimaryKey.SuperClassDesc == null) ||
-                (classDefToUseForPrimaryKey.SuperClassDesc.ORMapping == ORMapping.ConcreteTableInheritance) ||
-                (_classDef.SuperClassDesc.ORMapping == ORMapping.ClassTableInheritance))
+            if ((classDefToUseForPrimaryKey.SuperClassDef == null) ||
+                (classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance) ||
+                (_classDef.SuperClassDef.ORMapping == ORMapping.ClassTableInheritance))
             {
                 _primaryKey = (BOPrimaryKey)classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(_boPropCol);
             }
             else
             {
                 _primaryKey =
-                    (BOPrimaryKey)classDefToUseForPrimaryKey.SuperClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                    (BOPrimaryKey)classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
             }
             _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
         }
@@ -691,15 +691,15 @@ namespace Habanero.Bo
             get
             {
                 ClassDef classDefToUseForPrimaryKey = _classDef;
-                while (classDefToUseForPrimaryKey.SuperClassDesc != null &&
-                       classDefToUseForPrimaryKey.SuperClassDesc.ORMapping == ORMapping.SingleTableInheritance)
+                while (classDefToUseForPrimaryKey.SuperClassDef != null &&
+                       classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
                 {
-                    classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassDef;
+                    classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
                 }
-                if ((classDefToUseForPrimaryKey.SuperClassDesc != null) &&
-                    (classDefToUseForPrimaryKey.SuperClassDesc.ORMapping == ORMapping.SingleTableInheritance))
+                if ((classDefToUseForPrimaryKey.SuperClassDef != null) &&
+                    (classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance))
                 {
-                    return classDefToUseForPrimaryKey.SuperClassDef.TableName;
+                    return classDefToUseForPrimaryKey.SuperClassClassDef.TableName;
                 }
                 else
                 {
@@ -1653,13 +1653,13 @@ namespace Habanero.Bo
             }
             //			ClassDef currentClassDef = this.ClassDef ;
             //			while (currentClassDef.IsUsingClassTableInheritance()) {
-            //				foreach (DictionaryEntry entry in currentClassDef.SuperClassDef.PrimaryKeyDef) {
+            //				foreach (DictionaryEntry entry in currentClassDef.SuperClassClassDef.PrimaryKeyDef) {
             //					PropDef def = (PropDef) entry.Value;
-            //					statement += currentClassDef.SuperClassDef.TableName + "." + def.FieldName;
+            //					statement += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
             //					statement += " = " + currentClassDef.TableName + "." + def.FieldName;
             //					statement += " AND ";
             //				}
-            //				currentClassDef = currentClassDef.SuperClassDef ;
+            //				currentClassDef = currentClassDef.SuperClassClassDef ;
             //			}
             statement += WhereClause(selectSQL);
             return statement;
@@ -1738,10 +1738,10 @@ namespace Habanero.Bo
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 deleteSql = new SqlStatement(this.GetConnection());
-                deleteSql.Statement.Append("DELETE FROM " + currentClassDef.SuperClassDef.TableName + " WHERE " +
+                deleteSql.Statement.Append("DELETE FROM " + currentClassDef.SuperClassClassDef.TableName + " WHERE " +
                                            WhereClauseForSuperClass(deleteSql, currentClassDef));
                 statementCollection.Add(deleteSql);
-                currentClassDef = currentClassDef.SuperClassDef;
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
             return statementCollection;
         }

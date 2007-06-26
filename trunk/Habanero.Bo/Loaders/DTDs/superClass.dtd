@@ -1,0 +1,6 @@
+<!ELEMENT superClass EMPTY>
+<!ATTLIST superClass
+		class NMTOKEN #REQUIRED
+		assembly NMTOKEN #REQUIRED
+		orMapping ( ClassTableInheritance | SingleTableInheritance | ConcreteTableInheritance ) "ClassTableInheritance"
+>

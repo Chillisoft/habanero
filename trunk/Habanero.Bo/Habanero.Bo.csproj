@@ -135,6 +135,7 @@
     <Compile Include="BOCollectionEditableDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassDefinition\SuperClassDef.cs" />
     <Compile Include="IBusinessObjectCollectionLoader.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -189,9 +190,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassDefinition\SingleRelationshipDef.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ClassDefinition\SuperClassDesc.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HabaneroException.cs">
@@ -344,10 +342,10 @@
     <None Include="Loaders\DTDs\keyDef.dtd" />
     <None Include="Loaders\DTDs\PrimaryKeyDef.dtd" />
     <None Include="Loaders\DTDs\Prop.dtd" />
-    <None Include="Loaders\DTDs\PropertyDef.dtd" />
+    <None Include="Loaders\DTDs\property.dtd" />
     <None Include="Loaders\DTDs\RelationshipDef.dtd" />
     <None Include="Loaders\DTDs\SimpleLookupListSource.dtd" />
-    <None Include="Loaders\DTDs\SuperClassDesc.dtd" />
+    <None Include="Loaders\DTDs\superClass.dtd" />
     <None Include="Loaders\DTDs\UIDef.dtd" />
     <None Include="Loaders\DTDs\UIFormColumn.dtd" />
     <None Include="Loaders\DTDs\UIFormDef.dtd" />
