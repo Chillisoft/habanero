@@ -63,7 +63,7 @@ namespace Habanero.Bo.Loaders {
         /// <summary>
         ///   Looks up a localized string similar to #include KeyDef.dtd
         ///#include PrimaryKeyDef.dtd
-        ///#include PropertyDef.dtd
+        ///#include property.dtd
         ///#include RelationshipDef.dtd
         ///#include superClass.dtd
         ///#include UIDef.dtd
@@ -83,15 +83,15 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT businessObjectLookupListSource EMPTY&gt;
-        ///&lt;!ATTLIST businessObjectLookupListSource 
+        ///   Looks up a localized string similar to &lt;!ELEMENT businessObjectLookupList EMPTY&gt;
+        ///&lt;!ATTLIST businessObjectLookupList 
         ///	className NMTOKEN #REQUIRED
         ///	assemblyName NMTOKEN #REQUIRED
         ///&gt;.
         /// </summary>
-        internal static string BusinessObjectLookupListSource {
+        internal static string businessObjectLookupList {
             get {
-                return ResourceManager.GetString("BusinessObjectLookupListSource", resourceCulture);
+                return ResourceManager.GetString("businessObjectLookupList", resourceCulture);
             }
         }
         
@@ -107,16 +107,16 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT databaseLookupListSource EMPTY&gt;
-        ///&lt;!ATTLIST databaseLookupListSource 
-        ///	sqlString CDATA #IMPLIED
-        ///	className NMTOKEN #IMPLIED
-        ///	assemblyName NMTOKEN #IMPLIED
+        ///   Looks up a localized string similar to &lt;!ELEMENT databaseLookupList EMPTY&gt;
+        ///&lt;!ATTLIST databaseLookupList
+        ///	sql CDATA #REQUIRED
+        ///	class NMTOKEN #IMPLIED
+        ///	assembly NMTOKEN #IMPLIED
         ///&gt;.
         /// </summary>
-        internal static string DatabaseLookupListSource {
+        internal static string databaseLookupList {
             get {
-                return ResourceManager.GetString("DatabaseLookupListSource", resourceCulture);
+                return ResourceManager.GetString("databaseLookupList", resourceCulture);
             }
         }
         
@@ -176,17 +176,20 @@ namespace Habanero.Bo.Loaders {
         
         /// <summary>
         ///   Looks up a localized string similar to #include rule.dtd
-        ///#include databaseLookupListSource.dtd
-        ///#include simpleLookupListSource.dtd
-        ///#include businessObjectLookupListSource.dtd
-        ///&lt;!ELEMENT propertyDef (rule*, databaseLookupListSource*, simpleLookupListSource*, businessObjectLookupListSource*)&gt;
-        ///&lt;!ATTLIST propertyDef
+        ///#include databaseLookupList.dtd
+        ///#include simpleLookupList.dtd
+        ///#include businessObjectLookupList.dtd
+        ///&lt;!ELEMENT property (rule*, databaseLookupList*, simpleLookupList*, businessObjectLookupList*)&gt;
+        ///&lt;!ATTLIST property
         ///	name NMTOKEN #REQUIRED
         ///	type NMTOKEN &quot;String&quot;
         ///	assembly NMTOKEN &quot;System&quot;
-        ///	readWriteRule (	ReadManyWriteMany | ReadOnly | WriteOnly | ReadManyWriteNew | ReadManyWriteOnce ) &quot;ReadManyWriteMany&quot;
-        ///	databaseFieldName CDATA #IMPLIED
-        /// [rest of string was truncated]&quot;;.
+        ///	readWriteRule (	ReadWrite | ReadOnly | WriteOnce ) &quot;ReadWrite&quot;
+        ///	databaseField CDATA #IMPLIED
+        ///	default CDATA #IMPLIED
+        ///  compulsory ( true | false ) &quot;false&quot;
+        ///&gt;
+        ///.
         /// </summary>
         internal static string property {
             get {
@@ -237,7 +240,7 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT simpleLookupListSource (stringGuidPair*)&gt;
+        ///   Looks up a localized string similar to &lt;!ELEMENT simpleLookupList (stringGuidPair*)&gt;
         ///&lt;!ELEMENT stringGuidPair EMPTY&gt;
         ///&lt;!ATTLIST stringGuidPair
         ///	string CDATA #REQUIRED
@@ -245,9 +248,9 @@ namespace Habanero.Bo.Loaders {
         ///&gt;
         ///.
         /// </summary>
-        internal static string SimpleLookupListSource {
+        internal static string simpleLookupList {
             get {
-                return ResourceManager.GetString("SimpleLookupListSource", resourceCulture);
+                return ResourceManager.GetString("simpleLookupList", resourceCulture);
             }
         }
         

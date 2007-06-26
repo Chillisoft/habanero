@@ -121,14 +121,14 @@
   <data name="_class" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\class.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="BusinessObjectLookupListSource" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\BusinessObjectLookupListSource.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="businessObjectLookupList" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\businessObjectLookupList.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="classes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\classes.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="DatabaseLookupListSource" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\DatabaseLookupListSource.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="databaseLookupList" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\databaseLookupList.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="GridPropertyCollection" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\GridPropertyCollection.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -151,8 +151,8 @@
   <data name="Rule" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\Rule.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SimpleLookupListSource" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\SimpleLookupListSource.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="simpleLookupList" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\simpleLookupList.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="superClass" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\superClass.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

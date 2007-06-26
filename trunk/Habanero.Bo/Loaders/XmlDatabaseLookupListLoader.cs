@@ -9,7 +9,7 @@ namespace Habanero.Bo.Loaders
     /// Loads lookup list data from the reader, using sql information as
     /// specified in the reader
     /// </summary>
-    public class XmlDatabaseLookupListSourceLoader : XmlLookupListSourceLoader
+    public class XmlDatabaseLookupListLoader : XmlLookupListSourceLoader
     {
         private string _sqlString;
     	private string _assemblyName;
@@ -20,7 +20,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlDatabaseLookupListSourceLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public XmlDatabaseLookupListLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
         }
@@ -28,7 +28,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a loader
         /// </summary>
-        public XmlDatabaseLookupListSourceLoader()
+        public XmlDatabaseLookupListLoader()
         {
         }
 
@@ -38,9 +38,9 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         protected override void LoadLookupListSourceFromReader()
         {
-            _sqlString = _reader.GetAttribute("sqlString");
-            _className = _reader.GetAttribute("className");
-            _assemblyName = _reader.GetAttribute("assemblyName");
+            _sqlString = _reader.GetAttribute("sql");
+            _className = _reader.GetAttribute("class");
+            _assemblyName = _reader.GetAttribute("assembly");
         }
 
         /// <summary>

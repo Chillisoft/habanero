@@ -90,9 +90,9 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(
-                    @"<property  name=""TestProp""><databaseLookupListSource sqlString=""Source"" /></property>");
+                    @"<property  name=""TestProp""><databaseLookupList sql=""Source"" /></property>");
             Assert.AreSame(typeof (DatabaseLookupListSource), def.LookupListSource.GetType(),
-                           "LookupListSource should be of type DatabaseLookupListSource but is of type " +
+                           "LookupListSource should be of type DatabaseLookupList but is of type " +
                            def.LookupListSource.GetType().Name);
             DatabaseLookupListSource source = (DatabaseLookupListSource) def.LookupListSource;
             Assert.AreEqual("Source", source.SqlString, "LookupListSource should be the same as that specified in xml");
@@ -109,7 +109,7 @@ namespace Habanero.Test.Bo.Loaders
 
 			PropDef def =
                 itsLoader.LoadProperty(
-                    @"<property  name=""TestProp""><databaseLookupListSource sqlString=""Source"" className=""MyBo"" assemblyName=""Habanero.Test"" /></property>");
+                    @"<property  name=""TestProp""><databaseLookupList sql=""Source"" class=""MyBo"" assembly=""Habanero.Test"" /></property>");
             DatabaseLookupListSource source = (DatabaseLookupListSource) def.LookupListSource;
             Assert.IsNotNull(source.ClassDef);
             Assert.AreEqual(classDef.ClassName, source.ClassDef.ClassName);
@@ -123,10 +123,10 @@ namespace Habanero.Test.Bo.Loaders
                 itsLoader.LoadProperty(
                     @"
 					<property  name=""TestProp"">
-						<simpleLookupListSource>
+						<simpleLookupList>
 							<stringGuidPair string=""s1"" guid=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
 							<stringGuidPair string=""s2"" guid=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
-						</simpleLookupListSource>
+						</simpleLookupList>
 					</property>");
             Assert.AreSame(typeof (SimpleLookupListSource), def.LookupListSource.GetType(),
                            "LookupListSource should be of type SimpleLookupListSource");

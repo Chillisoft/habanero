@@ -8,14 +8,14 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads xml data for a lookup list
     /// </summary>
-    public class XmlSimpleLookupListSourceLoader : XmlLookupListSourceLoader
+    public class XmlSimpleLookupListLoader : XmlLookupListSourceLoader
     {
         private StringGuidPairCollection _stringGuidPairCollection;
 
         ///// <summary>
         ///// Constructor to initialise a loader
         ///// </summary>
-        //public XmlSimpleLookupListSourceLoader() : this("", null)
+        //public XmlSimpleLookupListLoader() : this("", null)
         //{
         //}
 
@@ -24,7 +24,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlSimpleLookupListSourceLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public XmlSimpleLookupListLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
             _stringGuidPairCollection = new StringGuidPairCollection();

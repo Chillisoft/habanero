@@ -1,0 +1,6 @@
+<!ELEMENT databaseLookupList EMPTY>
+<!ATTLIST databaseLookupList
+	sql CDATA #REQUIRED
+	class NMTOKEN #IMPLIED
+	assembly NMTOKEN #IMPLIED
+>

@@ -241,10 +241,10 @@
       <DependentUpon>Dtds.resx</DependentUpon>
     </Compile>
     <Compile Include="Loaders\IClassDefsLoader.cs" />
-    <Compile Include="Loaders\XmlBusinessObjectLookupListSourceLoader.cs" />
+    <Compile Include="Loaders\XmlBusinessObjectLookupListLoader.cs" />
     <Compile Include="Loaders\XmlClassDefsLoader.cs" />
     <Compile Include="Loaders\XmlClassLoader.cs" />
-    <Compile Include="Loaders\XmlDatabaseLookupListSourceLoader.cs" />
+    <Compile Include="Loaders\XmlDatabaseLookupListLoader.cs" />
     <Compile Include="Loaders\XmlKeyLoader.cs" />
     <Compile Include="Loaders\XmlLoader.cs" />
     <Compile Include="Loaders\XmlLookupListSourceLoader.cs" />
@@ -252,7 +252,7 @@
     <Compile Include="Loaders\XmlPropertyLoader.cs" />
     <Compile Include="Loaders\XmlRelationshipLoader.cs" />
     <Compile Include="Loaders\XmlRuleLoader.cs" />
-    <Compile Include="Loaders\XmlSimpleLookupListSourceLoader.cs" />
+    <Compile Include="Loaders\XmlSimpleLookupListLoader.cs" />
     <Compile Include="Loaders\XmlSuperClassDescLoader.cs" />
     <Compile Include="Loaders\XmlUIDefLoader.cs" />
     <Compile Include="Loaders\XmlUIFormColumnLoader.cs" />
@@ -334,17 +334,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Loaders\DTDs\BusinessObjectLookupListSource.dtd" />
+    <None Include="Loaders\DTDs\businessObjectLookupList.dtd" />
     <None Include="Loaders\DTDs\class.dtd" />
     <None Include="Loaders\DTDs\classes.dtd" />
-    <None Include="Loaders\DTDs\DatabaseLookupListSource.dtd" />
+    <None Include="Loaders\DTDs\databaseLookupList.dtd" />
     <None Include="Loaders\DTDs\GridPropertyCollection.dtd" />
     <None Include="Loaders\DTDs\keyDef.dtd" />
     <None Include="Loaders\DTDs\PrimaryKeyDef.dtd" />
     <None Include="Loaders\DTDs\Prop.dtd" />
     <None Include="Loaders\DTDs\property.dtd" />
     <None Include="Loaders\DTDs\RelationshipDef.dtd" />
-    <None Include="Loaders\DTDs\SimpleLookupListSource.dtd" />
+    <None Include="Loaders\DTDs\simpleLookupList.dtd" />
     <None Include="Loaders\DTDs\superClass.dtd" />
     <None Include="Loaders\DTDs\UIDef.dtd" />
     <None Include="Loaders\DTDs\UIFormColumn.dtd" />

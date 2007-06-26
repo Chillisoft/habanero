@@ -1,8 +1,8 @@
 #include rule.dtd
-#include databaseLookupListSource.dtd
-#include simpleLookupListSource.dtd
-#include businessObjectLookupListSource.dtd
-<!ELEMENT property (rule*, databaseLookupListSource*, simpleLookupListSource*, businessObjectLookupListSource*)>
+#include databaseLookupList.dtd
+#include simpleLookupList.dtd
+#include businessObjectLookupList.dtd
+<!ELEMENT property (rule*, databaseLookupList*, simpleLookupList*, businessObjectLookupList*)>
 <!ATTLIST property
 	name NMTOKEN #REQUIRED
 	type NMTOKEN "String"

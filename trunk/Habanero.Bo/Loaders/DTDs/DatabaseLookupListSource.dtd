@@ -1,6 +1,0 @@
-<!ELEMENT databaseLookupListSource EMPTY>
-<!ATTLIST databaseLookupListSource 
-	sqlString CDATA #IMPLIED
-	className NMTOKEN #IMPLIED
-	assemblyName NMTOKEN #IMPLIED
->

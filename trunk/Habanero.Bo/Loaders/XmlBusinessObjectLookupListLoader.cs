@@ -8,7 +8,7 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads xml data for a lookup list in a business object
     /// </summary>
-    public class XmlBusinessObjectLookupListSourceLoader : XmlLookupListSourceLoader
+    public class XmlBusinessObjectLookupListLoader : XmlLookupListSourceLoader
     {
         //private Type _type;
     	private string _className;
@@ -19,7 +19,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlBusinessObjectLookupListSourceLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public XmlBusinessObjectLookupListLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
         }
@@ -27,7 +27,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader
         /// </summary>
-        public XmlBusinessObjectLookupListSourceLoader()
+        public XmlBusinessObjectLookupListLoader()
         {
         }
 
