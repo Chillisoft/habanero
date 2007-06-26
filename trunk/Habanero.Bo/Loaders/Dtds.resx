@@ -136,8 +136,8 @@
   <data name="key" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\key.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="PrimaryKeyDef" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\PrimaryKeyDef.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="primaryKey" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\primaryKey.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="Prop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\Prop.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

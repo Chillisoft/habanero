@@ -27,9 +27,9 @@ namespace Habanero.Test.Bo
 				<class name=""MyBo"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
 					<property  name=""TestProp"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""MyBoID"" />
-					</primaryKeyDef>
+					</primaryKey>
 				</class>
 			");
             BusinessObject bo = itsClassDef.CreateNewBusinessObject();
@@ -57,15 +57,15 @@ namespace Habanero.Test.Bo
 					<classes>
 						<class name=""TestClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<property  name=""TestClass{0}ID"" />
-                            <primaryKeyDef>
+                            <primaryKey>
                                 <prop name=""TestClass{0}ID""/>
-                            </primaryKeyDef>
+                            </primaryKey>
 						</class>
 						<class name=""TestRelatedClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<property  name=""TestRelatedClass{0}ID"" />
-                            <primaryKeyDef>
+                            <primaryKey>
                                 <prop name=""TestRelatedClass{0}ID""/>
-                            </primaryKeyDef>
+                            </primaryKey>
 						</class>
 					</classes>
 			", suffix);

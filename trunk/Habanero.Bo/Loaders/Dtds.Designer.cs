@@ -61,13 +61,13 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #include KeyDef.dtd
+        ///   Looks up a localized string similar to #include key.dtd
         ///#include PrimaryKeyDef.dtd
         ///#include property.dtd
         ///#include RelationshipDef.dtd
         ///#include superClass.dtd
         ///#include UIDef.dtd
-        ///&lt;!ELEMENT class (superClass?, property*, keyDef*, primaryKeyDef?, relationshipDef*, uiDef*)&gt;
+        ///&lt;!ELEMENT class (superClass?, property*, key*, primaryKeyDef?, relationshipDef*, uiDef*)&gt;
         ///&lt;!ATTLIST class
         ///		name NMTOKEN #REQUIRED
         ///		assembly NMTOKEN #REQUIRED
@@ -136,7 +136,7 @@ namespace Habanero.Bo.Loaders {
         /// <summary>
         ///   Looks up a localized string similar to #include Prop.dtd
         ///&lt;!ELEMENT key (prop+)&gt;
-        ///&lt;!ATTLIST keyDef 
+        ///&lt;!ATTLIST key 
         ///	name NMTOKEN #IMPLIED
         ///	ignoreIfNull ( true | false ) &quot;false&quot;
         ///&gt;
@@ -150,15 +150,15 @@ namespace Habanero.Bo.Loaders {
         
         /// <summary>
         ///   Looks up a localized string similar to #include Prop.dtd
-        ///&lt;!ELEMENT primaryKeyDef (prop+)&gt;
-        ///&lt;!ATTLIST primaryKeyDef 
+        ///&lt;!ELEMENT primaryKey (prop+)&gt;
+        ///&lt;!ATTLIST primaryKey 
         ///	isObjectID ( true | false ) &quot;true&quot;
         ///&gt;
         ///.
         /// </summary>
-        internal static string PrimaryKeyDef {
+        internal static string primaryKey {
             get {
-                return ResourceManager.GetString("PrimaryKeyDef", resourceCulture);
+                return ResourceManager.GetString("primaryKey", resourceCulture);
             }
         }
         

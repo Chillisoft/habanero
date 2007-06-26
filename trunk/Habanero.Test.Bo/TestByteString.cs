@@ -33,9 +33,9 @@ namespace Habanero.Test.Bo
 				<class name=""MyBo"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
 					<property  name=""TestProp"" type=""ByteString"" assembly=""Habanero.Util"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""MyBoID"" />
-					</primaryKeyDef>
+					</primaryKey>
 				</class>
 			");
             base.SetupDBConnection();

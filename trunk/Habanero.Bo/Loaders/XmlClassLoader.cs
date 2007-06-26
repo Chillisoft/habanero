@@ -129,7 +129,7 @@ namespace Habanero.Bo.Loaders
 					case "key":
 						keyDefXmls.Add(_reader.ReadOuterXml());
 						break;
-					case "primaryKeyDef":
+					case "primaryKey":
 						primaryKeDefXML = _reader.ReadOuterXml();
 						break;
 					case "relationshipDef":

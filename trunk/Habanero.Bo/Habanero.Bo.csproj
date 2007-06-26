@@ -340,7 +340,7 @@
     <None Include="Loaders\DTDs\databaseLookupList.dtd" />
     <None Include="Loaders\DTDs\GridPropertyCollection.dtd" />
     <None Include="Loaders\DTDs\key.dtd" />
-    <None Include="Loaders\DTDs\PrimaryKeyDef.dtd" />
+    <None Include="Loaders\DTDs\primaryKey.dtd" />
     <None Include="Loaders\DTDs\Prop.dtd" />
     <None Include="Loaders\DTDs\property.dtd" />
     <None Include="Loaders\DTDs\RelationshipDef.dtd" />

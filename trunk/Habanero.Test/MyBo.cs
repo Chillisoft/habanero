@@ -39,9 +39,9 @@ namespace Habanero.Test
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""MyBoID"" />
-					</primaryKeyDef>
+					</primaryKey>
 					<uiDef>
 						<uiGridDef>
 							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
@@ -90,9 +90,9 @@ namespace Habanero.Test
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""MyBoID"" />
-					</primaryKeyDef>
+					</primaryKey>
 					<uiDef>
 						<uiGridDef>
 							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
@@ -125,9 +125,9 @@ namespace Habanero.Test
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<property  name=""TestBoolean"" type=""Boolean"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""MyBoID"" />
-					</primaryKeyDef>
+					</primaryKey>
 					<uiDef>
 						<uiGridDef>
 							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
@@ -166,9 +166,9 @@ namespace Habanero.Test
 							<stringGuidPair string=""s2"" guid=""{F428FADC-3740-412c-91A7-ECEB4D414414}"" />
 						</simpleLookupList>
 					</property>
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""MyBoID"" />
-					</primaryKeyDef>
+					</primaryKey>
 					<uiDef>
 						<uiGridDef>
 							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
@@ -207,9 +207,9 @@ namespace Habanero.Test
 						</simpleLookupList>
 					</property>
 					<property  name=""RelatedID"" type=""Guid"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""MyBoID"" />
-					</primaryKeyDef>
+					</primaryKey>
 					<relationshipDef name=""MyRelationship"" type=""single"" relatedType=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
 						<relKeyDef>
 							<relProp name=""RelatedID"" relatedPropName=""MyRelatedBoID"" />
@@ -282,9 +282,9 @@ namespace Habanero.Test
 					<property  name=""MyRelatedBoID"" />
 					<property  name=""MyRelatedTestProp"" />
 					<property  name=""MyBoID"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""MyRelatedBoID"" />
-					</primaryKeyDef>
+					</primaryKey>
 				</class>
 			");
             return itsClassDef;

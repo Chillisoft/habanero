@@ -58,9 +58,9 @@ namespace Habanero.Test.Bo.Loaders
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
                     <property  name=""TestProp"" />
-                    <primaryKeyDef>
+                    <primaryKey>
                         <prop name=""TestProp""/>
-                    </primaryKeyDef>
+                    </primaryKey>
 				</class>
 			");
             Assert.AreEqual("TestClass", def.TableName);
@@ -74,9 +74,9 @@ namespace Habanero.Test.Bo.Loaders
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" table=""myTable"">
                     <property  name=""TestProp"" />
-                    <primaryKeyDef>
+                    <primaryKey>
                         <prop name=""TestProp""/>
-                    </primaryKeyDef>
+                    </primaryKey>
 				</class>
 			");
             Assert.AreEqual("myTable", def.TableName);
@@ -90,9 +90,9 @@ namespace Habanero.Test.Bo.Loaders
 //                    @"
 //				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" supportsSynchronising=""true"">
 //                    <property  name=""TestProp"" />
-//                    <primaryKeyDef>
+//                    <primaryKey>
 //                        <prop name=""TestProp""/>
-//                    </primaryKeyDef>
+//                    </primaryKey>
 //				</class>
 //			");
 //            Assert.IsTrue(def.SupportsSynchronising);
@@ -107,9 +107,9 @@ namespace Habanero.Test.Bo.Loaders
 //                    @"
 //				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
 //                    <property  name=""TestProp"" />
-//                    <primaryKeyDef>
+//                    <primaryKey>
 //                        <prop name=""TestProp""/>
-//                    </primaryKeyDef>
+//                    </primaryKey>
 //				</class>
 //			");
 //            Assert.IsFalse(def.SupportsSynchronising);
@@ -124,9 +124,9 @@ namespace Habanero.Test.Bo.Loaders
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
-                    <primaryKeyDef>
+                    <primaryKey>
                         <prop name=""TestProp""/>
-                    </primaryKeyDef>
+                    </primaryKey>
 				</class>
 			");
             Assert.AreEqual(2, def.PropDefcol.Count);
@@ -141,9 +141,9 @@ namespace Habanero.Test.Bo.Loaders
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<property  name=""TestProp"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""TestProp"" />
-					</primaryKeyDef>
+					</primaryKey>
 				</class>
 			");
             Assert.IsNotNull(def.PrimaryKeyDef);
@@ -158,12 +158,12 @@ namespace Habanero.Test.Bo.Loaders
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""TestProp"" />
-					</primaryKeyDef>
-					<primaryKeyDef>
+					</primaryKey>
+					<primaryKey>
 						<prop name=""TestProp2"" />
-					</primaryKeyDef>
+					</primaryKey>
 				</class>
 			");
         }
@@ -185,9 +185,9 @@ namespace Habanero.Test.Bo.Loaders
 						<prop name=""TestProp2"" />
 						<prop name=""TestProp3"" />
 					</key>
-                    <primaryKeyDef>
+                    <primaryKey>
                         <prop name=""TestProp""/>
-                    </primaryKeyDef>
+                    </primaryKey>
 				</class>
 			");
             Assert.AreEqual(2, def.KeysCol.Count);
@@ -201,9 +201,9 @@ namespace Habanero.Test.Bo.Loaders
                     @"
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<property  name=""TestProp"" />
-                    <primaryKeyDef>
+                    <primaryKey>
                         <prop name=""TestProp""/>
-                    </primaryKeyDef>
+                    </primaryKey>
 					<relationshipDef 
 						name=""TestRelationship"" 
 						type=""single"" 
@@ -232,9 +232,9 @@ namespace Habanero.Test.Bo.Loaders
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<property  name=""TestClassID"" />
-                            <primaryKeyDef>
+                            <primaryKey>
                                 <prop name=""TestClassID""/>
-                            </primaryKeyDef>
+                            </primaryKey>
 						</class>
 					</classes>",
                                  new DtdLoader()));
@@ -244,9 +244,9 @@ namespace Habanero.Test.Bo.Loaders
 				<class name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<superClass class=""Habanero.Test.Bo.Loaders.TestClass"" assembly=""Habanero.Test.Bo"" />
 					<property  name=""TestProp"" />
-                    <primaryKeyDef>
+                    <primaryKey>
                         <prop name=""TestProp""/>
-                    </primaryKeyDef>
+                    </primaryKey>
 				</class>
 			");
             Assert.IsNotNull(def.SuperClassDef);
@@ -262,9 +262,9 @@ namespace Habanero.Test.Bo.Loaders
 				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
-					<primaryKeyDef>
+					<primaryKey>
 						<prop name=""TestProp"" />
-					</primaryKeyDef>
+					</primaryKey>
 					<uiDef>
 						<uiFormDef>
 							<uiFormTab name=""testtab"">

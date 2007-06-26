@@ -28,16 +28,16 @@ namespace Habanero.Test.Bo.Loaders
         public void TestSimplePrimaryKey()
         {
             PrimaryKeyDef def =
-                itsLoader.LoadPrimaryKey(@"<primaryKeyDef><prop name=""TestProp"" /></primaryKeyDef>", itsPropDefs);
+                itsLoader.LoadPrimaryKey(@"<primaryKey><prop name=""TestProp"" /></primaryKey>", itsPropDefs);
             Assert.AreEqual(1, def.Count, "Def should have one property in it.");
             Assert.AreEqual(true, def.IsObjectID, "Def should by default be an objectID");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'primaryKey' was encountered when loading the class definitions.")]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'primaryKeyDef' was encountered when loading the class definitions.")]
 
         public void TestWrongElementName()
         {
-            itsLoader.LoadPrimaryKey(@"<primaryKey><prop name=""TestProp"" /></primaryKey>", itsPropDefs);
+            itsLoader.LoadPrimaryKey(@"<primaryKeyDef><prop name=""TestProp"" /></primaryKeyDef>", itsPropDefs);
         }
 
         [
@@ -46,7 +46,7 @@ namespace Habanero.Test.Bo.Loaders
                     "A primaryKeyDef node must have one or more prop nodes")]
         public void TestWithNoProps()
         {
-            itsLoader.LoadPrimaryKey(@"<primaryKeyDef></primaryKeyDef>", itsPropDefs);
+            itsLoader.LoadPrimaryKey(@"<primaryKey></primaryKey>", itsPropDefs);
         }
 
         [
@@ -57,7 +57,7 @@ namespace Habanero.Test.Bo.Loaders
         public void TestWithPropThatDoesNotExist()
         {
             PropDefCol propDefs = new PropDefCol();
-            itsLoader.LoadPrimaryKey(@"<primaryKeyDef><prop name=""TestProp"" /></primaryKeyDef>", propDefs);
+            itsLoader.LoadPrimaryKey(@"<primaryKey><prop name=""TestProp"" /></primaryKey>", propDefs);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace Habanero.Test.Bo.Loaders
             itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
             PrimaryKeyDef def =
                 itsLoader.LoadPrimaryKey(
-                    @"<primaryKeyDef isObjectID=""false""><prop name=""TestProp"" /><prop name=""TestProp2"" /></primaryKeyDef>",
+                    @"<primaryKey isObjectID=""false""><prop name=""TestProp"" /><prop name=""TestProp2"" /></primaryKey>",
                     itsPropDefs);
             Assert.AreEqual(2, def.Count, "Def should have one property in it.");
             Assert.AreEqual(false, def.IsObjectID, "Def should not be an objectID");
