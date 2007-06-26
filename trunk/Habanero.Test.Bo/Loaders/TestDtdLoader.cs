@@ -16,13 +16,13 @@ namespace Habanero.Test.Bo.Loaders
     {
         private string dtd1 = "TestDtd";
         private string dtd2 = @"
-#include classdef.dtd
+#include class.dtd
 TestDtd2";
         private string dtd2and1 = @"
 TestDtd
 TestDtd2";
         private string dtd3 = @"
-#include classdef.dtd
+#include class.dtd
 #include propertydef.dtd
 TestDtd3";
         private string dtd3processed = @"
@@ -33,37 +33,39 @@ TestDtd3";
 
         [TestFixtureSetUp]
         public void SetupFixture() {
-            if (!File.Exists("propertydef.dtd"))
-            {
-                File.Create("propertydef.dtd");
-            }
-            if (!File.Exists("classdef.dtd"))
-            {
-                File.Create("classdef.dtd");
-            }
-            if (!File.Exists("keydef.dtd"))
-            {
-                File.Create("keydef.dtd");
-            }
+            
+                if (!File.Exists("propertydef.dtd")) {
+                    File.Create("propertydef.dtd");
+                }
+                if (!File.Exists("class.dtd")) {
+                    File.Create("class.dtd");
+                }
+                if (!File.Exists("keydef.dtd")) {
+                    File.Create("keydef.dtd");
+                }
+
         }
 
         [TestFixtureTearDown]
         public void TearDownFixture() {
-			try
-			{
-				if (File.Exists("propertydef.dtd"))
-				{
-					File.Delete("propertydef.dtd");
-				}
-				if (File.Exists("classdef.dtd"))
-				{
-					File.Delete("classdef.dtd");
-				}
-				if (File.Exists("keydef.dtd"))
-				{
-					File.Delete("keydef.dtd");
-				}
-			} catch  {}
+            try
+            {
+                if (File.Exists("propertydef.dtd"))
+                {
+                    File.Delete("propertydef.dtd");
+                }
+                if (File.Exists("class.dtd"))
+                {
+                    File.Delete("class.dtd");
+                }
+                if (File.Exists("keydef.dtd"))
+                {
+                    File.Delete("keydef.dtd");
+                }
+            }
+            catch (Exception ex) {
+                Console.Out.WriteLine("Problem removing test dtd files.");
+            }
         }
 
         [Test]
@@ -74,8 +76,8 @@ TestDtd3";
 
             DtdLoader loader = new DtdLoader(textFileLoader, "");
 
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"classdef.dtd"});
-            String dtdFileContents = loader.LoadDtd("classdef");
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"class.dtd"});
+            String dtdFileContents = loader.LoadDtd("class");
             Assert.AreEqual(dtd1 + Environment.NewLine, dtdFileContents);
             mockControl.Verify();
         }
@@ -91,7 +93,7 @@ TestDtd3";
             DtdLoader loader = new DtdLoader(textFileLoader, "");
 
             mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] {"propertydef.dtd"});
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"classdef.dtd"});
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"class.dtd"});
 
             String dtdFileContents = loader.LoadDtd("propertydef");
             Assert.AreEqual(dtd2and1 + Environment.NewLine, dtdFileContents);
@@ -106,9 +108,9 @@ TestDtd3";
             DtdLoader loader = new DtdLoader(textFileLoader, "");
 
             mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd3), new object[] {"keydef.dtd"});
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "classdef.dtd" });
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "class.dtd" });
             mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] { "propertydef.dtd" });
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "classdef.dtd" });
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "class.dtd" });
 
             String dtdFileContents = loader.LoadDtd("keydef");
             Assert.AreEqual(dtd3processed + Environment.NewLine, dtdFileContents);
@@ -117,7 +119,7 @@ TestDtd3";
         [Test]
         public void TestLoadFromResource() {
             DtdLoader loader = new DtdLoader();
-            string dtd = loader.LoadDtd("classDef");
+            string dtd = loader.LoadDtd("class");
             Assert.AreNotEqual(0, dtd.Length);
             Assert.AreNotEqual("#include", dtd.Substring(0, 8));
         }

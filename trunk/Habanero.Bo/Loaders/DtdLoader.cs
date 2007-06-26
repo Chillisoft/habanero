@@ -101,8 +101,9 @@ namespace Habanero.Bo.Loaders
                     dtdName = fileName.Substring(0, fileName.Length - 4);
                 }
                 object o = _resourceManager.GetObject(dtdName);
-                if (o == null) o = _resourceManager.GetObject(fileName.Substring(0, 1).ToUpper() + dtdName.Substring(1, dtdName.Length - 1));
-                if (o == null) o = _resourceManager.GetObject(fileName.Substring(0, 2).ToUpper() + dtdName.Substring(2, dtdName.Length - 2));
+                if (o == null) o = _resourceManager.GetObject("_" + dtdName);
+                if (o == null) o = _resourceManager.GetObject(dtdName.Substring(0, 1).ToUpper() + dtdName.Substring(1, dtdName.Length - 1));
+                if (o == null) o = _resourceManager.GetObject(dtdName.Substring(0, 2).ToUpper() + dtdName.Substring(2, dtdName.Length - 2));
                 if (o == null) {
                     throw new InvalidXmlDefinitionException("An invalid node '" + dtdName +
                                                             "' was encountered when loading the class definitions.");

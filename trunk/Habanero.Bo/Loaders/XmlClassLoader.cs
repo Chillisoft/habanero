@@ -23,7 +23,7 @@ namespace Habanero.Bo.Loaders
         private SuperClassDesc _SuperClassDesc;
         private UIDefCol _UIDefCol;
         private string _TableName;
-        private bool _SupportsSynchronising;
+        //private bool _SupportsSynchronising;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -54,8 +54,8 @@ namespace Habanero.Bo.Loaders
             if (xmlClassDef == null || xmlClassDef.Length == 0)
             {
                 throw new ArgumentException("The application is unable to read the " +
-                    "'classDef' element from the XML class definitions file.  " +
-                    "The definitions need one 'classDefs' root element and a 'classDef' " +
+                    "'classes' element from the XML class definitions file.  " +
+                    "The definitions need one 'classes' root element and a 'class' " +
                     "element for each class that you are mapping.  XML elements are " +
                     "case-sensitive.");
             }
@@ -93,7 +93,7 @@ namespace Habanero.Bo.Loaders
             {
                 def.TableName = _TableName;
             }
-            def.SupportsSynchronising = _SupportsSynchronising;
+            //def.SupportsSynchronising = _SupportsSynchronising;
             return def;
         }
 
@@ -106,7 +106,7 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             LoadClassInfo();
             LoadTableName();
-            LoadSupportsSynchronisation();
+            //LoadSupportsSynchronisation();
 
             _reader.Read();
 
@@ -116,7 +116,7 @@ namespace Habanero.Bo.Loaders
             List<string> uiDefXmls = new List<string>();
             string superclassDescXML = null;
             string primaryKeDefXML = null;
-            while (_reader.Name != "classDef")
+            while (_reader.Name != "class")
             {
 				switch (_reader.Name)
 				{
@@ -270,7 +270,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadTableName()
         {
-            _TableName = _reader.GetAttribute("tableName");
+            _TableName = _reader.GetAttribute("table");
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace Habanero.Bo.Loaders
                 {
                     errorMessage += " of '" + _ClassName + "'";
                 }
-                errorMessage += ". Within each 'classDef' element you need to set " +
+                errorMessage += ". Within each 'class' element you need to set " +
                                 "the 'assembly' attribute, which refers to the project or assembly " +
                                 "that contains the class which is being mapped to.";
                 throw new XmlException(errorMessage);
@@ -297,29 +297,29 @@ namespace Habanero.Bo.Loaders
             if (_ClassName == null || _ClassName.Length == 0)
             {
                 throw new XmlException("No 'name' attribute has been specified for a " +
-                   "'classDef' element.  The 'name' attribute indicates the name of the " +
+                   "'class' element.  The 'name' attribute indicates the name of the " +
                    "class to which a database table will be mapped.");
             }
         }
 
-        /// <summary>
-        /// Loads the attribute that indicates whether synchronisation is
-        /// supported
-        /// </summary>
-        private void LoadSupportsSynchronisation()
-        {
-            string supportsSynch = _reader.GetAttribute("supportsSynchronising");
-            try
-            {
-                _SupportsSynchronising = Convert.ToBoolean(supportsSynch);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidXmlDefinitionException(String.Format(
-                    "In the class definition for '{0}', the value provided for " +
-                    "the 'supportsSynchronising' attribute is not valid. The value " +
-                    "needs to be 'true' or 'false'.", _ClassName));
-            }
-        }
+        ///// <summary>
+        ///// Loads the attribute that indicates whether synchronisation is
+        ///// supported
+        ///// </summary>
+        //private void LoadSupportsSynchronisation()
+        //{
+        //    string supportsSynch = _reader.GetAttribute("supportsSynchronising");
+        //    try
+        //    {
+        //        _SupportsSynchronising = Convert.ToBoolean(supportsSynch);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new InvalidXmlDefinitionException(String.Format(
+        //            "In the class definition for '{0}', the value provided for " +
+        //            "the 'supportsSynchronising' attribute is not valid. The value " +
+        //            "needs to be 'true' or 'false'.", _ClassName));
+        //    }
+        //}
     }
 }

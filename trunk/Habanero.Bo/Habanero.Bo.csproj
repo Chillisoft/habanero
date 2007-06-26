@@ -334,14 +334,11 @@
     <Compile Include="UpdateStatementGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="VersionNumberSynchronisationController.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Loaders\DTDs\BusinessObjectLookupListSource.dtd" />
-    <None Include="Loaders\DTDs\ClassDef.dtd" />
-    <None Include="Loaders\DTDs\ClassDefs.dtd" />
+    <None Include="Loaders\DTDs\class.dtd" />
+    <None Include="Loaders\DTDs\classes.dtd" />
     <None Include="Loaders\DTDs\DatabaseLookupListSource.dtd" />
     <None Include="Loaders\DTDs\GridPropertyCollection.dtd" />
     <None Include="Loaders\DTDs\keyDef.dtd" />

@@ -35,7 +35,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<classDef name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyBoID"" />
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" />
@@ -72,7 +72,7 @@ namespace Habanero.Test
 
 
 
-				</classDef>
+				</class>
 
 
 			");
@@ -86,7 +86,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<classDef name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyBoID"" />
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" />
@@ -107,7 +107,7 @@ namespace Habanero.Test
 							</uiFormTab>
 						</uiFormDef>
 					</uiDef>
-				</classDef>
+				</class>
 
 			");
 			ClassDef.GetClassDefCol.Add(itsClassDef);
@@ -120,7 +120,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<classDef name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyBoID"" />
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" />
@@ -144,7 +144,7 @@ namespace Habanero.Test
 							</uiFormTab>
 						</uiFormDef>
 					</uiDef>
-				</classDef>
+				</class>
 				
 			");
 			ClassDef.GetClassDefCol.Add(itsClassDef);
@@ -157,7 +157,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<classDef name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyBoID"" />
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" type=""Guid"" >
@@ -183,7 +183,7 @@ namespace Habanero.Test
 							</uiFormTab>
 						</uiFormDef>
 					</uiDef>
-				</classDef>
+				</class>
 
 
 			");
@@ -197,7 +197,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<classDef name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyBoID"" />
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" type=""Guid"" >
@@ -234,7 +234,7 @@ namespace Habanero.Test
 							</uiFormTab>
 						</uiFormDef>
 					</uiDef>
-				</classDef>
+				</class>
 
 
 			");
@@ -278,14 +278,14 @@ namespace Habanero.Test
             itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<classDef name=""MyRelatedBo"" assembly=""Habanero.Test"">
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyRelatedBoID"" />
 					<propertyDef name=""MyRelatedTestProp"" />
 					<propertyDef name=""MyBoID"" />
 					<primaryKeyDef>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKeyDef>
-				</classDef>
+				</class>
 			");
             return itsClassDef;
         }

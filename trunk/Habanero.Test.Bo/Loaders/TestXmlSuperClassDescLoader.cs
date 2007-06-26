@@ -21,20 +21,20 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef.LoadClassDefs(
                 new XmlClassDefsLoader(
                     @"
-					<classDefs>
-						<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<propertyDef name=""TestClassID"" />
                             <primaryKeyDef>
                                 <prop name=""TestClassID""/>
                             </primaryKeyDef>
-						</classDef>
-						<classDef name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"" >
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<propertyDef name=""TestRelatedClassID"" />
                             <primaryKeyDef>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKeyDef>
-						</classDef>
-					</classDefs>",
+						</class>
+					</classes>",
                     new DtdLoader()));
         }
 

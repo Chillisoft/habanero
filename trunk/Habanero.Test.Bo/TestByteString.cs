@@ -30,13 +30,13 @@ namespace Habanero.Test.Bo
             itsClassDef =
                 loader.LoadClass(
                     @"
-				<classDef name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyBoID"" type=""Guid"" />
 					<propertyDef name=""TestProp"" type=""ByteString"" assembly=""Habanero.Util"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>
-				</classDef>
+				</class>
 			");
             base.SetupDBConnection();
         }

@@ -199,9 +199,6 @@
     <Compile Include="NullProgressIndicator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NullSynchronisationController.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IProgressIndicator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -209,12 +206,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StringGuidPairCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ISynchronisable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ISynchronisationController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UIDef.cs">

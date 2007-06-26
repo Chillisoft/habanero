@@ -10,7 +10,7 @@ namespace Habanero.Test
     {
         public ArchitectureTest()
         {
-            GlobalRegistry.SynchronisationController = new NullSynchronisationController();
+            //GlobalRegistry.SynchronisationController = new NullSynchronisationController();
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
         }
     }

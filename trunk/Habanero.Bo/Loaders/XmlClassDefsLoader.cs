@@ -85,8 +85,8 @@ namespace Habanero.Bo.Loaders
             {
                 //Console.Out.WriteLine(ExceptionUtil.GetExceptionString(ex, 0));
                 throw new XmlException("The class definitions XML file has no root " +
-                    "element 'classDefs'.  The document needs a master 'classDefs' element " +
-                    "and individual 'classDef' elements for each of the classes you are " +
+                    "element 'classes'.  The document needs a master 'classes' element " +
+                    "and individual 'class' elements for each of the classes you are " +
                     "defining.", ex);
             }
             return LoadClassDefs(doc.DocumentElement);
@@ -141,7 +141,7 @@ namespace Habanero.Bo.Loaders
             do
             {
                 _classDefList.Add(classLoader.LoadClass(_reader.ReadOuterXml()));
-            } while (_reader.Name == "classDef");
+            } while (_reader.Name == "class");
         }
     }
 }

@@ -25,10 +25,10 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef.GetClassDefCol.Clear();
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'class' was encountered when loading the class definitions.")]
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'class1' was encountered when loading the class definitions.")]
         public void TestInvalidXmlFormatWrongRootElement()
         {
-            loader.LoadClass("<class name=\"TestClass\" assembly=\"Habanero.Test.Bo.Loaders\" />");
+            loader.LoadClass("<class1 name=\"TestClass\" assembly=\"Habanero.Test.Bo.Loaders\" />");
         }
 
         //[
@@ -56,12 +56,12 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef def =
                 loader.LoadClass(
                     @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
+				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
                     <propertyDef name=""TestProp"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
-				</classDef>
+				</class>
 			");
             Assert.AreEqual("TestClass", def.TableName);
         }
@@ -72,48 +72,48 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef def =
                 loader.LoadClass(
                     @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" tableName=""myTable"">
+				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" table=""myTable"">
                     <propertyDef name=""TestProp"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
-				</classDef>
+				</class>
 			");
             Assert.AreEqual("myTable", def.TableName);
         }
 
-        [Test]
-        public void TestSupportsSynchronisation()
-        {
-            ClassDef def =
-                loader.LoadClass(
-                    @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" supportsSynchronising=""true"">
-                    <propertyDef name=""TestProp"" />
-                    <primaryKeyDef>
-                        <prop name=""TestProp""/>
-                    </primaryKeyDef>
-				</classDef>
-			");
-            Assert.IsTrue(def.SupportsSynchronising);
-        }
+//        [Test]
+//        public void TestSupportsSynchronisation()
+//        {
+//            ClassDef def =
+//                loader.LoadClass(
+//                    @"
+//				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" supportsSynchronising=""true"">
+//                    <propertyDef name=""TestProp"" />
+//                    <primaryKeyDef>
+//                        <prop name=""TestProp""/>
+//                    </primaryKeyDef>
+//				</class>
+//			");
+//            Assert.IsTrue(def.SupportsSynchronising);
+//        }
 
 
-        [Test]
-        public void TestSupportsSynchronisationDefault()
-        {
-            ClassDef def =
-                loader.LoadClass(
-                    @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
-                    <propertyDef name=""TestProp"" />
-                    <primaryKeyDef>
-                        <prop name=""TestProp""/>
-                    </primaryKeyDef>
-				</classDef>
-			");
-            Assert.IsFalse(def.SupportsSynchronising);
-        }
+//        [Test]
+//        public void TestSupportsSynchronisationDefault()
+//        {
+//            ClassDef def =
+//                loader.LoadClass(
+//                    @"
+//				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
+//                    <propertyDef name=""TestProp"" />
+//                    <primaryKeyDef>
+//                        <prop name=""TestProp""/>
+//                    </primaryKeyDef>
+//				</class>
+//			");
+//            Assert.IsFalse(def.SupportsSynchronising);
+//        }
 
         [Test]
         public void TestTwoPropClass()
@@ -121,13 +121,13 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef def =
                 loader.LoadClass(
                     @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
+				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
-				</classDef>
+				</class>
 			");
             Assert.AreEqual(2, def.PropDefcol.Count);
             Assert.AreEqual("TestClass", def.ClassName);
@@ -139,12 +139,12 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef def =
                 loader.LoadClass(
                     @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
+				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<propertyDef name=""TestProp"" />
 					<primaryKeyDef>
 						<prop name=""TestProp"" />
 					</primaryKeyDef>
-				</classDef>
+				</class>
 			");
             Assert.IsNotNull(def.PrimaryKeyDef);
             Assert.AreEqual(1, def.PrimaryKeyDef.Count);
@@ -155,7 +155,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             loader.LoadClass(
                 @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
+				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" />
 					<primaryKeyDef>
@@ -164,7 +164,7 @@ namespace Habanero.Test.Bo.Loaders
 					<primaryKeyDef>
 						<prop name=""TestProp2"" />
 					</primaryKeyDef>
-				</classDef>
+				</class>
 			");
         }
 
@@ -174,7 +174,7 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef def =
                 loader.LoadClass(
                     @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
+				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" />
 					<propertyDef name=""TestProp3"" />
@@ -188,7 +188,7 @@ namespace Habanero.Test.Bo.Loaders
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
-				</classDef>
+				</class>
 			");
             Assert.AreEqual(2, def.KeysCol.Count);
         }
@@ -199,7 +199,7 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef def =
                 loader.LoadClass(
                     @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
+				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<propertyDef name=""TestProp"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
@@ -214,7 +214,7 @@ namespace Habanero.Test.Bo.Loaders
 							<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />
 						</relKeyDef>
 					</relationshipDef>
-				</classDef>
+				</class>
 			");
             RelationshipDefCol relDefCol = def.RelationshipDefCol;
             Assert.AreEqual(1, relDefCol.Count, "There should be one relationship def from the given xml definition");
@@ -229,25 +229,25 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef.LoadClassDefs(
                 new XmlClassDefsLoader(
                     @"
-					<classDefs>
-						<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<propertyDef name=""TestClassID"" />
                             <primaryKeyDef>
                                 <prop name=""TestClassID""/>
                             </primaryKeyDef>
-						</classDef>
-					</classDefs>",
+						</class>
+					</classes>",
                                  new DtdLoader()));
             ClassDef def =
                 loader.LoadClass(
                     @"
-				<classDef name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"">
+				<class name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<superClassDesc className=""Habanero.Test.Bo.Loaders.TestClass"" assemblyName=""Habanero.Test.Bo"" />
 					<propertyDef name=""TestProp"" />
                     <primaryKeyDef>
                         <prop name=""TestProp""/>
                     </primaryKeyDef>
-				</classDef>
+				</class>
 			");
             Assert.IsNotNull(def.SuperClassDesc);
             Assert.AreSame(ClassDef.GetClassDefCol[typeof (TestClass)], def.SuperClassDesc.SuperClassDef);
@@ -259,7 +259,7 @@ namespace Habanero.Test.Bo.Loaders
             ClassDef def =
                 loader.LoadClass(
                     @"
-				<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
+				<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"">
 					<propertyDef name=""TestProp"" />
 					<propertyDef name=""TestProp2"" />
 					<primaryKeyDef>
@@ -274,7 +274,7 @@ namespace Habanero.Test.Bo.Loaders
 							</uiFormTab>
 						</uiFormDef>
 					</uiDef>
-				</classDef>
+				</class>
 			");
             UIDef uiDef = def.UIDefCol["default"];
             Assert.IsNotNull(uiDef);

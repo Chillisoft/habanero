@@ -45,7 +45,7 @@ namespace Habanero.Ui.Base
         private IDefClassFactory _defClassFactory;
         private DatabaseConfig _databaseConfig;
         private IExceptionNotifier _exceptionNotifier;
-        private ISynchronisationController _synchronisationController;
+        //private ISynchronisationController _synchronisationController;
         private ISettingsStorer _settingsStorer;
         private bool _loadClassDefs = true;
 
@@ -110,13 +110,13 @@ namespace Habanero.Ui.Base
             set { _exceptionNotifier = value; }
         }
 
-        /// <summary>
-        /// Sets the synchronisation controller, which implements a
-        /// synchronisation strategy for the application.
-        /// </summary>
-        public ISynchronisationController SynchronisationController {
-            set { _synchronisationController = value; }
-        }
+        ///// <summary>
+        ///// Sets the synchronisation controller, which implements a
+        ///// synchronisation strategy for the application.
+        ///// </summary>
+        //public ISynchronisationController SynchronisationController {
+        //    set { _synchronisationController = value; }
+        //}
 
         /// <summary>
         /// Sets the settings storer, which stores database settings
@@ -171,8 +171,8 @@ namespace Habanero.Ui.Base
                 if (_exceptionNotifier == null) _exceptionNotifier = new FormExceptionNotifier();
                 GlobalRegistry.UIExceptionNotifier = _exceptionNotifier;
 
-                if (_synchronisationController == null) _synchronisationController = new NullSynchronisationController();
-                GlobalRegistry.SynchronisationController = _synchronisationController;
+                //if (_synchronisationController == null) _synchronisationController = new NullSynchronisationController();
+                //GlobalRegistry.SynchronisationController = _synchronisationController;
 
                 GlobalRegistry.ApplicationName = _appName;
                 GlobalRegistry.ApplicationVersion = _appVersion;

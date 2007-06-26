@@ -61,6 +61,29 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #include KeyDef.dtd
+        ///#include PrimaryKeyDef.dtd
+        ///#include PropertyDef.dtd
+        ///#include RelationshipDef.dtd
+        ///#include SuperClassDesc.dtd
+        ///#include UIDef.dtd
+        ///&lt;!ELEMENT class (superClassDesc?, propertyDef*, keyDef*, primaryKeyDef?, relationshipDef*, uiDef*)&gt;
+        ///&lt;!ATTLIST class
+        ///		name NMTOKEN #REQUIRED
+        ///		assembly NMTOKEN #REQUIRED
+        ///		tableName NMTOKEN #IMPLIED
+        ///		supportsSynchronising ( true | false ) &quot;false&quot;
+        ///&gt;
+        ///
+        ///.
+        /// </summary>
+        internal static string _class {
+            get {
+                return ResourceManager.GetString("_class", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!ELEMENT businessObjectLookupListSource EMPTY&gt;
         ///&lt;!ATTLIST businessObjectLookupListSource 
         ///	className NMTOKEN #REQUIRED
@@ -74,36 +97,13 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #include KeyDef.dtd
-        ///#include PrimaryKeyDef.dtd
-        ///#include PropertyDef.dtd
-        ///#include RelationshipDef.dtd
-        ///#include SuperClassDesc.dtd
-        ///#include UIDef.dtd
-        ///&lt;!ELEMENT classDef (superClassDesc?, propertyDef*, keyDef*, primaryKeyDef?, relationshipDef*, uiDef*)&gt;
-        ///&lt;!ATTLIST classDef
-        ///		name NMTOKEN #REQUIRED
-        ///		assembly NMTOKEN #REQUIRED
-        ///		tableName NMTOKEN #IMPLIED
-        ///		supportsSynchronising ( true | false ) &quot;false&quot;
-        ///&gt;
-        ///
-        ///.
-        /// </summary>
-        internal static string ClassDef {
-            get {
-                return ResourceManager.GetString("ClassDef", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to #include ClassDef.dtd
-        ///&lt;!ELEMENT classDefs (classDef+)&gt;
+        ///&lt;!ELEMENT classes (classDef+)&gt;
         ///.
         /// </summary>
-        internal static string ClassDefs {
+        internal static string classes {
             get {
-                return ResourceManager.GetString("ClassDefs", resourceCulture);
+                return ResourceManager.GetString("classes", resourceCulture);
             }
         }
         

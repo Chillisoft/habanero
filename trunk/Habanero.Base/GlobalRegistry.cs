@@ -7,7 +7,7 @@ namespace Habanero.Base
     {
         private static ISettingsStorer _settingsStorer;
         private static IExceptionNotifier _exceptionNotifier;
-        private static ISynchronisationController _synchronisationController;
+        //private static ISynchronisationController _synchronisationController;
         private static string _applicationName;
         private static string _applicationVersion;
         private static int _databaseVersion;
@@ -32,22 +32,22 @@ namespace Habanero.Base
             set { _exceptionNotifier = value; }
         }
 
-        /// <summary>
-        /// Gets and sets the application's synchronisation controller,
-        /// which implements a synchronisation strategy for the application
-        /// </summary>
-        public static ISynchronisationController SynchronisationController
-        {
-            get
-            {
-                if (_synchronisationController == null)
-                {
-                    _synchronisationController = new NullSynchronisationController();
-                }
-                return _synchronisationController;
-            }
-            set { _synchronisationController = value; }
-        }
+        ///// <summary>
+        ///// Gets and sets the application's synchronisation controller,
+        ///// which implements a synchronisation strategy for the application
+        ///// </summary>
+        //public static ISynchronisationController SynchronisationController
+        //{
+        //    get
+        //    {
+        //        if (_synchronisationController == null)
+        //        {
+        //            _synchronisationController = new NullSynchronisationController();
+        //        }
+        //        return _synchronisationController;
+        //    }
+        //    set { _synchronisationController = value; }
+        //}
         
         /// <summary>
         /// Gets and sets the application name

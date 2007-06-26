@@ -39,7 +39,7 @@ namespace Habanero.Bo
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
     /// </summary>
-    public abstract class BusinessObject : ITransaction, ISynchronisable, Base.IBusinessObject
+    public abstract class BusinessObject : ITransaction, Base.IBusinessObject
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BusinessObject");
 
@@ -1197,7 +1197,7 @@ namespace Habanero.Bo
                     {
                         CheckPersistRules();
                         UpdatedConcurrencyControlProperties();
-                        GlobalRegistry.SynchronisationController.UpdateSynchronisationProperties(this);
+                        //GlobalRegistry.SynchronisationController.UpdateSynchronisationProperties(this);
 
                         BeforeUpdateToDB();
                         int numRowsUpdated;
@@ -1457,22 +1457,22 @@ namespace Habanero.Bo
             }
         }
 
-        /// <summary>
-        /// Increments the synchronisation version number
-        /// </summary>
-        public void IncrementVersionNumber()
-        {
-            if (this.ClassDef.SupportsSynchronising && this.GetBOPropCol().Contains("SyncVersionNumber"))
-            {
-                BOProp syncVersionNoProp = this.GetBOProp("SyncVersionNumber");
-                syncVersionNoProp.PropertyValue = (int)syncVersionNoProp.PropertyValue + 1;
-            }
-            else
-            {
-                throw new NotSupportedException("The Business Object of type " + this.GetType() +
-                                                " does not support version number synchronising.");
-            }
-        }
+        ///// <summary>
+        ///// Increments the synchronisation version number
+        ///// </summary>
+        //public void IncrementVersionNumber()
+        //{
+        //    if (this.ClassDef.SupportsSynchronising && this.GetBOPropCol().Contains("SyncVersionNumber"))
+        //    {
+        //        BOProp syncVersionNoProp = this.GetBOProp("SyncVersionNumber");
+        //        syncVersionNoProp.PropertyValue = (int)syncVersionNoProp.PropertyValue + 1;
+        //    }
+        //    else
+        //    {
+        //        throw new NotSupportedException("The Business Object of type " + this.GetType() +
+        //                                        " does not support version number synchronising.");
+        //    }
+        //}
 
         #endregion //Concurrency
 

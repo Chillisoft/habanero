@@ -24,20 +24,20 @@ namespace Habanero.Test.Bo.Loaders
             ClassDefCol classDefList =
                 loader.LoadClassDefs(
                     @"
-					<classDefs>
-						<classDef name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<propertyDef name=""TestClassID"" />
                             <primaryKeyDef>
                                 <prop name=""TestClassID""/>
                             </primaryKeyDef>
-						</classDef>
-						<classDef name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"" >
+						</class>
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<propertyDef name=""TestRelatedClassID"" />
                             <primaryKeyDef>
                                 <prop name=""TestRelatedClassID""/>
                             </primaryKeyDef>
-						</classDef>
-					</classDefs>
+						</class>
+					</classes>
 			");
             Assert.AreEqual(2, classDefList.Count);
         }

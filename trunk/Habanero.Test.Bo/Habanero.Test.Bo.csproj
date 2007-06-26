@@ -147,9 +147,6 @@
     <Compile Include="TestBoMapper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestBoSupportsSynchronising.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TestBusinessObjectBase.cs">
       <SubType>Code</SubType>
     </Compile>

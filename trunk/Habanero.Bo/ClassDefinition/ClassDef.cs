@@ -367,14 +367,14 @@ namespace Habanero.Bo.ClassDefinition
 			protected set { _uiDefCol = value; }
         }
 
-        /// <summary>
-        /// Indicates whether synchronising is supported
-        /// </summary>
-        public bool SupportsSynchronising
-        {
-            get { return _supportsSynchronisation; }
-            set { _supportsSynchronisation = value; }
-        }
+        ///// <summary>
+        ///// Indicates whether synchronising is supported
+        ///// </summary>
+        //public bool SupportsSynchronising
+        //{
+        //    get { return _supportsSynchronisation; }
+        //    set { _supportsSynchronisation = value; }
+        //}
 
         #endregion Properties
 		
@@ -446,11 +446,11 @@ namespace Habanero.Bo.ClassDefinition
                     }
                 }
             }
-            if (this.SupportsSynchronising)
-            {
-                propCol.Add(_versionNumberPropDef.CreateBOProp(newObject));
-                propCol.Add(_versionNumberAtLastSyncPropDef.CreateBOProp(newObject));
-            }
+            //if (this.SupportsSynchronising)
+            //{
+            //    propCol.Add(_versionNumberPropDef.CreateBOProp(newObject));
+            //    propCol.Add(_versionNumberAtLastSyncPropDef.CreateBOProp(newObject));
+            //}
             return propCol;
         }
 

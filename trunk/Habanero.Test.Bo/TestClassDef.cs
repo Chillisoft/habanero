@@ -24,13 +24,13 @@ namespace Habanero.Test.Bo
             itsClassDef =
                 loader.LoadClass(
                     @"
-				<classDef name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBo"" assembly=""Habanero.Test"">
 					<propertyDef name=""MyBoID"" type=""Guid"" />
 					<propertyDef name=""TestProp"" />
 					<primaryKeyDef>
 						<prop name=""MyBoID"" />
 					</primaryKeyDef>
-				</classDef>
+				</class>
 			");
             BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             Assert.AreSame(typeof (MyBo), bo.GetType());
@@ -53,21 +53,21 @@ namespace Habanero.Test.Bo
     	private string GetTestClassDefinition(string suffix)
     	{
     		string classDefString = String.Format(
-				@"
-					<classDefs>
-						<classDef name=""TestClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
+                @"
+					<classes>
+						<class name=""TestClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<propertyDef name=""TestClass{0}ID"" />
                             <primaryKeyDef>
                                 <prop name=""TestClass{0}ID""/>
                             </primaryKeyDef>
-						</classDef>
-						<classDef name=""TestRelatedClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
+						</class>
+						<class name=""TestRelatedClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
 							<propertyDef name=""TestRelatedClass{0}ID"" />
                             <primaryKeyDef>
                                 <prop name=""TestRelatedClass{0}ID""/>
                             </primaryKeyDef>
-						</classDef>
-					</classDefs>
+						</class>
+					</classes>
 			", suffix);
     		return classDefString;
     	}
