@@ -15,30 +15,27 @@ namespace Habanero.Test.Bo.Loaders
     {
         private String singleRelationshipString =
             @"
-					<relationshipDef 
+					<relationship 
 						name=""TestRelationship"" 
 						type=""single"" 
-						relatedType=""Habanero.Test.Bo.Loaders.TestRelatedClass"" 
+						relatedClass=""Habanero.Test.Bo.Loaders.TestRelatedClass"" 
 						relatedAssembly=""Habanero.Test.Bo""
 					>
-						<relKeyDef>
-							<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />
-						</relKeyDef>
-					</relationshipDef>";
+						<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+
+					</relationship>";
 
         private String multipleRelationshipString =
             @"
-					<relationshipDef 
+					<relationship 
 						name=""TestRelationship"" 
 						type=""multiple"" 
-						relatedType=""Habanero.Test.Bo.Loaders.TestRelatedClass"" 
+						relatedClass=""Habanero.Test.Bo.Loaders.TestRelatedClass"" 
 						relatedAssembly=""Habanero.Test.Bo""
 						orderBy=""TestOrder""
 					>
-						<relKeyDef>
-							<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />
-						</relKeyDef>
-					</relationshipDef>";
+						<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>";
 
         private XmlRelationshipLoader itsLoader;
         private PropDefCol itsPropDefs;
@@ -76,10 +73,10 @@ namespace Habanero.Test.Bo.Loaders
                             "The relationship should be of type MultipleRelationshipDef");
             MultipleRelationshipDef multipleRelDef = (MultipleRelationshipDef) relDef;
             Assert.AreEqual("TestOrder", multipleRelDef.OrderBy);
-            Assert.AreEqual(0, multipleRelDef.MinNoOfRelatedObjects);
-            Assert.AreEqual(-1, multipleRelDef.MaxNoOfRelatedObjects);
-            Assert.AreEqual(DeleteParentAction.PreventDeleteParent, multipleRelDef.DeleteParentAction,
-                            "Default delete action according to dtd is PreventDeleteParent.");
+            //Assert.AreEqual(0, multipleRelDef.MinNoOfRelatedObjects);
+            //Assert.AreEqual(-1, multipleRelDef.MaxNoOfRelatedObjects);
+            Assert.AreEqual(DeleteParentAction.Prevent, multipleRelDef.DeleteParentAction,
+                            "Default delete action according to dtd is Prevent.");
         }
 
         [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
@@ -101,11 +98,11 @@ namespace Habanero.Test.Bo.Loaders
         {
             itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
             string relationshipWithTwoProps = singleRelationshipString.Replace
-                (@"<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />",
-                 @"<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />
-				   <relProp name=""TestProp2"" relatedPropName=""TestRelatedProp2"" />");
+                (@"<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />",
+                 @"<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+				   <relatedProperty property=""TestProp2"" relatedProperty=""TestRelatedProp2"" />");
             RelationshipDef relDef = itsLoader.LoadRelationship(relationshipWithTwoProps, itsPropDefs);
-            Assert.AreEqual(2, relDef.RelKeyDef.Count, "There should be two relprops in the relkeydef.");
+            Assert.AreEqual(2, relDef.RelKeyDef.Count, "There should be two relatedProperty in the relationship.");
         }
     }
 }

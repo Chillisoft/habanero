@@ -49,8 +49,7 @@ namespace Habanero.Test
             RelPropDef lRelPropDef = new RelPropDef(propDef, "OwnerID");
             relKeyDef.Add(lRelPropDef);
             RelationshipDef relDef = new MultipleRelationshipDef("Owner", typeof (Shape),
-                                                                 relKeyDef, false, "", -1, -1,
-                                                                 DeleteParentAction.DereferenceRelatedObjects);
+                                                                 relKeyDef, false, "", DeleteParentAction.DereferenceRelated);
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             relDefCol.Add(relDef);
             ClassDef lClassDef = new ClassDef(typeof (Shape), primaryKey, lPropDefCol, keysCol, relDefCol);

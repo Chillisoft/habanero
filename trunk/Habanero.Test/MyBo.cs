@@ -210,16 +210,12 @@ namespace Habanero.Test
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
-					<relationshipDef name=""MyRelationship"" type=""single"" relatedType=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
-						<relKeyDef>
-							<relProp name=""RelatedID"" relatedPropName=""MyRelatedBoID"" />
-						</relKeyDef>
-					</relationshipDef>
-					<relationshipDef name=""MyMultipleRelationship"" type=""multiple"" relatedType=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
-						<relKeyDef>
-							<relProp name=""MyBoID"" relatedPropName=""MyBoID"" />
-						</relKeyDef>
-					</relationshipDef>
+					<relationship name=""MyRelationship"" type=""single"" relatedClass=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""RelatedID"" relatedProperty=""MyRelatedBoID"" />
+					</relationship>
+					<relationship name=""MyMultipleRelationship"" type=""multiple"" relatedClass=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
 					<uiDef>
 						<uiGridDef>
 							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />

@@ -75,12 +75,11 @@ namespace Habanero.Bo.ClassDefinition
 		public MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName,
 		                                                             string relatedClassName, RelKeyDef relKeyDef,
 		                                                             bool keepReferenceToRelatedObject, string orderBy,
-		                                                             int minNoOfRelatedObjects, int maxNoOfRelatedObjects,
 		                                                             DeleteParentAction deleteParentAction)
 		{
 			return
 				new MultipleRelationshipDef(relationshipName, relatedAssemblyName, relatedClassName, relKeyDef,
-				                            keepReferenceToRelatedObject, orderBy, minNoOfRelatedObjects, maxNoOfRelatedObjects,
+				                            keepReferenceToRelatedObject, orderBy, 
 				                            deleteParentAction);
 		}
 

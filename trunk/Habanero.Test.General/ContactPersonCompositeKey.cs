@@ -76,8 +76,8 @@ namespace Habanero.Test.General
             relKeyDef.Add(lRelPropDef);
 
             RelationshipDef relDef = new MultipleRelationshipDef("Driver",
-                                                                 typeof (Car), relKeyDef, true, "", -1, -1,
-                                                                 DeleteParentAction.DereferenceRelatedObjects);
+                                                                 typeof (Car), relKeyDef, true, "", 
+                                                                 DeleteParentAction.DereferenceRelated);
 
             relDefCol.Add(relDef);
             return relDefCol;

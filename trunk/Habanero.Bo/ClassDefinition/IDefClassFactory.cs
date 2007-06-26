@@ -29,7 +29,7 @@ namespace Habanero.Bo.ClassDefinition
 
 		SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject);
 
-		MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, int minNoOfRelatedObjects, int maxNoOfRelatedObjects, DeleteParentAction deleteParentAction);
+		MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction);
 
 		SimpleLookupListSource CreateSimpleLookupListSource(StringGuidPairCollection stringGuidPairCollection);
 

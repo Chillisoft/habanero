@@ -343,7 +343,7 @@
     <None Include="Loaders\DTDs\primaryKey.dtd" />
     <None Include="Loaders\DTDs\Prop.dtd" />
     <None Include="Loaders\DTDs\property.dtd" />
-    <None Include="Loaders\DTDs\RelationshipDef.dtd" />
+    <None Include="Loaders\DTDs\relationship.dtd" />
     <None Include="Loaders\DTDs\simpleLookupList.dtd" />
     <None Include="Loaders\DTDs\superClass.dtd" />
     <None Include="Loaders\DTDs\UIDef.dtd" />

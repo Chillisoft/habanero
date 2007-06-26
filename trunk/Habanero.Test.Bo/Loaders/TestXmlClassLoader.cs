@@ -204,16 +204,14 @@ namespace Habanero.Test.Bo.Loaders
                     <primaryKey>
                         <prop name=""TestProp""/>
                     </primaryKey>
-					<relationshipDef 
+					<relationship 
 						name=""TestRelationship"" 
 						type=""single"" 
-						relatedType=""TestRelatedClass"" 
+						relatedClass=""TestRelatedClass"" 
 						relatedAssembly=""Habanero.Test.Bo.Loaders""
 					>
-						<relKeyDef>
-							<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />
-						</relKeyDef>
-					</relationshipDef>
+						<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+					</relationship>
 				</class>
 			");
             RelationshipDefCol relDefCol = def.RelationshipDefCol;

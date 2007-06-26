@@ -145,8 +145,8 @@
   <data name="property" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\property.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="RelationshipDef" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\RelationshipDef.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="relationship" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\relationship.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="Rule" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\Rule.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

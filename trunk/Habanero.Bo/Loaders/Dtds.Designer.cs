@@ -62,12 +62,12 @@ namespace Habanero.Bo.Loaders {
         
         /// <summary>
         ///   Looks up a localized string similar to #include key.dtd
-        ///#include PrimaryKeyDef.dtd
+        ///#include primaryKey.dtd
         ///#include property.dtd
         ///#include RelationshipDef.dtd
         ///#include superClass.dtd
         ///#include UIDef.dtd
-        ///&lt;!ELEMENT class (superClass?, property*, key*, primaryKeyDef?, relationshipDef*, uiDef*)&gt;
+        ///&lt;!ELEMENT class (superClass?, property*, key*, primaryKey?, relationshipDef*, uiDef*)&gt;
         ///&lt;!ATTLIST class
         ///		name NMTOKEN #REQUIRED
         ///		assembly NMTOKEN #REQUIRED
@@ -198,8 +198,8 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT relationshipDef (relKeyDef)&gt;
-        ///&lt;!ATTLIST relationshipDef
+        ///   Looks up a localized string similar to &lt;!ELEMENT relationship (relKeyDef)&gt;
+        ///&lt;!ATTLIST relationship
         ///	name NMTOKEN #REQUIRED
         ///	type (single | multiple) #REQUIRED
         ///	relatedType NMTOKEN #REQUIRED
@@ -211,11 +211,11 @@ namespace Habanero.Bo.Loaders {
         ///	deleteParentAction ( DeleteRelatedObjects | DereferenceRelatedObjects | PreventDeleteParent ) &quot;PreventDeleteParent&quot;
         ///&gt;
         ///	&lt;!ELEMENT relKeyDef (relProp+)&gt;
-        ///		&lt;!ELEMENT r [rest of string was truncated]&quot;;.
+        ///		&lt;!ELEMENT relProp [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string RelationshipDef {
+        internal static string relationship {
             get {
-                return ResourceManager.GetString("RelationshipDef", resourceCulture);
+                return ResourceManager.GetString("relationship", resourceCulture);
             }
         }
         

@@ -40,7 +40,7 @@ namespace Habanero.Test.Bo
 
             mRelationshipDef = new MultipleRelationshipDef("Relation1", typeof(MockBO),
                                                            mRelKeyDef, false, "",
-                                                           -1, -1, DeleteParentAction.DeleteRelatedObjects);
+                                                           DeleteParentAction.DeleteRelated);
             DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetConnectionString();
         }
 
@@ -57,7 +57,7 @@ namespace Habanero.Test.Bo
         public void TestCreateRelationshipWithNonBOType()
         {
             RelationshipDef relDef = new MultipleRelationshipDef("Relation1", typeof(String), mRelKeyDef, false, "",
-                                                                 -1, -1, DeleteParentAction.DeleteRelatedObjects);
+                                                                 DeleteParentAction.DeleteRelated);
         }
 
         [Test]
