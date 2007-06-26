@@ -49,18 +49,21 @@ TestDtd3";
 
         [TestFixtureTearDown]
         public void TearDownFixture() {
-            if (File.Exists("propertydef.dtd"))
-            {
-                File.Delete("propertydef.dtd");
-            }
-            if (File.Exists("classdef.dtd"))
-            {
-                File.Delete("classdef.dtd");
-            }
-            if (File.Exists("keydef.dtd"))
-            {
-                File.Delete("keydef.dtd");
-            }
+			try
+			{
+				if (File.Exists("propertydef.dtd"))
+				{
+					File.Delete("propertydef.dtd");
+				}
+				if (File.Exists("classdef.dtd"))
+				{
+					File.Delete("classdef.dtd");
+				}
+				if (File.Exists("keydef.dtd"))
+				{
+					File.Delete("keydef.dtd");
+				}
+			} catch  {}
         }
 
         [Test]

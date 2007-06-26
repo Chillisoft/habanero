@@ -1,17 +1,19 @@
 ﻿<NUnitProject>
-  <Settings activeconfig="Debug" />
-  <Config name="Debug" binpathtype="Auto">
-    <assembly path="testing_bin\Habanero.Test.Bo.dll" />
-    <assembly path="testing_bin\Habanero.Test.Db.dll" />
-    <assembly path="testing_bin\Habanero.Test.General.dll" />
-    <assembly path="testing_bin\Habanero.Test.dll" />
-    <assembly path="testing_bin\Habanero.Test.UI.dll" />
-    <assembly path="testing_bin\Habanero.Bo.dll" />
-    <assembly path="testing_bin\Habanero.Db.dll" />
-    <assembly path="testing_bin\Habanero.Generic.dll" />
-    <assembly path="testing_bin\Habanero.UI.dll" />
-    <assembly path="testing_bin\Habanero.UI.Pro.dll" />
-    <assembly path="testing_bin\Habanero.Util.dll" />
+  <Settings activeconfig="Default" />
+  <Config name="Default" binpathtype="Auto">
+    <assembly path="Testing_bin\Habanero.Test.General.dll" />
+    <assembly path="Testing_bin\Habanero.Test.UI.dll" />
+    <assembly path="Testing_bin\Habanero.UI.dll" />
+    <assembly path="Testing_bin\Habanero.UI.Pro.dll" />
+    <assembly path="Testing_bin\Habanero.UI.Std.dll" />
+    <assembly path="Testing_bin\Habanero.Util.dll" />
+    <assembly path="Testing_bin\Habanero.Base.dll" />
+    <assembly path="Testing_bin\Habanero.Bo.dll" />
+    <assembly path="Testing_bin\Habanero.Build.dll" />
+    <assembly path="Testing_bin\Habanero.Db.dll" />
+    <assembly path="Testing_bin\Habanero.Generic.dll" />
+    <assembly path="Testing_bin\Habanero.Test.Bo.dll" />
+    <assembly path="Testing_bin\Habanero.Test.Db.dll" />
+    <assembly path="Testing_bin\Habanero.Test.dll" />
   </Config>
-  <Config name="Release" binpathtype="Auto" />
 </NUnitProject>

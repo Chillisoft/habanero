@@ -387,8 +387,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy $(ProjectDir)\Loaders\DTDs\*.dtd $(TargetDir)
-copy $(ProjectDir)\Loaders\DTDs\*.dtd $(ProjectDir)..\Build\Debug
-$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
 </Project>
