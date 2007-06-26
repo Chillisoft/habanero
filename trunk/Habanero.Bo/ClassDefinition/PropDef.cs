@@ -20,16 +20,12 @@ namespace Habanero.Bo.ClassDefinition
     public enum PropReadWriteRule
     {
         /// <summary>Full access</summary>
-        ReadManyWriteMany,
+        ReadWrite,
         /// <summary>Read but not write/edit</summary>
         ReadOnly,
-        /// <summary>Write/edit but not read from</summary>
-        WriteOnly,
-        /// <summary>Can only be edited when the object is new</summary>
-        ReadManyWriteNew,
         /// <summary>Can only be edited it if was never edited before 
         /// (regardless of whether the object is new or not)</summary>
-        ReadManyWriteOnce
+        WriteOnce
     }
 
     
@@ -604,34 +600,34 @@ namespace Habanero.Bo.ClassDefinition
             Assert.AreEqual("PropName", _propDef.PropertyName);
             Assert.AreEqual("PropName", _propDef.DatabaseFieldName);
             Assert.AreEqual(typeof (string), _propDef.PropType);
-            PropDef lPropDef = new PropDef("prop", typeof (int), PropReadWriteRule.ReadManyWriteMany, 1);
+            PropDef lPropDef = new PropDef("prop", typeof (int), PropReadWriteRule.ReadWrite, 1);
         }
 
         [Test]
         [ExpectedException(typeof (ArgumentException))]
         public void TestCreatePropDefInvalidDefault()
         {
-            PropDef lPropDef = new PropDef("prop", typeof (int), PropReadWriteRule.ReadManyWriteMany, "");
+            PropDef lPropDef = new PropDef("prop", typeof (int), PropReadWriteRule.ReadWrite, "");
         }
 
 		[Test]
 		public void TestCreateLatePropDefInvalidTypeNotAccessed()
 		{
-			PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadManyWriteMany, null, "", false);
+			PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadWrite, null, "", false);
 		}
 
         [Test]
         [ExpectedException(typeof (ArgumentException))]
         public void TestCreatePropDefInvalidDefault2()
         {
-            PropDef lPropDef = new PropDef("prop", typeof (string), PropReadWriteRule.ReadManyWriteMany, 1);
+            PropDef lPropDef = new PropDef("prop", typeof (string), PropReadWriteRule.ReadWrite, 1);
         }
 
 		[Test]
 		[ExpectedException(typeof(UnknownTypeNameException))]
 		public void TestCreateLatePropDefInvalidType()
 		{
-			PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadManyWriteMany, null, "", false);
+			PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadWrite, null, "", false);
 			Type propType = propDef.PropertyType;
 			Assert.Fail("This line should not be reached because the previous line should have failed.");
 		}
@@ -639,7 +635,7 @@ namespace Habanero.Bo.ClassDefinition
 		[Test]
 		public void TestCreateLatePropDefInvalidDefaultNotAccessed()
 		{
-			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadManyWriteMany, null, "", false);
+			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false);
 			//No error
 		}
 
@@ -647,7 +643,7 @@ namespace Habanero.Bo.ClassDefinition
 		[ExpectedException(typeof(FormatException))]
 		public void TestCreateLatePropDefInvalidDefault()
 		{
-			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadManyWriteMany, null, "", false);
+			PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false);
 			object defaultValue = lPropDef.DefaultValue;
 			Assert.Fail("This line should not be reached because the previous line should have failed.");
 		}

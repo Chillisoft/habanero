@@ -34,9 +34,9 @@ namespace Habanero.Test.General
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Radius", typeof (int), PropReadWriteRule.ReadManyWriteMany, "Radius", null);
+                new PropDef("Radius", typeof (int), PropReadWriteRule.ReadWrite, "Radius", null);
             lPropDefCol.Add(propDef);
-            propDef = lPropDefCol.Add("CircleID", typeof (Guid), PropReadWriteRule.ReadManyWriteOnce, null);
+            propDef = lPropDefCol.Add("CircleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["CircleID"]);

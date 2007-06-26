@@ -78,12 +78,12 @@ namespace Habanero.Test.General
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("EngineNo", typeof (String), PropReadWriteRule.ReadManyWriteMany, "ENGINE_NO", null);
+                new PropDef("EngineNo", typeof (String), PropReadWriteRule.ReadWrite, "ENGINE_NO", null);
             lPropDefCol.Add(propDef);
 
             propDef =
-                lPropDefCol.Add("EngineID", typeof (Guid), PropReadWriteRule.ReadManyWriteOnce, "Engine_ID", null);
-            propDef = lPropDefCol.Add("CarID", typeof (Guid), PropReadWriteRule.ReadManyWriteOnce, "CAR_ID", null);
+                lPropDefCol.Add("EngineID", typeof (Guid), PropReadWriteRule.WriteOnce, "Engine_ID", null);
+            propDef = lPropDefCol.Add("CarID", typeof (Guid), PropReadWriteRule.WriteOnce, "CAR_ID", null);
 
             return lPropDefCol;
         }

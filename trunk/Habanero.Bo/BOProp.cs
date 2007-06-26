@@ -524,7 +524,7 @@ namespace Habanero.Bo
         {
             //Test compulsory with no default set
             PropDef lPropDefWithRules = new PropDef("PropNameWithRules", "System", "String",
-                                                    PropReadWriteRule.ReadManyWriteMany, null, null, true);
+                                                    PropReadWriteRule.ReadWrite, null, null, true);
             lPropDefWithRules.assignPropRule(new PropRuleString(lPropDefWithRules.PropertyName, "", -1, -1, null, null));
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsFalse(lBOProp.isValid);
@@ -542,7 +542,7 @@ namespace Habanero.Bo
         {
             //Test compulsory with no default set
             PropDef lPropDefWithRules = new PropDef("PropNameWithRules", typeof (string),
-                                                    PropReadWriteRule.ReadManyWriteMany, null);
+                                                    PropReadWriteRule.ReadWrite, null);
             lPropDefWithRules.assignPropRule(new PropRuleString(lPropDefWithRules.PropertyName, "", 50, 51, null, null));
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsTrue(lBOProp.isValid);

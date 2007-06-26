@@ -21,7 +21,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             itsLoader = new XmlKeyLoader();
             itsPropDefs = new PropDefCol();
-            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestLoadKeyWithMultipleProps()
         {
-            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
             KeyDef def =
                 itsLoader.LoadKey(
                     @"<keyDef name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></keyDef>", itsPropDefs);

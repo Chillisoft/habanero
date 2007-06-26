@@ -86,14 +86,14 @@ namespace Habanero.Test.General
         private static PropDefCol CreateBOPropDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
-            PropDef propDef = new PropDef("Surname", typeof (String), PropReadWriteRule.ReadManyWriteMany, null);
+            PropDef propDef = new PropDef("Surname", typeof (String), PropReadWriteRule.ReadWrite, null);
             propDef.assignPropRule(new PropRuleString("ContactPerson-" + propDef.PropertyName, "", 2, 50, null, null));
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("FirstName", typeof (String), PropReadWriteRule.ReadManyWriteMany, null);
+            propDef = new PropDef("FirstName", typeof (String), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("DateOfBirth", typeof (DateTime), PropReadWriteRule.ReadManyWriteOnce, null);
+            propDef = new PropDef("DateOfBirth", typeof (DateTime), PropReadWriteRule.WriteOnce, null);
             lPropDefCol.Add(propDef);
 
             //Create concurrency control properties

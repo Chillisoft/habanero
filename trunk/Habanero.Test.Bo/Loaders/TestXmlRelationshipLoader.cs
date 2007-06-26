@@ -48,7 +48,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             itsLoader = new XmlRelationshipLoader();
             itsPropDefs = new PropDefCol();
-            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestWithTwoRelatedProps()
         {
-            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
             string relationshipWithTwoProps = singleRelationshipString.Replace
                 (@"<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />",
                  @"<relProp name=""TestProp"" relatedPropName=""TestRelatedProp"" />

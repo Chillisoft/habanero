@@ -30,7 +30,7 @@ namespace Habanero.Test.Bo.Loaders
             Assert.AreEqual("TestProp", def.PropertyName, "Property name should be same as that specified in xml");
             Assert.AreEqual(typeof (string), def.PropertyType,
                             "Property type should be the default as defined in the dtd");
-            Assert.AreEqual(null, def.DefaultValue, "The default defaultValue is null");
+            Assert.AreEqual(null, def.DefaultValue, "The default default is null");
             Assert.AreEqual("TestProp", def.FieldName,
                             "The field name should be the same as the property name by default");
         }
@@ -54,7 +54,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestPropertyWithDefaultValue()
         {
-            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" defaultValue=""TestValue"" />");
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" default=""TestValue"" />");
             Assert.AreEqual("TestValue", def.DefaultValue, "Default value should be same as that specified in xml");
         }
 
@@ -63,7 +63,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(
-                    @"<property  name=""TestProp"" type=""Guid"" defaultValue=""{38373667-B06A-40c5-B4CE-299CE925E121}"" />");
+                    @"<property  name=""TestProp"" type=""Guid"" default=""{38373667-B06A-40c5-B4CE-299CE925E121}"" />");
             Assert.AreEqual(new Guid("{38373667-B06A-40c5-B4CE-299CE925E121}"), def.DefaultValue,
                             "Default value should be same as that specified in xml");
         }
@@ -72,7 +72,7 @@ namespace Habanero.Test.Bo.Loaders
         public void TestPropertyWithDatabaseFieldName()
         {
             PropDef def =
-                itsLoader.LoadProperty(@"<property  name=""TestProp"" databaseFieldName=""TestFieldName"" />");
+                itsLoader.LoadProperty(@"<property  name=""TestProp"" databaseField=""TestFieldName"" />");
             Assert.AreEqual("TestFieldName", def.FieldName, "Field Name should be the same as that specified in xml");
         }
 

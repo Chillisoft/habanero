@@ -76,10 +76,10 @@ namespace Habanero.Bo.ClassDefinition
         private bool _supportsSynchronisation;
 
         private static PropDef _versionNumberAtLastSyncPropDef =
-            new PropDef("SyncVersionNumberAtLastSync", typeof (int), PropReadWriteRule.ReadManyWriteMany, 0);
+            new PropDef("SyncVersionNumberAtLastSync", typeof (int), PropReadWriteRule.ReadWrite, 0);
 
         private static PropDef _versionNumberPropDef =
-            new PropDef("SyncVersionNumber", typeof (int), PropReadWriteRule.ReadManyWriteMany, 0);
+            new PropDef("SyncVersionNumber", typeof (int), PropReadWriteRule.ReadWrite, 0);
 		
         #region Constructors
 

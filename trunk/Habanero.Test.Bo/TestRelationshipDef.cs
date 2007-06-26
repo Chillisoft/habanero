@@ -131,13 +131,13 @@ namespace Habanero.Test.Bo
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("MockBOProp1", typeof(Guid), PropReadWriteRule.ReadManyWriteMany, "MockBOProp1", null);
+                new PropDef("MockBOProp1", typeof(Guid), PropReadWriteRule.ReadWrite, "MockBOProp1", null);
             lPropDefCol.Add(propDef);
 
-            lPropDefCol.Add("MockBOProp2", typeof(string), PropReadWriteRule.ReadManyWriteOnce, "MockBOProp2", null);
+            lPropDefCol.Add("MockBOProp2", typeof(string), PropReadWriteRule.WriteOnce, "MockBOProp2", null);
 
             propDef =
-                lPropDefCol.Add("MockBOID", typeof(Guid), PropReadWriteRule.ReadManyWriteOnce, "MockBOID", null);
+                lPropDefCol.Add("MockBOID", typeof(Guid), PropReadWriteRule.WriteOnce, "MockBOID", null);
             return lPropDefCol;
         }
 

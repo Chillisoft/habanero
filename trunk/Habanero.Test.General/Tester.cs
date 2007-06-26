@@ -766,13 +766,13 @@ namespace Habanero.Test.General
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("TransactionSequenceNo", typeof (int), PropReadWriteRule.ReadManyWriteMany, null);
+                new PropDef("TransactionSequenceNo", typeof (int), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("DateTimeUpdated", typeof (DateTime), PropReadWriteRule.ReadManyWriteMany, null);
+            propDef = new PropDef("DateTimeUpdated", typeof (DateTime), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("WindowsUser", typeof (String), PropReadWriteRule.ReadManyWriteOnce, null);
+            propDef = new PropDef("WindowsUser", typeof (String), PropReadWriteRule.WriteOnce, null);
             lPropDefCol.Add(propDef);
 
             propDef = new PropDef("LogonUser", typeof (String), PropReadWriteRule.ReadOnly, null);

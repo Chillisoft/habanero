@@ -112,7 +112,7 @@ namespace Habanero.Bo
         [Test]
         public void TestDateRule()
         {
-            //	PropDef lPropDef = new PropDef("Surname", typeof(string),PropReadWriteRule.ReadManyWriteMany);
+            //	PropDef lPropDef = new PropDef("Surname", typeof(string),PropReadWriteRule.ReadWrite);
             PropRuleDate rule =
                 new PropRuleDate("BirthDate", "Test", new DateTime(1900, 01, 01), new DateTime(2010, 12, 31));
 

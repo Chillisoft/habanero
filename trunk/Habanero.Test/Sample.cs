@@ -62,24 +62,24 @@ namespace Habanero.Test
         {
             PropDefCol lPropDefCol = new PropDefCol();
             lPropDefCol.Add(
-                new PropDef("SampleText", typeof (String), PropReadWriteRule.ReadManyWriteMany, "SampleText", null));
+                new PropDef("SampleText", typeof (String), PropReadWriteRule.ReadWrite, "SampleText", null));
             lPropDefCol.Add(
-                new PropDef("SampleText2", typeof (String), PropReadWriteRule.ReadManyWriteMany, "SampleText2", null));
+                new PropDef("SampleText2", typeof (String), PropReadWriteRule.ReadWrite, "SampleText2", null));
             lPropDefCol.Add(
-                new PropDef("SampleDate", typeof (DateTime), PropReadWriteRule.ReadManyWriteMany, "SampleDate", null));
+                new PropDef("SampleDate", typeof (DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
             lPropDefCol.Add(
-                new PropDef("SampleBoolean", typeof (Boolean), PropReadWriteRule.ReadManyWriteMany, "SampleBoolean",
+                new PropDef("SampleBoolean", typeof (Boolean), PropReadWriteRule.ReadWrite, "SampleBoolean",
                             null));
             lPropDefCol.Add(
-                new PropDef("SampleLookupID", typeof (Guid), PropReadWriteRule.ReadManyWriteMany, "SampleLookupID",
+                new PropDef("SampleLookupID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookupID",
                             null));
             lPropDefCol.Add(
-                new PropDef("SampleInt", typeof (int), PropReadWriteRule.ReadManyWriteMany, "SampleInt", 0));
+                new PropDef("SampleInt", typeof (int), PropReadWriteRule.ReadWrite, "SampleInt", 0));
             lPropDefCol.Add(
-                new PropDef("SampleMoney", typeof (Decimal), PropReadWriteRule.ReadManyWriteMany, "SampleInt",
+                new PropDef("SampleMoney", typeof (Decimal), PropReadWriteRule.ReadWrite, "SampleInt",
                             new Decimal(0)));
             PropDef lPropDef =
-                new PropDef("SampleLookup2ID", typeof (Guid), PropReadWriteRule.ReadManyWriteMany, "SampleLookup2ID",
+                new PropDef("SampleLookup2ID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookup2ID",
                             null);
             itsLookupCollection = new StringGuidPairCollection();
             itsLookupCollection.Add(new StringGuidPair("Test1", new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}")));
@@ -87,7 +87,7 @@ namespace Habanero.Test
             itsLookupCollection.Add(new StringGuidPair("Test3", new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}")));
             lPropDef.LookupListSource = new SimpleLookupListSource(itsLookupCollection);
             lPropDefCol.Add(lPropDef);
-            lPropDefCol.Add("SampleID", typeof (Guid), PropReadWriteRule.ReadManyWriteOnce, null);
+            lPropDefCol.Add("SampleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["SampleID"]);

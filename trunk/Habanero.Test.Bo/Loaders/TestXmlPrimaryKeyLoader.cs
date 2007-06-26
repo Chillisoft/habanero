@@ -21,7 +21,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             itsLoader = new XmlPrimaryKeyLoader();
             itsPropDefs = new PropDefCol();
-            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestCompositeKey()
         {
-            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadManyWriteMany, null));
+            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
             PrimaryKeyDef def =
                 itsLoader.LoadPrimaryKey(
                     @"<primaryKeyDef isObjectID=""false""><prop name=""TestProp"" /><prop name=""TestProp2"" /></primaryKeyDef>",

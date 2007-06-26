@@ -93,7 +93,7 @@ namespace Habanero.Bo.ClassDefinition
         [SetUp]
         public void init()
         {
-            PropDef propDef = new PropDef("Prop", typeof (string), PropReadWriteRule.ReadManyWriteMany, null);
+            PropDef propDef = new PropDef("Prop", typeof (string), PropReadWriteRule.ReadWrite, null);
             mRelPropDef = new RelPropDef(propDef, "PropName");
             mPropDefCol = new PropDefCol();
             mPropDefCol.Add(propDef);

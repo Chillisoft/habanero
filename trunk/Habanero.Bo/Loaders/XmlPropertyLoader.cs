@@ -176,8 +176,8 @@ namespace Habanero.Bo.Loaders
                 throw new InvalidXmlDefinitionException(String.Format(
                     "In the property definition for '{0}', the 'readWriteRule' " +
                     "was set to an invalid value. The valid options are " +
-                    "ReadManyWriteMany, ReadOnly, WriteOnly, ReadManyWriteNew " +
-                    "and ReadManyWriteOnce.", _propertyName), ex);
+                    "ReadWrite, ReadOnly, WriteOnly, ReadManyWriteNew " +
+                    "and WriteOnce.", _propertyName), ex);
             }
         }
 
@@ -186,7 +186,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadDefaultValue()
         {
-            _defaultValueString = _reader.GetAttribute("defaultValue");
+            _defaultValueString = _reader.GetAttribute("default");
 
         }
 
@@ -195,7 +195,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadDatabaseFieldName()
         {
-            _databaseFieldName = _reader.GetAttribute("databaseFieldName");
+            _databaseFieldName = _reader.GetAttribute("databaseField");
         }
 
 

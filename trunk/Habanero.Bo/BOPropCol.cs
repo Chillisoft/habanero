@@ -194,7 +194,7 @@ namespace Habanero.Bo
 
             BOPropCol anotherPropCol = new BOPropCol();
             PropDef anotherPropDef =
-                new PropDef("TestAddPropCol", typeof (string), PropReadWriteRule.ReadManyWriteMany, null);
+                new PropDef("TestAddPropCol", typeof (string), PropReadWriteRule.ReadWrite, null);
             anotherPropCol.Add(anotherPropDef.CreateBOProp(false));
 
             mBOPropCol.Add(anotherPropCol);

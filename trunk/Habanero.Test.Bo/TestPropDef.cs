@@ -17,7 +17,7 @@ namespace Habanero.Test.Bo
                     )]
         public void TestDotIsNotAllowedInName()
         {
-            PropDef def = new PropDef("This.That", typeof (string), PropReadWriteRule.ReadManyWriteMany, "");
+            PropDef def = new PropDef("This.That", typeof (string), PropReadWriteRule.ReadWrite, "");
         }
 
 
@@ -28,7 +28,7 @@ namespace Habanero.Test.Bo
                     )]
         public void TestDashIsNotAllowedInName()
         {
-            PropDef def = new PropDef("This-That", typeof (string), PropReadWriteRule.ReadManyWriteMany, "");
+            PropDef def = new PropDef("This-That", typeof (string), PropReadWriteRule.ReadWrite, "");
         }
 
         [
@@ -38,7 +38,7 @@ namespace Habanero.Test.Bo
                     )]
         public void TestPipeIsNotAllowedInName()
         {
-            PropDef def = new PropDef("This|That", typeof (string), PropReadWriteRule.ReadManyWriteMany, "");
+            PropDef def = new PropDef("This|That", typeof (string), PropReadWriteRule.ReadWrite, "");
         }
     }
 }
