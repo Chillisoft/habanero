@@ -7,14 +7,14 @@ namespace Habanero.Ui.Forms
     /// <summary>
     /// Provides a form in which a user can edit an integer value
     /// </summary>
-    public class InputBoxInteger : InputBoxNumeric
+    public class InputFormInteger : InputFormNumeric
     {
         /// <summary>
         /// Initialises the form with a message to display to the user
         /// </summary>
         /// <param name="message">The message to display</param>
         /// <param name="defaultValue">The default integer value to display</param>
-        public InputBoxInteger(string message, int defaultValue) : base(message)
+        public InputFormInteger(string message, int defaultValue) : base(message)
         {
             _numericUpDown.Value = defaultValue;
         }

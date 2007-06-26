@@ -56,7 +56,7 @@ namespace Habanero.Ui.Util
         {
             if (!_isAuthenticated)
             {
-                InputBoxTextBox passwordEntry = new InputBoxTextBox("Please enter the password:", 1);
+                InputFormTextBox passwordEntry = new InputFormTextBox("Please enter the password:", 1);
                 passwordEntry.IsPasswordField = true;
                 if (passwordEntry.ShowDialog() == DialogResult.OK)
                 {

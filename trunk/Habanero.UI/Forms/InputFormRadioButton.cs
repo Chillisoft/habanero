@@ -8,14 +8,14 @@ namespace Habanero.Ui.Forms
     /// Provides a form in which a user can choose one from a number
     /// of radio button options
     /// </summary>
-    public class InputBoxRadioButton
+    public class InputFormRadioButton
     {
         private IList _radioButtons;
 
         /// <summary>
         /// Constructor to intialise a new form
         /// </summary>
-        public InputBoxRadioButton()
+        public InputFormRadioButton()
         {
             _radioButtons = new ArrayList();
         }

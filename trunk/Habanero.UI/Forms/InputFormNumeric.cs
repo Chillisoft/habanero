@@ -6,7 +6,7 @@ namespace Habanero.Ui.Forms
     /// <summary>
     /// Provides a super-class for a form in which a user can edit a numeric value
     /// </summary>
-    public abstract class InputBoxNumeric
+    public abstract class InputFormNumeric
     {
         private readonly string _message;
         protected NumericUpDown _numericUpDown;
@@ -15,7 +15,7 @@ namespace Habanero.Ui.Forms
         /// Initialises the form with a message to display to the user
         /// </summary>
         /// <param name="message">The message to display</param>
-        public InputBoxNumeric(string message)
+        public InputFormNumeric(string message)
         {
             _message = message;
             _numericUpDown = CreateNumericUpDown();

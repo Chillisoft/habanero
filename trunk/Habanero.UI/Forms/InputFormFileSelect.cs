@@ -7,7 +7,7 @@ namespace Habanero.Ui.Forms
     /// <summary>
     /// Provides a form in which a user can choose a file name
     /// </summary>
-    public class InputBoxFileSelect
+    public class InputFormFileSelect
     {
         private readonly string _message;
         protected TextBox _textBox;
@@ -17,7 +17,7 @@ namespace Habanero.Ui.Forms
         /// Initialises the form with a message to display to the user
         /// </summary>
         /// <param name="message">The message to display</param>
-        public InputBoxFileSelect(string message)
+        public InputFormFileSelect(string message)
         {
             _message = message;
             _textBox = ControlFactory.CreateTextBox();

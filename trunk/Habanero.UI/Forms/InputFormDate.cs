@@ -1,27 +1,25 @@
-using System.Collections.Generic;
+using System;
 using System.Windows.Forms;
 using Habanero.Ui.Base;
 
 namespace Habanero.Ui.Forms
 {
     /// <summary>
-    /// Provides a form in which a user can select from a combo box,
+    /// Provides a form in which a user can enter or edit a date
     /// </summary>
-    public class InputBoxComboBox
+    public class InputFormDate
     {
         private readonly string _message;
-        protected ComboBox _comboBox;
+        protected DateTimePicker _dateTimePicker;
 
         /// <summary>
         /// Initialises the form with a message to display to the user
         /// </summary>
         /// <param name="message">The message to display</param>
-        /// <param name="options">The List of options to display</param>
-        public InputBoxComboBox(string message, List<object> options)
+        public InputFormDate(string message)
         {
             _message = message;
-            _comboBox = ControlFactory.CreateComboBox();
-            options.ForEach(delegate(object obj) { _comboBox.Items.Add(obj); });
+            _dateTimePicker = ControlFactory.CreateStandardDateTimePicker();
         }
 
         /// <summary>
@@ -35,20 +33,20 @@ namespace Habanero.Ui.Forms
             Panel messagePanel = new Panel();
             FlowLayoutManager messagePanelManager = new FlowLayoutManager(messagePanel);
             messagePanelManager.AddControl(ControlFactory.CreateLabel(_message, false));
-            messagePanelManager.AddControl(_comboBox );
-            messagePanel.Height = _comboBox.Height + 100;
-            messagePanel.Width = ControlFactory.CreateLabel(_message, true).PreferredWidth + 20;
-            _comboBox.Width = messagePanel.Width - 30;
+            messagePanelManager.AddControl(_dateTimePicker);
+            messagePanel.Height = _dateTimePicker.Height*2 + 20;
+            messagePanel.Width = ControlFactory.CreateLabel(_message, false).PreferredWidth + 20;
             return new OKCancelDialog(messagePanel).ShowDialog();
         }
 
         /// <summary>
-        /// Gets or sets the selecteditem
+        /// Gets and sets the date-time value held in the date-time picker
+        /// on the form
         /// </summary>
-        public object SelectedItem
+        public DateTime Value
         {
-            get { return _comboBox.SelectedItem; }
-            set { _comboBox.SelectedItem = value; }
+            get { return _dateTimePicker.Value; }
+            set { _dateTimePicker.Value = value; }
         }
     }
 }

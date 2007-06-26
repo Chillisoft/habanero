@@ -7,7 +7,7 @@ namespace Habanero.Ui.Forms
     /// Provides a form in which a user can enter text into an input box,
     /// including the option of entering a masked password
     /// </summary>
-    public class InputBoxTextBox
+    public class InputFormTextBox
     {
         private readonly string _message;
         protected TextBox _textBox;
@@ -19,7 +19,7 @@ namespace Habanero.Ui.Forms
         /// <param name="message">The message to display</param>
         /// <param name="numLines">The number of lines to make available
         /// in the text box (its height in lines)</param>
-        public InputBoxTextBox(string message, int numLines)
+        public InputFormTextBox(string message, int numLines)
         {
             _message = message;
             _textBox = ControlFactory.CreateTextBox();

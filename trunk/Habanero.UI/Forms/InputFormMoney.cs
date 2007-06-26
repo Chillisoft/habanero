@@ -6,7 +6,7 @@ namespace Habanero.Ui.Forms
     /// <summary>
     /// Provides a form in which a user can edit a monetary value
     /// </summary>
-    public class InputBoxMoney : InputBoxNumeric
+    public class InputFormMoney : InputFormNumeric
     {
         /// <summary>
         /// Initialises the form with a message to display to the user
@@ -14,7 +14,7 @@ namespace Habanero.Ui.Forms
         /// <param name="message">The message to display</param>
         /// <param name="defaultValue">The default monetary value 
         /// to display</param>
-        public InputBoxMoney(string message, decimal defaultValue) : base(message)
+        public InputFormMoney(string message, decimal defaultValue) : base(message)
         {
             _numericUpDown.Value = defaultValue;
         }

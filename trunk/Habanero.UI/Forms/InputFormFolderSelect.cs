@@ -8,7 +8,7 @@ namespace Habanero.Ui.Forms
     /// Provides a form in which a user can choose a folder name from the file
     /// system
     /// </summary>
-    public class InputBoxFolderSelect
+    public class InputFormFolderSelect
     {
         private readonly string _message;
         protected TextBox _textBox;
@@ -18,7 +18,7 @@ namespace Habanero.Ui.Forms
         /// Initialises the form with a message to display to the user
         /// </summary>
         /// <param name="message">The message to display</param>
-        public InputBoxFolderSelect(string message)
+        public InputFormFolderSelect(string message)
         {
             _message = message;
             _textBox = ControlFactory.CreateTextBox();

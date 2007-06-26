@@ -8,7 +8,7 @@ namespace Habanero.Ui.Forms
     /// Provides a form in which a user can enter or edit a date range with
     /// a start and end date
     /// </summary>
-    public class InputBoxDateRange
+    public class InputFormDateRange
     {
         private readonly string _message;
         private DateTimePicker _startDateTimePicker;
@@ -20,7 +20,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         /// <param name="message">The message to display</param>
         /// <param name="title">The title</param>
-        public InputBoxDateRange(string message, string title)
+        public InputFormDateRange(string message, string title)
         {
             _message = message;
             _title = title;
