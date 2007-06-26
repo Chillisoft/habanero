@@ -113,9 +113,6 @@
     <Compile Include="CustomProperty.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Exceptions\ExceptionUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IFilterClause.cs">
       <SubType>Code</SubType>
     </Compile>
