@@ -346,28 +346,27 @@ namespace Habanero.Ui.Forms
         /// <returns>Returns the object containing the panel</returns>
         private PanelFactoryInfo CreatePanelWithGrid(UIFormGrid formGrid)
         {
-            //log.Debug("Creating a panel with a grid on it with relationship " + formGrid.RelationshipName);
             IGrid myGrid = (IGrid) Activator.CreateInstance(formGrid.GridType);
-            //GridBase myGrid = myGridWithButtons.Grid;
+            
             BusinessObject bo = _boArray[0];
             ClassDef classDef = ClassDef.GetClassDefCol[bo.GetType()];
-            //Console.Out.WriteLine(classDef.RelationshipDefCol);
             myGrid.ObjectInitialiser =
                 new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
                                                   formGrid.CorrespondingRelationshipName);
-            //log.Debug("Listing UI Grid properties");
+            
             BusinessObjectCollection collection =
                 bo.Relationships.GetRelatedBusinessObjectCol(formGrid.RelationshipName);
             foreach (UIGridProperty property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
             {
                 //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
             }
-            myGrid.SetGridDataProvider(
-                new SimpleGridDataProvider(collection,
+
+            myGrid.SetGridDataProvider(new SimpleGridDataProvider(collection,
                                            collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties()));
             ((Control) myGrid).Dock = DockStyle.Fill;
             Panel p = ControlFactory.CreatePanel(formGrid.RelationshipName );
             p.Controls.Add((Control) myGrid);
+            
             PanelFactoryInfo pinfo = new PanelFactoryInfo(p);
             pinfo.FormGrids.Add(formGrid.RelationshipName, myGrid);
             return pinfo;
