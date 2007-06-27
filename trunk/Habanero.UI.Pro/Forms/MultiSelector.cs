@@ -260,7 +260,7 @@ namespace Habanero.Ui.Forms
 			/// <summary>
             /// Returns a view of the Options collection
             /// </summary>
-            public ReadOnlyCollection<T> OptionsView { get { return new ReadOnlyCollection<T>(_options); } }
+            public ReadOnlyCollection<T> OptionsView { get { return _options.AsReadOnly(); } }
 
             /// <summary>
             /// Sets the list of selected items (right hand side list).
@@ -284,7 +284,7 @@ namespace Habanero.Ui.Forms
             /// <summary>
             /// Returns a view of the Selections collection
             /// </summary>
-            public ReadOnlyCollection<T> SelectionsView { get { return new ReadOnlyCollection<T>(_selections); } }
+            public ReadOnlyCollection<T> SelectionsView { get { return _selections.AsReadOnly(); } }
 
 
             private List<T> OriginalSelections { get { return _originalSelections; } }

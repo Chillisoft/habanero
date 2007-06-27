@@ -40,19 +40,19 @@ namespace Habanero.Bo.ClassDefinition
         /// Adds the related property definition to this key, as long as
         /// a property by that name has not already been added.
         /// </summary>
-        /// <param name="lRelPropDef">The RelPropDef object to be added.</param>
+        /// <param name="relPropDef">The RelPropDef object to be added.</param>
         /// <exception cref="HabaneroArgumentException">Thrown if the
         /// argument passed is null</exception>
-        public virtual void Add(RelPropDef lRelPropDef)
+        public virtual void Add(RelPropDef relPropDef)
         {
-            if (lRelPropDef == null)
+            if (relPropDef == null)
             {
-                throw new HabaneroArgumentException("lPropDef",
+				throw new HabaneroArgumentException("relPropDef",
                                                    "ClassDef-Add. You cannot add a null prop def to a classdef");
             }
-            if (!Dictionary.Contains(lRelPropDef.OwnerPropertyName))
+            if (!Contains(relPropDef))
             {
-                Dictionary.Add(lRelPropDef.OwnerPropertyName, lRelPropDef);
+                Dictionary.Add(relPropDef.OwnerPropertyName, relPropDef);
             }
         }
 
@@ -62,11 +62,21 @@ namespace Habanero.Bo.ClassDefinition
 		/// <param name="relPropDef">The Related Property Definition to remove</param>
 		protected void Remove(RelPropDef relPropDef)
 		{
-			if (Dictionary.Contains(relPropDef.OwnerPropertyName))
+			if (Contains(relPropDef))
 			{
 				base.Dictionary.Remove(relPropDef.OwnerPropertyName);
 			}
 		}
+
+        /// <summary>
+        /// Returns true if the specified property is found.
+        /// </summary>
+		/// <param name="relPropDef">The Related Property Definition to search for</param>
+		/// <returns>Returns true if found, false if not</returns>
+		internal protected bool Contains(RelPropDef relPropDef)
+        {
+			return (Dictionary.Contains(relPropDef.OwnerPropertyName));
+        }
 
         /// <summary>
         /// Returns true if a property with this name is part of this key.

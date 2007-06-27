@@ -22,8 +22,8 @@ namespace Habanero.Bo.ClassDefinition
         /// <summary>
         /// Adds a property definition to this key
         /// </summary>
-        /// <param name="lPropDef">The property definition to add</param>
-        public override void Add(PropDef lPropDef)
+        /// <param name="propDef">The property definition to add</param>
+        public override void Add(PropDef propDef)
         {
             if (Count > 0 && mIsObjectID)
                 //TODO_Err: Raise appropriate Error
@@ -31,20 +31,20 @@ namespace Habanero.Bo.ClassDefinition
                 Console.WriteLine("You cannot have more than one " +
                                   "property for a primary key that represents and object id");
             }
-            base.Add(lPropDef);
+            base.Add(propDef);
         }
 
-		/// <summary>
-		/// Removes a Property definition from the key
-		/// </summary>
-		/// <param name="propDef">The Property Definition to remove</param>
-		protected void Remove(PropDef propDef)
-		{
-			if (Dictionary.Contains(propDef.PropertyName))
-			{
-				base.Dictionary.Remove(propDef.PropertyName);
-			}
-		}
+		///// <summary>
+		///// Removes a Property definition from the key
+		///// </summary>
+		///// <param name="propDef">The Property Definition to remove</param>
+		//protected void Remove(PropDef propDef)
+		//{
+		//    if (Dictionary.Contains(propDef.PropertyName))
+		//    {
+		//        base.Dictionary.Remove(propDef.PropertyName);
+		//    }
+		//}
 
 		#region Properties
 

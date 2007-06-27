@@ -45,7 +45,8 @@ namespace Habanero.Bo.ClassDefinition
 
         /// <summary>
         /// Returns a collection of the key names being stored
-        /// </summary>
+		/// </summary>
+		/// TODO: Hide these members
         public ICollection Keys
         {
             get { return (Dictionary.Keys); }
@@ -54,6 +55,7 @@ namespace Habanero.Bo.ClassDefinition
         /// <summary>
         /// Returns a collection of the values being stored
         /// </summary>
+        /// TODO: Hide these members
         public ICollection Values
         {
             get { return (Dictionary.Values); }
@@ -119,22 +121,33 @@ namespace Habanero.Bo.ClassDefinition
 		/// <param name="propDef">The Property definition to remove</param>
 		protected void Remove(PropDef propDef)
 		{
-			if (Contains(propDef.PropertyName.ToUpper()))
+			if (Contains(propDef))
 			{
 				base.Dictionary.Remove(propDef.PropertyName.ToUpper());
 			}
 		}
 
-        /// <summary>
-        /// Indicates if a property definition with the given key exists
-        /// in the collection.
-        /// </summary>
-        /// <param name="key">The key to match</param>
-        /// <returns>Returns true if found, false if not</returns>
-        public bool Contains(string key)
-        {
-            return (Dictionary.Contains(key.ToUpper()));
-        }
+		/// <summary>
+		/// Indicates if the specified property definition exists
+		/// in the collection.
+		/// </summary>
+		/// <param name="propDef">The Property definition to search for</param>
+		/// <returns>Returns true if found, false if not</returns>
+		protected bool Contains(PropDef propDef)
+		{
+			return (Dictionary.Contains(propDef.PropertyName.ToUpper()));
+		}
+
+		/// <summary>
+		/// Indicates if a property definition with the given key exists
+		/// in the collection.
+		/// </summary>
+		/// <param name="key">The key to match</param>
+		/// <returns>Returns true if found, false if not</returns>
+		public bool Contains(string key)
+		{
+			return (Dictionary.Contains(key.ToUpper()));
+		}
 
         /// <summary>
         /// Creates a business object property collection that mirrors

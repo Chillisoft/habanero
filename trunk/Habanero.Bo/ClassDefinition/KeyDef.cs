@@ -110,26 +110,26 @@ namespace Habanero.Bo.ClassDefinition
         /// originally provided at instantiation of the key definition, then
         /// the new property definition's name will be appended to the key name.
         /// </summary>
-        /// <param name="lPropDef">The PropDef object to add</param>
+        /// <param name="propDef">The PropDef object to add</param>
         /// <exeption cref="HabaneroArgumentException">Will throw an exception
         /// if the argument is null</exeption>
-        public virtual void Add(PropDef lPropDef)
+        public virtual void Add(PropDef propDef)
         {
-            if (lPropDef == null)
+            if (propDef == null)
             {
                 throw new HabaneroArgumentException("lPropDef",
                                                    "ClassDef-Add. You cannot add a null prop def to a classdef");
             }
-            if (!Dictionary.Contains(lPropDef.PropertyName))
+            if (!Contains(propDef))
             {
-                Dictionary.Add(lPropDef.PropertyName, lPropDef);
+                Dictionary.Add(propDef.PropertyName, propDef);
                 if (_buildKeyName)
                 {
                     if (_keyName.Length > 0)
                     {
                         _keyName += "_";
                     }
-                    _keyName += lPropDef.PropertyName;
+                    _keyName += propDef.PropertyName;
                 }
             }
         }
@@ -140,10 +140,21 @@ namespace Habanero.Bo.ClassDefinition
 		/// <param name="propDef">The Property Definition to remove</param>
 		protected void Remove(PropDef propDef)
 		{
-			if (Dictionary.Contains(propDef.PropertyName))
+			if (Contains(propDef))
 			{
 				base.Dictionary.Remove(propDef.PropertyName);
 			}
+		}
+
+		/// <summary>
+		/// Indicates if the specified property definition exists
+		/// in the key.
+		/// </summary>
+		/// <param name="propDef">The Property definition to search for</param>
+		/// <returns>Returns true if found, false if not</returns>
+		protected bool Contains(PropDef propDef)
+		{
+			return (Dictionary.Contains(propDef.PropertyName));
 		}
 
         /// <summary>

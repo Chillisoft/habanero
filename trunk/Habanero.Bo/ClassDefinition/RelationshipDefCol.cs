@@ -19,16 +19,16 @@ namespace Habanero.Bo.ClassDefinition
         /// <summary>
         /// Add an existing relationship to the collection
         /// </summary>
-        /// <param name="lRelationshipDef">The existing relationship to add</param>
-        public void Add(RelationshipDef lRelationshipDef)
+        /// <param name="relationshipDef">The existing relationship to add</param>
+        public void Add(RelationshipDef relationshipDef)
         {
-            if (Dictionary.Contains(lRelationshipDef.RelationshipName))
+            if (Contains(relationshipDef))
             {
                 throw new ArgumentException(String.Format(
                     "A relationship definition with the name '{0}' already " +
-                    "exists.", lRelationshipDef.RelationshipName));
+                    "exists.", relationshipDef.RelationshipName));
             }
-            base.Dictionary.Add(lRelationshipDef.RelationshipName, lRelationshipDef);
+            Dictionary.Add(relationshipDef.RelationshipName, relationshipDef);
         }
 
 		/// <summary>
@@ -37,10 +37,34 @@ namespace Habanero.Bo.ClassDefinition
 		/// <param name="relationshipDef">The Relationship definition to remove</param>
 		protected void Remove(RelationshipDef relationshipDef)
 		{
-			if (Contains(relationshipDef.RelationshipName))
+			if (Contains(relationshipDef))
 			{
-				base.Dictionary.Remove(relationshipDef.RelationshipName);
+				Dictionary.Remove(relationshipDef.RelationshipName);
 			}
+		}
+
+
+		/// <summary>
+		/// Indicates whether the collection contains the relationship
+		/// definition specified
+		/// </summary>
+		/// <param name="relationshipDef">The Relationship definition to search for</param>
+		/// <returns>Returns true if found, false if not</returns>
+		protected bool Contains(RelationshipDef relationshipDef)
+		{
+			return Dictionary.Contains(relationshipDef.RelationshipName);
+		}
+
+
+		/// <summary>
+		/// Indicates whether the collection contains the relationship
+		/// definition specified
+		/// </summary>
+		/// <param name="keyName">The name of the definition</param>
+		/// <returns>Returns true if found, false if not</returns>
+		public bool Contains(string keyName)
+		{
+			return Dictionary.Contains(keyName);
 		}
 
         /// <summary>
@@ -85,15 +109,5 @@ namespace Habanero.Bo.ClassDefinition
             return lRelationshipCol;
         }
 
-        /// <summary>
-        /// Indicates whether the collection contains the relationship
-        /// definition specified
-        /// </summary>
-        /// <param name="keyName">The name of the definition</param>
-        /// <returns>Returns true if found, false if not</returns>
-        public bool Contains(string keyName)
-        {
-            return Dictionary.Contains(keyName);
-        }
     }
 }

@@ -19,29 +19,50 @@ namespace Habanero.Bo.ClassDefinition
         /// <summary>
         /// Adds a key definition to the collection
         /// </summary>
-        /// <param name="lKeyDef"></param>
-        public void Add(KeyDef lKeyDef)
+        /// <param name="keyDef"></param>
+        public void Add(KeyDef keyDef)
         {
-            if (Dictionary.Contains(lKeyDef.KeyName))
+            if (Contains(keyDef))
             {
                 throw new ArgumentException(String.Format(
                     "A key definition with the name '{0}' already " +
-                    "exists.", lKeyDef.KeyName));
+                    "exists.", keyDef.KeyName));
             }
-            base.Dictionary.Add(lKeyDef.KeyName, lKeyDef);
+            base.Dictionary.Add(keyDef.KeyName, keyDef);
         }
 
 		/// <summary>
 		/// Removes a key definition from the collection
 		/// </summary>
-		/// <param name="lKeyDef">The Key Definition to remove</param>
-		protected void Remove(KeyDef lKeyDef)
+		/// <param name="keyDef">The Key Definition to remove</param>
+		protected void Remove(KeyDef keyDef)
 		{
-			if (Dictionary.Contains(lKeyDef.KeyName))
+			if (Contains(keyDef))
 			{
-				base.Dictionary.Remove(lKeyDef.KeyName);
+				base.Dictionary.Remove(keyDef.KeyName);
 			}
 		}
+
+		/// <summary>
+		/// Indicates if the specified Key Definition exists
+		/// in the collection.
+		/// </summary>
+		/// <param name="keyDef">The Key Definition to search for</param>
+		/// <returns>Returns true if found, false if not</returns>
+		protected bool Contains(KeyDef keyDef)
+		{
+			return (Dictionary.Contains(keyDef.KeyName));
+		}
+
+        /// <summary>
+        /// Indicates whether the collection contains the key definition specified
+        /// </summary>
+        /// <param name="keyName">The name of the key definition</param>
+        /// <returns>Returns true if found, false if not</returns>
+        public bool Contains(string keyName)
+        {
+            return Dictionary.Contains(keyName);
+        }
 
         /// <summary>
         /// Provides an indexing facility for the collection so that items
@@ -84,14 +105,5 @@ namespace Habanero.Bo.ClassDefinition
             return lBOKeyCol;
         }
 
-        /// <summary>
-        /// Indicates whether the collection contains the key definition specified
-        /// </summary>
-        /// <param name="keyName">The name of the key definition</param>
-        /// <returns>Returns true if found, false if not</returns>
-        public bool Contains(string keyName)
-        {
-            return Dictionary.Contains(keyName);
-        }
     }
 }
