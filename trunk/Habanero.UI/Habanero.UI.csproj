@@ -44,10 +44,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\ApplicationVersionUpgrader.cs" />
     <Compile Include="Base\BorderLayoutManager.cs" />
+    <Compile Include="Base\ControlFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Base\HabaneroApp.cs" />
     <Compile Include="Base\IBusinessObjectControl.cs" />
     <Compile Include="Forms\ButtonControl.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FileChooser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FormExceptionNotifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Forms\PasswordTextBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Grid\CalendarCell.cs" />
     <Compile Include="Grid\CalendarEditingControl.cs">
@@ -56,7 +70,6 @@
     <Compile Include="Base\CollectionGridDataProvider.cs" />
     <Compile Include="Base\ColumnLayoutManager.cs" />
     <Compile Include="Base\ControlCollection.cs" />
-    <Compile Include="Base\ControlFactory.cs" />
     <Compile Include="Grid\DataGridViewDateTimeColumn.cs" />
     <Compile Include="Grid\DataGridViewNumericUpDownColumn.cs" />
     <Compile Include="Grid\DataViewCompositeFilterClause.cs" />
@@ -68,83 +81,26 @@
     <Compile Include="Grid\SimpleReadOnlyGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Util\DateTimePickerUtil.cs" />
-    <Compile Include="Forms\DbConnectionControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Util\DropShadowForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FileChooser.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Grid\FilterControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Grid\FilterControlEventArgs.cs" />
-    <Compile Include="Grid\FilterInputBoxCollection.cs" />
     <Compile Include="Base\FlowLayoutManager.cs" />
     <Compile Include="Base\IFormControl.cs" />
-    <Compile Include="Forms\FormExceptionNotifier.cs" />
     <Compile Include="Grid\GridBase.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Base\GridLayoutManager.cs" />
-    <Compile Include="Util\HelpAboutBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Grid\IEditableGrid.cs" />
     <Compile Include="Base\IFormDataProvider.cs" />
     <Compile Include="Grid\IGrid.cs" />
     <Compile Include="Base\IGridDataProvider.cs" />
     <Compile Include="Grid\IGridWithButtons.cs" />
-    <Compile Include="Forms\InputFormComboBox.cs" />
-    <Compile Include="Forms\InputFormDate.cs" />
-    <Compile Include="Forms\InputFormDateRange.cs" />
-    <Compile Include="Forms\InputFormFileSelect.cs" />
-    <Compile Include="Forms\InputFormFolderSelect.cs" />
-    <Compile Include="Forms\InputFormInteger.cs" />
-    <Compile Include="Forms\InputFormMoney.cs" />
-    <Compile Include="Forms\InputFormNumeric.cs" />
-    <Compile Include="Forms\InputFormRadioButton.cs" />
-    <Compile Include="Forms\InputFormTextBox.cs" />
     <Compile Include="Grid\IReadOnlyGrid.cs" />
     <Compile Include="Base\ISearch.cs" />
-    <Compile Include="Util\IWizardStep.cs" />
     <Compile Include="Base\LayoutManager.cs" />
     <Compile Include="Grid\NumericUpDownCell.cs" />
     <Compile Include="Grid\NumericUpDownEditingControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\OKCancelDialog.cs" />
-    <Compile Include="Forms\PasswordTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Forms\PictureControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Util\PopupProgressIndicator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Base\SimpleGridDataProvider.cs" />
-    <Compile Include="Util\SplashScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Util\SqlScratchPad.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\OKMessageDialog.cs" />
-    <Compile Include="Util\Wizard.cs" />
-    <Compile Include="Util\WizardStepEventArgs.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Forms\ButtonControl.resx">
-      <DependentUpon>ButtonControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DbConnectionControl.resx">
-      <DependentUpon>DbConnectionControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
@@ -163,6 +119,15 @@
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
       <Name>Habanero.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\ButtonControl.resx">
+      <DependentUpon>ButtonControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

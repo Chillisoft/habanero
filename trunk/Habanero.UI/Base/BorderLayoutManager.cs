@@ -1,3 +1,5 @@
+using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Habanero.Ui.Base
@@ -100,7 +102,12 @@ namespace Habanero.Ui.Base
                 {
                     if (_splitters[i])
                     {
-                        Splitter splt = ControlFactory.CreateSplitter();
+                        Splitter splt = new Splitter();
+                        Color newBackColor =
+                            Color.FromArgb(Math.Min(splt.BackColor.R - 30, 255), Math.Min(splt.BackColor.G - 30, 255),
+                                           Math.Min(splt.BackColor.B - 30, 255));
+                        splt.BackColor = newBackColor;
+
                         splt.Dock = _controls[i].Dock;
                         ManagedControl.Controls.Add(splt);
                     }

@@ -37,6 +37,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\MyTimePicker.dll</HintPath>
     </Reference>
+    <Reference Include="Noogen.WinForms, Version=1.0.2083.946, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Noogen.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -44,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\ApplicationVersionUpgrader.cs" />
     <Compile Include="Forms\BoPanelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -60,6 +63,9 @@
     <Compile Include="Forms\ControlMapper.cs" />
     <Compile Include="Forms\ControlMapperCollection.cs" />
     <Compile Include="Forms\DateTimePickerMapper.cs" />
+    <Compile Include="Forms\DbConnectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Forms\DefaultBOCreator.cs" />
     <Compile Include="Forms\DefaultBOEditor.cs" />
     <Compile Include="Forms\DefaultBOEditorForm.cs">
@@ -69,11 +75,21 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\FormController.cs" />
-    <Compile Include="Base\HabaneroApp.cs" />
+    <Compile Include="Forms\InputFormComboBox.cs" />
+    <Compile Include="Forms\InputFormDate.cs" />
+    <Compile Include="Forms\InputFormDateRange.cs" />
+    <Compile Include="Forms\InputFormFileSelect.cs" />
+    <Compile Include="Forms\InputFormFolderSelect.cs" />
+    <Compile Include="Forms\InputFormInteger.cs" />
+    <Compile Include="Forms\InputFormMoney.cs" />
+    <Compile Include="Forms\InputFormNumeric.cs" />
+    <Compile Include="Forms\InputFormRadioButton.cs" />
+    <Compile Include="Forms\InputFormTextBox.cs" />
     <Compile Include="Forms\ListComboBoxMapper.cs" />
     <Compile Include="Forms\ListViewCollectionMapper.cs" />
     <Compile Include="Forms\LookupComboBoxMapper.cs" />
     <Compile Include="Forms\LookupListNotSetException.cs" />
+    <Compile Include="Forms\MessageBoxDateProvider.cs" />
     <Compile Include="Forms\OKCancelConfirmer.cs" />
     <Compile Include="Forms\MultiSelector.cs">
       <SubType>UserControl</SubType>
@@ -82,8 +98,18 @@
     <Compile Include="Forms\NumericUpDownIntegerMapper.cs" />
     <Compile Include="Forms\NumericUpDownMapper.cs" />
     <Compile Include="Forms\NumericUpDownMoneyMapper.cs" />
+    <Compile Include="Forms\OKCancelDialog.cs" />
+    <Compile Include="Forms\OKMessageDialog.cs" />
     <Compile Include="Forms\PanelFactory.cs" />
     <Compile Include="Forms\PanelFactoryInfo.cs" />
+    <Compile Include="Forms\PictureControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid\FilterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid\FilterControlEventArgs.cs" />
+    <Compile Include="Grid\FilterInputBoxCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\ReadOnlyGridButtonControl.cs">
       <SubType>UserControl</SubType>
@@ -102,8 +128,29 @@
     <Compile Include="Forms\TreeViewTableEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Util\DateTimePickerUtil.cs" />
+    <Compile Include="Util\DropShadowForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Util\HelpAboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Util\IWizardStep.cs" />
+    <Compile Include="Util\PopupProgressIndicator.cs" />
+    <Compile Include="Util\SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Util\SqlScratchPad.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Util\Wizard.cs" />
+    <Compile Include="Util\WizardStepEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\DbConnectionControl.resx">
+      <DependentUpon>DbConnectionControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MultiSelector.resx">
       <DependentUpon>MultiSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -136,7 +183,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Util\" />
+    <Folder Include="Base\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

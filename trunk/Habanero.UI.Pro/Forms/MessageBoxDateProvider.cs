@@ -1,8 +1,9 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Generic;
+using Habanero.Base;
+using Habanero.Ui.Base;
 
-namespace Habanero.Ui.Generic
+namespace Habanero.Ui.Forms
 {
     /// <summary>
     /// Gets a date from the user using a dialog box
