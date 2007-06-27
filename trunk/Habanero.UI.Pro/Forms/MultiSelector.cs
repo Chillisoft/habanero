@@ -205,16 +205,25 @@ namespace Habanero.Ui.Forms
             private List<T> _selections;
             private List<T> _originalSelections;
 
-			internal event EventHandler OptionsChanged;
-			internal event EventHandler SelectionsChanged;
-			internal event EventHandler<ModelEventArgs<T>> OptionAdded;
-			internal event EventHandler<ModelEventArgs<T>> OptionRemoved;
-            internal event EventHandler<ModelEventArgs<T>> Selected;
-            internal event EventHandler<ModelEventArgs<T>> Deselected;
+			public event EventHandler OptionsChanged;
+			public event EventHandler SelectionsChanged;
+			public event EventHandler<ModelEventArgs<T>> OptionAdded;
+			public event EventHandler<ModelEventArgs<T>> OptionRemoved;
+			public event EventHandler<ModelEventArgs<T>> Selected;
+			public event EventHandler<ModelEventArgs<T>> Deselected;
 
-            internal class ModelEventArgs<T> : EventArgs {
+			///<summary>
+			/// The Event Arguements for the Multiselector Model
+			///</summary>
+			///<typeparam name="T"></typeparam>
+			public class ModelEventArgs<T> : EventArgs
+			{
                 private readonly T _item;
 
+                ///<summary>
+				/// The constructor for the Event Arguements for the Multiselector Model
+                ///</summary>
+                ///<param name="item">The item in the model to which the event applies</param>
                 public ModelEventArgs(T item) : base() {
                     _item = item;
                 }
