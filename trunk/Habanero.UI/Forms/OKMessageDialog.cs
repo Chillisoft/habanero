@@ -11,7 +11,7 @@ namespace Habanero.Ui.Forms
     /// TODO ERIC - rename to something like MessageBox or ScrollableMessageBox, 
     /// because textbox implies that you can enter text - or can it be edited?
     /// - add a constructor that provides a default width and height
-    public class TextBoxMessageBox
+    public class OKMessageDialog
     {
         private readonly string _title;
         private readonly int _height;
@@ -26,7 +26,7 @@ namespace Habanero.Ui.Forms
         /// <param name="message">The message to display</param>
         /// <param name="width">The width of the form</param>
         /// <param name="height">The height of the form</param>
-        public TextBoxMessageBox(string title, string message, int width, int height)
+        public OKMessageDialog(string title, string message, int width, int height)
         {
             _message = message;
             _width = width;

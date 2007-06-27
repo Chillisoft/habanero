@@ -74,7 +74,7 @@
     <Compile Include="Forms\ListViewCollectionMapper.cs" />
     <Compile Include="Forms\LookupComboBoxMapper.cs" />
     <Compile Include="Forms\LookupListNotSetException.cs" />
-    <Compile Include="Forms\MessageBoxOKCancelConfirmer.cs" />
+    <Compile Include="Forms\OKCancelConfirmer.cs" />
     <Compile Include="Forms\MultiSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>

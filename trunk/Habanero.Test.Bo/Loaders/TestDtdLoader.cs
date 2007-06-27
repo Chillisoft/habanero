@@ -92,10 +92,10 @@ TestDtd3";
 
             DtdLoader loader = new DtdLoader(textFileLoader, "");
 
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] {"propertydef.dtd"});
+            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] {"property.dtd"});
             mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"class.dtd"});
 
-            String dtdFileContents = loader.LoadDtd("propertydef");
+            String dtdFileContents = loader.LoadDtd("property");
             Assert.AreEqual(dtd2and1 + Environment.NewLine, dtdFileContents);
         }
 

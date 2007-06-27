@@ -61,14 +61,10 @@ namespace Habanero.Ui.Forms
         }
 
         /// <summary>
-        /// Sets up the form.  If you intend to call ShowDialog() immediately,
-        /// there is no need to call this method.
+        /// Sets up the form
         /// </summary>
         /// <returns>Returns the Form object created</returns>
-        /// TODO ERIC - for consistency (cf. InputBox...) and to eliminate
-        /// confusion (users think they need to create then show), 
-        /// combine this method into ShowDialog()
-        public Form CreateDialog()
+        private Form CreateDialog()
         {
             _form = new Form();
 

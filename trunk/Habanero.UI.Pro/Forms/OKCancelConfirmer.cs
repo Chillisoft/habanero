@@ -7,7 +7,7 @@ namespace Habanero.Ui.Forms
     /// Provides a message box giving the user the choice of proceeding with
     /// an option (such as deleting an object) or cancelling
     /// </summary>
-    public class MessageBoxOKCancelConfirmer : IConfirmer
+    public class OKCancelConfirmer : IConfirmer
     {
         /// <summary>
         /// Gets confirmation from the user as to whether they would like to

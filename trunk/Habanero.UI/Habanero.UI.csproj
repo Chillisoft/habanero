@@ -132,7 +132,7 @@
     <Compile Include="Util\SqlScratchPad.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\TextBoxMessageBox.cs" />
+    <Compile Include="Forms\OKMessageDialog.cs" />
     <Compile Include="Util\Wizard.cs" />
     <Compile Include="Util\WizardStepEventArgs.cs" />
   </ItemGroup>
