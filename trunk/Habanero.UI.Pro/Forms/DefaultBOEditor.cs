@@ -21,12 +21,15 @@ namespace Habanero.Ui.Forms
         /// user can edit the data
         /// </summary>
         /// <param name="obj">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returs true if the user chose to save the edits or
         /// false if the user cancelled the edits</returns>
-        public bool EditObject(Object obj)
+        public bool EditObject(Object obj, string uiDefName)
         {
             BusinessObject bo = (BusinessObject) obj;
-            DefaultBOEditorForm form = CreateEditorForm(bo);
+            DefaultBOEditorForm form = CreateEditorForm(bo, uiDefName);
             if (form.ShowDialog() == DialogResult.OK)
             {
                 return true;
@@ -41,10 +44,13 @@ namespace Habanero.Ui.Forms
         /// Creates a form in which a business object can be edited
         /// </summary>
         /// <param name="bo">The business object to edit</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returns a DefaultBOEditorForm object</returns>
-        protected virtual DefaultBOEditorForm CreateEditorForm(BusinessObject bo)
+        protected virtual DefaultBOEditorForm CreateEditorForm(BusinessObject bo, string uiDefName)
         {
-            return new DefaultBOEditorForm(bo);
+            return new DefaultBOEditorForm(bo, uiDefName);
         }
     }
 }

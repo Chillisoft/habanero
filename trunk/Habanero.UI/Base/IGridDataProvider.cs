@@ -22,6 +22,13 @@ namespace Habanero.Ui.Base
         UIGridDef GetUIGridDef();
 
         /// <summary>
+        /// Returns the name of the set of ui definitions to be used,
+        /// as specified by the user in the constructor
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        string GetUIDefName();
+
+        /// <summary>
         /// Sets the parent object to that specified
         /// </summary>
         /// <param name="parentObject">The parent object</param>

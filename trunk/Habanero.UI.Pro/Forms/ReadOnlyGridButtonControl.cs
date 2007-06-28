@@ -64,7 +64,7 @@ namespace Habanero.Ui.Forms
                                                      "assign that through the appropriate constructor.");
                 }
 
-                _objectEditor.EditObject(e.BusinessObject);
+                _objectEditor.EditObject(e.BusinessObject, _readOnlyGrid.GetUIDefName());
             }
         }
 
@@ -89,7 +89,7 @@ namespace Habanero.Ui.Forms
                 }
 
                 //if
-                _objectEditor.EditObject(selectedBo);
+                _objectEditor.EditObject(selectedBo, _readOnlyGrid.GetUIDefName());
                 //				{
                 //					_readOnlyGrid.RefreshRow(selectedBo) ;
                 //				}
@@ -113,7 +113,7 @@ namespace Habanero.Ui.Forms
                                                  "assign that through the appropriate constructor.");
             }
 
-            BusinessObject newObject = (BusinessObject) _objectCreator.CreateObject(this._objectEditor);
+            BusinessObject newObject = (BusinessObject)_objectCreator.CreateObject(this._objectEditor, _readOnlyGrid.GetUIDefName());
             if (newObject != null)
             {
                 _readOnlyGrid.SelectedBusinessObject = null;

@@ -1,5 +1,6 @@
 using System;
 using Habanero.Bo;
+using Habanero.Ui.Base;
 
 namespace Habanero.Ui.Grid
 {
@@ -30,5 +31,11 @@ namespace Habanero.Ui.Grid
         /// The event of a row being double-clicked
         /// </summary>
         event RowDoubleClickedHandler RowDoubleClicked;
+
+        /// <summary>
+        /// Returns the name of the ui 
+        /// </summary>
+        /// <returns>Returns the name of the ui</returns>
+        string GetUIDefName();
     }
 }

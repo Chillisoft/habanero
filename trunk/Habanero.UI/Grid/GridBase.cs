@@ -156,6 +156,15 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
+        /// Returns the name of the ui 
+        /// </summary>
+        /// <returns>Returns the name of the ui</returns>
+        public string GetUIDefName()
+        {
+            return _provider.GetUIDefName();
+        }
+
+        /// <summary>
         /// Calls the DataProviderUpdated() method, passing this instance
         /// as the sender
         /// </summary>

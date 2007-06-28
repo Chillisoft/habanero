@@ -112,6 +112,16 @@ namespace Habanero.Ui.Base
         }
 
         /// <summary>
+        /// Returns the name of the set of ui definitions to be used,
+        /// as specified by the user in the constructor
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        public string GetUIDefName()
+        {
+            return _uiDefName;
+        }
+
+        /// <summary>
         /// This method has not yet been implemented
         /// </summary>
         /// <param name="parentObject"></param>

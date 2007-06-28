@@ -48,6 +48,15 @@ namespace Habanero.Ui.Base
         }
 
         /// <summary>
+        /// Returns an empty string
+        /// </summary>
+        /// <returns>Returns a empty string</returns>
+        public string GetUIDefName()
+        {
+            return "";
+        }
+
+        /// <summary>
         /// This method has not yet been implemented
         /// </summary>
         /// <param name="parentObject"></param>

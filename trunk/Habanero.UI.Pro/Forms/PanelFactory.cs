@@ -29,34 +29,48 @@ namespace Habanero.Ui.Forms
         private EventHandler _emailTextBoxDoubleClickedHandler;
 
         /// <summary>
-        /// Constructor to initialise a new PanelFactory object
+        /// Constructor to initialise a new PanelFactory object, assuming
+        /// the ui form definition is from an unnamed ui definition
         /// </summary>
         /// <param name="bo">The business object to be represented</param>
         public PanelFactory(BusinessObject bo)
         {
-            _boArray = new BusinessObject[1];
-            _boArray[0] = bo;
+            //_boArray = new BusinessObject[1];
+            //_boArray[0] = bo;
             BOMapper mapper = new BOMapper(bo);
             _uiFormDef = mapper.GetUserInterfaceMapper().GetUIFormProperties();
-            _emailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
+            //_emailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
+            InitialiseFactory(bo);
         }
 
         /// <summary>
-        /// A constructor as before, but with a UIFormDef object specified
+        /// A constructor to initialise a new instance, with a UIFormDef object 
+        /// specified
         /// </summary>
-        public PanelFactory(BusinessObject bo, UIFormDef uiFormDef) : this(bo)
+        public PanelFactory(BusinessObject bo, UIFormDef uiFormDef)
         {
             _uiFormDef = uiFormDef;
+            InitialiseFactory(bo);
         }
 
         /// <summary>
         /// A constructor as before, but with a UIDefName specified
         /// </summary>
-        public PanelFactory(BusinessObject bo, string uiDefName) : this(bo)
+        public PanelFactory(BusinessObject bo, string uiDefName)
         {
             BOMapper mapper = new BOMapper(bo);
             _uiFormDef = mapper.GetUserInterfaceMapper(uiDefName).GetUIFormProperties();
-            ;
+            InitialiseFactory(bo);
+        }
+
+        /// <summary>
+        /// Initialises factory components
+        /// </summary>
+        private void InitialiseFactory(BusinessObject bo)
+        {
+            _boArray = new BusinessObject[1];
+            _boArray[0] = bo;
+            _emailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
         }
 
         /// <summary>

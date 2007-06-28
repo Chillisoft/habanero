@@ -29,10 +29,13 @@ namespace Habanero.Ui.Forms
         /// Creates a business object
         /// </summary>
         /// <param name="editor">An object editor</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returns the business object created</returns>
-        public Object CreateObject(IObjectEditor editor)
+        public Object CreateObject(IObjectEditor editor, string uiDefName)
         {
-            return this.CreateObject(editor, null);
+            return this.CreateObject(editor, null, uiDefName);
         }
 
         /// <summary>
@@ -40,15 +43,18 @@ namespace Habanero.Ui.Forms
         /// </summary>
         /// <param name="editor">An object editor</param>
         /// <param name="initialiser">An object initialiser</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returns the business object created</returns>
-        public Object CreateObject(IObjectEditor editor, IObjectInitialiser initialiser)
+        public Object CreateObject(IObjectEditor editor, IObjectInitialiser initialiser, string uiDefName)
         {
             BusinessObject newBo = _classDef.CreateNewBusinessObject();
             if (initialiser != null)
             {
                 initialiser.InitialiseObject(newBo);
             }
-            if (editor.EditObject(newBo))
+            if (editor.EditObject(newBo, uiDefName))
             {
                 return newBo;
             }

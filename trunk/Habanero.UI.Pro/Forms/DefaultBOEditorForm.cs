@@ -96,7 +96,8 @@ namespace Habanero.Ui.Forms
         }
 
         /// <summary>
-        /// Constructor as before, but sets the uiDefName to an empty string
+        /// Constructor as before, but sets the uiDefName to an empty string,
+        /// which uses the ui definition without a specified name attribute
         /// </summary>
         /// <param name="bo">The business object to represent</param>
         public DefaultBOEditorForm(BusinessObject bo)
