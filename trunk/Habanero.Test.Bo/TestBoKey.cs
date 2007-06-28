@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Habanero.Test.Bo
 {
     [TestFixture]
-    public class BOKeyTester
+    public class TestBoKey
     {
         private BOPropCol mBOPropCol1 = new BOPropCol();
         private KeyDef mKeyDef1 = new KeyDef();
