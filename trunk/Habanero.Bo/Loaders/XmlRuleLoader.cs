@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using Habanero.Base;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Util.File;
 
@@ -74,8 +75,34 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             while (_reader.Name == "add")
             {
-                _ruleParameters.Add(_reader.GetAttribute("key"), _reader.GetAttribute("value"));
-                _reader.Read();
+                string keyAtt = _reader.GetAttribute("key");
+                string valueAtt = _reader.GetAttribute("value");
+                if (keyAtt == null || keyAtt.Length == 0)
+                {
+                    throw new InvalidXmlDefinitionException("An 'add' " +
+                        "attribute in the class definitions was missing the " +
+                        "required 'key' attribute, which specifies the name " +
+                        "of the rule to check, such as 'max' for integers.");
+                }
+                if (valueAtt == null || valueAtt.Length == 0)
+                {
+                    throw new InvalidXmlDefinitionException("An 'add' " +
+                        "attribute in the class definitions was missing the " +
+                        "required 'value' attribute, which specifies the value " +
+                        "to compare with for the rule named in the 'key' " +
+                        "attribute.");
+                }
+
+                _ruleParameters.Add(keyAtt, valueAtt);
+                ReadAndIgnoreEndTag();
+            }
+
+            if (_ruleParameters.Count == 0)
+            {
+                throw new InvalidXmlDefinitionException("A 'rule' element in " +
+                    "the class definitions must contain at least one 'add' " +
+                    "element for each component of the rule, such as the " +
+                    "minimum length for an integer.");
             }
         }
 

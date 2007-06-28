@@ -3,7 +3,7 @@
 #include field.dtd
 <!ELEMENT form (tab*, columnLayout*, field*)>
 <!ATTLIST form
-	width CDATA "-1"
-	height CDATA "-1"
+	width CDATA "300"
+	height CDATA "250"
 	title CDATA ""
 >

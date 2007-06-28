@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Habanero.Base;
 using NUnit.Framework;
 
 namespace Habanero.Bo
@@ -44,11 +45,22 @@ namespace Habanero.Bo
         public PropRuleString(string name, string message, Dictionary<string, object> parameters)
 			: base(name, message, parameters)
         {
-            if (parameters.ContainsKey("patternMatch")) _patternMatch = Convert.ToString(parameters["patternMatch"]);
-            if (parameters.ContainsKey("patternMatchErrorMessage"))
-                _patternMatchErrorMessage = Convert.ToString(parameters["patternMatchErrorMessage"]);
-            if (parameters.ContainsKey("minLength")) _minLength = Convert.ToInt32(parameters["minLength"]);
-            if (parameters.ContainsKey("maxLength")) _maxLength = Convert.ToInt32(parameters["maxLength"]);
+            try
+            {
+                if (parameters.ContainsKey("patternMatch"))
+                    _patternMatch = Convert.ToString(parameters["patternMatch"]);
+                if (parameters.ContainsKey("patternMatchErrorMessage"))
+                    _patternMatchErrorMessage = Convert.ToString(parameters["patternMatchErrorMessage"]);
+                if (parameters.ContainsKey("minLength")) _minLength = Convert.ToInt32(parameters["minLength"]);
+                if (parameters.ContainsKey("maxLength")) _maxLength = Convert.ToInt32(parameters["maxLength"]);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("An error occurred " +
+                    "while processing the property rules for a string.  The " +
+                    "likely cause is that one of the attributes in the 'add' " +
+                    "element has an invalid value.", ex);
+            }
         }
 
 

@@ -5,7 +5,13 @@ namespace Habanero.Bo
 {
     /// <summary>
     /// Provides a super-class for property rules that test the validity of
-    /// a property value
+    /// a property value.  If you would like to implement your own property
+    /// rule checker, inherit from this class, override the
+    /// isPropValueValid method and add a constructor with the same arguments
+    /// as this one and pass back these arguments to base().
+    /// In the class definitions, in the 'rule'
+    /// element under the relevant 'property', specify the class and assembly
+    /// of your newly implemented class.
     /// </summary>
     public abstract class PropRuleBase
     {
