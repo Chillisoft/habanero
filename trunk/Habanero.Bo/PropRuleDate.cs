@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using NUnit.Framework;
 
 namespace Habanero.Bo
@@ -52,8 +53,18 @@ namespace Habanero.Bo
         public PropRuleDate(string name, string message, Dictionary<string, object> parameters)
 			: base(name, message, parameters)
         {
-            if (parameters.ContainsKey("min")) _minValue = Convert.ToDateTime(parameters["min"]);
-            if (parameters.ContainsKey("max")) _maxValue = Convert.ToDateTime(parameters["max"]);
+            try
+            {
+                if (parameters.ContainsKey("min")) _minValue = Convert.ToDateTime(parameters["min"]);
+                if (parameters.ContainsKey("max")) _maxValue = Convert.ToDateTime(parameters["max"]);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("An error occurred " +
+                    "while processing the property rules for a date.  The " +
+                    "likely cause is that one of the attributes in the 'add' " +
+                    "element of the class definitiosn has an invalid value.", ex);
+            }
         }
 
         /// <summary>

@@ -30,8 +30,9 @@ namespace Habanero.Test.Bo.Loaders
         public void TestPropRuleIntegerNoValues()
         {
             XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""/>");
+            PropRuleBase rule = loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""><add key=""max"" value=""1""/></rule>");
             Assert.AreEqual(int.MinValue, ((PropRuleInteger)rule).MinValue);
+            rule = loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""><add key=""min"" value=""1""/></rule>");
             Assert.AreEqual(int.MaxValue, ((PropRuleInteger)rule).MaxValue);
         }
 
@@ -49,7 +50,7 @@ namespace Habanero.Test.Bo.Loaders
         public void TestPropRuleString()
         {
             XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(string).Name, @"<rule name=""TestString"" message=""String Test Message""/>");
+            PropRuleBase rule = loader.LoadRule(typeof(string).Name, @"<rule name=""TestString"" message=""String Test Message""><add key=""maxLength"" value=""100""/></rule>");
 
             Assert.AreEqual("PropRuleString", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("TestString", rule.Name, "Rule name is not being read from xml correctly.");
@@ -62,6 +63,7 @@ namespace Habanero.Test.Bo.Loaders
                             "An empty string should be the default pattern match error message according to the dtd.");
             Assert.AreEqual(0, ((PropRuleString)rule).MinLength,
                             "0 should be the default minlength according to the dtd.");
+            rule = loader.LoadRule(typeof(string).Name, @"<rule name=""TestString"" message=""String Test Message""><add key=""minLength"" value=""1""/></rule>");
             Assert.AreEqual(-1, ((PropRuleString)rule).MaxLength,
                             "-1 should be the default maxlength according to the dtd.");
         }
@@ -125,13 +127,9 @@ namespace Habanero.Test.Bo.Loaders
         public void TestPropRuleDecimalNoValues()
         {
             XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(Decimal).Name,
-                        @"<rule name=""TestDec"" >
-                            
-                        </rule>                          
-");
-
+            PropRuleBase rule = loader.LoadRule(typeof(Decimal).Name, @"<rule name=""TestDec""><add key=""max"" value=""1""/></rule>");
             Assert.AreEqual(Decimal.MinValue, ((PropRuleDecimal)rule).MinValue);
+            rule = loader.LoadRule(typeof(Decimal).Name, @"<rule name=""TestDec""><add key=""min"" value=""1""/></rule>");
             Assert.AreEqual(Decimal.MaxValue, ((PropRuleDecimal)rule).MaxValue);
         }     
    
