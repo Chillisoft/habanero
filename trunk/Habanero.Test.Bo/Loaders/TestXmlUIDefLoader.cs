@@ -24,16 +24,16 @@ namespace Habanero.Test.Bo.Loaders
             UIDef def =
                 itsLoader.LoadUIDef(
                     @"
-				<uiDef name=""defTestName1"">
-					<uiFormDef>
-						<uiFormTab name=""testtab"">
-							<uiFormColumn>
-								<uiFormProperty label=""testlabel1"" propertyName=""testpropname1"" controlTypeName=""Button"" mapperTypeName=""testmappertypename1"" />
-								<uiFormProperty label=""testlabel2"" propertyName=""testpropname2"" controlTypeName=""Button"" mapperTypeName=""testmappertypename2"" />
-							</uiFormColumn>
-						</uiFormTab>
-					</uiFormDef>
-				</uiDef> 
+				<ui name=""defTestName1"">
+					<form>
+						<tab name=""testtab"">
+							<columnLayout>
+								<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
+								<field label=""testlabel2"" property=""testpropname2"" type=""Button"" mapperType=""testmappertypename2"" />
+							</columnLayout>
+						</tab>
+					</form>
+				</ui> 
 							");
             Assert.IsNotNull(def.UIFormDef);
             Assert.AreEqual(1, def.UIFormDef.Count);
@@ -45,13 +45,13 @@ namespace Habanero.Test.Bo.Loaders
             UIDef def =
                 itsLoader.LoadUIDef(
                     @"
-				<uiDef name=""defTestName1"">
-					<uiGridDef>
-						<uiGridProperty heading=""testheading1"" propertyName=""testpropname1""  />
-						<uiGridProperty heading=""testheading2"" propertyName=""testpropname2""  />
-						<uiGridProperty heading=""testheading3"" propertyName=""testpropname3""  />
-					</uiGridDef>
-				</uiDef> 
+				<ui name=""defTestName1"">
+					<grid>
+						<column heading=""testheading1"" property=""testpropname1""  />
+						<column heading=""testheading2"" property=""testpropname2""  />
+						<column heading=""testheading3"" property=""testpropname3""  />
+					</grid>
+				</ui> 
 							");
             Assert.IsNotNull(def.UIGridDef);
             Assert.AreEqual(3, def.UIGridDef.Count);
@@ -63,21 +63,21 @@ namespace Habanero.Test.Bo.Loaders
             UIDef def =
                 itsLoader.LoadUIDef(
                     @"
-				<uiDef name=""defTestName1"">
-					<uiGridDef>
-						<uiGridProperty heading=""testheading1"" propertyName=""testpropname1""  />
-						<uiGridProperty heading=""testheading2"" propertyName=""testpropname2""  />
-						<uiGridProperty heading=""testheading3"" propertyName=""testpropname3""  />
-					</uiGridDef>
-					<uiFormDef>
-						<uiFormTab name=""testtab"">
-							<uiFormColumn>
-								<uiFormProperty label=""testlabel1"" propertyName=""testpropname1"" controlTypeName=""Button"" mapperTypeName=""testmappertypename1"" />
-								<uiFormProperty label=""testlabel2"" propertyName=""testpropname2"" controlTypeName=""Button"" mapperTypeName=""testmappertypename2"" />
-							</uiFormColumn>
-						</uiFormTab>
-					</uiFormDef>
-				</uiDef> 
+				<ui name=""defTestName1"">
+					<grid>
+						<column heading=""testheading1"" property=""testpropname1""  />
+						<column heading=""testheading2"" property=""testpropname2""  />
+						<column heading=""testheading3"" property=""testpropname3""  />
+					</grid>
+					<form>
+						<tab name=""testtab"">
+							<columnLayout>
+								<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
+								<field label=""testlabel2"" property=""testpropname2"" type=""Button"" mapperType=""testmappertypename2"" />
+							</columnLayout>
+						</tab>
+					</form>
+				</ui> 
 							");
             Assert.IsNotNull(def.UIFormDef);
             Assert.AreEqual(1, def.UIFormDef.Count);
@@ -91,13 +91,13 @@ namespace Habanero.Test.Bo.Loaders
             UIDef def =
                 itsLoader.LoadUIDef(
                     @"
-				<uiDef name=""defTestName1"">
-					<uiGridDef>
-						<uiGridProperty heading=""testheading1"" propertyName=""testpropname1""  />
-						<uiGridProperty heading=""testheading2"" propertyName=""testpropname2""  />
-						<uiGridProperty heading=""testheading3"" propertyName=""testpropname3""  />
-					</uiGridDef>
-				</uiDef> ");
+				<ui name=""defTestName1"">
+					<grid>
+						<column heading=""testheading1"" property=""testpropname1""  />
+						<column heading=""testheading2"" property=""testpropname2""  />
+						<column heading=""testheading3"" property=""testpropname3""  />
+					</grid>
+				</ui> ");
             Assert.AreEqual("defTestName1", def.Name);
         }
     }

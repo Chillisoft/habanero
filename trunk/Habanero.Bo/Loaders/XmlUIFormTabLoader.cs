@@ -75,29 +75,29 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             _tab.Name = _reader.GetAttribute("name");
             _reader.Read();
-            if (_reader.Name == "uiFormGrid")
-            {
-                XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
-                _tab.UIFormGrid = gridLoader.LoadUIFormGrid(_reader.ReadOuterXml());
-            }
-            else
-            {
+            //if (_reader.Name == "uiFormGrid")
+            //{
+            //    XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
+            //    _tab.UIFormGrid = gridLoader.LoadUIFormGrid(_reader.ReadOuterXml());
+            //}
+            //else
+            //{
                 XmlUIFormColumnLoader loader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
-                while (_reader.Name == "uiFormColumn")
+                while (_reader.Name == "columnLayout")
                 {
                     _tab.Add(loader.LoadUIFormColumn(_reader.ReadOuterXml()));
                 }
 
                 if (_tab.Count == 0)
                 {
-                    throw new InvalidXmlDefinitionException("In a 'uiFormTab' " +
-                        "element, there were no 'uiFormGrid' or 'uiFormColumn' " +
+                    throw new InvalidXmlDefinitionException("In a 'tab' " +
+                        "element, there were no 'columnLayout' " +
                         "elements specified.  Ensure that the element " +
-                        "contains either a 'uiFormGrid' element or one or more " +
-                        "'uiFormColumn' elements, which specify the columns of " +
+                        "contains one or more " +
+                        "'columnLayout' elements, which specify the columns of " +
                         "controls to appear in the editing form.");
                 }
-            }
+           //}
         }
     }
 }

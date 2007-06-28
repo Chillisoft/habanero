@@ -124,7 +124,7 @@ namespace Habanero.Ui.Grid
                     col = (DataGridViewColumn) Activator.CreateInstance(gridProp.GridControlType);
                 }
                 col.Width = (int) (dataColumn.ExtendedProperties["Width"]);
-                col.ReadOnly = gridProp.IsReadOnly;
+                col.ReadOnly = !gridProp.Editable;
                 col.HeaderText = dataColumn.Caption;
                 col.Name = dataColumn.ColumnName;
                 col.DataPropertyName = dataColumn.ColumnName;

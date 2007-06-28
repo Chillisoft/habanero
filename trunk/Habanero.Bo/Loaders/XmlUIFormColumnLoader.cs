@@ -80,24 +80,24 @@ namespace Habanero.Bo.Loaders
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("In a 'uiFormColumn' " + 
+                throw new InvalidXmlDefinitionException("In a 'columnLayout' " + 
                     "element, the 'width' attribute has been given " +
                     "an invalid integer pixel value.", ex);
             }
 
             _reader.Read();
             XmlUIFormPropertyLoader propLoader = new XmlUIFormPropertyLoader(DtdLoader, _defClassFactory);
-            while (_reader.Name == "uiFormProperty")
+            while (_reader.Name == "field")
             {
                 _column.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
             }
 
             if (_column.Count == 0)
             {
-                throw new InvalidXmlDefinitionException("No 'uiFormProperty' " +
-                    "elements were specified in a 'uiFormColumn' element.  Ensure " +
+                throw new InvalidXmlDefinitionException("No 'field' " +
+                    "elements were specified in a 'columnLayout' element.  Ensure " +
                     "that the element " +
-                    "contains one or more 'uiFormProperty' elements, which " +
+                    "contains one or more 'field' elements, which " +
                     "specify the property editing controls to appear in the " +
                     "editing form column.");
             }

@@ -1,6 +1,0 @@
-#include UIFormColumn.dtd
-#include UIFormGrid.dtd
-<!ELEMENT uiFormTab (uiFormGrid*, uiFormColumn*)>
-<!ATTLIST uiFormTab
-	name CDATA #REQUIRED
->

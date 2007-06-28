@@ -1,0 +1,9 @@
+<!ELEMENT column EMPTY>
+<!ATTLIST column
+	heading CDATA #REQUIRED
+	property CDATA #REQUIRED
+	type NMTOKEN	"DataGridViewTextBoxColumn"
+	editable ( true | false ) "true"
+	width CDATA "100"
+	alignment ( left | right | center | centre ) "left"
+>

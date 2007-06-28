@@ -24,10 +24,10 @@ namespace Habanero.Test.Bo.Loaders
             UIFormColumn col =
                 loader.LoadUIFormColumn(
                     @"
-							<uiFormColumn width=""123"">
-								<uiFormProperty label=""testlabel1"" propertyName=""testpropname1"" controlTypeName=""Button"" mapperTypeName=""testmappertypename1"" />
-								<uiFormProperty label=""testlabel2"" propertyName=""testpropname2"" controlTypeName=""Button"" mapperTypeName=""testmappertypename2"" />
-							</uiFormColumn>");
+							<columnLayout width=""123"">
+								<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
+								<field label=""testlabel2"" property=""testpropname2"" type=""Button"" mapperType=""testmappertypename2"" />
+							</columnLayout>");
             Assert.AreEqual(2, col.Count);
             Assert.AreEqual(123, col.Width);
             Assert.AreEqual("testlabel1", col[0].Label);

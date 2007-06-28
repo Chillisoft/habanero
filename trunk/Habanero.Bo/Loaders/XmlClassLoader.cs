@@ -135,7 +135,7 @@ namespace Habanero.Bo.Loaders
 					case "relationship":
 						relationshipDefXmls.Add(_reader.ReadOuterXml());
 						break;
-					case "uiDef":
+					case "ui":
 						uiDefXmls.Add(_reader.ReadOuterXml());
 						break;
 					default:

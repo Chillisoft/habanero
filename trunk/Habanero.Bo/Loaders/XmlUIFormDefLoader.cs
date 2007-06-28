@@ -74,7 +74,7 @@ namespace Habanero.Bo.Loaders
             //_collection.Name = new UIPropertyCollectionName(_collection.Class, _reader.GetAttribute("name"));
 
             _reader.Read();
-            _uiFormDef.Heading = _reader.GetAttribute("heading");
+            _uiFormDef.Title = _reader.GetAttribute("title");
             try
             {
                 _uiFormDef.Width = Convert.ToInt32(_reader.GetAttribute("width"));
@@ -82,7 +82,7 @@ namespace Habanero.Bo.Loaders
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("In a 'uiFormDef' element, " +
+                throw new InvalidXmlDefinitionException("In a 'form' element, " +
                     "either the 'width' or 'height' attribute has been given " +
                     "an invalid integer pixel value.", ex);
             }
@@ -90,15 +90,15 @@ namespace Habanero.Bo.Loaders
 
             _reader.Read();
             XmlUIFormTabLoader loader = new XmlUIFormTabLoader(DtdLoader, _defClassFactory);
-            while (_reader.Name == "uiFormTab")
+            while (_reader.Name == "tab")
             {
                 _uiFormDef.Add(loader.LoadUIFormTab(_reader.ReadOuterXml()));
             }
 
             if (_uiFormDef.Count == 0)
             {
-                throw new InvalidXmlDefinitionException("No 'uiFormTab' " +
-                    "elements were specified in a 'uiFormDef' element.  Ensure " +
+                throw new InvalidXmlDefinitionException("No 'tab' " +
+                    "elements were specified in a 'form' element.  Ensure " +
                     "that the element contains one or more 'uiFormTab' elements, " +
                     "which each define a tab to appear in the editing form for " +
                     "the business object.");

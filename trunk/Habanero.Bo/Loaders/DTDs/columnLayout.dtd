@@ -1,0 +1,5 @@
+#include field.dtd
+<!ELEMENT columnLayout (field+)>
+<!ATTLIST columnLayout
+	width CDATA "-1"
+>

@@ -23,24 +23,24 @@ namespace Habanero.Test.Bo.Loaders
         {
             UIFormProperty uiProp =
                 loader.LoadUIProperty(
-                    @"<uiFormProperty label=""testlabel"" propertyName=""testpropname"" controlTypeName=""Button"" mapperTypeName=""testmappertypename"" isReadOnly=""true"" />");
+                    @"<field label=""testlabel"" property=""testpropname"" type=""Button"" mapperType=""testmappertypename"" editable=""false"" />");
             Assert.AreEqual("testlabel", uiProp.Label);
             Assert.AreEqual("testpropname", uiProp.PropertyName);
             Assert.AreEqual("Button", uiProp.ControlType.Name);
             Assert.AreEqual("testmappertypename", uiProp.MapperTypeName);
-            Assert.AreEqual(true, uiProp.IsReadOnly);
+            Assert.AreEqual(false, uiProp.Editable);
         }
 
         [Test]
         public void TestDefaults()
         {
             UIFormProperty uiProp =
-                loader.LoadUIProperty(@"<uiFormProperty label=""testlabel"" propertyName=""testpropname"" />");
+                loader.LoadUIProperty(@"<field label=""testlabel"" property=""testpropname"" />");
             Assert.AreEqual("testlabel", uiProp.Label);
             Assert.AreEqual("testpropname", uiProp.PropertyName);
             Assert.AreEqual("TextBox", uiProp.ControlType.Name);
             Assert.AreEqual("TextBoxMapper", uiProp.MapperTypeName);
-            Assert.AreEqual(false, uiProp.IsReadOnly);
+            Assert.AreEqual(true, uiProp.Editable);
         }
 
 
@@ -49,9 +49,9 @@ namespace Habanero.Test.Bo.Loaders
         {
             UIFormProperty uiProp =
                 loader.LoadUIProperty(
-                    @"<uiFormProperty label=""testlabel"" propertyName=""testpropname"" ><uiFormPropertyAtt name=""TestAtt"" value=""TestValue"" /><uiFormPropertyAtt name=""TestAtt2"" value=""TestValue2"" /></uiFormProperty>");
-            Assert.AreEqual("TestValue", uiProp.GetAttributeValue("TestAtt"));
-            Assert.AreEqual("TestValue2", uiProp.GetAttributeValue("TestAtt2"));
+                    @"<field label=""testlabel"" property=""testpropname"" ><parameter name=""TestAtt"" value=""TestValue"" /><parameter name=""TestAtt2"" value=""TestValue2"" /></field>");
+            Assert.AreEqual("TestValue", uiProp.GetParameterValue("TestAtt"));
+            Assert.AreEqual("TestValue2", uiProp.GetParameterValue("TestAtt2"));
         }
     }
 }

@@ -17,8 +17,9 @@ namespace Habanero.Bo.Loaders
         private string _propertyName;
         private string _mapperTypeName;
         private Type _controlType;
-        private bool _isReadOnly;
+        private bool _editable;
         private Hashtable _propertyAttributes;
+        private string _mapperTypeAssembly;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -64,9 +65,9 @@ namespace Habanero.Bo.Loaders
         protected override object Create()
         {
 			return _defClassFactory.CreateUIFormProperty(_label, _propertyName, 
-				_controlType, _mapperTypeName, _isReadOnly, _propertyAttributes);
+				_controlType, _mapperTypeName, _editable, _propertyAttributes);
 			//return
-			//    new UIFormProperty(_label, _propertyName, _controlType, _mapperTypeName, _isReadOnly,
+			//    new UIFormProperty(_label, _propertyName, _controlType, _mapperTypeName, _editable,
 			//                       _propertyAttributes);
         }
 
@@ -80,7 +81,8 @@ namespace Habanero.Bo.Loaders
             LoadPropertyName();
             LoadControlType();
             LoadMapperTypeName();
-            LoadIsReadOnly();
+            LoadMapperTypeAssembly();
+            LoadEditable();
             LoadAttributes();
         }
 
@@ -90,7 +92,15 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadMapperTypeName()
         {
-            _mapperTypeName = _reader.GetAttribute("mapperTypeName");
+            _mapperTypeName = _reader.GetAttribute("mapperType");
+        }
+
+        /// <summary>
+        /// Loads the mapper type assembly from the reader.  Called from LoadFromReader();
+        /// </summary>
+        private void LoadMapperTypeAssembly()
+        {
+            _mapperTypeAssembly = _reader.GetAttribute("mapperTypeAssembly");
         }
 
         /// <summary>
@@ -99,8 +109,8 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadControlType()
         {
-            string controlTypeName = _reader.GetAttribute("controlTypeName");
-            string controlAssemblyName = _reader.GetAttribute("controlAssemblyName");
+            string controlTypeName = _reader.GetAttribute("type");
+            string controlAssemblyName = _reader.GetAttribute("assembly");
             try
             {
                 _controlType = TypeLoader.LoadType(controlAssemblyName, controlTypeName);
@@ -108,7 +118,7 @@ namespace Habanero.Bo.Loaders
             catch (Exception ex)
             {
                 throw new InvalidXmlDefinitionException(String.Format(
-                    "While attempting to load a 'uiFormProperty' element, an " +
+                    "While attempting to load a 'field' element, an " +
                     "error occurred while loading the control type. " +
                     "The type supplied was '{0}' and the assembly was '{1}'. " +
                     "Please ensure that the type exists in the assembly provided.",
@@ -122,7 +132,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadPropertyName()
         {
-            _propertyName = _reader.GetAttribute("propertyName");
+            _propertyName = _reader.GetAttribute("property");
         }
 
         /// <summary>
@@ -135,19 +145,19 @@ namespace Habanero.Bo.Loaders
         }
 
         /// <summary>
-        /// Loads the "isReadOnly" attribute from the reader. This method is
+        /// Loads the "edtiable" attribute from the reader. This method is
         /// called by LoadFromReader().
         /// </summary>
-        private void LoadIsReadOnly()
+        private void LoadEditable()
         {
             try
             {
-                _isReadOnly = Convert.ToBoolean(_reader.GetAttribute("isReadOnly"));
+                _editable = Convert.ToBoolean(_reader.GetAttribute("editable"));
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("The 'isReadOnly' attribute " +
-                    "in a 'uiFormProperty' element is invalid. The valid options " +
+                throw new InvalidXmlDefinitionException("The 'editable' attribute " +
+                    "in a 'field' element is invalid. The valid options " +
                     "are 'true' and 'false'.", ex);
             }
         }
@@ -163,7 +173,7 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             System.Console.WriteLine(_reader.Name);
 
-            while (_reader.Name == "uiFormPropertyAtt")
+            while (_reader.Name == "parameter")
             {
                 string attName = _reader.GetAttribute("name");
                 string attValue = _reader.GetAttribute("value");
@@ -171,7 +181,7 @@ namespace Habanero.Bo.Loaders
                     attValue == null || attValue.Length == 0)
                 {
                     throw new InvalidXmlDefinitionException("In a " +
-                        "'uiFormPropertyAtt' element, either the 'name' or " +
+                        "'parameter' element, either the 'name' or " +
                         "'value' attribute has been omitted.");
                 }
 
@@ -182,7 +192,7 @@ namespace Habanero.Bo.Loaders
                 catch (Exception ex)
                 {
                     throw new InvalidXmlDefinitionException("An error occurred " +
-                        "while loading a 'uiFormPropertyAtt' element.  There may " +
+                        "while loading a 'parameter' element.  There may " +
                         "be duplicates with the same 'name' attribute.", ex);
                 }
                 ReadAndIgnoreEndTag();

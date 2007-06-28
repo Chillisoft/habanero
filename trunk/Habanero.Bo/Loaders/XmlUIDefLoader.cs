@@ -81,12 +81,12 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             _name = _reader.GetAttribute("name");
             _reader.Read();
-            if (_reader.Name == "uiGridDef")
+            if (_reader.Name == "grid")
             {
                 XmlUIGridDefLoader loader = new XmlUIGridDefLoader(DtdLoader, _defClassFactory);
                 _uiGridDef = loader.LoadUIGridDef(_reader.ReadOuterXml());
             }
-            if (_reader.Name == "uiFormDef")
+            if (_reader.Name == "form")
             {
                 XmlUIFormDefLoader loader = new XmlUIFormDefLoader(DtdLoader, _defClassFactory);
                 _uiFormDef = loader.LoadUIFormDef(_reader.ReadOuterXml());

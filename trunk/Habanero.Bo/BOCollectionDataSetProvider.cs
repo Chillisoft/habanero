@@ -46,7 +46,7 @@ namespace Habanero.Bo
                 // TODO: check that property exists in object.
                 column.ColumnName = uiProperty.PropertyName;
                 column.Caption = uiProperty.Heading;
-                column.ReadOnly = uiProperty.IsReadOnly;
+                column.ReadOnly = !uiProperty.Editable;
                 column.ExtendedProperties.Add("LookupListSource",
                                               _collection.ClassDef.GetLookupListSource(uiProperty.PropertyName));
                 column.ExtendedProperties.Add("Width", uiProperty.Width);

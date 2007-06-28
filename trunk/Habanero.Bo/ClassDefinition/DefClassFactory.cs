@@ -114,9 +114,9 @@ namespace Habanero.Bo.ClassDefinition
 		}
 
 		public UIFormProperty CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName,
-		                                           bool isReadOnly, Hashtable propertyAttributes)
+		                                           bool editable, Hashtable propertyAttributes)
 		{
-			return new UIFormProperty(label, propertyName, controlType, mapperTypeName, isReadOnly, propertyAttributes);
+			return new UIFormProperty(label, propertyName, controlType, mapperTypeName, editable, propertyAttributes);
 		}
 
 		public UIFormTab CreateUIFormTab()
@@ -129,10 +129,10 @@ namespace Habanero.Bo.ClassDefinition
 			return new UIGridDef();
 		}
 
-		public UIGridProperty CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool isReadOnly,
+		public UIGridProperty CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool editable,
 		                                           int width, UIGridProperty.PropAlignment alignment)
 		{
-			return new UIGridProperty(heading, propertyName, gridControlType, isReadOnly, width, alignment);
+			return new UIGridProperty(heading, propertyName, gridControlType, editable, width, alignment);
 		}
 
 		public PropDefCol CreatePropDefCol()

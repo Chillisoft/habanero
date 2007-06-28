@@ -24,10 +24,10 @@ namespace Habanero.Test.Bo.Loaders
             UIGridDef def =
                 loader.LoadUIGridDef(
                     @"
-					<uiGridDef>
-						<uiGridProperty heading=""testheading1"" propertyName=""testpropname1""  />
-						<uiGridProperty heading=""testheading2"" propertyName=""testpropname2""  />
-					</uiGridDef>");
+					<grid>
+						<column heading=""testheading1"" property=""testpropname1""  />
+						<column heading=""testheading2"" property=""testpropname2""  />
+					</grid>");
             Assert.AreEqual(2, def.Count);
             Assert.AreEqual("testheading1", def[0].Heading);
             Assert.AreEqual("testheading2", def[1].Heading);

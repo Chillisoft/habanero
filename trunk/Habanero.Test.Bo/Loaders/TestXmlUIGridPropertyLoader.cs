@@ -24,7 +24,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             UIGridProperty uiProp =
                 loader.LoadUIProperty(
-                    @"<uiGridProperty heading=""testheading"" propertyName=""testpropname"" gridControlTypeName=""DataGridViewCheckBoxColumn"" width=""40"" />");
+                    @"<column heading=""testheading"" property=""testpropname"" type=""DataGridViewCheckBoxColumn"" width=""40"" />");
             Assert.AreEqual("testheading", uiProp.Heading);
             Assert.AreEqual("testpropname", uiProp.PropertyName);
             Assert.AreEqual(40, uiProp.Width);
@@ -35,7 +35,7 @@ namespace Habanero.Test.Bo.Loaders
         public void TestDefaults()
         {
             UIGridProperty uiProp =
-                loader.LoadUIProperty(@"<uiGridProperty heading=""testheading"" propertyName=""testpropname"" />");
+                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" />");
             Assert.AreSame(typeof (DataGridViewTextBoxColumn), uiProp.GridControlType);
             Assert.AreEqual(100, uiProp.Width);
         }

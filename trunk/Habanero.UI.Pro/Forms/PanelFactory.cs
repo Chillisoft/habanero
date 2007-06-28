@@ -137,10 +137,10 @@ namespace Habanero.Ui.Forms
         /// - improve comments above
         private PanelFactoryInfo CreateOnePanel(UIFormTab uiFormTab)
         {
-            if (uiFormTab.UIFormGrid != null)
-            {
-                return CreatePanelWithGrid(uiFormTab.UIFormGrid);
-            }
+            //if (uiFormTab.UIFormGrid != null)
+            //{
+            //    return CreatePanelWithGrid(uiFormTab.UIFormGrid);
+            //}
             Panel p = new Panel();
             GridLayoutManager manager = new GridLayoutManager(p);
             int rowCount = 0;
@@ -188,7 +188,7 @@ namespace Habanero.Ui.Forms
                     controls[currentRow, currentColumn + 0] =
                         new GridLayoutManager.ControlInfo(ControlFactory.CreateLabel(property.Label, isCompulsory));
                     Control ctl = ControlFactory.CreateControl(property.ControlType);
-                    ctl.Enabled = !property.IsReadOnly;
+                    ctl.Enabled = property.Editable;
                     if (!ctl.Enabled)
                     {
                         ctl.ForeColor = Color.Black;
@@ -203,9 +203,9 @@ namespace Habanero.Ui.Forms
                     }
                     if (ctl is TextBox)
                     {
-                        if (property.GetAttributeValue("numLines") != null)
+                        if (property.GetParameterValue("numLines") != null)
                         {
-                            int numLines = Convert.ToInt32(property.GetAttributeValue("numLines"));
+                            int numLines = Convert.ToInt32(property.GetParameterValue("numLines"));
                             if (numLines > 1)
                             {
                                 TextBox tb = (TextBox) ctl;
@@ -214,9 +214,9 @@ namespace Habanero.Ui.Forms
                                 tb.ScrollBars = ScrollBars.Vertical;
                             }
                         }
-                        if (property.GetAttributeValue("isEmail") != null)
+                        if (property.GetParameterValue("isEmail") != null)
                         {
-                            bool isEmail = Convert.ToBoolean(property.GetAttributeValue("isEmail"));
+                            bool isEmail = Convert.ToBoolean(property.GetParameterValue("isEmail"));
                             if (isEmail)
                             {
                                 TextBox tb = (TextBox) ctl;
@@ -227,9 +227,9 @@ namespace Habanero.Ui.Forms
                     if (ctl is DateTimePicker)
                     {
                         DateTimePicker editor = (DateTimePicker) ctl;
-                        //if (property.GetAttributeValue("displayDatePicker") != null )
+                        //if (property.GetParameterValue("displayDatePicker") != null )
                         //{
-                        //    bool isDropDown = Convert.ToBoolean(property.GetAttributeValue("displayDatePicker") ) ;
+                        //    bool isDropDown = Convert.ToBoolean(property.GetParameterValue("displayDatePicker") ) ;
                         //    if (!isDropDown) 
                         //    {
                         //        editor.DropDownButtonDisplayStyle = ButtonDisplayStyle.Never ; 
@@ -244,22 +244,22 @@ namespace Habanero.Ui.Forms
                         upDown.Enter += new EventHandler(UpDownEnterHandler);
                     }
                     ControlMapper ctlMapper =
-                        ControlMapper.Create(property.MapperTypeName, ctl, property.PropertyName, property.IsReadOnly);
-                    ctlMapper.SetPropertyAttributes(property.Attributes);
+                        ControlMapper.Create(property.MapperTypeName, ctl, property.PropertyName,  !property.Editable);
+                    ctlMapper.SetPropertyAttributes(property.Parameters);
                     controlMappers.Add(ctlMapper);
                     ctlMapper.BusinessObject = _boArray[0];
 
                     int colSpan = 1;
-                    if (property.GetAttributeValue("colSpan") != null)
+                    if (property.GetParameterValue("colSpan") != null)
                     {
-                        colSpan = Convert.ToInt32(property.GetAttributeValue("colSpan"));
+                        colSpan = Convert.ToInt32(property.GetParameterValue("colSpan"));
                     }
                     colSpan = (colSpan - 1)*2 + 1; // must span label columns too
 
                     int rowSpan = 1;
-                    if (property.GetAttributeValue("rowSpan") != null)
+                    if (property.GetParameterValue("rowSpan") != null)
                     {
-                        rowSpan = Convert.ToInt32(property.GetAttributeValue("rowSpan"));
+                        rowSpan = Convert.ToInt32(property.GetParameterValue("rowSpan"));
                     }
                     if (rowSpan == 1)
                     {
@@ -352,38 +352,38 @@ namespace Habanero.Ui.Forms
             }
         }
 
-        /// <summary>
-        /// Creates a panel with a grid containing the business object
-        /// information
-        /// </summary>
-        /// <param name="formGrid">The grid to fill</param>
-        /// <returns>Returns the object containing the panel</returns>
-        private PanelFactoryInfo CreatePanelWithGrid(UIFormGrid formGrid)
-        {
-            IGrid myGrid = (IGrid) Activator.CreateInstance(formGrid.GridType);
+        ///// <summary>
+        ///// Creates a panel with a grid containing the business object
+        ///// information
+        ///// </summary>
+        ///// <param name="formGrid">The grid to fill</param>
+        ///// <returns>Returns the object containing the panel</returns>
+        //private PanelFactoryInfo CreatePanelWithGrid(UIFormGrid formGrid)
+        //{
+        //    IGrid myGrid = (IGrid) Activator.CreateInstance(formGrid.GridType);
             
-            BusinessObject bo = _boArray[0];
-            ClassDef classDef = ClassDef.GetClassDefCol[bo.GetType()];
-            myGrid.ObjectInitialiser =
-                new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
-                                                  formGrid.CorrespondingRelationshipName);
+        //    BusinessObject bo = _boArray[0];
+        //    ClassDef classDef = ClassDef.GetClassDefCol[bo.GetType()];
+        //    myGrid.ObjectInitialiser =
+        //        new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
+        //                                          formGrid.CorrespondingRelationshipName);
             
-            BusinessObjectCollection collection =
-                bo.Relationships.GetRelatedBusinessObjectCol(formGrid.RelationshipName);
-            foreach (UIGridProperty property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
-            {
-                //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
-            }
+        //    BusinessObjectCollection collection =
+        //        bo.Relationships.GetRelatedBusinessObjectCol(formGrid.RelationshipName);
+        //    foreach (UIGridProperty property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
+        //    {
+        //        //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
+        //    }
 
-            myGrid.SetGridDataProvider(new SimpleGridDataProvider(collection,
-                                           collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties()));
-            ((Control) myGrid).Dock = DockStyle.Fill;
-            Panel p = ControlFactory.CreatePanel(formGrid.RelationshipName );
-            p.Controls.Add((Control) myGrid);
+        //    myGrid.SetGridDataProvider(new SimpleGridDataProvider(collection,
+        //                                   collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties()));
+        //    ((Control) myGrid).Dock = DockStyle.Fill;
+        //    Panel p = ControlFactory.CreatePanel(formGrid.RelationshipName );
+        //    p.Controls.Add((Control) myGrid);
             
-            PanelFactoryInfo pinfo = new PanelFactoryInfo(p);
-            pinfo.FormGrids.Add(formGrid.RelationshipName, myGrid);
-            return pinfo;
-        }
+        //    PanelFactoryInfo pinfo = new PanelFactoryInfo(p);
+        //    pinfo.FormGrids.Add(formGrid.RelationshipName, myGrid);
+        //    return pinfo;
+        //}
     }
 }

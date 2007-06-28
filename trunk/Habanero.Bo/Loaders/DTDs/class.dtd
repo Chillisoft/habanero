@@ -3,8 +3,8 @@
 #include property.dtd
 #include relationship.dtd
 #include superClass.dtd
-#include UIDef.dtd
-<!ELEMENT class (superClass?, property*, key*, primaryKey?, relationship*, uiDef*)>
+#include ui.dtd
+<!ELEMENT class (superClass?, property*, key*, primaryKey?, relationship*, ui*)>
 <!ATTLIST class
 		name NMTOKEN #REQUIRED
 		assembly NMTOKEN #REQUIRED

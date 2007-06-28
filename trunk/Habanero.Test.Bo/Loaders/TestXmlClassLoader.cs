@@ -263,15 +263,15 @@ namespace Habanero.Test.Bo.Loaders
 					<primaryKey>
 						<prop name=""TestProp"" />
 					</primaryKey>
-					<uiDef>
-						<uiFormDef>
-							<uiFormTab name=""testtab"">
-								<uiFormColumn>
-									<uiFormProperty label=""Test Prop"" propertyName=""TestProp"" />
-								</uiFormColumn>
-							</uiFormTab>
-						</uiFormDef>
-					</uiDef>
+					<ui>
+						<form>
+							<tab name=""testtab"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
 				</class>
 			");
             UIDef uiDef = def.UIDefCol["default"];

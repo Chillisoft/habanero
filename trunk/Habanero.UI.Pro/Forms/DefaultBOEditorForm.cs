@@ -84,7 +84,7 @@ namespace Habanero.Ui.Forms
             _buttons.AddButton("&Cancel", new EventHandler(CancelButtonHandler));
             _buttons.AddButton("&OK", new EventHandler(OKButtonHandler)).NotifyDefault(true);
  
-            this.Text = def.Heading;
+            this.Text = def.Title;
             this.Height = def.Height;
             this.Width = def.Width;
             this.MinimizeBox = false;

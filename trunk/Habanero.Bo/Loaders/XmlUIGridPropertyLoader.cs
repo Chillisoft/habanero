@@ -17,7 +17,7 @@ namespace Habanero.Bo.Loaders
         private string _heading;
         private string _propertyName;
         private Type _gridControlType;
-        private bool _isReadOnly;
+        private bool _editable;
         private int _width;
         private UIGridProperty.PropAlignment _alignment;
 
@@ -65,9 +65,9 @@ namespace Habanero.Bo.Loaders
         protected override object Create()
         {
 			return _defClassFactory.CreateUIGridProperty(_heading, _propertyName, 
-				_gridControlType, _isReadOnly, _width, _alignment);
+				_gridControlType, _editable, _width, _alignment);
 			//return
-			//    new UIGridProperty(_heading, _propertyName, _gridControlType, _isReadOnly, _width,
+			//    new UIGridProperty(_heading, _propertyName, _gridControlType, _editable, _width,
 			//                       _alignment);
         }
 
@@ -93,12 +93,12 @@ namespace Habanero.Bo.Loaders
         {
             try
             {
-                _isReadOnly = Convert.ToBoolean(_reader.GetAttribute("isReadOnly"));
+                _editable = Convert.ToBoolean(_reader.GetAttribute("editable"));
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("The 'isReadOnly' attribute " +
-                    "in a 'uiGridProperty' element is invalid. The valid options " +
+                throw new InvalidXmlDefinitionException("The 'editable' attribute " +
+                    "in a 'column' element is invalid. The valid options " +
                     "are 'true' and 'false'.", ex);
             }
         }
@@ -110,7 +110,7 @@ namespace Habanero.Bo.Loaders
         private void LoadGridControlType()
         {
             string assemblyName;
-            string className = _reader.GetAttribute("gridControlTypeName");
+            string className = _reader.GetAttribute("type");
             if (className == "DataGridViewTextBoxColumn" || className == "DataGridViewCheckBoxColumn" ||
                 className == "DataGridViewComboBoxColumn")
             {
@@ -127,8 +127,8 @@ namespace Habanero.Bo.Loaders
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("In a 'uiGridProperty' " +
-                    "element, the 'gridControlTypeName' attribute has an invalid " +
+                throw new InvalidXmlDefinitionException("In a 'column' " +
+                    "element, the 'type' attribute has an invalid " +
                     "type. The available options are: DataGridViewTextBoxColumn, " +
                     "DataGridViewCheckBoxColumn, DataGridViewComboBoxColumn and " +
                     "DataGridViewDateTimeColumn.", ex);
@@ -141,11 +141,11 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadPropertyName()
         {
-            _propertyName = _reader.GetAttribute("propertyName");
+            _propertyName = _reader.GetAttribute("property");
             if (_propertyName == null || _propertyName.Length == 0)
             {
-                throw new InvalidXmlDefinitionException("In a 'uiGridProperty' " +
-                    "element, the 'propertyName' attribute was not specified. This " +
+                throw new InvalidXmlDefinitionException("In a 'column' " +
+                    "element, the 'property' attribute was not specified. This " +
                     "attribute specifies which property of the class to display " +
                     "in the column.");
             }
@@ -160,7 +160,7 @@ namespace Habanero.Bo.Loaders
             _heading = _reader.GetAttribute("heading");
             if (_heading == null || _heading.Length == 0)
             {
-                throw new InvalidXmlDefinitionException("In a 'uiGridProperty' " +
+                throw new InvalidXmlDefinitionException("In a 'column' " +
                     "element, the 'heading' attribute was not specified. This " +
                     "attribute sets the heading of the column as seen by the user.");
             }
@@ -179,7 +179,7 @@ namespace Habanero.Bo.Loaders
             catch (Exception ex)
             {
                 throw new InvalidXmlDefinitionException("In the 'width' attribute " +
-                    "of a 'uiGridProperty' element, the value provided was " +
+                    "of a 'column' element, the value provided was " +
                     "invalid.  This should be an integer value in pixels.", ex);
             }
         }

@@ -257,7 +257,6 @@
     <Compile Include="Loaders\XmlUIDefLoader.cs" />
     <Compile Include="Loaders\XmlUIFormColumnLoader.cs" />
     <Compile Include="Loaders\XmlUIFormDefLoader.cs" />
-    <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="Loaders\XmlUIFormPropertyLoader.cs" />
     <Compile Include="Loaders\XmlUIFormTabLoader.cs" />
     <Compile Include="Loaders\XmlUIGridDefLoader.cs" />
@@ -337,24 +336,22 @@
     <None Include="Loaders\DTDs\businessObjectLookupList.dtd" />
     <None Include="Loaders\DTDs\class.dtd" />
     <None Include="Loaders\DTDs\classes.dtd" />
+    <None Include="Loaders\DTDs\column.dtd" />
+    <None Include="Loaders\DTDs\columnLayout.dtd" />
     <None Include="Loaders\DTDs\databaseLookupList.dtd" />
-    <None Include="Loaders\DTDs\GridPropertyCollection.dtd" />
+    <None Include="Loaders\DTDs\field.dtd" />
+    <None Include="Loaders\DTDs\form.dtd" />
+    <None Include="Loaders\DTDs\grid.dtd" />
     <None Include="Loaders\DTDs\key.dtd" />
+    <None Include="Loaders\DTDs\parameter.dtd" />
     <None Include="Loaders\DTDs\primaryKey.dtd" />
     <None Include="Loaders\DTDs\Prop.dtd" />
     <None Include="Loaders\DTDs\property.dtd" />
     <None Include="Loaders\DTDs\relationship.dtd" />
     <None Include="Loaders\DTDs\simpleLookupList.dtd" />
     <None Include="Loaders\DTDs\superClass.dtd" />
-    <None Include="Loaders\DTDs\UIDef.dtd" />
-    <None Include="Loaders\DTDs\UIFormColumn.dtd" />
-    <None Include="Loaders\DTDs\UIFormDef.dtd" />
-    <None Include="Loaders\DTDs\UIFormGrid.dtd" />
-    <None Include="Loaders\DTDs\UIFormProperty.dtd" />
-    <None Include="Loaders\DTDs\UIFormPropertyAtt.dtd" />
-    <None Include="Loaders\DTDs\UIFormTab.dtd" />
-    <None Include="Loaders\DTDs\UIGridDef.dtd" />
-    <None Include="Loaders\DTDs\UIGridProperty.dtd" />
+    <None Include="Loaders\DTDs\tab.dtd" />
+    <None Include="Loaders\DTDs\ui.dtd" />
     <None Include="Loaders\DTDs\Rule.dtd" />
   </ItemGroup>
   <ItemGroup>

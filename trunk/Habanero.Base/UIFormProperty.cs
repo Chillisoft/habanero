@@ -13,8 +13,8 @@ namespace Habanero.Base
         private string _propertyName;
         private string _mapperTypeName;
         private Type _controlType;
-        private bool _isReadOnly;
-        private readonly Hashtable _propertyAttributes;
+        private bool _editable;
+        private readonly Hashtable _parameters;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -23,17 +23,17 @@ namespace Habanero.Base
         /// <param name="propertyName">The property name</param>
         /// <param name="controlType">The control type</param>
         /// <param name="mapperTypeName">The mapper type name</param>
-        /// <param name="isReadOnly">Whether the control is read-only (cannot
+        /// <param name="editable">Whether the control is read-only (cannot
         /// be edited directly)</param>
-        /// <param name="propertyAttributes">The property attributes</param>
+        /// <param name="parameters">The property attributes</param>
         public UIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName,
-                              bool isReadOnly, Hashtable propertyAttributes)
+                              bool editable, Hashtable parameters)
         {
             this._label = label;
             this._propertyName = propertyName;
             this._mapperTypeName = mapperTypeName;
-            this._isReadOnly = isReadOnly;
-            this._propertyAttributes = propertyAttributes;
+            this._editable = editable;
+            this._parameters = parameters;
             this._controlType = controlType;
         }
 
@@ -70,24 +70,23 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Indicates whether the control is read-only (cannot
-        /// be edited directly)
+        /// Indicates whether the control is editable
         /// </summary>
-        public bool IsReadOnly
+        public bool Editable
         {
-            get { return _isReadOnly; }
+            get { return _editable; }
         }
 
         /// <summary>
-        /// Returns the attribute value for the name provided
+        /// Returns the parameter value for the name provided
         /// </summary>
-        /// <param name="attName">The attribute name</param>
-        /// <returns>Returns the attribute value or null if not found</returns>
-        public object GetAttributeValue(string attName)
+        /// <param name="parameterName">The parameter name</param>
+        /// <returns>Returns the parameter value or null if not found</returns>
+        public object GetParameterValue(string parameterName)
         {
-            if (this._propertyAttributes.ContainsKey(attName))
+            if (this._parameters.ContainsKey(parameterName))
             {
-                return this._propertyAttributes[attName];
+                return this._parameters[parameterName];
             }
             else
             {
@@ -98,9 +97,9 @@ namespace Habanero.Base
         /// <summary>
         /// Returns the Hashtable containing the property attributes
         /// </summary>
-        public Hashtable Attributes
+        public Hashtable Parameters
         {
-            get { return this._propertyAttributes; }
+            get { return this._parameters; }
         }
     }
 }

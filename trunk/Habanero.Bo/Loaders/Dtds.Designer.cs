@@ -64,10 +64,10 @@ namespace Habanero.Bo.Loaders {
         ///   Looks up a localized string similar to #include key.dtd
         ///#include primaryKey.dtd
         ///#include property.dtd
-        ///#include RelationshipDef.dtd
+        ///#include relationship.dtd
         ///#include superClass.dtd
-        ///#include UIDef.dtd
-        ///&lt;!ELEMENT class (superClass?, property*, key*, primaryKey?, relationshipDef*, uiDef*)&gt;
+        ///#include ui.dtd
+        ///&lt;!ELEMENT class (superClass?, property*, key*, primaryKey?, relationship*, ui*)&gt;
         ///&lt;!ATTLIST class
         ///		name NMTOKEN #REQUIRED
         ///		assembly NMTOKEN #REQUIRED
@@ -107,6 +107,37 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!ELEMENT column EMPTY&gt;
+        ///&lt;!ATTLIST column
+        ///	heading CDATA #REQUIRED
+        ///	property CDATA #REQUIRED
+        ///	type NMTOKEN	&quot;DataGridViewTextBoxColumn&quot;
+        ///	editable ( true | false ) &quot;true&quot;
+        ///	width CDATA &quot;100&quot;
+        ///	alignment ( left | right | center | centre ) &quot;left&quot;
+        ///&gt;.
+        /// </summary>
+        internal static string column {
+            get {
+                return ResourceManager.GetString("column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #include field.dtd
+        ///&lt;!ELEMENT columnLayout (field+)&gt;
+        ///&lt;!ATTLIST columnLayout
+        ///	width CDATA &quot;-1&quot;
+        ///&gt;
+        ///.
+        /// </summary>
+        internal static string columnLayout {
+            get {
+                return ResourceManager.GetString("columnLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!ELEMENT databaseLookupList EMPTY&gt;
         ///&lt;!ATTLIST databaseLookupList
         ///	sql CDATA #REQUIRED
@@ -121,15 +152,47 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #include GridProperty.dtd
-        ///&lt;!ELEMENT gridPropertyCollection (gridProperty+)&gt;
-        ///&lt;!ATTLIST gridPropertyCollection
-        ///	name NMTOKEN #REQUIRED
+        ///   Looks up a localized string similar to #include UIFormPropertyAtt.dtd
+        ///&lt;!ELEMENT field (uiFormPropertyAtt*)&gt;
+        ///&lt;!ATTLIST field
+        ///	label CDATA #REQUIRED
+        ///	property NMTOKEN #REQUIRED
+        ///	type NMTOKEN	&quot;TextBox&quot;
+        ///	assembly NMTOKEN &quot;System.Windows.Forms&quot;
+        ///	mapperType NMTOKEN &quot;TextBoxMapper&quot;
+        ///  mapperAssembly NMTOKEN #IMPLIED
+        ///  editable ( true | false ) &quot;true&quot;
         ///&gt;.
         /// </summary>
-        internal static string GridPropertyCollection {
+        internal static string field {
             get {
-                return ResourceManager.GetString("GridPropertyCollection", resourceCulture);
+                return ResourceManager.GetString("field", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #include tab.dtd
+        ///&lt;!ELEMENT form (tab+)&gt;
+        ///&lt;!ATTLIST form
+        ///	width CDATA &quot;-1&quot;
+        ///	height CDATA &quot;-1&quot;
+        ///	title CDATA &quot;&quot;
+        ///&gt;
+        ///.
+        /// </summary>
+        internal static string form {
+            get {
+                return ResourceManager.GetString("form", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #include column.dtd
+        ///&lt;!ELEMENT grid (column+)&gt;.
+        /// </summary>
+        internal static string grid {
+            get {
+                return ResourceManager.GetString("grid", resourceCulture);
             }
         }
         
@@ -145,6 +208,19 @@ namespace Habanero.Bo.Loaders {
         internal static string key {
             get {
                 return ResourceManager.GetString("key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!ELEMENT parameter EMPTY&gt;
+        ///&lt;!ATTLIST parameter
+        ///	name NMTOKEN #REQUIRED
+        ///	value CDATA #REQUIRED
+        ///&gt;.
+        /// </summary>
+        internal static string parameter {
+            get {
+                return ResourceManager.GetString("parameter", resourceCulture);
             }
         }
         
@@ -198,20 +274,21 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT relationship (relKeyDef)&gt;
+        ///   Looks up a localized string similar to &lt;!ELEMENT relationship (relatedProperty+)&gt;
         ///&lt;!ATTLIST relationship
         ///	name NMTOKEN #REQUIRED
         ///	type (single | multiple) #REQUIRED
-        ///	relatedType NMTOKEN #REQUIRED
+        ///	relatedClass NMTOKEN #REQUIRED
         ///	relatedAssembly	NMTOKEN #REQUIRED
-        ///	keepReferenceToRelatedObject ( true | false ) &quot;true&quot;
+        ///	keepReference ( true | false ) &quot;true&quot;
         ///	orderBy CDATA &quot;&quot;
-        ///	minNoOfRelatedObjects NMTOKEN &quot;0&quot;
-        ///	maxNoOfRelatedObjects NMTOKEN &quot;-1&quot;
-        ///	deleteParentAction ( DeleteRelatedObjects | DereferenceRelatedObjects | PreventDeleteParent ) &quot;PreventDeleteParent&quot;
+        ///	deleteAction ( DeleteRelated | DereferenceRelated | Prevent ) &quot;Prevent&quot;
         ///&gt;
-        ///	&lt;!ELEMENT relKeyDef (relProp+)&gt;
-        ///		&lt;!ELEMENT relProp [rest of string was truncated]&quot;;.
+        ///		&lt;!ELEMENT relatedProperty EMPTY&gt;
+        ///    &lt;!ATTLIST relatedProperty
+        ///			property NMTOKEN #REQUIRED
+        ///			relatedProperty NMTOKEN #REQUIRED
+        ///		&gt;.
         /// </summary>
         internal static string relationship {
             get {
@@ -269,134 +346,30 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #include UIGridDef.dtd
-        ///#include UIFormDef.dtd
-        ///&lt;!ELEMENT uiDef (uiGridDef?, uiFormDef?)&gt;
-        ///&lt;!ATTLIST uiDef
-        ///	name NMTOKEN &quot;default&quot;
-        ///&gt;.
-        /// </summary>
-        internal static string UIDef {
-            get {
-                return ResourceManager.GetString("UIDef", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to #include UIFormProperty.dtd
-        ///&lt;!ELEMENT uiFormColumn (uiFormProperty+)&gt;
-        ///&lt;!ATTLIST uiFormColumn
-        ///	width CDATA &quot;-1&quot;
-        ///&gt;
-        ///.
-        /// </summary>
-        internal static string UIFormColumn {
-            get {
-                return ResourceManager.GetString("UIFormColumn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to #include UIFormTab.dtd
-        ///&lt;!ELEMENT uiFormDef (uiFormTab+)&gt;
-        ///&lt;!ATTLIST uiFormDef
-        ///	width CDATA &quot;-1&quot;
-        ///	height CDATA &quot;-1&quot;
-        ///	heading CDATA &quot;&quot;
-        ///&gt;
-        ///.
-        /// </summary>
-        internal static string UIFormDef {
-            get {
-                return ResourceManager.GetString("UIFormDef", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT uiFormGrid EMPTY&gt;
-        ///&lt;!ATTLIST uiFormGrid
-        ///	relationshipName NMTOKEN #REQUIRED
-        ///	gridType NMTOKEN &quot;Habanero.Ui.Grid.SimpleGrid&quot;
-        ///	gridTypeAssembly NMTOKEN &quot;Habanero.UI.Pro&quot;
-        ///	correspondingRelationshipName NMTOKEN #REQUIRED
-        ///&gt;.
-        /// </summary>
-        internal static string UIFormGrid {
-            get {
-                return ResourceManager.GetString("UIFormGrid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to #include UIFormPropertyAtt.dtd
-        ///&lt;!ELEMENT uiFormProperty (uiFormPropertyAtt*)&gt;
-        ///&lt;!ATTLIST uiFormProperty
-        ///	label CDATA #REQUIRED
-        ///	propertyName NMTOKEN #REQUIRED
-        ///	controlTypeName NMTOKEN	&quot;TextBox&quot;
-        ///	controlAssemblyName NMTOKEN &quot;System.Windows.Forms&quot;
-        ///	mapperTypeName NMTOKEN &quot;TextBoxMapper&quot;
-        ///	isReadOnly ( true | false ) &quot;false&quot;
-        ///&gt;.
-        /// </summary>
-        internal static string UIFormProperty {
-            get {
-                return ResourceManager.GetString("UIFormProperty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT uiFormPropertyAtt EMPTY&gt;
-        ///&lt;!ATTLIST uiFormPropertyAtt
-        ///	name NMTOKEN #REQUIRED
-        ///	value CDATA #REQUIRED
-        ///&gt;.
-        /// </summary>
-        internal static string UIFormPropertyAtt {
-            get {
-                return ResourceManager.GetString("UIFormPropertyAtt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to #include UIFormColumn.dtd
-        ///#include UIFormGrid.dtd
-        ///&lt;!ELEMENT uiFormTab (uiFormGrid*, uiFormColumn*)&gt;
-        ///&lt;!ATTLIST uiFormTab
+        ///   Looks up a localized string similar to #include columnLayout.dtd
+        ///&lt;!ELEMENT tab (columnLayout*)&gt;
+        ///&lt;!ATTLIST tab
         ///	name CDATA #REQUIRED
         ///&gt;
         ///.
         /// </summary>
-        internal static string UIFormTab {
+        internal static string tab {
             get {
-                return ResourceManager.GetString("UIFormTab", resourceCulture);
+                return ResourceManager.GetString("tab", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #include UIGridProperty.dtd
-        ///&lt;!ELEMENT uiGridDef (uiGridProperty+)&gt;.
-        /// </summary>
-        internal static string UIGridDef {
-            get {
-                return ResourceManager.GetString("UIGridDef", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT uiGridProperty EMPTY&gt;
-        ///&lt;!ATTLIST uiGridProperty
-        ///	heading CDATA #REQUIRED
-        ///	propertyName CDATA #REQUIRED
-        ///	gridControlTypeName NMTOKEN	&quot;DataGridViewTextBoxColumn&quot;
-        ///	isReadOnly ( true | false ) &quot;false&quot;
-        ///	width CDATA &quot;100&quot;
-        ///	alignment ( left | right | center | centre ) &quot;left&quot;
+        ///   Looks up a localized string similar to #include grid.dtd
+        ///#include form.dtd
+        ///&lt;!ELEMENT ui (grid?, form?)&gt;
+        ///&lt;!ATTLIST ui
+        ///	name NMTOKEN &quot;default&quot;
         ///&gt;.
         /// </summary>
-        internal static string UIGridProperty {
+        internal static string ui {
             get {
-                return ResourceManager.GetString("UIGridProperty", resourceCulture);
+                return ResourceManager.GetString("ui", resourceCulture);
             }
         }
     }

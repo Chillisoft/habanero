@@ -139,7 +139,6 @@
     <Compile Include="Loaders\TestXmlUIDefLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormColumnLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormDefLoader.cs" />
-    <Compile Include="Loaders\TestXmlUIFormGridLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormPropertyLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormTabLoader.cs" />
     <Compile Include="Loaders\TestXmlUIGridDefLoader.cs" />

@@ -11,7 +11,7 @@ namespace Habanero.Base
     {
         private IList _list;
         private string _name;
-        private UIFormGrid _uiFormGrid;
+        //private UIFormGrid _uiFormGrid;
         //private UIDefName _name;
 
         /// <summary>
@@ -105,14 +105,14 @@ namespace Habanero.Base
             set { _name = value; }
         }
 
-        /// <summary>
-        /// Gets and sets the UIFormGrid definition
-        /// </summary>
-        public UIFormGrid UIFormGrid
-        {
-            set { _uiFormGrid = value; }
-            get { return _uiFormGrid; }
-        }
+        ///// <summary>
+        ///// Gets and sets the UIFormGrid definition
+        ///// </summary>
+        //public UIFormGrid UIFormGrid
+        //{
+        //    set { _uiFormGrid = value; }
+        //    get { return _uiFormGrid; }
+        //}
 
         //		public UIDefName Name {
         //			get { return _name; }

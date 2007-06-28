@@ -42,32 +42,32 @@ namespace Habanero.Test
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
-					<uiDef>
-						<uiGridDef>
-							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
-							<uiGridProperty heading=""Test Prop 2"" propertyName=""TestProp2"" gridControlTypeName=""DataGridViewComboBoxColumn"" />
-						</uiGridDef>
-						<uiFormDef>
-							<uiFormTab name=""Tab1"">
-								<uiFormColumn>
-									<uiFormProperty label=""Test Prop"" propertyName=""TestProp"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-									<uiFormProperty label=""Test Prop 2"" propertyName=""TestProp2"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-								</uiFormColumn>
-							</uiFormTab>
-						</uiFormDef>
-					</uiDef>
-					<uiDef name=""Alternate"">
-						<uiGridDef>
-							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
-						</uiGridDef>
-						<uiFormDef>
-							<uiFormTab name=""Tab1"">
-								<uiFormColumn>
-									<uiFormProperty label=""Test Prop"" propertyName=""TestProp"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-								</uiFormColumn>
-							</uiFormTab>
-						</uiFormDef>
-					</uiDef>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+					<ui name=""Alternate"">
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
 
 
 
@@ -93,20 +93,20 @@ namespace Habanero.Test
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
-					<uiDef>
-						<uiGridDef>
-							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
-							<uiGridProperty heading=""Test Prop 2"" propertyName=""TestProp2"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
-						</uiGridDef>
-						<uiFormDef>
-							<uiFormTab name=""Tab1"">
-								<uiFormColumn>
-									<uiFormProperty label=""Test Prop"" propertyName=""TestProp"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-									<uiFormProperty label=""Test Prop 2"" propertyName=""TestProp2"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-								</uiFormColumn>
-							</uiFormTab>
-						</uiFormDef>
-					</uiDef>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
 				</class>
 
 			");
@@ -128,22 +128,22 @@ namespace Habanero.Test
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
-					<uiDef>
-						<uiGridDef>
-							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
-							<uiGridProperty heading=""Test Prop 2"" propertyName=""TestProp2"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
-							<uiGridProperty heading=""Test Boolean"" propertyName=""TestBoolean"" gridControlTypeName=""DataGridViewCheckBoxColumn"" />
-						</uiGridDef>
-						<uiFormDef>
-							<uiFormTab name=""Tab1"">
-								<uiFormColumn>
-									<uiFormProperty label=""Test Prop"" propertyName=""TestProp"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-									<uiFormProperty label=""Test Prop 2"" propertyName=""TestProp2"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-									<uiFormProperty label=""Test Boolean"" propertyName=""TestBoolean"" controlTypeName=""CheckBox"" mapperTypeName=""CheckBoxMapper"" />
-								</uiFormColumn>
-							</uiFormTab>
-						</uiFormDef>
-					</uiDef>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Boolean"" property=""TestBoolean"" type=""DataGridViewCheckBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Boolean"" property=""TestBoolean"" type=""CheckBox"" mapperType=""CheckBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
 				</class>
 				
 			");
@@ -169,20 +169,20 @@ namespace Habanero.Test
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
-					<uiDef>
-						<uiGridDef>
-							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
-							<uiGridProperty heading=""Test Prop 2"" propertyName=""TestProp2"" gridControlTypeName=""DataGridViewComboBoxColumn"" />
-						</uiGridDef>
-						<uiFormDef>
-							<uiFormTab name=""Tab1"">
-								<uiFormColumn>
-									<uiFormProperty label=""Test Prop"" propertyName=""TestProp"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-									<uiFormProperty label=""Test Prop 2"" propertyName=""TestProp2"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-								</uiFormColumn>
-							</uiFormTab>
-						</uiFormDef>
-					</uiDef>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
 				</class>
 
 
@@ -216,20 +216,20 @@ namespace Habanero.Test
 					<relationship name=""MyMultipleRelationship"" type=""multiple"" relatedClass=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
 						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
 					</relationship>
-					<uiDef>
-						<uiGridDef>
-							<uiGridProperty heading=""Test Prop"" propertyName=""TestProp"" gridControlTypeName=""DataGridViewTextBoxColumn"" />
-							<uiGridProperty heading=""Test Prop 2"" propertyName=""TestProp2"" gridControlTypeName=""DataGridViewComboBoxColumn"" />
-						</uiGridDef>
-						<uiFormDef>
-							<uiFormTab name=""Tab1"">
-								<uiFormColumn>
-									<uiFormProperty label=""Test Prop"" propertyName=""TestProp"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-									<uiFormProperty label=""Test Prop 2"" propertyName=""TestProp2"" controlTypeName=""TextBox"" mapperTypeName=""TextBoxMapper"" />
-								</uiFormColumn>
-							</uiFormTab>
-						</uiFormDef>
-					</uiDef>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
 				</class>
 
 

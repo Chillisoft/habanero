@@ -11,7 +11,7 @@ namespace Habanero.Base
         private string _heading;
         private string _propertyName;
         private Type _gridControlType;
-        private bool _isReadOnly;
+        private bool _editable;
         private int _width;
         private readonly PropAlignment _alignment;
 
@@ -31,17 +31,17 @@ namespace Habanero.Base
         /// <param name="heading">The heading</param>
         /// <param name="propertyName">The property name</param>
         /// <param name="gridControlType">The grid control type</param>
-        /// <param name="isReadOnly">Whether the grid is read-only (cannot be
+        /// <param name="editable">Whether the grid is read-only (cannot be
         /// edited directly)</param>
         /// <param name="width">The width</param>
         /// <param name="alignment">The horizontal alignment</param>
-        public UIGridProperty(string heading, string propertyName, Type gridControlType, bool isReadOnly, int width,
+        public UIGridProperty(string heading, string propertyName, Type gridControlType, bool editable, int width,
                               PropAlignment alignment)
         {
             _heading = heading;
             _propertyName = propertyName;
             _gridControlType = gridControlType;
-            _isReadOnly = isReadOnly;
+            _editable = editable;
             _width = width;
             this._alignment = alignment;
         }
@@ -71,11 +71,11 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Indicates whether the grid is read-only (cannot be edited directly)
+        /// Indicates whether the column is editable
         /// </summary>
-        public bool IsReadOnly
+        public bool Editable
         {
-            get { return _isReadOnly; }
+            get { return _editable; }
         }
 
         /// <summary>

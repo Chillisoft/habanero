@@ -1,0 +1,11 @@
+#include parameter.dtd
+<!ELEMENT field (parameter*)>
+<!ATTLIST field
+	label CDATA #REQUIRED
+	property NMTOKEN #REQUIRED
+	type NMTOKEN	"TextBox"
+	assembly NMTOKEN "System.Windows.Forms"
+	mapperType NMTOKEN "TextBoxMapper"
+  mapperAssembly NMTOKEN #IMPLIED
+  editable ( true | false ) "true"
+>

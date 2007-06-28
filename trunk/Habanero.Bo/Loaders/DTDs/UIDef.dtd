@@ -1,6 +1,0 @@
-#include UIGridDef.dtd
-#include UIFormDef.dtd
-<!ELEMENT uiDef (uiGridDef?, uiFormDef?)>
-<!ATTLIST uiDef
-	name NMTOKEN "default"
->

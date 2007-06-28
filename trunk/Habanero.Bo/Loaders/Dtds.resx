@@ -127,14 +127,29 @@
   <data name="classes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\classes.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="column" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\column.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="columnLayout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\columnLayout.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="databaseLookupList" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\databaseLookupList.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="GridPropertyCollection" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\GridPropertyCollection.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="field" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\field.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="form" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\form.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="grid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\grid.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="key" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\key.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="parameter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\parameter.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="primaryKey" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\primaryKey.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -157,31 +172,10 @@
   <data name="superClass" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\superClass.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="UIDef" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\UIDef.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="tab" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\tab.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="UIFormColumn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\UIFormColumn.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="UIFormDef" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\UIFormDef.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="UIFormGrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\UIFormGrid.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="UIFormProperty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\UIFormProperty.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="UIFormPropertyAtt" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\UIFormPropertyAtt.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="UIFormTab" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\UIFormTab.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="UIGridDef" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\UIGridDef.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="UIGridProperty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DTDs\UIGridProperty.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="ui" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\ui.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

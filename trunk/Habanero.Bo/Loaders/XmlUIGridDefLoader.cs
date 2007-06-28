@@ -76,17 +76,17 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             _reader.Read();
             XmlUIGridPropertyLoader propLoader = new XmlUIGridPropertyLoader(DtdLoader, _defClassFactory);
-            while (_reader.Name == "uiGridProperty")
+            while (_reader.Name == "column")
             {
                 _collection.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
             }
 
             if (_collection.Count == 0)
             {
-                throw new InvalidXmlDefinitionException("No 'uiGridProperty' " +
-                    "elements were specified in a 'uiGridDef' element.  Ensure " +
+                throw new InvalidXmlDefinitionException("No 'column' " +
+                    "elements were specified in a 'grid' element.  Ensure " +
                     "that the element " +
-                    "contains one or more 'uiGridProperty' elements, which " +
+                    "contains one or more 'column' elements, which " +
                     "specify the columns to appear in the grid.");
             }
         }

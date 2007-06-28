@@ -12,7 +12,7 @@ namespace Habanero.Base
         private IList _list;
         private int _width;
         private int _height;
-        private string _heading;
+        private string _title;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -108,10 +108,10 @@ namespace Habanero.Base
         /// <summary>
         /// Gets and sets the heading
         /// </summary>
-        public string Heading
+        public string Title
         {
-            set { _heading = value; }
-            get { return _heading; }
+            set { _title = value; }
+            get { return _title; }
         }
     }
 }
