@@ -1,5 +1,6 @@
 #include columnLayout.dtd
-<!ELEMENT tab (columnLayout*)>
+#include field.dtd
+<!ELEMENT tab (columnLayout*, field*)>
 <!ATTLIST tab
 	name CDATA #REQUIRED
 >

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Xml;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
@@ -82,10 +83,45 @@ namespace Habanero.Bo.Loaders
             //}
             //else
             //{
-                XmlUIFormColumnLoader loader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
-                while (_reader.Name == "columnLayout")
+
+                XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
+                XmlUIFormPropertyLoader fieldLoader = new XmlUIFormPropertyLoader(DtdLoader, _defClassFactory);
+                List<UIFormProperty> fields = new List<UIFormProperty>();
+                string contentType = "";
+                while (_reader.Name != "tab")
                 {
-                    _tab.Add(loader.LoadUIFormColumn(_reader.ReadOuterXml()));
+                    if (_reader.Name == "columnLayout")
+                    {
+                        if (contentType.Length > 0 && contentType != "columnLayout")
+                        {
+                            throw new InvalidXmlDefinitionException(
+                                "A 'tab' can have either a set of 'columnLayout' or 'field' nodes, but not a mixture.");
+                        }
+                        contentType = "columnLayout";
+                        _tab.Add(columnLoader.LoadUIFormColumn(_reader.ReadOuterXml()));
+                    }
+                    else if (_reader.Name == "field")
+                    {
+                        if (contentType.Length > 0 && contentType != "field")
+                        {
+                            throw new InvalidXmlDefinitionException(
+                                "A 'tab' can have either a set of 'columnLayout' or 'field' nodes, but not a mixture.");
+                        }
+                        contentType = "field";
+                        fields.Add(fieldLoader.LoadUIProperty(_reader.ReadOuterXml()));
+
+                    }
+                    else
+                    {
+                        throw new InvalidXmlDefinitionException(
+                            "A 'tab' can have either a set of 'columnLayout' or 'field' nodes, but not a mixture.");
+                    }
+                }
+                if (contentType == "field")
+                {
+                    UIFormColumn col = _defClassFactory.CreateUIFormColumn();
+                    fields.ForEach(delegate(UIFormProperty obj) { col.Add(obj); });
+                    _tab.Add(col);
                 }
 
                 if (_tab.Count == 0)

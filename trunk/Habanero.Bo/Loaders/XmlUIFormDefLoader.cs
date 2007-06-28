@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
@@ -89,18 +90,61 @@ namespace Habanero.Bo.Loaders
 
 
             _reader.Read();
-            XmlUIFormTabLoader loader = new XmlUIFormTabLoader(DtdLoader, _defClassFactory);
-            while (_reader.Name == "tab")
-            {
-                _uiFormDef.Add(loader.LoadUIFormTab(_reader.ReadOuterXml()));
+            XmlUIFormTabLoader tabLoader = new XmlUIFormTabLoader(DtdLoader, _defClassFactory);
+            XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
+            XmlUIFormPropertyLoader fieldLoader = new XmlUIFormPropertyLoader(DtdLoader, _defClassFactory);
+            List<UIFormColumn> columns = new List<UIFormColumn>();
+            List<UIFormProperty> fields = new List<UIFormProperty>();
+            string contentType = "";
+            while (_reader.Name != "form") {
+                if (_reader.Name == "tab") {
+                    if (contentType.Length > 0 && contentType != "tab") {
+                        throw new InvalidXmlDefinitionException(
+                            "A form can have either a set of 'tab', 'columnLayout' or 'field' nodes, but not a mixture.");
+                    }
+                    contentType = "tab";
+                    _uiFormDef.Add(tabLoader.LoadUIFormTab(_reader.ReadOuterXml()));
+                }
+                else if (_reader.Name == "columnLayout") {
+                    if (contentType.Length > 0 && contentType != "columnLayout") {
+                        throw new InvalidXmlDefinitionException(
+                            "A form can have either a set of 'tab', 'columnLayout' or 'field' nodes, but not a mixture.");
+                    }
+                    contentType = "columnLayout";
+                    columns.Add(columnLoader.LoadUIFormColumn(_reader.ReadOuterXml()));
+                }
+                else if (_reader.Name == "field") {
+                    if (contentType.Length > 0 && contentType != "field") {
+                        throw new InvalidXmlDefinitionException(
+                            "A form can have either a set of 'tab', 'columnLayout' or 'field' nodes, but not a mixture.");
+                    }
+                    contentType = "field";
+                    fields.Add(fieldLoader.LoadUIProperty(_reader.ReadOuterXml()));
+
+                } else {
+                    throw new InvalidXmlDefinitionException(
+                        "A form can have either a set of 'tab', 'columnLayout' or 'field' nodes.");
+                }
+            }
+            if (contentType == "columnLayout") {
+                UIFormTab tab = _defClassFactory.CreateUIFormTab();
+                columns.ForEach(delegate(UIFormColumn obj) { tab.Add(obj); });
+                _uiFormDef.Add(tab);
+            }
+            else if (contentType == "field") {
+                UIFormTab tab = _defClassFactory.CreateUIFormTab();
+                UIFormColumn col = _defClassFactory.CreateUIFormColumn();
+                fields.ForEach(delegate(UIFormProperty obj) { col.Add(obj); });
+                tab.Add(col);
+                _uiFormDef.Add(tab);
             }
 
             if (_uiFormDef.Count == 0)
             {
-                throw new InvalidXmlDefinitionException("No 'tab' " +
+                throw new InvalidXmlDefinitionException("No 'tab', 'columnLayout' or 'field' " +
                     "elements were specified in a 'form' element.  Ensure " +
-                    "that the element contains one or more 'uiFormTab' elements, " +
-                    "which each define a tab to appear in the editing form for " +
+                    "that the element contains one or more of either 'tab', 'columnLayout' or 'field' elements, " +
+                    "which each define what must appear in the editing form for " +
                     "the business object.");
             }
         }

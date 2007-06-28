@@ -34,11 +34,30 @@ namespace Habanero.Test.Bo.Loaders
 							</columnLayout>
 						</tab>");
             Assert.AreEqual("testname", col.Name);
-            Assert.AreEqual(2, col.Count, "There should be one column.");
+            Assert.AreEqual(2, col.Count, "There should be two column.");
             Assert.AreEqual(2, col[0].Count, "There should be two props in column 1");
             Assert.AreEqual(1, col[1].Count, "There should be one prop in column 2");
             Assert.AreEqual("testlabel1", col[0][0].Label);
             Assert.AreEqual("testlabel3", col[1][0].Label);
+        }
+
+        [Test]
+        public void TestTabWithFields()
+        {
+            UIFormTab col =
+                loader.LoadUIFormTab(
+                    @"
+						<tab name=""testname"">
+							<field label=""testlabel1"" property=""testpropname1"" />
+							<field label=""testlabel2"" property=""testpropname2"" />
+							<field label=""testlabel3"" property=""testpropname3"" />
+						</tab>");
+            Assert.AreEqual("testname", col.Name);
+            Assert.AreEqual(1, col.Count, "There should be one column.");
+            Assert.AreEqual(3, col[0].Count, "There should be two props in column 1");
+            Assert.AreEqual("testlabel1", col[0][0].Label);
+            Assert.AreEqual("testlabel2", col[0][1].Label);
+            Assert.AreEqual("testlabel3", col[0][2].Label);
         }
 
 

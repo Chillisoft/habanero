@@ -1,5 +1,7 @@
 #include tab.dtd
-<!ELEMENT form (tab+)>
+#include columnLayout.dtd
+#include field.dtd
+<!ELEMENT form (tab*, columnLayout*, field*)>
 <!ATTLIST form
 	width CDATA "-1"
 	height CDATA "-1"
