@@ -9,6 +9,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Habanero.UI.Pro</RootNamespace>
     <AssemblyName>Habanero.UI.Pro</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,10 +34,6 @@
     <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="MyTimePicker, Version=1.0.2287.20795, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\MyTimePicker.dll</HintPath>
     </Reference>
     <Reference Include="Noogen.WinForms, Version=1.0.2083.946, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
@@ -124,7 +122,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\TextBoxMapper.cs" />
-    <Compile Include="Forms\TimePickerMapper.cs" />
     <Compile Include="Forms\TreeViewTableEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -181,6 +178,10 @@
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
       <Name>Habanero.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.pfx" />
+    <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Base\" />

@@ -11,8 +11,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Habanero.Test.Bo</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>key.pfx</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -26,6 +25,7 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -124,7 +124,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs">
+    <Compile Include="BoKeyTester.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Loaders\TestDtdLoader.cs" />
@@ -170,9 +171,6 @@
     </Compile>
     <Compile Include="TestExpression.cs" />
     <Compile Include="TestLongText.cs" />
-    <Compile Include="TestPasswordBlowfish.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TestPropDef.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -185,6 +183,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestUnrefRelationshipDef.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

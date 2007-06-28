@@ -9,16 +9,22 @@ using NUnit.Framework;
 namespace Habanero.Test.Bo
 {
     [TestFixture]
-    public class TestRelationship
+    public class TestRelationship : TestUsingDatabase
     {
         private RelationshipDef mRelationshipDef;
         private RelKeyDef mRelKeyDef;
         private PropDefCol mPropDefCol;
         private MockBO mMockBo;
 
+        [TestFixtureSetUp]
+        public void SetupFixture()
+        {
+            SetupDBConnection();
+        }
         [SetUp]
         public void init()
         {
+
             mMockBo = new MockBO();
             mPropDefCol = mMockBo.PropDefCol;
 

@@ -9,6 +9,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Habanero.Test</RootNamespace>
     <AssemblyName>Habanero.Test</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -71,6 +73,9 @@
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
       <Name>Habanero.Util</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

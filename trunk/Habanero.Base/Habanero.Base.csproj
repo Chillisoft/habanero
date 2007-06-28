@@ -11,8 +11,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Habanero.Base</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>key.pfx</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -26,6 +25,7 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -73,10 +73,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Blowfish_NET, Version=0.0.0.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Blowfish_NET.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -89,10 +85,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs">
+    <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BlowfishCrypter.cs" />
     <Compile Include="Exceptions\ArgumentValidationHelper.cs" />
     <Compile Include="Exceptions\CannotSaveException.cs">
       <SubType>Code</SubType>
@@ -239,6 +234,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XMLWrapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

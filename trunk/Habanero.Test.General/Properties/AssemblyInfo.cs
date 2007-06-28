@@ -1,16 +1,16 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Habanero.Test")]
+[assembly: AssemblyTitle("Habanero.Test.General")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Chillisoft")]
-[assembly: AssemblyProduct("Habanero.Test")]
-[assembly: AssemblyCopyright("Copyright © Chillisoft 2007")]
+[assembly: AssemblyProduct("Habanero.Test.General")]
+[assembly: AssemblyCopyright("Copyright � Chillisoft 2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("B028FFBF-BF69-441b-835E-582121154E25")]
+[assembly: Guid("B0047FCA-C19E-401b-BD39-45DE85752FF3")]
 
 // Version information for an assembly consists of the following four values:
 //

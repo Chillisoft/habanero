@@ -11,8 +11,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Habanero.Bo</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>key.pfx</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -26,6 +25,7 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -95,7 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs">
+    <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BOHelper.cs" />
@@ -273,9 +273,6 @@
     <Compile Include="OptimisticLockingVersionNumber.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PasswordBlowfish.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PropRuleBase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -333,6 +330,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="key.pfx" />
     <None Include="Loaders\DTDs\businessObjectLookupList.dtd" />
     <None Include="Loaders\DTDs\class.dtd" />
     <None Include="Loaders\DTDs\classes.dtd" />
