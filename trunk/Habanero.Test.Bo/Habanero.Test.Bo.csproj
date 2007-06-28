@@ -124,6 +124,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassDefinition\TestKeyDef.cs" />
+    <Compile Include="ClassDefinition\TestPropDef.cs" />
+    <Compile Include="ClassDefinition\TestRelKeyDef.cs" />
+    <Compile Include="ClassDefinition\TestRelPropDef.cs" />
+    <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -147,6 +152,8 @@
     <Compile Include="TestBoMapper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestBoProp.cs" />
+    <Compile Include="TestBoPropCol.cs" />
     <Compile Include="TestBusinessObjectBase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -174,11 +181,14 @@
     <Compile Include="TestPropDef.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestPropRuleDate.cs" />
+    <Compile Include="TestPropRuleString.cs" />
     <Compile Include="TestRelationship.cs" />
     <Compile Include="TestRelationshipCol.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestRelationshipDef.cs" />
+    <Compile Include="TestRelProp.cs" />
     <Compile Include="TestSingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>

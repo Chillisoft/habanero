@@ -63,14 +63,6 @@ namespace Habanero.Test.General
             dbtester.TestExecuteSQLTransaction();
         }
 
-        private void RunPropDefTester()
-        {
-            PropDefTester lPropDefTester = new PropDefTester();
-
-            lPropDefTester.Init();
-            lPropDefTester.TestCreateBOProp();
-        }
-
         [TestFixtureSetUp]
         public void CreateTestPack()
         {
@@ -684,18 +676,6 @@ namespace Habanero.Test.General
 
         #endregion tests
 
-        #region RunOtherTests
-
-        public void RunTestPropRules()
-        {
-            PropRuleDateTester test = new PropRuleDateTester();
-            test.TestDateRule();
-            PropRuleStringTester testString = new PropRuleStringTester();
-            testString.TestStringRulePatternMatch();
-            testString.TestStringRule();
-        }
-
-        #endregion //RunOtherTests
     }
 
     /// <summary>

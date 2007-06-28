@@ -198,9 +198,6 @@
     <Compile Include="CriteriaManager\CriteriaExpression.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CriteriaManager\CriteriaManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CriteriaManager\Expression.cs">
       <SubType>Code</SubType>
     </Compile>
