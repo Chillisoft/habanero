@@ -107,7 +107,7 @@ namespace Habanero.Bo.Loaders
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("In a 'keyDef' element, " +
+                throw new InvalidXmlDefinitionException("In a 'key' element, " +
                     "the 'ignoreIfNull' attribute provided " +
                     "an invalid boolean value. Use 'true' or 'false'.", ex);
             }
@@ -122,11 +122,13 @@ namespace Habanero.Bo.Loaders
         {
             if (_reader.Name != "prop")
             {
-                throw new InvalidXmlDefinitionException("A 'keyDef' node is " +
+                throw new InvalidXmlDefinitionException("A 'key' node is " +
                     "missing 'prop' nodes. Each key definition specifies " +
-                    "limitations on a property, and the prop nodes have a 'name' " +
+                    "a combination of one or more listed properties that " +
+                    "must be unique for each row.  The 'prop' elements " +
+                    "each have a 'name' " +
                     "attribute that specifies which existing property definition " +
-                    "is being referred to in the key definition.");
+                    "make up the alternate key.");
             }
             do
             {
@@ -136,7 +138,7 @@ namespace Habanero.Bo.Loaders
                     throw new InvalidXmlDefinitionException("The 'prop' node " +
                         "under a key definition is missing a valid 'name' attribute, " +
                         "which specifies the name of an existing property definition " +
-                        "which is being further defined by the key definition.");
+                        "which makes up the alternate key.");
                 }
                 if (_propDefCol[propName] != null)
                 {
@@ -148,7 +150,7 @@ namespace Habanero.Bo.Loaders
                         String.Format("The property definition '{0}' being named by a " +
                         "'prop' element in a key definition does not exist. The property " +
                         "definition being referred to must have been defined in a " +
-                        "'propertyDef' element.  Add the property definition or check " +
+                        "'property' element.  Add the property definition or check " +
                         "that the spelling and capitalisation are correct.", propName));
                 }
                 ReadAndIgnoreEndTag();

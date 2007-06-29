@@ -163,8 +163,8 @@ namespace Habanero.Bo.Loaders
         {
             if (xmlDef != null)
         {
-            XmlSuperClassDescLoader superClassDescLoader = new XmlSuperClassDescLoader(DtdLoader, _defClassFactory);
-                _SuperClassDef = superClassDescLoader.LoadSuperClassDesc(xmlDef);
+            XmlSuperClassDefLoader superClassDefLoader = new XmlSuperClassDefLoader(DtdLoader, _defClassFactory);
+                _SuperClassDef = superClassDefLoader.LoadSuperClassDesc(xmlDef);
             }
         }
 
@@ -218,10 +218,10 @@ namespace Habanero.Bo.Loaders
             if (xmlDef == null)
             {
                 throw new InvalidXmlDefinitionException("Could not find a " +
-                    "'primaryKeyDef' element in the class definition for the class '" +
+                    "'primaryKey' element in the class definition for the class '" +
                     _ClassName + "'.  Each class definition requires a primary key " +
                     "definition, which is composed of one or more property definitions, " +
-                    "implying that you will need at least one 'propertyDef' element as " +
+                    "implying that you will need at least one 'property' element as " +
                     "well.");
             }
 			//_PrimaryKeyDef = new PrimaryKeyDef();
@@ -230,10 +230,10 @@ namespace Habanero.Bo.Loaders
             if (_PrimaryKeyDef == null)
             {
                 throw new InvalidXmlDefinitionException("There was an error loading " +
-                    "the 'primaryKeyDef' element in the class definition for the class '" +
+                    "the 'primaryKey' element in the class definition for the class '" +
                     _ClassName + "'.  Each class definition requires a primary key " +
                     "definition, which is composed of one or more property definitions, " +
-                    "implying that you will need at least one 'propertyDef' element as " +
+                    "implying that you will need at least one 'property' element as " +
                     "well.");
             }
         }
@@ -247,7 +247,7 @@ namespace Habanero.Bo.Loaders
             {
                 throw new InvalidXmlDefinitionException(String.Format("No property " +
                     "definitions have been specified for the class definition of '{0}'. " +
-                    "Each class requires at least one 'propertyDef' and 'primaryKeyDef' " +
+                    "Each class requires at least one 'property' and 'primaryKey' " +
                     "element which define the mapping from the database table fields to " +
                     "properties in the class that is being mapped to.", _ClassName));
             }

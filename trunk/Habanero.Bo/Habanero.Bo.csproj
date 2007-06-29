@@ -250,7 +250,7 @@
     <Compile Include="Loaders\XmlRelationshipLoader.cs" />
     <Compile Include="Loaders\XmlRuleLoader.cs" />
     <Compile Include="Loaders\XmlSimpleLookupListLoader.cs" />
-    <Compile Include="Loaders\XmlSuperClassDescLoader.cs" />
+    <Compile Include="Loaders\XmlSuperClassDefLoader.cs" />
     <Compile Include="Loaders\XmlUIDefLoader.cs" />
     <Compile Include="Loaders\XmlUIFormColumnLoader.cs" />
     <Compile Include="Loaders\XmlUIFormDefLoader.cs" />

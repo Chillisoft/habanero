@@ -105,7 +105,7 @@ namespace Habanero.Bo.Loaders
         {
             if (_reader.Name != "prop")
             {
-                throw new InvalidXmlDefinitionException("A primaryKeyDef node must have one or more prop nodes");
+                throw new InvalidXmlDefinitionException("A primaryKey node must have one or more prop nodes");
             }
             do
             {
@@ -125,7 +125,7 @@ namespace Habanero.Bo.Loaders
                     throw new InvalidXmlDefinitionException(
                         String.Format("A primary key definition has listed a 'prop' " +
                         "definition for '{0}', which hasn't been defined among " +
-                        "the 'propertyDef's for the class.  Either add a 'propertyDef' " +
+                        "the 'property' elements for the class.  Either add a 'property' " +
                         "for '{0}' or correct the spelling or capitalisation of the " +
                         "attribute to match a property that has already been defined.",
                         propName));

@@ -48,8 +48,8 @@ namespace Habanero.Bo.Loaders
             if (xmlPropDef == null || xmlPropDef.Length == 0)
             {
                 throw new InvalidXmlDefinitionException("An error has occurred while attempting to " +
-                   "load a property definition, contained in a 'propertyDef' element. " +
-                   "Check that you have correctly specified at least one 'propertyDef' " +
+                   "load a property definition, contained in a 'property' element. " +
+                   "Check that you have correctly specified at least one 'property' " +
                    "element, which defines a property that is to be mapped from a " +
                    "database field to a property in a class.");
             }
@@ -119,8 +119,8 @@ namespace Habanero.Bo.Loaders
             _propertyName = _reader.GetAttribute("name");
             if (_propertyName == null || _propertyName.Length == 0)
             {
-                throw new InvalidXmlDefinitionException("A 'propertyDef' element has no 'name' attribute " +
-                   "set. Each 'propertyDef' element requires a 'name' attribute that " +
+                throw new InvalidXmlDefinitionException("A 'property' element has no 'name' attribute " +
+                   "set. Each 'property' element requires a 'name' attribute that " +
                    "specifies the name of the property in the class to map to.");
             }
         }

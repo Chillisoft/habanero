@@ -71,7 +71,7 @@ namespace Habanero.Bo.Loaders
 
             if (_stringGuidPairCollection.Count == 0)
             {
-                throw new InvalidXmlDefinitionException("A 'simpleLookupListSource' " +
+                throw new InvalidXmlDefinitionException("A 'simpleLookupList' " +
                     "element does not contain any 'stringGuidPair' elements.  It " +
                     "should contain one or more 'stringGuidPair' elements that " +
                     "specify each of the available options in the lookup list.");

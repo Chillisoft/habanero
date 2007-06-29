@@ -131,7 +131,7 @@ namespace Habanero.Bo.Loaders
             
             if (_type == null || (_type != "single" && _type != "multiple"))
             {
-                throw new InvalidXmlDefinitionException("In a 'relationshipDef' " +
+                throw new InvalidXmlDefinitionException("In a 'relationship' " +
                     "element, the 'type' attribute was not included or was given " +
                     "an invalid value.  The 'type' refers to the type of " +
                     "relationship and can be either 'single' or 'multiple'.");
@@ -154,7 +154,7 @@ namespace Habanero.Bo.Loaders
             //}
             //catch (Exception ex)
             //{
-            //    throw new InvalidXmlDefinitionException("In a 'relationshipDef' " +
+            //    throw new InvalidXmlDefinitionException("In a 'relationship' " +
             //        "element, either the 'minNoOfRelatedObjects' or " +
             //        "'maxNoOfRelatedObjects' attribute has been given an invalid " +
             //        "integer value.", ex);
@@ -168,7 +168,7 @@ namespace Habanero.Bo.Loaders
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("In a 'relationshipDef' " +
+                throw new InvalidXmlDefinitionException("In a 'relationship' " +
                     "element, the 'deleteParentAction' attribute has been given " +
                     "an invalid value. The available options are " +
                     "DeleteRelated, DereferenceRelated and " +
