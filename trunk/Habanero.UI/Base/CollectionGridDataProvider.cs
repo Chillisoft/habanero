@@ -78,8 +78,8 @@ namespace Habanero.Ui.Base
                     throw new NullReferenceException(String.Format(
                                                          "An error occurred while " +
                                                          "initialising a grid display, because the class definitions " +
-                                                         "do not have a 'uiDef' element with the name attribute as '{0}'. " +
-                                                         "Either create a 'uiDef' element with that name, or check " +
+                                                         "do not have a 'ui' element with the name attribute as '{0}'. " +
+                                                         "Either create a 'ui' element with that name, or check " +
                                                          "spelling and capitalisation.", _uiDefName));
                 }
             }
@@ -91,7 +91,7 @@ namespace Habanero.Ui.Base
                     throw new NullReferenceException("An error occurred while " +
                                                      "initialising a grid display, because the class definitions " +
                                                      "do not have a 'default' grid definition, that is, a " +
-                                                     "'uiDef' element with no specific name assigned. " +
+                                                     "'ui' element with no specific name assigned. " +
                                                      "Either create a user interface definition, or if you " +
                                                      "have created one, but have assigned a specific name in " +
                                                      "the 'name' attribute, use a constructor for " +
@@ -105,7 +105,7 @@ namespace Habanero.Ui.Base
             {
                 throw new NullReferenceException("An error occurred while " +
                                                  "initialising a grid display, because the class definitions " +
-                                                 "in the class's 'uiDef' element do not contain a 'uiGridDef' " +
+                                                 "in the class's 'ui' element do not contain a 'grid' " +
                                                  "element, which defines which properties to display in the grid.");
             }
             return gridDef;

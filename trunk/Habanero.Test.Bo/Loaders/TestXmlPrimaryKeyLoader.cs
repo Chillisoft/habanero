@@ -43,7 +43,7 @@ namespace Habanero.Test.Bo.Loaders
         [
             Test,
                 ExpectedException(typeof (InvalidXmlDefinitionException),
-                    "A primaryKeyDef node must have one or more prop nodes")]
+                    "A primaryKey node must have one or more prop nodes")]
         public void TestWithNoProps()
         {
             itsLoader.LoadPrimaryKey(@"<primaryKey></primaryKey>", itsPropDefs);

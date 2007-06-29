@@ -52,7 +52,7 @@ namespace Habanero.Ui.Forms
                     throw new NullReferenceException("An error occurred while " +
                                                      "attempting to load an object editing form.  A possible " +
                                                      "cause is that the class definitions do not have a " +
-                                                     "'uiFormDef' section for the class, under the 'uiDef' " +
+                                                     "'form' section for the class, under the 'ui' " +
                                                      "with the name '" + _uiDefName + "'.");
                 }
                 def = uiMapper.GetUIFormProperties();
@@ -65,7 +65,7 @@ namespace Habanero.Ui.Forms
                     throw new NullReferenceException("An error occurred while " +
                                                      "attempting to load an object editing form.  A possible " +
                                                      "cause is that the class definitions do not have a " +
-                                                     "'uiFormDef' section for the class.");
+                                                     "'form' section for the class.");
                 }
                 def = uiMapper.GetUIFormProperties();
             }
@@ -74,7 +74,7 @@ namespace Habanero.Ui.Forms
                 throw new NullReferenceException("An error occurred while " +
                                                  "attempting to load an object editing form.  A possible " +
                                                  "cause is that the class definitions do not have a " +
-                                                 "'uiFormDef' section for the class.");
+                                                 "'form' section for the class.");
             }
 
             PanelFactory factory = new PanelFactory(_bo, def);

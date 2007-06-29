@@ -101,7 +101,7 @@ namespace Habanero.Bo.Loaders
             else
             {
                 throw new InvalidXmlDefinitionException(
-                    "There seems to be a problem with the relationshipDef dtd as it should only allow relationships of type 'single' or 'multiple'.");
+                    "There seems to be a problem with the relationship dtd as it should only allow relationships of type 'single' or 'multiple'.");
             }
         }
 
@@ -207,7 +207,7 @@ namespace Habanero.Bo.Loaders
                 if (!_propDefCol.Contains(defName))
                 {
                     throw new InvalidXmlDefinitionException(String.Format(
-                        "In a 'relProp' element, the property '{0}' given in the " +
+                        "In a 'relatedProperty' element, the property '{0}' given in the " +
                         "'name' attribute has not been defined among the class's " +
                         "property definitions. Either add " +
                         "the property definition or check the spelling and " +

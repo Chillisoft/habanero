@@ -202,7 +202,9 @@ namespace Habanero.Ui.Forms
         protected abstract void ValueUpdated();
 
         /// <summary>
-        /// Creates a new control mapper of a specified type.
+        /// Creates a new control mapper of a specified type.  If no 'mapperType'
+        /// has been specified, an appropriate mapper for standard controls will
+        /// be assigned as appropriate.
         /// </summary>
         /// <param name="mapperTypeName">The class name of the mapper type
         /// (e.g. ComboBoxMapper).  The current namespace of this
@@ -217,6 +219,23 @@ namespace Habanero.Ui.Forms
         /// a subclass of the ControlMapper class.</exception>
         public static ControlMapper Create(string mapperTypeName, Control ctl, string propertyName, bool isReadOnceOnly)
         {
+            if (mapperTypeName == "TextBoxMapper" && !(ctl is TextBox) && !(ctl is PasswordTextBox))
+            {
+                if (ctl is ComboBox) mapperTypeName = "LookupComboBoxMapper";
+                else if (ctl is CheckBox) mapperTypeName = "CheckBoxMapper";
+                else if (ctl is DateTimePicker) mapperTypeName = "DateTimePickerMapper";
+                else if (ctl is ListView) mapperTypeName = "ListViewCollectionMapper";
+                else if (ctl is NumericUpDown) mapperTypeName = "NumericUpDownIntegerMapper";
+                else
+                {
+                    throw new InvalidXmlDefinitionException(String.Format(
+                        "No suitable 'mapperType' has been provided in the class " +
+                        "definitions for the form control '{0}'.  Either add the " +
+                        "'mapperType' attribute or check that spelling and " +
+                        "capitalisation are correct.", ctl.Name));
+                }
+            }
+
             string nspace = typeof (ControlMapper).Namespace;
             Type mapperType = Type.GetType(nspace + "." + mapperTypeName);
             ControlMapper mapper;
@@ -228,7 +247,9 @@ namespace Habanero.Ui.Forms
             }
             else
             {
-                throw new UnknownTypeNameException("The mapper type name" + mapperTypeName + " is unknown.");
+                throw new UnknownTypeNameException("The control mapper " +
+                    "type '" + mapperTypeName + "' was not found.  All control " +
+                    "mappers must inherit from ControlMapper.");
             }
             return mapper;
         }
