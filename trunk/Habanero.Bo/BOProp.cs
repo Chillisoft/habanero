@@ -87,50 +87,61 @@ namespace Habanero.Bo
                 propValue = null;
             }
 
-            if (propValue != null)
+            try
             {
-                if (propValue.GetType().Name == "MySqlDateTime")
+                if (propValue != null)
                 {
-                    if (propValue.ToString().Trim().Length > 0)
+                    if (propValue.GetType().Name == "MySqlDateTime")
                     {
-                        propValue = DateTime.Parse(propValue.ToString());
+                        if (propValue.ToString().Trim().Length > 0)
+                        {
+                            propValue = DateTime.Parse(propValue.ToString());
+                        }
+                        else
+                        {
+                            propValue = null;
+                        }
+                    }
+                    else if (this.PropertyType == typeof (Guid))
+                    {
+                        try
+                        {
+                            propValue = new Guid(propValue.ToString());
+                        }
+                        catch (FormatException)
+                        {
+                            propValue = null;
+                        }
+                    }
+                    else if (this.PropertyType == typeof (Image))
+                    {
+                        propValue = SerialisationUtilities.ByteArrayToObject((byte[]) propValue);
+                    }
+                    else if (this.PropertyType.IsSubclassOf(typeof (CustomProperty)))
+                    {
+                        propValue = Activator.CreateInstance(this.PropertyType, new object[] {propValue, true});
+                    }
+                    else if (this.PropertyType == typeof (Object))
+                    {
+                        //propValue = propValue;
+                    }
+                    else if (this.PropertyType == typeof (TimeSpan) && propValue.GetType() == typeof (DateTime))
+                    {
+                        propValue = ((DateTime) propValue).TimeOfDay;
                     }
                     else
                     {
-                        propValue = null;
+                        propValue = Convert.ChangeType(propValue, this.PropertyType);
                     }
                 }
-                else if (this.PropertyType == typeof (Guid))
-                {
-                    try
-                    {
-                        propValue = new Guid(propValue.ToString());
-                    }
-                    catch (FormatException)
-                    {
-                        propValue = null;
-                    }
-                }
-                else if (this.PropertyType == typeof (Image))
-                {
-                    propValue = SerialisationUtilities.ByteArrayToObject((byte[]) propValue);
-                }
-                else if (this.PropertyType.IsSubclassOf(typeof (CustomProperty)))
-                {
-                    propValue = Activator.CreateInstance(this.PropertyType, new object[] {propValue, true});
-                }
-                else if (this.PropertyType == typeof (Object))
-                {
-                    //propValue = propValue;
-                }
-                else if (this.PropertyType == typeof (TimeSpan) && propValue.GetType() == typeof (DateTime))
-                {
-                    propValue = ((DateTime) propValue).TimeOfDay;
-                }
-                else
-                {
-                    propValue = Convert.ChangeType(propValue, this.PropertyType);
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new PropertyValueInvalidException(String.Format(
+                    "An error occurred while attempting to convert " +
+                    "the loaded property value of '{0}' to its specified " +
+                    "type of '{1}'. The property value is '{2}'.",
+                    PropertyName, PropertyType, propValue), ex);
             }
 
             _invalidReason = "";

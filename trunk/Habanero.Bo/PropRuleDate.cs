@@ -63,7 +63,7 @@ namespace Habanero.Bo
                 throw new InvalidXmlDefinitionException("An error occurred " +
                     "while processing the property rules for a date.  The " +
                     "likely cause is that one of the attributes in the 'add' " +
-                    "element of the class definitiosn has an invalid value.", ex);
+                    "element of the class definitions has an invalid value.", ex);
             }
         }
 

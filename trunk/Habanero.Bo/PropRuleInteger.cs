@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 
 namespace Habanero.Bo
 {
@@ -35,8 +36,18 @@ namespace Habanero.Bo
         public PropRuleInteger(string name, string message, Dictionary<string, object> parameters)
             : base(name, message, parameters)
         {
-            if (parameters.ContainsKey("min")) _minValue = Convert.ToInt32(parameters["min"]);
-            if (parameters.ContainsKey("max")) _maxValue = Convert.ToInt32(parameters["max"]);
+            try
+            {
+                if (parameters.ContainsKey("min")) _minValue = Convert.ToInt32(parameters["min"]);
+                if (parameters.ContainsKey("max")) _maxValue = Convert.ToInt32(parameters["max"]);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("An error occurred " +
+                    "while processing the property rules for an integer.  The " +
+                    "likely cause is that one of the attributes in the 'add' " +
+                    "element of the class definitions has an invalid value.", ex);
+            }
         }
 
 

@@ -182,6 +182,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestPropRuleDate.cs" />
+    <Compile Include="TestPropRuleDecimal.cs" />
+    <Compile Include="TestPropRuleInt.cs" />
     <Compile Include="TestPropRuleString.cs" />
     <Compile Include="TestRelationship.cs" />
     <Compile Include="TestRelationshipCol.cs">

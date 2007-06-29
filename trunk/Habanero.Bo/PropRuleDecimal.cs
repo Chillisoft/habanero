@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 
 namespace Habanero.Bo
 {
@@ -35,8 +36,18 @@ namespace Habanero.Bo
         public PropRuleDecimal(string name, string message, Dictionary<string, object> parameters)
 			: base(name, message, parameters)
         {
-            if (parameters.ContainsKey("min")) _minValue = Convert.ToDecimal(parameters["min"]);
-            if (parameters.ContainsKey("max")) _maxValue = Convert.ToDecimal(parameters["max"]);
+            try
+            {
+                if (parameters.ContainsKey("min")) _minValue = Convert.ToDecimal(parameters["min"]);
+                if (parameters.ContainsKey("max")) _maxValue = Convert.ToDecimal(parameters["max"]);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidXmlDefinitionException("An error occurred " +
+                    "while processing the property rules for a decimal.  The " +
+                    "likely cause is that one of the attributes in the 'add' " +
+                    "element of the class definitions has an invalid value.", ex);
+            }
         }
 
         /// <summary>
@@ -55,6 +66,34 @@ namespace Habanero.Bo
         {
             get { return _maxValue; }
         	protected set { _maxValue = value; }
+        }
+
+        /// <summary>
+        /// Indicates whether the property value is valid against the rules
+        /// </summary>
+        /// <param name="propValue">The value to check</param>
+        /// <param name="errorMessage">A string to amend with an error
+        /// message indicating why the value might have been invalid</param>
+        /// <returns>Returns true if valid</returns>
+        protected internal override bool isPropValueValid(object propValue, ref string errorMessage)
+        {
+            bool valueValid = base.isPropValueValid(propValue, ref errorMessage);
+            if (propValue is decimal)
+            {
+                decimal decimalPropRule = (decimal)propValue;
+                if (decimalPropRule < _minValue)
+                {
+                    valueValid = false;
+                    errorMessage += Environment.NewLine + "Please enter a value greater than " + _minValue + " for rule " + Name;
+                }
+                if (decimalPropRule > _maxValue)
+                {
+                    valueValid = false;
+                    errorMessage += Environment.NewLine + "Please enter a value less than " + _maxValue + " for rule " + Name;
+                }
+            }
+            return valueValid;
+
         }
     }
 }
