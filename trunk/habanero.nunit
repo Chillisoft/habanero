@@ -6,12 +6,6 @@
     <assembly path="Build\Debug\Habanero.Test.General.dll" />
     <assembly path="Build\Debug\Habanero.Test.dll" />
     <assembly path="Build\Debug\Habanero.Test.UI.dll" />
-    <assembly path="Build\Debug\Habanero.Bo.dll" />
-    <assembly path="Build\Debug\Habanero.Db.dll" />
-    <assembly path="Build\Debug\Habanero.UI.dll" />
-    <assembly path="Build\Debug\Habanero.UI.Pro.dll" />
-    <assembly path="Build\Debug\Habanero.Util.dll" />
-    <assembly path="Build\Debug\Habanero.Base.dll" />
   </Config>
   <Config name="Release" binpathtype="Auto" />
 </NUnitProject>
