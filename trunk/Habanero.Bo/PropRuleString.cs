@@ -47,12 +47,34 @@ namespace Habanero.Bo
         {
             try
             {
-                if (parameters.ContainsKey("patternMatch"))
-                    _patternMatch = Convert.ToString(parameters["patternMatch"]);
-                if (parameters.ContainsKey("patternMatchErrorMessage"))
-                    _patternMatchErrorMessage = Convert.ToString(parameters["patternMatchErrorMessage"]);
-                if (parameters.ContainsKey("minLength")) _minLength = Convert.ToInt32(parameters["minLength"]);
-                if (parameters.ContainsKey("maxLength")) _maxLength = Convert.ToInt32(parameters["maxLength"]);
+                foreach (string key in parameters.Keys)
+                {
+                    switch (key)
+                    {
+                        case "patternMatch":
+                            _patternMatch = Convert.ToString(parameters["patternMatch"]);
+                            break;
+                        case "patternMatchErrorMessage":
+                            _patternMatchErrorMessage = Convert.ToString(parameters["patternMatchErrorMessage"]);
+                            break;
+                        case "minLength":
+                            _minLength = Convert.ToInt32(parameters["minLength"]);
+                            break;
+                        case "maxLength":
+                            _maxLength = Convert.ToInt32(parameters["maxLength"]);
+                            break;
+                        default:
+                            throw new InvalidXmlDefinitionException(String.Format(
+                                "The rule type '{0}' for strings does not exist. " +
+                                "Check spelling and capitalisation, or see the " +
+                                "documentation for existing options or ways to " +
+                                "add options of your own.", key));
+                    }
+                }
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                throw;
             }
             catch (Exception ex)
             {

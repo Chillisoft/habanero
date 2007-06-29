@@ -84,7 +84,7 @@ namespace Habanero.Bo.Loaders
                         "required 'key' attribute, which specifies the name " +
                         "of the rule to check, such as 'max' for integers.");
                 }
-                if (valueAtt == null || valueAtt.Length == 0)
+                if (valueAtt == null)
                 {
                     throw new InvalidXmlDefinitionException("An 'add' " +
                         "attribute in the class definitions was missing the " +
@@ -102,7 +102,7 @@ namespace Habanero.Bo.Loaders
                 throw new InvalidXmlDefinitionException("A 'rule' element in " +
                     "the class definitions must contain at least one 'add' " +
                     "element for each component of the rule, such as the " +
-                    "minimum length for an integer.");
+                    "minimum value for an integer.");
             }
         }
 

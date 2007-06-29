@@ -81,8 +81,16 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(
-                    @"<property  name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/><add key=""max"" value=""8"" /></rule></property>");
+                    @"<property  name=""TestProp""><rule name=""StringRule""><add key=""minLength"" value=""8""/><add key=""maxLength"" value=""8"" /></rule></property>");
             Assert.AreEqual("PropRuleString", def.PropRule.GetType().Name);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropertyWithInvalidPropRule()
+        {
+            PropDef def =
+                itsLoader.LoadProperty(
+                    @"<property  name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/></rule></property>");
         }
 
         [Test]

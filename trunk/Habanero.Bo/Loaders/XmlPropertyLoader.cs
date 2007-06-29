@@ -152,6 +152,7 @@ namespace Habanero.Bo.Loaders
                 typeConverter.Add("boolean", "Boolean");
                 typeConverter.Add("bool", "Boolean");
                 typeConverter.Add("guid", "Guid");
+                typeConverter.Add("date", "DateTime");
 
                 if (typeConverter.ContainsKey(_typeName))
                 {

@@ -38,8 +38,28 @@ namespace Habanero.Bo
         {
             try
             {
-                if (parameters.ContainsKey("min")) _minValue = Convert.ToInt32(parameters["min"]);
-                if (parameters.ContainsKey("max")) _maxValue = Convert.ToInt32(parameters["max"]);
+                foreach (string key in parameters.Keys)
+                {
+                    switch (key)
+                    {
+                        case "min":
+                            _minValue = Convert.ToInt32(parameters["min"]);
+                            break;
+                        case "max":
+                            _maxValue = Convert.ToInt32(parameters["max"]);
+                            break;
+                        default:
+                            throw new InvalidXmlDefinitionException(String.Format(
+                                "The rule type '{0}' for integers does not exist. " +
+                                "Check spelling and capitalisation, or see the " +
+                                "documentation for existing options or ways to " +
+                                "add options of your own.", key));
+                    }
+                }
+            }
+            catch (InvalidXmlDefinitionException ex)
+            {
+                throw;
             }
             catch (Exception ex)
             {
