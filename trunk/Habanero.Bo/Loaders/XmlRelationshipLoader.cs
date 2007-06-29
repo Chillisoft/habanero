@@ -169,7 +169,7 @@ namespace Habanero.Bo.Loaders
             catch (Exception ex)
             {
                 throw new InvalidXmlDefinitionException("In a 'relationship' " +
-                    "element, the 'deleteParentAction' attribute has been given " +
+                    "element, the 'deleteAction' attribute has been given " +
                     "an invalid value. The available options are " +
                     "DeleteRelated, DereferenceRelated and " +
                     "Prevent.", ex);
