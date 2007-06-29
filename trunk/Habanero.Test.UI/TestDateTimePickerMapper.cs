@@ -61,7 +61,9 @@ namespace Habanero.Test.Ui.BoControls
             SetupClassDefs(new DateTime(2004, 1, 1));
             mapper = new DateTimePickerMapper(dte, "MyRelationship.MyRelatedTestProp", true);
             mapper.BusinessObject = itsMyBo;
-            Assert.AreEqual(new DateTime(2004, 1, 1), dte.Value);
+            Assert.AreEqual(2004, dte.Value.Year);
+            Assert.AreEqual(1, dte.Value.Month);
+            Assert.AreEqual(1, dte.Value.Day);
         }
     }
 }
