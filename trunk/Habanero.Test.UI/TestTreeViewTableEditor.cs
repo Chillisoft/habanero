@@ -27,17 +27,20 @@ namespace Habanero.Test.Ui.Application
         {
             ClassDef.GetClassDefCol.Clear();
             itsClassDefMyBo = MyBo.LoadClassDefWithNoLookup();
+            frm = new Form();
+            itsTreeViewTableEditor = new TreeViewTableEditor();
+            itsTreeViewTableEditor.Initialise();
+            frm.Controls.Add(itsTreeViewTableEditor);
+            frm.Show();
+            itsGridControlTester = new ControlTester("GridControl");
         }
 
 
         [SetUp]
         public void SetupForm()
         {
-            frm = new Form();
-            itsTreeViewTableEditor = new TreeViewTableEditor();
-            frm.Controls.Add(itsTreeViewTableEditor);
-            frm.Show();
-            itsGridControlTester = new ControlTester("GridControl");
+            
+
         }
 
         [TearDown]
@@ -47,18 +50,20 @@ namespace Habanero.Test.Ui.Application
             frm.Dispose();
         }
 
-        //[Test]
-        //public void TestLayout()
-        //{
-        //    TreeViewTester treeViewTester = new TreeViewTester("TreeView");
-        //    Assert.AreEqual(DockStyle.Left, treeViewTester.Properties.Dock);
+        [Test]
+        public void TestLayout()
+        {
+            ControlTester tester = new ControlTester ("TreeViewTableEditor.SplitContainer.Panel1.MyTreeView");
+            Assert.AreEqual("test", tester.Text );
+            TreeViewTester treeViewTester = new TreeViewTester("TreeViewTableEditor.SplitContainer.Panel1.MyTreeView");
+            Assert.AreEqual(DockStyle.Left, treeViewTester.Properties.Dock);
 
-        //    Assert.AreEqual(DockStyle.Fill, itsGridControlTester["Dock"]);
-        //    ControlTester buttonControlTester = new ControlTester("ButtonControl");
-        //    Assert.AreEqual(DockStyle.Bottom, buttonControlTester["Dock"]);
-        //    ControlTester gridAndButtonPanel = new ControlTester("SimpleGridWithButtons");
-        //    Assert.AreEqual(DockStyle.Fill, gridAndButtonPanel["Dock"]);
-        //}
+            Assert.AreEqual(DockStyle.Fill, itsGridControlTester["Dock"]);
+            ControlTester buttonControlTester = new ControlTester("ButtonControl");
+            Assert.AreEqual(DockStyle.Bottom, buttonControlTester["Dock"]);
+            ControlTester gridAndButtonPanel = new ControlTester("SimpleGridWithButtons");
+            Assert.AreEqual(DockStyle.Fill, gridAndButtonPanel["Dock"]);
+        }
 
         //THIS is broken since i changed the formant - going to have to research the controltester again.
         //[Test]

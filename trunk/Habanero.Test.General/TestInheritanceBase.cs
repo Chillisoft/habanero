@@ -4,7 +4,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.General
 {
-    [TestFixture]
     public abstract class TestInheritanceBase : TestUsingDatabase
     {
         protected BusinessObject objCircle;
@@ -14,7 +13,6 @@ namespace Habanero.Test.General
         protected SqlStatement selectSql;
         protected string strID;
 
-        [TestFixtureSetUp]
         public void SetupTest()
         {
             this.SetupDBConnection();

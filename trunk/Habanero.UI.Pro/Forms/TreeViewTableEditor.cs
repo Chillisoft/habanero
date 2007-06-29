@@ -181,6 +181,7 @@ namespace Habanero.Ui.Forms
         {
             this._splitContainer1 = new System.Windows.Forms.SplitContainer();
             this._treeView = new System.Windows.Forms.TreeView();
+            _treeView.Name = "TreeView";
             this._groupBox1 = new System.Windows.Forms.GroupBox();
             this._gridAndButtons = new SimpleGridWithButtons();
             this._splitContainer1.Panel1.SuspendLayout();
@@ -193,10 +194,11 @@ namespace Habanero.Ui.Forms
             // 
             this._splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this._splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this._splitContainer1.Name = "_splitContainer1";
+            this._splitContainer1.Name = "SplitContainer";
             // 
             // _splitContainer1.Panel1
             // 
+            this._splitContainer1.Panel1.Name = "Panel1";
             this._splitContainer1.Panel1.Controls.Add(this._treeView);
             // 
             // _splitContainer1.Panel2
@@ -210,7 +212,7 @@ namespace Habanero.Ui.Forms
             // 
             this._treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this._treeView.Location = new System.Drawing.Point(0, 0);
-            this._treeView.Name = "_treeView";
+            this._treeView.Name = "MyTreeView";
             this._treeView.Size = new System.Drawing.Size(136, 231);
             this._treeView.TabIndex = 1;
             // 
@@ -243,6 +245,11 @@ namespace Habanero.Ui.Forms
             this._groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
+        }
+
+        internal void Initialise()
+        {
+            this.InitializeComponent();
         }
     }
 }

@@ -10,7 +10,7 @@
     <RootNamespace>Habanero.UI.Pro</RootNamespace>
     <AssemblyName>Habanero.UI.Pro</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>key.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -180,7 +180,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="key.pfx" />
+    <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Base\" />

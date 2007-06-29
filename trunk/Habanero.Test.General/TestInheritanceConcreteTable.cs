@@ -8,6 +8,11 @@ namespace Habanero.Test.General
     [TestFixture]
     public class TestInheritanceConcreteTable : TestInheritanceBase
     {
+        [TestFixtureSetUp]
+        public void SetupFixture()
+        {
+            SetupTest();
+        }
         protected override void SetupInheritanceSpecifics()
         {
             Circle.GetClassDef().SuperClassDef =

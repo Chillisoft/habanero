@@ -11,6 +11,11 @@ namespace Habanero.Test.General
     [TestFixture]
     public class TestInheritanceSingleTable : TestInheritanceBase
     {
+        [TestFixtureSetUp]
+        public void SetupFixture()
+        {
+            SetupTest();
+        }
         public static void RunTest()
         {
             TestInheritanceSingleTable test = new TestInheritanceSingleTable();

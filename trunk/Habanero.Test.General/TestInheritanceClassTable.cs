@@ -18,6 +18,12 @@ namespace Habanero.Test.General
             test.TestSuperClassKey();
         }
 
+        [TestFixtureSetUp]
+        public void SetupFixture()
+        {
+            SetupTest();
+        }
+
         protected override void SetupInheritanceSpecifics()
         {
             Circle.GetClassDef().SuperClassDef =
