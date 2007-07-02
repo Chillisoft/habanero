@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
@@ -145,32 +146,6 @@ namespace Habanero.Ui.Forms
                     width = lbl.PreferredWidth;
                 }
                 cbx.Items.Add(businessObjectBase);
-            }
-            cbx.DropDownWidth = width;
-        }
-
-        /// <summary>
-        /// As above, but specifies the list of items in the ComboBox with a 
-        /// set of string-Guid pairs
-        /// </summary>
-        public static void SetComboBoxCollection(ComboBox cbx, StringGuidPairCollection col, bool includeBlank)
-        {
-            int width = cbx.Width;
-            ;
-            Label lbl = ControlFactory.CreateLabel("", false);
-            cbx.Items.Clear();
-            if (includeBlank)
-            {
-                cbx.Items.Add("");
-            }
-            foreach (StringGuidPair stringguidpair in col)
-            {
-                lbl.Text = stringguidpair.Str;
-                if (lbl.PreferredWidth > width)
-                {
-                    width = lbl.PreferredWidth;
-                }
-                cbx.Items.Add(stringguidpair);
             }
             cbx.DropDownWidth = width;
         }

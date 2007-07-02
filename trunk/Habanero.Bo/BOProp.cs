@@ -6,6 +6,7 @@ using Habanero.Bo.CriteriaManager;
 using Habanero.Db;
 using Habanero.Base;
 using Habanero.Util;
+using log4net;
 using NUnit.Framework;
 
 namespace Habanero.Bo
@@ -17,6 +18,7 @@ namespace Habanero.Bo
     /// </summary>
     public class BOProp : IParameterSqlInfo
     {
+        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BOProp");
         protected object _currentValue = null;
         protected PropDef _propDef;
         protected bool _isValid = true;
@@ -125,13 +127,21 @@ namespace Habanero.Bo
                     {
                         //propValue = propValue;
                     }
-                    else if (this.PropertyType == typeof (TimeSpan) && propValue.GetType() == typeof (DateTime))
+                    else if (this.PropertyType == typeof(TimeSpan) && propValue.GetType() == typeof(DateTime))
                     {
-                        propValue = ((DateTime) propValue).TimeOfDay;
+                        propValue = ((DateTime)propValue).TimeOfDay;
                     }
-                    else
-                    {
-                        propValue = Convert.ChangeType(propValue, this.PropertyType);
+                    else {
+                        try {
+                            propValue = Convert.ChangeType(propValue, this.PropertyType);
+                        }
+                        catch (InvalidCastException) {
+                            log.Error(
+                                string.Format("Problem in InitialiseProp(): Can't convert value of type {0} to {1}",
+                                              propValue.GetType().FullName, this.PropertyType.FullName));
+                            log.Error(string.Format("Value: {0}, Property: {1}, Field: {2}, Table: {3}", propValue, this._propDef.PropertyName, this._propDef.DatabaseFieldName, _propDef.TableName));
+                            throw;
+                        }
                     }
                 }
             }
@@ -140,7 +150,7 @@ namespace Habanero.Bo
                 throw new PropertyValueInvalidException(String.Format(
                     "An error occurred while attempting to convert " +
                     "the loaded property value of '{0}' to its specified " +
-                    "type of '{1}'. The property value is '{2}'.",
+                    "type of '{1}'. The property value is '{2}'. See log for details",
                     PropertyName, PropertyType, propValue), ex);
             }
 

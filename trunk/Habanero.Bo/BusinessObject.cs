@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Security.Permissions;
 using System.Security.Principal;
@@ -826,15 +827,14 @@ namespace Habanero.Bo
                 !this.PrimaryKey.Contains(propName))
             {
                 Guid myGuid = (Guid) GetPropertyValue(propName);
-                StringGuidPair val = this.ClassDef.GetLookupListSource(propName).GetLookupList().FindByGuid(myGuid);
-                if (val.Id.Equals(myGuid))
-                {
-                    return val.Str;
+                Dictionary<string, object> lookupList = this.ClassDef.GetLookupListSource(propName).GetLookupList();
+
+                foreach (KeyValuePair<string, object> pair in lookupList) {
+                    if (pair.Value != null && pair.Value.Equals(myGuid )) {
+                        return pair.Key;
+                    }
                 }
-                else
-                {
-                    return myGuid;
-                }
+                return myGuid;
             }
             else
             {
@@ -871,7 +871,7 @@ namespace Habanero.Bo
             BOProp prop = GetBOProp(propName);
             if (!(propValue is Guid))
             {
-                if (propValue is string)
+                if (propValue is string && prop.PropertyType == typeof(Guid))
                 {
                     try
                     {
@@ -880,11 +880,9 @@ namespace Habanero.Bo
                     }
                     catch (FormatException)
                     {
-                        if (this.ClassDef.GetPropDef(propName).HasLookupList())
-                        {
-                            propValue =
-                                this.ClassDef.GetPropDef(propName).LookupListSource.GetLookupList().FindByValue(
-                                    propValue).Id;
+                        if (this.ClassDef.GetPropDef(propName).HasLookupList()) {
+                            Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupListSource.GetLookupList();
+                            propValue = lookupList[(string)propValue];
                         }
                     }
                 }

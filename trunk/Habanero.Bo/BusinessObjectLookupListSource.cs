@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
 using Habanero.Util;
@@ -84,8 +85,8 @@ namespace Habanero.Bo
         /// Returns a lookup-list for all the business objects stored under
         /// the class definition held in this instance
         /// </summary>
-        /// <returns>Returns a collection of string-Guid pairs</returns>
-        public StringGuidPairCollection GetLookupList()
+        /// <returns>Returns a collection of string-value pairs</returns>
+        public Dictionary<string, object> GetLookupList()
         {
             return this.GetLookupList(null);
         }
@@ -96,12 +97,12 @@ namespace Habanero.Bo
         /// connection provided
         /// </summary>
         /// <param name="connection">The database connection</param>
-        /// <returns>Returns a collection of string-Guid pairs</returns>
-        public StringGuidPairCollection GetLookupList(IDatabaseConnection connection)
+        /// <returns>Returns a collection of string-value pairs</returns>
+        public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
             BusinessObjectCollection col = new BusinessObjectCollection(ClassDef.GetClassDefCol[MyBoType]);
             col.Load("", "");
-            return CreateStringGuidPairCollection(col);
+            return CreateDisplayValueDictionary(col);
 		}
 
 		/// <summary>
@@ -111,12 +112,12 @@ namespace Habanero.Bo
 		/// </summary>
 		/// <param name="col">The business object collection</param>
 		/// <returns>Returns a StringGuidPairCollection object</returns>
-		public static StringGuidPairCollection CreateStringGuidPairCollection(BusinessObjectCollection col)
+        public static Dictionary<string, object> CreateDisplayValueDictionary(BusinessObjectCollection col)
 		{
-			StringGuidPairCollection lookupList = new StringGuidPairCollection();
+            Dictionary<string, object> lookupList = new Dictionary<string, object>();
 			foreach (BusinessObject bo in col)
 			{
-				lookupList.Add(new StringGuidPair(bo.ToString(), bo.ID.GetGuid()));
+				lookupList.Add(bo.ToString(), bo);
 			}
 			return lookupList;
 		}

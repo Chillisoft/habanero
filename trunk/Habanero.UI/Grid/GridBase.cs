@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using Habanero.Bo;
@@ -98,9 +99,9 @@ namespace Habanero.Ui.Grid
                     table.Columns.Add("str");
 
                     table.LoadDataRow(new object[] { "", "" }, true);            
-                    foreach (StringGuidPair item in source.GetLookupList())
+                    foreach (KeyValuePair<string, object> pair in source.GetLookupList())
                     {
-                        table.LoadDataRow(new object[] {item.Id.ToString("B"), item.Str}, true);
+                        table.LoadDataRow(new object[] { pair.Value, pair.Key }, true);
                     }
                     comboBoxCol.DataSource = table;
                     comboBoxCol.ValueMember = "str";

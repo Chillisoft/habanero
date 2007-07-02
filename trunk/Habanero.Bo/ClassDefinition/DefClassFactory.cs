@@ -83,9 +83,9 @@ namespace Habanero.Bo.ClassDefinition
 				                            deleteParentAction);
 		}
 
-		public SimpleLookupListSource CreateSimpleLookupListSource(StringGuidPairCollection stringGuidPairCollection)
+        public SimpleLookupListSource CreateSimpleLookupListSource(Dictionary<string, object> displayValueDictionary)
 		{
-			return new SimpleLookupListSource(stringGuidPairCollection);
+			return new SimpleLookupListSource(displayValueDictionary);
 		}
 
 		public SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping)

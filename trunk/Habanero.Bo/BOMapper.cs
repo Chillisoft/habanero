@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
@@ -42,7 +43,7 @@ namespace Habanero.Bo
         /// <param name="propertyName">The property name</param>
         /// <returns>Returns the lookup list or an empty collection if
         /// not available</returns>
-        public StringGuidPairCollection GetLookupList(string propertyName)
+        public Dictionary<string, object> GetLookupList(string propertyName)
         {
             PropDef def = _businessObject.ClassDef.GetPropDef(propertyName);
             //return def.GetLookupList(_businessObject.GetDatabaseConnection());
@@ -52,7 +53,7 @@ namespace Habanero.Bo
             }
             else
             {
-                return new StringGuidPairCollection();
+                return new Dictionary<string, object>();
             }
         }
 

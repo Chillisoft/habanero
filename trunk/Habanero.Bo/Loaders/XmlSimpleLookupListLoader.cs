@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
 using Habanero.Util;
@@ -10,7 +11,7 @@ namespace Habanero.Bo.Loaders
     /// </summary>
     public class XmlSimpleLookupListLoader : XmlLookupListSourceLoader
     {
-        private StringGuidPairCollection _stringGuidPairCollection;
+        private Dictionary<string, object> _displayValueDictionary;
 
         ///// <summary>
         ///// Constructor to initialise a loader
@@ -27,7 +28,7 @@ namespace Habanero.Bo.Loaders
         public XmlSimpleLookupListLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
-            _stringGuidPairCollection = new StringGuidPairCollection();
+            _displayValueDictionary = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -35,45 +36,46 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         protected override void LoadLookupListSourceFromReader()
         {
+            string options = _reader.GetAttribute("options");
+            if (options != null && options.Length > 0) {
+                string[] optionsArr = options.Split(new char[] {'|'});
+                foreach (string s in optionsArr) {
+                    _displayValueDictionary.Add(s, s);
+                }
+            }
             _reader.Read();
-            while (_reader.Name == "stringGuidPair")
+            while (_reader.Name == "item")
             {
-                string stringPart = _reader.GetAttribute("string");
-                string guidPart = _reader.GetAttribute("guid");
+                string stringPart = _reader.GetAttribute("display");
+                string valuePart = _reader.GetAttribute("value");
                 if (stringPart == null || stringPart.Length == 0)
                 {
-                    throw new InvalidXmlDefinitionException("A 'stringGuidPair' " +
-                        "is missing a 'string' attribute that specifies the " +
+                    throw new InvalidXmlDefinitionException("An 'item' " +
+                        "is missing a 'display' attribute that specifies the " +
                         "string to show to the user in a display.");
                 }
-                if (guidPart == null || guidPart.Length == 0)
+                if (valuePart == null || valuePart.Length == 0)
                 {
-                    throw new InvalidXmlDefinitionException("A 'stringGuidPair' " +
-                        "is missing a 'guid' attribute that specifies the " +
-                        "guid to store for the given property.");
+                    throw new InvalidXmlDefinitionException("An 'item' " +
+                        "is missing a 'value' attribute that specifies the " +
+                        "value to store for the given property.");
                 }
 
-                try
-                {
-                    Guid newGuid = new Guid(guidPart);
-                    _stringGuidPairCollection.Add(
-                        new StringGuidPair(stringPart, newGuid));
-                }
-                catch (Exception ex)
-                {
-                    throw new InvalidXmlDefinitionException(String.Format(
-                        "In a 'stringGuidPair', a 'guid' attribute provides '{0}', " +
-                        "which is not a valid Guid.", guidPart), ex);
-                }
+                    try {
+                        Guid newGuid = new Guid(valuePart);
+                        _displayValueDictionary.Add(stringPart, newGuid );
+                    } catch (FormatException) {
+                        _displayValueDictionary.Add(stringPart, valuePart);
+                    }
                 
                 ReadAndIgnoreEndTag();
             }
 
-            if (_stringGuidPairCollection.Count == 0)
+            if (_displayValueDictionary.Count == 0)
             {
                 throw new InvalidXmlDefinitionException("A 'simpleLookupList' " +
-                    "element does not contain any 'stringGuidPair' elements.  It " +
-                    "should contain one or more 'stringGuidPair' elements that " +
+                    "element does not contain any 'item' elements or any items in the 'options' attribute.  It " +
+                    "should contain one or more 'item' elements or one or more | separated options in the 'options' attribute that " +
                     "specify each of the available options in the lookup list.");
             }
         }
@@ -84,8 +86,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a SimpleLookupListSource object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateSimpleLookupListSource(_stringGuidPairCollection);
-			//return new SimpleLookupListSource(_stringGuidPairCollection);
+			return _defClassFactory.CreateSimpleLookupListSource(_displayValueDictionary);
+			//return new SimpleLookupListSource(_displayValueDictionary);
         }
     }
 }

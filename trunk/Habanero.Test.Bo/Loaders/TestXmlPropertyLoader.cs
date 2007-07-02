@@ -132,14 +132,45 @@ namespace Habanero.Test.Bo.Loaders
                     @"
 					<property  name=""TestProp"">
 						<simpleLookupList>
-							<stringGuidPair string=""s1"" guid=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
-							<stringGuidPair string=""s2"" guid=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
+							<item display=""s1"" value=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
+							<item display=""s2"" value=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
 						</simpleLookupList>
 					</property>");
             Assert.AreSame(typeof (SimpleLookupListSource), def.LookupListSource.GetType(),
                            "LookupListSource should be of type SimpleLookupListSource");
             SimpleLookupListSource source = (SimpleLookupListSource) def.LookupListSource;
-            Assert.AreEqual(2, source.GetLookupList().Count, "LookupList should have two stringguidpairs");
+            Assert.AreEqual(2, source.GetLookupList().Count, "LookupList should have two keyvaluepairs");
         }
+
+        [Test]
+        public void TestSimpleLookupListSourceOptions()
+        {
+            PropDef def =
+                itsLoader.LoadProperty(
+                    @"
+					<property  name=""TestProp"">
+						<simpleLookupList options=""option1|option2|option3"" />
+					</property>");
+            SimpleLookupListSource source = (SimpleLookupListSource)def.LookupListSource;
+            Assert.AreEqual(3, source.GetLookupList().Count, "LookupList should have three keyvaluepairs");
+        }
+
+        [Test]
+        public void TestSimpleLookupListSourceOptionsAndItems()
+        {
+            PropDef def =
+                itsLoader.LoadProperty(
+                    @"
+					<property  name=""TestProp"">
+						<simpleLookupList options=""option1|option2|option3"" >
+							<item display=""s1"" value=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
+							<item display=""s2"" value=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
+                        </simpleLookupList>
+					</property>");
+            SimpleLookupListSource source = (SimpleLookupListSource)def.LookupListSource;
+            Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
+        }
+
+
     }
 }

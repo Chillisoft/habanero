@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Habanero.Base;
 
 namespace Habanero.Bo
@@ -11,9 +12,9 @@ namespace Habanero.Bo
         /// Returns a new empty lookup-list
         /// </summary>
         /// <returns>Returns an empty lookup-list</returns>
-        public StringGuidPairCollection GetLookupList()
+        public Dictionary<string, object> GetLookupList()
         {
-            return new StringGuidPairCollection();
+            return new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -22,9 +23,9 @@ namespace Habanero.Bo
         /// <param name="connection">A parameter preserved for polymorphism.
         /// This can be set to null.</param>
         /// <returns>Returns an empty lookup-list</returns>
-        public StringGuidPairCollection GetLookupList(IDatabaseConnection connection)
+        public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
-            return new StringGuidPairCollection();
+            return new Dictionary<string, object>();
         }
     }
 }

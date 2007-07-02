@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
@@ -16,7 +17,7 @@ namespace Habanero.Ui.Forms
     {
         protected ClassDef _lookupTypeClassDef;
         protected ComboBox _comboBox;
-        protected StringGuidPairCollection _collection;
+        protected Dictionary<string, object> _collection;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class

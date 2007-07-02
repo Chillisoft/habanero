@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
@@ -51,18 +52,25 @@ namespace Habanero.Ui.Forms
             //log.Debug("ValueChanged in LookupComboBoxMapper") ;
             if (_businessObject != null && _comboBox.SelectedIndex != -1)
             {
-                Guid newValue = ((StringGuidPair) _comboBox.SelectedItem).Id;
-                if (newValue.Equals(Guid.Empty))
-                {
-                    if (_businessObject.GetPropertyValue(_propertyName) != null)
-                    {
-                        _businessObject.SetPropertyValue(_propertyName, null);
-                    }
+                string selectedOption = (string)_comboBox.SelectedItem;
+                Object newValue = null;
+                if (selectedOption != null && selectedOption.Length > 0) {
+                    newValue = _collection[selectedOption];
+                } else {
+                    newValue = null;
                 }
-                else if (_businessObject.GetPropertyValue(_propertyName) == null ||
-                         !newValue.Equals(_businessObject.GetPropertyValue(_propertyName)))
-                {
-                    _businessObject.SetPropertyValue(_propertyName, newValue);
+                if (newValue != null) {
+                    if (newValue.Equals(Guid.Empty)) {
+                        if (_businessObject.GetPropertyValue(_propertyName) != null) {
+                            _businessObject.SetPropertyValue(_propertyName, null);
+                        }
+                    }
+                    else if (_businessObject.GetPropertyValue(_propertyName) == null ||
+                             !newValue.Equals(_businessObject.GetPropertyValue(_propertyName))) {
+                        _businessObject.SetPropertyValue(_propertyName, newValue);
+                    }
+                } else {
+                    _businessObject.SetPropertyValue(_propertyName, null);
                 }
             }
             //log.Debug("ValueChanged in LookupComboBoxMapper complete") ;
@@ -88,8 +96,14 @@ namespace Habanero.Ui.Forms
                 {
                     try
                     {
-                        _comboBox.SelectedItem =
-                            _collection.FindByGuid((Guid) _businessObject.GetPropertyValue(_propertyName));
+                        foreach (KeyValuePair<string, object> pair in _collection) {
+                            if (pair.Value != null && pair.Value.Equals( _businessObject.GetPropertyValue(_propertyName))) {
+                                _comboBox.SelectedItem = pair.Key;
+                                continue;
+                            }
+                        }
+                        //_comboBox.SelectedItem =
+                        //    _collection.FindByGuid((Guid) _businessObject.GetPropertyValue(_propertyName));
                         _comboBox.SelectionStart = 0;
                         _comboBox.SelectionLength = 0;
                     }
@@ -107,7 +121,7 @@ namespace Habanero.Ui.Forms
         private void SetupLookupList()
         {
             BOMapper mapper = new BOMapper(_businessObject);
-            StringGuidPairCollection col = mapper.GetLookupList(_propertyName);
+            Dictionary<string, object> col = mapper.GetLookupList(_propertyName);
             if (_lookupTypeClassDef == null)
             {
                 SetupRightClickBehaviour();
@@ -119,8 +133,15 @@ namespace Habanero.Ui.Forms
             //}
             if (col.Count > 0 && _businessObject.GetPropertyValue(_propertyName) != null)
             {
-                _comboBox.SelectedItem =
-                    _collection.FindByGuid((Guid) _businessObject.GetPropertyValue(_propertyName));
+                foreach (KeyValuePair<string, object> pair in _collection)
+                {
+                    if (pair.Value != null && pair.Value.Equals( _businessObject.GetPropertyValue(_propertyName)))
+                    {
+                        _comboBox.SelectedItem = pair.Key;
+                    }
+                }
+               // _comboBox.SelectedItem =
+                //    _collection.FindByGuid((Guid) _businessObject.GetPropertyValue(_propertyName));
                 _comboBox.SelectionStart = 0;
                 _comboBox.SelectionLength = 0;
             }
@@ -131,21 +152,20 @@ namespace Habanero.Ui.Forms
         /// ComboBox with the collection of items provided
         /// </summary>
         /// <param name="col">The items used to populate the list</param>
-        public void SetLookupList(StringGuidPairCollection col)
+        public void SetLookupList(Dictionary<string, object> col)
         {
             int width = _comboBox.Width;
             Label lbl = ControlFactory.CreateLabel("", false);
             _collection = col;
             _comboBox.Items.Clear();
-            _comboBox.Items.Add(new StringGuidPair("", Guid.Empty));
-            foreach (StringGuidPair pair in col)
-            {
-                lbl.Text = pair.Str;
+            _comboBox.Items.Add("");
+            foreach (KeyValuePair<string, object> pair in _collection) {
+                lbl.Text = pair.Key;
                 if (lbl.PreferredWidth > width)
                 {
                     width = lbl.PreferredWidth;
                 }
-                _comboBox.Items.Add(pair);
+                _comboBox.Items.Add(pair.Key);
             }
             _comboBox.DropDownWidth = width;
         }

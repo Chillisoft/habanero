@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Db;
 using Habanero.Base;
@@ -25,7 +28,7 @@ namespace Habanero.Bo
 		private string _className;
         private int _timeout;
 		private DateTime _lastCallTime;
-        private StringGuidPairCollection _stringGuidPairCollection;
+        private Dictionary<string, object> _lookupList;
 
 		#region Constructors
 
@@ -198,7 +201,7 @@ namespace Habanero.Bo
         /// will be returned, otherwise a fresh one will be loaded.
         /// </summary>
         /// <returns>Returns a collection of string-Guid pairs</returns>
-        public StringGuidPairCollection GetLookupList()
+        public Dictionary<string, object> GetLookupList()
         {
             return this.GetLookupList(DatabaseConnection.CurrentConnection);
         }
@@ -211,18 +214,25 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="connection">The database connection</param>
         /// <returns>Returns a collection of string-Guid pairs</returns>
-        public StringGuidPairCollection GetLookupList(IDatabaseConnection connection)
+        public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
             if (DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout)
             {
-                return _stringGuidPairCollection;
+                return _lookupList;
             }
-            _stringGuidPairCollection = new StringGuidPairCollection();
+            _lookupList = new Dictionary<string, object>();
             ISqlStatement statement = new SqlStatement(connection.GetConnection());
             statement.Statement.Append(_statement);
-            _stringGuidPairCollection.Load(connection, statement);
+
+            DataTable dt = connection.LoadDataTable(statement, "", "");
+            ArrayList list = new ArrayList(dt.Rows.Count);
+            foreach (DataRow row in dt.Rows)
+            {
+                string stringValue = DBNull.Value.Equals(row[1]) ? "" : (string)row[1];
+                _lookupList.Add(stringValue, new Guid((string)row[0]));
+            }
             _lastCallTime = DateTime.Now;
-            return _stringGuidPairCollection;
+            return _lookupList;
 		}
 
 		#endregion ILookupListSource Implementation
@@ -258,7 +268,7 @@ namespace Habanero.Bo
         /// <param name="bo">A business object with attached database
         /// connection</param>
         /// <returns>Returns a collection of string-Guid pairs</returns>
-        public StringGuidPairCollection GetLookupList(BusinessObject bo)
+        public Dictionary<string, object> GetLookupList(BusinessObject bo)
         {
             return this.GetLookupList(bo.GetDatabaseConnection());
         }

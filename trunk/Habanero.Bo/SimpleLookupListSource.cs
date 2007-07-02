@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Habanero.Base;
 
 namespace Habanero.Bo
@@ -11,36 +12,36 @@ namespace Habanero.Bo
     /// </summary>
     public class SimpleLookupListSource : ILookupListSource
     {
-        private StringGuidPairCollection _lookupListCollection;
+        private Dictionary<string, object> _lookupList;
 
         /// <summary>
         /// Constructor to initialise the provider with a specified
         /// collection of string-Guid pairs
         /// </summary>
         /// <param name="collection">The string-Guid pair collection</param>
-        public SimpleLookupListSource(StringGuidPairCollection collection)
+        public SimpleLookupListSource(Dictionary<string, object> collection)
         {
-            _lookupListCollection = collection;
+            _lookupList = collection;
         }
 
         /// <summary>
         /// Returns the lookup list contents being held
         /// </summary>
         /// <returns>Returns a StringGuidPairCollection object</returns>
-        public StringGuidPairCollection GetLookupList()
+        public Dictionary<string, object> GetLookupList()
         {
-            return _lookupListCollection;
+            return _lookupList;
         }
 
         /// <summary>
         /// Returns the lookup list contents being held
         /// </summary>
-        /// <param name="connection">This can be set to null as it plays
-        /// no role</param>
+        /// <param name="connection">Ignored for this lookup list type.</param>
         /// <returns>Returns a StringGuidPairCollection object</returns>
-        public StringGuidPairCollection GetLookupList(IDatabaseConnection connection)
+        public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
-            return _lookupListCollection;
+            return _lookupList;
         }
+
     }
 }

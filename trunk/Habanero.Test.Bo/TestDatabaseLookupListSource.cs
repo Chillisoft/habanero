@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Bo;
 using Habanero.Db;
@@ -60,9 +61,17 @@ namespace Habanero.Test.Bo
         public void TestGetLookupList()
         {
             DatabaseLookupListSource source = new DatabaseLookupListSource("select MyBoID, TestProp from tbMyBo");
-            StringGuidPairCollection col = source.GetLookupList(conn);
+            Dictionary<string, object> col = source.GetLookupList(conn);
             Assert.AreEqual(3, col.Count);
-            Assert.AreEqual("Test1", col.FindByGuid(g1).Str);
+            string str = "";
+            foreach (KeyValuePair<string, object> pair in col)
+            {
+                if (pair.Value != null && pair.Value.Equals(g1))
+                {
+                    str = pair.Key;
+                }
+            }
+            Assert.AreEqual("Test1", str);
             dbConnMock.Verify();
         }
 
@@ -71,8 +80,8 @@ namespace Habanero.Test.Bo
         public void TestCallingGetLookupListTwiceOnlyAccessesDbOnce()
         {
             DatabaseLookupListSource source = new DatabaseLookupListSource("select MyBoID, TestProp from tbMyBo");
-            StringGuidPairCollection col = source.GetLookupList(conn);
-            StringGuidPairCollection col2 = source.GetLookupList(conn);
+            Dictionary<string, object> col = source.GetLookupList(conn);
+            Dictionary<string, object> col2 = source.GetLookupList(conn);
             Assert.AreSame(col2, col);
             dbConnMock.Verify();
         }
@@ -85,9 +94,9 @@ namespace Habanero.Test.Bo
                                        new object[] {});
 
             DatabaseLookupListSource source = new DatabaseLookupListSource("select MyBoID, TestProp from tbMyBo", 100);
-            StringGuidPairCollection col = source.GetLookupList(conn);
+            Dictionary<string, object> col = source.GetLookupList(conn);
             System.Threading.Thread.Sleep(250);
-            StringGuidPairCollection col2 = source.GetLookupList(conn);
+            Dictionary<string, object> col2 = source.GetLookupList(conn);
             Assert.AreNotSame(col2, col);
             dbConnMock.Verify();
         }

@@ -131,7 +131,7 @@ namespace Habanero.Test.General
         /// <remarks>
         /// If the Contact person is already leaded then an identical copy of it will be returned.
         /// </remarks>
-        /// <param name="id">The object Id</param>
+        /// <param name="id">The object Value</param>
         /// <returns>The loaded business object</returns>
         /// <exception cref="Habanero.Bo.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
@@ -13,7 +14,7 @@ namespace Habanero.Test
     /// </summary>
     public class Sample : BusinessObject
     {
-        private static StringGuidPairCollection itsLookupCollection;
+        private static Dictionary<string, object> itsLookupCollection;
 
         public Sample() : base()
         {
@@ -81,10 +82,10 @@ namespace Habanero.Test
             PropDef lPropDef =
                 new PropDef("SampleLookup2ID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookup2ID",
                             null);
-            itsLookupCollection = new StringGuidPairCollection();
-            itsLookupCollection.Add(new StringGuidPair("Test1", new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}")));
-            itsLookupCollection.Add(new StringGuidPair("Test2", new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}")));
-            itsLookupCollection.Add(new StringGuidPair("Test3", new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}")));
+            itsLookupCollection = new Dictionary<string, object>();
+            itsLookupCollection.Add("Test1", new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}"));
+            itsLookupCollection.Add("Test2", new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}"));
+            itsLookupCollection.Add("Test3", new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}"));
             lPropDef.LookupListSource = new SimpleLookupListSource(itsLookupCollection);
             lPropDefCol.Add(lPropDef);
             lPropDefCol.Add("SampleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
@@ -98,7 +99,7 @@ namespace Habanero.Test
             return lClassDef;
         }
 
-        public static StringGuidPairCollection LookupCollection
+        public static Dictionary<string, object> LookupCollection
         {
             get { return itsLookupCollection; }
         }

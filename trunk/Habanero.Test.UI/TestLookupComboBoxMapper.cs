@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Test.General;
@@ -42,29 +43,28 @@ namespace Habanero.Test.Ui.BoControls
         public void TestSetLookupList()
         {
             Assert.AreEqual(4, cbx.Items.Count);
-            Assert.AreSame(typeof (StringGuidPair), cbx.Items[0].GetType());
-            Assert.IsTrue(cbx.Items.Contains(Sample.LookupCollection[1]));
+            Assert.AreSame(typeof (string), cbx.Items[0].GetType());
+            Assert.IsTrue(cbx.Items.Contains("Test1"));
         }
 
         [Test]
         public void TestComboBoxValue()
         {
-            s.SampleLookupID = Sample.LookupCollection[0].Id;
+            s.SampleLookupID = new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}");
             mapper.BusinessObject = s;
-            Assert.AreEqual(Sample.LookupCollection[0].Id, ((StringGuidPair) cbx.SelectedItem).Id, "Value is not set.");
-            s.SampleLookupID = Sample.LookupCollection[1].Id;
-            Assert.AreEqual(Sample.LookupCollection[1].Id, ((StringGuidPair) cbx.SelectedItem).Id,
-                            "Value is not set after changing bo prop");
+            Assert.AreEqual("Test1", (string)cbx.SelectedItem, "Value is not set.");
+            s.SampleLookupID = new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}");
+            Assert.AreEqual("Test2", (string)cbx.SelectedItem, "Value is not set after changing bo prop");
         }
 
         [Test]
         public void TestSettingComboValueUpdatesBO()
         {
-            s.SampleLookupID = Sample.LookupCollection[0].Id;
+            s.SampleLookupID = new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}");
             mapper.BusinessObject = s;
             cbx.SelectedIndex = 2;
-            StringGuidPair selected = (StringGuidPair) cbx.SelectedItem;
-            Assert.AreEqual(selected.Id, s.SampleLookupID,
+            string selected = (string) cbx.SelectedItem;
+            Assert.AreEqual(Sample.LookupCollection[selected], s.SampleLookupID,
                             "BO property value isn't changed when control value is changed.");
         }
 
@@ -82,12 +82,12 @@ namespace Habanero.Test.Ui.BoControls
             cbx = new ComboBox();
             mapper = new LookupComboBoxMapper(cbx, "SampleLookup2ID", false);
             s = new Sample();
-            s.SetPropertyValue("SampleLookup2ID", Sample.LookupCollection[1].Id);
+            s.SetPropertyValue("SampleLookup2ID", new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}"));
             mapper.BusinessObject = s;
             Assert.AreEqual(4, cbx.Items.Count);
-            Assert.AreSame(typeof (StringGuidPair), cbx.Items[0].GetType());
-            Assert.IsTrue(cbx.Items.Contains(Sample.LookupCollection[1]));
-            Assert.AreEqual("Test2", ((StringGuidPair) cbx.SelectedItem).Str);
+            Assert.AreSame(typeof (string), cbx.Items[0].GetType());
+            Assert.IsTrue(cbx.Items.Contains("Test1"));
+            Assert.AreEqual("Test2", (string) cbx.SelectedItem);
         }
     }
 }

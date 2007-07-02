@@ -31,7 +31,7 @@ namespace Habanero.Bo.ClassDefinition
 
 		MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction);
 
-		SimpleLookupListSource CreateSimpleLookupListSource(StringGuidPairCollection stringGuidPairCollection);
+		SimpleLookupListSource CreateSimpleLookupListSource(Dictionary<string, object> displayValueDictionary);
 
 		SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping);
 

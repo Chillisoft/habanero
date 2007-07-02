@@ -162,8 +162,8 @@ namespace Habanero.Test
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
 						<simpleLookupList>
-							<stringGuidPair string=""s1"" guid=""{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"" />
-							<stringGuidPair string=""s2"" guid=""{F428FADC-3740-412c-91A7-ECEB4D414414}"" />
+							<item display=""s1"" value=""{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"" />
+							<item display=""s2"" value=""{F428FADC-3740-412c-91A7-ECEB4D414414}"" />
 						</simpleLookupList>
 					</property>
 					<primaryKey>
@@ -202,8 +202,8 @@ namespace Habanero.Test
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
 						<simpleLookupList>
-							<stringGuidPair string=""s1"" guid=""{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"" />
-							<stringGuidPair string=""s2"" guid=""{F428FADC-3740-412c-91A7-ECEB4D414414}"" />
+							<item display=""s1"" value=""{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"" />
+							<item display=""s2"" value=""{F428FADC-3740-412c-91A7-ECEB4D414414}"" />
 						</simpleLookupList>
 					</property>
 					<property  name=""RelatedID"" type=""Guid"" />

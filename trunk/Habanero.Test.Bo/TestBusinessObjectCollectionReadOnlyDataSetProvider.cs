@@ -28,7 +28,7 @@ namespace Habanero.Test.Bo
         {
             BusinessObject bo3 = itsClassDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
-            bo3.SetPropertyValue("TestProp2", "bo3prop2");
+            bo3.SetPropertyValue("TestProp2", "s1");
             itsCollection.Add(bo3);
             Assert.AreEqual(3, itsTable.Rows.Count);
             Assert.AreEqual("bo3prop1", itsTable.Rows[2][1]);
@@ -39,7 +39,7 @@ namespace Habanero.Test.Bo
         {
             BusinessObject bo3 = itsClassDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
-            bo3.SetPropertyValue("TestProp2", "bo3prop2");
+            bo3.SetPropertyValue("TestProp2", "s2");
             itsCollection.Add(bo3);
             bo3.SetPropertyValue("TestProp", "UpdatedValue");
             Assert.AreEqual("UpdatedValue", itsTable.Rows[2][1]);
