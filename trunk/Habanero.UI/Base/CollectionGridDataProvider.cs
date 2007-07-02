@@ -72,7 +72,7 @@ namespace Habanero.Ui.Base
             IUserInterfaceMapper uiDef;
             if (_uiDefName != null && _uiDefName.Length > 0)
             {
-                uiDef = _collection.SampleBo.GetUserInterfaceMapper(_uiDefName);
+                uiDef = new BOMapper(_collection.SampleBo).GetUserInterfaceMapper(_uiDefName);
                 if (uiDef == null)
                 {
                     throw new NullReferenceException(String.Format(
@@ -85,7 +85,7 @@ namespace Habanero.Ui.Base
             }
             else
             {
-                uiDef = _collection.SampleBo.GetUserInterfaceMapper();
+                uiDef = new BOMapper(_collection.SampleBo).GetUserInterfaceMapper();
                 if (uiDef == null)
                 {
                     throw new NullReferenceException("An error occurred while " +

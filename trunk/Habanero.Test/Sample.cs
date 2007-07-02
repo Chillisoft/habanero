@@ -54,7 +54,7 @@ namespace Habanero.Test
             return _classDef;
         }
 
-        public override IUserInterfaceMapper GetUserInterfaceMapper()
+        protected override IUserInterfaceMapper GetUserInterfaceMapper()
         {
             return new SampleUserInterfaceMapper();
         }

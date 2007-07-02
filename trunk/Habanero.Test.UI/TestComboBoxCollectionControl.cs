@@ -70,7 +70,7 @@ namespace Habanero.Test.Ui.BoControls
 
             itsDataProviderMockControl.ExpectAndReturn("GetCollection", itsCollection);
             itsDataProviderMockControl.ExpectAndReturn("GetUIFormDef",
-                                                       bo1.GetUserInterfaceMapper().GetUIFormProperties());
+                                                       new BOMapper(bo1).GetUserInterfaceMapper().GetUIFormProperties());
 
             itsControl =
                 new ComboBoxCollectionControl("Select MyBo:", dataProviderMock, confirmerMock, databaseConnectionMock);

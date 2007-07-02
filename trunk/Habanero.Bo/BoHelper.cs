@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 
 namespace Habanero.Bo
 {
@@ -18,5 +19,6 @@ namespace Habanero.Bo
         public static bool CallBeforeApplyEdit(BusinessObject bo) {
             return bo.BeforeApplyEdit();
         }
+
     }
 }

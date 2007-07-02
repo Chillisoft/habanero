@@ -108,7 +108,7 @@ namespace Habanero.Ui.Forms
                     collectionForNode = _tableDataSource.GetCollection(sampleBo);
                     _gridAndButtons.Grid .SetGridDataProvider(
                         new SimpleGridDataProvider(collectionForNode,
-                                                   sampleBo.GetUserInterfaceMapper().GetUIGridProperties()));
+                                                   new BOMapper(sampleBo).GetUserInterfaceMapper().GetUIGridProperties()));
                     //_grid.te = e.Node.Text;
                 }
                 catch (Exception ex)

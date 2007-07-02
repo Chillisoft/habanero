@@ -45,7 +45,7 @@ namespace Habanero.Test.General
         {
             try
             {
-                objCircle.PrimaryKey.Contains("ShapeID");
+                objCircle.ID.Contains("ShapeID");
             }
             catch (HabaneroArgumentException)
             {

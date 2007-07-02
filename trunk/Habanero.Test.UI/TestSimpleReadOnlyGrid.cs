@@ -38,7 +38,7 @@ namespace Habanero.Test.Ui.Application
             bo2.SetPropertyValue("TestProp2", "2Value2");
             col.Add(bo1);
             col.Add(bo2);
-            grid.SetGridDataProvider(new SimpleGridDataProvider(col, bo1.GetUserInterfaceMapper().GetUIGridProperties()));
+            grid.SetGridDataProvider(new SimpleGridDataProvider(col, new BOMapper(bo1).GetUserInterfaceMapper().GetUIGridProperties()));
             frm = new Form();
             grid.Dock = DockStyle.Fill;
             frm.Controls.Add(grid);

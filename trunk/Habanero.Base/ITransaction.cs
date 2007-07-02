@@ -4,7 +4,7 @@ namespace Habanero.Base
     /// An interface to model a database transaction and some of its
     /// associated functions
     /// </summary>
-    public interface ITransaction
+    public  interface ITransaction
     {
         /// <summary>
         /// Carries out final steps on all transactions in the collection

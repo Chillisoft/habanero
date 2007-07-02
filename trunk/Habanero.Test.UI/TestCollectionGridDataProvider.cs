@@ -35,7 +35,7 @@ namespace Habanero.Test.Ui.Generic
         {
             CollectionGridDataProvider provider = new CollectionGridDataProvider(itsCollection);
             Assert.AreSame(itsCollection, provider.GetCollection());
-            Assert.AreSame(itsBo1.GetUserInterfaceMapper().GetUIGridProperties(), provider.GetUIGridDef());
+            Assert.AreSame(new BOMapper(itsBo1).GetUserInterfaceMapper().GetUIGridProperties(), provider.GetUIGridDef());
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Habanero.Test.Ui.Generic
         {
             CollectionGridDataProvider provider = new CollectionGridDataProvider(itsCollection, "Alternate");
             Assert.AreSame(itsCollection, provider.GetCollection());
-            Assert.AreSame(itsBo1.GetUserInterfaceMapper("Alternate").GetUIGridProperties(), provider.GetUIGridDef());
+            Assert.AreSame(new BOMapper(itsBo1).GetUserInterfaceMapper("Alternate").GetUIGridProperties(), provider.GetUIGridDef());
         }
     }
 }

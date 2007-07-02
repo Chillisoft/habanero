@@ -41,8 +41,8 @@ namespace Habanero.Test.General
         {
             try
             {
-                Assert.IsTrue(itsFilledCircle.PrimaryKey.Contains("FilledCircleID"));
-                Assert.AreEqual(1, itsFilledCircle.PrimaryKey.Count,
+                Assert.IsTrue(itsFilledCircle.ID.Contains("FilledCircleID"));
+                Assert.AreEqual(1, itsFilledCircle.ID.Count,
                                 "There should only be one item in the primary key (even when using class table inheritance).");
             }
             catch (HabaneroArgumentException)
@@ -104,7 +104,7 @@ namespace Habanero.Test.General
             Assert.IsTrue(msuperKey.Contains("CircleID"), "Super class key should contain the CircleID property");
             Assert.AreEqual(1, msuperKey.Count, "Super class key should only have one prop");
             Assert.AreEqual(msuperKey["CircleID"].PropertyValue,
-                            itsFilledCircle.PrimaryKey["FilledCircleID"].PropertyValue,
+                            itsFilledCircle.ID["FilledCircleID"].PropertyValue,
                             "CircleID and FilledCircleID should be the same");
         }
 

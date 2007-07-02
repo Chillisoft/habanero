@@ -473,23 +473,6 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns the business object from the loaded object collection
-        /// </summary>
-        /// <param name="dr">The IDataReader object</param>
-        /// <returns>Returns a business object</returns>
-        /// TODO ERIC - the code is identical to above and param not used
-        protected internal BusinessObject GetLoadedBusinessObject(IDataReader dr)
-        {
-            BusinessObject busObj = GetLoadedBusinessObject(ID);
-            if (busObj == null)
-            {
-                AddToLoadedBusinessObjectCol(this);
-                return this;
-            }
-            return busObj;
-        }
-
-        /// <summary>
         /// Adds a weak reference so that the object will be cleaned up if no 
         /// other objects in the system access it and if the garbage collector 
         /// runs
@@ -577,14 +560,6 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns the primary key object
-        /// </summary>
-        public BOPrimaryKey PrimaryKey
-        {
-            get { return _primaryKey; }
-        }
-
-        /// <summary>
         /// Sets the concurrency control object
         /// </summary>
         /// <param name="concurrencyControl">The concurrency control</param>
@@ -597,7 +572,7 @@ namespace Habanero.Bo
         /// Returns an XML string that contains the changes in the object
         /// since the last persistance to the database
         /// </summary>
-        public string DirtyXML
+        internal string DirtyXML
         {
             get
             {
@@ -623,50 +598,6 @@ namespace Habanero.Bo
             get { return _relationshipCol; }
             set { _relationshipCol = value; }
         }
-
-        //		private Relationship GetRelationship(string relationshipName) 
-        //		{
-        //			//TODO: sensible errors if relationship not configured.
-        //			return _relationshipCol[relationshipName];
-        //		}
-        //
-        //		/// <summary>
-        //		/// TODO: think about names for these
-        //		/// </summary>
-        //		/// <param name="relationshipName"></param>
-        //		/// <returns></returns>
-        //		public BusinessObject GetRelatedBusinessObject(string relationshipName) 
-        //		{
-        //			ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
-        //			if (!(_relationshipCol == null)) 
-        //			{
-        //				SingleRelationship rel = (SingleRelationship) GetRelationship(relationshipName);
-        //				if (!(rel == null)) 
-        //				{
-        //					return rel.GetRelatedObject(this.GetDatabaseConnection() );
-        //				}
-        //			}
-        //			return null;
-        //		}
-        //
-        //		/// <summary>
-        //		/// TODO: thinkg about names for these
-        //		/// </summary>
-        //		/// <param name="relationshipName"></param>
-        //		/// <returns></returns>
-        //		public BusinessObjectBaseCollection GetRelatedBusinessObjectCol(string relationshipName) 
-        //		{
-        //			ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
-        //			if (!(_relationshipCol == null)) 
-        //			{
-        //				MultipleRelationship rel = (MultipleRelationship) GetRelationship(relationshipName);
-        //				if (!(rel == null)) 
-        //				{
-        //					return rel.GetRelatedBusinessObjectCol();
-        //				}
-        //			}
-        //			return null;
-        //		}
 
         /// <summary>
         /// Returns the class definition
@@ -710,39 +641,10 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns the logged-on Windows user name
-        /// </summary>
-        /// <returns>Returns the name as a string</returns>
-        protected string CurrentLoggedOnUserName()
-        {
-            return WindowsIdentity.GetCurrent().Name;
-        }
-
-        /// <summary>
-        /// Returns the logged-on Windows user name
-        /// </summary>
-        /// <returns>Returns the name as a string</returns>
-        /// TODO ERIC - why is this exactly as above?
-        protected string CurrentWindowsUserName()
-        {
-            return WindowsIdentity.GetCurrent().Name;
-        }
-
-        /// <summary>
-        /// Returns the current machine name
-        /// </summary>
-        /// <returns>Returns the name as a string</returns>
-        protected string CurrentMachineName()
-        {
-            return Environment.MachineName;
-        }
-
-        /// <summary>
         /// Returns the collection of BOKeys
         /// </summary>
         /// <returns>Returns a BOKeyCol object</returns>
-        /// TODO: This shouldn't be public, but how do we test without that?.
-        public BOKeyCol GetBOKeyCol()
+        internal BOKeyCol GetBOKeyCol()
         {
             return _keysCol;
         }
@@ -751,7 +653,7 @@ namespace Habanero.Bo
         /// Returns a string useful for debugging output
         /// </summary>
         /// <returns>Returns an output string</returns>
-        public string GetDebugOutput()
+        internal string GetDebugOutput()
         {
             string output = "";
             output += "Type: " + this.GetType().Name + Environment.NewLine;
@@ -824,7 +726,7 @@ namespace Habanero.Bo
         public object GetPropertyValueToDisplay(string propName)
         {
             if (this.GetBOProp(propName).PropertyType == typeof (Guid) && this.GetPropertyValue(propName) != null &&
-                !this.PrimaryKey.Contains(propName))
+                !this.ID.Contains(propName))
             {
                 Guid myGuid = (Guid) GetPropertyValue(propName);
                 Dictionary<string, object> lookupList = this.ClassDef.GetLookupListSource(propName).GetLookupList();
@@ -1130,14 +1032,9 @@ namespace Habanero.Bo
             else
             {
                 ParseParameterInfo(searchExpression);
-                //TODO- Parametrize this.
                 selectSQL.Statement.Append(SelectSQLWithNoSearchClauseIncludingWhere());
                 searchExpression.SqlExpressionString(selectSQL, DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
                                                      DatabaseConnection.CurrentConnection.RightFieldDelimiter);
-//					searchExpression.SqlExpressionString(DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
-//					                                     DatabaseConnection.CurrentConnection.RightFieldDelimiter,
-//					                                     DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
-//					                                     DatabaseConnection.CurrentConnection.RightDateDelimiter)) ;);
                 return this.GetDatabaseConnection().LoadDataReader(selectSQL);
             }
         }
@@ -1203,7 +1100,7 @@ namespace Habanero.Bo
                         numRowsUpdated = _connection.ExecuteSql(statementCollection, null);
                         if (_transactionLog != null)
                         {
-                            _transactionLog.RecordTransactionLog(this, CurrentLoggedOnUserName());
+                            _transactionLog.RecordTransactionLog(this, WindowsIdentity.GetCurrent().Name);
                         }
                         if (numRowsUpdated == statementCollection.Count)
                         {
@@ -1512,8 +1409,8 @@ namespace Habanero.Bo
                                     //database matching these criteria.
                                 {
                                     throw new BusObjDuplicateConcurrencyControlException(ClassName,
-                                                                                         CurrentLoggedOnUserName(),
-                                                                                         CurrentMachineName(),
+                                                                                         WindowsIdentity.GetCurrent().Name,
+                                                                                         Environment.MachineName,
                                                                                          DateTime.Now, whereClause, this);
                                 }
                             }
@@ -1559,8 +1456,8 @@ namespace Habanero.Bo
                                 //database matching these criteria.
                             {
                                 throw new BusObjDuplicateConcurrencyControlException(ClassName,
-                                                                                     CurrentLoggedOnUserName(),
-                                                                                     CurrentMachineName(), DateTime.Now,
+                                                                                     WindowsIdentity.GetCurrent().Name,
+                                                                                     Environment.MachineName, DateTime.Now,
                                                                                      whereClause, this);
                             }
                         }
@@ -1638,7 +1535,7 @@ namespace Habanero.Bo
         /// <param name="selectSQL">The sql statement used to generate and track
         /// parameters</param>
         /// <returns>Returns a string</returns>
-        public virtual string SelectSqlStatement(SqlStatement selectSQL)
+        protected internal  virtual string SelectSqlStatement(SqlStatement selectSQL)
         {
             string statement = SelectSQLWithNoSearchClause();
             if (statement.IndexOf(" WHERE ") == -1)
@@ -1698,7 +1595,12 @@ namespace Habanero.Bo
         /// to the database
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        public ISqlStatementCollection GetPersistSql()
+        ISqlStatementCollection ITransaction.GetPersistSql()
+        {
+            return this.GetPersistSql();
+        }
+
+        protected internal ISqlStatementCollection GetPersistSql()
         {
             if (IsNew && !(IsDeleted))
             {
@@ -1724,7 +1626,7 @@ namespace Habanero.Bo
         /// Builds a "delete" sql statement list for this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        public SqlStatementCollection GetDeleteSQL()
+        protected internal SqlStatementCollection GetDeleteSQL()
         {
             SqlStatement deleteSql;
             SqlStatementCollection statementCollection = new SqlStatementCollection();
@@ -1748,7 +1650,7 @@ namespace Habanero.Bo
         /// Returns an "insert" sql statement list for inserting this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        public SqlStatementCollection GetInsertSQL()
+        protected internal SqlStatementCollection GetInsertSQL()
         {
             InsertStatementGenerator gen = new InsertStatementGenerator(this, this.GetConnection());
             return gen.Generate();
@@ -1758,7 +1660,7 @@ namespace Habanero.Bo
         /// Returns an "update" sql statement list for updating this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        public SqlStatementCollection GetUpdateSQL()
+        protected internal SqlStatementCollection GetUpdateSQL()
         {
             UpdateStatementGenerator gen = new UpdateStatementGenerator(this, this.GetConnection());
             return gen.Generate();
@@ -1771,7 +1673,7 @@ namespace Habanero.Bo
         /// <param name="limit">The limit</param>
         /// <returns>Returns a sql string</returns>
         /// TODO ERIC - clarify on the limit
-        public string GetSelectSql(int limit)
+        protected internal string GetSelectSql(int limit)
         {
             return new SelectStatementGenerator(this, this._connection).Generate(limit);
         }
@@ -1781,7 +1683,7 @@ namespace Habanero.Bo
         /// object from the database
         /// </summary>
         /// <returns>Returns a sql string</returns>
-        public string GetSelectSql()
+        protected internal string GetSelectSql()
         {
             return GetSelectSql(-1);
         }
@@ -1952,20 +1854,15 @@ namespace Habanero.Bo
         /// Carries out additional steps once the transaction has been committed
         /// to the database
         /// </summary>
-        public void TransactionCommited()
+        void ITransaction.TransactionCommited()
         {
             _boPropCol.BackupPropertyValues();
             this.UpdateAfterApplyEdit();
         }
 
-        //		SqlStatementList ITransaction.GetPersistSql() {
-        //			return this.GetPersistSQL();
-        //		}
-
         /// <summary>
         /// Checks the persistance rules
         /// </summary>
-        /// TODO ERIC - this formatting surprises me - is it correct?
         void ITransaction.CheckPersistRules()
         {
             this.CheckPersistRules();
@@ -1974,7 +1871,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Cancels the edit
         /// </summary>
-        public void TransactionCancelEdits()
+        void ITransaction.TransactionCancelEdits()
         {
             this.CancelEdit();
         }
@@ -1982,7 +1879,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Rolls back the transactions. Does nothing in this implementation.
         /// </summary>
-        public void TransactionRolledBack()
+        void ITransaction.TransactionRolledBack()
         {
             //Do nothing
         }
@@ -1993,7 +1890,7 @@ namespace Habanero.Bo
         /// <returns>Returns zero</returns>
         /// TODO ERIC - what is a transaction ranking? some kind of priority
         /// scheme?
-        public int TransactionRanking()
+        int ITransaction.TransactionRanking()
         {
             return 0;
         }
@@ -2005,7 +1902,7 @@ namespace Habanero.Bo
         /// Carries out additional steps before committing changes to the
         /// database
         /// </summary>
-        public void BeforeCommit()
+        void ITransaction.BeforeCommit()
         {
             string reasonNotSaved;
             if (IsValid(out reasonNotSaved))
@@ -2023,7 +1920,7 @@ namespace Habanero.Bo
         /// Carries out additional steps after committing changes to the
         /// database
         /// </summary>
-        public void AfterCommit()
+        void ITransaction.AfterCommit()
         {
             this.AfterApplyEdit();
         }
@@ -2036,9 +1933,9 @@ namespace Habanero.Bo
         /// Returns the user interface mapper
         /// </summary>
         /// <returns>Returns an IUserInterfaceMapper object</returns>
-        public virtual IUserInterfaceMapper GetUserInterfaceMapper()
+        protected internal virtual IUserInterfaceMapper GetUserInterfaceMapper()
         {
-            return this._classDef.UIDefCol["default"];
+            return this.GetUserInterfaceMapper("default");
         }
 
         /// <summary>
@@ -2046,7 +1943,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="uiDefName">The UIDefName</param>
         /// <returns>Returns an IUserInterfaceMapper object</returns>
-        public virtual IUserInterfaceMapper GetUserInterfaceMapper(string uiDefName)
+        protected internal virtual IUserInterfaceMapper GetUserInterfaceMapper(string uiDefName)
         {
             return this._classDef.UIDefCol[uiDefName];
         }
