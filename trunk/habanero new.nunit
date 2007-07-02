@@ -1,7 +1,6 @@
 ﻿<NUnitProject>
   <Settings activeconfig="Default" />
   <Config name="Default" binpathtype="Auto">
-    <assembly path="Testing_bin\Habanero.Test.General.dll" />
     <assembly path="Testing_bin\Habanero.Test.UI.dll" />
     <assembly path="Testing_bin\Habanero.UI.dll" />
     <assembly path="Testing_bin\Habanero.UI.Pro.dll" />
@@ -15,5 +14,6 @@
     <assembly path="Testing_bin\Habanero.Test.Bo.dll" />
     <assembly path="Testing_bin\Habanero.Test.Db.dll" />
     <assembly path="Testing_bin\Habanero.Test.dll" />
+    <assembly path="Testing_bin\Habanero.Test.General.dll" />
   </Config>
 </NUnitProject>

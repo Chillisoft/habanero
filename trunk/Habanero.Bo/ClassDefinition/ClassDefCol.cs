@@ -105,6 +105,20 @@ namespace Habanero.Bo.ClassDefinition
         }
 
 		/// <summary>
+		/// Indicates whether the collection contains a class definition
+		/// representing the passed type.
+		/// </summary>
+		/// <param name="assemblyName">The name of the class assembly</param>
+		/// <param name="className">The name of the class</param>
+		/// <returns>Returns true if found, false if not</returns>
+		public bool Contains(string assemblyName, string className)
+		{
+			bool found;
+			string typeId = GetTypeIdForItem(assemblyName,className, out found);
+			return found;
+		}
+
+		/// <summary>
 		/// Indicates whether the collection contains the class definition
 		/// that is passed as a parameter.
 		/// </summary>

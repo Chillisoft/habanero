@@ -138,14 +138,14 @@ namespace Habanero.Bo.ClassDefinition
 					   PropReadWriteRule propRWStatus,
 					   string databaseFieldName,
 					   object defaultValue, string defaultValueString, bool compulsory)
-		{
+		{			
+			ArgumentValidationHelper.CheckStringArgumentNotEmpty(propName, "propName","This field is compulsary for the PropDef class.");
 			if (propName.IndexOfAny(new char[] { '.', '-', '|' }) != -1)
 			{
 				throw new ArgumentException(
 					"A property name cannot contain any of the following characters: [.-|]  Invalid property name " +
 					propName);
 			}
-			ArgumentValidationHelper.CheckStringArgumentNotEmpty(propName, "propName","This field is compulsary for the PropDef class.");
 			_propName = propName;
 			if (propType != null)
 			{
