@@ -101,7 +101,7 @@ namespace Habanero.Ui.Forms
             Label lbl = ControlFactory.CreateLabel("", false);
             if (optionList != null && optionList.Length > 0)
             {
-                string[] options = optionList.Split(new Char[] {';'});
+                string[] options = optionList.Split(new Char[] {'|'});
                 foreach (string s in options)
                 {
                     if (s.Trim().Length > 0)

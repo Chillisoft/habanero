@@ -28,7 +28,7 @@ namespace Habanero.Test.Ui.BoControls
             cbx = new ComboBox();
             mapper = new ListComboBoxMapper(cbx, "SampleText", false);
             s = new Sample();
-            mapper.SetList("One;Two;Three;Four", false);
+            mapper.SetList("One|Two|Three|Four", false);
         }
 
         [Test]

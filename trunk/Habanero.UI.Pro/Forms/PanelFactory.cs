@@ -205,7 +205,18 @@ namespace Habanero.Ui.Forms
                     {
                         if (property.GetParameterValue("numLines") != null)
                         {
-                            int numLines = Convert.ToInt32(property.GetParameterValue("numLines"));
+                            int numLines = 0;
+                            try
+                            {
+                                numLines = Convert.ToInt32(property.GetParameterValue("numLines"));
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new InvalidXmlDefinitionException("An error " +
+                                    "occurred while reading the 'numLines' parameter " +
+                                    "from the class definitions.  The 'value' " +
+                                    "attribute must be a valid integer.");
+                            }
                             if (numLines > 1)
                             {
                                 TextBox tb = (TextBox) ctl;
@@ -216,7 +227,15 @@ namespace Habanero.Ui.Forms
                         }
                         if (property.GetParameterValue("isEmail") != null)
                         {
-                            bool isEmail = Convert.ToBoolean(property.GetParameterValue("isEmail"));
+                            string isEmailValue = (string)property.GetParameterValue("isEmail");
+                            if (isEmailValue != "true" && isEmailValue != "false")
+                            {
+                                throw new InvalidXmlDefinitionException("An error " +
+                                    "occurred while reading the 'isEmail' parameter " +
+                                    "from the class definitions.  The 'value' " +
+                                    "attribute must hold either 'true' or 'false'.");
+                            }
+                            bool isEmail = Convert.ToBoolean(isEmailValue);
                             if (isEmail)
                             {
                                 TextBox tb = (TextBox) ctl;
@@ -252,14 +271,34 @@ namespace Habanero.Ui.Forms
                     int colSpan = 1;
                     if (property.GetParameterValue("colSpan") != null)
                     {
-                        colSpan = Convert.ToInt32(property.GetParameterValue("colSpan"));
+                        try
+                        {
+                            colSpan = Convert.ToInt32(property.GetParameterValue("colSpan"));
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new InvalidXmlDefinitionException("An error " +
+                                "occurred while reading the 'colSpan' parameter " +
+                                "from the class definitions.  The 'value' " +
+                                "attribute must be a valid integer.");
+                        }
                     }
                     colSpan = (colSpan - 1)*2 + 1; // must span label columns too
 
                     int rowSpan = 1;
                     if (property.GetParameterValue("rowSpan") != null)
                     {
-                        rowSpan = Convert.ToInt32(property.GetParameterValue("rowSpan"));
+                        try
+                        {
+                            rowSpan = Convert.ToInt32(property.GetParameterValue("rowSpan"));
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new InvalidXmlDefinitionException("An error " +
+                                "occurred while reading the 'rowSpan' parameter " +
+                                "from the class definitions.  The 'value' " +
+                                "attribute must be a valid integer.");
+                        }
                     }
                     if (rowSpan == 1)
                     {
