@@ -69,19 +69,28 @@ namespace Habanero.Ui.Forms
 
         private bool IsDecimalType()
         {
-            Type propertyType = _businessObject.ClassDef.PropDefcol[_propertyName].PropertyType;
+            Type propertyType = GetPropertyType();
+            if (propertyType == null) return false;
             return
                 (propertyType == typeof (decimal) || propertyType == typeof (double) || propertyType == typeof (float));
         }
 
         private bool IsIntegerType()
         {
-            Type propertyType = _businessObject.ClassDef.PropDefcol[_propertyName].PropertyType;
+            Type propertyType = GetPropertyType();
+            if (propertyType == null) return false;
             return
                 (propertyType == typeof (int) || propertyType == typeof (long) ||
                  propertyType == typeof (short) || propertyType == typeof (uint) ||
                  propertyType == typeof (byte) || propertyType == typeof (ulong)
                  || propertyType == typeof (ushort) || propertyType == typeof(sbyte));
+        }
+
+        private Type GetPropertyType()
+        {
+            if (_businessObject == null ) return null;
+            if (!_businessObject.ClassDef.PropDefcol.Contains(_propertyName)) return null;
+            return _businessObject.ClassDef.PropDefcol[_propertyName].PropertyType;
         }
 
         /// <summary>
