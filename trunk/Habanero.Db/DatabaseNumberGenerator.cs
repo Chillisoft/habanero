@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using Habanero.Base;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// Generates unique numbers by storing the last number generated in

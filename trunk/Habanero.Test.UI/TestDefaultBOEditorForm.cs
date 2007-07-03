@@ -2,7 +2,7 @@ using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using Habanero.Ui.Forms;
@@ -28,7 +28,7 @@ namespace Habanero.Test.Ui.BoControls
         {
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
             this.SetupDBConnection();
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             itsClassDefMyBo = MyBo.LoadClassDefWithNoLookup();
         }
 

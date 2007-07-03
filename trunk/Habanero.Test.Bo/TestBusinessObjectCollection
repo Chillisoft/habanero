@@ -7,10 +7,10 @@ using System;
 namespace Habanero.Test.Bo
 {
     /// <summary>
-    /// Summary description for TestBusinessObjectBaseCollection.
+    /// Summary description for TestBusinessObjectCollection.
     /// </summary>
     [TestFixture]
-    public class TestBusinessObjectBaseCollection : TestUsingDatabase
+    public class TestBusinessObjectCollection : TestUsingDatabase
     {
         [TestFixtureSetUp]
         public void SetupTestFixture()

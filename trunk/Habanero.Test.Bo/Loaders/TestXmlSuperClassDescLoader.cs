@@ -17,7 +17,7 @@ namespace Habanero.Test.Bo.Loaders
         public void SetupTest()
         {
             itsLoader = new XmlSuperClassDefLoader();
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(
                 new XmlClassDefsLoader(
                     @"
@@ -45,7 +45,7 @@ namespace Habanero.Test.Bo.Loaders
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""Habanero.Test.Bo.Loaders.TestClass"" assembly=""Habanero.Test.Bo"" />");
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
-            Assert.AreSame(ClassDef.GetClassDefCol[typeof (TestClass)], def.SuperClassClassDef);
+            Assert.AreSame(ClassDef.ClassDefs[typeof (TestClass)], def.SuperClassClassDef);
         }
 
         [Test]

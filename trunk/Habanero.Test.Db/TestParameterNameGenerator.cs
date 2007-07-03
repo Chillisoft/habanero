@@ -1,5 +1,5 @@
 using System.Data;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.Db
@@ -13,9 +13,8 @@ namespace Habanero.Test.Db
         [Test]
         public void TestNameGeneration()
         {
-            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SQLServer, "test", "test", "test", "test", "1000");
-            DatabaseConnectionFactory factory = new DatabaseConnectionFactory();
-            IDbConnection dbConn = factory.CreateConnection(config).GetTestConnection();
+            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000");
+            IDbConnection dbConn = DatabaseConnectionFactory.CreateConnection(config).TestConnection;
             ParameterNameGenerator gen = new ParameterNameGenerator(dbConn);
             Assert.AreEqual("@Param0", gen.GetNextParameterName());
             Assert.AreEqual("@Param1", gen.GetNextParameterName());
@@ -26,10 +25,8 @@ namespace Habanero.Test.Db
         [Test]
         public void TestNameGenerationMySql()
         {
-            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.MySQL, "test", "test", "test", "test", "1000");
-            DatabaseConnectionFactory factory = new DatabaseConnectionFactory();
-
-            IDbConnection dbConn = factory.CreateConnection(config).GetTestConnection();
+            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.MySql, "test", "test", "test", "test", "1000");
+            IDbConnection dbConn = DatabaseConnectionFactory.CreateConnection(config).TestConnection;
             ParameterNameGenerator gen = new ParameterNameGenerator(dbConn);
             Assert.AreEqual("?Param0", gen.GetNextParameterName());
             Assert.AreEqual("?Param1", gen.GetNextParameterName());
@@ -42,9 +39,7 @@ namespace Habanero.Test.Db
         public void TestNameGenerationOracle()
         {
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Oracle, "test", "test", "test", "test", "1000");
-            DatabaseConnectionFactory factory = new DatabaseConnectionFactory();
-
-            IDbConnection dbConn = factory.CreateConnection(config).GetTestConnection();
+            IDbConnection dbConn = DatabaseConnectionFactory.CreateConnection(config).TestConnection;
             ParameterNameGenerator gen = new ParameterNameGenerator(dbConn);
             Assert.AreEqual(":Param0", gen.GetNextParameterName());
             Assert.AreEqual(":Param1", gen.GetNextParameterName());

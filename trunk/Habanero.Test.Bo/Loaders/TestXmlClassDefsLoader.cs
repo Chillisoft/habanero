@@ -14,7 +14,7 @@ namespace Habanero.Test.Bo.Loaders
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
         }
 
         [Test]

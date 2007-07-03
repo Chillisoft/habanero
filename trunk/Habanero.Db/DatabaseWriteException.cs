@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// An exception thrown when an error occurred while attempting to
@@ -20,13 +20,13 @@ namespace Habanero.Db
         /// </summary>
         /// <param name="userMessage">A message to users</param>
         /// <param name="developerMessage">A message to developers</param>
-        /// <param name="SqlStatement">The sql statement that was used</param>
-        /// <param name="ConnectString">The connection string that was used</param>
+        /// <param name="sqlStatement">The sql statement that was used</param>
+        /// <param name="connectString">The connection string that was used</param>
         public DatabaseWriteException(string userMessage, string developerMessage,
-                                      string SqlStatement, string ConnectString) : base(userMessage)
+                                      string sqlStatement, string connectString) : base(userMessage)
         {
-            _sqlStatement = SqlStatement;
-            _connectString = ConnectString;
+            _sqlStatement = sqlStatement;
+            _connectString = connectString;
             _developerMessage = developerMessage;
         }
 
@@ -36,13 +36,13 @@ namespace Habanero.Db
         /// <param name="userMessage">A message to users</param>
         /// <param name="developerMessage">A message to developers</param>
         /// <param name="inner">The inner exception</param>
-        /// <param name="SqlStatement">The sql statement that was used</param>
-        /// <param name="ConnectString">The connection string that was used</param>
+        /// <param name="sqlStatement">The sql statement that was used</param>
+        /// <param name="connectString">The connection string that was used</param>
         public DatabaseWriteException(string userMessage, string developerMessage, Exception inner,
-                                      string SqlStatement, string ConnectString) : base(userMessage, inner)
+                                      string sqlStatement, string connectString) : base(userMessage, inner)
         {
-            _sqlStatement = SqlStatement;
-            _connectString = ConnectString;
+            _sqlStatement = sqlStatement;
+            _connectString = connectString;
             _developerMessage = developerMessage;
         }
 
@@ -101,6 +101,19 @@ namespace Habanero.Db
         public string DeveloperMessage
         {
             get { return _developerMessage; }
+        }
+
+        /// <summary>
+        /// Required for ISerializable.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("sqlStatement", _sqlStatement);
+            info.AddValue("developerMessage",_developerMessage);
+            info.AddValue("connectString",_connectString);
         }
     }
 }

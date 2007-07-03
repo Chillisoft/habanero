@@ -373,7 +373,7 @@ namespace Habanero.Bo.ClassDefinition
         #endregion
 
         
-        #region IParameterSQLInfo Members
+        #region IParameterSqlInfo Members
 
         /// <summary>
         /// Returns the parameter type (typically either DateTime or String)

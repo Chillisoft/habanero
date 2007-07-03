@@ -14,7 +14,7 @@ namespace Habanero.Test.Ui.Generic
     public class TestCollectionGridDataProvider
     {
         private ClassDef itsClassDef;
-        private BusinessObjectCollection itsCollection;
+        private BusinessObjectCollection<BusinessObject> itsCollection;
 
         private MyBo itsBo1;
         private MyBo itsBo2;
@@ -22,9 +22,9 @@ namespace Habanero.Test.Ui.Generic
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
-            itsCollection = new BusinessObjectCollection(itsClassDef);
+            itsCollection = new BusinessObjectCollection<BusinessObject>(itsClassDef);
 
             itsBo1 = MyBo.Create();
             itsBo2 = MyBo.Create();

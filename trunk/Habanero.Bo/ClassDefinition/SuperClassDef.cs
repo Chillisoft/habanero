@@ -106,7 +106,7 @@ namespace Habanero.Bo.ClassDefinition
 				if (_superClassClassDef == null && _assemblyName != null && _className != null)
 				{
 					//TODO error: What happens if the ClassDef does not exist?
-					_superClassClassDef = ClassDef.GetClassDefCol[_assemblyName, _className];
+					_superClassClassDef = ClassDef.ClassDefs[_assemblyName, _className];
 				}
 				return _superClassClassDef;
 			}

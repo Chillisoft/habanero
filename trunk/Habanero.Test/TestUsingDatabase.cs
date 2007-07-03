@@ -1,4 +1,4 @@
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Test;
 using Habanero.Test.General;
 
@@ -12,14 +12,14 @@ namespace Habanero.Test
         public void SetupDBConnection()
         {
             if (DatabaseConnection.CurrentConnection != null &&
-                DatabaseConnection.CurrentConnection.GetType() == typeof (DatabaseConnectionMySQL))
+                DatabaseConnection.CurrentConnection.GetType() == typeof (DatabaseConnectionMySql))
             {
                 return;
             }
             else
             {
                 DatabaseConnection.CurrentConnection =
-                    new DatabaseConnectionMySQL("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
+                    new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
                 DatabaseConnection.CurrentConnection.ConnectionString =
                     MyDBConnection.GetDatabaseConfig().GetConnectionString();
                 DatabaseConnection.CurrentConnection.GetConnection();

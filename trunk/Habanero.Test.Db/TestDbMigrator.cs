@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using NMock;
 using NUnit.Framework;
@@ -11,7 +11,7 @@ namespace Habanero.Test.Db
     [TestFixture]
     public class TestDbMigrator
     {
-        DbMigrator itsDbMigrator;
+        DBMigrator itsDbMigrator;
         IDatabaseConnection itsConn;
         Mock itsConnMock;
         ISettingsStorer itsSettingsStorer;
@@ -21,7 +21,7 @@ namespace Habanero.Test.Db
         public void SetupFixture() {
             itsConnMock = new DynamicMock(typeof(IDatabaseConnection));
             itsConn = (IDatabaseConnection)itsConnMock.MockInstance;
-            itsDbMigrator = new DbMigrator(itsConn);
+            itsDbMigrator = new DBMigrator(itsConn);
             itsDbMigrator.AddMigration(1, "migration1;");
             itsDbMigrator.AddMigration(2, "migration2;");
             itsDbMigrator.AddMigration(3, "migration3;");
@@ -60,7 +60,7 @@ namespace Habanero.Test.Db
         public void TestMigrate() {
             itsDbMigrator.SetSettingsStorer(itsSettingsStorer);
             itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { new SqlStatementCollection(new SqlStatement(itsConn.GetConnection(), "migration2;")) });
-            itsSettingsStorerMock.ExpectAndReturn("SetString", null, new object[] { DbMigrator.DATABASE_VERSION_SETTING, "2" });
+            itsSettingsStorerMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
             itsDbMigrator.Migrate(1, 2);
             itsConnMock.Verify();
             itsSettingsStorerMock.Verify();
@@ -69,23 +69,23 @@ namespace Habanero.Test.Db
         [Test]
         public void TestGetCurrentVersion() {
             itsDbMigrator.SetSettingsStorer(itsSettingsStorer);
-            itsSettingsStorerMock.ExpectAndReturn("GetString", "2", new object[] { DbMigrator.DATABASE_VERSION_SETTING });
-            Assert.AreEqual(2, itsDbMigrator.GetCurrentVersion());
+            itsSettingsStorerMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
+            Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
             itsSettingsStorerMock.Verify();
         }
         
 
         [Test, ExpectedException(typeof(ArgumentNullException ))]
         public void TestGetCurrentVersionFailure() {
-            Assert.AreEqual(2, itsDbMigrator.GetCurrentVersion());
+            Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
         }
 
         [Test]
         public void TestGetCurrentVersionGlobalSettings()
         {
-            itsSettingsStorerMock.ExpectAndReturn("GetString", "2", new object[] { DbMigrator.DATABASE_VERSION_SETTING });
+            itsSettingsStorerMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
             GlobalRegistry.SettingsStorer = itsSettingsStorer;            
-            Assert.AreEqual(2, itsDbMigrator.GetCurrentVersion());
+            Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
             GlobalRegistry.SettingsStorer = null;
             itsSettingsStorerMock.Verify();
         }        
@@ -94,8 +94,8 @@ namespace Habanero.Test.Db
         [Test]
         public void TestMigrateTo() {
             itsDbMigrator.SetSettingsStorer(itsSettingsStorer);
-            itsSettingsStorerMock.ExpectAndReturn("GetString", "1", new object[] { DbMigrator.DATABASE_VERSION_SETTING });
-            itsSettingsStorerMock.ExpectAndReturn("SetString", null, new object[] {DbMigrator.DATABASE_VERSION_SETTING, "3"});
+            itsSettingsStorerMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
+            itsSettingsStorerMock.ExpectAndReturn("SetString", null, new object[] {DBMigrator.DatabaseVersionSetting, "3"});
             SqlStatementCollection col = new SqlStatementCollection();
             col.Add(new SqlStatement(itsConn.GetConnection(), "migration2;"));
             col.Add(new SqlStatement(itsConn.GetConnection(), "migration3;"));
@@ -109,7 +109,7 @@ namespace Habanero.Test.Db
         
         [Test]
         public void TestGetLatestVersion() {
-            Assert.AreEqual(3, itsDbMigrator.GetLatestVersion());
+            Assert.AreEqual(3, itsDbMigrator.LatestVersion());
         }
 
         [Test]

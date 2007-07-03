@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Util;
 using log4net;
@@ -265,7 +265,7 @@ namespace Habanero.Bo
                     {
                         return ((DateTime) PersistedPropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
                     }
-                        //SQL return ((DateTime)PropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
+                        //Sql return ((DateTime)PropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
                     else
                     {
                         return PersistedPropertyValue.ToString();
@@ -305,7 +305,7 @@ namespace Habanero.Bo
                         {
                             return ((DateTime) PropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
                         }
-                            //SQL return ((DateTime)PropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
+                            //Sql return ((DateTime)PropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
                         else
                         {
                             return PropertyValue.ToString();
@@ -410,7 +410,7 @@ namespace Habanero.Bo
                 }
                 else
                 {
-                    string paramName = sql.GetParameterNameGenerator().GetNextParameterName();
+                    string paramName = sql.ParameterNameGenerator.GetNextParameterName();
                     sql.AddParameter(paramName, PersistedPropertyValue);
                     return this.DatabaseFieldName + " = " + paramName;
                 }
@@ -441,7 +441,7 @@ namespace Habanero.Bo
                 }
                 else
                 {
-                    String paramName = sql.GetParameterNameGenerator().GetNextParameterName();
+                    String paramName = sql.ParameterNameGenerator.GetNextParameterName();
                     sql.AddParameter(paramName, this.PropertyValue);
                     return this.DatabaseFieldName + " = " + paramName;
                 }

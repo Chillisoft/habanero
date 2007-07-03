@@ -4,7 +4,7 @@ using System.Text;
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -92,7 +92,7 @@ namespace Habanero.Test.Bo
 
         public static MockBO Create()
         {
-            return (MockBO)ClassDef.GetClassDefCol[typeof(MockBO)].CreateNewBusinessObject();
+            return (MockBO)ClassDef.ClassDefs[typeof(MockBO)].CreateNewBusinessObject();
         }
 
 
@@ -104,7 +104,7 @@ namespace Habanero.Test.Bo
             }
             else
             {
-                return ClassDef.GetClassDefCol[typeof(MockBO)];
+                return ClassDef.ClassDefs[typeof(MockBO)];
             }
         }
 
@@ -123,7 +123,7 @@ namespace Habanero.Test.Bo
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["MockBOID"]);
             ClassDef lClassDef = new ClassDef(typeof(MockBO), primaryKey, lPropDefCol, keysCol, null);
-            ClassDef.GetClassDefCol.Add(lClassDef);
+            ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 

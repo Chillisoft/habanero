@@ -20,7 +20,7 @@ namespace Habanero.Test.Bo.Loaders
         public void SetupTest()
         {
             itsLoader = new XmlPropertyLoader();
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestDatabaseLookupListSourceWithClassDef()
         {
-        	ClassDef.GetClassDefCol.Clear();
+        	ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader();
 
             ClassDef classDef = MyBo.LoadDefaultClassDef();

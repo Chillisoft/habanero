@@ -25,7 +25,7 @@ namespace Habanero.Ui.Grid
         private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Grid.GridBase");
         protected DataTable _dataTable;
         protected BOCollectionDataSetProvider _dataSetProvider;
-        protected BusinessObjectCollection _collection;
+        protected BusinessObjectCollection<BusinessObject> _collection;
         private IObjectInitialiser _objectInitialiser;
         private IGridDataProvider _provider;
         protected DataView _dataTableDefaultView;
@@ -197,7 +197,7 @@ namespace Habanero.Ui.Grid
         /// <param name="col">The business object collection</param>
         /// <returns>Returns the new provider</returns>
         protected abstract BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
-            BusinessObjectCollection col);
+            BusinessObjectCollection<BusinessObject> col);
 
         /// <summary>
         /// Sets the object initialiser

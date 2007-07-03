@@ -19,7 +19,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestCreateBusinessObject()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader();
             itsClassDef =
                 loader.LoadClass(
@@ -45,9 +45,9 @@ namespace Habanero.Test.Bo
                 new XmlClassDefsLoader(
                     GetTestClassDefinition(""),
                      new DtdLoader());
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(loader);
-            Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
+            Assert.AreEqual(2, ClassDef.ClassDefs.Count);
         }
 
     	private string GetTestClassDefinition(string suffix)
@@ -77,13 +77,13 @@ namespace Habanero.Test.Bo
 		{
 			XmlClassDefsLoader loader;
             loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
-    		ClassDef.GetClassDefCol.Clear();
+    		ClassDef.ClassDefs.Clear();
 			ClassDef.LoadClassDefs(loader);
-			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
+			Assert.AreEqual(2, ClassDef.ClassDefs.Count);
 			//Now load the same again.
             loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
 			ClassDef.LoadClassDefs(loader);
-			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
+			Assert.AreEqual(2, ClassDef.ClassDefs.Count);
 		}
 
 		[Test]
@@ -91,13 +91,13 @@ namespace Habanero.Test.Bo
 		{
 			XmlClassDefsLoader loader;
             loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
-			ClassDef.GetClassDefCol.Clear();
+			ClassDef.ClassDefs.Clear();
 			ClassDef.LoadClassDefs(loader);
-			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
+			Assert.AreEqual(2, ClassDef.ClassDefs.Count);
 			// Now load some more classes
             loader = new XmlClassDefsLoader(GetTestClassDefinition("Other"), new DtdLoader());
 			ClassDef.LoadClassDefs(loader);
-			Assert.AreEqual(4, ClassDef.GetClassDefCol.Count);
+			Assert.AreEqual(4, ClassDef.ClassDefs.Count);
 		}
     }
 }

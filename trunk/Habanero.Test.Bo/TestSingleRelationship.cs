@@ -17,7 +17,7 @@ namespace Habanero.Test.Bo
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             itsClassDef = MyBo.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
         }

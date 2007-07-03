@@ -1,4 +1,4 @@
-using Habanero.Db;
+using Habanero.DB;
 
 namespace Habanero.Ui.Forms
 {

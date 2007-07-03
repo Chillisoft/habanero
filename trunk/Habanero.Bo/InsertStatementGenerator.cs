@@ -3,7 +3,7 @@ using System.Data;
 using System.Text;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 
 namespace Habanero.Bo.SqlGeneration
 {
@@ -17,7 +17,7 @@ namespace Habanero.Bo.SqlGeneration
         private StringBuilder _dbFieldList;
         private StringBuilder _dbValueList;
         private ParameterNameGenerator _gen;
-        private SqlStatement _insertSQL;
+        private SqlStatement _insertSql;
         private SqlStatementCollection _statementCollection;
         private IDbConnection _conn;
         private bool _firstField;
@@ -100,9 +100,9 @@ namespace Habanero.Bo.SqlGeneration
                     AddPropToInsertStatement(prop);
                 }
             }
-            _insertSQL.Statement.Append(@"INSERT INTO " + tableName + " (" + _dbFieldList.ToString() + ") VALUES (" +
+            _insertSql.Statement.Append(@"INSERT INTO " + tableName + " (" + _dbFieldList.ToString() + ") VALUES (" +
                                        _dbValueList.ToString() + ")");
-            _statementCollection.Insert(0, _insertSQL);
+            _statementCollection.Insert(0, _insertSql);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Habanero.Bo.SqlGeneration
         {
             _dbFieldList = new StringBuilder(_bo.GetBOPropCol().Count*20);
             _dbValueList = new StringBuilder(_bo.GetBOPropCol().Count*20);
-            _insertSQL = new SqlStatement(_conn);
+            _insertSql = new SqlStatement(_conn);
             _gen = new ParameterNameGenerator(_conn);
             _firstField = true;
         }
@@ -132,8 +132,8 @@ namespace Habanero.Bo.SqlGeneration
             _dbFieldList.Append(prop.DatabaseFieldName);
             paramName = _gen.GetNextParameterName();
             _dbValueList.Append(paramName);
-            _insertSQL.AddParameter(paramName, prop.PropertyValue);
-            //_insertSQL.AddParameter(paramName, DatabaseUtil.PrepareValue(prop.PropertyValue));
+            _insertSql.AddParameter(paramName, prop.PropertyValue);
+            //_insertSql.AddParameter(paramName, DatabaseUtil.PrepareValue(prop.PropertyValue));
             _firstField = false;
         }
     }

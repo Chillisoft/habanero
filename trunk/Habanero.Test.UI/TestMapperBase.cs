@@ -1,7 +1,7 @@
 using System;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using NMock;
@@ -28,7 +28,7 @@ namespace Habanero.Test.Ui.BoControls
             Mock relColControl = new DynamicMock(typeof (IRelationshipCol));
             IRelationshipCol mockRelCol = (IRelationshipCol) relColControl.MockInstance;
 
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             ClassDef itsClassDef = MyBo.LoadClassDefWithRelationship();
             ClassDef itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             itsMyBo = (MyBo) itsClassDef.CreateNewBusinessObject(connection);

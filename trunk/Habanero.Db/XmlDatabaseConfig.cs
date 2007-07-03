@@ -1,7 +1,8 @@
 using System.Xml;
+using System.Xml.XPath;
 using Habanero.Base;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// Stores database configuration information in an XML format
@@ -9,7 +10,7 @@ namespace Habanero.Db
     /// TODO ERIC - review
     public class XmlDatabaseConfig : DatabaseConfig
     {
-        private XmlNode _node;
+        private IXPathNavigable _node;
         private XmlWrapper _xmlWrapper;
 
         /// <summary>
@@ -17,7 +18,7 @@ namespace Habanero.Db
         /// </summary>
         /// <param name="node">The xml node</param>
         /// <param name="wrapper">The xml wrapper</param>
-        public XmlDatabaseConfig(XmlNode node, XmlWrapper wrapper) : base()
+        public XmlDatabaseConfig(IXPathNavigable node, XmlWrapper wrapper) : base()
         {
             _node = node;
             _xmlWrapper = wrapper;

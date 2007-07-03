@@ -1,11 +1,11 @@
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
     /// <summary>
     /// An interface to model a collection of sql statements
     /// </summary>
-    public interface ISqlStatementCollection : IEnumerable
+    public interface ISqlStatementCollection : IEnumerable<ISqlStatement>
     {
         /// <summary>
         /// Returns the number of statements in the collection

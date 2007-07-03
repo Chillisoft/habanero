@@ -11,7 +11,7 @@ namespace Habanero.Bo.CriteriaManager
     /// </summary>
     /// TODO: Needs to be parametrized.
     /// TODO ERIC - needs serious revision
-    public class SQLCriteriaCreator
+    public class SqlCriteriaCreator
     {
         private IExpression _expression;
 
@@ -20,18 +20,18 @@ namespace Habanero.Bo.CriteriaManager
         /// </summary>
         /// <param name="exp">The expression</param>
         /// <param name="bo">The business object</param>
-        public SQLCriteriaCreator(IExpression exp, BusinessObject bo)
+        public SqlCriteriaCreator(IExpression exp, BusinessObject bo)
         {
             ClassDef lClassDef = bo.ClassDef;
-            ConstructSQLCriteriaCreator(exp, lClassDef);
+            ConstructSqlCriteriaCreator(exp, lClassDef);
         }
 
         /// <summary>
         /// Constructor as before, but with a class definition specified
         /// </summary>
-        public SQLCriteriaCreator(IExpression exp, ClassDef classDef)
+        public SqlCriteriaCreator(IExpression exp, ClassDef classDef)
         {
-            ConstructSQLCriteriaCreator(exp, classDef);
+            ConstructSqlCriteriaCreator(exp, classDef);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Habanero.Bo.CriteriaManager
         /// </summary>
         /// <param name="exp">The expression to create sql for</param>
         /// <param name="classDef">The class definition</param>
-        private void ConstructSQLCriteriaCreator(IExpression exp, ClassDef classDef)
+        private void ConstructSqlCriteriaCreator(IExpression exp, ClassDef classDef)
         {
             _expression = exp;
             ClassDef lClassDef = classDef;
@@ -50,11 +50,11 @@ namespace Habanero.Bo.CriteriaManager
             }
 
             //		//TODO:Use DB Connection to get field/date separators - use parametrized sql
-            //		mSQLExpression = exp.SqlExpressionString("", "", "", "");
+            //		mSqlExpression = exp.SqlExpressionString("", "", "", "");
         }
 
-        //	public ISqlStatement SQLExpression {
-        //		get { return mSQLExpression; }
+        //	public ISqlStatement SqlExpression {
+        //		get { return mSqlExpression; }
         //	}
 
         /// <summary>

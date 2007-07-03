@@ -22,7 +22,7 @@ namespace Habanero.Test.Bo.Loaders
         public void SetupTest()
         {
             loader = new XmlClassLoader();
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'class1' was encountered when loading the class definitions.")]
@@ -223,7 +223,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestClassWithSuperClass()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(
                 new XmlClassDefsLoader(
                     @"
@@ -248,7 +248,7 @@ namespace Habanero.Test.Bo.Loaders
 				</class>
 			");
             Assert.IsNotNull(def.SuperClassDef);
-            Assert.AreSame(ClassDef.GetClassDefCol[typeof (TestClass)], def.SuperClassDef.SuperClassClassDef);
+            Assert.AreSame(ClassDef.ClassDefs[typeof (TestClass)], def.SuperClassDef.SuperClassClassDef);
         }
 
         [Test]

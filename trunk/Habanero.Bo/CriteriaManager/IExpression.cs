@@ -66,10 +66,10 @@ namespace Habanero.Bo.CriteriaManager
 
 
         /// <summary>
-        /// Copies across the parameterised sql info (see IParameterSQLInfo for
+        /// Copies across the parameterised sql info (see IParameterSqlInfo for
         /// more detail)
         /// </summary>
-        /// <param name="info">The IParameterSQLInfo object</param>
+        /// <param name="info">The IParameterSqlInfo object</param>
         /// <param name="tableName">The table name</param>
         void SetParameterSqlInfo(IParameterSqlInfo info, String tableName);
     }

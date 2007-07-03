@@ -4,7 +4,7 @@ using System.Xml;
 using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 //using Habanero.Ui.Misc;
 using Habanero.Ui.Base;
@@ -87,7 +87,7 @@ namespace Habanero.Ui.Base
         /// <summary>
         /// Sets the database configuration object, which contains basic 
         /// connection information along with the database vendor name 
-        /// (eg. MySQL, Oracle).
+        /// (eg. MySql, Oracle).
         /// </summary>
         public DatabaseConfig DatabaseConfig {
             set { _databaseConfig = value; }

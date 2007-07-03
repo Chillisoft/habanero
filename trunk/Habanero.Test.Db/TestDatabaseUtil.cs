@@ -1,5 +1,5 @@
 using System;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.Db

@@ -36,7 +36,7 @@ namespace Habanero.Bo
             else
             {
                 string primaryKeyField = classDef.PrimaryKeyDef.KeyName;
-                BusinessObjectCollection col = new BusinessObjectCollection(classDef);
+                BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
                 col.Load(primaryKeyField + " = '" + id.ToString("B").ToUpper() + "'", "");
                 if (col.Count == 1)
                 {

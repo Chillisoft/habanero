@@ -5,7 +5,7 @@ using System.Text;
 using Habanero.Base;
 using Habanero.Util;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// Manages a sql statement
@@ -135,6 +135,7 @@ namespace Habanero.Db
         /// <param name="command">The command</param>
         public void SetupCommand(IDbCommand command)
         {
+            if (command == null) throw new ArgumentNullException("command");
             command.CommandType = CommandType.Text;
             command.CommandText = this._statement.ToString();
             command.Parameters.Clear();
@@ -152,21 +153,21 @@ namespace Habanero.Db
         /// TODO ERIC - this might be more useful if it was in usable format
         public override string ToString()
         {
-            string str = "Raw statement: " + this.Statement + "   , Parameter values: ";
+            StringBuilder s = new StringBuilder(string.Format("Raw statement: {0}   , Parameter values: ", this.Statement));
             foreach (IDbDataParameter param in Parameters)
             {
-                str += param.Value.ToString() + ", ";
+                s.AppendFormat("{0}, ", param.Value);
             }
-            return str;
+            return s.ToString();
         }
 
         /// <summary>
         /// Returns the parameter name generator
         /// </summary>
         /// <returns>Returns a ParameterNameGenerator object</returns>
-        public ParameterNameGenerator GetParameterNameGenerator()
+        public ParameterNameGenerator ParameterNameGenerator
         {
-            return _gen;
+            get { return _gen; }
         }
 
         /// <summary>
@@ -188,9 +189,10 @@ namespace Habanero.Db
         /// <returns>Returns true if equal</returns>
         public override bool Equals(object obj)
         {
-            if (obj is SqlStatement)
+            SqlStatement statement = obj as SqlStatement;
+            if (statement != null)
             {
-                SqlStatement statement = (SqlStatement) obj;
+                
                 if (!_statement.ToString().Equals(statement.Statement.ToString()))
                 {
                     return false;

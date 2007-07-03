@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Security.Permissions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 
 namespace Habanero.Bo
@@ -22,7 +22,7 @@ namespace Habanero.Bo
     /// class. The business objects contained in this collection must
     /// inherit from BusinessObjectBase.
     /// </summary>
-    public class BusinessObjectCollection : ICollection
+    public class BusinessObjectCollection<T> : Collection<BusinessObject> where T: BusinessObject 
     {
         private ClassDef _boClassDef;
         private IExpression _criteriaExpression;
@@ -34,27 +34,47 @@ namespace Habanero.Bo
         private ArrayList _list;
 
         /// <summary>
-        /// Constructor to initialise a new collection with a
-        /// class definition provided by an existing business object
+        /// Default constructor. The classdef will be implied from T
         /// </summary>
-        /// <param name="bo">The business object whose class definition
-        /// is used to initialise the collection</param>
-        public BusinessObjectCollection(BusinessObject bo) : this(bo.ClassDef)
-        {
-        }
+        public BusinessObjectCollection()
+            : this(ClassDef.ClassDefs[typeof(T)])
+    {}
 
         /// <summary>
-        /// Constructor to initialise a new collection with a specified
-        /// class definition
+        /// Use this constructor if you will only know T at run time - BusinessObject will be the generic type
+        /// and the objects in the collection will be determined from the classDef passed in.
         /// </summary>
-        /// <param name="lClassDef">The class definition</param>
-        public BusinessObjectCollection(ClassDef lClassDef)
+        /// <param name="classDef">The classdef of the objects to be contained in this collection</param>
+        public BusinessObjectCollection(ClassDef classDef)
         {
+            _boClassDef = classDef;
             _list = new ArrayList();
-            _boClassDef = lClassDef;
             _sampleBo = _boClassDef.CreateNewBusinessObject();
             _lookupTable = new Hashtable();
         }
+
+        ///// <summary>
+        ///// Constructor to initialise a new collection with a
+        ///// class definition provided by an existing business object
+        ///// </summary>
+        ///// <param name="bo">The business object whose class definition
+        ///// is used to initialise the collection</param>
+        //public BusinessObjectCollection(BusinessObject bo) : this(bo.ClassDef)
+        //{
+        //}
+
+        ///// <summary>
+        ///// Constructor to initialise a new collection with a specified
+        ///// class definition
+        ///// </summary>
+        ///// <param name="lClassDef">The class definition</param>
+        //private BusinessObjectCollection(ClassDef lClassDef)
+        //{
+        //    _list = new ArrayList();
+        //    _boClassDef = lClassDef;
+        //    _sampleBo = _boClassDef.CreateNewBusinessObject();
+        //    _lookupTable = new Hashtable();
+        //}
 
         /// <summary>
         /// Handles the event of a business object being added
@@ -116,7 +136,7 @@ namespace Habanero.Bo
         /// Copies the business objects in one collection across to this one
         /// </summary>
         /// <param name="col">The collection to copy from</param>
-        public void Add(BusinessObjectCollection col)
+        public void Add(BusinessObjectCollection<T> col)
         {
             foreach (BusinessObject bo in col)
             {
@@ -159,7 +179,7 @@ namespace Habanero.Bo
             if (_criteriaExpression != null)
             {
                 refreshSql.AppendWhere();
-                SQLCriteriaCreator creator = new SQLCriteriaCreator(_criteriaExpression, _boClassDef);
+                SqlCriteriaCreator creator = new SqlCriteriaCreator(_criteriaExpression, _boClassDef);
                 creator.AppendCriteriaToStatement(refreshSql);
             }
             if (_extraSearchCriteriaLiteral.Length > 0)
@@ -440,9 +460,9 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="col2">Another collection to intersect with</param>
         /// <returns>Returns a new collection containing the intersection</returns>
-        public BusinessObjectCollection Intersection(BusinessObjectCollection col2)
+        public BusinessObjectCollection<T> Intersection(BusinessObjectCollection<T> col2)
         {
-            BusinessObjectCollection intersectionCol = new BusinessObjectCollection(this.ClassDef);
+            BusinessObjectCollection<T> intersectionCol = new BusinessObjectCollection<T>();
             foreach (BusinessObject businessObjectBase in this)
             {
                 if (col2.Contains(businessObjectBase))
@@ -460,9 +480,9 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="col2">Another collection to unite with</param>
         /// <returns>Returns a new collection containing the union</returns>
-        public BusinessObjectCollection Union(BusinessObjectCollection col2)
+        public BusinessObjectCollection<T> Union(BusinessObjectCollection<T> col2)
         {
-            BusinessObjectCollection unionCol = new BusinessObjectCollection(this.ClassDef);
+            BusinessObjectCollection<T> unionCol = new BusinessObjectCollection<T>();
             foreach (BusinessObject businessObjectBase in this)
             {
                 unionCol.Add(businessObjectBase);
@@ -482,9 +502,9 @@ namespace Habanero.Bo
         /// Returns a new collection that is a copy of this collection
         /// </summary>
         /// <returns>Returns the cloned copy</returns>
-        public BusinessObjectCollection Clone()
+        public BusinessObjectCollection<T> Clone()
         {
-            BusinessObjectCollection clonedCol = new BusinessObjectCollection(this.ClassDef);
+            BusinessObjectCollection<T> clonedCol = new BusinessObjectCollection<T>();
             foreach (BusinessObject businessObjectBase in this)
             {
                 clonedCol.Add(businessObjectBase);
@@ -618,10 +638,10 @@ namespace Habanero.Bo
         /// <param name="isAscending">True for ascending, false for descending
         /// </param>
         /// <returns>Returns a sorted business object collection</returns>
-        public BusinessObjectCollection GetSortedCollection(string propertyName, bool isAscending)
+        public BusinessObjectCollection<T> GetSortedCollection(string propertyName, bool isAscending)
         {
             //test
-            BusinessObjectCollection sortedCol = new BusinessObjectCollection(this.ClassDef);
+            BusinessObjectCollection<T> sortedCol = new BusinessObjectCollection<T>();
             foreach (BusinessObject bo in GetSortedList(propertyName, isAscending))
             {
                 sortedCol.Add(bo);

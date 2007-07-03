@@ -1,6 +1,6 @@
 using System;
 using System.Security.Principal;
-using Habanero.Db;
+using Habanero.DB;
 
 namespace Habanero.Bo
 {
@@ -53,8 +53,8 @@ namespace Habanero.Bo
         /// out the changes</param>
         public void RecordTransactionLog(BusinessObject busObj, string logonUserName)
         {
-            //TODO: Peter - make this proper parametrized SQL
-            SqlStatement tranSQL = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            //TODO: Peter - make this proper parametrized Sql
+            SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
             string sql = "INSERT INTO " + this._transactionLogTable + " (" +
                          this._dateTimeUpdatedFieldName + ", " +
                          this._logonUserFieldName + ", " +
@@ -70,8 +70,8 @@ namespace Habanero.Bo
                          busObj.ClassName + "', '" +
                          GetCrudAction(busObj) + "', '" +
                          busObj.DirtyXML + "' )";
-            tranSQL.Statement.Append(sql);
-            DatabaseConnection.CurrentConnection.ExecuteSql(new SqlStatementCollection(tranSQL));
+            tranSql.Statement.Append(sql);
+            DatabaseConnection.CurrentConnection.ExecuteSql(new SqlStatementCollection(tranSql));
         }
 
         /// <summary>

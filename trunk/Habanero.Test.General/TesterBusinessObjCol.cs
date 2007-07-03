@@ -31,7 +31,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjects()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -46,7 +46,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjectsFromObjectManager()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -64,7 +64,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjectsFromObjectManagerAndFresh()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -86,7 +86,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjectsSortOrder()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -108,7 +108,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjectsSearchCriteria()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -130,7 +130,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjectsSearchCriteriaWithOR()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";
@@ -160,7 +160,7 @@ namespace Habanero.Test.General
         public void TestRefreshBOCol()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = ContactPerson.GetNewContactPerson();
             p.FirstName = "a";

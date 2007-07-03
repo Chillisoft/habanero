@@ -3,7 +3,7 @@ using System.Collections;
 using System.Text;
 using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
 

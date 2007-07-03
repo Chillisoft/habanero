@@ -1,5 +1,5 @@
 using System;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.Db
@@ -11,26 +11,26 @@ namespace Habanero.Test.Db
     public class TestConnectionStringFactory
     {
         [Test]
-        public void TestSQLServer()
+        public void TestSqlServer()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLServer).GetConnectionString("testserver", "testdb",
+                ConnectionStringFactory.GetFactory(DatabaseConfig.SqlServer).GetConnectionString("testserver", "testdb",
                                                                                                  "testusername",
                                                                                                  "testpassword",
                                                                                                  "testport");
             Assert.AreEqual("Server=testserver;Initial Catalog=testdb;User ID=testusername;password=testpassword;", conn,
-                            "ConnectionStringFactory not working for SQL Server");
+                            "ConnectionStringFactory not working for Sql Server");
         }
 
         [Test]
-        public void TestSQLServerNoPassword()
+        public void TestSqlServerNoPassword()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLServer).GetConnectionString("testserver", "testdb",
+                ConnectionStringFactory.GetFactory(DatabaseConfig.SqlServer).GetConnectionString("testserver", "testdb",
                                                                                                  "testusername", "",
                                                                                                  "testport");
             Assert.AreEqual("Server=testserver;Initial Catalog=testdb;User ID=testusername;", conn,
-                            "ConnectionStringFactory not working for SQL Server");
+                            "ConnectionStringFactory not working for Sql Server");
         }
 
         [Test]
@@ -55,33 +55,33 @@ namespace Habanero.Test.Db
         }
 
         [Test]
-        public void TestMySQL()
+        public void TestMySql()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySQL).GetConnectionString("testserver", "testdb",
+                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("testserver", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
             Assert.AreEqual(
                 "Username=testusername; Host=testserver; Port=testport; Database=testdb; Password=testpassword;", conn,
-                "ConnectionStringFactory not working for MySQL");
+                "ConnectionStringFactory not working for MySql");
         }
 
         [Test]
-        public void TestMySQLNoPassword()
+        public void TestMySqlNoPassword()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySQL).GetConnectionString("testserver", "testdb",
+                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("testserver", "testdb",
                                                                                              "testusername", "",
                                                                                              "testport");
             Assert.AreEqual("Username=testusername; Host=testserver; Port=testport; Database=testdb;", conn,
-                            "ConnectionStringFactory not working for MySQL");
+                            "ConnectionStringFactory not working for MySql");
         }
 
         [Test, ExpectedException(typeof (ArgumentException))]
         public void TestMySqlNoServerName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySQL).GetConnectionString("", "testdb",
+                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
         }
@@ -90,7 +90,7 @@ namespace Habanero.Test.Db
         public void TestMySqlNoUserName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySQL).GetConnectionString("sdf", "testdb", "",
+                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("sdf", "testdb", "",
                                                                                              "testpassword", "testport");
         }
 
@@ -98,7 +98,7 @@ namespace Habanero.Test.Db
         public void TestMySqlNoDatabaseName()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySQL).GetConnectionString("sdf", "", "sasdf",
+                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("sdf", "", "sasdf",
                                                                                              "testpassword", "testport");
         }
 
@@ -106,12 +106,12 @@ namespace Habanero.Test.Db
         public void TestMySqlNoPort()
         {
             String conn =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySQL).GetConnectionString("testserver", "testdb",
+                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("testserver", "testdb",
                                                                                              "testusername",
                                                                                              "testpassword", "");
             Assert.AreEqual(
                 "Username=testusername; Host=testserver; Port=3306; Database=testdb; Password=testpassword;", conn,
-                "ConnectionStringFactory not working for MySQL");
+                "ConnectionStringFactory not working for MySql");
         }
 
         [Test]
@@ -129,12 +129,12 @@ namespace Habanero.Test.Db
         [Test]
         public void TestGetFactory()
         {
-            Assert.AreSame(typeof (ConnectionStringMySQLFactory),
-                           ConnectionStringFactory.GetFactory(DatabaseConfig.MySQL).GetType(),
-                           "GetFactory not creating correct type : MySQL.");
-            Assert.AreSame(typeof (ConnectionStringSQLServerFactory),
-                           ConnectionStringFactory.GetFactory(DatabaseConfig.SQLServer).GetType(),
-                           "GetFactory not creating correct type : SQLServer.");
+            Assert.AreSame(typeof (ConnectionStringMySqlFactory),
+                           ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetType(),
+                           "GetFactory not creating correct type : MySql.");
+            Assert.AreSame(typeof (ConnectionStringSqlServerFactory),
+                           ConnectionStringFactory.GetFactory(DatabaseConfig.SqlServer).GetType(),
+                           "GetFactory not creating correct type : SqlServer.");
         }
     }
 }

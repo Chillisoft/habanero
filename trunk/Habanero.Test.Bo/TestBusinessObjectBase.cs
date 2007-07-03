@@ -1,7 +1,7 @@
 using System;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using NMock;
@@ -25,7 +25,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestSettingLookupValueSetsGuid()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBo.LoadClassDefWithLookup();
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "s1");
@@ -36,7 +36,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestApplyEditResetsPreviousValues()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBo.LoadDefaultClassDef();
 
             Mock itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));

@@ -157,9 +157,6 @@
     <Compile Include="TestBusinessObjectBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestBusinessObjectBaseCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TestBusinessObjectCollectionDataProvider.cs">
       <SubType>Code</SubType>
     </Compile>

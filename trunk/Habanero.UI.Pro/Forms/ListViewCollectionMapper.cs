@@ -14,7 +14,7 @@ namespace Habanero.Ui.Forms
     {
         private string _uiDefName;
         private ListView _listView;
-        private BusinessObjectCollection _collection;
+        private BusinessObjectCollection<BusinessObject> _collection;
         private Hashtable _listItemsHash;
 
         /// <summary>
@@ -55,7 +55,8 @@ namespace Habanero.Ui.Forms
         /// ListView object
         /// </summary>
         /// <param name="collection">The collection of business objects</param>
-        public void SetCollection(BusinessObjectCollection collection) {
+        public void SetCollection(BusinessObjectCollection<BusinessObject> collection)
+        {
 
             if (_collection != null)
             {
@@ -110,7 +111,8 @@ namespace Habanero.Ui.Forms
         /// </summary>
         /// <param name="listView">The ListView object to add to</param>
         /// <param name="collection">The business object collection</param>
-        private void SetListViewCollection(ListView listView, BusinessObjectCollection collection) {
+        private void SetListViewCollection(ListView listView, BusinessObjectCollection<BusinessObject> collection)
+        {
             listView.Clear();
             _listItemsHash.Clear();
             listView.MultiSelect = true;

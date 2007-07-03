@@ -2,7 +2,7 @@ using System.Collections;
 using System.Data;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 
 namespace Habanero.Bo.SqlGeneration
 {
@@ -15,7 +15,7 @@ namespace Habanero.Bo.SqlGeneration
         private BusinessObject _bo;
         private IDbConnection _conn;
         private SqlStatementCollection _statementCollection;
-        private SqlStatement _updateSQL;
+        private SqlStatement _updateSql;
 
         /// <summary>
         /// Constructor to initialise the generator
@@ -73,8 +73,8 @@ namespace Habanero.Bo.SqlGeneration
         private void GenerateSingleUpdateStatement(string tableName, bool includeAllProps, BOPropCol propsToInclude,
                                                    bool isSuperClassStatement, ClassDef currentClassDef)
         {
-            _updateSQL = new SqlStatement(_conn);
-            _updateSQL.Statement.Append(@"UPDATE " + tableName + " SET ");
+            _updateSql = new SqlStatement(_conn);
+            _updateSql.Statement.Append(@"UPDATE " + tableName + " SET ");
             int includedProps = 0;
             foreach (BOProp prop in _bo.GetBOPropCol().SortedValues)
             {
@@ -86,26 +86,26 @@ namespace Habanero.Bo.SqlGeneration
                          !_bo.ClassDef.PrimaryKeyDef.IsObjectID))
                     {
                         includedProps++;
-                        _updateSQL.Statement.Append(prop.DatabaseFieldName);
-                        _updateSQL.Statement.Append(" = ");
-                        _updateSQL.AddParameterToStatement(prop.PropertyValue);
-                        //_updateSQL.AddParameterToStatement(DatabaseUtil.PrepareValue(prop.PropertyValue));
-                        _updateSQL.Statement.Append(", ");
+                        _updateSql.Statement.Append(prop.DatabaseFieldName);
+                        _updateSql.Statement.Append(" = ");
+                        _updateSql.AddParameterToStatement(prop.PropertyValue);
+                        //_updateSql.AddParameterToStatement(DatabaseUtil.PrepareValue(prop.PropertyValue));
+                        _updateSql.Statement.Append(", ");
                     }
                 }
             }
-            _updateSQL.Statement.Remove(_updateSQL.Statement.Length - 2, 2); //remove the last ", "
+            _updateSql.Statement.Remove(_updateSql.Statement.Length - 2, 2); //remove the last ", "
             if (isSuperClassStatement)
             {
-                _updateSQL.Statement.Append(" WHERE " + _bo.WhereClauseForSuperClass(_updateSQL, currentClassDef));
+                _updateSql.Statement.Append(" WHERE " + _bo.WhereClauseForSuperClass(_updateSql, currentClassDef));
             }
             else
             {
-                _updateSQL.Statement.Append(" WHERE " + _bo.WhereClause(_updateSQL));
+                _updateSql.Statement.Append(" WHERE " + _bo.WhereClause(_updateSql));
             }
             if (includedProps > 0)
             {
-                _statementCollection.Add(_updateSQL);
+                _statementCollection.Add(_updateSql);
             }
         }
     }

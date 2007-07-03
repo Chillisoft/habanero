@@ -37,7 +37,8 @@ namespace Habanero.Bo
         /// collection provided
         /// </summary>
         /// <param name="col">The business object collection</param>
-        public BOCollectionEditableDataSetProvider(BusinessObjectCollection col) : base(col)
+        public BOCollectionEditableDataSetProvider(BusinessObjectCollection<BusinessObject> col)
+            : base(col)
         {
         }
 
@@ -276,7 +277,7 @@ namespace Habanero.Bo
             catch (Exception ex)
             {
                 _isBeingAdded = false;
-                throw ex;
+                throw;
             }
         }
 

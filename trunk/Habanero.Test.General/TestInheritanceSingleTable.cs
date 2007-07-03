@@ -2,7 +2,7 @@ using System.Data;
 using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -68,13 +68,13 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestCircleInsertSQL()
+        public void TestCircleInsertSql()
         {
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
             Assert.AreEqual("INSERT INTO Shape (Radius, ShapeID, ShapeName) VALUES (?Param0, ?Param1, ?Param2)",
                             itsInsertSql[0].Statement.ToString(),
-                            "Concrete Table Inheritance insert SQL seems to be incorrect.");
+                            "Concrete Table Inheritance insert Sql seems to be incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
                             "Parameter ShapeID has incorrect value");
             Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[2]).Value,
@@ -107,7 +107,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, itsDeleteSql.Count,
                             "There should only be one delete sql statement when using single table inheritance.");
             Assert.AreEqual("DELETE FROM Shape WHERE ShapeID = ?Param0", itsDeleteSql[0].Statement.ToString(),
-                            "Delete SQL for single table inheritance is incorrect.");
+                            "Delete Sql for single table inheritance is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");
         }

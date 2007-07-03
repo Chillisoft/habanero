@@ -100,7 +100,7 @@ namespace Habanero.Bo
         /// <returns>Returns a collection of string-value pairs</returns>
         public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
-            BusinessObjectCollection col = new BusinessObjectCollection(ClassDef.GetClassDefCol[MyBoType]);
+            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[MyBoType]);
             col.Load("", "");
             return CreateDisplayValueDictionary(col);
 		}
@@ -112,7 +112,7 @@ namespace Habanero.Bo
 		/// </summary>
 		/// <param name="col">The business object collection</param>
 		/// <returns>Returns a collection of display-value pairs</returns>
-        public static Dictionary<string, object> CreateDisplayValueDictionary(BusinessObjectCollection col)
+        public static Dictionary<string, object> CreateDisplayValueDictionary(BusinessObjectCollection<BusinessObject> col)
 		{
             Dictionary<string, object> lookupList = new Dictionary<string, object>();
 			foreach (BusinessObject bo in col)
@@ -151,7 +151,7 @@ namespace Habanero.Bo
         /// <returns>Returns an ICollection object</returns>
         public ICollection GetValueCollection()
         {
-			BusinessObjectCollection col = new BusinessObjectCollection(ClassDef.GetClassDefCol[MyBoType]);
+            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[MyBoType]);
             col.Load("", "");
             return CreateValueList(col);
         }
@@ -162,7 +162,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <returns>Returns an ICollection object</returns>
-        private static ICollection CreateValueList(BusinessObjectCollection col)
+        private static ICollection CreateValueList(BusinessObjectCollection<BusinessObject> col)
         {
             SortedStringCollection valueList = new SortedStringCollection();
             foreach (BusinessObject bo in col)

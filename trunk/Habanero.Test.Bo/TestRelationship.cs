@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Bo;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.Bo

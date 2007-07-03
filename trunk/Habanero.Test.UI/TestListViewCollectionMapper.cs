@@ -15,14 +15,14 @@ namespace Habanero.Test.Ui.BoControls
 
         ListView itsListView;
         ListViewCollectionMapper mapper;
-        private BusinessObjectCollection itsCollection;
+        private BusinessObjectCollection<BusinessObject> itsCollection;
 
         [SetUp]
         public void SetupTest()
         {
             itsListView = new ListView();
             mapper = new ListViewCollectionMapper(itsListView);
-            itsCollection = new BusinessObjectCollection(Sample.GetClassDef());
+            itsCollection = new BusinessObjectCollection<BusinessObject>(Sample.GetClassDef());
             itsCollection.Add(new Sample());
             itsCollection.Add(new Sample());
             itsCollection.Add(new Sample());

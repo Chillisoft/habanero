@@ -8,8 +8,8 @@ namespace Habanero.Util
     /// <summary>
     /// Manages a long string that, when stored in the database, will need 
     /// to be stored as a byte array.
-    /// In MySQL this type is usually reflected by the data type 'blob'.
-    /// In SQLServer this type is usually reflected by the data type 'blob'.
+    /// In MySql this type is usually reflected by the data type 'blob'.
+    /// In SqlServer this type is usually reflected by the data type 'blob'.
     /// In Oracle this type is usually reflected by the data type 'blob'.
     /// In Access this type is usually reflected by the data type 'OLE Object'.
     /// </summary>

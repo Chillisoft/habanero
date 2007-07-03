@@ -14,14 +14,14 @@ namespace Habanero.Test.Ui.BoControls
     {
         ComboBox itsComboBox;
         CollectionComboBoxMapper mapper;
-        private BusinessObjectCollection itsCollection;
+        private BusinessObjectCollection<BusinessObject> itsCollection;
 
         [SetUp]
         public void SetupTest()
         {
             itsComboBox = new ComboBox();
             mapper = new CollectionComboBoxMapper(itsComboBox);
-            itsCollection = new BusinessObjectCollection(Sample.GetClassDef());
+            itsCollection = new BusinessObjectCollection<BusinessObject>(Sample.GetClassDef());
             itsCollection.Add(new Sample());
             itsCollection.Add(new Sample());
             itsCollection.Add(new Sample());

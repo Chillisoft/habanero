@@ -1,6 +1,6 @@
 using System.Data;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -50,13 +50,13 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestCircleInsertSQL()
+        public void TestCircleInsertSql()
         {
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert statement for concrete table inheritance.");
             Assert.AreEqual(
                 "INSERT INTO FilledCircle (Colour, FilledCircleID, Radius, ShapeName) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
-                itsInsertSql[0].Statement.ToString(), "Concrete Table Inheritance insert SQL seems to be incorrect.");
+                itsInsertSql[0].Statement.ToString(), "Concrete Table Inheritance insert Sql seems to be incorrect.");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
                             "Parameter FilledCircleID has incorrect value");
             Assert.AreEqual(3, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
@@ -68,13 +68,13 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestCircleUpdateSQL()
+        public void TestCircleUpdateSql()
         {
             Assert.AreEqual(1, itsUpdateSql.Count,
                             "There should only be one update statement for concrete table inheritance.");
             Assert.AreEqual(
                 "UPDATE FilledCircle SET Colour = ?Param0, Radius = ?Param1, ShapeName = ?Param2 WHERE FilledCircleID = ?Param3",
-                itsUpdateSql[0].Statement.ToString(), "Concrete Table Inheritance update SQL seems to be incorrect.");
+                itsUpdateSql[0].Statement.ToString(), "Concrete Table Inheritance update Sql seems to be incorrect.");
             Assert.AreEqual(3, ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
                             "Parameter Colour has incorrect value");
             Assert.AreEqual("MyFilledCircle", ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
@@ -86,15 +86,15 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestCircleDeleteSQL()
+        public void TestCircleDeleteSql()
         {
             Assert.AreEqual(1, itsDeleteSql.Count,
                             "There should only be one delete statement for concrete table inheritance.");
             Assert.AreEqual("DELETE FROM FilledCircle WHERE FilledCircleID = ?Param0",
                             itsDeleteSql[0].Statement.ToString(),
-                            "Concrete Table Inheritance delete SQL seems to be incorrect.");
+                            "Concrete Table Inheritance delete Sql seems to be incorrect.");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
-                            "Parameter FilledCircleID has incorrect value in Delete SQL statement for concrete table inheritance.");
+                            "Parameter FilledCircleID has incorrect value in Delete Sql statement for concrete table inheritance.");
         }
 
         [Test]

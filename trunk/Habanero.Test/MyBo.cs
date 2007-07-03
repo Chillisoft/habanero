@@ -76,7 +76,7 @@ namespace Habanero.Test
 
 
 			");
-			ClassDef.GetClassDefCol.Add(itsClassDef);
+			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
 
@@ -110,7 +110,7 @@ namespace Habanero.Test
 				</class>
 
 			");
-			ClassDef.GetClassDefCol.Add(itsClassDef);
+			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
 
@@ -147,7 +147,7 @@ namespace Habanero.Test
 				</class>
 				
 			");
-			ClassDef.GetClassDefCol.Add(itsClassDef);
+			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
 
@@ -187,7 +187,7 @@ namespace Habanero.Test
 
 
 			");
-			ClassDef.GetClassDefCol.Add(itsClassDef);
+			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
 
@@ -234,13 +234,13 @@ namespace Habanero.Test
 
 
 			");
-			ClassDef.GetClassDefCol.Add(itsClassDef);
+			ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
 
         public static MyBo Create()
         {
-            MyBo bo = new MyBo(ClassDef.GetClassDefCol[typeof (MyBo)]);
+            MyBo bo = new MyBo(ClassDef.ClassDefs[typeof (MyBo)]);
             MyBo.AddToLoadedBusinessObjectCol(bo);
             return bo;
         }

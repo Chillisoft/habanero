@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 
 namespace Habanero.Test.General
 {
@@ -29,7 +29,7 @@ namespace Habanero.Test.General
             }
             else
             {
-                return ClassDef.GetClassDefCol[typeof (Engine)];
+                return ClassDef.ClassDefs[typeof (Engine)];
             }
         }
 
@@ -52,7 +52,7 @@ namespace Habanero.Test.General
 
             ClassDef lClassDef = new ClassDef(typeof (Engine), primaryKey, lPropDefCol, keysCol, relDefCol);
             lClassDef.TableName = "Table_Engine";
-			ClassDef.GetClassDefCol.Add(lClassDef);
+			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
@@ -167,15 +167,15 @@ namespace Habanero.Test.General
             return _primaryKey.GetObjectNewID();
         }
 
-        protected internal static BusinessObjectCollection LoadBusinessObjCol()
+        protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol()
         {
             return LoadBusinessObjCol("", "");
         }
 
-        protected internal static BusinessObjectCollection LoadBusinessObjCol(string searchCriteria,
+        protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
                                                                                   string orderByClause)
         {
-            BusinessObjectCollection bOCol = new BusinessObjectCollection(GetClassDef());
+            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(GetClassDef());
             bOCol.Load(searchCriteria, orderByClause);
             return bOCol;
         }

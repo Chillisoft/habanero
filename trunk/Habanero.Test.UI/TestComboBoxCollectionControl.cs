@@ -1,6 +1,6 @@
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using Habanero.Ui.Base;
@@ -21,7 +21,7 @@ namespace Habanero.Test.Ui.BoControls
         private ComboBoxCollectionControl itsControl;
         private Mock itsDataProviderMockControl;
         private Mock itsConfirmerMockControl;
-        private BusinessObjectCollection itsCollection;
+        private BusinessObjectCollection<BusinessObject> itsCollection;
         Mock itsDatabaseConnectionMockControl;
 
         [TestFixtureSetUp]
@@ -33,7 +33,7 @@ namespace Habanero.Test.Ui.BoControls
         [SetUp]
         public void SetupTest()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
 
             itsDataProviderMockControl = new DynamicMock(typeof (IFormDataProvider));
@@ -64,7 +64,7 @@ namespace Habanero.Test.Ui.BoControls
             bo2.SetPropertyValue("TestProp2", "jkl");
             bo2.ApplyEdit();
 
-            itsCollection = new BusinessObjectCollection(itsClassDef);
+            itsCollection = new BusinessObjectCollection<BusinessObject>(itsClassDef);
             itsCollection.Add(bo1);
             itsCollection.Add(bo2);
 

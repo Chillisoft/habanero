@@ -25,7 +25,7 @@ namespace Habanero.Ui.Forms
         private CollectionComboBoxMapper _comboBoxMapper;
         private int _oldSelectedIndex;
         private ButtonControl _buttons;
-        private BusinessObjectCollection _boCollection;
+        private BusinessObjectCollection<BusinessObject> _boCollection;
 
         /// <summary>
         /// Constructor to initialise a new control object that has a

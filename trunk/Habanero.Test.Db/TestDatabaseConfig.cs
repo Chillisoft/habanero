@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.Db
@@ -11,25 +11,25 @@ namespace Habanero.Test.Db
     [TestFixture]
     public class TestDatabaseConfig
     {
-        private IDictionary settingsMySQL;
+        private IDictionary settingsMySql;
 
         [TestFixtureSetUp]
         public void FixtureSetup()
         {
-            settingsMySQL = new Hashtable();
-            settingsMySQL.Add("vendor", DatabaseConfig.MySQL);
-            settingsMySQL.Add("server", "b");
-            settingsMySQL.Add("database", "c");
-            settingsMySQL.Add("username", "d");
-            settingsMySQL.Add("password", "e");
-            settingsMySQL.Add("port", "f");
+            settingsMySql = new Hashtable();
+            settingsMySql.Add("vendor", DatabaseConfig.MySql);
+            settingsMySql.Add("server", "b");
+            settingsMySql.Add("database", "c");
+            settingsMySql.Add("username", "d");
+            settingsMySql.Add("password", "e");
+            settingsMySql.Add("port", "f");
         }
 
         [Test]
         public void TestDatabaseConfigSettings()
         {
-            DatabaseConfig d = new DatabaseConfig(settingsMySQL);
-            Assert.AreEqual(DatabaseConfig.MySQL, d.Vendor);
+            DatabaseConfig d = new DatabaseConfig(settingsMySql);
+            Assert.AreEqual(DatabaseConfig.MySql, d.Vendor);
             Assert.AreEqual("b", d.Server);
             Assert.AreEqual("c", d.Database);
             Assert.AreEqual("d", d.UserName);
@@ -40,8 +40,8 @@ namespace Habanero.Test.Db
         [Test]
         public void TestDatabaseConfigAlternateConstructor()
         {
-            DatabaseConfig d = new DatabaseConfig(DatabaseConfig.MySQL, "a", "b", "c", "d", "e");
-            Assert.AreEqual(DatabaseConfig.MySQL, d.Vendor);
+            DatabaseConfig d = new DatabaseConfig(DatabaseConfig.MySql, "a", "b", "c", "d", "e");
+            Assert.AreEqual(DatabaseConfig.MySql, d.Vendor);
             Assert.AreEqual("a", d.Server);
             Assert.AreEqual("b", d.Database);
             Assert.AreEqual("c", d.UserName);
@@ -55,7 +55,7 @@ namespace Habanero.Test.Db
         //		[Test, Ignore("If not running in NUnit")]
         //		public void TestReadFromConfigFile() {
         //			DatabaseConfig d = DatabaseConfig.ReadFromConfigFile();
-        //			Assert.AreEqual("SQLServer", d.Vendor);
+        //			Assert.AreEqual("SqlServer", d.Vendor);
         //			Assert.AreEqual("Core", d.Server);
         //			Assert.AreEqual("WorkShopManagement", d.Database);
         //			Assert.AreEqual("sa", d.UserName);
@@ -64,13 +64,13 @@ namespace Habanero.Test.Db
         //		}
 
         [Test]
-        public void TestUsingDatabaseConfigMySQL()
+        public void TestUsingDatabaseConfigMySql()
         {
-            DatabaseConfig config = new DatabaseConfig(settingsMySQL);
+            DatabaseConfig config = new DatabaseConfig(settingsMySql);
             String connectString =
-                ConnectionStringFactory.GetFactory(DatabaseConfig.MySQL).GetConnectionString("b", "c", "d", "e", "f");
+                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("b", "c", "d", "e", "f");
             Assert.AreEqual(connectString, config.GetConnectionString(),
-                            "ConnectionStringFactory not working for MySQL using ConfigData");
+                            "ConnectionStringFactory not working for MySql using ConfigData");
         }
     }
 }

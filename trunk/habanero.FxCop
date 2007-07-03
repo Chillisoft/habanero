@@ -1,0 +1,1151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.35" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">http://www.gotdotnet.com/team/fxcop//xsl/1.35/FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-us" />
+  <VersionAware>False</VersionAware>
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/Build/Debug/Habanero.Db.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.35">
+  <Namespaces>
+   <Namespace Name="Habanero.DB">
+    <Messages>
+     <Message Id="Habanero" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 14:26:07Z">
+      <Issue Name="Namespace">
+       <Item>Habanero</Item>
+       <Item>Habanero.DB</Item>
+      </Issue>
+      <Notes>
+       <User Name="peter">
+        <Note Id="7" />
+       </User>
+      </Notes>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="$(ProjectDir)/Build/Debug/Habanero.Db.dll">
+    <Modules>
+     <Module Name="habanero.db.dll">
+      <Messages>
+       <Message TypeName="AttributeStringLiteralsShouldParseCorrectly" Category="Microsoft.Usage" CheckId="CA2243" Created="2007-07-03 14:18:59Z">
+        <Issue>
+         <Item>version</Item>
+         <Item>1.0.*</Item>
+         <Item>System.Version</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2007-07-03 14:18:59Z">
+        <Issue Name="NoAttr">
+         <Item>Habanero.DB</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="Habanero.DB">
+        <Types>
+         <Type Name="ConnectionStringAccessFactory">
+          <Members>
+           <Member Name="CheckArguments(System.String,System.String,System.String,System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="System.ArgumentException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>ConnectionStringAccessFactory.CheckArguments(String, String, String, String, String):Void</Item>
+               <Item>1</Item>
+               <Item>ArgumentException.ArgumentException(String)</Item>
+               <Item>The database of an access connect string can never be empty.</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Created="2007-07-03 14:26:07Z">
+              <Issue Name="IsNullOrEmpty">
+               <Item>op_Equality</Item>
+               <Item>""</Item>
+               <Item>ConnectionStringAccessFactory.CheckArguments(String, String, String, String, String):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="CreateConnectionString(System.String,System.String,System.String,System.String,System.String):System.String">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>ConnectionStringAccessFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+               <Item>System.String.Format(System.String,System.Object,System.Object,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ConnectionStringFactory">
+          <Members>
+           <Member Name="GetFactory(System.String):Habanero.DB.ConnectionStringFactory">
+            <Messages>
+             <Message Id="vendor" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2007-07-03 14:26:07Z">
+              <Issue Name="UseStringCompareParameter">
+               <Item>ConnectionStringFactory.GetFactory(String):ConnectionStringFactory</Item>
+               <Item>String.op_Equality(String, String):Boolean</Item>
+               <Item>vendor</Item>
+              </Issue>
+              <Issue Name="UseStringCompareParameter">
+               <Item>ConnectionStringFactory.GetFactory(String):ConnectionStringFactory</Item>
+               <Item>String.op_Equality(String, String):Boolean</Item>
+               <Item>vendor</Item>
+              </Issue>
+              <Issue Name="UseStringCompareParameter">
+               <Item>ConnectionStringFactory.GetFactory(String):ConnectionStringFactory</Item>
+               <Item>String.op_Equality(String, String):Boolean</Item>
+               <Item>vendor</Item>
+              </Issue>
+              <Issue Name="UseStringCompareParameter">
+               <Item>ConnectionStringFactory.GetFactory(String):ConnectionStringFactory</Item>
+               <Item>String.op_Equality(String, String):Boolean</Item>
+               <Item>vendor</Item>
+              </Issue>
+              <Issue Name="UseStringCompareParameter">
+               <Item>ConnectionStringFactory.GetFactory(String):ConnectionStringFactory</Item>
+               <Item>String.op_Equality(String, String):Boolean</Item>
+               <Item>vendor</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>ConnectionStringFactory.GetFactory(String):ConnectionStringFactory</Item>
+               <Item>System.String.ToUpper</Item>
+               <Item>System.String.ToUpper(System.Globalization.CultureInfo)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ConnectionStringMySqlFactory">
+          <Members>
+           <Member Name="CheckArguments(System.String,System.String,System.String,System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="System.ArgumentException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-03 15:22:43Z">
+              <Issue>
+               <Item>ConnectionStringMySqlFactory.CheckArguments(String, String, String, String, String):Void</Item>
+               <Item>1</Item>
+               <Item>ArgumentException.ArgumentException(String)</Item>
+               <Item>The server, database and userName of a connect string can never be empty.</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="CreateConnectionString(System.String,System.String,System.String,System.String,System.String):System.String">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object[])" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 15:22:43Z">
+              <Issue>
+               <Item>ConnectionStringMySqlFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+               <Item>System.String.Format(System.String,System.Object[])</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+              <Issue>
+               <Item>ConnectionStringMySqlFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+               <Item>System.String.Format(System.String,System.Object[])</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Created="2007-07-03 15:22:43Z">
+              <Issue Name="IsNullOrEmpty">
+               <Item>op_Equality</Item>
+               <Item>""</Item>
+               <Item>ConnectionStringMySqlFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+              </Issue>
+              <Issue Name="IsNullOrEmpty">
+               <Item>op_Inequality</Item>
+               <Item>""</Item>
+               <Item>ConnectionStringMySqlFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ConnectionStringOracleFactory">
+          <Members>
+           <Member Name="CheckArguments(System.String,System.String,System.String,System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="System.ArgumentException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>ConnectionStringOracleFactory.CheckArguments(String, String, String, String, String):Void</Item>
+               <Item>1</Item>
+               <Item>ArgumentException.ArgumentException(String)</Item>
+               <Item>The database and userName of an Oracle connect string can never be empty.</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="CreateConnectionString(System.String,System.String,System.String,System.String,System.String):System.String">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>ConnectionStringOracleFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+               <Item>System.String.Format(System.String,System.Object,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>ConnectionStringOracleFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+               <Item>System.String.Format(System.String,System.Object,System.Object,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ConnectionStringSqlServerFactory">
+          <Members>
+           <Member Name="CheckArguments(System.String,System.String,System.String,System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="System.ArgumentException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-03 15:22:43Z">
+              <Issue>
+               <Item>ConnectionStringSqlServerFactory.CheckArguments(String, String, String, String, String):Void</Item>
+               <Item>1</Item>
+               <Item>ArgumentException.ArgumentException(String)</Item>
+               <Item>The server, database and userName of a connect string can never be empty.</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="CreateConnectionString(System.String,System.String,System.String,System.String,System.String):System.String">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 15:22:43Z">
+              <Issue>
+               <Item>ConnectionStringSqlServerFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+               <Item>System.String.Format(System.String,System.Object,System.Object,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Format(System.String,System.Object[])" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 15:22:43Z">
+              <Issue>
+               <Item>ConnectionStringSqlServerFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+               <Item>System.String.Format(System.String,System.Object[])</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Created="2007-07-03 15:22:43Z">
+              <Issue Name="IsNullOrEmpty">
+               <Item>op_Equality</Item>
+               <Item>""</Item>
+               <Item>ConnectionStringSqlServerFactory.CreateConnectionString(String, String, String, String, String):String</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Database">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldBeSealed" Category="Microsoft.Design" CheckId="CA1052" Created="2007-07-03 19:27:55Z">
+            <Issue>
+             <Item>Database</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="ExecuteRawSql(System.String,System.Data.IDbConnection):System.Void">
+            <Messages>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>'connection'</Item>
+               <Item>Database.ExecuteRawSql(String, IDbConnection):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseConfig">
+          <Members>
+           <Member Name=".ctor(System.Collections.IDictionary)">
+            <Messages>
+             <Message Id="System.ArgumentException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseConfig.DatabaseConfig(IDictionary)</Item>
+               <Item>1</Item>
+               <Item>ArgumentException.ArgumentException(String)</Item>
+               <Item>Missing database settings for the database configuration in the application configuration file. Ensure that you have a setting for 'vendor' - see documentation for possible options on the database vendor setting.</Item>
+              </Issue>
+              <Issue>
+               <Item>DatabaseConfig.DatabaseConfig(IDictionary)</Item>
+               <Item>1</Item>
+               <Item>ArgumentException.ArgumentException(String)</Item>
+               <Item>The database configuration could not be read. Check that your application configuration file exists (eg. app.config), that you have DatabaseConfig in the configSections, and that you have a section of settings in the DatabaseConfig category.</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Equals(System.Object):System.Boolean">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2007-07-03 14:26:07Z">
+              <Issue Name="Parameter">
+               <Item>obj</Item>
+               <Item>Habanero.DB.DatabaseConfig</Item>
+               <Item>DatabaseConfig.Equals(Object):Boolean</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseConnection">
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="2#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Status="Excluded" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>connectString</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="2" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="CreateDatabaseConnection():System.Data.IDbConnection">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseConnection.CreateDatabaseConnection():IDbConnection</Item>
+               <Item>System.String.Format(System.String,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="ErrorSafeConnectString():System.String">
+            <Messages>
+             <Message Id="connectString" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2007-07-03 14:26:07Z">
+              <Issue Name="DuplicateStringCreationLocal">
+               <Item>String.ToUpper(CultureInfo):String</Item>
+               <Item>connectString</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="ExecuteRawSql(System.String,System.Data.IDbTransaction):System.Int32">
+            <Messages>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>'sql'</Item>
+               <Item>DatabaseConnection.ExecuteRawSql(String, IDbTransaction):Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetConnection():System.Data.IDbConnection">
+            <Messages>
+             <Message Id="Habanero.DB.DatabaseConnectionException.#ctor(System.String,System.Exception)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseConnection.GetConnection():IDbConnection</Item>
+               <Item>1</Item>
+               <Item>DatabaseConnectionException.DatabaseConnectionException(String, Exception)</Item>
+               <Item>An error occurred while attempting to connect to the database.</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="LoadDataReader(Habanero.Base.ISqlStatement):System.Data.IDataReader">
+            <Messages>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>'selectSql'</Item>
+               <Item>DatabaseConnection.LoadDataReader(ISqlStatement):IDataReader</Item>
+              </Issue>
+              <Issue>
+               <Item>'selectSql'</Item>
+               <Item>DatabaseConnection.LoadDataReader(ISqlStatement):IDataReader</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="LoadDataTable(Habanero.Base.ISqlStatement,System.String,System.String):System.Data.DataTable">
+            <Messages>
+             <Message TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DataTable</Item>
+               <Item>DatabaseConnection.LoadDataTable(ISqlStatement, String, String):DataTable</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="NewConnection">
+            <Accessors>
+             <Accessor Name="get_NewConnection():System.Data.IDbConnection">
+              <Messages>
+               <Message Id="Habanero.DB.DatabaseConnectionException.#ctor(System.String,System.Exception)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-03 17:45:42Z">
+                <Issue>
+                 <Item>DatabaseConnection.get_NewConnection():IDbConnection</Item>
+                 <Item>1</Item>
+                 <Item>DatabaseConnectionException.DatabaseConnectionException(String, Exception)</Item>
+                 <Item>There was an error connecting to the database. The connection information was rejected by the database - connection information is either missing or incorrect.  In your configuration (eg. in app.config), you require settings for vendor, server and database.  Depending on your setup, you may also need username, password and port. Consult the documentation for more detail on available options for these settings.</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseConnectionAccess">
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="2#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Status="Excluded" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>connectString</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="11" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseConnectionException">
+          <Messages>
+           <Message TypeName="ExceptionsShouldBePublic" Category="Microsoft.Design" CheckId="CA1064" Created="2007-07-03 14:26:07Z">
+            <Issue>
+             <Item>Habanero.DB.DatabaseConnectionException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="DatabaseConnectionFactory">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldBeSealed" Category="Microsoft.Design" CheckId="CA1052" Created="2007-07-03 19:27:55Z">
+            <Issue>
+             <Item>DatabaseConnectionFactory</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="CreateConnection(Habanero.DB.DatabaseConfig,System.String,System.String):Habanero.DB.DatabaseConnection">
+            <Messages>
+             <Message Id="System.String.Compare(System.String,System.String,System.Boolean)" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2007-07-03 18:24:57Z">
+              <Issue>
+               <Item>DatabaseConnectionFactory.CreateConnection(DatabaseConfig, String, String):DatabaseConnection</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean)</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean,System.Globalization.CultureInfo)</Item>
+              </Issue>
+              <Issue>
+               <Item>DatabaseConnectionFactory.CreateConnection(DatabaseConfig, String, String):DatabaseConnection</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean)</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean,System.Globalization.CultureInfo)</Item>
+              </Issue>
+              <Issue>
+               <Item>DatabaseConnectionFactory.CreateConnection(DatabaseConfig, String, String):DatabaseConnection</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean)</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean,System.Globalization.CultureInfo)</Item>
+              </Issue>
+              <Issue>
+               <Item>DatabaseConnectionFactory.CreateConnection(DatabaseConfig, String, String):DatabaseConnection</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean)</Item>
+               <Item>System.String.Compare(System.String,System.String,System.Boolean,System.Globalization.CultureInfo)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseConnectionMySql">
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="2#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Status="Excluded" Created="2007-07-03 15:22:43Z">
+              <Issue>
+               <Item>connectString</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="0" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseConnectionOracle">
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="2#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Status="Excluded" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>connectString</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="1" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseConnectionSqlServer">
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="2#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Status="Excluded" Created="2007-07-03 15:22:43Z">
+              <Issue>
+               <Item>connectString</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="12" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseNumberGenerator">
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.Int32)">
+            <Messages>
+             <Message Id="System.Convert.ToInt32(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseNumberGenerator.DatabaseNumberGenerator(String, String, Int32)</Item>
+               <Item>System.Convert.ToInt32(System.Object)</Item>
+               <Item>System.Convert.ToInt32(System.Object,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseNumberGenerator+NumberUpdate">
+          <Members>
+           <Member Name="GetPersistSql():Habanero.Base.ISqlStatementCollection">
+            <Messages>
+             <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>NumberUpdate.GetPersistSql():ISqlStatementCollection</Item>
+               <Item>System.Int32.ToString</Item>
+               <Item>System.Int32.ToString(System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="StrID():System.String">
+            <Messages>
+             <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>NumberUpdate.StrID():String</Item>
+               <Item>System.Int32.ToString</Item>
+               <Item>System.Int32.ToString(System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseReadException">
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.Exception,System.String,System.String)">
+            <Messages>
+             <Message Id="4#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Status="Excluded" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>connectString</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="6" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.String,System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="3#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Status="Excluded" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>connectString</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="5" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext):System.Void">
+            <Messages>
+             <Message TypeName="OverrideLinkDemandsShouldBeIdenticalToBase" Category="Microsoft.Security" CheckId="CA2123" Created="2007-07-03 19:27:55Z">
+              <Issue Name="BaseOnly">
+               <Item>DatabaseReadException.GetObjectData(SerializationInfo, StreamingContext):Void</Item>
+               <Item>Exception.GetObjectData(SerializationInfo, StreamingContext):Void</Item>
+               <Item>[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SecureGetObjectDataOverrides" Category="Microsoft.Security" CheckId="CA2110" Created="2007-07-03 19:27:55Z">
+              <Issue>
+               <Item>DatabaseReadException.GetObjectData(SerializationInfo, StreamingContext):Void</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-03 19:27:55Z">
+              <Issue>
+               <Item>'info'</Item>
+               <Item>DatabaseReadException.GetObjectData(SerializationInfo, StreamingContext):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseSettingsStorer">
+          <Messages>
+           <Message Id="Storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 14:26:07Z">
+            <Issue Name="Type">
+             <Item>Storer</Item>
+             <Item>Habanero.DB.DatabaseSettingsStorer</Item>
+            </Issue>
+            <Notes>
+             <User Name="peter">
+              <Note Id="17" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="CreateInsertStatement(System.String,System.String):Habanero.DB.SqlStatement">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2007-07-03 14:26:07Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>DatabaseSettingsStorer.CreateInsertStatement(String, String):SqlStatement</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetBoolean(System.String):System.Boolean">
+            <Messages>
+             <Message Id="System.Convert.ToBoolean(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.GetBoolean(String):Boolean</Item>
+               <Item>System.Convert.ToBoolean(System.Object)</Item>
+               <Item>System.Convert.ToBoolean(System.Object,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetDecimal(System.String,System.DateTime):System.Decimal">
+            <Messages>
+             <Message Id="System.Convert.ToDecimal(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.GetDecimal(String, DateTime):Decimal</Item>
+               <Item>System.Convert.ToDecimal(System.Object)</Item>
+               <Item>System.Convert.ToDecimal(System.Object,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetString(System.String):System.String">
+            <Messages>
+             <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.GetString(String):String</Item>
+               <Item>System.Convert.ToString(System.Object)</Item>
+               <Item>System.Convert.ToString(System.Object,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetValue(System.String,System.DateTime):System.Object">
+            <Messages>
+             <Message Id="settingName" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2007-07-03 14:26:07Z">
+              <Issue Name="UseCaseInsensitiveHashtableParameter">
+               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>Hashtable.Add(Object, Object):Void</Item>
+               <Item>settingName</Item>
+              </Issue>
+              <Issue Name="UseCaseInsensitiveHashtableParameter">
+               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>Hashtable.Remove(Object):Void</Item>
+               <Item>settingName</Item>
+              </Issue>
+              <Issue Name="UseCaseInsensitiveHashtableParameter">
+               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>Hashtable.get_Item(Object):Object</Item>
+               <Item>settingName</Item>
+              </Issue>
+              <Issue Name="UseCaseInsensitiveHashtableParameter">
+               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>Hashtable.get_Item(Object):Object</Item>
+               <Item>settingName</Item>
+              </Issue>
+             </Message>
+             <Message Id="Habanero.Base.UserException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>1</Item>
+               <Item>UserException.UserException(String)</Item>
+               <Item>Setting ____ doesn't exist in the tbsetting table in the database. </Item>
+              </Issue>
+             </Message>
+             <Message Id="tbsetting" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>tbsetting</Item>
+               <Item>Setting ____ doesn't exist in the tbsetting table in the database. </Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>System.String.ToUpper</Item>
+               <Item>System.String.ToUpper(System.Globalization.CultureInfo)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="SetBoolean(System.String,System.Boolean):System.Void">
+            <Messages>
+             <Message Id="System.Convert.ToString(System.Boolean)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.SetBoolean(String, Boolean):Void</Item>
+               <Item>System.Convert.ToString(System.Boolean)</Item>
+               <Item>System.Convert.ToString(System.Boolean,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="SetValue(System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="currentValue" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.SetValue(String, String):Void</Item>
+               <Item>currentValue</Item>
+               <Item>System.String</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.SetValue(String, String):Void</Item>
+               <Item>System.String.ToUpper</Item>
+               <Item>System.String.ToUpper(System.Globalization.CultureInfo)</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.SetValue(String, String):Void</Item>
+               <Item>System.Convert.ToString(System.Object)</Item>
+               <Item>System.Convert.ToString(System.Object,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="UpdateCache(System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="settingValue" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2007-07-03 14:26:07Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>settingValue</Item>
+               <Item>DatabaseSettingsStorer.UpdateCache(String, String):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseSettingsStorer+Setting">
+          <Members>
+           <Member Name="Time">
+            <Accessors>
+             <Accessor Name="get_Time():System.DateTime">
+              <Messages>
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2007-07-03 14:26:07Z">
+                <Issue>
+                 <Item>Setting.get_Time():DateTime</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseUtil">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldBeSealed" Category="Microsoft.Design" CheckId="CA1052" Created="2007-07-03 19:27:55Z">
+            <Issue>
+             <Item>DatabaseUtil</Item>
+            </Issue>
+           </Message>
+           <Message Id="Util" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 14:26:07Z">
+            <Issue Name="Type">
+             <Item>Util</Item>
+             <Item>Habanero.DB.DatabaseUtil</Item>
+            </Issue>
+            <Notes>
+             <User Name="peter">
+              <Note Id="16" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="ConvertValueToStandardSql(System.Object):System.String">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2007-07-03 14:26:07Z">
+              <Issue Name="Local">
+               <Item>preparedValue</Item>
+               <Item>System.String</Item>
+               <Item>DatabaseUtil.ConvertValueToStandardSql(Object):String</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.Convert.ToDecimal(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 19:27:55Z">
+              <Issue>
+               <Item>DatabaseUtil.ConvertValueToStandardSql(Object):String</Item>
+               <Item>System.Convert.ToDecimal(System.Object)</Item>
+               <Item>System.Convert.ToDecimal(System.Object,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 19:27:55Z">
+              <Issue>
+               <Item>DatabaseUtil.ConvertValueToStandardSql(Object):String</Item>
+               <Item>System.String.Format(System.String,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="FormatDatabaseDateTime(System.DateTime):System.String">
+            <Messages>
+             <Message Id="System.DateTime.ToString(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>DatabaseUtil.FormatDatabaseDateTime(DateTime):String</Item>
+               <Item>System.DateTime.ToString(System.String)</Item>
+               <Item>System.DateTime.ToString(System.String,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="PrepareValue(System.Object):System.Object">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2007-07-03 14:26:07Z">
+              <Issue Name="Parameter">
+               <Item>objValue</Item>
+               <Item>Habanero.Base.CustomProperty</Item>
+               <Item>DatabaseUtil.PrepareValue(Object):Object</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DatabaseWriteException">
+          <Members>
+           <Member Name=".ctor(System.String,System.String,System.Exception,System.String,System.String)">
+            <Messages>
+             <Message Id="4#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Status="Excluded" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>connectString</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="4" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.String,System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="3#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Status="Excluded" Created="2007-07-03 14:26:07Z">
+              <Issue>
+               <Item>connectString</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="3" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext):System.Void">
+            <Messages>
+             <Message TypeName="OverrideLinkDemandsShouldBeIdenticalToBase" Category="Microsoft.Security" CheckId="CA2123" Created="2007-07-03 19:27:55Z">
+              <Issue Name="BaseOnly">
+               <Item>DatabaseWriteException.GetObjectData(SerializationInfo, StreamingContext):Void</Item>
+               <Item>Exception.GetObjectData(SerializationInfo, StreamingContext):Void</Item>
+               <Item>[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="SecureGetObjectDataOverrides" Category="Microsoft.Security" CheckId="CA2110" Created="2007-07-03 19:27:55Z">
+              <Issue>
+               <Item>DatabaseWriteException.GetObjectData(SerializationInfo, StreamingContext):Void</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-03 19:27:55Z">
+              <Issue>
+               <Item>'info'</Item>
+               <Item>DatabaseWriteException.GetObjectData(SerializationInfo, StreamingContext):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DBMigrator">
+          <Messages>
+           <Message Id="Migrator" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 18:24:57Z">
+            <Issue Name="Type">
+             <Item>Migrator</Item>
+             <Item>Habanero.DB.DBMigrator</Item>
+            </Issue>
+            <Notes>
+             <User Name="peter">
+              <Note Id="13" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="CurrentVersion():System.Int32">
+            <Messages>
+             <Message Id="System.Convert.ToInt32(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 18:24:57Z">
+              <Issue>
+               <Item>DBMigrator.CurrentVersion():Int32</Item>
+               <Item>System.Convert.ToInt32(System.String)</Item>
+               <Item>System.Convert.ToInt32(System.String,System.IFormatProvider)</Item>
+              </Issue>
+              <Issue>
+               <Item>DBMigrator.CurrentVersion():Int32</Item>
+               <Item>System.Convert.ToInt32(System.String)</Item>
+               <Item>System.Convert.ToInt32(System.String,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="SetCurrentVersion(System.Int32):System.Void">
+            <Messages>
+             <Message Id="System.Int32.ToString" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 18:24:57Z">
+              <Issue>
+               <Item>DBMigrator.SetCurrentVersion(Int32):Void</Item>
+               <Item>System.Int32.ToString</Item>
+               <Item>System.Int32.ToString(System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="SetSettingsStorer(Habanero.Base.ISettingsStorer):System.Void">
+            <Messages>
+             <Message Id="0#storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 18:24:57Z">
+              <Issue Name="Parameter">
+               <Item>DBMigrator.SetSettingsStorer(ISettingsStorer):Void</Item>
+               <Item>storer</Item>
+               <Item>storer</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="14" />
+               </User>
+              </Notes>
+             </Message>
+             <Message Id="Storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 18:24:57Z">
+              <Issue Name="Member">
+               <Item>Storer</Item>
+               <Item>DBMigrator.SetSettingsStorer(ISettingsStorer):Void</Item>
+              </Issue>
+              <Notes>
+               <User Name="peter">
+                <Note Id="15" />
+               </User>
+              </Notes>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SqlStatement">
+          <Members>
+           <Member Name="ToString():System.String">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 19:27:55Z">
+              <Issue>
+               <Item>SqlStatement.ToString():String</Item>
+               <Item>System.String.Format(System.String,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SqlStatementCollection">
+          <Members>
+           <Member Name="Equals(System.Object):System.Boolean">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2007-07-03 14:26:07Z">
+              <Issue Name="Parameter">
+               <Item>obj</Item>
+               <Item>Habanero.DB.SqlStatementCollection</Item>
+               <Item>SqlStatementCollection.Equals(Object):Boolean</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="System.Collections.IEnumerable.GetEnumerator():System.Collections.IEnumerator">
+            <Messages>
+             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2007-07-03 19:27:55Z">
+              <Issue>
+               <Item>SqlStatementCollection</Item>
+               <Item>IEnumerable.GetEnumerator():IEnumerator</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Notes>
+   <User Name="peter">
+    <Note Id="0" Modified="2007-07-03 15:27:06Z">connectString is the common name for a string that describes a database connection</Note>
+    <Note Id="1" Modified="2007-07-03 15:27:11Z">connectString is the common name for a string that describes a database connection</Note>
+    <Note Id="2" Modified="2007-07-03 15:27:18Z">connectString is the common name for a string that describes a database connection</Note>
+    <Note Id="3" Modified="2007-07-03 15:27:30Z">connectString is the common name for a string that describes a database connection</Note>
+    <Note Id="4" Modified="2007-07-03 15:27:35Z">connectString is the common name for a string that describes a database connection</Note>
+    <Note Id="5" Modified="2007-07-03 15:27:41Z">connectString is the common name for a string that describes a database connection</Note>
+    <Note Id="6" Modified="2007-07-03 15:27:46Z">connectString is the common name for a string that describes a database connection</Note>
+    <Note Id="7" Modified="2007-07-03 17:27:55Z">Habanero is spelled correctly</Note>
+    <Note Id="11" Modified="2007-07-03 18:11:20Z">connectString is the correct term for it</Note>
+    <Note Id="12" Modified="2007-07-03 18:12:55Z">connectString is the correct term</Note>
+    <Note Id="13" Modified="2007-07-03 18:31:19Z">Migrator is correct</Note>
+    <Note Id="14" Modified="2007-07-03 18:31:26Z">storer is correct</Note>
+    <Note Id="15" Modified="2007-07-03 18:31:32Z">storer is correct</Note>
+    <Note Id="16" Modified="2007-07-03 18:31:39Z">util is a valid abb</Note>
+    <Note Id="17" Modified="2007-07-03 18:31:46Z">storer is correct</Note>
+   </User>
+  </Notes>
+  <Rules>
+   <Rule TypeName="AttributeStringLiteralsShouldParseCorrectly" Category="Microsoft.Usage" CheckId="CA2243">
+    <Resolution Name="Default">Change the value of argument '{0}', which is currently "{1}", to something that can be correctly parsed as {2}.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720">
+    <Resolution Name="Default">Remove the type identifier from parameter name '{0}'.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Resolution Name="Default">'{0}' appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807">
+    <Resolution Name="DuplicateStringCreationLocal">Multiple calls to {0} occur on '{1}', a local. Cache the result of the first occurrence and eliminate redundant string creation.</Resolution>
+    <Resolution Name="UseCaseInsensitiveHashtableParameter">{0} calls {1} on a Hashtable instance after converting '{2}', a parameter, to upper or lowercase. Pass a CaseInsensitiveHashCodeProvider and CaseInsensitiveComparer to the Hashtable constructor (so that keys are case-insensitive) and eliminate the unnecessary string creation.</Resolution>
+    <Resolution Name="UseStringCompareParameter">{0} calls {1} after converting '{2}', a parameter, to upper or lowercase. If possible, eliminate the string creation and call the overload of String.Compare that performs a case-insensitive comparison.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
+    <Resolution Name="Local">'{0}', a local, is cast to type '{1}' multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+    <Resolution Name="Parameter">'{0}', a parameter, is cast to type '{1}' multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303">
+    <Resolution Name="Default">{0} passes a literal as parameter {1} of a call to {2}. Retrieve the following string argument from a resource table instead: '{3}'</Resolution>
+   </Rule>
+   <Rule TypeName="ExceptionsShouldBePublic" Category="Microsoft.Design" CheckId="CA1064">
+    <Resolution Name="Default">Make exception class {0} public.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="Member">Correct the spelling of the unrecognized token '{0}' in member name '{1}'.</Resolution>
+    <Resolution Name="Namespace">Correct the spelling of the unrecognized token '{0}' in namespace '{1}'.</Resolution>
+    <Resolution Name="Parameter">In method {0}, correct the spelling of the unrecognized token '{1}' in parameter name '{2}' or strip it entirely if it represents any sort of hungarian notation.</Resolution>
+    <Resolution Name="Type">Correct the spelling of the unrecognized token '{0}' in type name '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">
+    <Resolution Name="Default">Make '{0}' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of '{1}' and is visible to derived classes.</Resolution>
+   </Rule>
+   <Rule TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204">
+    <Resolution Name="Default">Correct the spelling of the unrecognized token '{0}' in the literal '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
+    <Resolution Name="NoAttr">'{0}' should be marked with CLSCompliantAttribute and its value should be true.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in VB) of {0} is never used. Mark the member as static (or Shared in VB) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   </Rule>
+   <Rule TypeName="OverrideLinkDemandsShouldBeIdenticalToBase" Category="Microsoft.Security" CheckId="CA2123">
+    <Resolution Name="BaseOnly">Add the following security attribute to {0} in order to match a LinkDemand on base method {1}:  {2}.</Resolution>
+   </Rule>
+   <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
+    <Resolution Name="Default">{0} declares a local, '{1}', of type {2}, which is never used or is only assigned to. Use this local or remove it.</Resolution>
+   </Rule>
+   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+    <Resolution Name="Default">Parameter '{0}' of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+   </Rule>
+   <Rule TypeName="SecureGetObjectDataOverrides" Category="Microsoft.Security" CheckId="CA2110">
+    <Resolution Name="Default">Add the following declarative security to {0}: [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter=true)]</Resolution>
+   </Rule>
+   <Rule TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306">
+    <Resolution Name="Default">Be sure to set the {0} Locale property wherever '{1}' creates an instance of that type.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304">
+    <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide a CultureInfo. This should be replaced with a call to {2}.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+    <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide an IFormatProvider. This should be replaced with a call to {2}.</Resolution>
+   </Rule>
+   <Rule TypeName="StaticHolderTypesShouldBeSealed" Category="Microsoft.Design" CheckId="CA1052">
+    <Resolution Name="Default">Mark '{0}' as sealed.</Resolution>
+   </Rule>
+   <Rule TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820">
+    <Resolution Name="IsNullOrEmpty">Replace the call to String.{0}({1}) in '{2}' with a call to String.IsNullOrEmpty.</Resolution>
+   </Rule>
+   <Rule TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062">
+    <Resolution Name="Default">Validate parameter {0} passed to externally visible method {1}.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>

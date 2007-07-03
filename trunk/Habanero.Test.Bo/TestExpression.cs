@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using Habanero.Bo.CriteriaManager;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.Bo

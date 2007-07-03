@@ -282,7 +282,7 @@ namespace Habanero.Ui.Grid
         /// <param name="boCollection">The new business object collection
         /// to be shown in the grid. This collection must have been
         /// pre-loaded using the collection's Load() method</param>
-        public void SetBusinessObjectCollection(BusinessObjectCollection boCollection)
+        public void SetBusinessObjectCollection(BusinessObjectCollection<BusinessObject> boCollection)
         {
             _provider = new CollectionGridDataProvider(boCollection);
             this.Grid.SetGridDataProvider(_provider);
@@ -346,7 +346,7 @@ namespace Habanero.Ui.Grid
         /// Returns a cloned collection of the business objects in the grid
         /// </summary>
         /// <returns>Returns a business object collection</returns>
-        public BusinessObjectCollection GetCollectionClone()
+        public BusinessObjectCollection<BusinessObject> GetCollectionClone()
         {
             return this.Grid.GetCollectionClone();
         }

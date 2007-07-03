@@ -1,7 +1,7 @@
 using System.Data;
 using Habanero.Base;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// Generates parameter names for parameterised sql statements

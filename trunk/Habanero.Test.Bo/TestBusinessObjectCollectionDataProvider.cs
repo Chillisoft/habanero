@@ -3,7 +3,7 @@ using System.Data;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using NMock;
@@ -20,7 +20,7 @@ namespace Habanero.Test.Bo
     {
         protected XmlClassLoader itsLoader;
         protected ClassDef itsClassDef;
-        protected BusinessObjectCollection itsCollection;
+        protected BusinessObjectCollection<BusinessObject> itsCollection;
         protected DataTable itsTable;
         protected BusinessObject itsBo1;
         protected BusinessObject itsBo2;
@@ -34,7 +34,7 @@ namespace Habanero.Test.Bo
         public void SetupTestFixture()
         {
             this.SetupDBConnection();
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             itsLoader = new XmlClassLoader();
             itsClassDef = MyBo.LoadClassDefWithLookup();
         }
@@ -44,7 +44,7 @@ namespace Habanero.Test.Bo
         {
             itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
             itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
-            itsCollection = new BusinessObjectCollection(itsClassDef);
+            itsCollection = new BusinessObjectCollection<BusinessObject>(itsClassDef);
             itsBo1 = itsClassDef.CreateNewBusinessObject(itsConnection);
             itsBo1.SetPropertyValue("TestProp", "bo1prop1");
             itsBo1.SetPropertyValue("TestProp2", "s1");
@@ -63,7 +63,7 @@ namespace Habanero.Test.Bo
             itsDatabaseConnectionMockControl.Verify();
         }
 
-        protected abstract IDataSetProvider CreateDataSetProvider(BusinessObjectCollection col);
+        protected abstract IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col);
 
 
         [Test]

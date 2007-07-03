@@ -5,7 +5,7 @@ using System.Globalization;
 using Habanero.Base;
 using Habanero.Util;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// Provides database utilities such as methods to reformat objects
@@ -13,15 +13,17 @@ namespace Habanero.Db
     /// </summary>
     public class DatabaseUtil
     {
+        private DatabaseUtil() {}
+
         /// <summary>
         /// Returns a DateTime object as a string in the format of:<br/>
         /// "yyyy-MM-dd hh:mm:ss"
         /// </summary>
-        /// <param name="dte">The DateTime object</param>
+        /// <param name="date">The DateTime object</param>
         /// <returns>Returns a string</returns>
-        public static string FormatDatabaseDateTime(DateTime dte)
+        public static string FormatDatabaseDateTime(DateTime date)
         {
-            return dte.ToString("yyyy-MM-dd hh:mm:ss");
+            return date.ToString("yyyy-MM-dd hh:mm:ss");
             //return dte.ToString("dd MMM yyyy HH:mm:ss");
         }
 
@@ -32,7 +34,7 @@ namespace Habanero.Db
         /// <returns>Returns the reformatted object</returns>
         /// TODO ERIC - prepare value for what?
         /// - should this be public? is it useful beyond ConvertValueToStandardSql 
-        public static object PrepareValue(object objValue)
+        internal static object PrepareValue(object objValue)
         {
             if (objValue is Guid)
             {
@@ -76,7 +78,7 @@ namespace Habanero.Db
         public static string ConvertValueToStandardSql(object objValue)
         {
             object preparedValue = PrepareValue(objValue);
-            string stringValue = "";
+            string stringValue;
             if (preparedValue == null || DBNull.Value.Equals(preparedValue))
             {
                 return "null";
@@ -89,12 +91,12 @@ namespace Habanero.Db
             {
                 try
                 {
-                    decimal decimalValue = Decimal.Parse((String) preparedValue);
+                    Convert.ToDecimal(preparedValue);
                     stringValue = (String) preparedValue;
                 }
-                catch
+                catch (FormatException)
                 {
-                    stringValue = "'" + (String) preparedValue + "'";
+                    stringValue = string.Format("'{0}'", preparedValue);
                 }
             }
             else
@@ -104,45 +106,38 @@ namespace Habanero.Db
             return stringValue;
         }
 
-        /// <summary>
-        /// Returns the primary key of the table specified
-        /// </summary>
-        /// <param name="conn">The database connection</param>
-        /// <param name="tableName">The table name</param>
-        /// <param name="adapter">The adapter</param>
-        /// <returns>Returns the primary key as a string</returns>
-        public static String GetPrimaryKeyOfTable(IDbConnection conn, String tableName, IDbDataAdapter adapter)
-        {
-            if (conn.State != ConnectionState.Open)
-            {
-                conn.Open();
-            }
-            try
-            {
-                IDbCommand command = conn.CreateCommand();
-                command.CommandText = "select * from " + tableName;
-                DataSet dst = new DataSet();
-                adapter.SelectCommand = command;
-                bool complete = false;
-                int count = 0;
-                while (!complete)
-                {
-                    try
-                    {
-                        adapter.FillSchema(dst, SchemaType.Source);
-                        complete = true;
-                    }
-                    catch (DataException ex)
-                    {
-                        throw ex;
-                    }
-                }
-                return dst.Tables["Table"].PrimaryKey[0].ColumnName;
-            }
-            finally
-            {
-                conn.Close();
-            }
-        }
+        ///// <summary>
+        ///// Returns the primary key of the table specified
+        ///// </summary>
+        ///// <param name="connection">The database connection</param>
+        ///// <param name="tableName">The table name</param>
+        ///// <param name="adapter">The adapter</param>
+        ///// <returns>Returns the primary key as a string</returns>
+        //public static String GetPrimaryKeyOfTable(IDbConnection connection, String tableName, IDbDataAdapter adapter)
+        //{
+        //    if (connection.State != ConnectionState.Open)
+        //    {
+        //        connection.Open();
+        //    }
+        //    try
+        //    {
+        //        IDbCommand command = connection.CreateCommand();
+        //        command.CommandText = "select * from " + tableName;
+        //        DataSet dst = new DataSet();
+        //        adapter.SelectCommand = command;
+        //        bool complete = false;
+        //       while (!complete)
+        //        {
+        //            adapter.FillSchema(dst, SchemaType.Source);
+        //            complete = true;
+
+        //        }
+        //        return dst.Tables["Table"].PrimaryKey[0].ColumnName;
+        //    }
+        //    finally
+        //    {
+        //        connection.Close();
+        //    }
+        //}
     }
 }

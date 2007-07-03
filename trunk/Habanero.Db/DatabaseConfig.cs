@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Data;
 using Habanero.Base;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// Stores database configuration settings and creates connections
@@ -12,17 +12,17 @@ namespace Habanero.Db
     /// </summary>
     public class DatabaseConfig : IDatabaseConfig
     {
-        public const string MySQL = "MYSQL";
-        public const string SQLServer = "SQLSERVER";
+        public const string MySql = "MYSQL";
+        public const string SqlServer = "SQLSERVER";
         public const string Oracle = "ORACLE";
         public const string Access = "ACCESS";
 
-        protected String _vendor;
-        protected String _server;
-        protected String _database;
-        protected String _userName;
-        protected String _password;
-        protected String _port;
+        private String _vendor;
+        private String _server;
+        private String _database;
+        private String _userName;
+        private String _password;
+        private String _port;
 
         /// <summary>
         /// A deparameterised constructor
@@ -35,7 +35,7 @@ namespace Habanero.Db
         /// A constructor with specific configurations provided
         /// </summary>
         /// <param name="vendor">The database vendor - use the strings
-        /// provided (eg. DatabaseConfig.MySQL)</param>
+        /// provided (eg. DatabaseConfig.MySql)</param>
         /// <param name="server">The database server</param>
         /// <param name="database">The database name</param>
         /// <param name="userName">The username</param>
@@ -183,8 +183,7 @@ namespace Habanero.Db
         /// <returns>Returns an IDbConnection object</returns>
         public IDbConnection GetConnection()
         {
-            DatabaseConnectionFactory factory = new DatabaseConnectionFactory();
-            return factory.CreateConnection(this).GetConnection();
+            return DatabaseConnectionFactory.CreateConnection(this).GetConnection();
         }
 
         /// <summary>
@@ -194,8 +193,7 @@ namespace Habanero.Db
         /// <returns>Returns an IDatabaseConnection object</returns>
         public IDatabaseConnection GetDatabaseConnection()
         {
-            DatabaseConnectionFactory factory = new DatabaseConnectionFactory();
-            return factory.CreateConnection(this);
+            return DatabaseConnectionFactory.CreateConnection(this);
         }
 
         /// <summary>
@@ -208,8 +206,7 @@ namespace Habanero.Db
         /// <returns>Returns an IDbConnection object</returns>
         public IDbConnection GetConnection(string assemblyName, string fullClassName)
         {
-            DatabaseConnectionFactory factory = new DatabaseConnectionFactory();
-            return factory.CreateConnection(this, assemblyName, fullClassName).GetConnection();
+            return DatabaseConnectionFactory.CreateConnection(this, assemblyName, fullClassName).GetConnection();
         }
 
         /// <summary>

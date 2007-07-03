@@ -1,4 +1,6 @@
-namespace Habanero.Db
+using System;
+
+namespace Habanero.DB
 {
     /// <summary>
     /// Creates new database connections, tailored to the vendor specified
@@ -6,36 +8,18 @@ namespace Habanero.Db
     /// </summary>
     public class DatabaseConnectionFactory
     {
-        /// <summary>
-        /// Constructor to initialise a new factory
-        /// </summary>
-        public DatabaseConnectionFactory()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
+        private DatabaseConnectionFactory() {}
 
-
-        //		public ConnectionStringFactory CreateConnectionStringFactory(string assemblyName) {
-        //			if (assemblyName == "MySql.Data.MySqlClient") {
-        //				return new ConnectionStringMySQLFactory();
-        //			} else {
-        //				throw new NotSupportedException(assemblyName + " is not a supported database connection assembly.");
-        //			}
-        //		}
-
-
-        /// <summary>
+        /// <summary>   
         /// Creates a new database connection with the configuration
         /// provided
         /// </summary>
         /// <param name="config">The database access configuration</param>
         /// <returns>Returns a new database connection</returns>
-        public DatabaseConnection CreateConnection(DatabaseConfig config)
+        public static DatabaseConnection CreateConnection(DatabaseConfig config)
         {
             return CreateConnection(config, "", "");
-        }
+        } 
 
         /// <summary>
         /// Creates a new database connection using the configuration
@@ -45,39 +29,42 @@ namespace Habanero.Db
         /// <param name="assemblyName">The assembly name</param>
         /// <param name="fullClassName">The full class name</param>
         /// <returns>Returns a new database connection</returns>
-        public DatabaseConnection CreateConnection(DatabaseConfig config, string assemblyName, string fullClassName)
+        public static DatabaseConnection CreateConnection(DatabaseConfig config, string assemblyName, string fullClassName)
         {
-            if (config.Vendor.ToUpper() == DatabaseConfig.MySQL.ToUpper())
+            if (config == null) {
+                throw new ArgumentNullException("config");
+            }
+            if (string.Compare(config.Vendor, DatabaseConfig.MySql, true) == 0)
             {
-                if (assemblyName == "")
+                if (String.IsNullOrEmpty(assemblyName))
                 {
                     return
-                        new DatabaseConnectionMySQL("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection",
+                        new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection",
                                                     config.GetConnectionString());
                 }
                 else
                 {
                     return
-                        new DatabaseConnectionMySQL(assemblyName, fullClassName,
+                        new DatabaseConnectionMySql(assemblyName, fullClassName,
                                                     config.GetConnectionString(assemblyName));
                 }
             }
-            else if (config.Vendor.ToUpper() == DatabaseConfig.SQLServer.ToUpper())
+            else if (string.Compare(config.Vendor, DatabaseConfig.SqlServer, true) == 0)
             {
-                if (assemblyName == "")
+                if (String.IsNullOrEmpty(assemblyName))
                 {
                     return
-                        new DatabaseConnectionSQLServer("System.Data", "System.Data.SqlClient.SqlConnection",
+                        new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection",
                                                         config.GetConnectionString());
                 }
                 else
                 {
-                    return new DatabaseConnectionSQLServer(assemblyName, fullClassName, config.GetConnectionString());
+                    return new DatabaseConnectionSqlServer(assemblyName, fullClassName, config.GetConnectionString());
                 }
             }
-            else if (config.Vendor.ToUpper() == DatabaseConfig.Oracle.ToUpper())
+            else if (string.Compare(config.Vendor, DatabaseConfig.Oracle, true) == 0)
             {
-                if (assemblyName == "")
+                if (String.IsNullOrEmpty(assemblyName))
                 {
                     return
                         new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection",
@@ -90,9 +77,9 @@ namespace Habanero.Db
                     return new DatabaseConnectionOracle(assemblyName, fullClassName, config.GetConnectionString());
                 }
             }
-            else if (config.Vendor.ToUpper() == DatabaseConfig.Access.ToUpper())
+            else if (string.Compare(config.Vendor, DatabaseConfig.Access, true) == 0)
             {
-                if (assemblyName == "")
+                if (String.IsNullOrEmpty(assemblyName))
                 {
                     return
                         new DatabaseConnectionAccess("System.Data", "System.Data.OleDb.OleDbConnection",
@@ -100,7 +87,7 @@ namespace Habanero.Db
                 }
                 else
                 {
-                    return new DatabaseConnectionOracle(assemblyName, fullClassName, config.GetConnectionString());
+                    return new DatabaseConnectionAccess(assemblyName, fullClassName, config.GetConnectionString());
                 }
             }
             else

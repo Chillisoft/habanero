@@ -20,7 +20,7 @@ namespace Habanero.Test.Bo
 
         public TestLongText()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader();
             itsClassDef =
                 loader.LoadClass(

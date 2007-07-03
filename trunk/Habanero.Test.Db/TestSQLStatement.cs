@@ -1,14 +1,14 @@
 using System;
 using System.Data;
 using System.Text;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 //using ByteFX.Data.MySqlClient;
 
 namespace Habanero.Test.Db
 {
     [TestFixture]
-    public class TestSQLStatement
+    public class TestSqlStatement
     {
         private IDbConnection connection;
         private String rawStatement;
@@ -18,16 +18,15 @@ namespace Habanero.Test.Db
 
         public static void RunTest()
         {
-            TestSQLStatement test = new TestSQLStatement();
+            TestSqlStatement test = new TestSqlStatement();
             test.SetupTestFixture();
         }
 
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SQLServer, "test", "test", "test", "test", "1000");
-            DatabaseConnectionFactory factory = new DatabaseConnectionFactory();
-            connection = factory.CreateConnection(config).GetTestConnection();
+            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000");
+            connection = DatabaseConnectionFactory.CreateConnection(config).TestConnection;
             testStatement = new SqlStatement(connection);
             rawStatement = "insert into tb1 (field1, field2, field3) values (@Param1, @Param2, @Param3)";
             testStatement.Statement.Append(rawStatement);
@@ -69,15 +68,15 @@ namespace Habanero.Test.Db
         public void TestToString()
         {
             Assert.AreEqual("Raw statement: " + rawStatement + "   , Parameter values: 12345, 67890, 13579, ",
-                            testStatement.ToString(), "ToString of SQLStatement not correct.");
+                            testStatement.ToString(), "ToString of SqlStatement not correct.");
         }
 
         [Test]
         public void TestParamNameGenerator()
         {
-            Assert.IsNotNull(testStatement.GetParameterNameGenerator(), "GetParameterNameGenerator returns null.");
-            Assert.AreEqual("@Param0", testStatement.GetParameterNameGenerator().GetNextParameterName());
-            Assert.AreEqual("@Param1", testStatement.GetParameterNameGenerator().GetNextParameterName());
+            Assert.IsNotNull(testStatement.ParameterNameGenerator, "GetParameterNameGenerator returns null.");
+            Assert.AreEqual("@Param0", testStatement.ParameterNameGenerator.GetNextParameterName());
+            Assert.AreEqual("@Param1", testStatement.ParameterNameGenerator.GetNextParameterName());
         }
 
         [Test]
@@ -90,11 +89,11 @@ namespace Habanero.Test.Db
         }
 
         [Test]
-        public void TestSQLStatementConstructor()
+        public void TestSqlStatementConstructor()
         {
             SqlStatement newTest = new SqlStatement(connection, "select * from bob");
             Assert.AreEqual("select * from bob", newTest.Statement.ToString(),
-                            "SQLStatement constructor does not set the statement correctly.");
+                            "SqlStatement constructor does not set the statement correctly.");
         }
 
         [Test]
@@ -149,7 +148,7 @@ namespace Habanero.Test.Db
         //[Test]
         //public void TestOracleClobField()
         //{
-        //    DatabaseConfig oraConfig = new DatabaseConfig(DatabaseConfig.SQLServer, "test", "test", "test", "test", "1000");
+        //    DatabaseConfig oraConfig = new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000");
         //    IDbConnection oraConnection;
         //    oraConnection = factory.CreateConnection(config).GetTestConnection();
         //    oraTestStatement = new SqlStatement(oraConnection);

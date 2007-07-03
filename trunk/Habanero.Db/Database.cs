@@ -1,18 +1,14 @@
+using System;
 using System.Data;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// Executes sql statements
     /// </summary>
     public class Database
     {
-        /// <summary>
-        /// Constructor to initialise a new instance
-        /// </summary>
-        public Database()
-        {
-        }
+        private Database() {}
 
         /// <summary>
         /// Executes the given sql statement using the database connection 
@@ -22,6 +18,8 @@ namespace Habanero.Db
         /// <param name="connection">The database connection</param>
         public static void ExecuteSqlStatement(SqlStatement statement, IDbConnection connection)
         {
+            if (statement == null) throw new ArgumentNullException("statement");
+            if (connection == null) throw new ArgumentNullException("connection");
             IDbCommand cmd;
             if (connection.State != ConnectionState.Open)
             {

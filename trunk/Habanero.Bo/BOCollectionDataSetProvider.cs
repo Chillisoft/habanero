@@ -10,7 +10,7 @@ namespace Habanero.Bo
     /// </summary>
     public abstract class BOCollectionDataSetProvider : IDataSetProvider
     {
-        protected readonly BusinessObjectCollection _collection;
+        protected readonly BusinessObjectCollection<BusinessObject> _collection;
         protected ICollection _uiGridProperties;
         protected DataTable _table;
         protected IObjectInitialiser _objectInitialiser;
@@ -20,7 +20,7 @@ namespace Habanero.Bo
         /// object collection
         /// </summary>
         /// <param name="collection">The business object collection</param>
-        public BOCollectionDataSetProvider(BusinessObjectCollection collection)
+        public BOCollectionDataSetProvider(BusinessObjectCollection<BusinessObject> collection)
         {
             this._collection = collection;
         }

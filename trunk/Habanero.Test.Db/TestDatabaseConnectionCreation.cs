@@ -1,4 +1,4 @@
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.Db
@@ -17,10 +17,10 @@ namespace Habanero.Test.Db
         public void TestCreateDatabaseConnectionMySql()
         {
             DatabaseConnection conn =
-                new DatabaseConnectionMySQL("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
+                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
             conn.ConnectionString =
-                new DatabaseConfig(DatabaseConfig.MySQL, "test", "test", "test", "test", "1000").GetConnectionString();
-            Assert.AreEqual("MySql.Data.MySqlClient", conn.GetTestConnection().GetType().Namespace,
+                new DatabaseConfig(DatabaseConfig.MySql, "test", "test", "test", "test", "1000").GetConnectionString();
+            Assert.AreEqual("MySql.Data.MySqlClient", conn.TestConnection.GetType().Namespace,
                             "Namespace of mysqlconnection is wrong.");
         }
 
@@ -28,12 +28,12 @@ namespace Habanero.Test.Db
         public void TestCreateDatabaseConnectionSqlServer()
         {
             DatabaseConnection conn =
-                new DatabaseConnectionSQLServer("System.Data", "System.Data.SqlClient.SqlConnection");
+                new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection");
             conn.ConnectionString =
-                new DatabaseConfig(DatabaseConfig.SQLServer, "test", "test", "test", "test", "1000").GetConnectionString
+                new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000").GetConnectionString
                     ();
-            Assert.AreEqual("System.Data.SqlClient", conn.GetTestConnection().GetType().Namespace,
-                            "Namespace of SQL connection is wrong.");
+            Assert.AreEqual("System.Data.SqlClient", conn.TestConnection.GetType().Namespace,
+                            "Namespace of Sql connection is wrong.");
         }
 
         //[Test]
@@ -56,7 +56,7 @@ namespace Habanero.Test.Db
                 new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
             conn.ConnectionString =
                 new DatabaseConfig(DatabaseConfig.Oracle, "test", "test", "test", "test", "1000").GetConnectionString();
-            Assert.AreEqual("System.Data.OracleClient", conn.GetTestConnection().GetType().Namespace,
+            Assert.AreEqual("System.Data.OracleClient", conn.TestConnection.GetType().Namespace,
                             "Namespace of Oracle connection is wrong.");
         }
 
@@ -66,7 +66,7 @@ namespace Habanero.Test.Db
             DatabaseConnection conn = new DatabaseConnectionAccess("System.Data", "System.Data.OleDb.OleDbConnection");
             conn.ConnectionString =
                 new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000").GetConnectionString();
-            Assert.AreEqual("System.Data.OleDb", conn.GetTestConnection().GetType().Namespace,
+            Assert.AreEqual("System.Data.OleDb", conn.TestConnection.GetType().Namespace,
                             "Namespace of Access connection is wrong.");
         }
     }

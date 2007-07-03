@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 
 namespace Habanero.Test.General
 {
@@ -36,7 +36,7 @@ namespace Habanero.Test.General
             }
             else
             {
-                return ClassDef.GetClassDefCol[typeof (ContactPersonCompositeKey)];
+                return ClassDef.ClassDefs[typeof (ContactPersonCompositeKey)];
             }
         }
 
@@ -54,7 +54,7 @@ namespace Habanero.Test.General
             ClassDef lClassDef =
                 new ClassDef(typeof (ContactPersonCompositeKey), primaryKey, lPropDefCol, keysCol, relDefs);
             lClassDef.HasObjectID = false;
-			ClassDef.GetClassDefCol.Add(lClassDef);
+			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
@@ -151,7 +151,7 @@ namespace Habanero.Test.General
 
         #region RelationShips
 
-        public BusinessObjectCollection GetCarsDriven()
+        public BusinessObjectCollection<BusinessObject> GetCarsDriven()
         {
             return Relationships.GetRelatedBusinessObjectCol("Driver");
             //			return Car.LoadBusinessObjCol("DriverFK1 = " + 

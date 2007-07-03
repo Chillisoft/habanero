@@ -1,9 +1,9 @@
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
-    /// A database connection customised for the MySQL database
+    /// A database connection customised for the MySql database
     /// </summary>
-    public class DatabaseConnectionMySQL : DatabaseConnection
+    public class DatabaseConnectionMySql : DatabaseConnection
     {
         /// <summary>
         /// Constructor to initialise the connection object with an
@@ -11,7 +11,7 @@ namespace Habanero.Db
         /// </summary>
         /// <param name="assemblyName">The assembly name</param>
         /// <param name="className">The class name</param>
-        public DatabaseConnectionMySQL(string assemblyName, string className) : base(assemblyName, className)
+        public DatabaseConnectionMySql(string assemblyName, string className) : base(assemblyName, className)
         {
         }
 
@@ -22,9 +22,9 @@ namespace Habanero.Db
         /// <param name="assemblyName">The assembly name</param>
         /// <param name="className">The class name</param>
         /// <param name="connectString">The connection string, which can be
-        /// generated using ConnectionStringMySQLFactory.CreateConnectionString()
+        /// generated using ConnectionStringMySqlFactory.CreateConnectionString()
         /// </param>
-        public DatabaseConnectionMySQL(string assemblyName, string className, string connectString)
+        public DatabaseConnectionMySql(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
         {
         }

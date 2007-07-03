@@ -25,7 +25,7 @@ namespace Habanero.Test.Bo
 
         public TestByteString()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader();
             itsClassDef =
                 loader.LoadClass(

@@ -1,4 +1,4 @@
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// A database connection customised for the Oracle database

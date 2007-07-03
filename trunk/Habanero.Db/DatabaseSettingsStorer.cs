@@ -3,7 +3,7 @@ using System.Collections;
 using System.Data;
 using Habanero.Base;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// Stores database settings as a cache and updates or retrieves settings
@@ -40,10 +40,10 @@ namespace Habanero.Db
         /// Sets a specified setting as a string
         /// </summary>
         /// <param name="settingName">The setting name</param>
-        /// <param name="val">The value to set it to</param>
-        public void SetString(string settingName, string val)
+        /// <param name="settingValue">The value to set it to</param>
+        public void SetString(string settingName, string settingValue)
         {
-            SetValue(settingName, val);
+            SetValue(settingName, settingValue);
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -21,9 +21,9 @@ namespace Habanero.Test.General
             SetStrID();
             objCircle.SetPropertyValue("ShapeName", "MyShape");
             objCircle.SetPropertyValue("Radius", 10);
-            itsInsertSql = objCircle.GetInsertSQL();
-            itsUpdateSql = objCircle.GetUpdateSQL();
-            itsDeleteSql = objCircle.GetDeleteSQL();
+            itsInsertSql = objCircle.GetInsertSql();
+            itsUpdateSql = objCircle.GetUpdateSql();
+            itsDeleteSql = objCircle.GetDeleteSql();
             selectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
             selectSql.Statement.Append(objCircle.SelectSqlStatement(selectSql));
         }

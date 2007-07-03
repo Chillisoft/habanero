@@ -23,7 +23,7 @@ namespace Habanero.Test.General
             }
             else
             {
-                return ClassDef.GetClassDefCol[typeof (FilledCircle)];
+                return ClassDef.ClassDefs[typeof (FilledCircle)];
             }
         }
 
@@ -47,7 +47,7 @@ namespace Habanero.Test.General
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             ClassDef lClassDef = new ClassDef(typeof (FilledCircle), primaryKey, lPropDefCol, keysCol, relDefCol);
             lClassDef.SuperClassDef = new SuperClassDef(Circle.GetClassDef(), ORMapping.ConcreteTableInheritance);
-			ClassDef.GetClassDefCol.Add(lClassDef);
+			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
     }

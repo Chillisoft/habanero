@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Ui.Base;
 using Habanero.Ui.Forms;

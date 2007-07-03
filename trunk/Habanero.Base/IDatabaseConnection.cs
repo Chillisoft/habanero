@@ -26,7 +26,7 @@ namespace Habanero.Base
         /// <returns>Returns an IDbConnection object</returns>
         IDbConnection GetConnection();
 
-        //IDataReader LoadDataReader(SqlStatement selectSQL, string strSearchCriteria, string strOrderByCriteria);
+        //IDataReader LoadDataReader(SqlStatement selectSql, string strSearchCriteria, string strOrderByCriteria);
 
         /// <summary>
         /// Loads a data reader
@@ -54,13 +54,13 @@ namespace Habanero.Base
         /// Loads data from the database into a DataTable object, using the
         /// sql statement object provided
         /// </summary>
-        /// <param name="selectSQL">The sql statement object</param>
+        /// <param name="selectSql">The sql statement object</param>
         /// <param name="strSearchCriteria">The search criteria as a string
         /// to append</param>
         /// <param name="strOrderByCriteria">The order by criteria as a string
         /// to append</param>
         /// <returns>Returns a DataTable object</returns>
-        DataTable LoadDataTable(ISqlStatement selectSQL, string strSearchCriteria, string strOrderByCriteria);
+        DataTable LoadDataTable(ISqlStatement selectSql, string strSearchCriteria, string strOrderByCriteria);
 
         /// <summary>
         /// Executes a sql command using the sql string provided

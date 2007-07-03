@@ -5,8 +5,8 @@ namespace Habanero.Util
     /// <summary>
     /// Manages a long string that, when stored in the database, will need 
     /// to be stored differently according to the database used.
-    /// In MySQL this type is usually reflected by the data type 'LongText'.
-    /// In SQLServer this type is usually reflected by the data type 'Text'.
+    /// In MySql this type is usually reflected by the data type 'LongText'.
+    /// In SqlServer this type is usually reflected by the data type 'Text'.
     /// In Oracle this type is usually reflected by the data type 'CLOB'.
     /// In Access this type is usually reflected by the data type 'Memo'.
     /// It is the Oracle data type in patricular that needs special treatment.

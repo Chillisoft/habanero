@@ -13,7 +13,7 @@ namespace Habanero.Bo
         /// collection provided
         /// </summary>
         /// <param name="collection">The business object collection</param>
-        public BOCollectionReadOnlyDataSetProvider(BusinessObjectCollection collection)
+        public BOCollectionReadOnlyDataSetProvider(BusinessObjectCollection<BusinessObject> collection)
             : base(collection)
         {
         }

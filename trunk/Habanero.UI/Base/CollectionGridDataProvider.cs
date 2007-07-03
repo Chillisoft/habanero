@@ -13,7 +13,7 @@ namespace Habanero.Ui.Base
     /// </summary>
     public class CollectionGridDataProvider : IGridDataProvider
     {
-        private BusinessObjectCollection _collection;
+        private BusinessObjectCollection<BusinessObject> _collection;
         private string _uiDefName;
 
         /// <summary>
@@ -22,7 +22,8 @@ namespace Habanero.Ui.Base
         /// <param name="collection">The business objects to represent.
         /// This collection must have been preloaded using the collection's
         /// Load() method.</param>
-        public CollectionGridDataProvider(BusinessObjectCollection collection) : this(collection, "")
+        public CollectionGridDataProvider(BusinessObjectCollection<BusinessObject> collection)
+            : this(collection, "")
         {
         }
 
@@ -48,7 +49,7 @@ namespace Habanero.Ui.Base
         /// <summary>
         /// A constructor as before, but allows a UIDefName to be specified
         /// </summary>
-        public CollectionGridDataProvider(BusinessObjectCollection collection, string uiDefName)
+        public CollectionGridDataProvider(BusinessObjectCollection<BusinessObject> collection, string uiDefName)
         {
             _collection = collection;
             _uiDefName = uiDefName;
@@ -58,7 +59,7 @@ namespace Habanero.Ui.Base
         /// Returns the business object collection being represented
         /// </summary>
         /// <returns>Returns the collection</returns>
-        public BusinessObjectCollection GetCollection()
+        public BusinessObjectCollection<BusinessObject> GetCollection()
         {
             return _collection;
         }

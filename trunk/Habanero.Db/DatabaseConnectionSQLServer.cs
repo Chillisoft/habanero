@@ -1,9 +1,9 @@
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
-    /// A database connection customised for the SQLServer database
+    /// A database connection customised for the SqlServer database
     /// </summary>
-    public class DatabaseConnectionSQLServer : DatabaseConnection
+    public class DatabaseConnectionSqlServer : DatabaseConnection
     {
         /// <summary>
         /// Constructor to initialise the connection object with an
@@ -11,7 +11,7 @@ namespace Habanero.Db
         /// </summary>
         /// <param name="assemblyName">The assembly name</param>
         /// <param name="className">The class name</param>
-        public DatabaseConnectionSQLServer(string assemblyName, string className) : base(assemblyName, className)
+        public DatabaseConnectionSqlServer(string assemblyName, string className) : base(assemblyName, className)
         {
         }
 
@@ -22,9 +22,9 @@ namespace Habanero.Db
         /// <param name="assemblyName">The assembly name</param>
         /// <param name="className">The class name</param>
         /// <param name="connectString">The connection string, which can be
-        /// generated using ConnectionStringSQLServerFactory.CreateConnectionString()
+        /// generated using ConnectionStringSqlServerFactory.CreateConnectionString()
         /// </param>
-        public DatabaseConnectionSQLServer(string assemblyName, string className, string connectString)
+        public DatabaseConnectionSqlServer(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
         {
         } //		protected override IDbConnection GetNewConnection() {

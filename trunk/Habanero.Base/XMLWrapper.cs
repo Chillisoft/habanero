@@ -1,4 +1,5 @@
 using System.Xml;
+using System.Xml.XPath;
 
 namespace Habanero.Base
 {
@@ -53,11 +54,11 @@ namespace Habanero.Base
         /// <param name="elementName">The element name</param>
         /// <returns>Returns the value if found or an empty string if not</returns>
         /// TODO: Error-checking on arguments
-        public string ReadXmlValue(XmlNode parentNode, string elementName)
+        public string ReadXmlValue(IXPathNavigable parentNode, string elementName)
         {
-            XmlNode node = parentNode.SelectSingleNode(elementName);
+            IXPathNavigable node = parentNode.CreateNavigator().SelectSingleNode(elementName);
             if (node != null)
-                return node.InnerText;
+                return node.CreateNavigator().InnerXml;
             else
                 return string.Empty;
         }
@@ -71,17 +72,17 @@ namespace Habanero.Base
         /// <param name="elementName">The element name for the value</param>
         /// <param name="newValue">The new value to be applied</param>
         /// TODO: Error checking on arguments
-        public void WriteXmlValue(XmlNode parentNode, string elementName,
+        public void WriteXmlValue(IXPathNavigable parentNode, string elementName,
                                   string newValue)
         {
-            XmlNode node = parentNode.SelectSingleNode(elementName);
+            IXPathNavigable node = parentNode.CreateNavigator().SelectSingleNode(elementName);
             if (node != null)
-                node.InnerText = newValue;
+                node.CreateNavigator().InnerXml = newValue;
             {
                 XmlNode newNode = _doc.CreateNode(XmlNodeType.Element,
-                                                 elementName, parentNode.NamespaceURI);
+                                                 elementName, parentNode.CreateNavigator().NamespaceURI);
                 newNode.InnerText = newValue;
-                parentNode.AppendChild(newNode);
+                parentNode.CreateNavigator().AppendChild(newNode.CreateNavigator());
             }
         }
 

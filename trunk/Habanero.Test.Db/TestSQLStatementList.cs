@@ -1,12 +1,12 @@
 using System;
 using System.Data;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.Db
 {
     [TestFixture]
-    public class TestSQLStatementList : TestUsingDatabase
+    public class TestSqlStatementList : TestUsingDatabase
     {
         private SqlStatementCollection testCollection;
         private SqlStatement testStatement1;
@@ -36,7 +36,7 @@ namespace Habanero.Test.Db
         [Test]
         public void TestCount()
         {
-            Assert.AreEqual(2, testCollection.Count, "Count property on SQLStatementList is returning incorrect value.");
+            Assert.AreEqual(2, testCollection.Count, "Count property on SqlStatementList is returning incorrect value.");
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Habanero.Test.Db
         {
             SqlStatementCollection newCollection = new SqlStatementCollection();
             newCollection.Add(testCollection);
-            Assert.AreEqual(2, newCollection.Count, "Adding a list to a SQLStatementList not working properly.");
+            Assert.AreEqual(2, newCollection.Count, "Adding a list to a SqlStatementList not working properly.");
         }
 
         [Test]
@@ -52,14 +52,14 @@ namespace Habanero.Test.Db
         {
             Assert.AreEqual(
                 testStatement1.ToString() + Environment.NewLine + testStatement2.ToString() + Environment.NewLine,
-                testCollection.ToString(), "Tostring of SQLStatementList not working correctly.");
+                testCollection.ToString(), "Tostring of SqlStatementList not working correctly.");
         }
 
         [Test]
         public void TestConstructorWithOneStatement()
         {
             Assert.AreEqual(1, testCollectionWithOneStatement.Count,
-                            "A SQLStatementList created with a SQLStatement should only contain one statement");
+                            "A SqlStatementList created with a SqlStatement should only contain one statement");
             Assert.AreSame(testStatement1, testCollectionWithOneStatement[0]);
         }
     }

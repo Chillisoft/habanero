@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 using Habanero.Base.Exceptions;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using log4net;
 

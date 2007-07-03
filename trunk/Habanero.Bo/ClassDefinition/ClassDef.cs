@@ -115,7 +115,7 @@ namespace Habanero.Bo.ClassDefinition
 			//_primaryKeyDef = primaryKeyDef;
 			//_relationshipDefCol = relationshipDefCol;
 			//_uiDefCol = uiDefCol;
-			//GetClassDefCol.Add(this);
+			//ClassDefs.Add(this);
 
 			////			mConcurrencyControl= concurrencyControl;
         }
@@ -385,16 +385,11 @@ namespace Habanero.Bo.ClassDefinition
         /// a part
         /// </summary>
         /// <returns>Returns a ClassDefCol object</returns>
-        public static ClassDefCol GetClassDefCol
+        public static ClassDefCol ClassDefs
         {
 			get
 			{
 				return ClassDefCol.GetColClassDef();
-				//if (_classDefCol == null)
-				//{
-				//    _classDefCol = ClassDefCol.GetColClassDef();
-				//}
-				//return _classDefCol;
 			}
         }
 
@@ -402,11 +397,11 @@ namespace Habanero.Bo.ClassDefinition
         /// Indicates whether the specified class type is amongst those
         /// contained in the class definition collection
         /// </summary>
-        /// <param name="classTye">The class type in question</param>
+        /// <param name="classType">The class type in question</param>
         /// <returns>Returns true if found, false if not</returns>
         public static bool IsDefined(Type classType)
         {
-            return GetClassDefCol.Contains(classType);
+            return ClassDefs.Contains(classType);
         }
 
         #endregion FactoryMethods
@@ -680,9 +675,9 @@ namespace Habanero.Bo.ClassDefinition
         	ClassDefCol.LoadColClassDef(classDefCol);
 			//foreach (ClassDef classDef in loader.LoadClassDefs())
 			//{
-			//    if (!ClassDef.GetClassDefCol.Contains(classDef))
+			//    if (!ClassDef.ClassDefs.Contains(classDef))
 			//    {
-			//        ClassDef.GetClassDefCol.Add(classDef);
+			//        ClassDef.ClassDefs.Add(classDef);
 			//    }
 			//    else
 			//    {

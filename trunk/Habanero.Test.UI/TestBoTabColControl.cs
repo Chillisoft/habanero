@@ -18,16 +18,16 @@ namespace Habanero.Test.Ui.Application
     {
         private BoTabColControl itsTabColControl;
         private ClassDef itsClassDef;
-        private BusinessObjectCollection itsCol;
+        private BusinessObjectCollection<BusinessObject> itsCol;
         private MyBo itsBo1;
         private MyBo itsBo2;
 
         [TestFixtureSetUp]
         public void SetupTextFixture()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
-            itsCol = new BusinessObjectCollection(itsClassDef);
+            itsCol = new BusinessObjectCollection<BusinessObject>(itsClassDef);
 
 			itsBo1 = MyBo.Create();
             itsBo2 = MyBo.Create();

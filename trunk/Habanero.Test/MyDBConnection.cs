@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using Habanero.Db;
+using Habanero.DB;
 
 namespace Habanero.Test.General
 {
@@ -18,7 +18,7 @@ namespace Habanero.Test.General
         {
             IDictionary settings = new Hashtable();
 
-            settings.Add("vendor", DatabaseConfig.MySQL);
+            settings.Add("vendor", DatabaseConfig.MySql);
             settings.Add("server", "localhost");
             settings.Add("database", "HabaneroTest");
             settings.Add("username", "root");

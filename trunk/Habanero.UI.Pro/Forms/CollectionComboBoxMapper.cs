@@ -16,7 +16,7 @@ namespace Habanero.Ui.Forms
     public class CollectionComboBoxMapper
     {
         private readonly ComboBox _comboBox;
-        private BusinessObjectCollection _collection;
+        private BusinessObjectCollection<BusinessObject> _collection;
         private string _uiDefName;
         private MouseEventHandler _mouseClickHandler;
 
@@ -46,7 +46,7 @@ namespace Habanero.Ui.Forms
         /// <param name="collection">The collection to represent</param>
         /// <param name="includeBlank">Whether to a put a blank item at the
         /// top of the list</param>
-        public void SetCollection(BusinessObjectCollection collection, bool includeBlank)
+        public void SetCollection(BusinessObjectCollection<BusinessObject> collection, bool includeBlank)
         {
             if (_collection != null)
             {
@@ -128,7 +128,7 @@ namespace Habanero.Ui.Forms
         /// <param name="col">The business object collection being represented</param>
         /// <param name="includeBlank">Whether to include a blank item at the
         /// top of the list</param>
-        public static void SetComboBoxCollection(ComboBox cbx, BusinessObjectCollection col, bool includeBlank)
+        public static void SetComboBoxCollection(ComboBox cbx, BusinessObjectCollection<BusinessObject> col, bool includeBlank)
         {
             int width = cbx.Width;
             

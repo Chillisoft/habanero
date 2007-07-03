@@ -13,7 +13,7 @@ namespace Habanero.Ui.Base
     /// TODO ERIC - how does this differ from CollectionGridDataProvider?
     public class SimpleGridDataProvider : IGridDataProvider
     {
-        private BusinessObjectCollection _collection;
+        private BusinessObjectCollection<BusinessObject> _collection;
         private UIGridDef _uiGridDef;
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Habanero.Ui.Base
         /// represent. This collection must have been preloaded using the 
         /// collection's Load() method.</param>
         /// <param name="uiGridDef">The UIGridDef object</param>
-        public SimpleGridDataProvider(BusinessObjectCollection collection, UIGridDef uiGridDef)
+        public SimpleGridDataProvider(BusinessObjectCollection<BusinessObject> collection, UIGridDef uiGridDef)
         {
             _collection = collection;
             _uiGridDef = uiGridDef;
@@ -33,7 +33,7 @@ namespace Habanero.Ui.Base
         /// Returns the business object collection being represented
         /// </summary>
         /// <returns>Returns the collection</returns>
-        public BusinessObjectCollection GetCollection()
+        public BusinessObjectCollection<BusinessObject> GetCollection()
         {
             return _collection;
         }

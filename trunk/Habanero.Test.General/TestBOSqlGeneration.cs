@@ -1,4 +1,4 @@
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -14,15 +14,15 @@ namespace Habanero.Test.General
         {
             this.SetupDBConnection();
             shape = Shape.GetNewObject();
-            insertSql = shape.GetInsertSQL();
+            insertSql = shape.GetInsertSql();
         }
 
         [Test]
-        public void TestInsertSQL()
+        public void TestInsertSql()
         {
             Assert.AreEqual(1, insertSql.Count, "There should only be one insert statement.");
             Assert.AreEqual("INSERT INTO Shape (ShapeID, ShapeName) VALUES (?Param0, ?Param1)",
-                            insertSql[0].Statement.ToString(), "Insert SQL is being created incorrectly");
+                            insertSql[0].Statement.ToString(), "Insert Sql is being created incorrectly");
         }
     }
 }

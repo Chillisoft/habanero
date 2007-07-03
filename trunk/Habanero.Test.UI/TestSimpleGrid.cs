@@ -20,7 +20,7 @@ namespace Habanero.Test.Ui.Application
         public void SetupTest()
         {
             grid = new SimpleGrid();
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Habanero.Test.Ui.Application
 
         private void SetupGrid(ClassDef classDef)
         {
-            BusinessObjectCollection col = new BusinessObjectCollection(classDef);
+            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
             BusinessObject bo1 = classDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp", "Value1");
             bo1.SetPropertyValue("TestProp2", "Value2");

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Util;
 using Habanero.Util.File;
@@ -185,7 +185,7 @@ namespace Habanero.Bo
 					return null;
 				} else
 				{
-					return ClassDef.GetClassDefCol[MyLookupObjectType];
+					return ClassDef.ClassDefs[MyLookupObjectType];
 				}
 			}
 		}

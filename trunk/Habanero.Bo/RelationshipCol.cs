@@ -102,7 +102,7 @@ namespace Habanero.Bo
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship specified is a single relationship, when a
         /// multiple one was expected</exception>
-        public BusinessObjectCollection GetRelatedBusinessObjectCol(string relationshipName)
+        public BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol(string relationshipName)
         {
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             Relationship relationship = this[relationshipName];

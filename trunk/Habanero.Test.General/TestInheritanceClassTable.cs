@@ -2,7 +2,7 @@ using System.Data;
 using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -73,7 +73,7 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestCircleInsertSQL()
+        public void TestCircleInsertSql()
         {
             Assert.AreEqual(2, itsInsertSql.Count,
                             "There should be 2 insert sql statements when using class table inheritance");

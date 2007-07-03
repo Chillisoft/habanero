@@ -12,7 +12,7 @@ namespace Habanero.Ui.Base
         /// Returns the business object collection being represented
         /// </summary>
         /// <returns>Returns the business object collection</returns>
-        BusinessObjectCollection GetCollection();
+        BusinessObjectCollection<BusinessObject> GetCollection();
 
         /// <summary>
         /// Returns the UIFormDef object

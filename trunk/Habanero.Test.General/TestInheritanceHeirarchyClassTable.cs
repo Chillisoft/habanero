@@ -2,7 +2,7 @@ using System.Data;
 using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Util;
 using NMock;
@@ -64,7 +64,7 @@ namespace Habanero.Test.General
 
 
         [Test]
-        public void TestCircleInsertSQL()
+        public void TestCircleInsertSql()
         {
             Assert.AreEqual(3, itsInsertSql.Count,
                             "There should be 3 insert sql statements when using class table inheritance");
@@ -159,7 +159,7 @@ namespace Habanero.Test.General
             myCircle.ApplyEdit();
             myCircle.SetPropertyValue("Colour", 4);
 
-            SqlStatementCollection myUpdateSql = myCircle.GetUpdateSQL();
+            SqlStatementCollection myUpdateSql = myCircle.GetUpdateSql();
             Assert.AreEqual(1, myUpdateSql.Count);
             connectionControl.Verify();
         }

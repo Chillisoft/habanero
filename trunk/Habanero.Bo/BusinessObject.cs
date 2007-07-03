@@ -8,7 +8,7 @@ using System.Text;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Bo.SqlGeneration;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using Habanero.Util;
 using log4net;
@@ -332,7 +332,7 @@ namespace Habanero.Bo
         /// expectations
         public static BusinessObject GetBusinessObject(string criteria, Type boType)
         {
-            BusinessObjectCollection col = new BusinessObjectCollection(ClassDef.GetClassDefCol[boType]);
+            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
             col.Load(criteria, "");
             if (col.Count < 1)
             {
@@ -401,8 +401,8 @@ namespace Habanero.Bo
         /// <returns>Returns a class definition</returns>
         protected virtual ClassDef ConstructClassDef()
         {
-            if (ClassDef.GetClassDefCol.Contains(this.GetType()))
-                return ClassDef.GetClassDefCol[this.GetType()];
+            if (ClassDef.ClassDefs.Contains(this.GetType()))
+                return ClassDef.ClassDefs[this.GetType()];
             else
                 return null;
 
@@ -523,10 +523,10 @@ namespace Habanero.Bo
         /// <param name="searchCriteria">The search criteria</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public virtual BusinessObjectCollection GetBusinessObjectCol(string searchCriteria,
+        public virtual BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(string searchCriteria,
                                                                          string orderByClause)
         {
-            BusinessObjectCollection bOCol = new BusinessObjectCollection(_classDef);
+            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(_classDef);
             bOCol.Load(searchCriteria, orderByClause);
             return bOCol;
         }
@@ -538,10 +538,10 @@ namespace Habanero.Bo
         /// <param name="searchExpression">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public virtual BusinessObjectCollection GetBusinessObjectCol(IExpression searchExpression,
+        public virtual BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(IExpression searchExpression,
                                                                          string orderByClause)
         {
-            BusinessObjectCollection bOCol = new BusinessObjectCollection(_classDef);
+            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(_classDef);
             bOCol.Load(searchExpression, orderByClause);
             return bOCol;
         }
@@ -1031,19 +1031,19 @@ namespace Habanero.Bo
         /// <returns>Returns an IDataReader object</returns>
         protected internal IDataReader LoadDataReader(IDatabaseConnection connection, IExpression searchExpression)
         {
-            SqlStatement selectSQL = new SqlStatement(connection.GetConnection());
+            SqlStatement selectSql = new SqlStatement(connection.GetConnection());
             if (searchExpression == null)
             {
-                selectSQL.Statement.Append(SelectSqlStatement(selectSQL));
-                return DatabaseConnection.CurrentConnection.LoadDataReader(selectSQL);
+                selectSql.Statement.Append(SelectSqlStatement(selectSql));
+                return DatabaseConnection.CurrentConnection.LoadDataReader(selectSql);
             }
             else
             {
                 ParseParameterInfo(searchExpression);
-                selectSQL.Statement.Append(SelectSQLWithNoSearchClauseIncludingWhere());
-                searchExpression.SqlExpressionString(selectSQL, DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
+                selectSql.Statement.Append(SelectSqlWithNoSearchClauseIncludingWhere());
+                searchExpression.SqlExpressionString(selectSql, DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
                                                      DatabaseConnection.CurrentConnection.RightFieldDelimiter);
-                return this.GetDatabaseConnection().LoadDataReader(selectSQL);
+                return this.GetDatabaseConnection().LoadDataReader(selectSql);
             }
         }
 
@@ -1400,15 +1400,15 @@ namespace Habanero.Bo
                     BOKey lBOKey = (BOKey) item.Value;
                     if (lBOKey.MustCheckKey())
                     {
-                        SqlStatement checkDuplicateSQL =
+                        SqlStatement checkDuplicateSql =
                             new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-                        checkDuplicateSQL.Statement.Append(this.GetSelectSql());
-                        string whereClause = " ( NOT (" + WhereClause(checkDuplicateSQL) + ")) AND " +
-                                             GetCheckForDuplicateWhereClause(lBOKey, checkDuplicateSQL);
-                        checkDuplicateSQL.AppendCriteria(whereClause);
+                        checkDuplicateSql.Statement.Append(this.GetSelectSql());
+                        string whereClause = " ( NOT (" + WhereClause(checkDuplicateSql) + ")) AND " +
+                                             GetCheckForDuplicateWhereClause(lBOKey, checkDuplicateSql);
+                        checkDuplicateSql.AppendCriteria(whereClause);
                         //string whereClause = " WHERE ( NOT " + WhereClause() +
                         //	") AND " + GetCheckForDuplicateWhereClause(lBOKey);
-                        using (IDataReader dr = this._connection.LoadDataReader(checkDuplicateSQL))
+                        using (IDataReader dr = this._connection.LoadDataReader(checkDuplicateSql))
                         {
                             //_classDef.SelectSql + whereClause)) {  //)  DatabaseConnection.CurrentConnection.LoadDataReader
                             try
@@ -1450,12 +1450,12 @@ namespace Habanero.Bo
                 //Only check if the primaryKey is 
                 if (_primaryKey.MustCheckKey())
                 {
-                    SqlStatement checkSQL = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-                    checkSQL.Statement.Append(this.GetSelectSql());
-                    string whereClause = " WHERE " + _primaryKey.DatabaseWhereClause(checkSQL);
-                    checkSQL.Statement.Append(whereClause);
+                    SqlStatement checkSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+                    checkSql.Statement.Append(this.GetSelectSql());
+                    string whereClause = " WHERE " + _primaryKey.DatabaseWhereClause(checkSql);
+                    checkSql.Statement.Append(whereClause);
 
-                    using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(checkSQL))
+                    using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(checkSql))
                     {
                         //_classDef.SelectSql + whereClause)) {
                         try
@@ -1540,12 +1540,12 @@ namespace Habanero.Bo
         /// <summary>
         /// Returns a sql "select" statement with an attached "where" clause
         /// </summary>
-        /// <param name="selectSQL">The sql statement used to generate and track
+        /// <param name="selectSql">The sql statement used to generate and track
         /// parameters</param>
         /// <returns>Returns a string</returns>
-        protected internal  virtual string SelectSqlStatement(SqlStatement selectSQL)
+        protected internal  virtual string SelectSqlStatement(SqlStatement selectSql)
         {
-            string statement = SelectSQLWithNoSearchClause();
+            string statement = SelectSqlWithNoSearchClause();
             if (statement.IndexOf(" WHERE ") == -1)
             {
                 statement += " WHERE ";
@@ -1564,7 +1564,7 @@ namespace Habanero.Bo
             //				}
             //				currentClassDef = currentClassDef.SuperClassClassDef ;
             //			}
-            statement += WhereClause(selectSQL);
+            statement += WhereClause(selectSql);
             return statement;
         }
 
@@ -1573,7 +1573,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <returns>Returns a sql string</returns>
         /// TODO ERIC - seems to add a "where" clause anyway
-        protected virtual string SelectSQLWithNoSearchClause()
+        protected virtual string SelectSqlWithNoSearchClause()
         {
             return new SelectStatementGenerator(this, this._connection).Generate(-1);
         }
@@ -1584,9 +1584,9 @@ namespace Habanero.Bo
         /// </summary>
         /// <returns>Returns a sql string</returns>
         /// TODO ERIC - if this uses above then it will have "where" already
-        private string SelectSQLWithNoSearchClauseIncludingWhere()
+        private string SelectSqlWithNoSearchClauseIncludingWhere()
         {
-            string basicSelect = SelectSQLWithNoSearchClause();
+            string basicSelect = SelectSqlWithNoSearchClause();
             if (basicSelect.IndexOf(" WHERE ") == -1)
             {
                 basicSelect += " WHERE ";
@@ -1612,15 +1612,15 @@ namespace Habanero.Bo
         {
             if (IsNew && !(IsDeleted))
             {
-                return GetInsertSQL();
+                return GetInsertSql();
             }
             else if (!(IsDeleted))
             {
-                return GetUpdateSQL();
+                return GetUpdateSql();
             }
             else if (IsDeleted && !(IsNew))
             {
-                return GetDeleteSQL();
+                return GetDeleteSql();
             }
             else
             {
@@ -1634,7 +1634,7 @@ namespace Habanero.Bo
         /// Builds a "delete" sql statement list for this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        protected internal SqlStatementCollection GetDeleteSQL()
+        protected internal SqlStatementCollection GetDeleteSql()
         {
             SqlStatement deleteSql;
             SqlStatementCollection statementCollection = new SqlStatementCollection();
@@ -1658,7 +1658,7 @@ namespace Habanero.Bo
         /// Returns an "insert" sql statement list for inserting this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        protected internal SqlStatementCollection GetInsertSQL()
+        protected internal SqlStatementCollection GetInsertSql()
         {
             InsertStatementGenerator gen = new InsertStatementGenerator(this, this.GetConnection());
             return gen.Generate();
@@ -1668,7 +1668,7 @@ namespace Habanero.Bo
         /// Returns an "update" sql statement list for updating this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        protected internal SqlStatementCollection GetUpdateSQL()
+        protected internal SqlStatementCollection GetUpdateSql()
         {
             UpdateStatementGenerator gen = new UpdateStatementGenerator(this, this.GetConnection());
             return gen.Generate();

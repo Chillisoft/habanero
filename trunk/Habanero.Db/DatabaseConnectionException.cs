@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// An exception thrown when an error occurred while attempting to

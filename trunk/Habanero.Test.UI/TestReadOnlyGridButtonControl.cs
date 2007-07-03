@@ -29,7 +29,7 @@ namespace Habanero.Test.Ui.Application
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             itsBo = MyBo.LoadDefaultClassDef().CreateNewBusinessObject();
         }
 

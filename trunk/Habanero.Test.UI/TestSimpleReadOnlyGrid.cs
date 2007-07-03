@@ -27,9 +27,9 @@ namespace Habanero.Test.Ui.Application
         {
             grid = new SimpleReadOnlyGrid();
             grid.Name = "GridControl";
-            ClassDef.GetClassDefCol.Clear();
+            ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBo.LoadClassDefWithNoLookup();
-            BusinessObjectCollection col = new BusinessObjectCollection(classDef);
+            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
 			bo1 = MyBo.Create(); //classDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp", "Value1");
             bo1.SetPropertyValue("TestProp2", "Value2");

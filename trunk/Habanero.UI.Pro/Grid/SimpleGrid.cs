@@ -31,7 +31,7 @@ namespace Habanero.Ui.Grid
         /// <param name="col">The business object collection</param>
         /// <returns>Returns a new data set provider</returns>
         protected override BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
-            BusinessObjectCollection col)
+            BusinessObjectCollection<BusinessObject> col)
         {
             return new BOCollectionEditableDataSetProvider(col);
         }

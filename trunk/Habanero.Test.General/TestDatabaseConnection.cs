@@ -1,6 +1,6 @@
 using System;
 using System.Data;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -97,7 +97,7 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestExecuteSQLTransaction()
+        public void TestExecuteSqlTransaction()
         {
             //DatabaseConnection.CurrentConnection.ConnectionString =
             //	@"data source=Core;database=WorkShopManagement;uid=sa;pwd=;";

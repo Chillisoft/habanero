@@ -1,5 +1,5 @@
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using Habanero.Base;
 using NUnit.Framework;
 using BusinessObject=Habanero.Bo.BusinessObject;
@@ -12,7 +12,7 @@ namespace Habanero.Test.Bo
     [TestFixture]
     public class TestBusinessObjectCollectionEditableDataProvider : TestBusinessObjectCollectionDataProvider
     {
-        protected override IDataSetProvider CreateDataSetProvider(BusinessObjectCollection col)
+        protected override IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col)
         {
             return new BOCollectionEditableDataSetProvider(itsCollection);
         }

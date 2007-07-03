@@ -402,7 +402,7 @@ namespace Habanero.Ui.Forms
         //    IGrid myGrid = (IGrid) Activator.CreateInstance(formGrid.GridType);
             
         //    BusinessObject bo = _boArray[0];
-        //    ClassDef classDef = ClassDef.GetClassDefCol[bo.GetType()];
+        //    ClassDef classDef = ClassDef.ClassDefs[bo.GetType()];
         //    myGrid.ObjectInitialiser =
         //        new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
         //                                          formGrid.CorrespondingRelationshipName);

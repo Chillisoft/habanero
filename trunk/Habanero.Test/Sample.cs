@@ -44,7 +44,7 @@ namespace Habanero.Test
             }
             else
             {
-                return ClassDef.GetClassDefCol[typeof (Sample)];
+                return ClassDef.ClassDefs[typeof (Sample)];
             }
         }
 
@@ -95,7 +95,7 @@ namespace Habanero.Test
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             ClassDef lClassDef = new ClassDef(typeof (Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
-			ClassDef.GetClassDefCol.Add(lClassDef);
+			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 

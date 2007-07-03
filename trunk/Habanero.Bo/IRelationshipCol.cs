@@ -26,7 +26,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="relationshipName">The name of the relationship</param>
         /// <returns>Returns a business object collection</returns>
-        BusinessObjectCollection GetRelatedBusinessObjectCol(string relationshipName);
+        BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol(string relationshipName);
 
         /// <summary>
         /// Relates a business object to this object through the type of

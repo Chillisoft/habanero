@@ -1,23 +1,24 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// Manages a collection of sql statements
     /// </summary>
     public class SqlStatementCollection : ISqlStatementCollection
     {
-        private IList _list;
+        private List<ISqlStatement> _list;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
         public SqlStatementCollection()
         {
-            _list = new ArrayList();
+            _list = new List<ISqlStatement>();
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace Habanero.Db
         /// <param name="statement">The sql statement object</param>
         public void Add(ISqlStatement statement)
         {
+            if (statement == null) throw new ArgumentNullException("statement");
             _list.Add(statement);
         }
 
@@ -46,6 +48,7 @@ namespace Habanero.Db
         /// <param name="statementCollection">The other collection</param>
         public void Add(ISqlStatementCollection statementCollection)
         {
+            if (statementCollection == null) throw new ArgumentNullException("statementCollection");
             foreach (ISqlStatement statement in statementCollection)
             {
                 _list.Add(statement);
@@ -58,15 +61,6 @@ namespace Habanero.Db
         public int Count
         {
             get { return _list.Count; }
-        }
-
-        /// <summary>
-        /// Returns the collection's enumerator
-        /// </summary>
-        /// <returns>Returns the enumerator</returns>
-        public IEnumerator GetEnumerator()
-        {
-            return _list.GetEnumerator();
         }
 
         /// <summary>
@@ -88,34 +82,34 @@ namespace Habanero.Db
         /// Provides an indexing facility so that the collection can
         /// be accessed like an array with square brackets
         /// </summary>
-        /// <param name="pos">The position in the collection</param>
+        /// <param name="index">The position in the collection</param>
         /// <returns>Returns the sql statement object at that position</returns>
-        public ISqlStatement this[int pos]
+        public ISqlStatement this[int index]
         {
-            get { return (ISqlStatement) _list[pos]; }
+            get { return (ISqlStatement) _list[index]; }
         }
 
         /// <summary>
         /// Inserts a sql statement object at the position specified
         /// </summary>
-        /// <param name="pos">The position to insert at</param>
+        /// <param name="index">The position to insert at</param>
         /// <param name="sql">The sql statement object to add</param>
-        public void Insert(int pos, ISqlStatement sql)
+        public void Insert(int index, ISqlStatement sql)
         {
-            _list.Insert(pos, sql);
+            _list.Insert(index, sql);
         }
 
         /// <summary>
         /// Indicates whether a specified collection is equal in content
         /// and order to this one
         /// </summary>
-        /// <param name="o">A SqlStatementCollection object</param>
+        /// <param name="obj">A SqlStatementCollection object</param>
         /// <returns>Returns true if equal</returns>
-        public override bool Equals(object o)
+        public override bool Equals(object obj)
         {
-            if (o is SqlStatementCollection )
+            if (obj is SqlStatementCollection )
             {
-                SqlStatementCollection col = (SqlStatementCollection) o;
+                SqlStatementCollection col = (SqlStatementCollection) obj;
                 if (col.Count != this.Count ) return false;
                 for (int i = 0; i < col.Count; i++) {
                     if (!col[i].Equals(this[i])) return false;
@@ -124,5 +118,20 @@ namespace Habanero.Db
             }
             return false;
         }
+
+        IEnumerator<ISqlStatement> IEnumerable<ISqlStatement>.GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
+
+        public override int GetHashCode()
+        {
+           return _list.GetHashCode();
+        } 
     }
 }

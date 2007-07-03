@@ -9,7 +9,7 @@ using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
 
-namespace Habanero.Db
+namespace Habanero.DB
 {
     /// <summary>
     /// A super-class to manage a database connection and execute sql commands
@@ -21,22 +21,22 @@ namespace Habanero.Db
     {
         private readonly string _assemblyName;
         private readonly string _className;
-        protected string _connectString;
-        protected IList _connections;
+        private string _connectString;
+        private IList _connections;
         //protected IDbConnection _currentDbConnection;
         private static IDatabaseConnection _currentDatabaseConnection;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Db.DatabaseConnection");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = 30;
 
-        /// <summary>
-        /// A class constructor that creates a new connection to a
-        /// SQLServer database.
-        /// </summary>
-        /// TODO ERIC - hmm? only SQLServer?
-        static DatabaseConnection()
-        {
-            new DatabaseConnectionSQLServer("System.Data", "System.Data.SqlClient.SqlConnection");
-        }
+        ///// <summary>
+        ///// A class constructor that creates a new connection to a
+        ///// SqlServer database.
+        ///// </summary>
+        ///// TODO ERIC - hmm? only SqlServer?
+        //static DatabaseConnection()
+        //{
+        //    new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection");
+        //}
 
         /// <summary>
         /// Constructor that initialises a new set of null connections
@@ -115,33 +115,34 @@ namespace Habanero.Db
         /// connection string that is stored in this instance
         /// </summary>
         /// <returns>Returns the new IDbConnection object</returns>
-        protected IDbConnection GetNewConnection()
+        protected IDbConnection NewConnection
         {
-            IDbConnection con = this.CreateDatabaseConnection();
+            get
+            {
+                IDbConnection con = this.CreateDatabaseConnection();
                 //IDbConnection) Activator.CreateInstance(sampleCon.GetType()); // new MySqlConnection(ConnectionString));
-            try
-            {
-                con.ConnectionString = this.ConnectionString;
-            }
-            catch (Exception ex)
-            {
-                throw new DatabaseConnectionException("There was an error " +
-                      "connecting to the database. The connection information was " +
-                      "rejected by the database - connection information is either " +
-                      "missing or incorrect.  In your configuration (eg. in app." +
-                      "config), you require settings for vendor, server and " +
-                      "database.  Depending on your setup, you may also need " +
-                      "username, password and port. Consult the documentation for " +
-                      "more detail on available options for these settings.", ex);
-            }
-            if (con.State != ConnectionState.Open && this._className == "System.Data.OleDb.OleDbConnection") {
-                con.Open();
-            }
+                try {
+                    con.ConnectionString = this.ConnectionString;
+                }
+                catch (Exception ex) {
+                    throw new DatabaseConnectionException("There was an error " +
+                                                          "connecting to the database. The connection information was " +
+                                                          "rejected by the database - connection information is either " +
+                                                          "missing or incorrect.  In your configuration (eg. in app." +
+                                                          "config), you require settings for vendor, server and " +
+                                                          "database.  Depending on your setup, you may also need " +
+                                                          "username, password and port. Consult the documentation for " +
+                                                          "more detail on available options for these settings.", ex);
+                }
+                if (con.State != ConnectionState.Open && this._className == "System.Data.OleDb.OleDbConnection") {
+                    con.Open();
+                }
 //			if (con.State != ConnectionState.Open) 
 //			{
 //				con.Open() ;
 //			}
-            return con;
+                return con;
+            }
         }
 
         /// <summary>
@@ -177,11 +178,14 @@ namespace Habanero.Db
         /// Creates a connection and assigns this instance's connection string
         /// </summary>
         /// <returns>Returns a new IDbConnection object</returns>
-        public IDbConnection GetTestConnection()
+        internal IDbConnection TestConnection
         {
-            IDbConnection con = this.CreateDatabaseConnection();
-            con.ConnectionString = this.ConnectionString;
-            return con;
+            get
+            {
+                IDbConnection con = this.CreateDatabaseConnection();
+                con.ConnectionString = this.ConnectionString;
+                return con;
+            }
         }
 
         /// <summary>
@@ -236,7 +240,7 @@ namespace Habanero.Db
                         return dbConnection;
                     }
                 }
-                IDbConnection newDbConnection = this.GetNewConnection();
+                IDbConnection newDbConnection = this.NewConnection;
                 //newDbConnection.Open() ;
                 _connections.Add(newDbConnection);
                 return newDbConnection;
@@ -245,7 +249,7 @@ namespace Habanero.Db
             {
                 log.Error("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine +
                           ExceptionUtilities.GetExceptionString(ex, 8));
-                throw ex;
+                throw;
             }
         }
 
@@ -270,7 +274,7 @@ namespace Habanero.Db
                         return dbConnection;
                     }
                 }
-                IDbConnection newDbConnection = this.GetNewConnection();
+                IDbConnection newDbConnection = this.NewConnection;
                 _connections.Add(newDbConnection);
                 return newDbConnection;
 
@@ -304,11 +308,14 @@ namespace Habanero.Db
         /// Creates and returns an open connection
         /// </summary>
         /// <returns>Returns an IDbConnection object</returns>
-        protected IDbConnection GetOpenConnection()
+        protected IDbConnection OpenConnection
         {
-            IDbConnection connection = this.GetConnection();
-            connection.Open();
-            return connection;
+            get
+            {
+                IDbConnection connection = this.GetConnection();
+                connection.Open();
+                return connection;
+            }
         }
 
 //		public IDbConnection GetConnection() {
@@ -336,6 +343,7 @@ namespace Habanero.Db
         /// TODO ERIC - say more, what happens, what is the result? (and next one)
         public IDataReader LoadDataReader(ISqlStatement selectSql, string strOrderByCriteria)
         {
+            if (selectSql == null) throw new ArgumentNullException("selectSql");
             //selectSql.AppendCriteria(strSearchCriteria) ;
             selectSql.AppendOrderBy(strOrderByCriteria);
             return LoadDataReader(selectSql);
@@ -350,6 +358,7 @@ namespace Habanero.Db
         /// occurred while setting up the data reader.  Also sends error
         /// output to the log.</exception>        
         public IDataReader LoadDataReader(string selectSql) {
+            if (selectSql == null) throw new ArgumentNullException("selectSql");
             IDbConnection con = null;
             try
             {
@@ -373,12 +382,12 @@ namespace Habanero.Db
         /// <summary>
         /// Loads a data reader
         /// </summary>
-        /// <param name="selectSQL">The sql statement object</param>
+        /// <param name="selectSql">The sql statement object</param>
         /// <returns>Returns an IDataReader object</returns>
         /// <exception cref="DatabaseReadException">Thrown when an error
         /// occurred while setting up the data reader.  Also sends error
         /// output to the log.</exception>
-        public IDataReader LoadDataReader(ISqlStatement selectSQL)
+        public IDataReader LoadDataReader(ISqlStatement selectSql)
         {
             //TODO_Err:Check that sql not null
             IDbConnection con = null;
@@ -386,9 +395,9 @@ namespace Habanero.Db
             {
                 con = GetOpenConnectionForReading();
                 IDbCommand cmd = con.CreateCommand();
-                selectSQL.SetupCommand(cmd);
-                //log.Debug("LoadDataReader with sql statement: " + selectSQL.ToString() ) ;
-                //cmd.CommandText = selectSQL;
+                selectSql.SetupCommand(cmd);
+                //log.Debug("LoadDataReader with sql statement: " + selectSql.ToString() ) ;
+                //cmd.CommandText = selectSql;
                 //_currentDbConnection = null;
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
@@ -396,17 +405,17 @@ namespace Habanero.Db
             {
                 log.Error("Error reading from database : " + Environment.NewLine +
                           ExceptionUtilities.GetExceptionString(ex, 10));
-                log.Error("Sql: " + selectSQL.ToString());
+                log.Error("Sql: " + selectSql.ToString());
                 //				if (con != null && con.State != ConnectionState.Closed) 
                 //				{
                 //					con.Close();
                 //				}
                 Console.Out.WriteLine("Error reading from database : " + Environment.NewLine +
                                       ExceptionUtilities.GetExceptionString(ex, 10));
-                Console.Out.WriteLine("Sql: " + selectSQL.ToString());
+                Console.Out.WriteLine("Sql: " + selectSql.ToString());
                 throw new DatabaseReadException(
                     "There was an error reading the database. Please contact your system administrator.",
-                    "The DataReader could not be filled with", ex, selectSQL.ToString(), ErrorSafeConnectString());
+                    "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
         }
 
@@ -445,7 +454,7 @@ namespace Habanero.Db
         /// This method can be used effectively where the database vendor
         /// supports the execution of several sql statements in one
         /// ExecuteNonQuery.  However, for database vendors like Microsoft
-        /// Access and MySQL, the sql statements will need to be split up
+        /// Access and MySql, the sql statements will need to be split up
         /// and executed as separate transactions.
         /// </summary>
         /// <param name="sql">A valid sql statement (typically "insert",
@@ -481,7 +490,7 @@ namespace Habanero.Db
                 }
                 else
                 {
-                    con = GetOpenConnection();
+                    con = OpenConnection;
                     cmd = con.CreateCommand();
                 } try
                 {
@@ -524,7 +533,7 @@ namespace Habanero.Db
         /// This method can be used effectively where the database vendor
         /// supports the execution of several sql statements in one
         /// ExecuteNonQuery.  However, for database vendors like Microsoft
-        /// Access and MySQL, the sql statements will need to be split up
+        /// Access and MySql, the sql statements will need to be split up
         /// and executed as separate transactions.
         /// </summary>
         /// <param name="sql">A valid sql statement object (typically "insert",
@@ -562,7 +571,7 @@ namespace Habanero.Db
                 }
                 else
                 {
-                    con = GetOpenConnection();
+                    con = OpenConnection;
                     cmd = con.CreateCommand();
                     transaction = con.BeginTransaction();
                     cmd.Transaction = transaction;
@@ -612,6 +621,7 @@ namespace Habanero.Db
         /// <param name="sql">The sql statement object</param>
         /// <returns>Returns the number of rows affected</returns>
         public int ExecuteSql(ISqlStatement sql) {
+            if (sql == null) throw new ArgumentNullException("sql");
             return ExecuteSql(new SqlStatementCollection(sql));
         }
 
@@ -667,7 +677,7 @@ namespace Habanero.Db
         /// Loads data from the database into a DataTable object, using the
         /// sql statement object provided
         /// </summary>
-        /// <param name="selectSQL">The sql statement object</param>
+        /// <param name="selectSql">The sql statement object</param>
         /// <param name="strSearchCriteria">The search criteria as a string
         /// to append</param>
         /// <param name="strOrderByCriteria">The order by criteria as a string
@@ -677,15 +687,15 @@ namespace Habanero.Db
         /// error reading the database.  Also outputs error messages to the log.
         /// </exception>
         /// TODO ERIC - ?are the last two args used?
-        public DataTable LoadDataTable(ISqlStatement selectSQL, string strSearchCriteria, string strOrderByCriteria)
+        public DataTable LoadDataTable(ISqlStatement selectSql, string strSearchCriteria, string strOrderByCriteria)
         {
-            //TODO_Err:Check that sql not null
+            if (selectSql == null) throw new ArgumentNullException("selectSql");
             IDbConnection con = null;
             try
             {
                 con = GetOpenConnectionForReading();
                 IDbCommand cmd = con.CreateCommand();
-                selectSQL.SetupCommand(cmd);
+                selectSql.SetupCommand(cmd);
                 IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                     //CommandBehavior.CloseConnection);
                 DataTable dt = new DataTable();
@@ -711,13 +721,13 @@ namespace Habanero.Db
             catch (Exception ex)
             {
                 log.Error("Error in LoadDataTable:" + Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 8));
-                log.Error("Sql string: " + selectSQL.ToString());
+                log.Error("Sql string: " + selectSql.ToString());
                 //				if (con != null && con.State != ConnectionState.Closed) {
                 //					con.Close();
                 //				}
                 throw new DatabaseReadException(
                     "There was an error reading the database. Please contact your system administrator.",
-                    "The DataReader could not be filled with", ex, selectSQL.ToString(), ErrorSafeConnectString());
+                    "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
         }
     }

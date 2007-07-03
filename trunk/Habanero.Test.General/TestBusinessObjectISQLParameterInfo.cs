@@ -1,17 +1,17 @@
 using System.Data;
 using Habanero.Bo.CriteriaManager;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
 {
     /// <summary>
-    /// Summary description for TestBusinessObjectISQLParameterInfo.
+    /// Summary description for TestBusinessObjectISqlParameterInfo.
     /// </summary>
     [TestFixture]
-    public class TestBusinessObjectISQLParameterInfo : TestUsingDatabase
+    public class TestBusinessObjectISqlParameterInfo : TestUsingDatabase
     {
-        public TestBusinessObjectISQLParameterInfo()
+        public TestBusinessObjectISqlParameterInfo()
         {
         }
 
@@ -22,11 +22,11 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        public void TestSQLParameterInfo()
+        public void TestSqlParameterInfo()
         {
             IExpression exp = Expression.CreateExpression("PK3Prop = 'test'");
             ContactPerson cp = ContactPerson.GetNewContactPerson();
-            SQLCriteriaCreator creator = new SQLCriteriaCreator(exp, cp);
+            SqlCriteriaCreator creator = new SqlCriteriaCreator(exp, cp);
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
             creator.AppendCriteriaToStatement(statement);
             Assert.AreEqual("ContactPerson.PK3_Prop = ?Param0", statement.Statement.ToString());

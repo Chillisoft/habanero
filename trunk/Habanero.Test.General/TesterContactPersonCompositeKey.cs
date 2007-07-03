@@ -1,6 +1,6 @@
 using System;
 using Habanero.Bo;
-using Habanero.Db;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
