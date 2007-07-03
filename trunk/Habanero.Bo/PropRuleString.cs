@@ -153,7 +153,17 @@ namespace Habanero.Bo
             return true;
         }
 
-        /// <summary>
+    	protected internal override List<string> AvailableParameters()
+    	{
+			List<string> parameters = new List<string>();
+			parameters.Add("minLength");
+			parameters.Add("maxLength");
+			parameters.Add("patternMatch");
+			parameters.Add("patternMatchErrorMessage");
+			return parameters;
+    	}
+
+    	/// <summary>
         /// Checks if the value matches the pattern set required. If no
         /// expression was specified, then the method will return true
         /// </summary>

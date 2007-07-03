@@ -281,6 +281,7 @@ namespace Habanero.Bo.ClassDefinition
 		public bool Compulsory
 		{
 			get { return _compulsory; }
+			protected set { _compulsory = value; }
 		}
 
 		#endregion

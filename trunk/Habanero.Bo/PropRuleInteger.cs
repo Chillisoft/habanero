@@ -117,5 +117,13 @@ namespace Habanero.Bo
             return valueValid;
             
         }
+
+    	protected internal override List<string> AvailableParameters()
+    	{
+			List<string> parameters = new List<string>();
+			parameters.Add("min");
+			parameters.Add("max");
+			return parameters;
+    	}
     }
 }

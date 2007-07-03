@@ -162,5 +162,12 @@ namespace Habanero.Test.Bo.Loaders
         {
             get { return _bob; }
         }
+
+    	protected internal override List<string> AvailableParameters()
+    	{
+			List<string> parameters = new List<string>();
+			parameters.Add("bob");
+			return parameters;
+    	}
     }
 }

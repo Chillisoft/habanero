@@ -44,6 +44,14 @@ namespace Habanero.Bo
             return true;
         }
 
+		/// <summary>
+		/// This method must be implemented to return a list of the 
+		/// parameters that are available to be set for this rule. 
+		/// This is used for validation by the loader.
+		/// </summary>
+		/// <returns>A list of the parameters that this rule uses</returns>
+    	protected internal abstract List<string> AvailableParameters();
+
         /// <summary>
         /// Returns the rule name
         /// </summary>

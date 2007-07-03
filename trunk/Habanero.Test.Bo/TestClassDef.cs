@@ -72,7 +72,8 @@ namespace Habanero.Test.Bo
     		return classDefString;
     	}
 
-    	public void TestLoadRepeatedClassDefs()
+		[Test]
+		public void TestLoadRepeatedClassDefs()
 		{
 			XmlClassDefsLoader loader;
             loader = new XmlClassDefsLoader(GetTestClassDefinition(""), new DtdLoader());
@@ -85,6 +86,7 @@ namespace Habanero.Test.Bo
 			Assert.AreEqual(2, ClassDef.GetClassDefCol.Count);
 		}
 
+		[Test]
 		public void TestLoadMultipleClassDefs()
 		{
 			XmlClassDefsLoader loader;

@@ -116,7 +116,15 @@ namespace Habanero.Bo
             return true;
         }
 
-         /// <summary>
+    	protected internal override List<string> AvailableParameters()
+    	{
+			List<string> parameters = new List<string>();
+			parameters.Add("min");
+			parameters.Add("max");
+    		return parameters;
+    	}
+
+    	/// <summary>
         /// Returns the minimum value the date can be
         /// </summary>
         public DateTime MinValue
