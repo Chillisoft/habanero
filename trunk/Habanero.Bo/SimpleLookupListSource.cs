@@ -27,7 +27,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Returns the lookup list contents being held
         /// </summary>
-        /// <returns>Returns a StringGuidPairCollection object</returns>
+        /// <returns>Returns a collection of display-value pairs</returns>
         public Dictionary<string, object> GetLookupList()
         {
             return _lookupList;
@@ -37,7 +37,7 @@ namespace Habanero.Bo
         /// Returns the lookup list contents being held
         /// </summary>
         /// <param name="connection">Ignored for this lookup list type.</param>
-        /// <returns>Returns a StringGuidPairCollection object</returns>
+        /// <returns>Returns a collection of display-value pairs</returns>
         public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
             return _lookupList;

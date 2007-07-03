@@ -111,7 +111,7 @@ namespace Habanero.Bo
 		/// business object and the object's ID.
 		/// </summary>
 		/// <param name="col">The business object collection</param>
-		/// <returns>Returns a StringGuidPairCollection object</returns>
+		/// <returns>Returns a collection of display-value pairs</returns>
         public static Dictionary<string, object> CreateDisplayValueDictionary(BusinessObjectCollection col)
 		{
             Dictionary<string, object> lookupList = new Dictionary<string, object>();

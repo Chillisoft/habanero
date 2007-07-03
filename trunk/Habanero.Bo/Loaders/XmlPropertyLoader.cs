@@ -145,6 +145,7 @@ namespace Habanero.Bo.Loaders
                 typeConverter.Add("uint", "UInt32");
                 typeConverter.Add("ulong", "UInt64");
                 typeConverter.Add("float", "Single");
+                typeConverter.Add("double", "Double"); 
                 typeConverter.Add("object", "Object");
                 typeConverter.Add("char", "Char");
                 typeConverter.Add("string", "String");

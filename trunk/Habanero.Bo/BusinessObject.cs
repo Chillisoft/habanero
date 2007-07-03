@@ -365,6 +365,14 @@ namespace Habanero.Bo
         protected virtual void ConstructClass(bool newObject)
         {
             _classDef = ConstructClassDef();
+            if (_classDef == null)
+            {
+                throw new NullReferenceException(String.Format(
+                    "An error occurred while loading the class definitions for " +
+                    "'{0}'. Check that the class exists in that " +
+                    "namespace and assembly and that there are corresponding " +
+                    "class definitions for this class.", GetType()));
+            }
             _boPropCol = _classDef.createBOPropertyCol(newObject);
             _keysCol = _classDef.createBOKeyCol(_boPropCol);
             ClassDef classDefToUseForPrimaryKey = _classDef;

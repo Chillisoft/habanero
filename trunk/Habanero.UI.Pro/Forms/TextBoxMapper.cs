@@ -1,11 +1,15 @@
 using System;
+using System.Globalization;
 using System.Windows.Forms;
 using Habanero.Ui.Forms;
 
 namespace Habanero.Ui.Forms
 {
     /// <summary>
-    /// Maps a TextBox object in a user interface
+    /// Maps a TextBox object in a user interface.  Note that there are some
+    /// limitations with using a TextBox for numbers.  For greater control 
+    /// of user input with numbers, you should consider using a NumericUpDown 
+    /// control.
     /// </summary>
     public class TextBoxMapper : ControlMapper
     {
@@ -22,8 +26,62 @@ namespace Habanero.Ui.Forms
         {
             _textBox = tb;
             //_textBox.Enabled = false;
+            _textBox.KeyPress += delegate(object sender, KeyPressEventArgs e)
+                         {
+                             if (IsIntegerType())
+                             {
+                                 if ((e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != 8 && e.KeyChar != '-')
+                                 {
+                                     e.Handled = true;
+                                 }
+                                 if (e.KeyChar == '-' && _textBox.SelectionStart != 0)
+                                 {
+                                     e.Handled = true;
+                                 }
+                             }
+                             if (IsDecimalType())
+                             {
+                                 if ((e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != '.' && e.KeyChar != 8 && e.KeyChar != '-')
+                                 {
+                                     e.Handled = true;
+                                 }
+
+                                 if (e.KeyChar == '.' && _textBox.Text.Contains("."))
+                                 {
+                                     e.Handled = true;
+                                 }
+                                 if (e.KeyChar == '.' && _textBox.SelectionStart == 0)
+                                 {
+                                     _textBox.Text = "0." + _textBox.Text;
+                                     e.Handled = true;
+                                     _textBox.SelectionStart = 2;
+                                     _textBox.SelectionLength = 0;
+                                 }
+                                 if (e.KeyChar == '-' && _textBox.SelectionStart != 0)
+                                 {
+                                     e.Handled = true;
+                                 }
+                             }
+                         };
             _textBox.TextChanged += new EventHandler(ValueChangedHandler);
             _oldText = "";
+        }
+
+        private bool IsDecimalType()
+        {
+            Type propertyType = _businessObject.ClassDef.PropDefcol[_propertyName].PropertyType;
+            return
+                (propertyType == typeof (decimal) || propertyType == typeof (double) || propertyType == typeof (float));
+        }
+
+        private bool IsIntegerType()
+        {
+            Type propertyType = _businessObject.ClassDef.PropDefcol[_propertyName].PropertyType;
+            return
+                (propertyType == typeof (int) || propertyType == typeof (long) ||
+                 propertyType == typeof (short) || propertyType == typeof (uint) ||
+                 propertyType == typeof (byte) || propertyType == typeof (ulong)
+                 || propertyType == typeof (ushort) || propertyType == typeof(sbyte));
         }
 
         /// <summary>
@@ -34,11 +92,26 @@ namespace Habanero.Ui.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void ValueChangedHandler(object sender, EventArgs e)
         {
+            string value = _textBox.Text;
+
+
+            if (IsDecimalType())
+            {
+                if (value.EndsWith(".")) return;
+            }
+            if (IsDecimalType() || IsIntegerType())
+            {
+                if (value.EndsWith("-")) return;
+                if (value.Length == 0)
+                {
+                    value = null;
+                }
+            }            
             if (_businessObject != null && !_isReadOnceOnly)
             {
                 try
                 {
-                    _businessObject.SetPropertyValue(_propertyName, _textBox.Text);
+                    _businessObject.SetPropertyValue(_propertyName, value);
                 }
                 catch (FormatException)
                 {
