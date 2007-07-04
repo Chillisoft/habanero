@@ -92,7 +92,6 @@ namespace Habanero.Bo.Loaders
                         "to compare with for the rule named in the 'key' " +
                         "attribute.");
                 }
-
                 _ruleParameters.Add(keyAtt, valueAtt);
                 ReadAndIgnoreEndTag();
             }

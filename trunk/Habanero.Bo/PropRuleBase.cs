@@ -51,7 +51,7 @@ namespace Habanero.Bo
 			get { return _parameters; }
 			set
 			{
-				_parameters = value;
+				_parameters = FillParameters(AvailableParameters(), value);
 				SetupParameters();
 			}
     	}
@@ -93,6 +93,7 @@ namespace Habanero.Bo
 			{
 				currentCollection = new Dictionary<string, object>();
 			}
+			if (availableParams == null) return new Dictionary<string, object>();
 			foreach (string availableParam in availableParams)
 			{
 				if (currentCollection.ContainsKey(availableParam))
