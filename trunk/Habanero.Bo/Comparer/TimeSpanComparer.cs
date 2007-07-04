@@ -1,14 +1,14 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.Util.Comparer
+namespace Habanero.Bo.Comparer
 {
     /// <summary>
     /// Compares timespan properties
     /// </summary>
     /// TODO ERIC - no error checking to make sure property is a timespan
-    public class TimeSpanComparer : IComparer
+    public class TimeSpanComparer<T> : IComparer<T> where T : BusinessObject
     {
         private readonly string _propName;
 
@@ -37,27 +37,25 @@ namespace Habanero.Util.Comparer
         /// <returns>Returns a negative number, zero or positive number,
         /// depending on whether x's timespan property is less, equal to or 
         /// greater than y's</returns>
-        public int Compare(object x, object y)
+        public int Compare(T x, T y)
         {
-            IBusinessObject boLeft = (IBusinessObject) x;
-            IBusinessObject boRight = (IBusinessObject) y;
             TimeSpan left;
             TimeSpan right;
-            if (boLeft.GetPropertyValue(_propName) == null)
+            if (x.GetPropertyValue(_propName) == null)
             {
                 left = TimeSpan.MinValue;
             }
             else
             {
-                left = (TimeSpan) boLeft.GetPropertyValue(_propName);
+                left = (TimeSpan) x.GetPropertyValue(_propName);
             }
-            if (boRight.GetPropertyValue(_propName) == null)
+            if (y.GetPropertyValue(_propName) == null)
             {
                 right = TimeSpan.MinValue;
             }
             else
             {
-                right = (TimeSpan) boRight.GetPropertyValue(_propName);
+                right = (TimeSpan) y.GetPropertyValue(_propName);
             }
             return left.CompareTo(right);
         }

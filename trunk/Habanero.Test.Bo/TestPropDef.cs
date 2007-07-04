@@ -39,6 +39,8 @@ namespace Habanero.Test.Bo
         public void TestPipeIsNotAllowedInName()
         {
             PropDef def = new PropDef("This|That", typeof (string), PropReadWriteRule.ReadWrite, "");
+
+           
         }
     }
 }

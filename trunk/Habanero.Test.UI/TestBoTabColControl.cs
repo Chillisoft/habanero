@@ -35,7 +35,7 @@ namespace Habanero.Test.Ui.Application
             itsCol.Add(itsBo2);
 
             itsTabColControl = new BoTabColControl(new NullBusinessObjectControl());
-            itsTabColControl.SetCollection(itsCol.GetList());
+            itsTabColControl.SetCollection(itsCol);
         }
 
         [
@@ -86,8 +86,8 @@ namespace Habanero.Test.Ui.Application
         public void TestSettingCollectionTwice()
         {
             BoTabColControl tabColControl = new BoTabColControl(new NullBusinessObjectControl());
-            tabColControl.SetCollection(itsCol.GetList());
-            tabColControl.SetCollection(itsCol.GetList());
+            tabColControl.SetCollection(itsCol);
+            tabColControl.SetCollection(itsCol);
             Assert.AreEqual(2, itsTabColControl.TabControl.TabPages.Count);
         }
 

@@ -1,13 +1,15 @@
-using System.Collections;
+
+using System;
+using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.Util.Comparer
+namespace Habanero.Bo.Comparer
 {
     /// <summary>
     /// Compares two business objects on the integer property specified 
     /// in the constructor
     /// </summary>
-    public class IntComparer : IComparer
+    public class IntComparer<T> : IComparer<T> where T: BusinessObject
     {
         private readonly string _propName;
         
@@ -33,27 +35,25 @@ namespace Habanero.Util.Comparer
         /// <returns>Returns a negative number, zero or a positive number,
         /// depending on whether the first integer is less, equal to or more
         /// than the second</returns>
-        public int Compare(object x, object y)
+        public int Compare(T x, T y)
         {
-            IBusinessObject boLeft = (IBusinessObject) x;
-            IBusinessObject boRight = (IBusinessObject) y;
             int left;
             int right;
-            if (boLeft.GetPropertyValue(_propName) == null)
+            if (x.GetPropertyValue(_propName) == null)
             {
                 left = 0;
             }
             else
             {
-                left = (int) boLeft.GetPropertyValue(_propName);
+                left = (int) x.GetPropertyValue(_propName);
             }
-            if (boRight.GetPropertyValue(_propName) == null)
+            if (y.GetPropertyValue(_propName) == null)
             {
                 right = 0;
             }
             else
             {
-                right = (int) boRight.GetPropertyValue(_propName);
+                right = (int) y.GetPropertyValue(_propName);
             }
             return left.CompareTo(right);
         }

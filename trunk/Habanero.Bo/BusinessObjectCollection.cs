@@ -12,7 +12,8 @@ using Habanero.Base;
 
 namespace Habanero.Bo
 {
-    public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);
+    
+    //public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);
 
     /// <summary>
     /// Manages a collection of business objects.  This class also serves
@@ -22,7 +23,7 @@ namespace Habanero.Bo
     /// class. The business objects contained in this collection must
     /// inherit from BusinessObjectBase.
     /// </summary>
-    public class BusinessObjectCollection<T> : Collection<BusinessObject> where T: BusinessObject 
+    public class BusinessObjectCollection<T> : List<T> where T: BusinessObject 
     {
         private ClassDef _boClassDef;
         private IExpression _criteriaExpression;
@@ -31,7 +32,7 @@ namespace Habanero.Bo
         private string _extraSearchCriteriaLiteral = "";
         private int _limit = -1;
         private Hashtable _lookupTable;
-        private ArrayList _list;
+        //private ArrayList _list;
 
         /// <summary>
         /// Default constructor. The classdef will be implied from T
@@ -48,61 +49,50 @@ namespace Habanero.Bo
         public BusinessObjectCollection(ClassDef classDef)
         {
             _boClassDef = classDef;
-            _list = new ArrayList();
+            //_list = new ArrayList();
             _sampleBo = _boClassDef.CreateNewBusinessObject();
             _lookupTable = new Hashtable();
         }
 
-        ///// <summary>
-        ///// Constructor to initialise a new collection with a
-        ///// class definition provided by an existing business object
-        ///// </summary>
-        ///// <param name="bo">The business object whose class definition
-        ///// is used to initialise the collection</param>
-        //public BusinessObjectCollection(BusinessObject bo) : this(bo.ClassDef)
-        //{
-        //}
-
-        ///// <summary>
-        ///// Constructor to initialise a new collection with a specified
-        ///// class definition
-        ///// </summary>
-        ///// <param name="lClassDef">The class definition</param>
-        //private BusinessObjectCollection(ClassDef lClassDef)
-        //{
-        //    _list = new ArrayList();
-        //    _boClassDef = lClassDef;
-        //    _sampleBo = _boClassDef.CreateNewBusinessObject();
-        //    _lookupTable = new Hashtable();
-        //}
+        /// <summary>
+        /// Constructor to initialise a new collection with a
+        /// class definition provided by an existing business object
+        /// </summary>
+        /// <param name="bo">The business object whose class definition
+        /// is used to initialise the collection</param>
+        public BusinessObjectCollection(T bo)
+            : this(bo.ClassDef)
+        {
+        }
 
         /// <summary>
         /// Handles the event of a business object being added
         /// </summary>
-        public event BusinessObjectEventHandler BusinessObjectAdded;
-
+        public event EventHandler<BOEventArgs> BusinessObjectAdded;
+ 
         /// <summary>
         /// Handles the event of a business object being removed
         /// </summary>
-        public event BusinessObjectEventHandler BusinessObjectRemoved;
+        public event EventHandler<BOEventArgs> BusinessObjectRemoved;
 
         /// <summary>
         /// Calls the BusinessObjectAdded() handler
         /// </summary>
         /// <param name="bo">The business object added</param>
-        public void FireBusinessObjectAdded(BusinessObject bo)
+        public void FireBusinessObjectAdded(T bo)
         {
             if (this.BusinessObjectAdded != null)
             {
                 this.BusinessObjectAdded(this, new BOEventArgs(bo));
             }
+
         }
 
         /// <summary>
         /// Calls the BusinessObjectRemoved() handler
         /// </summary>
         /// <param name="bo">The business object removed</param>
-        public void FireBusinessObjectRemoved(BusinessObject bo)
+        public void FireBusinessObjectRemoved(T bo)
         {
             if (this.BusinessObjectRemoved != null)
             {
@@ -114,9 +104,9 @@ namespace Habanero.Bo
         /// Adds a business object to the collection
         /// </summary>
         /// <param name="bo">The business object to add</param>
-        public void Add(BusinessObject bo)
+        public void Add(T bo)
         {
-            _list.Add(bo);
+            base.Add(bo);
             _lookupTable.Add(bo.StrID(), bo);
             bo.Deleted += new BusinessObjectUpdatedHandler(BusinessObjectDeletedHandler);
             this.FireBusinessObjectAdded(bo);
@@ -129,7 +119,7 @@ namespace Habanero.Bo
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectDeletedHandler(object sender, BOEventArgs e)
         {
-            this.RemoveAt(e.BusinessObject);
+            this.Remove((T)e.BusinessObject);
         }
 
         /// <summary>
@@ -138,34 +128,34 @@ namespace Habanero.Bo
         /// <param name="col">The collection to copy from</param>
         public void Add(BusinessObjectCollection<T> col)
         {
-            foreach (BusinessObject bo in col)
+            foreach (T bo in col)
+            {
+                this.Add(bo);
+            }
+        }
+
+        /// <summary>
+        /// Adds the businessobjects from col into this collecction
+        /// </summary>
+        /// <param name="col"></param>
+        public void Add(List<T> col)
+        {
+            foreach (T bo in col)
             {
                 this.Add(bo);
             }
         }
 
         ///// <summary>
-        ///// Adds the businessobjects from col into this collecction
+        ///// Provides a numerical indexing facility so that the objects
+        ///// in the collection can be accessed with square brackets like an array
         ///// </summary>
-        ///// <param name="col"></param>
-        //public void Add(Collection<BusinessObjectCollection> col)
+        ///// <param name="index">The index position</param>
+        ///// <returns>Returns the business object at the position specified</returns>
+        //public BusinessObject this[int index]
         //{
-        //    foreach (BusinessObjectCollection collection in col)
-        //    {
-        //        this.Add(collection);
-        //    }
+        //    get { return (BusinessObject) _list[index]; }
         //}
-
-        /// <summary>
-        /// Provides a numerical indexing facility so that the objects
-        /// in the collection can be accessed with square brackets like an array
-        /// </summary>
-        /// <param name="index">The index position</param>
-        /// <returns>Returns the business object at the position specified</returns>
-        public BusinessObject this[int index]
-        {
-            get { return (BusinessObject) _list[index]; }
-        }
 
         /// <summary>
         /// Refreshes the business objects in the collection
@@ -193,13 +183,13 @@ namespace Habanero.Bo
             {
                 try
                 {
-                    BusinessObject lTempBusObj;
-					lTempBusObj = _boClassDef.InstantiateBusinessObject();
+                    T lTempBusObj;
+					lTempBusObj = (T)_boClassDef.InstantiateBusinessObject();
 					//lTempBusObj = (BusinessObjectBase)Activator.CreateInstance(_boClassDef.ClassType, true);
 					while (dr.Read())
                     {
                         //Load Business OBject from the data reader
-                        Add(lTempBusObj.GetBusinessObject(dr));
+                        Add((T)lTempBusObj.GetBusinessObject(dr));
                     }
                 }
                 finally
@@ -271,22 +261,22 @@ namespace Habanero.Bo
             Refresh();
         }
 
-        /// <summary>
-        /// Returns the business object at the index position specified
-        /// </summary>
-        /// <param name="index">The index position</param>
-        /// <returns>Returns the business object at that position</returns>
-        public BusinessObject item(int index)
-        {
-            return (BusinessObject) _list[index];
-        }
+        ///// <summary>
+        ///// Returns the business object at the index position specified
+        ///// </summary>
+        ///// <param name="index">The index position</param>
+        ///// <returns>Returns the business object at that position</returns>
+        //public BusinessObject item(int index)
+        //{
+        //    return (BusinessObject) _list[index];
+        //}
 
         /// <summary>
         /// Clears the collection
         /// </summary>
-        public void Clear()
+        public new void Clear()
         {
-            _list.Clear();
+            base.Clear();
             _lookupTable.Clear();
         }
 
@@ -294,11 +284,11 @@ namespace Habanero.Bo
         /// Removes the business object at the index position specified
         /// </summary>
         /// <param name="index">The index position to remove from</param>
-        public void RemoveAt(int index)
+        public new void RemoveAt(int index)
         {
-            BusinessObject boToRemove = this[index];
+            T boToRemove = this[index];
             _lookupTable.Remove(boToRemove.StrID());
-            _list.RemoveAt(index);
+            base.RemoveAt(index);
             this.FireBusinessObjectRemoved(boToRemove);
         }
 
@@ -306,23 +296,23 @@ namespace Habanero.Bo
         /// Removes the specified business object from the collection
         /// </summary>
         /// <param name="bo">The business object to remove</param>
-        public void RemoveAt(BusinessObject bo)
+        public void Remove(T bo)
         {
-            _list.Remove(bo);
+            base.Remove(bo);
             _lookupTable.Remove(bo.StrID());
             this.FireBusinessObjectRemoved(bo);
         }
 
-        /// <summary>
-        /// Indicates whether the collection contains the specified 
-        /// business object
-        /// </summary>
-        /// <param name="bo">The business object</param>
-        /// <returns>Returns true if contained</returns>
-        public bool Contains(BusinessObject bo)
-        {
-            return _list.Contains(bo);
-        }
+        ///// <summary>
+        ///// Indicates whether the collection contains the specified 
+        ///// business object
+        ///// </summary>
+        ///// <param name="bo">The business object</param>
+        ///// <returns>Returns true if contained</returns>
+        //public bool Contains(T bo)
+        //{
+        //    return Contains(bo);
+        //}
 
         /// <summary>
         /// Indicates whether any of the business objects have been amended 
@@ -332,7 +322,7 @@ namespace Habanero.Bo
         {
             get
             {
-                foreach (BusinessObject child in _list)
+                foreach (T child in this)
                 {
                     if (child.IsDirty)
                     {
@@ -351,7 +341,7 @@ namespace Habanero.Bo
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid()
         {
-            foreach (BusinessObject child in _list)
+            foreach (T child in this)
             {
                 if (!child.IsValid())
                 {
@@ -371,7 +361,7 @@ namespace Habanero.Bo
         public bool IsValid(out string errorMessage)
         {
             errorMessage = "";
-            foreach (BusinessObject child in _list)
+            foreach (T child in this)
             {
                 if (!child.IsValid(out errorMessage))
                 {
@@ -391,11 +381,14 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="key">The orimary key as a string</param>
         /// <returns>Returns the business object if found, or null if not</returns>
-        public BusinessObject Find(string key)
+        public T Find(string key)
         {
             if (_lookupTable.ContainsKey(key))
             {
-                return (BusinessObject)_lookupTable[key];
+                T bo = (T)_lookupTable[key];
+                if (this.Contains(bo))
+                    return (T)_lookupTable[key];
+                else return null;
             }
             else
             {
@@ -416,7 +409,7 @@ namespace Habanero.Bo
         /// <param name="searchTerm">The Guid to search for</param>
         /// <returns>Returns the business object if found, or null if not
         /// found</returns>
-        public BusinessObject FindByGuid(Guid searchTerm)
+        public T FindByGuid(Guid searchTerm)
         {
 //            string formattedSearchItem = searchTerm.ToString();
 //            formattedSearchItem.Replace("{", "");
@@ -427,7 +420,7 @@ namespace Habanero.Bo
 
             if (_lookupTable.ContainsKey(formattedSearchItem))
             {
-                return (BusinessObject)_lookupTable[formattedSearchItem];
+                return (T)_lookupTable[formattedSearchItem];
             }
             else
             {
@@ -463,7 +456,7 @@ namespace Habanero.Bo
         public BusinessObjectCollection<T> Intersection(BusinessObjectCollection<T> col2)
         {
             BusinessObjectCollection<T> intersectionCol = new BusinessObjectCollection<T>();
-            foreach (BusinessObject businessObjectBase in this)
+            foreach (T businessObjectBase in this)
             {
                 if (col2.Contains(businessObjectBase))
                 {
@@ -483,11 +476,11 @@ namespace Habanero.Bo
         public BusinessObjectCollection<T> Union(BusinessObjectCollection<T> col2)
         {
             BusinessObjectCollection<T> unionCol = new BusinessObjectCollection<T>();
-            foreach (BusinessObject businessObjectBase in this)
+            foreach (T businessObjectBase in this)
             {
                 unionCol.Add(businessObjectBase);
             }
-            foreach (BusinessObject businessObjectBase in col2)
+            foreach (T businessObjectBase in col2)
             {
                 if (!unionCol.Contains(businessObjectBase))
                 {
@@ -505,7 +498,7 @@ namespace Habanero.Bo
         public BusinessObjectCollection<T> Clone()
         {
             BusinessObjectCollection<T> clonedCol = new BusinessObjectCollection<T>();
-            foreach (BusinessObject businessObjectBase in this)
+            foreach (T businessObjectBase in this)
             {
                 clonedCol.Add(businessObjectBase);
             }
@@ -528,18 +521,18 @@ namespace Habanero.Bo
         {
             if (isBoProperty)
             {
-                _list.Sort(ClassDef.GetPropDef(propertyName).GetPropertyComparer());
+                Sort(ClassDef.GetPropDef(propertyName).GetPropertyComparer<T>());
             }
             else
             {
-                _list.Sort(new PropertyComparer(propertyName));
+                Sort(new PropertyComparer<T>(propertyName));
             }
         }
 
         /// <summary>
         /// Compares two properties.  Used by Sort().
         /// </summary>
-        private class PropertyComparer : IComparer
+        private class PropertyComparer<T> : IComparer<T>
         {
             private string _propertyName;
 
@@ -552,55 +545,48 @@ namespace Habanero.Bo
                 _propertyName = propertyName;
             }
 
-            /// <summary>
-            /// Compares two objects
-            /// </summary>
-            /// <param name="bo1">The first object to compare</param>
-            /// <param name="bo2">The second object to compare</param>
-            /// <returns>Returns less than zero if bo1 less than bo2, zero if equal
-            /// and above zero if bo1 is greater than bo2</returns>
-            public int Compare(object bo1, object bo2)
+            public int Compare(T x, T y)
             {
-                PropertyInfo propInfo =
-                    bo1.GetType().GetProperty(_propertyName, BindingFlags.Public | BindingFlags.Instance);
-                object x = propInfo.GetValue(bo1, new object[] {});
-                object y = propInfo.GetValue(bo2, new object[] {});
+                    PropertyInfo propInfo =
+                        x.GetType().GetProperty(_propertyName, BindingFlags.Public | BindingFlags.Instance);
+                    object x1 = propInfo.GetValue(x, new object[] {});
+                    object y1 = propInfo.GetValue(y, new object[] {});
 
-                if (x == null && y == null)
+                if (x1 == null && y1 == null)
                 {
                     return 0;
                 }
-                else if (x == null)
+                else if (x1 == null)
                 {
                     return -1;
                 }
-                else if (y == null)
+                else if (y1 == null)
                 {
                     return 1;
                 }
 
-                if (x is string)
+                if (x1 is string)
                 {
-                    return String.Compare((string) x, (string) y);
+                    return String.Compare((string)x1, (string)y1);
                 }
 
-                if (x is int)
+                if (x1 is int)
                 {
-                    if ((int) x < (int) y) return -1;
-                    if ((int) x > (int) y) return 1;
+                    if ((int)x1 < (int)y1) return -1;
+                    if ((int)x1 > (int)y1) return 1;
                     return 0;
                 }
 
-                if (x is double)
+                if (x1 is double)
                 {
-                    if (Math.Abs((double) x - (double) y) < 0.00001) return 0;
-                    if ((double) x < (double) y) return -1;
-                    if ((double) x > (double) y) return 1;
+                    if (Math.Abs((double)x1 - (double)y1) < 0.00001) return 0;
+                    if ((double)x1 < (double)y1) return -1;
+                    if ((double)x1 > (double)y1) return 1;
                 }
 
-                if (x is DateTime)
+                if (x1 is DateTime)
                 {
-                    return ((DateTime) x).CompareTo(y);
+                    return ((DateTime)x1).CompareTo(y1);
                 }
 
                 return 0;
@@ -615,14 +601,14 @@ namespace Habanero.Bo
         /// <param name="isAscending">True for ascending, false for descending
         /// </param>
         /// <returns>Returns a sorted list</returns>
-        public IList GetSortedList(string propertyName, bool isAscending)
+        public List<T> GetSortedList(string propertyName, bool isAscending)
         {
-            ArrayList list = new ArrayList(this.Count);
-            foreach (object o in this)
+            List<T> list = new List<T>(this.Count);
+            foreach (T o in this)
             {
                 list.Add(o);
             }
-            list.Sort(ClassDef.GetPropDef(propertyName).GetPropertyComparer());
+            list.Sort(ClassDef.GetPropDef(propertyName).GetPropertyComparer<T>());
             if (!isAscending)
             {
                 list.Reverse();
@@ -642,7 +628,7 @@ namespace Habanero.Bo
         {
             //test
             BusinessObjectCollection<T> sortedCol = new BusinessObjectCollection<T>();
-            foreach (BusinessObject bo in GetSortedList(propertyName, isAscending))
+            foreach (T bo in GetSortedList(propertyName, isAscending))
             {
                 sortedCol.Add(bo);
             }
@@ -653,11 +639,10 @@ namespace Habanero.Bo
         /// Returns the business object collection as an IList object
         /// </summary>
         /// <returns>Returns an IList object</returns>
-        /// TODO ERIC - doesn't this duplicate GetList()?
-        public IList ToList()
+        public List<T> ToList()
         {
-            IList list = new ArrayList(this.Count);
-            foreach (object o in this)
+            List<T> list = new List<T>(this.Count);
+            foreach (T o in this)
             {
                 list.Add(o);
             }
@@ -671,7 +656,7 @@ namespace Habanero.Bo
         public void ApplyEdit()
         {
             Transaction t = new Transaction(DatabaseConnection.CurrentConnection);
-            foreach (BusinessObject bo in this._list)
+            foreach (T bo in this)
             {
                 if (bo.IsDirty || bo.IsNew)
                 {
@@ -690,48 +675,6 @@ namespace Habanero.Bo
         public void CopyTo(Array array, int index)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Returns the count of objects in the collection
-        /// </summary>
-        public int Count
-        {
-            get { return _list.Count; }
-        }
-
-        /// <summary>
-        /// Returns the collection object
-        /// </summary>
-        public object SyncRoot
-        {
-            get { return this; }
-        }
-
-        /// <summary>
-        /// Returns false
-        /// </summary>
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
-
-        /// <summary>
-        /// Returns this collection's enumerator
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator GetEnumerator()
-        {
-            return _list.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Returns the list of objects in the collection
-        /// </summary>
-        /// <returns>Returns an IList object</returns>
-        public IList GetList()
-        {
-            return _list;
         }
     }
 }

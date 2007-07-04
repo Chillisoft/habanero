@@ -125,7 +125,7 @@ namespace Habanero.Ui.Grid
         /// <param name="businessObject">The business object to remove</param>
         public void RemoveBusinessObject(BusinessObject businessObject)
         {
-            _collection.RemoveAt(businessObject);
+            _collection.Remove(businessObject);
         }
 
         /// <summary>

@@ -1,15 +1,13 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
+using Habanero.Bo.Comparer;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Util;
-using Habanero.Util.Comparer;
 using Habanero.Util.File;
 using log4net;
 using NUnit.Framework;
-using StringComparer=Habanero.Util.Comparer.StringComparer;
 
 namespace Habanero.Bo.ClassDefinition
 {
@@ -462,31 +460,31 @@ namespace Habanero.Bo.ClassDefinition
         /// </summary>
         /// <returns>Returns an IComparer object, or null if the property
         /// type is not one of those mentioned above</returns>
-        public IComparer GetPropertyComparer()
+        public IComparer<T> GetPropertyComparer<T>() where T:BusinessObject
         {
             if (this.PropertyType.Equals(typeof (string)))
             {
-                return new StringComparer(this.PropertyName);
+                return new StringComparer<T>(this.PropertyName);
             }
             else if (this.PropertyType.Equals(typeof (int)))
             {
-                return new IntComparer(this.PropertyName);
+                return new IntComparer<T>(this.PropertyName);
             }
             else if (this.PropertyType.Equals(typeof (Guid)))
             {
-                return new GuidComparer(this.PropertyName);
+                return new GuidComparer<T>(this.PropertyName);
             }
             else if (this.PropertyType.Equals(typeof (DateTime)))
             {
-                return new DateTimeComparer(this.PropertyName);
+                return new DateTimeComparer<T>(this.PropertyName);
             }
             else if (this.PropertyType.Equals(typeof (Single)))
             {
-                return new SingleComparer(this.PropertyName);
+                return new SingleComparer<T>(this.PropertyName);
             }
             else if (this.PropertyType.Equals(typeof (TimeSpan)))
             {
-                return new TimeSpanComparer(this.PropertyName);
+                return new TimeSpanComparer<T>(this.PropertyName);
             }
             return null;
         }

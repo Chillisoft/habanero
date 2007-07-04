@@ -1,14 +1,14 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.Util.Comparer
+namespace Habanero.Bo.Comparer
 {
     /// <summary>
     /// Compares two business objects on the date-time property specified 
     /// in the constructor
     /// </summary>
-    public class DateTimeComparer : IComparer
+    public class DateTimeComparer<T> : IComparer<T> where T : BusinessObject
     {
         private readonly string _propName;
 
@@ -36,27 +36,25 @@ namespace Habanero.Util.Comparer
         /// <returns>Returns a negative number, zero or a positive number,
         /// depending on whether the first date is less, equal to or more
         /// than the second</returns>
-        public int Compare(object x, object y)
+        public int Compare(T x, T y)
         {
-            IBusinessObject boLeft = (IBusinessObject) x;
-            IBusinessObject boRight = (IBusinessObject) y;
             DateTime left;
             DateTime right;
-            if (boLeft.GetPropertyValue(_propName) == null)
+            if (x.GetPropertyValue(_propName) == null)
             {
                 left = DateTime.MinValue;
             }
             else
             {
-                left = (DateTime) boLeft.GetPropertyValue(_propName);
+                left = (DateTime) x.GetPropertyValue(_propName);
             }
-            if (boRight.GetPropertyValue(_propName) == null)
+            if (y.GetPropertyValue(_propName) == null)
             {
                 right = DateTime.MinValue;
             }
             else
             {
-                right = (DateTime) boRight.GetPropertyValue(_propName);
+                right = (DateTime) y.GetPropertyValue(_propName);
             }
             return left.CompareTo(right);
         }

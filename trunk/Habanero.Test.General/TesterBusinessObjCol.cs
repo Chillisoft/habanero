@@ -196,7 +196,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, myCol.Count,
                             "The object collection should now have fewer object since it has been reloaded from the database.");
 
-            p = (ContactPerson) myCol.item(0);
+            p = (ContactPerson) myCol[0];
             Assert.AreEqual("abc", p.Surname);
         }
     }

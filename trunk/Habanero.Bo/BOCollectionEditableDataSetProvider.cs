@@ -50,7 +50,7 @@ namespace Habanero.Bo
             _table.TableNewRow += new DataTableNewRowEventHandler(NewRowHandler);
             _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
             _table.RowDeleted += new DataRowChangeEventHandler(RowDeletedHandler);
-            _collection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
+            _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(BusinessObjectAddedToCollectionHandler);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Habanero.Bo
         {
             _table.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
             _table.RowDeleted -= new DataRowChangeEventHandler(RowDeletedHandler);
-            _collection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
+            _collection.BusinessObjectAdded -= new EventHandler<BOEventArgs>(BusinessObjectAddedToCollectionHandler);
         }
 
         /// <summary>
@@ -289,14 +289,14 @@ namespace Habanero.Bo
         private void AddNewRowToCollection(BusinessObject newBo)
         {
             //log.Debug("Adding new row to col");
-            _collection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
+            _collection.BusinessObjectAdded -= new EventHandler<BOEventArgs>(BusinessObjectAddedToCollectionHandler);
             _table.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
 
             //log.Debug("Disabled handler, adding obj to col") ;
             _collection.Add(newBo);
             //log.Debug("Done adding obj to col, enabling handler") ;
             _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
-            _collection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedToCollectionHandler);
+            _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(BusinessObjectAddedToCollectionHandler);
             //log.Debug("Done Adding new row to col");
         }
 

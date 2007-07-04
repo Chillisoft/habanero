@@ -50,8 +50,8 @@ namespace Habanero.Ui.Forms
         {
             if (_collection != null)
             {
-                _collection.BusinessObjectAdded -= new BusinessObjectEventHandler(BusinessObjectAddedHandler);
-                _collection.BusinessObjectRemoved -= new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
+                _collection.BusinessObjectAdded -= new EventHandler<BOEventArgs>(BusinessObjectAddedHandler);
+                _collection.BusinessObjectRemoved -= new EventHandler<BOEventArgs>(BusinessObjectRemovedHandler);
             }
             _collection = collection;
             SetComboBoxCollection(_comboBox, _collection, includeBlank);
@@ -60,8 +60,8 @@ namespace Habanero.Ui.Forms
 //				_comboBox.Items.Add(businessObjectBase);
 //			}
 
-            _collection.BusinessObjectAdded += new BusinessObjectEventHandler(BusinessObjectAddedHandler);
-            _collection.BusinessObjectRemoved += new BusinessObjectEventHandler(BusinessObjectRemovedHandler);
+            _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(BusinessObjectAddedHandler);
+            _collection.BusinessObjectRemoved += new EventHandler<BOEventArgs>(BusinessObjectRemovedHandler);
         }
 
         /// <summary>

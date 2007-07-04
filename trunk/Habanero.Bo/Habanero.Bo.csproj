@@ -95,6 +95,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comparer\DateTimeComparer.cs" />
+    <Compile Include="Comparer\GuidComparer.cs" />
+    <Compile Include="Comparer\IntComparer.cs" />
+    <Compile Include="Comparer\SingleComparer.cs" />
+    <Compile Include="Comparer\StringComparer.cs" />
+    <Compile Include="Comparer\TimeSpanComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

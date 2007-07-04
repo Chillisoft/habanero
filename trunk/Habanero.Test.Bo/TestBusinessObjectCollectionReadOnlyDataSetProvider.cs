@@ -48,7 +48,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestRemoveBusinessObjectRemovesRow()
         {
-            itsCollection.RemoveAt(itsBo1);
+            itsCollection.Remove(itsBo1);
             Assert.AreEqual(1, itsTable.Rows.Count);
         }
     }

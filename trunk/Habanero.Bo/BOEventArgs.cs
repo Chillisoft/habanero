@@ -1,9 +1,11 @@
+using System;
+
 namespace Habanero.Bo
 {
     /// <summary>
     /// Provides arguments to attach for an event involving business objects
     /// </summary>
-    public class BOEventArgs
+    public class BOEventArgs : EventArgs
     {
         private BusinessObject _bo;
 

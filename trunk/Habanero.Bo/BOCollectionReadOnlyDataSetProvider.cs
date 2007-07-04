@@ -27,8 +27,8 @@ namespace Habanero.Bo
             {
                 businessObject.Updated += new BusinessObjectUpdatedHandler(UpdatedHandler);
             }
-            _collection.BusinessObjectAdded += new BusinessObjectEventHandler(AddedHandler);
-            _collection.BusinessObjectRemoved += new BusinessObjectEventHandler(RemovedHandler);
+            _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(AddedHandler);
+            _collection.BusinessObjectRemoved += new EventHandler<BOEventArgs>(RemovedHandler);
         }
 
         /// <summary>

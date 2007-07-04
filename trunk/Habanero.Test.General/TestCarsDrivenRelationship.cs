@@ -64,7 +64,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, person.GetCarsDriven().Count, "there should be one car for this person");
 
             BusinessObjectCollection<BusinessObject> carsDriven = person.GetCarsDriven();
-            Car carDriven = (Car) carsDriven.item(0);
+            Car carDriven = (Car) carsDriven[0];
             Assert.AreEqual(car.ID, carDriven.ID);
             BusinessObjectCollection<BusinessObject> carsDriven2 = person.GetCarsDriven();
             //Assert.IsTrue(object.ReferenceEquals(carsDriven, carsDriven2), "The references should be equal since the collection should be kept in memory");
