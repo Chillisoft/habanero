@@ -32,16 +32,16 @@ namespace Habanero.Test.Bo
             dt.Columns.Add();
             dt.Columns.Add();
             DataRow row = dt.NewRow();
-            row[0] = g1;
-            row[1] = "Test1";
+            row[0] = "Test1";
+            row[1] = g1;
             dt.Rows.Add(row);
             row = dt.NewRow();
-            row[0] = g2;
-            row[1] = "Test2";
+            row[0] = "Test2";
+            row[1] = g2;
             dt.Rows.Add(row);
             row = dt.NewRow();
-            row[0] = g3;
-            row[1] = "Test3";
+            row[0] = "Test3";
+            row[1] = g3;
             dt.Rows.Add(row);
         }
 
@@ -51,7 +51,7 @@ namespace Habanero.Test.Bo
             dbConnMock = new DynamicMock(typeof (IDatabaseConnection));
             conn = (IDatabaseConnection) dbConnMock.MockInstance;
             statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            statement.Statement.Append("select MyBoID, TestProp from tbMyBo");
+            statement.Statement.Append("select TestProp, MyBoID from tbMyBo");
             dbConnMock.ExpectAndReturn("LoadDataTable", dt, new object[] {statement, "", ""});
             dbConnMock.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
                                        new object[] {});
@@ -60,7 +60,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestGetLookupList()
         {
-            DatabaseLookupListSource source = new DatabaseLookupListSource("select MyBoID, TestProp from tbMyBo");
+            DatabaseLookupListSource source = new DatabaseLookupListSource("select TestProp, MyBoID from tbMyBo");
             Dictionary<string, object> col = source.GetLookupList(conn);
             Assert.AreEqual(3, col.Count);
             string str = "";
@@ -79,7 +79,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestCallingGetLookupListTwiceOnlyAccessesDbOnce()
         {
-            DatabaseLookupListSource source = new DatabaseLookupListSource("select MyBoID, TestProp from tbMyBo");
+            DatabaseLookupListSource source = new DatabaseLookupListSource("select TestProp, MyBoID from tbMyBo");
             Dictionary<string, object> col = source.GetLookupList(conn);
             Dictionary<string, object> col2 = source.GetLookupList(conn);
             Assert.AreSame(col2, col);
@@ -93,7 +93,7 @@ namespace Habanero.Test.Bo
             dbConnMock.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
                                        new object[] {});
 
-            DatabaseLookupListSource source = new DatabaseLookupListSource("select MyBoID, TestProp from tbMyBo", 100);
+            DatabaseLookupListSource source = new DatabaseLookupListSource("select TestProp, MyBoID from tbMyBo", 100);
             Dictionary<string, object> col = source.GetLookupList(conn);
             System.Threading.Thread.Sleep(250);
             Dictionary<string, object> col2 = source.GetLookupList(conn);

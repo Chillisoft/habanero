@@ -36,9 +36,10 @@ namespace Habanero.Bo
 		}
 
     	/// <summary>
-		/// Constructor to initialise a new lookup-list
-		/// </summary>
-		/// <param name="boType">The business object type</param>
+        /// Constructor to initialise a new lookup-list
+    	/// </summary>
+    	/// <param name="assemblyName">The assembly containing the class</param>
+    	/// <param name="className">The class from which to load the values</param>
 		public BusinessObjectLookupListSource(string assemblyName, string className)
 		{
 			_assemblyName = assemblyName;
@@ -50,6 +51,9 @@ namespace Habanero.Bo
 
 		#region Properties
 
+        /// <summary>
+        /// The assembly containing the class from which values are loaded
+        /// </summary>
 		public string AssemblyName
 		{
 			get { return _assemblyName; }
@@ -64,6 +68,9 @@ namespace Habanero.Bo
 			}
 		}
 
+        /// <summary>
+        /// The class from which values are loaded
+        /// </summary>
 		public string ClassName
 		{
 			get { return _className; }

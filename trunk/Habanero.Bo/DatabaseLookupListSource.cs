@@ -228,8 +228,8 @@ namespace Habanero.Bo
             ArrayList list = new ArrayList(dt.Rows.Count);
             foreach (DataRow row in dt.Rows)
             {
-                string stringValue = DBNull.Value.Equals(row[1]) ? "" : (string)row[1];
-                _lookupList.Add(stringValue, new Guid((string)row[0]));
+                string stringValue = DBNull.Value.Equals(row[0]) ? "" : (string)row[0];
+                _lookupList.Add(stringValue, new Guid((string)row[1]));
             }
             _lastCallTime = DateTime.Now;
             return _lookupList;
