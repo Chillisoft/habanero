@@ -20,6 +20,7 @@ namespace Habanero.Bo.Loaders
         private Dictionary<string, object> _ruleParameters;
         private string _class;
         private string _assembly;
+    	private PropRuleBase _propRule;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -66,12 +67,14 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         protected override sealed void LoadFromReader()
         {
+        	int counter = 0;
             _reader.Read();
             _name = _reader.GetAttribute("name");
             _message = _reader.GetAttribute("message");
             _class = _reader.GetAttribute("class");
             _assembly = _reader.GetAttribute("assembly");
-            _ruleParameters = new Dictionary<string, object>();
+        	_propRule = CreatePropRule();
+			_ruleParameters = _propRule.Parameters;
             _reader.Read();
             while (_reader.Name == "add")
             {
@@ -92,17 +95,27 @@ namespace Habanero.Bo.Loaders
                         "to compare with for the rule named in the 'key' " +
                         "attribute.");
                 }
-                _ruleParameters.Add(keyAtt, valueAtt);
+				if (!_ruleParameters.ContainsKey(keyAtt))
+				{
+					throw new InvalidXmlDefinitionException("An 'add' " +
+                        "attribute was specified for a property rule that " +
+                        "does not apply to the property rule. The specified " +
+                        "'add' attribute was '" + keyAtt + "' but the allowed " +
+                        "attributes are " + _propRule.AvailableParametersString() + ".");
+				}
+                _ruleParameters[keyAtt] = valueAtt;
+            	counter++;
                 ReadAndIgnoreEndTag();
             }
 
-            if (_ruleParameters.Count == 0)
+			if (counter == 0)
             {
                 throw new InvalidXmlDefinitionException("A 'rule' element in " +
                     "the class definitions must contain at least one 'add' " +
                     "element for each component of the rule, such as the " +
                     "minimum value for an integer.");
             }
+        	_propRule.Parameters = _ruleParameters;
         }
 
         ///// <summary>
@@ -140,7 +153,12 @@ namespace Habanero.Bo.Loaders
             def.assignPropRule(this.LoadRule(def.PropertyTypeName, propertyRuleElement));
         }
 
-        protected override object Create() {
+		protected override object Create()
+		{
+			return _propRule;
+		}
+
+    	protected PropRuleBase CreatePropRule() {
             if (_class != null && _class.Length > 0 && _assembly != null && _assembly.Length > 0) 
 			{
 				Type customPropRuleType = null;
@@ -148,7 +166,7 @@ namespace Habanero.Bo.Loaders
 					"Prop Rule Base Subclass", "Property Rule Definition");
 				if (customPropRuleType.IsSubclassOf(typeof(PropRuleBase)))
 				{
-					return Activator.CreateInstance(customPropRuleType, new object[] {_name, _message, _ruleParameters});
+					return (PropRuleBase)Activator.CreateInstance(customPropRuleType, new object[] { _name, _message });
 				} else
 				{
 					//TODO error: Throw a descriptive error.
@@ -156,15 +174,16 @@ namespace Habanero.Bo.Loaders
 				}
 			}
             if (_propTypeName == typeof(int).Name) {
-				return _defClassFactory.CreatePropRuleInteger(_name, _message, _ruleParameters);
+				return _defClassFactory.CreatePropRuleInteger(_name, _message);
             } else if (_propTypeName == typeof(string).Name ) {
-				return _defClassFactory.CreatePropRuleString(_name, _message, _ruleParameters);
+				return _defClassFactory.CreatePropRuleString(_name, _message);
             } else if (_propTypeName == typeof(DateTime).Name ) {
-				return _defClassFactory.CreatePropRuleDate(_name, _message, _ruleParameters);
+				return _defClassFactory.CreatePropRuleDate(_name, _message);
             } else if (_propTypeName == typeof(Decimal).Name) {
-				return _defClassFactory.CreatePropRuleDecimal(_name, _message, _ruleParameters);
+				return _defClassFactory.CreatePropRuleDecimal(_name, _message);
             }
-            return null;
+			throw new InvalidXmlDefinitionException("Could not load the Property Rule " +
+				"for this type('" + _propTypeName + "').");
         }
     }
 }

@@ -19,13 +19,13 @@ namespace Habanero.Bo.ClassDefinition
 
 		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory);
 
-		PropRuleDate CreatePropRuleDate(string name, string message, Dictionary<string, object> parameters);
+		PropRuleDate CreatePropRuleDate(string name, string message);
 
-		PropRuleDecimal CreatePropRuleDecimal(string name, string message, Dictionary<string, object> parameters);
+		PropRuleDecimal CreatePropRuleDecimal(string name, string message);
 
-		PropRuleInteger CreatePropRuleInteger(string name, string message, Dictionary<string, object> parameters);
+		PropRuleInteger CreatePropRuleInteger(string name, string message);
 
-		PropRuleString CreatePropRuleString(string name, string message, Dictionary<string, object> parameters);
+		PropRuleString CreatePropRuleString(string name, string message);
 
 		SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject);
 

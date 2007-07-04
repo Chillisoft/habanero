@@ -67,7 +67,20 @@ namespace Habanero.Bo
     	/// This is used for validation by the loader.
     	/// </summary>
     	/// <returns>A list of the parameters that this rule uses</returns>
-    	protected internal abstract List<string> AvailableParameters();
+		protected internal abstract List<string> AvailableParameters();
+
+		protected internal virtual string AvailableParametersString()
+		{
+			string list = "";
+			string delimiter = "";
+			foreach (string availableParameter in AvailableParameters())
+			{
+				list += delimiter + "'" + availableParameter + "'";
+				delimiter = ", ";
+			}
+			list = "{" + list + "}";
+			return list;
+		}
 
         /// <summary>
         /// Returns the rule name

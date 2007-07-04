@@ -152,10 +152,9 @@ namespace Habanero.Test.Bo.Loaders
     {
         private string _bob;
 
-        public MyRule(string name, string message, Dictionary<string, object> parameters)
+        public MyRule(string name, string message)
 			: base(name, message)
 		{
-			base.Parameters = parameters;
 		}
 
 		protected internal override void SetupParameters()

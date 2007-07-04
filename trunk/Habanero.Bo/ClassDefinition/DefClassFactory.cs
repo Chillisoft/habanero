@@ -43,24 +43,24 @@ namespace Habanero.Bo.ClassDefinition
 			return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString, compulsory);
 		}
 
-		public PropRuleDate CreatePropRuleDate(string name, string message, Dictionary<string, object> parameters)
+		public PropRuleDate CreatePropRuleDate(string name, string message)
 		{
-			return new PropRuleDate(name, message, parameters);
+			return new PropRuleDate(name, message, null);
 		}
 
-		public PropRuleDecimal CreatePropRuleDecimal(string name, string message, Dictionary<string, object> parameters)
+		public PropRuleDecimal CreatePropRuleDecimal(string name, string message)
 		{
-			return new PropRuleDecimal(name, message, parameters);
+			return new PropRuleDecimal(name, message, null);
 		}
 
-		public PropRuleInteger CreatePropRuleInteger(string name, string message, Dictionary<string, object> parameters)
+		public PropRuleInteger CreatePropRuleInteger(string name, string message)
 		{
-			return new PropRuleInteger(name, message, parameters);
+			return new PropRuleInteger(name, message, null);
 		}
 
-		public PropRuleString CreatePropRuleString(string name, string message, Dictionary<string, object> parameters)
+		public PropRuleString CreatePropRuleString(string name, string message)
 		{
-			return new PropRuleString(name, message, parameters);
+			return new PropRuleString(name, message, null);
 		}
 
 		public SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName,
