@@ -232,7 +232,7 @@ namespace Habanero.Bo.ClassDefinition
         /// <summary>
         /// The property rule relevant to this definition
         /// </summary>
-        public PropRuleBase PropRule
+        public virtual PropRuleBase PropRule
         {
             get { return _propRule; }
 			protected set{ _propRule = value;}

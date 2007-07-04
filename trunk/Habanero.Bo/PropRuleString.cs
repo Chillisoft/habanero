@@ -43,33 +43,42 @@ namespace Habanero.Bo
         /// <param name="message">This rule's failure message</param>
         /// <param name="parameters">The parameters for this rule.</param>
         public PropRuleString(string name, string message, Dictionary<string, object> parameters)
-			: base(name, message, parameters)
-        {
+			: base(name, message)
+		{
+			base.Parameters = parameters;
+		}
+
+		protected internal override void SetupParameters()
+		{
             try
             {
-                foreach (string key in parameters.Keys)
+                foreach (string key in _parameters.Keys)
                 {
-                    switch (key)
-                    {
-                        case "patternMatch":
-                            _patternMatch = Convert.ToString(parameters["patternMatch"]);
-                            break;
-                        case "patternMatchErrorMessage":
-                            _patternMatchErrorMessage = Convert.ToString(parameters["patternMatchErrorMessage"]);
-                            break;
-                        case "minLength":
-                            _minLength = Convert.ToInt32(parameters["minLength"]);
-                            break;
-                        case "maxLength":
-                            _maxLength = Convert.ToInt32(parameters["maxLength"]);
-                            break;
-                        default:
-                            throw new InvalidXmlDefinitionException(String.Format(
-                                "The rule type '{0}' for strings does not exist. " +
-                                "Check spelling and capitalisation, or see the " +
-                                "documentation for existing options or ways to " +
-                                "add options of your own.", key));
-                    }
+                	object value = _parameters[key];
+					if (value != null)
+					{
+						switch (key)
+						{
+							case "patternMatch":
+								_patternMatch = Convert.ToString(value);
+								break;
+							case "patternMatchErrorMessage":
+								_patternMatchErrorMessage = Convert.ToString(value);
+								break;
+							case "minLength":
+								_minLength = Convert.ToInt32(value);
+								break;
+							case "maxLength":
+								_maxLength = Convert.ToInt32(value);
+								break;
+							default:
+								throw new InvalidXmlDefinitionException(String.Format(
+                                	"The rule type '{0}' for strings does not exist. " +
+                                	"Check spelling and capitalisation, or see the " +
+                                	"documentation for existing options or ways to " +
+                                	"add options of your own.", key));
+						}
+					}
                 }
             }
             catch (InvalidXmlDefinitionException ex)
@@ -104,7 +113,8 @@ namespace Habanero.Bo
                                 int minLength,
                                 int maxLength,
                                 string patternMatch,
-                                string patternMatchErrorMessage) : base(ruleName, message, null)
+                                string patternMatchErrorMessage) 
+			: base(ruleName, message)
         {
             //TODO_Err: how to test for a valid regexpression?
             _minLength = minLength;

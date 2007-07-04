@@ -10,7 +10,7 @@ namespace Habanero.Base
     public class UIFormGrid
     {
         private string _relationshipName;
-        public Type _gridType;
+        private Type _gridType;
         private string _correspondingRelationshipName;
 
         /// <summary>
@@ -32,7 +32,8 @@ namespace Habanero.Base
         /// </summary>
         public string RelationshipName
         {
-            get { return _relationshipName; }
+			get { return _relationshipName; }
+			protected set { _relationshipName = value; }
         }
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace Habanero.Base
         public Type GridType
         {
             get { return _gridType; }
+			protected set { _gridType = value; }
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace Habanero.Base
         public string CorrespondingRelationshipName
         {
             get { return _correspondingRelationshipName; }
+			protected set { _correspondingRelationshipName = value; }
         }
     }
 }

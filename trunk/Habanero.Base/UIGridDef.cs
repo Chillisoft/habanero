@@ -19,14 +19,44 @@ namespace Habanero.Base
             _list = new ArrayList();
         }
 
-        /// <summary>
-        /// Adds a grid property definition
-        /// </summary>
-        /// <param name="prop">The grid property definition</param>
-        public void Add(UIGridProperty prop)
-        {
-            _list.Add(prop);
-        }
+		/// <summary>
+		/// Adds a grid property definition
+		/// </summary>
+		/// <param name="prop">The grid property definition</param>
+		public void Add(UIGridProperty prop)
+		{
+			_list.Add(prop);
+		}
+
+		/// <summary>
+		/// Removes a grid property definition
+		/// </summary>
+		/// <param name="prop">The grid property definition</param>
+		public void Remove(UIGridProperty prop)
+		{
+			_list.Remove(prop);
+		}
+
+		/// <summary>
+		/// Checks if a grid property definition is in the Grid definition
+		/// </summary>
+		/// <param name="prop">The grid property definition</param>
+		public bool Contains(UIGridProperty prop)
+		{
+			return _list.Contains(prop);
+		}
+		
+		/// <summary>
+		/// Provides an indexing facility so that the contents of the definition
+		/// collection can be accessed with square brackets like an array
+		/// </summary>
+		/// <param name="index">The index position to access</param>
+		/// <returns>Returns the property definition at the index position
+		/// specified</returns>
+		public UIGridProperty this[int index]
+		{
+			get { return (UIGridProperty)_list[index]; }
+		}
 
         /// <summary>
         /// Not yet implemented
@@ -72,16 +102,5 @@ namespace Habanero.Base
             return _list.GetEnumerator();
         }
 
-        /// <summary>
-        /// Provides an indexing facility so that the contents of the definition
-        /// collection can be accessed with square brackets like an array
-        /// </summary>
-        /// <param name="index">The index position to access</param>
-        /// <returns>Returns the property definition at the index position
-        /// specified</returns>
-        public UIGridProperty this[int index]
-        {
-            get { return (UIGridProperty) _list[index]; }
-        }
     }
 }

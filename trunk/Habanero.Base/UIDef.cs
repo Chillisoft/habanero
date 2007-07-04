@@ -50,7 +50,8 @@ namespace Habanero.Base
         /// </summary>
         public UIFormDef UIFormDef
         {
-            get { return _uiFormDef; }
+			get { return _uiFormDef; }
+			protected set { _uiFormDef = value; }
         }
 
         /// <summary>
@@ -59,6 +60,7 @@ namespace Habanero.Base
         public string Name
         {
             get { return _name; }
+			protected set { _name = value; }
         }
 
         /// <summary>
@@ -67,6 +69,7 @@ namespace Habanero.Base
         public UIGridDef UIGridDef
         {
             get { return _uiGridDef; }
+			protected set { _uiGridDef = value; }
         }
 
         /// <summary>

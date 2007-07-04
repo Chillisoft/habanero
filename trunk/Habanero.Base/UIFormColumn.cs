@@ -40,7 +40,55 @@ namespace Habanero.Base
             _list.Add(property);
         }
 
-        /// <summary>
+		/// <summary>
+		/// Removes a form property from the definition
+		/// </summary>
+		/// <param name="property">A form property definition</param>
+		public void Remove(UIFormProperty property)
+		{
+			_list.Add(property);
+		}
+
+		/// <summary>
+		/// Checks if a form property is in the definition
+		/// </summary>
+		/// <param name="property">A form property definition</param>
+		public bool Contains(UIFormProperty property)
+		{
+			return _list.Contains(property);
+		}
+
+		/// <summary>
+		/// Provides an indexing facility so that the contents of the definition
+		/// collection can be accessed with square brackets like an array
+		/// </summary>
+		/// <param name="index">The index position to access</param>
+		/// <returns>Returns the property definition at the index position
+		/// specified</returns>
+		public UIFormProperty this[int index]
+		{
+			get { return (UIFormProperty)_list[index]; }
+		}
+
+
+		/// <summary>
+		/// Returns the number of property definitions held
+		/// </summary>
+		public int Count
+		{
+			get { return _list.Count; }
+		}
+
+		/// <summary>
+		/// Returns the definition list's enumerator
+		/// </summary>
+		/// <returns>Returns an IEnumerator-type object</returns>
+		public IEnumerator GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		/// <summary>
         /// Not yet implemented
         /// </summary>
         /// <param name="array"></param>
@@ -49,14 +97,6 @@ namespace Habanero.Base
         public void CopyTo(Array array, int index)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Returns the number of property definitions held
-        /// </summary>
-        public int Count
-        {
-            get { return _list.Count; }
         }
 
         /// <summary>
@@ -73,27 +113,6 @@ namespace Habanero.Base
         public bool IsSynchronized
         {
             get { return _list.IsSynchronized; }
-        }
-
-        /// <summary>
-        /// Returns the definition list's enumerator
-        /// </summary>
-        /// <returns>Returns an IEnumerator-type object</returns>
-        public IEnumerator GetEnumerator()
-        {
-            return _list.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Provides an indexing facility so that the contents of the definition
-        /// collection can be accessed with square brackets like an array
-        /// </summary>
-        /// <param name="index">The index position to access</param>
-        /// <returns>Returns the property definition at the index position
-        /// specified</returns>
-        public UIFormProperty this[int index]
-        {
-            get { return (UIFormProperty) _list[index]; }
         }
 
         /// <summary>

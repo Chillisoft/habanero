@@ -31,16 +31,34 @@ namespace Habanero.Base
             _list = new ArrayList();
         }
 
-        /// <summary>
-        /// Adds a column definition to the collection of definitions
-        /// </summary>
-        /// <param name="column">The UIFormColumn object</param>
-        public void Add(UIFormColumn column)
-        {
-            _list.Add(column);
-        }
+		/// <summary>
+		/// Adds a column definition to the collection of definitions
+		/// </summary>
+		/// <param name="column">The UIFormColumn object</param>
+		public void Add(UIFormColumn column)
+		{
+			_list.Add(column);
+		}
 
-        /// <summary>
+		/// <summary>
+		/// Removes a column definition from the collection of definitions
+		/// </summary>
+		/// <param name="column">The UIFormColumn object</param>
+		public void Remove(UIFormColumn column)
+		{
+			_list.Remove(column);
+		}
+
+		/// <summary>
+		/// Checks if a column definition is in the collection of definitions
+		/// </summary>
+		/// <param name="column">The UIFormColumn object</param>
+		public bool Contains(UIFormColumn column)
+		{
+			return _list.Contains(column);
+		}
+
+		/// <summary>
         /// Not yet implemented
         /// </summary>
         /// <param name="array"></param>
@@ -51,6 +69,18 @@ namespace Habanero.Base
             throw new NotImplementedException();
         }
 
+		/// <summary>
+		/// Provides an indexing facility so that the contents of the definition
+		/// collection can be accessed with square brackets like an array
+		/// </summary>
+		/// <param name="index">The index position to access</param>
+		/// <returns>Returns the property definition at the index position
+		/// specified</returns>
+		public UIFormColumn this[int index]
+		{
+			get { return (UIFormColumn)_list[index]; }
+		}
+				
         /// <summary>
         /// Returns the number of definitions held
         /// </summary>
@@ -82,18 +112,6 @@ namespace Habanero.Base
         public IEnumerator GetEnumerator()
         {
             return _list.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Provides an indexing facility so that the contents of the definition
-        /// collection can be accessed with square brackets like an array
-        /// </summary>
-        /// <param name="index">The index position to access</param>
-        /// <returns>Returns the property definition at the index position
-        /// specified</returns>
-        public UIFormColumn this[int index]
-        {
-            get { return (UIFormColumn) _list[index]; }
         }
 
         /// <summary>

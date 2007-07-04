@@ -17,17 +17,19 @@ namespace Habanero.Bo
     {
 		private string _name;
         private string _message;
+    	protected Dictionary<string, object> _parameters;
 
 		/// <summary>
 		/// Constructor to initialise a new property rule
 		/// </summary>
 		/// <param name="name">The name of the rule</param>
 		/// <param name="message">This rule's failure message</param>
-		/// <param name="parameters">The parameters for this rule.</param>
-		public PropRuleBase(string name, string message, Dictionary<string, object> parameters)
+		///// <param name="parameters">The parameters for this rule.</param>
+		public PropRuleBase(string name, string message)
 		{
 			_name = name;
 			_message = message;
+			_parameters = FillParameters(AvailableParameters(), _parameters);
 		}
 
         /// <summary>
@@ -44,12 +46,27 @@ namespace Habanero.Bo
             return true;
         }
 
+    	protected internal virtual Dictionary<string, object> Parameters
+    	{
+			get { return _parameters; }
+			set
+			{
+				_parameters = value;
+				SetupParameters();
+			}
+    	}
+
 		/// <summary>
-		/// This method must be implemented to return a list of the 
-		/// parameters that are available to be set for this rule. 
-		/// This is used for validation by the loader.
+		/// Set up the rule variables from the current parameters collection.
 		/// </summary>
-		/// <returns>A list of the parameters that this rule uses</returns>
+		protected internal abstract void SetupParameters();
+
+    	/// <summary>
+    	/// This method must be implemented to return a list of the 
+    	/// parameters that are available to be set for this rule. 
+    	/// This is used for validation by the loader.
+    	/// </summary>
+    	/// <returns>A list of the parameters that this rule uses</returns>
     	protected internal abstract List<string> AvailableParameters();
 
         /// <summary>
@@ -68,5 +85,25 @@ namespace Habanero.Bo
 			get { return _message; }
 			protected set { _message = value; }
         }
+
+		private static Dictionary<string, object> FillParameters(List<string> availableParams, Dictionary<string, object> currentCollection)
+		{
+			Dictionary<string, object> parameters = new Dictionary<string, object>();
+			if (currentCollection == null)
+			{
+				currentCollection = new Dictionary<string, object>();
+			}
+			foreach (string availableParam in availableParams)
+			{
+				if (currentCollection.ContainsKey(availableParam))
+				{
+					parameters.Add(availableParam, currentCollection[availableParam]);
+				} else
+				{
+					parameters.Add(availableParam, null);
+				}
+			}
+			return parameters;
+		}
     }
 }

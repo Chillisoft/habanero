@@ -20,7 +20,7 @@ namespace Habanero.Bo
         /// <param name="min">The minimum value allowed for the integer</param>
         /// <param name="max">The maximum value allowed for the integer</param>
         public PropRuleInteger(string name, string message, int min, int max)
-			: base(name, message, null)
+			: base(name, message)
         {
             _minValue = min;
             _maxValue = max;
@@ -34,27 +34,36 @@ namespace Habanero.Bo
         /// <param name="message">This rule's failure message</param>
         /// <param name="parameters">The parameters for this rule.  Valid parameters are "min" and "max"</param>
         public PropRuleInteger(string name, string message, Dictionary<string, object> parameters)
-            : base(name, message, parameters)
-        {
+			: base(name, message)
+		{
+			base.Parameters = parameters;
+		}
+
+		protected internal override void SetupParameters()
+		{
             try
             {
-                foreach (string key in parameters.Keys)
+                foreach (string key in _parameters.Keys)
                 {
-                    switch (key)
-                    {
-                        case "min":
-                            _minValue = Convert.ToInt32(parameters["min"]);
-                            break;
-                        case "max":
-                            _maxValue = Convert.ToInt32(parameters["max"]);
-                            break;
-                        default:
-                            throw new InvalidXmlDefinitionException(String.Format(
-                                "The rule type '{0}' for integers does not exist. " +
-                                "Check spelling and capitalisation, or see the " +
-                                "documentation for existing options or ways to " +
-                                "add options of your own.", key));
-                    }
+                    object value = _parameters[key];
+					if (value != null)
+					{
+						switch (key)
+						{
+							case "min":
+								_minValue = Convert.ToInt32(value);
+								break;
+							case "max":
+								_maxValue = Convert.ToInt32(value);
+								break;
+							default:
+								throw new InvalidXmlDefinitionException(String.Format(
+                                	"The rule type '{0}' for integers does not exist. " +
+                                	"Check spelling and capitalisation, or see the " +
+                                	"documentation for existing options or ways to " +
+                                	"add options of your own.", key));
+						}
+					}
                 }
             }
             catch (InvalidXmlDefinitionException ex)

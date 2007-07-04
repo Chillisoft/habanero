@@ -21,7 +21,7 @@ namespace Habanero.Bo
         /// <param name="minValue">The minimum value allowed for the decimal</param>
         /// <param name="maxValue">The maximum value allowed for the decimal</param>
         public PropRuleDecimal(string ruleName, string message, decimal minValue, decimal maxValue)
-            : base(ruleName, message, null)
+            : base(ruleName, message)
         {
             _minValue = minValue;
             _maxValue = maxValue;
@@ -34,27 +34,36 @@ namespace Habanero.Bo
         /// <param name="message">This rule's failure message</param>
         /// <param name="parameters">The parameters for this rule.</param>
         public PropRuleDecimal(string name, string message, Dictionary<string, object> parameters)
-			: base(name, message, parameters)
-        {
+			: base(name, message)
+		{
+			base.Parameters = parameters;
+		}
+
+		protected internal override void SetupParameters()
+		{
             try
             {
-                foreach (string key in parameters.Keys)
+                foreach (string key in _parameters.Keys)
                 {
-                    switch (key)
-                    {
-                        case "min":
-                            _minValue = Convert.ToDecimal(parameters["min"]);
-                            break;
-                        case "max":
-                            _maxValue = Convert.ToDecimal(parameters["max"]);
-                            break;
-                        default:
-                            throw new InvalidXmlDefinitionException(String.Format(
-                                "The rule type '{0}' for decimals does not exist. " +
-                                "Check spelling and capitalisation, or see the " +
-                                "documentation for existing options or ways to " +
-                                "add options of your own.", key));
-                    }
+                    object value = _parameters[key];
+					if (value != null)
+					{
+						switch (key)
+						{
+							case "min":
+								_minValue = Convert.ToDecimal(value);
+								break;
+							case "max":
+								_maxValue = Convert.ToDecimal(value);
+								break;
+							default:
+								throw new InvalidXmlDefinitionException(String.Format(
+                                	"The rule type '{0}' for decimals does not exist. " +
+                                	"Check spelling and capitalisation, or see the " +
+                                	"documentation for existing options or ways to " +
+                                	"add options of your own.", key));
+						}
+					}
                 }
             }
             catch (InvalidXmlDefinitionException ex)

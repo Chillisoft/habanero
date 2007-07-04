@@ -27,6 +27,16 @@ namespace Habanero.Base
             _defs.Add(def.Name, def);
         }
 
+		public bool Contains(UIDef def)
+		{
+			return _defs.ContainsKey(def.Name);
+		}
+
+		public void Remove(UIDef def)
+		{
+			_defs.Remove(def.Name);
+		}
+
         /// <summary>
         /// Provides an indexing facility so that the contents of the
         /// collection can be accessed with square brackets like an array
@@ -45,7 +55,9 @@ namespace Habanero.Base
         /// TODO ERIC - implement
         public IEnumerator GetEnumerator()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+        	return _defs.GetEnumerator();
+			//TODO: Is this right?
         }
     }
 }

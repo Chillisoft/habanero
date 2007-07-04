@@ -43,6 +43,7 @@ namespace Habanero.Base
         public string Label
         {
             get { return _label; }
+			protected set { _label = value; }
         }
 
         /// <summary>
@@ -51,6 +52,7 @@ namespace Habanero.Base
         public string PropertyName
         {
             get { return _propertyName; }
+			protected set { _propertyName = value; }
         }
 
         /// <summary>
@@ -59,6 +61,7 @@ namespace Habanero.Base
         public string MapperTypeName
         {
             get { return _mapperTypeName; }
+			protected set { _mapperTypeName = value; }
         }
 
         /// <summary>
@@ -67,6 +70,7 @@ namespace Habanero.Base
         public Type ControlType
         {
             get { return _controlType; }
+			protected set { _controlType = value; }
         }
 
         /// <summary>
@@ -75,6 +79,7 @@ namespace Habanero.Base
         public bool Editable
         {
             get { return _editable; }
+			protected set { _editable = value; }
         }
 
         /// <summary>
