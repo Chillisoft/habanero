@@ -19,7 +19,6 @@ namespace Habanero.Bo
     /// The sql statement will need to load two fields in correct order:
     /// a Guid (such as the object ID or primary key) and a string.
     /// </summary>
-    /// TODO ERIC - a method to set the lookup type?
     public class DatabaseLookupListSource : ILookupListSource
     {
         private string _statement;

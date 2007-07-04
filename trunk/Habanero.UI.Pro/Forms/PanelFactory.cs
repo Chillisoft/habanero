@@ -134,7 +134,6 @@ namespace Habanero.Ui.Forms
         /// <param name="uiFormTab">The UIFormTab object</param>
         /// <returns>Returns the object containing the new panel</returns>
         /// TODO ERIC - this is a very long method!
-        /// - improve comments above
         private PanelFactoryInfo CreateOnePanel(UIFormTab uiFormTab)
         {
             //if (uiFormTab.UIFormGrid != null)

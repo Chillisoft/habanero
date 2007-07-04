@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.Ui.Forms;
 using log4net;
 
@@ -37,7 +38,13 @@ namespace Habanero.Ui.Forms
         {
             if (_attributes.ContainsKey("decimalPlaces"))
             {
-                int decimalPlaces = Convert.ToInt32(_attributes["decimalPlaces"]);
+                int decimalPlaces = 0;
+                if (!Int32.TryParse((string)_attributes["decimalPlaces"], out decimalPlaces))
+                {
+                    throw new InvalidXmlDefinitionException("In a 'parameter' " +
+                        "element in the class definitions, the 'decimalPlaces' " +
+                        "attribute had an invalid integer value.");
+                }
                 _numericUpDown.DecimalPlaces = decimalPlaces;
             }
         }

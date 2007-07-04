@@ -70,7 +70,7 @@ namespace Habanero.Test.Ui.BoControls
         public void TestSettingAttributes()
         {
             Hashtable attributes = new Hashtable();
-            attributes.Add("decimalPlaces", 4);
+            attributes.Add("decimalPlaces", "4");
             mapper.SetPropertyAttributes(attributes);
             Assert.AreEqual(4, itsNumUpDown.DecimalPlaces);
         }
