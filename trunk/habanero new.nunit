@@ -10,7 +10,6 @@
     <assembly path="Testing_bin\Habanero.Bo.dll" />
     <assembly path="Testing_bin\Habanero.Build.dll" />
     <assembly path="Testing_bin\Habanero.Db.dll" />
-    <assembly path="Testing_bin\Habanero.Generic.dll" />
     <assembly path="Testing_bin\Habanero.Test.Bo.dll" />
     <assembly path="Testing_bin\Habanero.Test.Db.dll" />
     <assembly path="Testing_bin\Habanero.Test.dll" />
