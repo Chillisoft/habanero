@@ -10,8 +10,6 @@ namespace Habanero.Bo
     /// <summary>
     /// Provides an editable data-set for business objects
     /// </summary>
-    /// TODO ERIC - some more clarity on what a data set is would be nice
-    /// (and for other equivalents too)
     public class BOCollectionEditableDataSetProvider : BOCollectionDataSetProvider
     {
         private static readonly ILog log =

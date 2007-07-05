@@ -10,9 +10,8 @@ using log4net;
 namespace Habanero.Bo
 {
     /// <summary>
-    /// Manages the mapper for the business object
+    /// Provides mapping to a business object
     /// </summary>
-    /// TODO ERIC - review above
     public class BOMapper
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BoMapper");
