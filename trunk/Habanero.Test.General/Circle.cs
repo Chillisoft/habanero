@@ -5,12 +5,6 @@ namespace Habanero.Test.General
 {
     public class Circle : Shape
     {
-        public static Circle GetNewObject()
-        {
-            Circle obj = new Circle();
-            AddToLoadedBusinessObjectCol(obj);
-            return obj;
-        }
 
         public static ClassDef GetClassDef()
         {

@@ -73,7 +73,7 @@ namespace Habanero.Ui.Forms
             {
                 try
                 {
-                    lookupBo.ApplyEdit();
+                    lookupBo.Save();
                     SetupComboBoxItems();
                     _comboBox.SelectedItem = lookupBo;
                 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.DB;
@@ -89,17 +90,6 @@ namespace Habanero.Test.General
         }
 
         /// <summary>
-        /// Creates a new contact person and adds this new contact person to the object manager collection
-        /// </summary>
-        /// <returns>newly created contact person Engine</returns>
-        public static Engine GetNewEngine()
-        {
-            Engine myEngine = new Engine();
-            AddToLoadedBusinessObjectCol(myEngine);
-            return myEngine;
-        }
-
-        /// <summary>
         /// returns the Engine identified by id.
         /// </summary>
         /// <remarks>
@@ -111,11 +101,10 @@ namespace Habanero.Test.General
         ///  if the object has been deleted already</exception>
         public static Engine GetEngine(BOPrimaryKey id)
         {
-            Engine myEngine = (Engine) Engine.GetLoadedBusinessObject(id);
+            Engine myEngine = (Engine)BOLoader.GetLoadedBusinessObject(id);
             if (myEngine == null)
             {
                 myEngine = new Engine(id);
-                AddToLoadedBusinessObjectCol(myEngine);
             }
             return myEngine;
         }
@@ -144,11 +133,6 @@ namespace Habanero.Test.General
         internal static void ClearEngineCol()
         {
             BusinessObject.ClearLoadedBusinessObjectBaseCol();
-        }
-
-        internal static Hashtable GetEngineCol()
-        {
-            return BusinessObject.GetLoadedBusinessObjectBaseCol();
         }
 
         internal static void DeleteAllEngines()

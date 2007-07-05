@@ -8,12 +8,6 @@ namespace Habanero.Test.General
     /// </summary>
     public class FilledCircle : Circle
     {
-        public static FilledCircle GetNewObject()
-        {
-            FilledCircle obj = new FilledCircle();
-            AddToLoadedBusinessObjectCol(obj);
-            return obj;
-        }
 
         public static ClassDef GetClassDef()
         {

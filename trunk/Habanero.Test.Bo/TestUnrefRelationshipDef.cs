@@ -72,7 +72,7 @@ namespace Habanero.Test.Bo
             Assert.IsTrue(rel.GetRelatedBusinessObjectCol().Count == 0);
 
             //			mMockBo.SetPropertyValue("MockBOProp1",mMockBo.GetPropertyValue("MockBOID"));
-            //			mMockBo.ApplyEdit();
+            //			mMockBo.Save();
             //			Assert.IsTrue (rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
             //
             //			Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1") ,mMockBo.GetPropertyValue("MockBOID"));

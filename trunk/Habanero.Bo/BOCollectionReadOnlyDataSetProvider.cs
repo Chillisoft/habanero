@@ -25,7 +25,7 @@ namespace Habanero.Bo
         {
             foreach (BusinessObject businessObject in _collection)
             {
-                businessObject.Updated += new BusinessObjectUpdatedHandler(UpdatedHandler);
+                businessObject.Updated += new EventHandler<BOEventArgs>(UpdatedHandler);
             }
             _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(AddedHandler);
             _collection.BusinessObjectRemoved += new EventHandler<BOEventArgs>(RemovedHandler);
@@ -44,7 +44,7 @@ namespace Habanero.Bo
             {
                 this._table.Rows.RemoveAt(rowNum);
             }
-            e.BusinessObject.Updated -= new BusinessObjectUpdatedHandler(UpdatedHandler);
+            e.BusinessObject.Updated -= new EventHandler<BOEventArgs>(UpdatedHandler);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Habanero.Bo
                 values[i++] = val;
             }
             _table.LoadDataRow(values, true);
-            e.BusinessObject.Updated += new BusinessObjectUpdatedHandler(UpdatedHandler);
+            e.BusinessObject.Updated += new EventHandler<BOEventArgs>(UpdatedHandler);
         }
 
         /// <summary>

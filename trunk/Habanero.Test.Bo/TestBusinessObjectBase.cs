@@ -23,6 +23,21 @@ namespace Habanero.Test.Bo
         }
 
         [Test]
+        public void TestInstantiate()
+        {
+            MyBo bo = new MyBo();
+            string t = bo.GetPropertyValueString("TestProp");
+        }
+
+        //[Test]
+        //public void TestIndexer()
+        //{
+        //    MyBo bo = new MyBo();
+        //    bo["TestProp"] = "hello";
+        //    Assert.AreEqual("hello", bo.GetPropertyValue("TestProp"));
+        //}
+
+        [Test]
         public void TestSettingLookupValueSetsGuid()
         {
             ClassDef.ClassDefs.Clear();
@@ -51,11 +66,11 @@ namespace Habanero.Test.Bo
 
             MyBo bo = (MyBo) classDef.CreateNewBusinessObject(itsConnection);
 //			bo.SetPropertyValue("TestProp", "Hello") ;
-//			bo.ApplyEdit() ;
+//			bo.Save() ;
 
             bo.SetPropertyValue("TestProp", "Goodbye");
-            bo.ApplyEdit();
-            bo.CancelEdit();
+            bo.Save();
+            bo.Restore();
             Assert.AreEqual("Goodbye", bo.GetPropertyValueString("TestProp"));
         }
     }

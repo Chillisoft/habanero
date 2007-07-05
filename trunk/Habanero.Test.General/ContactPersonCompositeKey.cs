@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.DB;
@@ -118,13 +119,6 @@ namespace Habanero.Test.General
             return lPropDefCol;
         }
 
-        public static ContactPersonCompositeKey GetNewContactPersonCompositeKey()
-        {
-            ContactPersonCompositeKey myContactPerson = new ContactPersonCompositeKey();
-            AddToLoadedBusinessObjectCol(myContactPerson);
-            return myContactPerson;
-        }
-
         /// <summary>
         /// returns the ContactPerson identified by id.
         /// </summary>
@@ -138,11 +132,10 @@ namespace Habanero.Test.General
         public static ContactPersonCompositeKey GetContactPersonCompositeKey(BOPrimaryKey id)
         {
             ContactPersonCompositeKey myContactPerson =
-                (ContactPersonCompositeKey) ContactPersonCompositeKey.GetLoadedBusinessObject(id);
+                (ContactPersonCompositeKey)BOLoader.GetLoadedBusinessObject(id);
             if (myContactPerson == null)
             {
                 myContactPerson = new ContactPersonCompositeKey(id);
-                AddToLoadedBusinessObjectCol(myContactPerson);
             }
             return myContactPerson;
         }
@@ -166,11 +159,6 @@ namespace Habanero.Test.General
         internal static void ClearContactPersonCol()
         {
             BusinessObject.ClearLoadedBusinessObjectBaseCol();
-        }
-
-        internal static Hashtable GetContactPersonCol()
-        {
-            return BusinessObject.GetLoadedBusinessObjectBaseCol();
         }
 
         internal static void DeleteAllContactPeople()

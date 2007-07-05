@@ -56,8 +56,8 @@ namespace Habanero.Test.Bo
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-            itsBo1.ApplyEdit();
-            itsBo1.ApplyEdit();
+            itsBo1.Save();
+            itsBo1.Save();
             itsProvider = CreateDataSetProvider(itsCollection);
             itsTable = itsProvider.GetDataTable(itsCollection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties());
             itsDatabaseConnectionMockControl.Verify();

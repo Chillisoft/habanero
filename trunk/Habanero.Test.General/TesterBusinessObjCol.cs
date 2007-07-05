@@ -33,10 +33,10 @@ namespace Habanero.Test.General
             ContactPerson.DeleteAllContactPeople();
             BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson p = ContactPerson.GetNewContactPerson();
+            ContactPerson p = new ContactPerson();
             p.FirstName = "a";
             p.Surname = "bb";
-            p.ApplyEdit();
+            p.Save();
             ContactPerson.ClearContactPersonCol();
             myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(1, myCol.Count);
@@ -48,10 +48,10 @@ namespace Habanero.Test.General
             ContactPerson.DeleteAllContactPeople();
             BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson p = ContactPerson.GetNewContactPerson();
+            ContactPerson p = new ContactPerson();
             p.FirstName = "a";
             p.Surname = "bb";
-            p.ApplyEdit();
+            p.Save();
             BOPrimaryKey pKey = p.ID;
             ContactPerson.ClearContactPersonCol();
             p = ContactPerson.GetContactPerson(pKey);
@@ -66,15 +66,15 @@ namespace Habanero.Test.General
             ContactPerson.DeleteAllContactPeople();
             BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson p = ContactPerson.GetNewContactPerson();
+            ContactPerson p = new ContactPerson();
             p.FirstName = "a";
             p.Surname = "bb";
-            p.ApplyEdit();
+            p.Save();
             BOPrimaryKey pKey = p.ID;
-            p = ContactPerson.GetNewContactPerson();
+            p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";
-            p.ApplyEdit();
+            p.Save();
             ContactPerson.ClearContactPersonCol();
             p = ContactPerson.GetContactPerson(pKey);
             myCol = ContactPerson.LoadBusinessObjCol("", "Surname ASC");
@@ -88,15 +88,15 @@ namespace Habanero.Test.General
             ContactPerson.DeleteAllContactPeople();
             BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson p = ContactPerson.GetNewContactPerson();
+            ContactPerson p = new ContactPerson();
             p.FirstName = "a";
             p.Surname = "bb";
-            p.ApplyEdit();
+            p.Save();
             BOPrimaryKey pKey = p.ID;
-            p = ContactPerson.GetNewContactPerson();
+            p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";
-            p.ApplyEdit();
+            p.Save();
             ContactPerson.ClearContactPersonCol();
             p = ContactPerson.GetContactPerson(pKey);
             myCol = ContactPerson.LoadBusinessObjCol("", "Surname Desc");
@@ -110,15 +110,15 @@ namespace Habanero.Test.General
             ContactPerson.DeleteAllContactPeople();
             BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson p = ContactPerson.GetNewContactPerson();
+            ContactPerson p = new ContactPerson();
             p.FirstName = "a";
             p.Surname = "bb";
-            p.ApplyEdit();
+            p.Save();
             BOPrimaryKey pKey = p.ID;
-            p = ContactPerson.GetNewContactPerson();
+            p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";
-            p.ApplyEdit();
+            p.Save();
             ContactPerson.ClearContactPersonCol();
             p = ContactPerson.GetContactPerson(pKey);
             myCol = ContactPerson.LoadBusinessObjCol("Surname = 'bb'", "Surname");
@@ -132,20 +132,20 @@ namespace Habanero.Test.General
             ContactPerson.DeleteAllContactPeople();
             BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson p = ContactPerson.GetNewContactPerson();
+            ContactPerson p = new ContactPerson();
             p.FirstName = "a";
             p.Surname = "bb";
-            p.ApplyEdit();
+            p.Save();
             BOPrimaryKey pKey = p.ID;
-            p = ContactPerson.GetNewContactPerson();
+            p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";
-            p.ApplyEdit();
+            p.Save();
 
-            p = ContactPerson.GetNewContactPerson();
+            p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abcd";
-            p.ApplyEdit();
+            p.Save();
 
             ContactPerson.ClearContactPersonCol();
 
@@ -162,20 +162,20 @@ namespace Habanero.Test.General
             ContactPerson.DeleteAllContactPeople();
             BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson p = ContactPerson.GetNewContactPerson();
+            ContactPerson p = new ContactPerson();
             p.FirstName = "a";
             p.Surname = "bb";
-            p.ApplyEdit();
+            p.Save();
             BOPrimaryKey pKey = p.ID;
-            p = ContactPerson.GetNewContactPerson();
+            p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";
-            p.ApplyEdit();
+            p.Save();
 
-            p = ContactPerson.GetNewContactPerson();
+            p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abcd";
-            p.ApplyEdit();
+            p.Save();
 
             ContactPerson.ClearContactPersonCol();
 
@@ -187,7 +187,7 @@ namespace Habanero.Test.General
             p = ContactPerson.GetContactPerson(pKey);
 
             p.Surname = "zzz";
-            p.ApplyEdit();
+            p.Save();
 
             Assert.AreEqual(2, myCol.Count,
                             "The object collection should not have changed since the physical object edited is different.");

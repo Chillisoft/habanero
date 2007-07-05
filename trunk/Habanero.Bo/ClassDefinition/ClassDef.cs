@@ -462,7 +462,7 @@ namespace Habanero.Bo.ClassDefinition
         {
             try
             {
-                return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this});
+                return (BusinessObject)Activator.CreateInstance(MyClassType, new object[] { });
             }
             catch (MissingMethodException ex)
             {
@@ -473,16 +473,16 @@ namespace Habanero.Bo.ClassDefinition
             }
         }
 
-        /// <summary>
-        /// Creates a new business object using this class definition
-        /// and the database connection provided
-        /// </summary>
-        /// <param name="conn">A database connection</param>
-        /// <returns>Returns a new business object</returns>
-        internal BusinessObject InstantiateBusinessObjectWithClassDef(IDatabaseConnection conn)
-        {
-            return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this, conn});
-        }
+        ///// <summary>
+        ///// Creates a new business object using this class definition
+        ///// and the database connection provided
+        ///// </summary>
+        ///// <param name="conn">A database connection</param>
+        ///// <returns>Returns a new business object</returns>
+        //internal BusinessObject InstantiateBusinessObjectWithClassDef(IDatabaseConnection conn)
+        //{
+        //    return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this, conn});
+        //}
 
         /// <summary>
         /// Creates a new collection of relationships.
@@ -538,8 +538,10 @@ namespace Habanero.Bo.ClassDefinition
         /// <returns>Returns the new object</returns>
         public BusinessObject CreateNewBusinessObject(IDatabaseConnection conn)
         {
-            return this.InstantiateBusinessObjectWithClassDef(conn);
-		}
+            BusinessObject newObj = this.InstantiateBusinessObjectWithClassDef();
+            newObj.SetDatabaseConnection(conn);
+            return newObj;
+        }
 
 		#endregion //Creating BOs
 

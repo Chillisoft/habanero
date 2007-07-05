@@ -17,8 +17,8 @@ namespace Habanero.Test.General
         {
             shapeClassDef = Shape.GetClassDef();
             circleClassDef = Circle.GetClassDef();
-            objShape = Shape.GetNewObject();
-            objCircle = Circle.GetNewObject();
+            objShape = new Shape();
+            objCircle = new Circle();
         }
 
         [Test]

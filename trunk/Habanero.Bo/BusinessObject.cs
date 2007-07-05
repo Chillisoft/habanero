@@ -5,6 +5,7 @@ using System.Data;
 using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
+using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Bo.SqlGeneration;
@@ -16,43 +17,31 @@ using log4net;
 
 namespace Habanero.Bo
 {
-    /// <summary>
-    /// An enumeration that describes the object's state
-    /// </summary>
-    [Flags()]
-    public enum States
-    {
-        /// <summary>The object is new</summary>
-        isNew = 1,
-        /// <summary>The object has changed since its last persistance to
-        /// the database</summary>
-        isDirty = 2,
-        /// <summary>The object has been deleted</summary>
-        isDeleted = 4,
-        /// <summary>The object is being edited</summary>
-        isEditing = 8,
-        // isIndependent = 32  //TODO: True if this Status is independent of its parent for editing
-    }
 
-    public delegate void BusinessObjectUpdatedHandler(Object sender, BOEventArgs e);
+
+    //public delegate void BusinessObjectUpdatedHandler(Object sender, BOEventArgs e);
 
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
     /// </summary>
-    public abstract class BusinessObject : ITransaction, Base.IBusinessObject
+    public class BusinessObject : ITransaction
     {
+
+
+
+        
         private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BusinessObject");
 
-        public event BusinessObjectUpdatedHandler Updated;
-        public event BusinessObjectUpdatedHandler Deleted;
+        public event EventHandler<BOEventArgs> Updated;
+        public event EventHandler<BOEventArgs> Deleted;
 
         #region Fields
 
-        protected static Hashtable _businessObjectBaseCol;
+        private static Dictionary<string, WeakReference> _allLoadedBusinessObjects = new Dictionary<string, WeakReference>();
 
         //set object as new by default.
-        protected States _flagState = States.isNew; //TODO: | BOFlagState.isIndependent;
+        private BOState _boState = new BOState();
 
         protected ClassDef _classDef;
         protected BOPropCol _boPropCol;
@@ -98,12 +87,7 @@ namespace Habanero.Bo
         /// <param name="conn">A database connection</param>
         protected internal BusinessObject(ClassDef def, IDatabaseConnection conn)
         {
-            SetIsDeleted(false);
-            SetIsDirty(false);
-            SetIsEditing(false);
-            SetIsNew(true);
-            _classDef = def;
-            ConstructClass(true);
+            Initialise(conn, def);
             Guid myID = Guid.NewGuid();
             _primaryKey.SetObjectID(myID);
             ClassDef currentClassDef = this.ClassDef;
@@ -115,6 +99,15 @@ namespace Habanero.Bo
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
             }
+            AddToLoadedBusinessObjectCol(this);
+
+        }
+
+        private void Initialise(IDatabaseConnection conn, ClassDef def) {
+            State.IsDeleted = false;
+            State.IsDirty = false;
+            State.IsEditing = false;
+            State.IsNew = true;
             if (conn != null)
             {
                 _connection = conn;
@@ -123,6 +116,13 @@ namespace Habanero.Bo
             {
                 _connection = DatabaseConnection.CurrentConnection;
             }
+            if (def != null) {
+                _classDef = def;
+            } else {
+                _classDef = ClassDef.ClassDefs[this.GetType()];
+            }
+
+            ConstructFromClassDef(true);
         }
 
         /// <summary>
@@ -142,18 +142,20 @@ namespace Habanero.Bo
         {
             //todo: Check if not already loaded in object manager if already loaded raise error
             //TODO: think about moving these to after load
-            _connection = conn;
-            SetIsNew(false);
-            SetIsDeleted(false);
-            SetIsDirty(false);
-            SetIsEditing(false);
-            ConstructClass(false);
+            Initialise(conn, null);
+            //_connection = conn;
+            //SetIsNew(false);
+            //SetIsDeleted(false);
+            //SetIsDirty(false);
+            //SetIsEditing(false);
+            //ConstructFromClassDef(false);
             _primaryKey = id;
-            if (!Load())
+            if (!BOLoader.Instance.Load(this))
             {
                 //If the item is not found then throw the appropriate exception
                 throw (new BusinessObjectNotFoundException());
             }
+            AddToLoadedBusinessObjectCol(this);
         }
 
         /// <summary>
@@ -175,12 +177,12 @@ namespace Habanero.Bo
         {
             //todo: Check if not already loaded in object manager if already loaded raise error
             _connection = conn;
-            SetIsNew(false);
-            SetIsDeleted(false);
-            SetIsDirty(false);
-            SetIsEditing(false);
-            ConstructClass(false);
-            if (!Load(searchExpression))
+            State.IsNew = false;
+            State.IsDeleted = false;
+            State.IsDirty = false;
+            State.IsEditing = false;
+            ConstructFromClassDef(false);
+            if (!BOLoader.Instance.Load(this, searchExpression))
             {
                 //If the item is not found then throw the appropriate exception
                 throw (new BusinessObjectNotFoundException());
@@ -192,12 +194,12 @@ namespace Habanero.Bo
         /// </summary>
         ~BusinessObject()
         {
-            GetLoadedBusinessObjectBaseCol().Remove(this.ID);
+            AllLoaded().Remove(this.ID.ToString());
             if (_primaryKey.GetOrigObjectID().Length > 0)
             {
-                if (GetLoadedBusinessObjectBaseCol().Contains(_primaryKey.GetOrigObjectID()))
+                if (AllLoaded().ContainsKey(_primaryKey.GetOrigObjectID()))
                 {
-                    GetLoadedBusinessObjectBaseCol().Remove(_primaryKey.GetOrigObjectID());
+                    AllLoaded().Remove(_primaryKey.GetOrigObjectID());
                 }
             }
             ReleaseWriteLocks();
@@ -209,162 +211,12 @@ namespace Habanero.Bo
         #region Business Object Loaders
 
         /// <summary>
-        /// Loads a business object that meets the specified search criteria
-        /// </summary>
-        /// <param name="searchExpression">The search expression</param>
-        /// <returns>Returns a business object, or null if none is found that
-        /// meets the criteria</returns>
-        [ReflectionPermission(SecurityAction.Demand)]
-        protected internal BusinessObject GetBusinessObject(IExpression searchExpression)
-        {
-			BusinessObject lTempBusObj = _classDef.InstantiateBusinessObject();
-            //BusinessObject lTempBusObj = (BusinessObject) Activator.CreateInstance(_classDef.ClassType, true);
-            lTempBusObj.SetDatabaseConnection(this.GetDatabaseConnection());
-            IDataReader dr = lTempBusObj.LoadDataReader(this.GetDatabaseConnection(), searchExpression);
-            try
-            {
-                if (dr.Read())
-                {
-                    return GetBusinessObject(dr);
-                }
-            }
-            finally
-            {
-                if (dr != null && !dr.IsClosed)
-                {
-                    dr.Close();
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Returns a new object loaded from the data reader or one from the 
-        /// object manager that is refreshed with data from the data reader
-        /// </summary>
-        /// <param name="dr">A data reader pointing at a valid record</param>
-        /// <returns>A valid business object for the data in the 
-        /// data reader</returns>
-        [ReflectionPermission(SecurityAction.Demand)]
-        protected internal BusinessObject GetBusinessObject(IDataRecord dr)
-        {
-            // This method creates a primary key object with the data from the 
-            // datareader and then checks if this is loaded, if it is then the 
-            // properties for the object are reloaded from the datareader else 
-            // a new object is created and the data for it is loaded from the 
-            // datareader. The object is then added to the object manager.
-            BOProp prop;
-            BOPropCol propCol = new BOPropCol();
-            BOPrimaryKey lPrimaryKey;
-            foreach (DictionaryEntry item in  _classDef.PrimaryKeyDef)
-            {
-                PropDef lPropDef = (PropDef) item.Value;
-                prop = lPropDef.CreateBOProp(false);
-
-                prop.InitialiseProp(dr[prop.DatabaseFieldName]);
-                propCol.Add(prop);
-
-                _primaryKey = (BOPrimaryKey) _classDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
-            }
-            lPrimaryKey = (BOPrimaryKey) _classDef.PrimaryKeyDef.CreateBOKey(propCol);
-
-            BusinessObject lTempBusObj =
-                BusinessObject.GetLoadedBusinessObject(lPrimaryKey.GetObjectId(), false);
-            bool isReplacingSuperClassObject = false;
-            if (lTempBusObj != null && this.GetType().IsSubclassOf(lTempBusObj.GetType()))
-            {
-                isReplacingSuperClassObject = true;
-            }
-            if (lTempBusObj == null || isReplacingSuperClassObject)
-            {
-                lTempBusObj = (this.CreateNewBusinessObject());
-                // BusinessObject)Activator.CreateInstance(_classDef.ClassType, true);
-                lTempBusObj.LoadFromDataReader(dr);
-                try
-                {
-                    if (isReplacingSuperClassObject)
-                    {
-                        GetLoadedBusinessObjectBaseCol().Remove(lTempBusObj.ID.GetObjectId());
-                    }
-                    GetLoadedBusinessObjectBaseCol().Add(lTempBusObj.ID.GetObjectId(), new WeakReference(lTempBusObj));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("The object with id " +
-                                                       lTempBusObj.ID.GetObjectId(), ex);
-                }
-            }
-            else if (lTempBusObj.GetType().IsSubclassOf(this.GetType()))
-            {
-                //TODO - refresh this subclass object.  It can be done using the current datareader because
-                //the current data reader is for an object of the superclass type.
-            }
-            else
-            {
-                if (lTempBusObj.IsDirty)
-                {
-                    log.Debug(
-                        "An attempt was made to load an object already loaded that was in edit mode.  Refresh from database ignored." +
-                        Environment.NewLine +
-                        "BO Type: " + lTempBusObj.GetType().Name + Environment.NewLine + " Stack Trace: " +
-                        Environment.StackTrace);
-                }
-                else
-                {
-                    lTempBusObj.LoadProperties(dr);
-                }
-            }
-            return lTempBusObj;
-        }
-
-        //TODO:Peter - make a better load that doesn't use a bo col.
-        /// <summary>
-        /// Returns the business object of the type provided and that meets the
-        /// search criteria
-        /// </summary>
-        /// <param name="criteria">The search criteria</param>
-        /// <param name="boType">The business object type</param>
-        /// <returns>Returns the business object found</returns>
-        /// <exception cref="UserException">Thrown if more than one object
-        /// matches the criteria</exception>
-        /// TODO ERIC - i don't understand why the exception is thrown, since
-        /// the normal pattern is just to return the first one that meets
-        /// expectations
-        public static BusinessObject GetBusinessObject(string criteria, Type boType)
-        {
-            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
-            col.Load(criteria, "");
-            if (col.Count < 1)
-            {
-                return null;
-            }
-            else if (col.Count > 1)
-            {
-                throw new UserException("Loading a " + boType.Name + " with criteria " + criteria +
-                                        " returned more than one record when only one was expected.");
-            }
-            else
-            {
-                return col[0];
-            }
-        }
-
-        /// <summary>
-        /// Creates a new business object from the class definition
-        /// </summary>
-        /// <returns></returns>
-        public BusinessObject CreateNewBusinessObject()
-        {
-            return _classDef.InstantiateBusinessObject();
-        }
-
-        /// <summary>
         /// Constructs the class
         /// </summary>
         /// <param name="newObject">Whether the object is new or not</param>
-        protected virtual void ConstructClass(bool newObject)
+        protected virtual void ConstructFromClassDef(bool newObject)
         {
-            _classDef = ConstructClassDef();
+            if (_classDef == null) _classDef = ConstructClassDef();
             if (_classDef == null)
             {
                 throw new NullReferenceException(String.Format(
@@ -407,76 +259,6 @@ namespace Habanero.Bo
                 return null;
 
         }
-        
-        /// <summary>
-        /// Loads a business object by ID
-        /// </summary>
-        /// <param name="id">The ID</param>
-        /// <returns>Returns a business object</returns>
-        protected static BusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
-        {
-            return GetLoadedBusinessObject(id.GetObjectId());
-        }
-
-        /// <summary>
-        /// Loads a business object with the specified ID
-        /// </summary>
-        /// <param name="id">The ID</param>
-        /// <returns>Returns a business object</returns>
-        protected static BusinessObject GetLoadedBusinessObject(string id)
-        {
-            return GetLoadedBusinessObject(id, true);
-        }
-
-        /// <summary>
-        /// Loads a business object with the specified ID from a collection
-        /// of loaded objects
-        /// </summary>
-        /// <param name="id">The ID</param>
-        /// <param name="refreshIfReqNotCurrent">Whether to check for
-        /// object concurrency at the time of loading</param>
-        /// <returns>Returns a business object</returns>
-        protected static BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
-        {
-            //If the object is already in loaded then refresh it and return it if required.
-            if (GetLoadedBusinessObjectBaseCol().Contains(id))
-            {
-                BusinessObject lBusinessObject;
-                WeakReference weakRef = (WeakReference) GetLoadedBusinessObjectBaseCol()[id];
-                //If the reference is valid return object else remove object from 
-                // Collection
-                if (weakRef.IsAlive && weakRef.Target != null)
-                {
-                    lBusinessObject = (BusinessObject) weakRef.Target;
-                    //Apply concurrency Control Strategy to the Business Object
-                    if (refreshIfReqNotCurrent)
-                    {
-                        lBusinessObject.CheckConcurrencyOnGettingObjectFromObjectManager();
-                    }
-                    return lBusinessObject;
-                }
-                else
-                {
-                    GetLoadedBusinessObjectBaseCol().Remove(id);
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Returns the business object from the loaded object collection
-        /// </summary>
-        /// <returns>Returns a business object</returns>
-        protected internal BusinessObject GetLoadedBusinessObject()
-        {
-            BusinessObject busObj = GetLoadedBusinessObject(ID);
-            if (busObj == null)
-            {
-                AddToLoadedBusinessObjectCol(this);
-                return this;
-            }
-            return busObj;
-        }
 
         /// <summary>
         /// Adds a weak reference so that the object will be cleaned up if no 
@@ -485,9 +267,10 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="myBusinessObject">The business object</param>
         /// TODO ERIC - "will be cleaned" or "will not"?
-        protected static void AddToLoadedBusinessObjectCol(BusinessObject myBusinessObject)
+        private static void AddToLoadedBusinessObjectCol(BusinessObject myBusinessObject)
         {
-            GetLoadedBusinessObjectBaseCol().Add(myBusinessObject.ID.GetObjectId(),
+
+            AllLoaded().Add(myBusinessObject.ID.GetObjectId(),
                                                  new WeakReference(myBusinessObject));
         }
 
@@ -495,53 +278,17 @@ namespace Habanero.Bo
         /// Returns a Hashtable containing the loaded business objects
         /// </summary>
         /// <returns></returns>
-        protected internal static Hashtable GetLoadedBusinessObjectBaseCol()
+        internal static Dictionary<string, WeakReference> AllLoaded()
         {
-            if (_businessObjectBaseCol == null)
-            {
-                _businessObjectBaseCol = new Hashtable();
-            }
-            return _businessObjectBaseCol;
+            return _allLoadedBusinessObjects;
         }
 
         /// <summary>
         /// Clears the loaded objects collection
         /// </summary>
-        public static void ClearLoadedBusinessObjectBaseCol()
+        internal static void ClearLoadedBusinessObjectBaseCol()
         {
-            _businessObjectBaseCol = null;
-            //TODO_Future: write to a log file since this 
-            //   should only be allowed to be called in test mode.
-        }
-
-        /// <summary>
-        /// Returns a business object collection with objects that meet the
-        /// given search criteria, ordered as specified
-        /// </summary>
-        /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <returns>Returns a business object collection</returns>
-        public virtual BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(string searchCriteria,
-                                                                         string orderByClause)
-        {
-            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(_classDef);
-            bOCol.Load(searchCriteria, orderByClause);
-            return bOCol;
-        }
-
-        /// /// <summary>
-        /// Returns a business object collection with objects that meet the
-        /// given search expression, ordered as specified
-        /// </summary>
-        /// <param name="searchExpression">The search expression</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <returns>Returns a business object collection</returns>
-        public virtual BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(IExpression searchExpression,
-                                                                         string orderByClause)
-        {
-            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(_classDef);
-            bOCol.Load(searchExpression, orderByClause);
-            return bOCol;
+            _allLoadedBusinessObjects.Clear();
         }
 
         #endregion //Business Object Loaders
@@ -560,9 +307,9 @@ namespace Habanero.Bo
         /// Returns the ID as a string
         /// </summary>
         /// <returns>Returns a string</returns>
-        public string StrID()
+        string ITransaction.StrID()
         {
-            return this.ID.ToString();
+            return ID.ToString();
         }
 
         /// <summary>
@@ -677,14 +424,14 @@ namespace Habanero.Bo
 
         /// <summary>
         /// Sets the object's state into editing mode.  The original state can
-        /// be restored with CancelEdit() and changes can be committed to the
-        /// database by calling ApplyEdit().
+        /// be restored with Restore() and changes can be committed to the
+        /// database by calling Save().
         /// </summary>
-        public void BeginEdit()
+        private void BeginEdit()
         {
             CheckNotEditing();
             CheckConcurrencyBeforeBeginEditing();
-            IsEditing = true;
+            State.IsEditing = true;
         }
 
         /// <summary>
@@ -695,9 +442,9 @@ namespace Habanero.Bo
         /// place</exception>
         /// TODO ERIC - this method can probably be combined
         /// back into BeginEdit()
-        protected void CheckNotEditing()
+        private void CheckNotEditing()
         {
-            if (IsEditing)
+            if (State.IsEditing)
             {
                 throw new EditingException(ClassName, WhereClause(null), this);
             }
@@ -718,7 +465,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns a string</returns>
-        public string GetPropertyValueString(string propName)
+        internal string GetPropertyValueString(string propName)
         {
             return GetBOProp(propName).PropertyValueString;
         }
@@ -729,7 +476,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the property value</returns>
-        public object GetPropertyValueToDisplay(string propName)
+        internal object GetPropertyValueToDisplay(string propName)
         {
             if (this.GetBOProp(propName).PropertyType == typeof (Guid) && this.GetPropertyValue(propName) != null &&
                 !this.ID.Contains(propName))
@@ -756,7 +503,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns a string</returns>
-        public string GetPropertyStringValueToDisplay(string propName)
+        internal string GetPropertyStringValueToDisplay(string propName)
         {
             object val = this.GetPropertyValueToDisplay(propName);
             if (val != null)
@@ -812,13 +559,41 @@ namespace Habanero.Bo
             // if the object is not fresh then throw appropriate exception.
             if (prop.PropertyValue != propValue)
             {
-                if (!IsEditing)
+                if (!State.IsEditing)
                 {
                     BeginEdit();
                 }
-                SetIsDirty(true);
+                State.IsDirty = true;
                 prop.PropertyValue = propValue;
                 FireUpdatedEvent();
+            }
+        }
+
+        ///// <summary>
+        ///// Set or get the value of the specified property of this Business Object
+        ///// </summary>
+        ///// <param name="propertyName">The name of the property to access</param>
+        ///// <returns>The value of the property</returns>
+        //public object this[string propertyName]
+        //{
+        //    get
+        //    {
+        //        return this.GetPropertyValue(propertyName);
+        //    }
+        //    set
+        //    {
+        //        this.SetPropertyValue(propertyName, value);
+        //    }
+        //}
+
+        /// <summary>
+        /// The BOProps in this business object
+        /// </summary>
+        public BOPropCol Props
+        {
+            get
+            {
+                return _boPropCol;
             }
         }
 
@@ -847,7 +622,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns a BOProp object</returns>
-        /// <exception cref="HabaneroArgumentException">Thrown if no
+        /// <exception cref="InvalidPropertyNameException">Thrown if no
         /// property exists by the name specified</exception>
         protected internal BOProp GetBOProp(string propName)
         {
@@ -869,7 +644,7 @@ namespace Habanero.Bo
         /// <param name="invalidReason">A string to modify with a reason
         /// for any invalid values</param>
         /// <returns>Returns true if all are valid</returns>
-        public bool IsValid(out string invalidReason)
+        protected internal bool IsValid(out string invalidReason)
         {
             return GetBOPropCol().IsValid(out invalidReason);
         }
@@ -879,10 +654,27 @@ namespace Habanero.Bo
         /// </summary>
         /// <returns>Returns true if all are valid</returns>
         /// TODO ERIC - one of these two methods could be removed
-        public bool IsValid()
+        protected internal bool IsValid()
         {
             string invalidReason;
             return GetBOPropCol().IsValid(out invalidReason);
+        }
+
+        /// <summary>
+        /// The BOState object for this BusinessObject, which records the state information of the object
+        /// </summary>
+        public BOState State
+        {
+            get
+            {
+                return _boState;
+            }
+        }
+
+
+        internal BOPrimaryKey PrimaryKey
+        {
+            set { _primaryKey = value; }
         }
 
         #endregion //Editing Property Values
@@ -902,7 +694,7 @@ namespace Habanero.Bo
         /// Returns the database connection
         /// </summary>
         /// <returns>Returns an IDatabaseConnection object</returns>
-        public IDatabaseConnection GetDatabaseConnection()
+        internal IDatabaseConnection GetDatabaseConnection()
         {
             return _connection;
         }
@@ -911,7 +703,7 @@ namespace Habanero.Bo
         /// Sets the database connection
         /// </summary>
         /// <param name="connection">The database connection to set to</param>
-        public void SetDatabaseConnection(IDatabaseConnection connection)
+        internal void SetDatabaseConnection(IDatabaseConnection connection)
         {
             this._connection = connection;
         }
@@ -925,174 +717,30 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns the database connection string, but with the password
-        /// removed
-        /// </summary>
-        protected virtual string ErrorSafeConnectString
-        {
-            get { return _connection.ErrorSafeConnectString(); }
-        }
-
-        /// <summary>
-        /// Reloads the business object from the database
-        /// </summary>
-        /// <returns>Returns true if the object was successfully loaded</returns>
-        protected virtual bool Load()
-        {
-            bool loaded;
-
-            loaded = Refresh();
-            AfterLoad();
-            return loaded;
-        }
-
-        /// <summary>
-        /// Loads the business object from the database as long as it meets
-        /// the search expression provided
-        /// </summary>
-        /// <param name="searchExpression">The search expression used to
-        /// locate the business object</param>
-        /// <returns>Returns true if the object was successfully loaded</returns>
-        protected virtual bool Load(IExpression searchExpression)
-        {
-            bool loaded;
-
-            loaded = Refresh(searchExpression);
-            AfterLoad();
-            return loaded;
-        }
-
-        /// <summary>
         /// Extra preparation or steps to take out after loading the business
         /// object
         /// </summary>
-        protected virtual void AfterLoad()
+        protected internal virtual void AfterLoad()
         {
         }
 
-        /// <summary>
-        /// Refreshes the business object by reloading from the database using
-        /// a search expression
-        /// </summary>
-        /// <param name="searchExpression">The search expression used to
-        /// locate the business object</param>
-        /// <returns>Returns true if refreshed successfully</returns>
-        /// <exception cref="BusinessObjectNotFoundException">Thrown if the
-        /// business object was not found in the database</exception>
-        /// TODO ERIC - return false anywhere for failed operation? methods
-        /// higher up the chain return the bool
-        public virtual bool Refresh(IExpression searchExpression)
-        {
-            using (IDataReader dr = LoadDataReader(this.GetDatabaseConnection(), searchExpression))
-            {
-                try
-                {
-                    if (dr.Read())
-                    {
-                        return LoadProperties(dr);
-                    }
-                    else
-                    {
-                        throw new BusinessObjectNotFoundException(
-                            "A serious error has occured please contact your system administrator" +
-                            "There are no records in the database for the Class: " + _classDef.ClassName +
-                            " identified by " + this.ID + " \n" + SelectSqlStatement(null) + " \n" + ErrorSafeConnectString);
-                    }
-                }
-                finally
-                {
-                    if (dr != null & !(dr.IsClosed))
-                    {
-                        dr.Close();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Refreshes the business object by reloading from the database
-        /// </summary>
-        /// <returns>Returns true if refreshed successfully</returns>
-        /// <exception cref="BusinessObjectNotFoundException">Thrown if the
-        /// business object was not found in the database</exception>
-        public virtual bool Refresh()
-        {
-            return Refresh(null);
-        }
-
-        /// <summary>
-        /// Loads an IDataReader object using the database connection provided
-        /// </summary>
-        /// <param name="connection">The database connection</param>
-        /// <param name="searchExpression">The search expression used to
-        /// locate the business object to be read</param>
-        /// <returns>Returns an IDataReader object</returns>
-        protected internal IDataReader LoadDataReader(IDatabaseConnection connection, IExpression searchExpression)
-        {
-            SqlStatement selectSql = new SqlStatement(connection.GetConnection());
-            if (searchExpression == null)
-            {
-                selectSql.Statement.Append(SelectSqlStatement(selectSql));
-                return DatabaseConnection.CurrentConnection.LoadDataReader(selectSql);
-            }
-            else
-            {
-                ParseParameterInfo(searchExpression);
-                selectSql.Statement.Append(SelectSqlWithNoSearchClauseIncludingWhere());
-                searchExpression.SqlExpressionString(selectSql, DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
-                                                     DatabaseConnection.CurrentConnection.RightFieldDelimiter);
-                return this.GetDatabaseConnection().LoadDataReader(selectSql);
-            }
-        }
-
-        /// <summary>
-        /// Loads the properties, using the data record provided
-        /// </summary>
-        /// <param name="dr">The IDataRecord object</param>
-        protected internal void LoadFromDataReader(IDataRecord dr)
-        {
-            LoadProperties(dr);
-        }
-
-        /// <summary>
-        /// Loads the business object properties
-        /// </summary>
-        /// <param name="dr">An IDataRecord object</param>
-        /// <returns>Returns true if loaded successfully</returns>
-        protected bool LoadProperties(IDataRecord dr)
-        {
-            //TODO_ERR: check that dr open valid etc.
-            int i = 0;
-            foreach (BOProp prop  in GetBOPropCol().SortedValues )
-            {
-                try
-                {
-                    prop.InitialiseProp(dr[i++]);
-                }
-                catch (IndexOutOfRangeException)
-                {
-                }
-            }
-            this.SetBOFlagValue(States.isNew, false);
-            return true;
-        }
 
         /// <summary>
         /// Commits to the database any changes made to the object
         /// </summary>
-        public void ApplyEdit()
+        public void Save()
         {
-            if (!BeforeApplyEdit())
+            if (!BeforeSave())
             {
                 return;
             }
 
             string reasonNotSaved = "";
-            if (!(IsDeleted && IsNew))
+            if (!(State.IsDeleted && State.IsNew))
             {
-                if (IsDirty || IsNew)
+                if (State.IsDirty || State.IsNew)
                 {
-                    //log.Debug("ApplyEdit - Object of type " + this.GetType().Name + " is dirty or new, saving.") ;
+                    //log.Debug("Save - Object of type " + this.GetType().Name + " is dirty or new, saving.") ;
                     if (IsValid(out reasonNotSaved))
                     {
                         CheckPersistRules();
@@ -1119,7 +767,7 @@ namespace Habanero.Bo
                                 "An Error occured while saving an object to the database: " + numRowsUpdated +
                                 " were updated whereas " + statementCollection.Count +
                                 " row(s) should have been updated ",
-                                GetPersistSql().ToString(), ErrorSafeConnectString);
+                                GetPersistSql().ToString(), this.GetDatabaseConnection().ErrorSafeConnectString());
                         }
                     }
                     else
@@ -1129,27 +777,32 @@ namespace Habanero.Bo
                 } //Isdirty || new
             }
 
-            UpdateAfterApplyEdit();
+            UpdateAfterSave();
 
-            AfterApplyEdit();
+            AfterSave();
         }
 
         /// <summary>
         /// Carries out updates to the object after changes have been
         /// committed to the database
         /// </summary>
-        protected void UpdateAfterApplyEdit()
+        protected void UpdateAfterSave()
         {
-            if (!IsDeleted)
+            if (!State.IsDeleted)
             {
-                if (GetLoadedBusinessObjectBaseCol().Contains(ID.GetObjectNewID()))
+                if (AllLoaded().ContainsKey(ID.GetObjectNewID()))
                 {
                     //System.Console.WriteLine("My line");//TODO ??
                 }
                 // set the flags back
-                SetIsNew(false);
-                SetIsDeleted(false);
-                if (!GetLoadedBusinessObjectBaseCol().Contains(ID.GetObjectId()))
+                State.IsEditing = false;
+                State.IsNew = false;
+                if (!(_boPropCol == null))
+                {
+                    _boPropCol.setIsObjectNew(false);
+                }
+                State.IsDeleted = false;
+                if (!AllLoaded().ContainsKey(ID.GetObjectId()))
                 {
                     AddToLoadedBusinessObjectCol(this);
                 }
@@ -1157,31 +810,32 @@ namespace Habanero.Bo
             else
             {
                 //Set the object state to an invalid state since the object has been deleted
-                SetIsNew(true);
-                SetIsDeleted(true);
+                State.IsEditing = false;
+                State.IsNew = true;
+                State.IsDeleted = true;
                 //Remove this object from the collection of objects since is is now invalid
-                GetLoadedBusinessObjectBaseCol().Remove(this.ID);
+                AllLoaded().Remove(this.ID.ToString());
                 FireDeleted();
             } //!IsDeleted
-            SetIsDirty(false);
-            SetIsEditing(false);
+            State.IsDirty = false;
+            State.IsEditing = false;
             ReleaseWriteLocks();
         }
 
         /// <summary>
-        /// Steps to carry out before the ApplyEdit() command is run
+        /// Steps to carry out before the Save() command is run
         /// </summary>
         /// <returns>Returns true</returns>
         /// TODO ERIC - what is meant to be returned? (in overridden methods)
-        protected internal virtual bool BeforeApplyEdit()
+        protected internal virtual bool BeforeSave()
         {
             return true;
         }
 
         /// <summary>
-        /// Steps to carry out after the ApplyEdit() command is run
+        /// Steps to carry out after the Save() command is run
         /// </summary>
-        protected virtual void AfterApplyEdit()
+        protected virtual void AfterSave()
         {
         }
 
@@ -1189,7 +843,7 @@ namespace Habanero.Bo
         /// Steps to carry out before the object values are updated to the
         /// database
         /// </summary>
-        /// TODO ERIC - this method surprises me - what about ApplyEdit()
+        /// TODO ERIC - this method surprises me - what about Save()
         /// and where is the UpdateToDB() method?
         protected virtual void BeforeUpdateToDB()
         {
@@ -1211,13 +865,13 @@ namespace Habanero.Bo
                     if (_primaryKey.GetOrigObjectID().Length > 0)
                     {
                         //If the ID was not a temp objectId then remove it from the collection
-                        if (!IsNew)
+                        if (!State.IsNew)
                         {
-                            GetLoadedBusinessObjectBaseCol().Remove(_primaryKey.GetOrigObjectID());
+                            AllLoaded().Remove(_primaryKey.GetOrigObjectID());
                         }
                         //If the object with the new ID does not exist in the collection then 
                         // add it.
-                        if (!GetLoadedBusinessObjectBaseCol().Contains(this.ID.GetObjectId()))
+                        if (!AllLoaded().ContainsKey(this.ID.GetObjectId()))
                         {
                             AddToLoadedBusinessObjectCol(this);
                         }
@@ -1230,12 +884,12 @@ namespace Habanero.Bo
         /// Cancel all edits made to the object since it was loaded from the 
         /// database or last saved to the database
         /// </summary>
-        public void CancelEdit()
+        public void Restore()
         {
             _boPropCol.RestorePropertyValues();
-            SetIsDeleted(false);
-            SetIsEditing(false);
-            SetIsDirty(false);
+            State.IsDeleted = false;
+            State.IsEditing = false;
+            State.IsDirty = false;
             ReleaseWriteLocks();
             FireUpdatedEvent();
         }
@@ -1246,12 +900,12 @@ namespace Habanero.Bo
         /// TODO ERIC - clarify these comments
         public void Delete()
         {
-            if (!IsEditing)
+            if (!State.IsEditing)
             {
                 BeginEdit();
             }
-            SetIsDirty(true);
-            SetIsDeleted(true);
+            State.IsDirty = true;
+            State.IsDeleted = true;
         }
 
         /// <summary>
@@ -1305,7 +959,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Checks concurrency before getting an object from the object manager
         /// </summary>
-        protected virtual void CheckConcurrencyOnGettingObjectFromObjectManager()
+        protected internal virtual void CheckConcurrencyOnGettingObjectFromObjectManager()
         {
             if (!(_concurrencyControl == null))
             {
@@ -1390,7 +1044,7 @@ namespace Habanero.Bo
                 return;
             }
 
-            if (!IsDeleted)
+            if (!State.IsDeleted)
             {
                 foreach (DictionaryEntry item in _keysCol)
                 {
@@ -1442,7 +1096,7 @@ namespace Habanero.Bo
         {
             //Only check if this does not have an object ID since an object id
             // is guaranteed to be unique
-            if (!_classDef.HasObjectID && !IsDeleted)
+            if (!_classDef.HasObjectID && !State.IsDeleted)
             {
                 //Only check if the primaryKey is 
                 if (_primaryKey.MustCheckKey())
@@ -1504,7 +1158,7 @@ namespace Habanero.Bo
         /// expression
         /// </summary>
         /// <param name="searchExpression">The search expression</param>
-        private void ParseParameterInfo(IExpression searchExpression)
+        internal void ParseParameterInfo(IExpression searchExpression)
         {
             BOProp prop;
             foreach (DictionaryEntry item in _boPropCol)
@@ -1585,7 +1239,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <returns>Returns a sql string</returns>
         /// TODO ERIC - if this uses above then it will have "where" already
-        private string SelectSqlWithNoSearchClauseIncludingWhere()
+        internal string SelectSqlWithNoSearchClauseIncludingWhere()
         {
             string basicSelect = SelectSqlWithNoSearchClause();
             if (basicSelect.IndexOf(" WHERE ") == -1)
@@ -1611,15 +1265,15 @@ namespace Habanero.Bo
 
         protected internal ISqlStatementCollection GetPersistSql()
         {
-            if (IsNew && !(IsDeleted))
+            if (State.IsNew && !(State.IsDeleted))
             {
                 return GetInsertSql();
             }
-            else if (!(IsDeleted))
+            else if (!(State.IsDeleted))
             {
                 return GetUpdateSql();
             }
-            else if (IsDeleted && !(IsNew))
+            else if (State.IsDeleted && !(State.IsNew))
             {
                 return GetDeleteSql();
             }
@@ -1700,162 +1354,6 @@ namespace Habanero.Bo
 
         #endregion //Sql Statements
 
-        #region Flags
-
-        /// <summary>
-        /// Indicates if the business object is new
-        /// </summary>
-        public bool IsNew
-        {
-            get { return GetBOFlagValue(States.isNew); }
-        }
-
-        /// <summary>
-        /// Indicates if the business object has been deleted
-        /// </summary>
-        public bool IsDeleted
-        {
-            get { return GetBOFlagValue(States.isDeleted); }
-        }
-
-        /// <summary>
-        /// Gets and sets the flag which indicates if the business object
-        /// is currently being edited
-        /// </summary>
-        protected bool IsEditing
-        {
-            get { return GetBOFlagValue(States.isEditing); }
-            set { SetBOFlagValue(States.isEditing, value); }
-        }
-
-        /// <summary>
-        /// Indicates whether the business object has been amended since it
-        /// was last persisted to the database
-        /// </summary>
-        public bool IsDirty
-        {
-            get { return GetBOFlagValue(States.isDirty); }
-        }
-
-        /// <summary>
-        /// Sets the "IsDirty" flag to the specified value, to indicate
-        /// if the business object has been edited since it was last persisted
-        /// to the database
-        /// </summary>
-        /// <param name="dirtyValue">True if dirty, false if not</param>
-        /// TODO ERIC - why not integrate this into the property above (and
-        /// others below)
-        protected void SetIsDirty(bool dirtyValue)
-        {
-            if (dirtyValue)
-            {
-                //log.Debug("obj " + this.GetType().Name + "  is being set to dirty") ;
-                //throw new Exception("obj set to dirty.");
-            }
-            SetBOFlagValue(States.isDirty, dirtyValue);
-        }
-
-        /// <summary>
-        /// Sets the "IsDeleted" flag to the specified value, to indicate
-        /// if the business object has been deleted
-        /// </summary>
-        /// <param name="deletedValue">True if deleted, false if not</param>
-        protected void SetIsDeleted(bool deletedValue)
-        {
-            SetBOFlagValue(States.isDeleted, deletedValue);
-        }
-
-        /// <summary>
-        /// Sets the "IsNew" flag to the specified value, to indicate if the
-        /// business object is new
-        /// </summary>
-        /// <param name="newValue">True if new, false if not</param>
-        protected void SetIsNew(bool newValue)
-        {
-            SetBOFlagValue(States.isNew, newValue);
-            if (!(_boPropCol == null))
-            {
-                _boPropCol.setIsObjectNew(newValue);
-            }
-        }
-
-        /// <summary>
-        /// Sets the "IsEditing" flag to the specified value, to indicate if the
-        /// business object is being edited
-        /// </summary>
-        /// <param name="editValue"></param>
-        protected void SetIsEditing(bool editValue)
-        {
-            SetBOFlagValue(States.isEditing, editValue);
-        }
-
-        /// <summary>
-        /// Indicates if the specified flag is currently set
-        /// </summary>
-        /// <param name="objFlag">The flag in question. See the States
-        /// enumeration for more detail.</param>
-        /// <returns>Returns true if set, false if not</returns>
-        protected bool GetBOFlagValue(States objFlag)
-        {
-            return Convert.ToBoolean(_flagState & objFlag);
-        }
-
-        /// <summary>
-        /// Checks that the specified flag value matches the value specified,
-        /// and throws an exception if it does not
-        /// </summary>
-        /// <param name="objFlag">The flag to check. See the States
-        /// enumeration for more detail.</param>
-        /// <param name="bValue">The value the flag should hold</param>
-        protected void CheckBOFlagValue(States objFlag, bool bValue)
-        {
-            if (GetBOFlagValue(objFlag) != bValue)
-            {
-                CheckBOFlagValue(objFlag, bValue, "The " + this.GetType().Name +
-                                              " object is " + (bValue ? "not " : "") + objFlag.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Checks that the specified flag value matches the value specified,
-        /// and throws an exception if it does not, using the exception message
-        /// provided
-        /// </summary>
-        /// <param name="objFlag">The flag to check. See the States
-        /// enumeration for more detail.</param>
-        /// <param name="bValue">The value the flag should hold</param>
-        /// <param name="errorMessage">The error message to display if the flag
-        /// value is not as expected</param>
-        protected void CheckBOFlagValue(States objFlag,
-                                        bool bValue,
-                                        string errorMessage)
-        {
-            if (GetBOFlagValue(objFlag) != bValue)
-            {
-                throw (new Exception(errorMessage));
-            }
-        }
-
-        /// <summary>
-        /// Sets the flag value as specified
-        /// </summary>
-        /// <param name="flag">The flag value to set. See the States
-        /// enumeration for more detail.</param>
-        /// <param name="bValue">The value to set to</param>
-        protected void SetBOFlagValue(States flag, bool bValue)
-        {
-            if (bValue)
-            {
-                _flagState = _flagState | flag;
-            }
-            else
-            {
-                _flagState = _flagState & ~flag;
-            }
-        }
-
-        #endregion //flags
-
         #region Implement ITransaction
 
         /// <summary>
@@ -1865,7 +1363,7 @@ namespace Habanero.Bo
         void ITransaction.TransactionCommited()
         {
             _boPropCol.BackupPropertyValues();
-            this.UpdateAfterApplyEdit();
+            this.UpdateAfterSave();
         }
 
         /// <summary>
@@ -1881,7 +1379,7 @@ namespace Habanero.Bo
         /// </summary>
         void ITransaction.TransactionCancelEdits()
         {
-            this.CancelEdit();
+            this.Restore();
         }
 
         /// <summary>
@@ -1915,7 +1413,7 @@ namespace Habanero.Bo
             string reasonNotSaved;
             if (IsValid(out reasonNotSaved))
             {
-                this.BeforeApplyEdit();
+                this.BeforeSave();
                 this.CheckPersistRules();
             }
             else
@@ -1930,7 +1428,7 @@ namespace Habanero.Bo
         /// </summary>
         void ITransaction.AfterCommit()
         {
-            this.AfterApplyEdit();
+            this.AfterSave();
         }
 
         #endregion //ITransaction

@@ -148,5 +148,30 @@ namespace Habanero.Bo
         {
             return new Guid(this.GetObjectId().Substring(3, 38));
         }
+
+        /// <summary>
+        /// Indicates whether the key provided is equal to this key
+        /// </summary>
+        /// <param name="obj">The key to compare with</param>
+        /// <returns>Returns true if equal</returns>
+        public override bool  Equals(Object obj)
+        {
+            if (obj is BOKey)
+            {
+                return (this == (BOPrimaryKey)obj);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns a string containing all the properties and their values
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        public override string ToString()
+        {
+            return this.KeyName + ":" + base.ToString();
+        }
+
     }
 }

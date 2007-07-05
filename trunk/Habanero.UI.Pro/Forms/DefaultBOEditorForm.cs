@@ -131,7 +131,7 @@ namespace Habanero.Ui.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void CancelButtonHandler(object sender, EventArgs e)
         {
-            _bo.CancelEdit();
+            _bo.Restore();
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
@@ -193,7 +193,7 @@ namespace Habanero.Ui.Forms
         /// <returns>Returns the transaction object</returns>
         protected virtual Transaction CreateSaveTransaction()
         {
-            Transaction saveTransaction = new Transaction(_bo.GetDatabaseConnection());
+            Transaction saveTransaction = new Transaction(BOLoader.Instance.GetDatabaseConnection(_bo));
             saveTransaction.AddTransactionObject(_bo);
             return saveTransaction;
         }

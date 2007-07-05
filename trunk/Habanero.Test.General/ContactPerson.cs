@@ -1,6 +1,7 @@
 // Static Model
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
 using Habanero.Bo;
@@ -30,7 +31,7 @@ namespace Habanero.Test.General
 
         #region Constructors
 
-        internal ContactPerson() : base()
+        public ContactPerson() : base()
         {
             SetPropertyValue("PK3Prop", this.ID.GetObjectId());
         }
@@ -67,9 +68,9 @@ namespace Habanero.Test.General
             return _classDef;
         }
 
-        protected override void ConstructClass(bool newObject)
+        protected override void ConstructFromClassDef(bool newObject)
         {
-            base.ConstructClass(newObject);
+            base.ConstructFromClassDef(newObject);
 
             mPropDateLastUpdated = _boPropCol["DateLastUpdated"];
             mPropUserLastUpdated = _boPropCol["UserLastUpdated"];
@@ -180,16 +181,6 @@ namespace Habanero.Test.General
             return lPropDefCol;
         }
 
-        /// <summary>
-        /// Creates a new contact person and adds this new contact person to the object manager collection
-        /// </summary>
-        /// <returns>newly created contact person ContactPerson</returns>
-        public static ContactPerson GetNewContactPerson()
-        {
-            ContactPerson myContactPerson = new ContactPerson();
-            AddToLoadedBusinessObjectCol(myContactPerson);
-            return myContactPerson;
-        }
 
         /// <summary>
         /// returns the ContactPerson identified by id.
@@ -203,11 +194,10 @@ namespace Habanero.Test.General
         ///  if the object has been deleted already</exception>
         public static ContactPerson GetContactPerson(BOPrimaryKey id)
         {
-            ContactPerson myContactPerson = (ContactPerson) ContactPerson.GetLoadedBusinessObject(id);
+            ContactPerson myContactPerson = (ContactPerson) BOLoader.GetLoadedBusinessObject(id);
             if (myContactPerson == null)
             {
                 myContactPerson = new ContactPerson(id);
-                AddToLoadedBusinessObjectCol(myContactPerson);
             }
             return myContactPerson;
         }
@@ -226,13 +216,13 @@ namespace Habanero.Test.General
         public static ContactPerson GetContactPerson(IExpression searchExpression)
         {
             ContactPerson myContactPerson =
-                (ContactPerson) ContactPerson.GetLoadedBusinessObject(searchExpression.ExpressionString());
+                (ContactPerson) BOLoader.GetLoadedBusinessObject(searchExpression.ExpressionString());
 
             if (myContactPerson == null)
             {
-                myContactPerson = ContactPerson.GetNewContactPerson();
-                myContactPerson = (ContactPerson) myContactPerson.GetBusinessObject(searchExpression);
-                //				AddToLoadedBusinessObjectCol(myContactPerson);
+                myContactPerson = new ContactPerson();
+                myContactPerson = (ContactPerson) BOLoader.Instance.GetBusinessObject(myContactPerson, searchExpression);
+                
             }
             return myContactPerson;
         }
@@ -287,11 +277,6 @@ namespace Habanero.Test.General
         internal static void ClearContactPersonCol()
         {
             BusinessObject.ClearLoadedBusinessObjectBaseCol();
-        }
-
-        internal static Hashtable GetContactPersonCol()
-        {
-            return BusinessObject.GetLoadedBusinessObjectBaseCol();
         }
 
         internal static void DeleteAllContactPeople()

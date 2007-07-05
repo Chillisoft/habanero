@@ -6,12 +6,6 @@ namespace Habanero.Test
 {
     public class Shape : BusinessObject
     {
-        public static Shape GetNewObject()
-        {
-            Shape obj = new Shape();
-            AddToLoadedBusinessObjectCol(obj);
-            return obj;
-        }
 
         public static ClassDef GetClassDef()
         {

@@ -20,20 +20,20 @@ namespace Habanero.Test.General
         public void TestGetCarsDriven()
         {
             Car.DeleteAllCars();
-            Car.ClearCarCol();
+            BusinessObject.ClearLoadedBusinessObjectBaseCol();
             ContactPersonCompositeKey.DeleteAllContactPeople();
             ContactPersonCompositeKey.ClearContactPersonCol();
 
-            Car car = Car.GetNewCar();
-            ContactPersonCompositeKey person = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            Car car = new Car();
+            ContactPersonCompositeKey person = new ContactPersonCompositeKey();
             person.SetPropertyValue("Surname", "Driver Surname");
             person.SetPropertyValue("PK1Prop1", "Driver1");
             person.SetPropertyValue("PK1Prop2", "Driver2");
-            person.ApplyEdit();
+            person.Save();
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("DriverFK1", person.GetPropertyValue("PK1Prop1"));
             car.SetPropertyValue("DriverFK2", person.GetPropertyValue("PK1Prop2"));
-            car.ApplyEdit();
+            car.Save();
             Assert.AreEqual(car.GetDriver().ID, person.ID);
             Assert.AreEqual(person.GetCarsDriven().Count, 1);
         }
@@ -47,17 +47,17 @@ namespace Habanero.Test.General
             Car.DeleteAllCars();
             ContactPersonCompositeKey.DeleteAllContactPeople();
 
-            Car car = Car.GetNewCar();
-            ContactPersonCompositeKey person = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            Car car = new Car();
+            ContactPersonCompositeKey person = new ContactPersonCompositeKey();
             person.SetPropertyValue("Surname", "Driver Surname");
             person.SetPropertyValue("PK1Prop1", "Driver11");
             person.SetPropertyValue("PK1Prop2", "Driver21");
-            person.ApplyEdit();
+            person.Save();
 
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("DriverFK1", person.GetPropertyValue("PK1Prop1"));
             car.SetPropertyValue("DriverFK2", person.GetPropertyValue("PK1Prop2"));
-            car.ApplyEdit();
+            car.Save();
 
             Assert.AreEqual(car.GetDriver().ID, person.ID);
 

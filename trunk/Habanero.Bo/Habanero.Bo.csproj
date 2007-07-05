@@ -95,6 +95,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BOLoader.cs" />
+    <Compile Include="BOState.cs" />
     <Compile Include="Comparer\DateTimeComparer.cs" />
     <Compile Include="Comparer\GuidComparer.cs" />
     <Compile Include="Comparer\IntComparer.cs" />

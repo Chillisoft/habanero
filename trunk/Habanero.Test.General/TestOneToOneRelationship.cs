@@ -25,14 +25,14 @@ namespace Habanero.Test.General
             Car.DeleteAllCars();
             Engine.DeleteAllEngines();
 
-            Car car = Car.GetNewCar();
+            Car car = new Car();
             car.SetPropertyValue("CarRegNo", "NP32459");
-            car.ApplyEdit();
-            Engine engine = Engine.GetNewEngine();
+            car.Save();
+            Engine engine = new Engine();
 
             engine.SetPropertyValue("EngineNo", "NO111");
             engine.SetPropertyValue("CarID", car.GetPropertyValue("CarID"));
-            engine.ApplyEdit();
+            engine.Save();
 
             Assert.AreEqual(car.GetEngine().ID, engine.ID);
             Assert.AreEqual(engine.GetCar().ID, car.ID);

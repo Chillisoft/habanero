@@ -144,7 +144,6 @@
     <Compile Include="ILookupListSource.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IBusinessObject.cs" />
     <Compile Include="INumberGenerator.cs">
       <SubType>Code</SubType>
     </Compile>

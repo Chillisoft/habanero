@@ -57,12 +57,12 @@ namespace Habanero.Test.Ui.BoControls
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
             bo1.SetPropertyValue("TestProp", "abc");
             bo1.SetPropertyValue("TestProp2", "def");
-            bo1.ApplyEdit();
+            bo1.Save();
 
             MyBo bo2 = (MyBo) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
             bo2.SetPropertyValue("TestProp", "ghi");
             bo2.SetPropertyValue("TestProp2", "jkl");
-            bo2.ApplyEdit();
+            bo2.Save();
 
             itsCollection = new BusinessObjectCollection<BusinessObject>(itsClassDef);
             itsCollection.Add(bo1);
@@ -112,7 +112,7 @@ namespace Habanero.Test.Ui.BoControls
 
             BusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
-            Assert.IsTrue(selectedBo.IsDirty);
+            Assert.IsTrue(selectedBo.State.IsDirty);
 
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
@@ -124,7 +124,7 @@ namespace Habanero.Test.Ui.BoControls
             itsControl.CollectionComboBox.SelectedIndex = 1;
             Assert.AreEqual(1, itsControl.CollectionComboBox.SelectedIndex);
 
-            Assert.IsFalse(selectedBo.IsDirty);
+            Assert.IsFalse(selectedBo.State.IsDirty);
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace Habanero.Test.Ui.BoControls
 
             BusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
-            Assert.IsTrue(selectedBo.IsDirty);
+            Assert.IsTrue(selectedBo.State.IsDirty);
 
             itsControl.CollectionComboBox.SelectedIndex = 2;
             Assert.AreEqual(1, itsControl.CollectionComboBox.SelectedIndex);
@@ -153,7 +153,7 @@ namespace Habanero.Test.Ui.BoControls
                                                              DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
             itsControl.Buttons.ClickButton("Save");
-            Assert.IsFalse(selectedBo.IsDirty);
+            Assert.IsFalse(selectedBo.State.IsDirty);
         }
 
         [Test]
@@ -174,14 +174,14 @@ namespace Habanero.Test.Ui.BoControls
             Assert.IsTrue(itsControl.BusinessObjectPanel.Enabled);
             Assert.IsFalse(itsControl.CollectionComboBox.Enabled);
             Assert.IsFalse(itsControl.Buttons["Add"].Enabled);
-            Assert.IsTrue(itsControl.SelectedBusinessObject.IsNew);
+            Assert.IsTrue(itsControl.SelectedBusinessObject.State.IsNew);
             itsControl.SelectedBusinessObject.SetPropertyValue("TestProp", "qwe");
             itsControl.SelectedBusinessObject.SetPropertyValue("TestProp2", "rty");
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
             itsControl.Buttons.ClickButton("Save");
-            Assert.IsFalse(itsControl.SelectedBusinessObject.IsNew);
+            Assert.IsFalse(itsControl.SelectedBusinessObject.State.IsNew);
             Assert.IsTrue(itsControl.Buttons["Add"].Enabled);
             Assert.IsTrue(itsControl.CollectionComboBox.Enabled);
             Assert.AreEqual(4, itsControl.CollectionComboBox.Items.Count);

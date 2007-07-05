@@ -73,7 +73,7 @@ namespace Habanero.Bo.ClassDefinition
 		public string KeyName
 		{
 			get { return _keyName; }
-			protected set
+			protected internal set
 			{
 				_keyName = value;
 				if (_keyName == null || _keyName.Length == 0)

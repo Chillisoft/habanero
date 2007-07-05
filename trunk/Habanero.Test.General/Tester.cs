@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
@@ -72,21 +73,21 @@ namespace Habanero.Test.General
             createUpdatedContactPersonTestPack();
 
             createDeleteContactPersonTestPack();
-            mContactPersonUpdateConcurrency = ContactPerson.GetNewContactPerson();
+            mContactPersonUpdateConcurrency = new ContactPerson();
             mContactPersonUpdateConcurrency.Surname = "Update Concurrency";
-            mContactPersonUpdateConcurrency.ApplyEdit();
+            mContactPersonUpdateConcurrency.Save();
 
-            mContactPersonDeleteConcurrency = ContactPerson.GetNewContactPerson();
+            mContactPersonDeleteConcurrency = new ContactPerson();
             mContactPersonDeleteConcurrency.Surname = "Delete Concurrency";
-            mContactPersonDeleteConcurrency.ApplyEdit();
+            mContactPersonDeleteConcurrency.Save();
 
-            mContactPBeginEditsConcurrency = ContactPerson.GetNewContactPerson();
+            mContactPBeginEditsConcurrency = new ContactPerson();
             mContactPBeginEditsConcurrency.Surname = "BeginEdits Concurrency";
-            mContactPBeginEditsConcurrency.ApplyEdit();
+            mContactPBeginEditsConcurrency.Save();
 
-            mCotanctPTestRefreshFromObjMan = ContactPerson.GetNewContactPerson();
+            mCotanctPTestRefreshFromObjMan = new ContactPerson();
             mCotanctPTestRefreshFromObjMan.Surname = "FirstSurname";
-            mCotanctPTestRefreshFromObjMan.ApplyEdit();
+            mCotanctPTestRefreshFromObjMan.Save();
 
             CreateDeletedPersonTestPack();
             CreateSaveContactPersonTestPack();
@@ -97,45 +98,45 @@ namespace Habanero.Test.General
 
         private void CreateSaveContactPersonTestPack()
         {
-            mContactPTestSave = ContactPerson.GetNewContactPerson();
+            mContactPTestSave = new ContactPerson();
             mContactPTestSave.DateOfBirth = new DateTime(1980, 01, 22);
             mContactPTestSave.FirstName = "Brad";
             mContactPTestSave.Surname = "Vincent1";
 
-            mContactPTestSave.ApplyEdit(); //save the object to the DB
+            mContactPTestSave.Save(); //save the object to the DB
         }
 
         private void CreateDeletedPersonTestPack()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact = new ContactPerson();
             myContact.DateOfBirth = new DateTime(1980, 01, 22);
             myContact.FirstName = "Brad";
             myContact.Surname = "Vincent2";
 
-            myContact.ApplyEdit(); //save the object to the DB
+            myContact.Save(); //save the object to the DB
             //waitForDB();
             myContact.Delete();
-            myContact.ApplyEdit();
+            myContact.Save();
 
             mContactPDeleted = myContact;
         }
 
         private void createUpdatedContactPersonTestPack()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact = new ContactPerson();
             myContact.DateOfBirth = new DateTime(1969, 01, 29);
             myContact.FirstName = "FirstName";
             myContact.Surname = "Surname";
-            myContact.ApplyEdit();
+            myContact.Save();
             updateContactPersonID = myContact.ID;
         }
 
         private void createDeleteContactPersonTestPack()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact = new ContactPerson();
             myContact.FirstName = "To Be deleted";
             myContact.Surname = "To Be deleted";
-            myContact.ApplyEdit();
+            myContact.Save();
             deleteContactPersonID = myContact.ID;
         }
 
@@ -148,7 +149,7 @@ namespace Habanero.Test.General
         {
             ContactPerson myContactPerson = ContactPerson.GetContactPerson(updateContactPersonID);
             myContactPerson.FirstName = "NewFirstName";
-            myContactPerson.ApplyEdit();
+            myContactPerson.Save();
 
             //waitForDB();
             ContactPerson.ClearContactPersonCol();
@@ -161,7 +162,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestCreateContactPerson()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact = new ContactPerson();
             Assert.IsNotNull(myContact);
             myContact.DateOfBirth = new DateTime(1980, 01, 22);
             myContact.FirstName = "Brad";
@@ -174,14 +175,14 @@ namespace Habanero.Test.General
         [Test]
         public void TestSaveContactPerson()
         {
-            Assert.IsFalse(mContactPTestSave.IsNew); // this object is saved and thus no longer
+            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is saved and thus no longer
             // new
 
             BOPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, mContactPTestSave.ID);
 
             ContactPerson mySecondContactPerson = ContactPerson.GetContactPerson(id);
-            Assert.IsFalse(mContactPTestSave.IsNew); // this object is recovered from the DB
+            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is recovered from the DB
             // and is thus not new.
             Assert.AreEqual(mContactPTestSave.ID.ToString(), mySecondContactPerson.ID.ToString());
             Assert.AreEqual(mContactPTestSave.FirstName, mySecondContactPerson.FirstName);
@@ -197,25 +198,25 @@ namespace Habanero.Test.General
         [Test]
         public void TestDeleteFlagsSetContactPerson()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
-            Assert.IsTrue(myContact.IsNew); // this object is new
+            ContactPerson myContact = new ContactPerson();
+            Assert.IsTrue(myContact.State.IsNew); // this object is new
             myContact.DateOfBirth = new DateTime(1980, 01, 22);
             myContact.FirstName = "Brad";
             myContact.Surname = "Vincent4";
 
-            myContact.ApplyEdit(); //save the object to the DB
-            Assert.IsFalse(myContact.IsNew); // this object is saved and thus no longer
+            myContact.Save(); //save the object to the DB
+            Assert.IsFalse(myContact.State.IsNew); // this object is saved and thus no longer
             // new
-            Assert.IsFalse(myContact.IsDeleted);
+            Assert.IsFalse(myContact.State.IsDeleted);
 
             BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
             //Put a loop in to take up some time due to MSAccess 
             myContact.Delete();
-            Assert.IsTrue(myContact.IsDeleted);
-            myContact.ApplyEdit();
-            Assert.IsTrue(myContact.IsDeleted);
-            Assert.IsTrue(myContact.IsNew);
+            Assert.IsTrue(myContact.State.IsDeleted);
+            myContact.Save();
+            Assert.IsTrue(myContact.State.IsDeleted);
+            Assert.IsTrue(myContact.State.IsNew);
         }
 
         [Test]
@@ -228,12 +229,12 @@ namespace Habanero.Test.General
         [Test]
         public void TestEditTwoInstancesContactPerson()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact = new ContactPerson();
             myContact.DateOfBirth = new DateTime(1980, 01, 22);
             myContact.FirstName = "Brad";
             myContact.Surname = "Vincent5";
 
-            myContact.ApplyEdit(); //save the object to the DB
+            myContact.Save(); //save the object to the DB
 
             BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
@@ -255,19 +256,19 @@ namespace Habanero.Test.General
         [Test]
         public void TestObjectBeingRemovedFromCollection()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact = new ContactPerson();
             BOPrimaryKey id = myContact.ID;
             myContact = null; // clear the person s.t. the GC can collect
             GC.Collect(); //Force the GC to collect
             //waitForDB(); // wait to give GC time to collect
-            Hashtable contactPersonCol = ContactPerson.GetContactPersonCol();
-            Assert.IsFalse(contactPersonCol.Contains(id), "Object has not been removed from the DB");
+            Dictionary<string, WeakReference> boCol = BusinessObject.AllLoaded();
+            Assert.IsFalse(boCol.ContainsKey(id.ToString()), "Object has not been removed from the dictionary");
         }
 
 //		[Test]
 //		[ExpectedException(typeof (InvalidPropertyValueException))]
 //		public void TestObjectSurnameTooLong() {
-//			ContactPerson myContact = ContactPerson.GetNewContactPerson();
+//			ContactPerson myContact = new ContactPerson();
 //			myContact.Surname = "MyPropertyIsTooLongByFarThisWill Cause and Error in Bus object";
 //		}
 
@@ -275,39 +276,39 @@ namespace Habanero.Test.General
         [ExpectedException(typeof (BusObjectInAnInvalidStateException))]
         public void TestObjectSurnameTooLong()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact = new ContactPerson();
             myContact.Surname = "MyPropertyIsTooLongByFarThisWill Cause and Error in Bus object";
-            myContact.ApplyEdit();
+            myContact.Save();
         }
 
         [Test]
         [ExpectedException(typeof (BusObjectInAnInvalidStateException))]
         public void TestObjectCompulsorySurnameNotSet()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
-            myContact.ApplyEdit();
+            ContactPerson myContact = new ContactPerson();
+            myContact.Save();
         }
 
         [Test]
         public void TestCancelEdits()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact = new ContactPerson();
 
             Assert.IsFalse(myContact.IsValid());
             myContact.Surname = "My Surname";
             Assert.IsTrue(myContact.IsValid());
             Assert.AreEqual("My Surname", myContact.Surname);
-            myContact.CancelEdit();
+            myContact.Restore();
             Assert.IsFalse(myContact.IsValid());
             Assert.IsTrue(myContact.Surname.Length == 0);
         }
 
         public void TestStateAfterApplyEdit()
         {
-            ContactPerson myContact = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact = new ContactPerson();
             myContact.Surname = "Test Surname";
-            myContact.ApplyEdit();
-            Assert.IsFalse(myContact.IsNew, "BO is still IsNew after being saved.");
+            myContact.Save();
+            Assert.IsFalse(myContact.State.IsNew, "BO is still IsNew after being saved.");
         }
 
         //TODO-Peter - check with Brett exactly what this should be doing - it's failing now
@@ -323,9 +324,9 @@ namespace Habanero.Test.General
         //			myContact.Surname = "New Surname"; //edit first object
         //			myContact2.Surname = "New Surname2"; //edit second object
         //			Assert.IsFalse(object.ReferenceEquals(myContact, myContact2));
-        //			myContact.ApplyEdit(); //save first
+        //			myContact.Save(); //save first
         //			waitForDB();
-        //			myContact2.ApplyEdit(); //save second
+        //			myContact2.Save(); //save second
         //		}
         //
         [Test]
@@ -333,10 +334,10 @@ namespace Habanero.Test.General
             public void TestMultipleUpdates()
         {
             mContactPersonUpdateConcurrency.Surname = "New Surname";
-            mContactPersonUpdateConcurrency.ApplyEdit();
+            mContactPersonUpdateConcurrency.Save();
             //waitForDB();
             mContactPersonUpdateConcurrency.Surname = "New Surname 2";
-            mContactPersonUpdateConcurrency.ApplyEdit();
+            mContactPersonUpdateConcurrency.Save();
             //waitForDB();
             mContactPersonUpdateConcurrency.Surname = "New Surname 3";
         }
@@ -349,9 +350,9 @@ namespace Habanero.Test.General
             ContactPerson myContact2 = ContactPerson.GetContactPerson(mContactPersonDeleteConcurrency.ID);
             mContactPersonDeleteConcurrency.Delete();
             myContact2.Surname = "New Surname 2";
-            mContactPersonDeleteConcurrency.ApplyEdit();
+            mContactPersonDeleteConcurrency.Save();
             //waitForDB();
-            myContact2.ApplyEdit();
+            myContact2.Save();
         }
 
         [Test]
@@ -367,7 +368,7 @@ namespace Habanero.Test.General
             Assert.IsTrue(myContact2 != mContactPBeginEditsConcurrency, "two objects are the same");
             mContactPBeginEditsConcurrency.Surname = "First Update to Surname";
 
-            mContactPBeginEditsConcurrency.ApplyEdit(); //save first object
+            mContactPBeginEditsConcurrency.Save(); //save first object
             //Try edit second instance (should raise error)
             //waitForDB();
             myContact2.Surname = "Second Update To Surname";
@@ -385,7 +386,7 @@ namespace Habanero.Test.General
 
             //Edit first object and save
             mCotanctPTestRefreshFromObjMan.Surname = "SecondSurname";
-            mCotanctPTestRefreshFromObjMan.ApplyEdit(); //
+            mCotanctPTestRefreshFromObjMan.Save(); //
             //get the third object from the object manager
             //waitForDB();
             //			System.Threading.Thread.Sleep(4000);
@@ -408,22 +409,22 @@ namespace Habanero.Test.General
         public void TestForDuplicateNewObjects()
         {
             //create the first object
-            ContactPerson myContact_1 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_1 = new ContactPerson();
 
             //Edit first object and save
             myContact_1.Surname = "My Surname";
             myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1");
             myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2");
-            myContact_1.ApplyEdit(); //
+            myContact_1.Save(); //
             //get the second new object from the object manager
             //waitForDB();
-            ContactPerson myContact_2 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_2 = new ContactPerson();
             //set this new object to have the same 
             // data as the already saved object
             myContact_2.Surname = "My Surname";
             myContact_2.SetPropertyValue("PK2Prop1", myContact_1.GetPropertyValue("PK2Prop1"));
             myContact_2.SetPropertyValue("PK2Prop2", myContact_1.GetPropertyValue("PK2Prop2"));
-            myContact_2.ApplyEdit(); //Should raise an errors
+            myContact_2.Save(); //Should raise an errors
         }
 
         /// <summary>
@@ -435,25 +436,25 @@ namespace Habanero.Test.General
         public void TestForDuplicateExistingObjects()
         {
             //create the first object
-            ContactPerson myContact_1 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_1 = new ContactPerson();
 
             //Edit first object and save
             myContact_1.Surname = "My Surname";
             myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1");
             myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2");
-            myContact_1.ApplyEdit(); //
+            myContact_1.Save(); //
             //get the second new object from the object manager
             //waitForDB();
-            ContactPerson myContact_2 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_2 = new ContactPerson();
             myContact_2.SetPropertyValue("PK2Prop1", "PK2Prop1Value1  Two");
             myContact_2.Surname = "My Surname two";
-            myContact_2.ApplyEdit();
+            myContact_2.Save();
 
             //set this new object to have the same 
             // data as the already saved object
             myContact_2.SetPropertyValue("PK2Prop1", myContact_1.GetPropertyValue("PK2Prop1"));
             myContact_2.SetPropertyValue("PK2Prop2", myContact_1.GetPropertyValue("PK2Prop2"));
-            myContact_2.ApplyEdit(); //Should raise an errors
+            myContact_2.Save(); //Should raise an errors
         }
 
         /// <summary>
@@ -465,20 +466,20 @@ namespace Habanero.Test.General
         public void TestForDuplicateNewObjectsSinglePropKey()
         {
             //create the first object
-            ContactPerson myContact_1 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_1 = new ContactPerson();
 
             //Edit first object and save
             myContact_1.Surname = "My Surname SinglePropKey 1";
             myContact_1.SetPropertyValue("PK3Prop", "PK3PropValue1");
-            myContact_1.ApplyEdit(); //
+            myContact_1.Save(); //
             //get the second new object from the object manager
             //waitForDB();
-            ContactPerson myContact_2 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_2 = new ContactPerson();
             //set this new object to have the same 
             // data as the already saved object
             myContact_2.Surname = "My Surname SinglePropKey 22";
             myContact_2.SetPropertyValue("PK3Prop", myContact_1.GetPropertyValue("PK3Prop"));
-            myContact_2.ApplyEdit(); //Should raise an errors
+            myContact_2.Save(); //Should raise an errors
         }
 
         [Test]
@@ -486,21 +487,21 @@ namespace Habanero.Test.General
         public void TestForDuplicateNewObjectsSinglePropKeyNull()
         {
             //create the first object
-            ContactPerson myContact_1 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_1 = new ContactPerson();
 
             //Edit first object and save
             myContact_1.Surname = "My Surname SinglePropKeyNull";
             myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
-            myContact_1.ApplyEdit(); //
+            myContact_1.Save(); //
             //get the second new object from the object manager
             //waitForDB();
-            ContactPerson myContact_2 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_2 = new ContactPerson();
             //set this new object to have the same 
             // data as the already saved object
             myContact_2.Surname = "My Surname SinglePropKeyNull";
             myContact_2.SetPropertyValue("PK3Prop", myContact_1.GetPropertyValue("PK3Prop"));
             // set the previous value to null
-            myContact_2.ApplyEdit(); //Should raise an errors
+            myContact_2.Save(); //Should raise an errors
         }
 
         [Test]
@@ -508,11 +509,11 @@ namespace Habanero.Test.General
         {
             TransactionLog.DeleteAllTransactionLogs();
 
-            ContactPerson myContact_1 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_1 = new ContactPerson();
             //Edit first object and save
             myContact_1.Surname = "My Surname 1";
             //myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
-            myContact_1.ApplyEdit(); //
+            myContact_1.Save(); //
 
             myContact_1.Surname = "My Surname New";
 
@@ -521,10 +522,10 @@ namespace Habanero.Test.General
                 "><Properties><Surname><PreviousValue>My Surname 1</PreviousValue><NewValue>My Surname New</NewValue></Surname><ContactPerson>",
                 myContact_1.DirtyXML);
 
-            myContact_1.ApplyEdit();
+            myContact_1.Save();
 
             myContact_1.Delete();
-            myContact_1.ApplyEdit();
+            myContact_1.Save();
 
             BusinessObjectCollection<BusinessObject> myCol = TransactionLog.LoadBusinessObjCol("", "TransactionSequenceNo");
             Assert.AreEqual(myCol.Count, 3);
@@ -572,14 +573,14 @@ namespace Habanero.Test.General
         [Test]
         public void TestTransactionSuccess()
         {
-            ContactPerson myContact_1 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_1 = new ContactPerson();
             //Edit first object and save
             myContact_1.Surname = "My Surname 1";
             //myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
             Transaction transact = new Transaction(DatabaseConnection.CurrentConnection);
             transact.AddTransactionObject(myContact_1);
 
-            ContactPerson myContact_2 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_2 = new ContactPerson();
             myContact_2.Surname = "My Surname 2";
 
             Assert.IsTrue(myContact_2.IsValid());
@@ -588,10 +589,10 @@ namespace Habanero.Test.General
 
             transact.CommitTransaction();
 
-            Assert.IsFalse(myContact_2.IsDirty);
-            Assert.IsFalse(myContact_1.IsNew);
-            Assert.IsFalse(myContact_1.IsDirty);
-            Assert.IsFalse(myContact_2.IsNew);
+            Assert.IsFalse(myContact_2.State.IsDirty);
+            Assert.IsFalse(myContact_1.State.IsNew);
+            Assert.IsFalse(myContact_1.State.IsDirty);
+            Assert.IsFalse(myContact_2.State.IsNew);
             Assert.IsTrue(myContact_2.IsValid());
 
             //Ensure object loaded from DB.
@@ -611,14 +612,14 @@ namespace Habanero.Test.General
         [Test]
         public void TestTransactionFail()
         {
-            ContactPerson myContact_1 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_1 = new ContactPerson();
             //Edit first object and save
             myContact_1.Surname = "My Surname 1";
             //myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
             Transaction transact = new Transaction(DatabaseConnection.CurrentConnection);
             transact.AddTransactionObject(myContact_1);
 
-            ContactPerson myContact_2 = ContactPerson.GetNewContactPerson();
+            ContactPerson myContact_2 = new ContactPerson();
             myContact_2.Surname = "My Surname 1"; //Should result in a duplicate error when try to persist
             //will result in the commit failing
             Assert.IsTrue(myContact_2.IsValid());
@@ -635,10 +636,10 @@ namespace Habanero.Test.General
 
             Assert.IsTrue(errorRaised, "Error should have been raised");
 
-            Assert.IsTrue(myContact_2.IsDirty);
-            Assert.IsTrue(myContact_1.IsNew);
-            Assert.IsTrue(myContact_1.IsDirty);
-            Assert.IsTrue(myContact_2.IsNew);
+            Assert.IsTrue(myContact_2.State.IsDirty);
+            Assert.IsTrue(myContact_1.State.IsNew);
+            Assert.IsTrue(myContact_1.State.IsDirty);
+            Assert.IsTrue(myContact_2.State.IsNew);
             Assert.IsTrue(myContact_2.IsValid());
             Assert.IsTrue(myContact_2.IsValid());
 
@@ -685,15 +686,17 @@ namespace Habanero.Test.General
     {
         #region Constructors
 
-        internal TransactionLog() : base()
+        public TransactionLog() : base()
         {
         }
 
-        internal TransactionLog(BOPrimaryKey id) : base(id)
+        internal TransactionLog(BOPrimaryKey id)
+            : base(id)
         {
         }
 
-        public TransactionLog(ClassDef def) : base(def)
+        public TransactionLog(ClassDef def)
+            : base(def)
         {
         }
 
@@ -715,9 +718,9 @@ namespace Habanero.Test.General
             return _classDef;
         }
 
-        protected override void ConstructClass(bool newObject)
+        protected override void ConstructFromClassDef(bool newObject)
         {
-            base.ConstructClass(newObject);
+            base.ConstructFromClassDef(newObject);
             SetTransactionLog(new TransactionLogTable("TransactionLog",
                                                       "DateTimeUpdated",
                                                       "WindowsUser",
@@ -772,13 +775,6 @@ namespace Habanero.Test.General
             return lPropDefCol;
         }
 
-        public static TransactionLog GetNewTransactionLog()
-        {
-            TransactionLog myTransactionLog = new TransactionLog();
-            AddToLoadedBusinessObjectCol(myTransactionLog);
-            return myTransactionLog;
-        }
-
         /// <summary>
         /// returns the TransactionLog identified by id.
         /// </summary>
@@ -791,11 +787,10 @@ namespace Habanero.Test.General
         ///  if the object has been deleted already</exception>
         public static TransactionLog GetTransactionLog(BOPrimaryKey id)
         {
-            TransactionLog myTransactionLog = (TransactionLog) TransactionLog.GetLoadedBusinessObject(id);
+            TransactionLog myTransactionLog = (TransactionLog)BOLoader.GetLoadedBusinessObject(id);
             if (myTransactionLog == null)
             {
                 myTransactionLog = new TransactionLog(id);
-                AddToLoadedBusinessObjectCol(myTransactionLog);
             }
             return myTransactionLog;
         }
@@ -807,11 +802,6 @@ namespace Habanero.Test.General
         internal static void ClearTransactionLogCol()
         {
             BusinessObject.ClearLoadedBusinessObjectBaseCol();
-        }
-
-        internal static Hashtable GetTransactionLogCol()
-        {
-            return BusinessObject.GetLoadedBusinessObjectBaseCol();
         }
 
         internal static void DeleteAllTransactionLogs()
@@ -838,7 +828,7 @@ namespace Habanero.Test.General
         protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
                                                                                   string orderByClause)
         {
-            TransactionLog lTransactionLog = GetNewTransactionLog();
+            TransactionLog lTransactionLog = new TransactionLog();
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
             statement.Statement.Append(lTransactionLog.SelectSqlWithNoSearchClause());
             if (searchCriteria.Length > 0)
@@ -855,9 +845,9 @@ namespace Habanero.Test.General
                 {
                     while (dr.Read())
                     {
-                        lTransactionLog.LoadProperties(dr);
+                        BOLoader.Instance.LoadProperties(lTransactionLog, dr);
                         TransactionLog lTempPerson2;
-                        lTempPerson2 = (TransactionLog) GetLoadedBusinessObject(lTransactionLog.GetObjectNewID());
+                        lTempPerson2 = (TransactionLog)BOLoader.GetLoadedBusinessObject(lTransactionLog.GetObjectNewID());
                         if (lTempPerson2 == null)
                         {
                             bOCol.Add(lTransactionLog);

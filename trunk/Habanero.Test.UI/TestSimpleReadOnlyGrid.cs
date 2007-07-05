@@ -30,10 +30,10 @@ namespace Habanero.Test.Ui.Application
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBo.LoadClassDefWithNoLookup();
             BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-			bo1 = MyBo.Create(); //classDef.CreateNewBusinessObject();
+            bo1 = new MyBo();
             bo1.SetPropertyValue("TestProp", "Value1");
             bo1.SetPropertyValue("TestProp2", "Value2");
-            bo2 = MyBo.Create(); //classDef.CreateNewBusinessObject();
+            bo2 = new MyBo();
             bo2.SetPropertyValue("TestProp", "2Value1");
             bo2.SetPropertyValue("TestProp2", "2Value2");
             col.Add(bo1);
@@ -64,8 +64,8 @@ namespace Habanero.Test.Ui.Application
         {
             grid.SelectedBusinessObject = bo2;
             BusinessObject selectedBo = grid.SelectedBusinessObject;
-            Assert.AreEqual("2Value1", selectedBo.GetPropertyValueString("TestProp"));
-            Assert.AreEqual("2Value2", selectedBo.GetPropertyValueString("TestProp2"));
+            Assert.AreEqual("2Value1", selectedBo.Props["TestProp"].PropertyValueString);
+            Assert.AreEqual("2Value2", selectedBo.Props["TestProp2"].PropertyValueString);
             Assert.AreSame(bo2, selectedBo);
         }
 

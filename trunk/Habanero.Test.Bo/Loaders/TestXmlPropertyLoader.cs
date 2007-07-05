@@ -88,9 +88,13 @@ namespace Habanero.Test.Bo.Loaders
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestPropertyWithInvalidPropRule()
         {
+            // this should not work as min is an invalid setting for a string rule.
             PropDef def =
                 itsLoader.LoadProperty(
                     @"<property  name=""TestProp""><rule name=""StringRule""><add key=""min"" value=""8""/></rule></property>");
+
+            Assert.IsNotNull(def.PropRule);
+           
         }
 
         [Test]

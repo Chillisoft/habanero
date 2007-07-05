@@ -58,53 +58,53 @@ namespace Habanero.Test.General
 
         private void CreateSaveContactPersonTestPack()
         {
-            mContactPTestSave = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            mContactPTestSave = new ContactPersonCompositeKey();
             mContactPTestSave.SetPropertyValue("DateOfBirth", new DateTime(1980, 01, 22));
             mContactPTestSave.SetPropertyValue("FirstName", "Brad");
             mContactPTestSave.SetPropertyValue("Surname", "Vincent");
             mContactPTestSave.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             mContactPTestSave.SetPropertyValue("PK1Prop2", Guid.NewGuid());
-            mContactPTestSave.ApplyEdit(); //save the object to the DB
+            mContactPTestSave.Save(); //save the object to the DB
         }
 
         private void CreateDeletedPersonTestPack()
         {
-            ContactPersonCompositeKey myContact = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
             myContact.SetPropertyValue("DateOfBirth", new DateTime(1980, 01, 22));
             myContact.SetPropertyValue("FirstName", "Brad");
             myContact.SetPropertyValue("Surname", "Vincent");
             myContact.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
-            myContact.ApplyEdit(); //save the object to the DB
+            myContact.Save(); //save the object to the DB
             myContact.Delete();
-            myContact.ApplyEdit();
+            myContact.Save();
 
             mContactPDeleted = myContact;
         }
 
         private void CreateUpdatedContactPersonTestPack()
         {
-            ContactPersonCompositeKey myContact = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
             myContact.SetPropertyValue("DateOfBirth", new DateTime(1969, 01, 29));
             myContact.SetPropertyValue("FirstName", "FirstName");
             myContact.SetPropertyValue("Surname", "Surname");
             myContact.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
-            myContact.ApplyEdit();
+            myContact.Save();
             updateContactPersonID = myContact.ID;
         }
 
         [Test]
         public void TestSaveContactPerson()
         {
-            Assert.IsFalse(mContactPTestSave.IsNew); // this object is saved and thus no longer
+            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is saved and thus no longer
             // new
 
             BOPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, mContactPTestSave.ID);
 
             ContactPersonCompositeKey mySecondContactPerson = ContactPersonCompositeKey.GetContactPersonCompositeKey(id);
-            Assert.IsFalse(mContactPTestSave.IsNew); // this object is recovered from the DB
+            Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is recovered from the DB
             // and is thus not new.
             Assert.AreEqual(mContactPTestSave.ID.ToString(), mySecondContactPerson.ID.ToString());
             Assert.AreEqual(mContactPTestSave.GetPropertyValue("FirstName"),
@@ -126,7 +126,7 @@ namespace Habanero.Test.General
             ContactPersonCompositeKey myContactPerson =
                 ContactPersonCompositeKey.GetContactPersonCompositeKey(updateContactPersonID);
             myContactPerson.SetPropertyValue("FirstName", "NewFirstName");
-            myContactPerson.ApplyEdit();
+            myContactPerson.Save();
 
             ContactPersonCompositeKey.ClearContactPersonCol();
             //Reload the person and make sure that the changes have been made.
@@ -139,27 +139,27 @@ namespace Habanero.Test.General
         [Test]
         public void TestDeleteFlagsSetContactPerson()
         {
-            ContactPersonCompositeKey myContact = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
-            Assert.IsTrue(myContact.IsNew); // this object is new
+            ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
+            Assert.IsTrue(myContact.State.IsNew); // this object is new
             myContact.SetPropertyValue("DateOfBirth", new DateTime(1980, 01, 22));
             myContact.SetPropertyValue("FirstName", "Brad");
             myContact.SetPropertyValue("Surname", "Vincent");
             myContact.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
 
-            myContact.ApplyEdit(); //save the object to the DB
-            Assert.IsFalse(myContact.IsNew); // this object is saved and thus no longer
+            myContact.Save(); //save the object to the DB
+            Assert.IsFalse(myContact.State.IsNew); // this object is saved and thus no longer
             // new
-            Assert.IsFalse(myContact.IsDeleted);
+            Assert.IsFalse(myContact.State.IsDeleted);
 
             BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
             //Put a loop in to take up some time due to MSAccess 
             myContact.Delete();
-            Assert.IsTrue(myContact.IsDeleted);
-            myContact.ApplyEdit();
-            Assert.IsTrue(myContact.IsDeleted);
-            Assert.IsTrue(myContact.IsNew);
+            Assert.IsTrue(myContact.State.IsDeleted);
+            myContact.Save();
+            Assert.IsTrue(myContact.State.IsDeleted);
+            Assert.IsTrue(myContact.State.IsNew);
         }
 
         [Test]
@@ -173,14 +173,14 @@ namespace Habanero.Test.General
         [Test]
         public void RecoverNewObjectFromObjectManagerBeforeAndAfterPersist()
         {
-            ContactPersonCompositeKey myContact = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
             myContact.SetPropertyValue("DateOfBirth", new DateTime(1980, 01, 22));
             myContact.SetPropertyValue("FirstName", "Brad");
             myContact.SetPropertyValue("Surname", "Vincent");
             myContact.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
             BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
-            myContact.ApplyEdit(); //save the object to the DB
+            myContact.Save(); //save the object to the DB
 
             //			BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
@@ -204,14 +204,14 @@ namespace Habanero.Test.General
         [Test]
         public void ModifyObjectsPrimaryKey()
         {
-            ContactPersonCompositeKey myContact = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
             myContact.SetPropertyValue("DateOfBirth", new DateTime(1980, 01, 22));
             myContact.SetPropertyValue("FirstName", "Brad");
             myContact.SetPropertyValue("Surname", "Vincent");
             myContact.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
             BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
-            myContact.ApplyEdit(); //save the object to the DB
+            myContact.Save(); //save the object to the DB
 
             //			BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
@@ -226,7 +226,7 @@ namespace Habanero.Test.General
                             mySecondContactPerson.GetPropertyValue("DateOfBirth"));
 
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
-            myContact.ApplyEdit(); //save the object to the DB
+            myContact.Save(); //save the object to the DB
 
             ContactPersonCompositeKey myContactPerson3 = ContactPersonCompositeKey.GetContactPersonCompositeKey(id);
             Assert.IsTrue(Object.ReferenceEquals(myContact, myContactPerson3));
@@ -245,56 +245,56 @@ namespace Habanero.Test.General
         [ExpectedException(typeof (BusObjDuplicateConcurrencyControlException))]
         public void SaveNewObjectWithDuplicatePrimaryKey()
         {
-            ContactPersonCompositeKey myContact = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
             myContact.SetPropertyValue("DateOfBirth", new DateTime(1980, 01, 22));
             myContact.SetPropertyValue("FirstName", "Brad");
             myContact.SetPropertyValue("Surname", "Vincent");
             myContact.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
             BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
-            myContact.ApplyEdit(); //save the object to the DB
+            myContact.Save(); //save the object to the DB
 
             //			BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
 
             ContactPersonCompositeKey mySecondContactPerson =
-                ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+                new ContactPersonCompositeKey();
             mySecondContactPerson.SetPropertyValue("DateOfBirth", new DateTime(1980, 01, 22));
             mySecondContactPerson.SetPropertyValue("FirstName", "Brad");
             mySecondContactPerson.SetPropertyValue("Surname", "Vincent");
             mySecondContactPerson.SetPropertyValue("PK1Prop1", myContact.GetPropertyValue("PK1Prop1"));
             mySecondContactPerson.SetPropertyValue("PK1Prop2", myContact.GetPropertyValue("PK1Prop2"));
-            mySecondContactPerson.ApplyEdit(); //save the object to the DB
+            mySecondContactPerson.Save(); //save the object to the DB
         }
 
         [Test]
         public void CreateTwoConsecutiveObjects()
         {
-            ContactPersonCompositeKey myContact = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
             ContactPersonCompositeKey mySecondContactPerson =
-                ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+                new ContactPersonCompositeKey();
         }
 
         [Test]
         public void ChangeObjectPrimaryKeyAndThenCreateNewObjectWithPreviousPrimaryKey()
         {
-            ContactPersonCompositeKey myContact = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            ContactPersonCompositeKey myContact = new ContactPersonCompositeKey();
             myContact.SetPropertyValue("Surname", "Vincent");
             Guid prop_1_ID = Guid.NewGuid();
             Guid prop_2_ID = Guid.NewGuid();
             myContact.SetPropertyValue("PK1Prop1", prop_1_ID.ToString());
             myContact.SetPropertyValue("PK1Prop2", prop_2_ID.ToString());
-            myContact.ApplyEdit();
+            myContact.Save();
             //modify the primary key
             myContact.SetPropertyValue("PK1Prop1", prop_1_ID.ToString() + "1");
             myContact.SetPropertyValue("PK1Prop1", prop_1_ID.ToString() + "1");
-            myContact.ApplyEdit();
+            myContact.Save();
 
-            ContactPersonCompositeKey myContactTwo = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            ContactPersonCompositeKey myContactTwo = new ContactPersonCompositeKey();
             myContactTwo.SetPropertyValue("Surname", "Vincent 2");
             myContactTwo.SetPropertyValue("PK1Prop1", prop_1_ID.ToString());
             myContactTwo.SetPropertyValue("PK1Prop2", prop_2_ID.ToString());
-            myContactTwo.ApplyEdit();
+            myContactTwo.Save();
         }
     }
 }

@@ -107,8 +107,8 @@ namespace Habanero.Bo
         public void Add(T bo)
         {
             base.Add(bo);
-            _lookupTable.Add(bo.StrID(), bo);
-            bo.Deleted += new BusinessObjectUpdatedHandler(BusinessObjectDeletedHandler);
+            _lookupTable.Add(bo.ID.ToString(), bo);
+            bo.Deleted += new EventHandler<BOEventArgs>(BusinessObjectDeletedHandler);
             this.FireBusinessObjectAdded(bo);
         }
 
@@ -189,7 +189,7 @@ namespace Habanero.Bo
 					while (dr.Read())
                     {
                         //Load Business OBject from the data reader
-                        Add((T)lTempBusObj.GetBusinessObject(dr));
+                        Add((T)BOLoader.Instance.GetBusinessObject(lTempBusObj, dr));
                     }
                 }
                 finally
@@ -286,7 +286,7 @@ namespace Habanero.Bo
         public new void RemoveAt(int index)
         {
             T boToRemove = this[index];
-            _lookupTable.Remove(boToRemove.StrID());
+            _lookupTable.Remove(boToRemove.ID.ToString());
             base.RemoveAt(index);
             this.FireBusinessObjectRemoved(boToRemove);
         }
@@ -298,7 +298,7 @@ namespace Habanero.Bo
         public void Remove(T bo)
         {
             base.Remove(bo);
-            _lookupTable.Remove(bo.StrID());
+            _lookupTable.Remove(bo.ID.ToString());
             this.FireBusinessObjectRemoved(bo);
         }
 
@@ -323,7 +323,7 @@ namespace Habanero.Bo
             {
                 foreach (T child in this)
                 {
-                    if (child.IsDirty)
+                    if (child.State.IsDirty)
                     {
                         return true;
                     }
@@ -651,12 +651,12 @@ namespace Habanero.Bo
         /// Commits to the database all the business objects that are either
         /// new or have been altered since the last committal
         /// </summary>
-        public void ApplyEdit()
+        public void SaveAll()
         {
             Transaction t = new Transaction(DatabaseConnection.CurrentConnection);
             foreach (T bo in this)
             {
-                if (bo.IsDirty || bo.IsNew)
+                if (bo.State.IsDirty || bo.State.IsNew)
                 {
                     t.AddTransactionObject(bo);
                 }

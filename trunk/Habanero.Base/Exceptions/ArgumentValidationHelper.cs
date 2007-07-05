@@ -76,18 +76,10 @@ namespace Habanero.Base.Exceptions
         public static void CheckStringArgumentNotEmpty(string str,
                                                        string parameterName)
         {
-            //unlikely but best to check, if the string can't be empty, it definitely
-            //shouldn't be nothing!
-            CheckArgumentNotNull(str, parameterName, parameterName + " cannot be an empty string");
-
-            //QUESTION this could happen with  parameters of other types, very unlikely
-            //I think it would almost have to be on purpose, but should we check anyway?
-
-            if (str.Length == 0)
-            {
+            if (String.IsNullOrEmpty(str))
                 throw new HabaneroArgumentException(parameterName,
-                                                    "Argument cannot be a zero length string.");
-            }
+                                                    "Argument cannot be a zero length string or null.");
+            
         }
 
         //[DebuggerStepThrough]

@@ -1,6 +1,7 @@
 // Static Model
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.DB;
@@ -122,17 +123,6 @@ namespace Habanero.Test.General
         }
 
         /// <summary>
-        /// Creates a new contact person and adds this new contact person to the object manager collection
-        /// </summary>
-        /// <returns>newly created contact person Car</returns>
-        public static Car GetNewCar()
-        {
-            Car myCar = new Car();
-            AddToLoadedBusinessObjectCol(myCar);
-            return myCar;
-        }
-
-        /// <summary>
         /// returns the Car identified by id.
         /// </summary>
         /// <remarks>
@@ -144,11 +134,11 @@ namespace Habanero.Test.General
         ///  if the object has been deleted already</exception>
         public static Car GetCar(BOPrimaryKey id)
         {
-            Car myCar = (Car) Car.GetLoadedBusinessObject(id);
+            Car myCar = (Car)BOLoader.GetLoadedBusinessObject(id);
             if (myCar == null)
             {
                 myCar = new Car(id);
-                AddToLoadedBusinessObjectCol(myCar);
+               // AddToLoadedBusinessObjectCol(myCar);
             }
             return myCar;
         }
@@ -183,16 +173,6 @@ namespace Habanero.Test.General
         #endregion //Relationships
 
         #region ForTesting
-
-        internal static void ClearCarCol()
-        {
-            BusinessObject.ClearLoadedBusinessObjectBaseCol();
-        }
-
-        internal static Hashtable GetCarCol()
-        {
-            return BusinessObject.GetLoadedBusinessObjectBaseCol();
-        }
 
         internal static void DeleteAllCars()
         {

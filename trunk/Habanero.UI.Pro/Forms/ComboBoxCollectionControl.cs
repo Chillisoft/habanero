@@ -102,7 +102,7 @@ namespace Habanero.Ui.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void CancelButtonClickHandler(object sender, EventArgs e)
         {
-            this.SelectedBusinessObject.CancelEdit();
+            this.SelectedBusinessObject.Restore();
             _collectionComboBox.Enabled = true;
             _buttons["Add"].Enabled = true;
         }
@@ -116,15 +116,15 @@ namespace Habanero.Ui.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void SaveButtonClickHander(object sender, EventArgs e)
         {
-            if (this.SelectedBusinessObject.IsNew)
+            if (this.SelectedBusinessObject.State.IsNew)
             {
-                this.SelectedBusinessObject.ApplyEdit();
+                this.SelectedBusinessObject.Save();
                 _boCollection.Add(this.SelectedBusinessObject);
                 this.CollectionComboBox.SelectedItem = this.SelectedBusinessObject;
             }
             else
             {
-                this.SelectedBusinessObject.ApplyEdit();
+                this.SelectedBusinessObject.Save();
             }
             _collectionComboBox.Enabled = true;
             _buttons["Add"].Enabled = true;
@@ -154,11 +154,11 @@ namespace Habanero.Ui.Forms
                 this._panelFactoryInfo.Panel.Enabled = true;
             }
             if (_oldSelectedIndex != -1 && _oldSelectedIndex != _collectionComboBox.SelectedIndex &&
-                SelectedBusinessObject.IsDirty)
+                SelectedBusinessObject.State.IsDirty)
             {
                 if (_confirmer.Confirm("Do you want to want to save before moving on?"))
                 {
-                    SelectedBusinessObject.ApplyEdit();
+                    SelectedBusinessObject.Save();
                 }
                 else
                 {

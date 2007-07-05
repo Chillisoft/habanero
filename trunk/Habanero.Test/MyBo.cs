@@ -11,13 +11,15 @@ namespace Habanero.Test
     /// </summary>
     public class MyBo : BusinessObject
     {
-        public MyBo(ClassDef def) : base(def)
-        {
-        }
+        public MyBo(): base() {}
 
-        public MyBo(ClassDef def, IDatabaseConnection conn) : base(def, conn)
-        {
-        }
+        //public MyBo(ClassDef def) : base(def)
+        //{
+        //}
+
+        //public MyBo(ClassDef def, IDatabaseConnection conn) : base(def, conn)
+        //{
+        //}
 
         protected override ClassDef ConstructClassDef()
         {
@@ -238,12 +240,11 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        public static MyBo Create()
-        {
-            MyBo bo = new MyBo(ClassDef.ClassDefs[typeof (MyBo)]);
-            MyBo.AddToLoadedBusinessObjectCol(bo);
-            return bo;
-        }
+        //public static MyBo Create()
+        //{
+        //    MyBo bo = new MyBo();
+        //    return bo;
+        //}
 
     }
 

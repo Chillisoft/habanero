@@ -11,13 +11,13 @@ namespace Habanero.Bo
     public class BOHelper
     {
         /// <summary>
-        /// Calls the BeforeApplyEdit() method which carries out additional
-        /// steps before the ApplyEdit() command is run
+        /// Calls the BeforeSave() method which carries out additional
+        /// steps before the Save() command is run
         /// </summary>
         /// <returns>Returns the result of the call (true could indicate that
         /// the steps were carried out successfully)</returns>
         public static bool CallBeforeApplyEdit(BusinessObject bo) {
-            return bo.BeforeApplyEdit();
+            return bo.BeforeSave();
         }
 
     }

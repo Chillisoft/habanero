@@ -19,7 +19,7 @@ namespace Habanero.Test.General
         {
             this.SetupDBConnection();
             SetupInheritanceSpecifics();
-            itsFilledCircle = FilledCircle.GetNewObject();
+            itsFilledCircle = new FilledCircle();
             SetStrID();
             itsFilledCircle.SetPropertyValue("Colour", 3);
             itsFilledCircle.SetPropertyValue("Radius", 10);

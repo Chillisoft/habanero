@@ -33,6 +33,7 @@ namespace Habanero.Test.Bo
 					</primaryKey>
 				</class>
 			");
+            ClassDef.ClassDefs.Add(itsClassDef);
             base.SetupDBConnection();
         }
 

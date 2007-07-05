@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
@@ -15,9 +16,10 @@ namespace Habanero.Bo
     /// that behave together in some way (e.g. for a composite alternate
     /// key, the combination of properties is required to be unique).
     /// </summary>
-    public class BOKey : DictionaryBase
+    public class BOKey// : DictionaryBase
     {
-        protected KeyDef _keyDef;
+        private Dictionary<string, BOProp> _props;
+        private KeyDef _keyDef;
 
         /// <summary>
         /// Constructor to initialise a new instance
@@ -27,6 +29,15 @@ namespace Habanero.Bo
         {
             ArgumentValidationHelper.CheckArgumentNotNull(lKeyDef, "lKeyDef");
             _keyDef = lKeyDef;
+            _props = new Dictionary<string, BOProp>();
+        }
+
+        protected KeyDef KeyDef
+        {
+            get
+            {
+                return _keyDef;
+            }
         }
 
         /// <summary>
@@ -40,14 +51,14 @@ namespace Habanero.Bo
         {
             get
             {
-                if (!Dictionary.Contains(propName))
+                if (!_props.ContainsKey(propName))
                 {
                     throw new InvalidPropertyNameException(String.Format(
                         "The given property name '{0}' does not exist in the " +
                         "key collection for this class.",
                         propName));
                 }
-                return ((BOProp) Dictionary[propName]);
+                return _props[propName];
             }
         }
 
@@ -58,13 +69,13 @@ namespace Habanero.Bo
         internal virtual void Add(BOProp boProp)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(boProp, "bOProp");
-            if (Dictionary.Contains(boProp.PropertyName))
+            if (_props.ContainsKey(boProp.PropertyName))
             {
                 throw new InvalidPropertyException(String.Format(
                     "The property with the name '{0}' that is being added already " +
                     "exists in the key collection.", boProp.PropertyName));
             }
-            Dictionary.Add(boProp.PropertyName, boProp);
+            _props.Add(boProp.PropertyName, boProp);
         }
 
         /// <summary>
@@ -75,7 +86,18 @@ namespace Habanero.Bo
         public bool Contains(string propName)
         {
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(propName, "propName");
-            return (Dictionary.Contains(propName));
+            return (_props.ContainsKey(propName));
+        }
+
+        /// <summary>
+        /// Returns the number of BOProps in this key.
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                return _props.Count;
+            }
         }
 
         /// <summary>
@@ -85,7 +107,7 @@ namespace Habanero.Bo
         internal BOPropCol GetBOPropCol()
         {
             BOPropCol col = new BOPropCol();
-            foreach (BOProp boProp in this.Dictionary.Values)
+            foreach (BOProp boProp in _props.Values)
             {
                 col.Add(boProp);
             }
@@ -136,9 +158,9 @@ namespace Habanero.Bo
             // check each property to determine whether
             // any of them are null if any are null then do not check sincd
             // Ignore nulls is true.
-            foreach (DictionaryEntry item in this)
+            foreach (BOProp lBOProp in _props.Values)
             {
-                BOProp lBOProp = (BOProp) item.Value;
+               
                 if (lBOProp.PropertyValue == null)
                 {
                     return false;
@@ -154,9 +176,8 @@ namespace Habanero.Bo
         {
             get
             {
-                foreach (DictionaryEntry item in this)
+                foreach (BOProp lBOProp in _props.Values)
                 {
-                    BOProp lBOProp = (BOProp) item.Value;
                     if (lBOProp.IsDirty)
                     {
                         return true;
@@ -173,9 +194,8 @@ namespace Habanero.Bo
         {
             get
             {
-                foreach (DictionaryEntry item in this)
+                foreach (BOProp lBOProp in _props.Values)
                 {
-                    BOProp lBOProp = (BOProp) item.Value;
                     if (lBOProp.IsObjectNew)
                     {
                         return true;
@@ -203,10 +223,9 @@ namespace Habanero.Bo
         /// <returns>Returns a string</returns>
         public override string ToString()
         {
-            StringBuilder propString = new StringBuilder(this.Count*30);
-            foreach (DictionaryEntry item in this)
+            StringBuilder propString = new StringBuilder(_props.Count*30);
+            foreach (BOProp prop in _props.Values)
             {
-                BOProp prop = (BOProp) item.Value;
                 if (propString.Length > 0)
                 {
                     propString.Append(" AND ");
@@ -224,10 +243,9 @@ namespace Habanero.Bo
         /// <returns>Returns a string</returns>
         protected internal virtual string PersistedDatabaseWhereClause(SqlStatement sql)
         {
-            StringBuilder whereClause = new StringBuilder(this.Count*30);
-            foreach (DictionaryEntry item in this)
+            StringBuilder whereClause = new StringBuilder(_props.Count*30);
+            foreach (BOProp prop in _props.Values)
             {
-                BOProp prop = (BOProp) item.Value;
                 if (whereClause.Length > 0)
                 {
                     whereClause.Append(" AND ");
@@ -251,10 +269,9 @@ namespace Habanero.Bo
         /// <returns>Returns a string</returns>
         protected internal virtual string DatabaseWhereClause(SqlStatement sql)
         {
-            StringBuilder whereClause = new StringBuilder(this.Count*30);
-            foreach (DictionaryEntry item in this)
+            StringBuilder whereClause = new StringBuilder(_props.Count*30);
+            foreach (BOProp prop in _props.Values)
             {
-                BOProp prop = (BOProp) item.Value;
                 if (whereClause.Length > 0)
                 {
                     whereClause.Append(" AND ");
@@ -274,7 +291,7 @@ namespace Habanero.Bo
         {
             try
             {
-                if (lhs.Count != rhs.Count)
+                if (lhs._props.Count != rhs._props.Count)
                 {
                     return false;
                 }
@@ -287,15 +304,20 @@ namespace Habanero.Bo
             {
                 throw;
             }
-            foreach (DictionaryEntry item in lhs)
+            foreach (BOProp prop in lhs._props.Values)
             {
-                BOProp prop = (BOProp) item.Value;
                 if (rhs.Contains(prop.PropertyName))
                 {
-                    BOProp rhsProp = (BOProp) rhs.Dictionary[prop.PropertyName];
+                    BOProp rhsProp = rhs[prop.PropertyName];
                     if (prop.PropertyValue != rhsProp.PropertyValue)
                     {
-                        return false;
+                        if (prop.PropertyValue != null && rhsProp.PropertyValue != null)
+                        {
+                            if (!prop.PropertyValue.Equals(rhsProp.PropertyValue)) return false;
+                        }
+                        else {
+                            return false;
+                        }
                     }
                 }
                 else

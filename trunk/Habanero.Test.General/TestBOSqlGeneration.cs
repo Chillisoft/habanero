@@ -13,7 +13,7 @@ namespace Habanero.Test.General
         public void SetupTestFixture()
         {
             this.SetupDBConnection();
-            shape = Shape.GetNewObject();
+            shape = new Shape();
             insertSql = shape.GetInsertSql();
         }
 

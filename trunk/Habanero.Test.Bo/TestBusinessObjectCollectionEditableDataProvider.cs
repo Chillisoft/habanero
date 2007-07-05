@@ -49,7 +49,7 @@ namespace Habanero.Test.Bo
             int numDeleted = 0;
             foreach (BusinessObject businessObjectBase in itsCollection)
             {
-                if (businessObjectBase.IsDeleted)
+                if (businessObjectBase.State.IsDeleted)
                 {
                     numDeleted++;
                 }
@@ -88,9 +88,9 @@ namespace Habanero.Test.Bo
             Assert.AreEqual("bo1prop1", itsBo1.GetPropertyValue("TestProp"));
             itsTable.AcceptChanges();
             itsTable.Rows[0].Delete();
-            Assert.IsTrue(itsBo1.IsDeleted);
+            Assert.IsTrue(itsBo1.State.IsDeleted);
             itsTable.RejectChanges();
-            Assert.IsFalse(itsBo1.IsDeleted);
+            Assert.IsFalse(itsBo1.State.IsDeleted);
         }
 
         [Test]

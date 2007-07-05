@@ -145,13 +145,13 @@ namespace Habanero.Bo
                 if ((RowState) _rowStates[e.Row] != RowState.Deleted)
                 {
                     changedBo = _collection.Find(e.Row["ID"].ToString());
-                    changedBo.CancelEdit();
+                    changedBo.Restore();
                     _rowStates.Remove(e.Row);
                 }
                 else
                 {
                     changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
-                    changedBo.CancelEdit();
+                    changedBo.Restore();
                     _rowStates.Remove(e.Row);
                     _deletedRowIDs.Remove(e.Row);
                 }
@@ -173,13 +173,13 @@ namespace Habanero.Bo
                     {
                         //log.Debug("Saving...");
                         changedBo = _collection.Find(e.Row["ID"].ToString());
-                        changedBo.ApplyEdit();
+                        changedBo.Save();
                         _rowStates.Remove(e.Row);
                     }
                     else
                     {
                         changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
-                        changedBo.ApplyEdit();
+                        changedBo.Save();
                         _rowStates.Remove(e.Row);
                         _deletedRowIDs.Remove(e.Row);
                     }

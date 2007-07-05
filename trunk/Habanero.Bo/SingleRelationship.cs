@@ -61,7 +61,7 @@ namespace Habanero.Bo
                     busObj.SetDatabaseConnection(connection);
 
                     IExpression relExp = _relKey.RelationshipExpression();
-                    busObj = busObj.GetBusinessObject(relExp);
+                    busObj = BOLoader.Instance.GetBusinessObject(busObj, relExp);
                     if (_relDef.KeepReferenceToRelatedObject)
                     {
                         _relatedBo = busObj;

@@ -54,7 +54,7 @@ namespace Habanero.Bo
             {
                 if (_objectIDProp == null)
                 {
-                    _objectIDProp = base[_keyDef.KeyName];
+                    _objectIDProp = base[KeyDef.KeyName];
                 }
                 if (_objectIDProp == null)
                 {

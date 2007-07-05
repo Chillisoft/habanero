@@ -1,3 +1,4 @@
+using Habanero.Bo;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -31,22 +32,26 @@ namespace Habanero.Test.General
             Car.DeleteAllCars();
             ContactPersonCompositeKey.DeleteAllContactPeople();
 
-            Car car = Car.GetNewCar();
-            ContactPersonCompositeKey person = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            Car car = new Car();
+            ContactPersonCompositeKey person = new ContactPersonCompositeKey();
             person.SetPropertyValue("Surname", "Driver Surname");
             person.SetPropertyValue("PK1Prop1", "Driver1");
             person.SetPropertyValue("PK1Prop2", "Driver2");
-            person.ApplyEdit();
+            person.Save();
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("DriverFK1", person.GetPropertyValue("PK1Prop1"));
             car.SetPropertyValue("DriverFK2", person.GetPropertyValue("PK1Prop2"));
-            Assert.AreEqual(car.GetDriver().ID, person.ID);
+            BOPrimaryKey bob = car.GetDriver().ID;
+            BOPrimaryKey bo2 = person.ID;
+            Assert.IsTrue(bob.Equals(bo2));
+            Assert.AreEqual(bob, bo2);
+            //Assert.AreEqual(car.GetDriver().ID, person.ID);
         }
 
         public void TestGetCarDriverNull()
         {
             Car.DeleteAllCars();
-            Car car = Car.GetNewCar();
+            Car car = new Car();
             car.SetPropertyValue("CarRegNo", "NP32459");
             Assert.IsTrue(car.GetDriver() == null);
         }
@@ -56,12 +61,12 @@ namespace Habanero.Test.General
             Car.DeleteAllCars();
             ContactPersonCompositeKey.DeleteAllContactPeople();
 
-            Car car = Car.GetNewCar();
-            ContactPersonCompositeKey person = ContactPersonCompositeKey.GetNewContactPersonCompositeKey();
+            Car car = new Car();
+            ContactPersonCompositeKey person = new ContactPersonCompositeKey();
             person.SetPropertyValue("Surname", "Driver Surname");
             person.SetPropertyValue("PK1Prop1", "Driver11");
             person.SetPropertyValue("PK1Prop2", "Driver21");
-            person.ApplyEdit();
+            person.Save();
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("DriverFK1", person.GetPropertyValue("PK1Prop1"));
             car.SetPropertyValue("DriverFK2", person.GetPropertyValue("PK1Prop2"));

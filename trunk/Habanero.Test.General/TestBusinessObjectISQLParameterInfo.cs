@@ -25,7 +25,7 @@ namespace Habanero.Test.General
         public void TestSqlParameterInfo()
         {
             IExpression exp = Expression.CreateExpression("PK3Prop = 'test'");
-            ContactPerson cp = ContactPerson.GetNewContactPerson();
+            ContactPerson cp = new ContactPerson();
             SqlCriteriaCreator creator = new SqlCriteriaCreator(exp, cp);
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
             creator.AppendCriteriaToStatement(statement);

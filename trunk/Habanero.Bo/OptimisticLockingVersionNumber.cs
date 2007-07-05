@@ -13,7 +13,7 @@ namespace Habanero.Bo
     /// A version number is used to check if the object has been edited. 
     /// To use this class effectively, the update properties method 
     /// must be called before the database is updated (i.e. in  
-    /// <see cref="BusinessObject.ApplyEdit"/> and 
+    /// <see cref="BusinessObject.Save"/> and 
     /// <see cref= "Habanero.Bo.OptimisticLockingVersionNumber.UpdatePropertiesWithLatestConcurrencyInfo"/>)
     /// </summary>
     public class OptimisticLockingVersionNumber : IConcurrencyControl
@@ -76,10 +76,10 @@ namespace Habanero.Bo
         /// if the object has been edited by another process/user</exception>
         public void CheckConcurrencyBeforePersisting(BusinessObject busObj)
         {
-            if (!busObj.IsNew) //you cannot have concurrency control issues on a new object 
+            if (!busObj.State.IsNew) //you cannot have concurrency control issues on a new object 
                 // all you can have is duplicate data issues.
             {
-                using (IDataReader dr = busObj.LoadDataReader(busObj.GetDatabaseConnection(), null))
+                using (IDataReader dr = BOLoader.Instance.LoadDataReader(busObj, busObj.GetDatabaseConnection(), null))
                 {
                     try
                     {
@@ -87,7 +87,7 @@ namespace Habanero.Bo
                         // then we have a concurrency conflict since it has been deleted by another process.
                         // If our objective was to delete it as well then no worries else throw error.
                         bool drHasData = dr.Read();
-                        if (! (drHasData) && !busObj.IsDeleted)
+                        if (! (drHasData) && !busObj.State.IsDeleted)
                         {
                             //The object you are trying to save has been deleted by another user.
                             throw new BusObjDeleteConcurrencyControlException(busObj.ClassName, busObj.ID.ToString(),
@@ -163,7 +163,7 @@ namespace Habanero.Bo
             }
             catch (BusObjectConcurrencyControlException)
             {
-                busObj.Refresh();
+                BOLoader.Instance.Refresh(busObj);
             }
         }
 

@@ -26,8 +26,8 @@ namespace Habanero.Test.Ui.Generic
             itsClassDef = MyBo.LoadDefaultClassDef();
             itsCollection = new BusinessObjectCollection<BusinessObject>(itsClassDef);
 
-            itsBo1 = MyBo.Create();
-            itsBo2 = MyBo.Create();
+            itsBo1 = new MyBo();
+            itsBo2 = new MyBo();
         }
 
         [Test]

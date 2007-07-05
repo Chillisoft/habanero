@@ -32,6 +32,7 @@ namespace Habanero.Test.Bo
 					</primaryKey>
 				</class>
 			");
+            ClassDef.ClassDefs.Add(itsClassDef);
             BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             Assert.AreSame(typeof (MyBo), bo.GetType());
             bo.SetPropertyValue("TestProp", "TestValue");

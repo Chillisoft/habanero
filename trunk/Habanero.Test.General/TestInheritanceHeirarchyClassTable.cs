@@ -154,9 +154,9 @@ namespace Habanero.Test.General
             connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
             connectionControl.ExpectAndReturn("ExecuteSql", 3, new object[] {null, null});
 
-            FilledCircle myCircle = FilledCircle.GetNewObject();
+            FilledCircle myCircle = new FilledCircle();
             myCircle.SetDatabaseConnection(connection);
-            myCircle.ApplyEdit();
+            myCircle.Save();
             myCircle.SetPropertyValue("Colour", 4);
 
             SqlStatementCollection myUpdateSql = myCircle.GetUpdateSql();

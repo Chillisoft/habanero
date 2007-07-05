@@ -44,8 +44,8 @@ namespace Habanero.Test.General
         [Test]
         public void TestCircleIsNotDirty()
         {
-            Circle circle = Circle.GetNewObject();
-            Assert.IsFalse(circle.IsDirty);
+            Circle circle = new Circle();
+            Assert.IsFalse(circle.State.IsDirty);
         }
 
         [Test]

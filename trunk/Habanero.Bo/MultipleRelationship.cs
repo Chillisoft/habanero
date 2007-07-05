@@ -38,14 +38,14 @@ namespace Habanero.Bo
                 // TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object
                 // gets added with the foreign key nothing will pick that up other than a reload.
                 //if (_boCol == null) {
-                _boCol = busObj.GetBusinessObjectCol(_relKey.RelationshipExpression(),
+                _boCol = BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
                                                      ((MultipleRelationshipDef) _relDef).OrderBy);
                 //}
                 return _boCol;
             }
             else
             {
-                return busObj.GetBusinessObjectCol(_relKey.RelationshipExpression(),
+                return BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
                                                    ((MultipleRelationshipDef) _relDef).OrderBy);
             }
         }

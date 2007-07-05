@@ -26,10 +26,10 @@ namespace Habanero.Test.General
             Car.DeleteAllCars();
             ContactPerson.DeleteAllContactPeople();
 
-            Car car = Car.GetNewCar();
-            ContactPerson person = ContactPerson.GetNewContactPerson();
+            Car car = new Car();
+            ContactPerson person = new ContactPerson();
             person.Surname = "Owner Surname";
-            person.ApplyEdit();
+            person.Save();
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("OwnerId", person.GetPropertyValue("ContactPersonID"));
             Assert.AreEqual(car.GetOwner().ID, person.ID);
@@ -41,10 +41,10 @@ namespace Habanero.Test.General
             Car.DeleteAllCars();
             ContactPerson.DeleteAllContactPeople();
 
-            Car car = Car.GetNewCar();
-            ContactPerson person = ContactPerson.GetNewContactPerson();
+            Car car = new Car();
+            ContactPerson person = new ContactPerson();
             person.Surname = "Owner Surname";
-            person.ApplyEdit();
+            person.Save();
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("OwnerId", person.GetPropertyValue("ContactPersonID"));
             Assert.AreEqual(car.GetOwner().ID, person.ID);
@@ -65,13 +65,13 @@ namespace Habanero.Test.General
             Car.DeleteAllCars();
             ContactPerson.DeleteAllContactPeople();
 
-            Car car = Car.GetNewCar();
-            ContactPerson person = ContactPerson.GetNewContactPerson();
+            Car car = new Car();
+            ContactPerson person = new ContactPerson();
             person.Surname = "Owner Surname3";
-            person.ApplyEdit();
+            person.Save();
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("OwnerId", person.GetPropertyValue("ContactPersonID"));
-            car.ApplyEdit();
+            car.Save();
             Assert.AreEqual(car.GetOwner().ID, person.ID);
 
             Assert.AreEqual(1, person.GetCarsOwned().Count, "there should be one car for this person");
@@ -87,13 +87,13 @@ namespace Habanero.Test.General
             Car.DeleteAllCars();
             ContactPerson.DeleteAllContactPeople();
 
-            Car car = Car.GetNewCar();
-            ContactPerson person = ContactPerson.GetNewContactPerson();
+            Car car = new Car();
+            ContactPerson person = new ContactPerson();
             person.Surname = "Owner Surname3";
-            person.ApplyEdit();
+            person.Save();
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("OwnerId", person.GetPropertyValue("ContactPersonID"));
-            car.ApplyEdit();
+            car.Save();
             Assert.AreEqual(car.GetOwner().ID, person.ID);
 
             Assert.AreEqual(1, person.GetCarsOwned().Count, "there should be one car for this person");

@@ -63,7 +63,7 @@ namespace Habanero.Test.Bo
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
             Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
             mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
-            mMockBo.ApplyEdit();
+            mMockBo.Save();
             Assert.IsTrue(rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
 
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), mMockBo.GetPropertyValue("MockBOID"));

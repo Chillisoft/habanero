@@ -289,7 +289,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Returns the property value as a string
         /// </summary>
-        internal string PropertyValueString
+        public string PropertyValueString
         {
             get
             {

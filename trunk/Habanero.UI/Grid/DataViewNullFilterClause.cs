@@ -1,4 +1,5 @@
 using Habanero.Base;
+using Habanero.Bo;
 
 namespace Habanero.Ui.Grid
 {

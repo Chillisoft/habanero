@@ -29,13 +29,6 @@ namespace Habanero.Test
             _classDef = classDef;
         }
 
-        public static Sample GetNewObject()
-        {
-            Sample obj = new Sample();
-            AddToLoadedBusinessObjectCol(obj);
-            return obj;
-        }
-
         public static ClassDef GetClassDef()
         {
             if (!ClassDef.IsDefined(typeof (Sample)))

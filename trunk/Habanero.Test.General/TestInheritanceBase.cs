@@ -17,7 +17,7 @@ namespace Habanero.Test.General
         {
             this.SetupDBConnection();
             SetupInheritanceSpecifics();
-            objCircle = Circle.GetNewObject();
+            objCircle = new Circle();
             SetStrID();
             objCircle.SetPropertyValue("ShapeName", "MyShape");
             objCircle.SetPropertyValue("Radius", 10);

@@ -45,7 +45,7 @@ namespace Habanero.Test.Bo
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
             Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
             mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
-            mMockBo.ApplyEdit();
+            mMockBo.Save();
             Assert.IsTrue(rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
 
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), mMockBo.GetPropertyValue("MockBOID"));
@@ -58,9 +58,9 @@ namespace Habanero.Test.Bo
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), ltempBO.GetPropertyValue("MockBOID"),
                             "The object returned should be the one with the ID = MockBOID");
 
-            Assert.IsTrue(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
+            Assert.AreSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
             MockBO.ClearLoadedBusinessObjectBaseCol();
-            Assert.IsFalse(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
+            Assert.AreNotSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace Habanero.Test.Bo
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
             Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
             mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
-            mMockBo.ApplyEdit();
+            mMockBo.Save();
             Assert.IsTrue(rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
 
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), mMockBo.GetPropertyValue("MockBOID"));
