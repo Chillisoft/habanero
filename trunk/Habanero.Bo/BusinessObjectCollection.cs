@@ -241,7 +241,6 @@ namespace Habanero.Bo
         /// <param name="searchCriteria">The search criteria</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <param name="limit">The limit</param>
-        /// TODO ERIC - review, what does a limit do?
         public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
         {
             _limit = limit;
@@ -516,7 +515,6 @@ namespace Habanero.Bo
         /// <param name="propertyName">The property name to sort on</param>
         /// <param name="isBoProperty">Whether the property is a business
         /// object property</param>
-        /// TODO ERIC - ascending/descending?
         public void Sort(string propertyName, bool isBoProperty)
         {
             if (isBoProperty)

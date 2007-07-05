@@ -185,7 +185,6 @@ namespace Habanero.Bo.ClassDefinition
 			{
 				return LoadColClassDef(new ClassDefCol());
 				//TODO: Is throwing an error correct? Maybe return null?
-				//TODO error: TODO Eric, please check that you are happy with this error.
 				//throw new Generic.HabaneroApplicationException(
 				//    "The Class Definitions cannot be accessed before they have been loaded.");
 			}
@@ -201,7 +200,6 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			if (classDefCol == null)
 			{
-				//TODO error: TODO Eric, please check that you are happy with this error.
 				throw new HabaneroArgumentException("classDefCol", "Cannot load a ClassDefCol if it is null.");
 			}
 			if (!_instanceFlag || _classDefcol.Count == 0)

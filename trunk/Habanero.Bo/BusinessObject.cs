@@ -430,14 +430,12 @@ namespace Habanero.Bo
 
         /// <summary>
         /// Loads a business object with the specified ID from a collection
-        /// or loaded objects
+        /// of loaded objects
         /// </summary>
         /// <param name="id">The ID</param>
         /// <param name="refreshIfReqNotCurrent">Whether to check for
         /// object concurrency at the time of loading</param>
         /// <returns>Returns a business object</returns>
-        /// TODO ERIC - review refresh above
-        /// - review how loaded object collection works and what it does
         protected static BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
         {
             //If the object is already in loaded then refresh it and return it if required.
@@ -1061,7 +1059,6 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="dr">An IDataRecord object</param>
         /// <returns>Returns true if loaded successfully</returns>
-        /// TODO ERIC - where does datarecord come from?
         protected bool LoadProperties(IDataRecord dr)
         {
             //TODO_ERR: check that dr open valid etc.
@@ -1246,7 +1243,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Deletes the object
         /// </summary>
-        /// TODO ERIC - hmmm?
+        /// TODO ERIC - clarify these comments
         public void Delete()
         {
             if (!IsEditing)
@@ -1490,7 +1487,11 @@ namespace Habanero.Bo
         /// <returns>Returns a string</returns>
         private string GetCheckForDuplicateWhereClause(BOKey lBOKey, SqlStatement sql)
         {
-            //TODO_Err: raise appropriate error if lBOKey == null
+            if (lBOKey == null)
+            {
+                throw new InvalidKeyException("An error occurred because a " +
+                    "BOKey argument was null.");
+            }
             return lBOKey.DatabaseWhereClause(sql);
         }
 
@@ -1624,9 +1625,9 @@ namespace Habanero.Bo
             }
             else
             {
-                //TODO: raise appropriate error
-                Console.WriteLine("A serious error has occured since the object is in an invalid state");
-                return null;
+                throw new HabaneroApplicationException("A serious error has occurred " +
+                    "since a business object is in an invalid state.");
+                //return null;
             }
         }
 
@@ -1680,7 +1681,6 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="limit">The limit</param>
         /// <returns>Returns a sql string</returns>
-        /// TODO ERIC - clarify on the limit
         protected internal string GetSelectSql(int limit)
         {
             return new SelectStatementGenerator(this, this._connection).Generate(limit);

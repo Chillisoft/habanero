@@ -54,14 +54,10 @@ namespace Habanero.Bo.ClassDefinition
     public class ClassDef
     {
         protected static ClassDefCol _classDefCol;
-		//TODO: check why this log field is here. It is never used.
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.ClassDefinition.ClassDef");
-
 		private string _assemblyName;
 		private string _className;
 		private string _classNameFull;
 		private Type _classType;
-		//TODO:check why this databaseName field is here. It is never used.
 		private string _databaseName = "Default";
 		//private string _SelectSql = "";
 		private string _tableName = "";
@@ -73,7 +69,7 @@ namespace Habanero.Bo.ClassDefinition
 
 		private SuperClassDef _superClassDef;
         private UIDefCol _uiDefCol;
-        private bool _supportsSynchronisation;
+        //private bool _supportsSynchronisation;
 
         private static PropDef _versionNumberAtLastSyncPropDef =
             new PropDef("SyncVersionNumberAtLastSync", typeof (int), PropReadWriteRule.ReadWrite, 0);
@@ -563,7 +559,6 @@ namespace Habanero.Bo.ClassDefinition
 				//    }
 				//    catch (UnknownTypeNameException ex)
 				//    {
-				//        //TODO: Is this the correct thing to do?
 				//        throw new UnknownTypeNameException("Unable to load the class type while " +
 				//            "attempting to load a type from a class definition, given the 'assembly' as: '" +
 				//            _assemblyName + "', and the 'class' as: '" + _className +

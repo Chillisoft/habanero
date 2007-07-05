@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
@@ -44,7 +45,7 @@ namespace Habanero.Bo.ClassDefinition
         /// an underscore.</param>
         public KeyDef(string keyName)
         {
-            //TODO_Err check that keyName is valid.
+            //TODO_Err check that keyName is valid. Eric: what is a valid keyname?
             KeyName = keyName;
         }
 
@@ -99,7 +100,12 @@ namespace Habanero.Bo.ClassDefinition
         {
             get
             {
-                //if (this.Contains(key)) //TODO_Err: If this does not exist
+                if (!Dictionary.Contains(propName))
+                {
+                    throw new InvalidPropertyNameException(String.Format(
+                        "In a key definition, no property with the name '{0}' " +
+                        "exists in the collection of properties.",propName));
+                }
                 return ((PropDef) Dictionary[propName]);
             }
         }
