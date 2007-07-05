@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Bo
 {
@@ -20,7 +22,13 @@ namespace Habanero.Bo
         /// <param name="lBOKey">The BO key</param>
         internal void Add(BOKey lBOKey)
         {
-            //TODO_Err: Add sensible error handling if prop already exists etc
+            if (Dictionary.Contains(lBOKey.KeyName))
+            {
+                throw new HabaneroArgumentException(String.Format(
+                    "A key with the name '{0}' is being added to a key " +
+                    "collection but already exists in the collection.",
+                    lBOKey.KeyName));
+            }
             base.Dictionary.Add(lBOKey.KeyName, lBOKey);
         }
 
@@ -52,7 +60,12 @@ namespace Habanero.Bo
         {
             get
             {
-                //TODOErr: put appropriate err handling
+                if (!Dictionary.Contains(boKeyName))
+                {
+                    throw new HabaneroArgumentException(String.Format(
+                        "The key with the name '{0}' does not exist in the " +
+                        "collection of keys.", boKeyName));
+                }
                 return ((BOKey) Dictionary[boKeyName]);
             }
         }

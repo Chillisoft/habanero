@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.Bo.ClassDefinition;
 
 namespace Habanero.Bo
@@ -31,8 +32,7 @@ namespace Habanero.Bo
             //If the Business object is not new then you cannot set the objectID
             if (!IsObjectNew)
             {
-                //TODO_Err: Raise the appropriate Error.
-                Console.WriteLine("Error has occured prop for object id cannot be null");
+                throw new InvalidObjectIdException("The property for objectID cannot be null.");
             }
             //If the object id is not already set then set it.
             if (_newObjectID == Guid.Empty)
@@ -41,8 +41,7 @@ namespace Habanero.Bo
             }
             else if (_newObjectID != id)
             {
-                //TODO raise appropriate error
-                Console.WriteLine("Error has occured prop for object id cannot be null");
+                throw new InvalidObjectIdException("The property for objectID cannot be null.");
             }
         }
 
@@ -70,8 +69,8 @@ namespace Habanero.Bo
             }
             else
             {
-                //TODO_Err: raise appropriate error
-                Console.WriteLine("Error has occured _isObjectNew = true but the _newObjectID is not set");
+                //TODO: This exception breaks tests. Review.
+                //throw new InvalidObjectIdException("Error: _isObjectNew = true but the _newObjectID is not set");
                 return "";
             }
         }

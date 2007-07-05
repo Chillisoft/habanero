@@ -40,7 +40,13 @@ namespace Habanero.Bo
         {
             get
             {
-                //if (this.Contains(key)) //TODO_Err: If this does not exist
+                if (!Dictionary.Contains(propName))
+                {
+                    throw new PropertyNameInvalidException(String.Format(
+                        "The given property name '{0}' does not exist in the " +
+                        "key collection for this class.",
+                        propName));
+                }
                 return ((BOProp) Dictionary[propName]);
             }
         }
@@ -52,7 +58,12 @@ namespace Habanero.Bo
         internal virtual void Add(BOProp boProp)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(boProp, "bOProp");
-            //TODO_Err: If this already exist
+            if (Dictionary.Contains(boProp.PropertyName))
+            {
+                throw new HabaneroArgumentException(String.Format(
+                    "The property with the name '{0}' that is being added already " +
+                    "exists in the key collection.", boProp.PropertyName));
+            }
             Dictionary.Add(boProp.PropertyName, boProp);
         }
 

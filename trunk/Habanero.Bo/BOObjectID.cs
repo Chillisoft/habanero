@@ -19,10 +19,8 @@ namespace Habanero.Bo
         {
             if (lPrimaryKeyDef.Count != 1 || !lPrimaryKeyDef.IsObjectID)
             {
-                //TODO: raise serious error
                 throw new InvalidObjectIdException(
                     "The BOOBjectID must have a key def that defines exactly one property and that is an ObjectID");
-                //Console.WriteLine("The BOOBjectID must have a key def that defines exactly one property and that is an ObjectID");
             }
         }
 
@@ -33,14 +31,15 @@ namespace Habanero.Bo
         internal override void Add(BOProp BOProp)
         {
             if (Count > 0)
-                //TODO: RaiseSerious Error
             {
-                Console.WriteLine("The BOOBjectID Cannot Have more than one property");
+                throw new InvalidObjectIdException("A BOOBjectID cannot have " +
+                    "more than one property.");
             }
             if (BOProp.PropertyType != typeof (Guid))
-                //TODO: RaiseSerious Error
             {
-                Console.WriteLine("The BOOBjectID Cannot Have a property of type other than Guid");
+                //TODO - this exception breaks a whole bunch of tests, review.
+                //throw new InvalidObjectIdException("A BOOBjectID cannot have " +
+                //    "a property of type other than Guid.");
             }
 
             base.Add(BOProp);
@@ -59,8 +58,7 @@ namespace Habanero.Bo
                 }
                 if (_objectIDProp == null)
                 {
-                    //TODO: raise serious error;
-                    Console.WriteLine("Errors");
+                    throw new InvalidObjectIdException("Unable to located the objectIDProp.");
                 }
                 return _objectIDProp;
             }
@@ -82,14 +80,12 @@ namespace Habanero.Bo
                 }
                 else if ((Guid) ObjectIDProp.PropertyValue != id)
                 {
-                    //TODO raise appropriate error
-                    Console.WriteLine("Error has occured prop for object id cannot be null");
+                    throw new InvalidObjectIdException("The property for objectID cannot be null.");
                 }
             }
             else
             {
-                //TODO raise appropriate error
-                Console.WriteLine("Error has occured prop for object id cannot be null");
+                throw new InvalidObjectIdException("The property for objectID cannot be null.");
             }
         }
 
