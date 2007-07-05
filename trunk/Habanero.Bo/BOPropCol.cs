@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Text;
+using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using NUnit.Framework;
 
@@ -24,7 +25,13 @@ namespace Habanero.Bo
         /// <param name="prop">The property to add</param>
         internal void Add(BOProp prop)
         {
-            //TODO_Err: Add sensible error handling if prop already exists etc
+            if (Dictionary.Contains(prop.PropertyName.ToUpper()))
+            {
+                throw new HabaneroArgumentException(String.Format(
+                    "The BOProp with the name '{0}' is being added to the " +
+                    "prop collection, but already exists in the collection.",
+                    prop.PropertyName));
+            }
             base.Dictionary.Add(prop.PropertyName.ToUpper(), prop);
         }
 
@@ -69,7 +76,13 @@ namespace Habanero.Bo
         {
             get
             {
-                //TODOErr: put appropriate err handling
+                if (!Dictionary.Contains(propName.ToUpper()))
+                {
+                    //TODO: This exception breaks tests
+//                    throw new InvalidPropertyNameException(String.Format(
+//                        "A BOProp with the name '{0}' does not exist in the " +
+//                        "prop collection.", propName));
+                }
                 return ((BOProp) Dictionary[propName.ToUpper()]);
             }
         }

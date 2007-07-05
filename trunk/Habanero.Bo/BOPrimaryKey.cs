@@ -27,7 +27,7 @@ namespace Habanero.Bo
         /// <param name="id">The ID to set to</param>
         internal virtual void SetObjectID(Guid id)
         {
-            //TODO_Err:	check that id is not empty
+            //TODO_Err:	check that id is not empty (Eric: is this done below?)
 
             //If the Business object is not new then you cannot set the objectID
             if (!IsObjectNew)
@@ -86,10 +86,9 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Get the object's original ID
+        /// Get the original ObjectID
         /// </summary>
         /// <returns>Returns a string</returns>
-        /// TODO ERIC - review this? original ID or orig object?
         internal virtual string GetOrigObjectID()
         {
             if (_newObjectID != Guid.Empty)

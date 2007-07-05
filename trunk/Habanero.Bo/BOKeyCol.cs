@@ -24,7 +24,7 @@ namespace Habanero.Bo
         {
             if (Dictionary.Contains(lBOKey.KeyName))
             {
-                throw new HabaneroArgumentException(String.Format(
+                throw new InvalidKeyException(String.Format(
                     "A key with the name '{0}' is being added to a key " +
                     "collection but already exists in the collection.",
                     lBOKey.KeyName));
@@ -62,7 +62,7 @@ namespace Habanero.Bo
             {
                 if (!Dictionary.Contains(boKeyName))
                 {
-                    throw new HabaneroArgumentException(String.Format(
+                    throw new InvalidKeyException(String.Format(
                         "The key with the name '{0}' does not exist in the " +
                         "collection of keys.", boKeyName));
                 }

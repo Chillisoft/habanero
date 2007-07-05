@@ -56,7 +56,7 @@ namespace Habanero.Test.Bo
             {
                 mProp.PropertyValue = "Prop Value fdfdfdf ff";
             }
-            catch (PropertyValueInvalidException)
+            catch (InvalidPropertyValueException)
             {
             }
             mProp = mBOPropCol["PropName"];

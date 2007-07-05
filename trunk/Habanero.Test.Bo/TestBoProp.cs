@@ -72,7 +72,7 @@ namespace Habanero.Test.Bo
             {
                 lBOProp.PropertyValue = "New Value";
             }
-            catch (PropertyValueInvalidException)
+            catch (InvalidPropertyValueException)
             {
                 //do nothing
             }

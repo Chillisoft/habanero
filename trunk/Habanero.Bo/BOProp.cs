@@ -147,7 +147,7 @@ namespace Habanero.Bo
             }
             catch (Exception ex)
             {
-                throw new PropertyValueInvalidException(String.Format(
+                throw new InvalidPropertyValueException(String.Format(
                     "An error occurred while attempting to convert " +
                     "the loaded property value of '{0}' to its specified " +
                     "type of '{1}'. The property value is '{2}'. See log for details",
@@ -221,7 +221,7 @@ namespace Habanero.Bo
                     FireBOPropValueUpdated();
                     _isDirty = true;
 //					if (!_isValid) {
-//						throw new PropertyValueInvalidException(_invalidReason);
+//						throw new InvalidPropertyValueException(_invalidReason);
 //					}
                 }
             }
@@ -379,7 +379,6 @@ namespace Habanero.Bo
         /// <summary>
         /// Indicates whether the object is new
         /// </summary>
-        /// TODO ERIC - what does this actually mean?
         internal bool IsObjectNew
         {
             get { return _isObjectNew; }

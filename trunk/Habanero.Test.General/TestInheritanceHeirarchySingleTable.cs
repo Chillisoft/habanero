@@ -63,7 +63,7 @@ namespace Habanero.Test.General
             itsFilledCircle.GetPropertyValue("Colour");
         }
 
-        [Test, ExpectedException(typeof (PropertyNameInvalidException))]
+        [Test, ExpectedException(typeof (InvalidPropertyNameException))]
         public void TestFilledCircleDoesntHaveCircleID()
         {
             itsFilledCircle.GetPropertyValue("CircleID");

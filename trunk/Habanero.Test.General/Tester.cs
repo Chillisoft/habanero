@@ -265,7 +265,7 @@ namespace Habanero.Test.General
         }
 
 //		[Test]
-//		[ExpectedException(typeof (PropertyValueInvalidException))]
+//		[ExpectedException(typeof (InvalidPropertyValueException))]
 //		public void TestObjectSurnameTooLong() {
 //			ContactPerson myContact = ContactPerson.GetNewContactPerson();
 //			myContact.Surname = "MyPropertyIsTooLongByFarThisWill Cause and Error in Bus object";

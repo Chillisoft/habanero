@@ -169,9 +169,9 @@ namespace Habanero.Bo.Loaders
         private void LoadAttributes()
         {
             _propertyAttributes = new Hashtable();
-            System.Console.WriteLine(_reader.Name);
+            //System.Console.WriteLine(_reader.Name);
             _reader.Read();
-            System.Console.WriteLine(_reader.Name);
+            //System.Console.WriteLine(_reader.Name);
 
             while (_reader.Name == "parameter")
             {

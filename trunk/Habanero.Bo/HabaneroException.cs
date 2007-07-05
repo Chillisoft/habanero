@@ -55,12 +55,12 @@ namespace Habanero.Bo
     /// Provides an exception to throw when a property value is invalid
     /// </summary>
     [Serializable()]
-    public class PropertyNameInvalidException : Exception
+    public class InvalidPropertyNameException : Exception
     {
         /// <summary>
         /// Constructor to initialise the exception
         /// </summary>
-        public PropertyNameInvalidException()
+        public InvalidPropertyNameException()
             : base()
         {
         }
@@ -70,7 +70,7 @@ namespace Habanero.Bo
         /// to display
         /// </summary>
         /// <param name="message">The error message</param>
-        public PropertyNameInvalidException(string message)
+        public InvalidPropertyNameException(string message)
             : base(message)
         {
         }
@@ -81,7 +81,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
-        public PropertyNameInvalidException(string message, Exception inner)
+        public InvalidPropertyNameException(string message, Exception inner)
             : base(message, inner)
         {
         }
@@ -92,7 +92,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="info">The serialisation info</param>
         /// <param name="context">The streaming context</param>
-        protected PropertyNameInvalidException(SerializationInfo info, StreamingContext context)
+        protected InvalidPropertyNameException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
@@ -104,12 +104,12 @@ namespace Habanero.Bo
     /// Provides an exception to throw when a property value is invalid
     /// </summary>
     [Serializable()]
-    public class PropertyValueInvalidException : Exception
+    public class InvalidPropertyValueException : Exception
     {
         /// <summary>
         /// Constructor to initialise the exception
         /// </summary>
-        public PropertyValueInvalidException() : base()
+        public InvalidPropertyValueException() : base()
         {
         }
 
@@ -118,7 +118,7 @@ namespace Habanero.Bo
         /// to display
         /// </summary>
         /// <param name="message">The error message</param>
-        public PropertyValueInvalidException(string message) : base(message)
+        public InvalidPropertyValueException(string message) : base(message)
         {
         }
 
@@ -128,7 +128,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
-        public PropertyValueInvalidException(string message, Exception inner) : base(message, inner)
+        public InvalidPropertyValueException(string message, Exception inner) : base(message, inner)
         {
         }
 
@@ -138,7 +138,105 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="info">The serialisation info</param>
         /// <param name="context">The streaming context</param>
-        protected PropertyValueInvalidException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected InvalidPropertyValueException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
+
+
+
+    /// <summary>
+    /// Provides an exception to throw when a property is invalid
+    /// </summary>
+    [Serializable()]
+    public class InvalidPropertyException : Exception
+    {
+        /// <summary>
+        /// Constructor to initialise the exception
+        /// </summary>
+        public InvalidPropertyException()
+            : base()
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display
+        /// </summary>
+        /// <param name="message">The error message</param>
+        public InvalidPropertyException(string message)
+            : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display, and the inner exception specified
+        /// </summary>
+        /// <param name="message">The error message</param>
+        /// <param name="inner">The inner exception</param>
+        public InvalidPropertyException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with the serialisation info
+        /// and streaming context provided
+        /// </summary>
+        /// <param name="info">The serialisation info</param>
+        /// <param name="context">The streaming context</param>
+        protected InvalidPropertyException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+    }
+
+
+
+    /// <summary>
+    /// Provides an exception to throw when a property is invalid
+    /// </summary>
+    [Serializable()]
+    public class InvalidKeyException : Exception
+    {
+        /// <summary>
+        /// Constructor to initialise the exception
+        /// </summary>
+        public InvalidKeyException()
+            : base()
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display
+        /// </summary>
+        /// <param name="message">The error message</param>
+        public InvalidKeyException(string message)
+            : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display, and the inner exception specified
+        /// </summary>
+        /// <param name="message">The error message</param>
+        /// <param name="inner">The inner exception</param>
+        public InvalidKeyException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with the serialisation info
+        /// and streaming context provided
+        /// </summary>
+        /// <param name="info">The serialisation info</param>
+        /// <param name="context">The streaming context</param>
+        protected InvalidKeyException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

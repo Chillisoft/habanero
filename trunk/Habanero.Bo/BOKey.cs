@@ -42,7 +42,7 @@ namespace Habanero.Bo
             {
                 if (!Dictionary.Contains(propName))
                 {
-                    throw new PropertyNameInvalidException(String.Format(
+                    throw new InvalidPropertyNameException(String.Format(
                         "The given property name '{0}' does not exist in the " +
                         "key collection for this class.",
                         propName));
@@ -60,7 +60,7 @@ namespace Habanero.Bo
             ArgumentValidationHelper.CheckArgumentNotNull(boProp, "bOProp");
             if (Dictionary.Contains(boProp.PropertyName))
             {
-                throw new HabaneroArgumentException(String.Format(
+                throw new InvalidPropertyException(String.Format(
                     "The property with the name '{0}' that is being added already " +
                     "exists in the key collection.", boProp.PropertyName));
             }

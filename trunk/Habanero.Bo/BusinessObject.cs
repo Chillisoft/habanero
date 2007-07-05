@@ -856,7 +856,7 @@ namespace Habanero.Bo
             BOProp prop = _boPropCol[propName];
             if (prop == null)
             {
-                throw new PropertyNameInvalidException("The property '" + propName + 
+                throw new InvalidPropertyNameException("The property '" + propName + 
                     "' for the class '" + ClassName + "' has not been declared " +
                     "in the class definitions.  Add the property to the class " +
                     "definitions and add the property to the class, or check that " +
