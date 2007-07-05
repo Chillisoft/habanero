@@ -282,6 +282,37 @@ namespace Habanero.Bo.ClassDefinition
 			protected set { _compulsory = value; }
 		}
 
+
+		/// <summary>
+		/// Provides access to read and write the ILookupListSource object
+		/// in this definition
+		/// </summary>
+		public virtual ILookupListSource LookupListSource
+		{
+			get { return _lookupListSource; }
+			set { _lookupListSource = value; }
+		}
+
+		/// <summary>
+		/// Returns the rule for how the property can be accessed. 
+		/// See the PropReadWriteRule enumeration for more detail.
+		/// </summary>
+		public PropReadWriteRule ReadWriteRule
+		{
+			get { return _propRWStatus; }
+			protected set { _propRWStatus = value; }
+		}
+
+		/// <summary>
+		/// Indicates whether this object has a LookupList object set
+		/// </summary>
+		/// <returns>Returns true if so, or false if the local
+		/// LookupListSource equates to NullLookupListSource</returns>
+		public bool HasLookupList()
+		{
+			return (!(_lookupListSource is NullLookupListSource));
+		}
+
 		#endregion
 
         
@@ -412,36 +443,6 @@ namespace Habanero.Bo.ClassDefinition
         public string TableName
         {
             get { return ""; }
-        }
-
-        /// <summary>
-        /// Provides access to read and write the ILookupListSource object
-        /// in this definition
-        /// </summary>
-        public ILookupListSource LookupListSource
-        {
-            get { return _lookupListSource; }
-            set { _lookupListSource = value; }
-        }
-
-        /// <summary>
-        /// Returns the rule for how the property can be accessed. 
-        /// See the PropReadWriteRule enumeration for more detail.
-        /// </summary>
-        public PropReadWriteRule ReadWriteRule
-        {
-            get { return _propRWStatus; }
-			protected set{ _propRWStatus = value;}
-        }
-
-        /// <summary>
-        /// Indicates whether this object has a LookupList object set
-        /// </summary>
-        /// <returns>Returns true if so, or false if the local
-        /// LookupListSource equates to NullLookupListSource</returns>
-        public bool HasLookupList()
-        {
-            return (!(_lookupListSource is NullLookupListSource));
         }
 
         #endregion
