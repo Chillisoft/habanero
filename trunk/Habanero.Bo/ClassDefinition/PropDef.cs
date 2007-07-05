@@ -361,7 +361,6 @@ namespace Habanero.Bo.ClassDefinition
 		/// <summary>
         /// Returns the type of the property
         /// </summary>
-        /// TODO ERIC: what is this?
         protected internal Type PropType
         {
             get { return MyPropertyType; }
@@ -376,7 +375,6 @@ namespace Habanero.Bo.ClassDefinition
         /// <summary>
         /// Returns the parameter type (typically either DateTime or String)
         /// </summary>
-        /// TODO ERIC: can elaborate on this and parameter name
         public ParameterType ParameterType
         {
             get

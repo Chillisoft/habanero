@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
@@ -7,10 +8,9 @@ using NUnit.Framework;
 namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
-    /// The key definition that is being related to in a 
-    /// relationship between objects
+    /// Lists a set of property definitions that indicate which properties
+    /// to match together for two classes in a relationship
     /// </summary>
-    /// TODO ERIC - review
     public class RelKeyDef : DictionaryBase
     {
         /// <summary>
@@ -31,7 +31,13 @@ namespace Habanero.Bo.ClassDefinition
         {
             get
             {
-                //if (this.Contains(key)) //TODO_Err: If this does not exist
+                if (!Dictionary.Contains(propName))
+                {
+                    throw new InvalidPropertyNameException(String.Format(
+                        "In a relationship property definition, the property " +
+                        "with the name '{0}' does not exist in the collection " +
+                        "of properties.", propName));
+                }
                 return ((RelPropDef) Dictionary[propName]);
             }
         }

@@ -6,16 +6,13 @@ using NUnit.Framework;
 namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
-    /// The property definition of the key being related to in a
-    /// relationship between objects
+    /// Lists a property on which two classes in a relationship are
+    /// being matched
     /// </summary>
-    /// TODO ERIC - review
     public class RelPropDef
     {
         private PropDef _ownerPropDef;
 		private string _relatedClassPropName;
-
-		#region Constructors
 
 		/// <summary>
         /// Constructor to create new RelPropDef object
@@ -32,12 +29,8 @@ namespace Habanero.Bo.ClassDefinition
             _relatedClassPropName = relatedObjectPropName;
 		}
 
-		#endregion Constructors
-
-		#region Properties
-
     	///<summary>
-    	/// Gets or sets the Owner Property Def
+    	/// Gets or sets the property definition for the relationship owner
     	///</summary>
     	protected PropDef OwnerProperty
     	{
@@ -50,7 +43,7 @@ namespace Habanero.Bo.ClassDefinition
     	}
 
 		/// <summary>
-        /// The property definition name of the owner object
+        /// Returns the property name for the relationship owner
         /// </summary>
         public string OwnerPropertyName
         {
@@ -58,17 +51,14 @@ namespace Habanero.Bo.ClassDefinition
         }
 
         /// <summary>
-        /// The property name of the related class object
+        /// The property name to be matched to in the related class
         /// </summary>
-        /// TODO ERIC - may need clarification
         public string RelatedClassPropName
         {
 			get { return _relatedClassPropName; }
 			protected set { _relatedClassPropName = value; }
 		}
 
-		#endregion Properties
-		
 		/// <summary>
         /// Creates a new RelProp object based on this property definition
         /// </summary>

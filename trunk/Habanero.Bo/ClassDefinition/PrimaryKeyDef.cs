@@ -26,10 +26,9 @@ namespace Habanero.Bo.ClassDefinition
         public override void Add(PropDef propDef)
         {
             if (Count > 0 && mIsObjectID)
-                //TODO_Err: Raise appropriate Error
             {
-                Console.WriteLine("You cannot have more than one " +
-                                  "property for a primary key that represents and object id");
+                throw new InvalidPropertyException("You cannot have more than one " +
+                    "property for a primary key that represents an object id");
             }
             base.Add(propDef);
         }
@@ -71,9 +70,9 @@ namespace Habanero.Bo.ClassDefinition
             set
             {
                 if (value)
-                    //TODO error:Raise appropriate error.
                 {
-                    Console.WriteLine("Error occured since you cannot set primary key to ignore nulls");
+                    throw new InvalidKeyException("Error occured since you " +
+                        "cannot set primary key to ignore nulls");
                 }
             }
 		}

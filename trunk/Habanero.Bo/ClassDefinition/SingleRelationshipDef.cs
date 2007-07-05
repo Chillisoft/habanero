@@ -21,8 +21,8 @@ namespace Habanero.Bo.ClassDefinition
         /// <param name="relatedObjectClassType">The class type of the related object</param>
         /// <param name="relKeyDef">The related key definition</param>
         /// <param name="keepReferenceToRelatedObject">Whether to keep a
-        /// reference to the related object</param>
-        /// TODO ERIC - review last param
+        /// reference to the related object.  Could be false for memory-
+        /// intensive applications.</param>
         public SingleRelationshipDef(string relationshipName, Type relatedObjectClassType, RelKeyDef relKeyDef,
                                      bool keepReferenceToRelatedObject)
             : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject)
@@ -37,8 +37,8 @@ namespace Habanero.Bo.ClassDefinition
 		/// <param name="relatedObjectClassName">The class name of the related object</param>
 		/// <param name="relKeyDef">The related key definition</param>
 		/// <param name="keepReferenceToRelatedObject">Whether to keep a
-		/// reference to the related object</param>
-		/// TODO ERIC - review last param
+        /// reference to the related object.  Could be false for memory-
+        /// intensive applications.</param>
 		public SingleRelationshipDef(string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, RelKeyDef relKeyDef,
 									 bool keepReferenceToRelatedObject)
 			: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject)

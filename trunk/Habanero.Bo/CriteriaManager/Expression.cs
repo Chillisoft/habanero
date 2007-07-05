@@ -7,7 +7,6 @@ namespace Habanero.Bo.CriteriaManager
     /// Expression implements IExpression to manage an expression
     /// linked to possible left and right expressions
     /// </summary>
-    /// TODO ERIC - review
     public class Expression : IExpression
     {
         private IExpression _leftExpression;

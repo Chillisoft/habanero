@@ -3,7 +3,6 @@ namespace Habanero.Bo.ClassDefinition
 	/// <summary>
 	/// Manages a super-class in the case where inheritance is being used.
 	/// </summary>
-	/// TODO ERIC - what is desc? description?  maybe this could be renamed
 	public class SuperClassDef
 	{
 		private ORMapping _orMapping;

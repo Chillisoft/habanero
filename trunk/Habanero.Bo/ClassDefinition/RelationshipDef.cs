@@ -27,8 +27,8 @@ namespace Habanero.Bo.ClassDefinition
         /// <param name="relatedObjectClassType">The class type of the related object</param>
         /// <param name="relKeyDef">The related key definition</param>
         /// <param name="keepReferenceToRelatedObject">Whether to keep a
-        /// reference to the related object</param>
-        /// TODO ERIC - review above param
+        /// reference to the related object.  Could be false for memory-
+        /// intensive applications.</param>
 		public RelationshipDef(string relationshipName,
 							   Type relatedObjectClassType,
 							   RelKeyDef relKeyDef,
@@ -120,9 +120,9 @@ namespace Habanero.Bo.ClassDefinition
         }
 
         /// <summary>
-        /// Whether to keep a reference to the related object
+        /// Whether to keep a reference to the related object.  Could be false 
+        /// for memory-intensive applications.
         /// </summary>
-        /// TODO ERIC - review
         public bool KeepReferenceToRelatedObject
         {
 			get { return _keepReferenceToRelatedObject; }
