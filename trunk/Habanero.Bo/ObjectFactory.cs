@@ -3,7 +3,6 @@ namespace Habanero.Bo
     /// <summary>
     /// A factory to create objects
     /// </summary>
-    /// TODO ERIC - does this have any use?
     public class ObjectFactory
     {
         private static ObjectFactory _objectFactory;

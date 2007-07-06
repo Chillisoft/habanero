@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
@@ -8,7 +9,6 @@ namespace Habanero.Bo
     /// <summary>
     /// Manages a collection of relationships between business objects
     /// </summary>
-    /// TODO ERIC - where is set for multiple rel's?
     public class RelationshipCol : DictionaryBase, IRelationshipCol
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.RelationshipCol");
@@ -30,7 +30,13 @@ namespace Habanero.Bo
         /// <param name="lRelationship">The relationship to add</param>
         public void Add(Relationship lRelationship)
         {
-            //TODO_Err: Add sensible error handling if prop already exists etc
+            if (Dictionary.Contains(lRelationship.RelationshipName))
+            {
+                throw new InvalidPropertyException(String.Format(
+                    "A relationship with the name '{0}' is being added to a " +
+                    "collection, but already exists in the collection.",
+                    lRelationship.RelationshipName));
+            }
             base.Dictionary.Add(lRelationship.RelationshipName, lRelationship);
         }
 

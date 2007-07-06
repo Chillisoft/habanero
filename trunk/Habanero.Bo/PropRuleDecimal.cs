@@ -7,7 +7,6 @@ namespace Habanero.Bo
     /// <summary>
     /// Checks decimal values against property rules that test for validity
     /// </summary>
-    /// TODO ERIC - where is validity checked?
     public class PropRuleDecimal : PropRuleBase
     {
         private decimal _minValue = Decimal.MinValue;

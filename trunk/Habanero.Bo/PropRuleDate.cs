@@ -8,7 +8,6 @@ namespace Habanero.Bo
     /// <summary>
     /// Checks date values against property rules that test for validity
     /// </summary>
-    /// TODO ERIC - includes sets for min/max
     public class PropRuleDate : PropRuleBase
     {
         private DateTime _minValue = DateTime.MinValue;

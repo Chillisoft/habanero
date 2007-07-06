@@ -11,8 +11,6 @@ namespace Habanero.Bo
     /// See System.Text.RegularExpressions for more information on regular
     /// expression formatting.
     /// </summary>
-    /// TODO ERIC - include property for pattern
-    /// - include sets for max/min values
     public class PropRuleString : PropRuleBase
     {
         private int _maxLength = -1;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
@@ -5,9 +6,9 @@ using Habanero.Bo.CriteriaManager;
 namespace Habanero.Bo
 {
     /// <summary>
-    /// Manages a relationship key
+    /// Holds a collection of properties on which two classes in a relationship
+    /// are matching
     /// </summary>
-    /// TODO ERIC - what is the function of this class
     public class RelKey : DictionaryBase
     {
         private RelKeyDef _relKeyDef;
@@ -31,7 +32,13 @@ namespace Habanero.Bo
         {
             get
             {
-                //if (this.Contains(key)) //TODO_Err: If this does not exist
+                if (!Dictionary.Contains(propName))
+                {
+                    throw new InvalidPropertyNameException(String.Format(
+                        "A related property with the name '{0}' is being " +
+                        "accessed, but no property with that name exists in " +
+                        "the relationship's collection.", propName));
+                }
                 return ((RelProp) Dictionary[propName]);
             }
         }
@@ -42,7 +49,13 @@ namespace Habanero.Bo
         /// <param name="relProp">The RelProp object to add</param>
         internal virtual void Add(RelProp relProp)
         {
-            //TODO_Err: If this already exist
+            if (Dictionary.Contains(relProp.OwnerPropertyName))
+            {
+                throw new InvalidPropertyException(String.Format(
+                    "A related property with the name '{0}' is being added " +
+                    "to a collection, but already exists in the collection.",
+                    relProp.OwnerPropertyName));
+            }
             Dictionary.Add(relProp.OwnerPropertyName, relProp);
         }
 
