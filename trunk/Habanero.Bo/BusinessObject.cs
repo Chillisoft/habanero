@@ -489,16 +489,41 @@ namespace Habanero.Bo
                 Dictionary<string, object> lookupList = this.ClassDef.GetLookupListSource(propName).GetLookupList();
 
                 foreach (KeyValuePair<string, object> pair in lookupList) {
-                    if (pair.Value != null && pair.Value.Equals(myGuid )) {
-                        return pair.Key;
+                    if (pair.Value == null) continue;
+                    if (pair.Value is BusinessObject)
+                    {
+                        if (((BusinessObject)pair.Value)._primaryKey.GetGuid().Equals(myGuid)) {
+                            return pair.Key;
+                        }
+                    }
+                    else {
+                        if (pair.Value.Equals(myGuid)) {
+                            return pair.Key;
+                        }
                     }
                 }
                 return myGuid;
+            } else if (ClassDef.GetPropDef(propName).HasLookupList()) {
+                Dictionary<string, object> lookupList = this.ClassDef.GetLookupListSource(propName).GetLookupList();
+                foreach (KeyValuePair<string, object> pair in lookupList)
+                {
+                    if (pair.Value == null) continue;
+                    if (pair.Value.Equals(GetPropertyValue(propName)))
+                    {
+                        return pair.Key;
+                    } else if (pair.Value is BusinessObject) {
+                        if (String.Compare(((BusinessObject) pair.Value).ID.ToString(), GetPropertyValue(propName).ToString()) == 0)
+                            return pair.Value.ToString();
+                    }
+                    
+                }
+                return GetPropertyValue(propName);
             }
             else
             {
                 return GetPropertyValue(propName);
             }
+
         }
 
         /// <summary>
@@ -542,6 +567,9 @@ namespace Habanero.Bo
                         if (this.ClassDef.GetPropDef(propName).HasLookupList()) {
                             Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupListSource.GetLookupList();
                             propValue = lookupList[(string)propValue];
+                            if (propValue is BusinessObject) {
+                                propValue = ((BusinessObject) (propValue))._primaryKey.GetGuid();
+                            }
                         }
                     }
                 }
@@ -555,6 +583,14 @@ namespace Habanero.Bo
                 if (propValue != null && prop.PropertyType != propValue.GetType())
                 {
                     propValue = System.Activator.CreateInstance(prop.PropertyType, new object[] {propValue, false});
+                }
+            }
+            if (propValue is string && ClassDef.GetPropDef(propName).HasLookupList()) {
+                Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupListSource.GetLookupList();
+                if (lookupList.ContainsKey((string)propValue))
+                    propValue = lookupList[(string)propValue];
+                if (propValue is BusinessObject) {
+                    propValue = ((BusinessObject) (propValue)).ID.ToString();
                 }
             }
             // If the property will be changed by this set then

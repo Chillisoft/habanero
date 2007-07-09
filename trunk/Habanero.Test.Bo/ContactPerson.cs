@@ -11,6 +11,11 @@ namespace Habanero.Test.Bo
     {
         public ContactPerson() : base() { }
 
+        public Guid ContactPersonID
+        {
+            get { return (Guid) this.GetPropertyValue("ContactPersonID"); }
+        }
+
         public override string ToString()
         {
             return (string)this.GetPropertyValue("Surname");
@@ -22,7 +27,7 @@ namespace Habanero.Test.Bo
                 itsLoader.LoadClass(
                     @"
 				<class name=""ContactPerson"" assembly=""Habanero.Test.Bo"">
-					<property  name=""ContactPersonID"" />
+					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />

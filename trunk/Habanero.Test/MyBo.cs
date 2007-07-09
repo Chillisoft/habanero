@@ -202,6 +202,120 @@ namespace Habanero.Test
 			return itsClassDef;
         }
 
+        public static ClassDef LoadClassDefWithStringLookup()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBo"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" >
+						<simpleLookupList>
+							<item display=""Started"" value=""S"" />
+							<item display=""Complete"" value=""C"" />
+						</simpleLookupList>
+					</property>
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+
+
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithBOLookup()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBo"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" type=""Guid"" >
+						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.Bo"" />
+					</property>
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+
+
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithBOStringLookup()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBo"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" >
+						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.Bo"" />
+					</property>
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+
+
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadClassDefWithRelationship()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
