@@ -135,9 +135,6 @@
     <Compile Include="IDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IDateProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IExceptionNotifier.cs">
       <SubType>Code</SubType>
     </Compile>
