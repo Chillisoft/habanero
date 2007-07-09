@@ -365,6 +365,10 @@ www.chillisoft.co.za/habanero/download</a></p>
 <p><font color="#FF0000">&lt;&lt;instructions for unzipping/installation/licensing&gt;&gt;, 
 log4net.dll, .net, other dll's, installing databases</font></p>
 
+<p>Once you have chosen the database vendor you will be using, follow the 
+installation instructions for that database.&nbsp; Your Habanero-based 
+application will need access to the DLL's that come with that installation.</p>
+
 <p><b><font size="3">Technical Support</font></b></p>
 
 <p>Chillisoft provides support for Habanero through the website:
@@ -542,6 +546,9 @@ will be persisted to the database.&nbsp; However, when you amend a property
 directly in the code, you will then need to call ApplyEdit() on the object to 
 have the changes persisted.&nbsp; Thus, you can make several changes of 
 calculations and only save the changes when you are ready.</font></p>
+<p><font size="2">We also encourage the use of nullably types (with the ? on the 
+end) - should you need to cast a nullable type to a non-nullable type, use 
+&quot;.Value&quot;.</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
     <td width="100%" height="20" class="codeclass">
@@ -640,8 +647,8 @@ using Habanero.Ui.Grid;</code></pre></td>
 InitializeComponents();...</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
-    <td width="100%" class="codeitself"><pre><code>BusinessObjectCollection computerParts = new 
-    BusinessObjectCollection(new ComputerPart());
+    <td width="100%" class="codeitself"><pre><code>BusinessObjectCollection&lt;ComputerPart&gt; computerParts = new 
+    BusinessObjectCollection&lt;ComputerPart&gt;();
 computerParts.Load(&quot;&quot;, &quot;&quot;);
 
 BorderLayoutManager manager = new BorderLayoutManager(this);
@@ -746,7 +753,7 @@ database structure now looks like this:</font></p>
 <p align="center">
 <img border="0" src="database-part_update.gif" width="650" height="138"></p>
 <p><font face="Verdana" size="2">This class definitions have also been amended 
-as below - at this stage we're beginning to filter just how match information we 
+as below - at this stage we're beginning to filter just how much information we 
 want to show at any one time.&nbsp; As far as data types for properties go, 
 &quot;String&quot; is the default and the other types can be named either by their wrapper 
 class names (eg. Int32) or their standard use names (eg. int).&nbsp; (see <a href="#AppendixI">Appendix I</a> for  a  list of data types in the class definitions).</font></p>
@@ -759,9 +766,9 @@ class names (eg. Int32) or their standard use names (eg. int).&nbsp; (see <a hre
 &lt;class name=&quot;ComputerPart&quot; assembly=&quot;Replace_it&quot;&gt;
   &lt;property name=&quot;ComputerPartID&quot; type=&quot;Guid&quot; /&gt;
   &lt;property name=&quot;Description&quot; /&gt;
+  &lt;property name=&quot;Cost&quot; type=&quot;Decimal&quot; /&gt;
   &lt;property name=&quot;Price&quot; type=&quot;Decimal&quot; /&gt;
   &lt;property name=&quot;Stock&quot; type=&quot;Int32&quot; /&gt;
-  &lt;property name=&quot;Cost&quot; type=&quot;Decimal&quot; /&gt;
   &lt;property name=&quot;PartCode&quot; /&gt;
   &lt;primaryKey&gt;
     &lt;prop name=&quot;ComputerPartID&quot; /&gt;
@@ -828,7 +835,8 @@ below, as listed further down in the classdefs.xml file.&nbsp; When you edit a
 business object using the default editor (DefaultBOEditor/Creator), a one-line 
 text field is supplied for each database field.&nbsp; Here we have specified 
 that the &quot;DispatchedYet&quot; boolean field will use a &quot;CheckBox&quot; rather 
-than the standard TextBox.&nbsp; You would often need to specify the Habanero 
+than the standard TextBox, and that its default value is &quot;false&quot;, to prevent an 
+exception if the user does not touch it.&nbsp; You would often need to specify the Habanero 
 class that maps this control to the property, but for a handful of standard 
 controls the mapper can be assumed.&nbsp; See <a href="#AppendixI">Appendix I</a> for further clarification on control types 
 and their mappers.</font></p>
@@ -840,7 +848,7 @@ and their mappers.</font></p>
   &lt;property name=&quot;OrderNumber&quot; type=&quot;Int32&quot; /&gt;
   &lt;property name=&quot;Name&quot; /&gt;
   &lt;property name=&quot;TotalCharge&quot; type=&quot;Decimal&quot; /&gt;
-  &lt;property name=&quot;DispatchedYet&quot; type=&quot;Boolean&quot; /&gt;
+  &lt;property name=&quot;DispatchedYet&quot; type=&quot;Boolean&quot; default=&quot;false&quot; /&gt;
   &lt;primaryKey&gt;
     &lt;prop name=&quot;CustomerOrderID&quot; /&gt;
   &lt;/primaryKey&gt;
@@ -961,7 +969,7 @@ private void CreateMainMenu()
 
 private void SetBOCollection(BusinessObject bo)
 {
-    BusinessObjectCollection boCollection = new BusinessObjectCollection(bo);
+    BusinessObjectCollection&lt;BusinessObject&gt; boCollection = new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
     boCollection.Load(&quot;&quot;, &quot;&quot;);
 
     grid.SetBusinessObjectCollection(boCollection);
@@ -1033,11 +1041,11 @@ developer, but not for the end user, which is why all visible labels refer to
   &lt;/relationship&gt;
   &lt;ui&gt;
     &lt;grid&gt;
-      &lt;column heading=&quot;Part Code&quot; property=&quot;</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID</code></font><code>&quot; /&gt;
+      &lt;column heading=&quot;Part Code&quot; property=&quot;ComputerPartID&quot; /&gt;
       &lt;column heading=&quot;Quantity&quot; property=&quot;Quantity&quot; /&gt;
     &lt;/grid&gt;
     &lt;form height=&quot;200&quot; width=&quot;300&quot; title=&quot;Add an ordered item&quot;&gt;
-      &lt;field label=&quot;Part Code:&quot; property=&quot;</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID</code></font><code>&quot; /&gt;
+      &lt;field label=&quot;Part Code:&quot; property=&quot;ComputerPartID&quot; /&gt;
       &lt;field label=&quot;Quantity:&quot; property=&quot;Quantity&quot; /&gt;
     &lt;/form&gt;
   &lt;/ui&gt;
@@ -1098,10 +1106,10 @@ namespace Replace_it
             set { SetPropertyValue(&quot;CustomerOrderItemID&quot;, value); }
         }
 
-        public Guid? </code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID</code></font><code>
+        public Guid? ComputerPartID
         {
-            get { return (Guid?)GetPropertyValue(&quot;</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID</code></font><code>&quot;); }
-            set { SetPropertyValue(&quot;</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID</code></font><code>&quot;, value); }
+            get { return (Guid?)GetPropertyValue(&quot;ComputerPartID&quot;); }
+            set { SetPropertyValue(&quot;ComputerPartID&quot;, value); }
         }
 
         public int? Quantity
@@ -1130,7 +1138,7 @@ as defined in the class definitions):</p>
 <font face="Verdana,Arial,Helvetica" size="2">
 
     <td width="100%" class="codeitself">
-    <pre><code>public BusinessObjectCollection CustomerOrderItems
+    <pre><code>public BusinessObjectCollection&lt;BusinessObject&gt; CustomerOrderItems
 {
     get { return Relationships.GetRelatedBusinessObjectCol(&quot;CustomerOrderItems&quot;); }
 }</code></pre>
@@ -1245,7 +1253,7 @@ private void CreateMainMenu()
 
 private void SetBOCollection(BusinessObject bo)
 {
-    BusinessObjectCollection boCollection = new BusinessObjectCollection(bo);
+    BusinessObjectCollection&lt;BusinessObject&gt; boCollection = new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
     boCollection.Load(&quot;&quot;, &quot;&quot;);
     grid.SetBusinessObjectCollection(boCollection);
 }
@@ -1362,11 +1370,11 @@ former definitions for CustomerOrderItem:</p>
 <font face="Verdana,Arial,Helvetica" size="2">
 
     <td width="100%" class="codeitself">
-    <pre><code>&lt;property name=&quot;</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID</code></font><code>&quot; type=&quot;Guid&quot; &gt;
+    <pre><code>&lt;property name=&quot;ComputerPartID&quot; type=&quot;Guid&quot; &gt;
   &lt;businessObjectLookupList class=&quot;ComputerPart&quot; assembly=&quot;Replace_it&quot; /&gt;
-&lt;/property&gt;</code></pre>
-    <p><code>...</code></p>
-    <pre><code>&lt;field label=&quot;Part Code:&quot; property=&quot;</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID</code></font><code>&quot; type=&quot;ComboBox&quot; /&gt;</code></pre>
+&lt;/property&gt;
+...
+&lt;field label=&quot;Part Code:&quot; property=&quot;ComputerPartID&quot; type=&quot;ComboBox&quot; /&gt;</code></pre>
     </td>
     </font>
   </tr>
@@ -1381,8 +1389,8 @@ would be:</p>
 <font face="Verdana,Arial,Helvetica" size="2">
 
     <td width="100%" class="codeitself">
-    <pre><code>&lt;property name=&quot;</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID</code></font><code>&quot; type=&quot;Guid&quot; &gt;
-  &lt;databaseLookupList sql=&quot;select ComputerPartID, PartCode from computerpart order by PartCode&quot; /&gt;
+    <pre><code>&lt;property name=&quot;ComputerPartID&quot; type=&quot;Guid&quot; &gt;
+  &lt;databaseLookupList sql=&quot;select PartCode, ComputerPartID from computerpart order by PartCode&quot; /&gt;
 &lt;/property&gt;</code></pre>
     </td>
     </font>
@@ -1401,16 +1409,14 @@ information.&nbsp; Here is the new ToString() function in ComputerPart:</p>
     <td width="100%" class="codeitself">
     <pre><code>public override string ToString()
 {
-    return PartCode</code><font face="Verdana,Arial,Helvetica" size="2"><code> </code></font><code>+ &quot; - &quot; + Description;
+    return PartCode + &quot; - &quot; + Description;
 }</code></pre>
     </td>
     </font>
   </tr>
 </table>
 
-<p>Lastly,  the data type of PartCode in ComputerPart.cs from string to Guid.&nbsp; 
-For clarity of data, you can now see that the PartCode field should really be 
-called ComputerPartID, and such a naming convention is preferred for the future. <font color="#FF0000"><b>&lt;&lt;review this little bit&gt;&gt; </b></font>This should now 
+<p>This should now 
 run successfully.</p>
 
 <p><b><font size="3">Fulfilling Customer Orders</font></b></p>
@@ -1444,18 +1450,18 @@ there the next time we start the application.</p>
     <pre><code>private void DispatchClickedHandler(object sender, EventArgs e)
 {
     CustomerOrder selectedOrder = (CustomerOrder)grid.GetSelectedObject();
-    if (selectedOrder.DispatchedYet || selectedOrder.CustomerOrderItems.Count == 0)
+    if (selectedOrder.DispatchedYet.Value || selectedOrder.CustomerOrderItems.Count == 0)
         return;
 
-    BusinessObjectCollection stockAvailable = new BusinessObjectCollection(ComputerPart.Create());
+    BusinessObjectCollection&lt;ComputerPart&gt; stockAvailable = new BusinessObjectCollection&lt;ComputerPart&gt;();
     stockAvailable.Load(&quot;&quot;,&quot;&quot;);
 
     foreach (CustomerOrderItem orderItem in selectedOrder.CustomerOrderItems)
     {
-        ComputerPart matchingPart = (ComputerPart) stockAvailable.FindByGuid(orderItem.PartCode);
+        ComputerPart matchingPart = (ComputerPart) stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
         if (matchingPart == null)
         {
-            MessageBox.Show(&quot;Could not find: &quot; + orderItem.PartCode);
+            MessageBox.Show(&quot;Could not find: &quot; + orderItem.ComputerPartID);
             return;
         }
             
@@ -1468,7 +1474,7 @@ there the next time we start the application.</p>
 
     foreach (CustomerOrderItem orderItem in selectedOrder.CustomerOrderItems)
     {
-        ComputerPart matchingPart = (ComputerPart)stockAvailable.FindByGuid(orderItem.PartCode);
+        ComputerPart matchingPart = (ComputerPart)stockAvailable.FindByGuid(orderItem.</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID.Value</code></font><code>);
         matchingPart.Stock -= orderItem.Quantity;
         matchingPart.ApplyEdit();
     }
@@ -1484,6 +1490,42 @@ there the next time we start the application.</p>
 we've achieved this with very little contact with either the user interface 
 designer or 
 the database connections.</p>
+
+<p><b><font size="3">Better Number Control</font></b></p>
+
+<p>While our user interface is functional, it's not very robust, and an 
+experimental user could quickly bring our application down to earth.&nbsp; We can exercise some control of our cost input by using NumericUpDown controls.&nbsp; 
+There are two Habanero mappers for this control: the default 
+NumericUpDownIntegerMapper and the NumericUpDownMoneyMapper, which can be 
+assigned a variable number of decimal places.&nbsp; We'll simply assign a 
+different control and mapper type and we'll also give these properties a default 
+value to prevent a null exception being thrown by the database.</p>
+
+<p>This is also a good time to introduce property rules.&nbsp; In our parts 
+business, we obviously don't want a negative stock, so we can create a rule that 
+prevents negative integers.&nbsp; A rule can be a combination of smaller rules, 
+so that ranges can be created for instance.&nbsp; See Appendix I for a list of 
+available rule options.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeitself">
+    <pre><code>&lt;property name=&quot;Cost&quot; type=&quot;Decimal&quot; default=&quot;0&quot; /&gt;
+&lt;property name=&quot;Price&quot; type=&quot;Decimal&quot; default=&quot;0&quot; /&gt;
+&lt;property name=&quot;Stock&quot; type=&quot;Int32&quot; default=&quot;0&quot;&gt;
+    &lt;rule name=&quot;No negative stock&quot;&gt;
+        &lt;add key=&quot;min&quot; value=&quot;0&quot; /&gt;
+    &lt;/rule&gt;
+&lt;/property&gt;
+
+...
+
+&lt;field label=&quot;Cost:&quot; property=&quot;Cost&quot; type=&quot;NumericUpDown&quot; mapperType=&quot;NumericUpDownMoneyMapper&quot;/&gt;
+&lt;field label=&quot;Price:&quot; property=&quot;Price&quot; type=&quot;NumericUpDown&quot; mapperType=&quot;NumericUpDownMoneyMapper&quot; /&gt;
+&lt;field label=&quot;Stock:&quot; property=&quot;Stock&quot; type=&quot;NumericUpDown&quot;/&gt;</code></pre>
+</td>
+  </tr>
+</table>
 
 <p><b><font size="3">Further Exercises</font></b></p>
 <p><font size="2">If you are looking to experiment, you could:</font></p>
@@ -1526,7 +1568,7 @@ the database connections.</p>
   permissions list?)</font></li>
   <li><font size="2">progress indicators</font></li>
   <li><font size="2">error messaging</font></li>
-  <li><font size="2">criteria, property rules</font></li>
+  <li><font size="2">criteria</font></li>
   <li>version upgrader/dbmigrator</li>
   <li>inheritance</li>
   <li>filter objects/clauses?</li>
@@ -1570,7 +1612,7 @@ specifications further along for specific options and limitations.</p>
     &lt;rule name=&quot;rule_name&quot; /&gt;
       &lt;add key=&quot;max&quot; value=&quot;300&quot;&gt;
     &lt;/rule&gt;
-    &lt;databaseLookupList sql=&quot;select [display_field], [value_field] from [table]&quot; /&gt;
+    &lt;databaseLookupList sql=&quot;select display_field, value_field from table_name&quot; /&gt;
   &lt;/property&gt;
 
   &lt;key name=&quot;keydef_name&quot; ignoreNulls=&quot;true&quot;&gt;
@@ -1593,12 +1635,12 @@ specifications further along for specific options and limitations.</p>
       &lt;tab name=&quot;form_name&quot;&gt;
         &lt;columnLayout width=&quot;350&quot;&gt;
           &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; editable=&quot;false&quot; /&gt;
-        &lt;/</code><font face="Verdana,Arial,Helvetica" size="2"><code>columnLayout</code></font><code>&gt;
-        &lt;</code><font face="Verdana,Arial,Helvetica" size="2"><code>columnLayout</code></font><code>&gt;
+        &lt;/columnLayout&gt;
+        &lt;columnLayout&gt;
           &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; type=&quot;ComboBox&quot; mapperType=&quot;ListComboBoxMapper&quot;&gt;
             &lt;parameter name=&quot;options&quot; value=&quot;F|M&quot; /&gt;
           &lt;/field&gt;
-        &lt;/</code><font face="Verdana,Arial,Helvetica" size="2"><code>columnLayout</code></font><code>&gt;
+        &lt;/columnLayout&gt;
       &lt;/tab&gt;
       &lt;tab name=&quot;form_name2&quot;&gt;
         &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; type=&quot;TextBox&quot; /&gt;
@@ -2145,8 +2187,8 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
     <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
       <tr>
         <td width=170 class="specname">Description:</td>
-        <td class="specvalue">Specifies the alternate key for the class/table, 
-        which is the property or combination of properties which must be unique 
+        <td class="specvalue">Specifies a unique key for the class/table, 
+        which is a property or combination of properties which must be unique 
         for each instance/row.</td>
       </tr>
       <tr>
@@ -2521,7 +2563,8 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         <td width=170 class="specname">Description:</td>
         <td class="specvalue">Creates a tab in the editing form window. Several 
         tabs can be created, but if there is only one tab, then you don't need 
-        to include this element.</td>
+        to include this element.&nbsp; Under this element you can have either 
+        columnLayout or field elements but not a combination of the two.</td>
       </tr>
       <tr>
         <td class="specname">Comes under:</td>
@@ -2695,6 +2738,11 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
             <td class="options">the number of rows for the field control to span 
             across</td>
           </tr>
+          <tr>
+            <td class="options">decimalPlaces</td>
+            <td class="options">the number of decimals to allow when 
+            NumericUpDownMoneyMapper is used</td>
+          </tr>
         </table>
         </font>
         </td>
@@ -2713,7 +2761,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
 <ul>
   <li>relprop (can propnames be different?)</li>
   <li>add rule (extensibility class/ass name)</li>
-  <li>dbLL (check ordering of pair, class/ass use, 
+  <li>dbLL (class/ass use, 
   timeout implemented?)</li>
   <li>boLL (must use Guids?, dbl-check criteria implemented)</li>
   <li>primKey (objectID)</li>
@@ -3051,7 +3099,8 @@ details of a complicated error message:</p>
 
   <li>give examples of configuring habaneroapp before startup()</li>
   <li>what is our policy on integer primary keys (and auto-increments)?</li>
-  <li>database number generators</font><font face="Verdana,Arial,Helvetica" size="2"><font face="Verdana" size="2"><br>
+  <li>database number generators</li>
+  <li>which DLL's are needed for which database vendors</font><font face="Verdana,Arial,Helvetica" size="2"><font face="Verdana" size="2"><br>
 &nbsp;</font></li>
 </ul>
 
