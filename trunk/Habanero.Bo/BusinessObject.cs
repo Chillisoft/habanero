@@ -512,7 +512,7 @@ namespace Habanero.Bo
                     {
                         return pair.Key;
                     } else if (pair.Value is BusinessObject) {
-                        if (String.Compare(((BusinessObject) pair.Value).ID.ToString(), GetPropertyValue(propName).ToString()) == 0)
+                        if (String.Compare(((BusinessObject) pair.Value).ID.ToString(), GetPropertyValueString(propName)) == 0)
                             return pair.Value.ToString();
                     }
                     

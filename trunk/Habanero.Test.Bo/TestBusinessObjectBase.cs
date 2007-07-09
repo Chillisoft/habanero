@@ -88,6 +88,19 @@ namespace Habanero.Test.Bo
         }
 
         [Test]
+        public void TestBOLookupListNull()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBo.LoadClassDefWithBOStringLookup();
+            ContactPerson.LoadDefaultClassDef();
+            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            BusinessObject bo = classDef.CreateNewBusinessObject();
+            bo.SetPropertyValue("TestProp2", null);
+            Assert.AreEqual(null, bo.GetPropertyValue("TestProp2"));
+            Assert.AreEqual(null, bo.GetPropertyValueToDisplay("TestProp2"));
+        }
+
+        [Test]
         public void TestApplyEditResetsPreviousValues()
         {
             ClassDef.ClassDefs.Clear();
