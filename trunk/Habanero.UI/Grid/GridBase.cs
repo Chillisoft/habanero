@@ -15,7 +15,6 @@ namespace Habanero.Ui.Grid
     /// <summary>
     /// Serves as a super-class for grid implementations
     /// </summary>
-    /// TODO ERIC - clarify on STA threads?
     public abstract class GridBase : DataGridView
     {
         private delegate void SetGridDataProviderDelegate(IGridDataProvider provider);

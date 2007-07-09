@@ -36,7 +36,6 @@ namespace Habanero.Bo
         /// Indicates whether the related object has been specified
         /// </summary>
         /// <returns>Returns true if related object exists</returns>
-        /// TODO ERIC - review
         public virtual bool HasRelationship()
         {
             return _relKey.HasRelatedObject();

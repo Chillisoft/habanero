@@ -150,7 +150,6 @@ namespace Habanero.DB
         /// This string cannot be used directly as a sql statement on its own.
         /// </summary>
         /// <returns>Returns a string</returns>
-        /// TODO ERIC - this might be more useful if it was in usable format
         public override string ToString()
         {
             StringBuilder s = new StringBuilder(string.Format("Raw statement: {0}   , Parameter values: ", this.Statement));

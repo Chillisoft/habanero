@@ -92,7 +92,6 @@ namespace Habanero.Ui.Grid
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        /// TODO ERIC - this is not used
         private void FilterTextBoxValueChangedHandler(object sender, EventArgs e)
         {
             if (_isAutomaticUpdate)

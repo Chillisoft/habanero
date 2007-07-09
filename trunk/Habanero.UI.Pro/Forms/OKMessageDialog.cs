@@ -8,9 +8,6 @@ namespace Habanero.Ui.Forms
     /// <summary>
     /// Provides a popup box that displays a message to the user
     /// </summary>
-    /// TODO ERIC - rename to something like MessageBox or ScrollableMessageBox, 
-    /// because textbox implies that you can enter text - or can it be edited?
-    /// - add a constructor that provides a default width and height
     public class OKMessageDialog
     {
         private readonly string _title;
@@ -32,6 +29,16 @@ namespace Habanero.Ui.Forms
             _width = width;
             _height = height;
             _title = title;
+        }
+
+        /// <summary>
+        /// Constructor to initialise the form with a default width and height
+        /// </summary>
+        /// <param name="title">The form title</param>
+        /// <param name="message">The message to display</param>
+        public OKMessageDialog(string title, string message) : 
+            this(title, message, 250, 150)
+        {
         }
 
         /// <summary>

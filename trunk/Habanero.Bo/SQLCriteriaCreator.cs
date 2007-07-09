@@ -10,7 +10,6 @@ namespace Habanero.Bo.CriteriaManager
     /// Creates sql criteria clauses
     /// </summary>
     /// TODO: Needs to be parametrized.
-    /// TODO ERIC - needs serious revision
     public class SqlCriteriaCreator
     {
         private IExpression _expression;

@@ -32,8 +32,6 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="objValue">The value to prepare</param>
         /// <returns>Returns the reformatted object</returns>
-        /// TODO ERIC - prepare value for what?
-        /// - should this be public? is it useful beyond ConvertValueToStandardSql 
         internal static object PrepareValue(object objValue)
         {
             if (objValue is Guid)

@@ -22,7 +22,7 @@ namespace Habanero.Ui.Forms
         /// <summary>
         /// Returns the integer value from the form
         /// </summary>
-        /// TODO ERIC - definitely need a set here
+        /// TODO ERIC - have a set here?
         public int Value
         {
             get { return Convert.ToInt32(_numericUpDown.Value); }

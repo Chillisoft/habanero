@@ -44,10 +44,9 @@ namespace Habanero.Util
         }
 
         /// <summary>
-        /// Sets the quotes
+        /// Sets the list of quote types to recognise (' and " by default)
         /// </summary>
         /// <param name="quotes">The quotes</param>
-        /// TODO ERIC - hmm?
         public void SetQuotes(string[] quotes)
         {
             _quotes = quotes;

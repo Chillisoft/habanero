@@ -5,9 +5,8 @@ using NUnit.Framework;
 namespace Habanero.Bo
 {
     /// <summary>
-    /// Represents a property in a relationship
+    /// Represents the property on which two objects match up in a relationship
     /// </summary>
-    /// TODO ERIC - review
     public class RelProp
     {
         private BOProp _boProp;

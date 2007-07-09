@@ -9,10 +9,10 @@ using Habanero.Ui.Forms;
 namespace Habanero.Ui.Forms
 {
     /// <summary>
-    /// Maps a ComboBox that display a list of options
+    /// This class provides mapping from an explicit list of options to a
+    /// user interface ComboBox.  This mapper is used when you have specified
+    /// an "options" parameter for a ui field in the class definitions.
     /// </summary>
-    /// TODO ERIC - clarify the difference between the combo box types
-    /// - is list just a straight 1-d array and lookup a string-guid col?
     public class ListComboBoxMapper : ControlMapper
     {
         private ComboBox _comboBox;

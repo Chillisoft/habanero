@@ -9,10 +9,10 @@ using BusinessObject=Habanero.Bo.BusinessObject;
 namespace Habanero.Ui.Forms
 {
     /// <summary>
-    /// This mapper represents a user interface ComboBox object that represents
-    /// a business object collection
+    /// This class provides mapping from a business object collection to a
+    /// user interface ComboBox.  This mapper is used at code level when
+    /// you are explicitly providing a business object collection.
     /// </summary>
-    /// TODO ERIC - need to compare more with ComboBoxMaper
     public class CollectionComboBoxMapper
     {
         private readonly ComboBox _comboBox;

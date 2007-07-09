@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.XPath;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
 {
@@ -53,9 +54,13 @@ namespace Habanero.Base
         /// <param name="parentNode">The parent node object</param>
         /// <param name="elementName">The element name</param>
         /// <returns>Returns the value if found or an empty string if not</returns>
-        /// TODO: Error-checking on arguments
         public string ReadXmlValue(IXPathNavigable parentNode, string elementName)
         {
+            if (parentNode == null)
+            {
+                throw new HabaneroArgumentException("parentNode", "The parent node " +
+                    "being passed in the method ReadXMLValue() is null.");
+            }
             IXPathNavigable node = parentNode.CreateNavigator().SelectSingleNode(elementName);
             if (node != null)
                 return node.CreateNavigator().InnerXml;
@@ -71,10 +76,14 @@ namespace Habanero.Base
         /// <param name="parentNode">The parent of the node to be edited</param>
         /// <param name="elementName">The element name for the value</param>
         /// <param name="newValue">The new value to be applied</param>
-        /// TODO: Error checking on arguments
         public void WriteXmlValue(IXPathNavigable parentNode, string elementName,
                                   string newValue)
         {
+            if (parentNode == null)
+            {
+                throw new HabaneroArgumentException("parentNode", "The parent node " +
+                    "being passed in the method WriteXMLValue() is null.");
+            }
             IXPathNavigable node = parentNode.CreateNavigator().SelectSingleNode(elementName);
             if (node != null)
                 node.CreateNavigator().InnerXml = newValue;

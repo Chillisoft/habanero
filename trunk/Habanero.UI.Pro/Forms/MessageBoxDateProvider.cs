@@ -8,7 +8,8 @@ namespace Habanero.Ui.Forms
     /// <summary>
     /// Gets a date from the user using a dialog box
     /// </summary>
-    /// TODO ERIC - not sure what this does, the name is not intuitive
+    /// TODO ERIC - this seems to duplicate InputFormDate, maybe it should
+    /// be removed (should be renamed otherwise)
     public class MessageBoxDateProvider : IDateProvider
     {
         private readonly string _message;

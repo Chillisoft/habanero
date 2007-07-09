@@ -7,7 +7,7 @@ namespace Habanero.Base
     /// receipt number for a retail business.  Incrementing the numbers
     /// as they are dispensed is one means of achieving uniqueness.
     /// </summary>
-    /// TODO ERIC
+    /// TODO:
     /// - need to apply synchronisation to ensure new number not retrieved
     /// by another user before first user saves and updates number (could
     /// update immediately)

@@ -7,10 +7,11 @@ using Habanero.Ui.Base;
 namespace Habanero.Ui.Base
 {
     /// <summary>
-    /// Provides data to a facility
-    /// that uses such data, such as a ReadOnlyGridWithButtons
+    /// Provides data to a facility that uses such data, such as a 
+    /// ReadOnlyGridWithButtons.  Unlike CollectionGridDataProvider, which
+    /// loads the data dynamically, with this class you can explicitly set
+    /// the data collection.
     /// </summary>
-    /// TODO ERIC - how does this differ from CollectionGridDataProvider?
     public class SimpleGridDataProvider : IGridDataProvider
     {
         private BusinessObjectCollection<BusinessObject> _collection;

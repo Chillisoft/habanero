@@ -17,7 +17,6 @@ namespace Habanero.Ui.Forms
     /// Creates panels that display business object information in a user
     /// interface
     /// </summary>
-    /// TODO ERIC - don't understand the dif btw dif create() methods
     public class PanelFactory
     {
         private static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.BoControls.PanelFactory");
@@ -342,7 +341,6 @@ namespace Habanero.Ui.Forms
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        /// TODO ERIC - entered? is this used?
         private void PanelEnteredHandler(object sender, EventArgs e)
         {
             _firstControl.Focus();
@@ -354,7 +352,6 @@ namespace Habanero.Ui.Forms
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        /// TODO ERIC - enter key or "entered into", see below and above also
         private void UpDownEnterHandler(object sender, EventArgs e)
         {
             NumericUpDown upDown = (NumericUpDown) sender;

@@ -15,8 +15,6 @@ namespace Habanero.DB
     /// A super-class to manage a database connection and execute sql commands
     /// </summary>
     /// "See registry (480) think typesafe as well."
-    /// TODO ERIC - can use a lot more clarity on what is open/not, etc. 
-    /// what is the process
     public abstract class DatabaseConnection : IDatabaseConnection
     {
         private readonly string _assemblyName;
@@ -340,7 +338,6 @@ namespace Habanero.DB
         /// <param name="selectSql">The sql statement object</param>
         /// <param name="strOrderByCriteria">A sql order-by clause</param>
         /// <returns>Returns an IDataReader object</returns>
-        /// TODO ERIC - say more, what happens, what is the result? (and next one)
         public IDataReader LoadDataReader(ISqlStatement selectSql, string strOrderByCriteria)
         {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
@@ -389,7 +386,11 @@ namespace Habanero.DB
         /// output to the log.</exception>
         public IDataReader LoadDataReader(ISqlStatement selectSql)
         {
-            //TODO_Err:Check that sql not null
+            if (selectSql == null)
+            {
+                throw new DatabaseConnectionException("The sql statement object " +
+                    "that has been passed to LoadDataReader() is null.");
+            }
             IDbConnection con = null;
             try
             {
@@ -664,10 +665,10 @@ namespace Habanero.DB
         }
 
         /// <summary>
-        /// Set the time-out period in seconds
+        /// Set the time-out period in seconds, after which the connection
+        /// attempt will fail
         /// </summary>
         /// <param name="timeoutSeconds">The time-out period in seconds</param>
-        /// TODO ERIC - times out what?
         public void SetTimeoutPeriod(int timeoutSeconds)
         {
             _timeoutPeriod = timeoutSeconds;
@@ -686,7 +687,6 @@ namespace Habanero.DB
         /// <exception cref="DatabaseReadException">Thrown if there is an
         /// error reading the database.  Also outputs error messages to the log.
         /// </exception>
-        /// TODO ERIC - ?are the last two args used?
         public DataTable LoadDataTable(ISqlStatement selectSql, string strSearchCriteria, string strOrderByCriteria)
         {
             if (selectSql == null) throw new ArgumentNullException("selectSql");

@@ -7,7 +7,6 @@ namespace Habanero.DB
     /// <summary>
     /// Stores database configuration information in an XML format
     /// </summary>
-    /// TODO ERIC - review
     public class XmlDatabaseConfig : DatabaseConfig
     {
         private IXPathNavigable _node;

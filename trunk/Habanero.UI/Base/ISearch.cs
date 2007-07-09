@@ -5,7 +5,6 @@ namespace Habanero.Ui.Base
     /// <summary>
     /// An interface to model a search facility
     /// </summary>
-    /// TODO ERIC - is this needed?
     public interface ISearch
     {
         /// <summary>

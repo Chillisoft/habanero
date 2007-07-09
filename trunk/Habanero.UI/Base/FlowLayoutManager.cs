@@ -277,7 +277,7 @@ namespace Habanero.Ui.Base
         /// Adds "glue" to the current position, which fills the space
         /// between components
         /// </summary>
-        /// TODO ERIC - double-check this
+        /// TODO ERIC - double-check these comments
         public void AddGlue()
         {
             _gluePositions.Add(this._controls.Count);
@@ -288,7 +288,7 @@ namespace Habanero.Ui.Base
         /// </summary>
         /// <param name="pos">The position in question</param>
         /// <returns>Returns true if "glued", false if not</returns>
-        /// TODO ERIC - review
+        /// TODO ERIC - review comments
         private bool IsGlueAtPosition(int pos)
         {
             foreach (int gluePosition in _gluePositions)

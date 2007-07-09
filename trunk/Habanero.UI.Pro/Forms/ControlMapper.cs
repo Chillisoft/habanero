@@ -154,9 +154,8 @@ namespace Habanero.Ui.Forms
         }
 
         /// <summary>
-        /// Returns the property name of the control being mapped
+        /// Returns the name of the property being edited in the control
         /// </summary>
-        /// TODO ERIC - need to clarify property name in this and other usage
         public string PropertyName
         {
             get { return _propertyName; }
@@ -278,7 +277,6 @@ namespace Habanero.Ui.Forms
         /// <summary>
         /// Initialises the control using the attributes already provided
         /// </summary>
-        /// TODO ERIC - clarify (is setpropattr the only way to set attribs?)
         protected virtual void InitialiseWithAttributes()
         {
         }

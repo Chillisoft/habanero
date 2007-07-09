@@ -427,7 +427,7 @@ namespace Habanero.Ui.Base
         /// </summary>
         /// <param name="columnNumber">The column in question</param>
         /// <returns>Returns the fixed width or -1</returns>
-        /// TODO ERIC - add a row equivalent
+        /// TODO ERIC - add a row equivalent?
         public int GetFixedColumnWidth(int columnNumber)
         {
             return this._columnWidths[columnNumber];

@@ -27,11 +27,21 @@ namespace Habanero.Base
             _defs.Add(def.Name, def);
         }
 
+        /// <summary>
+        /// Indicates whether the given ui definition is contained in the
+        /// collection
+        /// </summary>
+        /// <param name="def">The ui definition</param>
+        /// <returns>Returns true if contained</returns>
 		public bool Contains(UIDef def)
 		{
 			return _defs.ContainsKey(def.Name);
 		}
 
+        /// <summary>
+        /// Removes the specified ui definition from the collection
+        /// </summary>
+        /// <param name="def">The ui definition to remove</param>
 		public void Remove(UIDef def)
 		{
 			_defs.Remove(def.Name);

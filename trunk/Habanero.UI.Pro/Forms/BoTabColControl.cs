@@ -106,7 +106,6 @@ namespace Habanero.Ui.Forms
         /// <summary>
         /// Carries out additional steps when the user selects a different tab
         /// </summary>
-        /// TODO ERIC - sta thread?
         private void TabChangedInSTAThread()
         {
             _tabControl.SelectedTab.Controls.Clear();

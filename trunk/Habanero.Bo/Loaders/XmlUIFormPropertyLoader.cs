@@ -83,7 +83,7 @@ namespace Habanero.Bo.Loaders
             LoadMapperTypeName();
             LoadMapperTypeAssembly();
             LoadEditable();
-            LoadAttributes();
+            LoadParameters();
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace Habanero.Bo.Loaders
         /// Loads the attributes from the reader. This method is
         /// called by LoadFromReader().
         /// </summary>
-        private void LoadAttributes()
+        private void LoadParameters()
         {
             _propertyAttributes = new Hashtable();
             //System.Console.WriteLine(_reader.Name);

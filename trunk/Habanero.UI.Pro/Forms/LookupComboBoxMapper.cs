@@ -9,9 +9,10 @@ using Habanero.Ui.Forms;
 namespace Habanero.Ui.Forms
 {
     /// <summary>
-    /// Maps the lookup ComboBox
+    /// This class provides mapping from a lookup-list to a
+    /// user interface ComboBox.  This mapper is used when you have specified
+    /// a lookup-list for a property definition in the class definitions.
     /// </summary>
-    /// TODO ERIC - what's the dif btw these? what is lookup?
     public class LookupComboBoxMapper : ComboBoxMapper
     {
 

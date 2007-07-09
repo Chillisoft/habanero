@@ -4,9 +4,12 @@ namespace Habanero.Base
 {
     /// <summary>
     /// Manages property definitions for a grid in a user interface editing
-    /// form, as specified in the class definitions xml file
+    /// form that edits properties belonging to a class that is in a
+    /// relationship with the object being edited.  For example, if you have
+    /// order items that make up an order, contained in the editing form
+    /// for the order would be a UIFormGrid in which you can edit the
+    /// individual order items.
     /// </summary>
-    /// TODO ERIC - review - what does this do? relationships?
     public class UIFormGrid
     {
         private string _relationshipName;
