@@ -15,6 +15,7 @@ namespace Habanero.Test
     public class Sample : BusinessObject
     {
         private static Dictionary<string, object> itsLookupCollection;
+        private static Dictionary<string, object> itsBOLookupCollection;
 
         public Sample() : base()
         {
@@ -81,6 +82,8 @@ namespace Habanero.Test
             itsLookupCollection.Add("Test3", new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}"));
             lPropDef.LookupListSource = new SimpleLookupListSource(itsLookupCollection);
             lPropDefCol.Add(lPropDef);
+                lPropDefCol.Add(new PropDef("SampleLookup3ID", typeof (String), PropReadWriteRule.ReadWrite, "SampleLookup3ID",
+                                            null));
             lPropDefCol.Add("SampleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
@@ -95,6 +98,21 @@ namespace Habanero.Test
         public static Dictionary<string, object> LookupCollection
         {
             get { return itsLookupCollection; }
+        }
+
+        public static Dictionary<string, object> BOLookupCollection
+        {
+            get
+            {
+                if (itsBOLookupCollection == null) {
+
+                    itsBOLookupCollection = new Dictionary<string, object>();
+                    itsBOLookupCollection.Add("Test1", new Sample());
+                    itsBOLookupCollection.Add("Test2", new Sample());
+                    itsBOLookupCollection.Add("Test3", new Sample());
+                }
+                return itsBOLookupCollection;
+            }
         }
 
         public DateTime SampleDate
