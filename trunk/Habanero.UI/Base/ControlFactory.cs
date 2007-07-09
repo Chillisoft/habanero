@@ -366,5 +366,11 @@ namespace Habanero.Ui.Base
             rButton.Width = CreateLabel(text, false).PreferredWidth + 25;
             return rButton;
         }
+
+        public static GroupBox CreateGroupBox( )
+        {
+            return new GroupBox();
+            
+        }
     }
 }

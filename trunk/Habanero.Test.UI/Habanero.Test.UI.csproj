@@ -59,7 +59,6 @@
     <Compile Include="TestButtonControl.cs" />
     <Compile Include="TestCheckBoxMapper.cs" />
     <Compile Include="TestCollectionComboBoxMapper.cs" />
-    <Compile Include="TestCollectionGridDataProvider.cs" />
     <Compile Include="TestColumnLayoutManager.cs" />
     <Compile Include="TestComboBoxCollectionControl.cs" />
     <Compile Include="TestControlCollection.cs" />

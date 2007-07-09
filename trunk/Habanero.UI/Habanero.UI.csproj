@@ -69,7 +69,6 @@
     <Compile Include="Grid\CalendarEditingControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Base\CollectionGridDataProvider.cs" />
     <Compile Include="Base\ColumnLayoutManager.cs" />
     <Compile Include="Base\ControlCollection.cs" />
     <Compile Include="Grid\DataGridViewDateTimeColumn.cs" />
@@ -90,19 +89,15 @@
     </Compile>
     <Compile Include="Base\GridLayoutManager.cs" />
     <Compile Include="Grid\IEditableGrid.cs" />
-    <Compile Include="Base\IFormDataProvider.cs" />
     <Compile Include="Grid\IGrid.cs" />
-    <Compile Include="Base\IGridDataProvider.cs" />
     <Compile Include="Grid\IGridWithButtons.cs" />
     <Compile Include="Grid\IReadOnlyGrid.cs" />
-    <Compile Include="Base\ISearch.cs" />
     <Compile Include="Base\LayoutManager.cs" />
     <Compile Include="Grid\NumericUpDownCell.cs" />
     <Compile Include="Grid\NumericUpDownEditingControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Base\SimpleGridDataProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">

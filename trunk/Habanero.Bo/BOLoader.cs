@@ -410,5 +410,10 @@ namespace Habanero.Bo
         {
             return bo.GetDatabaseConnection();
         }
+
+        public void SetDatabaseConnection(BusinessObject bo, IDatabaseConnection connection)
+        {
+            bo.SetDatabaseConnection(connection);
+        }
     }
 }

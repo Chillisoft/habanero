@@ -29,12 +29,24 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Constructor to initialise a new grid with a data provider
+        /// Sets the collection of this grid, populating the grid with the collection of business objects
+        /// using the ui specified to format the columns.
         /// </summary>
-        /// <param name="provider">The data provider</param>
-        public SimpleGridWithButtons(IGridDataProvider provider) : this()
+        /// <param name="boCol">The collection to populate the grid with</param>
+        /// <param name="uiName">The ui to use</param>
+        public void SetCollection(BusinessObjectCollection<BusinessObject> boCol, string uiName)
         {
-            _grid.SetGridDataProvider(provider);
+            _grid.SetCollection(boCol, uiName);
+        }
+
+        /// <summary>
+        /// Sets the collection of this grid, populating the grid with the collection of business objects
+        /// using the default ui.
+        /// </summary>
+        /// <param name="boCol">The collection to populate the grid with</param>
+        public void SetCollection(BusinessObjectCollection<BusinessObject> boCol)
+        {
+            _grid.SetCollection(boCol, "default");
         }
 
         /// <summary>

@@ -18,64 +18,121 @@ namespace Habanero.Ui.Forms
     public class ComboBoxCollectionControl : UserControl
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BOControls.ComboBoxCollectionControl");
-        private readonly IDatabaseConnection _databaseConnection;
-        private readonly IConfirmer _confirmer;
+        private IDatabaseConnection _databaseConnection;
+        private IConfirmer _confirmer;
         private PanelFactoryInfo _panelFactoryInfo;
         private ComboBox _collectionComboBox;
         private CollectionComboBoxMapper _comboBoxMapper;
         private int _oldSelectedIndex;
         private ButtonControl _buttons;
-        private BusinessObjectCollection<BusinessObject> _boCollection;
+        private BusinessObjectCollection<BusinessObject> _collection;
+        private string _uiName;
+        private GroupBox _uxBOGroupBox;
+        private Label _label;
+        private Panel comboBoxPanel;
 
         /// <summary>
         /// Constructor to initialise a new control object that has a
         /// window listing a label, a ComboBox and buttons to allow business
         /// objects in the ComboBox to be added or edited
         /// </summary>
-        /// <param name="label">The label to appear above the ComboBox</param>
-        /// <param name="provider">The provider of the relevant data</param>
-        /// <param name="confirmer">The confirmer object</param>
-        /// <param name="databaseConnection">The database connection</param>
-        public ComboBoxCollectionControl(string label, IFormDataProvider provider, IConfirmer confirmer,
-                                         IDatabaseConnection databaseConnection)
+        public ComboBoxCollectionControl()
         {
             //log.Debug("Creating comboboxcollectioncontrol") ;
-            _databaseConnection = databaseConnection;
+            //_databaseConnection = databaseConnection;
             BorderLayoutManager manager = new BorderLayoutManager(this);
             _collectionComboBox = new ComboBox();
             _comboBoxMapper = new CollectionComboBoxMapper(_collectionComboBox);
-            _boCollection = provider.GetCollection();
-            _comboBoxMapper.SetCollection(_boCollection, true);
 
-            Panel comboBoxPanel = new Panel();
+            comboBoxPanel = new Panel();
             GridLayoutManager comboBoxPanelManager = new GridLayoutManager(comboBoxPanel);
             comboBoxPanelManager.SetGridSize(1, 2);
             comboBoxPanelManager.FixColumnBasedOnContents(0);
             comboBoxPanelManager.FixAllRowsBasedOnContents();
-            comboBoxPanelManager.AddControl(ControlFactory.CreateLabel(label, false));
+            _label = ControlFactory.CreateLabel("Your label here", false);
+            comboBoxPanelManager.AddControl(_label);
             comboBoxPanelManager.AddControl(_collectionComboBox);
             comboBoxPanel.Height = comboBoxPanelManager.GetFixedHeightIncludingGaps();
 
-            PanelFactory panelFactory =
-                new PanelFactory(_boCollection.ClassDef.CreateNewBusinessObject(), provider.GetUIFormDef());
-            _panelFactoryInfo = panelFactory.CreatePanel();
-            _panelFactoryInfo.Panel.Enabled = false;
+            _uxBOGroupBox = ControlFactory.CreateGroupBox();
+
 
             _buttons = new ButtonControl();
             _buttons.AddButton("Save", new EventHandler(SaveButtonClickHander));
             _buttons.AddButton("Cancel", new EventHandler(CancelButtonClickHandler));
             _buttons.AddButton("Add", new EventHandler(AddButtonClickHandler));
 
-            this.Height = comboBoxPanel.Height + _panelFactoryInfo.Panel.Height + _buttons.Height;
-            this.Width = _panelFactoryInfo.Panel.Width;
-            manager.AddControl(_panelFactoryInfo.Panel, BorderLayoutManager.Position.Centre);
+
+            manager.AddControl(_uxBOGroupBox, BorderLayoutManager.Position.Centre);
             manager.AddControl(comboBoxPanel, BorderLayoutManager.Position.North);
             manager.AddControl(_buttons, BorderLayoutManager.Position.South);
 
             _collectionComboBox.SelectedIndexChanged += new EventHandler(CollectionComboBoxIndexChangedHandler);
-            _confirmer = confirmer;
+            //_confirmer = confirmer;
             _oldSelectedIndex = -1;
             //log.Debug("Done Creating comboboxcollectioncontrol") ;
+        }
+
+        public void SetCollection(BusinessObjectCollection<BusinessObject> collection)
+        {
+            SetCollection(collection, "default");
+        }
+
+        public void SetCollection(BusinessObjectCollection<BusinessObject> collection, string uiName)
+        {
+            _collection = collection;
+            _uiName = uiName;
+
+            _comboBoxMapper.SetCollection(_collection, true);
+
+            PanelFactory panelFactory =
+                new PanelFactory(_collection.ClassDef.CreateNewBusinessObject(), _collection.ClassDef.UIDefCol[uiName].UIFormDef);
+            _panelFactoryInfo = panelFactory.CreatePanel();
+            _panelFactoryInfo.Panel.Enabled = false;
+
+            _panelFactoryInfo.Panel.Dock = DockStyle.Fill;
+            _uxBOGroupBox.Controls.Clear();
+            _uxBOGroupBox.Controls.Add(_panelFactoryInfo.Panel);
+
+            this.Height = comboBoxPanel.Height + _panelFactoryInfo.Panel.Height + _buttons.Height + 20;
+            this.Width = _panelFactoryInfo.Panel.Width + 20;
+
+        }
+
+        public BusinessObjectCollection<BusinessObject> Collection
+        {
+            get
+            {
+                return _collection;
+            }
+        }
+
+        public IConfirmer Confirmer
+        {
+            get
+            {
+                return _confirmer;
+
+            }
+            set
+            {
+                _confirmer = value;
+            }
+        }
+
+        public string Label
+        {
+            get
+            {
+                return _label.Text;
+            }
+            set
+            {
+                Label l = ControlFactory.CreateLabel(value, false);
+                _label.Width = l.Width;
+                _label.Text = value;
+
+            }
         }
 
         /// <summary>
@@ -86,8 +143,8 @@ namespace Habanero.Ui.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddButtonClickHandler(object sender, EventArgs e)
         {
-            _panelFactoryInfo.ControlMappers.BusinessObject =
-                _boCollection.ClassDef.CreateNewBusinessObject(_databaseConnection);
+     
+                _panelFactoryInfo.ControlMappers.BusinessObject = _collection.ClassDef.CreateNewBusinessObject(_databaseConnection);
             _collectionComboBox.SelectedIndex = -1;
             _collectionComboBox.Enabled = false;
             _buttons["Add"].Enabled = false;
@@ -119,7 +176,7 @@ namespace Habanero.Ui.Forms
             if (this.SelectedBusinessObject.State.IsNew)
             {
                 this.SelectedBusinessObject.Save();
-                _boCollection.Add(this.SelectedBusinessObject);
+                _collection.Add(this.SelectedBusinessObject);
                 this.CollectionComboBox.SelectedItem = this.SelectedBusinessObject;
             }
             else
@@ -156,13 +213,19 @@ namespace Habanero.Ui.Forms
             if (_oldSelectedIndex != -1 && _oldSelectedIndex != _collectionComboBox.SelectedIndex &&
                 SelectedBusinessObject.State.IsDirty)
             {
-                if (_confirmer.Confirm("Do you want to want to save before moving on?"))
-                {
+                if (_confirmer != null) {
+                    if (_confirmer.Confirm("Do you want to want to save before moving on?")) {
+                        SelectedBusinessObject.Save();
+                    }
+                    else {
+                        _collectionComboBox.SelectedIndex = _oldSelectedIndex;
+                    }
+                } else {
+                    if (_databaseConnection != null) {
+                        BOLoader.Instance.SetDatabaseConnection(SelectedBusinessObject, _databaseConnection);
+                    }
+                    
                     SelectedBusinessObject.Save();
-                }
-                else
-                {
-                    _collectionComboBox.SelectedIndex = _oldSelectedIndex;
                 }
             }
             _panelFactoryInfo.ControlMappers.BusinessObject = _comboBoxMapper.SelectedBusinessObject;
@@ -208,6 +271,12 @@ namespace Habanero.Ui.Forms
         public BusinessObject SelectedBusinessObject
         {
             get { return _panelFactoryInfo.ControlMappers.BusinessObject; }
+        }
+
+        public IDatabaseConnection DatabaseConnection
+        {
+            get { return _databaseConnection;  }
+            set { _databaseConnection = value; }
         }
     }
 }

@@ -36,6 +36,6 @@ namespace Habanero.Ui.Grid
         /// Returns the name of the ui 
         /// </summary>
         /// <returns>Returns the name of the ui</returns>
-        string GetUIDefName();
+        string UIName { get; }
     }
 }

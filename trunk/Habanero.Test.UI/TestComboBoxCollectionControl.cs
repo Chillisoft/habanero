@@ -19,7 +19,6 @@ namespace Habanero.Test.Ui.BoControls
     {
         private ClassDef itsClassDef;
         private ComboBoxCollectionControl itsControl;
-        private Mock itsDataProviderMockControl;
         private Mock itsConfirmerMockControl;
         private BusinessObjectCollection<BusinessObject> itsCollection;
         Mock itsDatabaseConnectionMockControl;
@@ -36,11 +35,8 @@ namespace Habanero.Test.Ui.BoControls
             ClassDef.ClassDefs.Clear();
             itsClassDef = MyBo.LoadDefaultClassDef();
 
-            itsDataProviderMockControl = new DynamicMock(typeof (IFormDataProvider));
-            IFormDataProvider dataProviderMock = (IFormDataProvider) itsDataProviderMockControl.MockInstance;
-
-            itsConfirmerMockControl = new DynamicMock(typeof (IConfirmer));
-            IConfirmer confirmerMock = (IConfirmer) itsConfirmerMockControl.MockInstance;
+            itsConfirmerMockControl = new DynamicMock(typeof(IConfirmer));
+            IConfirmer confirmerMock = (IConfirmer)itsConfirmerMockControl.MockInstance;
 
             itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
             IDatabaseConnection databaseConnectionMock =
@@ -68,18 +64,16 @@ namespace Habanero.Test.Ui.BoControls
             itsCollection.Add(bo1);
             itsCollection.Add(bo2);
 
-            itsDataProviderMockControl.ExpectAndReturn("GetCollection", itsCollection);
-            itsDataProviderMockControl.ExpectAndReturn("GetUIFormDef",
-                                                       new BOMapper(bo1).GetUserInterfaceMapper().GetUIFormProperties());
-
-            itsControl =
-                new ComboBoxCollectionControl("Select MyBo:", dataProviderMock, confirmerMock, databaseConnectionMock);
+            itsControl = new ComboBoxCollectionControl();
+            itsControl.SetCollection(itsCollection);
+            itsControl.Label = "Select MyBo:";
+            itsControl.DatabaseConnection = databaseConnectionMock;
+            itsControl.Confirmer = confirmerMock;
         }
 
         [TearDown]
         public void TearDownTest()
         {
-            itsDataProviderMockControl.Verify();
             itsConfirmerMockControl.Verify();
             itsDatabaseConnectionMockControl.Verify();
         }
@@ -131,7 +125,7 @@ namespace Habanero.Test.Ui.BoControls
         public void TestUpdateBusinessObjectWithConfirmFalse()
         {
             itsConfirmerMockControl.ExpectAndReturn("Confirm", false,
-                                                    new object[] {"Do you want to want to save before moving on?"});
+              new object[] {"Do you want to want to save before moving on?"});
             itsControl.CollectionComboBox.SelectedIndex = 1;
 
             BusinessObject selectedBo = itsControl.SelectedBusinessObject;

@@ -57,7 +57,7 @@ namespace Habanero.Test.Ui.Application
         public void TestEditButtonClickSuccessfulEdit()
         {
             itsGridMock.ExpectAndReturn("SelectedBusinessObject", itsBo, new object[] {});
-            itsGridMock.ExpectAndReturn("GetUIDefName", "default", new object[] { });
+            itsGridMock.ExpectAndReturn("UIName", "default", new object[] { });
             itsObjectEditorMock.ExpectAndReturn("EditObject", true, new object[] { itsBo, "default" });
             //itsGridMock.Expect("RefreshRow", new object[] { itsBo }) ;
             itsButtons.ObjectEditor = itsEditor;
@@ -71,7 +71,7 @@ namespace Habanero.Test.Ui.Application
         public void TestEditButtonClickUnsuccessfulEdit()
         {
             itsGridMock.ExpectAndReturn("SelectedBusinessObject", itsBo, new object[] {});
-            itsGridMock.ExpectAndReturn("GetUIDefName", "default", new object[] { });
+            itsGridMock.ExpectAndReturn("UIName", "default", new object[] { });
             itsObjectEditorMock.ExpectAndReturn("EditObject", false, new object[] { itsBo, "default" });
             //itsGridMock.ExpectNoCall("RefreshRow", new Type[] {typeof(object)});
             itsButtons.ObjectEditor = itsEditor;
@@ -97,7 +97,7 @@ namespace Habanero.Test.Ui.Application
         [Test]
         public void TestAddButtonClickSuccessfulAdd()
         {
-            itsGridMock.ExpectAndReturn("GetUIDefName", "default", new object[]{} );
+            itsGridMock.ExpectAndReturn("UIName", "default", new object[]{} );
             itsObjectCreatorMock.ExpectAndReturn("CreateObject", itsBo, new object[] {itsEditor, "default"});
             itsGridMock.Expect("AddBusinessObject", new object[] {itsBo});
             itsButtons.ObjectCreator = itsCreator;
@@ -111,7 +111,7 @@ namespace Habanero.Test.Ui.Application
         [Test]
         public void TestAddButtonClickUnsuccessfulAdd()
         {
-            itsGridMock.ExpectAndReturn("GetUIDefName", "default", new object[] { });
+            itsGridMock.ExpectAndReturn("UIName", "default", new object[] { });
             itsObjectCreatorMock.ExpectAndReturn("CreateObject", null, new object[] {itsEditor, "default"});
             itsGridMock.ExpectNoCall("AddBusinessObject", new Type[] {typeof (object)});
             itsButtons.ObjectCreator = itsCreator;

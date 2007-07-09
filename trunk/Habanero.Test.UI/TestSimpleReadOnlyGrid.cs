@@ -20,7 +20,6 @@ namespace Habanero.Test.Ui.Application
         private BusinessObject bo1;
         private BusinessObject bo2;
         private DataTable itsDataSource;
-        //private BusinessObjectBase itsClickedBo;
 
         [SetUp]
         public void SetupFixture()
@@ -38,19 +37,15 @@ namespace Habanero.Test.Ui.Application
             bo2.SetPropertyValue("TestProp2", "2Value2");
             col.Add(bo1);
             col.Add(bo2);
-            grid.SetGridDataProvider(new SimpleGridDataProvider(col, new BOMapper(bo1).GetUserInterfaceMapper().GetUIGridProperties()));
+            grid.SetCollection(col);
             frm = new Form();
             grid.Dock = DockStyle.Fill;
             frm.Controls.Add(grid);
-            //grid.DoubleClick += new EventHandler(frmdoubleclicked) ;
             frm.Show();
             itsDataSource = grid.DataTable;
         }
 
-        //		private void frmdoubleclicked(object sender, EventArgs e) {
-        //			Point p = grid.PointToClient(Control.MousePosition );
-        //			MessageBox.Show(p.X + ", " + p.Y ); 
-        //		}
+
 
         [TearDown]
         public void TearDown()
@@ -73,23 +68,7 @@ namespace Habanero.Test.Ui.Application
         public void TestRowIsRefreshed()
         {
             bo2.SetPropertyValue("TestProp", "UpdatedValue");
-            //grid.RefreshRow(bo2);
             Assert.AreEqual("UpdatedValue", itsDataSource.Rows[1][1]);
         }
-
-        //		[Test]
-        //		public void TestDoubleClick() {
-        //			ControlTester gridControlTester = new ControlTester("GridControl") ;
-        //			grid.RowDoubleClicked += new RowDoubleClickedHandler(RowDoubleClicked) ;
-        //			gridControlTester.MouseController().DoubleClick(60, 50) ;
-        //		//	Thread.Sleep(1000) ;
-        //		//	Assert.AreSame(bo1, itsClickedBo);
-        //
-        //		}
-        //
-        //		private void RowDoubleClicked(object sender, BOEventArgs e) {
-        //			itsClickedBo = e.BusinessObject ;
-        //			Console.Out.WriteLine("selected");
-        //		}
     }
 }

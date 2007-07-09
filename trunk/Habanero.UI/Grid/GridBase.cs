@@ -17,8 +17,7 @@ namespace Habanero.Ui.Grid
     /// </summary>
     public abstract class GridBase : DataGridView
     {
-        private delegate void SetGridDataProviderDelegate(IGridDataProvider provider);
-
+        private delegate void SetCollectionDelegate(BusinessObjectCollection<BusinessObject> col, string uiName);
         private delegate void SetSortColumnDelegate(string columnName, bool isAscending);
 
         private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Grid.GridBase");
@@ -26,13 +25,12 @@ namespace Habanero.Ui.Grid
         protected BOCollectionDataSetProvider _dataSetProvider;
         protected BusinessObjectCollection<BusinessObject> _collection;
         private IObjectInitialiser _objectInitialiser;
-        private IGridDataProvider _provider;
         protected DataView _dataTableDefaultView;
-        private SetGridDataProviderDelegate _setGridDataProvider;
+        private SetCollectionDelegate _setCollection;
         private SetSortColumnDelegate _setSortColumn;
-        //private DelayedMethodCall filterUpdatedMethodCaller;
-
-        public event EventHandler DataProviderUpdated;
+        private string _uiName;
+        
+        public event EventHandler CollectionChanged;
         public event EventHandler FilterUpdated;
 
         /// <summary>
@@ -40,64 +38,76 @@ namespace Habanero.Ui.Grid
         /// </summary>
         protected GridBase()
         {
-            //filterUpdatedMethodCaller = new DelayedMethodCall(1000) ;
-            _setGridDataProvider = new SetGridDataProviderDelegate(SetGridDataProviderInSTAThread);
+            _setCollection = new SetCollectionDelegate(SetCollectionInSTAThread);
             _setSortColumn = new SetSortColumnDelegate(SetSortColumnInSTAThread);
         }
 
         /// <summary>
-        /// Sets the grid's data provider to that specified
+        /// Sets the collection displayed in the grid
         /// </summary>
-        /// <param name="provider">The grid data provider</param>
-        public void SetGridDataProvider(IGridDataProvider provider)
+        /// <param name="col">The collection of business objects to display</param>
+        /// <param name="uiName">The ui to use</param>
+        public void SetCollection(BusinessObjectCollection<BusinessObject> col, string uiName)
         {
             try
             {
-                BeginInvoke(_setGridDataProvider, new object[] {provider});
+                BeginInvoke(_setCollection, new object[] { col, uiName });
                 // needed to do the call on the Forms thread.  See info about STA thread model.
             }
             catch (InvalidOperationException)
             {
-                this.SetGridDataProviderInSTAThread(provider);
+                this.SetCollectionInSTAThread(col, uiName);
             }
         }
 
         /// <summary>
-        /// Sets the grid's data provider to that specified, but using a
+        /// Sets the collection displayed in the grid.  The default ui will be used.
+        /// </summary>
+        /// <param name="col">The collection of business objects to display</param>
+        public void SetCollection(BusinessObjectCollection<BusinessObject> col)
+        {
+            SetCollection(col, "default");
+        }
+
+        /// <summary>
+        /// Sets the grid's collection to the one specified, but using the
         /// STA thread.  This method is called by SetGridDataProvider().
         /// </summary>
-        /// <param name="provider">The grid data provider</param>
-        private void SetGridDataProviderInSTAThread(IGridDataProvider provider)
+        /// <param name="collection">The collection to display in the grid</param>
+        /// <param name="uiName">The name of the uidef to use</param>
+        /// TODO: Refactor
+        private void SetCollectionInSTAThread(BusinessObjectCollection<BusinessObject> collection, string uiName)
         {
-            _provider = provider;
-            _collection = _provider.GetCollection();
+            _collection = collection;
             _dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
             _dataSetProvider.ObjectInitialiser = _objectInitialiser;
-            _dataTable = _dataSetProvider.GetDataTable(_provider.GetUIGridDef());
+            _uiName = uiName;
+            UIGridDef gridDef = collection.ClassDef.UIDefCol[uiName].UIGridDef;
+            _dataTable = _dataSetProvider.GetDataTable(gridDef);
             _dataTable.TableName = "Table";
 
             this.Columns.Clear();
 
             DataGridViewColumn col = new DataGridViewTextBoxColumn(); // DataGridViewTextBoxColumn();
             //col.Visible = false;
-            col.Width = 0;            
+            col.Width = 0;
             this.Columns.Add(col);
             this.Columns[0].Visible = false;
             int colNum = 1;
-            foreach (UIGridProperty gridProp in provider.GetUIGridDef())
+            foreach (UIGridProperty gridProp in gridDef)
             {
                 DataColumn dataColumn = _dataTable.Columns[colNum];
 
-                if (gridProp.GridControlType == typeof (DataGridViewComboBoxColumn))
+                if (gridProp.GridControlType == typeof(DataGridViewComboBoxColumn))
                 {
                     DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();
                     ILookupListSource source =
-                        (ILookupListSource) _dataTable.Columns[colNum].ExtendedProperties["LookupListSource"];
+                        (ILookupListSource)_dataTable.Columns[colNum].ExtendedProperties["LookupListSource"];
                     DataTable table = new DataTable();
                     table.Columns.Add("id");
                     table.Columns.Add("str");
 
-                    table.LoadDataRow(new object[] { "", "" }, true);            
+                    table.LoadDataRow(new object[] { "", "" }, true);
                     foreach (KeyValuePair<string, object> pair in source.GetLookupList())
                     {
                         table.LoadDataRow(new object[] { pair.Value, pair.Key }, true);
@@ -108,7 +118,7 @@ namespace Habanero.Ui.Grid
                     comboBoxCol.DataPropertyName = dataColumn.ColumnName;
                     col = comboBoxCol;
                 }
-                else if (gridProp.GridControlType == typeof (DataGridViewCheckBoxColumn))
+                else if (gridProp.GridControlType == typeof(DataGridViewCheckBoxColumn))
                 {
                     DataGridViewCheckBoxColumn checkBoxCol = new DataGridViewCheckBoxColumn();
                     col = checkBoxCol;
@@ -117,13 +127,13 @@ namespace Habanero.Ui.Grid
                 {
                     DataGridViewDateTimeColumn dateTimeCol = new DataGridViewDateTimeColumn();
                     col = dateTimeCol;
-                    
+
                 }
                 else
                 {
-                    col = (DataGridViewColumn) Activator.CreateInstance(gridProp.GridControlType);
+                    col = (DataGridViewColumn)Activator.CreateInstance(gridProp.GridControlType);
                 }
-                col.Width = (int) (dataColumn.ExtendedProperties["Width"]);
+                col.Width = (int)(dataColumn.ExtendedProperties["Width"]);
                 col.ReadOnly = !gridProp.Editable;
                 col.HeaderText = dataColumn.Caption;
                 col.Name = dataColumn.ColumnName;
@@ -152,27 +162,28 @@ namespace Habanero.Ui.Grid
             this.DataSource = _dataTableDefaultView;
 
             //this.DataSource = _dataTable;
-            FireDataProviderUpdated();
+            FireCollectionChanged();
         }
+
 
         /// <summary>
         /// Returns the name of the ui 
         /// </summary>
-        /// <returns>Returns the name of the ui</returns>
-        public string GetUIDefName()
+        /// <returns>Returns the name of the ui this grid is using</returns>
+        public string UIName
         {
-            return _provider.GetUIDefName();
+            get { return _uiName; }
         }
 
         /// <summary>
         /// Calls the DataProviderUpdated() method, passing this instance
         /// as the sender
         /// </summary>
-        private void FireDataProviderUpdated()
+        private void FireCollectionChanged()
         {
-            if (this.DataProviderUpdated != null)
+            if (this.CollectionChanged != null)
             {
-                this.DataProviderUpdated(this, new EventArgs());
+                this.CollectionChanged(this, new EventArgs());
             }
         }
 
@@ -185,8 +196,6 @@ namespace Habanero.Ui.Grid
             _collection.Add(bo);
             int row = GetRowOfBusinessObject(bo);
             this.SetSelectedRowCore(row, true);
-            //this.CurrentRowIndex = row ;
-            //this.Select(row) ;
         }
 
         /// <summary>
@@ -275,28 +284,16 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Returns the selected business objects as an IList
+        /// Returns the selected business objects as a BusinessObjectCollection
         /// </summary>
         /// <returns>Returns an IList object</returns>
-        protected virtual IList GetSelectedBusinessObjects()
+        protected virtual BusinessObjectCollection<BusinessObject> GetSelectedBusinessObjects()
         {
-            IList busObjects = new ArrayList();
+            BusinessObjectCollection<BusinessObject> busObjects = new BusinessObjectCollection<BusinessObject>(_collection.ClassDef);
             foreach (DataGridViewRow row in this.SelectedRows)
             {
                 busObjects.Add(this._dataSetProvider.Find((string) row.Cells["ID"].Value));
             }
-            //for (int i = 0; i < _dataTableDefaultView.Count; i++ ) {
-            //    if (this.IsSelected(i)) {
-            //        int j = 0;
-            //        foreach (DataRowView dataRowView in _dataTableDefaultView) 
-            //        {
-            //            if (j++ == i) 
-            //            {
-            //                busObjects.Add(this._dataSetProvider.Find((string)dataRowView.Row["ID"])) ;
-            //            }
-            //        }
-            //    }						 
-            //}
             return busObjects;
         }
 

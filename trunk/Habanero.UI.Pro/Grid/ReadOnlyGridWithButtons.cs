@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
@@ -8,7 +9,6 @@ using Habanero.Ui.Forms;
 using Habanero.Ui.Grid;
 using Habanero.Util;
 using log4net;
-using BusinessObject=Habanero.Bo.BusinessObject;
 
 namespace Habanero.Ui.Grid
 {
@@ -22,7 +22,7 @@ namespace Habanero.Ui.Grid
     /// Buttons properties 
     /// (ie. myGridWithButtons.Grid.SetGridDataProvider(...)).
     /// </summary>
-    public class ReadOnlyGridWithButtons : UserControl, IObjectLister
+    public class ReadOnlyGridWithButtons : UserControl
     {
         /// <summary>
         /// Sets the business object delegate
@@ -32,17 +32,15 @@ namespace Habanero.Ui.Grid
 
         private static ILog log = LogManager.GetLogger("Habanero.Ui.Grid.ReadOnlyGridWithButtons");
         public event EventHandler ItemSelected;
-        public event EventHandler ItemActioned;
 
         private SimpleReadOnlyGrid _grid;
         private ReadOnlyGridButtonControl _buttons;
         private DelayedMethodCall _itemSelectedMethodCaller;
-        //private SetGridDataProviderDelegate _setGridDataProvider;
-        //private BusinessObjectBaseCollection _collection;
 
         private int _oldRowNumber = -1;
-        private IGridDataProvider _provider;
-        private IList _itemSelectedDelegates;
+        
+        private List<SetBusinessObjectDelegate> _itemSelectedDelegates;
+        private BusinessObjectCollection<BusinessObject> _collection;
 
         /// <summary>
         /// Constructor to initialise a new grid.  Unless you plan to assign
@@ -62,73 +60,11 @@ namespace Habanero.Ui.Grid
             manager.AddControl(_buttons, BorderLayoutManager.Position.South);
 
             _grid.CurrentCellChanged += new EventHandler(CurrentCellChangedHandler);
-            _grid.DataProviderUpdated += new EventHandler(DataProviderUpdatedHandler);
+            _grid.CollectionChanged += new EventHandler(CollectionChangedHandler);
             _grid.FilterUpdated += new EventHandler(GridFilterUpdatedHandler);
-            _itemSelectedDelegates = new ArrayList();
-            //_setGridDataProvider = new SetGridDataProviderDelegate(Grid.SetGridDataProvider) ;
-        }
-
-        /// <summary>
-        /// Constructor to initialise the grid with a data provider, object
-        /// editor and object creator.  This constructor is suitable if you are
-        /// using customised object creation and editing forms, otherwise it may
-        /// be better to use ReadOnlyGridWithButtons(IGridDataProvider).
-        /// </summary>
-        /// <param name="dataProvider">The data provider to the grid.  An example
-        /// usage would be "new CollectionGridDataProvider(yourBOCollection)".
-        /// </param>
-        /// <param name="editor">The form in which the user edits the object
-        /// when "Edit" is clicked</param>
-        /// <param name="creator">The form in which the user edits a new object
-        /// when "Add" is clicked</param>
-        public ReadOnlyGridWithButtons(IGridDataProvider dataProvider, IObjectEditor editor, IObjectCreator creator)
-            : this()
-        {
-            _provider = dataProvider;
-            this.Grid.SetGridDataProvider(dataProvider);
-            this.Buttons.ObjectEditor = editor;
-            if (creator != null)
-            {
-                this.Buttons.ObjectCreator = creator;
-            }
-            else
-            {
-                this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.GetCollection().ClassDef);
-            }
-        }
-
-        /// <summary>
-        /// Constructor to initialise a grid with a data provider and object
-        /// editor, setting the object creator to null.
-        /// This constructor is suitable if you are
-        /// using a customised object editing form, otherwise it may
-        /// be better to use ReadOnlyGridWithButtons(IGridDataProvider).
-        /// </summary>
-        /// <param name="dataProvider">The data provider to the grid.  An example
-        /// usage would be "new CollectionGridDataProvider(yourBOCollection)".
-        /// </param>
-        /// <param name="editor">The form in which the user edits the object
-        /// when "Edit" is clicked</param>
-        public ReadOnlyGridWithButtons(IGridDataProvider dataProvider, IObjectEditor editor)
-            : this(dataProvider, editor, null)
-        {
-        }
-
-        /// <summary>
-        /// Constructor to initialise a grid with a data provider.  This
-        /// constructor assigns the default object creation and editing forms
-        /// to the grid (for use when the user clicks the Add or Edit buttons).
-        /// </summary>
-        /// <param name="dataProvider">The data provider to the grid.  An example
-        /// usage would be "new CollectionGridDataProvider(yourBOCollection)".
-        /// </param>
-        public ReadOnlyGridWithButtons(IGridDataProvider dataProvider)
-            : this()
-        {
-            _provider = dataProvider;
-            this.Grid.SetGridDataProvider(dataProvider);
+            _itemSelectedDelegates = new List<SetBusinessObjectDelegate>();
             this.Buttons.ObjectEditor = new DefaultBOEditor();
-            this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.ClassDef);
+            //this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.ClassDef);
         }
 
         /// <summary>
@@ -138,7 +74,6 @@ namespace Habanero.Ui.Grid
         /// <param name="e">Attached arguments regarding the event</param>
         private void GridFilterUpdatedHandler(object sender, EventArgs e)
         {
-            //log.Debug("GridFilterUpdated - firing item selected");
             _oldRowNumber = -1;
             FireItemSelectedIfCurrentRowChanged();
         }
@@ -148,7 +83,7 @@ namespace Habanero.Ui.Grid
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void DataProviderUpdatedHandler(object sender, EventArgs e)
+        private void CollectionChangedHandler(object sender, EventArgs e)
         {
             _oldRowNumber = -1;
             FireItemSelectedIfCurrentRowChanged();
@@ -194,11 +129,11 @@ namespace Habanero.Ui.Grid
         /// </summary>
         private void FireItemSelected()
         {
-            if (this.GetSelectedObject() != null || this.GetSelectedObject() is BusinessObject)
+            if (this.SelectedBusinessObject != null)
             {
                 foreach (SetBusinessObjectDelegate selectedDelegate in _itemSelectedDelegates)
                 {
-                    selectedDelegate((BusinessObject) this.GetSelectedObject());
+                    selectedDelegate((BusinessObject)this.SelectedBusinessObject);
                 }
             }
             _itemSelectedMethodCaller.Call(new VoidMethodWithSender(DelayedItemSelected));
@@ -213,17 +148,6 @@ namespace Habanero.Ui.Grid
             if (this.ItemSelected != null)
             {
                 this.ItemSelected(sender, new EventArgs());
-            }
-        }
-
-        /// <summary>
-        /// Creates an item actioned event
-        /// </summary>
-        private void FireItemActioned()
-        {
-            if (this.ItemActioned != null)
-            {
-                this.ItemActioned(this, new EventArgs());
             }
         }
 
@@ -248,24 +172,22 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Sets the parent object
+        /// Sets the business object collection being managed to that
+        /// specified. This method would typically be used if either an
+        /// unparameterised constructor was used to instantiate the
+        /// grid, or if the business object collection is to be changed
+        /// at some stage after instantiation.<br/>
+        /// Alternatively, to have more specific control you could call
+        /// *.Grid.SetGridDataProvider()
+        /// and set the object editor and creator for the buttons as well,
+        /// using *.Buttons.ObjectEditor and *.Buttons.ObjectCreator
         /// </summary>
-        /// <param name="parentObject">The parent object to set to</param>
-        public void SetParentObject(object parentObject)
+        /// <param name="boCollection">The new business object collection
+        /// to be shown in the grid. This collection must have been
+        /// pre-loaded using the collection's Load() method</param>
+        public void SetBusinessObjectCollection(BusinessObjectCollection<BusinessObject> boCollection)
         {
-            _provider.SetParentObject(parentObject);
-            //BeginInvoke(_setGridDataProvider, new object[] {_provider}); // needed to do the call on the Forms thread.  See info about STA thread model.
-
-            this.Grid.SetGridDataProvider(_provider);
-        }
-
-        /// <summary>
-        /// Sets the text of the action button
-        /// </summary>
-        /// <param name="text">The text to display on the button</param>
-        public void SetActionButtonText(string text)
-        {
-            this.Buttons.AddButton(text, new EventHandler(SelectButtonClickedHandler));
+            this.SetBusinessObjectCollection(boCollection, "default");
         }
 
         /// <summary>
@@ -282,21 +204,24 @@ namespace Habanero.Ui.Grid
         /// <param name="boCollection">The new business object collection
         /// to be shown in the grid. This collection must have been
         /// pre-loaded using the collection's Load() method</param>
-        public void SetBusinessObjectCollection(BusinessObjectCollection<BusinessObject> boCollection)
+        /// <param name="uiName">The name of the ui to use to format the grid</param>
+        public void SetBusinessObjectCollection(BusinessObjectCollection<BusinessObject> boCollection, string uiName)
         {
-            _provider = new CollectionGridDataProvider(boCollection);
-            this.Grid.SetGridDataProvider(_provider);
+            _collection = boCollection;
+            this.Grid.SetCollection(boCollection, uiName);
             this.Buttons.ObjectEditor = new DefaultBOEditor();
-            this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.ClassDef);
+            this.Buttons.ObjectCreator = new DefaultBOCreator(_collection.ClassDef);
         }
 
         /// <summary>
-        /// Returns the currently selected object
+        /// Returns a single selected business object (null if none are selected) denoted by where the current selected cell is
         /// </summary>
-        /// <returns>Returns the currently selected object</returns>
-        public object GetSelectedObject()
+        public BusinessObject SelectedBusinessObject
         {
-            return this.Grid.SelectedBusinessObject;
+             get
+             {
+                 return this.Grid.SelectedBusinessObject;
+             }
         }
 
         /// <summary>
@@ -314,9 +239,9 @@ namespace Habanero.Ui.Grid
         /// Removes the specified object from the list
         /// </summary>
         /// <param name="objectToRemove">The object to remove</param>
-        public void RemoveObject(object objectToRemove)
+        public void RemoveBusinessObject(BusinessObject objectToRemove)
         {
-            this.Grid.RemoveBusinessObject((BusinessObject) objectToRemove);
+            this.Grid.RemoveBusinessObject( objectToRemove);
             if (this.Grid.HasBusinessObjects)
             {
                 FireItemSelected();
@@ -327,19 +252,9 @@ namespace Habanero.Ui.Grid
         /// Adds the specified object to the list
         /// </summary>
         /// <param name="objectToAdd">The object to add</param>
-        public void AddObject(object objectToAdd)
+        public void AddBusinessObject(BusinessObject objectToAdd)
         {
-            this.Grid.AddBusinessObject((BusinessObject) objectToAdd);
-        }
-
-        /// <summary>
-        /// Handles the event of the select button being pressed
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void SelectButtonClickedHandler(object sender, EventArgs e)
-        {
-            FireItemActioned();
+            this.Grid.AddBusinessObject(objectToAdd);
         }
 
         /// <summary>
@@ -354,7 +269,7 @@ namespace Habanero.Ui.Grid
         /// <summary>
         /// Returns a list of the filtered business objects
         /// </summary>
-        public IList FilteredBusinessObjects
+        public List<BusinessObject> FilteredBusinessObjects
         {
             get { return this.Grid.FilteredBusinessObjects; }
         }
