@@ -16,7 +16,7 @@ namespace Habanero.Bo
     /// that behave together in some way (e.g. for a composite alternate
     /// key, the combination of properties is required to be unique).
     /// </summary>
-    public class BOKey// : DictionaryBase
+    public class BOKey
     {
         private Dictionary<string, BOProp> _props;
         private KeyDef _keyDef;
@@ -161,7 +161,7 @@ namespace Habanero.Bo
             foreach (BOProp lBOProp in _props.Values)
             {
                
-                if (lBOProp.PropertyValue == null)
+                if (lBOProp.Value == null)
                 {
                     return false;
                 }
@@ -230,7 +230,7 @@ namespace Habanero.Bo
                 {
                     propString.Append(" AND ");
                 }
-                propString.Append(prop.PropertyName + "=" + prop.PropertyValue);
+                propString.Append(prop.PropertyName + "=" + prop.Value);
             }
             return propString.ToString();
         }
@@ -309,11 +309,11 @@ namespace Habanero.Bo
                 if (rhs.Contains(prop.PropertyName))
                 {
                     BOProp rhsProp = rhs[prop.PropertyName];
-                    if (prop.PropertyValue != rhsProp.PropertyValue)
+                    if (prop.Value != rhsProp.Value)
                     {
-                        if (prop.PropertyValue != null && rhsProp.PropertyValue != null)
+                        if (prop.Value != null && rhsProp.Value != null)
                         {
-                            if (!prop.PropertyValue.Equals(rhsProp.PropertyValue)) return false;
+                            if (!prop.Value.Equals(rhsProp.Value)) return false;
                         }
                         else {
                             return false;

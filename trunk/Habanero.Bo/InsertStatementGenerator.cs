@@ -51,7 +51,7 @@ namespace Habanero.Bo.SqlGeneration
             if (_bo.ClassDef.IsUsingClassTableInheritance())
             {
                 propsToInclude.Add(
-                    _bo.ClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.GetBOPropCol()).GetBOPropCol());
+                    _bo.ClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
             }
             tableName = _bo.TableName;
             GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
@@ -64,7 +64,7 @@ namespace Habanero.Bo.SqlGeneration
                     includeAllProps = false;
                     propsToInclude = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
                     propsToInclude.Add(
-                        currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.GetBOPropCol()).GetBOPropCol());
+                        currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
                     tableName = currentClassDef.TableName;
                     GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
                     currentClassDef = currentClassDef.SuperClassClassDef;
@@ -92,7 +92,7 @@ namespace Habanero.Bo.SqlGeneration
         {
             this.InitialiseStatement();
 
-            foreach (BOProp prop in _bo.GetBOPropCol().SortedValues)
+            foreach (BOProp prop in _bo.Props.SortedValues)
             {
                // BOProp prop = (BOProp) item.Value;
                 if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
@@ -110,8 +110,8 @@ namespace Habanero.Bo.SqlGeneration
         /// </summary>
         private void InitialiseStatement()
         {
-            _dbFieldList = new StringBuilder(_bo.GetBOPropCol().Count*20);
-            _dbValueList = new StringBuilder(_bo.GetBOPropCol().Count*20);
+            _dbFieldList = new StringBuilder(_bo.Props.Count * 20);
+            _dbValueList = new StringBuilder(_bo.Props.Count * 20);
             _insertSql = new SqlStatement(_conn);
             _gen = new ParameterNameGenerator(_conn);
             _firstField = true;
@@ -132,7 +132,7 @@ namespace Habanero.Bo.SqlGeneration
             _dbFieldList.Append(prop.DatabaseFieldName);
             paramName = _gen.GetNextParameterName();
             _dbValueList.Append(paramName);
-            _insertSql.AddParameter(paramName, prop.PropertyValue);
+            _insertSql.AddParameter(paramName, prop.Value);
             //_insertSql.AddParameter(paramName, DatabaseUtil.PrepareValue(prop.PropertyValue));
             _firstField = false;
         }

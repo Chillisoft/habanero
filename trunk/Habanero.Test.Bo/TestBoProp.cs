@@ -23,20 +23,20 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestSetBOPropValue()
         {
-            mProp.PropertyValue = "Prop Value";
-            Assert.AreEqual("Prop Value", mProp.PropertyValue);
+            mProp.Value = "Prop Value";
+            Assert.AreEqual("Prop Value", mProp.Value);
         }
 
         [Test]
         public void TestRestorePropValue()
         {
             mProp.InitialiseProp("OrigionalValue");
-            mProp.PropertyValue = "Prop New Value";
-            Assert.AreEqual("Prop New Value", mProp.PropertyValue);
+            mProp.Value = "Prop New Value";
+            Assert.AreEqual("Prop New Value", mProp.Value);
             Assert.IsTrue(mProp.IsDirty);
             Assert.IsTrue(mProp.isValid);
             mProp.RestorePropValue();
-            Assert.AreEqual("OrigionalValue", mProp.PropertyValue);
+            Assert.AreEqual("OrigionalValue", mProp.Value);
             Assert.IsFalse(mProp.IsDirty);
             Assert.IsTrue(mProp.isValid);
         }
@@ -51,7 +51,7 @@ namespace Habanero.Test.Bo
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsFalse(lBOProp.isValid);
             Assert.IsTrue(lBOProp.InvalidReason.Length > 0);
-            lBOProp.PropertyValue = "New Value";
+            lBOProp.Value = "New Value";
             Assert.IsTrue(lBOProp.isValid);
             Assert.IsFalse(lBOProp.InvalidReason.Length > 0);
             lBOProp.RestorePropValue();
@@ -70,7 +70,7 @@ namespace Habanero.Test.Bo
             Assert.IsTrue(lBOProp.isValid);
             try
             {
-                lBOProp.PropertyValue = "New Value";
+                lBOProp.Value = "New Value";
             }
             catch (InvalidPropertyValueException)
             {
@@ -85,10 +85,10 @@ namespace Habanero.Test.Bo
         public void TestBackupProp()
         {
             mProp.InitialiseProp("OrigionalValue");
-            mProp.PropertyValue = "Prop New Value";
-            Assert.AreEqual("Prop New Value", mProp.PropertyValue);
+            mProp.Value = "Prop New Value";
+            Assert.AreEqual("Prop New Value", mProp.Value);
             mProp.BackupPropValue();
-            Assert.AreEqual("Prop New Value", mProp.PropertyValue);
+            Assert.AreEqual("Prop New Value", mProp.Value);
             Assert.IsFalse(mProp.IsDirty);
             Assert.IsTrue(mProp.isValid);
         }
@@ -99,7 +99,7 @@ namespace Habanero.Test.Bo
         public void TestDirtyProp()
         {
             mProp.InitialiseProp("OrigionalValue");
-            mProp.PropertyValue = "OrigionalValue";
+            mProp.Value = "OrigionalValue";
             Assert.IsFalse(mProp.IsDirty);
             Assert.IsTrue(mProp.isValid);
         }
@@ -109,7 +109,7 @@ namespace Habanero.Test.Bo
         public void TestPersistedPropValue()
         {
             mProp.InitialiseProp("OrigionalValue");
-            mProp.PropertyValue = "New Value";
+            mProp.Value = "New Value";
             Assert.IsTrue(mProp.IsDirty);
             Assert.AreEqual("OrigionalValue", mProp.PersistedPropertyValue);
             Assert.AreEqual("PropName = 'New Value'", mProp.DatabaseNameFieldNameValuePair(null));
@@ -121,7 +121,7 @@ namespace Habanero.Test.Bo
         public void TestDirtyXml()
         {
             mProp.InitialiseProp("OrigionalValue");
-            mProp.PropertyValue = "New Value";
+            mProp.Value = "New Value";
             Assert.IsTrue(mProp.IsDirty);
             string dirtyXml = "<" + mProp.PropertyName + "><PreviousValue>OrigionalValue" +
                               "</PreviousValue><NewValue>New Value</NewValue></" +

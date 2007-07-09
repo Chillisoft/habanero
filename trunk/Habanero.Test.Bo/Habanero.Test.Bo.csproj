@@ -128,6 +128,7 @@
     <Compile Include="ClassDefinition\TestPropDef.cs" />
     <Compile Include="ClassDefinition\TestRelKeyDef.cs" />
     <Compile Include="ClassDefinition\TestRelPropDef.cs" />
+    <Compile Include="ContactPerson.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -167,6 +168,7 @@
     <Compile Include="TestBusinessObjectCollectionReadOnlyDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestBusinessObjectLookupListSource.cs" />
     <Compile Include="TestByteString.cs" />
     <Compile Include="TestClassDef.cs">
       <SubType>Code</SubType>

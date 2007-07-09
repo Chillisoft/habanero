@@ -44,7 +44,7 @@ namespace Habanero.Bo
         /// </summary>
         internal bool IsNull
         {
-            get { return _boProp == null || _boProp.PropertyValue == null; }
+            get { return _boProp == null || _boProp.Value == null; }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Habanero.Bo
         /// <returns>Returns an IExpression object</returns>
         internal IExpression RelatedPropExpression()
         {
-            if (_boProp.PropertyValue == null)
+            if (_boProp.Value == null)
             {
                 return new Parameter(_relPropDef.RelatedClassPropName, "IS", "NULL");
             }

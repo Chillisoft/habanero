@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOLoader.cs" />
+    <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOState.cs" />
     <Compile Include="Comparer\DateTimeComparer.cs" />
     <Compile Include="Comparer\GuidComparer.cs" />

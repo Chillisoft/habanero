@@ -20,32 +20,59 @@ namespace Habanero.Bo
     /// </summary>
     public class BusinessObjectLookupListSource : ILookupListSource
     {
+        private readonly int _timeout;
         private Type _boType;
     	private string _assemblyName;
     	private string _className;
+        private Dictionary<string, object> _displayValueDictionary;
+        private DateTime _lastCallTime;
 
-		#region Constructors
+        #region Constructors
 
         /// <summary>
         /// Constructor to initialise a new lookup-list
         /// </summary>
         /// <param name="boType">The business object type</param>
-        public BusinessObjectLookupListSource(Type boType)
+        public BusinessObjectLookupListSource(Type boType) : this(boType, 10000)
         {
-            MyBoType = boType;
+            
 		}
 
-    	/// <summary>
+        /// <summary>
+        /// Constructor to initialise a new lookup-list
+        /// </summary>
+        /// <param name="boType">The business object type</param>
+        public BusinessObjectLookupListSource(Type boType, int timeout)
+        {
+            
+            MyBoType = boType;
+            _timeout = timeout;
+            _lastCallTime = DateTime.MinValue;
+        }
+
+        /// <summary>
         /// Constructor to initialise a new lookup-list
     	/// </summary>
     	/// <param name="assemblyName">The assembly containing the class</param>
     	/// <param name="className">The class from which to load the values</param>
-		public BusinessObjectLookupListSource(string assemblyName, string className)
+		public BusinessObjectLookupListSource(string assemblyName, string className) : this(assemblyName, className, 10000)
 		{
-			_assemblyName = assemblyName;
-			_className = className;
-			_boType = null;
 		}
+
+        /// <summary>
+        /// Constructor to initialise a new lookup-list
+        /// </summary>
+        /// <param name="assemblyName">The assembly containing the class</param>
+        /// <param name="className">The class from which to load the values</param>
+        public BusinessObjectLookupListSource(string assemblyName, string className, int timeout)
+        {
+            
+            _assemblyName = assemblyName;
+            _className = className;
+            _boType = null;
+            _timeout = timeout;
+            _lastCallTime = DateTime.MinValue;
+        }
 
 		#endregion Constructors
 
@@ -107,9 +134,18 @@ namespace Habanero.Bo
         /// <returns>Returns a collection of string-value pairs</returns>
         public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
-            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[MyBoType]);
-            col.Load("", "");
-            return CreateDisplayValueDictionary(col);
+            if (DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout)
+            {
+                _lastCallTime = DateTime.Now;
+                return _displayValueDictionary;
+            } else {
+                BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[MyBoType]);
+                col.Load("", "");
+                _displayValueDictionary = CreateDisplayValueDictionary(col);
+                _lastCallTime = DateTime.Now;
+                return _displayValueDictionary;
+            }
+            
 		}
 
 		/// <summary>

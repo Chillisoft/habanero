@@ -1,3 +1,4 @@
+using System;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Bo;
@@ -29,6 +30,14 @@ namespace Habanero.Test
         public string MyName
         {
             get { return "MyNameIsMyBo"; }
+        }
+
+        public Guid MyBoID
+        {
+            get
+            {
+                return (Guid)this.GetPropertyValue("MyBoID");
+            }
         }
 
         public static ClassDef LoadDefaultClassDef()

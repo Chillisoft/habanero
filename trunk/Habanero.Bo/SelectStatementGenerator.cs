@@ -61,7 +61,7 @@ namespace Habanero.Bo
                 statement += " " + _connection.GetLimitClauseForBeginning(limit) + " ";
             }
 
-            foreach (BOProp prop in _bo.GetBOPropCol().SortedValues)
+            foreach (BOProp prop in _bo.Props.SortedValues)
             {
                 string tableName = GetTableName(prop, classDefs);
                 statement += tableName + ".";

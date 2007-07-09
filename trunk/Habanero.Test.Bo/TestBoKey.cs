@@ -42,18 +42,18 @@ namespace Habanero.Test.Bo
             //Set values for Key1
             BOKey lBOKey1 = mKeyDef1.CreateBOKey(mBOPropCol1);
             BOProp lProp = mBOPropCol1["PropName"];
-            lProp.PropertyValue = "Prop Value";
+            lProp.Value = "Prop Value";
 
             lProp = mBOPropCol1["PropName1"];
-            lProp.PropertyValue = "Value 2";
+            lProp.Value = "Value 2";
 
             //Set values for Key2
             BOKey lBOKey2 = mKeyDef2.CreateBOKey(mBOPropCol2);
             lProp = mBOPropCol2["PropName"];
-            lProp.PropertyValue = "Prop Value";
+            lProp.Value = "Prop Value";
 
             lProp = mBOPropCol2["PropName1"];
-            lProp.PropertyValue = "Value 2";
+            lProp.Value = "Value 2";
 
             //Assert.AreEqual(lBOKey1, lBOKey2);
             Assert.IsTrue(lBOKey1 == lBOKey2);

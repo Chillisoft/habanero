@@ -31,5 +31,15 @@ namespace Habanero.Test.Bo
             Assert.AreSame(ClassDef.ClassDefs[typeof(MyBo)], col.ClassDef);
         }
 
+        [Test]
+        public void TestFindByGuid()
+        {
+            BusinessObjectCollection<MyBo> col = new BusinessObjectCollection<MyBo>();
+            MyBo bo1 = new MyBo();
+            col.Add(bo1);
+            col.Add(new MyBo());
+            Assert.AreSame(bo1, col.FindByGuid(bo1.MyBoID));
+        }
+
     }
 }

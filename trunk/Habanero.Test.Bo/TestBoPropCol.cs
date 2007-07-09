@@ -40,12 +40,12 @@ namespace Habanero.Test.Bo
         public void TestSetBOPropValue()
         {
             mProp = mBOPropCol["Prop2"];
-            mProp.PropertyValue = "Prop Value";
-            Assert.AreEqual("Prop Value", mProp.PropertyValue);
+            mProp.Value = "Prop Value";
+            Assert.AreEqual("Prop Value", mProp.Value);
 
             mProp = mBOPropCol["PropName"];
-            mProp.PropertyValue = "Value 2";
-            Assert.AreEqual("Value 2", mProp.PropertyValue);
+            mProp.Value = "Value 2";
+            Assert.AreEqual("Value 2", mProp.Value);
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Habanero.Test.Bo
             mProp = mBOPropCol["Prop2"];
             try
             {
-                mProp.PropertyValue = "Prop Value fdfdfdf ff";
+                mProp.Value = "Prop Value fdfdfdf ff";
             }
             catch (InvalidPropertyValueException)
             {
@@ -93,12 +93,12 @@ namespace Habanero.Test.Bo
         {
             mProp = mBOPropCol["Prop2"];
             mProp.InitialiseProp("Prop2-Orig");
-            mProp.PropertyValue = "Prop2-New";
+            mProp.Value = "Prop2-New";
             Assert.IsTrue(mProp.IsDirty);
 
             mProp = mBOPropCol["PropName"];
             mProp.InitialiseProp("Propn-Orig");
-            mProp.PropertyValue = "PropName-new";
+            mProp.Value = "PropName-new";
             Assert.IsTrue(mProp.IsDirty);
 
             mPropDef = new PropDef("Prop3", typeof(string), PropReadWriteRule.ReadOnly, null);

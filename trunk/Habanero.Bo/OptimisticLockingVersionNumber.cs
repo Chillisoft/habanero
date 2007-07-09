@@ -101,7 +101,7 @@ namespace Habanero.Bo
                             // if these two are not equal then the objects data has been 
                             // updated to the database since this object read it,
                             // we thus have a concurrency conflict.
-                            if (versionNumber != (int) _versionNumber.PropertyValue)
+                            if (versionNumber != (int) _versionNumber.Value)
                             {
                                 String dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
                                 string userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
@@ -175,13 +175,13 @@ namespace Habanero.Bo
         /// </summary>
         public void UpdatePropertiesWithLatestConcurrencyInfo()
         {
-            _dateLastUpdated.PropertyValue = DateTime.Now;
+            _dateLastUpdated.Value = DateTime.Now;
 
             try
             {
                 //TODO Temp code possibly integrate with a system to get the user as
                 // per custom code for now use the OS user.
-                _userLastUpdated.PropertyValue = WindowsIdentity.GetCurrent().Name;
+                _userLastUpdated.Value = WindowsIdentity.GetCurrent().Name;
             }
             catch (SecurityException)
             {
@@ -189,18 +189,18 @@ namespace Habanero.Bo
 
             try
             {
-                _machineLastUpdated.PropertyValue = Environment.MachineName;
+                _machineLastUpdated.Value = Environment.MachineName;
             }
             catch (InvalidOperationException)
             {
             }
 
-            _versionNumber.PropertyValue = (int) _versionNumber.PropertyValue + 1;
+            _versionNumber.Value = (int) _versionNumber.Value + 1;
             if (!(_operatingSystemUser == null))
             {
                 try
                 {
-                    _operatingSystemUser.PropertyValue = WindowsIdentity.GetCurrent().Name;
+                    _operatingSystemUser.Value = WindowsIdentity.GetCurrent().Name;
                 }
                 catch (SecurityException)
                 {

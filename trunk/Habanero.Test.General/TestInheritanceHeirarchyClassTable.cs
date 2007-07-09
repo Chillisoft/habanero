@@ -103,8 +103,8 @@ namespace Habanero.Test.General
             BOKey msuperKey = BOPrimaryKey.GetSuperClassKey(FilledCircle.GetClassDef(), itsFilledCircle);
             Assert.IsTrue(msuperKey.Contains("CircleID"), "Super class key should contain the CircleID property");
             Assert.AreEqual(1, msuperKey.Count, "Super class key should only have one prop");
-            Assert.AreEqual(msuperKey["CircleID"].PropertyValue,
-                            itsFilledCircle.ID["FilledCircleID"].PropertyValue,
+            Assert.AreEqual(msuperKey["CircleID"].Value,
+                            itsFilledCircle.ID["FilledCircleID"].Value,
                             "CircleID and FilledCircleID should be the same");
         }
 

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 using Habanero.Base.Exceptions;
+using Habanero.Bo;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.DB;

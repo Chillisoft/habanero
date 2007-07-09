@@ -73,12 +73,12 @@ namespace Habanero.Bo
             //If the object id is not already set then set it.
             if (ObjectIDProp != null)
             {
-                if (ObjectIDProp.PropertyValue == null ||
-                    (Guid) ObjectIDProp.PropertyValue == Guid.Empty)
+                if (ObjectIDProp.Value == null ||
+                    (Guid) ObjectIDProp.Value == Guid.Empty)
                 {
-                    ObjectIDProp.PropertyValue = id;
+                    ObjectIDProp.Value = id;
                 }
-                else if ((Guid) ObjectIDProp.PropertyValue != id)
+                else if ((Guid) ObjectIDProp.Value != id)
                 {
                     throw new InvalidObjectIdException("The property for objectID cannot be null.");
                 }
@@ -115,7 +115,7 @@ namespace Habanero.Bo
         /// <returns>Returns true if the ID's are equal</returns>
         public static bool operator ==(BOObjectID lhs, Guid rhs)
         {
-            return ((Guid) lhs.ObjectIDProp.PropertyValue == rhs);
+            return ((Guid) lhs.ObjectIDProp.Value == rhs);
         }
 
         /// <summary>

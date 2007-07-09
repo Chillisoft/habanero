@@ -26,15 +26,15 @@ namespace Habanero.Bo
             _businessObject = bo;
         }
 
-        /// <summary>
-        /// Returns a property of the name specified
-        /// </summary>
-        /// <param name="propertyName">The property name</param>
-        /// <returns>Returns the BOProp object by that name</returns>
-        public BOProp GetProperty(string propertyName)
-        {
-            return _businessObject.GetBOProp(propertyName);
-        }
+        ///// <summary>
+        ///// Returns a property of the name specified
+        ///// </summary>
+        ///// <param name="propertyName">The property name</param>
+        ///// <returns>Returns the BOProp object by that name</returns>
+        //public BOProp GetProperty(string propertyName)
+        //{
+        //    return _businessObject.GetBOProp(propertyName);
+        //}
 
         /// <summary>
         /// Returns the lookup list contents for the property specified

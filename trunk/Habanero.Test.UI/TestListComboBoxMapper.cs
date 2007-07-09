@@ -1,5 +1,6 @@
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.Bo;
 using Habanero.Test.General;
 using Habanero.Ui.Forms;
 using NUnit.Framework;

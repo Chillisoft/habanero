@@ -136,7 +136,7 @@ namespace Habanero.Bo
         /// <returns>Returns a BOKey object</returns>
         public static BOKey GetSuperClassKey(ClassDef subClassDef, BusinessObject subClassObj)
         {
-            BOKey superKey = subClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(subClassObj.GetBOPropCol());
+            BOKey superKey = subClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(subClassObj.Props);
             return superKey;
         }
 
@@ -164,14 +164,14 @@ namespace Habanero.Bo
             return false;
         }
 
-        /// <summary>
-        /// Returns a string containing all the properties and their values
-        /// </summary>
-        /// <returns>Returns a string</returns>
-        public override string ToString()
-        {
-            return this.KeyName + ":" + base.ToString();
-        }
+        ///// <summary>
+        ///// Returns a string containing all the properties and their values
+        ///// </summary>
+        ///// <returns>Returns a string</returns>
+        //public override string ToString()
+        //{
+        //    return KeyDef.. + ":" + base.ToString();
+        //}
 
     }
 }

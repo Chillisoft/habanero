@@ -1,4 +1,5 @@
 using Habanero.Base;
+using Habanero.Bo;
 using Habanero.Ui.Grid;
 
 namespace Habanero.Ui.Grid
@@ -33,6 +34,8 @@ namespace Habanero.Ui.Grid
         public IFilterClause CreateIntegerFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
                                                        int filterValue)
         {
+            //BusinessObject b = new BusinessObject();
+            //b.Props["test"].PropertyValueString
             return new DataViewIntegerFilterClause(filterColumn, clauseOperator, filterValue);
         }
 

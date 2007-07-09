@@ -41,7 +41,7 @@ namespace Habanero.Bo
         /// business object was not found in the database</exception>
         /// TODO ERIC - return false anywhere for failed operation? methods
         /// higher up the chain return the bool
-        public virtual bool Refresh(BusinessObject obj, IExpression searchExpression)
+        internal virtual bool Refresh(BusinessObject obj, IExpression searchExpression)
         {
             using (IDataReader dr = BOLoader.Instance.LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
             {
@@ -75,11 +75,11 @@ namespace Habanero.Bo
         /// <param name="dr">An IDataRecord object</param>
         /// <returns>Returns true if loaded successfully</returns>
         /// TODO ERIC - where does datarecord come from?
-        protected internal bool LoadProperties(BusinessObject obj, IDataRecord dr)
+        internal bool LoadProperties(BusinessObject obj, IDataRecord dr)
         {
             //TODO_ERR: check that dr open valid etc.
             int i = 0;
-            foreach (BOProp prop in obj.GetBOPropCol().SortedValues)
+            foreach (BOProp prop in obj.Props.SortedValues)
             {
                 try
                 {
@@ -101,7 +101,7 @@ namespace Habanero.Bo
         /// <returns>A valid business object for the data in the 
         /// data reader</returns>
         [ReflectionPermission(SecurityAction.Demand)]
-        protected internal BusinessObject GetBusinessObject(BusinessObject obj, IDataRecord dr)
+        internal BusinessObject GetBusinessObject(BusinessObject obj, IDataRecord dr)
         {
             // This method creates a primary key object with the data from the 
             // datareader and then checks if this is loaded, if it is then the 
@@ -119,12 +119,12 @@ namespace Habanero.Bo
                 prop.InitialiseProp(dr[prop.DatabaseFieldName]);
                 propCol.Add(prop);
 
-                obj.PrimaryKey = (BOPrimaryKey) obj.ClassDef.PrimaryKeyDef.CreateBOKey(obj.GetBOPropCol());
+                obj.PrimaryKey = (BOPrimaryKey)obj.ClassDef.PrimaryKeyDef.CreateBOKey(obj.Props);
             }
             lPrimaryKey = (BOPrimaryKey)obj.ClassDef.PrimaryKeyDef.CreateBOKey(propCol);
 
             BusinessObject lTempBusObj =
-                BOLoader.GetLoadedBusinessObject(lPrimaryKey.GetObjectId(), false);
+                BOLoader.Instance.GetLoadedBusinessObject(lPrimaryKey.GetObjectId(), false);
             bool isReplacingSuperClassObject = false;
             if (lTempBusObj != null && this.GetType().IsSubclassOf(lTempBusObj.GetType()))
             {
@@ -132,7 +132,7 @@ namespace Habanero.Bo
             }
             if (lTempBusObj == null || isReplacingSuperClassObject)
             {
-                lTempBusObj = CreateNewBusinessObject(obj.ClassDef);
+                lTempBusObj = obj.ClassDef.InstantiateBusinessObject();
                 LoadFromDataReader(lTempBusObj, dr);
                 try
                 {
@@ -178,7 +178,7 @@ namespace Habanero.Bo
         /// <returns>Returns a business object, or null if none is found that
         /// meets the criteria</returns>
         [ReflectionPermission(SecurityAction.Demand)]
-        protected internal BusinessObject GetBusinessObject(BusinessObject obj, IExpression searchExpression)
+        internal BusinessObject GetBusinessObject(BusinessObject obj, IExpression searchExpression)
         {
             BusinessObject lTempBusObj = obj.ClassDef.InstantiateBusinessObject();
             lTempBusObj.SetDatabaseConnection(obj.GetDatabaseConnection());
@@ -204,7 +204,7 @@ namespace Habanero.Bo
         /// Reloads the business object from the database
         /// </summary>
         /// <returns>Returns true if the object was successfully loaded</returns>
-        protected internal virtual bool Load(BusinessObject obj)
+        internal virtual bool Load(BusinessObject obj)
         {
             bool loaded;
 
@@ -221,7 +221,7 @@ namespace Habanero.Bo
         /// <param name="searchExpression">The search expression used to
         /// locate the business object</param>
         /// <returns>Returns true if the object was successfully loaded</returns>
-        protected internal virtual bool Load(BusinessObject obj, IExpression searchExpression)
+        internal virtual bool Load(BusinessObject obj, IExpression searchExpression)
         {
             bool loaded;
 
@@ -234,7 +234,7 @@ namespace Habanero.Bo
         /// Loads the properties, using the data record provided
         /// </summary>
         /// <param name="dr">The IDataRecord object</param>
-        protected internal void LoadFromDataReader(BusinessObject obj, IDataRecord dr)
+        internal void LoadFromDataReader(BusinessObject obj, IDataRecord dr)
         {
             LoadProperties(obj, dr);
         }
@@ -245,16 +245,16 @@ namespace Habanero.Bo
         /// search criteria
         /// </summary>
         /// <param name="criteria">The search criteria</param>
-        /// <param name="boType">The business object type</param>
+        /// <param name="T">The business object type</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object
         /// matches the criteria</exception>
         /// TODO ERIC - i don't understand why the exception is thrown, since
         /// the normal pattern is just to return the first one that meets
         /// expectations
-        public static BusinessObject GetBusinessObject(string criteria, Type boType)
+        public T GetBusinessObject<T>(string criteria) where T:BusinessObject
         {
-            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
+            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
             col.Load(criteria, "");
             if (col.Count < 1)
             {
@@ -262,7 +262,7 @@ namespace Habanero.Bo
             }
             else if (col.Count > 1)
             {
-                throw new UserException("Loading a " + boType.Name + " with criteria " + criteria +
+                throw new UserException("Loading a " + typeof(T).Name + " with criteria " + criteria +
                                         " returned more than one record when only one was expected.");
             }
             else
@@ -272,14 +272,14 @@ namespace Habanero.Bo
         }
 
 
-        /// <summary>
-        /// Creates a new business object from the class definition
-        /// </summary>
-        /// <returns></returns>
-        public BusinessObject CreateNewBusinessObject(ClassDef classDef)
-        {
-            return classDef.InstantiateBusinessObject();
-        }
+        ///// <summary>
+        ///// Creates a new business object from the class definition
+        ///// </summary>
+        ///// <returns></returns>
+        //public BusinessObject CreateNewBusinessObject(ClassDef classDef)
+        //{
+        //    return classDef.InstantiateBusinessObject();
+        //}
 
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        public static BusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
+        public BusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
         {
             return GetLoadedBusinessObject(id.GetObjectId());
         }
@@ -297,7 +297,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        public static BusinessObject GetLoadedBusinessObject(string id)
+        public BusinessObject GetLoadedBusinessObject(string id)
         {
             return GetLoadedBusinessObject(id, true);
         }
@@ -310,7 +310,7 @@ namespace Habanero.Bo
         /// <param name="refreshIfReqNotCurrent">Whether to check for
         /// object concurrency at the time of loading</param>
         /// <returns>Returns a business object</returns>
-        public static BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
+        public BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
         {
             //If the object is already in loaded then refresh it and return it if required.
             if (BusinessObject.AllLoaded().ContainsKey(id))
@@ -337,6 +337,19 @@ namespace Habanero.Bo
             return null;
         }
 
+        /// <summary>
+        /// Returns a business object collection with objects that meet the
+        /// given search criteria, ordered as specified
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <returns>Returns a business object collection</returns>
+        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, string orderByClause) where T:BusinessObject
+        {
+            BusinessObjectCollection<T> bOCol = new BusinessObjectCollection<T>();
+            bOCol.Load(searchCriteria, orderByClause);
+            return bOCol;
+        }
 
         /// <summary>
         /// Returns a business object collection with objects that meet the
@@ -345,7 +358,7 @@ namespace Habanero.Bo
         /// <param name="searchCriteria">The search criteria</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public virtual BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(Type boType, string searchCriteria,
+        public BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(Type boType, string searchCriteria,
                                                                          string orderByClause)
         {
             BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
@@ -360,7 +373,7 @@ namespace Habanero.Bo
         /// <param name="searchExpression">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public virtual BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(Type boType, IExpression searchExpression,
+        public BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(Type boType, IExpression searchExpression,
                                                                          string orderByClause)
         {
             BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
@@ -375,7 +388,7 @@ namespace Habanero.Bo
         /// <param name="searchExpression">The search expression used to
         /// locate the business object to be read</param>
         /// <returns>Returns an IDataReader object</returns>
-        protected internal IDataReader LoadDataReader(BusinessObject obj, IDatabaseConnection connection, IExpression searchExpression)
+        internal IDataReader LoadDataReader(BusinessObject obj, IDatabaseConnection connection, IExpression searchExpression)
         {
             SqlStatement selectSql = new SqlStatement(connection.GetConnection());
             if (searchExpression == null)

@@ -76,7 +76,7 @@ namespace Habanero.Bo.SqlGeneration
             _updateSql = new SqlStatement(_conn);
             _updateSql.Statement.Append(@"UPDATE " + tableName + " SET ");
             int includedProps = 0;
-            foreach (BOProp prop in _bo.GetBOPropCol().SortedValues)
+            foreach (BOProp prop in _bo.Props.SortedValues)
             {
                 if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
                 {
@@ -88,7 +88,7 @@ namespace Habanero.Bo.SqlGeneration
                         includedProps++;
                         _updateSql.Statement.Append(prop.DatabaseFieldName);
                         _updateSql.Statement.Append(" = ");
-                        _updateSql.AddParameterToStatement(prop.PropertyValue);
+                        _updateSql.AddParameterToStatement(prop.Value);
                         //_updateSql.AddParameterToStatement(DatabaseUtil.PrepareValue(prop.PropertyValue));
                         _updateSql.Statement.Append(", ");
                     }

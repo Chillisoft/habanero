@@ -457,7 +457,11 @@ namespace Habanero.Bo
         /// <returns>Returns the value if found</returns>
         public object GetPropertyValue(string propName)
         {
-            return GetBOProp(propName).PropertyValue;
+            if (Props.Contains(propName))
+                return Props[propName].Value;
+            else
+                throw new InvalidPropertyNameException("Property '" + propName + "' does not exist on a business object of type '" +
+                                                       this.GetType().Name + "'");
         }
 
         /// <summary>
@@ -467,7 +471,7 @@ namespace Habanero.Bo
         /// <returns>Returns a string</returns>
         internal string GetPropertyValueString(string propName)
         {
-            return GetBOProp(propName).PropertyValueString;
+            return Props[propName].PropertyValueString;
         }
 
         /// <summary>
@@ -478,7 +482,7 @@ namespace Habanero.Bo
         /// <returns>Returns the property value</returns>
         internal object GetPropertyValueToDisplay(string propName)
         {
-            if (this.GetBOProp(propName).PropertyType == typeof (Guid) && this.GetPropertyValue(propName) != null &&
+            if (Props[propName].PropertyType == typeof(Guid) && this.GetPropertyValue(propName) != null &&
                 !this.ID.Contains(propName))
             {
                 Guid myGuid = (Guid) GetPropertyValue(propName);
@@ -523,7 +527,7 @@ namespace Habanero.Bo
         /// <param name="propValue">The new value to set to</param>
         public void SetPropertyValue(string propName, object propValue)
         {
-            BOProp prop = GetBOProp(propName);
+            BOProp prop = Props[propName];
             if (!(propValue is Guid))
             {
                 if (propValue is string && prop.PropertyType == typeof(Guid))
@@ -557,34 +561,17 @@ namespace Habanero.Bo
             // check if object is already editing (i.e. another property value has 
             // been changed if it is not then check that this object is still fresh
             // if the object is not fresh then throw appropriate exception.
-            if (prop.PropertyValue != propValue)
+            if (prop.Value != propValue)
             {
                 if (!State.IsEditing)
                 {
                     BeginEdit();
                 }
                 State.IsDirty = true;
-                prop.PropertyValue = propValue;
+                prop.Value = propValue;
                 FireUpdatedEvent();
             }
         }
-
-        ///// <summary>
-        ///// Set or get the value of the specified property of this Business Object
-        ///// </summary>
-        ///// <param name="propertyName">The name of the property to access</param>
-        ///// <returns>The value of the property</returns>
-        //public object this[string propertyName]
-        //{
-        //    get
-        //    {
-        //        return this.GetPropertyValue(propertyName);
-        //    }
-        //    set
-        //    {
-        //        this.SetPropertyValue(propertyName, value);
-        //    }
-        //}
 
         /// <summary>
         /// The BOProps in this business object
@@ -604,39 +591,39 @@ namespace Habanero.Bo
         /// <param name="propValue">The value to initialise to</param>
         private void InitialisePropertyValue(string propName, object propValue)
         {
-            BOProp prop = GetBOProp(propName);
-            prop.PropertyValue = propValue;
+            BOProp prop = Props[propName];
+            prop.Value = propValue;
         }
 
-        /// <summary>
-        /// Returns the property collection
-        /// </summary>
-        /// <returns>Returns a BOPropCol object</returns>
-        internal BOPropCol GetBOPropCol()
-        {
-            return _boPropCol;
-        }
+        ///// <summary>
+        ///// Returns the property collection
+        ///// </summary>
+        ///// <returns>Returns a BOPropCol object</returns>
+        //internal BOPropCol GetBOPropCol()
+        //{
+        //    return _boPropCol;
+        //}
 
-        /// <summary>
-        /// Returns the property having the name specified
-        /// </summary>
-        /// <param name="propName">The property name</param>
-        /// <returns>Returns a BOProp object</returns>
-        /// <exception cref="InvalidPropertyNameException">Thrown if no
-        /// property exists by the name specified</exception>
-        protected internal BOProp GetBOProp(string propName)
-        {
-            BOProp prop = _boPropCol[propName];
-            if (prop == null)
-            {
-                throw new InvalidPropertyNameException("The property '" + propName + 
-                    "' for the class '" + ClassName + "' has not been declared " +
-                    "in the class definitions.  Add the property to the class " +
-                    "definitions and add the property to the class, or check that " +
-                    "spelling and capitalisation are correct.");
-            }
-            return prop;
-        }
+        ///// <summary>
+        ///// Returns the property having the name specified
+        ///// </summary>
+        ///// <param name="propName">The property name</param>
+        ///// <returns>Returns a BOProp object</returns>
+        ///// <exception cref="InvalidPropertyNameException">Thrown if no
+        ///// property exists by the name specified</exception>
+        //protected internal BOProp GetBOProp(string propName)
+        //{
+        //    BOProp prop = _boPropCol[propName];
+        //    if (prop == null)
+        //    {
+        //        throw new InvalidPropertyNameException("The property '" + propName + 
+        //            "' for the class '" + ClassName + "' has not been declared " +
+        //            "in the class definitions.  Add the property to the class " +
+        //            "definitions and add the property to the class, or check that " +
+        //            "spelling and capitalisation are correct.");
+        //    }
+        //    return prop;
+        //}
 
         /// <summary>
         /// Indicates whether all of the property values are valid
@@ -646,7 +633,7 @@ namespace Habanero.Bo
         /// <returns>Returns true if all are valid</returns>
         protected internal bool IsValid(out string invalidReason)
         {
-            return GetBOPropCol().IsValid(out invalidReason);
+            return Props.IsValid(out invalidReason);
         }
 
         /// <summary>
@@ -657,7 +644,7 @@ namespace Habanero.Bo
         protected internal bool IsValid()
         {
             string invalidReason;
-            return GetBOPropCol().IsValid(out invalidReason);
+            return Props.IsValid(out invalidReason);
         }
 
         /// <summary>

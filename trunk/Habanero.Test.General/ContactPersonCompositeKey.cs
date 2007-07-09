@@ -132,7 +132,7 @@ namespace Habanero.Test.General
         public static ContactPersonCompositeKey GetContactPersonCompositeKey(BOPrimaryKey id)
         {
             ContactPersonCompositeKey myContactPerson =
-                (ContactPersonCompositeKey)BOLoader.GetLoadedBusinessObject(id);
+                (ContactPersonCompositeKey)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myContactPerson == null)
             {
                 myContactPerson = new ContactPersonCompositeKey(id);

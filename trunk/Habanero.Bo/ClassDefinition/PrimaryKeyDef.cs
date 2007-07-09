@@ -77,7 +77,7 @@ namespace Habanero.Bo.ClassDefinition
             }
 		}
 
-		#endregion Properties
+        #endregion Properties
 
 
 		/// <summary>

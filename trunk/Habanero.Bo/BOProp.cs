@@ -11,8 +11,7 @@ using NUnit.Framework;
 
 namespace Habanero.Bo
 {
-    public delegate void BOPropValueUpdatedHandler(Object sender, EventArgs e);
-
+ 
     /// <summary>
     /// Stores the object's property value at any given point in time
     /// </summary>
@@ -29,7 +28,7 @@ namespace Habanero.Bo
         protected bool _isObjectNew = false;
         protected bool _isDirty = false;
 
-        public event BOPropValueUpdatedHandler BOPropValueUpdated;
+        public event EventHandler<BOPropEventArgs> Updated;
 
         /// <summary>
         /// Constructor to initialise a new property
@@ -193,7 +192,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Gets and sets the value for this property
         /// </summary>
-        public object PropertyValue
+        public object Value
         {
             get { return _currentValue; }
             set
@@ -237,13 +236,13 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Calls the BOPropValueUpdated() method
+        /// Calls the Updated() method
         /// </summary>
         protected void FireBOPropValueUpdated()
         {
-            if (this.BOPropValueUpdated != null)
+            if (this.Updated != null)
             {
-                BOPropValueUpdated(this, new EventArgs());
+                Updated(this, new BOPropEventArgs(this));
             }
         }
 
@@ -261,11 +260,11 @@ namespace Habanero.Bo
                 }
                 if (_propDef.PropType == typeof (DateTime))
                 {
-                    if (!(PropertyValue == DBNull.Value))
+                    if (!(Value == DBNull.Value))
                     {
                         return ((DateTime) PersistedPropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
                     }
-                        //Sql return ((DateTime)PropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
+                        //Sql return ((DateTime)Value).ToString("dd MMM yyyy HH:mm:ss:fff");
                     else
                     {
                         return PersistedPropertyValue.ToString();
@@ -289,7 +288,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Returns the property value as a string
         /// </summary>
-        public string PropertyValueString
+        internal string PropertyValueString
         {
             get
             {
@@ -301,26 +300,26 @@ namespace Habanero.Bo
                     }
                     else if (_propDef.PropType == typeof (DateTime))
                     {
-                        if (!(PropertyValue == DBNull.Value))
+                        if (!(Value == DBNull.Value))
                         {
-                            return ((DateTime) PropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
+                            return ((DateTime) Value).ToString("dd MMM yyyy HH:mm:ss:fff");
                         }
-                            //Sql return ((DateTime)PropertyValue).ToString("dd MMM yyyy HH:mm:ss:fff");
+                            //Sql return ((DateTime)Value).ToString("dd MMM yyyy HH:mm:ss:fff");
                         else
                         {
-                            return PropertyValue.ToString();
+                            return Value.ToString();
                         }
                     }
                     else if (_propDef.PropType == typeof (Guid))
                     {
                         if (_currentValue is Guid)
                         {
-                            return ((Guid) PropertyValue).ToString("B").ToUpper(CultureInfo.InvariantCulture);
+                            return ((Guid) Value).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                         }
                         else
                         {
                             return
-                                (new Guid(PropertyValue.ToString())).ToString("B").ToUpper(CultureInfo.InvariantCulture);
+                                (new Guid(Value.ToString())).ToString("B").ToUpper(CultureInfo.InvariantCulture);
                         }
                     }
                     else if ((_propDef.PropType == typeof (String)) && (_currentValue is Guid))
@@ -441,7 +440,7 @@ namespace Habanero.Bo
                 else
                 {
                     String paramName = sql.ParameterNameGenerator.GetNextParameterName();
-                    sql.AddParameter(paramName, this.PropertyValue);
+                    sql.AddParameter(paramName, this.Value);
                     return this.DatabaseFieldName + " = " + paramName;
                 }
             }

@@ -64,8 +64,8 @@ namespace Habanero.Test.Ui.Application
         {
             grid.SelectedBusinessObject = bo2;
             BusinessObject selectedBo = grid.SelectedBusinessObject;
-            Assert.AreEqual("2Value1", selectedBo.Props["TestProp"].PropertyValueString);
-            Assert.AreEqual("2Value2", selectedBo.Props["TestProp2"].PropertyValueString);
+            Assert.AreEqual("2Value1", selectedBo.Props["TestProp"].Value);
+            Assert.AreEqual("2Value2", selectedBo.Props["TestProp2"].Value);
             Assert.AreSame(bo2, selectedBo);
         }
 

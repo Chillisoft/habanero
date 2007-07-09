@@ -175,9 +175,8 @@ namespace Habanero.Ui.Forms
                 ValueUpdated();
                 if (!_isReadOnceOnly)
                 {
-                    BOMapper mapper = new BOMapper(_businessObject);
-                    mapper.GetProperty(_propertyName).BOPropValueUpdated +=
-                        new BOPropValueUpdatedHandler(this.BOPropValueUpdatedHandler);
+                    _businessObject.Props[_propertyName].Updated +=
+                        new EventHandler<BOPropEventArgs>(this.BOPropValueUpdatedHandler);
                 }
             }
             get { return _businessObject; }

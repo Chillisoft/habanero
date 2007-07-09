@@ -101,7 +101,7 @@ namespace Habanero.Test.General
         ///  if the object has been deleted already</exception>
         public static Engine GetEngine(BOPrimaryKey id)
         {
-            Engine myEngine = (Engine)BOLoader.GetLoadedBusinessObject(id);
+            Engine myEngine = (Engine)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myEngine == null)
             {
                 myEngine = new Engine(id);
