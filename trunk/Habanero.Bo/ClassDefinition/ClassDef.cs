@@ -693,7 +693,7 @@ namespace Habanero.Bo.ClassDefinition
         /// found, or a NullLookupListSource object if not</returns>
         public ILookupListSource GetLookupListSource(string propertyName)
         {
-            if (this.PropDefcol[propertyName] != null)
+            if (this.PropDefcol.Contains(propertyName))
             {
                 return this.PropDefcol[propertyName].LookupListSource;
             }
