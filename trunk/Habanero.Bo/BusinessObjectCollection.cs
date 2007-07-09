@@ -663,16 +663,5 @@ namespace Habanero.Bo
             }
             t.CommitTransaction();
         }
-
-        /// <summary>
-        /// Not yet implemented
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="index"></param>
-        /// TODO ERIC - implement
-        public void CopyTo(Array array, int index)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -59,15 +59,12 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Not yet implemented
+        /// Returns the collection's enumerator
         /// </summary>
-        /// <returns></returns>
-        /// TODO ERIC - implement
+        /// <returns>Returns an object of type IEnumerator</returns>
         public IEnumerator GetEnumerator()
         {
-            //throw new NotImplementedException();
         	return _defs.GetEnumerator();
-			//TODO: Is this right?
         }
     }
 }

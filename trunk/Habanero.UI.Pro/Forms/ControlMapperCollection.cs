@@ -22,14 +22,15 @@ namespace Habanero.Ui.Forms
         }
 
         /// <summary>
-        /// This method not yet implemented
+        /// Copies the elements of the collection to an Array, 
+        /// starting at a particular Array index
         /// </summary>
-        /// <param name="array"></param>
-        /// <param name="index"></param>
-        /// TODO ERIC - needs to be implemented
+        /// <param name="array">The array to copy to</param>
+        /// <param name="index">The zero-based index position to start
+        /// copying from</param>
         public void CopyTo(Array array, int index)
         {
-            throw new NotImplementedException();
+            _collection.CopyTo(array, index);
         }
 
         /// <summary>
