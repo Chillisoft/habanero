@@ -28,33 +28,6 @@ namespace Habanero.Base.Exceptions
         }
 
         /// <summary>
-        /// This is deprecated - rather use GetExceptionString(Exception,int,bool).
-        /// Returns an exception string formatted to display the exception
-        /// message, stack trace and inner exception, each on different lines,
-        /// at a specific indentation
-        /// </summary>
-        /// <param name="ex">The exception to display</param>
-        /// <param name="indent">The indentation as a number of spaces</param>
-        /// <returns>Returns a string</returns>
-        /// TODO ERIC - consider removing
-        public static string GetExceptionString(Exception ex, int indent)
-        {
-            string str = "";
-            str += GetIndent(indent);
-            str += "Exception: " + ex.ToString() + Environment.NewLine;
-            str += GetIndent(indent);
-            str += "Stacktrace: " + ex.StackTrace;
-            if (ex.InnerException != null)
-            {
-                str += Environment.NewLine;
-                str += GetIndent(indent + 8);
-                return
-                    str + "Inner Exception:" + Environment.NewLine + GetExceptionString(ex.InnerException, indent + 8);
-            }
-            return str;
-        }
-
-        /// <summary>
         /// Arranges the exception into a readable string to be shown to the
         /// final user
         /// </summary>

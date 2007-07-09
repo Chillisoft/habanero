@@ -122,7 +122,7 @@ namespace Habanero.Bo
             }
             catch (Exception e)
             {
-                log.Error("Error commiting transaction: " + Environment.NewLine + ExceptionUtilities.GetExceptionString(e, 4));
+                log.Error("Error commiting transaction: " + Environment.NewLine + ExceptionUtilities.GetExceptionString(e, 4, true));
                 dbTransaction.Rollback();
                 TransactionRolledBack();
                 throw e;

@@ -27,7 +27,7 @@ namespace Habanero.Base.Exceptions
         public void Notify(Exception ex, string furtherMessage, string title)
         {
             Console.Out.WriteLine("Error: " + furtherMessage);
-            Console.Out.WriteLine("Further details: " + ExceptionUtilities.GetExceptionString(ex, 0));
+            Console.Out.WriteLine("Further details: " + ExceptionUtilities.GetExceptionString(ex, 0, true));
         }
     }
 }

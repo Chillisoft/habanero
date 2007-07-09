@@ -187,7 +187,7 @@ namespace Habanero.Bo
                 catch (Exception ex)
                 {
                     GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem saving.", "Problem Saving");
-                    //log.Debug(ExceptionUtil.GetExceptionString(ex, 0) ) ;
+                    //log.Debug(ExceptionUtil.GetExceptionString(ex, 0, true) ) ;
                 }
             }
             else

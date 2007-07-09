@@ -83,7 +83,7 @@ namespace Habanero.Bo.Loaders
             }
             catch (XmlException ex)
             {
-                //Console.Out.WriteLine(ExceptionUtil.GetExceptionString(ex, 0));
+                //Console.Out.WriteLine(ExceptionUtil.GetExceptionString(ex, 0, true));
                 throw new XmlException("The class definitions XML file has no root " +
                     "element 'classes'.  The document needs a master 'classes' element " +
                     "and individual 'class' elements for each of the classes you are " +
