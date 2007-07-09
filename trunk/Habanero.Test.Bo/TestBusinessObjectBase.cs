@@ -69,7 +69,7 @@ namespace Habanero.Test.Bo
             ContactPerson.LoadDefaultClassDef();
             ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
-            bo.SetPropertyValue("TestProp2", "abc");
+            bo.SetPropertyValue("TestProp2", cp);
             Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
         }

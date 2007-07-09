@@ -553,6 +553,7 @@ namespace Habanero.Bo
         public void SetPropertyValue(string propName, object propValue)
         {
             BOProp prop = Props[propName];
+
             if (!(propValue is Guid))
             {
                 if (propValue is string && prop.PropertyType == typeof(Guid))
@@ -585,7 +586,12 @@ namespace Habanero.Bo
                     propValue = System.Activator.CreateInstance(prop.PropertyType, new object[] {propValue, false});
                 }
             }
-            if (propValue is string && ClassDef.GetPropDef(propName).HasLookupList()) {
+            if (propValue is BusinessObject)
+            {
+                if (prop.PropertyType == typeof(Guid))
+                    propValue = ((BusinessObject)propValue)._primaryKey.GetGuid();
+                else propValue = ((BusinessObject)propValue).ID.ToString();
+            } else if (propValue is string && ClassDef.GetPropDef(propName).HasLookupList()) {
                 Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupListSource.GetLookupList();
                 if (lookupList.ContainsKey((string)propValue))
                     propValue = lookupList[(string)propValue];
