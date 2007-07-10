@@ -5,7 +5,7 @@ namespace Habanero.Base
     /// interface, as specified in the class definitions xml file.
     /// This consists of definitions for a grid display and an editing form.
     /// </summary>
-    public class UIDef : IUserInterfaceMapper
+    public class UIDef 
     {
         private string _name;
         private UIFormDef _uiFormDef;
@@ -24,26 +24,6 @@ namespace Habanero.Base
             _uiFormDef = uiFormDef;
             _uiGridDef = uiGridDef;
         }
-
-        //		private static Hashtable _uiDefs;
-        //
-        //		public static Hashtable GetUIDefs() {
-        //			if (_uiDefs == null) {
-        //				_uiDefs = new Hashtable();
-        //			}
-        //			return _uiDefs;
-        //		}
-        //
-        //		public static void LoadUIDefs(IUIDefsLoader loader) {
-        //			foreach (UIDef uiDef in loader.LoadUIDefs()) {
-        //				UIDefName name = uiDef.Name;
-        //				if (!UIDef.GetUIDefs().Contains(name)) {
-        //					UIDef.GetUIDefs().Add(name, uiDef);
-        //				} else {
-        //					Console.Out.WriteLine("Attempted to load a UI Def when it was already defined.");
-        //				}
-        //			}
-        //		}
 
         /// <summary>
         /// Returns the form definition

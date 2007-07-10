@@ -142,6 +142,9 @@
   <data name="form" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\form.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="formGrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\formGrid.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="grid" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\grid.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

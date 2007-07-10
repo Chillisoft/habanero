@@ -1,6 +1,7 @@
 #include columnLayout.dtd
+#include formGrid.dtd
 #include field.dtd
-<!ELEMENT tab (columnLayout*, field*)>
+<!ELEMENT tab (columnLayout*, field*, formGrid?)>
 <!ATTLIST tab
 	name CDATA #REQUIRED
 >

@@ -159,9 +159,6 @@
     <Compile Include="IObjectInitialiser.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IObjectLister.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -178,12 +175,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ITransaction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IUIDefsLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IUserInterfaceMapper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NullCrypter.cs" />

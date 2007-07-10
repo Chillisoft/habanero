@@ -37,7 +37,7 @@ namespace Habanero.Ui.Forms
             //_boArray = new BusinessObject[1];
             //_boArray[0] = bo;
             BOMapper mapper = new BOMapper(bo);
-            _uiFormDef = mapper.GetUserInterfaceMapper().GetUIFormProperties();
+            _uiFormDef = mapper.GetUIDef().GetUIFormProperties();
             //_emailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
             InitialiseFactory(bo);
         }
@@ -58,7 +58,7 @@ namespace Habanero.Ui.Forms
         public PanelFactory(BusinessObject bo, string uiDefName)
         {
             BOMapper mapper = new BOMapper(bo);
-            _uiFormDef = mapper.GetUserInterfaceMapper(uiDefName).GetUIFormProperties();
+            _uiFormDef = mapper.GetUIDef(uiDefName).GetUIFormProperties();
             InitialiseFactory(bo);
         }
 
@@ -85,7 +85,7 @@ namespace Habanero.Ui.Forms
             {
                 Panel mainPanel = new Panel();
                 ControlMapperCollection controlMappers = new ControlMapperCollection();
-                IDictionary<string, IGrid> formGrids = new Dictionary<string, IGrid> ();
+                IDictionary<string, EditableGrid> formGrids = new Dictionary<string, EditableGrid>();
                 TabControl tabControl = new TabControl();
                 tabControl.Dock = DockStyle.Fill;
                 mainPanel.Controls.Add(tabControl);
@@ -96,7 +96,7 @@ namespace Habanero.Ui.Forms
                     {
                         controlMappers.Add(controlMapper);
                     }
-                    foreach (KeyValuePair<string, IGrid> keyValuePair in onePanelInfo.FormGrids)
+                    foreach (KeyValuePair<string, EditableGrid> keyValuePair in onePanelInfo.FormGrids)
                     {
                         formGrids.Add(keyValuePair);
                     }
@@ -116,14 +116,11 @@ namespace Habanero.Ui.Forms
             if (_uiFormDef.Height > -1)
             {
                 factoryInfo.PreferredHeight = _uiFormDef.Height;
-                //factoryInfo.Panel.Height = _uiFormDef.Height;
             }
             if (_uiFormDef.Width > -1)
             {
                 factoryInfo.PreferredWidth = _uiFormDef.Width;
-                //factoryInfo.Panel.Width = _uiFormDef.Width;
             }
-            //log.Debug("Done Creating panel for object of type " + _boArray[0].GetType().Name ) ;
             return factoryInfo;
         }
 
@@ -135,10 +132,10 @@ namespace Habanero.Ui.Forms
         /// TODO ERIC - this is a very long method!
         private PanelFactoryInfo CreateOnePanel(UIFormTab uiFormTab)
         {
-            //if (uiFormTab.UIFormGrid != null)
-            //{
-            //    return CreatePanelWithGrid(uiFormTab.UIFormGrid);
-            //}
+            if (uiFormTab.UIFormGrid != null)
+            {
+                return CreatePanelWithGrid(uiFormTab.UIFormGrid);
+            }
             Panel p = new Panel();
             GridLayoutManager manager = new GridLayoutManager(p);
             int rowCount = 0;
@@ -387,38 +384,38 @@ namespace Habanero.Ui.Forms
             }
         }
 
-        ///// <summary>
-        ///// Creates a panel with a grid containing the business object
-        ///// information
-        ///// </summary>
-        ///// <param name="formGrid">The grid to fill</param>
-        ///// <returns>Returns the object containing the panel</returns>
-        //private PanelFactoryInfo CreatePanelWithGrid(UIFormGrid formGrid)
-        //{
-        //    IGrid myGrid = (IGrid) Activator.CreateInstance(formGrid.GridType);
-            
-        //    BusinessObject bo = _boArray[0];
-        //    ClassDef classDef = ClassDef.ClassDefs[bo.GetType()];
-        //    myGrid.ObjectInitialiser =
-        //        new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
-        //                                          formGrid.CorrespondingRelationshipName);
-            
-        //    BusinessObjectCollection collection =
-        //        bo.Relationships.GetRelatedBusinessObjectCol(formGrid.RelationshipName);
-        //    foreach (UIGridProperty property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
-        //    {
-        //        //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
-        //    }
+        /// <summary>
+        /// Creates a panel with a grid containing the business object
+        /// information
+        /// </summary>
+        /// <param name="formGrid">The grid to fill</param>
+        /// <returns>Returns the object containing the panel</returns>
+        private PanelFactoryInfo CreatePanelWithGrid(UIFormGrid formGrid)
+        {
+            EditableGrid myGrid = new EditableGrid();
 
-        //    myGrid.SetGridDataProvider(new SimpleGridDataProvider(collection,
-        //                                   collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties()));
-        //    ((Control) myGrid).Dock = DockStyle.Fill;
-        //    Panel p = ControlFactory.CreatePanel(formGrid.RelationshipName );
-        //    p.Controls.Add((Control) myGrid);
-            
-        //    PanelFactoryInfo pinfo = new PanelFactoryInfo(p);
-        //    pinfo.FormGrids.Add(formGrid.RelationshipName, myGrid);
-        //    return pinfo;
-        //}
+            BusinessObject bo = _boArray[0];
+            ClassDef classDef = ClassDef.ClassDefs[bo.GetType()];
+            myGrid.ObjectInitialiser =
+                new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
+                                                  formGrid.CorrespondingRelationshipName);
+
+            BusinessObjectCollection<BusinessObject> collection =
+                bo.Relationships.GetRelatedBusinessObjectCol(formGrid.RelationshipName);
+            //foreach (UIGridProperty property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
+            //{
+            //    //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
+            //}
+
+            myGrid.SetCollection(collection);
+
+            myGrid.Dock = DockStyle.Fill;
+            Panel p = ControlFactory.CreatePanel(formGrid.RelationshipName);
+            p.Controls.Add(myGrid);
+
+            PanelFactoryInfo pinfo = new PanelFactoryInfo(p);
+            pinfo.FormGrids.Add(formGrid.RelationshipName, myGrid);
+            return pinfo;
+        }
     }
 }

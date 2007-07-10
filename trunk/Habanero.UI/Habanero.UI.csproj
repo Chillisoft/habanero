@@ -89,7 +89,6 @@
     </Compile>
     <Compile Include="Base\GridLayoutManager.cs" />
     <Compile Include="Grid\IEditableGrid.cs" />
-    <Compile Include="Grid\IGrid.cs" />
     <Compile Include="Grid\IGridWithButtons.cs" />
     <Compile Include="Grid\IReadOnlyGrid.cs" />
     <Compile Include="Base\LayoutManager.cs" />

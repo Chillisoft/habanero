@@ -13,6 +13,9 @@ namespace Habanero.Bo.Loaders
     {
         private UIFormTab _tab;
 
+        private string MixedContentMessage =
+            "A 'tab' can have either a set of 'columnLayout' or 'field' nodes or a single 'formGrid' node, but not a mixture.";
+
         /// <summary>
         /// Constructor to initialise a new loader
         /// </summary>
@@ -86,6 +89,8 @@ namespace Habanero.Bo.Loaders
 
                 XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
                 XmlUIFormPropertyLoader fieldLoader = new XmlUIFormPropertyLoader(DtdLoader, _defClassFactory);
+            XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
+
                 List<UIFormProperty> fields = new List<UIFormProperty>();
                 string contentType = "";
                 while (_reader.Name != "tab")
@@ -94,8 +99,7 @@ namespace Habanero.Bo.Loaders
                     {
                         if (contentType.Length > 0 && contentType != "columnLayout")
                         {
-                            throw new InvalidXmlDefinitionException(
-                                "A 'tab' can have either a set of 'columnLayout' or 'field' nodes, but not a mixture.");
+                            throw new InvalidXmlDefinitionException(MixedContentMessage);
                         }
                         contentType = "columnLayout";
                         _tab.Add(columnLoader.LoadUIFormColumn(_reader.ReadOuterXml()));
@@ -104,17 +108,23 @@ namespace Habanero.Bo.Loaders
                     {
                         if (contentType.Length > 0 && contentType != "field")
                         {
-                            throw new InvalidXmlDefinitionException(
-                                "A 'tab' can have either a set of 'columnLayout' or 'field' nodes, but not a mixture.");
+                            throw new InvalidXmlDefinitionException(MixedContentMessage);
                         }
                         contentType = "field";
                         fields.Add(fieldLoader.LoadUIProperty(_reader.ReadOuterXml()));
 
+                    } else if (_reader.Name == "formGrid") {
+                         if (contentType.Length > 0)
+                         {
+                             throw new InvalidXmlDefinitionException(MixedContentMessage);
+                         }
+                        contentType = "formGrid";
+                        _tab.UIFormGrid = gridLoader.LoadUIFormGrid(_reader.ReadOuterXml());
+
                     }
                     else
                     {
-                        throw new InvalidXmlDefinitionException(
-                            "A 'tab' can have either a set of 'columnLayout' or 'field' nodes, but not a mixture.");
+                        throw new InvalidXmlDefinitionException(MixedContentMessage);
                     }
                 }
                 if (contentType == "field")

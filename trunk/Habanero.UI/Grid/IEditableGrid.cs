@@ -3,7 +3,7 @@ namespace Habanero.Ui.Grid
     /// <summary>
     /// An interface to model a grid that can be edited
     /// </summary>
-    public interface IEditableGrid : IGrid
+    public interface IEditableGrid 
     {
         /// <summary>
         /// Commits changes that have been made in the grid contents

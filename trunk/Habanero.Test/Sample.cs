@@ -48,11 +48,6 @@ namespace Habanero.Test
             return _classDef;
         }
 
-        protected override IUserInterfaceMapper GetUserInterfaceMapper()
-        {
-            return new SampleUserInterfaceMapper();
-        }
-
         private static ClassDef CreateClassDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
@@ -91,7 +86,9 @@ namespace Habanero.Test
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             ClassDef lClassDef = new ClassDef(typeof (Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
-			ClassDef.ClassDefs.Add(lClassDef);
+            lClassDef.UIDefCol.Add(new SampleUserInterfaceMapper().GetUIDef()); 
+            ClassDef.ClassDefs.Add(lClassDef);
+
             return lClassDef;
         }
 
@@ -148,8 +145,12 @@ namespace Habanero.Test
         /// <summary>
         /// Summary description for SampleUserInterfaceMapper.
         /// </summary>
-        public class SampleUserInterfaceMapper : IUserInterfaceMapper
+        public class SampleUserInterfaceMapper 
         {
+            public UIDef GetUIDef()
+            {
+                return new UIDef("default", GetUIFormProperties(), GetUIGridProperties());
+            }
             public UIFormDef GetUIFormProperties()
             {
                 UIFormDef def = new UIFormDef();
@@ -195,14 +196,6 @@ namespace Habanero.Test
             def.Add(tab);
             return def;
         }
-
-//			public UIGridDef GetUIGridProperties() {
-//				UIGridDef col = new UIGridDef();
-//				col.Add(new UIGridProperty("Text:", "SampleText", typeof (DataGridTextBoxColumn)));
-//				col.Add(new UIGridProperty("Date:", "SampleDate", typeof (DataGridTextBoxColumn)));
-//				col.Add(new UIGridProperty("Text2:", "SampleText2", typeof (DataGridTextBoxColumn)));
-//				return col;
-//			}
 
 
         public static UIFormDef SampleUserInterfaceMapper2Cols()

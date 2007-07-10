@@ -159,7 +159,7 @@ namespace Habanero.Ui.Forms
         public void SetupRightClickBehaviour()
         {
             BOMapper mapper = new BOMapper(_collection.SampleBo);
-            if (mapper.GetUserInterfaceMapper(_uiDefName) != null)
+            if (mapper.GetUIDef(_uiDefName) != null)
             {
                 ToolTip toolTip = new ToolTip();
                 toolTip.SetToolTip(_comboBox, "Right click to add a new entry.");

@@ -26,16 +26,6 @@ namespace Habanero.Bo
             _businessObject = bo;
         }
 
-        ///// <summary>
-        ///// Returns a property of the name specified
-        ///// </summary>
-        ///// <param name="propertyName">The property name</param>
-        ///// <returns>Returns the BOProp object by that name</returns>
-        //public BOProp GetProperty(string propertyName)
-        //{
-        //    return _businessObject.GetBOProp(propertyName);
-        //}
-
         /// <summary>
         /// Returns the lookup list contents for the property specified
         /// </summary>
@@ -60,9 +50,9 @@ namespace Habanero.Bo
         /// Returns the business object's interface mapper
         /// </summary>
         /// <returns>Returns the interface mapper</returns>
-        public IUserInterfaceMapper GetUserInterfaceMapper()
+        public UIDef GetUIDef()
         {
-            return _businessObject.GetUserInterfaceMapper();
+            return GetUIDef("default");
         }
 
         /// <summary>
@@ -71,9 +61,9 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="uiDefName">The UIDefName</param>
         /// <returns>Returns the interface mapper</returns>
-        public IUserInterfaceMapper GetUserInterfaceMapper(string uiDefName)
+        public UIDef GetUIDef(string uiDefName)
         {
-            return _businessObject.GetUserInterfaceMapper(uiDefName);
+            return _businessObject.ClassDef.UIDefCol[uiDefName];
         }
 
         /// <summary>

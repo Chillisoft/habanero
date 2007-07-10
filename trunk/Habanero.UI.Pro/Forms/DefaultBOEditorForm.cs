@@ -46,7 +46,7 @@ namespace Habanero.Ui.Forms
             UIFormDef def;
             if (_uiDefName.Length > 0)
             {
-                IUserInterfaceMapper uiMapper = mapper.GetUserInterfaceMapper(_uiDefName);
+                UIDef uiMapper = mapper.GetUIDef(_uiDefName);
                 if (uiMapper == null)
                 {
                     throw new NullReferenceException("An error occurred while " +
@@ -59,7 +59,7 @@ namespace Habanero.Ui.Forms
             }
             else
             {
-                IUserInterfaceMapper uiMapper = mapper.GetUserInterfaceMapper();
+                UIDef uiMapper = mapper.GetUIDef();
                 if (uiMapper == null)
                 {
                     throw new NullReferenceException("An error occurred while " +
@@ -165,10 +165,10 @@ namespace Habanero.Ui.Forms
                             foreach (Control control in panel.Controls)
                             {
                                 //Console.Out.WriteLine(control.GetType().Name);
-                                if (control is IGrid)
+                                if (control is EditableGrid)
                                 {
-                                    //Console.Out.WriteLine("IGrid found.");
-                                    ((IGrid) control).SaveChanges();
+                                    //Console.Out.WriteLine("EditableGrid found.");
+                                    ((EditableGrid)control).SaveChanges();
                                 }
                             }
                         }

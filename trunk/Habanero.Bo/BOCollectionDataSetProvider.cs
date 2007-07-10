@@ -36,7 +36,7 @@ namespace Habanero.Bo
             this.InitialiseLocalData();
 
             //BusinessObject sampleBo = _collection.ClassDef.InstantiateBusinessObjectWithClassDef();
-            _uiGridProperties = uiGridDef; //sampleBo.GetUserInterfaceMapper().GetUIGridProperties();
+            _uiGridProperties = uiGridDef; //sampleBo.GetUIDef().GetUIGridProperties();
             DataColumn column = _table.Columns.Add();
             column.Caption = "ID";
             column.ColumnName = "ID";
@@ -82,8 +82,6 @@ namespace Habanero.Bo
                         val = ((Guid) val).ToString("B");
                     }
                     values[i++] = val;
-                    //values[i++] = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
-                    //values[i++] = businessObjectBase.GetPropertyValueToDisplay(gridProperty.PropertyName);
                 }
                 _table.LoadDataRow(values, true);
             }

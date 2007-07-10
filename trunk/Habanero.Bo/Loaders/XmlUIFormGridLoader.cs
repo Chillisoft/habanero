@@ -80,7 +80,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadCorrespondingRelationshipName()
         {
-            _correspondingRelationshipName = _reader.GetAttribute("correspondingRelationshipName");
+            _correspondingRelationshipName = _reader.GetAttribute("reverseRelationship");
         }
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadGridType()
         {
-            string className = _reader.GetAttribute("gridType");
-            string assemblyName = _reader.GetAttribute("gridTypeAssembly");
+            string className = "Habanero.Ui.Grid.EditableGrid"; //"_reader.GetAttribute("gridType");
+            string assemblyName = "Habanero.Ui.Pro";
             try
             {
                 _gridType = TypeLoader.LoadType(assemblyName, className);
@@ -98,7 +98,7 @@ namespace Habanero.Bo.Loaders
             catch (Exception ex)
             {
                 throw new InvalidXmlDefinitionException(String.Format(
-                    "While attempting to load a 'uiFormGrid' element, an " +
+                    "While attempting to load a 'formGrid' element, an " +
                     "error occurred while loading the grid type. " +
                     "The type supplied was '{0}' and the assembly was '{1}'. " +
                     "Please ensure that the type exists in the assembly provided.",
@@ -112,7 +112,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadRelationshipName()
         {
-            _relationshipName = _reader.GetAttribute("relationshipName");
+            _relationshipName = _reader.GetAttribute("relationship");
         }
     }
 }

@@ -104,6 +104,7 @@
     <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
+    <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -345,6 +346,7 @@
     <None Include="Loaders\DTDs\databaseLookupList.dtd" />
     <None Include="Loaders\DTDs\field.dtd" />
     <None Include="Loaders\DTDs\form.dtd" />
+    <None Include="Loaders\DTDs\formGrid.dtd" />
     <None Include="Loaders\DTDs\grid.dtd" />
     <None Include="Loaders\DTDs\key.dtd" />
     <None Include="Loaders\DTDs\parameter.dtd" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Globalization;
 using Habanero.Base;
 
 namespace Habanero.DB
@@ -10,10 +11,7 @@ namespace Habanero.DB
     /// either from the cache or from the database if the cache value has
     /// expired
     /// </summary>
-    /// TODO ERIC
-    /// - more clarity on how the date works (eg. 10 minute expiration)
-    /// - is the 10-minute rule standard or should the user be able to amend
-    /// - no set decimal?
+    /// TODO ERIC : check caching function (in particular how does it work with dates).
     public class DatabaseSettingsStorer : ISettingsStorer
     {
         private Hashtable _cachedSettings;
@@ -37,6 +35,18 @@ namespace Habanero.DB
         }
 
         /// <summary>
+        /// Returns a specified setting as a string
+        /// </summary>
+        /// <param name="settingName">The setting name</param>
+        /// <param name="date">The date of the setting to retrieve 
+        /// (ie this method will retrieve the setting value as at this date</param>
+        /// <returns>Returns a string</returns>
+        public string GetString(string settingName, DateTime date)
+        {
+            return Convert.ToString(GetValue(settingName, date));
+        }
+
+        /// <summary>
         /// Sets a specified setting as a string
         /// </summary>
         /// <param name="settingName">The setting name</param>
@@ -52,10 +62,30 @@ namespace Habanero.DB
         /// <param name="settingName">The setting name</param>
         /// <param name="date">The date at which to check the setting</param>
         /// <returns>Returns a decimal</returns>
-        /// TODO ERIC - what is the date for? can that be passed?
         public decimal GetDecimal(string settingName, DateTime date)
         {
-            return Convert.ToDecimal(GetValue(settingName, date));
+            return Convert.ToDecimal(GetValue(settingName, date), CultureInfo.InvariantCulture.NumberFormat);
+        }
+
+        /// <summary>
+        /// Returns the configuration for the setting name provided
+        /// </summary>
+        /// <param name="settingName">The setting name</param>
+        /// <returns>Returns a string</returns>
+        public decimal GetDecimal(string settingName)
+        {
+            return GetDecimal(settingName, DateTime.Now);
+        }
+
+        /// <summary>
+        /// Sets a setting with a decimal value (using the InvariantCulture).  Uses DateTime.Now for the 
+        /// date of the setting to indicate when the setting was changed.
+        /// </summary>
+        /// <param name="settingName">The name of the setting to set</param>
+        /// <param name="settingValue">The value to set the setting to.</param>
+        public void SetDecimal(string settingName, decimal settingValue)
+        {
+            SetValue(settingName, Convert.ToString(settingValue, CultureInfo.InvariantCulture.NumberFormat));
         }
 
         /// <summary>
@@ -232,7 +262,7 @@ namespace Habanero.DB
             statement.Statement.Append(", ");
             statement.AddParameterToStatement(settingValue);
             statement.Statement.Append(", ");
-            statement.AddParameterToStatement(DateTime.Now.Date.AddDays(-1));
+            statement.AddParameterToStatement(DateTime.Now);
             statement.Statement.Append(", ");
             statement.AddParameterToStatement(null);
             statement.Statement.Append(") ");

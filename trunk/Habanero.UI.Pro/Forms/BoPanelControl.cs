@@ -30,8 +30,8 @@ namespace Habanero.Ui.Forms
             BOMapper mapper = new BOMapper(bo);
 			
             UIFormDef def = (_uiDefName.Length > 0) 
-                                ? mapper.GetUserInterfaceMapper(_uiDefName).GetUIFormProperties() 
-                                : mapper.GetUserInterfaceMapper().GetUIFormProperties();
+                                ? mapper.GetUIDef(_uiDefName).GetUIFormProperties() 
+                                : mapper.GetUIDef().GetUIFormProperties();
 
             PanelFactory factory = new PanelFactory(_bo, def );
             _panelFactoryInfo = factory.CreatePanel() ;

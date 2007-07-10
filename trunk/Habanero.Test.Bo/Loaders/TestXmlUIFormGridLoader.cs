@@ -24,10 +24,10 @@ namespace Habanero.Test.Bo.Loaders
         {
             UIFormGrid formGrid =
                 loader.LoadUIFormGrid(
-                    @"<uiFormGrid relationshipName=""testrelationshipname"" correspondingRelationshipName=""testcorrespondingrelationshipname"" />");
+                    @"<formGrid relationship=""testrelationshipname"" reverseRelationship=""testcorrespondingrelationshipname"" />");
             Assert.AreEqual("testrelationshipname", formGrid.RelationshipName);
             Assert.AreEqual("testcorrespondingrelationshipname", formGrid.CorrespondingRelationshipName);
-            Assert.AreEqual(typeof (SimpleGrid), formGrid.GridType);
+            Assert.AreEqual(typeof (EditableGrid), formGrid.GridType);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Habanero.Ui.Forms
         private readonly Control _firstControlToFocus;
         private int _preferredHeight;
         private int _preferredWidth;
-        private IDictionary<string, IGrid> _formGrids;
+        private IDictionary<string, EditableGrid> _formGrids;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -28,7 +28,7 @@ namespace Habanero.Ui.Forms
             _panel = panel;
             _mappers = mappers;
             this._firstControlToFocus = firstControlToFocus;
-            _formGrids = new Dictionary<string, IGrid>();
+            _formGrids = new Dictionary<string, EditableGrid>();
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Habanero.Ui.Forms
         /// <param name="gridName">The grid name</param>
         /// <returns>Returns the grid object if a grid by that name is
         /// found</returns>
-        public IGrid GetFormGrid(string gridName)
+        public EditableGrid GetFormGrid(string gridName)
         {
             return _formGrids[gridName];
         }
@@ -68,7 +68,7 @@ namespace Habanero.Ui.Forms
         /// <summary>
         /// Gets and sets the form grids
         /// </summary>
-        public IDictionary<string, IGrid> FormGrids
+        public IDictionary<string, EditableGrid> FormGrids
         {
             get
             {

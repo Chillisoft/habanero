@@ -1,0 +1,5 @@
+<!ELEMENT formGrid EMPTY>
+<!ATTLIST formGrid
+	relationship NMTOKEN #REQUIRED
+	reverseRelationship NMTOKEN #REQUIRED
+>

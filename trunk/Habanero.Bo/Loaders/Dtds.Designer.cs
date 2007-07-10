@@ -152,8 +152,8 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #include UIFormPropertyAtt.dtd
-        ///&lt;!ELEMENT field (uiFormPropertyAtt*)&gt;
+        ///   Looks up a localized string similar to #include parameter.dtd
+        ///&lt;!ELEMENT field (parameter*)&gt;
         ///&lt;!ATTLIST field
         ///	label CDATA #REQUIRED
         ///	property NMTOKEN #REQUIRED
@@ -172,10 +172,12 @@ namespace Habanero.Bo.Loaders {
         
         /// <summary>
         ///   Looks up a localized string similar to #include tab.dtd
-        ///&lt;!ELEMENT form (tab+)&gt;
+        ///#include columnLayout.dtd
+        ///#include field.dtd
+        ///&lt;!ELEMENT form (tab*, columnLayout*, field*)&gt;
         ///&lt;!ATTLIST form
-        ///	width CDATA &quot;-1&quot;
-        ///	height CDATA &quot;-1&quot;
+        ///	width CDATA &quot;300&quot;
+        ///	height CDATA &quot;250&quot;
         ///	title CDATA &quot;&quot;
         ///&gt;
         ///.
@@ -183,6 +185,19 @@ namespace Habanero.Bo.Loaders {
         internal static string form {
             get {
                 return ResourceManager.GetString("form", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!ELEMENT formGrid EMPTY&gt;
+        ///&lt;!ATTLIST formGrid
+        ///	relationship NMTOKEN #REQUIRED
+        ///	reverseRelationship NMTOKEN #REQUIRED
+        ///&gt;.
+        /// </summary>
+        internal static string formGrid {
+            get {
+                return ResourceManager.GetString("formGrid", resourceCulture);
             }
         }
         
@@ -317,11 +332,14 @@ namespace Habanero.Bo.Loaders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!ELEMENT simpleLookupList (stringGuidPair*)&gt;
-        ///&lt;!ELEMENT stringGuidPair EMPTY&gt;
-        ///&lt;!ATTLIST stringGuidPair
-        ///	string CDATA #REQUIRED
-        ///	guid   CDATA #REQUIRED
+        ///   Looks up a localized string similar to &lt;!ELEMENT simpleLookupList (item*)&gt;
+        ///&lt;!ATTLIST simpleLookupList
+        ///  options CDATA #IMPLIED
+        ///  &gt;
+        ///&lt;!ELEMENT item EMPTY&gt;
+        ///&lt;!ATTLIST item
+        ///	display CDATA #REQUIRED
+        ///	value   CDATA #REQUIRED
         ///&gt;
         ///.
         /// </summary>
@@ -347,7 +365,9 @@ namespace Habanero.Bo.Loaders {
         
         /// <summary>
         ///   Looks up a localized string similar to #include columnLayout.dtd
-        ///&lt;!ELEMENT tab (columnLayout*)&gt;
+        ///#include formGrid.dtd
+        ///#include field.dtd
+        ///&lt;!ELEMENT tab (columnLayout*, field*, formGrid?)&gt;
         ///&lt;!ATTLIST tab
         ///	name CDATA #REQUIRED
         ///&gt;

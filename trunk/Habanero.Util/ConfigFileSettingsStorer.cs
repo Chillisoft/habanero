@@ -30,29 +30,56 @@ namespace Habanero.Util
         }
 
         /// <summary>
-        /// Not yet implemented
+        /// Not supported by ConfigFileSettings
         /// </summary>
         /// <param name="settingName"></param>
-        /// <param name="settingValue"></param>
-        /// TODO ERIC - implement
-        public void SetString(string settingName, string settingValue)
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public string GetString(string settingName, DateTime date)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException("ConfigFileSettingsStorer does not support date ranging settings.");
         }
 
         /// <summary>
-        /// Returns a exception indicating that date settings are not
-        /// supported
+        /// Not supported by ConfigFileSettings
+        /// </summary>
+        /// <param name="settingName"></param>
+        /// <param name="settingValue"></param>
+        public void SetString(string settingName, string settingValue)
+        {
+            throw new NotImplementedException("ConfigFileSettingsStorer does not support setting settings");
+        }
+
+        /// <summary>
+        /// Not supported by ConfigFileSettings
         /// </summary>
         /// <exception cref="NotSupportedException">Thrown any time this
         /// method is called</exception>
-        /// TODO ERIC - is this wrongly named? the error message doesn't
-        /// indicate anything to do with decimals.
-        /// - need a set as well?
         public decimal GetDecimal(string settingName, DateTime date)
         {
             throw new NotSupportedException("ConfigFileSettingsStorer does not support date ranging settings.");
         }
+
+        /// <summary>
+        /// Returns the configuration for the setting name provided
+        /// </summary>
+        /// <param name="settingName">The setting name</param>
+        /// <returns>Returns a string</returns>
+        public decimal  GetDecimal(string settingName)
+        {
+            return (decimal)_reader.GetValue(settingName, typeof(decimal));
+        }
+
+        /// <summary>
+        /// Not supported by ConfigFileSettings
+        /// </summary>
+        /// <param name="settingName"></param>
+        /// <param name="settingValue"></param>
+        public void SetDecimal(string settingName, decimal settingValue)
+        {
+            throw new NotImplementedException("ConfigFileSettingsStorer does not support setting settings");
+        }
+
 
         /// <summary>
         /// Not yet implemented

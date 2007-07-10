@@ -98,22 +98,6 @@ namespace Habanero.Bo.ClassDefinition
                           UIDefCol uiDefCol)
 			: this(classType, null, null, null, tableName,primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
         {
-			////_SelectSql = "SELECT * FROM " + tableName;
-			//_classType = classType;
-			//_className = _classType.Name;
-			//_assemblyName = _classType.Assembly.ManifestModule.ScopeName;
-			//if (tableName == null || tableName.Length == 0)
-			//    _tableName = _className;
-			//else
-			//    _tableName = tableName;
-			//_propDefCol = propDefCol;
-			//_keysCol = keyDefCol;
-			//_primaryKeyDef = primaryKeyDef;
-			//_relationshipDefCol = relationshipDefCol;
-			//_uiDefCol = uiDefCol;
-			//ClassDefs.Add(this);
-
-			////			mConcurrencyControl= concurrencyControl;
         }
 
         /// <summary>
@@ -271,14 +255,6 @@ namespace Habanero.Bo.ClassDefinition
 			}
 		}
 
-		/////<summary>
-		///// The full name of the class definition.
-		/////</summary>
-		//public string ClassFullName
-		//{
-		//    get { return ClassDefCol.GetTypeId(__assemblyName, __className); }
-		//}
-
         /// <summary>
         /// The type of the class definition
         /// </summary>
@@ -301,13 +277,6 @@ namespace Habanero.Bo.ClassDefinition
             set { _tableName = value; }
         }
 
-
-//		public string SelectSql {
-//			get {
-//				return GetSelectSql(null);
-//			}
-//			set { _SelectSql = value; }
-//		}
 
         /// <summary>
         /// The collection of property definitions
@@ -473,17 +442,6 @@ namespace Habanero.Bo.ClassDefinition
             }
         }
 
-        ///// <summary>
-        ///// Creates a new business object using this class definition
-        ///// and the database connection provided
-        ///// </summary>
-        ///// <param name="conn">A database connection</param>
-        ///// <returns>Returns a new business object</returns>
-        //internal BusinessObject InstantiateBusinessObjectWithClassDef(IDatabaseConnection conn)
-        //{
-        //    return (BusinessObject) Activator.CreateInstance(MyClassType, new object[] {this, conn});
-        //}
-
         /// <summary>
         /// Creates a new collection of relationships.
         /// </summary>
@@ -575,15 +533,6 @@ namespace Habanero.Bo.ClassDefinition
 				_classType = value;
 				TypeLoader.ClassTypeInfo(_classType, out _assemblyName, out _classNameFull);
 				_className = ClassDefCol.StripOutNameSpace(_classNameFull);
-				//if (_classType != null)
-				//{
-				//    _assemblyName = ClassDefCol.CleanUpAssemblyName(_classType.Assembly.ManifestModule.ScopeName);
-				//    _className = _classType.FullName;
-				//} else
-				//{
-				//    _assemblyName = null;
-				//    _className = null;
-				//}
 			}
 		}
 
@@ -670,17 +619,6 @@ namespace Habanero.Bo.ClassDefinition
         {
         	ClassDefCol classDefCol = loader.LoadClassDefs();
         	ClassDefCol.LoadColClassDef(classDefCol);
-			//foreach (ClassDef classDef in loader.LoadClassDefs())
-			//{
-			//    if (!ClassDef.ClassDefs.Contains(classDef))
-			//    {
-			//        ClassDef.ClassDefs.Add(classDef);
-			//    }
-			//    else
-			//    {
-			//        Console.Out.WriteLine("Attempted to load a class def when it was already defined.");
-			//    }
-			//}
         }
 
         /// <summary>

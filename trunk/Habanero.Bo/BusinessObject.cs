@@ -1462,28 +1462,5 @@ namespace Habanero.Bo
 
         #endregion //ITransaction
 
-        #region UI Support
-
-        /// <summary>
-        /// Returns the user interface mapper
-        /// </summary>
-        /// <returns>Returns an IUserInterfaceMapper object</returns>
-        protected internal virtual IUserInterfaceMapper GetUserInterfaceMapper()
-        {
-            return this.GetUserInterfaceMapper("default");
-        }
-
-        /// <summary>
-        /// Returns the user interface mapper with the UIDefName provided
-        /// </summary>
-        /// <param name="uiDefName">The UIDefName</param>
-        /// <returns>Returns an IUserInterfaceMapper object</returns>
-        protected internal virtual IUserInterfaceMapper GetUserInterfaceMapper(string uiDefName)
-        {
-            return this._classDef.UIDefCol[uiDefName];
-        }
-
-        #endregion //UI Support
-        
     }
 }

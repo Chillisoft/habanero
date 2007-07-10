@@ -130,6 +130,7 @@
     <Compile Include="ClassDefinition\TestRelPropDef.cs" />
     <Compile Include="ContactPerson.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
+    <Compile Include="Loaders\TestXmlUIFormGridLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
