@@ -43,10 +43,13 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Sets the collection displayed in the grid
+        /// Sets the business object collection displayed in the grid.  This
+        /// collection must be pre-loaded using the collection's Load() command.
         /// </summary>
-        /// <param name="col">The collection of business objects to display</param>
-        /// <param name="uiName">The ui to use</param>
+        /// <param name="col">The collection of business objects to display. This
+        /// collection needs to be pre-loaded</param>
+        /// <param name="uiName">The ui definition to use, as specified in the 'name'
+        /// attribute of the 'ui' element</param>
         public void SetCollection(BusinessObjectCollection<BusinessObject> col, string uiName)
         {
             try
@@ -61,9 +64,13 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Sets the collection displayed in the grid.  The default ui will be used.
+        /// Sets the business object collection displayed in the grid.  This
+        /// collection must be pre-loaded using the collection's Load() command.
+        /// The default ui definition will be used, that is a 'ui' element 
+        /// without a 'name' attribute.
         /// </summary>
-        /// <param name="col">The collection of business objects to display</param>
+        /// <param name="col">The collection of business objects to display.  This
+        /// collection must be pre-loaded.</param>
         public void SetCollection(BusinessObjectCollection<BusinessObject> col)
         {
             SetCollection(col, "default");
@@ -71,7 +78,7 @@ namespace Habanero.Ui.Grid
 
         /// <summary>
         /// Sets the grid's collection to the one specified, but using the
-        /// STA thread.  This method is called by SetGridDataProvider().
+        /// STA thread
         /// </summary>
         /// <param name="collection">The collection to display in the grid</param>
         /// <param name="uiName">The name of the uidef to use</param>
@@ -167,17 +174,22 @@ namespace Habanero.Ui.Grid
 
 
         /// <summary>
-        /// Returns the name of the ui 
+        /// Returns the name of the ui definition used, as specified in the
+        /// 'name' attribute of the 'ui' element in the class definitions.
+        /// By default, no 'name' attribute is specified and the ui name of
+        /// "default" is used.  Having a name attribute allows you to choose
+        /// between a multiple visual representations of a business object
+        /// collection.
         /// </summary>
-        /// <returns>Returns the name of the ui this grid is using</returns>
+        /// <returns>Returns the name of the ui definition this grid is using
+        /// </returns>
         public string UIName
         {
             get { return _uiName; }
         }
 
         /// <summary>
-        /// Calls the DataProviderUpdated() method, passing this instance
-        /// as the sender
+        /// Calls CollectionChanged, passing this instance as the sender
         /// </summary>
         private void FireCollectionChanged()
         {
@@ -241,7 +253,9 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Applies a filter clause to the data table and updates the filter
+        /// Applies a filter clause to the data table and updates the filter.
+        /// The filter allows you to determine which objects to display using
+        /// some criteria.
         /// </summary>
         /// <param name="filterClause">The filter clause</param>
         public void ApplyFilter(IFilterClause filterClause)

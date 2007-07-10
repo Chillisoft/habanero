@@ -114,10 +114,10 @@
     <Compile Include="Grid\ReadOnlyGridWithButtons.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Grid\SimpleGrid.cs">
+    <Compile Include="Grid\EditableGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Grid\SimpleGridWithButtons.cs">
+    <Compile Include="Grid\EditableGridWithButtons.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\TextBoxMapper.cs" />

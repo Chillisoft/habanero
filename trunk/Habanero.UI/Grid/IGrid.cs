@@ -15,10 +15,12 @@ namespace Habanero.Ui.Grid
         IObjectInitialiser ObjectInitialiser { set; }
 
         /// <summary>
-        /// Sets the grid's data provider to that provided
+        /// Sets the business object collection to display in the grid, along
+        /// with the ui definition used to format the display.  The ui name
+        /// is obtained from the 'name' attribute in the 'ui' element.
         /// </summary>
-        /// <param name="boCol">The collection</param>
-        /// <param name="uiName">The ui to use</param>
+        /// <param name="boCol">The business object collection</param>
+        /// <param name="uiName">The ui definition name to use</param>
         void SetCollection(BusinessObjectCollection<BusinessObject> boCol, string uiName);
 
         /// <summary>

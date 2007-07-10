@@ -10,13 +10,13 @@ using NUnit.Framework;
 namespace Habanero.Test.Ui.Application
 {
     /// <summary>
-    /// Summary description for TestSimpleReadOnlyGrid.
+    /// Summary description for TestReadOnlyGrid.
     /// </summary>
     [TestFixture]
-    public class TestSimpleReadOnlyGrid
+    public class TestReadOnlyGrid
     {
         private Form frm;
-        private SimpleReadOnlyGrid grid;
+        private ReadOnlyGrid grid;
         private BusinessObject bo1;
         private BusinessObject bo2;
         private DataTable itsDataSource;
@@ -24,7 +24,7 @@ namespace Habanero.Test.Ui.Application
         [SetUp]
         public void SetupFixture()
         {
-            grid = new SimpleReadOnlyGrid();
+            grid = new ReadOnlyGrid();
             grid.Name = "GridControl";
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBo.LoadClassDefWithNoLookup();

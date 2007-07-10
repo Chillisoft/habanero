@@ -13,14 +13,21 @@ using log4net;
 namespace Habanero.Ui.Grid
 {
     /// <summary>
-    /// Manages a read-only grid with buttons (ie. a grid that cannot be
-    /// directly edited).  By default, an "Edit" and "Add" are added at 
-    /// the bottom of the grid, which open up dialogs to edit the business
-    /// object.<br/>
+    /// Manages a read-only grid with buttons (ie. a grid whose objects are
+    /// edited through an editing form rather than directly on the grid).
+    /// By default, an "Edit" and "Add" are added at 
+    /// the bottom of the grid, which open up dialogs to edit the selected
+    /// business object.<br/>
+    /// To supply the business object collection to display in the grid,
+    /// instantiate a new BusinessObjectCollection and load the collection
+    /// from the database using the Load() command.  After instantiating this
+    /// grid with the parameterless constructor, pass the collection with
+    /// SetCollection().<br/>
     /// To have further control of particular aspects of the buttons or
     /// grid, access the standard functionality through the Grid and
-    /// Buttons properties 
-    /// (ie. myGridWithButtons.Grid.SetGridDataProvider(...)).
+    /// Buttons properties (eg. myGridWithButtons.Buttons.AddButton(...)).
+    /// You can assign a non-default object editor or creator for the buttons,
+    /// using *.Buttons.ObjectEditor and *.Buttons.ObjectCreator.
     /// </summary>
     public class ReadOnlyGridWithButtons : UserControl
     {
@@ -33,7 +40,7 @@ namespace Habanero.Ui.Grid
         private static ILog log = LogManager.GetLogger("Habanero.Ui.Grid.ReadOnlyGridWithButtons");
         public event EventHandler ItemSelected;
 
-        private SimpleReadOnlyGrid _grid;
+        private ReadOnlyGrid _grid;
         private ReadOnlyGridButtonControl _buttons;
         private DelayedMethodCall _itemSelectedMethodCaller;
 
@@ -43,16 +50,13 @@ namespace Habanero.Ui.Grid
         private BusinessObjectCollection<BusinessObject> _collection;
 
         /// <summary>
-        /// Constructor to initialise a new grid.  Unless you plan to assign
-        /// a data provider, editing form and object creation form yourself,
-        /// rather use the other available constructors, such as
-        /// ReadOnlyGridWithButtons(IGridDataProvider).
+        /// Constructor to initialise a new grid
         /// </summary>
         public ReadOnlyGridWithButtons()
         {
             _itemSelectedMethodCaller = new DelayedMethodCall(500, this);
             BorderLayoutManager manager = new BorderLayoutManager(this);
-            _grid = new SimpleReadOnlyGrid();
+            _grid = new ReadOnlyGrid();
             _grid.Name = "GridControl";
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             _buttons = new ReadOnlyGridButtonControl(_grid);
@@ -154,9 +158,9 @@ namespace Habanero.Ui.Grid
         /// <summary>
         /// Returns the grid object held. This property can be used to
         /// access a range of functionality for the grid
-        /// (ie. myGridWithButtons.Grid.SetGridDataProvider(...))
+        /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
         /// </summary>
-        public SimpleReadOnlyGrid Grid
+        public ReadOnlyGrid Grid
         {
             get { return _grid; }
         }
@@ -164,7 +168,7 @@ namespace Habanero.Ui.Grid
         /// <summary>
         /// Returns the button control held. This property can be used
         /// to access a range of functionality for the button control
-        /// (ie. myGridWithButtons.Buttons.AddButton("Delete", delegate(object sender, EventArgs e) {  }))
+        /// (eg. myGridWithButtons.Buttons.AddButton(...)).
         /// </summary>
         public ReadOnlyGridButtonControl Buttons
         {
@@ -172,40 +176,29 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Sets the business object collection being managed to that
-        /// specified. This method would typically be used if either an
-        /// unparameterised constructor was used to instantiate the
-        /// grid, or if the business object collection is to be changed
-        /// at some stage after instantiation.<br/>
-        /// Alternatively, to have more specific control you could call
-        /// *.Grid.SetGridDataProvider()
-        /// and set the object editor and creator for the buttons as well,
-        /// using *.Buttons.ObjectEditor and *.Buttons.ObjectCreator
+        /// Sets the business object collection to display.  Loading of
+        /// the collection needs to be done before it is assigned to the
+        /// grid.  This method assumes a default ui definition is to be
+        /// used, that is a 'ui' element without a 'name' attribute.
         /// </summary>
         /// <param name="boCollection">The new business object collection
-        /// to be shown in the grid. This collection must have been
-        /// pre-loaded using the collection's Load() method</param>
-        public void SetBusinessObjectCollection(BusinessObjectCollection<BusinessObject> boCollection)
+        /// to be shown in the grid</param>
+        public void SetCollection(BusinessObjectCollection<BusinessObject> boCollection)
         {
-            this.SetBusinessObjectCollection(boCollection, "default");
+            this.SetCollection(boCollection, "default");
         }
 
         /// <summary>
-        /// Sets the business object collection being managed to that
-        /// specified. This method would typically be used if either an
-        /// unparameterised constructor was used to instantiate the
-        /// grid, or if the business object collection is to be changed
-        /// at some stage after instantiation.<br/>
-        /// Alternatively, to have more specific control you could call
-        /// *.Grid.SetGridDataProvider()
-        /// and set the object editor and creator for the buttons as well,
-        /// using *.Buttons.ObjectEditor and *.Buttons.ObjectCreator
+        /// Sets the business object collection to display.  Loading of
+        /// the collection needs to be done before it is assigned to the
+        /// grid.
         /// </summary>
         /// <param name="boCollection">The new business object collection
-        /// to be shown in the grid. This collection must have been
-        /// pre-loaded using the collection's Load() method</param>
-        /// <param name="uiName">The name of the ui to use to format the grid</param>
-        public void SetBusinessObjectCollection(BusinessObjectCollection<BusinessObject> boCollection, string uiName)
+        /// to be shown in the grid</param>
+        /// <param name="uiName">The name of the ui definition used to 
+        /// format the grid, as specified in the 'name' attribute of the 
+        /// 'ui' element in the class definitions</param>
+        public void SetCollection(BusinessObjectCollection<BusinessObject> boCollection, string uiName)
         {
             _collection = boCollection;
             this.Grid.SetCollection(boCollection, uiName);
@@ -214,7 +207,8 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Returns a single selected business object (null if none are selected) denoted by where the current selected cell is
+        /// Returns a single selected business object (null if none are selected)
+        /// denoted by where the current selected cell is
         /// </summary>
         public BusinessObject SelectedBusinessObject
         {
@@ -236,9 +230,9 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Removes the specified object from the list
+        /// Removes the specified business object from the list
         /// </summary>
-        /// <param name="objectToRemove">The object to remove</param>
+        /// <param name="objectToRemove">The business object to remove</param>
         public void RemoveBusinessObject(BusinessObject objectToRemove)
         {
             this.Grid.RemoveBusinessObject( objectToRemove);
@@ -249,9 +243,9 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Adds the specified object to the list
+        /// Adds the specified business object to the list
         /// </summary>
-        /// <param name="objectToAdd">The object to add</param>
+        /// <param name="objectToAdd">The business object to add</param>
         public void AddBusinessObject(BusinessObject objectToAdd)
         {
             this.Grid.AddBusinessObject(objectToAdd);

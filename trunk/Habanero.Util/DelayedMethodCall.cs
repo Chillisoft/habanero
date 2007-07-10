@@ -11,7 +11,7 @@ namespace Habanero.Util
     /// </summary>
     public class DelayedMethodCall
     {
-        private static ILog log = LogManager.GetLogger("CorChillisoftil.DelayedMethodCall");
+        private static ILog log = LogManager.GetLogger("Habanero.Util.DelayedMethodCall");
         private readonly double _delayInMilliseconds;
         private readonly object _caller;
         private VoidMethodWithSender _methodToCall;

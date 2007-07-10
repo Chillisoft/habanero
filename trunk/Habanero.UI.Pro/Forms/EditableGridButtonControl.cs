@@ -7,7 +7,13 @@ using Habanero.Ui.Grid;
 namespace Habanero.Ui.Forms
 {
     /// <summary>
-    /// Manages buttons in an editable grid
+    /// Manages buttons in an editable grid.  By default, "Save" and "Cancel"
+    /// buttons are added, which call the appropriate methods in the grid
+    /// to accept or discard the changes made by the user.
+    /// You can add other buttons with a command like: 
+    /// "AddButton("buttonName", new EventHandler(handlerMethodToCall));".
+    /// You can also manipulate the behaviour of this control by accessing it
+    /// through the grid with an accessor like "myGrid.Buttons.someMethod".
     /// </summary>
     public class EditableGridButtonControl : ButtonControl
     {

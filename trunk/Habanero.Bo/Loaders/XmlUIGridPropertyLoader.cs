@@ -118,7 +118,7 @@ namespace Habanero.Bo.Loaders
             }
             else
             {
-                assemblyName = "Habanero.Ui.Generic";
+                assemblyName = "Habanero.Ui.Grid";
             }
             //log.Debug("assembly: " + assemblyName + ", class: " + className) ;
             try
@@ -130,8 +130,8 @@ namespace Habanero.Bo.Loaders
                 throw new InvalidXmlDefinitionException("In a 'column' " +
                     "element, the 'type' attribute has an invalid " +
                     "type. The available options are: DataGridViewTextBoxColumn, " +
-                    "DataGridViewCheckBoxColumn, DataGridViewComboBoxColumn and " +
-                    "DataGridViewDateTimeColumn.", ex);
+                    "DataGridViewCheckBoxColumn, DataGridViewComboBoxColumn, " +
+                    "DataGridViewNumericUpDownColumn and DataGridViewDateTimeColumn.", ex);
             }
         }
 

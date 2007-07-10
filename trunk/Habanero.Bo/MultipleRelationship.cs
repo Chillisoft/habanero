@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 
 namespace Habanero.Bo
@@ -31,8 +32,20 @@ namespace Habanero.Bo
         /// <returns>Returns a collection of business objects</returns>
         public BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol()
         {
-            BusinessObject busObj =
-                (BusinessObject) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
+            BusinessObject busObj;
+            try
+            {
+                busObj = (BusinessObject) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
+            }
+            catch (Exception ex)
+            {
+                throw new UnknownTypeNameException(String.Format(
+                    "An error occurred while attempting to load a related " +
+                    "business object collection, with the type given as '{0}'. " +
+                    "Check that the given type exists and has been correctly " +
+                    "defined in the relationship and class definitions for the classes " +
+                    "involved.", _relDef.RelatedObjectClassType));
+            }
             if (this._relDef.KeepReferenceToRelatedObject)
             {
                 // TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object

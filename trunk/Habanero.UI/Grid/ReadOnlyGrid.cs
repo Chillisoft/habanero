@@ -11,18 +11,20 @@ using log4net;
 namespace Habanero.Ui.Grid
 {
     /// <summary>
-    /// Manages a simple read-only grid (a grid that cannot be edited directly)
+    /// Manages a read-only grid (a grid that cannot be edited directly).
+    /// The business object collection to display in this grid must be
+    /// pre-loaded.
     /// </summary>
-    public class SimpleReadOnlyGrid : GridBase, IReadOnlyGrid
+    public class ReadOnlyGrid : GridBase, IReadOnlyGrid
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Generic.SimpleReadOnlyGrid");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Grid.ReadOnlyGrid");
 
         public event RowDoubleClickedHandler RowDoubleClicked;
 
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
-        public SimpleReadOnlyGrid() : base()
+        public ReadOnlyGrid() : base()
         {
             this.ReadOnly = true;
             this.CollectionChanged += new EventHandler(CollectionChangedHandler);
@@ -47,7 +49,7 @@ namespace Habanero.Ui.Grid
         }
 
         /// <summary>
-        /// Handles the event of the data provider being updated
+        /// Handles the event of the collection being updated
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>

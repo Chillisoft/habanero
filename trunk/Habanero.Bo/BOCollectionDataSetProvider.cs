@@ -43,7 +43,13 @@ namespace Habanero.Bo
             foreach (UIGridProperty uiProperty in _uiGridProperties)
             {
                 column = _table.Columns.Add();
-                // TODO: check that property exists in object.
+                if (_table.Columns.Contains(uiProperty.PropertyName))
+                {
+                    throw new DuplicateNameException(String.Format(
+                        "In a grid definition, a duplicate column with " +
+                        "the name '{0}' has been detected. Only one column " +
+                        "per property can be specified.", uiProperty.PropertyName));
+                }
                 column.ColumnName = uiProperty.PropertyName;
                 column.Caption = uiProperty.Heading;
                 column.ReadOnly = !uiProperty.Editable;

@@ -84,8 +84,8 @@
     <Compile Include="TestNumericUpDownMoneyMapper.cs" />
     <Compile Include="TestPanelFactory.cs" />
     <Compile Include="TestReadOnlyGridButtonControl.cs" />
-    <Compile Include="TestSimpleGrid.cs" />
-    <Compile Include="TestSimpleReadOnlyGrid.cs" />
+    <Compile Include="TestEditableGrid.cs" />
+    <Compile Include="TestReadOnlyGrid.cs" />
     <Compile Include="TestTextBoxMapper.cs" />
     <Compile Include="TestWizard.cs" />
   </ItemGroup>

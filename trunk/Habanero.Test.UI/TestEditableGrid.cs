@@ -9,17 +9,17 @@ using NUnit.Framework;
 namespace Habanero.Test.Ui.Application
 {
     /// <summary>
-    /// Summary description for TestSimpleGrid.
+    /// Summary description for TestEditableGrid.
     /// </summary>
     [TestFixture]
-    public class TestSimpleGrid
+    public class TestEditableGrid
     {
-        private SimpleGrid grid;
+        private EditableGrid grid;
 
         [SetUp]
         public void SetupTest()
         {
-            grid = new SimpleGrid();
+            grid = new EditableGrid();
             ClassDef.ClassDefs.Clear();
         }
 

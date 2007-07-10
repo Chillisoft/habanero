@@ -19,7 +19,7 @@ namespace Habanero.Ui.Forms
         private SplitContainer _splitContainer1;
         protected TreeView _treeView;
         private GroupBox _groupBox1;
-        private SimpleGridWithButtons _gridAndButtons;
+        private EditableGridWithButtons _gridAndButtons;
         private ITreeViewDataSource _treeViewDataSource;
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Habanero.Ui.Forms
             this._treeView = new System.Windows.Forms.TreeView();
             _treeView.Name = "TreeView";
             this._groupBox1 = new System.Windows.Forms.GroupBox();
-            this._gridAndButtons = new SimpleGridWithButtons();
+            this._gridAndButtons = new EditableGridWithButtons();
             this._splitContainer1.Panel1.SuspendLayout();
             this._splitContainer1.Panel2.SuspendLayout();
             this._splitContainer1.SuspendLayout();

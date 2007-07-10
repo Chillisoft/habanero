@@ -79,7 +79,7 @@
     <Compile Include="Grid\DataViewIntegerFilterClause.cs" />
     <Compile Include="Grid\DataViewNullFilterClause.cs" />
     <Compile Include="Grid\DataViewStringFilterClause.cs" />
-    <Compile Include="Grid\SimpleReadOnlyGrid.cs">
+    <Compile Include="Grid\ReadOnlyGrid.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Base\FlowLayoutManager.cs" />

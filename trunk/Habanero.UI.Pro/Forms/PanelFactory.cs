@@ -19,7 +19,7 @@ namespace Habanero.Ui.Forms
     /// </summary>
     public class PanelFactory
     {
-        private static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.BoControls.PanelFactory");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Forms.PanelFactory");
         private BusinessObject[] _boArray;
         //private IUserInterfaceMapper[] _uiArray;
         private UIFormDef _uiFormDef;

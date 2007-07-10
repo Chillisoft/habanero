@@ -5,7 +5,7 @@ using Habanero.Ui.Base;
 namespace Habanero.Ui.Grid
 {
     /// <summary>
-    /// Handles the event of a user double-clicking on a row
+    /// Handles the event of a user double-clicking on a row in the grid
     /// </summary>
     /// <param name="sender">The object that notified of the event</param>
     /// <param name="e">Attached arguments regarding the event</param>
@@ -33,9 +33,15 @@ namespace Habanero.Ui.Grid
         event RowDoubleClickedHandler RowDoubleClicked;
 
         /// <summary>
-        /// Returns the name of the ui 
+        /// Returns the name of the ui definition used, as specified in the
+        /// 'name' attribute of the 'ui' element in the class definitions.
+        /// By default, no 'name' attribute is specified and the ui name of
+        /// "default" is used.  Having a name attribute allows you to choose
+        /// between a multiple visual representations of a business object
+        /// collection.
         /// </summary>
-        /// <returns>Returns the name of the ui</returns>
+        /// <returns>Returns the name of the ui definition this grid is using
+        /// </returns>
         string UIName { get; }
     }
 }

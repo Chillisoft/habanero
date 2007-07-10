@@ -4,9 +4,9 @@ using Habanero.Ui.Grid;
 namespace Habanero.Ui.Grid
 {
     /// <summary>
-    /// Manages a simple grid
+    /// Manages an editable grid that displays business objects
     /// </summary>
-    public class SimpleGrid : GridBase, IEditableGrid
+    public class EditableGrid : GridBase, IEditableGrid
     {
         /// <summary>
         /// Accepts and saves all changes to the data table
