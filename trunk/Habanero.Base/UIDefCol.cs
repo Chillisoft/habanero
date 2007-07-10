@@ -55,7 +55,30 @@ namespace Habanero.Base
         /// <returns>Returns the definition with the name specified</returns>
         public UIDef this[string name]
         {
-            get { return (UIDef) this._defs[name]; }
+            get
+            {
+                if (!_defs.Contains(name))
+                {
+                    if (name == "default")
+                    {
+                        throw new HabaneroApplicationException(
+                           "No default 'ui' definition exists (a definition with " +
+                           "no name attribute).  Check that you have at least one " +
+                           "set of 'ui' definitions for the class, or check that " +
+                           "you have a default 'ui' definition, or ensure that " +
+                           "you have correctly indicated the name of the ui " +
+                           "definition you are intending to use.");
+                    }
+                    else
+                    {
+                        throw new HabaneroApplicationException(String.Format(
+                           "The ui definition with the name '{0}' does not " +
+                           "exist in the collection of definitions for the " +
+                           "class.", name));
+                    }
+                }
+                return (UIDef) this._defs[name];
+            }
         }
 
         /// <summary>

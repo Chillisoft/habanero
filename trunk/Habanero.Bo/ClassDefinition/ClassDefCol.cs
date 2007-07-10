@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 using Habanero.Util.File;
@@ -88,6 +89,13 @@ namespace Habanero.Bo.ClassDefinition
 		public void Add(ClassDef value)
 		{
 			string typeId = GetTypeId(value.AssemblyName, value.ClassName, true);
+            if (Dictionary.Contains(typeId))
+            {
+                throw new InvalidXmlDefinitionException(String.Format(
+                    "A duplicate class element has been encountered, where the " +
+                    "type '{0}.{1}' has already been defined previously.",
+                    value.AssemblyName, value.ClassName));
+            }
 			Dictionary.Add(typeId, value);
 		}
 
