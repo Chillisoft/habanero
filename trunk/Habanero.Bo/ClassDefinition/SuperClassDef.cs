@@ -1,3 +1,6 @@
+using System;
+using Habanero.Base;
+
 namespace Habanero.Bo.ClassDefinition
 {
 	/// <summary>
@@ -104,8 +107,15 @@ namespace Habanero.Bo.ClassDefinition
 			{
 				if (_superClassClassDef == null && _assemblyName != null && _className != null)
 				{
-					//TODO error: What happens if the ClassDef does not exist?
 					_superClassClassDef = ClassDef.ClassDefs[_assemblyName, _className];
+                    if (_superClassClassDef == null)
+                    {
+                        throw new InvalidXmlDefinitionException(String.Format(
+                            "The class definition for the super class with the type " +
+                            "'{0}' was not found.  Check that the class definition " +
+                            "exists or that spelling and capitalisation are correct."
+                            ,_assemblyName + "." + _className));
+                    }
 				}
 				return _superClassClassDef;
 			}

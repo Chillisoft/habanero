@@ -27,7 +27,7 @@ namespace Habanero.Bo
         {
             if (Dictionary.Contains(prop.PropertyName.ToUpper()))
             {
-                throw new HabaneroArgumentException(String.Format(
+                throw new InvalidPropertyException(String.Format(
                     "The BOProp with the name '{0}' is being added to the " +
                     "prop collection, but already exists in the collection.",
                     prop.PropertyName));

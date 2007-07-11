@@ -240,7 +240,7 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClass(
                     @"
 				<class name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"">
-					<superClass class=""Habanero.Test.Bo.Loaders.TestClass"" assembly=""Habanero.Test.Bo"" />
+					<superClass class=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" />
 					<property  name=""TestProp"" />
                     <primaryKey>
                         <prop name=""TestProp""/>
@@ -248,7 +248,10 @@ namespace Habanero.Test.Bo.Loaders
 				</class>
 			");
             Assert.IsNotNull(def.SuperClassDef);
-            Assert.AreSame(ClassDef.ClassDefs[typeof (TestClass)], def.SuperClassDef.SuperClassClassDef);
+            //ClassDef parentDef = ClassDef.ClassDefs[typeof(TestClass)];
+            ClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.Bo.Loaders", "TestClass"];
+            ClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
+            Assert.AreSame(parentDef, superClassDef);
         }
 
         [Test]

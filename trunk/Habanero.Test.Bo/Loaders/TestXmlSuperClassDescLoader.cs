@@ -43,9 +43,12 @@ namespace Habanero.Test.Bo.Loaders
         {
             SuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
-                    @"<superClass class=""Habanero.Test.Bo.Loaders.TestClass"" assembly=""Habanero.Test.Bo"" />");
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" />");
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
-            Assert.AreSame(ClassDef.ClassDefs[typeof (TestClass)], def.SuperClassClassDef);
+            //ClassDef parentDef = ClassDef.ClassDefs[typeof(TestClass)];
+            ClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.Bo.Loaders", "TestClass"];
+            ClassDef superClassDef = def.SuperClassClassDef;
+            Assert.AreSame(parentDef, superClassDef);
         }
 
         [Test]
