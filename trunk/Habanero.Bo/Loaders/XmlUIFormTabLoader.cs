@@ -134,15 +134,16 @@ namespace Habanero.Bo.Loaders
                     _tab.Add(col);
                 }
 
-                if (_tab.Count == 0)
-                {
-                    throw new InvalidXmlDefinitionException("In a 'tab' " +
-                        "element, there were no 'columnLayout' " +
-                        "elements specified.  Ensure that the element " +
-                        "contains one or more " +
-                        "'columnLayout' elements, which specify the columns of " +
-                        "controls to appear in the editing form.");
-                }
+                //Eric: Not sure this is needed
+//                if (_tab.Count == 0)
+//                {
+//                    throw new InvalidXmlDefinitionException("In a 'tab' " +
+//                        "element, there were no 'columnLayout' " +
+//                        "elements specified.  Ensure that the element " +
+//                        "contains one or more " +
+//                        "'columnLayout' elements, which specify the columns of " +
+//                        "controls to appear in the editing form.");
+//                }
            //}
         }
     }

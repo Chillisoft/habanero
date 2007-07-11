@@ -553,6 +553,13 @@ namespace Habanero.Bo
         public void SetPropertyValue(string propName, object propValue)
         {
             BOProp prop = Props[propName];
+            if (prop == null)
+            {
+                throw new InvalidPropertyNameException(String.Format(
+                    "The given property name '{0}' does not exist in the " +
+                    "collection of properties for the class '{1}'.",
+                    propName, ClassName));
+            }
 
             if (!(propValue is Guid))
             {
