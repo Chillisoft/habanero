@@ -689,7 +689,6 @@ namespace Habanero.Bo
         /// Indicates whether all of the property values are valid
         /// </summary>
         /// <returns>Returns true if all are valid</returns>
-        /// TODO ERIC - one of these two methods could be removed
         protected internal bool IsValid()
         {
             string invalidReason;

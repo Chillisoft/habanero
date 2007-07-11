@@ -82,21 +82,19 @@ namespace Habanero.Util
 
 
         /// <summary>
-        /// Not yet implemented
+        /// Not supported by ConfigFileSettings
         /// </summary>
         /// <param name="settingName"></param>
-        /// TODO ERIC - implement
         public bool GetBoolean(string settingName)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Not yet implemented
+        /// Not supported by ConfigFileSettings
         /// </summary>
         /// <param name="settingName"></param>
         /// <param name="boolValue"></param>
-        /// TODO ERIC - implement
         public void SetBoolean(string settingName, bool boolValue)
         {
             throw new NotImplementedException();

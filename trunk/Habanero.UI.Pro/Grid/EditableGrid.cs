@@ -4,7 +4,12 @@ using Habanero.Ui.Grid;
 namespace Habanero.Ui.Grid
 {
     /// <summary>
-    /// Manages an editable grid that displays business objects
+    /// Manages an editable grid, that displays a business object
+    /// collection that has been pre-loaded.<br/>
+    /// NOTE: Changes are not persisted until AcceptChanges() is called.
+    /// Either use EditableGridWithButtons, which has a Save and Cancel button
+    /// attached, or add some feature that causes changes to be saved
+    /// once the user has finished editing.
     /// </summary>
     public class EditableGrid : GridBase, IEditableGrid
     {

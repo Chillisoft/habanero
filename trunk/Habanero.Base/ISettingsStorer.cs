@@ -11,7 +11,6 @@ namespace Habanero.Base
     /// entry with that date as the setting.  Should time not affect your setting at all, simply use the methods
     /// without the date parameter.
     /// </summary>
-    /// TODO ERIC - no set decimal?
     public interface ISettingsStorer
     {
         /// <summary>

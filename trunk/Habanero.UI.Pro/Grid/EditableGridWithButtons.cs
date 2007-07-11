@@ -8,7 +8,8 @@ namespace Habanero.Ui.Grid
 {
     /// <summary>
     /// Manages an editable grid with buttons, that displays a business object
-    /// collection that has been pre-loaded.
+    /// collection that has been pre-loaded.  Note that changes are not
+    /// immediately persisted to the database.
     /// By default, "Save" and "Cancel" buttons are added at 
     /// the bottom of the grid, which accept or discard changes made by the
     /// user.<br/>
