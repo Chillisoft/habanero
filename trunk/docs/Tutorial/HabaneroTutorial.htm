@@ -137,6 +137,9 @@ section.</font></p>
       <li><a href="#Step4">Step 4: User interface enhancements</a><br>
       <font size="2">Adds more features to the user interface<br>
 &nbsp;</font></li>
+      <li><a href="#Step5">Step 5: Introducing inheritance</a><br>
+      <font size="2">Have supplier orders inherit parts order functionality<br>
+&nbsp;</font></li>
       <li><a href="#AppendixI">Appendix I - Class definitions</a><br>
       <font face="Verdana,Arial,Helvetica" size="2">Covers a list of 
       explanations, possible options and limitations for class definitions<br>
@@ -432,7 +435,7 @@ You may also need the following DLL's:</font></p>
 <ul>
   <li><font size="2"><font color="#808080">log4net.dll</font> - This is the logging system that 
   Habanero supports for outputting runtime information to a specified log.&nbsp; 
-  See <a href="#AppendixII">Appendix II</a> for more information.</font></li>
+  See Appendix II for more information.</font></li>
   <li><font size="2"><font color="#808080">MySql.Data.dll</font> - Used to manage MySql database 
   connections (if you're using a different database, you'll need to make 
   appropriate adjustments here)</font></li>
@@ -504,7 +507,7 @@ Configuration File&quot;).&nbsp; Once the file has been added to the project, it
 should be amended to look something like that below.&nbsp; The options for 
 vendor are &quot;mysql&quot;, &quot;access&quot;, &quot;sqlserver&quot; and &quot;oracle&quot;.&nbsp; Additionally, you 
 may want to add logging support to your application, which is a simple operation 
-- see <a href="#AppendixII">Appendix II</a> on how to add Log4net to the 
+- see Appendix II on how to add Log4net to the 
 configuration file.</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
@@ -543,7 +546,7 @@ amend in your database table.</font></p>
 <p><font size="2">Just a small but important note here on properties.&nbsp; When 
 you edit the business objects through the standard user interfaces, the changes 
 will be persisted to the database.&nbsp; However, when you amend a property 
-directly in the code, you will then need to call ApplyEdit() on the object to 
+directly in the code, you will then need to call Save() on the object to 
 have the changes persisted.&nbsp; Thus, you can make several changes of 
 calculations and only save the changes when you are ready.</font></p>
 <p><font size="2">We also encourage the use of nullably types (with the ? on the 
@@ -559,20 +562,12 @@ end) - should you need to cast a nullable type to a non-nullable type, use
     <td width="100%" height="291" class="codeitself">
     <pre><code>using System;
 using Habanero.Bo;
-using Habanero.Bo.ClassDefinition;
 
 namespace Replace_it
 {
 
 public class ComputerPart : BusinessObject
 {
-    public ComputerPart() : base() { }    
-
-    public ComputerPart(ClassDef classDef) : base(classDef) 
-    {
-        _classDef = classDef;
-    }
-
     public Guid? ComputerPartID
     {
         get { return (Guid?)GetPropertyValue(&quot;ComputerPartID&quot;); }
@@ -581,7 +576,7 @@ public class ComputerPart : BusinessObject
 
     public string Description 
     {
-        get { return GetPropertyValueString(&quot;Description&quot;); }
+        get { return (string)GetPropertyValue(&quot;Description&quot;); }
         set { SetPropertyValue(&quot;Description&quot;, value); }
     }
 
@@ -652,8 +647,8 @@ InitializeComponents();...</font></p>
 computerParts.Load(&quot;&quot;, &quot;&quot;);
 
 BorderLayoutManager manager = new BorderLayoutManager(this);
-ReadOnlyGridWithButtons grid = new ReadOnlyGridWithButtons(new 
-    CollectionGridDataProvider(computerParts));
+ReadOnlyGridWithButtons grid = new ReadOnlyGridWithButtons();
+grid.SetCollection(computerParts);
 manager.AddControl(grid, BorderLayoutManager.Position.Centre);</code></pre>
 </td>
   </tr>
@@ -665,8 +660,7 @@ basically specifying how the database data is mapped to the classes, as well as 
 information we'd like to display in the grid.&nbsp; We add a new ClassDefs.xml 
 file to the project (in Visual Studio you will also need to set the properties 
 for the xml file so that it copies to the &quot;debug&quot; or output folder).&nbsp; You 
-can find more information on class definitions in <a href="#AppendixI">Appendix 
-I</a>.&nbsp; Note that the Habanero application will not run if no class definitions 
+can find more information on class definitions in Appendix I.&nbsp; Note that the Habanero application will not run if no class definitions 
 have been specified.</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
@@ -756,7 +750,8 @@ database structure now looks like this:</font></p>
 as below - at this stage we're beginning to filter just how much information we 
 want to show at any one time.&nbsp; As far as data types for properties go, 
 &quot;String&quot; is the default and the other types can be named either by their wrapper 
-class names (eg. Int32) or their standard use names (eg. int).&nbsp; (see <a href="#AppendixI">Appendix I</a> for  a  list of data types in the class definitions).</font></p>
+class names (eg. Int32) or their standard use names (eg. int).&nbsp; (see 
+Appendix I for  a  list of data types in the class definitions).</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
     <td width="100%" class="codeitself">
@@ -795,10 +790,7 @@ class names (eg. Int32) or their standard use names (eg. int).&nbsp; (see <a hre
   </tr>
 </table>
 <p><font face="Verdana" size="2">Finally, the ComputerPart class also needs 
-properties to reflect the changes.&nbsp; Keep an eye out for the subtle GetPropertyValueString() change in the case of strings.&nbsp; 
-You could use a string cast like the other properties, but this option provides 
-a helper that checks for null, which could cause a failure of the ToString() 
-method.</font></p>
+properties to reflect the changes.</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
     <td width="100%" class="codeitself"><pre><code>public int? Stock
@@ -815,7 +807,7 @@ public decimal? Cost
 
 public string PartCode
 {
-    get { return GetPropertyValueString(&quot;PartCode&quot;); }
+    get { return (string)GetPropertyValue(&quot;PartCode&quot;); }
     set { SetPropertyValue(&quot;PartCode&quot;, value); }
 }</code></pre></td>
   </tr>
@@ -825,77 +817,69 @@ at this stage, check for mistakes like wrong capitalisation, spaces between
 words and types that don't match up.</font></p>
 <p><b><font face="Verdana" size="3">Including Customer Orders</font></b></p>
 <p><font face="Verdana" size="2">We'll need a new database table for customer 
-sales items, called &quot;customerorder&quot;.&nbsp; Looking at the design, you might ask: 
+sales items, called &quot;PartsOrder&quot; (&quot;order&quot; is a sql keyword).&nbsp; Looking at the design, you might ask: 
 how do we know which items were ordered? We'll answer that once we've got this 
 class up and running.</font></p>
 <p align="center">
-<img border="0" src="database-customer_order.gif" width="651" height="120"></p>
+<img border="0" src="database-partsorder.gif" width="651" height="124"></p>
 <p><font face="Verdana" size="2">The corresponding class definitions are here 
 below, as listed further down in the classdefs.xml file.&nbsp; When you edit a 
 business object using the default editor (DefaultBOEditor/Creator), a one-line 
 text field is supplied for each database field.&nbsp; Here we have specified 
-that the &quot;DispatchedYet&quot; boolean field will use a &quot;CheckBox&quot; rather 
+that the &quot;Delivered&quot; boolean field will use a &quot;CheckBox&quot; rather 
 than the standard TextBox, and that its default value is &quot;false&quot;, to prevent an 
 exception if the user does not touch it.&nbsp; You would often need to specify the Habanero 
 class that maps this control to the property, but for a handful of standard 
-controls the mapper can be assumed.&nbsp; See <a href="#AppendixI">Appendix I</a> for further clarification on control types 
+controls the mapper can be assumed.&nbsp; See Appendix I for further clarification on control types 
 and their mappers.</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
     <td width="100%" class="codeitself">
-    <pre><code>&lt;class name=&quot;CustomerOrder&quot; assembly=&quot;Replace_it&quot;&gt;
-  &lt;property name=&quot;CustomerOrderID&quot; type=&quot;Guid&quot; /&gt;
-  &lt;property name=&quot;OrderNumber&quot; type=&quot;Int32&quot; /&gt;
+    <pre><code>&lt;class name=&quot;PartsOrder&quot; assembly=&quot;Replace_it&quot;&gt;
+  &lt;property name=&quot;PartsOrderID&quot; type=&quot;Guid&quot; /&gt;
+  &lt;property name=&quot;OrderNumber&quot; /&gt;
   &lt;property name=&quot;Name&quot; /&gt;
   &lt;property name=&quot;TotalCharge&quot; type=&quot;Decimal&quot; /&gt;
-  &lt;property name=&quot;DispatchedYet&quot; type=&quot;Boolean&quot; default=&quot;false&quot; /&gt;
+  &lt;property name=&quot;Delivered&quot; type=&quot;Boolean&quot; default=&quot;false&quot; /&gt;
   &lt;primaryKey&gt;
-    &lt;prop name=&quot;CustomerOrderID&quot; /&gt;
+    &lt;prop name=&quot;PartsOrderID&quot; /&gt;
   &lt;/primaryKey&gt;
   &lt;ui&gt;
     &lt;grid&gt;
       &lt;column heading=&quot;Order Number&quot; property=&quot;OrderNumber&quot; /&gt;
       &lt;column heading=&quot;Name&quot; property=&quot;Name&quot; /&gt;
-      &lt;column heading=&quot;Dispatched Yet&quot; property=&quot;DispatchedYet&quot; /&gt;
+      &lt;column heading=&quot;Delivered&quot; property=&quot;Delivered&quot; /&gt;
     &lt;/grid&gt;
-    &lt;form height=&quot;100&quot; width=&quot;300&quot; title=&quot;Add a customer order&quot;&gt;
+    &lt;form height=&quot;100&quot; width=&quot;300&quot; title=&quot;Add an order&quot;&gt;
       &lt;field label=&quot;Order Number:&quot; property=&quot;OrderNumber&quot; /&gt;
       &lt;field label=&quot;Name:&quot; property=&quot;Name&quot; /&gt;
       &lt;field label=&quot;Total Charge:&quot; property=&quot;TotalCharge&quot; /&gt;
-      &lt;field label=&quot;Dispatched Yet:&quot; property=&quot;DispatchedYet&quot; type=&quot;CheckBox&quot;/&gt;
+      &lt;field label=&quot;Delivered:&quot; property=&quot;Delivered&quot; type=&quot;CheckBox&quot;/&gt;
     &lt;/form&gt;
   &lt;/ui&gt;
 &lt;/class&gt;</code></pre>
     </td>
   </tr>
 </table>
-<p><font face="Verdana" size="2">And the CustomerOrder class to be added:</font></p>
+<p><font face="Verdana" size="2">And the PartsOrder class to be added:</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
     <td width="100%" class="codeclass">
-    <b><font size=2>CustomerOrder.cs</font></b></td>
+    <font size="2"><b>PartsOrder.cs</b></font></td>
   </tr>
   <tr>
     <td width="100%" class="codeitself">
     <pre><code>using System;
 using Habanero.Bo;
-using Habanero.Bo.ClassDefinition;
 
 namespace Replace_it
 {
-public class CustomerOrder : BusinessObject
+public class PartsOrder : BusinessObject
 {
-    public CustomerOrder() : base() { }
-
-    public CustomerOrder(ClassDef classDef) : base(classDef) 
+    public Guid? PartsOrderID
     {
-        _classDef = classDef;
-    }
-
-    public Guid? CustomerOrderID
-    {
-        get { return (Guid?)GetPropertyValue(&quot;CustomerOrderID&quot;); }
-        set { SetPropertyValue(&quot;CustomerOrderID&quot;, value); }
+        get { return (Guid?)GetPropertyValue(&quot;PartsOrderID&quot;); }
+        set { SetPropertyValue(&quot;PartsOrderID&quot;, value); }
     }
 
     public int? OrderNumber
@@ -906,20 +890,20 @@ public class CustomerOrder : BusinessObject
 
     public string Name
     {
-        get { return GetPropertyValueString(&quot;Name&quot;); }
+        get { return (string)GetPropertyValue(&quot;Name&quot;); }
         set { SetPropertyValue(&quot;Name&quot;, value); }
     }
 
-    public decimal? TotalCharged
+    public decimal? TotalCharge
     {
-        get { return (decimal?)GetPropertyValue(&quot;TotalCharged&quot;); }
-        set { SetPropertyValue(&quot;TotalCharged&quot;, value); }
+        get { return (decimal?)GetPropertyValue(&quot;TotalCharge&quot;); }
+        set { SetPropertyValue(&quot;TotalCharge&quot;, value); }
     }
 
-    public bool? DispatchedYet
+    public bool? Delivered
     {
-        get { return (bool?)GetPropertyValue(&quot;DispatchedYet&quot;); }
-        set { SetPropertyValue(&quot;DispatchedYet&quot;, value); }
+        get { return (bool?)GetPropertyValue(&quot;Delivered&quot;); }
+        set { SetPropertyValue(&quot;Delivered&quot;, value); }
     }
 }
 }</code></pre>
@@ -949,7 +933,6 @@ public Form1()
     InitializeComponent();
 
     BorderLayoutManager manager = new BorderLayoutManager(this);
-    grid = new ReadOnlyGridWithButtons();
     SetBOCollection(new ComputerPart());
     manager.AddControl(grid, BorderLayoutManager.Position.Centre);
 }
@@ -961,7 +944,7 @@ private void CreateMainMenu()
     fileMenu.MenuItems.Add(new MenuItem(&quot;Computer &amp;parts&quot;, delegate
         { SetBOCollection(new ComputerPart()); }));
     fileMenu.MenuItems.Add(new MenuItem(&quot;Customer &amp;orders&quot;, delegate
-        { SetBOCollection(new CustomerOrder()); }));
+        { SetBOCollection(new PartsOrder()); }));
 
     menu.MenuItems.Add(fileMenu);
     Menu = menu;
@@ -972,7 +955,8 @@ private void SetBOCollection(BusinessObject bo)
     BusinessObjectCollection&lt;BusinessObject&gt; boCollection = new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
     boCollection.Load(&quot;&quot;, &quot;&quot;);
 
-    grid.SetBusinessObjectCollection(boCollection);
+    grid = new ReadOnlyGridWithButtons();
+    grid.SetCollection(boCollection);
 }</code></pre>
     </td>
   </tr>
@@ -986,14 +970,17 @@ those two pieces of data, along with an ID number and a foreign key pointing
 back to the order number.&nbsp; In a simplistic version, we might just have a 
 PartCode string property to store the part code, but later on we'll develop a 
 more robust system, so ComputerPartID will become useful further on. Here is the 
-table layout for the &quot;CustomerOrderItem&quot;:</p>
+table layout for the &quot;OrderItem&quot;:</p>
 <p align="center">
-<img border="0" src="database-cust_order_item.gif" width="649" height="100"></p>
-<p align="left">The foreign key needs to refer to a primary key, so we'll point 
-it to the ID of CustomerOrder, even though we know that effectively the 
+<img border="0" src="database-orderitem.gif" width="649" height="100"></p>
+<p align="left">Specifying the foreign key in the database is not strictly 
+necessary, since your Habanero-based application will still run successfully 
+without it, but it is considered good practice to include it, since it can help 
+reduce the likelyhood of further error creeping in.&nbsp; The foreign key needs to refer to a primary key, so we'll point 
+it to the ID of PartsOrder, even though we know that effectively the 
 OrderNumber will be the matching column.</p>
 <p align="center">
-<img border="0" src="database-cust_order_item_fk.gif" width="619" height="162"></p>
+<img border="0" src="database-orderitem-fk.gif" width="660" height="179"></p>
 
 <font face="Verdana" size="2">
 
@@ -1001,15 +988,15 @@ OrderNumber will be the matching column.</p>
 Single or Multiple Relationships.&nbsp; We'll need to specify the relationships 
 in the class definitions.&nbsp; The relationship between orders and order items are multiple 
 rather than single, since we may have many items in an order.&nbsp; The 
-class definition xml code to insert just after the CustomerOrder's primary key definition is:</p>
+class definition xml code to insert just after the PartsOrder's primary key definition is:</p>
 <table class="code" border="1" cellspacing="0">
   <tr>
 
 <font face="Verdana,Arial,Helvetica" size="2">
 
     <td width="100%" class="codeitself">
-    <pre><code>&lt;relationship name=&quot;CustomerOrderItems&quot; type=&quot;multiple&quot; relatedClass=&quot;CustomerOrderItem&quot; relatedAssembly=&quot;Replace_it&quot;&gt;
-  &lt;relatedProperty property=&quot;CustomerOrderID&quot; relatedProperty=&quot;CustomerOrderID&quot; /&gt;
+    <pre><code>&lt;relationship name=&quot;OrderItems&quot; type=&quot;multiple&quot; relatedClass=&quot;OrderItem&quot; relatedAssembly=&quot;Replace_it&quot;&gt;
+  &lt;relatedProperty property=&quot;PartsOrderID&quot; relatedProperty=&quot;PartsOrderID&quot; /&gt;
 &lt;/relationship&gt;</code></pre>
 </td>
 
@@ -1017,7 +1004,7 @@ class definition xml code to insert just after the CustomerOrder's primary key d
 
   </tr>
 </table>
-<p>We'll need class definitions for CustomerOrderItem, which use a single 
+<p>We'll need class definitions for  OrderItem, which use a single 
 relationship to point back to the parent customer order, since there is one 
 order for every order item.&nbsp; The ComputerPartID is useful for the 
 developer, but not for the end user, which is why all visible labels refer to 
@@ -1028,16 +1015,16 @@ developer, but not for the end user, which is why all visible labels refer to
 <font face="Verdana,Arial,Helvetica" size="2">
 
     <td width="100%" class="codeitself">
-    <pre><code>&lt;class name=&quot;CustomerOrderItem&quot; assembly=&quot;Replace_it&quot;&gt;
-  &lt;property name=&quot;CustomerOrderItemID&quot; type=&quot;Guid&quot; /&gt;
+    <pre><code>&lt;class name=&quot;OrderItem&quot; assembly=&quot;Replace_it&quot;&gt;
+  &lt;property name=&quot;OrderItemID&quot; type=&quot;Guid&quot; /&gt;
   &lt;property name=&quot;ComputerPartID&quot; type=&quot;Guid&quot; /&gt;
   &lt;property name=&quot;Quantity&quot; type=&quot;Int32&quot; /&gt;
-  &lt;property name=&quot;CustomerOrderID&quot; type=&quot;Guid&quot; /&gt;
+  &lt;property name=&quot;PartsOrderID&quot; type=&quot;Guid&quot; /&gt;
   &lt;primaryKey&gt;
-    &lt;prop name=&quot;CustomerOrderItemID&quot; /&gt;
+    &lt;prop name=&quot;OrderItemID&quot; /&gt;
   &lt;/primaryKey&gt;
-  &lt;relationship name=&quot;CustomerOrder&quot; type=&quot;single&quot; relatedClass=&quot;CustomerOrder&quot; relatedAssembly=&quot;Replace_it&quot;&gt;
-    &lt;relatedProperty property=&quot;CustomerOrderID&quot; relatedProperty=&quot;CustomerOrderID&quot; /&gt;
+  &lt;relationship name=&quot;PartsOrder&quot; type=&quot;single&quot; relatedClass=&quot;PartsOrder&quot; relatedAssembly=&quot;Replace_it&quot;&gt;
+    &lt;relatedProperty property=&quot;PartsOrderID&quot; relatedProperty=&quot;PartsOrderID&quot; /&gt;
   &lt;/relationship&gt;
   &lt;ui&gt;
     &lt;grid&gt;
@@ -1056,8 +1043,8 @@ developer, but not for the end user, which is why all visible labels refer to
 
   </tr>
 </table>
-<p>The CustomerOrderItem class will need an additional constructor to assign the 
-ID of the parent CustomerOrder and an additional method to return the parent 
+<p>The  OrderItem class will need an additional constructor to assign the 
+ID of the parent PartsOrder and an additional method to return the parent 
 order relating to an order item.&nbsp; The PartCode property uses a Guid data 
 type - we would usually use a string, but a Guid will become useful later in the 
 tutorial.</p>
@@ -1065,7 +1052,7 @@ tutorial.</p>
 <table class="code" border="1" cellspacing="0">
   <tr>
     <td width="100%" class="codeclass">
-      <b><font face="Verdana,Arial,Helvetica" size="2">CustomerOrderItem.cs</font></b> </td>
+      <b><font face="Verdana,Arial,Helvetica" size="2">OrderItem.cs</font></b> </td>
 
 </font>
 
@@ -1077,33 +1064,27 @@ tutorial.</p>
 
     <pre><code>using System;
 using Habanero.Bo;
-using Habanero.Bo.ClassDefinition;
 
 namespace Replace_it
 {
-    public class CustomerOrderItem : BusinessObject
+    public class OrderItem : BusinessObject
     {
-        public CustomerOrderItem() : base() { }
+        public OrderItem() { }
 
-        public CustomerOrderItem(ClassDef classDef) : base(classDef) 
-	{
-	    _classDef = classDef;
-	}
-
-        public CustomerOrderItem(CustomerOrder customerOrder)
+        public OrderItem(PartsOrder partsOrder)
         {
-            CustomerOrderID = customerOrder.CustomerOrderID;
+            PartsOrderID = partsOrder.PartsOrderID;
         }
 
-        public CustomerOrder CustomerOrder
+        public PartsOrder PartsOrder
         {
-            get { return (CustomerOrder)Relationships.GetRelatedBusinessObject(&quot;CustomerOrder&quot;); }
+            get { return (PartsOrder)Relationships.GetRelatedBusinessObject(&quot;PartsOrder&quot;); }
         }
 
-        public Guid? CustomerOrderItemID
+        public Guid? OrderItemID
         {
-            get { return (Guid?)GetPropertyValue(&quot;CustomerOrderItemID&quot;); }
-            set { SetPropertyValue(&quot;CustomerOrderItemID&quot;, value); }
+            get { return (Guid?)GetPropertyValue(&quot;OrderItemID&quot;); }
+            set { SetPropertyValue(&quot;OrderItemID&quot;, value); }
         }
 
         public Guid? ComputerPartID
@@ -1118,17 +1099,17 @@ namespace Replace_it
             set { SetPropertyValue(&quot;Quantity&quot;, value); }
         }
 
-        public Guid? CustomerOrderID
+        public Guid? PartsOrderID
         {
-            get { return (Guid?)GetPropertyValue(&quot;CustomerOrderID&quot;); }
-            set { SetPropertyValue(&quot;CustomerOrderID&quot;, value); }
+            get { return (Guid?)GetPropertyValue(&quot;PartsOrderID&quot;); }
+            set { SetPropertyValue(&quot;PartsOrderID&quot;, value); }
         }
     }
 }</code></pre>
 </font></td>
   </tr>
 </table>
-<p>CustomerOrder will require an additional method to return the collection of 
+<p>PartsOrder will require an additional method to return the collection of 
 its associated order items (between the quotes we specify the relationship name 
 as defined in the class definitions):</p>
 
@@ -1138,9 +1119,9 @@ as defined in the class definitions):</p>
 <font face="Verdana,Arial,Helvetica" size="2">
 
     <td width="100%" class="codeitself">
-    <pre><code>public BusinessObjectCollection&lt;BusinessObject&gt; CustomerOrderItems
+    <pre><code>public BusinessObjectCollection&lt;BusinessObject&gt; OrderItems
 {
-    get { return Relationships.GetRelatedBusinessObjectCol(&quot;CustomerOrderItems&quot;); }
+    get { return Relationships.GetRelatedBusinessObjectCol(&quot;OrderItems&quot;); }
 }</code></pre>
 </td>
 
@@ -1155,7 +1136,7 @@ the items for each order) is to have two grids, so that clicking on the customer
 order grid will cause the order items grid below it to show the items for that 
 order.</p>
 
-<p>The principle challenge here is to copy across the  CustomerOrderID (which is the key on which the relationship is matched) when a 
+<p>The principle challenge here is to copy across the  PartsOrderID (which is the key on which the relationship is matched) when a 
 new item is added.&nbsp; To achieve that we'll build our own object creator, 
 instead of the DefaultBOCreator provided.&nbsp; Because the creator is generic 
 and won't know which order is currently selected, we'll pass that information in 
@@ -1165,7 +1146,7 @@ editor to provide the default form in which the fields are edited.</p>
 <table class="code" border="1" cellspacing="0">
   <tr>
     <td width="100%" class="codeclass"><b><font size="2">
-    CustomerOrderItemCreator.cs</font></b></td>
+    OrderItemCreator.cs</font></b></td>
   </tr>
   <tr>
 
@@ -1178,27 +1159,27 @@ using Habanero.Base;
 
 namespace Replace_it
 {
-public class CustomerOrderItemCreator : IObjectCreator
+public class OrderItemCreator : IObjectCreator
 {
-    private CustomerOrder parentObject;
+    private PartsOrder parentObject;
 
-    public CustomerOrderItemCreator()
+    public OrderItemCreator()
     {
         parentObject = null;
     }
 
-    public CustomerOrderItemCreator(CustomerOrder customerOrder)
+    public OrderItemCreator(PartsOrder partsOrder)
     {
-        parentObject = customerOrder;
+        parentObject = partsOrder;
     }
 
     public Object CreateObject(IObjectEditor editor, string uiDefName)
     {
         if (parentObject != null)
         {
-            CustomerOrderItem customerOrderItem = new CustomerOrderItem(parentObject);
-            if (editor.EditObject(customerOrderItem, uiDefName))
-                return customerOrderItem;
+            OrderItem orderItem = new OrderItem(parentObject);
+            if (editor.EditObject(orderItem, uiDefName))
+                return orderItem;
         }
         return null;
     }
@@ -1245,7 +1226,7 @@ private void CreateMainMenu()
     fileMenu.MenuItems.Add(new MenuItem(&quot;Computer &amp;parts&quot;, delegate
         { ShowComputerParts(); }));
     fileMenu.MenuItems.Add(new MenuItem(&quot;Customer &amp;orders&quot;, delegate
-        { ShowCustomerOrders(); }));
+        { ShowOrders(new PartsOrder()); }));
 
     menu.MenuItems.Add(fileMenu);
     Menu = menu;
@@ -1255,41 +1236,39 @@ private void SetBOCollection(BusinessObject bo)
 {
     BusinessObjectCollection&lt;BusinessObject&gt; boCollection = new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
     boCollection.Load(&quot;&quot;, &quot;&quot;);
-    grid.SetBusinessObjectCollection(boCollection);
+
+    grid = new ReadOnlyGridWithButtons();
+    grid.SetCollection(boCollection);
 }
 
 private void ShowComputerParts()
 {
     BorderLayoutManager manager = new BorderLayoutManager(this);
-    grid = new ReadOnlyGridWithButtons();
     SetBOCollection(new ComputerPart());
     orderItemsGrid = null;
     manager.AddControl(grid, BorderLayoutManager.Position.Centre);
 }
 
-private void ShowCustomerOrders()
+private void ShowOrders(BusinessObject bo)
 {
-    <font color="#808080">// Add the grid containing the customer orders</font>
+    SetBOCollection(bo);
+    
     BorderLayoutManager manager = new BorderLayoutManager(this);
-    grid = new ReadOnlyGridWithButtons();
-    SetBOCollection(new CustomerOrder());
     manager.AddControl(grid, BorderLayoutManager.Position.Centre);
 
-    <font color="#808080">// Add the grid with the ordered items for the selected order</font>
     orderItemsGrid = new ReadOnlyGridWithButtons();
     SetOrderItemsCollection();
     manager.AddControl(orderItemsGrid, BorderLayoutManager.Position.South);
 
-    <font color="#808080">//Change the items grid when the order is changed</font>
     grid.ItemSelected += delegate{ SetOrderItemsCollection(); };
 }
 
 private void SetOrderItemsCollection()
 {
-    CustomerOrder selectedOrder = (CustomerOrder)grid.GetSelectedObject();
+    PartsOrder selectedOrder = (PartsOrder)grid.SelectedBusinessObject;
     if (selectedOrder != null)
-        orderItemsGrid.SetBusinessObjectCollection(selectedOrder.CustomerOrderItems);
-    orderItemsGrid.Buttons.ObjectCreator = new CustomerOrderItemCreator(selectedOrder);
+        orderItemsGrid.SetCollection(selectedOrder.OrderItems);
+    orderItemsGrid.Buttons.ObjectCreator = new OrderItemCreator(selectedOrder);
 }</code></pre>
 </td>
 
@@ -1310,8 +1289,6 @@ private void SetOrderItemsCollection()
 <p><font size="2">If you are looking to experiment, you could:</font></p>
 <ul>
   <li>Recalculate the customer's order charge as each item is added to the order</li>
-  <li>Add orders from suppliers, which would largely be similar to customer 
-  orders</li>
   <li>Have the order items displayed in a grid on the editor form rather - 
   create your own editor by inheriting from IObjectEditor and setting the editor 
   using &quot;</font><font face="Courier New" size="2">orderItemsGrid.Buttons.ObjectEditor 
@@ -1330,13 +1307,19 @@ private void SetOrderItemsCollection()
   </tr>
   <tr>
     <td width="100%"><font size="2">We'll continue to explore ways to enhance 
-    the user's ability to edit objects: </font><ul>
-  <li><font face="Verdana" size="2">Adding lookup-lists in a combo-box</font></li>
-  <li><font face="Verdana" size="2">Fulfilling customer orders</font></li>
-</ul>
+    the user's ability to edit objects:<ul>
+  <li>Adding lookup-lists in a combo-box</li>
+  <li>Fulfilling customer orders</li>
+  <li>Better number control</li>
+  <li>Filtering grid displays</li>
+</ul> </font>
     </td>
   </tr>
 </table>
+
+</font>
+
+<font face="Verdana,Arial,Helvetica" size="2">
 
 <p>Habanero provides some useful user interface functionality.&nbsp; While a lot 
 of these features are well used already, it often takes a lot of work to get a 
@@ -1362,7 +1345,7 @@ version here.</p>
 <p>A lookup-list comprises a set of display-value pairs.&nbsp; The display part is 
 shown to the user and the value part is the value actually stored.&nbsp; As far as 
 implementation goes, we'll first amend the class definitions, amending our 
-former definitions for CustomerOrderItem:</p>
+former definitions for  OrderItem:</p>
 
 <table class="code" border="1" cellspacing="0">
   <tr>
@@ -1390,7 +1373,7 @@ would be:</p>
 
     <td width="100%" class="codeitself">
     <pre><code>&lt;property name=&quot;ComputerPartID&quot; type=&quot;Guid&quot; &gt;
-  &lt;databaseLookupList sql=&quot;select PartCode, ComputerPartID from computerpart order by PartCode&quot; /&gt;
+  &lt;databaseLookupList sql=&quot;select ComputerPartID, PartCode from computerpart order by PartCode&quot; /&gt;
 &lt;/property&gt;</code></pre>
     </td>
     </font>
@@ -1421,9 +1404,9 @@ run successfully.</p>
 
 <p><b><font size="3">Fulfilling Customer Orders</font></b></p>
 
-<p>Where the DispatchedYet field is set to false, we can now dispatch the order 
-and automatically amend the stock quantities.&nbsp; In the ShowCustomerOrders() 
-method, a &quot;Dispatch&quot; button is added to the ReadOnlyGridWithButtons as follows:</p>
+<p>Where the Delivered field is set to false, we can now dispatch the order 
+and automatically amend the stock quantities.&nbsp; In the anonymous delegate 
+for the Customer Orders menu item, a &quot;Dispatch&quot; button is added to the ReadOnlyGridWithButtons as follows:</p>
 
 <table class="code" border="1" cellspacing="0">
   <tr>
@@ -1431,7 +1414,11 @@ method, a &quot;Dispatch&quot; button is added to the ReadOnlyGridWithButtons as
 <font face="Verdana,Arial,Helvetica" size="2">
 
     <td width="100%" class="codeitself">
-    <pre><code>grid.Buttons.AddButton(&quot;Dispatch&quot;, new EventHandler(DispatchClickedHandler));</code></pre>
+    <pre><code>fileMenu.MenuItems.Add(new MenuItem("Customer &orders", delegate
+    {
+        ShowOrders(new PartsOrder());
+        grid.Buttons.AddButton(&quot;Dispatch&quot;, new EventHandler(DispatchClickedHandler));
+    }));</code></pre>
 </td>
     </font>
   </tr>
@@ -1439,7 +1426,7 @@ method, a &quot;Dispatch&quot; button is added to the ReadOnlyGridWithButtons as
 
 <p>The DispatchClickedHandler is implemented further along.&nbsp; The parts 
 stock is loaded and we check that all of the stock is available before 
-decrementing stock levels.&nbsp; Note that <b><font color="#FF0000">we call ApplyEdit()</font></b> on the objects in 
+decrementing stock levels.&nbsp; Note that we call Save() on the objects in 
 order to persist the changes to the database, otherwise our stock will still be 
 there the next time we start the application.</p>
 
@@ -1449,19 +1436,19 @@ there the next time we start the application.</p>
     <td width="100%" class="codeitself">
     <pre><code>private void DispatchClickedHandler(object sender, EventArgs e)
 {
-    CustomerOrder selectedOrder = (CustomerOrder)grid.GetSelectedObject();
-    if (selectedOrder.DispatchedYet.Value || selectedOrder.CustomerOrderItems.Count == 0)
+    PartsOrder selectedOrder = (PartsOrder)grid.SelectedBusinessObject;
+    if (selectedOrder.Delivered.Value || selectedOrder.OrderItems.Count == 0)
         return;
 
     BusinessObjectCollection&lt;ComputerPart&gt; stockAvailable = new BusinessObjectCollection&lt;ComputerPart&gt;();
     stockAvailable.Load(&quot;&quot;,&quot;&quot;);
 
-    foreach (CustomerOrderItem orderItem in selectedOrder.CustomerOrderItems)
+    foreach (OrderItem orderItem in selectedOrder.OrderItems)
     {
-        ComputerPart matchingPart = (ComputerPart) stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+        ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
         if (matchingPart == null)
         {
-            MessageBox.Show(&quot;Could not find: &quot; + orderItem.ComputerPartID);
+            MessageBox.Show(&quot;Could not find some of the stock on order. Please double-check.&quot;);
             return;
         }
             
@@ -1472,15 +1459,15 @@ there the next time we start the application.</p>
         }
     }
 
-    foreach (CustomerOrderItem orderItem in selectedOrder.CustomerOrderItems)
+    foreach (OrderItem orderItem in selectedOrder.OrderItems)
     {
-        ComputerPart matchingPart = (ComputerPart)stockAvailable.FindByGuid(orderItem.</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID.Value</code></font><code>);
+        ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.</code><font face="Verdana,Arial,Helvetica" size="2"><code>ComputerPartID.Value</code></font><code>);
         matchingPart.Stock -= orderItem.Quantity;
-        matchingPart.ApplyEdit();
+        matchingPart.Save();
     }
     MessageBox.Show(&quot;Stock dispatched and stock levels amended&quot;);
-    selectedOrder.DispatchedYet = true;
-    selectedOrder.ApplyEdit();
+    selectedOrder.Delivered = true;
+    selectedOrder.Save();
 }</code></pre>
     </td>
   </tr>
@@ -1527,14 +1514,367 @@ available rule options.</p>
   </tr>
 </table>
 
+<p><b><font size="3">Filtering Grid Displays</font></b></p>
+
+<p>Quite clearly, our grid displays could grow rather large as we begin to add 
+computer parts or customer orders.&nbsp; There are a few ways to limit the 
+number of objects being shown.&nbsp; We could specify load criteria as a 
+parameter in each collection's Load() command.&nbsp; Another simple way is to 
+add a filter control, which filters out the rows to display, so that only those 
+rows that meet a requirement are shown.</p>
+
+<p>Looking first at the computer parts, how you filter your values will depend 
+on how you distinguish your parts.&nbsp; For instance, Replace IT uses a part 
+code made up of three letters which indicate the type of product and four 
+numbers which serve as a sub-code for that type.&nbsp; For example, one of the 
+optical mice might have a code of MOU1534.&nbsp; So our solution simply 
+categorises items by their three first letters, doing a non-strict string 
+comparison.</p>
+
+<p>This code slots in at the bottom of the ShowComputerParts() method.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeitself">
+    <pre><code>string[] options = {"CDR", "KEY", "MOU", "HDD", "DVD", "MBD", &quot;FDD&quot;, &quot;CAS&quot;, &quot;MON&quot;, &quot;VID&quot;};
+FilterControl filter = new FilterControl(new DataViewFilterClauseFactory());
+filter.AddStringFilterComboBox("Category:", "PartCode", new ArrayList(options), false);
+filter.FilterClauseChanged += delegate{ grid.Grid.ApplyFilter(filter.GetFilterClause()); };
+manager.AddControl(filter, BorderLayoutManager.Position.North);</code></pre>
+    </td>
+  </tr>
+</table>
+
+<p>For the sake of illustration, we can use the Load() method to filter values 
+in the orders grids.&nbsp; We'll add a checkbox at the top that allows the user 
+to display only those orders that have not been delivered yet.&nbsp; We'll then 
+assign a new collection to the grid that has load-criteria.&nbsp; The following 
+code is added at the bottom of the ShowOrders() method.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeitself">
+    <pre><code>CheckBox checkBox = new CheckBox();
+checkBox.Text = "Undelivered orders only";
+checkBox.CheckedChanged += delegate
+   {
+       BusinessObjectCollection&lt;BusinessObject&gt; col =
+           new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
+       if (checkBox.Checked) col.Load("Delivered = 'false'", "");
+       else col.Load("","");
+       grid.SetCollection(col);
+   };
+manager.AddControl(checkBox, BorderLayoutManager.Position.North);</code></pre>
+    </td>
+  </tr>
+</table>
+
 <p><b><font size="3">Further Exercises</font></b></p>
 <p><font size="2">If you are looking to experiment, you could:</font></p>
 <ul>
   <li>Add a customer table that tracks their orders, so that when you create an 
   order, you choose the customer from a ComboBox list</li>
+  <li>Add functionality to track how much profit you are making on your orders</li>
 </ul>
 
 </font>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<hr>
+
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse" bordercolor="#CCCCCC" width="100%" id="AutoNumber13" bgcolor="#F2F2F2">
+  <tr>
+    <td width="100%" bgcolor="#2F2F84"><b>
+    <font face="Verdana" color="#FFFFFF" size="4"><a name="Step5">Step 5: 
+    Introducing Inheritance</a></font></b></td>
+  </tr>
+  <tr>
+    <td width="100%"><font size="2">We'll introduce supplier orders using inheritance:
+
+
+
+<ul>
+  <li>Have SupplierOrder inherit from PartsOrder</li>
+  <li>Unloading supplier orders</li>
+</ul>
+</font>
+    </td>
+  </tr>
+</table>
+
+
+<p><b><font size="3">Inheritance Strategies</font></b></p>
+
+
+<p>Inheritance is one distinct feature supported by object-orientation but not 
+by relational databases.&nbsp; Habanero as an object relational mapping tool 
+translates an inheritance structure to database tables in three different ways.&nbsp; 
+The default &quot;ClassTableInheritance&quot; uses one database table per class in the 
+inheritance structure. All fields that are inherited from the parent are 
+actually stored in the database table of the parent, while the child table only 
+stores its ID, the parent's ID and any fields that are unique to the child.&nbsp; 
+&quot;SingleTableInheritance&quot; maps all fields of all classes of an inheritance 
+structure into a single table. &quot;ConcreteTableInheritance&quot; uses a table for each 
+concrete class in the inheritance hierarchy, so that the fields of an abstract 
+parent are stored in the child rather.</p>
+
+<p>In our example, supplier orders and customer orders are very similar - they 
+both have an order number, name, price, delivery indication and a list of items 
+ordered.&nbsp; We'd really like supplier orders to have all the functionality of 
+customer orders, or PartsOrders as we called them, but the problem is that 
+supplier orders are not a type of customer order.&nbsp; So what we've done - and 
+this was really sneaky - was to give CustomerOrders the name PartsOrder.&nbsp; 
+Now SupplierOrder and CustomerOrder can inherit from PartsOrder without 
+duplicating too much functionality.&nbsp; PartsOrder becomes an abstract class 
+that the user will never see.</p>
+
+<p>Now to choose an inheritance strategy.&nbsp; Each one obviously has its pros 
+and cons.&nbsp; The advantage of &quot;ClassTableInheritance&quot; is that we're 
+not having to duplicate the fields of each inheritor in both the database tables 
+and the class definitions - once they've been declared in the parent, they're 
+inherited automatically.&nbsp; &quot;SingleTableInheritance&quot; places all the data into 
+one table, which does reduce our control over the individual tables.&nbsp; 
+&quot;ConcreteTableInheritance&quot; separates the data distinctly but does incur 
+duplication.&nbsp; You can imagine that in a class with many fields, this 
+duplication can add up to a lot of extra work.&nbsp; We'll go with the default 
+for this example, although you may want to experiment with the other structures 
+too.</p>
+
+<p><font size="3"><b>Implementing Inheritance</b></font></p>
+
+<p>The first step will be to add database tables for &quot;CustomerOrder&quot; and 
+&quot;SupplierOrder&quot;.&nbsp; At this stage you may want to add extra fields relevant 
+to the supplier or customer, but for now we'll leave that for some day in the 
+distant future.&nbsp; Note that you may run into issues if you already have data 
+in the PartsOrder table - just delete all the entries you have for PartsOrder 
+and OrderItem.&nbsp; If you're having foreign key conflicts, consider removing 
+the foreign key in OrderItem and adding it back after all the changes have been 
+made.</p>
+
+<p align="center">
+<img border="0" src="database-custorder.gif" width="651" height="270"></p>
+
+<p>&nbsp;</p>
+
+<p align="center">
+<img border="0" src="database-suporder.gif" width="650" height="268"></p>
+
+<p>The class definitions are fairly straight-forward, except for the fact that 
+we have to list all the columns and fields to display in the user interfaces.&nbsp; 
+All we need to do is to delete the ui definitions from PartsOrder and copy them 
+equally into SupplierOrder and CustomerOrder.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+    <td width="100%" class="codeitself">
+    <pre><code>  &lt;class name=&quot;SupplierOrder&quot; assembly=&quot;Replace_it&quot;&gt;
+    &lt;superClass class=&quot;PartsOrder&quot; assembly=&quot;Replace_it&quot; /&gt;
+    &lt;property name=&quot;SupplierOrderID&quot; type=&quot;Guid&quot; /&gt;
+    &lt;primaryKey&gt;
+      &lt;prop name=&quot;SupplierOrderID&quot;/&gt;
+    &lt;/primaryKey&gt;
+    &lt;ui&gt;
+      &lt;grid&gt;
+        &lt;column heading=&quot;Order Number&quot; property=&quot;OrderNumber&quot; /&gt;
+        &lt;column heading=&quot;Name&quot; property=&quot;Name&quot; /&gt;
+        &lt;column heading=&quot;Delivered&quot; property=&quot;Delivered&quot; /&gt;
+      &lt;/grid&gt;
+      &lt;form height=&quot;200&quot; width=&quot;300&quot; title=&quot;Add a customer order&quot;&gt;
+        &lt;field label=&quot;Order Number:&quot; property=&quot;OrderNumber&quot; /&gt;
+        &lt;field label=&quot;Name:&quot; property=&quot;Name&quot; /&gt;
+        &lt;field label=&quot;Total Charge:&quot; property=&quot;TotalCharge&quot; /&gt;
+        &lt;field label=&quot;Delivered:&quot; property=&quot;Delivered&quot; type=&quot;CheckBox&quot;/&gt;
+      &lt;/form&gt;
+    &lt;/ui&gt;
+  &lt;/class&gt;
+
+  &lt;class name=&quot;CustomerOrder&quot; assembly=&quot;Replace_it&quot;&gt;
+    &lt;superClass class=&quot;PartsOrder&quot; assembly=&quot;Replace_it&quot; /&gt;
+    &lt;property name=&quot;CustomerOrderID&quot; type=&quot;Guid&quot; /&gt;
+    &lt;primaryKey&gt;
+      &lt;prop name=&quot;CustomerOrderID&quot;/&gt;
+    &lt;/primaryKey&gt;
+    &lt;ui&gt;
+      &lt;grid&gt;
+        &lt;column heading=&quot;Order Number&quot; property=&quot;OrderNumber&quot; /&gt;
+        &lt;column heading=&quot;Name&quot; property=&quot;Name&quot; /&gt;
+        &lt;column heading=&quot;Delivered&quot; property=&quot;Delivered&quot; /&gt;
+      &lt;/grid&gt;
+      &lt;form height=&quot;200&quot; width=&quot;300&quot; title=&quot;Add a customer order&quot;&gt;
+        &lt;field label=&quot;Order Number:&quot; property=&quot;OrderNumber&quot; /&gt;
+        &lt;field label=&quot;Name:&quot; property=&quot;Name&quot; /&gt;
+        &lt;field label=&quot;Total Charge:&quot; property=&quot;TotalCharge&quot; /&gt;
+        &lt;field label=&quot;Delivered:&quot; property=&quot;Delivered&quot; type=&quot;CheckBox&quot;/&gt;
+      &lt;/form&gt;
+    &lt;/ui&gt;
+  &lt;/class&gt;</code></pre>
+</td>
+    </font>
+  </tr>
+</table>
+
+<p>Our two new classes, CustomerOrder.cs and SupplierOrder.cs, couldn't be 
+simpler:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+    <td width="100%" class="codeclass"><b><font size="2">
+    CustomerOrder.cs</font></b></td>
+    </font>
+  </tr>
+  <tr>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+    <td width="100%" class="codeitself">
+
+<pre><code>namespace Replace_it
+{
+    class CustomerOrder : PartsOrder
+    {
+    }
+}</code></pre>
+</td>
+</font>
+</tr>
+</table>
+
+
+
+<br>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+    <td width="100%" class="codeclass"><b><font size="2">
+    SupplierOrder.cs</font></b></td>
+    </font>
+  </tr>
+  <tr>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+    <td width="100%" class="codeitself">
+
+<pre><code>namespace Replace_it
+{
+    class SupplierOrder : PartsOrder
+    {
+    }
+}</code></pre>
+</td>
+</font>
+</tr>
+</table>
+
+
+
+<p>And finally, we have to adjust the code.&nbsp; This tutorial has structured 
+the previous code in a way that these changes are going to be fairly easy.&nbsp; We'll 
+just change the two menu items, so that &quot;Customer orders&quot; now points at the 
+CustomerOrders, and we'll add a menu item for &quot;Supplier orders&quot;:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+    <td width="100%" class="codeitself">
+    <pre><code>fileMenu.MenuItems.Add(new MenuItem("Customer &orders", delegate
+    {
+        ShowOrders(new CustomerOrder());
+        grid.Buttons.AddButton("Dispatch", new EventHandler(DispatchClickedHandler));
+    }));
+fileMenu.MenuItems.Add(new MenuItem("&Supplier orders", delegate
+    {
+        ShowOrders(new SupplierOrder());
+        grid.Buttons.AddButton("Receive", new EventHandler(DispatchClickedHandler));
+    }));</code></pre></td>
+    </font>
+  </tr>
+</table>
+
+
+
+<p>The method to handle a &quot;Receive&quot; button click is as follows:</p>
+
+
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+    <td width="100%" class="codeitself">
+    <pre><code>private void ReceiveClickedHandler(object sender, EventArgs e)
+{
+    PartsOrder selectedPartsOrder = (PartsOrder)grid.SelectedBusinessObject;
+    if (selectedPartsOrder.Delivered.Value || selectedPartsOrder.OrderItems.Count == 0)
+        return;
+
+    BusinessObjectCollection<ComputerPart> stockAvailable = new BusinessObjectCollection<ComputerPart>();
+    stockAvailable.Load("", "");
+
+    foreach (OrderItem orderItem in selectedPartsOrder.OrderItems)
+    {
+        ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+        if (matchingPart == null)
+        {
+            MessageBox.Show("Could not find some of the stock on order. Please double-check.");
+            return;
+        }
+    }
+
+    foreach (OrderItem orderItem in selectedPartsOrder.OrderItems)
+    {
+        ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+        matchingPart.Stock += orderItem.Quantity;
+        matchingPart.Save();
+    }
+    MessageBox.Show("Stock received and stock levels amended");
+    selectedPartsOrder.Delivered = true;
+    selectedPartsOrder.Save();
+}</code></pre></td>
+    </font>
+  </tr>
+</table>
+
+
+
+<p>That should give you a working application.</p>
+
+
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+<p><b><font size="3">Further Exercises</font></b></p>
+<p><font size="2">If you are looking to experiment, you could:</font></p>
+<ul>
+  <li>Implement the above solution with the other inheritance strategies.</li>
+  <li>Add a button in the supplier section that allows you to return faulty 
+  stock.</li>
+  <li>While adding a new supplier order, add the ability to create a new 
+  computer part when you encounter a part that's new to the catalogue.</li>
+</ul>
+
+</font>
+
+
+
+<p>&nbsp;</p>
+
+
 
 <p>&nbsp;</p>
 
@@ -1554,12 +1894,27 @@ available rule options.</p>
     <td width="100%" class="codeitself"><pre><code>template</code></pre></td>
   </tr>
 </table>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeclass"><b><font size="2">
+    OrderItemCreator.cs</font></b></td>
+  </tr>
+  <tr>
+
+<font face="Verdana,Arial,Helvetica" size="2">
+
+    <td width="100%" class="codeitself">
+
+<pre><code>class template</code></pre>
+</td>
+</tr>
+</table>
+
+
+
 <p><b><font size="2">Task list:</font></b></p>
 <ul>
-  <li><font size="2">Y- fulfill/dispatch customer orders (adapt grid to add a fulfill 
-  button, make items list apply to real collection, relationships?)</font></li>
-  <li><font size="2">X- complete supplier order (adapt grid to add a complete 
-  button, make items list apply to real collection)</font></li>
   <li><font size="2">X- create customer table (adapt customerorder to refer to 
   customer number, when you create new order, have option to create new customer 
   with popup window, in customer table maintain list of orders with related 
@@ -1568,10 +1923,7 @@ available rule options.</p>
   permissions list?)</font></li>
   <li><font size="2">progress indicators</font></li>
   <li><font size="2">error messaging</font></li>
-  <li><font size="2">criteria</font></li>
   <li>version upgrader/dbmigrator</li>
-  <li>inheritance</li>
-  <li>filter objects/clauses?</li>
   <li>using Habanero without the GUI application</li>
   <li>fix &quot;using&quot;s</li>
 </ul>
@@ -2013,7 +2365,8 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         that the first is the value to display to the user (eg. in a ComboBox or 
         grid) and the second is the value to be stored for the property, which 
         is useful when you are using Guids.&nbsp; The sql statement needs to be in the form of: &quot;select 
-        displayField, valueField 
+         
+        valueField, displayField 
         from tableName&quot;.&nbsp; An order-by clause can also be appended.&nbsp; 
         The class and assembly will seldom need to be specified.</td>
       </tr>
@@ -2495,8 +2848,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       </tr>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
-        <td class="specvaluebottom"><b>type</b> =<i>DataGridViewTextBoxColumn</i>/DataGridViewCheckBoxColumn/ 
-        DataGridViewComboBoxColumn/DataGridViewDateTimeColumn (the control type for the column)<br>
+        <td class="specvaluebottom"><b>type</b> =<i>DataGridViewTextBoxColumn</i>/DataGridViewCheckBoxColumn/ DataGridViewComboBoxColumn/DataGridViewNumericUpDownColumn/DataGridViewDateTimeColumn (the control type for the column)<br>
         <b>assembly</b> (of the control type, specify this if you are using a custom 
         type)<br>
         <b>editable</b> =<i>true</i>/false (whether the property  can be edited 
@@ -2933,6 +3285,8 @@ details of a complicated error message:</p>
 </table>
 
 <p>&nbsp;</p>
+
+<p>&nbsp;</p>
 <hr>
 <table border="1" cellpadding="7" cellspacing="0" style="border-collapse: collapse" bordercolor="#CCCCCC" width="100%" id="AutoNumber9" bgcolor="#E4E4E4">
   <tr>
@@ -2951,9 +3305,7 @@ details of a complicated error message:</p>
 <p><b><font size="3">Troubleshooting FAQ</font></b></p>
 <ul>
 
-<font face="Verdana,Arial,Helvetica" size="2">
-
-<font size="2">
+<font size="2" face="Verdana,Arial,Helvetica">
 
   <li><b>Application is not working</b><ul>
     <li>Is the code correct?</li>
@@ -2975,9 +3327,22 @@ details of a complicated error message:</p>
     database?</li>
   </ul>
   </li>
+
+<font size="2" face="Verdana,Arial,Helvetica">
+
+  <li><b>&quot;Object reference not set to an instance of an object.&quot;</b><ul>
+
+<li>This is a .Net error thrown when a null reference is being encountered.&nbsp; 
+This is a common exception that is not related to any particular area of code, 
+so you'll need to do some further research to try and isolate the code that is 
+throwing the exception.</li>
+
+</ul>
+  </li>
 </font>
 
-  </font>
+</font>
+
   <li><b>Class definitions</b><ul>
   <li>Classdefs.xml not found<ul>
   <li>While the class definitions may be stored under your project or assembly, 
@@ -2985,6 +3350,13 @@ details of a complicated error message:</p>
   output).&nbsp; Either add a build command to copy the file at run-time or use 
   a feature like Visual Studio's where you can set the properties on 
   &quot;classdefs.xml&quot; so that it is copied to the output directory.</li>
+</ul>
+  </li>
+  <li>Can't find control, mapper or assembly for a field/grid control<ul>
+  <li>Apart from checking for the obvious (does the type or mapper exist in the 
+  assembly as specified?), check that the assembly you're referring to has been 
+  referenced in the relevant project (try referencing it in the other projects 
+  if you've got multiple ones).</li>
 </ul>
   </li>
 </ul>
@@ -2995,9 +3367,7 @@ details of a complicated error message:</p>
   <li><b>Database issues</b><ul>
   <li>Changes not being saved to database<ul>
   <li>If you edit an object in a default form, the changes should be committed 
-  automatically, but if you edit values at code level, you <font color="#FF0000">
-  <b>need to use 
-  ApplyEdit()</b></font> on the object to commit the changes.</li>
+  automatically, but if you edit values at code level, you need to call Save() on the object to commit the changes.</li>
 </ul>
   </li>
 </ul>
@@ -3006,7 +3376,7 @@ details of a complicated error message:</p>
   <li>ComboBox displaying wrong information<ul>
   <li>There are two means to display data in a ComboBox using the class 
   definitions.&nbsp; You can specify a set list of options using 
-  &quot;attribute&quot; elements (see <a href="#AppendixI">Appendix I</a>), or you can set the list to be dynamically 
+  &quot;attribute&quot; elements (see Appendix I), or you can set the list to be dynamically 
   loaded when the form comes up, using the lookup-list source options.&nbsp; 
   These need a pair of strings and Guids, with the strings displayed to the user 
   and the Guids stored in the property values.&nbsp; Your property type therefor 
@@ -3047,6 +3417,21 @@ details of a complicated error message:</p>
 </ul>
   </li>
 
+<li><b>Naming issues</b><ul>
+
+<li>Dashes in the assembly name<ul>
+
+<li>In Visual Studio, putting a dash in the assembly name will result in an 
+underscore in the namespace.&nbsp; This will cause failures with Habanero - 
+while we create a workaround for this problem, we suggest you avoid using dashes 
+in the assembly names.</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
 </ul>
 </font>
 
@@ -3055,7 +3440,6 @@ details of a complicated error message:</p>
 <p><font face="Verdana" size="2">Issues to deal with:</font></p>
 <ul>
   <li><font face="Verdana" size="2">Concurrency/synch</font></li>
-  <li><font face="Verdana" size="2">Progress indicators</font></li>
   <li><font face="Verdana" size="2">Alternate DB vendors</font></li>
   <li><font face="Verdana" size="2">the concept of “persisted” values cf normal 
   values (may need to edit code comments more)</font></li>
@@ -3064,27 +3448,18 @@ details of a complicated error message:</p>
   <li><font face="Verdana" size="2">cover progress indicators/user feedback</font></li>
   <li><font face="Verdana" size="2">list of required DLLs (for each database 
   vendor)</font></li>
-  <li><font face="Verdana" size="2">clarification of terminology (eg. business 
-  objects), background info</font></li>
   <li><font face="Verdana" size="2">at the end of each step, list the classes 
   covered so far, or at least additional classes now covered</font></li>
-  <li><font face="Verdana" size="2">inheritance, super-class, inheritance types</font></li>
-  <li><font face="Verdana" size="2">review parameterised sql</font></li>
   <li><font face="Verdana" size="2">use of expressions</font></li>
   <li><font face="Verdana" size="2">use of parameterised sql</font></li>
   <li><font face="Verdana" size="2">a quick reference card</font></li>
   <li><font face="Verdana" size="2">where to reference habanero - always copy 
   dll's or environment variables on where to find them (and others like classdef 
   dtd, log4net, ms app exc)</font></li>
-  <li><font face="Verdana" size="2">ID instead of *ID</font></li>
-  <li><font face="Verdana" size="2">singular for database table names (review 
-  all database naming according to conventions)</font></li>
   <li><font face="Verdana" size="2">links to websites with basic sql tutorial 
   (w3c) and database vendor introduction</font></li>
 
 <font face="Verdana" size="2">
-
-  <li>combo lookups - change to ID instead of partcode</li>
 
   <li>list of assemblies and important classes, comments etc (does this 
   duplicate the documentation?)</li>
@@ -3095,12 +3470,13 @@ details of a complicated error message:</p>
 
   <li>FEATURES: csvfile reader/writer + how to set column headers</li>
 
-  <li>'-' in assembly names, converts to '_'</li>
-
   <li>give examples of configuring habaneroapp before startup()</li>
   <li>what is our policy on integer primary keys (and auto-increments)?</li>
   <li>database number generators</li>
-  <li>which DLL's are needed for which database vendors</font><font face="Verdana,Arial,Helvetica" size="2"><font face="Verdana" size="2"><br>
+  <li>combine all ComputerPart fields into db right at the start, not two 
+  chapters</li>
+  <li>how many directions for rel between partsorder and orderitems (and should 
+  foreign key then be both ways too?)</font><font face="Verdana,Arial,Helvetica" size="2"><font face="Verdana" size="2"><br>
 &nbsp;</font></li>
 </ul>
 
