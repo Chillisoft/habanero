@@ -78,11 +78,13 @@ namespace Habanero.Ui.Grid
         /// filtering</param>
         /// <param name="options">The options to display in the ComboBox,
         /// which will be prefixed with a blank option</param>
+        /// <param name="strictMatch">Whether the column should match the entire
+        /// string or just contain the string</param>
         /// <returns>Returns the new ComboBox added</returns>
-        public ComboBox AddStringFilterComboBox(string label, string columnName, ICollection options)
+        public ComboBox AddStringFilterComboBox(string label, string columnName, ICollection options, bool strictMatch)
         {
             _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
-            ComboBox cb = _filterInputBoxCollection.AddStringFilterComboBox(columnName, options);
+            ComboBox cb = _filterInputBoxCollection.AddStringFilterComboBox(columnName, options, strictMatch);
             _layoutManager.AddControl(cb);
             return cb;
         }

@@ -68,11 +68,20 @@ namespace Habanero.Test.Ui.Generic
             IList options = new ArrayList();
             options.Add("1");
             options.Add("2");
-            ComboBox cb = filterControl.AddStringFilterComboBox("t", "TestColumn", options);
+            ComboBox cb = filterControl.AddStringFilterComboBox("t", "TestColumn", options, true);
             cb.SelectedIndex = 1;
             cb.SelectAll();
             IFilterClause clause =
                 itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "1");
+            Assert.AreEqual(clause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+            cb.SelectedIndex = -1;
+            Assert.AreEqual(nullClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+
+            cb = filterControl.AddStringFilterComboBox("t", "TestColumn", options, false);
+            cb.SelectedIndex = 1;
+            cb.SelectAll();
+            clause =
+                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "1");
             Assert.AreEqual(clause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
             cb.SelectedIndex = -1;
             Assert.AreEqual(nullClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
@@ -86,7 +95,7 @@ namespace Habanero.Test.Ui.Generic
             options.Add("2");
             itsIsFilterClauseChanged = false;
             filterControl.FilterClauseChanged += new EventHandler<FilterControlEventArgs>(FilterClauseChangedHandler);
-            ComboBox cb = filterControl.AddStringFilterComboBox("Test:", "TestColumn", options);
+            ComboBox cb = filterControl.AddStringFilterComboBox("Test:", "TestColumn", options, true);
             Assert.IsTrue(itsIsFilterClauseChanged, "Adding a new control should make the filter clause change");
             itsIsFilterClauseChanged = false;
             cb.SelectedIndex = 0;

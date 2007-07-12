@@ -28,7 +28,7 @@ namespace Habanero.Test.Ui.Generic
             CheckBox testCheckBox = filterInputBoxCol.AddBooleanFilterCheckBox("test", "textbox", true);
             Assert.AreEqual(4, filterInputBoxCol.GetControls().Count);
             
-            ComboBox testComboBox = filterInputBoxCol.AddStringFilterComboBox("test", new ArrayList());
+            ComboBox testComboBox = filterInputBoxCol.AddStringFilterComboBox("test", new ArrayList(), true);
             Assert.AreEqual(5, filterInputBoxCol.GetControls().Count);
             
             Assert.AreSame(testLabel, filterInputBoxCol.GetControls()[0]);
@@ -65,7 +65,7 @@ namespace Habanero.Test.Ui.Generic
 
             ArrayList testOptions = new ArrayList();
             testOptions.Add("testoption1");
-            ComboBox testComboBox = filterInputBoxCol.AddStringFilterComboBox("test", testOptions);
+            ComboBox testComboBox = filterInputBoxCol.AddStringFilterComboBox("test", testOptions, true);
             Assert.AreEqual("", testComboBox.Items[0]);
             Assert.AreEqual("testoption1", testComboBox.Items[1]);
 
@@ -93,8 +93,8 @@ namespace Habanero.Test.Ui.Generic
             
             ArrayList testOptions = new ArrayList();
             testOptions.Add("testoption1");
-            ComboBox testComboBox1 = filterInputBoxCol.AddStringFilterComboBox("test3", testOptions);
-            ComboBox testComboBox2 = filterInputBoxCol.AddStringFilterComboBox("test4", testOptions);
+            ComboBox testComboBox1 = filterInputBoxCol.AddStringFilterComboBox("test3", testOptions, true);
+            ComboBox testComboBox2 = filterInputBoxCol.AddStringFilterComboBox("test4", testOptions, true);
             testComboBox2.SelectedItem = "testoption1";
 
             string testFilterClause = "(((test0 like '*testvalue*')" +

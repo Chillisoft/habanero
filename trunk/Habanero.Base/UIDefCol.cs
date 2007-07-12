@@ -24,6 +24,15 @@ namespace Habanero.Base
         /// <param name="def">The UI definition to add</param>
         public void Add(UIDef def)
         {
+            if (_defs.Contains(def.Name))
+            {
+                throw new InvalidXmlDefinitionException(String.Format(
+                    "A 'ui' definition with the name '{0}' is being added to " +
+                    "the collection of ui definitions for the class, but a " +
+                    "definition with that name already exists.  (Note: " +
+                    "'default' is the name given to a 'ui' element without " +
+                    "a 'name' attribute.)", def.Name));
+            }
             _defs.Add(def.Name, def);
         }
 

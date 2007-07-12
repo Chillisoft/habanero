@@ -162,12 +162,14 @@ namespace Habanero.Ui.Grid
         /// filtered on</param>
         /// <param name="options">The options to display in the ComboBox,
         /// which will be prefixed with a blank option</param>
+        /// <param name="strictMatch">Whether the column should match the entire
+        /// string or just contain the string</param>
         /// <returns>Returns the new ComboBox added</returns>
-        public ComboBox AddStringFilterComboBox(string columnName, ICollection options)
+        public ComboBox AddStringFilterComboBox(string columnName, ICollection options, bool strictMatch)
         {
             ComboBox cb = ControlFactory.CreateComboBox();
             cb.Width = _filterWidth;
-            _filterUIs.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options));
+            _filterUIs.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options, strictMatch));
             cb.SelectedIndexChanged += new EventHandler(FilterControlValueChangedHandler);
             cb.TextChanged += new EventHandler(FilterControlValueChangedHandler);
             FireFilterClauseChanged(cb);
@@ -413,9 +415,10 @@ namespace Habanero.Ui.Grid
         private class FilterUIStringOptions : FilterUI
         {
             private readonly ComboBox _comboBox;
+            private bool _strictMatch;
 
             public FilterUIStringOptions(IFilterClauseFactory clauseFactory, string columnName, ComboBox comboBox,
-                                         ICollection options)
+                                         ICollection options, bool strictMatch)
                 : base(clauseFactory, columnName)
             {
                 _comboBox = comboBox;
@@ -424,14 +427,18 @@ namespace Habanero.Ui.Grid
                 {
                     _comboBox.Items.Add(optionString);
                 }
+                _strictMatch = strictMatch;
             }
 
             public override IFilterClause GetFilterClause()
             {
                 if (_comboBox.SelectedIndex != -1 && _comboBox.SelectedItem.ToString().Length > 0)
                 {
+                    FilterClauseOperator op;
+                    if (_strictMatch) op = FilterClauseOperator.OpEquals;
+                    else op = FilterClauseOperator.OpLike;
                     return
-                        _clauseFactory.CreateStringFilterClause(_columnName, FilterClauseOperator.OpEquals,
+                        _clauseFactory.CreateStringFilterClause(_columnName, op,
                                                                 _comboBox.SelectedItem.ToString());
                 }
                 else
