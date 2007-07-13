@@ -120,7 +120,10 @@ namespace Habanero.Ui.Base
         //}
 
         /// <summary>
-        /// Sets the settings storer, which stores database settings
+        /// Sets the settings storer, which stores application settings such
+        /// as those for the database.  This can be set with an
+        /// instantiation of DatabaseSettingsStorer (the default) or 
+        /// ConfigFileSettingsStorer, although the later is read-only.
         /// </summary>
         public ISettingsStorer SettingsStorer {
             set { _settingsStorer = value; }

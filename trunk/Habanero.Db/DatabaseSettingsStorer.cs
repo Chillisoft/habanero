@@ -15,13 +15,35 @@ namespace Habanero.DB
     public class DatabaseSettingsStorer : ISettingsStorer
     {
         private Hashtable _cachedSettings;
+        private string _tableName = "settings";
 
         /// <summary>
-        /// Constructor to initialise an empty store of settings
+        /// Constructor to initialise an empty store of settings, using the table
+        /// name of "settings"
         /// </summary>
         public DatabaseSettingsStorer()
         {
             _cachedSettings = new Hashtable();
+        }
+
+        /// <summary>
+        /// Constructor to initialise an empty store of settings, specifying
+        /// the table name to use to store the settings
+        /// </summary>
+        /// <param name="tableName">The table name in which to store settings</param>
+        public DatabaseSettingsStorer(string tableName) : this()
+        {
+            _tableName = tableName;
+        }
+
+        /// <summary>
+        /// Gets and sets the database table name to use to store the settings.
+        /// The default is "settings", but the name can be altered if needed.
+        /// </summary>
+        public string TableName
+        {
+            get { return _tableName; }
+            set { _tableName = value; }
         }
 
         /// <summary>
@@ -31,7 +53,7 @@ namespace Habanero.DB
         /// <returns>Returns a string</returns>
         public string GetString(string settingName)
         {
-            return Convert.ToString(GetValue(settingName, DateTime.Now.Date));
+            return Convert.ToString(GetValue(settingName, DateTime.Now));
         }
 
         /// <summary>
@@ -196,8 +218,9 @@ namespace Habanero.DB
                 }
                 else
                 {
-                    throw new UserException("Setting " + settingName +
-                                            " doesn't exist in the tbsetting table in the database. ");
+                    throw new UserException(String.Format("The setting '{0}' " +
+                        "does not exist in the '{1}' table in the database.",
+                        settingName, _tableName));
                 }
             }
             finally
@@ -216,10 +239,10 @@ namespace Habanero.DB
         /// <param name="settingName">The setting name</param>
         /// <param name="date">The date</param>
         /// <returns>Returns a sql statement object</returns>
-        private static SqlStatement CreateSelectStatement(string settingName, DateTime date)
+        private SqlStatement CreateSelectStatement(string settingName, DateTime date)
         {
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            statement.Statement.Append("select SettingValue from tbsetting where SettingName = ");
+            statement.Statement.Append("select SettingValue from " + _tableName + " where SettingName = ");
             statement.AddParameterToStatement(settingName);
             statement.Statement.Append(" and (StartDate < ");
             statement.AddParameterToStatement(date);
@@ -237,10 +260,10 @@ namespace Habanero.DB
         /// <param name="settingName">The setting name</param>
         /// <param name="settingValue">The value to set to</param>
         /// <returns>Returns a sql statement object</returns>
-        private static SqlStatement CreateUpdateStatementNoDate(string settingName, string settingValue)
+        private SqlStatement CreateUpdateStatementNoDate(string settingName, string settingValue)
         {
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            statement.Statement.Append("update tbsetting set SettingValue = ");
+            statement.Statement.Append("update " + _tableName + " set SettingValue = ");
             statement.AddParameterToStatement(settingValue);
             statement.Statement.Append(" where SettingName = ");
             statement.AddParameterToStatement(settingName);
@@ -256,7 +279,7 @@ namespace Habanero.DB
         private SqlStatement CreateInsertStatement(string settingName, string settingValue)
         {
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            statement.Statement.Append("insert into tbsetting (SettingName, SettingValue, StartDate, EndDate) ");
+            statement.Statement.Append("insert into " + _tableName + " (SettingName, SettingValue, StartDate, EndDate) ");
             statement.Statement.Append("values (");
             statement.AddParameterToStatement(settingName);
             statement.Statement.Append(", ");

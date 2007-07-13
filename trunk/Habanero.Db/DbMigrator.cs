@@ -38,7 +38,7 @@ namespace Habanero.DB
         /// <param name="number">The migration number</param>
         /// <param name="sql">The sql statement string to add</param>
         public void AddMigration(int number, string sql) {
-            _migrations.Add(number, new SqlStatement(_connection.GetConnection() , sql));
+            AddMigration(number, new SqlStatement(_connection.GetConnection() , sql));
         }
         
         /// <summary>
@@ -47,6 +47,13 @@ namespace Habanero.DB
         /// <param name="number">The migration number</param>
         /// <param name="sql">The sql statement object to add</param>
         public void AddMigration(int number, SqlStatement sql) {
+            if (_migrations.ContainsKey(number))
+            {
+                throw new HabaneroApplicationException(String.Format(
+                    "While processing a database migration, a duplicate migration " +
+                    "number '{0}' was encountered. Each number must be unique.",
+                    number));
+            }
             _migrations.Add(number, sql);
         }
 
