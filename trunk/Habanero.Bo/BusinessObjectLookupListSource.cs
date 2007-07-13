@@ -42,6 +42,7 @@ namespace Habanero.Bo
         /// Constructor to initialise a new lookup-list
         /// </summary>
         /// <param name="boType">The business object type</param>
+        /// <param name="timeout">The period after which the cache expires</param>
         public BusinessObjectLookupListSource(Type boType, int timeout)
         {
             
@@ -64,6 +65,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="assemblyName">The assembly containing the class</param>
         /// <param name="className">The class from which to load the values</param>
+        /// <param name="timeout">The period after which the cache expires</param>
         public BusinessObjectLookupListSource(string assemblyName, string className, int timeout)
         {
             
@@ -157,12 +159,17 @@ namespace Habanero.Bo
 		/// <returns>Returns a collection of display-value pairs</returns>
         public static Dictionary<string, object> CreateDisplayValueDictionary(BusinessObjectCollection<BusinessObject> col)
 		{
-            Dictionary<string, object> lookupList = new Dictionary<string, object>();
+            SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
 			foreach (BusinessObject bo in col)
 			{
-				lookupList.Add(bo.ToString(), bo);
+				sortedLookupList.Add(bo.ToString(), bo);
 			}
-			return lookupList;
+		    Dictionary<string, object> lookupList = new Dictionary<string, object>();
+            foreach (string key in sortedLookupList.Keys)
+		    {
+		        lookupList.Add(key, sortedLookupList[key]);
+		    }
+            return lookupList;
 		}
 
 		#endregion ILookupListSource Implementation
