@@ -661,7 +661,7 @@ namespace Habanero.Bo.ClassDefinition
             ClassDef currentClassDef = this;
             while (currentClassDef != null)
             {
-                if (currentClassDef.RelationshipDefCol[relationshipName] != null)
+                if (currentClassDef.RelationshipDefCol.Contains(relationshipName))
                 {
                     return currentClassDef.RelationshipDefCol[relationshipName];
                 }
