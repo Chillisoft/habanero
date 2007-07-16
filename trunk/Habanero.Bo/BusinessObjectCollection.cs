@@ -515,7 +515,9 @@ namespace Habanero.Bo
         /// <param name="propertyName">The property name to sort on</param>
         /// <param name="isBoProperty">Whether the property is a business
         /// object property</param>
-        public void Sort(string propertyName, bool isBoProperty)
+        /// <param name="isAscending">Whether to sort in ascending order, set
+        /// false for descending order</param>
+        public void Sort(string propertyName, bool isBoProperty, bool isAscending)
         {
             if (isBoProperty)
             {
@@ -524,6 +526,11 @@ namespace Habanero.Bo
             else
             {
                 Sort(new PropertyComparer<T>(propertyName));
+            }
+
+            if (!isAscending)
+            {
+                Reverse();
             }
         }
 
@@ -634,10 +641,10 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns the business object collection as an IList object
+        /// Returns the business object collection as a List
         /// </summary>
         /// <returns>Returns an IList object</returns>
-        public List<T> ToList()
+        public List<T> GetList()
         {
             List<T> list = new List<T>(this.Count);
             foreach (T o in this)

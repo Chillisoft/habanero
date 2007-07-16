@@ -228,12 +228,12 @@ namespace Habanero.Bo.ClassDefinition
         }
 
         /// <summary>
-        /// The property rule relevant to this definition
+        /// Gets and sets the property rule relevant to this definition
         /// </summary>
         public virtual PropRuleBase PropRule
         {
             get { return _propRule; }
-			protected set{ _propRule = value;}
+			set { _propRule = value; }
         }
 
         /// <summary>
@@ -317,15 +317,6 @@ namespace Habanero.Bo.ClassDefinition
 
         
         #region "Rules"
-
-        /// <summary>
-        /// Assigns the relevant property rule to this Property Definition.
-        /// </summary>
-        /// <param name="lPropRule">A rule of type PropRuleBase</param>
-        public void assignPropRule(PropRuleBase lPropRule)
-        {
-            _propRule = lPropRule;
-        }
 
         /// <summary>
         /// Tests whether a specified property value is valid against the current

@@ -150,7 +150,7 @@ namespace Habanero.Bo.Loaders
         /// <param name="def">The property definition</param>
         public void LoadRuleIntoProperty(string propertyRuleElement, PropDef def)
         {
-            def.assignPropRule(this.LoadRule(def.PropertyTypeName, propertyRuleElement));
+            def.PropRule = this.LoadRule(def.PropertyTypeName, propertyRuleElement);
         }
 
 		protected override object Create()

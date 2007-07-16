@@ -227,15 +227,6 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns the persisted value (the value assigned at the last
-        /// backup or database committal)
-        /// </summary>
-        public object PersistedValue
-        {
-            get { return _persistedValue; }
-        }
-
-        /// <summary>
         /// Calls the Updated() method
         /// </summary>
         protected void FireBOPropValueUpdated()
@@ -343,8 +334,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Returns the persisted property value in its object form
         /// </summary>
-        /// TODO ERIC - this duplicates PersistedValue
-        internal object PersistedPropertyValue
+        public object PersistedPropertyValue
         {
             get { return _persistedValue; }
         }
