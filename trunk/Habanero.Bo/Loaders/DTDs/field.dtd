@@ -1,7 +1,7 @@
 #include parameter.dtd
 <!ELEMENT field (parameter*)>
 <!ATTLIST field
-	label CDATA #REQUIRED
+	label CDATA #IMPLIED
 	property NMTOKEN #REQUIRED
 	type NMTOKEN	"TextBox"
 	assembly NMTOKEN "System.Windows.Forms"

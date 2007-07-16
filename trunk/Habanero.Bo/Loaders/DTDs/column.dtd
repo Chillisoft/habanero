@@ -1,6 +1,6 @@
 <!ELEMENT column EMPTY>
 <!ATTLIST column
-	heading CDATA #REQUIRED
+	heading CDATA #IMPLIED
 	property CDATA #REQUIRED
 	type NMTOKEN	"DataGridViewTextBoxColumn"
 	editable ( true | false ) "true"

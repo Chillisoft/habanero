@@ -74,8 +74,8 @@ namespace Habanero.Bo.Loaders
         protected override void LoadFromReader()
         {
             _reader.Read();
-            LoadLabel();
             LoadPropertyName();
+            LoadLabel();
             LoadControlType();
             LoadMapperTypeName();
             LoadMapperTypeAssembly();
@@ -139,6 +139,10 @@ namespace Habanero.Bo.Loaders
         private void LoadLabel()
         {
             _label = _reader.GetAttribute("label");
+            if (_label == null)
+            {
+                _label = StringUtilities.DelimitPascalCase(_propertyName, " ") + ":";
+            }
         }
 
         /// <summary>

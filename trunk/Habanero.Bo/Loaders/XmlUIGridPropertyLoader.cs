@@ -77,8 +77,8 @@ namespace Habanero.Bo.Loaders
         protected override void LoadFromReader()
         {
             _reader.Read();
-            LoadHeading();
             LoadPropertyName();
+            LoadHeading();
             LoadGridControlType();
             LoadIsReadOnly();
             LoadWidth();
@@ -158,11 +158,9 @@ namespace Habanero.Bo.Loaders
         private void LoadHeading()
         {
             _heading = _reader.GetAttribute("heading");
-            if (_heading == null || _heading.Length == 0)
+            if (_heading == null)
             {
-                throw new InvalidXmlDefinitionException("In a 'column' " +
-                    "element, the 'heading' attribute was not specified. This " +
-                    "attribute sets the heading of the column as seen by the user.");
+                _heading = StringUtilities.DelimitPascalCase(_propertyName, " ");
             }
         }
 
