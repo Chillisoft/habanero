@@ -390,18 +390,18 @@ namespace Habanero.Bo.ClassDefinition
 				propCol.Add(superClassDef.createBOPropertyCol(newObject));
                 if (this.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance)
                 {
-					foreach (DictionaryEntry entry in superClassDef.PrimaryKeyDef)
+                    foreach (PropDef def in superClassDef.PrimaryKeyDef)
                     {
-                        propCol.Remove((string) entry.Key);
+                        propCol.Remove(def.PropertyName);
                     }
                 } 
                 else if (this.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
                 {
                     if (this.PrimaryKeyDef != null)
                     {
-                        foreach (DictionaryEntry entry in this.PrimaryKeyDef)
+                        foreach (PropDef def in this.PrimaryKeyDef)
                         {
-                            propCol.Remove((string) entry.Key);
+                            propCol.Remove(def.PropertyName);
                         }
                     }
                 }

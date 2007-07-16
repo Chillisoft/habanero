@@ -43,7 +43,7 @@ namespace Habanero.Bo.CriteriaManager
             _expression = exp;
             ClassDef lClassDef = classDef;
             String tableName = lClassDef.TableName;
-            foreach (PropDef def in lClassDef.PropDefcol.Values)
+            foreach (PropDef def in lClassDef.PropDefcol)
             {
                 _expression.SetParameterSqlInfo(def, tableName);
             }

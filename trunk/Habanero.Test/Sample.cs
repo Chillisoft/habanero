@@ -79,7 +79,8 @@ namespace Habanero.Test
             lPropDefCol.Add(lPropDef);
                 lPropDefCol.Add(new PropDef("SampleLookup3ID", typeof (String), PropReadWriteRule.ReadWrite, "SampleLookup3ID",
                                             null));
-            lPropDefCol.Add("SampleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
+            PropDef def = new PropDef("SampleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
+            lPropDefCol.Add(def);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["SampleID"]);

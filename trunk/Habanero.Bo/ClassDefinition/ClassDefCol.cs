@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
@@ -10,10 +11,11 @@ namespace Habanero.Bo.ClassDefinition
     /// <summary>
     /// Manages a collection of class definitions.
     /// </summary>
-    public class ClassDefCol : DictionaryBase
+    public class ClassDefCol 
     {
         private static ClassDefCol _classDefcol;
         private static bool _instanceFlag = false;
+        private Dictionary<string, ClassDef> _classDefs;
 
 		/// <summary>
 		/// Initialises an empty collection
@@ -21,6 +23,7 @@ namespace Habanero.Bo.ClassDefinition
 		internal protected ClassDefCol()
 			: base()
 		{
+		    _classDefs = new Dictionary<string, ClassDef>();
 		}
 		
 		/// <summary>
@@ -37,7 +40,7 @@ namespace Habanero.Bo.ClassDefinition
 			{
 				bool found;
 				string typeId = GetTypeIdForItem(key, out found);
-				if (found) return (ClassDef)Dictionary[typeId];
+				if (found) return _classDefs[typeId];
 				else return null;
 				//TODO error: When converted to use generic collection then 
 				// an error (KeyNotFoundException) should be thrown if the item is not in the collection?
@@ -59,7 +62,7 @@ namespace Habanero.Bo.ClassDefinition
 			{
 				bool found;
 				string typeId = GetTypeIdForItem(assemblyName, className, out found);
-				if (found) return (ClassDef)Dictionary[typeId];
+				if (found) return _classDefs[typeId];
 				else return null;
 				//TODO error: When converted to use generic collection then 
 				// an error (KeyNotFoundException) should be thrown if the item is not in the collection?
@@ -71,7 +74,7 @@ namespace Habanero.Bo.ClassDefinition
         /// </summary>
         internal ICollection Keys
         {
-            get { return (Dictionary.Keys); }
+            get { return (_classDefs.Keys); }
         }
 
         /// <summary>
@@ -79,7 +82,7 @@ namespace Habanero.Bo.ClassDefinition
         /// </summary>
         internal ICollection Values
         {
-            get { return (Dictionary.Values); }
+            get { return (_classDefs.Values); }
         }
 
 		/// <summary>
@@ -89,14 +92,14 @@ namespace Habanero.Bo.ClassDefinition
 		public void Add(ClassDef value)
 		{
 			string typeId = GetTypeId(value.AssemblyName, value.ClassName, true);
-            if (Dictionary.Contains(typeId))
+            if (_classDefs.ContainsKey(typeId))
             {
                 throw new InvalidXmlDefinitionException(String.Format(
                     "A duplicate class element has been encountered, where the " +
                     "type '{0}.{1}' has already been defined previously.",
                     value.AssemblyName, value.ClassName));
             }
-			Dictionary.Add(typeId, value);
+			_classDefs.Add(typeId, value);
 		}
 
         /// <summary>
@@ -149,7 +152,7 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			bool found;
 			string typeId = GetTypeIdForItem(key, out found);
-			if (found) Dictionary.Remove(typeId);
+			if (found) _classDefs.Remove(typeId);
 			//TODO error: When converted to use generic collection then 
 			// an the value of found should be returned (method type should be bool).
 		}
@@ -162,7 +165,7 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			bool found;
 			string typeId = GetTypeIdForItem(classDef.AssemblyName, classDef.ClassName, out found);
-			if (found) Dictionary.Remove(typeId);
+			if (found) _classDefs.Remove(typeId);
 			//TODO error: When converted to use generic collection then 
 			// an the value of found should be returned (method type should be bool).
 		}
@@ -216,9 +219,9 @@ namespace Habanero.Bo.ClassDefinition
 				_instanceFlag = true;
 			} else
 			{
-				foreach (DictionaryEntry entry in classDefCol)
+                foreach (ClassDef classDef in classDefCol)
 				{
-					ClassDef classDef = (ClassDef)entry.Value;
+                    //ClassDef classDef = (ClassDef)entry.Value;
 					if (!_classDefcol.Contains(classDef))
 					{
 						_classDefcol.Add(classDef);
@@ -232,6 +235,22 @@ namespace Habanero.Bo.ClassDefinition
 			return _classDefcol;
 		}
 
+        public int Count
+        {
+            get { return _classDefs.Count; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _classDefs.Values.GetEnumerator();
+        }
+
+        public void Clear()
+        {
+            _classDefs.Clear();
+            
+        }
+
 		#endregion
 
 		#region TypeId Methods
@@ -240,12 +259,12 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			string typeId = ClassDefCol.GetTypeId(key, false);
 			found = false;
-			if (Dictionary.Contains(typeId))
+			if (_classDefs.ContainsKey(typeId))
 				found = true;
 			else
 			{
 				typeId = ClassDefCol.GetTypeId(key, true);
-				if (Dictionary.Contains(typeId))
+                if (_classDefs.ContainsKey(typeId))
 				{
 					found = true;
 				}
@@ -257,12 +276,12 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			string typeId = ClassDefCol.GetTypeId(assemblyName, className, false);
 			found = false;
-			if (Dictionary.Contains(typeId))
+            if (_classDefs.ContainsKey(typeId))
 				found = true;
 			else
 			{
 				typeId = ClassDefCol.GetTypeId(assemblyName, className, true);
-				if (Dictionary.Contains(typeId))
+                if (_classDefs.ContainsKey(typeId))
 				{
 					found = true;
 				}

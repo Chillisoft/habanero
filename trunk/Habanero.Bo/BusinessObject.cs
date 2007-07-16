@@ -1081,9 +1081,8 @@ namespace Habanero.Bo
 
             if (!State.IsDeleted)
             {
-                foreach (DictionaryEntry item in _keysCol)
+                foreach (BOKey lBOKey in _keysCol)
                 {
-                    BOKey lBOKey = (BOKey) item.Value;
                     if (lBOKey.MustCheckKey())
                     {
                         SqlStatement checkDuplicateSql =
@@ -1195,11 +1194,9 @@ namespace Habanero.Bo
         /// <param name="searchExpression">The search expression</param>
         internal void ParseParameterInfo(IExpression searchExpression)
         {
-            BOProp prop;
-            foreach (DictionaryEntry item in _boPropCol)
+            foreach (BOProp prop in _boPropCol)
             {
-                prop = (BOProp)item.Value;
-                searchExpression.SetParameterSqlInfo(prop, _classDef.TableName);
+               searchExpression.SetParameterSqlInfo(prop, _classDef.TableName);
             }
         }
 

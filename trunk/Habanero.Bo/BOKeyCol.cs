@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Bo
@@ -7,13 +8,16 @@ namespace Habanero.Bo
     /// <summary>
     /// Manages a collection of BOKey objects
     /// </summary>
-    public class BOKeyCol : DictionaryBase
+    public class BOKeyCol 
     {
+        private Dictionary<string, BOKey> _boKeys;
+
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
         internal BOKeyCol() : base()
         {
+            _boKeys = new Dictionary<string, BOKey>();
         }
 
         /// <summary>
@@ -22,14 +26,14 @@ namespace Habanero.Bo
         /// <param name="lBOKey">The BO key</param>
         internal void Add(BOKey lBOKey)
         {
-            if (Dictionary.Contains(lBOKey.KeyName))
+            if (Contains(lBOKey.KeyName))
             {
                 throw new InvalidKeyException(String.Format(
                     "A key with the name '{0}' is being added to a key " +
                     "collection but already exists in the collection.",
                     lBOKey.KeyName));
             }
-            base.Dictionary.Add(lBOKey.KeyName, lBOKey);
+            _boKeys.Add(lBOKey.KeyName, lBOKey);
         }
 
         /// <summary>
@@ -38,9 +42,9 @@ namespace Habanero.Bo
         /// <param name="keyCol">The other collection</param>
         internal void Add(BOKeyCol keyCol)
         {
-            foreach (DictionaryEntry entry in keyCol)
+            foreach (BOKey key in keyCol)
             {
-                this.Add((BOKey) (entry.Value));
+                this.Add((BOKey)(key));
             }
         }
 
@@ -60,13 +64,31 @@ namespace Habanero.Bo
         {
             get
             {
-                if (!Dictionary.Contains(boKeyName))
+                if (!Contains(boKeyName))
                 {
                     throw new InvalidKeyException(String.Format(
                         "The key with the name '{0}' does not exist in the " +
                         "collection of keys.", boKeyName));
                 }
-                return ((BOKey) Dictionary[boKeyName]);
+                return _boKeys[boKeyName];
+            }
+        }
+
+        internal bool Contains(string boKeyName)
+        {
+            return _boKeys.ContainsKey(boKeyName);
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _boKeys.Values.GetEnumerator();
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _boKeys.Count;
             }
         }
     }

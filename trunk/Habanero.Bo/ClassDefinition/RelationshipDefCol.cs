@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Bo;
 
 namespace Habanero.Bo.ClassDefinition
@@ -7,13 +8,16 @@ namespace Habanero.Bo.ClassDefinition
     /// <summary>
     /// Manages a collection of relationship definitions
     /// </summary>
-    public class RelationshipDefCol : DictionaryBase
+    public class RelationshipDefCol 
     {
+        private Dictionary<string, RelationshipDef> _relDefs;
+
         /// <summary>
         /// A constructor to create a new empty collection
         /// </summary>
         public RelationshipDefCol()
         {
+            _relDefs = new Dictionary<string, RelationshipDef>();
         }
 
         /// <summary>
@@ -28,7 +32,7 @@ namespace Habanero.Bo.ClassDefinition
                     "A relationship definition with the name '{0}' already " +
                     "exists.", relationshipDef.RelationshipName));
             }
-            Dictionary.Add(relationshipDef.RelationshipName, relationshipDef);
+            _relDefs.Add(relationshipDef.RelationshipName, relationshipDef);
         }
 
 		/// <summary>
@@ -39,7 +43,7 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			if (Contains(relationshipDef))
 			{
-				Dictionary.Remove(relationshipDef.RelationshipName);
+                _relDefs.Remove(relationshipDef.RelationshipName);
 			}
 		}
 
@@ -52,7 +56,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <returns>Returns true if found, false if not</returns>
 		protected bool Contains(RelationshipDef relationshipDef)
 		{
-			return Dictionary.Contains(relationshipDef.RelationshipName);
+            return _relDefs.ContainsKey(relationshipDef.RelationshipName);
 		}
 
 
@@ -64,7 +68,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <returns>Returns true if found, false if not</returns>
 		public bool Contains(string keyName)
 		{
-			return Dictionary.Contains(keyName);
+			return _relDefs.ContainsKey(keyName);
 		}
 
         /// <summary>
@@ -80,13 +84,13 @@ namespace Habanero.Bo.ClassDefinition
         {
             get
             {
-                if (!Dictionary.Contains(relationshipName))
+                if (!Contains(relationshipName))
                 {
                     throw new ArgumentException(String.Format(
                         "The relationship name '{0}' does not exist in the " +
                         "collection of relationship definitions.", relationshipName));
                 }
-                return ((RelationshipDef) Dictionary[relationshipName]);
+                return _relDefs[relationshipName];
             }
         }
 
@@ -100,13 +104,25 @@ namespace Habanero.Bo.ClassDefinition
         public RelationshipCol CreateRelationshipCol(BOPropCol lBoPropCol, BusinessObject bo)
         {
             RelationshipCol lRelationshipCol = new RelationshipCol(bo);
-            RelationshipDef lRelationshipDef;
-            foreach (DictionaryEntry item in this)
+            ;
+            foreach (RelationshipDef lRelationshipDef in this)
             {
-                lRelationshipDef = (RelationshipDef) item.Value;
                 lRelationshipCol.Add(lRelationshipDef.CreateRelationship(bo, lBoPropCol));
             }
             return lRelationshipCol;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _relDefs.Values.GetEnumerator();
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _relDefs.Count;
+            }
         }
 
     }

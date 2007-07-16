@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Util;
@@ -11,13 +12,16 @@ namespace Habanero.Bo.ClassDefinition
     /// Lists a set of property definitions that indicate which properties
     /// to match together for two classes in a relationship
     /// </summary>
-    public class RelKeyDef : DictionaryBase
+    public class RelKeyDef 
     {
+        private Dictionary<string, RelPropDef> _relPropDefs;
+
         /// <summary>
         /// Constructor to create a new RelKeyDef object
         /// </summary>
         public RelKeyDef() : base()
         {
+            _relPropDefs = new Dictionary<string, RelPropDef>();
         }
 
         /// <summary>
@@ -31,14 +35,14 @@ namespace Habanero.Bo.ClassDefinition
         {
             get
             {
-                if (!Dictionary.Contains(propName))
+                if (!Contains(propName))
                 {
                     throw new InvalidPropertyNameException(String.Format(
                         "In a relationship property definition, the property " +
                         "with the name '{0}' does not exist in the collection " +
                         "of properties.", propName));
                 }
-                return ((RelPropDef) Dictionary[propName]);
+                return _relPropDefs[propName];
             }
         }
 
@@ -58,7 +62,7 @@ namespace Habanero.Bo.ClassDefinition
             }
             if (!Contains(relPropDef))
             {
-                Dictionary.Add(relPropDef.OwnerPropertyName, relPropDef);
+                _relPropDefs.Add(relPropDef.OwnerPropertyName, relPropDef);
             }
         }
 
@@ -70,7 +74,7 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			if (Contains(relPropDef))
 			{
-				base.Dictionary.Remove(relPropDef.OwnerPropertyName);
+				_relPropDefs.Remove(relPropDef.OwnerPropertyName);
 			}
 		}
 
@@ -81,7 +85,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <returns>Returns true if found, false if not</returns>
 		internal protected bool Contains(RelPropDef relPropDef)
         {
-			return (Dictionary.Contains(relPropDef.OwnerPropertyName));
+			return (_relPropDefs.ContainsKey(relPropDef.OwnerPropertyName));
         }
 
         /// <summary>
@@ -91,7 +95,7 @@ namespace Habanero.Bo.ClassDefinition
         /// <returns>Returns true if found, false if not</returns>
         internal bool Contains(string propName)
         {
-            return (Dictionary.Contains(propName));
+            return (_relPropDefs.ContainsKey(propName));
         }
 
         /// <summary>
@@ -103,13 +107,24 @@ namespace Habanero.Bo.ClassDefinition
         public RelKey CreateRelKey(BOPropCol lBoPropCol)
         {
             RelKey lRelKey = new RelKey(this);
-            foreach (DictionaryEntry item in this)
+            foreach (RelPropDef relPropDef in this)
             {
-                RelPropDef relPropDef = (RelPropDef) item.Value;
-
                 lRelKey.Add(relPropDef.CreateRelProp(lBoPropCol));
             }
             return lRelKey;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _relPropDefs.Values.GetEnumerator();
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _relPropDefs.Count;
+            }
         }
     }
 

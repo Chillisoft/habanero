@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Util;
@@ -15,8 +16,9 @@ namespace Habanero.Bo.ClassDefinition
     /// together in some way (e.g. for a composite alternate 
     /// key, the combination of properties is required to be unique).
     /// </summary>
-    public class KeyDef : DictionaryBase
+    public class KeyDef 
     {
+        private Dictionary<string, PropDef> _propDefs;
         protected bool _ignoreIfNull = false;
         protected string _keyName = "";
         protected bool _buildKeyName = true; //this is a flag used to 
@@ -33,6 +35,7 @@ namespace Habanero.Bo.ClassDefinition
 		public KeyDef()
 			: this("")
 		{
+            
 		}
 
 		/// <summary>
@@ -47,6 +50,7 @@ namespace Habanero.Bo.ClassDefinition
         {
             //TODO_Err check that keyName is valid. Eric: what is a valid keyname?
             KeyName = keyName;
+            _propDefs = new Dictionary<string, PropDef>();
         }
 
 		#endregion Constructors
@@ -100,13 +104,13 @@ namespace Habanero.Bo.ClassDefinition
         {
             get
             {
-                if (!Dictionary.Contains(propName))
+                if (!Contains(propName))
                 {
                     throw new InvalidPropertyNameException(String.Format(
                         "In a key definition, no property with the name '{0}' " +
                         "exists in the collection of properties.",propName));
                 }
-                return ((PropDef) Dictionary[propName]);
+                return _propDefs[propName];
             }
         }
 
@@ -128,7 +132,7 @@ namespace Habanero.Bo.ClassDefinition
             }
             if (!Contains(propDef))
             {
-                Dictionary.Add(propDef.PropertyName, propDef);
+                _propDefs.Add(propDef.PropertyName, propDef);
                 if (_buildKeyName)
                 {
                     if (_keyName.Length > 0)
@@ -148,7 +152,7 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			if (Contains(propDef))
 			{
-				base.Dictionary.Remove(propDef.PropertyName);
+				_propDefs.Remove(propDef.PropertyName);
 			}
 		}
 
@@ -160,7 +164,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <returns>Returns true if found, false if not</returns>
 		protected bool Contains(PropDef propDef)
 		{
-			return (Dictionary.Contains(propDef.PropertyName));
+			return (_propDefs.ContainsKey(propDef.PropertyName));
 		}
 
         /// <summary>
@@ -171,7 +175,7 @@ namespace Habanero.Bo.ClassDefinition
         /// <returns>Returns true if found or false if not</returns>
         internal bool Contains(string propName)
         {
-            return (Dictionary.Contains(propName));
+            return (_propDefs.ContainsKey(propName));
 		}
 
 		#endregion Dictionary Methods
@@ -184,8 +188,10 @@ namespace Habanero.Bo.ClassDefinition
         /// stored</returns>
         internal virtual bool IsValid()
         {
-            return (Count > 0);
+            return (_propDefs.Count > 0);
         }
+
+
 
 		/// <summary>
         /// Creates a new business object key (BOKey) using this key
@@ -197,12 +203,24 @@ namespace Habanero.Bo.ClassDefinition
         public virtual BOKey CreateBOKey(BOPropCol lBOPropCol)
         {
             BOKey lBOKey = new BOKey(this);
-            foreach (DictionaryEntry item in this)
+            foreach (PropDef lPropDef in _propDefs.Values)
             {
-                PropDef lPropDef = (PropDef) item.Value;
                 lBOKey.Add(lBOPropCol[lPropDef.PropertyName]);
             }
             return lBOKey;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _propDefs.Values.GetEnumerator();
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _propDefs.Count;
+            }
         }
 
     }

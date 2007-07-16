@@ -100,9 +100,8 @@ namespace Habanero.Bo.ClassDefinition
             {
                 lBOKey = new BOPrimaryKey(this);
             }
-            foreach (DictionaryEntry item in this)
+            foreach (PropDef lPropDef in this)
             {
-                PropDef lPropDef = (PropDef) item.Value;
                 lBOKey.Add(lBOPropCol[lPropDef.PropertyName]);
             }
             return lBOKey;

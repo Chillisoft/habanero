@@ -192,9 +192,9 @@ namespace Habanero.DB
         private object GetValue(string settingName, DateTime date)
         {
             settingName = settingName.ToUpper();
-            if (_cachedSettings[settingName] != null)
+            Setting setting = (Setting) _cachedSettings[settingName];
+            if (setting != null)
             {
-                Setting setting = (Setting) _cachedSettings[settingName];
                 if (!setting.IsExpired())
                 {
                     return setting.Value;

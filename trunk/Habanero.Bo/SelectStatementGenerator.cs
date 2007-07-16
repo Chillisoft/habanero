@@ -83,9 +83,8 @@ namespace Habanero.Bo
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 statement += ", " + currentClassDef.SuperClassClassDef.TableName;
-                foreach (DictionaryEntry entry in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
+                foreach (PropDef def in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
                 {
-                    PropDef def = (PropDef) entry.Value;
                     where += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
                     where += " = " + currentClassDef.TableName + "." + def.FieldName;
                     where += " AND ";

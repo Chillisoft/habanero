@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Bo;
 
 namespace Habanero.Bo.ClassDefinition
@@ -7,13 +8,16 @@ namespace Habanero.Bo.ClassDefinition
     /// <summary>
     /// Maintains a collection of key definitions (KeyDef objects)
     /// </summary>
-    public class KeyDefCol : DictionaryBase
+    public class KeyDefCol
     {
+        private Dictionary<string, KeyDef> _keyDefs;
+
         /// <summary>
         /// A basic constructor that sets up an empty collection
         /// </summary>
         public KeyDefCol() : base()
         {
+            _keyDefs = new Dictionary<string, KeyDef>();
         }
 
         /// <summary>
@@ -28,7 +32,7 @@ namespace Habanero.Bo.ClassDefinition
                     "A key definition with the name '{0}' already " +
                     "exists.", keyDef.KeyName));
             }
-            base.Dictionary.Add(keyDef.KeyName, keyDef);
+            _keyDefs.Add(keyDef.KeyName, keyDef);
         }
 
 		/// <summary>
@@ -39,7 +43,7 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			if (Contains(keyDef))
 			{
-				base.Dictionary.Remove(keyDef.KeyName);
+                _keyDefs.Remove(keyDef.KeyName);
 			}
 		}
 
@@ -51,7 +55,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <returns>Returns true if found, false if not</returns>
 		protected bool Contains(KeyDef keyDef)
 		{
-			return (Dictionary.Contains(keyDef.KeyName));
+		    return (_keyDefs.ContainsValue(keyDef));
 		}
 
         /// <summary>
@@ -61,7 +65,7 @@ namespace Habanero.Bo.ClassDefinition
         /// <returns>Returns true if found, false if not</returns>
         public bool Contains(string keyName)
         {
-            return Dictionary.Contains(keyName);
+            return _keyDefs.ContainsKey(keyName);
         }
 
         /// <summary>
@@ -76,13 +80,13 @@ namespace Habanero.Bo.ClassDefinition
         {
             get
             {
-                if (!Dictionary.Contains(keyName))
+                if (!Contains(keyName))
                 {
                     throw new ArgumentException(String.Format(
                         "The key name '{0}' does not exist in the " +
                         "collection of key definitions.", keyName));
                 }
-                return ((KeyDef) Dictionary[keyName]);
+                return _keyDefs[keyName];
             }
         }
 
@@ -96,13 +100,24 @@ namespace Habanero.Bo.ClassDefinition
         public BOKeyCol CreateBOKeyCol(BOPropCol lBOPropCol)
         {
             BOKeyCol lBOKeyCol = new BOKeyCol();
-            KeyDef lKeyDef;
-            foreach (DictionaryEntry item in this)
+            foreach (KeyDef lKeyDef in this)
             {
-                lKeyDef = (KeyDef) item.Value;
                 lBOKeyCol.Add(lKeyDef.CreateBOKey(lBOPropCol));
             }
             return lBOKeyCol;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _keyDefs.Values.GetEnumerator();
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _keyDefs.Count;
+            }
         }
 
     }

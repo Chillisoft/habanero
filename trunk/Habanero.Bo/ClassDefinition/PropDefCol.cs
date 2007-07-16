@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Bo;
 
 namespace Habanero.Bo.ClassDefinition
@@ -7,13 +8,16 @@ namespace Habanero.Bo.ClassDefinition
     /// <summary>
     /// Provides a collection of property definitions.
     /// </summary>
-    public class PropDefCol : DictionaryBase
+    public class PropDefCol 
     {
+        private Dictionary<string, PropDef> _propDefs;
+
         /// <summary>
         /// A constructor to create a new empty collection
         /// </summary>
         public PropDefCol() : base()
         {
+            _propDefs = new Dictionary<string, PropDef>();
         }
 
         /// <summary>
@@ -28,13 +32,13 @@ namespace Habanero.Bo.ClassDefinition
         {
             get
             {
-                if (!Dictionary.Contains(key.ToUpper()))
+                if (!Contains(key.ToUpper()))
                 {
                     throw new ArgumentException(String.Format(
                         "The property name '{0}' does not exist in the " +
                         "collection of property definitions.", key));
                 }
-                return ((PropDef) Dictionary[key.ToUpper()]);
+                return (_propDefs[key.ToUpper()]);
 
                 //else
 
@@ -44,49 +48,31 @@ namespace Habanero.Bo.ClassDefinition
         }
 
         /// <summary>
-        /// Returns a collection of the key names being stored
-		/// </summary>
-		/// TODO: Hide these members
-        public ICollection Keys
-        {
-            get { return (Dictionary.Keys); }
-        }
-
-        /// <summary>
-        /// Returns a collection of the values being stored
-        /// </summary>
-        /// TODO: Hide these members
-        public ICollection Values
-        {
-            get { return (Dictionary.Values); }
-        }
-
-        /// <summary>
         /// Add an existing property definition to the collection
         /// </summary>
         /// <param name="propDef">The existing property definition</param>
         public void Add(PropDef propDef)
         {
             CheckPropNotAlreadyAdded(propDef.PropertyName);
-            Dictionary.Add(propDef.PropertyName.ToUpper(), propDef);
+            _propDefs.Add(propDef.PropertyName.ToUpper(), propDef);
         }
 
-        /// <summary>
-        /// Create a new property definition and add it to the collection
-        /// </summary>
-        /// <param name="propName">The name of the property, e.g. surname</param>
-        /// <param name="propType">The type of the property, e.g. string</param>
-        /// <param name="propRWStatus">Rules for how a property can be
-        /// accessed. See PropReadWriteRule enumeration for more detail.</param>
-        /// <param name="databaseFieldName">The database field name - this
-        /// allows you to have a database field name that is different to the
-        /// property name, which is useful for migrating systems where
-        /// the database has already been set up</param>
-        /// <param name="defaultValue">The default value that a property 
-        /// of a new object will be set to</param>
-        /// <returns>Returns the new definition created, after it has
-        /// been added to the collection</returns>
-        public PropDef Add(string propName,
+        ///// <summary>
+        ///// Create a new property definition and add it to the collection
+        ///// </summary>
+        ///// <param name="propName">The name of the property, e.g. surname</param>
+        ///// <param name="propType">The type of the property, e.g. string</param>
+        ///// <param name="propRWStatus">Rules for how a property can be
+        ///// accessed. See PropReadWriteRule enumeration for more detail.</param>
+        ///// <param name="databaseFieldName">The database field name - this
+        ///// allows you to have a database field name that is different to the
+        ///// property name, which is useful for migrating systems where
+        ///// the database has already been set up</param>
+        ///// <param name="defaultValue">The default value that a property 
+        ///// of a new object will be set to</param>
+        ///// <returns>Returns the new definition created, after it has
+        ///// been added to the collection</returns>
+        internal PropDef Add(string propName,
                            Type propType,
                            PropReadWriteRule propRWStatus,
                            string databaseFieldName,
@@ -95,15 +81,15 @@ namespace Habanero.Bo.ClassDefinition
             CheckPropNotAlreadyAdded(propName);
             PropDef lPropDef = new PropDef(propName, propType, propRWStatus,
                                            databaseFieldName, defaultValue);
-            Dictionary.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
+            _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
             return lPropDef;
         }
 
-        /// <summary>
-        /// Creates and adds a new property definition as before, but 
-        /// assumes the database field name is the same as the property name.
-        /// </summary>
-        public PropDef Add(string propName,
+        ///// <summary>
+        ///// Creates and adds a new property definition as before, but 
+        ///// assumes the database field name is the same as the property name.
+        ///// </summary>
+        internal PropDef Add(string propName,
                            Type propType,
                            PropReadWriteRule propRWStatus,
                            object defaultValue)
@@ -111,7 +97,7 @@ namespace Habanero.Bo.ClassDefinition
             CheckPropNotAlreadyAdded(propName);
             PropDef lPropDef = new PropDef(propName, propType, propRWStatus,
                                            defaultValue);
-            Dictionary.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
+            _propDefs.Add(lPropDef.PropertyName.ToUpper(), lPropDef);
             return lPropDef;
         }
 
@@ -123,7 +109,7 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			if (Contains(propDef))
 			{
-				base.Dictionary.Remove(propDef.PropertyName.ToUpper());
+				_propDefs.Remove(propDef.PropertyName.ToUpper());
 			}
 		}
 
@@ -135,7 +121,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <returns>Returns true if found, false if not</returns>
 		protected bool Contains(PropDef propDef)
 		{
-			return (Dictionary.Contains(propDef.PropertyName.ToUpper()));
+			return (_propDefs.ContainsKey(propDef.PropertyName.ToUpper()));
 		}
 
 		/// <summary>
@@ -146,7 +132,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <returns>Returns true if found, false if not</returns>
 		public bool Contains(string key)
 		{
-			return (Dictionary.Contains(key.ToUpper()));
+			return (_propDefs.ContainsKey(key.ToUpper()));
 		}
 
         /// <summary>
@@ -162,13 +148,16 @@ namespace Habanero.Bo.ClassDefinition
         public BOPropCol CreateBOPropertyCol(bool newObject)
         {
             BOPropCol lBOPropertyCol = new BOPropCol();
-            PropDef lPropDef;
-            foreach (DictionaryEntry item in this)
+            foreach (PropDef lPropDef in this)
             {
-                lPropDef = (PropDef) item.Value;
                 lBOPropertyCol.Add(lPropDef.CreateBOProp(newObject));
             }
             return lBOPropertyCol;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _propDefs.Values.GetEnumerator();
         }
 
         /// <summary>
@@ -178,11 +167,19 @@ namespace Habanero.Bo.ClassDefinition
         /// <param name="propName">The property name</param>
         private void CheckPropNotAlreadyAdded(string propName)
         {
-            if (Dictionary.Contains(propName) || Dictionary.Contains(propName.ToUpper()))
+            if (Contains(propName) || Contains(propName.ToUpper()))
             {
                 throw new ArgumentException(String.Format(
                     "A property definition with the name '{0}' already " +
                     "exists.", propName));
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _propDefs.Count;
             }
         }
     }

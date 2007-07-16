@@ -111,9 +111,8 @@ namespace Habanero.Bo
             BOProp prop;
             BOPropCol propCol = new BOPropCol();
             BOPrimaryKey lPrimaryKey;
-            foreach (DictionaryEntry item in obj.ClassDef.PrimaryKeyDef)
+            foreach (PropDef lPropDef in obj.ClassDef.PrimaryKeyDef)
             {
-                PropDef lPropDef = (PropDef)item.Value;
                 prop = lPropDef.CreateBOProp(false);
 
                 prop.InitialiseProp(dr[prop.DatabaseFieldName]);

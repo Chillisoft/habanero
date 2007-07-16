@@ -217,6 +217,19 @@ namespace Habanero.Bo
             get { return _keyDef.KeyName; }
         }
 
+        public List<BOProp> SortedValues
+        {
+            get
+            {
+                List<BOProp> props = new List<BOProp>();
+                foreach (KeyValuePair<string, BOProp> prop in _props) {
+                    props.Add(prop.Value);
+                }
+                props.Sort(delegate(BOProp x, BOProp y) { return String.Compare(x.PropertyName, y.PropertyName); });
+                return props;
+            }
+        }
+
         /// <summary>
         /// Returns a string containing all the properties and their values
         /// </summary>
@@ -244,8 +257,7 @@ namespace Habanero.Bo
         protected internal virtual string PersistedDatabaseWhereClause(SqlStatement sql)
         {
             StringBuilder whereClause = new StringBuilder(_props.Count*30);
-            foreach (BOProp prop in _props.Values)
-            {
+            foreach (BOProp prop in SortedValues) {
                 if (whereClause.Length > 0)
                 {
                     whereClause.Append(" AND ");

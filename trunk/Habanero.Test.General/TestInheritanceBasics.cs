@@ -60,11 +60,11 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, objCircle.GetBOKeyCol().Count, "The Circle should have one key inherited from Shape");
         }
 
-        [Test]
-        public void TestObjCircleHasShapeRelationship()
-        {
-            Assert.AreEqual(1, objCircle.Relationships.Count,
-                            "The Circle object should have one relationship inherited from Shape");
-        }
+        //[Test]
+        //public void TestObjCircleHasShapeRelationship()
+        //{
+        //    Assert.AreEqual(1, objCircle.Relationships.Count,
+        //                    "The Circle object should have one relationship inherited from Shape");
+        //}
     }
 }

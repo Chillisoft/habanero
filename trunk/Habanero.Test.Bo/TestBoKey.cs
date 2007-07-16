@@ -60,5 +60,12 @@ namespace Habanero.Test.Bo
 
             Assert.AreEqual(lBOKey1.GetHashCode(), lBOKey2.GetHashCode());
         }
+
+        public void TestSortedValues()
+        {
+            BOKey lBOKey1 = mKeyDef1.CreateBOKey(mBOPropCol2);
+            BOProp lProp = mBOPropCol2["PropName"];
+            Assert.AreSame(lProp, lBOKey1.SortedValues[0]);
+        }
     }
 }

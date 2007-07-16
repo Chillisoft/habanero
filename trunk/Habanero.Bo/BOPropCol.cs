@@ -1,22 +1,23 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
-using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using NUnit.Framework;
 
 namespace Habanero.Bo
 {
     /// <summary>
     /// Manages a collection of BOProp objects
     /// </summary>
-    public class BOPropCol : DictionaryBase
+    public class BOPropCol 
     {
+        private Dictionary<string, BOProp> _boProps;
+
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
         internal BOPropCol() : base()
         {
+            _boProps = new Dictionary<string, BOProp>();
         }
 
         /// <summary>
@@ -25,14 +26,14 @@ namespace Habanero.Bo
         /// <param name="prop">The property to add</param>
         internal void Add(BOProp prop)
         {
-            if (Dictionary.Contains(prop.PropertyName.ToUpper()))
+            if (Contains(prop.PropertyName.ToUpper()))
             {
                 throw new InvalidPropertyException(String.Format(
                     "The BOProp with the name '{0}' is being added to the " +
                     "prop collection, but already exists in the collection.",
                     prop.PropertyName));
             }
-            base.Dictionary.Add(prop.PropertyName.ToUpper(), prop);
+            _boProps.Add(prop.PropertyName.ToUpper(), prop);
         }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace Habanero.Bo
         /// <param name="propName">The property name</param>
         internal void Remove(string propName)
         {
-            Dictionary.Remove(propName.ToUpper());
+            _boProps.Remove(propName.ToUpper());
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace Habanero.Bo
         /// <returns>Returns true if found</returns>
         public bool Contains(string propName)
         {
-            return Dictionary.Contains(propName.ToUpper());
+            return _boProps.ContainsKey(propName.ToUpper());
         }
 
         /// <summary>
@@ -76,14 +77,14 @@ namespace Habanero.Bo
         {
             get
             {
-                if (!Dictionary.Contains(propName.ToUpper()))
+                if (!Contains(propName.ToUpper()))
                 {
                     //TODO: This exception breaks tests
 //                    throw new InvalidPropertyNameException(String.Format(
 //                        "A BOProp with the name '{0}' does not exist in the " +
 //                        "prop collection.", propName));
                 }
-                return ((BOProp) Dictionary[propName.ToUpper()]);
+                return _boProps[propName.ToUpper()];
             }
         }
 
@@ -112,9 +113,8 @@ namespace Habanero.Bo
         /// </summary>
         internal void RestorePropertyValues()
         {
-            foreach (DictionaryEntry item in this)
+            foreach (BOProp prop in this)
             {
-                BOProp prop = (BOProp) item.Value;
                 prop.RestorePropValue();
             }
         }
@@ -125,9 +125,8 @@ namespace Habanero.Bo
         /// </summary>
         internal void BackupPropertyValues()
         {
-            foreach (DictionaryEntry item in this)
+            foreach (BOProp prop in this)
             {
-                BOProp prop = (BOProp) item.Value;
                 prop.BackupPropValue();
             }
         }
@@ -143,9 +142,8 @@ namespace Habanero.Bo
         {
             bool propsValid = true;
             StringBuilder reason = new StringBuilder();
-            foreach (DictionaryEntry item in this)
+            foreach (BOProp prop in this)
             {
-                BOProp prop = (BOProp) item.Value;
                 if (!prop.isValid)
                 {
                     reason.Append(prop.InvalidReason + Environment.NewLine);
@@ -162,9 +160,8 @@ namespace Habanero.Bo
         /// <param name="bValue">Whether the object is set as new</param>
         internal void setIsObjectNew(bool bValue)
         {
-            foreach (DictionaryEntry item in this)
+            foreach (BOProp prop in this)
             {
-                BOProp prop = (BOProp) item.Value;
                 prop.IsObjectNew = bValue;
             }
         }
@@ -174,7 +171,7 @@ namespace Habanero.Bo
         /// </summary>
         public ICollection  Values
         {
-            get { return base.Dictionary.Values; }
+            get { return _boProps.Values; }
         }
 
         /// <summary>
@@ -182,7 +179,20 @@ namespace Habanero.Bo
         /// </summary>
         public IEnumerable SortedValues
         {
-            get { return new SortedList(base.Dictionary).Values; }
+            get { return new SortedList(_boProps).Values; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return SortedValues.GetEnumerator();
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _boProps.Count;
+            }
         }
     }
 }
