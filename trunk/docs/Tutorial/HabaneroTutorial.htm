@@ -92,7 +92,7 @@ body, p {
 <body>
 
 <p><font face="Verdana" size="5" color="#000080"><b>HABANERO TUTORIAL</b></font></p>
-<p><font size="2" color="#808080">For Habanero Beta v1.0, July 2007<br>
+<p><font size="2" color="#808080">For Habanero Beta v1.0, 13 July 2007<br>
 More information can be found at: </font>
 <a href="http://www.chillisoft.co.za/habanero">
 www.chillisoft.co.za/habanero</a><br>
@@ -115,7 +115,7 @@ section.</font></p>
     <td width="100%">
     <ul>
       <li><a href="#OurStory">Our Story</a><br>
-      <font size="2">Introduces a simple storyline used to build the demo 
+      <font size="2">Introduces a simple storyline behind the demo 
       application</font><br>
 &nbsp;</li>
       <li><a href="#HabaneroThink">Understanding Habanero-think</a><br>
@@ -139,6 +139,12 @@ section.</font></p>
 &nbsp;</font></li>
       <li><a href="#Step5">Step 5: Introducing inheritance</a><br>
       <font size="2">Have supplier orders inherit parts order functionality<br>
+&nbsp;</font></li>
+      <li><a href="#Step6">Step 6: Controlling forms</a><br>
+      <font size="2">Control all the forms in your application<br>
+&nbsp;</font></li>
+      <li><a href="#Step7">Step 7: Version control</a><br>
+      <font size="2">Updating your application version<br>
 &nbsp;</font></li>
       <li><a href="#AppendixI">Appendix I - Class definitions</a><br>
       <font face="Verdana,Arial,Helvetica" size="2">Covers a list of 
@@ -406,19 +412,17 @@ application with a user interface that displays business objects:</font><ul>
 </table>
 <p><font size="3"><b>Designing the Database</b></font></p>
 <p><font size="2">Before we begin on the code side, let's set up the database 
-tables.&nbsp; At this stage you'll have to have chosen your database of choice 
+tables.&nbsp; At this stage you'll have  chosen your database of choice 
 and installed it. For this 
 tutorial we'll be using the MySQL database.&nbsp; We open the database 
 administrator and create a new schema called &quot;replace_it&quot;.&nbsp; It's time for 
 our first table, which will hold our computer parts.&nbsp; We'll call it 
-ComputerPart - no surprises there.&nbsp; We'll start with three columns.&nbsp; 
-The first is &quot;ID&quot; which serves as the primary key.&nbsp; Now there is 
+ComputerPart - no surprises there.&nbsp;  The first column is &quot;ComputerPartID&quot; which serves as the primary key.&nbsp; Now there is 
 some 
 debate on primary keys and what format they take, but for our example, our 
-primary key will be a Guid and will remain discrete.&nbsp; In MySQL, a Guid can 
-be represented as a CHAR(38) type.&nbsp; Our other two fields will be 
-Description as VARCHAR(500) and the Price as DECIMAL(10,2).&nbsp; Here is an 
-image of our structure as in the MySQL administrator: </font></p>
+primary key will be a Guid and will remain hidden from the user.&nbsp; In MySQL, a Guid can 
+be represented as a CHAR(38) type.&nbsp; Here is an 
+image of our structure in the MySQL Administrator: </font></p>
 <p align="center">
 <img border="0" src="database-part_setup.gif" width="651" height="83"></p>
 <p><b><font size="3">Setting up the Project/Solution</font></b></p>
@@ -429,21 +433,19 @@ also want to add a &quot;lib&quot; folder under &quot;Replace_it&quot;, to store
 the project, and a &quot;docs&quot; folder for any notes you want to take or documentation 
 you want to write.</font></p>
 <p><font size="2">First up we'll need to reference some DLL's that are important 
-to our application.&nbsp; Add references to the Habanero DLL's you installed as 
-instructed in Step 1.&nbsp; 
-You may also need the following DLL's:</font></p>
+to our application.&nbsp; These may need to be referenced from within your IDE (right click on the References folder and &quot;Add reference&quot;).</font></p>
 <ul>
-  <li><font size="2"><font color="#808080">log4net.dll</font> - This is the logging system that 
+  <li><font size="2"><b>Habanero*.dll</b> - These are the DLL's you installed as 
+  instructed in Step 1.</font></li>
+  <li><font size="2"><b>log4net.dll</b> - This is the logging system that 
   Habanero supports for outputting runtime information to a specified log.&nbsp; 
   See Appendix II for more information.</font></li>
-  <li><font size="2"><font color="#808080">MySql.Data.dll</font> - Used to manage MySql database 
+  <li><font size="2"><b>MySql.Data.dll</b> - Used to manage MySql database 
   connections (if you're using a different database, you'll need to make 
   appropriate adjustments here)</font></li>
-  <li><font size="2"><font color="#808080">Noogen.Winforms.dll</font> - Used to 
+  <li><font size="2"><b>Noogen.Winforms.dll</b> - Used to 
   generate combo-boxes</font></li>
 </ul>
-<p><font size="2">These will all need to be referenced from within your IDE as 
-well (right click on the References folder and &quot;Add reference&quot;).</font></p>
 <p><font size="2">Now if, for instance, you've created a new project in Visual 
 Studio 2005, you'll see that two classes have been added already: &quot;Form1.cs&quot; and 
 &quot;Program.cs&quot;.&nbsp; If you're using a different IDE, go ahead and create these 
@@ -642,8 +644,8 @@ using Habanero.Ui.Grid;</code></pre></td>
 InitializeComponents();...</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
-    <td width="100%" class="codeitself"><pre><code>BusinessObjectCollection&lt;ComputerPart&gt; computerParts = new 
-    BusinessObjectCollection&lt;ComputerPart&gt;();
+    <td width="100%" class="codeitself"><pre><code>BusinessObjectCollection&lt;BusinessObject&gt; computerParts = new 
+    BusinessObjectCollection&lt;BusinessObject&gt;(new ComputerPart());
 computerParts.Load(&quot;&quot;, &quot;&quot;);
 
 BorderLayoutManager manager = new BorderLayoutManager(this);
@@ -924,7 +926,7 @@ tables and add and edit entries.</font></p>
 <table class="code" border="1" cellspacing="0">
   <tr>
     <td width="100%" class="codeitself">
-    <pre><code>private ReadOnlyGridWithButtons grid;
+    <pre><code>private ReadOnlyGridWithButtons _grid;
 
 public Form1()
 {
@@ -934,7 +936,7 @@ public Form1()
 
     BorderLayoutManager manager = new BorderLayoutManager(this);
     SetBOCollection(new ComputerPart());
-    manager.AddControl(grid, BorderLayoutManager.Position.Centre);
+    manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
 }
 
 private void CreateMainMenu()
@@ -955,8 +957,8 @@ private void SetBOCollection(BusinessObject bo)
     BusinessObjectCollection&lt;BusinessObject&gt; boCollection = new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
     boCollection.Load(&quot;&quot;, &quot;&quot;);
 
-    grid = new ReadOnlyGridWithButtons();
-    grid.SetCollection(boCollection);
+    _grid = new ReadOnlyGridWithButtons();
+    _grid.SetCollection(boCollection);
 }</code></pre>
     </td>
   </tr>
@@ -1161,23 +1163,23 @@ namespace Replace_it
 {
 public class OrderItemCreator : IObjectCreator
 {
-    private PartsOrder parentObject;
+    private PartsOrder _parentObject;
 
     public OrderItemCreator()
     {
-        parentObject = null;
+        _parentObject = null;
     }
 
     public OrderItemCreator(PartsOrder partsOrder)
     {
-        parentObject = partsOrder;
+        _parentObject = partsOrder;
     }
 
     public Object CreateObject(IObjectEditor editor, string uiDefName)
     {
-        if (parentObject != null)
+        if (_parentObject != null)
         {
-            OrderItem orderItem = new OrderItem(parentObject);
+            OrderItem orderItem = new OrderItem(_parentObject);
             if (editor.EditObject(orderItem, uiDefName))
                 return orderItem;
         }
@@ -1207,8 +1209,8 @@ object creator (and specifying the parent customer order).</p>
 <font face="Verdana,Arial,Helvetica" size="2">
 
     <td width="705" class="codeitself">
-    <pre><code>private ReadOnlyGridWithButtons grid;
-private ReadOnlyGridWithButtons orderItemsGrid;
+    <pre><code>private ReadOnlyGridWithButtons _grid;
+private ReadOnlyGridWithButtons _orderItemsGrid;
 
 public Form1()
 {
@@ -1237,16 +1239,16 @@ private void SetBOCollection(BusinessObject bo)
     BusinessObjectCollection&lt;BusinessObject&gt; boCollection = new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
     boCollection.Load(&quot;&quot;, &quot;&quot;);
 
-    grid = new ReadOnlyGridWithButtons();
-    grid.SetCollection(boCollection);
+    _grid = new ReadOnlyGridWithButtons();
+    _grid.SetCollection(boCollection);
 }
 
 private void ShowComputerParts()
 {
     BorderLayoutManager manager = new BorderLayoutManager(this);
     SetBOCollection(new ComputerPart());
-    orderItemsGrid = null;
-    manager.AddControl(grid, BorderLayoutManager.Position.Centre);
+    _orderItemsGrid = null;
+    manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
 }
 
 private void ShowOrders(BusinessObject bo)
@@ -1254,21 +1256,21 @@ private void ShowOrders(BusinessObject bo)
     SetBOCollection(bo);
     
     BorderLayoutManager manager = new BorderLayoutManager(this);
-    manager.AddControl(grid, BorderLayoutManager.Position.Centre);
+    manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
 
-    orderItemsGrid = new ReadOnlyGridWithButtons();
+    _orderItemsGrid = new ReadOnlyGridWithButtons();
     SetOrderItemsCollection();
-    manager.AddControl(orderItemsGrid, BorderLayoutManager.Position.South);
+    manager.AddControl(_orderItemsGrid, BorderLayoutManager.Position.South);
 
-    grid.ItemSelected += delegate{ SetOrderItemsCollection(); };
+    _grid.ItemSelected += delegate{ SetOrderItemsCollection(); };
 }
 
 private void SetOrderItemsCollection()
 {
-    PartsOrder selectedOrder = (PartsOrder)grid.SelectedBusinessObject;
+    PartsOrder selectedOrder = (PartsOrder)_grid.SelectedBusinessObject;
     if (selectedOrder != null)
-        orderItemsGrid.SetCollection(selectedOrder.OrderItems);
-    orderItemsGrid.Buttons.ObjectCreator = new OrderItemCreator(selectedOrder);
+        _orderItemsGrid.SetCollection(selectedOrder.OrderItems);
+    _orderItemsGrid.Buttons.ObjectCreator = new OrderItemCreator(selectedOrder);
 }</code></pre>
 </td>
 
@@ -1417,7 +1419,7 @@ for the Customer Orders menu item, a &quot;Dispatch&quot; button is added to the
     <pre><code>fileMenu.MenuItems.Add(new MenuItem("Customer &orders", delegate
     {
         ShowOrders(new PartsOrder());
-        grid.Buttons.AddButton(&quot;Dispatch&quot;, new EventHandler(DispatchClickedHandler));
+        _grid.Buttons.AddButton(&quot;Dispatch&quot;, new EventHandler(DispatchClickedHandler));
     }));</code></pre>
 </td>
     </font>
@@ -1436,7 +1438,7 @@ there the next time we start the application.</p>
     <td width="100%" class="codeitself">
     <pre><code>private void DispatchClickedHandler(object sender, EventArgs e)
 {
-    PartsOrder selectedOrder = (PartsOrder)grid.SelectedBusinessObject;
+    PartsOrder selectedOrder = (PartsOrder)_grid.SelectedBusinessObject;
     if (selectedOrder.Delivered.Value || selectedOrder.OrderItems.Count == 0)
         return;
 
@@ -1539,7 +1541,7 @@ comparison.</p>
     <pre><code>string[] options = {"CDR", "KEY", "MOU", "HDD", "DVD", "MBD", &quot;FDD&quot;, &quot;CAS&quot;, &quot;MON&quot;, &quot;VID&quot;};
 FilterControl filter = new FilterControl(new DataViewFilterClauseFactory());
 filter.AddStringFilterComboBox("Category:", "PartCode", new ArrayList(options), false);
-filter.FilterClauseChanged += delegate{ grid.Grid.ApplyFilter(filter.GetFilterClause()); };
+filter.FilterClauseChanged += delegate{ _grid.Grid.ApplyFilter(filter.GetFilterClause()); };
 manager.AddControl(filter, BorderLayoutManager.Position.North);</code></pre>
     </td>
   </tr>
@@ -1562,7 +1564,7 @@ checkBox.CheckedChanged += delegate
            new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
        if (checkBox.Checked) col.Load("Delivered = 'false'", "");
        else col.Load("","");
-       grid.SetCollection(col);
+       _grid.SetCollection(col);
    };
 manager.AddControl(checkBox, BorderLayoutManager.Position.North);</code></pre>
     </td>
@@ -1794,12 +1796,12 @@ CustomerOrders, and we'll add a menu item for &quot;Supplier orders&quot;:</p>
     <pre><code>fileMenu.MenuItems.Add(new MenuItem("Customer &orders", delegate
     {
         ShowOrders(new CustomerOrder());
-        grid.Buttons.AddButton("Dispatch", new EventHandler(DispatchClickedHandler));
+        _grid.Buttons.AddButton("Dispatch", new EventHandler(DispatchClickedHandler));
     }));
 fileMenu.MenuItems.Add(new MenuItem("&Supplier orders", delegate
     {
         ShowOrders(new SupplierOrder());
-        grid.Buttons.AddButton("Receive", new EventHandler(DispatchClickedHandler));
+        _grid.Buttons.AddButton("Receive", new EventHandler(DispatchClickedHandler));
     }));</code></pre></td>
     </font>
   </tr>
@@ -1819,7 +1821,7 @@ fileMenu.MenuItems.Add(new MenuItem("&Supplier orders", delegate
     <td width="100%" class="codeitself">
     <pre><code>private void ReceiveClickedHandler(object sender, EventArgs e)
 {
-    PartsOrder selectedPartsOrder = (PartsOrder)grid.SelectedBusinessObject;
+    PartsOrder selectedPartsOrder = (PartsOrder)_grid.SelectedBusinessObject;
     if (selectedPartsOrder.Delivered.Value || selectedPartsOrder.OrderItems.Count == 0)
         return;
 
@@ -1880,10 +1882,551 @@ fileMenu.MenuItems.Add(new MenuItem("&Supplier orders", delegate
 
 <p>&nbsp;</p>
 
+<hr>
+
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse" bordercolor="#CCCCCC" width="100%" id="AutoNumber13" bgcolor="#F2F2F2">
+  <tr>
+    <td width="100%" bgcolor="#2F2F84"><b>
+    <font face="Verdana" color="#FFFFFF" size="4"><a name="Step6">Step 6: 
+    Controlling Forms</a></font></b></td>
+  </tr>
+  <tr>
+    <td width="100%"><font size="2">This section will cover an efficient way to control forms:
+<ul>
+  <li>Using forms controller</li>
+</ul>
+</font>
+    </td>
+  </tr>
+</table>
+
+
+
+<p>As soon as our application starts to grow, our menus will rapidly fill out 
+with forms of different shapes and sizes.&nbsp; It becomes important and 
+efficient to have a central place where we control forms.&nbsp; Another concern 
+is that our current system refreshes our grids every time we change the menu 
+item. Sometimes you'll need to switch between forms and be able to return to 
+them as they were previously.&nbsp; Habanero helps to manage this with the 
+FormController class.</p>
+
+
+
+<p>Just one note before we proceed: the FormController works only with MDI 
+forms, which is a form where you can dock other windows inside and minimise or 
+maximise them.&nbsp; The weakness of this system is that the user could start 
+opening a lot of forms without closing others down, pulling system performance 
+down.&nbsp; In your application you may want to add a &quot;Windows&quot; menu where the 
+user can see all the forms they currently have open.</p>
+
+
+
+<p><b><font size="3">Refactoring The Forms</font></b></p>
+
+
+
+<p>Switching to this new system is going to require some overhaul of our present 
+design.&nbsp; The new system will be considerably neater and more manageable.&nbsp; 
+Simply, we're going to put each form to display in a class of its own that 
+inherits from UserControl and IFormControl.&nbsp; Take this approach right from 
+the start when you are building a new application.</p>
+
+
+
+<p>The ComputerPartsControl is very similar to what we had before.&nbsp; The 
+SetForm() method is a necessary implementation used by FormController.</p>
+
+
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeclass">
+      <b><font size="2">ComputerPartsControl.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" class="codeitself">
+      <pre><code>using System.Collections;
+using System.Windows.Forms;
+using Habanero.Bo;
+using Habanero.Ui.Base;
+using Habanero.Ui.Grid;
+
+namespace Replace_it
+{
+    public class ComputerPartsControl : UserControl, IFormControl
+    {
+        public ComputerPartsControl()
+        {
+            BusinessObjectCollection&lt;BusinessObject&gt; boCollection = 
+                new BusinessObjectCollection&lt;BusinessObject&gt;(new ComputerPart());
+            boCollection.Load("", "");
+            ReadOnlyGridWithButtons grid = new ReadOnlyGridWithButtons();
+            grid.SetCollection(boCollection);
+
+            BorderLayoutManager manager = new BorderLayoutManager(this);
+            manager.AddControl(grid, BorderLayoutManager.Position.Centre);
+
+            string[] options = { "CDR", "KEY", "MOU", "HDD", "DVD", "MBD", "FDD", "CAS", "MON", "VID" };
+            FilterControl filter = new FilterControl(new DataViewFilterClauseFactory());
+            filter.AddStringFilterComboBox("Category:", "PartCode", new ArrayList(options), false);
+            filter.FilterClauseChanged += delegate { grid.Grid.ApplyFilter(filter.GetFilterClause()); };
+            manager.AddControl(filter, BorderLayoutManager.Position.North);
+        }
+
+        public void SetForm(Form form) {}
+    }
+}</code></pre>
+    </td>
+  </tr>
+</table>
+
+<p>The similarities between CustomerOrder and SupplierOrder mean we'll only need 
+one class, OrdersControl, to display and manage both.&nbsp; We'll just use a 
+ 
+BusinessObject argument to indicate which type we're working with.&nbsp; Of 
+course, alternatively you could inherit controls for each class from an abstract 
+orders control and reimplement the delivery handler.</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeclass">
+      <b><font size="2">OrdersControl.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" class="codeitself">
+      <pre><code>using System;
+using System.Windows.Forms;
+using Habanero.Bo;
+using Habanero.Ui.Base;
+using Habanero.Ui.Grid;
+
+namespace ReplaceIT
+{
+    public class OrdersControl : UserControl, IFormControl
+    {
+        private ReadOnlyGridWithButtons _grid;
+        private ReadOnlyGridWithButtons _orderItemsGrid;
+        
+        public OrdersControl(BusinessObject bo)
+        {
+            BusinessObjectCollection&lt;BusinessObject&gt; boCollection = 
+                new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
+            boCollection.Load("", "");
+            _grid = new ReadOnlyGridWithButtons();
+            _grid.SetCollection(boCollection);
+            BorderLayoutManager manager = new BorderLayoutManager(this);
+            manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+
+            _orderItemsGrid = new ReadOnlyGridWithButtons();
+            SetOrderItemsCollection();
+            manager.AddControl(_orderItemsGrid, BorderLayoutManager.Position.South);
+
+            _grid.ItemSelected += delegate { SetOrderItemsCollection(); };
+
+            CheckBox checkBox = new CheckBox();
+            checkBox.Text = "Undelivered orders only";
+            checkBox.CheckedChanged += delegate
+               {
+                   BusinessObjectCollection&lt;BusinessObject&gt; col =
+                       new BusinessObjectCollection&lt;BusinessObject&gt;(bo);
+                   if (checkBox.Checked) col.Load("Delivered = 'false'", "");
+                   else col.Load("", "");
+                   _grid.SetCollection(col);
+               };
+            manager.AddControl(checkBox, BorderLayoutManager.Position.North);
+
+            if (bo.GetType() == typeof(CustomerOrder))
+            {
+                _grid.Buttons.AddButton("Dispatch", new EventHandler(DispatchClickedHandler));
+            }
+            else if (bo.GetType() == typeof(SupplierOrder))
+            {
+                _grid.Buttons.AddButton("Receive", new EventHandler(ReceiveClickedHandler));
+            }
+        }
+
+        public void SetForm(Form form) {}
+
+        private void SetOrderItemsCollection()
+        {
+            PartsOrder selectedPartsOrder = (PartsOrder)_grid.SelectedBusinessObject;
+            if (selectedPartsOrder != null)
+                _orderItemsGrid.SetCollection(selectedPartsOrder.OrderItems);
+            _orderItemsGrid.Buttons.ObjectCreator = new OrderItemCreator(selectedPartsOrder);
+        }
+
+        private void DispatchClickedHandler(object sender, EventArgs e)
+        {
+            PartsOrder selectedPartsOrder = (PartsOrder)_grid.SelectedBusinessObject;
+            if (selectedPartsOrder.Delivered.Value || selectedPartsOrder.OrderItems.Count == 0)
+                return;
+
+            BusinessObjectCollection&lt;ComputerPart&gt; stockAvailable = 
+                new BusinessObjectCollection&lt;ComputerPart&gt;();
+            stockAvailable.Load("", "");
+
+            foreach (OrderItem orderItem in selectedPartsOrder.OrderItems)
+            {
+                ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+                if (matchingPart == null)
+                {
+                    MessageBox.Show("Could not find some of the stock on order. Please double-check.");
+                    return;
+                }
+
+                if (orderItem.Quantity > matchingPart.Stock)
+                {
+                    MessageBox.Show("Insufficient stock of part: " + matchingPart.PartCode);
+                    return;
+                }
+            }
+
+            foreach (OrderItem orderItem in selectedPartsOrder.OrderItems)
+            {
+                ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+                matchingPart.Stock -= orderItem.Quantity;
+                matchingPart.Save();
+            }
+            MessageBox.Show("Stock dispatched and stock levels amended");
+            selectedPartsOrder.Delivered = true;
+            selectedPartsOrder.Save();
+        }
+
+        private void ReceiveClickedHandler(object sender, EventArgs e)
+        {
+            PartsOrder selectedPartsOrder = (PartsOrder)_grid.SelectedBusinessObject;
+            if (selectedPartsOrder.Delivered.Value || selectedPartsOrder.OrderItems.Count == 0)
+                return;
+
+            BusinessObjectCollection&lt;ComputerPart&gt; stockAvailable = 
+                new BusinessObjectCollection&lt;ComputerPart&gt;();
+            stockAvailable.Load("", "");
+
+            foreach (OrderItem orderItem in selectedPartsOrder.OrderItems)
+            {
+                ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+                if (matchingPart == null)
+                {
+                    MessageBox.Show("Could not find some of the stock on order. Please double-check.");
+                    return;
+                }
+            }
+
+            foreach (OrderItem orderItem in selectedPartsOrder.OrderItems)
+            {
+                ComputerPart matchingPart = stockAvailable.FindByGuid(orderItem.ComputerPartID.Value);
+                matchingPart.Stock += orderItem.Quantity;
+                matchingPart.Save();
+            }
+            MessageBox.Show("Stock received and stock levels amended");
+            selectedPartsOrder.Delivered = true;
+            selectedPartsOrder.Save();
+        }
+    }
+}
+</code></pre>
+    </td>
+  </tr>
+</table>
+
+<p>Moving along, we'll create our ReplaceITFormController class that inherits 
+from FormController.&nbsp; Here's the code:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeclass">
+      <b><font size="2">ReplaceITFormController.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" class="codeitself">
+      <pre><code>using System.Windows.Forms;
+using Habanero.Ui.Base;
+using Habanero.Ui.Forms;
+
+namespace ReplaceIT
+{
+    public class ReplaceITFormController : FormController
+    {
+        public const string COMPUTER_PARTS = "Computer Parts";
+        public const string CUSTOMER_ORDERS = "Customer Orders";
+        public const string SUPPLIER_ORDERS = "Supplier Orders";
+        
+        public ReplaceITFormController(Form parentForm) : base(parentForm) { }
+        
+        protected override IFormControl GetFormControl(string heading) {
+            IFormControl formCtl = null;
+            switch (heading)
+            {
+                case COMPUTER_PARTS:
+                    formCtl = new ComputerPartsControl();
+                    break;
+                case CUSTOMER_ORDERS:
+                    formCtl = new OrdersControl(new CustomerOrder());
+                    break;
+                case SUPPLIER_ORDERS:
+                    formCtl = new OrdersControl(new SupplierOrder());
+                    break;
+            }
+            return formCtl;
+        }
+    }
+}</code></pre>
+    </td>
+  </tr>
+</table>
+
+
+
+
+<p>And last but not least, our Form1 class will look a hundred times cleaner:</p>
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeclass">
+      <font size="2"><b>Form1.cs</b> (revised)</font>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" class="codeitself">
+      <pre><code>using System.Windows.Forms;
+
+namespace ReplaceIT
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            SetBounds(0, 0, 640, 480);
+            IsMdiContainer = true;
+            CreateMainMenu();
+            InitializeComponent();
+        }
+
+        private void CreateMainMenu()
+        {
+            ReplaceITFormController formController = new ReplaceITFormController(this);
+
+            MainMenu menu = new MainMenu();
+            MenuItem fileMenu = new MenuItem("&Data");
+            fileMenu.MenuItems.Add(new MenuItem("Computer &parts", delegate
+                { formController.SetCurrentControl(ReplaceITFormController.COMPUTER_PARTS); }));
+            fileMenu.MenuItems.Add(new MenuItem("Customer &orders", delegate
+                { formController.SetCurrentControl(ReplaceITFormController.CUSTOMER_ORDERS); }));
+            fileMenu.MenuItems.Add(new MenuItem("&Supplier orders", delegate
+                { formController.SetCurrentControl(ReplaceITFormController.SUPPLIER_ORDERS); }));
+
+            menu.MenuItems.Add(fileMenu);
+            Menu = menu;
+        }
+    }
+}</code></pre>
+    </td>
+  </tr>
+</table>
+
+
+
 <font face="Verdana,Arial,Helvetica" size="2">
 
-<hr>
+<p><b><font size="3">Further Exercises</font></b></p>
+<p><font size="2">If you are looking to experiment, you could:</font></p>
+<ul>
+  <li>Add a &quot;Windows&quot; menu item that lists all the windows currently open, along 
+  with a shortcut key to switch between windows</li>
+</ul>
+
 </font>
+
+
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<hr>
+
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse" bordercolor="#CCCCCC" width="100%" id="AutoNumber14" bgcolor="#F2F2F2">
+  <tr>
+    <td width="100%" bgcolor="#2F2F84"><b>
+    <font face="Verdana" color="#FFFFFF" size="4"><a name="Step7">Step 7: 
+    Version Control</a></font></b></td>
+  </tr>
+  <tr>
+    <td width="100%"><font size="2">Here we'll tackle the thorny issue of outdated versions:
+<ul>
+  <li>Updating database versions</li>
+</ul>
+</font>
+    </td>
+  </tr>
+</table>
+
+
+
+<p><b><font size="3">Updating Database Versions</font></b></p>
+
+
+
+<p>When you start producing applications for business and industry, you'll 
+often find requests for new features and changes streaming in.&nbsp; Adding a 
+new database field is a multi-step process.&nbsp; When it comes to changing the 
+application, Habanero helps to simplify the process, so that you need only 
+change the class definitions, the class implementation and the user interface 
+(if not entirely defined in the class definitions).&nbsp; The result of those 
+changes is a new set of EXE's or DLL's that can simply replace what the client 
+has already.</p>
+
+
+
+<p>When it comes to database changes, however, you can't simply replace an 
+entire working database.&nbsp; Usually, you'd have to manually run a set of Sql 
+scripts to add or remove columns.&nbsp; Updating one database is manageable, but 
+multiple installations can be both tedious and prone to error - if you forget 
+the update, your application will crash.&nbsp; Habanero can automate this 
+database update process for 
+you using the ApplicationVersionUpgrader interface and the DBMigrator class, which will 
+cause the application itself to update the database automatically, so you only need to replace the application.</p>
+
+
+
+<p>Back at Replace IT, we recently installed the latest version of the new system and it's 
+been running smoothly.&nbsp; The databases have rapidly become populated with 
+new entries.&nbsp; However, the accounts department have found the CustomerOrder 
+form a little bit lacking - they're now asking for an address column.</p>
+
+
+
+<p>As far as code-side implementation goes, we'll only need to amend the class 
+definitions and the CustomerOrder class.&nbsp; You'll also need to amend the 
+height of the form to fit all the fields in.</p>
+
+
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeitself">
+      <pre><code>&lt;property name="Address" /&gt;
+
+...
+
+&lt;field label="Address:" property="Address"&gt;
+  &lt;parameter name="numLines" value="4" /&gt;
+&lt;/field&gt;</code></pre>
+    </td>
+  </tr>
+</table>
+
+
+
+<p>We'll need an Address property in CustomerOrder:</p>
+
+
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeitself">
+      <pre><code>public string Address
+{
+    get { return (string)GetPropertyValue("Address"); }
+    set { SetPropertyValue("Address", value); }
+}</code></pre>
+    </td>
+  </tr>
+</table>
+
+
+
+<p>Next we'll implement ApplicationVersionUpgrader, which will carry out a 
+version check every time it runs.&nbsp; If the database version is out-of-date, 
+it will carry out any migration instructions to get it up to speed.&nbsp; Here 
+is the new class:</p>
+
+
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeclass">
+      <b><font size="2">ReplaceITVersionUpgrader.cs</font></b>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" class="codeitself">
+      <pre><code>using Habanero.Base;
+using Habanero.DB;
+using Habanero.Ui.Base;
+
+namespace ReplaceIT
+{
+    public class ReplaceITVersionUpgrader : ApplicationVersionUpgrader
+    {
+        public void Upgrade()
+        {
+            DBMigrator migrator = new DBMigrator(DatabaseConnection.CurrentConnection);
+            migrator.SetSettingsStorer(GlobalRegistry.Settings);
+
+            migrator.AddMigration(1, "ALTER TABLE CustomerOrder ADD COLUMN Address VARCHAR(200);");
+
+            migrator.MigrateToLatestVersion();
+        }
+    }
+}</code></pre>
+    </td>
+  </tr>
+</table>
+
+
+
+<p>To extend this for each version change, simply add more AddMigration() calls, 
+and increment the version number.&nbsp; We'll need to point to this class right 
+at the start of our application, in Program.cs:</p>
+
+
+
+<table class="code" border="1" cellspacing="0">
+  <tr>
+    <td width="100%" class="codeitself">
+      <pre><code>HabaneroApp mainApp = new HabaneroApp("Replace_IT", "v1.0");
+mainApp.ApplicationVersionUpgrader = new ReplaceITVersionUpgrader();
+if (!mainApp.Startup()) return;</code></pre>
+    </td>
+  </tr>
+</table>
+
+
+
+<p>There's one final step: creating the database table that will store the 
+version number.&nbsp; SettingsStorer in HabaneroApp supports both 
+DatabaseSettingsStorer and ConfigFileSettingsStorer, but the latter can't be 
+written to, so we'll need a database table called &quot;settings&quot;, with the following 
+design:</p>
+
+
+
+<p align="center">
+<img border="0" src="database-settings.gif" width="651" height="101"></p>
+
+
+
+<p>As soon as you've created the table, add a single row with the SettingName as 
+&quot;DATABASE_VERSION&quot; and the SettingValue as &quot;0&quot;.&nbsp; Our application should run 
+now, and a quick check on the database should show a new field for the address.&nbsp; 
+Running the application again should make no change.</p>
+
+
+
+<p>&nbsp;</p>
+
+
+
+<p>&nbsp;</p>
+
+
+
+<hr>
+
 
 <p>&nbsp;</p>
 
@@ -1891,41 +2434,33 @@ fileMenu.MenuItems.Add(new MenuItem("&Supplier orders", delegate
 
 <table class="code" border="1" cellspacing="0">
   <tr>
-    <td width="100%" class="codeitself"><pre><code>template</code></pre></td>
+    <td width="100%" class="codeitself">
+      <pre><code>template</code></pre>
+    </td>
   </tr>
 </table>
 
 <table class="code" border="1" cellspacing="0">
   <tr>
-    <td width="100%" class="codeclass"><b><font size="2">
-    OrderItemCreator.cs</font></b></td>
+    <td width="100%" class="codeclass">
+      <b><font size="2">OrderItemCreator.cs</font></b>
+    </td>
   </tr>
   <tr>
-
-<font face="Verdana,Arial,Helvetica" size="2">
-
     <td width="100%" class="codeitself">
-
-<pre><code>class template</code></pre>
-</td>
-</tr>
+      <pre><code>class template</code></pre>
+    </td>
+  </tr>
 </table>
 
 
 
 <p><b><font size="2">Task list:</font></b></p>
 <ul>
-  <li><font size="2">X- create customer table (adapt customerorder to refer to 
-  customer number, when you create new order, have option to create new customer 
-  with popup window, in customer table maintain list of orders with related 
-  field)</font></li>
   <li><font size="2">login to application, check synchronisation (maintain 
   permissions list?)</font></li>
   <li><font size="2">progress indicators</font></li>
-  <li><font size="2">error messaging</font></li>
-  <li>version upgrader/dbmigrator</li>
   <li>using Habanero without the GUI application</li>
-  <li>fix &quot;using&quot;s</li>
 </ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -2495,7 +3030,8 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         type.&nbsp; The Guid value will be the actual value stored, while the 
         value displayed to the user (eg. in the ComboBox or grid) will be that 
         obtained from the object's ToString() method. You can also set criteria 
-        to limit which objects are loaded.</td>
+        to limit which objects are loaded.&nbsp; This list is sorted by default 
+        - if you want greater control over sort order, use databaseLookupList.</td>
       </tr>
       <tr>
         <td class="specname">Comes under:</td>
@@ -3333,7 +3869,7 @@ details of a complicated error message:</p>
   <li><b>&quot;Object reference not set to an instance of an object.&quot;</b><ul>
 
 <li>This is a .Net error thrown when a null reference is being encountered.&nbsp; 
-This is a common exception that is not related to any particular area of code, 
+This is a common exception that can be thrown for a wide range of activities, 
 so you'll need to do some further research to try and isolate the code that is 
 throwing the exception.</li>
 
@@ -3372,7 +3908,20 @@ throwing the exception.</li>
   </li>
 </ul>
   </li>
-  <li><b>User Interface issues</b><ul>
+  <li><b>Data issues</b><ul>
+
+<li>Null values being saved in not-null fields<ul>
+
+<li>Empty strings are not null.&nbsp; Ensure that you have catered for the 
+possibility of empty strings - some counter strategies include adding a unique 
+key constraint on the field or placing a &quot;minLength&quot; rule on a property.</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+  <li><b>User interface issues</b><ul>
   <li>ComboBox displaying wrong information<ul>
   <li>There are two means to display data in a ComboBox using the class 
   definitions.&nbsp; You can specify a set list of options using 
@@ -3405,7 +3954,9 @@ throwing the exception.</li>
 
 <font size="2">
 
-  <li><b>Why do I get an empty form?</b><ul>
+<ul>
+
+<li>Why do I get an empty form?<ul>
   <li>If you've created an form-based application and nothing is showing in your 
   form, then you need to decide what to show in the form, such as a grid 
   containing your data or a menu that opens other grids or forms.&nbsp; See the 
@@ -3416,6 +3967,8 @@ throwing the exception.</li>
   that the data couldn't adhere to.</li>
 </ul>
   </li>
+
+</ul>
 
 <li><b>Naming issues</b><ul>
 
@@ -3440,7 +3993,6 @@ in the assembly names.</li>
 <p><font face="Verdana" size="2">Issues to deal with:</font></p>
 <ul>
   <li><font face="Verdana" size="2">Concurrency/synch</font></li>
-  <li><font face="Verdana" size="2">Alternate DB vendors</font></li>
   <li><font face="Verdana" size="2">the concept of “persisted” values cf normal 
   values (may need to edit code comments more)</font></li>
   <li><font face="Verdana" size="2">Loaded objects in BusinessObject 
@@ -3456,8 +4008,6 @@ in the assembly names.</li>
   <li><font face="Verdana" size="2">where to reference habanero - always copy 
   dll's or environment variables on where to find them (and others like classdef 
   dtd, log4net, ms app exc)</font></li>
-  <li><font face="Verdana" size="2">links to websites with basic sql tutorial 
-  (w3c) and database vendor introduction</font></li>
 
 <font face="Verdana" size="2">
 
@@ -3473,8 +4023,6 @@ in the assembly names.</li>
   <li>give examples of configuring habaneroapp before startup()</li>
   <li>what is our policy on integer primary keys (and auto-increments)?</li>
   <li>database number generators</li>
-  <li>combine all ComputerPart fields into db right at the start, not two 
-  chapters</li>
   <li>how many directions for rel between partsorder and orderitems (and should 
   foreign key then be both ways too?)</font><font face="Verdana,Arial,Helvetica" size="2"><font face="Verdana" size="2"><br>
 &nbsp;</font></li>
