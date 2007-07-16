@@ -629,11 +629,11 @@ namespace Habanero.Bo.ClassDefinition
         /// <param name="propertyName">The property name in question</param>
         /// <returns>Returns the lookup-list if the property is
         /// found, or a NullLookupListSource object if not</returns>
-        public ILookupListSource GetLookupListSource(string propertyName)
+        public ILookupList GetLookupListSource(string propertyName)
         {
             if (this.PropDefcol.Contains(propertyName))
             {
-                return this.PropDefcol[propertyName].LookupListSource;
+                return this.PropDefcol[propertyName].LookupList;
             }
             else
             {

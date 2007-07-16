@@ -14,8 +14,8 @@ namespace Habanero.Test.Db
         DBMigrator itsDbMigrator;
         IDatabaseConnection itsConn;
         Mock itsConnMock;
-        ISettingsStorer itsSettingsStorer;
-        Mock itsSettingsStorerMock;
+        ISettings _itsSettings;
+        Mock itsSettingsMock;
         
         [SetUp]
         public void SetupFixture() {
@@ -26,8 +26,8 @@ namespace Habanero.Test.Db
             itsDbMigrator.AddMigration(2, "migration2;");
             itsDbMigrator.AddMigration(3, "migration3;");
 
-            itsSettingsStorerMock = new DynamicMock(typeof(ISettingsStorer));
-            itsSettingsStorer = (ISettingsStorer)itsSettingsStorerMock.MockInstance;            
+            itsSettingsMock = new DynamicMock(typeof(ISettings));
+            _itsSettings = (ISettings)itsSettingsMock.MockInstance;            
        
         }
         
@@ -58,20 +58,20 @@ namespace Habanero.Test.Db
         
         [Test]
         public void TestMigrate() {
-            itsDbMigrator.SetSettingsStorer(itsSettingsStorer);
+            itsDbMigrator.SetSettingsStorer(_itsSettings);
             itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { new SqlStatementCollection(new SqlStatement(itsConn.GetConnection(), "migration2;")) });
-            itsSettingsStorerMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
             itsDbMigrator.Migrate(1, 2);
             itsConnMock.Verify();
-            itsSettingsStorerMock.Verify();
+            itsSettingsMock.Verify();
         }
         
         [Test]
         public void TestGetCurrentVersion() {
-            itsDbMigrator.SetSettingsStorer(itsSettingsStorer);
-            itsSettingsStorerMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
+            itsDbMigrator.SetSettingsStorer(_itsSettings);
+            itsSettingsMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
             Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
-            itsSettingsStorerMock.Verify();
+            itsSettingsMock.Verify();
         }
         
 
@@ -83,19 +83,19 @@ namespace Habanero.Test.Db
         [Test]
         public void TestGetCurrentVersionGlobalSettings()
         {
-            itsSettingsStorerMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
-            GlobalRegistry.SettingsStorer = itsSettingsStorer;            
+            itsSettingsMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
+            GlobalRegistry.Settings = _itsSettings;            
             Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
-            GlobalRegistry.SettingsStorer = null;
-            itsSettingsStorerMock.Verify();
+            GlobalRegistry.Settings = null;
+            itsSettingsMock.Verify();
         }        
         
         
         [Test]
         public void TestMigrateTo() {
-            itsDbMigrator.SetSettingsStorer(itsSettingsStorer);
-            itsSettingsStorerMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
-            itsSettingsStorerMock.ExpectAndReturn("SetString", null, new object[] {DBMigrator.DatabaseVersionSetting, "3"});
+            itsDbMigrator.SetSettingsStorer(_itsSettings);
+            itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] {DBMigrator.DatabaseVersionSetting, "3"});
             SqlStatementCollection col = new SqlStatementCollection();
             col.Add(new SqlStatement(itsConn.GetConnection(), "migration2;"));
             col.Add(new SqlStatement(itsConn.GetConnection(), "migration3;"));
@@ -104,7 +104,7 @@ namespace Habanero.Test.Db
             itsDbMigrator.MigrateTo(3);
             
             itsConnMock.Verify();
-            itsSettingsStorerMock.Verify();
+            itsSettingsMock.Verify();
         }
         
         [Test]

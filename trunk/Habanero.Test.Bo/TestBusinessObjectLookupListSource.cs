@@ -32,7 +32,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestGetLookupList() 
         {
-            BusinessObjectLookupListSource source = new BusinessObjectLookupListSource(typeof (ContactPerson));
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof (ContactPerson));
 
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(3, col.Count);
@@ -44,7 +44,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestCallingGetLookupListTwiceOnlyAccessesDbOnce()
         {
-            BusinessObjectLookupListSource source = new BusinessObjectLookupListSource(typeof(ContactPerson));
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPerson));
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Dictionary<string, object> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreSame(col2, col);
@@ -53,7 +53,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestLookupListTimeout()
         {
-            BusinessObjectLookupListSource source = new BusinessObjectLookupListSource(typeof(ContactPerson), 100);
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPerson), 100);
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             System.Threading.Thread.Sleep(250);
             Dictionary<string, object> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);

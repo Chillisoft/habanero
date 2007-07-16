@@ -85,19 +85,23 @@ namespace Habanero.Ui.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void CtlKeyUpHandler(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.Handled = true;
-
-
-                Control nextControl = GetNextControlInTabOrder(_control.Parent, _control);
-                //_control.FindForm().GetNextControl(_control, true) ;
-
-                if (nextControl != null)
-                {
-                    nextControl.Focus();
-                }
-            }
+//            if (e.KeyCode == Keys.Enter)
+//            {
+//                e.Handled = true;
+//
+//                if (_control is TextBox && ((TextBox)_control).Multiline)
+//                {
+//                    return;
+//                }
+//
+//                Control nextControl = GetNextControlInTabOrder(_control.Parent, _control);
+//                //_control.FindForm().GetNextControl(_control, true) ;
+//
+//                if (nextControl != null)
+//                {
+//                    nextControl.Focus();
+//                }
+//            }
         }
 
         /// <summary>

@@ -5,7 +5,7 @@ namespace Habanero.Base
     /// </summary>
     public class GlobalRegistry
     {
-        private static ISettingsStorer _settingsStorer;
+        private static ISettings _settings;
         private static IExceptionNotifier _exceptionNotifier;
         //private static ISynchronisationController _synchronisationController;
         private static string _applicationName;
@@ -16,10 +16,10 @@ namespace Habanero.Base
         /// Gets and sets the application's settings storer, which stores
         /// database settings
         /// </summary>
-        public static ISettingsStorer SettingsStorer
+        public static ISettings Settings
         {
-            get { return _settingsStorer; }
-            set { _settingsStorer = value; }
+            get { return _settings; }
+            set { _settings = value; }
         }
 
         /// <summary>

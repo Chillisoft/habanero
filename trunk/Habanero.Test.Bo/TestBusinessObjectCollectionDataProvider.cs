@@ -106,8 +106,8 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestLookupListSourcePopulated()
         {
-            Object prop = itsTable.Columns["TestProp2"].ExtendedProperties["LookupListSource"];
-            Assert.AreSame(typeof (SimpleLookupListSource), prop.GetType());
+            Object prop = itsTable.Columns["TestProp2"].ExtendedProperties["LookupList"];
+            Assert.AreSame(typeof (SimpleLookupList), prop.GetType());
         }
 
 

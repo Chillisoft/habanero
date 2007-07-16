@@ -10,9 +10,9 @@ namespace Habanero.Bo.ClassDefinition
 	{
 		#region IDefClassFactory Members
 
-		public BusinessObjectLookupListSource CreateBusinessObjectLookupListSource(string assemblyName, string className)
+		public BusinessObjectLookupList CreateBusinessObjectLookupListSource(string assemblyName, string className)
 		{
-			return new BusinessObjectLookupListSource(assemblyName, className);
+			return new BusinessObjectLookupList(assemblyName, className);
 		}
 
 		public ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef,
@@ -22,9 +22,9 @@ namespace Habanero.Bo.ClassDefinition
 			return new ClassDef(assemblyName, className, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol);
 		}
 
-		public DatabaseLookupListSource CreateDatabaseLookupListSource(string sqlString, string assemblyName, string className)
+		public DatabaseLookupList CreateDatabaseLookupListSource(string sqlString, string assemblyName, string className)
 		{
-			return new DatabaseLookupListSource(sqlString, assemblyName, className);
+			return new DatabaseLookupList(sqlString, assemblyName, className);
 		}
 
 		public KeyDef CreateKeyDef(string keyName)
@@ -83,9 +83,9 @@ namespace Habanero.Bo.ClassDefinition
 				                            deleteParentAction);
 		}
 
-        public SimpleLookupListSource CreateSimpleLookupListSource(Dictionary<string, object> displayValueDictionary)
+        public SimpleLookupList CreateSimpleLookupListSource(Dictionary<string, object> displayValueDictionary)
 		{
-			return new SimpleLookupListSource(displayValueDictionary);
+			return new SimpleLookupList(displayValueDictionary);
 		}
 
 		public SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping)

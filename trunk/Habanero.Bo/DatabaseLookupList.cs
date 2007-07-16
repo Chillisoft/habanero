@@ -19,7 +19,7 @@ namespace Habanero.Bo
     /// The sql statement will need to load two fields in correct order:
     /// a Guid (such as the object ID or primary key) and a string.
     /// </summary>
-    public class DatabaseLookupListSource : ILookupListSource
+    public class DatabaseLookupList : ILookupList
     {
         private string _statement;
         private Type _lookupObjectType;
@@ -36,7 +36,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="statement">The sql statement used to specify which
         /// objects to load for the lookup-list</param>
-        public DatabaseLookupListSource(string statement) : this(statement, 10000)
+        public DatabaseLookupList(string statement) : this(statement, 10000)
         {
         }
 
@@ -47,7 +47,7 @@ namespace Habanero.Bo
         /// <param name="statement">The sql statement used to specify which
         /// objects to load for the lookup-list</param>
         /// <param name="lookupObjectType">The object type</param>
-        public DatabaseLookupListSource(string statement, Type lookupObjectType)
+        public DatabaseLookupList(string statement, Type lookupObjectType)
             : this(statement, 10000, lookupObjectType)
         {
         }
@@ -60,7 +60,7 @@ namespace Habanero.Bo
 		/// objects to load for the lookup-list</param>
 		/// <param name="assemblyName">The class type assembly name.</param>
 		/// <param name="className">The class type name</param>
-		public DatabaseLookupListSource(string statement, string assemblyName, string className)
+		public DatabaseLookupList(string statement, string assemblyName, string className)
 			: this(statement, 10000, null, assemblyName, className)
 		{
 		}
@@ -75,7 +75,7 @@ namespace Habanero.Bo
 		/// which a fresh copy will be loaded</param>
 		/// <param name="assemblyName">The class type assembly name.</param>
 		/// <param name="className">The class type name</param>
-		public DatabaseLookupListSource(string statement, int timeout, string assemblyName, string className)
+		public DatabaseLookupList(string statement, int timeout, string assemblyName, string className)
 			: this(statement, timeout, null, assemblyName, className)
 		{
 		}
@@ -87,7 +87,7 @@ namespace Habanero.Bo
         /// objects to load for the lookup-list</param>
         /// <param name="timeout">The time-out period in milliseconds after
         /// which a fresh copy will be loaded</param>
-        public DatabaseLookupListSource(string statement, int timeout) : this(statement, timeout, null)
+        public DatabaseLookupList(string statement, int timeout) : this(statement, timeout, null)
         {
         }
 
@@ -100,12 +100,12 @@ namespace Habanero.Bo
     	/// <param name="timeout">The time-out period in milliseconds after
     	/// which a fresh copy will be loaded</param>
     	/// <param name="lookupObjectType">The object type</param>
-    	public DatabaseLookupListSource(string statement, int timeout, Type lookupObjectType)
+    	public DatabaseLookupList(string statement, int timeout, Type lookupObjectType)
     		: this(statement, timeout, lookupObjectType, null, null)
         {
 		}
 
-		private DatabaseLookupListSource(string statement, int timeout, 
+		private DatabaseLookupList(string statement, int timeout, 
 			Type lookupObjectType, string assemblyName, string className)
 		{
 			_statement = statement;
@@ -191,7 +191,7 @@ namespace Habanero.Bo
 
 		#endregion Properties
 
-		#region ILookupListSource Implementation
+		#region ILookupList Implementation
 
 		/// <summary>
         /// Returns a lookup-list loaded using the sql 
@@ -234,7 +234,7 @@ namespace Habanero.Bo
             return _lookupList;
 		}
 
-		#endregion ILookupListSource Implementation
+		#endregion ILookupList Implementation
 
 		#region Type Initialisation
 

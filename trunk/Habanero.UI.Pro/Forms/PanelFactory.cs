@@ -216,6 +216,7 @@ namespace Habanero.Ui.Forms
                             {
                                 TextBox tb = (TextBox) ctl;
                                 tb.Multiline = true;
+                                tb.AcceptsReturn = true;
                                 tb.Height = tb.Height*numLines;
                                 tb.ScrollBars = ScrollBars.Vertical;
                             }

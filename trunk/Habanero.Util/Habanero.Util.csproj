@@ -109,7 +109,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ByteString.cs" />
-    <Compile Include="ConfigFileSettingsStorer.cs">
+    <Compile Include="ConfigFileSettings.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="File\TextFileLoader.cs" />

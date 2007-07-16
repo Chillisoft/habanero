@@ -40,8 +40,8 @@ namespace Habanero.Util
             if (attachmentPath != null && attachmentPath.Length > 0)
                 _attachmentPaths.Add(attachmentPath);
             _fromAddress = fromAddress;
-            if (GlobalRegistry.SettingsStorer != null)
-                _smtpServerHost = GlobalRegistry.SettingsStorer.GetString("SmtpServer");
+            if (GlobalRegistry.Settings != null)
+                _smtpServerHost = GlobalRegistry.Settings.GetString("SmtpServer");
             _smtpServerPort = 25;
         }
 
@@ -108,7 +108,7 @@ namespace Habanero.Util
             //{
             //    message.Attachments.Add(_attachmentPath);
             //}
-            //SMTP server = new SMTP(GlobalRegistry.SettingsStorer.GetString("SmtpServer"));
+            //SMTP server = new SMTP(GlobalRegistry.Settings.GetString("SmtpServer"));
             //server.Send(message);
 
             if (_smtpServerHost == null)

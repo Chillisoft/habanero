@@ -141,7 +141,7 @@
     <Compile Include="DatabaseReadException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DatabaseSettingsStorer.cs">
+    <Compile Include="DatabaseSettings.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DatabaseUtil.cs">

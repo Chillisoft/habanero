@@ -108,8 +108,8 @@ namespace Habanero.Ui.Grid
                 if (gridProp.GridControlType == typeof(DataGridViewComboBoxColumn))
                 {
                     DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();
-                    ILookupListSource source =
-                        (ILookupListSource)_dataTable.Columns[colNum].ExtendedProperties["LookupListSource"];
+                    ILookupList source =
+                        (ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupListSource"];
                     DataTable table = new DataTable();
                     table.Columns.Add("id");
                     table.Columns.Add("str");

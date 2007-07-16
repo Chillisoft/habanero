@@ -47,7 +47,7 @@ namespace Habanero.Ui.Base
         private DatabaseConfig _databaseConfig;
         private IExceptionNotifier _exceptionNotifier;
         //private ISynchronisationController _synchronisationController;
-        private ISettingsStorer _settingsStorer;
+        private ISettings _settings;
         private bool _loadClassDefs = true;
 
         /// <summary>
@@ -122,11 +122,11 @@ namespace Habanero.Ui.Base
         /// <summary>
         /// Sets the settings storer, which stores application settings such
         /// as those for the database.  This can be set with an
-        /// instantiation of DatabaseSettingsStorer (the default) or 
-        /// ConfigFileSettingsStorer, although the later is read-only.
+        /// instantiation of DatabaseSettings (the default) or 
+        /// ConfigFileSettings, although the later is read-only.
         /// </summary>
-        public ISettingsStorer SettingsStorer {
-            set { _settingsStorer = value; }
+        public ISettings Settings {
+            set { _settings = value; }
         }
 
         /// <summary>
@@ -202,8 +202,8 @@ namespace Habanero.Ui.Base
                 if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
                 DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
 
-                if (_settingsStorer == null) _settingsStorer = new DatabaseSettingsStorer();
-                GlobalRegistry.SettingsStorer = _settingsStorer;
+                if (_settings == null) _settings = new DatabaseSettings();
+                GlobalRegistry.Settings = _settings;
 
                 if (_applicationVersionUpgrader != null) _applicationVersionUpgrader.Upgrade();
 

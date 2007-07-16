@@ -45,7 +45,7 @@ namespace Habanero.Bo.Loaders
         /// Creates a business object lookup list data source from the
         /// data already read in
         /// </summary>
-        /// <returns>Returns a BusinessObjectLookupListSource object</returns>
+        /// <returns>Returns a BusinessObjectLookupList object</returns>
         protected override object Create()
         {
 			return _defClassFactory.CreateBusinessObjectLookupListSource(_assemblyName, _className);

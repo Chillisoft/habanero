@@ -138,7 +138,7 @@
     <Compile Include="IExceptionNotifier.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ILookupListSource.cs">
+    <Compile Include="ILookupList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="INumberGenerator.cs">
@@ -162,7 +162,7 @@
     <Compile Include="IParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ISettingsStorer.cs">
+    <Compile Include="ISettings.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ISqlStatement.cs">

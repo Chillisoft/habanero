@@ -10,7 +10,7 @@ namespace Habanero.Bo
     /// where the string would be displayed, but the Guid would be the
     /// value stored (for reasons of data integrity).
     /// </summary>
-    public class SimpleLookupListSource : ILookupListSource
+    public class SimpleLookupList : ILookupList
     {
         private Dictionary<string, object> _lookupList;
 
@@ -19,7 +19,7 @@ namespace Habanero.Bo
         /// collection of string-Guid pairs
         /// </summary>
         /// <param name="collection">The string-Guid pair collection</param>
-        public SimpleLookupListSource(Dictionary<string, object> collection)
+        public SimpleLookupList(Dictionary<string, object> collection)
         {
             _lookupList = collection;
         }

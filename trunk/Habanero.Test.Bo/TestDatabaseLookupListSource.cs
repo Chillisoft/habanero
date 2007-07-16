@@ -61,7 +61,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestGetLookupList()
         {
-            DatabaseLookupListSource source = new DatabaseLookupListSource(Sql);
+            DatabaseLookupList source = new DatabaseLookupList(Sql);
             Dictionary<string, object> col = source.GetLookupList(conn);
             Assert.AreEqual(3, col.Count);
             string str = "";
@@ -80,7 +80,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestCallingGetLookupListTwiceOnlyAccessesDbOnce()
         {
-            DatabaseLookupListSource source = new DatabaseLookupListSource(Sql);
+            DatabaseLookupList source = new DatabaseLookupList(Sql);
             Dictionary<string, object> col = source.GetLookupList(conn);
             Dictionary<string, object> col2 = source.GetLookupList(conn);
             Assert.AreSame(col2, col);
@@ -94,7 +94,7 @@ namespace Habanero.Test.Bo
             dbConnMock.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
                                        new object[] {});
 
-            DatabaseLookupListSource source = new DatabaseLookupListSource(Sql, 100);
+            DatabaseLookupList source = new DatabaseLookupList(Sql, 100);
             Dictionary<string, object> col = source.GetLookupList(conn);
             System.Threading.Thread.Sleep(250);
             Dictionary<string, object> col2 = source.GetLookupList(conn);

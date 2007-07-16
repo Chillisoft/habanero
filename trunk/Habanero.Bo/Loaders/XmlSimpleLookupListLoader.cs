@@ -83,7 +83,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Creates a lookup list data source from the data already read in
         /// </summary>
-        /// <returns>Returns a SimpleLookupListSource object</returns>
+        /// <returns>Returns a SimpleLookupList object</returns>
         protected override object Create()
         {
 			return _defClassFactory.CreateSimpleLookupListSource(_displayValueDictionary);

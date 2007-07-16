@@ -12,7 +12,7 @@ namespace Habanero.DB
     /// expired
     /// </summary>
     /// TODO ERIC : check caching function (in particular how does it work with dates).
-    public class DatabaseSettingsStorer : ISettingsStorer
+    public class DatabaseSettings : ISettings
     {
         private Hashtable _cachedSettings;
         private string _tableName = "settings";
@@ -21,7 +21,7 @@ namespace Habanero.DB
         /// Constructor to initialise an empty store of settings, using the table
         /// name of "settings"
         /// </summary>
-        public DatabaseSettingsStorer()
+        public DatabaseSettings()
         {
             _cachedSettings = new Hashtable();
         }
@@ -31,7 +31,7 @@ namespace Habanero.DB
         /// the table name to use to store the settings
         /// </summary>
         /// <param name="tableName">The table name in which to store settings</param>
-        public DatabaseSettingsStorer(string tableName) : this()
+        public DatabaseSettings(string tableName) : this()
         {
             _tableName = tableName;
         }

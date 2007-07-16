@@ -75,7 +75,7 @@ namespace Habanero.Test
             itsLookupCollection.Add("Test1", new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}"));
             itsLookupCollection.Add("Test2", new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}"));
             itsLookupCollection.Add("Test3", new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}"));
-            lPropDef.LookupListSource = new SimpleLookupListSource(itsLookupCollection);
+            lPropDef.LookupList = new SimpleLookupList(itsLookupCollection);
             lPropDefCol.Add(lPropDef);
                 lPropDefCol.Add(new PropDef("SampleLookup3ID", typeof (String), PropReadWriteRule.ReadWrite, "SampleLookup3ID",
                                             null));

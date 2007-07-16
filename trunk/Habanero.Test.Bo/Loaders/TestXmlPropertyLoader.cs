@@ -103,11 +103,11 @@ namespace Habanero.Test.Bo.Loaders
             PropDef def =
                 itsLoader.LoadProperty(
                     @"<property  name=""TestProp""><databaseLookupList sql=""Source"" /></property>");
-            Assert.AreSame(typeof (DatabaseLookupListSource), def.LookupListSource.GetType(),
-                           "LookupListSource should be of type DatabaseLookupList but is of type " +
-                           def.LookupListSource.GetType().Name);
-            DatabaseLookupListSource source = (DatabaseLookupListSource) def.LookupListSource;
-            Assert.AreEqual("Source", source.SqlString, "LookupListSource should be the same as that specified in xml");
+            Assert.AreSame(typeof (DatabaseLookupList), def.LookupList.GetType(),
+                           "LookupList should be of type DatabaseLookupList but is of type " +
+                           def.LookupList.GetType().Name);
+            DatabaseLookupList source = (DatabaseLookupList) def.LookupList;
+            Assert.AreEqual("Source", source.SqlString, "LookupList should be the same as that specified in xml");
             Assert.IsNull(source.ClassDef);
         }
 
@@ -122,7 +122,7 @@ namespace Habanero.Test.Bo.Loaders
 			PropDef def =
                 itsLoader.LoadProperty(
                     @"<property  name=""TestProp""><databaseLookupList sql=""Source"" class=""MyBo"" assembly=""Habanero.Test"" /></property>");
-            DatabaseLookupListSource source = (DatabaseLookupListSource) def.LookupListSource;
+            DatabaseLookupList source = (DatabaseLookupList) def.LookupList;
             Assert.IsNotNull(source.ClassDef);
             Assert.AreEqual(classDef.ClassName, source.ClassDef.ClassName);
         }
@@ -140,9 +140,9 @@ namespace Habanero.Test.Bo.Loaders
 							<item display=""s2"" value=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
 						</simpleLookupList>
 					</property>");
-            Assert.AreSame(typeof (SimpleLookupListSource), def.LookupListSource.GetType(),
-                           "LookupListSource should be of type SimpleLookupListSource");
-            SimpleLookupListSource source = (SimpleLookupListSource) def.LookupListSource;
+            Assert.AreSame(typeof (SimpleLookupList), def.LookupList.GetType(),
+                           "LookupList should be of type SimpleLookupList");
+            SimpleLookupList source = (SimpleLookupList) def.LookupList;
             Assert.AreEqual(2, source.GetLookupList().Count, "LookupList should have two keyvaluepairs");
         }
 
@@ -155,7 +155,7 @@ namespace Habanero.Test.Bo.Loaders
 					<property  name=""TestProp"">
 						<simpleLookupList options=""option1|option2|option3"" />
 					</property>");
-            SimpleLookupListSource source = (SimpleLookupListSource)def.LookupListSource;
+            SimpleLookupList source = (SimpleLookupList)def.LookupList;
             Assert.AreEqual(3, source.GetLookupList().Count, "LookupList should have three keyvaluepairs");
         }
 
@@ -171,7 +171,7 @@ namespace Habanero.Test.Bo.Loaders
 							<item display=""s2"" value=""{B89CC2C9-4CBB-4519-862D-82AB64796A58}"" />
                         </simpleLookupList>
 					</property>");
-            SimpleLookupListSource source = (SimpleLookupListSource)def.LookupListSource;
+            SimpleLookupList source = (SimpleLookupList)def.LookupList;
             Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
         }
 

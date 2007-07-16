@@ -36,7 +36,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         /// <param name="sourceElement">The source element as a string</param>
         /// <returns>Returns an ILookupListSource object</returns>
-        public ILookupListSource LoadLookupListSource(string sourceElement)
+        public ILookupList LoadLookupListSource(string sourceElement)
         {
             return this.LoadLookupListSource(this.CreateXmlElement(sourceElement));
         }
@@ -47,9 +47,9 @@ namespace Habanero.Bo.Loaders
         /// <param name="sourceElement">The source element as an XmlElement
         /// object</param>
         /// <returns>Returns an ILookupListSource object</returns>
-        public ILookupListSource LoadLookupListSource(XmlElement sourceElement)
+        public ILookupList LoadLookupListSource(XmlElement sourceElement)
         {
-            return (ILookupListSource) this.Load(sourceElement);
+            return (ILookupList) this.Load(sourceElement);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Habanero.Bo.Loaders
                 Type.GetType(typeof (XmlLookupListSourceLoader).Namespace + "." + loaderClassName, true, true);
             XmlLookupListSourceLoader loader =
 				(XmlLookupListSourceLoader)Activator.CreateInstance(loaderType, new object[] { dtdLoader, defClassFactory });
-            def.LookupListSource = loader.LoadLookupListSource(doc.DocumentElement);
+            def.LookupList = loader.LoadLookupListSource(doc.DocumentElement);
         }
     }
 }

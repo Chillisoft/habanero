@@ -47,7 +47,7 @@ namespace Habanero.Bo.Loaders
         /// Creates a database lookup list data source from the
         /// data already read in
         /// </summary>
-        /// <returns>Returns a DatabaseLookupListSource object</returns>
+        /// <returns>Returns a DatabaseLookupList object</returns>
         protected override object Create()
         {
 			return _defClassFactory.CreateDatabaseLookupListSource(_sqlString, _assemblyName, _className);

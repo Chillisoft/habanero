@@ -155,7 +155,7 @@
     <Compile Include="BOEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessObjectLookupListSource.cs">
+    <Compile Include="BusinessObjectLookupList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassDefinition\ClassDef.cs">
@@ -223,7 +223,7 @@
     <Compile Include="CriteriaManager\SqlOperator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DatabaseLookupListSource.cs">
+    <Compile Include="DatabaseLookupList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IConcurrencyControl.cs">
@@ -319,7 +319,7 @@
     <Compile Include="SelectStatementGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SimpleLookupListSource.cs" />
+    <Compile Include="SimpleLookupList.cs" />
     <Compile Include="SingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>

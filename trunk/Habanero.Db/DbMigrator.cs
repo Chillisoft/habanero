@@ -16,7 +16,7 @@ namespace Habanero.DB
         public const string DatabaseVersionSetting = "DATABASE_VERSION";
         private readonly IDatabaseConnection _connection;
         private SortedDictionary<int, SqlStatement> _migrations;
-        private ISettingsStorer _settingsStorer;
+        private ISettings _settings;
 
         /// <summary>
         /// Constructor to initialise the migrator with the connection provided
@@ -112,8 +112,8 @@ namespace Habanero.DB
         /// Sets this instance's settings storer to that specified
         /// </summary>
         /// <param name="storer">The settings storer</param>
-        public void SetSettingsStorer(ISettingsStorer storer) {
-            _settingsStorer = storer;
+        public void SetSettingsStorer(ISettings storer) {
+            _settings = storer;
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="version">The version number to set to</param>
         public void SetCurrentVersion(int version) {
-            _settingsStorer.SetString(DatabaseVersionSetting, version.ToString( ));
+            _settings.SetString(DatabaseVersionSetting, version.ToString( ));
         }
 
         /// <summary>
@@ -131,15 +131,15 @@ namespace Habanero.DB
         /// <exception cref="ArgumentNullException">Thrown if the
         /// settings storer has not been assigned</exception>
         public int CurrentVersion() {
-            if (this._settingsStorer == null && GlobalRegistry.SettingsStorer == null)
+            if (this._settings == null && GlobalRegistry.Settings == null)
             {
                 throw new ArgumentNullException("SettingsStorer",
                                                 "Please set the setting storer before using CurrentVersion as it uses the SettingsStorer to read the current version (VERSION setting)");
             }
             try {
-                if (_settingsStorer == null) return Convert.ToInt32(GlobalRegistry.SettingsStorer.GetString(DatabaseVersionSetting));
+                if (_settings == null) return Convert.ToInt32(GlobalRegistry.Settings.GetString(DatabaseVersionSetting));
 
-                return Convert.ToInt32(_settingsStorer.GetString(DatabaseVersionSetting));
+                return Convert.ToInt32(_settings.GetString(DatabaseVersionSetting));
             } catch (UserException ) {
                 return 0;
             }

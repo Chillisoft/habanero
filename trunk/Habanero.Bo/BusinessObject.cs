@@ -573,7 +573,7 @@ namespace Habanero.Bo
                     catch (FormatException)
                     {
                         if (this.ClassDef.GetPropDef(propName).HasLookupList()) {
-                            Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupListSource.GetLookupList();
+                            Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
                             propValue = lookupList[(string)propValue];
                             if (propValue is BusinessObject) {
                                 propValue = ((BusinessObject) (propValue))._primaryKey.GetGuid();
@@ -599,7 +599,7 @@ namespace Habanero.Bo
                     propValue = ((BusinessObject)propValue)._primaryKey.GetGuid();
                 else propValue = ((BusinessObject)propValue).ID.ToString();
             } else if (propValue is string && ClassDef.GetPropDef(propName).HasLookupList()) {
-                Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupListSource.GetLookupList();
+                Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
                 if (lookupList.ContainsKey((string)propValue))
                     propValue = lookupList[(string)propValue];
                 if (propValue is BusinessObject) {

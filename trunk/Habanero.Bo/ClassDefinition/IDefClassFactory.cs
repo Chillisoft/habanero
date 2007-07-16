@@ -7,11 +7,11 @@ namespace Habanero.Bo.ClassDefinition
 {
 	public interface IDefClassFactory
 	{
-		BusinessObjectLookupListSource CreateBusinessObjectLookupListSource(string assemblyName, string className);
+		BusinessObjectLookupList CreateBusinessObjectLookupListSource(string assemblyName, string className);
 
 		ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
 
-		DatabaseLookupListSource CreateDatabaseLookupListSource(string sqlString, string assemblyName, string className);
+		DatabaseLookupList CreateDatabaseLookupListSource(string sqlString, string assemblyName, string className);
 		
 		KeyDef CreateKeyDef(string keyName);
 		
@@ -31,7 +31,7 @@ namespace Habanero.Bo.ClassDefinition
 
 		MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName, string relatedClassName, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, string orderBy, DeleteParentAction deleteParentAction);
 
-		SimpleLookupListSource CreateSimpleLookupListSource(Dictionary<string, object> displayValueDictionary);
+		SimpleLookupList CreateSimpleLookupListSource(Dictionary<string, object> displayValueDictionary);
 
 		SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping);
 

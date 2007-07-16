@@ -5,7 +5,7 @@ namespace Habanero.Base
     /// <summary>
     /// An interface to model a lookup-list content provider
     /// </summary>
-    public interface ILookupListSource
+    public interface ILookupList
     {
         /// <summary>
         /// Returns the contents of a lookup-list

@@ -81,8 +81,11 @@ namespace Habanero.Ui.Forms
             _panelFactoryInfo = factory.CreatePanel();
             _boPanel = _panelFactoryInfo.Panel;
             _buttons = new ButtonControl();
-            _buttons.AddButton("&Cancel", new EventHandler(CancelButtonHandler));
-            _buttons.AddButton("&OK", new EventHandler(OKButtonHandler)).NotifyDefault(true);
+            Button cancelButton = _buttons.AddButton("&Cancel", new EventHandler(CancelButtonHandler));
+            Button okbutton = _buttons.AddButton("&OK", new EventHandler(OKButtonHandler));
+            okbutton.NotifyDefault(true);
+            AcceptButton = okbutton;
+            CancelButton = cancelButton;
  
             this.Text = def.Title;
             this.Height = def.Height;

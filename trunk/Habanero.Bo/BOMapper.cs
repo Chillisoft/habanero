@@ -36,9 +36,9 @@ namespace Habanero.Bo
         {
             PropDef def = _businessObject.ClassDef.GetPropDef(propertyName);
             //return def.GetLookupList(_businessObject.GetDatabaseConnection());
-            if (def.LookupListSource != null)
+            if (def.LookupList != null)
             {
-                return def.LookupListSource.GetLookupList(_businessObject.GetDatabaseConnection());
+                return def.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
             }
             else
             {
@@ -147,9 +147,9 @@ namespace Habanero.Bo
         public ClassDef GetLookupListClassDef(string propertyName)
         {
             PropDef def = _businessObject.ClassDef.GetPropDef(propertyName);
-            if (def.LookupListSource != null && def.LookupListSource.GetType() == typeof (DatabaseLookupListSource))
+            if (def.LookupList != null && def.LookupList.GetType() == typeof (DatabaseLookupList))
             {
-                return ((DatabaseLookupListSource) def.LookupListSource).ClassDef;
+                return ((DatabaseLookupList) def.LookupList).ClassDef;
             }
             return null;
         }

@@ -11,7 +11,7 @@ namespace Habanero.Base
     /// entry with that date as the setting.  Should time not affect your setting at all, simply use the methods
     /// without the date parameter.
     /// </summary>
-    public interface ISettingsStorer
+    public interface ISettings
     {
         /// <summary>
         /// Returns a specified setting as a string

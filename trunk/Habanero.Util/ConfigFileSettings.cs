@@ -7,14 +7,14 @@ namespace Habanero.Util
     /// <summary>
     /// Stores settings from the application's configuration file
     /// </summary>
-    public class ConfigFileSettingsStorer : ISettingsStorer
+    public class ConfigFileSettings : ISettings
     {
         private AppSettingsReader _reader;
 
         /// <summary>
         /// Constructor to initialise a new storer
         /// </summary>
-        public ConfigFileSettingsStorer()
+        public ConfigFileSettings()
         {
             _reader = new AppSettingsReader();
         }
@@ -37,7 +37,7 @@ namespace Habanero.Util
         /// <returns></returns>
         public string GetString(string settingName, DateTime date)
         {
-            throw new NotSupportedException("ConfigFileSettingsStorer does not support date ranging settings.");
+            throw new NotSupportedException("ConfigFileSettings does not support date ranging settings.");
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Habanero.Util
         /// <param name="settingValue"></param>
         public void SetString(string settingName, string settingValue)
         {
-            throw new NotImplementedException("ConfigFileSettingsStorer does not support setting settings");
+            throw new NotImplementedException("ConfigFileSettings does not support setting settings");
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Habanero.Util
         /// method is called</exception>
         public decimal GetDecimal(string settingName, DateTime date)
         {
-            throw new NotSupportedException("ConfigFileSettingsStorer does not support date ranging settings.");
+            throw new NotSupportedException("ConfigFileSettings does not support date ranging settings.");
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Habanero.Util
         /// <param name="settingValue"></param>
         public void SetDecimal(string settingName, decimal settingValue)
         {
-            throw new NotImplementedException("ConfigFileSettingsStorer does not support setting settings");
+            throw new NotImplementedException("ConfigFileSettings does not support setting settings");
         }
 
 

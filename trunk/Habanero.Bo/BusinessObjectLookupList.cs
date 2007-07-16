@@ -18,7 +18,7 @@ namespace Habanero.Bo
     /// Note: this class does not provide criteria, so the entire collection
     /// will be loaded.
     /// </summary>
-    public class BusinessObjectLookupListSource : ILookupListSource
+    public class BusinessObjectLookupList : ILookupList
     {
         private readonly int _timeout;
         private Type _boType;
@@ -33,7 +33,7 @@ namespace Habanero.Bo
         /// Constructor to initialise a new lookup-list
         /// </summary>
         /// <param name="boType">The business object type</param>
-        public BusinessObjectLookupListSource(Type boType) : this(boType, 10000)
+        public BusinessObjectLookupList(Type boType) : this(boType, 10000)
         {
             
 		}
@@ -43,7 +43,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="boType">The business object type</param>
         /// <param name="timeout">The period after which the cache expires</param>
-        public BusinessObjectLookupListSource(Type boType, int timeout)
+        public BusinessObjectLookupList(Type boType, int timeout)
         {
             
             MyBoType = boType;
@@ -56,7 +56,7 @@ namespace Habanero.Bo
     	/// </summary>
     	/// <param name="assemblyName">The assembly containing the class</param>
     	/// <param name="className">The class from which to load the values</param>
-		public BusinessObjectLookupListSource(string assemblyName, string className) : this(assemblyName, className, 10000)
+		public BusinessObjectLookupList(string assemblyName, string className) : this(assemblyName, className, 10000)
 		{
 		}
 
@@ -66,7 +66,7 @@ namespace Habanero.Bo
         /// <param name="assemblyName">The assembly containing the class</param>
         /// <param name="className">The class from which to load the values</param>
         /// <param name="timeout">The period after which the cache expires</param>
-        public BusinessObjectLookupListSource(string assemblyName, string className, int timeout)
+        public BusinessObjectLookupList(string assemblyName, string className, int timeout)
         {
             
             _assemblyName = assemblyName;
@@ -115,7 +115,7 @@ namespace Habanero.Bo
 
 		#endregion Properties
 
-		#region ILookupListSource Implementation
+		#region ILookupList Implementation
 
 		/// <summary>
         /// Returns a lookup-list for all the business objects stored under
@@ -162,6 +162,13 @@ namespace Habanero.Bo
             SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
 			foreach (BusinessObject bo in col)
 			{
+                if (sortedLookupList.ContainsKey(bo.ToString()))
+                {
+                    throw new HabaneroApplicationException(String.Format(
+                        "A duplication error occurred while compiling a business " +
+                        "object lookup list.  The key '{0}' has already been added.",
+                        bo.ToString()));
+                }
 				sortedLookupList.Add(bo.ToString(), bo);
 			}
 		    Dictionary<string, object> lookupList = new Dictionary<string, object>();
@@ -172,7 +179,7 @@ namespace Habanero.Bo
             return lookupList;
 		}
 
-		#endregion ILookupListSource Implementation
+		#endregion ILookupList Implementation
 
 		#region Type Initialisation
 
