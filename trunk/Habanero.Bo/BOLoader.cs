@@ -126,7 +126,7 @@ namespace Habanero.Bo
             BusinessObject lTempBusObj =
                 BOLoader.Instance.GetLoadedBusinessObject(lPrimaryKey.GetObjectId(), false);
             bool isReplacingSuperClassObject = false;
-            if (lTempBusObj != null && this.GetType().IsSubclassOf(lTempBusObj.GetType()))
+            if (lTempBusObj != null && obj.GetType().IsSubclassOf(lTempBusObj.GetType()))
             {
                 isReplacingSuperClassObject = true;
             }
@@ -148,7 +148,7 @@ namespace Habanero.Bo
                                                        lTempBusObj.ID.GetObjectId(), ex);
                 }
             }
-            else if (lTempBusObj.GetType().IsSubclassOf(this.GetType()))
+            else if (lTempBusObj.GetType().IsSubclassOf(obj.GetType()))
             {
                 //TODO - refresh this subclass object.  It can be done using the current datareader because
                 //the current data reader is for an object of the superclass type.
