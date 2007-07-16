@@ -7,10 +7,15 @@ namespace Habanero.DB
 {
     /// <summary>
     /// Manages database migrations that are needed to ensure that working
-    /// copies of a project have the up-to-date database structure
+    /// copies of a project have the up-to-date database structure.<br/>
+    /// This migrator requires access to an ISettings service that can read and write a
+    /// a DATABASE_VERSION setting.  Since ConfigFileSettings does not have write
+    /// support, you will either need to use DatabaseSettings or reimplement
+    /// a settings operator.  The setting will need to be in existence before this
+    /// operation will execute correctly.<br/>
+    /// This class is commonly used inside an implementation of
+    /// IApplicationVersionUpgrader.  See the tutorials for usage examples.
     /// </summary>
-    /// TODO ERIC - potential confusion over inclusivity of version number
-    /// range - see GetMigrationSql() and Migrate()
     public class DBMigrator
     {
         public const string DatabaseVersionSetting = "DATABASE_VERSION";
@@ -58,19 +63,17 @@ namespace Habanero.DB
         }
 
         /// <summary>
-        /// Returns a set of sql statements between two specified version numbers
+        /// Returns a set of sql statements between two specified version numbers,
+        /// excluding the start version and including the end version.
         /// </summary>
-        /// <param name="startVersion">The start version number (exclusive)</param>
+        /// <param name="startAfterVersion">The start version number (exclusive)</param>
         /// <param name="endVersion">The end version number (inclusive)</param>
         /// <returns>Returns a collection of sql objects</returns>
-        /// TODO ERIC - start version should be inclusive (as in "start from
-        /// that version", not "after that version").  Also see Migrate()
-        /// - or rename the parameter
-        public SqlStatementCollection  GetMigrationSql(int startVersion, int endVersion) {
+        public SqlStatementCollection  GetMigrationSql(int startAfterVersion, int endVersion) {
             SqlStatementCollection migrationSql = new SqlStatementCollection();
             foreach (KeyValuePair<int, SqlStatement> migration in _migrations)
             {
-                if (migration.Key > startVersion && migration.Key <= endVersion)
+                if (migration.Key > startAfterVersion && migration.Key <= endVersion)
                 {
                     migrationSql.Add(migration.Value);
                 }
@@ -90,21 +93,20 @@ namespace Habanero.DB
         }
 
         /// <summary>
-        /// Performs the migrations from the start version (exclusive) to the
-        /// end version (inclusive) specified.  Updates the stored version
-        /// number to the end version number specified
+        /// Performs the migrations from after the start version up to and
+        /// including the end version.  Updates the stored version
+        /// number to the end version number specified.
         /// </summary>
-        /// <param name="startVersion">The start version (exclusive)</param>
+        /// <param name="startAfterVersion">The start version (exclusive)</param>
         /// <param name="endVersion">The end version (inclusive)</param>
-        /// TODO ERIC - rename startversion as currentversion
-        public void Migrate(int startVersion, int endVersion) {
-            //for (int i = startVersion; i <= endVersion; i++)
+        public void Migrate(int startAfterVersion, int endVersion) {
+            //for (int i = startAfterVersion; i <= endVersion; i++)
             //{ 
             //    _connection.ExecuteSql(GetMigrationSql(i, i));
             //    SetCurrentVersion(endVersion);
 
             //}
-            _connection.ExecuteSql(GetMigrationSql(startVersion, endVersion));
+            _connection.ExecuteSql(GetMigrationSql(startAfterVersion, endVersion));
             SetCurrentVersion(endVersion);
         }
 
@@ -147,8 +149,8 @@ namespace Habanero.DB
 
         /// <summary>
         /// Carries out all migrations from the current version to the version
-        /// specified
-        /// Note: The DBMigrator only supports forward migrations at the moment.
+        /// specified. Note: The DBMigrator currently only supports forward 
+        /// migrations.
         /// </summary>
         /// <param name="version">The version number to migrate to (inclusive)</param>
         public void MigrateTo(int version) {
@@ -171,7 +173,9 @@ namespace Habanero.DB
         
         /// <summary>
         /// Performs all migrations available from the current version number
-        /// to the most recent version available
+        /// to the most recent version available.  This is the common-case
+        /// method used to carry out a migration, unless you require more
+        /// specific control.
         /// </summary>
         public void MigrateToLatestVersion() {
             if (CurrentVersion() < LatestVersion()) {

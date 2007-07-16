@@ -40,7 +40,7 @@ namespace Habanero.Ui.Base
         private readonly string _appName;
         private readonly string _appVersion;
         private static ILog log;
-        private ApplicationVersionUpgrader _applicationVersionUpgrader;
+        private IApplicationVersionUpgrader _applicationVersionUpgrader;
         private string _classDefsPath = "";
         private string _classDefsFileName = "ClassDefs.xml";
         private IDefClassFactory _defClassFactory;
@@ -99,7 +99,7 @@ namespace Habanero.Ui.Base
         /// out upgrades on an installed application to upgrade it to newer
         /// versions.
         /// </summary>
-        public ApplicationVersionUpgrader ApplicationVersionUpgrader {
+        public IApplicationVersionUpgrader ApplicationVersionUpgrader {
             set { _applicationVersionUpgrader = value; }
         }
 
@@ -165,7 +165,7 @@ namespace Habanero.Ui.Base
         /// configuration and connection, the class definitions, the exception
         /// notifier and the synchronisation controller.  This method also
         /// carries out any version upgrades using the 
-        /// ApplicationVersionUpgrader, if specified.
+        /// IApplicationVersionUpgrader, if specified.
         /// </summary>
         /// <returns>Returns true if launched successfully, false if not. A
         /// failed launch will result in error messages being sent to the log

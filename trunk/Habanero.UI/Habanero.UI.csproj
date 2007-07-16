@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\ApplicationVersionUpgrader.cs" />
+    <Compile Include="Base\IApplicationVersionUpgrader.cs" />
     <Compile Include="Base\BorderLayoutManager.cs" />
     <Compile Include="Base\ControlFactory.cs">
       <SubType>Code</SubType>
