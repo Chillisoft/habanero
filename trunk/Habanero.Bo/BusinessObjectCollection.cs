@@ -496,7 +496,7 @@ namespace Habanero.Bo
         /// <returns>Returns the cloned copy</returns>
         public BusinessObjectCollection<T> Clone()
         {
-            BusinessObjectCollection<T> clonedCol = new BusinessObjectCollection<T>();
+            BusinessObjectCollection<T> clonedCol = new BusinessObjectCollection<T>(_boClassDef);
             foreach (T businessObjectBase in this)
             {
                 clonedCol.Add(businessObjectBase);

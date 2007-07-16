@@ -13,7 +13,7 @@
   <SourceLookup>True</SourceLookup>
   <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
   <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
-  <Spelling Locale="en-us" />
+  <Spelling Locale="en-gb" />
   <VersionAware>False</VersionAware>
   <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
   <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
@@ -21,6 +21,7 @@
   <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
  </ProjectOptions>
  <Targets>
+  <Target Name="$(ProjectDir)/Build/Debug/Habanero.Base.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/Build/Debug/Habanero.Db.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
@@ -40,6 +41,26 @@
  </Rules>
  <FxCopReport Version="1.35">
   <Namespaces>
+   <Namespace Name="Habanero.Base">
+    <Messages>
+     <Message Id="Habanero" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+      <Issue Name="Namespace">
+       <Item>Habanero</Item>
+       <Item>Habanero.Base</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="Habanero.Base.Exceptions">
+    <Messages>
+     <Message Id="Habanero" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+      <Issue Name="Namespace">
+       <Item>Habanero</Item>
+       <Item>Habanero.Base.Exceptions</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
    <Namespace Name="Habanero.DB">
     <Messages>
      <Message Id="Habanero" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 14:26:07Z">
@@ -57,6 +78,935 @@
    </Namespace>
   </Namespaces>
   <Targets>
+   <Target Name="$(ProjectDir)/Build/Debug/Habanero.Base.dll">
+    <Modules>
+     <Module Name="habanero.base.dll">
+      <Messages>
+       <Message TypeName="AttributeStringLiteralsShouldParseCorrectly" Category="Microsoft.Usage" CheckId="CA2243" Created="2007-07-10 15:06:28Z">
+        <Issue>
+         <Item>version</Item>
+         <Item>1.0.*</Item>
+         <Item>System.Version</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2007-07-10 15:06:28Z">
+        <Issue Name="NoAttr">
+         <Item>Habanero.Base</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="Habanero.Base">
+        <Types>
+         <Type Name="CustomProperty">
+          <Messages>
+           <Message TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>CustomProperty</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name=".ctor(System.Object,System.Boolean)">
+            <Messages>
+             <Message Id="isLoading" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2007-07-10 15:06:28Z" FixCategory="Breaking">
+              <Issue>
+               <Item>isLoading</Item>
+               <Item>CustomProperty.CustomProperty(Object, Boolean)</Item>
+              </Issue>
+             </Message>
+             <Message Id="value" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2007-07-10 15:06:28Z" FixCategory="Breaking">
+              <Issue>
+               <Item>value</Item>
+               <Item>CustomProperty.CustomProperty(Object, Boolean)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetPersistValue():System.Object">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetPersistValue</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="FilterClauseCompositeOperator">
+          <Members>
+           <Member Name="OpAnd">
+            <Messages>
+             <Message Id="Member" TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Op</Item>
+               <Item>FilterClauseCompositeOperator.OpAnd</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="OpOr">
+            <Messages>
+             <Message Id="Member" TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Op</Item>
+               <Item>FilterClauseCompositeOperator.OpOr</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="FilterClauseOperator">
+          <Members>
+           <Member Name="OpEquals">
+            <Messages>
+             <Message Id="Member" TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Op</Item>
+               <Item>FilterClauseOperator.OpEquals</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="OpGreaterThanOrEqualTo">
+            <Messages>
+             <Message Id="Member" TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Op</Item>
+               <Item>FilterClauseOperator.OpGreaterThanOrEqualTo</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="OpLessThanOrEqualTo">
+            <Messages>
+             <Message Id="Member" TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Op</Item>
+               <Item>FilterClauseOperator.OpLessThanOrEqualTo</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="OpLike">
+            <Messages>
+             <Message Id="Member" TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Op</Item>
+               <Item>FilterClauseOperator.OpLike</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="GlobalRegistry">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>GlobalRegistry</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="SettingsStorer">
+            <Messages>
+             <Message Id="Storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Storer</Item>
+               <Item>GlobalRegistry.SettingsStorer:ISettingsStorer</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="UIExceptionNotifier">
+            <Messages>
+             <Message Id="Notifier" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Notifier</Item>
+               <Item>GlobalRegistry.UIExceptionNotifier:IExceptionNotifier</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HabaneroApplicationException">
+          <Messages>
+           <Message Id="Habanero" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+            <Issue Name="Type">
+             <Item>Habanero</Item>
+             <Item>Habanero.Base.HabaneroApplicationException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="ICrypter">
+          <Messages>
+           <Message Id="Crypter" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+            <Issue Name="Type">
+             <Item>Crypter</Item>
+             <Item>Habanero.Base.ICrypter</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="IDatabaseConfig">
+          <Members>
+           <Member Name="GetDatabaseConnection():Habanero.Base.IDatabaseConnection">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetDatabaseConnection</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IDatabaseConnection">
+          <Members>
+           <Member Name="GetConnection():System.Data.IDbConnection">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetConnection</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="LeftFieldDelimiter">
+            <Messages>
+             <Message Id="LeftField" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2007-07-10 15:06:28Z">
+              <Issue Name="ShouldBeDiscreteTerm">
+               <Item>LeftField</Item>
+               <Item>property</Item>
+               <Item>LeftFieldDelimiter</Item>
+               <Item>Leftfield</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="LoadDataReader(Habanero.Base.ISqlStatement,System.String):System.Data.IDataReader">
+            <Messages>
+             <Message Id="1#str" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Parameter">
+               <Item>IDatabaseConnection.LoadDataReader(ISqlStatement, String):IDataReader</Item>
+               <Item>str</Item>
+               <Item>strOrderByCriteria</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="LoadDataTable(Habanero.Base.ISqlStatement,System.String,System.String):System.Data.DataTable">
+            <Messages>
+             <Message Id="1#str" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Parameter">
+               <Item>IDatabaseConnection.LoadDataTable(ISqlStatement, String, String):DataTable</Item>
+               <Item>str</Item>
+               <Item>strSearchCriteria</Item>
+              </Issue>
+             </Message>
+             <Message Id="2#str" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Parameter">
+               <Item>IDatabaseConnection.LoadDataTable(ISqlStatement, String, String):DataTable</Item>
+               <Item>str</Item>
+               <Item>strOrderByCriteria</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IExceptionNotifier">
+          <Messages>
+           <Message Id="Notifier" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+            <Issue Name="Type">
+             <Item>Notifier</Item>
+             <Item>Habanero.Base.IExceptionNotifier</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="IFilterClause">
+          <Members>
+           <Member Name="GetFilterClauseString():System.String">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetFilterClauseString</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="INumberGenerator">
+          <Members>
+           <Member Name="GetNextNumberInt():System.Int32">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetNextNumberInt</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetUpdateTransaction():Habanero.Base.ITransaction">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetUpdateTransaction</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IObjectCreator">
+          <Members>
+           <Member Name="CreateObject(Habanero.Base.IObjectEditor,Habanero.Base.IObjectInitialiser,System.String):System.Object">
+            <Messages>
+             <Message Id="1#initialiser" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Parameter">
+               <Item>IObjectCreator.CreateObject(IObjectEditor, IObjectInitialiser, String):Object</Item>
+               <Item>initialiser</Item>
+               <Item>initialiser</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="IObjectInitialiser">
+          <Messages>
+           <Message Id="Initialiser" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+            <Issue Name="Type">
+             <Item>Initialiser</Item>
+             <Item>Habanero.Base.IObjectInitialiser</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="IParameterNameGenerator">
+          <Members>
+           <Member Name="GetNextParameterName():System.String">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetNextParameterName</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ISettingsStorer">
+          <Messages>
+           <Message Id="Storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+            <Issue Name="Type">
+             <Item>Storer</Item>
+             <Item>Habanero.Base.ISettingsStorer</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="SetBoolean(System.String,System.Boolean):System.Void">
+            <Messages>
+             <Message Id="1#" TypeName="AvoidLanguageSpecificTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1718" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>boolValue</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>boolValue</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ISqlStatement">
+          <Members>
+           <Member Name="AddParameter(System.String,System.Object):System.Data.IDbDataParameter">
+            <Messages>
+             <Message Id="0#param" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Parameter">
+               <Item>ISqlStatement.AddParameter(String, Object):IDbDataParameter</Item>
+               <Item>param</Item>
+               <Item>paramName</Item>
+              </Issue>
+             </Message>
+             <Message Id="1#param" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Parameter">
+               <Item>ISqlStatement.AddParameter(String, Object):IDbDataParameter</Item>
+               <Item>param</Item>
+               <Item>paramValue</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ITransaction">
+          <Members>
+           <Member Name="GetPersistSql():Habanero.Base.ISqlStatementCollection">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetPersistSql</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="StrID():System.String">
+            <Messages>
+             <Message Id="Str" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Str</Item>
+               <Item>ITransaction.StrID():String</Item>
+              </Issue>
+             </Message>
+             <Message Id="Member" TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706" Created="2007-07-10 15:06:28Z">
+              <Issue Name="MemberId">
+               <Item>ITransaction.StrID():String</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="TransactionCommited():System.Void">
+            <Messages>
+             <Message Id="Commited" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>Commited</Item>
+               <Item>ITransaction.TransactionCommited():Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="NullCrypter">
+          <Messages>
+           <Message Id="Crypter" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+            <Issue Name="Type">
+             <Item>Crypter</Item>
+             <Item>Habanero.Base.NullCrypter</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="UIDef">
+          <Members>
+           <Member Name="GetUIFormProperties():Habanero.Base.UIFormDef">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetUIFormProperties</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetUIGridProperties():Habanero.Base.UIGridDef">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2007-07-10 15:06:28Z">
+              <Issue Certainty="50">
+               <Item>GetUIGridProperties</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="UIFormDef">
+            <Messages>
+             <Message TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>UIFormDef</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="UIGridDef">
+            <Messages>
+             <Message TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>UIGridDef</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="UIDefCol">
+          <Messages>
+           <Message TypeName="CollectionsShouldImplementGenericInterface" Category="Microsoft.Design" CheckId="CA1010" Created="2007-07-10 15:06:28Z">
+            <Issue Certainty="60">
+             <Item>UIDefCol</Item>
+             <Item>IEnumerable</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>Habanero.Base.UIDefCol</Item>
+             <Item>Collection</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="Add(Habanero.Base.UIDef):System.Void">
+            <Messages>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>'def'</Item>
+               <Item>UIDefCol.Add(UIDef):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Contains(Habanero.Base.UIDef):System.Boolean">
+            <Messages>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>'def'</Item>
+               <Item>UIDefCol.Contains(UIDef):Boolean</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="Remove(Habanero.Base.UIDef):System.Void">
+            <Messages>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>'def'</Item>
+               <Item>UIDefCol.Remove(UIDef):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="UIFormColumn">
+          <Messages>
+           <Message TypeName="ICollectionImplementationsHaveStronglyTypedMembers" Category="Microsoft.Design" CheckId="CA1035" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>UIFormColumn</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>Habanero.Base.UIFormColumn</Item>
+             <Item>Collection</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="UIFormDef">
+          <Messages>
+           <Message TypeName="ICollectionImplementationsHaveStronglyTypedMembers" Category="Microsoft.Design" CheckId="CA1035" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>UIFormDef</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>Habanero.Base.UIFormDef</Item>
+             <Item>Collection</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="UIFormTab">
+          <Messages>
+           <Message TypeName="ICollectionImplementationsHaveStronglyTypedMembers" Category="Microsoft.Design" CheckId="CA1035" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>UIFormTab</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>Habanero.Base.UIFormTab</Item>
+             <Item>Collection</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="UIGridDef">
+          <Messages>
+           <Message TypeName="ICollectionImplementationsHaveStronglyTypedMembers" Category="Microsoft.Design" CheckId="CA1035" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>UIGridDef</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>Habanero.Base.UIGridDef</Item>
+             <Item>Collection</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="UIGridProperty+PropAlignment">
+          <Members>
+           <Member Name="centre">
+            <Messages>
+             <Message Id="Member" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>centre</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="left">
+            <Messages>
+             <Message Id="Member" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>left</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="right">
+            <Messages>
+             <Message Id="Member" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Member">
+               <Item>right</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="XmlWrapper">
+          <Members>
+           <Member Name=".ctor(System.String)">
+            <Messages>
+             <Message Id="Filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2007-07-10 15:06:28Z">
+              <Issue Name="ShouldBeCompoundWord">
+               <Item>Filename</Item>
+               <Item>parameter</Item>
+               <Item>xmlFilename</Item>
+               <Item>FileName</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.Xml.XmlDocument)">
+            <Messages>
+             <Message Id="System.Xml.XmlNode" TypeName="MembersShouldNotExposeCertainConcreteTypes" Category="Microsoft.Design" CheckId="CA1059" Created="2007-07-10 15:06:28Z">
+              <Issue Name="System.Xml.XmlNode">
+               <Item>XmlWrapper.XmlWrapper(XmlDocument)</Item>
+               <Item>System.Xml.XmlDocument</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="ReadXmlValue(System.Xml.XPath.IXPathNavigable,System.String):System.String">
+            <Messages>
+             <Message Id="Habanero.Base.Exceptions.HabaneroArgumentException.#ctor(System.String,System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>XmlWrapper.ReadXmlValue(IXPathNavigable, String):String</Item>
+               <Item>2</Item>
+               <Item>HabaneroArgumentException.HabaneroArgumentException(String, String)</Item>
+               <Item>The parent node being passed in the method ReadXMLValue() is null.</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2007-07-10 15:06:28Z" FixCategory="Breaking">
+              <Issue>
+               <Item>XmlWrapper.ReadXmlValue(IXPathNavigable, String):String</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="WriteXmlDocToFile():System.Void">
+            <Messages>
+             <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Created="2007-07-10 15:06:28Z">
+              <Issue Name="IsNullOrEmpty">
+               <Item>op_Inequality</Item>
+               <Item>String.Empty</Item>
+               <Item>XmlWrapper.WriteXmlDocToFile():Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="WriteXmlDocToFile(System.String):System.Void">
+            <Messages>
+             <Message Id="filename" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2007-07-10 15:06:28Z">
+              <Issue Name="ShouldBeCompoundWord">
+               <Item>filename</Item>
+               <Item>parameter</Item>
+               <Item>filename</Item>
+               <Item>fileName</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="WriteXmlValue(System.Xml.XPath.IXPathNavigable,System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="Habanero.Base.Exceptions.HabaneroArgumentException.#ctor(System.String,System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>XmlWrapper.WriteXmlValue(IXPathNavigable, String, String):Void</Item>
+               <Item>2</Item>
+               <Item>HabaneroArgumentException.HabaneroArgumentException(String, String)</Item>
+               <Item>The parent node being passed in the method WriteXMLValue() is null.</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="XmlDocument">
+            <Messages>
+             <Message Id="System.Xml.XmlNode" TypeName="MembersShouldNotExposeCertainConcreteTypes" Category="Microsoft.Design" CheckId="CA1059" Created="2007-07-10 15:06:28Z">
+              <Issue Name="System.Xml.XmlNode">
+               <Item>XmlWrapper.XmlDocument:XmlDocument</Item>
+               <Item>System.Xml.XmlDocument</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="Habanero.Base.Exceptions">
+        <Types>
+         <Type Name="ArgumentValidationHelper">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldBeSealed" Category="Microsoft.Design" CheckId="CA1052" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>ArgumentValidationHelper</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="CheckArgumentIsSubType(System.Type,System.String,System.Type):System.Void">
+            <Messages>
+             <Message Id="SubType" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2007-07-10 15:06:28Z">
+              <Issue Name="ShouldBeDiscreteTerm">
+               <Item>SubType</Item>
+               <Item>method</Item>
+               <Item>CheckArgumentIsSubType</Item>
+               <Item>Subtype</Item>
+              </Issue>
+             </Message>
+             <Message Id="Habanero.Base.Exceptions.ArgumentValidationHelper.CheckArgumentIsSubType(System.Type,System.String,System.Type,System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>ArgumentValidationHelper.CheckArgumentIsSubType(Type, String, Type):Void</Item>
+               <Item>4</Item>
+               <Item>ArgumentValidationHelper.CheckArgumentIsSubType(Type, String, Type, String):Void</Item>
+               <Item />
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="CheckArgumentIsSubType(System.Type,System.String,System.Type,System.String):System.Void">
+            <Messages>
+             <Message Id="SubType" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2007-07-10 15:06:28Z">
+              <Issue Name="ShouldBeDiscreteTerm">
+               <Item>SubType</Item>
+               <Item>method</Item>
+               <Item>CheckArgumentIsSubType</Item>
+               <Item>Subtype</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>'expectedType'</Item>
+               <Item>ArgumentValidationHelper.CheckArgumentIsSubType(Type, String, Type, String):Void</Item>
+              </Issue>
+              <Issue>
+               <Item>'parameterType'</Item>
+               <Item>ArgumentValidationHelper.CheckArgumentIsSubType(Type, String, Type, String):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="CheckStringArgumentNotEmpty(System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="Habanero.Base.Exceptions.HabaneroArgumentException.#ctor(System.String,System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>ArgumentValidationHelper.CheckStringArgumentNotEmpty(String, String):Void</Item>
+               <Item>2</Item>
+               <Item>HabaneroArgumentException.HabaneroArgumentException(String, String)</Item>
+               <Item>Argument cannot be a zero length string or null.</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#str" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Parameter">
+               <Item>ArgumentValidationHelper.CheckStringArgumentNotEmpty(String, String):Void</Item>
+               <Item>str</Item>
+               <Item>str</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="CheckStringArgumentNotEmpty(System.String,System.String,System.String):System.Void">
+            <Messages>
+             <Message Id="Habanero.Base.Exceptions.HabaneroArgumentException.#ctor(System.String,System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>ArgumentValidationHelper.CheckStringArgumentNotEmpty(String, String, String):Void</Item>
+               <Item>2</Item>
+               <Item>HabaneroArgumentException.HabaneroArgumentException(String, String)</Item>
+               <Item>Argument cannot be a zero length string.&#xA;__</Item>
+              </Issue>
+             </Message>
+             <Message Id="0#str" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+              <Issue Name="Parameter">
+               <Item>ArgumentValidationHelper.CheckStringArgumentNotEmpty(String, String, String):Void</Item>
+               <Item>str</Item>
+               <Item>str</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>'str'</Item>
+               <Item>ArgumentValidationHelper.CheckStringArgumentNotEmpty(String, String, String):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="CannotSaveException">
+          <Messages>
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2007-07-10 15:06:28Z">
+            <Issue Level="Error">
+             <Item>CannotSaveException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="ConsoleExceptionNotifier">
+          <Messages>
+           <Message Id="Notifier" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+            <Issue Name="Type">
+             <Item>Notifier</Item>
+             <Item>Habanero.Base.Exceptions.ConsoleExceptionNotifier</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="ExceptionUtilities">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2007-07-10 15:06:28Z">
+            <Issue>
+             <Item>ExceptionUtilities</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="Display(System.Exception):System.Void">
+            <Messages>
+             <Message TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>ExceptionUtilities.Display(Exception):Void</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>'ex'</Item>
+               <Item>ExceptionUtilities.Display(Exception):Void</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetExceptionString(System.Exception,System.Int32,System.Boolean):System.String">
+            <Messages>
+             <Message Id="indent+8" TypeName="OperationsShouldNotOverflow" Category="Microsoft.Usage" CheckId="CA2233" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>indent+8</Item>
+               <Item>ExceptionUtilities.GetExceptionString(Exception, Int32, Boolean):String</Item>
+              </Issue>
+              <Issue>
+               <Item>indent+8</Item>
+               <Item>ExceptionUtilities.GetExceptionString(Exception, Int32, Boolean):String</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>'ex'</Item>
+               <Item>ExceptionUtilities.GetExceptionString(Exception, Int32, Boolean):String</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetIndent(System.Int32):System.String">
+            <Messages>
+             <Message TypeName="DoNotConcatenateStringsInsideLoops" Category="Microsoft.Performance" CheckId="CA1818" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>ExceptionUtilities.GetIndent(Int32):String</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="HabaneroArgumentException">
+          <Messages>
+           <Message Id="Habanero" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
+            <Issue Name="Type">
+             <Item>Habanero</Item>
+             <Item>Habanero.Base.Exceptions.HabaneroArgumentException</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name=".ctor(System.String)">
+            <Messages>
+             <Message Id="System.Exception.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>HabaneroArgumentException.HabaneroArgumentException(String)</Item>
+               <Item>1</Item>
+               <Item>Exception.Exception(String)</Item>
+               <Item>The argument '____' is not valid. </Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.String,System.Exception)">
+            <Messages>
+             <Message Id="System.Exception.#ctor(System.String,System.Exception)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>HabaneroArgumentException.HabaneroArgumentException(String, Exception)</Item>
+               <Item>1</Item>
+               <Item>Exception.Exception(String, Exception)</Item>
+               <Item>The argument '____' is not valid. </Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.String,System.String)">
+            <Messages>
+             <Message Id="System.Exception.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>HabaneroArgumentException.HabaneroArgumentException(String, String)</Item>
+               <Item>1</Item>
+               <Item>Exception.Exception(String)</Item>
+               <Item>The argument '____' is not valid. __</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name=".ctor(System.String,System.String,System.Exception)">
+            <Messages>
+             <Message Id="System.Exception.#ctor(System.String,System.Exception)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 15:06:28Z">
+              <Issue>
+               <Item>HabaneroArgumentException.HabaneroArgumentException(String, String, Exception)</Item>
+               <Item>1</Item>
+               <Item>Exception.Exception(String, Exception)</Item>
+               <Item>The argument '____' is not valid. __</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
    <Target Name="$(ProjectDir)/Build/Debug/Habanero.Db.dll">
     <Modules>
      <Module Name="habanero.db.dll">
@@ -388,14 +1338,12 @@
            </Member>
            <Member Name="LoadDataReader(Habanero.Base.ISqlStatement):System.Data.IDataReader">
             <Messages>
-             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-03 14:26:07Z">
+             <Message Id="Habanero.DB.DatabaseConnectionException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-10 14:59:20Z">
               <Issue>
-               <Item>'selectSql'</Item>
                <Item>DatabaseConnection.LoadDataReader(ISqlStatement):IDataReader</Item>
-              </Issue>
-              <Issue>
-               <Item>'selectSql'</Item>
-               <Item>DatabaseConnection.LoadDataReader(ISqlStatement):IDataReader</Item>
+               <Item>1</Item>
+               <Item>DatabaseConnectionException.DatabaseConnectionException(String)</Item>
+               <Item>The sql statement object that has been passed to LoadDataReader() is null.</Item>
               </Issue>
              </Message>
             </Messages>
@@ -676,22 +1624,22 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="GetDecimal(System.String,System.DateTime):System.Decimal">
-            <Messages>
-             <Message Id="System.Convert.ToDecimal(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
-              <Issue>
-               <Item>DatabaseSettingsStorer.GetDecimal(String, DateTime):Decimal</Item>
-               <Item>System.Convert.ToDecimal(System.Object)</Item>
-               <Item>System.Convert.ToDecimal(System.Object,System.IFormatProvider)</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="GetString(System.String):System.String">
             <Messages>
              <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
               <Issue>
                <Item>DatabaseSettingsStorer.GetString(String):String</Item>
+               <Item>System.Convert.ToString(System.Object)</Item>
+               <Item>System.Convert.ToString(System.Object,System.IFormatProvider)</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="GetString(System.String,System.DateTime):System.String">
+            <Messages>
+             <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-10 14:59:20Z">
+              <Issue>
+               <Item>DatabaseSettingsStorer.GetString(String, DateTime):String</Item>
                <Item>System.Convert.ToString(System.Object)</Item>
                <Item>System.Convert.ToString(System.Object,System.IFormatProvider)</Item>
               </Issue>
@@ -1074,8 +2022,14 @@
    </User>
   </Notes>
   <Rules>
+   <Rule TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012">
+    <Resolution Name="Default">Change the accessibility of all public constructors in '{0}' to protected.</Resolution>
+   </Rule>
    <Rule TypeName="AttributeStringLiteralsShouldParseCorrectly" Category="Microsoft.Usage" CheckId="CA2243">
     <Resolution Name="Default">Change the value of argument '{0}', which is currently "{1}", to something that can be correctly parsed as {2}.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidLanguageSpecificTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1718">
+    <Resolution Name="Default">Use a generic name for parameter '{0}'. If this is not possible, replace the type identifier with a universal type name.</Resolution>
    </Rule>
    <Rule TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720">
     <Resolution Name="Default">Remove the type identifier from parameter name '{0}'.</Resolution>
@@ -1088,9 +2042,22 @@
     <Resolution Name="UseCaseInsensitiveHashtableParameter">{0} calls {1} on a Hashtable instance after converting '{2}', a parameter, to upper or lowercase. Pass a CaseInsensitiveHashCodeProvider and CaseInsensitiveComparer to the Hashtable constructor (so that keys are case-insensitive) and eliminate the unnecessary string creation.</Resolution>
     <Resolution Name="UseStringCompareParameter">{0} calls {1} after converting '{2}', a parameter, to upper or lowercase. If possible, eliminate the string creation and call the overload of String.Compare that performs a case-insensitive comparison.</Resolution>
    </Rule>
+   <Rule TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227">
+    <Resolution Name="Default">Change '{0}' to be read-only by removing the property setter.</Resolution>
+   </Rule>
+   <Rule TypeName="CollectionsShouldImplementGenericInterface" Category="Microsoft.Design" CheckId="CA1010">
+    <Resolution Name="Default">'{0}' appears to be a non-generic, strongly typed collection. Add an implementation to the instance of {1}&lt;T&gt; where T is {0}'s underlying element type.</Resolution>
+   </Rule>
+   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="ShouldBeCompoundWord">The discrete term '{0}' in {1} '{2}' should be expressed as a compound term, '{3}'.</Resolution>
+    <Resolution Name="ShouldBeDiscreteTerm">The compound word '{0}' in {1} '{2}' exists as a discrete term. If your usage is intended to be single word, case it as '{3}'.</Resolution>
+   </Rule>
    <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
     <Resolution Name="Local">'{0}', a local, is cast to type '{1}' multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
     <Resolution Name="Parameter">'{0}', a parameter, is cast to type '{1}' multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotConcatenateStringsInsideLoops" Category="Microsoft.Performance" CheckId="CA1818">
+    <Resolution Name="Default">Change {0} to use StringBuilder instead of String.Concat or +=</Resolution>
    </Rule>
    <Rule TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303">
     <Resolution Name="Default">{0} passes a literal as parameter {1} of a call to {2}. Retrieve the following string argument from a resource table instead: '{3}'</Resolution>
@@ -1098,11 +2065,21 @@
    <Rule TypeName="ExceptionsShouldBePublic" Category="Microsoft.Design" CheckId="CA1064">
     <Resolution Name="Default">Make exception class {0} public.</Resolution>
    </Rule>
+   <Rule TypeName="ICollectionImplementationsHaveStronglyTypedMembers" Category="Microsoft.Design" CheckId="CA1035">
+    <Resolution Name="Default">'{0}' should provide a strongly typed implementation of ICollection.CopyTo.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Member">Correct the casing of member name '{0}'.</Resolution>
+   </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
     <Resolution Name="Member">Correct the spelling of the unrecognized token '{0}' in member name '{1}'.</Resolution>
     <Resolution Name="Namespace">Correct the spelling of the unrecognized token '{0}' in namespace '{1}'.</Resolution>
     <Resolution Name="Parameter">In method {0}, correct the spelling of the unrecognized token '{1}' in parameter name '{2}' or strip it entirely if it represents any sort of hungarian notation.</Resolution>
+    <Resolution Name="ParameterOneLetter">In method {0}, consider providing a more meaningful name than the one-letter parameter name '{1}'.</Resolution>
     <Resolution Name="Type">Correct the spelling of the unrecognized token '{0}' in type name '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
+    <Resolution Name="Default">Rename '{0}' to end in '{1}'.</Resolution>
    </Rule>
    <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">
     <Resolution Name="Default">Make '{0}' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of '{1}' and is visible to derived classes.</Resolution>
@@ -1113,8 +2090,17 @@
    <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
     <Resolution Name="NoAttr">'{0}' should be marked with CLSCompliantAttribute and its value should be true.</Resolution>
    </Rule>
+   <Rule TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237">
+    <Resolution Name="Default">Add [Serializable] to '{0}' as this type implements ISerializable.</Resolution>
+   </Rule>
    <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
     <Resolution Name="Default">The 'this' parameter (or 'Me' in VB) of {0} is never used. Mark the member as static (or Shared in VB) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   </Rule>
+   <Rule TypeName="MembersShouldNotExposeCertainConcreteTypes" Category="Microsoft.Design" CheckId="CA1059">
+    <Resolution Name="System.Xml.XmlNode">Modify member '{0}' so that it no longer exposes the concrete type {1}. Use IXPathNavigable to represent Xml data sources.</Resolution>
+   </Rule>
+   <Rule TypeName="OperationsShouldNotOverflow" Category="Microsoft.Usage" CheckId="CA2233">
+    <Resolution Name="Default">Correct the potential overflow in the operation '{0}' in '{1}'.</Resolution>
    </Rule>
    <Rule TypeName="OverrideLinkDemandsShouldBeIdenticalToBase" Category="Microsoft.Security" CheckId="CA2123">
     <Resolution Name="BaseOnly">Add the following security attribute to {0} in order to match a LinkDemand on base method {1}:  {2}.</Resolution>
@@ -1131,17 +2117,30 @@
    <Rule TypeName="SetLocaleForDataTypes" Category="Microsoft.Globalization" CheckId="CA1306">
     <Resolution Name="Default">Be sure to set the {0} Locale property wherever '{1}' creates an instance of that type.</Resolution>
    </Rule>
+   <Rule TypeName="ShortAcronymsShouldBeUppercase" Category="Microsoft.Naming" CheckId="CA1706">
+    <Resolution Name="Member">Correct the capitalization of '{0}' in member name '{1}'.</Resolution>
+    <Resolution Name="MemberId">'Id' is an abbreviation and therefore is not subject to acronym casing guidelines. Correct the capitalization of 'ID' in member name '{0}' by changing it to 'Id'.</Resolution>
+   </Rule>
    <Rule TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304">
     <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide a CultureInfo. This should be replaced with a call to {2}.</Resolution>
    </Rule>
    <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
     <Resolution Name="Default">{0} makes a call to {1} that does not explicitly provide an IFormatProvider. This should be replaced with a call to {2}.</Resolution>
    </Rule>
+   <Rule TypeName="SpecifyMessageBoxOptions" Category="Microsoft.Globalization" CheckId="CA1300">
+    <Resolution Name="Default">Change {0} to call the MessageBox.Show overload that specifies MessageBoxOptions, and make sure to set MessageBoxOptions.RightAlign and MessageBoxOptions.RtlReading if RightToLeft is set to RightToLeft.Yes on the parent control. If it is set to RightTolLeft.Inherit, check its parent until a value indicating Yes or No is found.</Resolution>
+   </Rule>
    <Rule TypeName="StaticHolderTypesShouldBeSealed" Category="Microsoft.Design" CheckId="CA1052">
     <Resolution Name="Default">Mark '{0}' as sealed.</Resolution>
    </Rule>
+   <Rule TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053">
+    <Resolution Name="Default">Remove the public constructors from '{0}'.</Resolution>
+   </Rule>
    <Rule TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820">
     <Resolution Name="IsNullOrEmpty">Replace the call to String.{0}({1}) in '{2}' with a call to String.IsNullOrEmpty.</Resolution>
+   </Rule>
+   <Rule TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024">
+    <Resolution Name="Default">Change '{0}' to a property if appropriate.</Resolution>
    </Rule>
    <Rule TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062">
     <Resolution Name="Default">Validate parameter {0} passed to externally visible method {1}.</Resolution>

@@ -23,11 +23,12 @@ namespace Habanero.Test.Bo.Loaders
         {
             UIFormProperty uiProp =
                 loader.LoadUIProperty(
-                    @"<field label=""testlabel"" property=""testpropname"" type=""Button"" mapperType=""testmappertypename"" editable=""false"" />");
+                    @"<field label=""testlabel"" property=""testpropname"" type=""Button"" mapperType=""testmappertypename"" mapperAssembly=""testmapperassembly"" editable=""false"" />");
             Assert.AreEqual("testlabel", uiProp.Label);
             Assert.AreEqual("testpropname", uiProp.PropertyName);
             Assert.AreEqual("Button", uiProp.ControlType.Name);
             Assert.AreEqual("testmappertypename", uiProp.MapperTypeName);
+            Assert.AreEqual("testmapperassembly", uiProp.MapperAssembly);
             Assert.AreEqual(false, uiProp.Editable);
         }
 
@@ -53,5 +54,6 @@ namespace Habanero.Test.Bo.Loaders
             Assert.AreEqual("TestValue", uiProp.GetParameterValue("TestAtt"));
             Assert.AreEqual("TestValue2", uiProp.GetParameterValue("TestAtt2"));
         }
+
     }
 }

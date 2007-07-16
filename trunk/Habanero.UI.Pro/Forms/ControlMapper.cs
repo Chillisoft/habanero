@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Base;
+using Habanero.Util.File;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
@@ -219,7 +220,7 @@ namespace Habanero.Ui.Forms
         /// <exception cref="UnknownTypeNameException">An exception is
         /// thrown if the mapperTypeName does not provide a type that is
         /// a subclass of the ControlMapper class.</exception>
-        public static ControlMapper Create(string mapperTypeName, Control ctl, string propertyName, bool isReadOnceOnly)
+        public static ControlMapper Create(string mapperTypeName, string mapperAssembly, Control ctl, string propertyName, bool isReadOnceOnly)
         {
             if (mapperTypeName == "TextBoxMapper" && !(ctl is TextBox) && !(ctl is PasswordTextBox))
             {
@@ -238,8 +239,13 @@ namespace Habanero.Ui.Forms
                 }
             }
 
-            string nspace = typeof (ControlMapper).Namespace;
-            Type mapperType = Type.GetType(nspace + "." + mapperTypeName);
+            Type mapperType;
+            if (String.IsNullOrEmpty(mapperAssembly)) {
+                string nspace = typeof (ControlMapper).Namespace;
+                mapperType = Type.GetType(nspace + "." + mapperTypeName);
+            } else {
+                mapperType = TypeLoader.LoadType(mapperAssembly, mapperTypeName);
+            }
             ControlMapper mapper;
             if (mapperType != null && mapperType.IsSubclassOf(typeof (ControlMapper)))
             {

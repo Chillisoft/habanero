@@ -43,7 +43,7 @@ namespace Habanero.Bo.ClassDefinition
 
 		UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName);
 
-		UIFormProperty CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, bool editable, System.Collections.Hashtable propertyAttributes);
+		UIFormProperty CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly, bool editable, System.Collections.Hashtable propertyAttributes);
 
 		UIFormTab CreateUIFormTab();
 

@@ -70,5 +70,12 @@ namespace Habanero.Test.Ui.Application
             bo2.SetPropertyValue("TestProp", "UpdatedValue");
             Assert.AreEqual("UpdatedValue", itsDataSource.Rows[1][1]);
         }
+
+        [Test]
+        public void TestGetCollectionClone()
+        {
+            BusinessObjectCollection<BusinessObject> cloneCol = grid.GetCollectionClone();
+            Assert.AreEqual(cloneCol.Count,2 );
+        }
     }
 }

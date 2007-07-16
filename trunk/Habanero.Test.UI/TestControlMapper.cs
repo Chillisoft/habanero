@@ -34,8 +34,17 @@ namespace Habanero.Test.Ui.BoControls
         public void TestCreateMapper()
         {
             TextBox b = new TextBox();
-            ControlMapper mapper = ControlMapper.Create("TextBoxMapper", b, "Test", false);
+            ControlMapper mapper = ControlMapper.Create("TextBoxMapper", "", b, "Test", false);
             Assert.AreSame(typeof (TextBoxMapper), mapper.GetType());
+            Assert.AreSame(b, mapper.Control);
+        }
+
+        [Test]
+        public void TestCreateMapperWithAssembly()
+        {
+            TextBox b = new TextBox();
+            ControlMapper mapper = ControlMapper.Create("Habanero.UI.Forms.TextBoxMapper", "Habanero.UI.Pro", b, "Test", false);
+            Assert.AreSame(typeof(TextBoxMapper), mapper.GetType());
             Assert.AreSame(b, mapper.Control);
         }
 

@@ -65,10 +65,7 @@ namespace Habanero.Bo.Loaders
         protected override object Create()
         {
 			return _defClassFactory.CreateUIFormProperty(_label, _propertyName, 
-				_controlType, _mapperTypeName, _editable, _propertyAttributes);
-			//return
-			//    new UIFormProperty(_label, _propertyName, _controlType, _mapperTypeName, _editable,
-			//                       _propertyAttributes);
+				_controlType, _mapperTypeName, _mapperTypeAssembly, _editable, _propertyAttributes);
         }
 
         /// <summary>
@@ -100,7 +97,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadMapperTypeAssembly()
         {
-            _mapperTypeAssembly = _reader.GetAttribute("mapperTypeAssembly");
+            _mapperTypeAssembly = _reader.GetAttribute("mapperAssembly");
         }
 
         /// <summary>

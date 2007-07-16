@@ -259,7 +259,7 @@ namespace Habanero.Ui.Forms
                         upDown.Enter += new EventHandler(UpDownEnterHandler);
                     }
                     ControlMapper ctlMapper =
-                        ControlMapper.Create(property.MapperTypeName, ctl, property.PropertyName,  !property.Editable);
+                        ControlMapper.Create(property.MapperTypeName, property.MapperAssembly, ctl, property.PropertyName,  !property.Editable);
                     ctlMapper.SetPropertyAttributes(property.Parameters);
                     controlMappers.Add(ctlMapper);
                     ctlMapper.BusinessObject = _boArray[0];

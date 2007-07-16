@@ -110,18 +110,19 @@ namespace Habanero.Ui.Grid
                     DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();
                     ILookupList source =
                         (ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupListSource"];
-                    DataTable table = new DataTable();
-                    table.Columns.Add("id");
-                    table.Columns.Add("str");
+                    if (source != null) {
+                        DataTable table = new DataTable();
+                        table.Columns.Add("id");
+                        table.Columns.Add("str");
 
-                    table.LoadDataRow(new object[] { "", "" }, true);
-                    foreach (KeyValuePair<string, object> pair in source.GetLookupList())
-                    {
-                        table.LoadDataRow(new object[] { pair.Value, pair.Key }, true);
+                        table.LoadDataRow(new object[] {"", ""}, true);
+                        foreach (KeyValuePair<string, object> pair in source.GetLookupList()) {
+                            table.LoadDataRow(new object[] {pair.Value, pair.Key}, true);
+                        }
+                        comboBoxCol.DataSource = table;
+                        comboBoxCol.ValueMember = "str";
+                        comboBoxCol.DisplayMember = "str";
                     }
-                    comboBoxCol.DataSource = table;
-                    comboBoxCol.ValueMember = "str";
-                    comboBoxCol.DisplayMember = "str";
                     comboBoxCol.DataPropertyName = dataColumn.ColumnName;
                     col = comboBoxCol;
                 }

@@ -15,6 +15,7 @@ namespace Habanero.Base
         private Type _controlType;
         private bool _editable;
         private readonly Hashtable _parameters;
+        private string _mapperAssembly;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -26,12 +27,13 @@ namespace Habanero.Base
         /// <param name="editable">Whether the control is read-only (cannot
         /// be edited directly)</param>
         /// <param name="parameters">The property attributes</param>
-        public UIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName,
+        public UIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
                               bool editable, Hashtable parameters)
         {
             this._label = label;
             this._propertyName = propertyName;
             this._mapperTypeName = mapperTypeName;
+            this._mapperAssembly = mapperAssembly;
             this._editable = editable;
             this._parameters = parameters;
             this._controlType = controlType;
@@ -105,6 +107,11 @@ namespace Habanero.Base
         public Hashtable Parameters
         {
             get { return this._parameters; }
+        }
+
+        public string MapperAssembly
+        {
+            get { return _mapperAssembly; }
         }
     }
 }
