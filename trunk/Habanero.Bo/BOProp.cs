@@ -439,7 +439,7 @@ namespace Habanero.Bo
         /// <summary>
         /// Returns the property type
         /// </summary>
-        internal Type PropertyType
+        public Type PropertyType
         {
             get { return _propDef.PropType; }
         }

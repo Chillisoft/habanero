@@ -53,7 +53,7 @@ namespace Habanero.Bo
         /// <param name="propName">The property name</param>
         internal void Remove(string propName)
         {
-            base.Dictionary.Remove(propName.ToUpper());
+            Dictionary.Remove(propName.ToUpper());
         }
 
         /// <summary>
@@ -61,9 +61,9 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns true if found</returns>
-        internal bool Contains(string propName)
+        public bool Contains(string propName)
         {
-            return (Dictionary.Contains(propName.ToUpper()));
+            return Dictionary.Contains(propName.ToUpper());
         }
 
         /// <summary>
@@ -177,13 +177,12 @@ namespace Habanero.Bo
             get { return base.Dictionary.Values; }
         }
 
-        public IEnumerable SortedValues {
-            get { return new SortedList(base.Dictionary ).Values ;
-                }
-            }
-        
+        /// <summary>
+        /// Returns the collection of property values as a SortedList
+        /// </summary>
+        public IEnumerable SortedValues
+        {
+            get { return new SortedList(base.Dictionary).Values; }
+        }
     }
-
-
-
 }

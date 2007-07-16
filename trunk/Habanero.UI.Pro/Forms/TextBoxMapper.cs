@@ -88,9 +88,11 @@ namespace Habanero.Ui.Forms
 
         private Type GetPropertyType()
         {
-            if (_businessObject == null ) return null;
-            if (!_businessObject.ClassDef.PropDefcol.Contains(_propertyName)) return null;
-            return _businessObject.ClassDef.PropDefcol[_propertyName].PropertyType;
+            if (_businessObject == null || !_businessObject.Props.Contains(_propertyName))
+            {
+                 return null;
+            }
+            return _businessObject.Props[_propertyName].PropertyType;
         }
 
         /// <summary>
