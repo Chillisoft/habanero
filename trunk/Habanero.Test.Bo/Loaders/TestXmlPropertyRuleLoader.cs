@@ -16,9 +16,9 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestRuleOfInteger() {
             XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
+            PropRuleBase rule = loader.LoadRule(typeof(int).Name, @"<rule name=""Test Rule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
             Assert.AreEqual("PropRuleInteger", rule.GetType().Name, "Incorrect rule type created.");
-            Assert.AreEqual("TestRule", rule.Name, "Name name is not being read from xml correctly.");
+            Assert.AreEqual("Test Rule", rule.Name, "Name name is not being read from xml correctly.");
             Assert.AreEqual("Test Message", rule.Message, "Message is not being read from xml correctly.");
             //Assert.AreSame(typeof(int), rule.PropertyType,
             //                   "A propRuleInteger should have int as its property type.");
