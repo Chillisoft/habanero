@@ -99,25 +99,32 @@ namespace Habanero.Bo
         /// <summary>
         /// Indicates whether the property value is valid against the rules
         /// </summary>
+        /// <param name="propName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal override bool isPropValueValid(object propValue, ref string errorMessage)
+        protected internal override bool isPropValueValid(string propName, object propValue, ref string errorMessage)
         {
-            bool valueValid = base.isPropValueValid(propValue, ref errorMessage);
+            bool valueValid = base.isPropValueValid(propName, propValue, ref errorMessage);
             if (propValue is decimal)
             {
                 decimal decimalPropRule = (decimal)propValue;
                 if (decimalPropRule < _minValue)
                 {
+                    errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
+                    propName, Name);
+                    if (Message != null) errorMessage += Message;
+                    else errorMessage += "The value cannot be less than " + _minValue + " .";
                     valueValid = false;
-                    errorMessage += Environment.NewLine + "Please enter a value greater than " + _minValue + " for rule " + Name;
                 }
                 if (decimalPropRule > _maxValue)
                 {
+                    errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
+                    propName, Name);
+                    if (Message != null) errorMessage += Message;
+                    else errorMessage += "The value cannot be more than " + _maxValue + " .";
                     valueValid = false;
-                    errorMessage += Environment.NewLine + "Please enter a value less than " + _maxValue + " for rule " + Name;
                 }
             }
             return valueValid;

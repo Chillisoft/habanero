@@ -59,8 +59,6 @@ namespace Habanero.Test.Bo.Loaders
             //               "A PropRuleString should have string as its property type.");
             Assert.AreEqual("", ((PropRuleString)rule).PatternMatch,
                             "An empty string should be the default pattern match string according to the dtd.");
-            Assert.AreEqual("", ((PropRuleString)rule).PatternMatchErrorMessage,
-                            "An empty string should be the default pattern match error message according to the dtd.");
             Assert.AreEqual(0, ((PropRuleString)rule).MinLength,
                             "0 should be the default minlength according to the dtd.");
             rule = loader.LoadRule(typeof(string).Name, @"<rule name=""TestString"" message=""String Test Message""><add key=""minLength"" value=""1""/></rule>");
@@ -75,7 +73,6 @@ namespace Habanero.Test.Bo.Loaders
             PropRuleBase rule = loader.LoadRule(typeof(string).Name,
                         @"<rule name=""TestString"" message=""String Test Message"" >
                             <add key=""patternMatch"" value=""Test Pattern"" />
-                            <add key=""patternMatchErrorMessage"" value=""Test Pattern Error Message"" />
                             <add key=""minLength"" value=""5"" />          
                             <add key=""maxLength"" value=""10"" />
                         </rule>                          
@@ -83,7 +80,6 @@ namespace Habanero.Test.Bo.Loaders
 
             Assert.AreEqual("PropRuleString", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("Test Pattern", ((PropRuleString)rule).PatternMatch);
-            Assert.AreEqual("Test Pattern Error Message", ((PropRuleString)rule).PatternMatchErrorMessage);
             Assert.AreEqual(5, ((PropRuleString)rule).MinLength);
             Assert.AreEqual(10, ((PropRuleString)rule).MaxLength);
         }

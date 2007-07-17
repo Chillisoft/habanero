@@ -337,7 +337,7 @@ namespace Habanero.Bo.ClassDefinition
             errorMessage = "";
             if (!(_propRule == null))
             {
-                return _propRule.isPropValueValid(propValue, ref errorMessage);
+                return _propRule.isPropValueValid(PropertyName, propValue, ref errorMessage);
             }
             else
             {

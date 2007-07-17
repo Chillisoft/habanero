@@ -16,7 +16,6 @@ namespace Habanero.Bo
         private int _maxLength = -1;
         private int _minLength = 0;
     	private string _patternMatch = ""; //regex pattern match
-    	private string _patternMatchErrorMessage = "";
 
         ///// <summary>
         ///// Constructor to initialise a new rule
@@ -60,9 +59,6 @@ namespace Habanero.Bo
 							case "patternMatch":
 								_patternMatch = Convert.ToString(value);
 								break;
-							case "patternMatchErrorMessage":
-								_patternMatchErrorMessage = Convert.ToString(value);
-								break;
 							case "minLength":
 								_minLength = Convert.ToInt32(value);
 								break;
@@ -104,31 +100,28 @@ namespace Habanero.Bo
         /// expression that the string must conform to.  See 
         /// System.Text.RegularExpressions for more information on regular
         /// expression formatting.</param>
-        /// <param name="patternMatchErrorMessage">The error message that must 
-        /// be displayed if the pattern does not match</param>
         public PropRuleString(string ruleName,
                                string message,
                                 int minLength,
                                 int maxLength,
-                                string patternMatch,
-                                string patternMatchErrorMessage) 
+                                string patternMatch)
 			: base(ruleName, message)
         {
             //TODO_Err: how to test for a valid regexpression?
             _minLength = minLength;
             _maxLength = maxLength;
             _patternMatch = patternMatch ?? "";
-            _patternMatchErrorMessage = patternMatchErrorMessage ?? "";
         }
 
         /// <summary>
         /// Indicates whether the property value is valid against the rules
         /// </summary>
+        /// <param name="propName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal override bool isPropValueValid(Object propValue,
+        protected internal override bool isPropValueValid(string propName, Object propValue,
                                                           ref string errorMessage)
         {
             errorMessage = "";
@@ -144,17 +137,17 @@ namespace Habanero.Bo
                                " since it is not of type String";
                 return false;
             }
-            if (!base.isPropValueValid(propValue, ref errorMessage))
+            if (!base.isPropValueValid(propName, propValue, ref errorMessage))
             {
                 return false;
             }
  
-            if (!CheckLengthRule(propValue, ref errorMessage))
+            if (!CheckLengthRule(propName, propValue, ref errorMessage))
             {
                 return false;
             }
 
-            if (!CheckPatternMatchRule(propValue, ref errorMessage))
+            if (!CheckPatternMatchRule(propName, propValue, ref errorMessage))
             {
                 return false;
             }
@@ -167,7 +160,6 @@ namespace Habanero.Bo
 			parameters.Add("minLength");
 			parameters.Add("maxLength");
 			parameters.Add("patternMatch");
-			parameters.Add("patternMatchErrorMessage");
 			return parameters;
     	}
 
@@ -175,32 +167,24 @@ namespace Habanero.Bo
         /// Checks if the value matches the pattern set required. If no
         /// expression was specified, then the method will return true
         /// </summary>
+        /// <param name="propName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected bool CheckPatternMatchRule(Object propValue,
+        protected bool CheckPatternMatchRule(string propName, Object propValue,
                                              ref string errorMessage)
         {
-            if (this._patternMatch.Length == 0)
+            if (_patternMatch.Length == 0)
             {
                 return true;
             }
-            if (!Regex.IsMatch((string) propValue, this._patternMatch))
+            if (!Regex.IsMatch((string) propValue, _patternMatch))
             {
-                if (_patternMatchErrorMessage.Length <= 0)
-                {
-                    errorMessage = propValue.ToString() +
-								   " is not valid for " + Name +
-                                   " it must match the pattern " +
-                                   _patternMatch;
-                }
-                else
-                {
-                    errorMessage = propValue.ToString() +
-								   " is not valid for " + Name +
-                                   "\n" + _patternMatchErrorMessage;
-                }
+                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
+                    propName, Name);
+                if (Message != null) errorMessage += Message;
+                else errorMessage += "It does not fit the required format.";
                 return false;
             }
             return true;
@@ -210,28 +194,29 @@ namespace Habanero.Bo
         /// Checks that the string length falls within the length range
         /// specified
         /// </summary>
+        /// <param name="propName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected bool CheckLengthRule(Object propValue,
+        protected bool CheckLengthRule(string propName, Object propValue,
                                        ref string errorMessage)
         {
             //Check the appropriate length rules
             if (_minLength > 0 && ((string) propValue).Length < _minLength)
             {
-                errorMessage = propValue.ToString() +
-							   " is not valid for " + Name +
-                               " it must be greater than or equal to " +
-                               _minLength;
+                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
+                    propName, Name);
+                if (Message != null) errorMessage += Message;
+                else errorMessage += "The length cannot be less than " + _minLength + " character(s).";
                 return false;
             }
             if (_maxLength > 0 && ((string) propValue).Length > _maxLength)
             {
-                errorMessage = propValue.ToString() +
-							   " is not valid for " + Name +
-                               " it must be less than or equal to " +
-                               _maxLength;
+                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
+                    propName, Name);
+                if (Message != null) errorMessage += Message;
+                else errorMessage += "The length cannot be more than " + _maxLength + " character(s).";
                 return false;
             }
             return true;
@@ -263,16 +248,5 @@ namespace Habanero.Bo
 			get { return _patternMatch; }
 			protected set { _patternMatch = value; }
 		}
-
-		/// <summary>
-		/// Returns the error message raised when the pattern is not matched
-		/// </summary>
-		public string PatternMatchErrorMessage
-		{
-			get { return _patternMatchErrorMessage; }
-			protected set { _patternMatchErrorMessage = value; }
-		}
-		
     }
-
 }

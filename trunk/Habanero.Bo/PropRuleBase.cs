@@ -35,11 +35,12 @@ namespace Habanero.Bo
         /// <summary>
         /// Indicates whether the property value is valid against the rules
         /// </summary>
+        /// <param name="propName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal virtual bool isPropValueValid(Object propValue,
+        protected internal virtual bool isPropValueValid(string propName, Object propValue,
                                                          ref string errorMessage)
         {
             errorMessage = "";

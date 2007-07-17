@@ -98,15 +98,16 @@ namespace Habanero.Bo
         /// <summary>
         /// Indicates whether the property value is valid against the rules
         /// </summary>
+        /// <param name="propName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal override bool isPropValueValid(Object propValue,
+        protected internal override bool isPropValueValid(string propName, Object propValue,
                                                           ref string errorMessage)
         {
             errorMessage = "";
-            if (!base.isPropValueValid(propValue, ref errorMessage))
+            if (!base.isPropValueValid(propName, propValue, ref errorMessage))
             {
                 return false;
             }
@@ -114,11 +115,20 @@ namespace Habanero.Bo
             {
                 return true;
             }
-            if ((DateTime) propValue < _minValue || (DateTime) propValue > _maxValue)
+            if ((DateTime) propValue < _minValue)
             {
-                errorMessage = propValue.ToString() +
-							   " is not valid for " + Name +
-                               " since it is not of type DateTime";
+                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
+                    propName, Name);
+                if (Message != null) errorMessage += Message;
+                else errorMessage += "The date cannot be before " + _minValue + ".";
+                return false;
+            }
+            if ((DateTime) propValue > _maxValue)
+            {
+                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
+                    propName, Name);
+                if (Message != null) errorMessage += Message;
+                else errorMessage += "The date cannot be after " + _maxValue + ".";
                 return false;
             }
             return true;
