@@ -163,14 +163,21 @@ namespace Habanero.Bo.Loaders
 			{
 				Type customPropRuleType = null;
 				TypeLoader.LoadClassType(ref customPropRuleType, _assembly, _class, 
-					"Prop Rule Base Subclass", "Property Rule Definition");
+					"PropRuleBase Subclass", "Property Rule Definition");
 				if (customPropRuleType.IsSubclassOf(typeof(PropRuleBase)))
 				{
-					return (PropRuleBase)Activator.CreateInstance(customPropRuleType, new object[] { _name, _message });
-				} else
+                    try
+                    {
+                        return (PropRuleBase) Activator.CreateInstance(customPropRuleType, new object[] {_name, _message });
+                    }
+                    catch (MissingMethodException)
+                    {
+                        return (PropRuleBase) Activator.CreateInstance(customPropRuleType, new object[] { _name, _message, _ruleParameters });
+                    }
+				}
+                else
 				{
-					//TODO error: Throw a descriptive error.
-					throw new TypeLoadException("The prop rule must inherit from Prop Rule Base.");
+					throw new TypeLoadException("The prop rule '" + _name + "' must inherit from PropRuleBase.");
 				}
 			}
             if (_propTypeName == typeof(int).Name) {

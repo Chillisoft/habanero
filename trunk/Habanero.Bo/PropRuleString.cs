@@ -45,6 +45,10 @@ namespace Habanero.Bo
 			base.Parameters = parameters;
 		}
 
+        /// <summary>
+        /// Sets up the parameters to the rule, that is the individual pairs
+        /// of rule type and rule value that make up the composite rule
+        /// </summary>
 		protected internal override void SetupParameters()
 		{
             try
@@ -87,7 +91,6 @@ namespace Habanero.Bo
                     "element has an invalid value.", ex);
             }
         }
-
 
         /// <summary>
         /// Constructor to initialise a new rule
@@ -132,9 +135,9 @@ namespace Habanero.Bo
             }
             if (!(propValue is string))
             {
-                errorMessage = propValue +
-                               " is not valid for " + Name +
-                               " since it is not of type String";
+                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. " +
+                    "It is not a type of string.",
+                    propName, Name);
                 return false;
             }
             if (!base.isPropValueValid(propName, propValue, ref errorMessage))
@@ -154,6 +157,10 @@ namespace Habanero.Bo
             return true;
         }
 
+        /// <summary>
+        /// Returns the list of available parameter names for the rule.
+        /// </summary>
+        /// <returns>A list of the parameters that this rule uses</returns>
     	protected internal override List<string> AvailableParameters()
     	{
 			List<string> parameters = new List<string>();

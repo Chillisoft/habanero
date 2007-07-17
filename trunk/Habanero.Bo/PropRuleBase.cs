@@ -47,6 +47,10 @@ namespace Habanero.Bo
             return true;
         }
 
+        /// <summary>
+        /// Returns the list of parameters to the rule - individual pairs
+        /// of rule type and rule value that make up the composite rule
+        /// </summary>
     	protected internal virtual Dictionary<string, object> Parameters
     	{
 			get { return _parameters; }
@@ -58,18 +62,24 @@ namespace Habanero.Bo
     	}
 
 		/// <summary>
-		/// Set up the rule variables from the current parameters collection.
+        /// Sets up the parameters to the rule, that is the individual pairs
+        /// of rule type and rule value that make up the composite rule
 		/// </summary>
 		protected internal abstract void SetupParameters();
 
     	/// <summary>
-    	/// This method must be implemented to return a list of the 
-    	/// parameters that are available to be set for this rule. 
-    	/// This is used for validation by the loader.
+        /// Returns the list of available parameter names for the rule.
+        /// This method must be implemented by creating a list of the names
+        /// of each type of rule available for the class, such as "min" and
+        /// "max" for integers.
     	/// </summary>
     	/// <returns>A list of the parameters that this rule uses</returns>
 		protected internal abstract List<string> AvailableParameters();
 
+        /// <summary>
+        /// Returns the list of available parameter names for the rule
+        /// </summary>
+        /// <returns>Returns a string</returns>
 		protected internal virtual string AvailableParametersString()
 		{
 			string list = "";

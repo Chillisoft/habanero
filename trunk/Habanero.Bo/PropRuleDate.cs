@@ -55,6 +55,10 @@ namespace Habanero.Bo
         	base.Parameters = parameters;
         }
 
+        /// <summary>
+        /// Sets up the parameters to the rule, that is the individual pairs
+        /// of rule type and rule value that make up the composite rule
+        /// </summary>
 		protected internal override void SetupParameters()
 		{
             try
@@ -134,12 +138,10 @@ namespace Habanero.Bo
             return true;
         }
 
-		/// <summary>
-		/// This method must be implemented to return a list of the 
-		/// parameters that are available to be set for this rule. 
-		/// This is used for validation by the loader.
-		/// </summary>
-		/// <returns>A list of the parameters that this rule uses</returns>
+        /// <summary>
+        /// Returns the list of available parameter names for the rule.
+        /// </summary>
+        /// <returns>A list of the parameters that this rule uses</returns>
 		protected internal override List<string> AvailableParameters()
 		{
 		    List<string> parameters = new List<string>();

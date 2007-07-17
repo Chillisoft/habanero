@@ -26,7 +26,6 @@ namespace Habanero.Bo
             _maxValue = max;
         }
 
-
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
@@ -39,6 +38,10 @@ namespace Habanero.Bo
 			base.Parameters = parameters;
 		}
 
+        /// <summary>
+        /// Sets up the parameters to the rule, that is the individual pairs
+        /// of rule type and rule value that make up the composite rule
+        /// </summary>
 		protected internal override void SetupParameters()
 		{
             try
@@ -79,8 +82,6 @@ namespace Habanero.Bo
             }
         }
 
-
-
         /// <summary>
         /// Gets and sets the minimum value that the integer can be assigned
         /// </summary>
@@ -116,7 +117,7 @@ namespace Habanero.Bo
                 if (intPropRule < _minValue)
                 {
                     errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
-                    propName, Name);
+                        propName, Name);
                     if (Message != null) errorMessage += Message;
                     else errorMessage += "The value cannot be less than " + _minValue + ".";
                     valueValid = false;
@@ -124,7 +125,7 @@ namespace Habanero.Bo
                 if (intPropRule > _maxValue)
                 {
                     errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
-                    propName, Name);
+                        propName, Name);
                     if (Message != null) errorMessage += Message;
                     else errorMessage += "The value cannot be more than " + _maxValue + ".";
                     valueValid = false;
@@ -134,6 +135,10 @@ namespace Habanero.Bo
             
         }
 
+        /// <summary>
+        /// Returns the list of available parameter names for the rule.
+        /// </summary>
+        /// <returns>A list of the parameters that this rule uses</returns>
     	protected internal override List<string> AvailableParameters()
     	{
 			List<string> parameters = new List<string>();
