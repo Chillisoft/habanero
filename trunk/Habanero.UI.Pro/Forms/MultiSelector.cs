@@ -393,6 +393,7 @@ namespace Habanero.Ui.Forms
             ///</summary>
             ///<param name="item">The item to remove</param>
             public void RemoveOption(T item) {
+				Deselect(item);
                 _options.Remove(item);
                 FireOptionRemoved(item);
             }
