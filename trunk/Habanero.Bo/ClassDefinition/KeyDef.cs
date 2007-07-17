@@ -16,7 +16,7 @@ namespace Habanero.Bo.ClassDefinition
     /// together in some way (e.g. for a composite alternate 
     /// key, the combination of properties is required to be unique).
     /// </summary>
-    public class KeyDef 
+    public class KeyDef : IEnumerable<PropDef>
     {
         private Dictionary<string, PropDef> _propDefs;
         protected bool _ignoreIfNull = false;
@@ -210,10 +210,10 @@ namespace Habanero.Bo.ClassDefinition
             return lBOKey;
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return _propDefs.Values.GetEnumerator();
-        }
+		//public IEnumerator GetEnumerator()
+		//{
+		//    return _propDefs.Values.GetEnumerator();
+		//}
 
         public int Count
         {
@@ -223,6 +223,23 @@ namespace Habanero.Bo.ClassDefinition
             }
         }
 
+		#region IEnumerable<PropDef> Members
+
+		IEnumerator<PropDef> IEnumerable<PropDef>.GetEnumerator()
+		{
+			return _propDefs.Values.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable Members
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _propDefs.Values.GetEnumerator();
+		}
+
+		#endregion
     }
 
 

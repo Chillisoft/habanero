@@ -12,7 +12,7 @@ namespace Habanero.Bo.ClassDefinition
     /// Lists a set of property definitions that indicate which properties
     /// to match together for two classes in a relationship
     /// </summary>
-    public class RelKeyDef 
+    public class RelKeyDef : IEnumerable<RelPropDef>
     {
         private Dictionary<string, RelPropDef> _relPropDefs;
 
@@ -114,10 +114,10 @@ namespace Habanero.Bo.ClassDefinition
             return lRelKey;
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return _relPropDefs.Values.GetEnumerator();
-        }
+		//public IEnumerator GetEnumerator()
+		//{
+		//    return _relPropDefs.Values.GetEnumerator();
+		//}
 
         public int Count
         {
@@ -125,7 +125,25 @@ namespace Habanero.Bo.ClassDefinition
             {
                 return _relPropDefs.Count;
             }
-        }
+		}
+
+		#region IEnumerable<RelPropDef> Members
+
+		IEnumerator<RelPropDef> IEnumerable<RelPropDef>.GetEnumerator()
+		{
+			return _relPropDefs.Values.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable Members
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _relPropDefs.Values.GetEnumerator();
+		}
+
+		#endregion
     }
 
 

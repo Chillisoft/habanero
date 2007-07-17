@@ -8,14 +8,14 @@ namespace Habanero.Bo.ClassDefinition
     /// <summary>
     /// Provides a collection of property definitions.
     /// </summary>
-    public class PropDefCol 
+    public class PropDefCol : IEnumerable<PropDef>
     {
         private Dictionary<string, PropDef> _propDefs;
 
         /// <summary>
         /// A constructor to create a new empty collection
         /// </summary>
-        public PropDefCol() : base()
+        public PropDefCol()
         {
             _propDefs = new Dictionary<string, PropDef>();
         }
@@ -155,10 +155,10 @@ namespace Habanero.Bo.ClassDefinition
             return lBOPropertyCol;
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return _propDefs.Values.GetEnumerator();
-        }
+		//public IEnumerator GetEnumerator()
+		//{
+		//    return _propDefs.Values.GetEnumerator();
+		//}
 
         /// <summary>
         /// Checks if a property definition with that name has already been added
@@ -182,5 +182,23 @@ namespace Habanero.Bo.ClassDefinition
                 return _propDefs.Count;
             }
         }
+
+		#region IEnumerable<PropDef> Members
+
+		IEnumerator<PropDef> IEnumerable<PropDef>.GetEnumerator()
+		{
+			return _propDefs.Values.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable Members
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _propDefs.Values.GetEnumerator();
+		}
+
+		#endregion
     }
 }

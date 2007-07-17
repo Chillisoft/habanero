@@ -8,7 +8,7 @@ namespace Habanero.Bo.ClassDefinition
     /// <summary>
     /// Manages a collection of relationship definitions
     /// </summary>
-    public class RelationshipDefCol 
+    public class RelationshipDefCol : IEnumerable<RelationshipDef>
     {
         private Dictionary<string, RelationshipDef> _relDefs;
 
@@ -112,10 +112,10 @@ namespace Habanero.Bo.ClassDefinition
             return lRelationshipCol;
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return _relDefs.Values.GetEnumerator();
-        }
+		//public IEnumerator GetEnumerator()
+		//{
+		//    return _relDefs.Values.GetEnumerator();
+		//}
 
         public int Count
         {
@@ -123,7 +123,25 @@ namespace Habanero.Bo.ClassDefinition
             {
                 return _relDefs.Count;
             }
-        }
+		}
+
+		#region IEnumerable<RelationshipDef> Members
+
+		IEnumerator<RelationshipDef> IEnumerable<RelationshipDef>.GetEnumerator()
+		{
+			return _relDefs.Values.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable Members
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _relDefs.Values.GetEnumerator();
+		}
+
+		#endregion
 
     }
 }

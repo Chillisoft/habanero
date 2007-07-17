@@ -11,7 +11,7 @@ namespace Habanero.Bo.ClassDefinition
     /// <summary>
     /// Manages a collection of class definitions.
     /// </summary>
-    public class ClassDefCol 
+    public class ClassDefCol : IEnumerable<ClassDef>
     {
         private static ClassDefCol _classDefcol;
         private static bool _instanceFlag = false;
@@ -240,10 +240,10 @@ namespace Habanero.Bo.ClassDefinition
             get { return _classDefs.Count; }
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return _classDefs.Values.GetEnumerator();
-        }
+		//public IEnumerator GetEnumerator()
+		//{
+		//    return _classDefs.Values.GetEnumerator();
+		//}
 
         public void Clear()
         {
@@ -352,7 +352,23 @@ namespace Habanero.Bo.ClassDefinition
 
 		#endregion
 
+    	#region IEnumerable<ClassDef> Members
 
+    	IEnumerator<ClassDef> IEnumerable<ClassDef>.GetEnumerator()
+    	{
+			return _classDefs.Values.GetEnumerator(); 
+    	}
+
+    	#endregion
+
+    	#region IEnumerable Members
+
+    	IEnumerator IEnumerable.GetEnumerator()
+    	{
+    		return _classDefs.Values.GetEnumerator(); 
+    	}
+
+    	#endregion
     }
 
     #region "self Tests"

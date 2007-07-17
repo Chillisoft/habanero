@@ -45,9 +45,10 @@ namespace Habanero.Bo
             //log.Debug(_relationship.RelKeyDef.Count + " props in relkeydef. ");
 
             // TODO - this code should go in the SetRelatedBusinessObject method.
-            foreach (DictionaryEntry relKeyDef in _relationship.RelKeyDef)
-            {
-                RelPropDef propDef = (RelPropDef) relKeyDef.Value;
+			//foreach (DictionaryEntry relKeyDef in _relationship.RelKeyDef)
+			foreach (RelPropDef propDef in _relationship.RelKeyDef)
+			{
+                //RelPropDef propDef = (RelPropDef) relKeyDef.Value;
                 //log.Debug(propDef.OwnerPropertyName);
                 //log.Debug(propDef.RelatedClassPropName);
                 newBo.SetPropertyValue(propDef.OwnerPropertyName,

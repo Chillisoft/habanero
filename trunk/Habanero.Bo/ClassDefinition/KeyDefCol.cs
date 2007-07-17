@@ -8,7 +8,7 @@ namespace Habanero.Bo.ClassDefinition
     /// <summary>
     /// Maintains a collection of key definitions (KeyDef objects)
     /// </summary>
-    public class KeyDefCol
+    public class KeyDefCol: IEnumerable<KeyDef>
     {
         private Dictionary<string, KeyDef> _keyDefs;
 
@@ -107,10 +107,10 @@ namespace Habanero.Bo.ClassDefinition
             return lBOKeyCol;
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return _keyDefs.Values.GetEnumerator();
-        }
+		//public IEnumerator GetEnumerator()
+		//{
+		//    return _keyDefs.Values.GetEnumerator();
+		//}
 
         public int Count
         {
@@ -120,5 +120,22 @@ namespace Habanero.Bo.ClassDefinition
             }
         }
 
+    	#region IEnumerable<KeyDef> Members
+
+    	IEnumerator<KeyDef> IEnumerable<KeyDef>.GetEnumerator()
+    	{
+    		return _keyDefs.Values.GetEnumerator();
+    	}
+
+    	#endregion
+
+		#region IEnumerable Members
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _keyDefs.Values.GetEnumerator();
+		}
+
+		#endregion
     }
 }
