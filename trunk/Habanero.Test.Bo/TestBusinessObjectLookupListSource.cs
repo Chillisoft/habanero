@@ -60,5 +60,14 @@ namespace Habanero.Test.Bo
             Assert.AreNotSame(col2, col);
         }
 
+        [Test]
+        public void TestLookupListCriteria()
+        {
+            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.Bo", 
+                "ContactPerson", "surname='zzz'");
+            Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            Assert.AreEqual(1, col.Count);
+        }
+
     }
 }

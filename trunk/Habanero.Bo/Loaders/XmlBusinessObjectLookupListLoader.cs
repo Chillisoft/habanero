@@ -13,6 +13,7 @@ namespace Habanero.Bo.Loaders
         //private Type _type;
     	private string _className;
     	private string _assemblyName;
+        private string _criteria;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -39,6 +40,7 @@ namespace Habanero.Bo.Loaders
             _className = _reader.GetAttribute("class");
             _assemblyName = _reader.GetAttribute("assembly");
             //_type = TypeLoader.LoadType(assemblyName, className);
+            _criteria = _reader.GetAttribute("criteria");
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a BusinessObjectLookupList object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateBusinessObjectLookupListSource(_assemblyName, _className);
+			return _defClassFactory.CreateBusinessObjectLookupListSource(_assemblyName, _className, _criteria);
 			//return new BOLookupListSource(_assemblyName, _className);
 			//return new BOLookupListSource(_type);
 		}

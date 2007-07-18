@@ -24,6 +24,7 @@ namespace Habanero.Bo
         private Type _boType;
     	private string _assemblyName;
     	private string _className;
+        private string _criteria;
         private Dictionary<string, object> _displayValueDictionary;
         private DateTime _lastCallTime;
 
@@ -76,6 +77,19 @@ namespace Habanero.Bo
             _lastCallTime = DateTime.MinValue;
         }
 
+        /// <summary>
+        /// Constructor to initialise a new lookup-list
+        /// </summary>
+        /// <param name="assemblyName">The assembly containing the class</param>
+        /// <param name="className">The class from which to load the values</param>
+        /// <param name="criteria">Sql criteria to apply on loading of the 
+        /// collection</param>
+        public BusinessObjectLookupList(string assemblyName, string className, string criteria)
+            : this(assemblyName, className)
+        {
+            _criteria = criteria;
+        }
+
 		#endregion Constructors
 
 		#region Properties
@@ -113,6 +127,16 @@ namespace Habanero.Bo
 			}
 		}
 
+        /// <summary>
+        /// Gets and sets the sql criteria used to limit which objects
+        /// are loaded in the BO collection
+        /// </summary>
+        public string Criteria
+        {
+            get { return _criteria; }
+            set { _criteria = value; }
+        }
+
 		#endregion Properties
 
 		#region ILookupList Implementation
@@ -142,7 +166,8 @@ namespace Habanero.Bo
                 return _displayValueDictionary;
             } else {
                 BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[MyBoType]);
-                col.Load("", "");
+                if (_criteria == null) col.Load("", "");
+                else col.Load(_criteria, "");
                 _displayValueDictionary = CreateDisplayValueDictionary(col);
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;

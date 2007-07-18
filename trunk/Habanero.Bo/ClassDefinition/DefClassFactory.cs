@@ -6,13 +6,15 @@ using Habanero.Base;
 
 namespace Habanero.Bo.ClassDefinition
 {
+    /// <summary>
+    /// A factory that produces instances of business object related classes.
+    /// This class is used by xml loaders that read from the class definitions.
+    /// </summary>
 	internal class DefClassFactory : IDefClassFactory
 	{
-		#region IDefClassFactory Members
-
-		public BusinessObjectLookupList CreateBusinessObjectLookupListSource(string assemblyName, string className)
+		public BusinessObjectLookupList CreateBusinessObjectLookupListSource(string assemblyName, string className, string criteria)
 		{
-			return new BusinessObjectLookupList(assemblyName, className);
+			return new BusinessObjectLookupList(assemblyName, className, criteria);
 		}
 
 		public ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef,
@@ -169,7 +171,5 @@ namespace Habanero.Bo.ClassDefinition
 		{
 			return new ClassDefCol();
 		}
-
-		#endregion
 	}
 }

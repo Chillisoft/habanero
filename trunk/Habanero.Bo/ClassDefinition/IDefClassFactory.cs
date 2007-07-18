@@ -5,9 +5,13 @@ using Habanero.Base;
 
 namespace Habanero.Bo.ClassDefinition
 {
+    /// <summary>
+    /// An interface to model a factory that produces business object related
+    /// classes
+    /// </summary>
 	public interface IDefClassFactory
 	{
-		BusinessObjectLookupList CreateBusinessObjectLookupListSource(string assemblyName, string className);
+		BusinessObjectLookupList CreateBusinessObjectLookupListSource(string assemblyName, string className, string criteria);
 
 		ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
 

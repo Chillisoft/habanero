@@ -175,6 +175,35 @@ namespace Habanero.Test.Bo.Loaders
             Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
         }
 
+        [Test]
+        public void TestBusinessObjectLookupList()
+        {
+            PropDef def = itsLoader.LoadProperty(
+                    @"<property  name=""TestProp"">
+						<businessObjectLookupList class=""MyBo"" assembly=""Habanero.Test"" />
+					</property>");
+            Assert.AreSame(typeof(BusinessObjectLookupList), def.LookupList.GetType(),
+                           "LookupList should be of type BusinessObjectLookupList but is of type " +
+                           def.LookupList.GetType().Name);
+            BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
+            //Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
+            Assert.AreEqual("MyBo", source.ClassName);
+            Assert.AreEqual("Habanero.Test", source.AssemblyName);
+            Assert.AreEqual(null, source.Criteria);
+        }
+
+        [Test]
+        public void TestBusinessObjectLookupListWithCriteria()
+        {
+            PropDef def = itsLoader.LoadProperty(
+                    @"<property  name=""TestProp"">
+						<businessObjectLookupList class=""MyBo"" assembly=""Habanero.Test"" criteria=""Test"" />
+					</property>");
+            BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
+            //Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
+            Assert.AreEqual("Test", source.Criteria);
+        }
+
 
     }
 }
