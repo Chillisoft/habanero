@@ -73,7 +73,7 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             LoadKeyName();
 
-            LoadKeyIgnoreNulls();
+            LoadKeyIgnoreIfNull();
             LoadMessage();
 
             _reader.Read();
@@ -106,9 +106,9 @@ namespace Habanero.Bo.Loaders
         }
 
         /// <summary>
-        /// Loads the attribute that indicates whether to ignore nulls
+        /// Loads the 'ignoreIfNull' attribute
         /// </summary>
-        private void LoadKeyIgnoreNulls()
+        private void LoadKeyIgnoreIfNull()
         {
             try
             {

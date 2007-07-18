@@ -28,7 +28,7 @@ namespace Habanero.Bo.ClassDefinition
             if (Count > 0 && mIsObjectID)
             {
                 throw new InvalidPropertyException("You cannot have more than one " +
-                    "property for a primary key that represents an object id");
+                    "property for a primary key that represents an object's ID");
             }
             base.Add(propDef);
         }
@@ -48,7 +48,8 @@ namespace Habanero.Bo.ClassDefinition
 		#region Properties
 
         /// <summary>
-        /// Returns true if the Primary Key is also the object ID
+        /// Returns true if the primary key is also the object's ID, that is,
+        /// the primary key is a single discrete property that serves as the ID
         /// </summary>
         public bool IsObjectID
         {
@@ -57,12 +58,9 @@ namespace Habanero.Bo.ClassDefinition
         }
 
         /// <summary>
-        /// A method used by BOKey to determine whether to check for
-        /// duplicate keys.  It will always check if either
-        /// IgnoreIfNull is set to false or if it encounters null
-        /// properties.<br/>
-        /// NOTE: Because this is a primary key, a warning will be sent to
-        /// the console if you try to set this to true
+        /// This overridden method will always return false and will prevent the
+        /// value being set to true, since primary keys cannot have null
+        /// properties.
         /// </summary>
         public override bool IgnoreIfNull
         {
@@ -72,7 +70,7 @@ namespace Habanero.Bo.ClassDefinition
                 if (value)
                 {
                     throw new InvalidKeyException("Error occured since you " +
-                        "cannot set primary key to ignore nulls");
+                        "cannot set a primary key's IgnoreIfNull setting to true.");
                 }
             }
 		}
@@ -83,7 +81,7 @@ namespace Habanero.Bo.ClassDefinition
 		/// <summary>
         /// Creates a new business object key (BOKey) using this key
         /// definition and its property definitions. Creates either a new
-        /// BOObjectID object (if the primary key is the object ID) 
+        /// BOObjectID object (if the primary key is the object's ID) 
         /// or a BOPrimaryKey object.
         /// </summary>
         /// <param name="lBOPropCol">The master property collection</param>

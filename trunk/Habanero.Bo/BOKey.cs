@@ -124,9 +124,9 @@ namespace Habanero.Bo
         //		}
         
         /// <summary>
-        /// Returns the ignore-nulls setting, which is used to determine
-        /// whether to check for duplicate keys (if this is set to false,
-        /// then duplicates will always be checked for)
+        /// Gets the ignore-if-null setting.  If this is true, then the uniqueness
+        /// check on a key is ignored if one of the properties that make up the
+        /// key are null.
         /// </summary>
         protected bool IgnoreIfNull
         {
@@ -135,7 +135,7 @@ namespace Habanero.Bo
 
         /// <summary>
         /// Indicates whether to check for duplicates.
-        /// This will be false when the IgnoreIfNull is true and one or more 
+        /// This will be false when IgnoreIfNull is true and one or more 
         /// of the BOProperties is null.
         /// </summary>
         /// <returns>Returns true if duplicates need to be checked for</returns>
@@ -149,7 +149,7 @@ namespace Habanero.Bo
                 return false;
             }
 
-            //If the relevant props are dirty and ignore nulls is false
+            //If the relevant props are dirty and ignore if null is false
             // then you must always check for duplicates
             if (!IgnoreIfNull)
             {
@@ -157,7 +157,7 @@ namespace Habanero.Bo
             }
             // check each property to determine whether
             // any of them are null if any are null then do not check sincd
-            // Ignore nulls is true.
+            // Ignore if null is true.
             foreach (BOProp lBOProp in _props.Values)
             {
                

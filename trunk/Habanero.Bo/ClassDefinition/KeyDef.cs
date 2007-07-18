@@ -61,9 +61,8 @@ namespace Habanero.Bo.ClassDefinition
 
 		/// <summary>
 		/// A method used by BOKey to determine whether to check for
-		/// duplicate keys.  It will always check if either
-		/// IgnoreIfNull is set to false or if it there are no null
-		/// properties.<br/>
+		/// duplicate keys.  If true, then the uniqueness check will be ignored
+		/// if any of the properties making up the key are null.<br/>
 		/// NOTE: If the BOKey is a primary key, then this cannot be
 		/// set to true.
 		/// </summary>

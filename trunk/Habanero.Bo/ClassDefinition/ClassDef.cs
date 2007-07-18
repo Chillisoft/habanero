@@ -306,7 +306,8 @@ namespace Habanero.Bo.ClassDefinition
         }
 
         /// <summary>
-        /// Indicates if this object has an ID
+        /// Indicates if the primary key of this class is an ObjectID, that is,
+        /// the primary key is a single discrete property that serves as the ID
         /// </summary>
         public bool HasObjectID
         {

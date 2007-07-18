@@ -5,14 +5,18 @@ using Habanero.Base;
 namespace Habanero.Bo
 {
     /// <summary>
-    /// Manages a business object primary key, where the key is a Guid ID
+    /// Manages a business object primary key, where the key is the object's ID.
+    /// Unlike composite primary keys that are typically composed of properties
+    /// that are used in real-world scenarios and can be changed, an ObjectID
+    /// is a primary key that won't be used by end users.  It typically acts
+    /// discretely behind the user interface.
     /// </summary>
     public class BOObjectID : BOPrimaryKey
     {
         protected BOProp _objectIDProp;
 
         /// <summary>
-        /// Constructor to initialise a new ID
+        /// Constructor to initialise a new ObjectID
         /// </summary>
         /// <param name="lPrimaryKeyDef">The primary key definition</param>
         internal BOObjectID(PrimaryKeyDef lPrimaryKeyDef) : base(lPrimaryKeyDef)
@@ -46,7 +50,7 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns the object's property
+        /// Returns the objectID's property
         /// </summary>
         protected BOProp ObjectIDProp
         {
@@ -65,9 +69,9 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Sets the object's ID
+        /// Sets the objectID
         /// </summary>
-        /// <param name="id">The ID to set to</param>
+        /// <param name="id">The Guid ID to set to</param>
         internal override void SetObjectID(Guid id)
         {
             //If the object id is not already set then set it.
@@ -90,7 +94,7 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns the object ID as "ID=ObjectIDValue"
+        /// Returns the ObjectID as "ID=ObjectIDValue"
         /// </summary>
         /// <returns>Returns a string</returns>
         public override String GetObjectId()
@@ -108,54 +112,53 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Indicates if a BOObjectID has the same ID as that of a Guid
+        /// Indicates if a BOObjectID has the same value as a given Guid
         /// </summary>
-        /// <param name="lhs">The first ID to compare</param>
-        /// <param name="rhs">The second ID to compare</param>
-        /// <returns>Returns true if the ID's are equal</returns>
+        /// <param name="lhs">The ObjectID to compare</param>
+        /// <param name="rhs">The Guid to compare</param>
+        /// <returns>Returns true if the arguments are equal</returns>
         public static bool operator ==(BOObjectID lhs, Guid rhs)
         {
             return ((Guid) lhs.ObjectIDProp.Value == rhs);
         }
 
         /// <summary>
-        /// Indicates if a BOObjectID has a different ID to that of a Guid
+        /// Indicates if a BOObjectID has a different value to a given Guid
         /// </summary>
-        /// <param name="lhs">The first ID to compare</param>
-        /// <param name="rhs">The second ID to compare</param>
-        /// <returns>Returns true if the ID's differ</returns>
+        /// <param name="lhs">The ObjectID to compare</param>
+        /// <param name="rhs">The Guid to compare</param>
+        /// <returns>Returns true if the arguments differ</returns>
         public static bool operator !=(BOObjectID lhs, Guid rhs)
         {
             return !(lhs == rhs);
         }
 
         /// <summary>
-        /// Indicates if two BOObjectID objects are equal in content
+        /// Indicates if two BOObjectID objects have the same value
         /// </summary>
-        /// <param name="lhs">The first ID to compare</param>
-        /// <param name="rhs">The second ID to compare</param>
-        /// <returns>Returns true if the ID's are equal</returns>
+        /// <param name="lhs">The first ObjectID to compare</param>
+        /// <param name="rhs">The second ObjectID to compare</param>
+        /// <returns>Returns true if the ObjectID's are equal</returns>
         public static bool operator ==(BOObjectID lhs, BOObjectID rhs)
         {
             return lhs.Equals(rhs);
         }
 
         /// <summary>
-        /// Indicates if two BOObjectID objects differ
+        /// Indicates if two BOObjectID objects have different values
         /// </summary>
-        /// <param name="lhs">The first ID to compare</param>
-        /// <param name="rhs">The second ID to compare</param>
-        /// <returns>Returns true if the ID's differ</returns>
+        /// <param name="lhs">The first ObjectID to compare</param>
+        /// <param name="rhs">The second ObjectID to compare</param>
+        /// <returns>Returns true if the ObjectID's differ</returns>
         public static bool operator !=(BOObjectID lhs, BOObjectID rhs)
         {
             return !(lhs == rhs);
         }
 
         /// <summary>
-        /// Indicates if the ID of a specified BOObjectID object is the
-        /// same as this one
+        /// Indicates if a specified BOObjectID has the same value as this one
         /// </summary>
-        /// <param name="obj">The object to compare with</param>
+        /// <param name="obj">The BOObjectID to compare with</param>
         /// <returns>Returns true if equal</returns>
         public override bool Equals(Object obj)
         {
@@ -172,7 +175,7 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns a hashcode of the ID
+        /// Returns a hashcode of the ObjectID
         /// </summary>
         /// <returns>Returns a hashcode integer</returns>
         public override int GetHashCode()
