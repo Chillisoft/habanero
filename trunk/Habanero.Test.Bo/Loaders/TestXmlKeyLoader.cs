@@ -35,9 +35,10 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestLoadKeyWithName()
         {
-            KeyDef def = itsLoader.LoadKey(@"<key name=""Key1""><prop name=""TestProp"" /></key>", itsPropDefs);
+            KeyDef def = itsLoader.LoadKey(@"<key name=""Key 1""><prop name=""TestProp"" /></key>", itsPropDefs);
             Assert.AreEqual(1, def.Count);
-            Assert.AreEqual("Key1_TestProp", def.KeyName);
+            Assert.AreEqual("Key 1_TestProp", def.KeyName);
+            Assert.AreEqual("Key 1", def.KeyNameForDisplay);
         }
 
         [Test]
@@ -48,6 +49,8 @@ namespace Habanero.Test.Bo.Loaders
                 itsLoader.LoadKey(
                     @"<key name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>", itsPropDefs);
             Assert.AreEqual(2, def.Count);
+            Assert.AreEqual("Key1_TestProp_TestProp2", def.KeyName);
+            Assert.AreEqual("Key1", def.KeyNameForDisplay);
         }
 
         [Test]

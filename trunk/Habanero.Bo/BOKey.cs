@@ -32,12 +32,12 @@ namespace Habanero.Bo
             _props = new Dictionary<string, BOProp>();
         }
 
-        protected KeyDef KeyDef
+        /// <summary>
+        /// Gets the key definition for this key
+        /// </summary>
+        public KeyDef KeyDef
         {
-            get
-            {
-                return _keyDef;
-            }
+            get { return _keyDef; }
         }
 
         /// <summary>
@@ -217,6 +217,9 @@ namespace Habanero.Bo
             get { return _keyDef.KeyName; }
         }
 
+        /// <summary>
+        /// Returns a sorted list of the property values
+        /// </summary>
         public List<BOProp> SortedValues
         {
             get

@@ -74,16 +74,28 @@ namespace Habanero.Bo
             }
         }
 
+        /// <summary>
+        /// Indicates whether a key with the given name exists in the collection
+        /// </summary>
+        /// <param name="boKeyName">The key name</param>
+        /// <returns>Returns true if so, false if not</returns>
         internal bool Contains(string boKeyName)
         {
             return _boKeys.ContainsKey(boKeyName);
         }
 
+        /// <summary>
+        /// Returnst the key collection's enumerator
+        /// </summary>
+        /// <returns>Returns the enumerator</returns>
         public IEnumerator GetEnumerator()
         {
             return _boKeys.Values.GetEnumerator();
         }
 
+        /// <summary>
+        /// Gets the number of keys in the collection
+        /// </summary>
         public int Count
         {
             get

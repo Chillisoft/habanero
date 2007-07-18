@@ -403,16 +403,15 @@ namespace Habanero.Bo
                                                            DateTime dateUpdated,
                                                            string objectID,
                                                            BusinessObject obj) :
-                                                               base("You cannot save the changes to the " +
-                                                                    className +
-                                                                    ", as another user has edited the this record.\n" +
-                                                                    "UserName : " +
+                                                               base("You cannot save the changes to '" + className +
+                                                                    "', as another user has edited this record. \n" +
+                                                                    "UserName: " +
                                                                     (userName.Length > 0 ? userName : "[Unknown]") +
-                                                                    "\nMachineName : " +
+                                                                    " \nMachineName: " +
                                                                     (machineName.Length > 0 ? machineName : "[Unknown]") +
-                                                                    "\nDateUpdated : " +
+                                                                    " \nDateUpdated: " +
                                                                     dateUpdated.ToString("dd MMM yyyy HH:mm:ss:fff") +
-                                                                    "\nObjectID : " + objectID, obj)
+                                                                    " \nObjectID: " + objectID, obj)
         {
             mUserNameEdited = (userName.Length > 0 ? userName : "[Unknown]");
             mMachineNameEdited = (machineName.Length > 0 ? machineName : "[Unknown]");
@@ -551,10 +550,10 @@ namespace Habanero.Bo
         public BusObjDeleteConcurrencyControlException(string className,
                                                        string objectID,
                                                        object obj) :
-                                                           base("You cannot save the changes to the " +
+                                                           base("You cannot save the changes to '" +
                                                                 className +
-                                                                ", as another user has deleted the record.\n" +
-                                                                "\nObjectID : " + objectID, obj)
+                                                                "', as another user has deleted the record. \n" +
+                                                                "\nObjectID: " + objectID, obj)
         {
         }
 
@@ -781,16 +780,15 @@ namespace Habanero.Bo
                                                           DateTime dateDuplicated,
                                                           string duplicateWhereClause,
                                                           object obj) :
-                                                              base("You cannot save " +
-                                                                   className +
-                                                                   ", as another user has created a duplicate record.\n" +
-                                                                   "UserName : " +
+                                                              base("You cannot save '" + className +
+                                                                   "', as another user has created a duplicate record. \n" +
+                                                                   "UserName: " +
                                                                    (userName.Length > 0 ? userName : "[Unknown]") +
-                                                                   "\nMachineName : " +
+                                                                   " \nMachineName: " +
                                                                    (machineName.Length > 0 ? machineName : "[Unknown]") +
-                                                                   "\nDateUpdated : " +
+                                                                   " \nDateUpdated: " +
                                                                    dateDuplicated.ToString("dd MMM yyyy HH:mm:ss:fff") +
-                                                                   "\nDuplicateObject : " + duplicateWhereClause, obj)
+                                                                   " \nDuplicateObject: " + duplicateWhereClause, obj)
         {
         }
 

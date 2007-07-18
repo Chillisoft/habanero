@@ -1,6 +1,7 @@
 #include Prop.dtd
 <!ELEMENT key (prop+)>
 <!ATTLIST key 
-	name NMTOKEN #IMPLIED
+	name CDATA #IMPLIED
 	ignoreIfNull ( true | false ) "false"
+  message CDATA #IMPLIED
 >

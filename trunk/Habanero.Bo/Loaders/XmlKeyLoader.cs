@@ -74,6 +74,7 @@ namespace Habanero.Bo.Loaders
             LoadKeyName();
 
             LoadKeyIgnoreNulls();
+            LoadMessage();
 
             _reader.Read();
             LoadKeyProperties();
@@ -94,6 +95,14 @@ namespace Habanero.Bo.Loaders
 			//{
 			//    _keyDef = new KeyDef();
 			//}
+        }
+
+        /// <summary>
+        /// Loads the message to display to the user
+        /// </summary>
+        private void LoadMessage()
+        {
+            _keyDef.Message = _reader.GetAttribute("message");
         }
 
         /// <summary>

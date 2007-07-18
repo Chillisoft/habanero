@@ -1098,13 +1098,44 @@ namespace Habanero.Bo
                             //_classDef.SelectSql + whereClause)) {  //)  DatabaseConnection.CurrentConnection.LoadDataReader
                             try
                             {
-                                if (dr != null && dr.Read()) //There is already an object in the 
-                                    //database matching these criteria.
+                                if (dr != null && dr.Read()) //Database object with these criteria already exists
                                 {
-                                    throw new BusObjDuplicateConcurrencyControlException(ClassName,
-                                                                                         WindowsIdentity.GetCurrent().Name,
-                                                                                         Environment.MachineName,
-                                                                                         DateTime.Now, whereClause, this);
+                                    log.Error(String.Format("For key: {6}. Duplicate record error occurred for: " +
+                                            "Class: {0}, Username: {1}, Machinename: {2}, " +
+                                            "Time: {3}, Sql: {4}, Object: {5}",
+                                            ClassName, WindowsIdentity.GetCurrent().Name, Environment.MachineName,
+                                            DateTime.Now, whereClause, this, lBOKey.KeyDef.KeyNameForDisplay));
+                                    
+                                    string keyNameLead = "";
+                                    if (lBOKey.KeyDef.KeyNameForDisplay != null && lBOKey.KeyDef.KeyNameForDisplay.Length > 0)
+                                    {
+                                        keyNameLead = lBOKey.KeyDef.KeyNameForDisplay + ": ";
+                                    }
+
+                                    if (lBOKey.KeyDef.Message != null)
+                                    {
+                                        throw new BusObjDuplicateConcurrencyControlException(
+                                            keyNameLead + lBOKey.KeyDef.Message);
+                                    }
+
+                                    string propNames = "";
+                                    foreach (BOProp prop in lBOKey.GetBOPropCol())
+                                    {
+                                        if (propNames.Length > 0) propNames += ", ";
+                                        propNames += prop.PropertyName;
+                                    }
+                                    if (lBOKey.Count == 1)
+                                    {
+                                        throw new BusObjDuplicateConcurrencyControlException(
+                                            keyNameLead + "A record already exists with that value for " +
+                                            propNames + ".");
+                                    }
+                                    else
+                                    {
+                                        throw new BusObjDuplicateConcurrencyControlException(
+                                            keyNameLead + "A record already exists with that combination " +
+                                            "of values for: " + propNames + ".");
+                                    }
                                 }
                             }
                             finally
@@ -1145,13 +1176,32 @@ namespace Habanero.Bo
                         //_classDef.SelectSql + whereClause)) {
                         try
                         {
-                            if (dr.Read()) //There is already an object in the 
-                                //database matching these criteria.
+                            if (dr.Read()) //Database object with these criteria already exists
                             {
-                                throw new BusObjDuplicateConcurrencyControlException(ClassName,
-                                                                                     WindowsIdentity.GetCurrent().Name,
-                                                                                     Environment.MachineName, DateTime.Now,
-                                                                                     whereClause, this);
+                                log.Error(String.Format("Duplicate record error occurred on primary key for: " +
+                                            "Class: {0}, Username: {1}, Machinename: {2}, " +
+                                            "Time: {3}, Sql: {4}, Object: {5}",
+                                            ClassName, WindowsIdentity.GetCurrent().Name, Environment.MachineName,
+                                            DateTime.Now, whereClause, this));
+                                
+                                string propNames = "";
+                                foreach (BOProp prop in _primaryKey.GetBOPropCol())
+                                {
+                                    if (propNames.Length > 0) propNames += ", ";
+                                    propNames += prop.PropertyName;
+                                }
+                                if (_primaryKey.Count == 1)
+                                {
+                                    throw new BusObjDuplicateConcurrencyControlException(
+                                        "A record already exists with that value for " +
+                                        propNames + ".");
+                                }
+                                else
+                                {
+                                    throw new BusObjDuplicateConcurrencyControlException(
+                                        "A record already exists with that combination " +
+                                        "of values for: " + propNames + ".");
+                                }
                             }
                         }
                         finally
