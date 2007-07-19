@@ -12,7 +12,7 @@ namespace Habanero.Bo.ClassDefinition
     /// </summary>
 	internal class DefClassFactory : IDefClassFactory
 	{
-		public BusinessObjectLookupList CreateBusinessObjectLookupListSource(string assemblyName, string className, string criteria)
+		public BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria)
 		{
 			return new BusinessObjectLookupList(assemblyName, className, criteria);
 		}
@@ -24,7 +24,7 @@ namespace Habanero.Bo.ClassDefinition
 			return new ClassDef(assemblyName, className, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol);
 		}
 
-		public DatabaseLookupList CreateDatabaseLookupListSource(string sqlString, int timeout, string assemblyName, string className)
+		public DatabaseLookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className)
 		{
 			return new DatabaseLookupList(sqlString, timeout, assemblyName, className);
 		}
@@ -85,7 +85,7 @@ namespace Habanero.Bo.ClassDefinition
 				                            deleteParentAction);
 		}
 
-        public SimpleLookupList CreateSimpleLookupListSource(Dictionary<string, object> displayValueDictionary)
+        public SimpleLookupList CreateSimpleLookupList(Dictionary<string, object> displayValueDictionary)
 		{
 			return new SimpleLookupList(displayValueDictionary);
 		}

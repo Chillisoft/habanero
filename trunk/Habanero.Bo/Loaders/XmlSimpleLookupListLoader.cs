@@ -9,7 +9,7 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads xml data for a lookup list
     /// </summary>
-    public class XmlSimpleLookupListLoader : XmlLookupListSourceLoader
+    public class XmlSimpleLookupListLoader : XmlLookupListLoader
     {
         private Dictionary<string, object> _displayValueDictionary;
 
@@ -34,7 +34,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Loads the lookup list data from the reader
         /// </summary>
-        protected override void LoadLookupListSourceFromReader()
+        protected override void LoadLookupListFromReader()
         {
             string options = _reader.GetAttribute("options");
             if (options != null && options.Length > 0) {
@@ -86,8 +86,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a SimpleLookupList object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateSimpleLookupListSource(_displayValueDictionary);
-			//return new SimpleLookupListSource(_displayValueDictionary);
+			return _defClassFactory.CreateSimpleLookupList(_displayValueDictionary);
+			//return new SimpleLookupList(_displayValueDictionary);
         }
     }
 }

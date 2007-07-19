@@ -59,7 +59,7 @@ namespace Habanero.Bo.ClassDefinition
     	private string _defaultValueString;
     	private bool _hasDefaultValueBeenValidated;
         private PropRuleBase _propRule;
-        private ILookupList _lookupList = new NullLookupListSource();
+        private ILookupList _lookupList = new NullLookupList();
     	private bool _compulsory = false;
 
         
@@ -307,10 +307,10 @@ namespace Habanero.Bo.ClassDefinition
 		/// Indicates whether this object has a LookupList object set
 		/// </summary>
 		/// <returns>Returns true if so, or false if the local
-		/// LookupList equates to NullLookupListSource</returns>
+		/// LookupList equates to NullLookupList</returns>
 		public bool HasLookupList()
 		{
-			return (!(_lookupList is NullLookupListSource));
+			return (!(_lookupList is NullLookupList));
 		}
 
 		#endregion

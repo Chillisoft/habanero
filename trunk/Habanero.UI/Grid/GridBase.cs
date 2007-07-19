@@ -109,7 +109,7 @@ namespace Habanero.Ui.Grid
                 {
                     DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();
                     ILookupList source =
-                        (ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupListSource"];
+                        (ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
                     if (source != null) {
                         DataTable table = new DataTable();
                         table.Columns.Add("id");

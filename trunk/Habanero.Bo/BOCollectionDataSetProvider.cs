@@ -54,7 +54,7 @@ namespace Habanero.Bo
                 column.Caption = uiProperty.Heading;
                 column.ReadOnly = !uiProperty.Editable;
                 column.ExtendedProperties.Add("LookupList",
-                                              _collection.ClassDef.GetLookupListSource(uiProperty.PropertyName));
+                                              _collection.ClassDef.GetLookupList(uiProperty.PropertyName));
                 column.ExtendedProperties.Add("Width", uiProperty.Width);
                 column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
             }

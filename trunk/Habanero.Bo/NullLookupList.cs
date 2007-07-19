@@ -6,7 +6,7 @@ namespace Habanero.Bo
     /// <summary>
     /// Provides an empty lookup-list
     /// </summary>
-    public class NullLookupListSource : ILookupList
+    public class NullLookupList : ILookupList
     {
         /// <summary>
         /// Returns a new empty lookup-list

@@ -8,7 +8,7 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads xml data for a lookup list in a business object
     /// </summary>
-    public class XmlBusinessObjectLookupListLoader : XmlLookupListSourceLoader
+    public class XmlBusinessObjectLookupListLoader : XmlLookupListLoader
     {
         //private Type _type;
     	private string _className;
@@ -35,7 +35,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Loads the lookup list data from the reader
         /// </summary>
-        protected override void LoadLookupListSourceFromReader()
+        protected override void LoadLookupListFromReader()
         {
             _className = _reader.GetAttribute("class");
             _assemblyName = _reader.GetAttribute("assembly");
@@ -50,9 +50,9 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a BusinessObjectLookupList object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateBusinessObjectLookupListSource(_assemblyName, _className, _criteria);
-			//return new BOLookupListSource(_assemblyName, _className);
-			//return new BOLookupListSource(_type);
+			return _defClassFactory.CreateBusinessObjectLookupList(_assemblyName, _className, _criteria);
+			//return new BusinessObjectLookupList(_assemblyName, _className);
+			//return new BusinessObjectLookupList(_type);
 		}
     }
 }

@@ -169,12 +169,12 @@
     <Compile Include="TestBusinessObjectCollectionReadOnlyDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestBusinessObjectLookupListSource.cs" />
+    <Compile Include="TestBusinessObjectLookupList.cs" />
     <Compile Include="TestByteString.cs" />
     <Compile Include="TestClassDef.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestDatabaseLookupListSource.cs">
+    <Compile Include="TestDatabaseLookupList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestExpression.cs" />

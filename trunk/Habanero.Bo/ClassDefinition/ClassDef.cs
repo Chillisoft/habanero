@@ -629,8 +629,8 @@ namespace Habanero.Bo.ClassDefinition
         /// </summary>
         /// <param name="propertyName">The property name in question</param>
         /// <returns>Returns the lookup-list if the property is
-        /// found, or a NullLookupListSource object if not</returns>
-        public ILookupList GetLookupListSource(string propertyName)
+        /// found, or a NullLookupList object if not</returns>
+        public ILookupList GetLookupList(string propertyName)
         {
             if (this.PropDefcol.Contains(propertyName))
             {
@@ -640,11 +640,11 @@ namespace Habanero.Bo.ClassDefinition
             {
                 if (this.SuperClassDef != null)
                 {
-                    return this.SuperClassClassDef.GetLookupListSource(propertyName);
+                    return this.SuperClassClassDef.GetLookupList(propertyName);
                 }
                 else
                 {
-                    return new NullLookupListSource();
+                    return new NullLookupList();
                 }
             }
         }

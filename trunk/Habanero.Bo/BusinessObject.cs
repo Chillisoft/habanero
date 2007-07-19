@@ -486,7 +486,7 @@ namespace Habanero.Bo
                 !this.ID.Contains(propName))
             {
                 Guid myGuid = (Guid) GetPropertyValue(propName);
-                Dictionary<string, object> lookupList = this.ClassDef.GetLookupListSource(propName).GetLookupList();
+                Dictionary<string, object> lookupList = this.ClassDef.GetLookupList(propName).GetLookupList();
 
                 foreach (KeyValuePair<string, object> pair in lookupList) {
                     if (pair.Value == null) continue;
@@ -504,7 +504,7 @@ namespace Habanero.Bo
                 }
                 return myGuid;
             } else if (ClassDef.GetPropDef(propName).HasLookupList()) {
-                Dictionary<string, object> lookupList = this.ClassDef.GetLookupListSource(propName).GetLookupList();
+                Dictionary<string, object> lookupList = this.ClassDef.GetLookupList(propName).GetLookupList();
                 foreach (KeyValuePair<string, object> pair in lookupList)
                 {
                     if (pair.Value == null) continue;

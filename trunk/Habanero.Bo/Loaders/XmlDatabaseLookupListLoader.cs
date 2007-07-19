@@ -10,7 +10,7 @@ namespace Habanero.Bo.Loaders
     /// Loads lookup list data from the reader, using sql information as
     /// specified in the reader
     /// </summary>
-    public class XmlDatabaseLookupListLoader : XmlLookupListSourceLoader
+    public class XmlDatabaseLookupListLoader : XmlLookupListLoader
     {
         private string _sqlString;
         private int _timeout;
@@ -38,7 +38,7 @@ namespace Habanero.Bo.Loaders
         /// Loads the lookup list data from the reader, using the sql string, time-out
         /// class name and assembly name specified in the reader
         /// </summary>
-        protected override void LoadLookupListSourceFromReader()
+        protected override void LoadLookupListFromReader()
         {
             _sqlString = _reader.GetAttribute("sql");
             _className = _reader.GetAttribute("class");
@@ -61,8 +61,8 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a DatabaseLookupList object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateDatabaseLookupListSource(_sqlString, _timeout,_assemblyName, _className);
-			//return new DatabaseLookupListSource(_sqlString, _assemblyName, _className);
+			return _defClassFactory.CreateDatabaseLookupList(_sqlString, _timeout,_assemblyName, _className);
+			//return new DatabaseLookupList(_sqlString, _assemblyName, _className);
 		}
     }
 }

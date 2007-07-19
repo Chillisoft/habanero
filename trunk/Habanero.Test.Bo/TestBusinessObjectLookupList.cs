@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Habanero.Test.Bo
 {
     [TestFixture]
-    public class TestBusinessObjectLookupListSource : TestUsingDatabase
+    public class TestBusinessObjectLookupList : TestUsingDatabase
     {
 
         [TestFixtureSetUp]

@@ -10,10 +10,10 @@ using NUnit.Framework;
 namespace Habanero.Test.Bo
 {
     /// <summary>
-    /// Summary description for DatabaseLookupListSource.
+    /// Summary description for DatabaseLookupList.
     /// </summary>
     [TestFixture]
-    public class TestDatabaseLookupListSource : TestUsingDatabase
+    public class TestDatabaseLookupList : TestUsingDatabase
     {
         private readonly string Sql = "select MyBoID, TestProp from tbMyBo";
         Guid g1 = Guid.NewGuid();

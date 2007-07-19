@@ -98,7 +98,7 @@ namespace Habanero.Test.Bo.Loaders
         }
 
         [Test]
-        public void TestPropertyWithDatabaseLookupListSource()
+        public void TestPropertyWithDatabaseLookupList()
         {
             PropDef def =
                 itsLoader.LoadProperty(
@@ -129,7 +129,7 @@ namespace Habanero.Test.Bo.Loaders
         }
 
         [Test]
-        public void TestDatabaseLookupListSourceWithClassDef()
+        public void TestDatabaseLookupListWithClassDef()
         {
         	ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader();
@@ -147,7 +147,7 @@ namespace Habanero.Test.Bo.Loaders
 
 
         [Test]
-        public void TestPropertyWithSimpleLookupListSource()
+        public void TestPropertyWithSimpleLookupList()
         {
             PropDef def =
                 itsLoader.LoadProperty(
@@ -165,7 +165,7 @@ namespace Habanero.Test.Bo.Loaders
         }
 
         [Test]
-        public void TestSimpleLookupListSourceOptions()
+        public void TestSimpleLookupListOptions()
         {
             PropDef def =
                 itsLoader.LoadProperty(
@@ -178,7 +178,7 @@ namespace Habanero.Test.Bo.Loaders
         }
 
         [Test]
-        public void TestSimpleLookupListSourceOptionsAndItems()
+        public void TestSimpleLookupListOptionsAndItems()
         {
             PropDef def =
                 itsLoader.LoadProperty(

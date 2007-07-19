@@ -254,7 +254,7 @@
     <Compile Include="Loaders\XmlDatabaseLookupListLoader.cs" />
     <Compile Include="Loaders\XmlKeyLoader.cs" />
     <Compile Include="Loaders\XmlLoader.cs" />
-    <Compile Include="Loaders\XmlLookupListSourceLoader.cs" />
+    <Compile Include="Loaders\XmlLookupListLoader.cs" />
     <Compile Include="Loaders\XmlPrimaryKeyLoader.cs" />
     <Compile Include="Loaders\XmlPropertyLoader.cs" />
     <Compile Include="Loaders\XmlRelationshipLoader.cs" />
@@ -271,7 +271,7 @@
     <Compile Include="MultipleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NullLookupListSource.cs">
+    <Compile Include="NullLookupList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObjectFactory.cs">

@@ -105,7 +105,7 @@ namespace Habanero.Bo.Loaders
             if (_reader.Name.Length >= len &&
                 _reader.Name.Substring(_reader.Name.Length - len, len) == "LookupList")
             {
-                XmlLookupListSourceLoader.LoadLookupListSourceIntoProperty(_reader.ReadOuterXml(), _propDef,
+                XmlLookupListLoader.LoadLookupListIntoProperty(_reader.ReadOuterXml(), _propDef,
                                                                            DtdLoader, _defClassFactory);
             }
         }
