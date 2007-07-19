@@ -109,16 +109,20 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         private void LoadGridControlType()
         {
-            string assemblyName;
+            string assemblyName = _reader.GetAttribute("assembly");
             string className = _reader.GetAttribute("type");
-            if (className == "DataGridViewTextBoxColumn" || className == "DataGridViewCheckBoxColumn" ||
-                className == "DataGridViewComboBoxColumn")
+
+            if (assemblyName == null || assemblyName.Length == 0)
             {
-                assemblyName = "System.Windows.Forms";
-            }
-            else
-            {
-                assemblyName = "Habanero.Ui.Grid";
+                if (className == "DataGridViewTextBoxColumn" || className == "DataGridViewCheckBoxColumn" ||
+                    className == "DataGridViewComboBoxColumn")
+                {
+                    assemblyName = "System.Windows.Forms";
+                }
+                else
+                {
+                    assemblyName = "Habanero.Ui.Grid";
+                }
             }
             //log.Debug("assembly: " + assemblyName + ", class: " + className) ;
             try
@@ -127,11 +131,11 @@ namespace Habanero.Bo.Loaders
             }
             catch (Exception ex)
             {
-                throw new InvalidXmlDefinitionException("In a 'column' " +
-                    "element, the 'type' attribute has an invalid " +
-                    "type. The available options are: DataGridViewTextBoxColumn, " +
-                    "DataGridViewCheckBoxColumn, DataGridViewComboBoxColumn, " +
-                    "DataGridViewNumericUpDownColumn and DataGridViewDateTimeColumn.", ex);
+                throw new InvalidXmlDefinitionException(String.Format(
+                    "In a 'column' element, the grid column type could not be loaded, " +
+                    "with the 'type' given as '{0}' and the assembly as '{1}'. " +
+                    "See the documentation for available types.",
+                    className, assemblyName), ex);
             }
         }
 

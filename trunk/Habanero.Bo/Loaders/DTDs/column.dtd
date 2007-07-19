@@ -3,6 +3,7 @@
 	heading CDATA #IMPLIED
 	property CDATA #REQUIRED
 	type NMTOKEN	"DataGridViewTextBoxColumn"
+	assembly NMTOKEN #IMPLIED
 	editable ( true | false ) "true"
 	width CDATA "100"
 	alignment ( left | right | center | centre ) "left"
