@@ -677,12 +677,12 @@ have been specified.</font></p>
     &lt;/primaryKey&gt;
     &lt;ui&gt;
       &lt;grid&gt;
-        &lt;column heading=&quot;Description&quot; property=&quot;Description&quot; /&gt;
-        &lt;column heading=&quot;Price&quot; property=&quot;Price&quot; /&gt;
+        &lt;column property=&quot;Description&quot; /&gt;
+        &lt;column property=&quot;Price&quot; /&gt;
       &lt;/grid&gt;
       &lt;form height=&quot;150&quot; width=&quot;300&quot; title=&quot;Add a computer part&quot;&gt;
-        &lt;field label=&quot;Description:&quot; property=&quot;Description&quot; /&gt;
-        &lt;field label=&quot;Price:&quot; property=&quot;Price&quot; /&gt;
+        &lt;field property=&quot;Description&quot; /&gt;
+        &lt;field property=&quot;Price&quot; /&gt;
       &lt;/form&gt;
     &lt;/ui&gt;
   &lt;/class&gt;
@@ -772,18 +772,18 @@ Appendix I for  a  list of data types in the class definitions).</font></p>
   &lt;/primaryKey&gt;
   &lt;ui&gt;
     &lt;grid&gt;
-      &lt;column heading=&quot;Part Code&quot; property=&quot;PartCode&quot; /&gt;
-      &lt;column heading=&quot;Description&quot; property=&quot;Description&quot; /&gt;
-      &lt;column heading=&quot;Cost&quot; property=&quot;Cost&quot; /&gt;
-      &lt;column heading=&quot;Price&quot; property=&quot;Price&quot; /&gt;
-      &lt;column heading=&quot;Stock&quot; property=&quot;Stock&quot; /&gt;
+      &lt;column property=&quot;PartCode&quot; /&gt;
+      &lt;column property=&quot;Description&quot; /&gt;
+      &lt;column property=&quot;Cost&quot; /&gt;
+      &lt;column property=&quot;Price&quot; /&gt;
+      &lt;column property=&quot;Stock&quot; /&gt;
     &lt;/grid&gt;
     &lt;form height=&quot;250&quot; width=&quot;300&quot; title=&quot;Add a computer part&quot;&gt;
-      &lt;field label=&quot;Part Code:&quot; property=&quot;PartCode&quot; /&gt;
-      &lt;field label=&quot;Description:&quot; property=&quot;Description&quot; /&gt;
-      &lt;field label=&quot;Cost:&quot; property=&quot;Cost&quot; /&gt;
-      &lt;field label=&quot;Price:&quot; property=&quot;Price&quot; /&gt;
-      &lt;field label=&quot;Stock:&quot; property=&quot;Stock&quot; /&gt;
+      &lt;field property=&quot;PartCode&quot; /&gt;
+      &lt;field property=&quot;Description&quot; /&gt;
+      &lt;field property=&quot;Cost&quot; /&gt;
+      &lt;field property=&quot;Price&quot; /&gt;
+      &lt;field property=&quot;Stock&quot; /&gt;
     &lt;/form&gt;
   &lt;/ui&gt;
 &lt;/class&gt;
@@ -848,15 +848,15 @@ and their mappers.</font></p>
   &lt;/primaryKey&gt;
   &lt;ui&gt;
     &lt;grid&gt;
-      &lt;column heading=&quot;Order Number&quot; property=&quot;OrderNumber&quot; /&gt;
-      &lt;column heading=&quot;Name&quot; property=&quot;Name&quot; /&gt;
-      &lt;column heading=&quot;Delivered&quot; property=&quot;Delivered&quot; /&gt;
+      &lt;column property=&quot;OrderNumber&quot; /&gt;
+      &lt;column property=&quot;Name&quot; /&gt;
+      &lt;column property=&quot;Delivered&quot; /&gt;
     &lt;/grid&gt;
     &lt;form height=&quot;100&quot; width=&quot;300&quot; title=&quot;Add an order&quot;&gt;
-      &lt;field label=&quot;Order Number:&quot; property=&quot;OrderNumber&quot; /&gt;
-      &lt;field label=&quot;Name:&quot; property=&quot;Name&quot; /&gt;
-      &lt;field label=&quot;Total Charge:&quot; property=&quot;TotalCharge&quot; /&gt;
-      &lt;field label=&quot;Delivered:&quot; property=&quot;Delivered&quot; type=&quot;CheckBox&quot;/&gt;
+      &lt;field property=&quot;OrderNumber&quot; /&gt;
+      &lt;field property=&quot;Name&quot; /&gt;
+      &lt;field property=&quot;TotalCharge&quot; /&gt;
+      &lt;field property=&quot;Delivered&quot; type=&quot;CheckBox&quot;/&gt;
     &lt;/form&gt;
   &lt;/ui&gt;
 &lt;/class&gt;</code></pre>
@@ -1031,11 +1031,11 @@ developer, but not for the end user, which is why all visible labels refer to
   &lt;ui&gt;
     &lt;grid&gt;
       &lt;column heading=&quot;Part Code&quot; property=&quot;ComputerPartID&quot; /&gt;
-      &lt;column heading=&quot;Quantity&quot; property=&quot;Quantity&quot; /&gt;
+      &lt;column property=&quot;Quantity&quot; /&gt;
     &lt;/grid&gt;
     &lt;form height=&quot;200&quot; width=&quot;300&quot; title=&quot;Add an ordered item&quot;&gt;
       &lt;field label=&quot;Part Code:&quot; property=&quot;ComputerPartID&quot; /&gt;
-      &lt;field label=&quot;Quantity:&quot; property=&quot;Quantity&quot; /&gt;
+      &lt;field property=&quot;Quantity&quot; /&gt;
     &lt;/form&gt;
   &lt;/ui&gt;
 &lt;/class&gt;</code></pre>
@@ -1295,6 +1295,13 @@ private void SetOrderItemsCollection()
   create your own editor by inheriting from IObjectEditor and setting the editor 
   using &quot;</font><font face="Courier New" size="2">orderItemsGrid.Buttons.ObjectEditor 
   = new ...</font><font face="Verdana,Arial,Helvetica" size="2">&quot;</font></li>
+
+</font>
+
+<font size="2">
+
+  <li>Adapt the display so the grid appears on the left, and when you click once 
+  on an item, a detailed summary appears in a panel on the right</li>
 </ul>
 
 </font>
@@ -1509,9 +1516,9 @@ available rule options.</p>
 
 ...
 
-&lt;field label=&quot;Cost:&quot; property=&quot;Cost&quot; type=&quot;NumericUpDown&quot; mapperType=&quot;NumericUpDownMoneyMapper&quot;/&gt;
-&lt;field label=&quot;Price:&quot; property=&quot;Price&quot; type=&quot;NumericUpDown&quot; mapperType=&quot;NumericUpDownMoneyMapper&quot; /&gt;
-&lt;field label=&quot;Stock:&quot; property=&quot;Stock&quot; type=&quot;NumericUpDown&quot;/&gt;</code></pre>
+&lt;field property=&quot;Cost&quot; type=&quot;NumericUpDown&quot; mapperType=&quot;NumericUpDownMoneyMapper&quot;/&gt;
+&lt;field property=&quot;Price&quot; type=&quot;NumericUpDown&quot; mapperType=&quot;NumericUpDownMoneyMapper&quot; /&gt;
+&lt;field property=&quot;Stock&quot; type=&quot;NumericUpDown&quot;/&gt;</code></pre>
 </td>
   </tr>
 </table>
@@ -1683,15 +1690,15 @@ equally into SupplierOrder and CustomerOrder.</p>
     &lt;/primaryKey&gt;
     &lt;ui&gt;
       &lt;grid&gt;
-        &lt;column heading=&quot;Order Number&quot; property=&quot;OrderNumber&quot; /&gt;
-        &lt;column heading=&quot;Name&quot; property=&quot;Name&quot; /&gt;
-        &lt;column heading=&quot;Delivered&quot; property=&quot;Delivered&quot; /&gt;
+        &lt;column property=&quot;OrderNumber&quot; /&gt;
+        &lt;column property=&quot;Name&quot; /&gt;
+        &lt;column property=&quot;Delivered&quot; /&gt;
       &lt;/grid&gt;
       &lt;form height=&quot;200&quot; width=&quot;300&quot; title=&quot;Add a customer order&quot;&gt;
-        &lt;field label=&quot;Order Number:&quot; property=&quot;OrderNumber&quot; /&gt;
-        &lt;field label=&quot;Name:&quot; property=&quot;Name&quot; /&gt;
-        &lt;field label=&quot;Total Charge:&quot; property=&quot;TotalCharge&quot; /&gt;
-        &lt;field label=&quot;Delivered:&quot; property=&quot;Delivered&quot; type=&quot;CheckBox&quot;/&gt;
+        &lt;field property=&quot;OrderNumber&quot; /&gt;
+        &lt;field property=&quot;Name&quot; /&gt;
+        &lt;field property=&quot;TotalCharge&quot; /&gt;
+        &lt;field property=&quot;Delivered&quot; type=&quot;CheckBox&quot;/&gt;
       &lt;/form&gt;
     &lt;/ui&gt;
   &lt;/class&gt;
@@ -1704,15 +1711,15 @@ equally into SupplierOrder and CustomerOrder.</p>
     &lt;/primaryKey&gt;
     &lt;ui&gt;
       &lt;grid&gt;
-        &lt;column heading=&quot;Order Number&quot; property=&quot;OrderNumber&quot; /&gt;
-        &lt;column heading=&quot;Name&quot; property=&quot;Name&quot; /&gt;
-        &lt;column heading=&quot;Delivered&quot; property=&quot;Delivered&quot; /&gt;
+        &lt;column property=&quot;OrderNumber&quot; /&gt;
+        &lt;column property=&quot;Name&quot; /&gt;
+        &lt;column property=&quot;Delivered&quot; /&gt;
       &lt;/grid&gt;
       &lt;form height=&quot;200&quot; width=&quot;300&quot; title=&quot;Add a customer order&quot;&gt;
-        &lt;field label=&quot;Order Number:&quot; property=&quot;OrderNumber&quot; /&gt;
-        &lt;field label=&quot;Name:&quot; property=&quot;Name&quot; /&gt;
-        &lt;field label=&quot;Total Charge:&quot; property=&quot;TotalCharge&quot; /&gt;
-        &lt;field label=&quot;Delivered:&quot; property=&quot;Delivered&quot; type=&quot;CheckBox&quot;/&gt;
+        &lt;field property=&quot;OrderNumber&quot; /&gt;
+        &lt;field property=&quot;Name&quot; /&gt;
+        &lt;field property=&quot;TotalCharge&quot; /&gt;
+        &lt;field property=&quot;Delivered&quot; type=&quot;CheckBox&quot;/&gt;
       &lt;/form&gt;
     &lt;/ui&gt;
   &lt;/class&gt;</code></pre>
@@ -2461,6 +2468,12 @@ Running the application again should make no change.</p>
   permissions list?)</font></li>
   <li><font size="2">progress indicators</font></li>
   <li>using Habanero without the GUI application</li>
+  <li>implementing personalised versions of:<ul>
+  <li>mappers</li>
+  <li>prop rules</li>
+  <li>editor forms</li>
+</ul>
+  </li>
 </ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -2496,13 +2509,14 @@ specifications further along for specific options and limitations.</p>
 
   &lt;property name=&quot;property_name&quot; /&gt;
   &lt;property name=&quot;property_name&quot; type=&quot;Guid&quot; isCompulsory=&quot;true&quot;&gt;
-    &lt;rule name=&quot;rule_name&quot; /&gt;
-      &lt;add key=&quot;max&quot; value=&quot;300&quot;&gt;
+    &lt;rule name=&quot;rule name&quot; message=&quot;message for user if rule broken&quot; /&gt;
+      &lt;add key=&quot;min&quot; value=&quot;0&quot; /&gt;
+      &lt;add key=&quot;max&quot; value=&quot;300&quot; /&gt;
     &lt;/rule&gt;
     &lt;databaseLookupList sql=&quot;select display_field, value_field from table_name&quot; /&gt;
   &lt;/property&gt;
 
-  &lt;key name=&quot;keydef_name&quot; ignoreNulls=&quot;true&quot;&gt;
+  &lt;key name=&quot;keydef name&quot; message=&quot;message to user&quot; ignoreIfNull=&quot;true&quot;&gt;
     &lt;prop name=&quot;property_name&quot; /&gt;
   &lt;/key&gt;
 
@@ -2516,12 +2530,13 @@ specifications further along for specific options and limitations.</p>
 
   &lt;ui&gt;
     &lt;grid&gt;
+      &lt;column property=&quot;property_name&quot; /&gt;
       &lt;column heading=&quot;column_heading&quot; property=&quot;property_name&quot; width=&quot;100&quot; /&gt;
     &lt;/grid&gt;
     &lt;form height=&quot;400&quot; width=&quot;450&quot; heading=&quot;edit_form_heading&quot;&gt;
       &lt;tab name=&quot;form_name&quot;&gt;
         &lt;columnLayout width=&quot;350&quot;&gt;
-          &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; editable=&quot;false&quot; /&gt;
+          &lt;field property=&quot;property_name&quot; /&gt;
         &lt;/columnLayout&gt;
         &lt;columnLayout&gt;
           &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; type=&quot;ComboBox&quot; mapperType=&quot;ListComboBoxMapper&quot;&gt;
@@ -2530,7 +2545,7 @@ specifications further along for specific options and limitations.</p>
         &lt;/columnLayout&gt;
       &lt;/tab&gt;
       &lt;tab name=&quot;form_name2&quot;&gt;
-        &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; type=&quot;TextBox&quot; /&gt;
+        &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; type=&quot;TextBox&quot; editable=&quot;false&quot; /&gt;
       &lt;/tab&gt;
     &lt;/form&gt;
   &lt;/ui&gt;	
@@ -2766,7 +2781,9 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
         <td class="specvaluebottom"><b>type</b> =<i>String</i>/Guid/Int32/Boolean/Decimal/DateTime/etc (the data 
-        type at code level, standard names like 'int' are also valid, you can add your own types if desired)<br>
+        type at code level, standard names like 'int' are also valid, you can add your own types if desired, 
+        Habanero.Util also provides LongText and ByteString to convert Clobs and 
+        Blobs to strings)<br>
         <b>assembly</b> =<i>System</i> (the assembly to which the property type belongs)<br>
         <b>databaseField</b> (if the field name is different to the property name)<br>
         <b>default</b> (any default value to be assigned)<br>
@@ -2795,7 +2812,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         therefore be a combination of several cases.&nbsp; You can also add 
         rules of your own by creating a class that inherits from 
         Habanero.Bo.PropRuleBase, and specifying this class here. See the 'add' 
-        element on a list of rules currently available.</td>
+        element for a list of rules currently available.</td>
       </tr>
       <tr>
         <td class="specname">Comes under:</td>
@@ -2817,7 +2834,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
         <td class="specvaluebottom"><b>message</b> (to display to the user if the rule 
-        is broken)<br>
+        is broken, if this is left out, a default explanation will be provided)<br>
         <b>class</b> (a class that carries out checking against a custom rule)<br>
         <b>assembly</b> (the assembly holding the above class)</td>
       </tr>
@@ -2896,9 +2913,9 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         <td width=170 class="specname">Description:</td>
         <td class="specvalue">Provides a list of potential values for the property, using 
         the objects loaded from the database with the given sql statement.&nbsp; 
-        Two fields must be provided in the form of a display-value pair, meaning 
-        that the first is the value to display to the user (eg. in a ComboBox or 
-        grid) and the second is the value to be stored for the property, which 
+        Two fields must be provided to form a display-value pair - the first is the value to 
+        store and the second is the value to display to the user (eg. in a ComboBox or 
+        grid), which 
         is useful when you are using Guids.&nbsp; The sql statement needs to be in the form of: &quot;select 
          
         valueField, displayField 
@@ -2924,9 +2941,10 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       </tr>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
-        <td class="specvaluebottom"><b>class</b> (the class for the objects being loaded)<br>
-        <b>assembly</b> (the assembly/project for the objects being loaded)<br>
-        <b>timeout</b> (the period in seconds after which a query times out)</td>
+        <td class="specvaluebottom"><b>timeout</b> =<i>10000</i> (the period in 
+        milliseconds after which the cached copy expires)<b><br>
+        class</b> (the class for the objects being loaded)<br>
+        <b>assembly</b> (the assembly/project for the objects being loaded)</td>
       </tr>
     </table>
     </font>
@@ -3099,7 +3117,8 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
         <td class="specvaluebottom"><b>name</b> (a name that describes the key)<br>
-        <b>message</b> (to explain why a write operation violates the key)<br>
+        <b>message</b> (to explain why a write operation violates the key, if 
+        not specified then a default message is provided)<br>
         <b>ignoreIfNull</b> =true/<i>false</i> (whether to ignore the uniqueness 
         check if any of the properties making up the key are null)</td>
       </tr>
@@ -3140,8 +3159,10 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       </tr>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
-        <td class="specvaluebottom"><b>isObjectId</b> =<i>true</i>/false (whether this 
-        key is the object ID, false for composite keys)</td>
+        <td class="specvaluebottom"><b>isObjectID</b> =<i>true</i>/false (whether this 
+        key has a single property that is the object's ID, false for composite keys 
+        or keys where the property is in everday use, setting this true will 
+        prevent the key being changed)</td>
       </tr>
     </table>
     </font>
@@ -3379,13 +3400,17 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       </tr>
       <tr>
         <td class="specname">Compulsory attribs:</td>
-        <td class="specvalue"><b>heading</b> (the column heading as seen by the user)<br>
+        <td class="specvalue">
         <b>property</b> (the name of the property being shown)</td>
       </tr>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
-        <td class="specvaluebottom"><b>type</b> =<i>DataGridViewTextBoxColumn</i>/DataGridViewCheckBoxColumn/ DataGridViewComboBoxColumn/DataGridViewNumericUpDownColumn/DataGridViewDateTimeColumn (the control type for the column)<br>
-        <b>assembly</b> (of the control type, specify this if you are using a custom 
+        <td class="specvaluebottom"><b>heading</b> (the column heading as seen 
+        by the user, the property name will be used if this is not specified)<b><br>
+        type</b> =<i>DataGridViewTextBoxColumn </i>(the type of column to use, 
+        other standard types include DataGridViewCheckBoxColumn, DataGridViewComboBoxColumn, DataGridViewNumericUpDownColumn 
+        and DataGridViewDateTimeColumn, you can also specify custom types)<br>
+        <b>assembly</b> (of the control type, only specify this if you are using a custom 
         type)<br>
         <b>editable</b> =<i>true</i>/false (whether the property  can be edited 
         directly on the grid, irrelevant if grid is read-only)<br>
@@ -3432,8 +3457,8 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         <td class="specnamebottom">Optional attribs:</td>
         <td class="specvaluebottom"><b>title</b> (the window heading as it appears to 
         the user)<br>
-        <b>width</b> =<i>200</i> (in pixels)<br>
-        <b>height</b> =<i>200</i> (in pixels)</td>
+        <b>width</b> =<i>300</i> (in pixels)<br>
+        <b>height</b> =<i>250</i> (in pixels)</td>
       </tr>
     </table>
     </font>
@@ -3544,13 +3569,15 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       </tr>
       <tr>
         <td class="specname">Compulsory attribs:</td>
-        <td class="specvalue"><b>label</b> (the label to appear next to the control on 
-        the form)<br>
+        <td class="specvalue">
         <b>property</b> (the property to edit)</td>
       </tr>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
-        <td class="specvaluebottom"><b>editable</b> =<i>true</i>/false<i><br>
+        <td class="specvaluebottom"><b>label</b> (the label to appear next to the 
+        control on the form, the property name will be used if this is not 
+        specified)<br>
+        <b>editable</b> =<i>true</i>/false<i><br>
         </i><b>type</b> =<i>TextBox</i> (the class name of the type of 
         control)<br>
         <b>assembly</b> =<i>System.Windows.Forms</i> (the assembly of the 
@@ -3649,16 +3676,10 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
 <ul>
   <li>relprop (can propnames be different?)</li>
   <li>add rule (extensibility class/ass name)</li>
-  <li>dbLL (class/ass use, 
-  timeout implemented?)</li>
-  <li>boLL (must use Guids?, dbl-check criteria implemented)</li>
-  <li>primKey (objectID)</li>
+  <li>dbLL (class/ass use)</li>
+  <li>boLL (must use Guids?)</li>
   <li>rel (property to primKey?)</li>
-  <li>property (mark - longtext, bytestring?)</li>
-  <li>rule (class/ass?)</li>
-  <li>field (assembly implemented?)</li>
-  <li>key (message implemented?)</li>
-  <li>column (assembly implemented?)</li>
+  <li>column (Habanero column types)</li>
 </ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -3904,23 +3925,23 @@ throwing the exception.</li>
   <li>Changes not being saved to database<ul>
   <li>If you edit an object in a default form, the changes should be committed 
   automatically, but if you edit values at code level, you need to call Save() on the object to commit the changes.</li>
+  <li>You cannot edit a primary key, Habanero blocks this edit.&nbsp; For this 
+  reason, once an object has been created, you should either not make the field 
+  available for editing, or set the field's &quot;editable&quot; attribute to false.</li>
 </ul>
   </li>
-</ul>
-  </li>
-  <li><b>Data issues</b><ul>
-
-<li>Null values being saved in not-null fields<ul>
-
-<li>Empty strings are not null.&nbsp; Ensure that you have catered for the 
+  <li>Null values being saved in not-null fields<ul>
+  <li>Empty strings are not null.&nbsp; Ensure that you have catered for the 
 possibility of empty strings - some counter strategies include adding a unique 
 key constraint on the field or placing a &quot;minLength&quot; rule on a property.</li>
-
 </ul>
-</li>
-
+  </li>
 </ul>
-</li>
+  </li>
+  </font>
+
+<font size="2">
+
   <li><b>User interface issues</b><ul>
   <li>ComboBox displaying wrong information<ul>
   <li>There are two means to display data in a ComboBox using the class 
