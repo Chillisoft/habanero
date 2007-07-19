@@ -18,8 +18,8 @@ namespace Habanero.Test.Ui.Application
             IEditableGrid grid = (IEditableGrid) gridMock.MockInstance;
             EditableGridButtonControl buttons = new EditableGridButtonControl(grid);
             Assert.AreEqual(2, buttons.Controls.Count);
-            Assert.AreEqual("Save", buttons.Controls[0].Name);
-            Assert.AreEqual("Cancel", buttons.Controls[1].Name);
+            Assert.AreEqual("Save", buttons.Controls[1].Name);
+            Assert.AreEqual("Cancel", buttons.Controls[0].Name);
         }
 
         [Test]

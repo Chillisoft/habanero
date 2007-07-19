@@ -672,6 +672,9 @@ namespace Habanero.Bo.ClassDefinition
                 }
             }
             return null;
+//            throw new InvalidRelationshipAccessException(String.Format(
+//                "A relationship definition with the name of '{0}' was not found.",
+//                relationshipName));
         }
         
         /// <summary>
@@ -695,7 +698,10 @@ namespace Habanero.Bo.ClassDefinition
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
             }
-            return null;
+            //return null;
+            throw new InvalidPropertyNameException(String.Format(
+                "The property definition for the property '{0}' could not be " +
+                "found.", propertyName));
         }
 
         #endregion //Returning defs

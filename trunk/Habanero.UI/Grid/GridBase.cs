@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Ui.Base;
 using Habanero.Ui.Grid;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;
@@ -101,11 +99,11 @@ namespace Habanero.Ui.Grid
             this.Columns.Add(col);
             this.Columns[0].Visible = false;
             int colNum = 1;
-            foreach (UIGridColumn gridProp in grid)
+            foreach (UIGridColumn gridColumn in grid)
             {
                 DataColumn dataColumn = _dataTable.Columns[colNum];
 
-                if (gridProp.GridControlType == typeof(DataGridViewComboBoxColumn))
+                if (gridColumn.GridControlType == typeof(DataGridViewComboBoxColumn))
                 {
                     DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();
                     ILookupList source =
@@ -126,12 +124,12 @@ namespace Habanero.Ui.Grid
                     comboBoxCol.DataPropertyName = dataColumn.ColumnName;
                     col = comboBoxCol;
                 }
-                else if (gridProp.GridControlType == typeof(DataGridViewCheckBoxColumn))
+                else if (gridColumn.GridControlType == typeof(DataGridViewCheckBoxColumn))
                 {
                     DataGridViewCheckBoxColumn checkBoxCol = new DataGridViewCheckBoxColumn();
                     col = checkBoxCol;
                 }
-                else if (gridProp.GridControlType == typeof(DataGridViewDateTimeColumn))
+                else if (gridColumn.GridControlType == typeof(DataGridViewDateTimeColumn))
                 {
                     DataGridViewDateTimeColumn dateTimeCol = new DataGridViewDateTimeColumn();
                     col = dateTimeCol;
@@ -139,16 +137,16 @@ namespace Habanero.Ui.Grid
                 }
                 else
                 {
-                    col = (DataGridViewColumn)Activator.CreateInstance(gridProp.GridControlType);
+                    col = (DataGridViewColumn)Activator.CreateInstance(gridColumn.GridControlType);
                 }
                 col.Width = (int)(dataColumn.ExtendedProperties["Width"]);
-                col.ReadOnly = !gridProp.Editable;
+                col.ReadOnly = !gridColumn.Editable;
                 col.HeaderText = dataColumn.Caption;
                 col.Name = dataColumn.ColumnName;
                 col.DataPropertyName = dataColumn.ColumnName;
                 //col.MappingName = dataColumn.ColumnName;
 
-                switch (gridProp.Alignment)
+                switch (gridColumn.Alignment)
                 {
                     case UIGridColumn.PropAlignment.centre:
                         col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -172,7 +170,6 @@ namespace Habanero.Ui.Grid
             //this.DataSource = _dataTable;
             FireCollectionChanged();
         }
-
 
         /// <summary>
         /// Returns the name of the ui definition used, as specified in the

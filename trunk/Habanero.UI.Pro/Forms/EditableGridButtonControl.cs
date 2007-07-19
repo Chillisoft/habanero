@@ -25,8 +25,8 @@ namespace Habanero.Ui.Forms
         /// <param name="editableGrid">The editable grid</param>
         public EditableGridButtonControl(IEditableGrid editableGrid)
         {
-            this.AddButton("Save", new EventHandler(SaveButtonClickHandler));
             this.AddButton("Cancel", new EventHandler(CancelButtonClickHandler));
+            this.AddButton("Save", new EventHandler(SaveButtonClickHandler));
             this._editableGrid = editableGrid;
         }
 

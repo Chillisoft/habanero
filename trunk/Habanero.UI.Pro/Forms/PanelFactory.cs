@@ -167,11 +167,11 @@ namespace Habanero.Ui.Forms
             foreach (UIFormColumn uiFormColumn in uiFormTab)
             {
                 int currentRow = 0;
-                foreach (UIFormField property in uiFormColumn)
+                foreach (UIFormField field in uiFormColumn)
                 {
                     //log.Debug("Creating label and control for property " + property.PropertyName + " with mapper type " + property.MapperTypeName) ;
                     bool isCompulsory = false;
-                    PropDef propDef = _boArray[0].ClassDef.GetPropDef(property.PropertyName);
+                    PropDef propDef = _boArray[0].ClassDef.GetPropDef(field.PropertyName);
                     if (propDef != null)
                     {
                         isCompulsory = propDef.Compulsory;
@@ -181,29 +181,19 @@ namespace Habanero.Ui.Forms
                         isCompulsory = false;
                     }
                     controls[currentRow, currentColumn + 0] =
-                        new GridLayoutManager.ControlInfo(ControlFactory.CreateLabel(property.Label, isCompulsory));
-                    Control ctl = ControlFactory.CreateControl(property.ControlType);
-                    ctl.Enabled = property.Editable;
-                    if (!ctl.Enabled)
-                    {
-                        ctl.ForeColor = Color.Black;
-                        ctl.BackColor = Color.Beige;
-                    }
-                    else
-                    {
-                        if (_firstControl == null)
-                        {
-                            _firstControl = ctl;
-                        }
-                    }
+                        new GridLayoutManager.ControlInfo(ControlFactory.CreateLabel(field.Label, isCompulsory));
+                    Control ctl = ControlFactory.CreateControl(field.ControlType);
+
+                    bool editable = CheckIfEditable(field, ctl);
+
                     if (ctl is TextBox)
                     {
-                        if (property.GetParameterValue("numLines") != null)
+                        if (field.GetParameterValue("numLines") != null)
                         {
                             int numLines = 0;
                             try
                             {
-                                numLines = Convert.ToInt32(property.GetParameterValue("numLines"));
+                                numLines = Convert.ToInt32(field.GetParameterValue("numLines"));
                             }
                             catch (Exception ex)
                             {
@@ -221,9 +211,9 @@ namespace Habanero.Ui.Forms
                                 tb.ScrollBars = ScrollBars.Vertical;
                             }
                         }
-                        if (property.GetParameterValue("isEmail") != null)
+                        if (field.GetParameterValue("isEmail") != null)
                         {
-                            string isEmailValue = (string)property.GetParameterValue("isEmail");
+                            string isEmailValue = (string)field.GetParameterValue("isEmail");
                             if (isEmailValue != "true" && isEmailValue != "false")
                             {
                                 throw new InvalidXmlDefinitionException("An error " +
@@ -258,18 +248,19 @@ namespace Habanero.Ui.Forms
                         NumericUpDown upDown = (NumericUpDown) ctl;
                         upDown.Enter += new EventHandler(UpDownEnterHandler);
                     }
+
                     ControlMapper ctlMapper =
-                        ControlMapper.Create(property.MapperTypeName, property.MapperAssembly, ctl, property.PropertyName,  !property.Editable);
-                    ctlMapper.SetPropertyAttributes(property.Parameters);
+                        ControlMapper.Create(field.MapperTypeName, field.MapperAssembly, ctl, field.PropertyName, !editable);
+                    ctlMapper.SetPropertyAttributes(field.Parameters);
                     controlMappers.Add(ctlMapper);
                     ctlMapper.BusinessObject = _boArray[0];
 
                     int colSpan = 1;
-                    if (property.GetParameterValue("colSpan") != null)
+                    if (field.GetParameterValue("colSpan") != null)
                     {
                         try
                         {
-                            colSpan = Convert.ToInt32(property.GetParameterValue("colSpan"));
+                            colSpan = Convert.ToInt32(field.GetParameterValue("colSpan"));
                         }
                         catch (Exception ex)
                         {
@@ -282,11 +273,11 @@ namespace Habanero.Ui.Forms
                     colSpan = (colSpan - 1)*2 + 1; // must span label columns too
 
                     int rowSpan = 1;
-                    if (property.GetParameterValue("rowSpan") != null)
+                    if (field.GetParameterValue("rowSpan") != null)
                     {
                         try
                         {
-                            rowSpan = Convert.ToInt32(property.GetParameterValue("rowSpan"));
+                            rowSpan = Convert.ToInt32(field.GetParameterValue("rowSpan"));
                         }
                         catch (Exception ex)
                         {
@@ -332,6 +323,39 @@ namespace Habanero.Ui.Forms
 
             p.Height = manager.GetFixedHeightIncludingGaps();
             return new PanelFactoryInfo(p, controlMappers, _firstControl);
+        }
+
+        /// <summary>
+        /// Checks whether a given field should be editable and makes appropriate
+        /// changes.  If the property is an ObjectID and the BO
+        /// is not new, then editing should not be done.
+        /// </summary>
+        /// <param name="field">The field being added</param>
+        /// <param name="ctl">The control being prepared</param>
+        /// <returns>Returns true if editable</returns>
+        private bool CheckIfEditable(UIFormField field, Control ctl)
+        {
+            bool editable = field.Editable;
+            if (_boArray[0].ClassDef.PrimaryKeyDef.IsObjectID &&
+                _boArray[0].ID.Contains(field.PropertyName) &&
+                !_boArray[0].State.IsNew)
+            {
+                editable = false;
+            }
+            ctl.Enabled = editable;
+            if (!ctl.Enabled)
+            {
+                ctl.ForeColor = Color.Black;
+                ctl.BackColor = Color.Beige;
+            }
+            else
+            {
+                if (_firstControl == null)
+                {
+                    _firstControl = ctl;
+                }
+            }
+            return editable;
         }
 
         /// <summary>
