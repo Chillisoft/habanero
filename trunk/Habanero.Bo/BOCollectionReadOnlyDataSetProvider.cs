@@ -59,7 +59,7 @@ namespace Habanero.Bo
             values[0] = e.BusinessObject.ID.ToString();
             int i = 1;
             BOMapper mapper = new BOMapper(e.BusinessObject);
-            foreach (UIGridProperty gridProperty in _uiGridProperties)
+            foreach (UIGridColumn gridProperty in _uiGridProperties)
             {
                 object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
                 if (val != null && val is DateTime)
@@ -93,7 +93,7 @@ namespace Habanero.Bo
             values[0] = e.BusinessObject.ID.ToString();
             int i = 1;
             BOMapper mapper = new BOMapper(e.BusinessObject);
-            foreach (UIGridProperty gridProperty in _uiGridProperties)
+            foreach (UIGridColumn gridProperty in _uiGridProperties)
             {
                 object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
                 if (val != null && val is DateTime)

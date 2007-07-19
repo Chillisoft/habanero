@@ -95,9 +95,9 @@ namespace Habanero.Bo.ClassDefinition
 			return new SuperClassDef(assemblyName, className, orMapping);
 		}
 
-		public UIDef CreateUIDef(string name, UIFormDef uiFormDef, UIGridDef uiGridDef)
+		public UIDef CreateUIDef(string name, UIForm uiForm, UIGrid uiGrid)
 		{
-			return new UIDef(name, uiFormDef, uiGridDef);
+			return new UIDef(name, uiForm, uiGrid);
 		}
 
 		public UIFormColumn CreateUIFormColumn()
@@ -105,9 +105,9 @@ namespace Habanero.Bo.ClassDefinition
 			return new UIFormColumn();
 		}
 
-		public UIFormDef CreateUIFormDef()
+		public UIForm CreateUIFormDef()
 		{
-			return new UIFormDef();
+			return new UIForm();
 		}
 
 		public UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName)
@@ -115,10 +115,10 @@ namespace Habanero.Bo.ClassDefinition
 			return new UIFormGrid(relationshipName, gridType, correspondingRelationshipName);
 		}
 
-		public UIFormProperty CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
+		public UIFormField CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
 		                                           bool editable, Hashtable propertyAttributes)
 		{
-			return new UIFormProperty(label, propertyName, controlType, mapperTypeName, mapperAssembly, editable, propertyAttributes);
+			return new UIFormField(label, propertyName, controlType, mapperTypeName, mapperAssembly, editable, propertyAttributes);
 		}
 
 		public UIFormTab CreateUIFormTab()
@@ -126,15 +126,15 @@ namespace Habanero.Bo.ClassDefinition
 			return new UIFormTab();
 		}
 
-		public UIGridDef CreateUIGridDef()
+		public UIGrid CreateUIGridDef()
 		{
-			return new UIGridDef();
+			return new UIGrid();
 		}
 
-		public UIGridProperty CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool editable,
-		                                           int width, UIGridProperty.PropAlignment alignment)
+		public UIGridColumn CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool editable,
+		                                           int width, UIGridColumn.PropAlignment alignment)
 		{
-			return new UIGridProperty(heading, propertyName, gridControlType, editable, width, alignment);
+			return new UIGridColumn(heading, propertyName, gridControlType, editable, width, alignment);
 		}
 
 		public PropDefCol CreatePropDefCol()

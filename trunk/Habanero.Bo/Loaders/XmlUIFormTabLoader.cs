@@ -91,7 +91,7 @@ namespace Habanero.Bo.Loaders
                 XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
             XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
 
-                List<UIFormProperty> fields = new List<UIFormProperty>();
+                List<UIFormField> fields = new List<UIFormField>();
                 string contentType = "";
                 while (_reader.Name != "tab")
                 {
@@ -130,7 +130,7 @@ namespace Habanero.Bo.Loaders
                 if (contentType == "field")
                 {
                     UIFormColumn col = _defClassFactory.CreateUIFormColumn();
-                    fields.ForEach(delegate(UIFormProperty obj) { col.Add(obj); });
+                    fields.ForEach(delegate(UIFormField obj) { col.Add(obj); });
                     _tab.Add(col);
                 }
 

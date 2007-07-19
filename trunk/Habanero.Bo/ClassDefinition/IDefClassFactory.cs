@@ -39,21 +39,21 @@ namespace Habanero.Bo.ClassDefinition
 
 		SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping);
 
-		UIDef CreateUIDef(string name, UIFormDef uiFormDef, UIGridDef uiGridDef);
+		UIDef CreateUIDef(string name, UIForm uiForm, UIGrid uiGrid);
 
 		UIFormColumn CreateUIFormColumn();
 
-		UIFormDef CreateUIFormDef();
+		UIForm CreateUIFormDef();
 
 		UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName);
 
-		UIFormProperty CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly, bool editable, System.Collections.Hashtable propertyAttributes);
+		UIFormField CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly, bool editable, System.Collections.Hashtable propertyAttributes);
 
 		UIFormTab CreateUIFormTab();
 
-		UIGridDef CreateUIGridDef();
+		UIGrid CreateUIGridDef();
 
-		UIGridProperty CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool editable, int width, UIGridProperty.PropAlignment alignment);
+		UIGridColumn CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool editable, int width, UIGridColumn.PropAlignment alignment);
 
 		PropDefCol CreatePropDefCol();
 

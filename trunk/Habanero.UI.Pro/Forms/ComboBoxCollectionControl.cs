@@ -86,7 +86,7 @@ namespace Habanero.Ui.Forms
             _comboBoxMapper.SetCollection(_collection, true);
 
             PanelFactory panelFactory =
-                new PanelFactory(_collection.ClassDef.CreateNewBusinessObject(), _collection.ClassDef.UIDefCol[uiName].UIFormDef);
+                new PanelFactory(_collection.ClassDef.CreateNewBusinessObject(), _collection.ClassDef.UIDefCol[uiName].UIForm);
             _panelFactoryInfo = panelFactory.CreatePanel();
             _panelFactoryInfo.Panel.Enabled = false;
 

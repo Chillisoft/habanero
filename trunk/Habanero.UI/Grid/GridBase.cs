@@ -89,8 +89,8 @@ namespace Habanero.Ui.Grid
             _dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
             _dataSetProvider.ObjectInitialiser = _objectInitialiser;
             _uiName = uiName;
-            UIGridDef gridDef = collection.ClassDef.UIDefCol[uiName].UIGridDef;
-            _dataTable = _dataSetProvider.GetDataTable(gridDef);
+            UIGrid grid = collection.ClassDef.UIDefCol[uiName].UIGrid;
+            _dataTable = _dataSetProvider.GetDataTable(grid);
             _dataTable.TableName = "Table";
 
             this.Columns.Clear();
@@ -101,7 +101,7 @@ namespace Habanero.Ui.Grid
             this.Columns.Add(col);
             this.Columns[0].Visible = false;
             int colNum = 1;
-            foreach (UIGridProperty gridProp in gridDef)
+            foreach (UIGridColumn gridProp in grid)
             {
                 DataColumn dataColumn = _dataTable.Columns[colNum];
 
@@ -150,13 +150,13 @@ namespace Habanero.Ui.Grid
 
                 switch (gridProp.Alignment)
                 {
-                    case UIGridProperty.PropAlignment.centre:
+                    case UIGridColumn.PropAlignment.centre:
                         col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                         break;
-                    case UIGridProperty.PropAlignment.left:
+                    case UIGridColumn.PropAlignment.left:
                         col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
                         break;
-                    case UIGridProperty.PropAlignment.right:
+                    case UIGridColumn.PropAlignment.right:
                         col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                         break;
                 }

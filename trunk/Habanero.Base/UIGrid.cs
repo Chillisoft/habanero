@@ -7,14 +7,14 @@ namespace Habanero.Base
     /// Manages property definitions for a user interface grid, as specified
     /// in the class definitions xml file
     /// </summary>
-    public class UIGridDef : ICollection
+    public class UIGrid : ICollection
     {
         private IList _list;
 
         /// <summary>
         /// Constructor to initialise a new collection of definitions
         /// </summary>
-        public UIGridDef()
+        public UIGrid()
         {
             _list = new ArrayList();
         }
@@ -23,7 +23,7 @@ namespace Habanero.Base
 		/// Adds a grid property definition
 		/// </summary>
 		/// <param name="prop">The grid property definition</param>
-		public void Add(UIGridProperty prop)
+		public void Add(UIGridColumn prop)
 		{
 			_list.Add(prop);
 		}
@@ -32,7 +32,7 @@ namespace Habanero.Base
 		/// Removes a grid property definition
 		/// </summary>
 		/// <param name="prop">The grid property definition</param>
-		public void Remove(UIGridProperty prop)
+		public void Remove(UIGridColumn prop)
 		{
 			_list.Remove(prop);
 		}
@@ -41,7 +41,7 @@ namespace Habanero.Base
 		/// Checks if a grid property definition is in the Grid definition
 		/// </summary>
 		/// <param name="prop">The grid property definition</param>
-		public bool Contains(UIGridProperty prop)
+		public bool Contains(UIGridColumn prop)
 		{
 			return _list.Contains(prop);
 		}
@@ -53,9 +53,9 @@ namespace Habanero.Base
 		/// <param name="index">The index position to access</param>
 		/// <returns>Returns the property definition at the index position
 		/// specified</returns>
-		public UIGridProperty this[int index]
+		public UIGridColumn this[int index]
 		{
-			get { return (UIGridProperty)_list[index]; }
+			get { return (UIGridColumn)_list[index]; }
 		}
 
         /// <summary>

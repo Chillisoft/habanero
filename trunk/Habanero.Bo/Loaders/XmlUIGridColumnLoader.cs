@@ -19,7 +19,7 @@ namespace Habanero.Bo.Loaders
         private Type _gridControlType;
         private bool _editable;
         private int _width;
-        private UIGridProperty.PropAlignment _alignment;
+        private UIGridColumn.PropAlignment _alignment;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -43,7 +43,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         /// <param name="xmlUIProp">The xml string</param>
         /// <returns>Returns a UIGridProperty object</returns>
-        public UIGridProperty LoadUIProperty(string xmlUIProp)
+        public UIGridColumn LoadUIProperty(string xmlUIProp)
         {
             return this.LoadUIProperty(this.CreateXmlElement(xmlUIProp));
         }
@@ -53,9 +53,9 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         /// <param name="uiPropElement">The xml element</param>
         /// <returns>Returns a UIGridProperty object</returns>
-        public UIGridProperty LoadUIProperty(XmlElement uiPropElement)
+        public UIGridColumn LoadUIProperty(XmlElement uiPropElement)
         {
-            return (UIGridProperty) Load(uiPropElement);
+            return (UIGridColumn) Load(uiPropElement);
         }
 
         /// <summary>
@@ -195,15 +195,15 @@ namespace Habanero.Bo.Loaders
             string alignmentStr = Convert.ToString(_reader.GetAttribute("alignment"));
             if (alignmentStr == "left")
             {
-                _alignment = UIGridProperty.PropAlignment.left;
+                _alignment = UIGridColumn.PropAlignment.left;
             }
             else if (alignmentStr == "right")
             {
-                _alignment = UIGridProperty.PropAlignment.right;
+                _alignment = UIGridColumn.PropAlignment.right;
             }
             else
             {
-                _alignment = UIGridProperty.PropAlignment.centre;
+                _alignment = UIGridColumn.PropAlignment.centre;
             }
         }
     }

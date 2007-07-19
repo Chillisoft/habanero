@@ -193,22 +193,22 @@
     <Compile Include="UIFormColumn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UIFormDef.cs">
+    <Compile Include="UIForm.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UIFormGrid.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UIFormProperty.cs">
+    <Compile Include="UIFormField.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UIFormTab.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UIGridDef.cs">
+    <Compile Include="UIGrid.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UIGridProperty.cs">
+    <Compile Include="UIGridColumn.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Exceptions\UnknownTypeNameException.cs">

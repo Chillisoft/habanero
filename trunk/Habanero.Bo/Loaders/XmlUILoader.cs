@@ -10,8 +10,8 @@ namespace Habanero.Bo.Loaders
     /// </summary>
     public class XmlUILoader : XmlLoader
     {
-        private UIFormDef _uiFormDef;
-        private UIGridDef _uiGridDef;
+        private UIForm _uiForm;
+        private UIGrid _uiGrid;
         private string _name;
 
         //private string _xmlUICollections;
@@ -69,7 +69,7 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a UIDef object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateUIDef(_name, _uiFormDef, _uiGridDef);
+			return _defClassFactory.CreateUIDef(_name, _uiForm, _uiGrid);
 			//return new UIDef(_name, _uiFormDef, _uiGridDef);
         }
 
@@ -84,12 +84,12 @@ namespace Habanero.Bo.Loaders
             if (_reader.Name == "grid")
             {
                 XmlUIGridLoader loader = new XmlUIGridLoader(DtdLoader, _defClassFactory);
-                _uiGridDef = loader.LoadUIGridDef(_reader.ReadOuterXml());
+                _uiGrid = loader.LoadUIGridDef(_reader.ReadOuterXml());
             }
             if (_reader.Name == "form")
             {
                 XmlUIFormLoader loader = new XmlUIFormLoader(DtdLoader, _defClassFactory);
-                _uiFormDef = loader.LoadUIFormDef(_reader.ReadOuterXml());
+                _uiForm = loader.LoadUIFormDef(_reader.ReadOuterXml());
             }
         }
     }

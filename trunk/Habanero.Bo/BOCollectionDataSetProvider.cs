@@ -28,19 +28,19 @@ namespace Habanero.Bo
         /// <summary>
         /// Returns a data table with the UIGridDef provided
         /// </summary>
-        /// <param name="uiGridDef">The UIGridDef</param>
+        /// <param name="uiGrid">The UIGridDef</param>
         /// <returns>Returns a DataTable object</returns>
-        public DataTable GetDataTable(UIGridDef uiGridDef)
+        public DataTable GetDataTable(UIGrid uiGrid)
         {
             _table = new DataTable();
             this.InitialiseLocalData();
 
             //BusinessObject sampleBo = _collection.ClassDef.InstantiateBusinessObjectWithClassDef();
-            _uiGridProperties = uiGridDef; //sampleBo.GetUIDef().GetUIGridProperties();
+            _uiGridProperties = uiGrid; //sampleBo.GetUIDef().GetUIGridProperties();
             DataColumn column = _table.Columns.Add();
             column.Caption = "ID";
             column.ColumnName = "ID";
-            foreach (UIGridProperty uiProperty in _uiGridProperties)
+            foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
                 column = _table.Columns.Add();
                 if (_table.Columns.Contains(uiProperty.PropertyName))
@@ -64,7 +64,7 @@ namespace Habanero.Bo
                 values[0] = businessObjectBase.ID.ToString();
                 int i = 1;
                 BOMapper mapper = new BOMapper(businessObjectBase);
-                foreach (UIGridProperty gridProperty in _uiGridProperties)
+                foreach (UIGridColumn gridProperty in _uiGridProperties)
                 {
                     object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
                     // object val = businessObjectBase.GetPropertyValue(gridProperty.PropertyName);

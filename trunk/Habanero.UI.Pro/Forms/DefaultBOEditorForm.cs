@@ -43,7 +43,7 @@ namespace Habanero.Ui.Forms
 
             BOMapper mapper = new BOMapper(bo);
 
-            UIFormDef def;
+            UIForm def;
             if (_uiDefName.Length > 0)
             {
                 UIDef uiMapper = mapper.GetUIDef(_uiDefName);

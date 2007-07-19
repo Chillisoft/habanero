@@ -32,30 +32,30 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Adds a form property to the definition
+        /// Adds a form field to the definition
         /// </summary>
-        /// <param name="property">A form property definition</param>
-        public void Add(UIFormProperty property)
+        /// <param name="field">A form field definition</param>
+        public void Add(UIFormField field)
         {
-            _list.Add(property);
+            _list.Add(field);
         }
 
 		/// <summary>
-		/// Removes a form property from the definition
+		/// Removes a form field from the definition
 		/// </summary>
-		/// <param name="property">A form property definition</param>
-		public void Remove(UIFormProperty property)
+		/// <param name="field">A form field definition</param>
+		public void Remove(UIFormField field)
 		{
-			_list.Add(property);
+			_list.Add(field);
 		}
 
 		/// <summary>
-		/// Checks if a form property is in the definition
+		/// Checks if a form field is in the definition
 		/// </summary>
-		/// <param name="property">A form property definition</param>
-		public bool Contains(UIFormProperty property)
+		/// <param name="field">A form field definition</param>
+		public bool Contains(UIFormField field)
 		{
-			return _list.Contains(property);
+			return _list.Contains(field);
 		}
 
 		/// <summary>
@@ -65,9 +65,9 @@ namespace Habanero.Base
 		/// <param name="index">The index position to access</param>
 		/// <returns>Returns the property definition at the index position
 		/// specified</returns>
-		public UIFormProperty this[int index]
+		public UIFormField this[int index]
 		{
-			get { return (UIFormProperty)_list[index]; }
+			get { return (UIFormField)_list[index]; }
 		}
 
 

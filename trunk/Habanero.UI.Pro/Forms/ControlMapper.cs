@@ -17,7 +17,7 @@ namespace Habanero.Ui.Forms
     /// </summary>
     public abstract class ControlMapper
     {
-        protected static readonly ILog log = LogManager.GetLogger("Chillisoft.UI.BoControls.ControlMapper");
+        protected static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Forms.ControlMapper");
         protected Control _control;
         protected string _propertyName;
         protected readonly bool _isReadOnceOnly;

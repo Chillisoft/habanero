@@ -43,7 +43,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         /// <param name="xmlUIProp">The xml string</param>
         /// <returns>Returns a UIFormProperty object</returns>
-        public UIFormProperty LoadUIProperty(string xmlUIProp)
+        public UIFormField LoadUIProperty(string xmlUIProp)
         {
             return this.LoadUIProperty(this.CreateXmlElement(xmlUIProp));
         }
@@ -53,9 +53,9 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         /// <param name="uiPropElement">The xml element</param>
         /// <returns>Returns a UIFormProperty object</returns>
-        public UIFormProperty LoadUIProperty(XmlElement uiPropElement)
+        public UIFormField LoadUIProperty(XmlElement uiPropElement)
         {
-            return (UIFormProperty) Load(uiPropElement);
+            return (UIFormField) Load(uiPropElement);
         }
 
         /// <summary>

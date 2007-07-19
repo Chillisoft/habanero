@@ -6,7 +6,7 @@ namespace Habanero.Base
     /// Manages property definitions for a column in a user interface grid,
     /// as specified in the class definitions xml file
     /// </summary>
-    public class UIGridProperty
+    public class UIGridColumn
     {
         private string _heading;
         private string _propertyName;
@@ -35,7 +35,7 @@ namespace Habanero.Base
         /// edited directly)</param>
         /// <param name="width">The width</param>
         /// <param name="alignment">The horizontal alignment</param>
-        public UIGridProperty(string heading, string propertyName, Type gridControlType, bool editable, int width,
+        public UIGridColumn(string heading, string propertyName, Type gridControlType, bool editable, int width,
                               PropAlignment alignment)
         {
             _heading = heading;

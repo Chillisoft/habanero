@@ -22,7 +22,7 @@ namespace Habanero.Ui.Forms
         private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Forms.PanelFactory");
         private BusinessObject[] _boArray;
         //private IUserInterfaceMapper[] _uiArray;
-        private UIFormDef _uiFormDef;
+        private UIForm _uiForm;
         private Control _firstControl;
 
         private EventHandler _emailTextBoxDoubleClickedHandler;
@@ -37,18 +37,18 @@ namespace Habanero.Ui.Forms
             //_boArray = new BusinessObject[1];
             //_boArray[0] = bo;
             BOMapper mapper = new BOMapper(bo);
-            _uiFormDef = mapper.GetUIDef().GetUIFormProperties();
+            _uiForm = mapper.GetUIDef().GetUIFormProperties();
             //_emailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
             InitialiseFactory(bo);
         }
 
         /// <summary>
-        /// A constructor to initialise a new instance, with a UIFormDef object 
+        /// A constructor to initialise a new instance, with a UIForm object 
         /// specified
         /// </summary>
-        public PanelFactory(BusinessObject bo, UIFormDef uiFormDef)
+        public PanelFactory(BusinessObject bo, UIForm uiForm)
         {
-            _uiFormDef = uiFormDef;
+            _uiForm = uiForm;
             InitialiseFactory(bo);
         }
 
@@ -58,7 +58,7 @@ namespace Habanero.Ui.Forms
         public PanelFactory(BusinessObject bo, string uiDefName)
         {
             BOMapper mapper = new BOMapper(bo);
-            _uiFormDef = mapper.GetUIDef(uiDefName).GetUIFormProperties();
+            _uiForm = mapper.GetUIDef(uiDefName).GetUIFormProperties();
             InitialiseFactory(bo);
         }
 
@@ -81,7 +81,7 @@ namespace Habanero.Ui.Forms
             //log.Debug("Creating panel for object of type " + _boArray[0].GetType().Name ) ;
             PanelFactoryInfo factoryInfo;
             _firstControl = null;
-            if (_uiFormDef.Count > 1)
+            if (_uiForm.Count > 1)
             {
                 Panel mainPanel = new Panel();
                 ControlMapperCollection controlMappers = new ControlMapperCollection();
@@ -89,7 +89,7 @@ namespace Habanero.Ui.Forms
                 TabControl tabControl = new TabControl();
                 tabControl.Dock = DockStyle.Fill;
                 mainPanel.Controls.Add(tabControl);
-                foreach (UIFormTab formTab in _uiFormDef)
+                foreach (UIFormTab formTab in _uiForm)
                 {
                     PanelFactoryInfo onePanelInfo = CreateOnePanel(formTab);
                     foreach (ControlMapper controlMapper in onePanelInfo.ControlMappers)
@@ -111,15 +111,15 @@ namespace Habanero.Ui.Forms
             }
             else
             {
-                factoryInfo = CreateOnePanel(_uiFormDef[0]);
+                factoryInfo = CreateOnePanel(_uiForm[0]);
             }
-            if (_uiFormDef.Height > -1)
+            if (_uiForm.Height > -1)
             {
-                factoryInfo.PreferredHeight = _uiFormDef.Height;
+                factoryInfo.PreferredHeight = _uiForm.Height;
             }
-            if (_uiFormDef.Width > -1)
+            if (_uiForm.Width > -1)
             {
-                factoryInfo.PreferredWidth = _uiFormDef.Width;
+                factoryInfo.PreferredWidth = _uiForm.Width;
             }
             return factoryInfo;
         }
@@ -167,7 +167,7 @@ namespace Habanero.Ui.Forms
             foreach (UIFormColumn uiFormColumn in uiFormTab)
             {
                 int currentRow = 0;
-                foreach (UIFormProperty property in uiFormColumn)
+                foreach (UIFormField property in uiFormColumn)
                 {
                     //log.Debug("Creating label and control for property " + property.PropertyName + " with mapper type " + property.MapperTypeName) ;
                     bool isCompulsory = false;
@@ -403,7 +403,7 @@ namespace Habanero.Ui.Forms
 
             BusinessObjectCollection<BusinessObject> collection =
                 bo.Relationships.GetRelatedBusinessObjectCol(formGrid.RelationshipName);
-            //foreach (UIGridProperty property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
+            //foreach (UIGridColumn property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
             //{
             //    //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
             //}

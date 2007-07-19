@@ -8,30 +8,30 @@ namespace Habanero.Base
     public class UIDef 
     {
         private string _name;
-        private UIFormDef _uiFormDef;
-        private UIGridDef _uiGridDef;
+        private UIForm _uiForm;
+        private UIGrid _uiGrid;
 
         /// <summary>
         /// Constructor to initialise a new definition with the name, form
         /// and grid definitions provided
         /// </summary>
         /// <param name="name">The name</param>
-        /// <param name="uiFormDef">The form definition</param>
-        /// <param name="uiGridDef">The grid definition</param>
-        public UIDef(string name, UIFormDef uiFormDef, UIGridDef uiGridDef)
+        /// <param name="uiForm">The form definition</param>
+        /// <param name="uiGrid">The grid definition</param>
+        public UIDef(string name, UIForm uiForm, UIGrid uiGrid)
         {
             _name = name;
-            _uiFormDef = uiFormDef;
-            _uiGridDef = uiGridDef;
+            _uiForm = uiForm;
+            _uiGrid = uiGrid;
         }
 
         /// <summary>
         /// Returns the form definition
         /// </summary>
-        public UIFormDef UIFormDef
+        public UIForm UIForm
         {
-			get { return _uiFormDef; }
-			protected set { _uiFormDef = value; }
+			get { return _uiForm; }
+			protected set { _uiForm = value; }
         }
 
         /// <summary>
@@ -46,28 +46,28 @@ namespace Habanero.Base
         /// <summary>
         /// Returns the grid definition
         /// </summary>
-        public UIGridDef UIGridDef
+        public UIGrid UIGrid
         {
-            get { return _uiGridDef; }
-			protected set { _uiGridDef = value; }
+            get { return _uiGrid; }
+			protected set { _uiGrid = value; }
         }
 
         /// <summary>
         /// Returns the form property definitions
         /// </summary>
-        /// <returns>Returns a UIFormDef object</returns>
-        public UIFormDef GetUIFormProperties()
+        /// <returns>Returns a UIForm object</returns>
+        public UIForm GetUIFormProperties()
         {
-            return this.UIFormDef;
+            return this.UIForm;
         }
 
         /// <summary>
         /// Returns the grid property definitions
         /// </summary>
         /// <returns>Returns a UIGridDef object</returns>
-        public UIGridDef GetUIGridProperties()
+        public UIGrid GetUIGridProperties()
         {
-            return this.UIGridDef;
+            return this.UIGrid;
         }
     }
 }

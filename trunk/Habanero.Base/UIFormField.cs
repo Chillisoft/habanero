@@ -7,7 +7,7 @@ namespace Habanero.Base
     /// Manages a property definition for a control in a user interface editing
     /// form, as specified in the class definitions xml file
     /// </summary>
-    public class UIFormProperty
+    public class UIFormField
     {
         private string _label;
         private string _propertyName;
@@ -27,7 +27,7 @@ namespace Habanero.Base
         /// <param name="editable">Whether the control is read-only (cannot
         /// be edited directly)</param>
         /// <param name="parameters">The property attributes</param>
-        public UIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
+        public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
                               bool editable, Hashtable parameters)
         {
             this._label = label;

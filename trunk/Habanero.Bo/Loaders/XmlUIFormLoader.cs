@@ -12,7 +12,7 @@ namespace Habanero.Bo.Loaders
     /// </summary>
     public class XmlUIFormLoader : XmlLoader
     {
-        private UIFormDef _uiFormDef;
+        private UIForm _uiForm;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -36,7 +36,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         /// <param name="formDefElement">The xml string</param>
         /// <returns>Returns a UIFormDef object</returns>
-        public UIFormDef LoadUIFormDef(string formDefElement)
+        public UIForm LoadUIFormDef(string formDefElement)
         {
             return this.LoadUIFormDef(this.CreateXmlElement(formDefElement));
         }
@@ -46,9 +46,9 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         /// <param name="formDefElement">The xml element</param>
         /// <returns>Returns a UIFormDef object</returns>
-        public UIFormDef LoadUIFormDef(XmlElement formDefElement)
+        public UIForm LoadUIFormDef(XmlElement formDefElement)
         {
-            return (UIFormDef) this.Load(formDefElement);
+            return (UIForm) this.Load(formDefElement);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a UIFormDef object</returns>
         protected override object Create()
         {
-            return _uiFormDef;
+            return _uiForm;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         protected override void LoadFromReader()
         {
-			_uiFormDef = _defClassFactory.CreateUIFormDef();
+			_uiForm = _defClassFactory.CreateUIFormDef();
 			//_uiFormDef = new UIFormDef();
 
             //_reader.Read();
@@ -75,11 +75,11 @@ namespace Habanero.Bo.Loaders
             //_collection.Name = new UIPropertyCollectionName(_collection.Class, _reader.GetAttribute("name"));
 
             _reader.Read();
-            _uiFormDef.Title = _reader.GetAttribute("title");
+            _uiForm.Title = _reader.GetAttribute("title");
             try
             {
-                _uiFormDef.Width = Convert.ToInt32(_reader.GetAttribute("width"));
-                _uiFormDef.Height = Convert.ToInt32(_reader.GetAttribute("height"));
+                _uiForm.Width = Convert.ToInt32(_reader.GetAttribute("width"));
+                _uiForm.Height = Convert.ToInt32(_reader.GetAttribute("height"));
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@ namespace Habanero.Bo.Loaders
             XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
             XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
             List<UIFormColumn> columns = new List<UIFormColumn>();
-            List<UIFormProperty> fields = new List<UIFormProperty>();
+            List<UIFormField> fields = new List<UIFormField>();
             string contentType = "";
             while (_reader.Name != "form") {
                 if (_reader.Name == "tab") {
@@ -103,7 +103,7 @@ namespace Habanero.Bo.Loaders
                             "A form can have either a set of 'tab', 'columnLayout' or 'field' nodes, but not a mixture.");
                     }
                     contentType = "tab";
-                    _uiFormDef.Add(tabLoader.LoadUIFormTab(_reader.ReadOuterXml()));
+                    _uiForm.Add(tabLoader.LoadUIFormTab(_reader.ReadOuterXml()));
                 }
                 else if (_reader.Name == "columnLayout") {
                     if (contentType.Length > 0 && contentType != "columnLayout") {
@@ -129,17 +129,17 @@ namespace Habanero.Bo.Loaders
             if (contentType == "columnLayout") {
                 UIFormTab tab = _defClassFactory.CreateUIFormTab();
                 columns.ForEach(delegate(UIFormColumn obj) { tab.Add(obj); });
-                _uiFormDef.Add(tab);
+                _uiForm.Add(tab);
             }
             else if (contentType == "field") {
                 UIFormTab tab = _defClassFactory.CreateUIFormTab();
                 UIFormColumn col = _defClassFactory.CreateUIFormColumn();
-                fields.ForEach(delegate(UIFormProperty obj) { col.Add(obj); });
+                fields.ForEach(delegate(UIFormField obj) { col.Add(obj); });
                 tab.Add(col);
-                _uiFormDef.Add(tab);
+                _uiForm.Add(tab);
             }
 
-            if (_uiFormDef.Count == 0)
+            if (_uiForm.Count == 0)
             {
                 throw new InvalidXmlDefinitionException("No 'tab', 'columnLayout' or 'field' " +
                     "elements were specified in a 'form' element.  Ensure " +

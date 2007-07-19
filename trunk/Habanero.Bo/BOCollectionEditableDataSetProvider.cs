@@ -213,7 +213,7 @@ namespace Habanero.Bo
             BusinessObject changedBo = _collection.Find(e.Row["ID"].ToString());
             if (changedBo != null && !_isBeingAdded)
             {
-                foreach (UIGridProperty uiProperty in _uiGridProperties)
+                foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
                     if (uiProperty.PropertyName.IndexOf(".") == -1)
                     {
@@ -251,7 +251,7 @@ namespace Habanero.Bo
                 }
                 // set all the values in the grid to the bo's current prop values (defaults)
                 // make sure the part entered to create the row is not changed.
-                foreach (UIGridProperty uiProperty in _uiGridProperties)
+                foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
                     if (uiProperty.PropertyName.IndexOf(".") == -1)
                     {
@@ -312,7 +312,7 @@ namespace Habanero.Bo
             values[0] = e.BusinessObject.ID.ToString();
             int i = 1;
             BOMapper mapper = new BOMapper(e.BusinessObject);
-            foreach (UIGridProperty gridProperty in _uiGridProperties)
+            foreach (UIGridColumn gridProperty in _uiGridProperties)
             {
                 values[i++] = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
             }

@@ -23,7 +23,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestSimpleUIProperty()
         {
-            UIGridProperty uiProp =
+            UIGridColumn uiProp =
                 loader.LoadUIProperty(
                     @"<column heading=""testheading"" property=""testpropname"" type=""DataGridViewCheckBoxColumn"" width=""40"" />");
             Assert.AreEqual("testheading", uiProp.Heading);
@@ -35,7 +35,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestDefaults()
         {
-            UIGridProperty uiProp =
+            UIGridColumn uiProp =
                 loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" />");
             Assert.AreSame(typeof (DataGridViewTextBoxColumn), uiProp.GridControlType);
             Assert.AreEqual(100, uiProp.Width);
@@ -44,7 +44,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestAssemblyAttributeForSystem()
         {
-            UIGridProperty uiProp =
+            UIGridColumn uiProp =
                 loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" assembly=""System.Windows.Forms"" />");
             Assert.AreEqual(typeof(DataGridViewTextBoxColumn), uiProp.GridControlType);
         }
@@ -61,7 +61,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestCustomColumnType()
         {
-            UIGridProperty uiProp =
+            UIGridColumn uiProp =
                 loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""MyBo"" assembly=""Habanero.Test"" />");
             Assert.AreEqual(typeof(MyBo), uiProp.GridControlType);
         }

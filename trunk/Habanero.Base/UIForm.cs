@@ -7,7 +7,7 @@ namespace Habanero.Base
     /// Manages a collection of property definitions for a user interface
     /// editing form, as specified in the class definitions xml file
     /// </summary>
-    public class UIFormDef : ICollection
+    public class UIForm : ICollection
     {
         private IList _list;
         private int _width;
@@ -17,7 +17,7 @@ namespace Habanero.Base
         /// <summary>
         /// Constructor to initialise a new definition
         /// </summary>
-        public UIFormDef()
+        public UIForm()
         {
             _list = new ArrayList();
         }

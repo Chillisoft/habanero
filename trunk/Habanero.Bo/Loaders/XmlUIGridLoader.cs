@@ -11,7 +11,7 @@ namespace Habanero.Bo.Loaders
     /// </summary>
     public class XmlUIGridLoader : XmlLoader
     {
-        private UIGridDef _collection;
+        private UIGrid _collection;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -35,7 +35,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         /// <param name="formDefElement">The xml string</param>
         /// <returns>Returns a UIGridDef object</returns>
-        public UIGridDef LoadUIGridDef(string formDefElement)
+        public UIGrid LoadUIGridDef(string formDefElement)
         {
             return this.LoadUIGridDef(this.CreateXmlElement(formDefElement));
         }
@@ -45,9 +45,9 @@ namespace Habanero.Bo.Loaders
         /// </summary>
         /// <param name="formDefElement">The xml element</param>
         /// <returns>Returns a UIGridDef object</returns>
-        public UIGridDef LoadUIGridDef(XmlElement formDefElement)
+        public UIGrid LoadUIGridDef(XmlElement formDefElement)
         {
-            return (UIGridDef) this.Load(formDefElement);
+            return (UIGrid) this.Load(formDefElement);
         }
 
         /// <summary>

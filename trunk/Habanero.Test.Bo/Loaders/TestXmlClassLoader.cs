@@ -279,8 +279,8 @@ namespace Habanero.Test.Bo.Loaders
 			");
             UIDef uiDef = def.UIDefCol["default"];
             Assert.IsNotNull(uiDef);
-            Assert.IsNotNull(uiDef.UIFormDef);
-            Assert.IsNull(uiDef.UIGridDef);
+            Assert.IsNotNull(uiDef.UIForm);
+            Assert.IsNull(uiDef.UIGrid);
         }
     }
 

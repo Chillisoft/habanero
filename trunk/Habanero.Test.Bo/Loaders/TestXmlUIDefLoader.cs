@@ -35,8 +35,8 @@ namespace Habanero.Test.Bo.Loaders
 					</form>
 				</ui> 
 							");
-            Assert.IsNotNull(def.UIFormDef);
-            Assert.AreEqual(1, def.UIFormDef.Count);
+            Assert.IsNotNull(def.UIForm);
+            Assert.AreEqual(1, def.UIForm.Count);
         }
 
         [Test]
@@ -53,8 +53,8 @@ namespace Habanero.Test.Bo.Loaders
 					</grid>
 				</ui> 
 							");
-            Assert.IsNotNull(def.UIGridDef);
-            Assert.AreEqual(3, def.UIGridDef.Count);
+            Assert.IsNotNull(def.UIGrid);
+            Assert.AreEqual(3, def.UIGrid.Count);
         }
 
         [Test]
@@ -79,10 +79,10 @@ namespace Habanero.Test.Bo.Loaders
 					</form>
 				</ui> 
 							");
-            Assert.IsNotNull(def.UIFormDef);
-            Assert.AreEqual(1, def.UIFormDef.Count);
-            Assert.IsNotNull(def.UIGridDef);
-            Assert.AreEqual(3, def.UIGridDef.Count);
+            Assert.IsNotNull(def.UIForm);
+            Assert.AreEqual(1, def.UIForm.Count);
+            Assert.IsNotNull(def.UIGrid);
+            Assert.AreEqual(3, def.UIGrid.Count);
         }
 
         [Test]

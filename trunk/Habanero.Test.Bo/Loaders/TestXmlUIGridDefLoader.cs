@@ -21,7 +21,7 @@ namespace Habanero.Test.Bo.Loaders
         [Test]
         public void TestLoadPropertyCollection()
         {
-            UIGridDef def =
+            UIGrid def =
                 loader.LoadUIGridDef(
                     @"
 					<grid>
