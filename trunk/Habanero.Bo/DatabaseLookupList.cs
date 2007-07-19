@@ -105,6 +105,9 @@ namespace Habanero.Bo
         {
 		}
 
+        /// <summary>
+        /// Private constructor with all available parameters
+        /// </summary>
 		private DatabaseLookupList(string statement, int timeout, 
 			Type lookupObjectType, string assemblyName, string className)
 		{
@@ -126,10 +129,13 @@ namespace Habanero.Bo
 
 		#region Properties
 
-		protected string AssemblyName
+        /// <summary>
+        /// Gets and sets the assembly name for the class being sourced for data
+        /// </summary>
+		public string AssemblyName
 		{
 			get { return _assemblyName; }
-			set
+			protected set
 			{
 				if (_assemblyName != value)
 				{
@@ -140,10 +146,13 @@ namespace Habanero.Bo
 			}
 		}
 
-		protected string ClassName
+        /// <summary>
+        /// Gets and sets the class name being sourced for data
+        /// </summary>
+		public string ClassName
 		{
 			get { return _className; }
-			set
+			protected set
 			{
 				if (_className != value)
 				{
@@ -154,26 +163,27 @@ namespace Habanero.Bo
 		}
 
 		/// <summary>
-		/// Returns the sql statement which is used to specify which
+		/// Gets the sql statement which is used to specify which
 		/// objects to load for the lookup-list
 		/// </summary>
 		public string SqlString
 		{
 			get { return _statement; }
-			protected set { _statement = value; }
+			set { _statement = value; }
 		}
 
 		/// <summary>
-		/// 
+		/// Gets and sets the time-out period in seconds after which a fresh
+		/// copy will be loaded
 		/// </summary>
-		protected int TimeOut
+		public int TimeOut
     	{
 			get { return _timeout; }
     		set { _timeout = value; }
     	}
 
 		/// <summary>
-		/// Returns the class definition of the lookup type
+		/// Gets the class definition of the lookup type
 		/// </summary>
 		public ClassDef ClassDef
 		{
@@ -263,7 +273,6 @@ namespace Habanero.Bo
         /// time-out period has not expired, then the currently held list
         /// will be returned, otherwise a fresh one will be loaded.
         /// </summary>
-        /// <param name="connection">The database connection</param>
         /// <param name="bo">A business object with attached database
         /// connection</param>
         /// <returns>Returns a collection of string-Guid pairs</returns>

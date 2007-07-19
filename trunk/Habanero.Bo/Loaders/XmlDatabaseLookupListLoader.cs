@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.Bo;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Util;
@@ -12,6 +13,7 @@ namespace Habanero.Bo.Loaders
     public class XmlDatabaseLookupListLoader : XmlLookupListSourceLoader
     {
         private string _sqlString;
+        private int _timeout;
     	private string _assemblyName;
     	private string _className;
 
@@ -33,7 +35,7 @@ namespace Habanero.Bo.Loaders
         }
 
         /// <summary>
-        /// Loads the lookup list data from the reader, using the sql string,
+        /// Loads the lookup list data from the reader, using the sql string, time-out
         /// class name and assembly name specified in the reader
         /// </summary>
         protected override void LoadLookupListSourceFromReader()
@@ -41,6 +43,15 @@ namespace Habanero.Bo.Loaders
             _sqlString = _reader.GetAttribute("sql");
             _className = _reader.GetAttribute("class");
             _assemblyName = _reader.GetAttribute("assembly");
+
+            if (!Int32.TryParse(_reader.GetAttribute("timeout"), out _timeout) ||
+                _timeout < 0)
+            {
+                throw new InvalidXmlDefinitionException("In a 'databaseLookupList' " +
+                    "element, an invalid integer was assigned to the 'timeout' " +
+                    "attribute.  The value must be a positive integer or zero.");
+            }
+
         }
 
         /// <summary>
@@ -50,7 +61,7 @@ namespace Habanero.Bo.Loaders
         /// <returns>Returns a DatabaseLookupList object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateDatabaseLookupListSource(_sqlString, _assemblyName, _className);
+			return _defClassFactory.CreateDatabaseLookupListSource(_sqlString, _timeout,_assemblyName, _className);
 			//return new DatabaseLookupListSource(_sqlString, _assemblyName, _className);
 		}
     }

@@ -102,13 +102,30 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(
-                    @"<property  name=""TestProp""><databaseLookupList sql=""Source"" /></property>");
+                    @"<property  name=""TestProp""><databaseLookupList sql=""Source"" timeout=""100"" class=""MyBo"" assembly=""Habanero.Test"" /></property>");
             Assert.AreSame(typeof (DatabaseLookupList), def.LookupList.GetType(),
                            "LookupList should be of type DatabaseLookupList but is of type " +
                            def.LookupList.GetType().Name);
             DatabaseLookupList source = (DatabaseLookupList) def.LookupList;
             Assert.AreEqual("Source", source.SqlString, "LookupList should be the same as that specified in xml");
+            Assert.AreEqual(100, source.TimeOut);
+            Assert.AreEqual("MyBo", source.ClassName);
+            Assert.AreEqual("Habanero.Test", source.AssemblyName);
             Assert.IsNull(source.ClassDef);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestDatabaseLookupListWithInvalidTimeout()
+        {
+            itsLoader.LoadProperty(
+                    @"<property name=""TestProp""><databaseLookupList sql=""Source"" timeout=""aaa"" /></property>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestDatabaseLookupListWithNegativeTimeout()
+        {
+            itsLoader.LoadProperty(
+                    @"<property name=""TestProp""><databaseLookupList sql=""Source"" timeout=""-1"" /></property>");
         }
 
         [Test]
@@ -125,6 +142,7 @@ namespace Habanero.Test.Bo.Loaders
             DatabaseLookupList source = (DatabaseLookupList) def.LookupList;
             Assert.IsNotNull(source.ClassDef);
             Assert.AreEqual(classDef.ClassName, source.ClassDef.ClassName);
+            Assert.AreEqual(10000, source.TimeOut);
         }
 
 

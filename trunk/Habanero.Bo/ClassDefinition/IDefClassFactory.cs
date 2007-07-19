@@ -15,7 +15,7 @@ namespace Habanero.Bo.ClassDefinition
 
 		ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
 
-		DatabaseLookupList CreateDatabaseLookupListSource(string sqlString, string assemblyName, string className);
+        DatabaseLookupList CreateDatabaseLookupListSource(string sqlString, int timeout, string assemblyName, string className);
 		
 		KeyDef CreateKeyDef(string keyName);
 		
