@@ -11,9 +11,9 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads UI grid property definitions from xml data
     /// </summary>
-    public class XmlUIGridPropertyLoader : XmlLoader
+    public class XmlUIGridColumnLoader : XmlLoader
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.Loaders.XmlUIGridPropertyLoader");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.Loaders.XmlUIGridColumnLoader");
         private string _heading;
         private string _propertyName;
         private Type _gridControlType;
@@ -26,7 +26,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlUIGridPropertyLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public XmlUIGridColumnLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
         }
@@ -34,7 +34,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader
         /// </summary>
-        public XmlUIGridPropertyLoader()
+        public XmlUIGridColumnLoader()
         {
         }
 

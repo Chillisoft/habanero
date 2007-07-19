@@ -9,7 +9,7 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads super class information from xml data
     /// </summary>
-    public class XmlSuperClassDefLoader : XmlLoader
+    public class XmlSuperClassLoader : XmlLoader
     {
         private ORMapping _orMapping;
         private string _className;
@@ -21,7 +21,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlSuperClassDefLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public XmlSuperClassLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
         }
@@ -29,7 +29,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader
         /// </summary>
-        public XmlSuperClassDefLoader()
+        public XmlSuperClassLoader()
         {
         }
 

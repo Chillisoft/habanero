@@ -10,12 +10,12 @@ namespace Habanero.Test.Bo.Loaders
     [TestFixture]
     public class TestXmlUIGridDefLoader
     {
-        private XmlUIGridDefLoader loader;
+        private XmlUIGridLoader loader;
 
         [SetUp]
         public void SetupTest()
         {
-            loader = new XmlUIGridDefLoader();
+            loader = new XmlUIGridLoader();
         }
 
         [Test]

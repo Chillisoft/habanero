@@ -163,8 +163,8 @@ namespace Habanero.Bo.Loaders
         {
             if (xmlDef != null)
         {
-            XmlSuperClassDefLoader superClassDefLoader = new XmlSuperClassDefLoader(DtdLoader, _defClassFactory);
-                _SuperClassDef = superClassDefLoader.LoadSuperClassDesc(xmlDef);
+            XmlSuperClassLoader superClassLoader = new XmlSuperClassLoader(DtdLoader, _defClassFactory);
+                _SuperClassDef = superClassLoader.LoadSuperClassDesc(xmlDef);
             }
         }
 
@@ -189,7 +189,7 @@ namespace Habanero.Bo.Loaders
         {
 			_UIDefCol = _defClassFactory.CreateUIDefCol();
 			//_UIDefCol = new UIDefCol();
-            XmlUIDefLoader loader = new XmlUIDefLoader(DtdLoader, _defClassFactory);
+            XmlUILoader loader = new XmlUILoader(DtdLoader, _defClassFactory);
             foreach (string uiDefXml in xmlDefs)
             {
                 _UIDefCol.Add(loader.LoadUIDef(uiDefXml));

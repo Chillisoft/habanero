@@ -8,7 +8,7 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads UI definitions from xml data
     /// </summary>
-    public class XmlUIDefLoader : XmlLoader
+    public class XmlUILoader : XmlLoader
     {
         private UIFormDef _uiFormDef;
         private UIGridDef _uiGridDef;
@@ -19,7 +19,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader
         /// </summary>
-        public XmlUIDefLoader()
+        public XmlUILoader()
         {
         }
 
@@ -28,13 +28,13 @@ namespace Habanero.Bo.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlUIDefLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public XmlUILoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
         }
 
 
-        //		public XmlUIDefLoader(string xmlUICollections) {
+        //		public XmlUILoader(string xmlUICollections) {
         //			_xmlUICollections = xmlUICollections;
         //		}
 
@@ -83,12 +83,12 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             if (_reader.Name == "grid")
             {
-                XmlUIGridDefLoader loader = new XmlUIGridDefLoader(DtdLoader, _defClassFactory);
+                XmlUIGridLoader loader = new XmlUIGridLoader(DtdLoader, _defClassFactory);
                 _uiGridDef = loader.LoadUIGridDef(_reader.ReadOuterXml());
             }
             if (_reader.Name == "form")
             {
-                XmlUIFormDefLoader loader = new XmlUIFormDefLoader(DtdLoader, _defClassFactory);
+                XmlUIFormLoader loader = new XmlUIFormLoader(DtdLoader, _defClassFactory);
                 _uiFormDef = loader.LoadUIFormDef(_reader.ReadOuterXml());
             }
         }

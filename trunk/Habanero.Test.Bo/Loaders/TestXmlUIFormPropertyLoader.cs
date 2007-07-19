@@ -10,12 +10,12 @@ namespace Habanero.Test.Bo.Loaders
     [TestFixture]
     public class TestXmlUIFormPropertyLoader
     {
-        private XmlUIFormPropertyLoader loader;
+        private XmlUIFormFieldLoader loader;
 
         [SetUp]
         public void SetupTest()
         {
-            loader = new XmlUIFormPropertyLoader();
+            loader = new XmlUIFormFieldLoader();
         }
 
         [Test]

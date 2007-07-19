@@ -12,12 +12,12 @@ namespace Habanero.Test.Bo.Loaders
     [TestFixture]
     public class TestXmlUIGridPropertyLoader
     {
-        private XmlUIGridPropertyLoader loader;
+        private XmlUIGridColumnLoader loader;
 
         [SetUp]
         public void SetupTest()
         {
-            loader = new XmlUIGridPropertyLoader();
+            loader = new XmlUIGridColumnLoader();
         }
 
         [Test]

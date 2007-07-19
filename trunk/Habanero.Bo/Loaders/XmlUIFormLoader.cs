@@ -10,7 +10,7 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads UI form definitions from xml data
     /// </summary>
-    public class XmlUIFormDefLoader : XmlLoader
+    public class XmlUIFormLoader : XmlLoader
     {
         private UIFormDef _uiFormDef;
 
@@ -19,7 +19,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlUIFormDefLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public XmlUIFormLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
         }
@@ -27,7 +27,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader
         /// </summary>
-        public XmlUIFormDefLoader()
+        public XmlUIFormLoader()
         {
         }
 
@@ -92,7 +92,7 @@ namespace Habanero.Bo.Loaders
             _reader.Read();
             XmlUIFormTabLoader tabLoader = new XmlUIFormTabLoader(DtdLoader, _defClassFactory);
             XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
-            XmlUIFormPropertyLoader fieldLoader = new XmlUIFormPropertyLoader(DtdLoader, _defClassFactory);
+            XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
             List<UIFormColumn> columns = new List<UIFormColumn>();
             List<UIFormProperty> fields = new List<UIFormProperty>();
             string contentType = "";

@@ -11,12 +11,12 @@ namespace Habanero.Test.Bo.Loaders
     [TestFixture]
     public class TestXmlSuperClassDescLoader
     {
-        private XmlSuperClassDefLoader itsLoader;
+        private XmlSuperClassLoader itsLoader;
 
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlSuperClassDefLoader();
+            itsLoader = new XmlSuperClassLoader();
             ClassDef.ClassDefs.Clear();
             ClassDef.LoadClassDefs(
                 new XmlClassDefsLoader(

@@ -10,12 +10,12 @@ namespace Habanero.Test.Bo.Loaders
     [TestFixture]
     public class TestXmlUIDefLoader
     {
-        private XmlUIDefLoader itsLoader;
+        private XmlUILoader itsLoader;
 
         [SetUp]
         public void Setup()
         {
-            itsLoader = new XmlUIDefLoader();
+            itsLoader = new XmlUILoader();
         }
 
         [Test]

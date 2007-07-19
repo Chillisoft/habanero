@@ -260,14 +260,14 @@
     <Compile Include="Loaders\XmlRelationshipLoader.cs" />
     <Compile Include="Loaders\XmlRuleLoader.cs" />
     <Compile Include="Loaders\XmlSimpleLookupListLoader.cs" />
-    <Compile Include="Loaders\XmlSuperClassDefLoader.cs" />
-    <Compile Include="Loaders\XmlUIDefLoader.cs" />
+    <Compile Include="Loaders\XmlSuperClassLoader.cs" />
+    <Compile Include="Loaders\XmlUILoader.cs" />
     <Compile Include="Loaders\XmlUIFormColumnLoader.cs" />
-    <Compile Include="Loaders\XmlUIFormDefLoader.cs" />
-    <Compile Include="Loaders\XmlUIFormPropertyLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormFieldLoader.cs" />
     <Compile Include="Loaders\XmlUIFormTabLoader.cs" />
-    <Compile Include="Loaders\XmlUIGridDefLoader.cs" />
-    <Compile Include="Loaders\XmlUIGridPropertyLoader.cs" />
+    <Compile Include="Loaders\XmlUIGridLoader.cs" />
+    <Compile Include="Loaders\XmlUIGridColumnLoader.cs" />
     <Compile Include="MultipleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>

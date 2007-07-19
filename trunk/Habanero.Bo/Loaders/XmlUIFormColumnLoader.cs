@@ -86,7 +86,7 @@ namespace Habanero.Bo.Loaders
             }
 
             _reader.Read();
-            XmlUIFormPropertyLoader propLoader = new XmlUIFormPropertyLoader(DtdLoader, _defClassFactory);
+            XmlUIFormFieldLoader propLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
             while (_reader.Name == "field")
             {
                 _column.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));

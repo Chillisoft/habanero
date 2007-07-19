@@ -10,12 +10,12 @@ namespace Habanero.Test.Bo.Loaders
     [TestFixture]
     public class TestXmlUIFormDefLoader
     {
-        private XmlUIFormDefLoader loader;
+        private XmlUIFormLoader loader;
 
         [SetUp]
         public void SetupTest()
         {
-            loader = new XmlUIFormDefLoader();
+            loader = new XmlUIFormLoader();
         }
 
         [Test]

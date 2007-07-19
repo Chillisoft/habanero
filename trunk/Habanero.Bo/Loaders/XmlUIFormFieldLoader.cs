@@ -11,7 +11,7 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads UI form property information from xml data
     /// </summary>
-    public class XmlUIFormPropertyLoader : XmlLoader
+    public class XmlUIFormFieldLoader : XmlLoader
     {
         private string _label;
         private string _propertyName;
@@ -24,7 +24,7 @@ namespace Habanero.Bo.Loaders
         /// <summary>
         /// Constructor to initialise a new loader
         /// </summary>
-        public XmlUIFormPropertyLoader()
+        public XmlUIFormFieldLoader()
         {
         }
 
@@ -33,7 +33,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlUIFormPropertyLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public XmlUIFormFieldLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
         }

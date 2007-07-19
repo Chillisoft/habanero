@@ -88,7 +88,7 @@ namespace Habanero.Bo.Loaders
             //{
 
                 XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
-                XmlUIFormPropertyLoader fieldLoader = new XmlUIFormPropertyLoader(DtdLoader, _defClassFactory);
+                XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
             XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
 
                 List<UIFormProperty> fields = new List<UIFormProperty>();

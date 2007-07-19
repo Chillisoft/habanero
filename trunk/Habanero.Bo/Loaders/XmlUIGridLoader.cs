@@ -9,14 +9,14 @@ namespace Habanero.Bo.Loaders
     /// <summary>
     /// Loads UI grid definitions from xml data
     /// </summary>
-    public class XmlUIGridDefLoader : XmlLoader
+    public class XmlUIGridLoader : XmlLoader
     {
         private UIGridDef _collection;
 
         /// <summary>
         /// Constructor to initialise a new loader
         /// </summary>
-        public XmlUIGridDefLoader()
+        public XmlUIGridLoader()
         {
         }
 
@@ -25,7 +25,7 @@ namespace Habanero.Bo.Loaders
         /// </summary>
 		/// <param name="dtdLoader">The dtd loader</param>
 		/// <param name="defClassFactory">The factory for the definition classes</param>
-        public XmlUIGridDefLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        public XmlUIGridLoader(DtdLoader dtdLoader, IDefClassFactory defClassFactory)
 			: base(dtdLoader, defClassFactory)
         {
         }
@@ -75,7 +75,7 @@ namespace Habanero.Bo.Loaders
 
             _reader.Read();
             _reader.Read();
-            XmlUIGridPropertyLoader propLoader = new XmlUIGridPropertyLoader(DtdLoader, _defClassFactory);
+            XmlUIGridColumnLoader propLoader = new XmlUIGridColumnLoader(DtdLoader, _defClassFactory);
             while (_reader.Name == "column")
             {
                 _collection.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
