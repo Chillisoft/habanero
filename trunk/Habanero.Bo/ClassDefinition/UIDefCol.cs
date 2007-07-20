@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using Habanero.Base;
+using Habanero.Bo.ClassDefinition;
 
-namespace Habanero.Base
+namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
     /// Manages a collection of user interface definitions
@@ -27,11 +29,11 @@ namespace Habanero.Base
             if (_defs.Contains(def.Name))
             {
                 throw new InvalidXmlDefinitionException(String.Format(
-                    "A 'ui' definition with the name '{0}' is being added to " +
-                    "the collection of ui definitions for the class, but a " +
-                    "definition with that name already exists.  (Note: " +
-                    "'default' is the name given to a 'ui' element without " +
-                    "a 'name' attribute.)", def.Name));
+                                                            "A 'ui' definition with the name '{0}' is being added to " +
+                                                            "the collection of ui definitions for the class, but a " +
+                                                            "definition with that name already exists.  (Note: " +
+                                                            "'default' is the name given to a 'ui' element without " +
+                                                            "a 'name' attribute.)", def.Name));
             }
             _defs.Add(def.Name, def);
         }
@@ -42,19 +44,19 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="def">The ui definition</param>
         /// <returns>Returns true if contained</returns>
-		public bool Contains(UIDef def)
-		{
-			return _defs.ContainsKey(def.Name);
-		}
+        public bool Contains(UIDef def)
+        {
+            return _defs.ContainsKey(def.Name);
+        }
 
         /// <summary>
         /// Removes the specified ui definition from the collection
         /// </summary>
         /// <param name="def">The ui definition to remove</param>
-		public void Remove(UIDef def)
-		{
-			_defs.Remove(def.Name);
-		}
+        public void Remove(UIDef def)
+        {
+            _defs.Remove(def.Name);
+        }
 
         /// <summary>
         /// Provides an indexing facility so that the contents of the
@@ -71,19 +73,19 @@ namespace Habanero.Base
                     if (name == "default")
                     {
                         throw new HabaneroApplicationException(
-                           "No default 'ui' definition exists (a definition with " +
-                           "no name attribute).  Check that you have at least one " +
-                           "set of 'ui' definitions for the class, or check that " +
-                           "you have a default 'ui' definition, or ensure that " +
-                           "you have correctly indicated the name of the ui " +
-                           "definition you are intending to use.");
+                            "No default 'ui' definition exists (a definition with " +
+                            "no name attribute).  Check that you have at least one " +
+                            "set of 'ui' definitions for the class, or check that " +
+                            "you have a default 'ui' definition, or ensure that " +
+                            "you have correctly indicated the name of the ui " +
+                            "definition you are intending to use.");
                     }
                     else
                     {
                         throw new HabaneroApplicationException(String.Format(
-                           "The ui definition with the name '{0}' does not " +
-                           "exist in the collection of definitions for the " +
-                           "class.", name));
+                                                                   "The ui definition with the name '{0}' does not " +
+                                                                   "exist in the collection of definitions for the " +
+                                                                   "class.", name));
                     }
                 }
                 return (UIDef) this._defs[name];
@@ -96,7 +98,7 @@ namespace Habanero.Base
         /// <returns>Returns an object of type IEnumerator</returns>
         public IEnumerator GetEnumerator()
         {
-        	return _defs.GetEnumerator();
+            return _defs.GetEnumerator();
         }
     }
 }

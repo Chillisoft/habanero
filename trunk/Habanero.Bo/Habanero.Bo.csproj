@@ -98,12 +98,22 @@
     <Compile Include="BOLoader.cs" />
     <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOState.cs" />
+    <Compile Include="ClassDefinition\UIDef.cs" />
+    <Compile Include="ClassDefinition\UIDefCol.cs" />
+    <Compile Include="ClassDefinition\UIForm.cs" />
+    <Compile Include="ClassDefinition\UIFormColumn.cs" />
+    <Compile Include="ClassDefinition\UIFormField.cs" />
+    <Compile Include="ClassDefinition\UIFormGrid.cs" />
+    <Compile Include="ClassDefinition\UIFormTab.cs" />
+    <Compile Include="ClassDefinition\UIGrid.cs" />
+    <Compile Include="ClassDefinition\UIGridColumn.cs" />
     <Compile Include="Comparer\DateTimeComparer.cs" />
     <Compile Include="Comparer\GuidComparer.cs" />
     <Compile Include="Comparer\IntComparer.cs" />
     <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
+    <Compile Include="IDataSetProvider.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

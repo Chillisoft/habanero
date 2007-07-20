@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Habanero.Base
+namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
     /// Manages a property definition for a control in a user interface editing
@@ -28,7 +28,7 @@ namespace Habanero.Base
         /// be edited directly)</param>
         /// <param name="parameters">The property attributes</param>
         public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
-                              bool editable, Hashtable parameters)
+                           bool editable, Hashtable parameters)
         {
             this._label = label;
             this._propertyName = propertyName;
@@ -45,7 +45,7 @@ namespace Habanero.Base
         public string Label
         {
             get { return _label; }
-			protected set { _label = value; }
+            protected set { _label = value; }
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Habanero.Base
         public string PropertyName
         {
             get { return _propertyName; }
-			protected set { _propertyName = value; }
+            protected set { _propertyName = value; }
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Habanero.Base
         public string MapperTypeName
         {
             get { return _mapperTypeName; }
-			protected set { _mapperTypeName = value; }
+            protected set { _mapperTypeName = value; }
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Habanero.Base
         public Type ControlType
         {
             get { return _controlType; }
-			protected set { _controlType = value; }
+            protected set { _controlType = value; }
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Habanero.Base
         public bool Editable
         {
             get { return _editable; }
-			protected set { _editable = value; }
+            protected set { _editable = value; }
         }
 
         /// <summary>

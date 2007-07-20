@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Habanero.Base
+namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
     /// Manages a collection of property definitions for a user interface
@@ -22,53 +22,53 @@ namespace Habanero.Base
             _list = new ArrayList();
         }
 
-		/// <summary>
-		/// Adds a tab to the form
-		/// </summary>
-		/// <param name="tab">A UIFormTab object</param>
-		public void Add(UIFormTab tab)
-		{
-			_list.Add(tab);
-		}
+        /// <summary>
+        /// Adds a tab to the form
+        /// </summary>
+        /// <param name="tab">A UIFormTab object</param>
+        public void Add(UIFormTab tab)
+        {
+            _list.Add(tab);
+        }
 
-		/// <summary>
-		/// Removes a tab from the form
-		/// </summary>
-		/// <param name="tab">A UIFormTab object</param>
-		public void Remove(UIFormTab tab)
-		{
-			_list.Remove(tab);
-		}
+        /// <summary>
+        /// Removes a tab from the form
+        /// </summary>
+        /// <param name="tab">A UIFormTab object</param>
+        public void Remove(UIFormTab tab)
+        {
+            _list.Remove(tab);
+        }
 
-		/// <summary>
-		/// Checks if the form contains the specified tab
-		/// </summary>
-		/// <param name="tab">A UIFormTab object</param>
-		public bool Contains(UIFormTab tab)
-		{
-			return _list.Contains(tab);
-		}
+        /// <summary>
+        /// Checks if the form contains the specified tab
+        /// </summary>
+        /// <param name="tab">A UIFormTab object</param>
+        public bool Contains(UIFormTab tab)
+        {
+            return _list.Contains(tab);
+        }
 
-		/// <summary>
-		/// Provides an indexing facility so that the contents of the definition
-		/// collection can be accessed with square brackets like an array
-		/// </summary>
-		/// <param name="index">The index position to access</param>
-		/// <returns>Returns the property definition at the index position
-		/// specified</returns>
-		public UIFormTab this[int index]
-		{
-			get { return (UIFormTab)_list[index]; }
-		}
+        /// <summary>
+        /// Provides an indexing facility so that the contents of the definition
+        /// collection can be accessed with square brackets like an array
+        /// </summary>
+        /// <param name="index">The index position to access</param>
+        /// <returns>Returns the property definition at the index position
+        /// specified</returns>
+        public UIFormTab this[int index]
+        {
+            get { return (UIFormTab)_list[index]; }
+        }
 
-		/// <summary>
-		/// Returns the definition list's enumerator
-		/// </summary>
-		/// <returns>Returns an IEnumerator-type object</returns>
-		public IEnumerator GetEnumerator()
-		{
-			return _list.GetEnumerator();
-		}
+        /// <summary>
+        /// Returns the definition list's enumerator
+        /// </summary>
+        /// <returns>Returns an IEnumerator-type object</returns>
+        public IEnumerator GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
 
         /// <summary>
         /// Returns the number of definitions held

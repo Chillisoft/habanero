@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Base
+namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
     /// Manages property definitions for a grid in a user interface editing
@@ -35,8 +35,8 @@ namespace Habanero.Base
         /// </summary>
         public string RelationshipName
         {
-			get { return _relationshipName; }
-			protected set { _relationshipName = value; }
+            get { return _relationshipName; }
+            protected set { _relationshipName = value; }
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Habanero.Base
         public Type GridType
         {
             get { return _gridType; }
-			protected set { _gridType = value; }
+            protected set { _gridType = value; }
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Habanero.Base
         public string CorrespondingRelationshipName
         {
             get { return _correspondingRelationshipName; }
-			protected set { _correspondingRelationshipName = value; }
+            protected set { _correspondingRelationshipName = value; }
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace Habanero.Base
+namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
     /// Defines how the properties of a class are displayed in a user
@@ -30,8 +30,8 @@ namespace Habanero.Base
         /// </summary>
         public UIForm UIForm
         {
-			get { return _uiForm; }
-			protected set { _uiForm = value; }
+            get { return _uiForm; }
+            protected set { _uiForm = value; }
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Habanero.Base
         public string Name
         {
             get { return _name; }
-			protected set { _name = value; }
+            protected set { _name = value; }
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Habanero.Base
         public UIGrid UIGrid
         {
             get { return _uiGrid; }
-			protected set { _uiGrid = value; }
+            protected set { _uiGrid = value; }
         }
 
         /// <summary>

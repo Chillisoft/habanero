@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Habanero.Base
+namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
     /// Holds the property definitions for a column of controls in a user 
@@ -40,55 +40,55 @@ namespace Habanero.Base
             _list.Add(field);
         }
 
-		/// <summary>
-		/// Removes a form field from the definition
-		/// </summary>
-		/// <param name="field">A form field definition</param>
-		public void Remove(UIFormField field)
-		{
-			_list.Add(field);
-		}
+        /// <summary>
+        /// Removes a form field from the definition
+        /// </summary>
+        /// <param name="field">A form field definition</param>
+        public void Remove(UIFormField field)
+        {
+            _list.Add(field);
+        }
 
-		/// <summary>
-		/// Checks if a form field is in the definition
-		/// </summary>
-		/// <param name="field">A form field definition</param>
-		public bool Contains(UIFormField field)
-		{
-			return _list.Contains(field);
-		}
+        /// <summary>
+        /// Checks if a form field is in the definition
+        /// </summary>
+        /// <param name="field">A form field definition</param>
+        public bool Contains(UIFormField field)
+        {
+            return _list.Contains(field);
+        }
 
-		/// <summary>
-		/// Provides an indexing facility so that the contents of the definition
-		/// collection can be accessed with square brackets like an array
-		/// </summary>
-		/// <param name="index">The index position to access</param>
-		/// <returns>Returns the property definition at the index position
-		/// specified</returns>
-		public UIFormField this[int index]
-		{
-			get { return (UIFormField)_list[index]; }
-		}
+        /// <summary>
+        /// Provides an indexing facility so that the contents of the definition
+        /// collection can be accessed with square brackets like an array
+        /// </summary>
+        /// <param name="index">The index position to access</param>
+        /// <returns>Returns the property definition at the index position
+        /// specified</returns>
+        public UIFormField this[int index]
+        {
+            get { return (UIFormField)_list[index]; }
+        }
 
 
-		/// <summary>
-		/// Returns the number of property definitions held
-		/// </summary>
-		public int Count
-		{
-			get { return _list.Count; }
-		}
+        /// <summary>
+        /// Returns the number of property definitions held
+        /// </summary>
+        public int Count
+        {
+            get { return _list.Count; }
+        }
 
-		/// <summary>
-		/// Returns the definition list's enumerator
-		/// </summary>
-		/// <returns>Returns an IEnumerator-type object</returns>
-		public IEnumerator GetEnumerator()
-		{
-			return _list.GetEnumerator();
-		}
+        /// <summary>
+        /// Returns the definition list's enumerator
+        /// </summary>
+        /// <returns>Returns an IEnumerator-type object</returns>
+        public IEnumerator GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
 
-		/// <summary>
+        /// <summary>
         /// Copies the elements of the collection to an Array, 
         /// starting at a particular Array index
         /// </summary>

@@ -132,9 +132,6 @@
     <Compile Include="IDatabaseConnection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IDataSetProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IExceptionNotifier.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -182,33 +179,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IProgressIndicator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIDef.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIDefCol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIFormColumn.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIForm.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIFormGrid.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIFormField.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIFormTab.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIGrid.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UIGridColumn.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Exceptions\UnknownTypeNameException.cs">

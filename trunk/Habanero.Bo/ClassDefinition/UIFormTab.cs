@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
+using Habanero.Bo.ClassDefinition;
 
-namespace Habanero.Base
+namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
     /// Manages property definitions for a tab in a user interface editing 
@@ -31,32 +32,32 @@ namespace Habanero.Base
             _list = new ArrayList();
         }
 
-		/// <summary>
-		/// Adds a column definition to the collection of definitions
-		/// </summary>
-		/// <param name="column">The UIFormColumn object</param>
-		public void Add(UIFormColumn column)
-		{
-			_list.Add(column);
-		}
+        /// <summary>
+        /// Adds a column definition to the collection of definitions
+        /// </summary>
+        /// <param name="column">The UIFormColumn object</param>
+        public void Add(UIFormColumn column)
+        {
+            _list.Add(column);
+        }
 
-		/// <summary>
-		/// Removes a column definition from the collection of definitions
-		/// </summary>
-		/// <param name="column">The UIFormColumn object</param>
-		public void Remove(UIFormColumn column)
-		{
-			_list.Remove(column);
-		}
+        /// <summary>
+        /// Removes a column definition from the collection of definitions
+        /// </summary>
+        /// <param name="column">The UIFormColumn object</param>
+        public void Remove(UIFormColumn column)
+        {
+            _list.Remove(column);
+        }
 
-		/// <summary>
-		/// Checks if a column definition is in the collection of definitions
-		/// </summary>
-		/// <param name="column">The UIFormColumn object</param>
-		public bool Contains(UIFormColumn column)
-		{
-			return _list.Contains(column);
-		}
+        /// <summary>
+        /// Checks if a column definition is in the collection of definitions
+        /// </summary>
+        /// <param name="column">The UIFormColumn object</param>
+        public bool Contains(UIFormColumn column)
+        {
+            return _list.Contains(column);
+        }
 
         /// <summary>
         /// Copies the elements of the collection to an Array, 
@@ -70,17 +71,17 @@ namespace Habanero.Base
             _list.CopyTo(array, index);
         }
 
-		/// <summary>
-		/// Provides an indexing facility so that the contents of the definition
-		/// collection can be accessed with square brackets like an array
-		/// </summary>
-		/// <param name="index">The index position to access</param>
-		/// <returns>Returns the property definition at the index position
-		/// specified</returns>
-		public UIFormColumn this[int index]
-		{
-			get { return (UIFormColumn)_list[index]; }
-		}
+        /// <summary>
+        /// Provides an indexing facility so that the contents of the definition
+        /// collection can be accessed with square brackets like an array
+        /// </summary>
+        /// <param name="index">The index position to access</param>
+        /// <returns>Returns the property definition at the index position
+        /// specified</returns>
+        public UIFormColumn this[int index]
+        {
+            get { return (UIFormColumn)_list[index]; }
+        }
 				
         /// <summary>
         /// Returns the number of definitions held

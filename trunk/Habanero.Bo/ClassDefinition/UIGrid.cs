@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Habanero.Base
+namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
     /// Manages property definitions for a user interface grid, as specified
@@ -19,44 +19,44 @@ namespace Habanero.Base
             _list = new ArrayList();
         }
 
-		/// <summary>
-		/// Adds a grid property definition
-		/// </summary>
-		/// <param name="prop">The grid property definition</param>
-		public void Add(UIGridColumn prop)
-		{
-			_list.Add(prop);
-		}
+        /// <summary>
+        /// Adds a grid property definition
+        /// </summary>
+        /// <param name="prop">The grid property definition</param>
+        public void Add(UIGridColumn prop)
+        {
+            _list.Add(prop);
+        }
 
-		/// <summary>
-		/// Removes a grid property definition
-		/// </summary>
-		/// <param name="prop">The grid property definition</param>
-		public void Remove(UIGridColumn prop)
-		{
-			_list.Remove(prop);
-		}
+        /// <summary>
+        /// Removes a grid property definition
+        /// </summary>
+        /// <param name="prop">The grid property definition</param>
+        public void Remove(UIGridColumn prop)
+        {
+            _list.Remove(prop);
+        }
 
-		/// <summary>
-		/// Checks if a grid property definition is in the Grid definition
-		/// </summary>
-		/// <param name="prop">The grid property definition</param>
-		public bool Contains(UIGridColumn prop)
-		{
-			return _list.Contains(prop);
-		}
+        /// <summary>
+        /// Checks if a grid property definition is in the Grid definition
+        /// </summary>
+        /// <param name="prop">The grid property definition</param>
+        public bool Contains(UIGridColumn prop)
+        {
+            return _list.Contains(prop);
+        }
 		
-		/// <summary>
-		/// Provides an indexing facility so that the contents of the definition
-		/// collection can be accessed with square brackets like an array
-		/// </summary>
-		/// <param name="index">The index position to access</param>
-		/// <returns>Returns the property definition at the index position
-		/// specified</returns>
-		public UIGridColumn this[int index]
-		{
-			get { return (UIGridColumn)_list[index]; }
-		}
+        /// <summary>
+        /// Provides an indexing facility so that the contents of the definition
+        /// collection can be accessed with square brackets like an array
+        /// </summary>
+        /// <param name="index">The index position to access</param>
+        /// <returns>Returns the property definition at the index position
+        /// specified</returns>
+        public UIGridColumn this[int index]
+        {
+            get { return (UIGridColumn)_list[index]; }
+        }
 
         /// <summary>
         /// Copies the elements of the collection to an Array, 

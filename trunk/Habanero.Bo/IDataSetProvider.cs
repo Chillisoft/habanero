@@ -1,4 +1,5 @@
 using System.Data;
+using Habanero.Bo.ClassDefinition;
 
 namespace Habanero.Base
 {

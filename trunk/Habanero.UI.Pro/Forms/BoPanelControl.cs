@@ -1,7 +1,6 @@
-using System;
 using System.Windows.Forms;
 using Habanero.Bo;
-using Habanero.Base;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Ui.Base;
 using BusinessObject=Habanero.Bo.BusinessObject;
 

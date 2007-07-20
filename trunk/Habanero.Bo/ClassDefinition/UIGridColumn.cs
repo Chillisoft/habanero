@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Base
+namespace Habanero.Bo.ClassDefinition
 {
     /// <summary>
     /// Manages property definitions for a column in a user interface grid,
@@ -36,7 +36,7 @@ namespace Habanero.Base
         /// <param name="width">The width</param>
         /// <param name="alignment">The horizontal alignment</param>
         public UIGridColumn(string heading, string propertyName, Type gridControlType, bool editable, int width,
-                              PropAlignment alignment)
+                            PropAlignment alignment)
         {
             _heading = heading;
             _propertyName = propertyName;
@@ -52,7 +52,7 @@ namespace Habanero.Base
         public string Heading
         {
             get { return _heading; }
-			protected set { _heading = value; }
+            protected set { _heading = value; }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Habanero.Base
         public string PropertyName
         {
             get { return _propertyName; }
-			protected set { _propertyName = value; }
+            protected set { _propertyName = value; }
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Habanero.Base
         public Type GridControlType
         {
             get { return _gridControlType; }
-			protected set { _gridControlType = value; }
+            protected set { _gridControlType = value; }
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Habanero.Base
         public bool Editable
         {
             get { return _editable; }
-			protected set { _editable = value; }
+            protected set { _editable = value; }
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Habanero.Base
         public int Width
         {
             get { return _width; }
-			protected set { _width = value; }
+            protected set { _width = value; }
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Habanero.Base
         public PropAlignment Alignment
         {
             get { return _alignment; }
-			protected set { _alignment = value; }
+            protected set { _alignment = value; }
         }
     }
 }

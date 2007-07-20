@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Base;
 using Habanero.Ui.Grid;

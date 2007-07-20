@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Data;
 using Habanero.Base;
+using Habanero.Bo.ClassDefinition;
 
 namespace Habanero.Bo
 {

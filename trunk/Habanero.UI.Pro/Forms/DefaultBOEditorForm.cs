@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Base;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Ui.Base;
 using Habanero.Ui.Forms;
 using Habanero.Ui.Grid;

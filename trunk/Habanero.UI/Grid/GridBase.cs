@@ -4,6 +4,7 @@ using System.Data;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
+using Habanero.Bo.ClassDefinition;
 using Habanero.Ui.Grid;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;
