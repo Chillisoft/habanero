@@ -175,6 +175,7 @@
     <Compile Include="TesterContactPersonCompositeKey.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestExceptions.cs" />
     <Compile Include="TestInheritanceBase.cs">
       <SubType>Code</SubType>
     </Compile>

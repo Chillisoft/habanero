@@ -55,7 +55,9 @@
     <Compile Include="Sample.cs" />
     <Compile Include="Shape.cs" />
     <Compile Include="TestDelayedMethodCall.cs" />
+    <Compile Include="TestGlobalRegistry.cs" />
     <Compile Include="TestHabaneroStringBuilder.cs" />
+    <Compile Include="TestProgressIndicators.cs" />
     <Compile Include="TestStringUtilities.cs" />
     <Compile Include="TestUsingDatabase.cs" />
     <Compile Include="TestXmlDocumentValidator.cs" />
