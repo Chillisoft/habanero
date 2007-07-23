@@ -267,7 +267,7 @@ namespace Habanero.Test.General
 
         public BusinessObjectCollection<BusinessObject> GetCarsOwned()
         {
-            return Relationships.GetRelatedBusinessObjectCol("Owner");
+            return Relationships.GetRelatedCollection("Owner");
         }
 
         #endregion //Relationships

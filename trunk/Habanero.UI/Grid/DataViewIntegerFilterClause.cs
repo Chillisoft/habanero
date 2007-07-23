@@ -1,9 +1,9 @@
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 using Habanero.Util;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Manages a filter clause that filters which data to

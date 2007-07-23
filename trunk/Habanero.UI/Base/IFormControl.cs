@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Base
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// An interface to model an interface control for a form

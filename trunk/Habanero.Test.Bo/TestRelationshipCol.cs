@@ -30,7 +30,7 @@ namespace Habanero.Test.Bo
         public void TestMissingRelationshipErrorMessageSingle()
         {
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
-            bo1.Relationships.GetRelatedBusinessObject("WrongRelationshipName");
+            bo1.Relationships.GetRelatedObject("WrongRelationshipName");
         }
 
         [
@@ -41,29 +41,29 @@ namespace Habanero.Test.Bo
         public void TestMissingRelationshipErrorMessageMultiple()
         {
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
-            bo1.Relationships.GetRelatedBusinessObjectCol("WrongRelationshipName");
+            bo1.Relationships.GetRelatedCollection("WrongRelationshipName");
         }
 
         [
             Test,
                 ExpectedException(typeof (InvalidRelationshipAccessException),
-                    "The 'single' relationship MyRelationship was accessed as a 'multiple' relationship (using GetRelatedBusinessObjectCol())."
+                    "The 'single' relationship MyRelationship was accessed as a 'multiple' relationship (using GetRelatedCollection())."
                     )]
         public void TestInvalidRelationshipAccessSingle()
         {
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
-            bo1.Relationships.GetRelatedBusinessObjectCol("MyRelationship");
+            bo1.Relationships.GetRelatedCollection("MyRelationship");
         }
 
         [
             Test,
                 ExpectedException(typeof (InvalidRelationshipAccessException),
-                    "The 'multiple' relationship MyMultipleRelationship was accessed as a 'single' relationship (using GetRelatedBusinessObject())."
+                    "The 'multiple' relationship MyMultipleRelationship was accessed as a 'single' relationship (using GetRelatedObject())."
                     )]
         public void TestInvalidRelationshipAccessMultiple()
         {
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
-            bo1.Relationships.GetRelatedBusinessObject("MyMultipleRelationship");
+            bo1.Relationships.GetRelatedObject("MyMultipleRelationship");
         }
 
         [Test]
@@ -71,21 +71,21 @@ namespace Habanero.Test.Bo
         {
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
-            bo1.Relationships.SetRelatedBusinessObject("MyRelationship", relatedBo1);
-            Assert.AreSame(relatedBo1, bo1.Relationships.GetRelatedBusinessObject("MyRelationship"));
+            bo1.Relationships.SetRelatedObject("MyRelationship", relatedBo1);
+            Assert.AreSame(relatedBo1, bo1.Relationships.GetRelatedObject("MyRelationship"));
             Assert.AreSame(bo1.GetPropertyValue("RelatedID"), relatedBo1.GetPropertyValue("MyRelatedBoID"));
         }
 
         [
             Test,
                 ExpectedException(typeof (InvalidRelationshipAccessException),
-                    "SetRelatedBusinessObject() was passed a relationship (MyMultipleRelationship) that is of type 'multiple' when it expects a 'single' relationship"
+                    "SetRelatedObject() was passed a relationship (MyMultipleRelationship) that is of type 'multiple' when it expects a 'single' relationship"
                     )]
         public void TestSetRelatedBusinessObjectWithWrongRelationshipType()
         {
             MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
-            bo1.Relationships.SetRelatedBusinessObject("MyMultipleRelationship", relatedBo1);
+            bo1.Relationships.SetRelatedObject("MyMultipleRelationship", relatedBo1);
         }
     }
 }

@@ -211,16 +211,6 @@
            </Message>
           </Messages>
           <Members>
-           <Member Name="SettingsStorer">
-            <Messages>
-             <Message Id="Storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
-              <Issue Name="Member">
-               <Item>Storer</Item>
-               <Item>GlobalRegistry.SettingsStorer:ISettingsStorer</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="UIExceptionNotifier">
             <Messages>
              <Message Id="Notifier" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
@@ -403,24 +393,16 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="ISettingsStorer">
-          <Messages>
-           <Message Id="Storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-10 15:06:28Z">
-            <Issue Name="Type">
-             <Item>Storer</Item>
-             <Item>Habanero.Base.ISettingsStorer</Item>
-            </Issue>
-           </Message>
-          </Messages>
+         <Type Name="ISettings">
           <Members>
            <Member Name="SetBoolean(System.String,System.Boolean):System.Void">
             <Messages>
-             <Message Id="1#" TypeName="AvoidLanguageSpecificTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1718" Created="2007-07-10 15:06:28Z">
+             <Message Id="1#" TypeName="AvoidLanguageSpecificTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1718" Created="2007-07-16 14:42:40Z">
               <Issue>
                <Item>boolValue</Item>
               </Issue>
              </Message>
-             <Message Id="1#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Created="2007-07-10 15:06:28Z">
+             <Message Id="1#" TypeName="AvoidTypeNamesInParameters" Category="Microsoft.Naming" CheckId="CA1720" Created="2007-07-16 14:42:40Z">
               <Issue>
                <Item>boolValue</Item>
               </Issue>
@@ -557,6 +539,13 @@
           <Members>
            <Member Name="Add(Habanero.Base.UIDef):System.Void">
             <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-16 14:42:40Z">
+              <Issue>
+               <Item>UIDefCol.Add(UIDef):Void</Item>
+               <Item>System.String.Format(System.String,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
              <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2007-07-10 15:06:28Z">
               <Issue>
                <Item>'def'</Item>
@@ -574,6 +563,29 @@
               </Issue>
              </Message>
             </Messages>
+           </Member>
+           <Member Name="Item[System.String]">
+            <Accessors>
+             <Accessor Name="get_Item(System.String):Habanero.Base.UIDef">
+              <Messages>
+               <Message Id="Habanero.Base.HabaneroApplicationException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-16 14:42:40Z">
+                <Issue>
+                 <Item>UIDefCol.get_Item(String):UIDef</Item>
+                 <Item>1</Item>
+                 <Item>HabaneroApplicationException.HabaneroApplicationException(String)</Item>
+                 <Item>No default 'ui' definition exists (a definition with no name attribute).  Check that you have at least one set of 'ui' definitions for the class, or check that you have a default 'ui' definition, or ensure that you have correctly indicated the name of the ui definition you are intending to use.</Item>
+                </Issue>
+               </Message>
+               <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-16 14:42:40Z">
+                <Issue>
+                 <Item>UIDefCol.get_Item(String):UIDef</Item>
+                 <Item>System.String.Format(System.String,System.Object)</Item>
+                 <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+                </Issue>
+               </Message>
+              </Messages>
+             </Accessor>
+            </Accessors>
            </Member>
            <Member Name="Remove(Habanero.Base.UIDef):System.Void">
             <Messages>
@@ -1589,35 +1601,13 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="DatabaseSettingsStorer">
-          <Messages>
-           <Message Id="Storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 14:26:07Z">
-            <Issue Name="Type">
-             <Item>Storer</Item>
-             <Item>Habanero.DB.DatabaseSettingsStorer</Item>
-            </Issue>
-            <Notes>
-             <User Name="peter">
-              <Note Id="17" />
-             </User>
-            </Notes>
-           </Message>
-          </Messages>
+         <Type Name="DatabaseSettings">
           <Members>
-           <Member Name="CreateInsertStatement(System.String,System.String):Habanero.DB.SqlStatement">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2007-07-03 14:26:07Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>DatabaseSettingsStorer.CreateInsertStatement(String, String):SqlStatement</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="GetBoolean(System.String):System.Boolean">
             <Messages>
-             <Message Id="System.Convert.ToBoolean(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+             <Message Id="System.Convert.ToBoolean(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-16 14:42:40Z">
               <Issue>
-               <Item>DatabaseSettingsStorer.GetBoolean(String):Boolean</Item>
+               <Item>DatabaseSettings.GetBoolean(String):Boolean</Item>
                <Item>System.Convert.ToBoolean(System.Object)</Item>
                <Item>System.Convert.ToBoolean(System.Object,System.IFormatProvider)</Item>
               </Issue>
@@ -1626,9 +1616,9 @@
            </Member>
            <Member Name="GetString(System.String):System.String">
             <Messages>
-             <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+             <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-16 14:42:40Z">
               <Issue>
-               <Item>DatabaseSettingsStorer.GetString(String):String</Item>
+               <Item>DatabaseSettings.GetString(String):String</Item>
                <Item>System.Convert.ToString(System.Object)</Item>
                <Item>System.Convert.ToString(System.Object,System.IFormatProvider)</Item>
               </Issue>
@@ -1637,9 +1627,9 @@
            </Member>
            <Member Name="GetString(System.String,System.DateTime):System.String">
             <Messages>
-             <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-10 14:59:20Z">
+             <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-16 14:42:40Z">
               <Issue>
-               <Item>DatabaseSettingsStorer.GetString(String, DateTime):String</Item>
+               <Item>DatabaseSettings.GetString(String, DateTime):String</Item>
                <Item>System.Convert.ToString(System.Object)</Item>
                <Item>System.Convert.ToString(System.Object,System.IFormatProvider)</Item>
               </Issue>
@@ -1648,56 +1638,49 @@
            </Member>
            <Member Name="GetValue(System.String,System.DateTime):System.Object">
             <Messages>
-             <Message Id="settingName" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2007-07-03 14:26:07Z">
+             <Message Id="settingName" TypeName="AvoidUnnecessaryStringCreation" Category="Microsoft.Performance" CheckId="CA1807" Created="2007-07-16 14:42:40Z">
               <Issue Name="UseCaseInsensitiveHashtableParameter">
-               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>DatabaseSettings.GetValue(String, DateTime):Object</Item>
                <Item>Hashtable.Add(Object, Object):Void</Item>
                <Item>settingName</Item>
               </Issue>
               <Issue Name="UseCaseInsensitiveHashtableParameter">
-               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>DatabaseSettings.GetValue(String, DateTime):Object</Item>
                <Item>Hashtable.Remove(Object):Void</Item>
                <Item>settingName</Item>
               </Issue>
               <Issue Name="UseCaseInsensitiveHashtableParameter">
-               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>DatabaseSettings.GetValue(String, DateTime):Object</Item>
                <Item>Hashtable.get_Item(Object):Object</Item>
                <Item>settingName</Item>
               </Issue>
               <Issue Name="UseCaseInsensitiveHashtableParameter">
-               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>DatabaseSettings.GetValue(String, DateTime):Object</Item>
                <Item>Hashtable.get_Item(Object):Object</Item>
                <Item>settingName</Item>
               </Issue>
              </Message>
-             <Message Id="Habanero.Base.UserException.#ctor(System.String)" TypeName="DoNotPassLiteralsAsLocalizedParameters" Category="Microsoft.Globalization" CheckId="CA1303" Created="2007-07-03 14:26:07Z">
+             <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2007-07-16 14:42:40Z">
               <Issue>
-               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
-               <Item>1</Item>
-               <Item>UserException.UserException(String)</Item>
-               <Item>Setting ____ doesn't exist in the tbsetting table in the database. </Item>
-              </Issue>
-             </Message>
-             <Message Id="tbsetting" TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204" Created="2007-07-03 14:26:07Z">
-              <Issue>
-               <Item>tbsetting</Item>
-               <Item>Setting ____ doesn't exist in the tbsetting table in the database. </Item>
-              </Issue>
-             </Message>
-             <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2007-07-03 14:26:07Z">
-              <Issue>
-               <Item>DatabaseSettingsStorer.GetValue(String, DateTime):Object</Item>
+               <Item>DatabaseSettings.GetValue(String, DateTime):Object</Item>
                <Item>System.String.ToUpper</Item>
                <Item>System.String.ToUpper(System.Globalization.CultureInfo)</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-16 14:42:40Z">
+              <Issue>
+               <Item>DatabaseSettings.GetValue(String, DateTime):Object</Item>
+               <Item>System.String.Format(System.String,System.Object,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
            <Member Name="SetBoolean(System.String,System.Boolean):System.Void">
             <Messages>
-             <Message Id="System.Convert.ToString(System.Boolean)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+             <Message Id="System.Convert.ToString(System.Boolean)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-16 14:42:40Z">
               <Issue>
-               <Item>DatabaseSettingsStorer.SetBoolean(String, Boolean):Void</Item>
+               <Item>DatabaseSettings.SetBoolean(String, Boolean):Void</Item>
                <Item>System.Convert.ToString(System.Boolean)</Item>
                <Item>System.Convert.ToString(System.Boolean,System.IFormatProvider)</Item>
               </Issue>
@@ -1706,23 +1689,23 @@
            </Member>
            <Member Name="SetValue(System.String,System.String):System.Void">
             <Messages>
-             <Message Id="currentValue" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2007-07-03 14:26:07Z">
+             <Message Id="currentValue" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2007-07-16 14:42:40Z">
               <Issue>
-               <Item>DatabaseSettingsStorer.SetValue(String, String):Void</Item>
+               <Item>DatabaseSettings.SetValue(String, String):Void</Item>
                <Item>currentValue</Item>
                <Item>System.String</Item>
               </Issue>
              </Message>
-             <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2007-07-03 14:26:07Z">
+             <Message Id="System.String.ToUpper" TypeName="SpecifyCultureInfo" Category="Microsoft.Globalization" CheckId="CA1304" Created="2007-07-16 14:42:40Z">
               <Issue>
-               <Item>DatabaseSettingsStorer.SetValue(String, String):Void</Item>
+               <Item>DatabaseSettings.SetValue(String, String):Void</Item>
                <Item>System.String.ToUpper</Item>
                <Item>System.String.ToUpper(System.Globalization.CultureInfo)</Item>
               </Issue>
              </Message>
-             <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 14:26:07Z">
+             <Message Id="System.Convert.ToString(System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-16 14:42:40Z">
               <Issue>
-               <Item>DatabaseSettingsStorer.SetValue(String, String):Void</Item>
+               <Item>DatabaseSettings.SetValue(String, String):Void</Item>
                <Item>System.Convert.ToString(System.Object)</Item>
                <Item>System.Convert.ToString(System.Object,System.IFormatProvider)</Item>
               </Issue>
@@ -1731,23 +1714,23 @@
            </Member>
            <Member Name="UpdateCache(System.String,System.String):System.Void">
             <Messages>
-             <Message Id="settingValue" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2007-07-03 14:26:07Z" FixCategory="NonBreaking">
+             <Message Id="settingValue" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2007-07-16 14:42:40Z" FixCategory="NonBreaking">
               <Issue>
                <Item>settingValue</Item>
-               <Item>DatabaseSettingsStorer.UpdateCache(String, String):Void</Item>
+               <Item>DatabaseSettings.UpdateCache(String, String):Void</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
           </Members>
          </Type>
-         <Type Name="DatabaseSettingsStorer+Setting">
+         <Type Name="DatabaseSettings+Setting">
           <Members>
            <Member Name="Time">
             <Accessors>
              <Accessor Name="get_Time():System.DateTime">
               <Messages>
-               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2007-07-03 14:26:07Z">
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2007-07-16 14:42:40Z">
                 <Issue>
                  <Item>Setting.get_Time():DateTime</Item>
                 </Issue>
@@ -1898,6 +1881,17 @@
            </Message>
           </Messages>
           <Members>
+           <Member Name="AddMigration(System.Int32,Habanero.DB.SqlStatement):System.Void">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-16 14:42:40Z">
+              <Issue>
+               <Item>DBMigrator.AddMigration(Int32, SqlStatement):Void</Item>
+               <Item>System.String.Format(System.String,System.Object)</Item>
+               <Item>System.String.Format(System.IFormatProvider,System.String,System.Object[])</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="CurrentVersion():System.Int32">
             <Messages>
              <Message Id="System.Convert.ToInt32(System.String)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2007-07-03 18:24:57Z">
@@ -1925,30 +1919,20 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="SetSettingsStorer(Habanero.Base.ISettingsStorer):System.Void">
+           <Member Name="SetSettingsStorer(Habanero.Base.ISettings):System.Void">
             <Messages>
-             <Message Id="0#storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 18:24:57Z">
+             <Message Id="0#storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-16 14:42:40Z">
               <Issue Name="Parameter">
-               <Item>DBMigrator.SetSettingsStorer(ISettingsStorer):Void</Item>
+               <Item>DBMigrator.SetSettingsStorer(ISettings):Void</Item>
                <Item>storer</Item>
                <Item>storer</Item>
               </Issue>
-              <Notes>
-               <User Name="peter">
-                <Note Id="14" />
-               </User>
-              </Notes>
              </Message>
-             <Message Id="Storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2007-07-03 18:24:57Z">
+             <Message Id="Storer" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2007-07-16 14:42:40Z">
               <Issue Name="Member">
                <Item>Storer</Item>
-               <Item>DBMigrator.SetSettingsStorer(ISettingsStorer):Void</Item>
+               <Item>DBMigrator.SetSettingsStorer(ISettings):Void</Item>
               </Issue>
-              <Notes>
-               <User Name="peter">
-                <Note Id="15" />
-               </User>
-              </Notes>
              </Message>
             </Messages>
            </Member>
@@ -2015,10 +1999,7 @@
     <Note Id="11" Modified="2007-07-03 18:11:20Z">connectString is the correct term for it</Note>
     <Note Id="12" Modified="2007-07-03 18:12:55Z">connectString is the correct term</Note>
     <Note Id="13" Modified="2007-07-03 18:31:19Z">Migrator is correct</Note>
-    <Note Id="14" Modified="2007-07-03 18:31:26Z">storer is correct</Note>
-    <Note Id="15" Modified="2007-07-03 18:31:32Z">storer is correct</Note>
     <Note Id="16" Modified="2007-07-03 18:31:39Z">util is a valid abb</Note>
-    <Note Id="17" Modified="2007-07-03 18:31:46Z">storer is correct</Note>
    </User>
   </Notes>
   <Rules>
@@ -2075,7 +2056,6 @@
     <Resolution Name="Member">Correct the spelling of the unrecognized token '{0}' in member name '{1}'.</Resolution>
     <Resolution Name="Namespace">Correct the spelling of the unrecognized token '{0}' in namespace '{1}'.</Resolution>
     <Resolution Name="Parameter">In method {0}, correct the spelling of the unrecognized token '{1}' in parameter name '{2}' or strip it entirely if it represents any sort of hungarian notation.</Resolution>
-    <Resolution Name="ParameterOneLetter">In method {0}, consider providing a more meaningful name than the one-letter parameter name '{1}'.</Resolution>
     <Resolution Name="Type">Correct the spelling of the unrecognized token '{0}' in type name '{1}'.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
@@ -2083,9 +2063,6 @@
    </Rule>
    <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">
     <Resolution Name="Default">Make '{0}' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of '{1}' and is visible to derived classes.</Resolution>
-   </Rule>
-   <Rule TypeName="LiteralsShouldBeSpelledCorrectly" Category="Microsoft.Usage" CheckId="CA2204">
-    <Resolution Name="Default">Correct the spelling of the unrecognized token '{0}' in the literal '{1}'.</Resolution>
    </Rule>
    <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
     <Resolution Name="NoAttr">'{0}' should be marked with CLSCompliantAttribute and its value should be true.</Resolution>

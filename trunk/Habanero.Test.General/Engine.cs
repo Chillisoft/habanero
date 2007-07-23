@@ -123,7 +123,7 @@ namespace Habanero.Test.General
 
         public Car GetCar()
         {
-            return (Car) Relationships.GetRelatedBusinessObject("Car");
+            return (Car) Relationships.GetRelatedObject("Car");
         }
 
         #endregion //Relationships

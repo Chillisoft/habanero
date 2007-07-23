@@ -1,8 +1,9 @@
 using System;
 using System.Windows.Forms;
+using Habanero.UI.Base;
 using log4net;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// A mapper for the numeric up-down facility where the values are integers
@@ -10,7 +11,7 @@ namespace Habanero.Ui.Forms
     public class NumericUpDownIntegerMapper : NumericUpDownMapper
     {
         private static readonly new ILog log =
-            LogManager.GetLogger("Habanero.Ui.Forms.NumericUpDownIntegerMapper");
+            LogManager.GetLogger("Habanero.UI.Forms.NumericUpDownIntegerMapper");
 
         /// <summary>
         /// Constructor to initialise the mapper
@@ -21,6 +22,7 @@ namespace Habanero.Ui.Forms
         public NumericUpDownIntegerMapper(NumericUpDown control, string propName, bool isReadOnceOnly)
             : base(control, propName, isReadOnceOnly)
         {
+
             _numericUpDown.DecimalPlaces = 0;
             _numericUpDown.Maximum = Int32.MaxValue;
             _numericUpDown.Minimum = Int32.MinValue;

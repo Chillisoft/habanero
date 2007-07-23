@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Util
+namespace Habanero.UI.Util
 {
     public delegate void WizardStepEnabledUpdatedHandler(Object sender, WizardStepEventArgs e);
 

@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Base;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Manages a collection of filter input controls, that allow rows of
@@ -47,6 +47,7 @@ namespace Habanero.Ui.Grid
         /// <param name="clauseFactory">The filter clause factory</param>
         public FilterInputBoxCollection(IFilterClauseFactory clauseFactory)
         {
+            Permission.Check(this);
             _filterUIs = new ArrayList();
             _clauseFactory = clauseFactory;
             _controls = new ArrayList(8);

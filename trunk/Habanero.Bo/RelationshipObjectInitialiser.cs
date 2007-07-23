@@ -54,7 +54,7 @@ namespace Habanero.Bo
                 newBo.SetPropertyValue(propDef.OwnerPropertyName,
                                        _parentObject.GetPropertyValue(propDef.RelatedClassPropName));
             }
-            newBo.Relationships.SetRelatedBusinessObject(_correspondingRelationshipName, _parentObject);
+            newBo.Relationships.SetRelatedObject(_correspondingRelationshipName, _parentObject);
         }
 
         /// <summary>

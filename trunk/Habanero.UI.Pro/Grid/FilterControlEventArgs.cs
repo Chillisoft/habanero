@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Provides arguments relating to a filter control event
@@ -18,6 +19,7 @@ namespace Habanero.Ui.Grid
         /// <param name="sendingControl">The sending control</param>
         public FilterControlEventArgs(Control sendingControl)
         {
+            Permission.Check(this);
             _sendingControl = sendingControl;
         }
 

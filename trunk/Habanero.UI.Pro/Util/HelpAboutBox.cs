@@ -1,9 +1,9 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 
-namespace Habanero.Ui.Util
+namespace Habanero.UI.Util
 {
     /// <summary>
     /// Displays project information when the user chooses "About" from the
@@ -21,6 +21,7 @@ namespace Habanero.Ui.Util
         /// <param name="versionNumber">The version number</param>
         public HelpAboutBox(string programName, string producedForName, string producedByName, string versionNumber)
         {
+            Permission.Check(this);
             Panel mainPanel = new Panel();
             GridLayoutManager mainPanelManager = new GridLayoutManager(mainPanel);
             mainPanelManager.SetGridSize(4, 2);

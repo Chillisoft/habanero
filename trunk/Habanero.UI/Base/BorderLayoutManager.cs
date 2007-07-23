@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Habanero.Ui.Base
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Manages the layout of controls in a user interface by having

@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// An exception to be thrown when the lookup list has not been set before

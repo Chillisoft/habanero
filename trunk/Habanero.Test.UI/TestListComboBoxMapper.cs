@@ -2,7 +2,7 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Bo;
 using Habanero.Test.General;
-using Habanero.Ui.Forms;
+using Habanero.UI.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.BoControls

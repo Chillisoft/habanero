@@ -1,7 +1,8 @@
 using Habanero.Bo;
-using Habanero.Ui.Grid;
+using Habanero.UI.Base;
+using Habanero.UI.Grid;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Manages an editable grid, that displays a business object
@@ -13,6 +14,13 @@ namespace Habanero.Ui.Grid
     /// </summary>
     public class EditableGrid : GridBase, IEditableGrid
     {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public EditableGrid()
+        {
+            Permission.Check(this);
+        }
         /// <summary>
         /// Accepts and saves all changes to the data table
         /// </summary>

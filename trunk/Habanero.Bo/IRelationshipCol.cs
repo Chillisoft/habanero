@@ -6,7 +6,7 @@ namespace Habanero.Bo
     /// An interface to model a collection of relationships between
     /// business objects
     /// </summary>
-    public interface IRelationshipCol : IDictionary
+    public interface IRelationshipCol
     {
         /// <summary>
         /// Returns the business object that is related to this object
@@ -16,7 +16,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="relationshipName">The name of the relationship</param>
         /// <returns>Returns a business object</returns>
-        BusinessObject GetRelatedBusinessObject(string relationshipName);
+        BusinessObject GetRelatedObject(string relationshipName);
 
         /// <summary>
         /// Returns a collection of business objects that are connected to
@@ -26,7 +26,7 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="relationshipName">The name of the relationship</param>
         /// <returns>Returns a business object collection</returns>
-        BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol(string relationshipName);
+        BusinessObjectCollection<BusinessObject> GetRelatedCollection(string relationshipName);
 
         /// <summary>
         /// Relates a business object to this object through the type of
@@ -35,6 +35,13 @@ namespace Habanero.Bo
         /// </summary>
         /// <param name="relationshipName">The name of the relationship</param>
         /// <param name="parentObject">The object to relate to</param>
-        void SetRelatedBusinessObject(string relationshipName, BusinessObject parentObject);
+        void SetRelatedObject(string relationshipName, BusinessObject parentObject);
+
+        /// <summary>
+        /// Searches the relationship col for the relationship with the given name
+        /// </summary>
+        /// <param name="name">The relationship name</param>
+        /// <returns>The Relationship object</returns>
+        Relationship this[string name] { get;}
     }
 }

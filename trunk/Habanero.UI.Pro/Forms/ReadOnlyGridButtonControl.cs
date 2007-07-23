@@ -1,11 +1,12 @@
 using System;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Ui.Forms;
-using Habanero.Ui.Grid;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
+using Habanero.UI.Grid;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Manages the buttons attached to a ReadOnlyGridWithButtons. By default,
@@ -30,6 +31,7 @@ namespace Habanero.Ui.Forms
         /// <param name="readOnlyGrid">The read-only grid</param>
         public ReadOnlyGridButtonControl(IReadOnlyGrid readOnlyGrid)
         {
+            Permission.Check(this);
             this.AddButton("Add", new EventHandler(AddButtonClickHandler));
             this.AddButton("Edit", new EventHandler(EditButtonClickHandler));
             this._readOnlyGrid = readOnlyGrid;

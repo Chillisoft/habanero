@@ -3,10 +3,10 @@ using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Ui.Forms;
-using Habanero.Ui.Util;
+using Habanero.UI.Forms;
+using Habanero.UI.Util;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Manages the facility to set dates and times in the user interface

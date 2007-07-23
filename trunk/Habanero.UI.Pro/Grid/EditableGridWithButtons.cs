@@ -1,10 +1,10 @@
 using System.Windows.Forms;
 using Habanero.Bo;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
-using Habanero.Ui.Grid;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
+using Habanero.UI.Grid;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Manages an editable grid with buttons, that displays a business object
@@ -32,6 +32,7 @@ namespace Habanero.Ui.Grid
         /// </summary>
         public EditableGridWithButtons()
         {
+            Permission.Check(this);
             BorderLayoutManager manager = new BorderLayoutManager(this);
             _grid = new EditableGrid();
             _grid.Name = "GridControl";

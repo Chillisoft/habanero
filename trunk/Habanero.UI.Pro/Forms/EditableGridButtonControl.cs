@@ -1,10 +1,11 @@
 using System;
 using System.Windows.Forms;
 using Habanero.Base;
-using Habanero.Ui.Forms;
-using Habanero.Ui.Grid;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
+using Habanero.UI.Grid;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Manages buttons in an editable grid.  By default, "Save" and "Cancel"
@@ -25,6 +26,7 @@ namespace Habanero.Ui.Forms
         /// <param name="editableGrid">The editable grid</param>
         public EditableGridButtonControl(IEditableGrid editableGrid)
         {
+            Permission.Check(this);
             this.AddButton("Cancel", new EventHandler(CancelButtonClickHandler));
             this.AddButton("Save", new EventHandler(SaveButtonClickHandler));
             this._editableGrid = editableGrid;

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Base;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.Generic

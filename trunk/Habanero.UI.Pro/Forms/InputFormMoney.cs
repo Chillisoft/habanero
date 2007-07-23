@@ -1,7 +1,7 @@
 using System.Windows.Forms;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a form in which a user can edit a monetary value
@@ -16,6 +16,7 @@ namespace Habanero.Ui.Forms
         /// to display</param>
         public InputFormMoney(string message, decimal defaultValue) : base(message)
         {
+            Permission.Check(this);
             _numericUpDown.Value = defaultValue;
         }
 

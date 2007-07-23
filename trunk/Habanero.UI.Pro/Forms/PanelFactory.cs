@@ -4,14 +4,14 @@ using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
-using Habanero.Ui.Grid;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
+using Habanero.UI.Grid;
 using log4net;
 using System.Collections.Generic;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Creates panels that display business object information in a user
@@ -19,7 +19,7 @@ namespace Habanero.Ui.Forms
     /// </summary>
     public class PanelFactory
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Forms.PanelFactory");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
         private BusinessObject[] _boArray;
         //private IUserInterfaceMapper[] _uiArray;
         private UIForm _uiForm;
@@ -34,6 +34,7 @@ namespace Habanero.Ui.Forms
         /// <param name="bo">The business object to be represented</param>
         public PanelFactory(BusinessObject bo)
         {
+            Permission.Check(this);
             //_boArray = new BusinessObject[1];
             //_boArray[0] = bo;
             BOMapper mapper = new BOMapper(bo);
@@ -48,6 +49,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         public PanelFactory(BusinessObject bo, UIForm uiForm)
         {
+            Permission.Check(this);
             _uiForm = uiForm;
             InitialiseFactory(bo);
         }
@@ -57,6 +59,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         public PanelFactory(BusinessObject bo, string uiDefName)
         {
+            Permission.Check(this);
             BOMapper mapper = new BOMapper(bo);
             _uiForm = mapper.GetUIDef(uiDefName).GetUIFormProperties();
             InitialiseFactory(bo);
@@ -426,7 +429,7 @@ namespace Habanero.Ui.Forms
                                                   formGrid.CorrespondingRelationshipName);
 
             BusinessObjectCollection<BusinessObject> collection =
-                bo.Relationships.GetRelatedBusinessObjectCol(formGrid.RelationshipName);
+                bo.Relationships.GetRelatedCollection(formGrid.RelationshipName);
             //foreach (UIGridColumn property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
             //{
             //    //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);

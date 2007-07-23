@@ -1,5 +1,5 @@
-using Habanero.Ui.Forms;
-using Habanero.Ui.Grid;
+using Habanero.UI.Forms;
+using Habanero.UI.Grid;
 using NMock;
 using NUnit.Framework;
 

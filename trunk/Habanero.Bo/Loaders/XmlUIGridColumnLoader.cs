@@ -121,7 +121,8 @@ namespace Habanero.Bo.Loaders
                 }
                 else
                 {
-                    assemblyName = "Habanero.Ui.Grid";
+                    assemblyName = "Habanero.UI";
+                    className = "Habanero.UI.Grid." + className;
                 }
             }
             //log.Debug("assembly: " + assemblyName + ", class: " + className) ;

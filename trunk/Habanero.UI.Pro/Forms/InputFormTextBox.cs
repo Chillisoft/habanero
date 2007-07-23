@@ -1,7 +1,7 @@
 using System.Windows.Forms;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a form in which a user can enter text into an input box,
@@ -21,6 +21,7 @@ namespace Habanero.Ui.Forms
         /// in the text box (its height in lines)</param>
         public InputFormTextBox(string message, int numLines)
         {
+            Permission.Check(this);
             _message = message;
             _textBox = ControlFactory.CreateTextBox();
             if (numLines > 1)

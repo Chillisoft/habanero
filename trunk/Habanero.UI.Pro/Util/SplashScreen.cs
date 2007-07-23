@@ -2,9 +2,10 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using Habanero.Ui.Util;
+using Habanero.UI.Base;
+using Habanero.UI.Util;
 
-namespace Habanero.Ui.Util
+namespace Habanero.UI.Util
 {
     /// <summary>
     ///	Represents a splash screen that is displayed to the user while the
@@ -29,6 +30,7 @@ namespace Habanero.Ui.Util
         /// </summary>
         public SplashScreen()
         {
+            Permission.Check(this);
             InitializeComponent();
         }
 

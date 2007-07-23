@@ -1,6 +1,6 @@
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// An interface that models a grid that has buttons

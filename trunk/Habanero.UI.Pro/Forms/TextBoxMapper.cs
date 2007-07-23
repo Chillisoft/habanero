@@ -1,9 +1,9 @@
 using System;
 using System.Globalization;
 using System.Windows.Forms;
-using Habanero.Ui.Forms;
+using Habanero.UI.Forms;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Maps a TextBox object in a user interface.  Note that there are some

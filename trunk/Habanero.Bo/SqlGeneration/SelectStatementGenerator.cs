@@ -2,7 +2,7 @@ using System.Collections;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
 
-namespace Habanero.Bo
+namespace Habanero.Bo.SqlGeneration
 {
     /// <summary>
     /// Generates "select" sql statements to read a specified business

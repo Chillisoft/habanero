@@ -1,6 +1,6 @@
 using System.Data;
 using Habanero.Base;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 using NUnit.Framework;
 
 namespace Habanero.Test.Ui.Generic

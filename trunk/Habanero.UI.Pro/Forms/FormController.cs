@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a super-class for form controllers
@@ -22,6 +22,7 @@ namespace Habanero.Ui.Forms
         /// <param name="parentForm">The parent form</param>
         public FormController(Form parentForm)
         {
+            Permission.Check(this);
             _parentForm = parentForm;
         }
 

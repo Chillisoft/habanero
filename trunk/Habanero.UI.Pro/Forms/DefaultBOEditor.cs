@@ -2,9 +2,10 @@ using System;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
+using Habanero.UI.Base;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides an editing facility for a business object.
@@ -16,6 +17,13 @@ namespace Habanero.Ui.Forms
     /// </summary>
     public class DefaultBOEditor : IObjectEditor
     {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public DefaultBOEditor()
+        {
+            Permission.Check(this);
+        }
         /// <summary>
         /// Edits the given business object by providing a form in which the
         /// user can edit the data

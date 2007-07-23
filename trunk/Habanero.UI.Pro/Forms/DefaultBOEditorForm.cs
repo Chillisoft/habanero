@@ -4,14 +4,14 @@ using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Base;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
-using Habanero.Ui.Grid;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
+using Habanero.UI.Grid;
 using log4net;
 
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a form to edit a business object.  This form is initiated
@@ -23,7 +23,7 @@ namespace Habanero.Ui.Forms
     /// </summary>
     public class DefaultBOEditorForm : Form
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Forms.DefaultBOEditorForm");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.DefaultBOEditorForm");
         private readonly string _uiDefName;
         private ButtonControl _buttons;
         protected BusinessObject _bo;
@@ -39,6 +39,7 @@ namespace Habanero.Ui.Forms
         /// <param name="uiDefName">The uiDefName</param>
         public DefaultBOEditorForm(BusinessObject bo, string uiDefName)
         {
+            Permission.Check(this);
             _bo = bo;
             _uiDefName = uiDefName;
 

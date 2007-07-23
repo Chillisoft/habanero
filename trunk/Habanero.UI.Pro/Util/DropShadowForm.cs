@@ -1,8 +1,9 @@
 using System;
 using System.Security.Permissions;
 using System.Windows.Forms;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Util
+namespace Habanero.UI.Util
 {
     /// <summary>
     /// Provides a form that has a drop shadow
@@ -30,6 +31,7 @@ namespace Habanero.Ui.Util
         /// </summary>
         public DropShadowForm()
         {
+            Permission.Check(this);
         }
 
         /// <summary>

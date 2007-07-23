@@ -146,7 +146,7 @@ namespace Habanero.Test.General
 
         public BusinessObjectCollection<BusinessObject> GetCarsDriven()
         {
-            return Relationships.GetRelatedBusinessObjectCol("Driver");
+            return Relationships.GetRelatedCollection("Driver");
             //			return Car.LoadBusinessObjCol("DriverFK1 = " + 
             //					this.GetPropertyValueString("PK1Prop1") +
             //					" AND DriverFK2 = " + this.GetPropertyValueString("PK1Prop2"),"");

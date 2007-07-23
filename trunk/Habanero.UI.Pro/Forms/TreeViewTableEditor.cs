@@ -3,11 +3,11 @@ using System.Collections;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
-using Habanero.Ui.Base;
-using Habanero.Ui.Grid;
+using Habanero.UI.Base;
+using Habanero.UI.Grid;
 using Habanero.Util;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Manages an editor that uses a tree view
@@ -27,6 +27,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         public TreeViewTableEditor()
         {
+            Permission.Check(this);
             //BorderLayoutManager mainManager = new BorderLayoutManager(this);
             //_treeView = ControlFactory.CreateTreeView("TreeView");
             //mainManager.AddControl(_treeView, BorderLayoutManager.Position.West, true);

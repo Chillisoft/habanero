@@ -1,6 +1,6 @@
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 using Habanero.Util;
 using NUnit.Framework;
 

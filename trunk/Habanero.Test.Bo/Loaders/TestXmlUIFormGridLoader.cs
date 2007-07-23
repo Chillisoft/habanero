@@ -1,6 +1,6 @@
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 using NUnit.Framework;
 
 namespace Habanero.Test.Bo.Loaders

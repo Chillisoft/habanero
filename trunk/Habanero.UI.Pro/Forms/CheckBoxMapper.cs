@@ -1,7 +1,8 @@
 using System;
 using System.Windows.Forms;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// This mapper represents a CheckBox object in a user interface
@@ -18,6 +19,7 @@ namespace Habanero.Ui.Forms
         /// <param name="isReadOnceOnly">Whether this object can be read once only</param>
         public CheckBoxMapper(CheckBox cb, string propName, bool isReadOnceOnly) : base(cb, propName, isReadOnceOnly)
         {
+            Permission.Check(this);
             _checkBox = cb;
             _checkBox.CheckedChanged += new EventHandler(ValueChangedHandler);
         }

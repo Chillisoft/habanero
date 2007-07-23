@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a multiselector control. The type to be displayed in the 
@@ -17,6 +18,7 @@ namespace Habanero.Ui.Forms
         /// A constructor to initialise a new selector
         /// </summary>
         public MultiSelector() {
+            Permission.Check(this);
             InitializeComponent();
             _model = new Model();
 			_model.OptionsChanged +=delegate 

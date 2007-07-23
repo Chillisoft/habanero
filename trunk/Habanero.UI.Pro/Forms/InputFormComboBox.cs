@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a form in which a user can select from a combo box,
@@ -19,6 +19,7 @@ namespace Habanero.Ui.Forms
         /// <param name="options">The List of options to display</param>
         public InputFormComboBox(string message, List<object> options)
         {
+            Permission.Check(this);
             _message = message;
             _comboBox = ControlFactory.CreateComboBox();
             options.ForEach(delegate(object obj) { _comboBox.Items.Add(obj); });

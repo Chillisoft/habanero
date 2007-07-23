@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// This class provides mapping from a lookup-list to a
@@ -25,6 +25,7 @@ namespace Habanero.Ui.Forms
         public LookupComboBoxMapper(ComboBox cbx, string propName, bool isReadOnceOnly)
             : base(cbx, propName, isReadOnceOnly)
         {
+            Permission.Check(this);
             _comboBox = cbx;
             //_comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             _comboBox.SelectedIndexChanged += new EventHandler(ValueChangedHandler);

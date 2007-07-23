@@ -2,8 +2,9 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a control that displays a picture
@@ -26,6 +27,7 @@ namespace Habanero.Ui.Forms
         /// center the image</param>
         public PictureControl(bool stretchToFit)
         {
+            Permission.Check(this);
             try
             {
                 _picture = Image.FromFile("logo.jpg");

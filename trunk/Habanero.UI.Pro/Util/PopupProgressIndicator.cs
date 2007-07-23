@@ -1,9 +1,9 @@
 using System.Threading;
 using System.Windows.Forms;
 using Habanero.Base;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Util
+namespace Habanero.UI.Util
 {
     /// <summary>
     /// Provides a form that displays a progress indicator to the user
@@ -19,6 +19,7 @@ namespace Habanero.Ui.Util
         /// <param name="message">The message to display</param>
         public PopupProgressIndicator(string message)
         {
+            Permission.Check(this);
             _popupProgressForm = new PopupProgressForm(message);
             _popupProgressForm.SetProgress(0);
             _popupProgressForm.Height = 100;

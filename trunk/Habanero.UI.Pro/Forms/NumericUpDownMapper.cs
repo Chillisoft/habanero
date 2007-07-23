@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Ui.Forms;
+using Habanero.UI.Forms;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// A super-class for mappers of the numeric up-down facility

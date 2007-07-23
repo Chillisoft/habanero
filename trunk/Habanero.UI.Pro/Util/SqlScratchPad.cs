@@ -3,10 +3,10 @@ using System.Data;
 using System.Windows.Forms;
 using Habanero.DB;
 using Habanero.Base;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 
-namespace Habanero.Ui.Util
+namespace Habanero.UI.Util
 {
     /// <summary>
     /// Provides a pad in which raw sql can be typed and executed
@@ -25,6 +25,7 @@ namespace Habanero.Ui.Util
         /// </summary>
         public SqlScratchPad()
         {
+            Permission.Check(this);
             _scriptTextBox = ControlFactory.CreateTextBox();
             _scriptTextBox.Multiline = true;
             _scriptTextBox.ScrollBars = ScrollBars.Vertical;

@@ -7,14 +7,14 @@ using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.DB;
 using Habanero.Base;
-//using Habanero.Ui.Misc;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
+//using Habanero.UI.Misc;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 using Habanero.Util;
 using log4net;
 using log4net.Config;
 
-namespace Habanero.Ui.Base
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Provides a template for a standard Habanero application, including

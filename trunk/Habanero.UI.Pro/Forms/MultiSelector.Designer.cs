@@ -1,4 +1,4 @@
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     public partial class MultiSelector<T>
     {

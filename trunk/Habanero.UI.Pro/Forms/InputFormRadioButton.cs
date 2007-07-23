@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Windows.Forms;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a form in which a user can choose one from a number
@@ -17,6 +17,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         public InputFormRadioButton()
         {
+            Permission.Check(this);
             _radioButtons = new ArrayList();
         }
 

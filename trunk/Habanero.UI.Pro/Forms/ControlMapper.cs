@@ -5,11 +5,12 @@ using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Base;
+using Habanero.UI.Base;
 using Habanero.Util.File;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// This provides a super class for objects that map user interface
@@ -17,7 +18,7 @@ namespace Habanero.Ui.Forms
     /// </summary>
     public abstract class ControlMapper
     {
-        protected static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Forms.ControlMapper");
+        protected static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.ControlMapper");
         protected Control _control;
         protected string _propertyName;
         protected readonly bool _isReadOnceOnly;
@@ -34,6 +35,7 @@ namespace Habanero.Ui.Forms
         /// handlers are assigned to manage key presses.</param>
         protected ControlMapper(Control ctl, string propName, bool isReadOnceOnly)
         {
+            Permission.Check(this);
             _control = ctl;
             _propertyName = propName;
             _isReadOnceOnly = isReadOnceOnly;

@@ -157,17 +157,17 @@ namespace Habanero.Test.General
 
         public ContactPerson GetOwner()
         {
-            return (ContactPerson) Relationships.GetRelatedBusinessObject("Owner");
+            return (ContactPerson) Relationships.GetRelatedObject("Owner");
         }
 
         public ContactPersonCompositeKey GetDriver()
         {
-            return (ContactPersonCompositeKey) Relationships.GetRelatedBusinessObject("Driver");
+            return (ContactPersonCompositeKey) Relationships.GetRelatedObject("Driver");
         }
 
         public Engine GetEngine()
         {
-            return (Engine) Relationships.GetRelatedBusinessObject("Engine");
+            return (Engine) Relationships.GetRelatedObject("Engine");
         }
 
         #endregion //Relationships

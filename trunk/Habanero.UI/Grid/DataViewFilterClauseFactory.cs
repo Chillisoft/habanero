@@ -1,8 +1,8 @@
 using Habanero.Base;
 using Habanero.Bo;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Creates filter clauses that determine which rows of data are displayed

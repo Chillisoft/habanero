@@ -2,12 +2,12 @@ using System;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a control for collection ComboBoxes
@@ -38,6 +38,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         public ComboBoxCollectionControl()
         {
+            Permission.Check(this);
             //log.Debug("Creating comboboxcollectioncontrol") ;
             //_databaseConnection = databaseConnection;
             BorderLayoutManager manager = new BorderLayoutManager(this);

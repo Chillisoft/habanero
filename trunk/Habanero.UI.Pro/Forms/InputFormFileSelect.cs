@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a form in which a user can choose a file name
@@ -19,6 +19,7 @@ namespace Habanero.Ui.Forms
         /// <param name="message">The message to display</param>
         public InputFormFileSelect(string message)
         {
+            Permission.Check(this);
             _message = message;
             _textBox = ControlFactory.CreateTextBox();
         }

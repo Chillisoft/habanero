@@ -1,7 +1,7 @@
 using System.Windows.Forms;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a super-class for a form in which a user can edit a numeric value
@@ -17,6 +17,7 @@ namespace Habanero.Ui.Forms
         /// <param name="message">The message to display</param>
         public InputFormNumeric(string message)
         {
+            Permission.Check(this);
             _message = message;
             _numericUpDown = CreateNumericUpDown();
         }

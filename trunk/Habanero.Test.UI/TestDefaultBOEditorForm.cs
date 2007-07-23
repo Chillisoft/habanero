@@ -5,7 +5,7 @@ using Habanero.Bo;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
-using Habanero.Ui.Forms;
+using Habanero.UI.Forms;
 using NMock;
 using NUnit.Framework;
 using BusinessObject=Habanero.Bo.BusinessObject;

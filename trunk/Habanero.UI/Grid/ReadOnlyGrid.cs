@@ -5,10 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Bo;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 using log4net;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Manages a read-only grid (a grid that cannot be edited directly).
@@ -17,7 +17,7 @@ namespace Habanero.Ui.Grid
     /// </summary>
     public class ReadOnlyGrid : GridBase, IReadOnlyGrid
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Grid.ReadOnlyGrid");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Grid.ReadOnlyGrid");
 
         public event RowDoubleClickedHandler RowDoubleClicked;
 

@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Base;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Manages a collection of filter input controls, that allow rows of
@@ -41,11 +41,17 @@ namespace Habanero.Ui.Grid
         public event EventHandler<FilterControlEventArgs> FilterClauseChanged;
         
         /// <summary>
+        /// Default constructor - uses the DataViewFilterClauseFactory as the filer clause factory.
+        /// </summary>
+        public FilterControl() : this(new DataViewFilterClauseFactory()) {}
+
+        /// <summary>
         /// Constructor to initialise a new filter control
         /// </summary>
         /// <param name="clauseFactory">The filter clause factory</param>
         public FilterControl(IFilterClauseFactory clauseFactory)
         {
+            Permission.Check(this);
             _layoutManager = new FlowLayoutManager(this);
             _filterInputBoxCollection = new FilterInputBoxCollection(clauseFactory);
             _filterInputBoxCollection.FilterClauseChanged += new EventHandler(FilterControlValueChangedHandler);

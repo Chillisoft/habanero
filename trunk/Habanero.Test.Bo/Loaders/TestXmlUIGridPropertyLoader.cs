@@ -2,7 +2,7 @@ using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.Loaders;
 using Habanero.Base;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 using NUnit.Framework;
 
 namespace Habanero.Test.Bo.Loaders
@@ -50,14 +50,13 @@ namespace Habanero.Test.Bo.Loaders
             Assert.AreEqual(typeof(DataGridViewTextBoxColumn), uiProp.GridControlType);
         }
 
-        //This test is breaking
-//        [Test]
-//        public void TestAssemblyAttributeForHabaneroTypes()
-//        {
-//            UIGridProperty uiProp =
-//                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""DataGridViewNumericUpDownColumn"" />");
-//            Assert.AreEqual(typeof(DataGridViewNumericUpDownColumn), uiProp.GridControlType);
-//        }
+        [Test]
+        public void TestAssemblyAttributeForHabaneroTypes()
+        {
+            UIGridColumn uiProp =
+                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""DataGridViewNumericUpDownColumn"" />");
+            Assert.AreEqual(typeof(DataGridViewNumericUpDownColumn), uiProp.GridControlType);
+        }
 
         [Test]
         public void TestCustomColumnType()

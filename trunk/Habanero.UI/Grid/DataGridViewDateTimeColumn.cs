@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Represents a column in data grid view

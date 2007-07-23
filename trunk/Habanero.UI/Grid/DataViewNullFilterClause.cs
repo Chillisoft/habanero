@@ -1,7 +1,7 @@
 using Habanero.Base;
 using Habanero.Bo;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Manages a null filter clause, which carries out no filtering of data

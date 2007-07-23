@@ -1,5 +1,5 @@
 using System.Windows.Forms;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 using NUnit.Framework;
 using System;
 using System.Collections;

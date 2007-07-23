@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
-using Habanero.Ui.Grid;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
+using Habanero.UI.Grid;
 using Habanero.Util;
 using log4net;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Manages a read-only grid with buttons (ie. a grid whose objects are
@@ -37,7 +37,7 @@ namespace Habanero.Ui.Grid
         /// <param name="bo">The business object</param>
         public delegate void SetBusinessObjectDelegate(BusinessObject bo);
 
-        private static ILog log = LogManager.GetLogger("Habanero.Ui.Grid.ReadOnlyGridWithButtons");
+        private static ILog log = LogManager.GetLogger("Habanero.UI.Grid.ReadOnlyGridWithButtons");
         public event EventHandler ItemSelected;
 
         private ReadOnlyGrid _grid;
@@ -54,6 +54,7 @@ namespace Habanero.Ui.Grid
         /// </summary>
         public ReadOnlyGridWithButtons()
         {
+            Permission.Check(this);
             _itemSelectedMethodCaller = new DelayedMethodCall(500, this);
             BorderLayoutManager manager = new BorderLayoutManager(this);
             _grid = new ReadOnlyGrid();

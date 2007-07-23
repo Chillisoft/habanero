@@ -4,10 +4,10 @@ using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Ui.Forms;
+using Habanero.UI.Forms;
 using Noogen.WinForms;
 
-namespace Habanero.Ui.Base
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Produces a range of user interface objects as requested

@@ -1,10 +1,10 @@
 using System;
 using System.Windows.Forms;
 using Habanero.Base;
-using Habanero.Ui.Forms;
+using Habanero.UI.Forms;
 using log4net;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// A mapper for the numeric up-down facility where the values are monetary
@@ -12,7 +12,7 @@ namespace Habanero.Ui.Forms
     public class NumericUpDownMoneyMapper : NumericUpDownMapper
     {
         private static readonly new ILog log =
-            LogManager.GetLogger("Habanero.Ui.Forms.NumericUpDownMoneyMapper");
+            LogManager.GetLogger("Habanero.UI.Forms.NumericUpDownMoneyMapper");
 
         /// <summary>
         /// Constructor to initialise the mapper

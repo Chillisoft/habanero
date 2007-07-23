@@ -1,9 +1,9 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a popup box that displays a message to the user
@@ -25,6 +25,7 @@ namespace Habanero.Ui.Forms
         /// <param name="height">The height of the form</param>
         public OKMessageDialog(string title, string message, int width, int height)
         {
+            Permission.Check(this);
             _message = message;
             _width = width;
             _height = height;

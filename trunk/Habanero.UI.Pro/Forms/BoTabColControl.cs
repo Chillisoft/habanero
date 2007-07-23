@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Bo;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Manages a collection of tab pages that hold business object controls
@@ -31,6 +31,7 @@ namespace Habanero.Ui.Forms
         /// displaying the business object information in the tab page</param>
         public BoTabColControl(IBusinessObjectControl boControl)
         {
+            Permission.Check(this);
             _boControl = boControl;
             if (boControl is Control)
             {

@@ -85,14 +85,14 @@ namespace Habanero.Bo
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship specified is a multiple relationship, when a
         /// single one was expected</exception>
-        public BusinessObject GetRelatedBusinessObject(string relationshipName)
+        public BusinessObject GetRelatedObject(string relationshipName)
         {
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             Relationship relationship = this[relationshipName];
             if (relationship is MultipleRelationship)
             {
                 throw new InvalidRelationshipAccessException("The 'multiple' relationship " + relationshipName +
-                                                             " was accessed as a 'single' relationship (using GetRelatedBusinessObject()).");
+                                                             " was accessed as a 'single' relationship (using GetRelatedObject()).");
             }
             return ((SingleRelationship) relationship).GetRelatedObject(_bo.GetDatabaseConnection());
         }
@@ -108,14 +108,14 @@ namespace Habanero.Bo
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship specified is a single relationship, when a
         /// multiple one was expected</exception>
-        public BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol(string relationshipName)
+        public BusinessObjectCollection<BusinessObject> GetRelatedCollection(string relationshipName)
         {
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             Relationship relationship = this[relationshipName];
             if (relationship is SingleRelationship)
             {
                 throw new InvalidRelationshipAccessException("The 'single' relationship " + relationshipName +
-                                                             " was accessed as a 'multiple' relationship (using GetRelatedBusinessObjectCol()).");
+                                                             " was accessed as a 'multiple' relationship (using GetRelatedCollection()).");
             }
             return ((MultipleRelationship) relationship).GetRelatedBusinessObjectCol();
         }
@@ -130,12 +130,12 @@ namespace Habanero.Bo
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship named is a multiple relationship instead of a
         /// single one</exception>
-        public void SetRelatedBusinessObject(string relationshipName, BusinessObject relatedObject)
+        public void SetRelatedObject(string relationshipName, BusinessObject relatedObject)
         {
             Relationship relationship = this[relationshipName];
             if (relationship is MultipleRelationship)
             {
-                throw new InvalidRelationshipAccessException("SetRelatedBusinessObject() was passed a relationship (" +
+                throw new InvalidRelationshipAccessException("SetRelatedObject() was passed a relationship (" +
                                                              relationshipName +
                                                              ") that is of type 'multiple' when it expects a 'single' relationship");
             }

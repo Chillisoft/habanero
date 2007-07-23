@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using Habanero.Bo;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Maps a ListView object in a user interface
@@ -24,6 +25,7 @@ namespace Habanero.Ui.Forms
         /// <param name="listView">The ListView object to map</param>
         public ListViewCollectionMapper(ListView listView) : this(listView, "default")
         {
+
         }
 
         /// <summary>
@@ -31,6 +33,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         public ListViewCollectionMapper(ListView listView, string uiDefName)
         {
+            Permission.Check(this);
             _listView = listView;
             _uiDefName = uiDefName;
             _listItemsHash = new Hashtable();

@@ -1,10 +1,10 @@
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides control for panels that represent a business object
@@ -23,6 +23,7 @@ namespace Habanero.Ui.Forms
         /// <param name="bo">The business object being represented</param>
         /// <param name="uiDefName">A string name for the control</param>
         public BoPanelControl(BusinessObject bo, string uiDefName) {
+            Permission.Check(this);
             _bo = bo;
             _uiDefName = uiDefName;
 

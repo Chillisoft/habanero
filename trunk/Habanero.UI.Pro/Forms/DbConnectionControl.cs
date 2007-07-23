@@ -1,6 +1,7 @@
 using Habanero.DB;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a control form listing database settings
@@ -30,6 +31,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         public DbConnectionControl()
         {
+            Permission.Check(this);
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
 

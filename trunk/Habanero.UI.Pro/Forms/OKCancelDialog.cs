@@ -1,10 +1,10 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a form that contains a specified control and "OK" and
@@ -43,6 +43,7 @@ namespace Habanero.Ui.Forms
         /// dialog</param>
         public OKCancelDialog(Control controlToNest, string title, Point position)
         {
+            Permission.Check(this);
             _controlToNest = controlToNest;
             _title = title;
             _position = position;

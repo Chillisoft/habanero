@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// This class provides mapping from a business object collection to a
@@ -35,6 +35,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         public CollectionComboBoxMapper(ComboBox comboBox, string uiDefName)
         {
+            Permission.Check(this);
             _comboBox = comboBox;
             _uiDefName = uiDefName;
         }

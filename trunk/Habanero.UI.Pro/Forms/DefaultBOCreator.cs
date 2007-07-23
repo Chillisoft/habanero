@@ -2,9 +2,10 @@ using System;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Base;
+using Habanero.UI.Base;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Creates business objects.  The default creator is used by facilities
@@ -18,10 +19,12 @@ namespace Habanero.Ui.Forms
 
         /// <summary>
         /// Constructor to initialise a new object creator
-        /// </summary>
+        /// </summary> 
+        /// 
         /// <param name="classDef">The class definition</param>
         public DefaultBOCreator(ClassDef classDef)
         {
+            Permission.Check(this);
             _classDef = classDef;
         }
 

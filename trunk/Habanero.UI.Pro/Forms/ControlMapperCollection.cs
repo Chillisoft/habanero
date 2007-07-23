@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using Habanero.Bo;
-using Habanero.Ui.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Manages a collection of objects that are sub-types of ControlMapper
@@ -18,6 +19,7 @@ namespace Habanero.Ui.Forms
         /// </summary>
         public ControlMapperCollection()
         {
+            Permission.Check(this);
             _collection = new ArrayList();
         }
 

@@ -5,11 +5,11 @@ using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
 using Habanero.Bo.ClassDefinition;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 using log4net;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Serves as a super-class for grid implementations
@@ -19,7 +19,7 @@ namespace Habanero.Ui.Grid
         private delegate void SetCollectionDelegate(BusinessObjectCollection<BusinessObject> col, string uiName);
         private delegate void SetSortColumnDelegate(string columnName, bool isAscending);
 
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Ui.Grid.GridBase");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Grid.GridBase");
         protected DataTable _dataTable;
         protected BOCollectionDataSetProvider _dataSetProvider;
         protected BusinessObjectCollection<BusinessObject> _collection;

@@ -1,8 +1,8 @@
 using System;
 using Habanero.Bo;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Handles the event of a user double-clicking on a row in the grid

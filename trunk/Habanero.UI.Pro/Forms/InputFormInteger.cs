@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Ui.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a form in which a user can edit an integer value
@@ -16,6 +16,7 @@ namespace Habanero.Ui.Forms
         /// <param name="defaultValue">The default integer value to display</param>
         public InputFormInteger(string message, int defaultValue) : base(message)
         {
+            Permission.Check(this);
             _numericUpDown.Value = defaultValue;
         }
 

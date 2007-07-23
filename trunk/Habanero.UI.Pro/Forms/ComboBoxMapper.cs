@@ -5,10 +5,11 @@ using System.Windows.Forms;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Ui.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 using BusinessObject=Habanero.Bo.BusinessObject;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// This mapper represents a user interface ComboBox object
@@ -29,6 +30,7 @@ namespace Habanero.Ui.Forms
         public ComboBoxMapper(ComboBox comboBox, string propName, bool isReadOnceOnly)
             : base(comboBox, propName, isReadOnceOnly)
         {
+            Permission.Check(this);
             _comboBox = comboBox;
         }
 

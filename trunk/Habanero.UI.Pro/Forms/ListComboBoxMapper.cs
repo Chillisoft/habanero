@@ -3,10 +3,10 @@ using System.Collections;
 using System.Windows.Forms;
 using Habanero.Bo;
 using Habanero.Base;
-using Habanero.Ui.Base;
-using Habanero.Ui.Forms;
+using Habanero.UI.Base;
+using Habanero.UI.Forms;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// This class provides mapping from an explicit list of options to a

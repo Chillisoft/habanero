@@ -113,6 +113,7 @@
     <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
+    <Compile Include="CriteriaManager\SQLCriteriaCreator.cs" />
     <Compile Include="IDataSetProvider.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -239,9 +240,6 @@
     <Compile Include="IConcurrencyControl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InsertStatementGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="InvalidRelationshipAccessException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -326,23 +324,17 @@
     <Compile Include="RelProp.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SelectStatementGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SimpleLookupList.cs" />
     <Compile Include="SingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SQLCriteriaCreator.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SqlGeneration\InsertStatementGenerator.cs" />
+    <Compile Include="SqlGeneration\SelectStatementGenerator.cs" />
+    <Compile Include="SqlGeneration\UpdateStatementGenerator.cs" />
     <Compile Include="Transaction.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TransactionLogTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UpdateStatementGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

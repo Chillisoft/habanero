@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
-using Habanero.Ui.Util;
+using Habanero.UI.Base;
+using Habanero.UI.Util;
 
-namespace Habanero.Ui.Util
+namespace Habanero.UI.Util
 {
     /// <summary>
     /// Provides a super-class for wizard helpers that lead the user 
@@ -19,6 +20,7 @@ namespace Habanero.Ui.Util
         /// </summary>
         public Wizard()
         {
+            Permission.Check(this);
             _wizardSteps = new ArrayList(_maxNumSteps);
             for (int i = 1; i <= _maxNumSteps; i++)
             {

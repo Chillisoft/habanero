@@ -1,7 +1,7 @@
 using Habanero.Base;
-using Habanero.Ui.Grid;
+using Habanero.UI.Grid;
 
-namespace Habanero.Ui.Grid
+namespace Habanero.UI.Grid
 {
     /// <summary>
     /// Manages a filter clause that filters which data to

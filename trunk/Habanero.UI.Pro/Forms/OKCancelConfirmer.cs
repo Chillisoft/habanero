@@ -1,7 +1,8 @@
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.UI.Base;
 
-namespace Habanero.Ui.Forms
+namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a message box giving the user the choice of proceeding with
@@ -9,6 +10,13 @@ namespace Habanero.Ui.Forms
     /// </summary>
     public class OKCancelConfirmer : IConfirmer
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public OKCancelConfirmer()
+        {
+            Permission.Check(this);
+        }
         /// <summary>
         /// Gets confirmation from the user as to whether they would like to
         /// proceed and accept the choice given to them.  Displays a message box

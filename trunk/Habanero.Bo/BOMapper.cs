@@ -97,12 +97,12 @@ namespace Habanero.Bo
                     int i = 0;
                     do
                     {
-                        relatedBo = oldBo.Relationships.GetRelatedBusinessObject((String) relNames[i++]);
+                        relatedBo = oldBo.Relationships.GetRelatedObject((String) relNames[i++]);
                     } while (relatedBo == null && i < relNames.Count);
                 }
                 else
                 {
-                    relatedBo = relatedBo.Relationships.GetRelatedBusinessObject(relationshipName);
+                    relatedBo = relatedBo.Relationships.GetRelatedObject(relationshipName);
                 }
                 if (relatedBo == null)
                 {

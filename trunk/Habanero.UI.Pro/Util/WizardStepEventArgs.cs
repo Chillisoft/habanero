@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Ui.Util
+namespace Habanero.UI.Util
 {
     /// <summary>
     /// Provides arguments relating to the enabling of a wizard step

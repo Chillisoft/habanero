@@ -55,7 +55,7 @@ namespace Habanero.Test.Bo
             BOMapper mapper = new BOMapper(bo1);
             bo1.Relationships = mockRelCol;
 
-            relColControl.ExpectAndReturn("GetRelatedBusinessObject", relatedBo, new object[] {"MyRelationship"});
+            relColControl.ExpectAndReturn("GetRelatedObject", relatedBo, new object[] {"MyRelationship"});
 
             mockDbConnection.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
                                              new object[] {});
@@ -93,7 +93,7 @@ namespace Habanero.Test.Bo
             BOMapper mapper = new BOMapper(bo1);
             bo1.Relationships = mockRelCol;
 
-            relColControl.ExpectAndReturn("GetRelatedBusinessObject", null, new object[] {"MyRelationship"});
+            relColControl.ExpectAndReturn("GetRelatedObject", null, new object[] {"MyRelationship"});
 
             mockDbConnection.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
                                              new object[] {});
