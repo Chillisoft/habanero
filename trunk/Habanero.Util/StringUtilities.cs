@@ -28,6 +28,7 @@ namespace Habanero.Util
         {
             string formatted = "";
             int counter = 0;
+			if (inputString == null) return null;
             foreach (char c in inputString)
             {
                 string str = c.ToString();
