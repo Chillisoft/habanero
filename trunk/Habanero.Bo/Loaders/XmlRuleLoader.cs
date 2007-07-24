@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Util.File;
 

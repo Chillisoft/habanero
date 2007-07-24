@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.DB
 {

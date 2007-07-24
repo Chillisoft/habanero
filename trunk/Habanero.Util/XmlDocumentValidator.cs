@@ -2,6 +2,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
 {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Globalization;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.DB
 {

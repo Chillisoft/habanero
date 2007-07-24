@@ -27,7 +27,6 @@ namespace Habanero.Test.General
         private ArrayList exceptions = new ArrayList();
         private string[,] namespaces = {
                                           //Namespace, Assembly
-                                          {"Habanero.Base", "Habanero.Base"},
                                           {"Habanero.Base.Exceptions", "Habanero.Base"},
                                           {"Habanero.Bo", "Habanero.Bo"},
                                           {"Habanero.DB", "Habanero.DB"},
@@ -43,11 +42,7 @@ namespace Habanero.Test.General
                     "HabaneroApplicationException",
                     "InvalidObjectIdException",
                     "InvalidXmlDefinitionException",
-                    "UserException"
-                };
-
-            string[] baseExceptionExceptions =
-                {
+                    "UserException",
                     "CannotSaveException",
                     "UnknownTypeNameException"
                 };
@@ -83,7 +78,6 @@ namespace Habanero.Test.General
                 };
 
             exceptions.Add(baseExceptions);
-            exceptions.Add(baseExceptionExceptions);
             exceptions.Add(boExceptions);
             exceptions.Add(dbExceptions);
             exceptions.Add(utilExceptions);

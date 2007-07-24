@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 
 
-namespace Habanero.Base
+namespace Habanero.Base.Exceptions
 {
     /// <summary>
     /// Provides a generalised application exception to throw

@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Base;
 

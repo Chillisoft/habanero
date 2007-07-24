@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using NUnit.Framework;
 
 namespace Habanero.Bo

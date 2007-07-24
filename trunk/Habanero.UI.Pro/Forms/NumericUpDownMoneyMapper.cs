@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.UI.Forms;
 using log4net;
 

@@ -5,6 +5,7 @@ using System.Data;
 using System.Security.Permissions;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
 using Habanero.DB;

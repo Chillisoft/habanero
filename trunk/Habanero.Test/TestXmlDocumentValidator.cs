@@ -1,4 +1,5 @@
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.Util;
 using NUnit.Framework;
 

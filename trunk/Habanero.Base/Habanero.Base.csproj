@@ -89,6 +89,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\InvalidObjectIdException.cs" />
+    <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
     <Compile Include="HabaneroApp.cs" />
     <Compile Include="IApplicationVersionUpgrader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -145,12 +147,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="INumberGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InvalidObjectIdException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InvalidXmlDefinitionException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IObjectCreator.cs">
