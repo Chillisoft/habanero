@@ -46,12 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\IApplicationVersionUpgrader.cs" />
+    <Compile Include="Base\HabaneroAppForm.cs" />
     <Compile Include="Base\BorderLayoutManager.cs" />
     <Compile Include="Base\ControlFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Base\HabaneroApp.cs" />
     <Compile Include="Base\IBusinessObjectControl.cs" />
     <Compile Include="Forms\ButtonControl.cs">
       <SubType>UserControl</SubType>

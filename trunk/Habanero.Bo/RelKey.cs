@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
 
@@ -9,9 +9,10 @@ namespace Habanero.Bo
     /// Holds a collection of properties on which two classes in a relationship
     /// are matching
     /// </summary>
-    public class RelKey : DictionaryBase
+    public class RelKey 
     {
         private RelKeyDef _relKeyDef;
+        private Dictionary<string, RelProp> _relProps;
 
         /// <summary>
         /// Constructor to initialise a new instance
@@ -20,6 +21,7 @@ namespace Habanero.Bo
         public RelKey(RelKeyDef lRelKeyDef)
         {
             _relKeyDef = lRelKeyDef;
+            _relProps = new Dictionary<string, RelProp>();
         }
 
         /// <summary>
@@ -32,14 +34,14 @@ namespace Habanero.Bo
         {
             get
             {
-                if (!Dictionary.Contains(propName))
+                if (!_relProps.ContainsKey(propName))
                 {
                     throw new InvalidPropertyNameException(String.Format(
                         "A related property with the name '{0}' is being " +
                         "accessed, but no property with that name exists in " +
                         "the relationship's collection.", propName));
                 }
-                return ((RelProp) Dictionary[propName]);
+                return (_relProps[propName]);
             }
         }
 
@@ -49,14 +51,14 @@ namespace Habanero.Bo
         /// <param name="relProp">The RelProp object to add</param>
         internal virtual void Add(RelProp relProp)
         {
-            if (Dictionary.Contains(relProp.OwnerPropertyName))
+            if (_relProps.ContainsKey(relProp.OwnerPropertyName))
             {
                 throw new InvalidPropertyException(String.Format(
                     "A related property with the name '{0}' is being added " +
                     "to a collection, but already exists in the collection.",
                     relProp.OwnerPropertyName));
             }
-            Dictionary.Add(relProp.OwnerPropertyName, relProp);
+            _relProps.Add(relProp.OwnerPropertyName, relProp);
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace Habanero.Bo
         /// <returns>Returns true if a property with this name is held</returns>
         internal bool Contains(string propName)
         {
-            return (Dictionary.Contains(propName));
+            return (_relProps.ContainsKey(propName));
         }
 
         /// <summary>
@@ -77,9 +79,8 @@ namespace Habanero.Bo
         /// <returns>Returns true if there is a valid relationship</returns>
         internal bool HasRelatedObject()
         {
-            foreach (DictionaryEntry item in this)
+            foreach (RelProp relProp in this)
             {
-                RelProp relProp = (RelProp) item.Value;
                 if (! (relProp.IsNull))
                 {
                     return true;
@@ -94,12 +95,11 @@ namespace Habanero.Bo
         /// <returns>Returns an IExpression object</returns>
         internal IExpression RelationshipExpression()
         {
-            if (Count >= 1)
+            if (_relProps.Count >= 1)
             {
                 IExpression exp = null;
-                foreach (DictionaryEntry item in this)
+                foreach (RelProp relProp in this)
                 {
-                    RelProp relProp = (RelProp) item.Value;
                     if (exp == null)
                     {
                         exp = relProp.RelatedPropExpression();
@@ -112,6 +112,15 @@ namespace Habanero.Bo
                 return exp;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Returns an enumrated for theis RelKey to iterate through its RelProps
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<RelProp> GetEnumerator()
+        {
+            return _relProps.Values.GetEnumerator();
         }
     }
 }

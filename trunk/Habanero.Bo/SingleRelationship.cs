@@ -82,14 +82,12 @@ namespace Habanero.Bo
         /// <summary>
         /// Sets the related object to that provided
         /// </summary>
-        /// <param name="parentObject">The object to relate to</param>
-        /// TODO ERIC - is the parameter appropriately named (relatedObject)?
-        public void SetRelatedObject(BusinessObject parentObject)
+        /// <param name="relatedObject">The object to relate to</param>
+        public void SetRelatedObject(BusinessObject relatedObject)
         {
-            _relatedBo = parentObject;
-            foreach (DictionaryEntry entry in this._relKey)
+            _relatedBo = relatedObject;
+            foreach (RelProp relProp in _relKey)
             {
-                RelProp relProp = (RelProp) entry.Value;
                 _owningBo.SetPropertyValue(relProp.OwnerPropertyName,
                                              _relatedBo.GetPropertyValue(relProp.RelatedClassPropName));
             }

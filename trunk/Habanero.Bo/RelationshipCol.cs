@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 using log4net;
@@ -9,10 +10,11 @@ namespace Habanero.Bo
     /// <summary>
     /// Manages a collection of relationships between business objects
     /// </summary>
-    public class RelationshipCol : DictionaryBase, IRelationshipCol
+    public class RelationshipCol : IRelationshipCol
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.RelationshipCol");
         private BusinessObject _bo;
+        private Dictionary<string, Relationship> _relationships;
 
         /// <summary>
         /// Constructor to initialise a new relationship, specifying the
@@ -22,6 +24,7 @@ namespace Habanero.Bo
         public RelationshipCol(BusinessObject bo)
         {
             _bo = bo;
+            _relationships = new Dictionary<string, Relationship>();
         }
 
         /// <summary>
@@ -30,14 +33,14 @@ namespace Habanero.Bo
         /// <param name="lRelationship">The relationship to add</param>
         public void Add(Relationship lRelationship)
         {
-            if (Dictionary.Contains(lRelationship.RelationshipName))
+            if (_relationships.ContainsKey(lRelationship.RelationshipName))
             {
                 throw new InvalidPropertyException(String.Format(
                     "A relationship with the name '{0}' is being added to a " +
                     "collection, but already exists in the collection.",
                     lRelationship.RelationshipName));
             }
-            base.Dictionary.Add(lRelationship.RelationshipName, lRelationship);
+            _relationships.Add(lRelationship.RelationshipName, lRelationship);
         }
 
         /// <summary>
@@ -46,9 +49,9 @@ namespace Habanero.Bo
         /// <param name="relCol">The collection of relationships to add</param>
         public void Add(RelationshipCol relCol)
         {
-            foreach (DictionaryEntry entry in relCol)
+            foreach (Relationship rel in relCol)
             {
-                this.Add((Relationship) (entry.Value));
+                this.Add(rel);
             }
         }
 
@@ -63,14 +66,13 @@ namespace Habanero.Bo
         {
             get
             {
-                Relationship foundRel = ((Relationship) Dictionary[relationshipName]);
-                if (foundRel == null)
+                if (!_relationships.ContainsKey(relationshipName))
                 {
                     throw new RelationshipNotFoundException("The relationship " + relationshipName +
                                                             " was not found on a BusinessObject of type " +
                                                             this._bo.GetType().ToString());
                 }
-                return foundRel;
+                return _relationships[relationshipName];
             }
         }
 
@@ -140,6 +142,11 @@ namespace Habanero.Bo
                                                              ") that is of type 'multiple' when it expects a 'single' relationship");
             }
             ((SingleRelationship) this[relationshipName]).SetRelatedObject(relatedObject);
+        }
+
+        public IEnumerator<Relationship> GetEnumerator()
+        {
+            return _relationships.Values.GetEnumerator();
         }
     }
 }
