@@ -16,9 +16,9 @@ namespace Habanero.Test.Ui.Application
     public class TestMultiSelector
     {
         private MultiSelector<TestT> _selector;
-        private FieldInfo _availableOptionsListBoxInfo = typeof(MultiSelector<TestT>).GetField("AvailableOptionsListBox", BindingFlags.Instance | BindingFlags.NonPublic);
+        //private FieldInfo _availableOptionsListBoxInfo = typeof(MultiSelector<TestT>).GetField("AvailableOptionsListBox", BindingFlags.Instance | BindingFlags.NonPublic);
         private ListBox _availableOptionsListBox;
-        private FieldInfo _selectionsListBoxInfo = typeof(MultiSelector<TestT>).GetField("SelectionsListBox", BindingFlags.Instance | BindingFlags.NonPublic);
+        //private FieldInfo _selectionsListBoxInfo = typeof(MultiSelector<TestT>).GetField("SelectionsListBox", BindingFlags.Instance | BindingFlags.NonPublic);
         private ListBox _selectionsListBox;
 
         /// <summary>
@@ -32,8 +32,10 @@ namespace Habanero.Test.Ui.Application
             options.Add(new TestT());
             options.Add(new TestT());
             _selector.Options = options;
-            _availableOptionsListBox = (ListBox)_availableOptionsListBoxInfo.GetValue(_selector);
-            _selectionsListBox = (ListBox)_selectionsListBoxInfo.GetValue(_selector);
+			_availableOptionsListBox = _selector.GetAvailableOptionsListBox();
+			_selectionsListBox = _selector.GetSelectionsListBox();
+			//_availableOptionsListBox = (ListBox)_availableOptionsListBoxInfo.GetValue(_selector);
+			//_selectionsListBox = (ListBox)_selectionsListBoxInfo.GetValue(_selector);
 		}
 
 		#region Test Options List

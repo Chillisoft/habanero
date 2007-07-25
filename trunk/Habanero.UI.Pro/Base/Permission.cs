@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Habanero.UI.Base
 {
-    class Permission
+    internal class Permission
     {
         public static void Check(object obj)
         {

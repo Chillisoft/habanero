@@ -1,0 +1,10 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="Dotfuscated Build\Habanero.Test.Bo.dll" />
+    <assembly path="Dotfuscated Build\Habanero.Test.Db.dll" />
+    <assembly path="Dotfuscated Build\Habanero.Test.General.dll" />
+    <assembly path="Dotfuscated Build\Habanero.Test.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto" />
+</NUnitProject>
