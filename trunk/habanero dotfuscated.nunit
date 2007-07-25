@@ -5,6 +5,7 @@
     <assembly path="Dotfuscated Build\Habanero.Test.Db.dll" />
     <assembly path="Dotfuscated Build\Habanero.Test.General.dll" />
     <assembly path="Dotfuscated Build\Habanero.Test.dll" />
+    <assembly path="Dotfuscated Build\Habanero.Test.UI.dll" />
   </Config>
   <Config name="Release" binpathtype="Auto" />
 </NUnitProject>
