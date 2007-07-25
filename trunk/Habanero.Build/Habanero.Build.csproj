@@ -114,6 +114,10 @@
       <Project>{F30A2151-F894-44E4-8F71-492B8C245745}</Project>
       <Name>Habanero.Test.General</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.UI.Pro\Habanero.Test.UI.Pro.csproj">
+      <Project>{466D9128-56C4-4C95-A14F-A83CA080D82D}</Project>
+      <Name>Habanero.Test.UI.Pro</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.Test.UI\Habanero.Test.UI.csproj">
       <Project>{979540B1-0154-4870-8BD7-B70AA61492D7}</Project>
       <Name>Habanero.Test.UI</Name>

@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{979540B1-0154-4870-8BD7-B70AA61492D7}</ProjectGuid>
+    <ProjectGuid>{466D9128-56C4-4C95-A14F-A83CA080D82D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Habanero.Test.UI</RootNamespace>
-    <AssemblyName>Habanero.Test.UI</AssemblyName>
+    <RootNamespace>Habanero.Test.UI.Pro</RootNamespace>
+    <AssemblyName>Habanero.Test.UI.Pro</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -30,11 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MyTimePicker, Version=1.0.2287.20795, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\MyTimePicker.dll</HintPath>
-    </Reference>
-    <Reference Include="nmock, Version=1.0.1536.20687, Culture=neutral">
+    <Reference Include="nmock, Version=1.0.2735.26971, Culture=neutral, PublicKeyToken=824173e82b3e3b0d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nmock.dll</HintPath>
     </Reference>
@@ -42,31 +38,45 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="NUnitForms, Version=1.3.1771.29165, Culture=neutral, PublicKeyToken=9df516afcc0d4103">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\NUnitForms.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestBorderLayoutManager.cs" />
-    <Compile Include="TestButtonControl.cs" />
-    <Compile Include="TestColumnLayoutManager.cs" />
-    <Compile Include="TestControlCollection.cs" />
-    <Compile Include="TestControlFactory.cs" />
-    <Compile Include="TestDataViewFilterClauseFactory.cs" />
-    <Compile Include="TestDataViewFilterClauseFactoryWithStrings.cs" />
-    <Compile Include="TestFlowLayoutManager.cs" />
-    <Compile Include="TestGridLayoutManager.cs" />
-    <Compile Include="TestLayoutManager.cs" />
-    <Compile Include="TestReadOnlyGrid.cs" />
+    <Compile Include="TestBoTabColControl.cs" />
+    <Compile Include="TestCheckBoxMapper.cs" />
+    <Compile Include="TestCollectionComboBoxMapper.cs" />
+    <Compile Include="TestComboBoxCollectionControl.cs" />
+    <Compile Include="TestControlMapper.cs" />
+    <Compile Include="TestDateTimePickerMapper.cs" />
+    <Compile Include="TestDefaultBOEditorForm.cs" />
+    <Compile Include="TestEditableGrid.cs" />
+    <Compile Include="TestEditableGridButtonControl.cs" />
+    <Compile Include="TestFilterControl.cs" />
+    <Compile Include="TestFilterInputBoxCollection.cs" />
+    <Compile Include="TestListComboBoxMapper.cs" />
+    <Compile Include="TestListViewCollectionMapper.cs" />
+    <Compile Include="TestLookupComboBoxMapper.cs" />
+    <Compile Include="TestMapperBase.cs" />
+    <Compile Include="TestMultiSelector.cs" />
+    <Compile Include="TestMultiSelectorModel.cs" />
+    <Compile Include="TestNumericUpDownIntegerMapper.cs" />
+    <Compile Include="TestNumericUpDownMoneyMapper.cs" />
+    <Compile Include="TestPanelFactory.cs" />
+    <Compile Include="TestReadOnlyGridButtonControl.cs" />
+    <Compile Include="TestTextBoxMapper.cs" />
+    <Compile Include="TestWizard.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
       <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
       <Name>Habanero.Bo</Name>
@@ -75,25 +85,22 @@
       <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
       <Name>Habanero.Db</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Name>Habanero.Base</Name>
+    <ProjectReference Include="..\Habanero.Test.General\Habanero.Test.General.csproj">
+      <Project>{F30A2151-F894-44E4-8F71-492B8C245745}</Project>
+      <Name>Habanero.Test.General</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
       <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
       <Name>Habanero.Test</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.Pro\Habanero.UI.Pro.csproj">
+      <Project>{E1B4C7C4-587F-4162-A51C-7CCBA8147029}</Project>
+      <Name>Habanero.UI.Pro</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.UI\Habanero.UI.csproj">
       <Project>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</Project>
       <Name>Habanero.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
-      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
-      <Name>Habanero.Util</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="key.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -103,7 +110,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
-  </PropertyGroup>
 </Project>
