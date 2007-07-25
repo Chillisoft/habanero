@@ -112,22 +112,6 @@ namespace Habanero.UI.Forms
             }
         }
 
-		/// <summary>
-		/// Gets the AvailableOptionsListBox listbox
-		/// </summary>
-		internal ListBox GetAvailableOptionsListBox()
-    	{
-    		return AvailableOptionsListBox;
-    	}
-
-		/// <summary>
-		/// Gets the SelectionsListBox listbox
-		/// </summary>
-		internal ListBox GetSelectionsListBox()
-    	{
-    		return SelectionsListBox;
-    	}
-
     	private void UpdateListBoxes()
 		{
 			AvailableOptionsListBox.Items.Clear();
