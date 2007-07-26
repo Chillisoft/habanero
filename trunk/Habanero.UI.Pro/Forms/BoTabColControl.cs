@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Forms

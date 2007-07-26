@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Manages a collection of BOKey objects

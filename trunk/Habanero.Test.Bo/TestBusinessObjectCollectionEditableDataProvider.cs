@@ -1,10 +1,10 @@
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
 using NUnit.Framework;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for TestBusinessObjectCollectionEditableDataProvider.

@@ -1,9 +1,9 @@
 using System;
-using Habanero.Bo;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
     /// <summary>
     /// Loads xml data for a lookup list in a business object

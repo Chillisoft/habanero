@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Test.General;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 
-namespace Habanero.Test.Ui.BoControls
+namespace Habanero.Test.UI.BoControls
 {
     [TestFixture ]
     public class TestListViewCollectionMapper

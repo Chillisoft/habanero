@@ -1,7 +1,7 @@
 using System;
 using Habanero.Base;
 
-namespace Habanero.Bo.CriteriaManager
+namespace Habanero.BO.CriteriaManager
 {
     /// <summary>
     /// IExpression is an interface for an Expression tree consisting of 

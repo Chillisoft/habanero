@@ -1,4 +1,4 @@
-using Habanero.Bo;
+using Habanero.BO;
 
 namespace Habanero.UI.Base
 {

@@ -6,16 +6,16 @@ using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.CriteriaManager;
-using Habanero.Bo.SqlGeneration;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
+using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Util;
 using log4net;
 
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
 
 
@@ -31,7 +31,7 @@ namespace Habanero.Bo
 
 
         
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BusinessObject");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         public event EventHandler<BOEventArgs> Updated;
         public event EventHandler<BOEventArgs> Deleted;

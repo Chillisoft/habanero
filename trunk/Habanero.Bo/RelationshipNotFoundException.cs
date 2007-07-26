@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// An exception to throw if a specified relationship was not found

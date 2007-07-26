@@ -1,13 +1,13 @@
 using System;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
+using Habanero.BO;
 using Habanero.Base;
 using Habanero.Test;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.Loaders
+namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
     /// Summary description for TestXmlPropertyLoader.
@@ -103,14 +103,14 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(
-                    @"<property  name=""TestProp""><databaseLookupList sql=""Source"" timeout=""100"" class=""MyBo"" assembly=""Habanero.Test"" /></property>");
+                    @"<property  name=""TestProp""><databaseLookupList sql=""Source"" timeout=""100"" class=""MyBO"" assembly=""Habanero.Test"" /></property>");
             Assert.AreSame(typeof (DatabaseLookupList), def.LookupList.GetType(),
                            "LookupList should be of type DatabaseLookupList but is of type " +
                            def.LookupList.GetType().Name);
             DatabaseLookupList source = (DatabaseLookupList) def.LookupList;
             Assert.AreEqual("Source", source.SqlString, "LookupList should be the same as that specified in xml");
             Assert.AreEqual(100, source.TimeOut);
-            Assert.AreEqual("MyBo", source.ClassName);
+            Assert.AreEqual("MyBO", source.ClassName);
             Assert.AreEqual("Habanero.Test", source.AssemblyName);
             Assert.IsNull(source.ClassDef);
         }
@@ -135,11 +135,11 @@ namespace Habanero.Test.Bo.Loaders
         	ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader();
 
-            ClassDef classDef = MyBo.LoadDefaultClassDef();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
 
 			PropDef def =
                 itsLoader.LoadProperty(
-                    @"<property  name=""TestProp""><databaseLookupList sql=""Source"" class=""MyBo"" assembly=""Habanero.Test"" /></property>");
+                    @"<property  name=""TestProp""><databaseLookupList sql=""Source"" class=""MyBO"" assembly=""Habanero.Test"" /></property>");
             DatabaseLookupList source = (DatabaseLookupList) def.LookupList;
             Assert.IsNotNull(source.ClassDef);
             Assert.AreEqual(classDef.ClassName, source.ClassDef.ClassName);
@@ -199,14 +199,14 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def = itsLoader.LoadProperty(
                     @"<property  name=""TestProp"">
-						<businessObjectLookupList class=""MyBo"" assembly=""Habanero.Test"" />
+						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" />
 					</property>");
             Assert.AreSame(typeof(BusinessObjectLookupList), def.LookupList.GetType(),
                            "LookupList should be of type BusinessObjectLookupList but is of type " +
                            def.LookupList.GetType().Name);
             BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
             //Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
-            Assert.AreEqual("MyBo", source.ClassName);
+            Assert.AreEqual("MyBO", source.ClassName);
             Assert.AreEqual("Habanero.Test", source.AssemblyName);
             Assert.AreEqual(null, source.Criteria);
         }
@@ -216,7 +216,7 @@ namespace Habanero.Test.Bo.Loaders
         {
             PropDef def = itsLoader.LoadProperty(
                     @"<property  name=""TestProp"">
-						<businessObjectLookupList class=""MyBo"" assembly=""Habanero.Test"" criteria=""Test"" />
+						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" criteria=""Test"" />
 					</property>");
             BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
             //Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");

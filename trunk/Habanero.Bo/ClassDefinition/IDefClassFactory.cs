@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// An interface to model a factory that produces business object related

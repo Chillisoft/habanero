@@ -1,9 +1,9 @@
 using System;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Serves as a broker between the application and the database, by

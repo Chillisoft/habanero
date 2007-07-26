@@ -2,7 +2,7 @@ using System;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.Db
+namespace Habanero.Test.DB
 {
     /// <summary>
     /// Summary description for TestDatabaseUtil.

@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Contains the details of the key constraints for the particular

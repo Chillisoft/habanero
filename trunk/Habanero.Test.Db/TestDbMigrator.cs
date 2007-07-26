@@ -6,10 +6,10 @@ using Habanero.Base;
 using NMock;
 using NUnit.Framework;
 
-namespace Habanero.Test.Db
+namespace Habanero.Test.DB
 {
     [TestFixture]
-    public class TestDbMigrator
+    public class TestDBMigrator
     {
         DBMigrator itsDbMigrator;
         IDatabaseConnection itsConn;

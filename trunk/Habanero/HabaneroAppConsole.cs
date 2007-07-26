@@ -4,8 +4,8 @@ using System.IO;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.DB;
 
 namespace Habanero

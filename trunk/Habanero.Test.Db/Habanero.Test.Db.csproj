@@ -10,14 +10,14 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Habanero.Test.Db</AssemblyName>
+    <AssemblyName>Habanero.Test.DB</AssemblyName>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>Habanero.Test.Db</RootNamespace>
+    <RootNamespace>Habanero.Test.DB</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -91,9 +91,9 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
       <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
-      <Name>Habanero.Db</Name>
+      <Name>Habanero.DB</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
       <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>

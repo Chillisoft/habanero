@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
 using NMock;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for DatabaseLookupList.

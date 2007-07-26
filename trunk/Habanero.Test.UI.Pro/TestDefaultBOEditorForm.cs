@@ -1,16 +1,16 @@
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using Habanero.UI.Forms;
 using NMock;
 using NUnit.Framework;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.Ui.BoControls
+namespace Habanero.Test.UI.BoControls
 {
     /// <summary>
     /// Summary description for TestDefaultBOEditory.
@@ -29,7 +29,7 @@ namespace Habanero.Test.Ui.BoControls
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
             this.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
-            itsClassDefMyBo = MyBo.LoadClassDefWithNoLookup();
+            itsClassDefMyBo = MyBO.LoadClassDefWithNoLookup();
         }
 
         [SetUp]

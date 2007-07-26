@@ -1,9 +1,9 @@
 using System;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Manages a business object primary key, where the key is the object's ID.
@@ -104,7 +104,7 @@ namespace Habanero.Bo
         }
 
         /// <summary>
-        /// Returns the ObjectID <see cref="Habanero.Bo.BOObjectID.GetObjectId()"/>
+        /// Returns the ObjectID <see cref="Habanero.BO.BOObjectID.GetObjectId()"/>
         /// </summary>
         /// <returns>Returns the ID as a string</returns>
         public override string GetObjectNewID()

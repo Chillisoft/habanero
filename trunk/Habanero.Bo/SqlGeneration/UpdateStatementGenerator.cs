@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Data;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.DB;
 
-namespace Habanero.Bo.SqlGeneration
+namespace Habanero.BO.SqlGeneration
 {
     /// <summary>
     /// Generates "update" sql statements to update a specified business

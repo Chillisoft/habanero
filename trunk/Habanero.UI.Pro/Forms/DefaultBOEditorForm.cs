@@ -1,15 +1,15 @@
 using System;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Base;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
 using Habanero.UI.Grid;
 using log4net;
 
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
 {

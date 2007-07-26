@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 using Habanero.Util;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
     /// <summary>
     /// Uses a variety of xml loaders to load all the facets that make

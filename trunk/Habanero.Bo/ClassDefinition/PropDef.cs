@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.Comparer;
-using Habanero.Bo.CriteriaManager;
-using Habanero.Bo;
+using Habanero.BO.Comparer;
+using Habanero.BO.CriteriaManager;
+using Habanero.BO;
 using Habanero.Base;
 using Habanero.Util.File;
 using log4net;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
 
     /// <summary>
@@ -41,7 +41,7 @@ namespace Habanero.Bo.ClassDefinition
     /// </futureEnhancements>
     public class PropDef : IParameterSqlInfo
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.ClassDefinition.PropDef");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
         private string _propName;
 		private string _propTypeAssemblyName;
     	private string _propTypeName;

@@ -1,4 +1,4 @@
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Defines how the properties of a class are displayed in a user

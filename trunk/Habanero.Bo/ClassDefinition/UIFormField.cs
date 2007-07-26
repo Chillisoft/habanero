@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Manages a property definition for a control in a user interface editing

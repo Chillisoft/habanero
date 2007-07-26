@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.Base;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test
 {

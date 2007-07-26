@@ -1,5 +1,5 @@
 using System.Data;
-using Habanero.Bo.CriteriaManager;
+using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using NUnit.Framework;
 

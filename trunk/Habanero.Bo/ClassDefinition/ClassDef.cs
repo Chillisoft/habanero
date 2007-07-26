@@ -1,14 +1,14 @@
 using System;
 using System.Collections;
-using Habanero.Bo;
-using Habanero.Bo.Loaders;
+using Habanero.BO;
+using Habanero.BO.Loaders;
 using Habanero.Base;
 using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Defines the properties of a class that need to be managed at a 

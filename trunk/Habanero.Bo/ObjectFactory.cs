@@ -1,4 +1,4 @@
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// A factory to create objects

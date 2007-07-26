@@ -1,10 +1,10 @@
 using System.Windows.Forms;
 using Habanero.Test.General;
-using Habanero.Test.Ui.BoControls;
+using Habanero.Test.UI.BoControls;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 
-namespace Habanero.Test.Ui.BoControls
+namespace Habanero.Test.UI.BoControls
 {
     /// <summary>
     /// Summary description for TestTextBoxMapper.

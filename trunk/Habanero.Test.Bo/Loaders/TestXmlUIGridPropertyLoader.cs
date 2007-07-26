@@ -1,12 +1,12 @@
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.Base;
 using Habanero.UI.Grid;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.Loaders
+namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
     /// Summary description for TestXmlUIPropertyLoader.
@@ -63,8 +63,8 @@ namespace Habanero.Test.Bo.Loaders
         public void TestCustomColumnType()
         {
             UIGridColumn uiProp =
-                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""MyBo"" assembly=""Habanero.Test"" />");
-            Assert.AreEqual(typeof(MyBo), uiProp.GridControlType);
+                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""MyBO"" assembly=""Habanero.Test"" />");
+            Assert.AreEqual(typeof(MyBO), uiProp.GridControlType);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]

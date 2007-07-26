@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.Bo.Comparer
+namespace Habanero.BO.Comparer
 {
     /// <summary>
     /// Compares two business objects on the integer property specified 

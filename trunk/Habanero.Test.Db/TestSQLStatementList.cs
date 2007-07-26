@@ -3,7 +3,7 @@ using System.Data;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.Db
+namespace Habanero.Test.DB
 {
     [TestFixture]
     public class TestSqlStatementList : TestUsingDatabase

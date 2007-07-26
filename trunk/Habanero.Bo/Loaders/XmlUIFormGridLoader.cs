@@ -1,12 +1,12 @@
 using System;
 using System.Xml;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 using Habanero.Util;
 using Habanero.Util.File;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
     /// <summary>
     /// Loads UI form grid information from xml data

@@ -1,4 +1,4 @@
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// An interface to implement a transaction log. There are many 

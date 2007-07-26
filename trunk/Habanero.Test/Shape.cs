@@ -1,6 +1,6 @@
 using System;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 
 namespace Habanero.Test
 {

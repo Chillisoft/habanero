@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Habanero.Bo;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.ClassDefinition
+namespace Habanero.Test.BO.ClassDefinition
 {
 
 

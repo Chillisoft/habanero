@@ -1,13 +1,13 @@
 using System.Data;
 using System.Windows.Forms;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.Test;
 using Habanero.UI.Base;
 using Habanero.UI.Grid;
 using NUnit.Framework;
 
-namespace Habanero.Test.Ui.Application
+namespace Habanero.Test.UI.Application
 {
     /// <summary>
     /// Summary description for TestReadOnlyGrid.
@@ -27,12 +27,12 @@ namespace Habanero.Test.Ui.Application
             grid = new ReadOnlyGrid();
             grid.Name = "GridControl";
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBo.LoadClassDefWithNoLookup();
+            ClassDef classDef = MyBO.LoadClassDefWithNoLookup();
             BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-            bo1 = new MyBo();
+            bo1 = new MyBO();
             bo1.SetPropertyValue("TestProp", "Value1");
             bo1.SetPropertyValue("TestProp2", "Value2");
-            bo2 = new MyBo();
+            bo2 = new MyBO();
             bo2.SetPropertyValue("TestProp", "2Value1");
             bo2.SetPropertyValue("TestProp2", "2Value2");
             col.Add(bo1);

@@ -1,16 +1,16 @@
 using System;
 using System.Data;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using NMock;
 using NUnit.Framework;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for Class1.
@@ -36,7 +36,7 @@ namespace Habanero.Test.Bo
             this.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
             itsLoader = new XmlClassLoader();
-            itsClassDef = MyBo.LoadClassDefWithLookup();
+            itsClassDef = MyBO.LoadClassDefWithLookup();
         }
 
         [SetUp]

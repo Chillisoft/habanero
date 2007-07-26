@@ -1,13 +1,13 @@
 using System;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using NMock;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for TestBoMapper.
@@ -28,8 +28,8 @@ namespace Habanero.Test.Bo
         public void TestGetPropertyValueToDisplay()
         {
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBo.LoadClassDefWithLookup();
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
+            itsClassDef = MyBO.LoadClassDefWithLookup();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp2", "s1");
             BOMapper mapper = new BOMapper(bo1);
             Assert.AreEqual("s1", mapper.GetPropertyValueToDisplay("TestProp2"));
@@ -45,9 +45,9 @@ namespace Habanero.Test.Bo
             IRelationshipCol mockRelCol = (IRelationshipCol) relColControl.MockInstance;
 
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBo.LoadClassDefWithRelationship();
+            itsClassDef = MyBO.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject(connection);
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
             MyRelatedBo relatedBo = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
             Guid myRelatedBoGuid = new Guid(relatedBo.ID.GetObjectId().Substring(3, 38));
             bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
@@ -66,9 +66,9 @@ namespace Habanero.Test.Bo
         public void TestGetPropertyValueWithDot_IncorrectRelationshipName()
         {
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBo.LoadClassDefWithRelationship();
+            itsClassDef = MyBO.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             BOMapper mapper = new BOMapper(bo1);
             Assert.AreEqual(null, mapper.GetPropertyValueToDisplay("MyIncorrectRelationship.MyRelatedTestProp"));
         }
@@ -83,9 +83,9 @@ namespace Habanero.Test.Bo
             IRelationshipCol mockRelCol = (IRelationshipCol) relColControl.MockInstance;
 
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBo.LoadClassDefWithRelationship();
+            itsClassDef = MyBO.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject(connection);
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
             MyRelatedBo relatedBo = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
 //			Guid myRelatedBoGuid = new Guid(relatedBo.ID.GetObjectId().Substring(3, 38));
 //			bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
@@ -106,8 +106,8 @@ namespace Habanero.Test.Bo
             IDatabaseConnection connection = (IDatabaseConnection) mockDbConnection.MockInstance;
 
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBo.LoadDefaultClassDef();
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject(connection);
+            itsClassDef = MyBO.LoadDefaultClassDef();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
 
             BOMapper mapper = new BOMapper(bo1);
             Assert.AreEqual("MyNameIsMyBo", mapper.GetPropertyValueToDisplay("-MyName-"));

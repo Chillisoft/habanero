@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Provides arguments to attach for an event involving business objects

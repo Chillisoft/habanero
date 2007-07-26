@@ -1,10 +1,10 @@
 using System;
 using Habanero.Base.Exceptions;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Util;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// An enumeration that gives some instructions or limitations in the

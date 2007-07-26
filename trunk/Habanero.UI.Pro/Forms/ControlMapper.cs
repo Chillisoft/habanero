@@ -3,12 +3,12 @@ using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.Util.File;
 using log4net;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
 {

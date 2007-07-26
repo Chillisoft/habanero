@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;

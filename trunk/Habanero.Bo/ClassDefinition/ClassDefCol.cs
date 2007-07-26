@@ -6,7 +6,7 @@ using Habanero.Base.Exceptions;
 using Habanero.Util;
 using Habanero.Util.File;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Manages a collection of class definitions.

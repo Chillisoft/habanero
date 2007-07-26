@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Provides an exception to throw when a business object is not found

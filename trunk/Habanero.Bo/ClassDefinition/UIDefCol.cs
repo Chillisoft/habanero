@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Manages a collection of user interface definitions

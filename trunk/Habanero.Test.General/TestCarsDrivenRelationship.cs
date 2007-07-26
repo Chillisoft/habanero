@@ -1,4 +1,4 @@
-using Habanero.Bo;
+using Habanero.BO;
 using NUnit.Framework;
 
 namespace Habanero.Test.General

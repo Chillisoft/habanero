@@ -4,10 +4,10 @@ using System.Text;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Util.File;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
     /// <summary>
     /// Provides a super-class for loaders that read property rules from

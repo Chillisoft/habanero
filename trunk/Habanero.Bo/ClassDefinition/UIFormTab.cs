@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Manages property definitions for a tab in a user interface editing 

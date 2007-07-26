@@ -1,4 +1,4 @@
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// An interface that models the ability to load a business object

@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base.Exceptions;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Util;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Lists a set of property definitions that indicate which properties

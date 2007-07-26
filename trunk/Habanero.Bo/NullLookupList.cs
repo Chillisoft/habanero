@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Provides an empty lookup-list

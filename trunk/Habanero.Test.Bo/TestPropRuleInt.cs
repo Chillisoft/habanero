@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Habanero.Bo;
+using Habanero.BO;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     [TestFixture]
     public class TestPropRuleInt

@@ -1,7 +1,7 @@
 using System;
 using Habanero.Util;
 
-namespace Habanero.Bo.CriteriaManager
+namespace Habanero.BO.CriteriaManager
 {
     /// <summary>
     /// This class manages expressions that force certain criteria upon data

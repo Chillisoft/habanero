@@ -2,7 +2,7 @@ using System.Windows.Forms;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.Ui.Generic
+namespace Habanero.Test.UI.Generic
 {
     [TestFixture]
     public class TestControlCollection

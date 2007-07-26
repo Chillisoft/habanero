@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.DB;
 
 namespace Habanero.Test.General
@@ -97,7 +97,7 @@ namespace Habanero.Test.General
         /// </remarks>
         /// <param name="id">The object primary Key</param>
         /// <returns>The loaded business object</returns>
-        /// <exception cref="Habanero.Bo.BusObjDeleteConcurrencyControlException">
+        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
         public static Engine GetEngine(BOPrimaryKey id)
         {

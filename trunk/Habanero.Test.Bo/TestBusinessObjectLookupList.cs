@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using Habanero.Base;
-using Habanero.Bo;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NMock;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     [TestFixture]
     public class TestBusinessObjectLookupList : TestUsingDatabase
@@ -63,7 +63,7 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestLookupListCriteria()
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.Bo", 
+            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO", 
                 "ContactPerson", "surname='zzz'");
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);

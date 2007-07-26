@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Manages property definitions for a grid in a user interface editing

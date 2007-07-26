@@ -1,19 +1,19 @@
 using System;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using NMock;
 
-namespace Habanero.Test.Ui.BoControls
+namespace Habanero.Test.UI.BoControls
 {
     /// <summary>
     /// Summary description for TestMapperBase.
     /// </summary>
     public class TestMapperBase : TestUsingDatabase
     {
-        protected MyBo itsMyBo;
+        protected MyBO itsMyBo;
 
         public TestMapperBase()
         {
@@ -29,9 +29,9 @@ namespace Habanero.Test.Ui.BoControls
             IRelationshipCol mockRelCol = (IRelationshipCol) relColControl.MockInstance;
 
             ClassDef.ClassDefs.Clear();
-            ClassDef itsClassDef = MyBo.LoadClassDefWithRelationship();
+            ClassDef itsClassDef = MyBO.LoadClassDefWithRelationship();
             ClassDef itsRelatedClassDef = MyRelatedBo.LoadClassDef();
-            itsMyBo = (MyBo) itsClassDef.CreateNewBusinessObject(connection);
+            itsMyBo = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
             MyRelatedBo relatedBo = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
             Guid myRelatedBoGuid = new Guid(relatedBo.ID.GetObjectId().Substring(3, 38));
             itsMyBo.SetPropertyValue("RelatedID", myRelatedBoGuid);

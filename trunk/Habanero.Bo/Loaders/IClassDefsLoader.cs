@@ -1,7 +1,7 @@
 using System.Collections;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
 	/// <summary>
 	/// An interface to model classes that load class definitions from

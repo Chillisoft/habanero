@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Habanero.Bo.Loaders {
+namespace Habanero.BO.Loaders {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Habanero.Bo.Loaders {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Habanero.Bo.Loaders.Dtds", typeof(Dtds).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Habanero.BO.Loaders.Dtds", typeof(Dtds).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -87,6 +87,7 @@ namespace Habanero.Bo.Loaders {
         ///&lt;!ATTLIST businessObjectLookupList 
         ///	class NMTOKEN #REQUIRED
         ///	assembly NMTOKEN #REQUIRED
+        ///  criteria CDATA #IMPLIED
         ///&gt;.
         /// </summary>
         internal static string businessObjectLookupList {
@@ -109,9 +110,10 @@ namespace Habanero.Bo.Loaders {
         /// <summary>
         ///   Looks up a localized string similar to &lt;!ELEMENT column EMPTY&gt;
         ///&lt;!ATTLIST column
-        ///	heading CDATA #REQUIRED
+        ///	heading CDATA #IMPLIED
         ///	property CDATA #REQUIRED
         ///	type NMTOKEN	&quot;DataGridViewTextBoxColumn&quot;
+        ///	assembly NMTOKEN #IMPLIED
         ///	editable ( true | false ) &quot;true&quot;
         ///	width CDATA &quot;100&quot;
         ///	alignment ( left | right | center | centre ) &quot;left&quot;
@@ -141,6 +143,7 @@ namespace Habanero.Bo.Loaders {
         ///   Looks up a localized string similar to &lt;!ELEMENT databaseLookupList EMPTY&gt;
         ///&lt;!ATTLIST databaseLookupList
         ///	sql CDATA #REQUIRED
+        ///  timeout CDATA &quot;10000&quot;
         ///	class NMTOKEN #IMPLIED
         ///	assembly NMTOKEN #IMPLIED
         ///&gt;.
@@ -155,7 +158,7 @@ namespace Habanero.Bo.Loaders {
         ///   Looks up a localized string similar to #include parameter.dtd
         ///&lt;!ELEMENT field (parameter*)&gt;
         ///&lt;!ATTLIST field
-        ///	label CDATA #REQUIRED
+        ///	label CDATA #IMPLIED
         ///	property NMTOKEN #REQUIRED
         ///	type NMTOKEN	&quot;TextBox&quot;
         ///	assembly NMTOKEN &quot;System.Windows.Forms&quot;
@@ -215,8 +218,9 @@ namespace Habanero.Bo.Loaders {
         ///   Looks up a localized string similar to #include Prop.dtd
         ///&lt;!ELEMENT key (prop+)&gt;
         ///&lt;!ATTLIST key 
-        ///	name NMTOKEN #IMPLIED
+        ///	name CDATA #IMPLIED
         ///	ignoreIfNull ( true | false ) &quot;false&quot;
+        ///  message CDATA #IMPLIED
         ///&gt;
         ///.
         /// </summary>
@@ -319,7 +323,7 @@ namespace Habanero.Bo.Loaders {
         ///&gt;
         ///&lt;!ELEMENT rule (add*)&gt;
         ///&lt;!ATTLIST rule
-        ///	name NMTOKEN #REQUIRED
+        ///	name CDATA #REQUIRED
         ///	class NMTOKEN #IMPLIED
         ///  assembly NMTOKEN #IMPLIED
         ///  message CDATA #IMPLIED

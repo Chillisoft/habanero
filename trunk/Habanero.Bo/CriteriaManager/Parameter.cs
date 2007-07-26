@@ -1,8 +1,8 @@
 using System;
 using Habanero.Base;
-//using Habanero.Bo;
+//using Habanero.BO;
 
-namespace Habanero.Bo.CriteriaManager
+namespace Habanero.BO.CriteriaManager
 {
     
     /// <summary>

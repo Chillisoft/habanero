@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Habanero.Bo.Loaders;
-using Habanero.Bo;
+using Habanero.BO.Loaders;
+using Habanero.BO;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.Loaders
+namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
     /// Summary description for TestXmlPropertyRuleLoader.
@@ -133,7 +133,7 @@ namespace Habanero.Test.Bo.Loaders
         public void TestCustomRuleClass() {
             XmlRuleLoader loader = new XmlRuleLoader();
             PropRuleBase rule = loader.LoadRule("CustomProperty",
-                        @"<rule name=""TestCustom"" class=""Habanero.Test.Bo.Loaders.MyRule"" assembly=""Habanero.Test.Bo"">
+                        @"<rule name=""TestCustom"" class=""Habanero.Test.BO.Loaders.MyRule"" assembly=""Habanero.Test.BO"">
                             <add key=""bob"" value=""billy"" />
                         </rule>                          
 ");

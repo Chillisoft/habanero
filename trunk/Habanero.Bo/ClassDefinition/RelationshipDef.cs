@@ -1,10 +1,10 @@
 using System;
 using Habanero.Base.Exceptions;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Util;
 using Habanero.Util.File;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Describes the relationship between an object and some other object(s)

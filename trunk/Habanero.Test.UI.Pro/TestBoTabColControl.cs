@@ -1,14 +1,14 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.Test;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
 using NMock;
 using NUnit.Framework;
 
-namespace Habanero.Test.Ui.Application
+namespace Habanero.Test.UI.Application
 {
     /// <summary>
     /// Summary description for TestBoTabColControl.
@@ -19,18 +19,18 @@ namespace Habanero.Test.Ui.Application
         private BoTabColControl itsTabColControl;
         private ClassDef itsClassDef;
         private BusinessObjectCollection<BusinessObject> itsCol;
-        private MyBo itsBo1;
-        private MyBo itsBo2;
+        private MyBO itsBo1;
+        private MyBO itsBo2;
 
         [TestFixtureSetUp]
         public void SetupTextFixture()
         {
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBo.LoadDefaultClassDef();
+            itsClassDef = MyBO.LoadDefaultClassDef();
             itsCol = new BusinessObjectCollection<BusinessObject>(itsClassDef);
 
-            itsBo1 = new MyBo();
-            itsBo2 = new MyBo();
+            itsBo1 = new MyBO();
+            itsBo2 = new MyBO();
             itsCol.Add(itsBo1);
             itsCol.Add(itsBo2);
 

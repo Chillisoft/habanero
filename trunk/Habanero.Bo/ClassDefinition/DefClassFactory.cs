@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// A factory that produces instances of business object related classes.

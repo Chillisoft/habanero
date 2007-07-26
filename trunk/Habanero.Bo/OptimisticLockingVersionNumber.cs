@@ -3,7 +3,7 @@ using System.Data;
 using System.Security;
 using System.Security.Principal;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Provides functionality to check if another user or process has 
@@ -14,7 +14,7 @@ namespace Habanero.Bo
     /// To use this class effectively, the update properties method 
     /// must be called before the database is updated (i.e. in  
     /// <see cref="BusinessObject.Save"/> and 
-    /// <see cref= "Habanero.Bo.OptimisticLockingVersionNumber.UpdatePropertiesWithLatestConcurrencyInfo"/>)
+    /// <see cref= "Habanero.BO.OptimisticLockingVersionNumber.UpdatePropertiesWithLatestConcurrencyInfo"/>)
     /// </summary>
     public class OptimisticLockingVersionNumber : IConcurrencyControl
     {
@@ -67,7 +67,7 @@ namespace Habanero.Bo
         /// Throws an exception if the object has been edited by another
         /// process/user, as determined by a version number.
         /// The object is persisted by calling 
-        /// <see cref= "Habanero.Bo.OptimisticLockingVersionNumber.UpdatePropertiesWithLatestConcurrencyInfo"/>.
+        /// <see cref= "Habanero.BO.OptimisticLockingVersionNumber.UpdatePropertiesWithLatestConcurrencyInfo"/>.
         /// </summary>
         /// <param name="busObj">The business object to be persisted</param>
         /// <exception cref="BusObjDeleteConcurrencyControlException">Thrown if 

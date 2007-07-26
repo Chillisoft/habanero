@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.CriteriaManager;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
+using Habanero.BO;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -783,7 +783,7 @@ namespace Habanero.Test.General
         /// </remarks>
         /// <param name="id">The object primary Key</param>
         /// <returns>The loaded business object</returns>
-        /// <exception cref="Habanero.Bo.BusObjDeleteConcurrencyControlException">
+        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
         public static TransactionLog GetTransactionLog(BOPrimaryKey id)
         {

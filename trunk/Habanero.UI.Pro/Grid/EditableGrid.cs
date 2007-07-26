@@ -1,4 +1,4 @@
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Grid;
 

@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
-using Habanero.Bo;
+using Habanero.BO;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Manages the definition of the primary key in a data set

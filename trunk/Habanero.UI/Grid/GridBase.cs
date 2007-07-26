@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Base;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Grid;
 using log4net;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Grid
 {

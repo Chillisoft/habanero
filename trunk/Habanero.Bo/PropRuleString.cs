@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Checks string values against property rules that test for validity.

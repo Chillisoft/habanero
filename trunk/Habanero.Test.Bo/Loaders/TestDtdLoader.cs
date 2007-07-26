@@ -1,12 +1,12 @@
 using System;
 using System.IO;
 using Habanero.Base;
-using Habanero.Bo.Loaders;
+using Habanero.BO.Loaders;
 using Habanero.Util;
 using NMock;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.Loaders
+namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
     /// Summary description for TestDtdLoader.

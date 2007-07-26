@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.CriteriaManager;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using Habanero.Base;
 using log4net;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Manages a relationship where the relationship owner relates to one
@@ -14,7 +14,7 @@ namespace Habanero.Bo
     /// </summary>
     public class SingleRelationship : Relationship
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.SingleRelationship");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
         private BusinessObject _relatedBo;
         private string _storedRelationshipExpression;
 

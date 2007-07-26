@@ -5,7 +5,7 @@ using Habanero.DB;
 using NUnit.Framework;
 //using ByteFX.Data.MySqlClient;
 
-namespace Habanero.Test.Db
+namespace Habanero.Test.DB
 {
     [TestFixture]
     public class TestSqlStatement

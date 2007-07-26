@@ -1,5 +1,5 @@
 using System;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.Test.General
 {

@@ -1,4 +1,4 @@
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// An enumeration specifying the means used to preserve a class

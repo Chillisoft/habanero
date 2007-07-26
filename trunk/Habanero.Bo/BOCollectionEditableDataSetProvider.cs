@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using System.Data;
 using Habanero.Base;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using log4net;
 
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Provides an editable data-set for business objects
@@ -14,7 +14,7 @@ namespace Habanero.Bo
     public class BOCollectionEditableDataSetProvider : BOCollectionDataSetProvider
     {
         private static readonly ILog log =
-            LogManager.GetLogger("Habanero.Bo.BOCollectionEditableDataSetProvider");
+            LogManager.GetLogger("Habanero.BO.BOCollectionEditableDataSetProvider");
 
         private Hashtable _rowStates;
         private Hashtable _deletedRowIDs;

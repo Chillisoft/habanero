@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
@@ -101,11 +101,11 @@ namespace Habanero.UI.Forms
                         foreach (KeyValuePair<string, object> pair in _collection) {
                             if (pair.Value == null) continue;
                             if (pair.Value is BusinessObject) {
-                                if (((Bo.BusinessObject)pair.Value).ID.GetGuid().Equals( _businessObject.GetPropertyValue(_propertyName))) {
+                                if (((BO.BusinessObject)pair.Value).ID.GetGuid().Equals( _businessObject.GetPropertyValue(_propertyName))) {
                                     _comboBox.SelectedItem = pair.Key;
                                     break;
                                 }
-                                else if (_businessObject.GetPropertyValue(_propertyName) != null && String.Compare(((Bo.BusinessObject)pair.Value).ID.ToString(), _businessObject.GetPropertyValue(_propertyName).ToString()) == 0) {
+                                else if (_businessObject.GetPropertyValue(_propertyName) != null && String.Compare(((BO.BusinessObject)pair.Value).ID.ToString(), _businessObject.GetPropertyValue(_propertyName).ToString()) == 0) {
                                     _comboBox.SelectedItem = pair.Key;
                                     break;
                                 }

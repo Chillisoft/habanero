@@ -1,5 +1,5 @@
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
@@ -7,9 +7,9 @@ using Habanero.UI.Base;
 using Habanero.UI.Forms;
 using NMock;
 using NUnit.Framework;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.Ui.BoControls
+namespace Habanero.Test.UI.BoControls
 {
     /// <summary>
     /// Summary description for TestComboBoxCollectionControl.
@@ -33,7 +33,7 @@ namespace Habanero.Test.Ui.BoControls
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBo.LoadDefaultClassDef();
+            itsClassDef = MyBO.LoadDefaultClassDef();
 
             itsConfirmerMockControl = new DynamicMock(typeof(IConfirmer));
             IConfirmer confirmerMock = (IConfirmer)itsConfirmerMockControl.MockInstance;
@@ -50,12 +50,12 @@ namespace Habanero.Test.Ui.BoControls
             itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
 
 
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
             bo1.SetPropertyValue("TestProp", "abc");
             bo1.SetPropertyValue("TestProp2", "def");
             bo1.Save();
 
-            MyBo bo2 = (MyBo) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
+            MyBO bo2 = (MyBO) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
             bo2.SetPropertyValue("TestProp", "ghi");
             bo2.SetPropertyValue("TestProp2", "jkl");
             bo2.Save();
@@ -66,7 +66,7 @@ namespace Habanero.Test.Ui.BoControls
 
             itsControl = new ComboBoxCollectionControl();
             itsControl.SetCollection(itsCollection);
-            itsControl.Label = "Select MyBo:";
+            itsControl.Label = "Select MyBO:";
             itsControl.DatabaseConnection = databaseConnectionMock;
             itsControl.Confirmer = confirmerMock;
         }

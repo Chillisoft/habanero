@@ -1,9 +1,9 @@
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.Test;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for TestSingleRelationship.
@@ -18,14 +18,14 @@ namespace Habanero.Test.Bo
         public void SetupTestFixture()
         {
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBo.LoadClassDefWithRelationship();
+            itsClassDef = MyBO.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
         }
 
         [Test]
         public void TestSetRelatedObject()
         {
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
             ((SingleRelationship) bo1.Relationships["MyRelationship"]).SetRelatedObject(relatedBo1);
             Assert.AreSame(relatedBo1, bo1.Relationships.GetRelatedObject("MyRelationship"));

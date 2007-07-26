@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// An interface to model a collection of relationships between

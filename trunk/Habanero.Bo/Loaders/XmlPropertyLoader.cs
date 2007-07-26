@@ -2,11 +2,11 @@ using System;
 using System.Xml;
 using System.Collections;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 using Habanero.Util;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
     /// <summary>
     /// Loads property definitions from xml data

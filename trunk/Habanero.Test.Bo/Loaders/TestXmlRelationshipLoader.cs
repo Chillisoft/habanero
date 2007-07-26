@@ -1,11 +1,11 @@
 using System;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using Habanero.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.Loaders
+namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
     /// Summary description for TestXmlRelationshipLoader.
@@ -18,8 +18,8 @@ namespace Habanero.Test.Bo.Loaders
 					<relationship 
 						name=""TestRelationship"" 
 						type=""single"" 
-						relatedClass=""Habanero.Test.Bo.Loaders.TestRelatedClass"" 
-						relatedAssembly=""Habanero.Test.Bo""
+						relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
 					>
 						<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 
@@ -30,8 +30,8 @@ namespace Habanero.Test.Bo.Loaders
 					<relationship 
 						name=""TestRelationship"" 
 						type=""multiple"" 
-						relatedClass=""Habanero.Test.Bo.Loaders.TestRelatedClass"" 
-						relatedAssembly=""Habanero.Test.Bo""
+						relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
+						relatedAssembly=""Habanero.Test.BO""
 						orderBy=""TestOrder""
 					>
 						<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />

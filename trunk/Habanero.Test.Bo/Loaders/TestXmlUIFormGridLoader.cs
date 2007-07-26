@@ -1,9 +1,9 @@
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 //using Habanero.UI.Grid;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.Loaders
+namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
     /// Summary description for TestXmlUIPropertyLoader.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Checks decimal values against property rules that test for validity

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// A basic lookup-list content provider that stores a collection of

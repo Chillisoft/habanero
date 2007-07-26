@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Manages a collection of BOProp objects

@@ -2,11 +2,11 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 using Habanero.Util;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
 	/// <summary>
 	/// Provides a super-class for different types of xml loaders.

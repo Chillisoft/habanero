@@ -6,7 +6,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util.File;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
     /// <summary>
     /// Loads document type definitions (dtd's)
@@ -18,7 +18,7 @@ namespace Habanero.Bo.Loaders
         private readonly ResourceManager _resourceManager;
 
         public DtdLoader() {
-            _resourceManager = new ResourceManager("Habanero.Bo.Loaders.Dtds", typeof(DtdLoader).Assembly);
+            _resourceManager = new ResourceManager("Habanero.BO.Loaders.Dtds", typeof(DtdLoader).Assembly);
         }
 
         ///// <summary>

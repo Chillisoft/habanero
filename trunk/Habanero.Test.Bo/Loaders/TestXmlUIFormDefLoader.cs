@@ -1,8 +1,8 @@
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.Loaders
+namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
     /// Summary description for TestXmlUIPropertyCollectionLoader.
@@ -32,8 +32,8 @@ namespace Habanero.Test.Bo.Loaders
 							</columnLayout>
 						</tab>
 					</form>");
-            //Assert.AreEqual(typeof(MyBo), col.Class);
-            //Assert.AreEqual("Habanero.Test.Bo.MyBo_testName", col.Name.ToString() );
+            //Assert.AreEqual(typeof(MyBO), col.Class);
+            //Assert.AreEqual("Habanero.Test.BO.MyBO_testName", col.Name.ToString() );
             Assert.AreEqual(1, col.Count, "There should be 1 tab"); // 1 tab
             Assert.AreEqual(1, col[0].Count, "There should be one column in that tab");
             Assert.AreEqual(2, col[0][0].Count, "There should be two propertys in that column");
@@ -54,8 +54,8 @@ namespace Habanero.Test.Bo.Loaders
 						<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
 						<field label=""testlabel2"" property=""testpropname2"" type=""Button"" mapperType=""testmappertypename2"" />
 					</form>");
-            //Assert.AreEqual(typeof(MyBo), col.Class);
-            //Assert.AreEqual("Habanero.Test.Bo.MyBo_testName", col.Name.ToString() );
+            //Assert.AreEqual(typeof(MyBO), col.Class);
+            //Assert.AreEqual("Habanero.Test.BO.MyBO_testName", col.Name.ToString() );
             Assert.AreEqual(1, col.Count, "There should be 1 tab"); // 1 tab
             Assert.AreEqual(1, col[0].Count, "There should be one column in that tab");
             Assert.AreEqual(2, col[0][0].Count, "There should be two propertys in that column");
@@ -80,8 +80,8 @@ namespace Habanero.Test.Bo.Loaders
     						<field label=""testlabel2"" property=""testpropname2"" type=""Button"" mapperType=""testmappertypename2"" />
                         </columnLayout>
                     </form>");
-            //Assert.AreEqual(typeof(MyBo), col.Class);
-            //Assert.AreEqual("Habanero.Test.Bo.MyBo_testName", col.Name.ToString() );
+            //Assert.AreEqual(typeof(MyBO), col.Class);
+            //Assert.AreEqual("Habanero.Test.BO.MyBO_testName", col.Name.ToString() );
             Assert.AreEqual(1, col.Count, "There should be 1 tab"); // 1 tab
             Assert.AreEqual(2, col[0].Count, "There should be one column in that tab");
             Assert.AreEqual(1, col[0][0].Count, "There should be two propertys in column 1");

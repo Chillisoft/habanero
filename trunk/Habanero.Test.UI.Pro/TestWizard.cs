@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Habanero.UI.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.Ui.Generic
+namespace Habanero.Test.UI.Generic
 {
     /// <summary>
     /// Summary description for TestWizard.

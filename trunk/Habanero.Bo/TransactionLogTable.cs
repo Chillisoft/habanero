@@ -2,7 +2,7 @@ using System;
 using System.Security.Principal;
 using Habanero.DB;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Logs transactions in the same database that is used to store the

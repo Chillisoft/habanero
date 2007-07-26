@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Grid;
 using Habanero.Util;

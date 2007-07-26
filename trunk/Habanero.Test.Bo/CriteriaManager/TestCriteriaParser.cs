@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Habanero.Bo.CriteriaManager;
+using Habanero.BO.CriteriaManager;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.CriteriaManager
+namespace Habanero.Test.BO.CriteriaManager
 {
 
     [TestFixture]

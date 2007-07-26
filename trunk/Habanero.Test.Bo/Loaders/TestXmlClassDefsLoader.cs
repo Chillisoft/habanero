@@ -1,9 +1,9 @@
 using System.Collections;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo.Loaders
+namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
     /// Summary description for TestXmlClassDefsLoader.
@@ -25,13 +25,13 @@ namespace Habanero.Test.Bo.Loaders
                 loader.LoadClassDefs(
                     @"
 					<classes>
-						<class name=""TestClass"" assembly=""Habanero.Test.Bo.Loaders"" >
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" />
                             <primaryKey>
                                 <prop name=""TestClassID""/>
                             </primaryKey>
 						</class>
-						<class name=""TestRelatedClass"" assembly=""Habanero.Test.Bo.Loaders"" >
+						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestRelatedClassID"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClassID""/>

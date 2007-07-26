@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Habanero.Bo;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     class ContactPerson: BusinessObject
     {
@@ -26,7 +26,7 @@ namespace Habanero.Test.Bo
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPerson"" assembly=""Habanero.Test.Bo"">
+				<class name=""ContactPerson"" assembly=""Habanero.Test.BO"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" />
 					<primaryKey>

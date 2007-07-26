@@ -3,18 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 using log4net;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Provides mapping to a business object
     /// </summary>
     public class BOMapper
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BoMapper");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BoMapper");
         private BusinessObject _businessObject;
 
         /// <summary>

@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
 

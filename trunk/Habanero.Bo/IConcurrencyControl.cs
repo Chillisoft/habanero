@@ -1,4 +1,4 @@
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// An interface to model optimistic or pessimistic concurrency

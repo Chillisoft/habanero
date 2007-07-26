@@ -1,8 +1,8 @@
 using System;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Manages a relationship where the relationship owner relates to several

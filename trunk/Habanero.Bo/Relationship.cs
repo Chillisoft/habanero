@@ -1,6 +1,6 @@
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Provides a super-class for relationships between business objects

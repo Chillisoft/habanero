@@ -1,12 +1,12 @@
 using System.Windows.Forms;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.Test;
 using Habanero.UI.Base;
 using Habanero.UI.Grid;
 using NUnit.Framework;
 
-namespace Habanero.Test.Ui.Application
+namespace Habanero.Test.UI.Application
 {
     /// <summary>
     /// Summary description for TestEditableGrid.
@@ -26,7 +26,7 @@ namespace Habanero.Test.Ui.Application
         [Test]
         public void TestSetBusinessObjectCollection()
         {
-            ClassDef classDef = MyBo.LoadClassDefWithBoolean();
+            ClassDef classDef = MyBO.LoadClassDefWithBoolean();
             SetupGrid(classDef);
 
             Assert.AreEqual(4, grid.DataTable.Columns.Count);
@@ -51,7 +51,7 @@ namespace Habanero.Test.Ui.Application
         [Test]
         public void TestColumnTypes()
         {
-            ClassDef classDef = MyBo.LoadClassDefWithBoolean();
+            ClassDef classDef = MyBO.LoadClassDefWithBoolean();
             SetupGrid(classDef);
 
             Assert.AreSame(typeof (DataGridViewTextBoxColumn), grid.Columns[0].GetType());
@@ -64,7 +64,7 @@ namespace Habanero.Test.Ui.Application
         [Test]
         public void TestColumnTypesCombo()
         {
-            ClassDef classDef = MyBo.LoadDefaultClassDef();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
             SetupGrid(classDef);
 
             Assert.AreSame(typeof (DataGridViewTextBoxColumn), grid.Columns[0].GetType());

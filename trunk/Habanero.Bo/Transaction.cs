@@ -6,14 +6,14 @@ using Habanero.DB;
 using Habanero.Base;
 using log4net;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Manages a collection of transactions to commit to the database
     /// </summary>
     public class Transaction
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.Transaction");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.Transaction");
 
         private SortedList _colTransactions = null;
         private IDatabaseConnection _databaseConnection;

@@ -1,10 +1,10 @@
 using System;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
 using Habanero.UI.Grid;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
 {

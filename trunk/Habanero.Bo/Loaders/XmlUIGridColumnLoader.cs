@@ -1,20 +1,20 @@
 using System;
 using System.Xml;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
     /// <summary>
     /// Loads UI grid property definitions from xml data
     /// </summary>
     public class XmlUIGridColumnLoader : XmlLoader
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.Loaders.XmlUIGridColumnLoader");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.Loaders.XmlUIGridColumnLoader");
         private string _heading;
         private string _propertyName;
         private Type _gridControlType;

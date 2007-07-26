@@ -1,10 +1,10 @@
 using System;
 using System.Data;
-using Habanero.Bo.CriteriaManager;
+using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for TestExpression.

@@ -4,7 +4,7 @@ using Habanero.UI.Grid;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.Ui.Generic
+namespace Habanero.Test.UI.Generic
 {
     /// <summary>
     /// Summary description for TestDataviewFilterClauseBuilder.

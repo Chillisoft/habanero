@@ -1,4 +1,4 @@
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Checks object values against property rules that test for validity

@@ -4,7 +4,7 @@ using System.Reflection;
 using Habanero.Base;
 using NUnit.Framework;
 using Habanero.Base.Exceptions;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.DB;
 
 namespace Habanero.Test.General
@@ -28,7 +28,7 @@ namespace Habanero.Test.General
         private string[,] namespaces = {
                                           //Namespace, Assembly
                                           {"Habanero.Base.Exceptions", "Habanero.Base"},
-                                          {"Habanero.Bo", "Habanero.Bo"},
+                                          {"Habanero.BO", "Habanero.BO"},
                                           {"Habanero.DB", "Habanero.DB"},
                                           {"Habanero.Util", "Habanero.Util"}
                                        };

@@ -1,15 +1,15 @@
 using System;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.Base;
 using Habanero.Test;
 using Habanero.UI.Forms;
 using Habanero.UI.Grid;
 using NMock;
 using NUnit.Framework;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.Ui.Application
+namespace Habanero.Test.UI.Application
 {
     /// <summary>
     /// Summary description for TestReadOnlyGridButtonControl.
@@ -30,7 +30,7 @@ namespace Habanero.Test.Ui.Application
         public void SetupFixture()
         {
             ClassDef.ClassDefs.Clear();
-            itsBo = MyBo.LoadDefaultClassDef().CreateNewBusinessObject();
+            itsBo = MyBO.LoadDefaultClassDef().CreateNewBusinessObject();
         }
 
         [SetUp]

@@ -1,7 +1,7 @@
 using System;
 using Habanero.Base;
 
-namespace Habanero.Bo.CriteriaManager
+namespace Habanero.BO.CriteriaManager
 {
     /// <summary>
     /// Provides a sql operator for use in building sql statements

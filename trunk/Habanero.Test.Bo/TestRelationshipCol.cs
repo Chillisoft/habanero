@@ -1,9 +1,9 @@
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.Test;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for TestRelationshipCol.
@@ -18,29 +18,29 @@ namespace Habanero.Test.Bo
         public void SetupTestFixture()
         {
             ClassDef.ClassDefs.Clear();
-            itsClassDef = MyBo.LoadClassDefWithRelationship();
+            itsClassDef = MyBO.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
         }
 
         [
             Test,
                 ExpectedException(typeof (RelationshipNotFoundException),
-                    "The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBo"
+                    "The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO"
                     )]
         public void TestMissingRelationshipErrorMessageSingle()
         {
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             bo1.Relationships.GetRelatedObject("WrongRelationshipName");
         }
 
         [
             Test,
                 ExpectedException(typeof (RelationshipNotFoundException),
-                    "The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBo"
+                    "The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO"
                     )]
         public void TestMissingRelationshipErrorMessageMultiple()
         {
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             bo1.Relationships.GetRelatedCollection("WrongRelationshipName");
         }
 
@@ -51,7 +51,7 @@ namespace Habanero.Test.Bo
                     )]
         public void TestInvalidRelationshipAccessSingle()
         {
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             bo1.Relationships.GetRelatedCollection("MyRelationship");
         }
 
@@ -62,14 +62,14 @@ namespace Habanero.Test.Bo
                     )]
         public void TestInvalidRelationshipAccessMultiple()
         {
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             bo1.Relationships.GetRelatedObject("MyMultipleRelationship");
         }
 
         [Test]
         public void TestSetRelatedBusinessObject()
         {
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
             bo1.Relationships.SetRelatedObject("MyRelationship", relatedBo1);
             Assert.AreSame(relatedBo1, bo1.Relationships.GetRelatedObject("MyRelationship"));
@@ -83,7 +83,7 @@ namespace Habanero.Test.Bo
                     )]
         public void TestSetRelatedBusinessObjectWithWrongRelationshipType()
         {
-            MyBo bo1 = (MyBo) itsClassDef.CreateNewBusinessObject();
+            MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
             bo1.Relationships.SetRelatedObject("MyMultipleRelationship", relatedBo1);
         }

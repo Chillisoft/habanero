@@ -1,11 +1,11 @@
 using System;
 using System.Windows.Forms;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
 using log4net;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
 {
@@ -17,7 +17,7 @@ namespace Habanero.UI.Forms
     /// add button does.  need to see in action
     public class ComboBoxCollectionControl : UserControl
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BOControls.ComboBoxCollectionControl");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOControls.ComboBoxCollectionControl");
         private IDatabaseConnection _databaseConnection;
         private IConfirmer _confirmer;
         private PanelFactoryInfo _panelFactoryInfo;

@@ -2,14 +2,14 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.CriteriaManager;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Util;
 using log4net;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
  
     /// <summary>
@@ -17,7 +17,7 @@ namespace Habanero.Bo
     /// </summary>
     public class BOProp : IParameterSqlInfo
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BOProp");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
         protected object _currentValue = null;
         protected PropDef _propDef;
         protected bool _isValid = true;

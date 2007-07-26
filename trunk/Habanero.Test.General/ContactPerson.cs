@@ -2,9 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.CriteriaManager;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
+using Habanero.BO;
 using Habanero.DB;
 
 namespace Habanero.Test.General
@@ -190,7 +190,7 @@ namespace Habanero.Test.General
         /// </remarks>
         /// <param name="id">The object primary Key</param>
         /// <returns>The loaded business object</returns>
-        /// <exception cref="Habanero.Bo.BusObjDeleteConcurrencyControlException">
+        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
         public static ContactPerson GetContactPerson(BOPrimaryKey id)
         {
@@ -211,7 +211,7 @@ namespace Habanero.Test.General
         /// <param name="searchExpression">The object primary Key as a searchExpression or any of the objects
         /// alternate keys propertyname value pairs</param>
         /// <returns>The loaded business object or null</returns>
-        /// <exception cref="Habanero.Bo.BusObjDeleteConcurrencyControlException">
+        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
         public static ContactPerson GetContactPerson(IExpression searchExpression)
         {

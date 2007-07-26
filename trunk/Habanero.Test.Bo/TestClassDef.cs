@@ -1,12 +1,12 @@
 using System;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
+using Habanero.BO;
 using Habanero.Test;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for TestClassDef.
@@ -24,7 +24,7 @@ namespace Habanero.Test.Bo
             itsClassDef =
                 loader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
 					<property  name=""TestProp"" />
 					<primaryKey>
@@ -34,7 +34,7 @@ namespace Habanero.Test.Bo
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
             BusinessObject bo = itsClassDef.CreateNewBusinessObject();
-            Assert.AreSame(typeof (MyBo), bo.GetType());
+            Assert.AreSame(typeof (MyBO), bo.GetType());
             bo.SetPropertyValue("TestProp", "TestValue");
             Assert.AreEqual("TestValue", bo.GetPropertyValue("TestProp"));
         }
@@ -56,13 +56,13 @@ namespace Habanero.Test.Bo
     		string classDefString = String.Format(
                 @"
 					<classes>
-						<class name=""TestClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
+						<class name=""TestClass{0}"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClass{0}ID"" />
                             <primaryKey>
                                 <prop name=""TestClass{0}ID""/>
                             </primaryKey>
 						</class>
-						<class name=""TestRelatedClass{0}"" assembly=""Habanero.Test.Bo.Loaders"" >
+						<class name=""TestRelatedClass{0}"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestRelatedClass{0}ID"" />
                             <primaryKey>
                                 <prop name=""TestRelatedClass{0}ID""/>

@@ -1,14 +1,14 @@
 using System.Data;
 using System.Text;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
+using Habanero.BO;
 using Habanero.Base;
 using Habanero.Util;
 using NUnit.Framework;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// This Test Class tests the functionality of the LongText custom property class.
@@ -25,7 +25,7 @@ namespace Habanero.Test.Bo
             itsClassDef =
                 loader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
 					<property  name=""TestProp"" type=""LongText"" assembly=""Habanero.Util"" />
 					<primaryKey>

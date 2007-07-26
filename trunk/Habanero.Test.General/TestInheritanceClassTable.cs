@@ -1,7 +1,7 @@
 using System.Data;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;

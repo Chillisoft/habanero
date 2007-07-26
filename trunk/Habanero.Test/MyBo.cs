@@ -1,24 +1,24 @@
 using System;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.Loaders;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
+using Habanero.BO;
 using Habanero.Base;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test
 {
     /// <summary>
-    /// Summary description for MyBo.
+    /// Summary description for MyBO.
     /// </summary>
-    public class MyBo : BusinessObject
+    public class MyBO : BusinessObject
     {
-        public MyBo(): base() {}
+        public MyBO(): base() {}
 
-        //public MyBo(ClassDef def) : base(def)
+        //public MyBO(ClassDef def) : base(def)
         //{
         //}
 
-        //public MyBo(ClassDef def, IDatabaseConnection conn) : base(def, conn)
+        //public MyBO(ClassDef def, IDatabaseConnection conn) : base(def, conn)
         //{
         //}
 
@@ -46,7 +46,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
@@ -97,7 +97,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
@@ -131,7 +131,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
@@ -168,7 +168,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
@@ -208,7 +208,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" >
@@ -248,11 +248,11 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
-						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.Bo"" />
+						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.BO"" />
 					</property>
 					<primaryKey>
 						<prop name=""MyBoID"" />
@@ -285,11 +285,11 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" >
-						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.Bo"" />
+						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.BO"" />
 					</property>
 					<primaryKey>
 						<prop name=""MyBoID"" />
@@ -322,7 +322,7 @@ namespace Habanero.Test
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyBo"" assembly=""Habanero.Test"">
+				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
@@ -363,9 +363,9 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
-        //public static MyBo Create()
+        //public static MyBO Create()
         //{
-        //    MyBo bo = new MyBo();
+        //    MyBO bo = new MyBO();
         //    return bo;
         //}
 

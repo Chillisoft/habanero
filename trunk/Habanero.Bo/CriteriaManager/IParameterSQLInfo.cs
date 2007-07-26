@@ -1,4 +1,4 @@
-namespace Habanero.Bo.CriteriaManager
+namespace Habanero.BO.CriteriaManager
 {
     /// <summary>
     /// This interface is created so that any component that is using the 

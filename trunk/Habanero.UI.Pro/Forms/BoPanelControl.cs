@@ -1,8 +1,8 @@
 using System.Windows.Forms;
-using Habanero.Bo;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Provides a super-class for property rules that test the validity of

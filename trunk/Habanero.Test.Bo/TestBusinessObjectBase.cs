@@ -1,14 +1,14 @@
 using System;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
 using NMock;
 using NUnit.Framework;
-using BusinessObject=Habanero.Bo.BusinessObject;
+using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for TestBusinessObjectBase.
@@ -25,14 +25,14 @@ namespace Habanero.Test.Bo
         [Test]
         public void TestInstantiate()
         {
-            MyBo bo = new MyBo();
+            MyBO bo = new MyBO();
             string t = bo.GetPropertyValueString("TestProp");
         }
 
         //[Test]
         //public void TestIndexer()
         //{
-        //    MyBo bo = new MyBo();
+        //    MyBO bo = new MyBO();
         //    bo["TestProp"] = "hello";
         //    Assert.AreEqual("hello", bo.GetPropertyValue("TestProp"));
         //}
@@ -41,7 +41,7 @@ namespace Habanero.Test.Bo
         public void TestSettingLookupValueSetsGuid()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBo.LoadClassDefWithLookup();
+            ClassDef classDef = MyBO.LoadClassDefWithLookup();
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "s1");
             Assert.AreEqual("s1", bo.GetPropertyValueToDisplay("TestProp2"));
@@ -53,7 +53,7 @@ namespace Habanero.Test.Bo
         public void TestGetPropertyValueToDisplay()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBo.LoadClassDefWithStringLookup();
+            ClassDef classDef = MyBO.LoadClassDefWithStringLookup();
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "Started");
             Assert.AreEqual("S", bo.GetPropertyValue("TestProp2"));
@@ -65,7 +65,7 @@ namespace Habanero.Test.Bo
         public void TestGetPropertyValueToDisplayWithBOLookupList()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBo.LoadClassDefWithBOLookup();
+            ClassDef classDef = MyBO.LoadClassDefWithBOLookup();
             ContactPerson.LoadDefaultClassDef();
             ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
@@ -78,7 +78,7 @@ namespace Habanero.Test.Bo
         public void TestBOLookupListWithString()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBo.LoadClassDefWithBOStringLookup();
+            ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPerson.LoadDefaultClassDef();
             ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
@@ -91,7 +91,7 @@ namespace Habanero.Test.Bo
         public void TestBOLookupListNull()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBo.LoadClassDefWithBOStringLookup();
+            ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPerson.LoadDefaultClassDef();
             ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
@@ -104,7 +104,7 @@ namespace Habanero.Test.Bo
         public void TestApplyEditResetsPreviousValues()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBo.LoadDefaultClassDef();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
 
             Mock itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
             IDatabaseConnection itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
@@ -116,7 +116,7 @@ namespace Habanero.Test.Bo
                                                              DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
 
-            MyBo bo = (MyBo) classDef.CreateNewBusinessObject(itsConnection);
+            MyBO bo = (MyBO) classDef.CreateNewBusinessObject(itsConnection);
 //			bo.SetPropertyValue("TestProp", "Hello") ;
 //			bo.Save() ;
 

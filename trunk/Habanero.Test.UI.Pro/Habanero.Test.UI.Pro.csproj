@@ -77,13 +77,13 @@
       <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
       <Name>Habanero.Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.Bo\Habanero.Bo.csproj">
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
       <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
-      <Name>Habanero.Bo</Name>
+      <Name>Habanero.BO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.Db\Habanero.Db.csproj">
+    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
       <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
-      <Name>Habanero.Db</Name>
+      <Name>Habanero.DB</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Test.General\Habanero.Test.General.csproj">
       <Project>{F30A2151-F894-44E4-8F71-492B8C245745}</Project>

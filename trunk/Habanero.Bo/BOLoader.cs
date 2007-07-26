@@ -6,16 +6,16 @@ using System.Security.Permissions;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.CriteriaManager;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using log4net;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     public class BOLoader
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.BOLoader");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOLoader");
 
         private BOLoader() {}
         public static BOLoader Instance = new BOLoader();

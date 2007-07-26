@@ -35,7 +35,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>bin\Debug\Habanero.Db.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Habanero.DB.XML</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -149,11 +149,11 @@
     <Compile Include="DatabaseWriteException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DbMigrator.cs" />
+    <Compile Include="DBMigrator.cs" />
     <Compile Include="ParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SQLStatement.cs">
+    <Compile Include="SqlStatement.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SqlStatementCollection.cs">

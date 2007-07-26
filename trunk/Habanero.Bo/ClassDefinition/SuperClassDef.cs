@@ -2,7 +2,7 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
 	/// <summary>
 	/// Manages a super-class in the case where inheritance is being used.

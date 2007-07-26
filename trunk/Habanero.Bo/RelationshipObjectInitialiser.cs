@@ -1,10 +1,10 @@
 using System.Collections;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 using log4net;
 using System.Data;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Initialises a relationship object
@@ -12,7 +12,7 @@ namespace Habanero.Bo
     public class RelationshipObjectInitialiser : IObjectInitialiser
     {
         private readonly string _correspondingRelationshipName;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.RelationshipObjectInitialiser");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipObjectInitialiser");
         private readonly RelationshipDef _relationship;
         private readonly BusinessObject _parentObject;
 

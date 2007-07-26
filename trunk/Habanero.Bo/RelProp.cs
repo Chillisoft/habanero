@@ -1,7 +1,7 @@
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.CriteriaManager;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Represents the property on which two objects match up in a relationship

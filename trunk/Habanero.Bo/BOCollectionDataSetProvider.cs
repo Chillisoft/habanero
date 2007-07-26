@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Data;
 using Habanero.Base;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Provides a super-class for data-set providers for business objects

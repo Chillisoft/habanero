@@ -5,14 +5,14 @@ using Habanero.Base.Exceptions;
 using Habanero.Util;
 using log4net;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Manages a collection of relationships between business objects
     /// </summary>
     public class RelationshipCol : IRelationshipCol
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.Bo.RelationshipCol");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipCol");
         private BusinessObject _bo;
         private Dictionary<string, Relationship> _relationships;
 

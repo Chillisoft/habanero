@@ -1,11 +1,11 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Bo;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
-namespace Habanero.Bo.Loaders
+namespace Habanero.BO.Loaders
 {
     /// <summary>
     /// Loads lookup list data from the reader, using sql information as

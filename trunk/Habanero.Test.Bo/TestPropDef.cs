@@ -1,8 +1,8 @@
 using System;
-using Habanero.Bo.ClassDefinition;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.Bo
+namespace Habanero.Test.BO
 {
     /// <summary>
     /// Summary description for TestPropertyDef.

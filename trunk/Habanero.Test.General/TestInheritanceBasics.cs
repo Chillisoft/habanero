@@ -1,5 +1,5 @@
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO;
 using NUnit.Framework;
 
 namespace Habanero.Test.General

@@ -5,12 +5,12 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Reflection;
 using System.Security.Permissions;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.CriteriaManager;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using Habanero.Base;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     
     //public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);

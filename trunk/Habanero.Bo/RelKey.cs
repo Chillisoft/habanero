@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo.CriteriaManager;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
 
-namespace Habanero.Bo
+namespace Habanero.BO
 {
     /// <summary>
     /// Holds a collection of properties on which two classes in a relationship

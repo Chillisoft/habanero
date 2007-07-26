@@ -1,9 +1,9 @@
 using System;
-using Habanero.Bo;
+using Habanero.BO;
 using Habanero.DB;
 using Habanero.Util;
 
-namespace Habanero.Bo.ClassDefinition
+namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Defines a relationship where the owner relates to only one other object.
