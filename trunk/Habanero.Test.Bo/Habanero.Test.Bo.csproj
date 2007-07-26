@@ -110,10 +110,6 @@
       <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
       <Name>Habanero.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.UI.Pro\Habanero.UI.Pro.csproj">
-      <Project>{E1B4C7C4-587F-4162-A51C-7CCBA8147029}</Project>
-      <Name>Habanero.UI.Pro</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Habanero.UI\Habanero.UI.csproj">
       <Project>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</Project>
       <Name>Habanero.UI</Name>
@@ -204,6 +200,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>$(SolutionDir)PostBuild.cmd $(SolutionDir)  $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
