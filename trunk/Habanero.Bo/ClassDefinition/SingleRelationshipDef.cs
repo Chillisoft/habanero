@@ -2,7 +2,6 @@ using System;
 using Habanero.Bo;
 using Habanero.DB;
 using Habanero.Util;
-using NUnit.Framework;
 
 namespace Habanero.Bo.ClassDefinition
 {

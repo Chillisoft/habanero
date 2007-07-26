@@ -5,7 +5,6 @@ using Habanero.Bo.CriteriaManager;
 using Habanero.DB;
 using Habanero.Base;
 using log4net;
-using NUnit.Framework;
 
 namespace Habanero.Bo
 {

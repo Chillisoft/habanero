@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiveReports.Chart, Version=5.0.0.117, Culture=neutral, PublicKeyToken=cc4967777c49a3ff" />
-    <Reference Include="ActiveReports.Viewer3, Version=5.0.0.117, Culture=neutral, PublicKeyToken=cc4967777c49a3ff" />
-    <Reference Include="ActiveReports3, Version=5.0.0.117, Culture=neutral, PublicKeyToken=cc4967777c49a3ff" />
     <Reference Include="nmock, Version=1.0.1536.20687, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nmock.dll</HintPath>

@@ -1,7 +1,6 @@
 using Habanero.Base.Exceptions;
 using Habanero.Bo;
 using Habanero.Util;
-using NUnit.Framework;
 
 namespace Habanero.Bo.ClassDefinition
 {

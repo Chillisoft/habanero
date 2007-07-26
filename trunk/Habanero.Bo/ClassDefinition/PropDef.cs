@@ -7,7 +7,6 @@ using Habanero.Bo;
 using Habanero.Base;
 using Habanero.Util.File;
 using log4net;
-using NUnit.Framework;
 
 namespace Habanero.Bo.ClassDefinition
 {

@@ -1,6 +1,5 @@
 using Habanero.Bo.ClassDefinition;
 using Habanero.Bo.CriteriaManager;
-using NUnit.Framework;
 
 namespace Habanero.Bo
 {

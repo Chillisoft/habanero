@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using NUnit.Framework;
 
 namespace Habanero.Bo
 {
