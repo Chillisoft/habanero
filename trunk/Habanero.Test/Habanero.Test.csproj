@@ -30,6 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ActiveReports.Chart, Version=5.0.0.117, Culture=neutral, PublicKeyToken=cc4967777c49a3ff" />
+    <Reference Include="ActiveReports.Viewer3, Version=5.0.0.117, Culture=neutral, PublicKeyToken=cc4967777c49a3ff" />
+    <Reference Include="ActiveReports3, Version=5.0.0.117, Culture=neutral, PublicKeyToken=cc4967777c49a3ff" />
+    <Reference Include="Habanero, Version=1.0.0.0, Culture=neutral, PublicKeyToken=eae2c64fef8aa18b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Habanero\bin\Debug\Habanero.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.UI, Version=1.0.2768.20436, Culture=neutral, PublicKeyToken=71779386dead1c10, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Habanero.UI\bin\Debug\Habanero.UI.dll</HintPath>
+    </Reference>
     <Reference Include="nmock, Version=1.0.1536.20687, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nmock.dll</HintPath>
@@ -53,11 +64,14 @@
     <Compile Include="Shape.cs" />
     <Compile Include="TestDelayedMethodCall.cs" />
     <Compile Include="TestGlobalRegistry.cs" />
+    <Compile Include="TestHabaneroApp.cs" />
     <Compile Include="TestHabaneroStringBuilder.cs" />
+    <Compile Include="TestNullCrypter.cs" />
     <Compile Include="TestProgressIndicators.cs" />
     <Compile Include="TestStringUtilities.cs" />
     <Compile Include="TestUsingDatabase.cs" />
     <Compile Include="TestXmlDocumentValidator.cs" />
+    <Compile Include="TestXmlWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
