@@ -7,7 +7,7 @@
     <asmlist>
       <inputassembly>
         <option>library</option>
-        <file dir="D:\Habanero\Source\Build\Debug" name="Habanero.UI.Pro.dll" />
+        <file dir="${configdir}\Build\Debug" name="Habanero.UI.Pro.dll" />
       </inputassembly>
     </asmlist>
   </input>
@@ -19,6 +19,7 @@
       <type name="Habanero.UI.Forms.MultiSelector`1&lt;T&gt;">
         <method name="GetAvailableOptionsListBox" signature="" />
         <method name="GetSelectionsListBox" signature="" />
+        <method name="AvailableOptionsListBox_MouseDoubleClick" signature="object,System.Windows.Forms.MouseEventArgs" />
         <field name="AvailableOptionsListBox" />
         <field name="DeselectAllButton" />
         <field name="DeselectButton" />
