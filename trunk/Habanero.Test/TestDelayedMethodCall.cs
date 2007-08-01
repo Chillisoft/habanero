@@ -9,6 +9,10 @@ namespace Habanero.Test
     {
         private bool calledYet = false;
         
+        /// <summary>
+        /// Note that the test values seem to leave a lot of leeway - this is
+        /// because of our slow build server
+        /// </summary>
         [Test]
         public void TestCall()
         {
@@ -17,14 +21,14 @@ namespace Habanero.Test
             DelayedMethodCall call = new DelayedMethodCall(200, this);
             call.Call(new VoidMethodWithSender(MethodToCall));
 
-            while (!calledYet && (DateTime.Now - time).TotalMilliseconds < 500)
+            while (!calledYet && (DateTime.Now - time).TotalMilliseconds < 600)
             {
                 //
             }
             Assert.IsTrue(calledYet);
             double difference = (DateTime.Now - time).TotalMilliseconds;
             Assert.GreaterOrEqual(difference, 200d);
-            Assert.LessOrEqual(difference, 400d);
+            Assert.LessOrEqual(difference, 550d);
         }
 
         private void MethodToCall(object sender)
