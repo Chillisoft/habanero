@@ -63,11 +63,18 @@
     <Compile Include="Sample.cs" />
     <Compile Include="Shape.cs" />
     <Compile Include="TestDelayedMethodCall.cs" />
+    <Compile Include="TestEmailSender.cs" />
     <Compile Include="TestGlobalRegistry.cs" />
     <Compile Include="TestHabaneroApp.cs" />
     <Compile Include="TestHabaneroStringBuilder.cs" />
+    <Compile Include="TestJpgMetaData.cs" />
     <Compile Include="TestNullCrypter.cs" />
     <Compile Include="TestProgressIndicators.cs" />
+    <Compile Include="TestResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="TestStringUtilities.cs" />
     <Compile Include="TestUsingDatabase.cs" />
     <Compile Include="TestXmlDocumentValidator.cs" />
@@ -93,6 +100,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestResources\TestJpeg.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TestResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

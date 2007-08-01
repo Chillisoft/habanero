@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -41,6 +39,21 @@ namespace Habanero.Test
 
             output = StringUtilities.DelimitPascalCase("", " ");
             Assert.AreEqual("", output);
+        }
+
+        [Test]
+        public void TestIdNumberUtilities()
+        {
+            IdNumberUtilities idUtil = new IdNumberUtilities();
+            DateTime testDate = new DateTime(2007,1,1);
+            Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("070101"));
+        }
+
+        [Test, ExpectedException(typeof(FormatException))]
+        public void TestIdNumberUtilitiesException()
+        {
+            DateTime testDate = new DateTime(2007, 1, 1);
+            Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("07010"));
         }
     }
 }

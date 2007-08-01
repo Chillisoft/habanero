@@ -69,7 +69,7 @@ namespace Habanero.Util
         /// </summary>
         public void Send()
         {
-            doSend(null, null,null);
+            DoSend(null, null,null);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Habanero.Util
         /// <param name="password">The password used for authentification</param>
         public void SendAuthenticated(string username, string password)
         {
-            doSend(username, password,null);
+            DoSend(username, password,null);
         }
 
         /// <summary>
@@ -92,10 +92,10 @@ namespace Habanero.Util
         /// <param name="domain">The domain used for authentification</param>
         public void SendAuthenticated(string username, string password, string domain)
         {
-            doSend(username, password, domain);
+            DoSend(username, password, domain);
         }
 
-        private void doSend(string authUsername, string authPassword, string authDomain)
+        private void DoSend(string authUsername, string authPassword, string authDomain)
         {
             //EmailMessage message =
             //    new EmailMessage((string) itsEmailAddresses[0], _fromAddress, _subject, _content,

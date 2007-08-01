@@ -1,7 +1,9 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Text;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
 {
@@ -10,13 +12,6 @@ namespace Habanero.Util
     /// </summary>
     public class JpgMetaData
     {
-        /// <summary>
-        /// Constructor to initialise a new data object
-        /// </summary>
-        public JpgMetaData()
-        {
-        }
-
         /// <summary>
         /// A struct to hold image metadata detail
         /// </summary>
@@ -32,28 +27,14 @@ namespace Habanero.Util
         /// </summary>
         public struct Metadata
         {
-            public MetadataDetail
-                EquipmentMake;
-
+            public MetadataDetail EquipmentMake;
             public MetadataDetail CameraModel;
-
-            public MetadataDetail
-                ExposureTime;
-
+            public MetadataDetail ExposureTime;
             public MetadataDetail Fstop;
-
-            public MetadataDetail
-                DatePictureTaken;
-
-            public MetadataDetail
-                ShutterSpeed;
-
-            public MetadataDetail
-                ExposureCompensation;
-
-            public MetadataDetail
-                MeteringMode;
-
+            public MetadataDetail DatePictureTaken;
+            public MetadataDetail ShutterSpeed;
+            public MetadataDetail ExposureCompensation;
+            public MetadataDetail MeteringMode;
             public MetadataDetail Flash;
             public MetadataDetail XResolution;
             public MetadataDetail YResolution;
@@ -64,109 +45,108 @@ namespace Habanero.Util
         /// <summary>
         /// Returns the exif value for the specified arguments
         /// </summary>
-        /// <param name="Description">The exif description</param>
-        /// <param name="Value">The exif value type</param>
+        /// <param name="description">The exif description</param>
+        /// <param name="value">The exif value type</param>
         /// <returns>Returns a string</returns>
-        public string LookupExifValue(string
-                                          Description, string Value)
+        public string LookupExifValue(string description, string value)
         {
-            string DescriptionValue = null;
+            string descriptionValue = null;
 
-            if (Description == "MeteringMode")
+            if (description == "MeteringMode")
             {
-                switch (Value)
+                switch (value)
                 {
                     case "0":
-
-                        DescriptionValue = "Unknown";
+                        descriptionValue = "Unknown";
                         break;
                     case "1":
-
-                        DescriptionValue = "Average";
+                        descriptionValue = "Average";
                         break;
                     case "2":
-
-                        DescriptionValue = "Center Weighted Average";
+                        descriptionValue = "Center Weighted Average";
                         break;
                     case "3":
-
-                        DescriptionValue = "Spot";
+                        descriptionValue = "Spot";
                         break;
                     case "4":
-
-                        DescriptionValue = "Multi-spot";
+                        descriptionValue = "Multi-spot";
                         break;
                     case "5":
-
-                        DescriptionValue = "Multi-segment";
+                        descriptionValue = "Multi-segment";
                         break;
                     case "6":
-
-                        DescriptionValue = "Partial";
+                        descriptionValue = "Partial";
                         break;
                     case "255":
-
-                        DescriptionValue = "Other";
+                        descriptionValue = "Other";
                         break;
                 }
             }
 
-            if (Description
-                == "ResolutionUnit")
+            if (description == "ResolutionUnit")
             {
-                switch (Value)
+                switch (value)
                 {
                     case "1":
-
-                        DescriptionValue = "No Units";
+                        descriptionValue = "No Units";
                         break;
                     case "2":
-
-                        DescriptionValue = "Inch";
+                        descriptionValue = "Inch";
                         break;
                     case "3":
-
-                        DescriptionValue = "Centimeter";
+                        descriptionValue = "Centimeter";
                         break;
                 }
             }
 
-            if (Description == "Flash")
+            if (description == "Flash")
             {
-                switch (Value)
+                switch (value)
                 {
                     case "0":
-
-                        DescriptionValue = "Flash did not fire";
+                        descriptionValue = "Flash did not fire";
                         break;
                     case "1":
-
-                        DescriptionValue = "Flash fired";
+                        descriptionValue = "Flash fired";
                         break;
                     case "5":
-
-                        DescriptionValue = "Flash fired but strobe return light not detected";
+                        descriptionValue = "Flash fired but strobe return light not detected";
                         break;
                     case "7":
-
-                        DescriptionValue = "Flash fired and strobe return light detected";
+                        descriptionValue = "Flash fired and strobe return light detected";
                         break;
                 }
             }
-            return DescriptionValue;
+            return descriptionValue;
         }
 
         /// <summary>
-        /// Returns a Metadata object with exif metadata for the given photo
+        /// Returns a Metadata object with exif metadata for the image
+        /// in the given path
         /// </summary>
-        /// <param name="PhotoName">The photo</param>
+        /// <param name="imagePath">The image path</param>
         /// <returns>Returns a Metadata object</returns>
-        public Metadata GetExifMetadata(string
-                                            PhotoName)
+        public Metadata GetExifMetadata(string imagePath)
         {
-            // Create an instance of the image to gather metadata from 
-            Image MyImage = Image.FromFile
-                (PhotoName);
+            Image image = Image.FromFile(imagePath);
+            if (image == null)
+            {
+                throw new FileNotFoundException("Image file not found.");
+            }
+            return GetExifMetadata(image);
+        }
+
+        /// <summary>
+        /// Returns a Metadata object with exif metadata for the given image
+        /// </summary>
+        /// <param name="image">The photo</param>
+        /// <returns>Returns a Metadata object</returns>
+        public Metadata GetExifMetadata(Image image)
+        {
+            if (image == null)
+            {
+                throw new HabaneroArgumentException("image");
+            }
 
             // Create an integer array to hold the property id list,
             // and populate it with the list from my image.
@@ -174,8 +154,7 @@ namespace Habanero.Util
 										 list of integers, one for for each PropertyID.
 													  * We will populate the
 										 PropertyItem values later. */
-            int[] MyPropertyIdList =
-                MyImage.PropertyIdList;
+            int[] propertyIdList = image.PropertyIdList;
 
             // Create an array of PropertyItems, but don't populate it yet.
             /* Note: there is a bug in .class="highlight1">net
@@ -191,207 +170,145 @@ namespace Habanero.Util
 									   * test each of the PropertyItems
 						  ourselves, one at a time, and not add any that
 									   * would cause an error. */
-            PropertyItem[] MyPropertyItemList
-                = new PropertyItem[MyPropertyIdList.Length];
+            PropertyItem[] propertyItemList = new PropertyItem[propertyIdList.Length];
 
             // Create an instance of Metadata and populate Hex codes (values populated later)
-            Metadata MyMetadata = new Metadata
-                ();
-            MyMetadata.EquipmentMake.Hex
-                = "10f";
-            MyMetadata.CameraModel.Hex
-                = "110";
-            MyMetadata.DatePictureTaken.Hex
-                = "9003";
-            MyMetadata.ExposureTime.Hex
-                = "829a";
-            MyMetadata.Fstop.Hex = "829d";
-            MyMetadata.ShutterSpeed.Hex
-                = "9201";
-
-            MyMetadata.ExposureCompensation.Hex = "9204";
-            MyMetadata.MeteringMode.Hex
-                = "9207";
-            MyMetadata.Flash.Hex = "9209";
+            Metadata metadata = new Metadata();
+            metadata.EquipmentMake.Hex = "10f";
+            metadata.CameraModel.Hex = "110";
+            metadata.DatePictureTaken.Hex = "9003";
+            metadata.ExposureTime.Hex = "829a";
+            metadata.Fstop.Hex = "829d";
+            metadata.ShutterSpeed.Hex = "9201";
+            metadata.ExposureCompensation.Hex = "9204";
+            metadata.MeteringMode.Hex = "9207";
+            metadata.Flash.Hex = "9209";
 
             // Declare an ASCIIEncoding to use for returning string values from bytes
-            ASCIIEncoding Value =
-                new ASCIIEncoding();
+            ASCIIEncoding Value = new ASCIIEncoding();
 
             // Populate MyPropertyItemList.
             // For each propertyID...
             int index = 0;
-            foreach (int MyPropertyId in
-                MyPropertyIdList)
+            foreach (int propertyId in propertyIdList)
             {
                 // ... try to call GetPropertyItem (it crashes if PropertyItem has length 0, so use Try/Catch)
                 try
                 {
                     // Assign the image's PropertyItem to the PropertyItem array
-                    MyPropertyItemList
-                        [index] = MyImage.GetPropertyItem(MyPropertyId);
+                    propertyItemList[index] = image.GetPropertyItem(propertyId);
 
                     // Troublshooting
                     /*
                 
 																					textBox1.AppendText("\r\n\t" +
-																				BitConverter.ToString(MyImage.GetPropertyItem
+																				BitConverter.ToString(image.GetPropertyItem
 																				(MyPropertyId).Value));
                 
 																					textBox1.AppendText("\r\n\thex location: " +
-																				MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x"));
+																				image.GetPropertyItem(MyPropertyId).Id.ToString("x"));
 																									*/
 
                     // Assign each element of MyMetadata
-                    if
-                        (MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x")
-                         == "10f") // EquipmentMake
+                    if (image.GetPropertyItem(propertyId).Id.ToString("x") == "10f") // EquipmentMake
                     {
-                        MyMetadata.EquipmentMake.RawValueAsString =
-                            BitConverter.ToString(MyImage.GetPropertyItem
-                                                      (MyPropertyId).Value);
-
-                        MyMetadata.EquipmentMake.DisplayValue =
-                            Value.GetString(MyPropertyItemList[index].Value);
+                        metadata.EquipmentMake.RawValueAsString =
+                            BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
+                        metadata.EquipmentMake.DisplayValue =
+                            Value.GetString(propertyItemList[index].Value);
                     }
 
-                    if
-                        (MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x")
-                         == "110") // CameraModel
+                    if (image.GetPropertyItem(propertyId).Id.ToString("x") == "110") // CameraModel
                     {
-                        MyMetadata.CameraModel.RawValueAsString =
-                            BitConverter.ToString(MyImage.GetPropertyItem
-                                                      (MyPropertyId).Value);
-
-                        MyMetadata.CameraModel.DisplayValue =
-                            Value.GetString(MyPropertyItemList[index].Value);
+                        metadata.CameraModel.RawValueAsString =
+                            BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
+                        metadata.CameraModel.DisplayValue =
+                            Value.GetString(propertyItemList[index].Value);
                     }
 
-                    if
-                        (MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x")
-                         == "9003") // DatePictureTaken
+                    if (image.GetPropertyItem(propertyId).Id.ToString("x") == "9003") // DatePictureTaken
                     {
-                        MyMetadata.DatePictureTaken.RawValueAsString =
-                            BitConverter.ToString(MyImage.GetPropertyItem
-                                                      (MyPropertyId).Value);
-
-                        MyMetadata.DatePictureTaken.DisplayValue =
-                            Value.GetString(MyPropertyItemList[index].Value);
+                        metadata.DatePictureTaken.RawValueAsString =
+                            BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
+                        metadata.DatePictureTaken.DisplayValue =
+                            Value.GetString(propertyItemList[index].Value);
                     }
 
-                    if
-                        (MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x")
-                         == "9207") // MeteringMode
+                    if (image.GetPropertyItem(propertyId).Id.ToString("x") == "9207") // MeteringMode
                     {
-                        MyMetadata.MeteringMode.RawValueAsString =
-                            BitConverter.ToString(MyImage.GetPropertyItem
-                                                      (MyPropertyId).Value);
-
-                        MyMetadata.MeteringMode.DisplayValue =
+                        metadata.MeteringMode.RawValueAsString =
+                            BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
+                        metadata.MeteringMode.DisplayValue =
                             LookupExifValue("MeteringMode", BitConverter.ToInt16
-                                                                (MyImage.GetPropertyItem(MyPropertyId).Value, 0).
-                                                                ToString
-                                                                ());
+                                                                (image.GetPropertyItem(propertyId).Value, 0).ToString());
                     }
 
-                    if
-                        (MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x")
-                         == "9209") // Flash
+                    if (image.GetPropertyItem(propertyId).Id.ToString("x") == "9209") // Flash
                     {
-                        MyMetadata.Flash.RawValueAsString =
-                            BitConverter.ToString(MyImage.GetPropertyItem
-                                                      (MyPropertyId).Value);
-
-                        MyMetadata.Flash.DisplayValue = LookupExifValue
-                            ("Flash", BitConverter.ToInt16(MyImage.GetPropertyItem
-                                                               (MyPropertyId).Value, 0).ToString());
+                        metadata.Flash.RawValueAsString =
+                            BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
+                        metadata.Flash.DisplayValue = LookupExifValue
+                            ("Flash", BitConverter.ToInt16(image.GetPropertyItem
+                                                               (propertyId).Value, 0).ToString());
                     }
 
-                    if
-                        (MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x")
-                         == "829a") // ExposureTime
+                    if (image.GetPropertyItem(propertyId).Id.ToString("x") == "829a") // ExposureTime
                     {
-                        MyMetadata.ExposureTime.RawValueAsString =
-                            BitConverter.ToString(MyImage.GetPropertyItem
-                                                      (MyPropertyId).Value);
+                        metadata.ExposureTime.RawValueAsString =
+                            BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
 
-                        string
-                            StringValue = "";
-                        for (int
-                                 Offset = 0;
-                             Offset < MyImage.GetPropertyItem
-                                          (MyPropertyId).Len;
-                             Offset = Offset + 4)
+                        string StringValue = "";
+                        for (int Offset = 0; Offset < image.GetPropertyItem(propertyId).Len; Offset = Offset + 4)
                         {
                             StringValue += BitConverter.ToInt32
-                                               (MyImage.GetPropertyItem
-                                                    (MyPropertyId).Value, Offset).ToString() + "/";
+                                               (image.GetPropertyItem
+                                                    (propertyId).Value, Offset).ToString() + "/";
                         }
 
-                        MyMetadata.ExposureTime.DisplayValue =
+                        metadata.ExposureTime.DisplayValue =
                             StringValue.Substring(0, StringValue.Length - 1);
                     }
 
-                    if
-                        (MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x")
-                         == "829d") // F-stop
+                    if (image.GetPropertyItem(propertyId).Id.ToString("x") == "829d") // F-stop
                     {
-                        MyMetadata.Fstop.RawValueAsString =
-                            BitConverter.ToString(MyImage.GetPropertyItem
-                                                      (MyPropertyId).Value);
+                        metadata.Fstop.RawValueAsString =
+                            BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
 
                         int int1;
                         int int2;
-                        int1 =
-                            BitConverter.ToInt32(MyImage.GetPropertyItem
-                                                     (MyPropertyId).Value, 0);
-                        int2 =
-                            BitConverter.ToInt32(MyImage.GetPropertyItem
-                                                     (MyPropertyId).Value, 4);
+                        int1 = BitConverter.ToInt32(image.GetPropertyItem(propertyId).Value, 0);
+                        int2 = BitConverter.ToInt32(image.GetPropertyItem(propertyId).Value, 4);
 
-                        MyMetadata.Fstop.DisplayValue = "F/" +
-                                                        (int1/int2);
+                        metadata.Fstop.DisplayValue = "F/" + (int1/int2);
                     }
 
-                    if
-                        (MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x")
-                         == "9201") // ShutterSpeed
+                    if (image.GetPropertyItem(propertyId).Id.ToString("x") == "9201") // ShutterSpeed
                     {
-                        MyMetadata.ShutterSpeed.RawValueAsString =
-                            BitConverter.ToString(MyImage.GetPropertyItem
-                                                      (MyPropertyId).Value);
+                        metadata.ShutterSpeed.RawValueAsString =
+                            BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
 
-                        string
-                            StringValue = BitConverter.ToString
-                                (MyImage.GetPropertyItem(MyPropertyId).Value).Substring
-                                (0, 2);
+                        string StringValue = BitConverter.ToString
+                                (image.GetPropertyItem(propertyId).Value).Substring(0, 2);
 
-                        MyMetadata.ShutterSpeed.DisplayValue = "1/" +
-                                                               StringValue;
+                        metadata.ShutterSpeed.DisplayValue = "1/" + StringValue;
                     }
 
-                    if
-                        (MyImage.GetPropertyItem(MyPropertyId).Id.ToString("x")
-                         == "9204") // ExposureCompensation
+                    if (image.GetPropertyItem(propertyId).Id.ToString("x") == "9204") // ExposureCompensation
                     {
-                        MyMetadata.ExposureCompensation.RawValueAsString
-                            = BitConverter.ToString(MyImage.GetPropertyItem
-                                                        (MyPropertyId).Value);
+                        metadata.ExposureCompensation.RawValueAsString
+                            = BitConverter.ToString(image.GetPropertyItem(propertyId).Value);
 
-                        string
-                            StringValue = BitConverter.ToString
-                                (MyImage.GetPropertyItem(MyPropertyId).Value).Substring
-                                (0, 1);
+                        string StringValue = BitConverter.ToString
+                                (image.GetPropertyItem(propertyId).Value).Substring(0, 1);
 
-                        MyMetadata.ExposureCompensation.DisplayValue =
+                        metadata.ExposureCompensation.DisplayValue =
                             StringValue + " (Needs work to confirm accuracy)";
                     }
                 }
                 catch (Exception exc)
                 {
                     // if it is the expected error, do nothing
-                    if (exc.GetType
-                            ().ToString() != "System.ArgumentNullException")
+                    if (exc.GetType().ToString() != "System.ArgumentNullException")
                     {
                     }
                 }
@@ -402,19 +319,19 @@ namespace Habanero.Util
             }
 
 
-            MyMetadata.XResolution.DisplayValue =
-                MyImage.HorizontalResolution.ToString();
+            metadata.XResolution.DisplayValue =
+                image.HorizontalResolution.ToString();
 
-            MyMetadata.YResolution.DisplayValue =
-                MyImage.VerticalResolution.ToString();
+            metadata.YResolution.DisplayValue =
+                image.VerticalResolution.ToString();
 
-            MyMetadata.ImageHeight.DisplayValue =
-                MyImage.Height.ToString();
+            metadata.ImageHeight.DisplayValue =
+                image.Height.ToString();
 
-            MyMetadata.ImageWidth.DisplayValue =
-                MyImage.Width.ToString();
+            metadata.ImageWidth.DisplayValue =
+                image.Width.ToString();
 
-            return MyMetadata;
+            return metadata;
         }
     }
 }
