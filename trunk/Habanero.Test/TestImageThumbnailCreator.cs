@@ -33,5 +33,41 @@ namespace Habanero.Test
             Assert.AreEqual(200, newLargeImage.Height);
             Assert.AreEqual(200, newLargeImage.Width);
         }
+
+        [Test]
+        public void TestForHeightLargerThanWidth()
+        {
+            Image oldImage = (Image)_resourceManager.GetObject("TestJpeg2");
+            Assert.AreEqual(10, oldImage.Height);
+            Assert.AreEqual(5, oldImage.Width);
+
+            ImageThumbnailCreator creator = new ImageThumbnailCreator();
+
+            Image newSmallImage = creator.CreateThumbnail(oldImage, 2);
+            Assert.AreEqual(2, newSmallImage.Height);
+            Assert.AreEqual(4, newSmallImage.Width);
+
+            Image newLargeImage = creator.CreateThumbnail(oldImage, 20);
+            Assert.AreEqual(20, newLargeImage.Height);
+            Assert.AreEqual(40, newLargeImage.Width);
+        }
+
+        [Test]
+        public void TestForWidthLargerThanHeight()
+        {
+            Image oldImage = (Image)_resourceManager.GetObject("TestJpeg3");
+            Assert.AreEqual(5, oldImage.Height);
+            Assert.AreEqual(10, oldImage.Width);
+
+            ImageThumbnailCreator creator = new ImageThumbnailCreator();
+
+            Image newSmallImage = creator.CreateThumbnail(oldImage, 2);
+            Assert.AreEqual(2, newSmallImage.Height);
+            Assert.AreEqual(4, newSmallImage.Width);
+
+            Image newLargeImage = creator.CreateThumbnail(oldImage, 20);
+            Assert.AreEqual(20, newLargeImage.Height);
+            Assert.AreEqual(40, newLargeImage.Width);
+        }
     }
 }

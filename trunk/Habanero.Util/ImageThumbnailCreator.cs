@@ -6,6 +6,7 @@ namespace Habanero.Util
     /// <summary>
     /// Creates image thumbnails
     /// </summary>
+    /// TODO: What is the intention with the height/width inversion for h>w ?
     public class ImageThumbnailCreator
     {
         /// <summary>

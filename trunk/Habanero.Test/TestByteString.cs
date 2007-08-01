@@ -10,7 +10,7 @@ using Habanero.Util;
 using NUnit.Framework;
 using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test
 {
     /// <summary>
     /// This Test Class tests the functionality of the ByteString custom property class.
@@ -64,6 +64,21 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestOtherTypeConstructor()
+        {
+            ByteString byteString = new ByteString(1, false);
+            Assert.AreEqual("1", byteString.Value);
+        }
+
+        [Test]
+        public void TestSettingValue()
+        {
+            ByteString byteString = new ByteString("test");
+            byteString.Value = "newtest";
+            Assert.IsTrue(byteString.Value.Equals("newtest"));
+        }
+
+        [Test]
         public void TestEquals()
         {
             ByteString byteString1 = new ByteString("test");
@@ -85,6 +100,13 @@ namespace Habanero.Test.BO
             ByteString byteString1 = new ByteString(itsByteArrSpelling_test,false);
             ByteString byteString2 = new ByteString(itsByteArrSpelling_test,true);
             Assert.IsTrue(byteString1.Equals(byteString2));
+        }
+
+        [Test]
+        public void TestHashCode()
+        {
+            ByteString byteString = new ByteString("test");
+            Assert.AreEqual(byteString.GetHashCode(), -354185609);
         }
 
         [Test]
@@ -121,7 +143,7 @@ namespace Habanero.Test.BO
             BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             Assert.AreSame(typeof(ByteString), bo.GetPropertyValue("TestProp").GetType());
-            Assert.AreEqual("test", bo.GetPropertyValueString("TestProp"));
+            Assert.AreEqual("test", bo.GetPropertyValue("TestProp").ToString());
         }
 
         [Test]

@@ -34,12 +34,12 @@ namespace Habanero.Test
             Assert.AreEqual(col[1], "b");
             Assert.AreEqual(col[2], "c");
 
-            col.Add("d");
+            col.Add("e");
             Assert.AreEqual(col.Count, 4);
             Assert.AreEqual(col[0], "a");
             Assert.AreEqual(col[1], "b");
             Assert.AreEqual(col[2], "c");
-            Assert.AreEqual(col[3], "d");
+            Assert.AreEqual(col[3], "e");
 
             col.Add("b");
             Assert.AreEqual(col.Count, 5);
@@ -47,17 +47,38 @@ namespace Habanero.Test
             Assert.AreEqual(col[1], "b");
             Assert.AreEqual(col[2], "b");
             Assert.AreEqual(col[3], "c");
-            Assert.AreEqual(col[4], "d");
+            Assert.AreEqual(col[4], "e");
 
-            string[] copy = new string[7];
-            col.CopyTo(copy, 1);
-            Assert.AreEqual(null, copy[0]);
-            Assert.AreEqual(col[0], copy[1]);
-            Assert.AreEqual(col[1], copy[2]);
-            Assert.AreEqual(col[2], copy[3]);
-            Assert.AreEqual(col[3], copy[4]);
-            Assert.AreEqual(col[4], copy[5]);
-            Assert.AreEqual(null, copy[6]);
+            col.Add("d");
+            Assert.AreEqual(col.Count, 6);
+            Assert.AreEqual(col[0], "a");
+            Assert.AreEqual(col[1], "b");
+            Assert.AreEqual(col[2], "b");
+            Assert.AreEqual(col[3], "c");
+            Assert.AreEqual(col[4], "d");
+            Assert.AreEqual(col[5], "e");
+
+            string[] exactCopy = new string[8];
+            col.CopyTo(exactCopy, 0);
+            Assert.AreEqual(col[0], exactCopy[0]);
+            Assert.AreEqual(col[1], exactCopy[1]);
+            Assert.AreEqual(col[2], exactCopy[2]);
+            Assert.AreEqual(col[3], exactCopy[3]);
+            Assert.AreEqual(col[4], exactCopy[4]);
+            Assert.AreEqual(col[5], exactCopy[5]);
+            Assert.AreEqual(null, exactCopy[6]);
+            Assert.AreEqual(null, exactCopy[7]);
+
+            string[] offsetCopy = new string[8];
+            col.CopyTo(offsetCopy, 1);
+            Assert.AreEqual(null, offsetCopy[0]);
+            Assert.AreEqual(col[0], offsetCopy[1]);
+            Assert.AreEqual(col[1], offsetCopy[2]);
+            Assert.AreEqual(col[2], offsetCopy[3]);
+            Assert.AreEqual(col[3], offsetCopy[4]);
+            Assert.AreEqual(col[4], offsetCopy[5]);
+            Assert.AreEqual(col[5], offsetCopy[6]);
+            Assert.AreEqual(null, offsetCopy[7]);
         }
     }
 }

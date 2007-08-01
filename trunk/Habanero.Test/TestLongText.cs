@@ -8,7 +8,7 @@ using Habanero.Util;
 using NUnit.Framework;
 using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test
 {
     /// <summary>
     /// This Test Class tests the functionality of the LongText custom property class.
@@ -52,11 +52,26 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestSettingValue()
+        {
+            LongText longText = new LongText("test");
+            longText.Value = "newtest";
+            Assert.IsTrue(longText.Value.Equals("newtest"));
+        }
+
+        [Test]
         public void TestEquals()
         {
             LongText longText1 = new LongText("test");
             LongText longText2 = new LongText("test");
             Assert.IsTrue(longText1.Equals(longText2));
+        }
+
+        [Test]
+        public void TestHashCode()
+        {
+            LongText longText = new LongText("test");
+            Assert.AreEqual(longText.GetHashCode(), -354185609);
         }
 
         [Test]
@@ -86,7 +101,7 @@ namespace Habanero.Test.BO
             BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             Assert.AreSame(typeof (LongText), bo.GetPropertyValue("TestProp").GetType());
-            Assert.AreEqual("test", bo.GetPropertyValueString("TestProp"));
+            Assert.AreEqual("test", bo.GetPropertyValue("TestProp").ToString());
         }
 
         [Test]

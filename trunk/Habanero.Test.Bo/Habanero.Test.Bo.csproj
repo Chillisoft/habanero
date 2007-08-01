@@ -166,7 +166,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestBusinessObjectLookupList.cs" />
-    <Compile Include="TestByteString.cs" />
     <Compile Include="TestClassDef.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -174,7 +173,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestExpression.cs" />
-    <Compile Include="TestLongText.cs" />
     <Compile Include="TestPropDef.cs">
       <SubType>Code</SubType>
     </Compile>

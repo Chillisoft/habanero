@@ -67,10 +67,33 @@ namespace Habanero.Test {
             }
         }
         
+        internal static System.Drawing.Bitmap TestJpeg2 {
+            get {
+                object obj = ResourceManager.GetObject("TestJpeg2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap TestJpeg3 {
+            get {
+                object obj = ResourceManager.GetObject("TestJpeg3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap TestPhoto {
             get {
                 object obj = ResourceManager.GetObject("TestPhoto", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sample text.
+        /// </summary>
+        internal static string TestText {
+            get {
+                return ResourceManager.GetString("TestText", resourceCulture);
             }
         }
     }

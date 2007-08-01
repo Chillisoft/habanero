@@ -39,6 +39,9 @@ namespace Habanero.Test
 
             output = StringUtilities.DelimitPascalCase("", " ");
             Assert.AreEqual("", output);
+
+            output = StringUtilities.DelimitPascalCase(null, " ");
+            Assert.AreEqual(null, output);
         }
 
         [Test]

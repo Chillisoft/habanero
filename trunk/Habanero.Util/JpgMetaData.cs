@@ -131,7 +131,7 @@ namespace Habanero.Util
             Image image = Image.FromFile(imagePath);
             if (image == null)
             {
-                throw new FileNotFoundException("Image file not found.");
+                throw new FileLoadException("Image file not valid.");
             }
             return GetExifMetadata(image);
         }

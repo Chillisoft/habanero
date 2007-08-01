@@ -21,6 +21,17 @@ namespace Habanero.Test
         public void SetUpResources()
         {
             _resourceManager = new ResourceManager("Habanero.Test.TestResources", typeof(TestJpgMetaData).Assembly);
+            //File.WriteAllText("tempfile.txt", "test");
+            //Image image = (Image)_resourceManager.GetObject("TestJpeg2");
+            //image.Save("test.jpg");
+        }
+
+        [TearDown]
+        public void DeleteTempFile()
+        {
+            //_resourceManager.ReleaseAllResources();
+            //File.Delete("tempfile.txt");
+            //File.Delete("test.jpg");
         }
 
         [Test]
@@ -143,6 +154,17 @@ namespace Habanero.Test
             Assert.AreEqual(null, metadata.ImageHeight.RawValueAsString);
         }
 
+        // Tried to write an image to a temp file, then read it here
+        // and delete it in the teardown, but getting an error on deleting
+        // the file
+//        [Test]
+//        public void TestExifMetadataFromFilePath()
+//        {
+//            JpgMetaData data = new JpgMetaData();
+//            JpgMetaData.Metadata metadata = data.GetExifMetadata("test.jpg");
+//            Assert.AreEqual("10", metadata.ImageHeight.DisplayValue);
+//        }
+
         [Test, ExpectedException(typeof(HabaneroArgumentException))]
         public void TestInvalidImageException()
         {
@@ -157,6 +179,15 @@ namespace Habanero.Test
             JpgMetaData data = new JpgMetaData();
             JpgMetaData.Metadata metadata = data.GetExifMetadata("falsepath");
         }
+
+        // Attempted to test the null test (file exists but image conversion goes
+        // to null), but was getting outofmemoryexception
+//        [Test, ExpectedException(typeof(FileLoadException))]
+//        public void TestInvalidImageFileException()
+//        {
+//            JpgMetaData data = new JpgMetaData();
+//            JpgMetaData.Metadata metadata = data.GetExifMetadata("tempfile.txt");
+//        }
 
         [Test]
         public void TestLookupExifValue()
