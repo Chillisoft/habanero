@@ -83,6 +83,66 @@ namespace Habanero.Test
             Assert.AreEqual(null, metadata.ImageHeight.RawValueAsString);
         }
 
+        [Test]
+        public void TestExifMetadataWithPhoto()
+        {
+            Image image = (Image)_resourceManager.GetObject("TestPhoto");
+            JpgMetaData data = new JpgMetaData();
+            JpgMetaData.Metadata metadata = data.GetExifMetadata(image);
+
+            Assert.AreEqual("618z3 Digital Camera ", metadata.CameraModel.DisplayValue);
+            Assert.AreEqual("110", metadata.CameraModel.Hex);
+            Assert.AreEqual("36-31-38-7A-33-20-44-69-67-69-74-61-6C-20-43-61-6D-65-72-61-20-00", metadata.CameraModel.RawValueAsString);
+
+            Assert.AreEqual("2007:07:14 12:36:58", metadata.DatePictureTaken.DisplayValue);
+            Assert.AreEqual("9003", metadata.DatePictureTaken.Hex);
+            Assert.AreEqual("32-30-30-37-3A-30-37-3A-31-34-20-31-32-3A-33-36-3A-35-38-00", metadata.DatePictureTaken.RawValueAsString);
+
+            Assert.AreEqual("SOMERFIELD/ AVENTI", metadata.EquipmentMake.DisplayValue);
+            Assert.AreEqual("10f", metadata.EquipmentMake.Hex);
+            Assert.AreEqual("53-4F-4D-45-52-46-49-45-4C-44-2F-20-41-56-45-4E-54-49-00", metadata.EquipmentMake.RawValueAsString);
+
+            Assert.AreEqual("1000/100000", metadata.ExposureTime.DisplayValue);
+            Assert.AreEqual("829a", metadata.ExposureTime.Hex);
+            Assert.AreEqual("E8-03-00-00-A0-86-01-00", metadata.ExposureTime.RawValueAsString);
+
+            Assert.AreEqual("F/4", metadata.Fstop.DisplayValue);
+            Assert.AreEqual("829d", metadata.Fstop.Hex);
+            Assert.AreEqual("35-01-00-00-40-00-00-00", metadata.Fstop.RawValueAsString);
+
+            Assert.AreEqual(null, metadata.ShutterSpeed.DisplayValue);
+            Assert.AreEqual("9201", metadata.ShutterSpeed.Hex);
+            Assert.AreEqual(null, metadata.ShutterSpeed.RawValueAsString);
+
+            Assert.AreEqual("0 (Needs work to confirm accuracy)", metadata.ExposureCompensation.DisplayValue);
+            Assert.AreEqual("9204", metadata.ExposureCompensation.Hex);
+            Assert.AreEqual("00-00-00-00-0A-00-00-00", metadata.ExposureCompensation.RawValueAsString);
+
+            Assert.AreEqual("Center Weighted Average", metadata.MeteringMode.DisplayValue);
+            Assert.AreEqual("9207", metadata.MeteringMode.Hex);
+            Assert.AreEqual("02-00", metadata.MeteringMode.RawValueAsString);
+
+            Assert.AreEqual(null, metadata.Flash.DisplayValue);
+            Assert.AreEqual("9209", metadata.Flash.Hex);
+            Assert.AreEqual("1F-00", metadata.Flash.RawValueAsString);
+
+            Assert.AreEqual("72", metadata.XResolution.DisplayValue);
+            Assert.AreEqual(null, metadata.XResolution.Hex);
+            Assert.AreEqual(null, metadata.XResolution.RawValueAsString);
+
+            Assert.AreEqual("72", metadata.YResolution.DisplayValue);
+            Assert.AreEqual(null, metadata.YResolution.Hex);
+            Assert.AreEqual(null, metadata.YResolution.RawValueAsString);
+
+            Assert.AreEqual("100", metadata.ImageWidth.DisplayValue);
+            Assert.AreEqual(null, metadata.ImageWidth.Hex);
+            Assert.AreEqual(null, metadata.ImageWidth.RawValueAsString);
+
+            Assert.AreEqual("100", metadata.ImageHeight.DisplayValue);
+            Assert.AreEqual(null, metadata.ImageHeight.Hex);
+            Assert.AreEqual(null, metadata.ImageHeight.RawValueAsString);
+        }
+
         [Test, ExpectedException(typeof(HabaneroArgumentException))]
         public void TestInvalidImageException()
         {

@@ -67,6 +67,7 @@
     <Compile Include="TestGlobalRegistry.cs" />
     <Compile Include="TestHabaneroApp.cs" />
     <Compile Include="TestHabaneroStringBuilder.cs" />
+    <Compile Include="TestImageThumbnailCreator.cs" />
     <Compile Include="TestJpgMetaData.cs" />
     <Compile Include="TestNullCrypter.cs" />
     <Compile Include="TestProgressIndicators.cs" />
@@ -75,6 +76,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TestResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TestSortedStringCollection.cs" />
     <Compile Include="TestStringUtilities.cs" />
     <Compile Include="TestUsingDatabase.cs" />
     <Compile Include="TestXmlDocumentValidator.cs" />
@@ -103,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestResources\TestJpeg.jpg" />
+    <Content Include="TestResources\TestPhoto.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestResources.resx">

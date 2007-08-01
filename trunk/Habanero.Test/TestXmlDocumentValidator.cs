@@ -3,7 +3,7 @@ using Habanero.Base.Exceptions;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.Utilities
+namespace Habanero.Test
 {
     /// <summary>
     /// Summary description for XmlDocumentValidator.

@@ -66,5 +66,12 @@ namespace Habanero.Test {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap TestPhoto {
+            get {
+                object obj = ResourceManager.GetObject("TestPhoto", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

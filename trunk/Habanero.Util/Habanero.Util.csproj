@@ -132,7 +132,7 @@
     <Compile Include="SerialisationUtilities.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SortedStringList.cs">
+    <Compile Include="SortedStringCollection.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StringUtilities.cs">

@@ -9,13 +9,6 @@ namespace Habanero.Util
     public class ImageThumbnailCreator
     {
         /// <summary>
-        /// Constructor to initialise a new creator
-        /// </summary>
-        public ImageThumbnailCreator()
-        {
-        }
-
-        /// <summary>
         /// Creates a thumbnail from the image provided, scaled down to the
         /// new height specified while keeping the aspect ratio
         /// </summary>
