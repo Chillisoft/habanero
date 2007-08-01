@@ -17,14 +17,14 @@ namespace Habanero.Test
             DelayedMethodCall call = new DelayedMethodCall(200, this);
             call.Call(new VoidMethodWithSender(MethodToCall));
 
-            while (!calledYet && (DateTime.Now - time).TotalMilliseconds < 400)
+            while (!calledYet && (DateTime.Now - time).TotalMilliseconds < 500)
             {
                 //
             }
             Assert.IsTrue(calledYet);
             double difference = (DateTime.Now - time).TotalMilliseconds;
             Assert.GreaterOrEqual(difference, 200d);
-            Assert.LessOrEqual(difference, 300d);
+            Assert.LessOrEqual(difference, 400d);
         }
 
         private void MethodToCall(object sender)
