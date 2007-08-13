@@ -192,7 +192,9 @@ namespace Habanero.BO
                 {
                     throw new HabaneroApplicationException(String.Format(
                         "A duplication error occurred while compiling a business " +
-                        "object lookup list.  The key '{0}' has already been added.",
+                        "object lookup list.  The key '{0}' has already been added. " +
+                        "One possible cause is that a customised ToString() method has not " +
+                        "been added to the business object.",
                         bo.ToString()));
                 }
 				sortedLookupList.Add(bo.ToString(), bo);
