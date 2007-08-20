@@ -104,7 +104,7 @@ namespace Habanero.UI.Grid
         /// <param name="col">The business object collection</param>
         /// <returns>Returns a new data set provider</returns>
         protected override BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
-            BusinessObjectCollection<BusinessObject> col)
+			IBusinessObjectCollection col)
         {
             return new BOCollectionReadOnlyDataSetProvider(col);
         }
@@ -131,8 +131,9 @@ namespace Habanero.UI.Grid
         /// Returns a cloned collection of the business objects in the grid
         /// </summary>
         /// <returns>Returns a business object collection</returns>
-        public BusinessObjectCollection<BusinessObject> GetCollectionClone()
-        {
+		public IBusinessObjectCollection GetCollectionClone()
+        //public BusinessObjectCollection<BusinessObject> GetCollectionClone()
+		{
             return _collection.Clone();
         }
 

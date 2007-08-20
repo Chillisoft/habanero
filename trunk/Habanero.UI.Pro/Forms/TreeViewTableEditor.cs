@@ -103,7 +103,7 @@ namespace Habanero.UI.Forms
             if (e.Node.Tag != null)
             {
                 BusinessObject sampleBo = (BusinessObject) e.Node.Tag;
-                BusinessObjectCollection<BusinessObject> collectionForNode;
+				IBusinessObjectCollection collectionForNode;
                 try
                 {
                     collectionForNode = _tableDataSource.GetCollection(sampleBo);
@@ -127,7 +127,7 @@ namespace Habanero.UI.Forms
             /// </summary>
             /// <param name="sampleBo">A sample business object</param>
             /// <returns>Returns the business object collection</returns>
-            BusinessObjectCollection<BusinessObject> GetCollection(BusinessObject sampleBo);
+			IBusinessObjectCollection GetCollection(BusinessObject sampleBo);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Habanero.UI.Forms
             /// </summary>
             /// <param name="sampleBo">A sample business object</param>
             /// <returns>Returns the business object collection</returns>
-            public BusinessObjectCollection<BusinessObject> GetCollection(BusinessObject sampleBo)
+			public IBusinessObjectCollection GetCollection(BusinessObject sampleBo)
             {
                 return BOLoader.Instance.GetBusinessObjectCol(sampleBo.GetType(), "", "");
             }

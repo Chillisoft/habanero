@@ -183,7 +183,7 @@ namespace Habanero.BO
 		/// </summary>
 		/// <param name="col">The business object collection</param>
 		/// <returns>Returns a collection of display-value pairs</returns>
-        public static Dictionary<string, object> CreateDisplayValueDictionary(BusinessObjectCollection<BusinessObject> col)
+        public static Dictionary<string, object> CreateDisplayValueDictionary(IBusinessObjectCollection col)
 		{
             SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
 			foreach (BusinessObject bo in col)
@@ -247,7 +247,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <returns>Returns an ICollection object</returns>
-        private static ICollection CreateValueList(BusinessObjectCollection<BusinessObject> col)
+        private static ICollection CreateValueList(IBusinessObjectCollection col)
         {
             SortedStringCollection valueList = new SortedStringCollection();
             foreach (BusinessObject bo in col)

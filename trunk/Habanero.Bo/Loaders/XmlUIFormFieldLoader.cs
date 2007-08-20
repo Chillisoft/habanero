@@ -16,11 +16,13 @@ namespace Habanero.BO.Loaders
     {
         private string _label;
         private string _propertyName;
-        private string _mapperTypeName;
-        private Type _controlType;
+		private string _mapperTypeName;
+		private string _mapperTypeAssembly;
+		private string _controlTypeName;
+		private string _controlAssembly;
+		//private Type _controlType;
         private bool _editable;
         private Hashtable _propertyAttributes;
-        private string _mapperTypeAssembly;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -65,8 +67,10 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a UIFormProperty object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateUIFormProperty(_label, _propertyName, 
-				_controlType, _mapperTypeName, _mapperTypeAssembly, _editable, _propertyAttributes);
+			return _defClassFactory.CreateUIFormProperty(_label, _propertyName,
+				_controlTypeName, _controlAssembly, _mapperTypeName, _mapperTypeAssembly, _editable, _propertyAttributes);
+			//return _defClassFactory.CreateUIFormProperty(_label, _propertyName, 
+			//    _controlType, _mapperTypeName, _mapperTypeAssembly, _editable, _propertyAttributes);
         }
 
         /// <summary>
@@ -107,21 +111,23 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadControlType()
         {
-            string controlTypeName = _reader.GetAttribute("type");
-            string controlAssemblyName = _reader.GetAttribute("assembly");
-            try
-            {
-                _controlType = TypeLoader.LoadType(controlAssemblyName, controlTypeName);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidXmlDefinitionException(String.Format(
-                    "While attempting to load a 'field' element, an " +
-                    "error occurred while loading the control type. " +
-                    "The type supplied was '{0}' and the assembly was '{1}'. " +
-                    "Please ensure that the type exists in the assembly provided.",
-                    controlTypeName, controlAssemblyName), ex);
-            }
+			_controlTypeName = _reader.GetAttribute("type");
+			_controlAssembly = _reader.GetAttribute("assembly");
+			//string controlTypeName = _reader.GetAttribute("type");
+			//string controlAssemblyName = _reader.GetAttribute("assembly");
+			//try
+			//{
+			//    _controlType = TypeLoader.LoadType(controlAssemblyName, controlTypeName);
+			//}
+			//catch (Exception ex)
+			//{
+			//    throw new InvalidXmlDefinitionException(String.Format(
+			//        "While attempting to load a 'field' element, an " +
+			//        "error occurred while loading the control type. " +
+			//        "The type supplied was '{0}' and the assembly was '{1}'. " +
+			//        "Please ensure that the type exists in the assembly provided.",
+			//        controlTypeName, controlAssemblyName), ex);
+			//}
         }
 
         /// <summary>

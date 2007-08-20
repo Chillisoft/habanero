@@ -62,7 +62,7 @@ namespace Habanero.BO.ClassDefinition
     	private bool _compulsory = false;
 
         
-        #region "Constuctor and destructors"
+        #region Constuctor and destructors
 
         /// <summary>
         /// This constructor is used to create a propdef using it's property type and other information. 
@@ -173,7 +173,7 @@ namespace Habanero.BO.ClassDefinition
 		#endregion
 
 
-		#region "properties"
+		#region Properties
 
 		/// <summary>
         /// The name of the property, e.g. surname

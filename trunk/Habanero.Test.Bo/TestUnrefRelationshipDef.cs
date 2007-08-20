@@ -83,5 +83,31 @@ namespace Habanero.Test.BO
             //			Assert.AreEqual(mMockBo.GetPropertyValueString("MockBOProp1") ,ltempBO.GetPropertyValueString("MockBOID"), "The object returned should be the one with the ID = MockBOID");
             //			Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1") ,ltempBO.GetPropertyValue("MockBOID"), "The object returned should be the one with the ID = MockBOID");
         }
+
+		[Test]
+		public void TestCreateRelationshipUsingGenerics()
+		{
+			MultipleRelationship rel =
+				(MultipleRelationship)mRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
+			Assert.AreEqual(mRelationshipDef.RelationshipName, rel.RelationshipName);
+
+			Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
+
+			BusinessObjectCollection<MockBO> relatedObjects;
+			relatedObjects = rel.GetRelatedBusinessObjectCol<MockBO>();
+			Assert.IsTrue(relatedObjects.Count == 0);
+
+			//			mMockBo.SetPropertyValue("MockBOProp1",mMockBo.GetPropertyValue("MockBOID"));
+			//			mMockBo.Save();
+			//			Assert.IsTrue (rel.HasRelationship(), "Should be true since prop MockBOProp1 has been set");
+			//
+			//			Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1") ,mMockBo.GetPropertyValue("MockBOID"));
+			//TODO:
+			//			MockBO ltempBO = (MockBO) rel.GetRelatedObject();
+			//			Assert.IsFalse(ltempBO == null);
+			//			Assert.AreEqual(mMockBo.GetPropertyValue("MockBOID") ,ltempBO.GetPropertyValue("MockBOID"), "The object returned should be the one with the ID = MockBOID");
+			//			Assert.AreEqual(mMockBo.GetPropertyValueString("MockBOProp1") ,ltempBO.GetPropertyValueString("MockBOID"), "The object returned should be the one with the ID = MockBOID");
+			//			Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1") ,ltempBO.GetPropertyValue("MockBOID"), "The object returned should be the one with the ID = MockBOID");
+		}
     }
 }

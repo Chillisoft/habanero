@@ -429,7 +429,7 @@ namespace Habanero.UI.Forms
                 new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),
                                                   formGrid.CorrespondingRelationshipName);
 
-            BusinessObjectCollection<BusinessObject> collection =
+			IBusinessObjectCollection collection =
                 bo.Relationships.GetRelatedCollection(formGrid.RelationshipName);
             //foreach (UIGridColumn property in collection.SampleBo.GetUserInterfaceMapper().GetUIGridProperties())
             //{

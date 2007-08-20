@@ -5,7 +5,7 @@
 <!ELEMENT property (rule*, databaseLookupList*, simpleLookupList*, businessObjectLookupList*)>
 <!ATTLIST property
 	name NMTOKEN #REQUIRED
-	type NMTOKEN "String"
+	type CDATA "String"
 	assembly NMTOKEN "System"
 	readWriteRule (	ReadWrite | ReadOnly | WriteOnce ) "ReadWrite"
 	databaseField CDATA #IMPLIED

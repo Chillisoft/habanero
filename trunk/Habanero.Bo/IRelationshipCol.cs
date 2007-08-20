@@ -28,6 +28,20 @@ namespace Habanero.BO
         /// <returns>Returns a business object collection</returns>
         BusinessObjectCollection<BusinessObject> GetRelatedCollection(string relationshipName);
 
+		/// <summary>
+		/// Returns a collection of business objects that are connected to
+		/// this object through the specified relationship (eg. would return
+		/// a father and a mother if the relationship was "parents").  This
+		/// method is to be used in the case of multiple relationships.
+		/// </summary>
+		/// <param name="relationshipName">The name of the relationship</param>
+		/// <returns>Returns a business object collection</returns>
+		/// <exception cref="InvalidRelationshipAccessException">Thrown if
+		/// the relationship specified is a single relationship, when a
+		/// multiple one was expected</exception>
+		BusinessObjectCollection<T> GetRelatedCollection<T>(string relationshipName)
+			where T : BusinessObject;
+
         /// <summary>
         /// Relates a business object to this object through the type of
         /// relationship specified (eg. could add a new child through a
@@ -43,5 +57,6 @@ namespace Habanero.BO
         /// <param name="name">The relationship name</param>
         /// <returns>The Relationship object</returns>
         Relationship this[string name] { get;}
+
     }
 }

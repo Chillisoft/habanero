@@ -99,7 +99,23 @@ namespace Habanero.BO
             return ((SingleRelationship) relationship).GetRelatedObject(_bo.GetDatabaseConnection());
         }
 
-        /// <summary>
+		/// <summary>
+		/// Returns a collection of business objects that are connected to
+		/// this object through the specified relationship (eg. would return
+		/// a father and a mother if the relationship was "parents").  This
+		/// method is to be used in the case of multiple relationships.
+		/// </summary>
+		/// <param name="relationshipName">The name of the relationship</param>
+		/// <returns>Returns a business object collection</returns>
+		/// <exception cref="InvalidRelationshipAccessException">Thrown if
+		/// the relationship specified is a single relationship, when a
+		/// multiple one was expected</exception>
+		public BusinessObjectCollection<BusinessObject> GetRelatedCollection(string relationshipName)
+		{
+			return GetRelatedCollection<BusinessObject>(relationshipName);
+		}
+
+    	/// <summary>
         /// Returns a collection of business objects that are connected to
         /// this object through the specified relationship (eg. would return
         /// a father and a mother if the relationship was "parents").  This
@@ -110,8 +126,9 @@ namespace Habanero.BO
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship specified is a single relationship, when a
         /// multiple one was expected</exception>
-        public BusinessObjectCollection<BusinessObject> GetRelatedCollection(string relationshipName)
-        {
+        public BusinessObjectCollection<T> GetRelatedCollection<T>(string relationshipName)
+			where T : BusinessObject
+		{
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
             Relationship relationship = this[relationshipName];
             if (relationship is SingleRelationship)
@@ -119,7 +136,7 @@ namespace Habanero.BO
                 throw new InvalidRelationshipAccessException("The 'single' relationship " + relationshipName +
                                                              " was accessed as a 'multiple' relationship (using GetRelatedCollection()).");
             }
-            return ((MultipleRelationship) relationship).GetRelatedBusinessObjectCol();
+            return ((MultipleRelationship) relationship).GetRelatedBusinessObjectCol<T>();
         }
 
         /// <summary>

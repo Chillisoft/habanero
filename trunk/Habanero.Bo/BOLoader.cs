@@ -346,9 +346,9 @@ namespace Habanero.BO
         /// <returns>Returns a business object collection</returns>
         public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, string orderByClause) where T:BusinessObject
         {
-            BusinessObjectCollection<T> bOCol = new BusinessObjectCollection<T>();
-            bOCol.Load(searchCriteria, orderByClause);
-            return bOCol;
+            BusinessObjectCollection<T> boCol = new BusinessObjectCollection<T>();
+            boCol.Load(searchCriteria, orderByClause);
+            return boCol;
         }
 
         /// <summary>
@@ -361,22 +361,37 @@ namespace Habanero.BO
         public BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(Type boType, string searchCriteria,
                                                                          string orderByClause)
         {
-            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
-            bOCol.Load(searchCriteria, orderByClause);
-            return bOCol;
+			BusinessObjectCollection<BusinessObject> boCol = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
+			boCol.Load(searchCriteria, orderByClause);
+			return boCol;
         }
 
-        /// /// <summary>
-        /// Returns a business object collection with objects that meet the
-        /// given search expression, ordered as specified
-        /// </summary>
-        /// <param name="searchExpression">The search expression</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <returns>Returns a business object collection</returns>
-        public BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(Type boType, IExpression searchExpression,
-                                                                         string orderByClause)
-        {
-            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
+		/// <summary>
+		/// Returns a business object collection with objects that meet the
+		/// given search expression, ordered as specified
+		/// </summary>
+		/// <param name="searchExpression">The search expression</param>
+		/// <param name="orderByClause">The order-by clause</param>
+		/// <returns>Returns a business object collection</returns>
+		public BusinessObjectCollection<T> GetBusinessObjectCol<T>(IExpression searchExpression, string orderByClause)
+			where T: BusinessObject
+		{
+			BusinessObjectCollection<T> bOCol = new BusinessObjectCollection<T>();
+			bOCol.Load(searchExpression, orderByClause);
+			return bOCol;
+		}
+
+		/// <summary>
+		/// Returns a business object collection with objects that meet the
+		/// given search expression, ordered as specified
+		/// </summary>
+		/// <param name="searchExpression">The search expression</param>
+		/// <param name="orderByClause">The order-by clause</param>
+		/// <returns>Returns a business object collection</returns>
+		public BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(Type boType, IExpression searchExpression,
+																		 string orderByClause)
+		{
+			BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
             bOCol.Load(searchExpression, orderByClause);
             return bOCol;
         }

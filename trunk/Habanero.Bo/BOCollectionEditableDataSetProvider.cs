@@ -36,7 +36,7 @@ namespace Habanero.BO
         /// collection provided
         /// </summary>
         /// <param name="col">The business object collection</param>
-        public BOCollectionEditableDataSetProvider(BusinessObjectCollection<BusinessObject> col)
+		public BOCollectionEditableDataSetProvider(IBusinessObjectCollection col)
             : base(col)
         {
         }

@@ -50,7 +50,7 @@ namespace Habanero.UI.Grid
         /// collection needs to be pre-loaded</param>
         /// <param name="uiName">The ui definition to use, as specified in the 'name'
         /// attribute of the 'ui' element</param>
-        public void SetCollection(BusinessObjectCollection<BusinessObject> boCol, string uiName)
+		public void SetCollection(IBusinessObjectCollection boCol, string uiName)
         {
             _grid.SetCollection(boCol, uiName);
         }
@@ -63,7 +63,7 @@ namespace Habanero.UI.Grid
         /// </summary>
         /// <param name="boCol">The collection of business objects to display.  This
         /// collection must be pre-loaded.</param>
-        public void SetCollection(BusinessObjectCollection<BusinessObject> boCol)
+		public void SetCollection(IBusinessObjectCollection boCol)
         {
             _grid.SetCollection(boCol, "default");
         }

@@ -74,7 +74,7 @@ namespace Habanero.Test.UI.Application
         [Test]
         public void TestGetCollectionClone()
         {
-            BusinessObjectCollection<BusinessObject> cloneCol = grid.GetCollectionClone();
+            IBusinessObjectCollection cloneCol = grid.GetCollectionClone();
             Assert.AreEqual(cloneCol.Count,2 );
         }
     }

@@ -16,13 +16,13 @@ namespace Habanero.UI.Grid
     /// </summary>
     public abstract class GridBase : DataGridView
     {
-        private delegate void SetCollectionDelegate(BusinessObjectCollection<BusinessObject> col, string uiName);
+		private delegate void SetCollectionDelegate(IBusinessObjectCollection col, string uiName);
         private delegate void SetSortColumnDelegate(string columnName, bool isAscending);
 
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Grid.GridBase");
         protected DataTable _dataTable;
         protected BOCollectionDataSetProvider _dataSetProvider;
-        protected BusinessObjectCollection<BusinessObject> _collection;
+		protected IBusinessObjectCollection _collection;
         private IObjectInitialiser _objectInitialiser;
         protected DataView _dataTableDefaultView;
         private SetCollectionDelegate _setCollection;
@@ -49,7 +49,7 @@ namespace Habanero.UI.Grid
         /// collection needs to be pre-loaded</param>
         /// <param name="uiName">The ui definition to use, as specified in the 'name'
         /// attribute of the 'ui' element</param>
-        public void SetCollection(BusinessObjectCollection<BusinessObject> col, string uiName)
+		public void SetCollection(IBusinessObjectCollection col, string uiName)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace Habanero.UI.Grid
         /// </summary>
         /// <param name="col">The collection of business objects to display.  This
         /// collection must be pre-loaded.</param>
-        public void SetCollection(BusinessObjectCollection<BusinessObject> col)
+		public void SetCollection(IBusinessObjectCollection col)
         {
             SetCollection(col, "default");
         }
@@ -82,7 +82,7 @@ namespace Habanero.UI.Grid
         /// <param name="collection">The collection to display in the grid</param>
         /// <param name="uiName">The name of the uidef to use</param>
         /// TODO: Refactor
-        private void SetCollectionInSTAThread(BusinessObjectCollection<BusinessObject> collection, string uiName)
+		private void SetCollectionInSTAThread(IBusinessObjectCollection collection, string uiName)
         {
             _collection = collection;
             _dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
@@ -216,7 +216,7 @@ namespace Habanero.UI.Grid
         /// <param name="col">The business object collection</param>
         /// <returns>Returns the new provider</returns>
         protected abstract BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
-            BusinessObjectCollection<BusinessObject> col);
+			IBusinessObjectCollection col);
 
         /// <summary>
         /// Sets the object initialiser

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Reflection;
 using System.Security.Permissions;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
@@ -21,9 +22,9 @@ namespace Habanero.BO
     /// can be derived.<br/>
     /// To create a collection of business objects, inherit from this 
     /// class. The business objects contained in this collection must
-    /// inherit from BusinessObjectBase.
+    /// inherit from BusinessObject.
     /// </summary>
-    public class BusinessObjectCollection<T> : List<T> where T: BusinessObject 
+	public class BusinessObjectCollection<T> : List<T>, IEnumerable<T>, IBusinessObjectCollection where T : BusinessObject
     {
         private ClassDef _boClassDef;
         private IExpression _criteriaExpression;
@@ -128,10 +129,11 @@ namespace Habanero.BO
         /// <param name="col">The collection to copy from</param>
         public void Add(BusinessObjectCollection<T> col)
         {
-            foreach (T bo in col)
-            {
-                this.Add(bo);
-            }
+			Add((List<T>) col);
+			//foreach (T bo in col)
+			//{
+			//    this.Add(bo);
+			//}
         }
 
         /// <summary>
@@ -295,11 +297,12 @@ namespace Habanero.BO
         /// Removes the specified business object from the collection
         /// </summary>
         /// <param name="bo">The business object to remove</param>
-        public void Remove(T bo)
+        public bool Remove(T bo)
         {
-            base.Remove(bo);
+			bool removed = base.Remove(bo);
             _lookupTable.Remove(bo.ID.ToString());
             this.FireBusinessObjectRemoved(bo);
+        	return removed;
         }
 
         ///// <summary>
@@ -504,6 +507,32 @@ namespace Habanero.BO
             return clonedCol;
         }
 
+		/// <summary>
+		/// Returns a new collection that is a copy of this collection
+		/// </summary>
+		/// <returns>Returns the cloned copy</returns>
+		public BusinessObjectCollection<DestType> Clone<DestType>()
+			where DestType : BusinessObject
+		{
+			BusinessObjectCollection<DestType> clonedCol = new BusinessObjectCollection<DestType>(_boClassDef);
+			if (!typeof(DestType).IsSubclassOf(typeof(T)) &&
+				!typeof(T).IsSubclassOf(typeof(DestType)) &&
+				!typeof(T).Equals(typeof(DestType)))
+			{
+				throw new InvalidCastException(String.Format("Cannot cast a collection of type '{0}' to " +
+					  "a collection of type '{1}'.", typeof(T).Name, typeof(DestType).Name));
+			}
+			foreach (T businessObject in this)
+			{
+				DestType obj = businessObject as DestType;
+				if (obj != null)
+				{
+					clonedCol.Add(obj);
+				}
+			}
+			return clonedCol;
+		}
+
         /// <summary>
         /// Sorts the collection by the property specified. The second parameter
         /// indicates whether this property is a business object property or
@@ -669,6 +698,169 @@ namespace Habanero.BO
                 }
             }
             t.CommitTransaction();
-        }
+		}
+
+		#region IBusinessObjectCollection Members
+		BusinessObject IBusinessObjectCollection.Find(string key)
+		{
+			return this.Find(key);
+		}
+
+    	/// <summary>
+    	/// Returns a new collection that is a copy of this collection
+    	/// </summary>
+    	/// <returns>Returns the cloned copy</returns>
+    	IBusinessObjectCollection IBusinessObjectCollection.Clone()
+    	{
+    		return this.Clone();
+    	}
+
+    	#endregion
+
+
+		#region IBusinessObjectCollection Members
+
+		///<summary>
+    	///Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1"></see>.
+    	///</summary>
+    	///
+    	///<returns>
+    	///The index of item if found in the list; otherwise, -1.
+    	///</returns>
+    	///
+    	///<param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"></see>.</param>
+		int IBusinessObjectCollection.IndexOf(BusinessObject item)
+    	{
+			return this.IndexOf((T) item);
+    	}
+
+    	///<summary>
+    	///Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"></see> at the specified index.
+    	///</summary>
+    	///
+    	///<param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"></see>.</param>
+    	///<param name="index">The zero-based index at which item should be inserted.</param>
+    	///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
+    	///<exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
+		void IBusinessObjectCollection.Insert(int index, BusinessObject item)
+    	{
+    		this.Insert(index, (T)item);
+    	}
+
+    	///<summary>
+    	///Gets or sets the element at the specified index.
+    	///</summary>
+    	///
+    	///<returns>
+    	///The element at the specified index.
+    	///</returns>
+    	///
+    	///<param name="index">The zero-based index of the element to get or set.</param>
+    	///<exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
+    	///<exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
+		BusinessObject IBusinessObjectCollection.this[int index]
+    	{
+    		get { return base[index]; }
+    		set { base[index] = (T)value; }
+    	}
+
+		///<summary>
+    	///Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+    	///</summary>
+    	///
+    	///<param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+    	///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
+		void IBusinessObjectCollection.Add(BusinessObject item)
+    	{
+    		this.Add((T) item);
+    	}
+
+    	///<summary>
+    	///Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> contains a specific value.
+    	///</summary>
+    	///
+    	///<returns>
+    	///true if item is found in the <see cref="T:System.Collections.Generic.ICollection`1"></see>; otherwise, false.
+    	///</returns>
+    	///
+    	///<param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+		bool IBusinessObjectCollection.Contains(BusinessObject item)
+    	{
+    		return this.Contains((T) item);
+    	}
+
+    	///<summary>
+    	///Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"></see> to an <see cref="T:System.Array"></see>, starting at a particular <see cref="T:System.Array"></see> index.
+    	///</summary>
+    	///
+    	///<param name="array">The one-dimensional <see cref="T:System.Array"></see> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"></see>. The <see cref="T:System.Array"></see> must have zero-based indexing.</param>
+    	///<param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+    	///<exception cref="T:System.ArgumentOutOfRangeException">arrayIndex is less than 0.</exception>
+    	///<exception cref="T:System.ArgumentNullException">array is null.</exception>
+    	///<exception cref="T:System.ArgumentException">array is multidimensional.-or-arrayIndex is equal to or greater than the length of array.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is greater than the available space from arrayIndex to the end of the destination array.-or-Type T cannot be cast automatically to the type of the destination array.</exception>
+		void IBusinessObjectCollection.CopyTo(BusinessObject[] array, int arrayIndex)
+    	{
+    		T[] thisArray = new T[array.LongLength];
+			this.CopyTo(thisArray, arrayIndex);
+    		int count = Count;
+			for (int index = 0; index < count; index++)
+				array[arrayIndex + index] = thisArray[arrayIndex + index];
+    	}
+
+    	///<summary>
+    	///Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+    	///</summary>
+    	///
+    	///<returns>
+    	///true if item was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"></see>; otherwise, false. This method also returns false if item is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+    	///</returns>
+    	///
+    	///<param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+    	///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
+		bool IBusinessObjectCollection.Remove(BusinessObject item)
+    	{
+    		return this.Remove((T) item);
+    	}
+
+    	///<summary>
+    	///Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.
+    	///</summary>
+    	///
+    	///<returns>
+    	///true if the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only; otherwise, false.
+    	///</returns>
+    	///
+		bool IBusinessObjectCollection.IsReadOnly
+    	{
+			get { return false; }
+    	}
+
+    	#endregion
+
+		//#region IEnumerable<BusinessObject> Members
+
+		/////<summary>
+		/////Returns an enumerator that iterates through the collection.
+		/////</summary>
+		/////
+		/////<returns>
+		/////A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
+		/////</returns>
+		/////<filterpriority>1</filterpriority>
+		//IEnumerator<BusinessObject> IBusinessObjectCollection.GetEnumerator()
+		//{
+		//    for (int i = 0; i < Count; i++)
+		//    {
+		//        yield return this[i];
+		//    }
+		//}
+
+		//#endregion
+
+		//public new IEnumerator<T> GetEnumerator()
+		//{
+		//    return base.GetEnumerator();
+		//}
+
     }
 }

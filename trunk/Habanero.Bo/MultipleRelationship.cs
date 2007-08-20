@@ -10,7 +10,8 @@ namespace Habanero.BO
     /// </summary>
     public class MultipleRelationship : Relationship
     {
-        private BusinessObjectCollection<BusinessObject> _boCol;
+		private IBusinessObjectCollection _boCol;
+		//private BusinessObjectCollection<BusinessObject> _boCol;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -25,14 +26,25 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Returns the set of business objects that relate to this one
-        /// through the specific relationship
-        /// </summary>
-        /// <returns>Returns a collection of business objects</returns>
-        public BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol()
+		/// <summary>
+		/// Returns the set of business objects that relate to this one
+		/// through the specific relationship
+		/// </summary>
+		/// <returns>Returns a collection of business objects</returns>
+		public BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol()
+		{
+			return GetRelatedBusinessObjectCol<BusinessObject>();
+		}
+
+    	/// <summary>
+    	/// Returns the set of business objects that relate to this one
+    	/// through the specific relationship
+    	/// </summary>
+    	/// <returns>Returns a collection of business objects</returns>
+    	public BusinessObjectCollection<T> GetRelatedBusinessObjectCol<T>()
+    		where T : BusinessObject
         {
-            BusinessObject busObj;
+			BusinessObject busObj;
             try
             {
                 busObj = (BusinessObject) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
@@ -46,21 +58,37 @@ namespace Habanero.BO
                     "defined in the relationship and class definitions for the classes " +
                     "involved.", _relDef.RelatedObjectClassType));
             }
-            if (this._relDef.KeepReferenceToRelatedObject)
+			if (!(busObj is T))
+			{
+				throw new HabaneroArgumentException(String.Format(
+					"An error occurred while attempting to load a related " +
+                    "business object collection of type '{0}' into a " +
+					"collection of the specified generic type('{1}').",
+					_relDef.RelatedObjectClassType, typeof(T)));
+			}
+    		bool isGenericBaseType = typeof (T).Equals(typeof (BusinessObject));
+    		IBusinessObjectCollection boCol;
+			if (isGenericBaseType)
+			{
+				boCol = BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
+				                                     ((MultipleRelationshipDef) _relDef).OrderBy);
+			} else
+			{
+				boCol = BOLoader.Instance.GetBusinessObjectCol<T>(
+					_relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
+			}
+
+    		if (this._relDef.KeepReferenceToRelatedObject)
             {
-                // TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object
-                // gets added with the foreign key nothing will pick that up other than a reload.
-                //if (_boCol == null) {
-                _boCol = BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
-                                                     ((MultipleRelationshipDef) _relDef).OrderBy);
-                //}
-                return _boCol;
+				//// TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object
+				//// gets added with the foreign key nothing will pick that up other than a reload.
+				////if (_boCol == null) {
+				//_boCol = BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
+				////                                     ((MultipleRelationshipDef) _relDef).OrderBy);
+				////}
+            	_boCol = boCol;
             }
-            else
-            {
-                return BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
-                                                   ((MultipleRelationshipDef) _relDef).OrderBy);
-            }
+			return (BusinessObjectCollection<T>)boCol;
         }
     }
 }

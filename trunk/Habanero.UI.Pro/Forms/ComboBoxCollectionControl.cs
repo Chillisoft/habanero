@@ -25,7 +25,7 @@ namespace Habanero.UI.Forms
         private CollectionComboBoxMapper _comboBoxMapper;
         private int _oldSelectedIndex;
         private ButtonControl _buttons;
-        private BusinessObjectCollection<BusinessObject> _collection;
+		private IBusinessObjectCollection _collection;
         private string _uiName;
         private GroupBox _uxBOGroupBox;
         private Label _label;
@@ -74,12 +74,12 @@ namespace Habanero.UI.Forms
             //log.Debug("Done Creating comboboxcollectioncontrol") ;
         }
 
-        public void SetCollection(BusinessObjectCollection<BusinessObject> collection)
+		public void SetCollection(IBusinessObjectCollection collection)
         {
             SetCollection(collection, "default");
         }
 
-        public void SetCollection(BusinessObjectCollection<BusinessObject> collection, string uiName)
+		public void SetCollection(IBusinessObjectCollection collection, string uiName)
         {
             _collection = collection;
             _uiName = uiName;
@@ -100,7 +100,7 @@ namespace Habanero.UI.Forms
 
         }
 
-        public BusinessObjectCollection<BusinessObject> Collection
+		public IBusinessObjectCollection Collection
         {
             get
             {

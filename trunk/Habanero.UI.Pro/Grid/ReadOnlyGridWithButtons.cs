@@ -47,7 +47,7 @@ namespace Habanero.UI.Grid
         private int _oldRowNumber = -1;
         
         private List<SetBusinessObjectDelegate> _itemSelectedDelegates;
-        private BusinessObjectCollection<BusinessObject> _collection;
+		private IBusinessObjectCollection _collection;
 
         /// <summary>
         /// Constructor to initialise a new grid
@@ -184,7 +184,7 @@ namespace Habanero.UI.Grid
         /// </summary>
         /// <param name="boCollection">The new business object collection
         /// to be shown in the grid</param>
-        public void SetCollection(BusinessObjectCollection<BusinessObject> boCollection)
+		public void SetCollection(IBusinessObjectCollection boCollection)
         {
             this.SetCollection(boCollection, "default");
         }
@@ -199,7 +199,7 @@ namespace Habanero.UI.Grid
         /// <param name="uiName">The name of the ui definition used to 
         /// format the grid, as specified in the 'name' attribute of the 
         /// 'ui' element in the class definitions</param>
-        public void SetCollection(BusinessObjectCollection<BusinessObject> boCollection, string uiName)
+		public void SetCollection(IBusinessObjectCollection boCollection, string uiName)
         {
             _collection = boCollection;
             this.Grid.SetCollection(boCollection, uiName);
@@ -256,7 +256,7 @@ namespace Habanero.UI.Grid
         /// Returns a cloned collection of the business objects in the grid
         /// </summary>
         /// <returns>Returns a business object collection</returns>
-        public BusinessObjectCollection<BusinessObject> GetCollectionClone()
+		public IBusinessObjectCollection GetCollectionClone()
         {
             return this.Grid.GetCollectionClone();
         }

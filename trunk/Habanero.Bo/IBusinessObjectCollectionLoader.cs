@@ -10,6 +10,6 @@ namespace Habanero.BO
         /// Loads a business object collection
         /// </summary>
         /// <returns>Returns the collection loaded</returns>
-        BusinessObjectCollection<BusinessObject> Load();
+        IBusinessObjectCollection Load();
     }
 }

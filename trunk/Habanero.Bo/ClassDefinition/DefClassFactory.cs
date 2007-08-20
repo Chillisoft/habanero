@@ -115,10 +115,10 @@ namespace Habanero.BO.ClassDefinition
 			return new UIFormGrid(relationshipName, gridType, correspondingRelationshipName);
 		}
 
-		public UIFormField CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
+		public UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
 		                                           bool editable, Hashtable propertyAttributes)
 		{
-			return new UIFormField(label, propertyName, controlType, mapperTypeName, mapperAssembly, editable, propertyAttributes);
+			return new UIFormField(label, propertyName, controlTypeName, controlAssembly, mapperTypeName, mapperAssembly, editable, propertyAttributes);
 		}
 
 		public UIFormTab CreateUIFormTab()
