@@ -74,9 +74,11 @@ namespace Habanero.BO
                 }
                 return _relationships[relationshipName];
             }
-        }
+		}
 
-        /// <summary>
+		#region IRelationshipCol Members
+
+		/// <summary>
         /// Returns the business object that is related to this object
         /// through the specified relationship (eg. would return a father
         /// if the relationship was called "father").  This method is to be
@@ -89,17 +91,36 @@ namespace Habanero.BO
         /// single one was expected</exception>
         public BusinessObject GetRelatedObject(string relationshipName)
         {
-            ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
-            Relationship relationship = this[relationshipName];
-            if (relationship is MultipleRelationship)
-            {
-                throw new InvalidRelationshipAccessException("The 'multiple' relationship " + relationshipName +
-                                                             " was accessed as a 'single' relationship (using GetRelatedObject()).");
-            }
-            return ((SingleRelationship) relationship).GetRelatedObject(_bo.GetDatabaseConnection());
+			return GetRelatedObject<BusinessObject>(relationshipName);
         }
 
-		/// <summary>
+    	
+    	/// <summary>
+    	/// Returns the business object that is related to this object
+    	/// through the specified relationship (eg. would return a father
+    	/// if the relationship was called "father").  This method is to be
+    	/// used in the case of single relationships.
+    	/// </summary>
+    	/// <param name="relationshipName">The name of the relationship</param>
+    	/// <returns>Returns a business object</returns>
+		/// <exception cref="InvalidRelationshipAccessException">Thrown if
+		/// the relationship specified is a multiple relationship, when a
+		/// single one was expected</exception>
+    	public T GetRelatedObject<T>(string relationshipName) where T : BusinessObject
+    	{
+			ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
+			Relationship relationship = this[relationshipName];
+			if (relationship is MultipleRelationship)
+			{
+				throw new InvalidRelationshipAccessException("The 'multiple' relationship " + relationshipName +
+															 " was accessed as a 'single' relationship (using GetRelatedObject()).");
+			}
+			return ((SingleRelationship)relationship).GetRelatedObject<T>(_bo.GetDatabaseConnection());
+    	}
+
+    	#endregion
+
+    	/// <summary>
 		/// Returns a collection of business objects that are connected to
 		/// this object through the specified relationship (eg. would return
 		/// a father and a mother if the relationship was "parents").  This

@@ -47,6 +47,17 @@ namespace Habanero.BO
         /// <returns>Returns the related business object</returns>
         public BusinessObject GetRelatedObject(IDatabaseConnection connection)
         {
+        	return GetRelatedObject<BusinessObject>(connection);
+        }
+
+        /// <summary>
+        /// Returns the related object using the database connection provided
+        /// </summary>
+        /// <param name="connection">A database connection</param>
+        /// <returns>Returns the related business object</returns>
+        public T GetRelatedObject<T>(IDatabaseConnection connection)
+			where T :BusinessObject
+        {
             if (_relatedBo == null ||
                 (_storedRelationshipExpression != _relKey.RelationshipExpression().ExpressionString()))
             {
@@ -67,7 +78,7 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        return busObj;
+                        return (T)busObj;
                     }
                 }
             }
@@ -75,7 +86,7 @@ namespace Habanero.BO
             {
                 //log.Debug("Related Object is already loaded, returning cached one.") ;
             }
-            return _relatedBo;
+            return (T)_relatedBo;
         }
 
         /// <summary>
