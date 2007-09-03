@@ -173,6 +173,15 @@ namespace Habanero.UI.Grid
         }
 
         /// <summary>
+        /// Returns the business object collection being displayed in the grid
+        /// </summary>
+        /// <returns>Returns a business collection</returns>
+        public IBusinessObjectCollection GetCollection()
+        {
+            return _collection;
+        }
+
+        /// <summary>
         /// Returns the name of the ui definition used, as specified in the
         /// 'name' attribute of the 'ui' element in the class definitions.
         /// By default, no 'name' attribute is specified and the ui name of

@@ -10,7 +10,15 @@ using Habanero.Util;
 namespace Habanero.UI.Forms
 {
     /// <summary>
-    /// Manages an editor that uses a tree view
+    /// Provides an editor that contains a treeview on the left and a corresponding
+    /// editable grid on the right for each treeview entry.  This editor is useful
+    /// for editing simple information such as lookup lists or contacts.
+    /// <br/>
+    /// Simply supply a data source that implements ITreeViewDataSource, which
+    /// includes GetTreeViewData().  This supplies an IList with DictionaryEntry objects
+    /// containing the text to appear in the treeview and the BusinessObject to model
+    /// in the grid.  The grid design is drawn from the "ui" and "grid" elements in
+    /// the object's class definition (XML).
     /// </summary>
     public class TreeViewTableEditor : UserControl
     {
@@ -35,6 +43,10 @@ namespace Habanero.UI.Forms
 
             _tableDataSource = new DatabaseTableDataSource();
             _treeViewDataSource = new NullTreeViewDataSource();
+            _treeView.BeforeSelect += delegate(object sender, TreeViewCancelEventArgs e)
+                  {
+                      DirtyCheckHandler(sender, e);
+                  };
         }
 
         /// <summary>
@@ -53,6 +65,14 @@ namespace Habanero.UI.Forms
         {
             get { return _treeViewDataSource; }
             set { _treeViewDataSource = value; }
+        }
+
+        /// <summary>
+        /// Gets the editable grid in which values are edited
+        /// </summary>
+        public EditableGridWithButtons DataGrid
+        {
+            get { return _gridAndButtons; }
         }
 
         /// <summary>
@@ -113,6 +133,31 @@ namespace Habanero.UI.Forms
                 catch (Exception ex)
                 {
                     ExceptionUtilities.Display(ex);
+                }
+            }
+        }
+
+        private void DirtyCheckHandler(object sender, TreeViewCancelEventArgs e)
+        {
+            if (this.DataGrid != null
+                && this.DataGrid.Grid != null
+                && this.DataGrid.Grid.GetCollection() != null)
+            {
+                if (((BusinessObjectCollection<BusinessObject>)this.DataGrid.Grid.GetCollection()).IsDirty)
+                {
+                    DialogResult result = MessageBox.Show("Do you want to save changes?",
+                                                          "Save?",
+                                                          MessageBoxButtons.YesNoCancel,
+                                                          MessageBoxIcon.Exclamation);
+                    if (result == DialogResult.Yes)
+                    {
+                        ((EditableGrid)this.DataGrid.Grid).AcceptChanges();
+                    }
+                    if (result == DialogResult.No)
+                    {
+                        ((EditableGrid)this.DataGrid.Grid).RejectChanges();
+                    }
+                    if (result == DialogResult.Cancel) e.Cancel = true;
                 }
             }
         }

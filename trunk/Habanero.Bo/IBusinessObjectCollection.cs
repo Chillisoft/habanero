@@ -5,6 +5,10 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// Models a collection of business objects.  This interface has been provided to
+    /// circumvent the strong typing of BusinessObjectCollection.
+    /// </summary>
 	public interface IBusinessObjectCollection : ICollection, IEnumerable //IList<BusinessObject>
 	{
 		/// <summary>

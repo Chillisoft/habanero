@@ -214,6 +214,8 @@ namespace Habanero.UI.Forms
         /// <param name="mapperTypeName">The class name of the mapper type
         /// (e.g. ComboBoxMapper).  The current namespace of this
         /// ControlMapper class will then be prefixed to the name.</param>
+        /// <param name="mapperAssembly">The assembly where the mapper is
+        /// located</param>
         /// <param name="ctl">The control to be mapped</param>
         /// <param name="propertyName">The property name</param>
         /// <param name="isReadOnceOnly">Whether the control can be read once
