@@ -281,13 +281,12 @@ namespace Habanero.BO
         //    return classDef.InstantiateBusinessObject();
         //}
 
-
         /// <summary>
         /// Loads a business object by ID
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        public BusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
+        internal BusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
         {
             return GetLoadedBusinessObject(id.GetObjectId());
         }
@@ -297,7 +296,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        public BusinessObject GetLoadedBusinessObject(string id)
+		internal BusinessObject GetLoadedBusinessObject(string id)
         {
             return GetLoadedBusinessObject(id, true);
         }
@@ -310,7 +309,7 @@ namespace Habanero.BO
         /// <param name="refreshIfReqNotCurrent">Whether to check for
         /// object concurrency at the time of loading</param>
         /// <returns>Returns a business object</returns>
-        public BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
+		internal BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
         {
             //If the object is already in loaded then refresh it and return it if required.
             if (BusinessObject.AllLoaded().ContainsKey(id))

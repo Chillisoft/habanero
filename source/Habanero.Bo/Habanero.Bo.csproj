@@ -104,8 +104,10 @@
     <Compile Include="ClassDefinition\UIGrid.cs" />
     <Compile Include="ClassDefinition\UIGridColumn.cs" />
     <Compile Include="Comparer\DateTimeComparer.cs" />
+    <Compile Include="Comparer\DoubleComparer.cs" />
     <Compile Include="Comparer\GuidComparer.cs" />
     <Compile Include="Comparer\IntComparer.cs" />
+    <Compile Include="Comparer\PropertyComparer.cs" />
     <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />

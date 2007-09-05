@@ -66,7 +66,6 @@ namespace Habanero.Test.BO
 		[Test]
 		public void TestGetPropertyValueWithDot()
 		{
-			//Converted to NMock2
 			MockRepository mock = new MockRepository();
 			
 			//Mock mockDbConnection = new DynamicMock(typeof(IDatabaseConnection));

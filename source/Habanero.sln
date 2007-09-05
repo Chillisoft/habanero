@@ -17,14 +17,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.UI", "Habanero.Test.UI\Habanero.Test.UI.csproj", "{979540B1-0154-4870-8BD7-B70AA61492D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "Habanero.Test\Habanero.Test.csproj", "{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B32C6E9-037A-4610-85CB-95C9A050CF7C} = {9B32C6E9-037A-4610-85CB-95C9A050CF7C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.BO", "Habanero.Test.Bo\Habanero.Test.BO.csproj", "{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.DB", "Habanero.Test.Db\Habanero.Test.DB.csproj", "{1484CDE2-0A30-466F-9FEA-E79CE2751489}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.General", "Habanero.Test.General\Habanero.Test.General.csproj", "{F30A2151-F894-44E4-8F71-492B8C245745}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Build", "Habanero.Build\Habanero.Build.csproj", "{C05D164E-5F5C-45F7-AD49-DA06C46249D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero", "Habanero\Habanero.csproj", "{9B32C6E9-037A-4610-85CB-95C9A050CF7C}"
 EndProject
@@ -84,10 +85,6 @@ Global
 		{F30A2151-F894-44E4-8F71-492B8C245745}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F30A2151-F894-44E4-8F71-492B8C245745}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C05D164E-5F5C-45F7-AD49-DA06C46249D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C05D164E-5F5C-45F7-AD49-DA06C46249D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C05D164E-5F5C-45F7-AD49-DA06C46249D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C05D164E-5F5C-45F7-AD49-DA06C46249D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B32C6E9-037A-4610-85CB-95C9A050CF7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B32C6E9-037A-4610-85CB-95C9A050CF7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B32C6E9-037A-4610-85CB-95C9A050CF7C}.Release|Any CPU.ActiveCfg = Release|Any CPU

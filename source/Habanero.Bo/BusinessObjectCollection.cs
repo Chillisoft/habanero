@@ -567,8 +567,10 @@ namespace Habanero.BO
         /// Compares two properties.  Used by Sort().
         /// </summary>
         private class PropertyComparer<T> : IComparer<T>
+
         {
             private string _propertyName;
+        	private PropertyInfo _propInfo;
 
             /// <summary>
             /// Constructor to instantiate a new comparer
@@ -577,14 +579,13 @@ namespace Habanero.BO
             public PropertyComparer(string propertyName)
             {
                 _propertyName = propertyName;
+                _propInfo =typeof(T).GetProperty(_propertyName, BindingFlags.Public | BindingFlags.Instance);
             }
 
             public int Compare(T x, T y)
             {
-                    PropertyInfo propInfo =
-                        x.GetType().GetProperty(_propertyName, BindingFlags.Public | BindingFlags.Instance);
-                    object x1 = propInfo.GetValue(x, new object[] {});
-                    object y1 = propInfo.GetValue(y, new object[] {});
+                object x1 = _propInfo.GetValue(x, new object[] {});
+                object y1 = _propInfo.GetValue(y, new object[] {});
 
                 if (x1 == null && y1 == null)
                 {
@@ -599,31 +600,34 @@ namespace Habanero.BO
                     return 1;
                 }
 
-                if (x1 is string)
-                {
-                    return String.Compare((string)x1, (string)y1);
-                }
+            	IComparer comparer = Comparer<T>.Default;
+				return comparer.Compare(x1, y1);
 
-                if (x1 is int)
-                {
-                    if ((int)x1 < (int)y1) return -1;
-                    if ((int)x1 > (int)y1) return 1;
-                    return 0;
-                }
+				//if (x1 is string)
+				//{
+				//    return String.Compare((string)x1, (string)y1);
+				//}
 
-                if (x1 is double)
-                {
-                    if (Math.Abs((double)x1 - (double)y1) < 0.00001) return 0;
-                    if ((double)x1 < (double)y1) return -1;
-                    if ((double)x1 > (double)y1) return 1;
-                }
+				//if (x1 is int)
+				//{
+				//    if ((int)x1 < (int)y1) return -1;
+				//    if ((int)x1 > (int)y1) return 1;
+				//    return 0;
+				//}
 
-                if (x1 is DateTime)
-                {
-                    return ((DateTime)x1).CompareTo(y1);
-                }
+				//if (x1 is double)
+				//{
+				//    if (Math.Abs((double)x1 - (double)y1) < 0.00001) return 0;
+				//    if ((double)x1 < (double)y1) return -1;
+				//    if ((double)x1 > (double)y1) return 1;
+				//}
 
-                return 0;
+				//if (x1 is DateTime)
+				//{
+				//    return ((DateTime)x1).CompareTo(y1);
+				//}
+
+                //return 0;
             }
         }
 
