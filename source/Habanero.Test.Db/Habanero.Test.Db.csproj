@@ -74,6 +74,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="nmock, Version=1.0.1536.20687, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nmock.dll</HintPath>
@@ -141,7 +145,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy "$(SolutionDir)\lib\MySql.Data.dll"  "$(TargetDir)"
+    <PostBuildEvent>rem copy "$(SolutionDir)\lib\MySql.Data.dll"  "$(TargetDir)"
 "$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
