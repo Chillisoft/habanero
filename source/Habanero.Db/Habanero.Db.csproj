@@ -1,0 +1,185 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Habanero.DB</AssemblyName>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Habanero.DB</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Habanero.DB.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConnectionStringAccessFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConnectionStringFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConnectionStringMySQLFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConnectionStringOracleFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConnectionStringSQLServerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Database.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseConnectionAccess.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseConnectionException.cs" />
+    <Compile Include="DatabaseConnectionFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseConnectionMySQL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseConnectionOracle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseConnectionSQLServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseNumberGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseReadException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DatabaseWriteException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DBMigrator.cs" />
+    <Compile Include="ParameterNameGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SqlStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SqlStatementCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XmlDatabaseConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

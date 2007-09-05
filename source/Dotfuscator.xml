@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE dotfuscator SYSTEM "http://www.preemptive.com/dotfuscator/dtd/dotfuscator_v2.1.dtd">
+<dotfuscator version="2.1">
+  <!--This is application generated code. Do not edit manually.-->
+  <global />
+  <input>
+    <asmlist>
+      <inputassembly>
+        <option>library</option>
+        <file dir="${configdir}\Build\Debug" name="Habanero.UI.Pro.dll" />
+      </inputassembly>
+    </asmlist>
+  </input>
+  <output>
+    <file dir="${configdir}\Dotfuscated" />
+  </output>
+  <renaming>
+    <excludelist>
+      <type name="Habanero.UI.Forms.MultiSelector`1&lt;T&gt;">
+        <method name="GetAvailableOptionsListBox" signature="" />
+        <method name="GetSelectionsListBox" signature="" />
+        <method name="AvailableOptionsListBox_MouseDoubleClick" signature="object,System.Windows.Forms.MouseEventArgs" />
+        <field name="AvailableOptionsListBox" />
+        <field name="DeselectAllButton" />
+        <field name="DeselectButton" />
+        <field name="SelectAllButton" />
+        <field name="SelectButton" />
+        <field name="SelectionsListBox" />
+      </type>
+      <type name="Habanero.UI.Forms.MultiSelector`1/Model&lt;T&gt;" />
+      <type name="Habanero.UI.Forms.MultiSelector`1/Model/ModelEventArgs`1&lt;T,T&gt;" />
+    </excludelist>
+    <mapping>
+      <mapoutput overwrite="false">
+        <file dir="${configdir}\Dotfuscated" name="Map.xml" />
+      </mapoutput>
+    </mapping>
+  </renaming>
+</dotfuscator>

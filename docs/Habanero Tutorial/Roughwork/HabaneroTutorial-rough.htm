@@ -1,0 +1,281 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-za">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>ROUGH WORK</title>
+</head>
+
+<body>
+
+<p>ROUGH WORK</p>
+<p><font face="Verdana" size="2">(Create directory HabaneroTutorial - had to 
+move directory one up after VS)</font></p>
+<p><font face="Verdana" size="2">Visual Studio, new project/solution, specify 
+directory, name.&nbsp; Run brings up blank form.</font></p>
+<p><font face="Verdana" size="2">Copy Habanero dlls to (new) lib folder, added 
+refs in project (go to project, references, right-click add refs), runs fine</font></p>
+<p><font face="Verdana" size="2">Put in:<br>
+</font><font color="#808080" face="Courier New" size="2">HabaneroApp mainApp = 
+new HabaneroApp(&quot;Repair-IT&quot;, &quot;v1.0&quot;);<br>
+if (!mainApp.Startup()) return;</font><font face="Verdana" size="2"><br>
+and got inner exception message. &gt; needed to add log4net.dll (improve error 
+messaging - had to hunt for this one)</font></p>
+<p><font face="Verdana" size="2">Ran again and got exception: missing 
+Microsoft.ApplicationBlocks.ExceptionManagement and 
+Microsoft.ApplicationBlocks.ExceptionManagement.Interfaces so copied dlls and 
+included (where do these dlls come from? licensing?) (this error could have been 
+picked up with a nicer message)</font></p>
+<p><font face="Verdana" size="2">New exception - nicer message box pops up, 
+although messaging still not wonderful. (I know about config file, but messaging 
+makes no reference to it). Complains about DatabaseConfig and null ref.&nbsp; So 
+I have to make a config file.&nbsp; So right-click on Proj, add, new item, 
+application config.&nbsp; Open it and get template. Run, still same error.&nbsp; 
+Added &lt;section name=&quot;DatabaseConfig&quot; type=&quot;System.Configuration.DictionarySectionHandler&quot;/&gt; 
+and got inner exception re log4net - no messaging.</font></p>
+<p><font face="Verdana" size="2">Added between &lt;configuration&gt;:<br>
+</font><font color="#808080" face="Courier New" size="2">&lt;configSections&gt;<br>
+&lt;section name=&quot;DatabaseConfig&quot; type=&quot;System.Configuration.DictionarySectionHandler&quot;/&gt;<br>
+&lt;/configSections&gt;<br>
+<br>
+&lt;DatabaseConfig&gt;<br>
+&lt;add key=&quot;vendor&quot; value=&quot;Mysql&quot;/&gt;<br>
+&lt;add key=&quot;server&quot; value=&quot;localhost&quot;/&gt;<br>
+&lt;add key=&quot;database&quot; value=&quot;cmd&quot;/&gt;<br>
+&lt;add key=&quot;username&quot; value=&quot;root&quot;/&gt;<br>
+&lt;add key=&quot;password&quot; value=&quot;root&quot;/&gt;<br>
+&lt;add key=&quot;port&quot; value=&quot;3306&quot;/&gt;<br>
+&lt;/DatabaseConfig&gt;<br>
+</font><font face="Verdana" size="2">and got error message about classdefs.xml 
+not found - messaging was awful (surprised that log4net stuff disappeared - is 
+it important in the config).</font></p>
+<p><font face="Verdana" size="2">So, not knowing where classdefs.xml should 
+appear (why is it in cmd.bo for cmd, but this app looks under the main 
+directory?), I add new item, xml file and run - still get file not found, even 
+though file is there.&nbsp; Put in &lt;classDefs&gt;&lt;/classDefs&gt; but no improvement.</font></p>
+<p><font face="Verdana" size="2">So I make a copy and put it in bin/debug as 
+requested (even though this has no correlation to the one referenced in my 
+project (meaning the changes won't synchronise).&nbsp; Yay, a more meaningful 
+error message: no dtd.</font></p>
+<p><font face="Verdana" size="2">Coped dtd to HabaneroTutorial, same error, 
+copied to bin/debug and got new error of missing classdef.dtd. Copied that and 
+now no keydef.dtd, and then prop.dtd, so I copy all the dtd's across.&nbsp; Now 
+it says &quot;root element is missing&quot;.&nbsp; (at this point I just want to get a 
+working application - I don't want to have to build my whole classdef just yet.&nbsp; 
+At this stage I would normally give up and see if there is something else on the 
+market.)&nbsp; Dumping all these dtds in the debug is probably not the best 
+place? How do I ref them when they're sitting elsewhere? (Later: I see you don't 
+have to load up the classdefs - but a novice user doesn't know this, so maybe 
+just set to false until a valid classdefs is specified, although there would be 
+no feedback to tell the user they still need to load them, and they're just 
+staring at this thing wondering why it's not working)</font></p>
+<p><font face="Verdana" size="2">Edit the xml, adding:<br>
+</font><font color="#808080" face="Courier New" size="2">&lt;classDef name=&quot;Title&quot; 
+assembly=&quot;HabaneroTutorial&quot;&gt;<br>
+&lt;/classDef&gt;</font><font face="Verdana" size="2"><br>
+and get the error: &quot;Length cannot be less than zero&quot;, which as you can imagine 
+is exceptionally helpful.&nbsp; What length?&nbsp; Asked Peter about simplest 
+classdef possible, and he says: classdefs, classdef, propdef, primarykeydef.</font></p>
+<p><font face="Verdana" size="2">So now I have:<br>
+</font><font color="#808080" face="Courier New" size="2">&lt;?xml version=&quot;1.0&quot; 
+encoding=&quot;utf-8&quot; ?&gt;<br>
+&lt;classDefs&gt;<br>
+&lt;classDef name=&quot;Title&quot; assembly=&quot;HabaneroTutorial&quot;&gt;<br>
+&lt;propertyDef name=&quot;TitleID&quot; type=&quot;Guid&quot; /&gt;<br>
+&lt;primaryKeyDef&gt;<br>
+&lt;prop name=&quot;TitleID&quot; /&gt;<br>
+&lt;/primaryKeyDef&gt;<br>
+&lt;/classDef&gt;<br>
+&lt;/classDefs&gt;</font><font face="Verdana" size="2"><br>
+and ... still getting length message. As a user I would be completely stuck 
+here, so I'm going to dive into Habanero and find the answer. Nothing there, so 
+it's a dotnet error message. TypeLoader is failing because it's looking for the 
+part of the assembly name after the dot, but I don't have a dot in my assembly 
+name.&nbsp; Ah, now I understand - it's looking for the class called &quot;Title&quot; in 
+the assembly &quot;HabaneroTutorial&quot;.</font></p>
+<p><font face="Verdana" size="2">So I add &quot;Title.cs&quot; and inherit from 
+BusinessObjectBase. Run it and get errors that some abstract methods are not 
+implemented.&nbsp; So I just copy the code from CMD Title and paste. (Looks like 
+we may need a tool to generate a simple business object with all necessary 
+methods that carry out the bare minimum - at this stage some of the code is 
+confusing me, and I haven't even got a working app yet)</font></p>
+<p><font face="Verdana" size="2">Also had to make sure I included the dlls:<br>
+</font><font color="#808080" face="Courier New" size="2">using Chillisoft.Bo.v2;<br>
+using Chillisoft.Bo.ClassDefinition.v2;</font></p>
+<p><font face="Verdana" size="2">And bingo! I have an error free working app.&nbsp; 
+Now to put some data on it.&nbsp; It's a pity that I had to do it with some 
+stop-gap code with a title class I had no plans for. (of course, we're aware 
+that we need a class def generator too). (A bit strange that the application 
+fired up without a configured database connection).</font></p>
+<p><font face="Verdana" size="2">So our repair-IT business, for a start, is 
+selling only &quot;computers&quot;.&nbsp; They are all black, square and with standard 
+specifications. So we're going to set it up in the database.&nbsp; Install and 
+configure MySQL with localhost, create scheme called &quot;repair-it&quot; and create 
+table called &quot;Computer&quot; with ComputerID (primary key) and Description field 
+names.&nbsp; Also populate it with three rows of data.</font></p>
+<p><font face="Verdana" size="2">Now going to amend all the Title stuff to 
+Computer (classdefs, class in project). All runs fine.&nbsp; Now for the UI.</font></p>
+<p><font face="Verdana" size="2">Added after primary key (copied and pasted from 
+CMD):<br>
+</font><font color="#808080" face="Courier New" size="2">&lt;uiDef&gt;<br>
+&lt;uiGridDef&gt;<br>
+&lt;uiGridProperty heading=&quot;Computer&quot; propertyName=&quot;ComputerID&quot; width=&quot;150&quot; /&gt;<br>
+&lt;/uiGridDef&gt;<br>
+&lt;uiFormDef height=&quot;100&quot; width=&quot;300&quot; heading=&quot;Adding a computer&quot;&gt;<br>
+&lt;uiFormTab name=&quot;Computer&quot;&gt;<br>
+&lt;uiFormColumn width=&quot;250&quot;&gt;<br>
+&lt;uiFormProperty label=&quot;ComputerID:&quot; propertyName=&quot;ComputerID&quot; /&gt;<br>
+&lt;/uiFormColumn&gt;<br>
+&lt;/uiFormTab&gt;<br>
+&lt;/uiFormDef&gt;<br>
+&lt;/uiDef&gt;</font><font face="Verdana" size="2"><br>
+and no error came up, but nothing changing in the appearance of the main form.</font></p>
+<p><font face="Verdana" size="2">Starting to read through code and docs/wiki to 
+build the forms, and it's not dead-easy to start with.&nbsp; Let's try the 
+FormController route.</font></p>
+<p><font face="Verdana" size="2">Did try using the form designer, but it crashed 
+a few times when I tried to specify the data input.</font></p>
+<p><font face="Verdana" size="2">Adding a one-item main menu for showing 
+computers. I'll probably design a little popup now with the data, although my 
+preference would have been to put stuff straight onto the main form, but I 
+couldn't quite get it done.</font></p>
+<p><font face="Verdana" size="2">So I put a little popup that works 
+successfully.&nbsp; Now I'm trying to figure out how to do the forms, so I'll 
+begin with just trying to get the ComputerID to show in the popup box using 
+Computer.Create() which I saw in CMD.&nbsp; I get an error with not a lot of 
+info, but enough to show me that my Computer class still has stuff from Title.&nbsp; 
+I fix it and a few type errors and hey presto, I get a GUID on the screen.&nbsp; 
+Now let's add the computer description to the classdef.</font></p>
+<p><font face="Verdana" size="2">To look at 2moro.&nbsp; Copy command - two 
+options - for classdefs. Then bocollection of type load.&nbsp; Readonlygrid with 
+add bocol.&nbsp; To do later: log4net in app.config.</font></p>
+<p><font face="Verdana" size="2">After problem of copying classdefs to debug, 
+added to project and right-click properties, set copy to if-newer.</font></p>
+<p><font face="Verdana" size="2">Busy making business object collection, so need 
+to include Bo.v2. Add BOcol field for computers, and needing to set the type, 
+but need to check that bocol help docs indicate whether I need to do something 
+else or if it's loaded now. Going to try putting a load() on it.&nbsp; Looks 
+like you have to initialise a CollectionGridDataProvider (include UI.Generic) 
+for the BOCol - why not just pass the bocol straight into the constructor and 
+the grid makes its own provider, or even better, just pass the bo type and let 
+the provider make its own bocol as well.</font></p>
+<p><font face="Verdana" size="2">Making a readonlygridwithbuttons in static 
+method for showcomputers method called as delegate from menu options, but 
+complains that bocol computers is nonstatic.&nbsp; Argh. Don't want to have to 
+add a static get() method in computers as in CMD.clinic. So add static to bocol 
+- runs but don't know if it's working.</font></p>
+<p><font face="Verdana" size="2">Trying to find a way to add the readonlygrid - 
+it won't show() on its own and the form does not have an add method. Will try 
+borderlayoutmanager from habanero - it needs a control (&quot;this&quot; in CMD), is form 
+a control?&nbsp; Move readonlygrid to constructor and add to manager.&nbsp; Runs 
+ok and shows grid (menu is now superfluous) but no objects!!! Ok, let's try that 
+get in Computer.</font></p>
+<p><font face="Verdana" size="2">Decide to add an object anyway, and it seems 
+I'm missing a dll for MySQL.&nbsp; Hmm, having installed it on my pc, I'm 
+surprised I need a dll as well.&nbsp; Ok, so it's added and now I get an 
+exception because &quot;tbcomputer&quot; doesn't exist.&nbsp; It is nice to have a default 
+table name, but is the &quot;tb&quot; standard - could we drop that otherwise?&nbsp; Where 
+can I specify the table name now?&nbsp; Add tableName=&quot;Computer&quot; inside 
+classDef. Get new error when I add, that description can't be null, but there's 
+nowhere to set Description (why didn't this come up automatically?)&nbsp; Now 
+got an out-of-range error, assumedly because of GUID/integer clashes.</font></p>
+<p><font face="Verdana" size="2">Changed Guids to ints in Computer but 
+readonlygrid add still throws up a Guid and if I put in an integer the whole 
+program crashes. I'm stuck now, because I can't edit the readonlygrid, so my 
+only lifeline is to change the database to GUID, which is not ideal (the system 
+is forcing the user and not meeting his needs).&nbsp; MySQL throws up all kinds 
+of issues (no support for GUIDs?, has issues with string as primary key?), so 
+now I'm in a real mess.</font></p>
+<p><font face="Verdana" size="2">Ah, a brain wave.&nbsp; Edit the id property in 
+the classdef. Changed type to &quot;int&quot; and got an out of range exception thrown by 
+sub-string. Ok, &quot;integer&quot; doesn't fix it. Ok, &quot;Int32&quot; does the job, even though 
+that's not what's in the database (maybe variations should be accepted too, eg. 
+&quot;int&quot;, &quot;integer&quot;, hope that case is not strict).</font></p>
+<p><font face="Verdana" size="2">Right, adding a new object, add brings up a 
+Guid as the default, which it shouldn't because it's all set to Int32 now, but 
+at least when I edit to the program doesn't crash and finally I have a new entry 
+in the grid (although I don't know why the other objects haven't been loaded).&nbsp; 
+Well done - it found a duplicate key when I typed &quot;1&quot;!&nbsp; Oh no, when I edit 
+the value, it doesn't udpate in the grid (it's still 4), even though its value 
+has in fact changed (when I click edit I see the new value).&nbsp; Another oops, 
+I edit it and change it to 3 and no duplicate key error. And then add a new key 
+with &quot;4&quot; and I get a duplicate key error.&nbsp; Now I'm stuck.&nbsp; So the grid 
+must have the real values then, and the edit is showing the wrong values, but 
+there's no Save button on the grid, so I have to assume that the changes to the 
+grid (with the Edit button) go live straight away.&nbsp; Big oops. (the add 
+button made a live change, so why didn't the edit button make a live change?).</font></p>
+<p><font face="Verdana" size="2">I still don't understand why the &quot;description&quot; 
+column hasn't come up on the grid. Ah, edit the classdefs... Glad to see that 
+when I left off width it assigned a default anyway. Interesting to see that the 
+xml elements are case sensitive (and table fields not). Added description to 
+&quot;add&quot; popup and that worked fine, although I see editing it does make changes on 
+the grid and then it doesn't - behaviour is variable.&nbsp; Can change 
+description but not id - if there is a rule that you can't change the id then an 
+error message should have come up, or the field should be disabled in the edit 
+box.&nbsp; Also noticed that a second field is not displayed properly in the 
+popup - it kind of gets overlapped by the buttons below - solved with the height 
+attribute (maybe could make that if height not specified, it is calculated 
+automatically).</font></p>
+<p><font face="Verdana" size="2">I added a Price field in the database and it 
+was a hassle to have to change all the classdefs too - useful to have an update 
+tool that can check database changes and offer to update the classdefs 
+appropriately. I see the default in the database is not shown in the grid-data 
+form that pops up - do we set default in classdefs (what about just detecting it 
+straight from the database instead of having to make the user do the work).</font></p>
+<p><font face="Verdana" size="2">Now I'll assume there must be some load 
+function I'm missing for the grid to display existing objects.&nbsp; I expected 
+a Load() method but nothing there. And no displayAll or something like it.&nbsp; 
+Ok, after a chat, find out that it's bocols that decide how stuff is filtered, 
+and that I have to load them - the dataprovider doesn't do that as expected. 
+(dataprovider is possibly an unnecessary middleman in all this)</font></p>
+<p><font face="Verdana" size="2">Well, we've got some more clarity on the 
+add/edit buttons.&nbsp; It appears that you can't change primary keys, which is 
+why changes weren't going through, and this in turn completely messes up the ui, 
+which gets majorly confused about which one it's dealing with.&nbsp; Also, a 
+Guid is thrown up as the default because it's assumed that all primary keys are 
+GUIDs. Will need revision - it appears that not everyone is on the side of 
+GUID's as a primary key (eg. SqlServer INTEGER column).</font></p>
+<p><font face="Verdana" size="2">Made changes to the database (making id as 
+GUID, changing its name and changing decimal settings for price), but forgot to 
+update class defs or anything else.&nbsp; Weird error came up (datareader), 
+although inner exception said problem reading database, but I had to hunt for 
+that.&nbsp; Better messaging needed.&nbsp; Corrected the classdefs and got a new 
+error with some lookup table in bocol (&quot;Item has already been added. Key in 
+dictionary: 'ID=' Key being added: 'ID='&quot;) - I'm stuck on this one now, can't 
+see any errors anywhere.&nbsp; Deleted all entries and the problem disappeared.</font></p>
+<p><font face="Verdana" size="2">Little editing glitches on add/edit - pressing 
+Enter makes beep sound, but I can still click OK.&nbsp; When entering decimal, 
+pressing dot key acts like home and it's a real struggle trying to insert a dot.&nbsp; 
+Also, there is no delete button. (For neat design you could even grey out the 
+edit button when a row is not selected).&nbsp; There is also no differentiation 
+between add and edit in the uidefs.</font></p>
+<p><font face="Verdana" size="2">When entering nothing for price, program 
+crashes.&nbsp; Or when I start typing characters in a price field</font></p>
+<p><font face="Verdana" size="2">~</font></p>
+<p><font face="Verdana" size="2">Editing the database structure/class 
+defs/classes is a scary procedure, so easy to make mistakes and error messaging 
+unhelpful.</font></p>
+<p><font face="Verdana" size="2">Lacking consistency in the getproperty methods 
+- only string has a different method.</font></p>
+
+<p><font face="Verdana" size="2">Got error message &quot;ownerClassPropDef&quot; can't be 
+null (while trying to get relationships working) - seeing as I don't explicitly 
+have that property, that error message needs to be revised.&nbsp; Was a missing 
+ID, or rather a misspelt ID.</font></p>
+
+<p><font face="Verdana" size="2">When adding new object to grid, the highlight 
+is mixed up - highlighting two different lines</font></p>
+<p><font face="Verdana" size="2">Error when Noogen.WinForms.dll not found</font></p>
+<p><font face="Verdana" size="2">First experience with comboboxes not too 
+positive - first the value that gets stored is the GUID rather than the value as 
+seen in the combobox.&nbsp; Secondly, the guid is stored okay, but when you 
+restart the application, it's got curly brackets around it, which crashes the 
+application.</font></p>
+<p><font face="Verdana" size="2">Nice to create a BO collection by just passing 
+a type.&nbsp; Or have a static loadall method in BOcol, given a type.</font></p>
+
+</body>
+
+</html>

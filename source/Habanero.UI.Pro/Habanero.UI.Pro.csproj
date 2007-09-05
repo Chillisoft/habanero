@@ -1,0 +1,193 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E1B4C7C4-587F-4162-A51C-7CCBA8147029}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.UI.Pro</RootNamespace>
+    <AssemblyName>Habanero.UI.Pro</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Habanero.UI.Pro.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\Permission.cs" />
+    <Compile Include="Forms\BoPanelControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\BoTabColControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\CheckBoxMapper.cs" />
+    <Compile Include="Forms\CollectionComboBoxMapper.cs" />
+    <Compile Include="Forms\ComboBoxCollectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ComboBoxMapper.cs" />
+    <Compile Include="Forms\ControlMapper.cs" />
+    <Compile Include="Forms\ControlMapperCollection.cs" />
+    <Compile Include="Forms\DateTimePickerMapper.cs" />
+    <Compile Include="Forms\DbConnectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\DefaultBOCreator.cs" />
+    <Compile Include="Forms\DefaultBOEditor.cs" />
+    <Compile Include="Forms\DefaultBOEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditableGridButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FormController.cs" />
+    <Compile Include="Forms\InputFormComboBox.cs" />
+    <Compile Include="Forms\InputFormDate.cs" />
+    <Compile Include="Forms\InputFormDateRange.cs" />
+    <Compile Include="Forms\InputFormFileSelect.cs" />
+    <Compile Include="Forms\InputFormFolderSelect.cs" />
+    <Compile Include="Forms\InputFormInteger.cs" />
+    <Compile Include="Forms\InputFormMoney.cs" />
+    <Compile Include="Forms\InputFormNumeric.cs" />
+    <Compile Include="Forms\InputFormRadioButton.cs" />
+    <Compile Include="Forms\InputFormTextBox.cs" />
+    <Compile Include="Forms\ListComboBoxMapper.cs" />
+    <Compile Include="Forms\ListViewCollectionMapper.cs" />
+    <Compile Include="Forms\LookupComboBoxMapper.cs" />
+    <Compile Include="Forms\LookupListNotSetException.cs" />
+    <Compile Include="Forms\OKCancelConfirmer.cs" />
+    <Compile Include="Forms\MultiSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\MultiSelector.Designer.cs" />
+    <Compile Include="Forms\NumericUpDownIntegerMapper.cs" />
+    <Compile Include="Forms\NumericUpDownMapper.cs" />
+    <Compile Include="Forms\NumericUpDownMoneyMapper.cs" />
+    <Compile Include="Forms\OKCancelDialog.cs" />
+    <Compile Include="Forms\OKMessageDialog.cs" />
+    <Compile Include="Forms\PanelFactory.cs" />
+    <Compile Include="Forms\PanelFactoryInfo.cs" />
+    <Compile Include="Forms\PictureControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid\FilterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid\FilterControlEventArgs.cs" />
+    <Compile Include="Grid\FilterInputBoxCollection.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Forms\ReadOnlyGridButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid\ReadOnlyGridWithButtons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid\EditableGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\EditableGridWithButtons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\TextBoxMapper.cs" />
+    <Compile Include="Forms\TreeViewTableEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Util\DateTimePickerUtil.cs" />
+    <Compile Include="Util\DropShadowForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Util\HelpAboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Util\IWizardStep.cs" />
+    <Compile Include="Util\PopupProgressIndicator.cs" />
+    <Compile Include="Util\SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Util\SqlScratchPad.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Util\Wizard.cs" />
+    <Compile Include="Util\WizardStepEventArgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\DbConnectionControl.resx">
+      <DependentUpon>DbConnectionControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MultiSelector.resx">
+      <DependentUpon>MultiSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TreeViewTableEditor.resx">
+      <DependentUpon>TreeViewTableEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.DB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI\Habanero.UI.csproj">
+      <Project>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</Project>
+      <Name>Habanero.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

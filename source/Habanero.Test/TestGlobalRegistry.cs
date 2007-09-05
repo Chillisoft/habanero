@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using NUnit.Framework;
+using Habanero.Base;
+using Habanero.Base.Exceptions;
+using Habanero.Util;
+using Habanero.DB;
+
+namespace Habanero.Test
+{
+    [TestFixture]
+    public class TestGlobalRegistry
+    {
+        private string appName = GlobalRegistry.ApplicationName;
+        private string appVersion = GlobalRegistry.ApplicationVersion;
+        private int dbVersion = GlobalRegistry.DatabaseVersion;
+        private ISettings settings = GlobalRegistry.Settings;
+        private IExceptionNotifier exNotifier = GlobalRegistry.UIExceptionNotifier;
+
+        [SetUp]
+        public void ResetRegistry()
+        {
+            GlobalRegistry.ApplicationName = appName;
+            GlobalRegistry.ApplicationVersion = appVersion;
+            GlobalRegistry.DatabaseVersion = dbVersion;
+            GlobalRegistry.Settings = settings;
+            GlobalRegistry.UIExceptionNotifier = exNotifier;
+        }
+
+        // This test fails because other tests have already set the global registry
+//        [Test]
+//        public void TestInitialValues()
+//        {
+//            Assert.IsNull(GlobalRegistry.ApplicationName);
+//            Assert.IsNull(GlobalRegistry.ApplicationVersion);
+//            Assert.AreEqual(0,GlobalRegistry.DatabaseVersion);
+//            Assert.IsNull(GlobalRegistry.Settings);
+//            Assert.IsNull(GlobalRegistry.UIExceptionNotifier);
+//        }
+
+        [Test]
+        public void TestGetsAndSets()
+        {
+            GlobalRegistry.ApplicationName = "testapp";
+            GlobalRegistry.ApplicationVersion = "v1";
+            GlobalRegistry.DatabaseVersion = 1;
+            GlobalRegistry.Settings = new ConfigFileSettings();
+            GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
+
+            Assert.AreEqual("testapp", GlobalRegistry.ApplicationName);
+            Assert.AreEqual("v1", GlobalRegistry.ApplicationVersion);
+            Assert.AreEqual(1, GlobalRegistry.DatabaseVersion);
+            Assert.AreEqual(typeof(ConfigFileSettings), GlobalRegistry.Settings.GetType());
+            Assert.AreEqual(typeof(ConsoleExceptionNotifier), GlobalRegistry.UIExceptionNotifier.GetType());
+        }
+    }
+}

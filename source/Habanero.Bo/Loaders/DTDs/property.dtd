@@ -1,0 +1,14 @@
+#include rule.dtd
+#include databaseLookupList.dtd
+#include simpleLookupList.dtd
+#include businessObjectLookupList.dtd
+<!ELEMENT property (rule*, databaseLookupList*, simpleLookupList*, businessObjectLookupList*)>
+<!ATTLIST property
+	name NMTOKEN #REQUIRED
+	type CDATA "String"
+	assembly NMTOKEN "System"
+	readWriteRule (	ReadWrite | ReadOnly | WriteOnce ) "ReadWrite"
+	databaseField CDATA #IMPLIED
+	default CDATA #IMPLIED
+  compulsory ( true | false ) "false"
+>

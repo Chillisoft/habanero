@@ -1,0 +1,2 @@
+#include column.dtd
+<!ELEMENT grid (column+)>

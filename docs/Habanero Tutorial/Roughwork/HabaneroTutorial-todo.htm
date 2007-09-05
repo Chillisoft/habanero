@@ -1,0 +1,100 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-za">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>ROUGH WORK</title>
+</head>
+
+<body>
+
+<p>COMMENTS</p>
+
+<p><b><font size="2">Frustrations:</font></b></p>
+<ul>
+  <li><font size="2">Error messaging</font></li>
+  <li><font size="2">Having to do the classdef's when I just wanted to create a 
+  simple working application</font></li>
+  <li><font size="2">Trying to enter decimals in edit form</font></li>
+</ul>
+
+<p><b><font size="2">Error detection:</font></b></p>
+<ul>
+  <li><font size="2">missing log4net.dll (and other important dll's?)</font></li>
+  <li><font size="2">missing app.config</font></li>
+  <li><font size="2">missing settings in app.config</font></li>
+  <li><font size="2">missing classdefs.xml</font></li>
+  <li><font size="2">thorough classdefs syntax checking (for subtleties that are 
+  still valid xml) - eg. multiplicity, missing subelements</font></li>
+  <li><font size="2">missing dtd's</font></li>
+  <li><font size="2">class defined in classdefs but no matching class in 
+  assembly</font></li>
+  <li><font size="2">?faulty database connection</font></li>
+  <li><font size="2">user trying to edit primary key (can automatically make the 
+  field read-only)</font></li>
+</ul>
+
+<p><b><font size="2">Error messaging:</font></b></p>
+<ul>
+  <li><font size="2">The error message window requires you to look in the stack 
+  trace for the error - ok for developers, but not for users</font></li>
+  <li><font size="2">Get &quot;</font><font face="Verdana" size="2">Length cannot be 
+  less than zero&quot; when class def components missing</font></li>
+  <li><font face="Verdana" size="2">Mismatch between classDefs and database 
+  brings up datareader error (can happen when you change db but not classdefs)</font></li>
+  <li><font face="Verdana" size="2">Got error message &quot;ownerClassPropDef&quot; can't be 
+null (while trying to get relationships working). Was a missing 
+ID, or rather a misspelt ID.</font></li>
+</ul>
+
+<p><b><font size="2">To do:</font></b></p>
+<ul>
+  <li><font size="2">Accept table name without &quot;tb&quot; prefix</font></li>
+  <li><font size="2">Adding decimal places in edit form (do I have to set this 
+  in the classdefs?)</font></li>
+  <li><font size="2">When adding new row/object to grid, switch selection to new 
+  row (current highlights two different objects)</font></li>
+</ul>
+
+<p><b><font size="2">Potential issues:</font></b></p>
+<ul>
+  <li><font size="2">Ms.Ab.ExceptionManagement.* - licensing - where do they 
+  come from</font></li>
+  <li><font size="2">Creating business objects - need to ensure methods 
+  correctly implemented - generate them</font></li>
+  <li><font size="2">Order of buttons on edit form should be add, edit, delete</font></li>
+  <li><font size="2">Pressing Enter in editor should trigger the default button, 
+  not do tab's job of moving to next control (and the beep sound?)</font></li>
+  <li><font size="2">No support for Alt-letter shortcuts in editing form - add 
+  '&amp;' and application crashes with nullreferenceexception.</font></li>
+  <li><font size="2">getProperty methods lack consistency, all the same but 
+  string has its own method</font></li>
+</ul>
+
+<p><b><font size="2">Opportunities:</font></b></p>
+<ul>
+  <li><font size="2">Eliminate griddataproviders</font></li>
+  <li><font size="2">A loadall command on bocol, skips the ugly empty quotes 
+  approach.</font></li>
+  <li><font size="2">Read all variations of data types in class defs, regardless 
+  of case</font></li>
+  <li><font size="2">Set width/height of a form automatically</font></li>
+  <li><font size="2">Have the default value, as set in the database, 
+  automatically appear in the editing field</font></li>
+</ul>
+
+<p><b><font size="2">To explore:</font></b></p>
+<ul>
+  <li><font size="2">habanero controls with standard layout managers</font></li>
+  <li><font size="2">How well does it handle integer primary keys - </font><font face="Verdana" size="2">
+  it appears that not everyone is on the side of GUID's as a primary key (eg. 
+  SqlServer INTEGER column)</font><font size="2">?</font></li>
+</ul>
+
+<p>&nbsp;</p>
+
+</body>
+
+</html>

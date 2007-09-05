@@ -1,0 +1,6 @@
+<!ELEMENT businessObjectLookupList EMPTY>
+<!ATTLIST businessObjectLookupList 
+	class NMTOKEN #REQUIRED
+	assembly NMTOKEN #REQUIRED
+  criteria CDATA #IMPLIED
+>

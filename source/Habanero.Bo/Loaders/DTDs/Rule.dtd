@@ -1,0 +1,12 @@
+<!ELEMENT add EMPTY>
+<!ATTLIST add
+	key NMTOKEN #REQUIRED
+  value CDATA #REQUIRED
+>
+<!ELEMENT rule (add*)>
+<!ATTLIST rule
+	name CDATA #REQUIRED
+	class NMTOKEN #IMPLIED
+  assembly NMTOKEN #IMPLIED
+  message CDATA #IMPLIED
+>

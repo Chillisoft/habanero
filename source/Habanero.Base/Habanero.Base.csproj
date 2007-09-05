@@ -1,0 +1,200 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D04BB138-C144-4406-9A41-17192E7D44BF}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Habanero.Base</AssemblyName>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Habanero.Base</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Habanero.Base.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Exceptions\InvalidObjectIdException.cs" />
+    <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
+    <Compile Include="HabaneroApp.cs" />
+    <Compile Include="IApplicationVersionUpgrader.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\ArgumentValidationHelper.cs" />
+    <Compile Include="Exceptions\CannotSaveException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\ConsoleExceptionNotifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConsoleProgressIndicator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\ExceptionUtilities.cs" />
+    <Compile Include="Exceptions\HabaneroArgumentException.cs" />
+    <Compile Include="ICrypter.cs" />
+    <Compile Include="Encryption.cs" />
+    <Compile Include="Exceptions\HabaneroException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomProperty.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFilterClause.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FilterClauseCompositeOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFilterClauseFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FilterClauseOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GlobalRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IConfirmer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDatabaseConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDatabaseConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IExceptionNotifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ILookupList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="INumberGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IObjectCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IObjectEditor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IObjectInitialiser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IParameterNameGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ISettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ISqlStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ISqlStatementCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITextFileLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITransaction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NullCrypter.cs" />
+    <Compile Include="NullProgressIndicator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProgressIndicator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\UnknownTypeNameException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XMLWrapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

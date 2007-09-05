@@ -1,0 +1,141 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.UI</RootNamespace>
+    <AssemblyName>Habanero.UI</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Habanero.UI.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Noogen.WinForms, Version=1.0.2083.946, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Noogen.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\HabaneroAppForm.cs" />
+    <Compile Include="Base\BorderLayoutManager.cs" />
+    <Compile Include="Base\ControlFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Base\IBusinessObjectControl.cs" />
+    <Compile Include="Forms\ButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FileChooser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FormExceptionNotifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Forms\PasswordTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Grid\CalendarCell.cs" />
+    <Compile Include="Grid\CalendarEditingControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Base\ColumnLayoutManager.cs" />
+    <Compile Include="Base\ControlCollection.cs" />
+    <Compile Include="Grid\DataGridViewDateTimeColumn.cs" />
+    <Compile Include="Grid\DataGridViewNumericUpDownColumn.cs" />
+    <Compile Include="Grid\DataViewCompositeFilterClause.cs" />
+    <Compile Include="Grid\DataViewFilterClause.cs" />
+    <Compile Include="Grid\DataViewFilterClauseFactory.cs" />
+    <Compile Include="Grid\DataViewIntegerFilterClause.cs" />
+    <Compile Include="Grid\DataViewNullFilterClause.cs" />
+    <Compile Include="Grid\DataViewStringFilterClause.cs" />
+    <Compile Include="Grid\ReadOnlyGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Base\FlowLayoutManager.cs" />
+    <Compile Include="Base\IFormControl.cs" />
+    <Compile Include="Grid\GridBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Base\GridLayoutManager.cs" />
+    <Compile Include="Grid\IEditableGrid.cs" />
+    <Compile Include="Grid\IGridWithButtons.cs" />
+    <Compile Include="Grid\IReadOnlyGrid.cs" />
+    <Compile Include="Base\LayoutManager.cs" />
+    <Compile Include="Grid\NumericUpDownCell.cs" />
+    <Compile Include="Grid\NumericUpDownEditingControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.DB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
+      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
+      <Name>Habanero.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\ButtonControl.resx">
+      <DependentUpon>ButtonControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
