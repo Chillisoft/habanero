@@ -445,37 +445,42 @@ namespace Habanero.BO.ClassDefinition
         /// property type.  Can be used, for example, to provide to the
         /// ArrayList.Sort() function in order to determine how to compare
         /// items.  Caters for the following types: String, Int, Guid,
-        /// DateTime, Single and TimeSpan.
+		/// DateTime, Single, Double, TimeSpan 
+		/// and anything else that supports IComparable.
         /// </summary>
         /// <returns>Returns an IComparer object, or null if the property
         /// type is not one of those mentioned above</returns>
         public IComparer<T> GetPropertyComparer<T>() where T:BusinessObject
         {
-            if (this.PropertyType.Equals(typeof (string)))
-            {
-                return new StringComparer<T>(this.PropertyName);
-            }
-            else if (this.PropertyType.Equals(typeof (int)))
-            {
-                return new IntComparer<T>(this.PropertyName);
-            }
-            else if (this.PropertyType.Equals(typeof (Guid)))
-            {
-                return new GuidComparer<T>(this.PropertyName);
-            }
-            else if (this.PropertyType.Equals(typeof (DateTime)))
-            {
-                return new DateTimeComparer<T>(this.PropertyName);
-            }
-            else if (this.PropertyType.Equals(typeof (Single)))
-            {
-                return new SingleComparer<T>(this.PropertyName);
-            }
-            else if (this.PropertyType.Equals(typeof (TimeSpan)))
-            {
-                return new TimeSpanComparer<T>(this.PropertyName);
-            }
-            return null;
+        	Type comparerType = typeof(PropertyComparer<,>);
+        	comparerType = comparerType.MakeGenericType(typeof (T), PropertyType);
+			IComparer<T> comparer = (IComparer<T>)Activator.CreateInstance(comparerType, this.PropertyName);
+        	return comparer;
+			//if (this.PropertyType.Equals(typeof (string)))
+			//{
+			//    return new StringComparer<T>(this.PropertyName);
+			//}
+			//else if (this.PropertyType.Equals(typeof (int)))
+			//{
+			//    return new IntComparer<T>(this.PropertyName);
+			//}
+			//else if (this.PropertyType.Equals(typeof (Guid)))
+			//{
+			//    return new GuidComparer<T>(this.PropertyName);
+			//}
+			//else if (this.PropertyType.Equals(typeof (DateTime)))
+			//{
+			//    return new DateTimeComparer<T>(this.PropertyName);
+			//}
+			//else if (this.PropertyType.Equals(typeof (Single)))
+			//{
+			//    return new SingleComparer<T>(this.PropertyName);
+			//}
+			//else if (this.PropertyType.Equals(typeof (TimeSpan)))
+			//{
+			//    return new TimeSpanComparer<T>(this.PropertyName);
+			//}
+			//return null;
         }
 
         #endregion //PropertyComparer
