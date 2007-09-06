@@ -33,11 +33,11 @@
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\log4net.dll</HintPath>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Noogen.WinForms, Version=1.0.2083.946, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Noogen.WinForms.dll</HintPath>
+      <HintPath>..\..\lib\Noogen.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
