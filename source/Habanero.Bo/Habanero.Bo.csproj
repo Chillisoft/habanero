@@ -108,6 +108,7 @@
     <Compile Include="Comparer\GuidComparer.cs" />
     <Compile Include="Comparer\IntComparer.cs" />
     <Compile Include="Comparer\PropertyComparer.cs" />
+    <Compile Include="Comparer\ReflectedPropertyComparer.cs" />
     <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
