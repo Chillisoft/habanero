@@ -565,13 +565,12 @@ namespace Habanero.BO
             {
                 if (propValue is string && prop.PropertyType == typeof(Guid))
                 {
-                    try
-                    {
-                        Guid g = new Guid((string) propValue);
-                        propValue = g;
-                    }
-                    catch (FormatException)
-                    {
+                	Guid guidValue;
+					if (StringUtilities.GuidTryParse((string) propValue, out guidValue))
+					{
+						propValue = guidValue;
+					} else 
+					{
                         if (this.ClassDef.GetPropDef(propName).HasLookupList()) {
                             Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
                             propValue = lookupList[(string)propValue];

@@ -61,13 +61,15 @@ namespace Habanero.BO.Loaders
                         "is missing a 'value' attribute that specifies the " +
                         "value to store for the given property.");
                 }
-
-                    try {
-                        Guid newGuid = new Guid(valuePart);
-                        _displayValueDictionary.Add(stringPart, newGuid );
-                    } catch (FormatException) {
-                        _displayValueDictionary.Add(stringPart, valuePart);
-                    }
+            	
+				Guid newGuid;
+            	if (StringUtilities.GuidTryParse(valuePart, out newGuid))
+            	{
+					_displayValueDictionary.Add(stringPart, newGuid);
+            	} else
+            	{
+					_displayValueDictionary.Add(stringPart, valuePart);
+            	}
                 
                 ReadAndIgnoreEndTag();
             }

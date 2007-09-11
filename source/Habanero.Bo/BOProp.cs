@@ -105,14 +105,14 @@ namespace Habanero.BO
                     }
                     else if (this.PropertyType == typeof (Guid))
                     {
-                        try
-                        {
-                            propValue = new Guid(propValue.ToString());
-                        }
-                        catch (FormatException)
-                        {
-                            propValue = null;
-                        }
+                    	Guid guidValue;
+						if (StringUtilities.GuidTryParse(propValue.ToString(), out guidValue))
+						{
+							propValue = guidValue;
+						} else
+						{
+							propValue = null;
+						}
                     }
                     else if (this.PropertyType == typeof (Image))
                     {

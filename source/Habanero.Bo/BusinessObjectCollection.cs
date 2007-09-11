@@ -212,7 +212,7 @@ namespace Habanero.BO
         /// </summary>
         public void LoadAll()
         {
-			Load("", "");
+			LoadAll("");
         }
 
 		/// <summary>
@@ -236,7 +236,7 @@ namespace Habanero.BO
         /// <param name="orderByClause">The order-by clause</param>
         public void Load(string searchCriteria, string orderByClause)
         {
-            LoadWithLimit(searchCriteria, orderByClause, "", -1);
+            Load(searchCriteria, orderByClause, "");
         }
 		
 		/// <summary>
@@ -247,7 +247,7 @@ namespace Habanero.BO
 		/// <param name="orderByClause">The order-by clause</param>
 		public void Load(IExpression searchExpression, string orderByClause)
 		{
-			LoadWithLimit(searchExpression, orderByClause, "", -1);
+			Load(searchExpression, orderByClause, "");
 		}
 
         /// <summary>

@@ -87,12 +87,11 @@ namespace Habanero.DB
             }
             else if (preparedValue is String)
             {
-                try
-                {
-                    Convert.ToDecimal(preparedValue);
-                    stringValue = (String) preparedValue;
-                }
-                catch (FormatException)
+            	Decimal decimalValue;
+				if (Decimal.TryParse((string)preparedValue, out decimalValue))
+				{
+					stringValue = (string) preparedValue;
+				} else 
                 {
                     stringValue = string.Format("'{0}'", preparedValue);
                 }
