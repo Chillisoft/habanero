@@ -35,6 +35,12 @@ namespace Habanero.Test.DB
             crypter = new RSAPasswordCrypter(rsa);
             password = "password";
             encryptedPassword = crypter.EncryptString(password);
+           
+        }
+
+        [SetUp]
+        public void Setup()
+        {
             encryptedConfig = new DatabaseConfig(DatabaseConfig.MySql, "a", "b", "c", encryptedPassword, "e");
         }
 
