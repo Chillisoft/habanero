@@ -97,12 +97,18 @@ namespace Habanero.UI.Grid
             DataGridViewColumn col = new DataGridViewTextBoxColumn(); // DataGridViewTextBoxColumn();
             //col.Visible = false;
             col.Width = 0;
+            
+            col.Visible = false;
+            col.ReadOnly = true;
+            DataColumn dataColumn = _dataTable.Columns[0];
+            col.HeaderText = dataColumn.Caption;
+            col.Name = dataColumn.ColumnName;
+            col.DataPropertyName = dataColumn.ColumnName;
             this.Columns.Add(col);
-            this.Columns[0].Visible = false;
             int colNum = 1;
             foreach (UIGridColumn gridColumn in grid)
             {
-                DataColumn dataColumn = _dataTable.Columns[colNum];
+                dataColumn = _dataTable.Columns[colNum];
 
                 if (gridColumn.GridControlType == typeof(DataGridViewComboBoxColumn))
                 {
