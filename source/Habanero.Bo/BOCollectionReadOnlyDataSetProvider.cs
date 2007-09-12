@@ -44,7 +44,7 @@ namespace Habanero.BO
             {
                 this._table.Rows.RemoveAt(rowNum);
             }
-            e.BusinessObject.Updated -= new EventHandler<BOEventArgs>(UpdatedHandler);
+            e.BusinessObject.Updated -= UpdatedHandler;
         }
 
         /// <summary>

@@ -16,8 +16,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="cb">The CheckBox object to be mapped</param>
         /// <param name="propName">A name for the property</param>
-        /// <param name="isReadOnceOnly">Whether this object can be read once only</param>
-        public CheckBoxMapper(CheckBox cb, string propName, bool isReadOnceOnly) : base(cb, propName, isReadOnceOnly)
+        /// <param name="isReadOnly">Whether this control is read only</param>
+        public CheckBoxMapper(CheckBox cb, string propName, bool isReadOnly) 
+			: base(cb, propName, isReadOnly)
         {
             Permission.Check(this);
             _checkBox = cb;
@@ -33,10 +34,8 @@ namespace Habanero.UI.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (_isReadOnceOnly)
-            {
-                return;
-            }
+			if (!_isEditable) return;
+
             bool newValue = _checkBox.Checked;
             bool valueChanged = false;
             if (GetPropertyValue() == null)

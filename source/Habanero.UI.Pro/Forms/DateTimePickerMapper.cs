@@ -22,9 +22,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="dtp">The DateTimePicker control object</param>
         /// <param name="propName">The property name</param>
-        /// <param name="isReadOnceOnly">Whether the control is read once only</param>
-        public DateTimePickerMapper(Control dtp, string propName, bool isReadOnceOnly)
-            : base(dtp, propName, isReadOnceOnly)
+		/// <param name="isReadOnly">Whether this control is read only</param>
+		public DateTimePickerMapper(Control dtp, string propName, bool isReadOnly)
+            : base(dtp, propName, isReadOnly)
         {
             _dateTimePicker = dtp;
             EventInfo valueChangedEventInfo = dtp.GetType().GetEvent("ValueChanged");
@@ -39,24 +39,23 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void ValueChangedHandler(object sender, EventArgs e)
+		private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (_businessObject != null && !_isReadOnceOnly)
-            {
-                //DateTime newValue = _dateTimePicker.Value;
-                object newValue = GetValueOfDateTimePicker();
-                object oldValue = _businessObject.GetPropertyValue(_propertyName);
-                if (oldValue != null || newValue != null)
-                {
-                    if (oldValue == null || !oldValue.Equals(newValue))
-                    {
-                        _businessObject.SetPropertyValue(_propertyName, newValue);
-                    }
-                }
-            }
+			if (!_isEditable) return;
+
+        	//DateTime newValue = _dateTimePicker.Value;
+        	object newValue = GetValueOfDateTimePicker();
+        	object oldValue = _businessObject.GetPropertyValue(_propertyName);
+        	if (oldValue != null || newValue != null)
+        	{
+        		if (oldValue == null || !oldValue.Equals(newValue))
+        		{
+        			_businessObject.SetPropertyValue(_propertyName, newValue);
+        		}
+        	}
         }
 
-        /// <summary>
+    	/// <summary>
         /// Returns the value currently held by the picker
         /// </summary>
         /// <returns>Returns the value held</returns>

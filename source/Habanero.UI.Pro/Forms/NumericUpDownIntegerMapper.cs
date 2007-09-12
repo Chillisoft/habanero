@@ -18,9 +18,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="control">The control to map</param>
         /// <param name="propName">The property name</param>
-        /// <param name="isReadOnceOnly">Whether the object is read once only</param>
-        public NumericUpDownIntegerMapper(NumericUpDown control, string propName, bool isReadOnceOnly)
-            : base(control, propName, isReadOnceOnly)
+		/// <param name="isReadOnly">Whether this control is read only</param>
+		public NumericUpDownIntegerMapper(NumericUpDown control, string propName, bool isReadOnly)
+            : base(control, propName, isReadOnly)
         {
 
             _numericUpDown.DecimalPlaces = 0;
@@ -36,18 +36,17 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void ValueChangedHandler(object sender, EventArgs e)
+		private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (_businessObject != null && !_isReadOnceOnly)
-            {
-                int newValue = Convert.ToInt32(_numericUpDown.Value);
-                int oldValue = Convert.ToInt32(_businessObject.GetPropertyValue(_propertyName));
-                if (newValue != oldValue)
-                {
-                    //log.Debug("setting property value to " + _numericUpDown.Value + " of type " + itsNumericUpDown.Value.GetType().Name);
-                    _businessObject.SetPropertyValue(_propertyName, newValue);
-                }
-            }
+			if (!_isEditable) return;
+
+        	int newValue = Convert.ToInt32(_numericUpDown.Value);
+        	int oldValue = Convert.ToInt32(_businessObject.GetPropertyValue(_propertyName));
+        	if (newValue != oldValue)
+        	{
+        		//log.Debug("setting property value to " + _numericUpDown.Value + " of type " + itsNumericUpDown.Value.GetType().Name);
+        		_businessObject.SetPropertyValue(_propertyName, newValue);
+        	}
         }
     }
 }

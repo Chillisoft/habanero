@@ -21,7 +21,8 @@ namespace Habanero.UI.Forms
         protected static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.ControlMapper");
         protected Control _control;
         protected string _propertyName;
-        protected readonly bool _isReadOnceOnly;
+        protected readonly bool _isReadOnly;
+    	protected bool _isEditable;
         protected BusinessObject _businessObject;
         protected Hashtable _attributes;
 
@@ -30,30 +31,27 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="ctl">The control object to map</param>
         /// <param name="propName">The property name</param>
-        /// <param name="isReadOnceOnly">Whether the control can only be
-        /// read once.  If so, it then becomes disabled.  If not,
+        /// <param name="isReadOnly">Whether the control is read only.
+        /// If so, it then becomes disabled.  If not,
         /// handlers are assigned to manage key presses.</param>
-        protected ControlMapper(Control ctl, string propName, bool isReadOnceOnly)
+        protected ControlMapper(Control ctl, string propName, bool isReadOnly)
         {
             Permission.Check(this);
             _control = ctl;
             _propertyName = propName;
-            _isReadOnceOnly = isReadOnceOnly;
-            if (isReadOnceOnly)
-            {
-                _control.Enabled = false;
-                _control.ForeColor = Color.Black;
-                _control.BackColor = Color.Beige;
-            }
-            else
-            {
-                ctl.KeyUp += new KeyEventHandler(CtlKeyUpHandler);
-                ctl.KeyDown += new KeyEventHandler(CtlKeyDownHandler);
-                ctl.KeyPress += new KeyPressEventHandler(CtlKeyPressHandler);
-            }
+            _isReadOnly = isReadOnly;
+			if (!_isReadOnly)
+			{
+				_control.KeyUp += CtlKeyUpHandler;
+				_control.KeyDown += CtlKeyDownHandler;
+				_control.KeyPress += CtlKeyPressHandler;
+			}
+        	UpdateIsEditable();
         }
 
-        /// <summary>
+    	#region Key Press Event Handlers
+
+		/// <summary>
         /// A handler to deal with the case where a key has been pressed.
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
@@ -105,9 +103,13 @@ namespace Habanero.UI.Forms
 //                    nextControl.Focus();
 //                }
 //            }
-        }
+		}
 
-        /// <summary>
+		#endregion
+
+		#region Control Order Methods
+
+		/// <summary>
         /// Provides the next item in the tab order on a control
         /// </summary>
         /// <param name="parentControl">The parent of the controls in question</param>
@@ -150,9 +152,11 @@ namespace Habanero.UI.Forms
                 }
                 currentControl = prevControl;
             } while (true);
-        }
+		}
 
-        /// <summary>
+		#endregion
+
+		/// <summary>
         /// Returns the control being mapped
         /// </summary>
         public Control Control
@@ -176,18 +180,51 @@ namespace Habanero.UI.Forms
         /// </summary>
         public BusinessObject BusinessObject
         {
+            get { return _businessObject; }
             set
             {
-                _businessObject = value;
+				if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
+				{
+					//Remove existing handlers
+					_businessObject.Props[_propertyName].Updated -= this.BOPropValueUpdatedHandler;
+				}
+				_businessObject = value;
+            	UpdateIsEditable();
                 ValueUpdated();
-                if (!_isReadOnceOnly)
-                {
-                    _businessObject.Props[_propertyName].Updated +=
-                        new EventHandler<BOPropEventArgs>(this.BOPropValueUpdatedHandler);
-                }
+				if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
+				{
+					//Add needed handlers
+					_businessObject.Props[_propertyName].Updated += this.BOPropValueUpdatedHandler;
+				}
+                
             }
-            get { return _businessObject; }
         }
+
+		/// <summary>
+		/// Updates the isEditable flag and updates 
+		/// the control according to the current state
+		/// </summary>
+		private void UpdateIsEditable()
+		{
+			_isEditable = !_isReadOnly && _businessObject != null
+					&& _businessObject.Props.Contains(_propertyName);
+			if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsObjectID &&
+				_businessObject.ID.Contains(_propertyName) &&
+				!_businessObject.State.IsNew)
+			{
+				_isEditable = false;
+			}
+			_control.Enabled = _isEditable;
+			if (_isEditable)
+			{
+				_control.ForeColor = SystemColors.WindowText;
+				_control.BackColor = SystemColors.Window;
+			} else
+			{
+				_control.ForeColor = Color.Black;
+				_control.BackColor = Color.Beige;
+			}
+		}
 
         /// <summary>
         /// Handler to carry out changes where the value of a business
@@ -218,13 +255,12 @@ namespace Habanero.UI.Forms
         /// located</param>
         /// <param name="ctl">The control to be mapped</param>
         /// <param name="propertyName">The property name</param>
-        /// <param name="isReadOnceOnly">Whether the control can be read once
-        /// only</param>
+        /// <param name="isReadOnly">Whether the control is read only</param>
         /// <returns>Returns a new object which is a subclass of ControlMapper</returns>
         /// <exception cref="UnknownTypeNameException">An exception is
         /// thrown if the mapperTypeName does not provide a type that is
         /// a subclass of the ControlMapper class.</exception>
-        public static ControlMapper Create(string mapperTypeName, string mapperAssembly, Control ctl, string propertyName, bool isReadOnceOnly)
+        public static ControlMapper Create(string mapperTypeName, string mapperAssembly, Control ctl, string propertyName, bool isReadOnly)
         {
             if (mapperTypeName == "TextBoxMapper" && !(ctl is TextBox) && !(ctl is PasswordTextBox))
             {
@@ -250,12 +286,12 @@ namespace Habanero.UI.Forms
             } else {
                 mapperType = TypeLoader.LoadType(mapperAssembly, mapperTypeName);
             }
-            ControlMapper mapper;
+            ControlMapper controlMapper;
             if (mapperType != null && mapperType.IsSubclassOf(typeof (ControlMapper)))
             {
-                mapper =
+                controlMapper =
                     (ControlMapper)
-                    Activator.CreateInstance(mapperType, new object[] {ctl, propertyName, isReadOnceOnly});
+                    Activator.CreateInstance(mapperType, new object[] {ctl, propertyName, isReadOnly});
             }
             else
             {
@@ -263,7 +299,7 @@ namespace Habanero.UI.Forms
                     "type '" + mapperTypeName + "' was not found.  All control " +
                     "mappers must inherit from ControlMapper.");
             }
-            return mapper;
+            return controlMapper;
         }
 
         /// <summary>
@@ -272,8 +308,14 @@ namespace Habanero.UI.Forms
         /// <returns>Returns the property value in appropriate object form</returns>
         protected virtual object GetPropertyValue()
         {
-            BOMapper mapper = new BOMapper(_businessObject);
-            return mapper.GetPropertyValueToDisplay(_propertyName);
+			if (_businessObject != null)
+			{
+				BOMapper boMapper = new BOMapper(_businessObject);
+				return boMapper.GetPropertyValueToDisplay(_propertyName);
+			} else
+			{
+				return null;
+			}
         }
 
         /// <summary>

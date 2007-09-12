@@ -16,9 +16,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="control">The control to map</param>
         /// <param name="propName">The property name</param>
-        /// <param name="isReadOnceOnly">Whether the object is read once only</param>
-        public NumericUpDownMapper(NumericUpDown control, string propName, bool isReadOnceOnly)
-            : base(control, propName, isReadOnceOnly)
+		/// <param name="isReadOnly">Whether this control is read only</param>
+		public NumericUpDownMapper(NumericUpDown control, string propName, bool isReadOnly)
+            : base(control, propName, isReadOnly)
         {
             _numericUpDown = control;
         }

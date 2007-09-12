@@ -21,8 +21,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="tb">The TextBox to map</param>
         /// <param name="propName">The property name</param>
-        /// <param name="isReadOnceOnly">Whether the object is read once only</param>
-        public TextBoxMapper(TextBox tb, string propName, bool isReadOnceOnly) : base(tb, propName, isReadOnceOnly)
+		/// <param name="isReadOnly">Whether this control is read only</param>
+		public TextBoxMapper(TextBox tb, string propName, bool isReadOnly)
+			: base(tb, propName, isReadOnly)
         {
             _textBox = tb;
             //_textBox.Enabled = false;
@@ -101,38 +102,38 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void ValueChangedHandler(object sender, EventArgs e)
+		private void ValueChangedHandler(object sender, EventArgs e)
         {
-            string value = _textBox.Text;
+        	string value = _textBox.Text;
 
 
-            if (IsDecimalType())
-            {
-                if (value.EndsWith(".")) return;
-            }
-            if (IsDecimalType() || IsIntegerType())
-            {
-                if (value.EndsWith("-")) return;
-                if (value.Length == 0)
-                {
-                    value = null;
-                }
-            }            
-            if (_businessObject != null && !_isReadOnceOnly)
-            {
-                try
-                {
-                    _businessObject.SetPropertyValue(_propertyName, value);
-                }
-                catch (FormatException)
-                {
-                    _textBox.Text = _oldText;
-                }
-                _oldText = _textBox.Text;
-            }
+        	if (IsDecimalType())
+        	{
+        		if (value.EndsWith(".")) return;
+        	}
+        	if (IsDecimalType() || IsIntegerType())
+        	{
+        		if (value.EndsWith("-")) return;
+        		if (value.Length == 0)
+        		{
+        			value = null;
+        		}
+        	}
+
+			if (!_isEditable) return;
+
+        	try
+        	{
+        		_businessObject.SetPropertyValue(_propertyName, value);
+        	}
+        	catch (FormatException)
+        	{
+        		_textBox.Text = _oldText;
+        	}
+        	_oldText = _textBox.Text;
         }
 
-        /// <summary>
+    	/// <summary>
         /// Updates the interface when the value has been changed in the
         /// object being represented
         /// </summary>

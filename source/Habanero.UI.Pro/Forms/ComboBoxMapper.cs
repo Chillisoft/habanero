@@ -25,10 +25,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="comboBox">The ComboBox object to map</param>
         /// <param name="propName">The property name</param>
-        /// <param name="isReadOnceOnly">Whether this object can be read once only</param>
-        /// TODO ERIC - what's this last one, review all by similar name
-        public ComboBoxMapper(ComboBox comboBox, string propName, bool isReadOnceOnly)
-            : base(comboBox, propName, isReadOnceOnly)
+		/// <param name="isReadOnly">Whether this control is read only</param>
+		public ComboBoxMapper(ComboBox comboBox, string propName, bool isReadOnly)
+            : base(comboBox, propName, isReadOnly)
         {
             Permission.Check(this);
             _comboBox = comboBox;
