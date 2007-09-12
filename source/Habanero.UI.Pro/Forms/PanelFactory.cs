@@ -175,7 +175,7 @@ namespace Habanero.UI.Forms
                 {
                     //log.Debug("Creating label and control for property " + property.PropertyName + " with mapper type " + property.MapperTypeName) ;
                     bool isCompulsory = false;
-                    PropDef propDef = _boArray[0].ClassDef.GetPropDef(field.PropertyName);
+                    PropDef propDef = _boArray[0].ClassDef.GetPropDef(field.PropertyName, false);
                     if (propDef != null)
                     {
                         isCompulsory = propDef.Compulsory;
@@ -198,8 +198,7 @@ namespace Habanero.UI.Forms
                             try
                             {
                                 numLines = Convert.ToInt32(field.GetParameterValue("numLines"));
-                            }
-                            catch (Exception ex)
+                            } catch (Exception)
                             {
                                 throw new InvalidXmlDefinitionException("An error " +
                                     "occurred while reading the 'numLines' parameter " +
@@ -340,19 +339,20 @@ namespace Habanero.UI.Forms
         private bool CheckIfEditable(UIFormField field, Control ctl)
         {
             bool editable = field.Editable;
-            if (_boArray[0].ClassDef.PrimaryKeyDef.IsObjectID &&
-                _boArray[0].ID.Contains(field.PropertyName) &&
-                !_boArray[0].State.IsNew)
-            {
-                editable = false;
-            }
-            ctl.Enabled = editable;
-            if (!ctl.Enabled)
-            {
-                ctl.ForeColor = Color.Black;
-                ctl.BackColor = Color.Beige;
-            }
-            else
+			//if (_boArray[0].ClassDef.PrimaryKeyDef.IsObjectID &&
+			//    _boArray[0].ID.Contains(field.PropertyName) &&
+			//    !_boArray[0].State.IsNew)
+			//{
+			//    editable = false;
+			//}
+			//ctl.Enabled = editable;
+			//if (!ctl.Enabled)
+			//{
+			//    ctl.ForeColor = Color.Black;
+			//    ctl.BackColor = Color.Beige;
+			//}
+			//else
+			if (editable)
             {
                 if (_firstControl == null)
                 {

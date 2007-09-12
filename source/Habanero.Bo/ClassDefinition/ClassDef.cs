@@ -683,27 +683,56 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="propertyName">The property name in question</param>
         /// <returns>Returns the property definition if found, or
-        /// null if not</returns>
-        public PropDef GetPropDef(string propertyName)
+		/// throws an error if not</returns>
+		/// <exception cref="InvalidPropertyNameException">
+		/// This exception is thrown if the property is not found</exception>
+		public PropDef GetPropDef(string propertyName)
         {
-            ClassDef currentClassDef = this;
-            while (currentClassDef != null)
-            {
-                if (currentClassDef.PropDefcol.Contains(propertyName))
-                {
-                    return currentClassDef.PropDefcol[propertyName];
-                }
-                else
-                {
-                    currentClassDef = currentClassDef.SuperClassClassDef;
-                }
-            }
-            //return null;
-            throw new InvalidPropertyNameException(String.Format(
-                "The property definition for the property '{0}' could not be " +
-                "found.", propertyName));
+        	return GetPropDef(propertyName, true);
         }
 
-        #endregion //Returning defs
+		/// <summary>
+		/// Searches the property definition collection and returns the 
+		/// property definition for the property with the name provided.
+		/// </summary>
+		/// <param name="propertyName">The property name in question</param>
+		/// <param name="throwError">Should an error be thrown if the property is not found</param>
+		/// <returns>Returns the property definition if found, or
+		/// throw an error if <paramref name="throwError"/> is true,
+		/// otherwise return null</returns>
+		/// <exception cref="InvalidPropertyNameException">
+		/// This exception is thrown if the property is not found and 
+		/// <paramref name="throwError"/> is true</exception>
+		public PropDef GetPropDef(string propertyName, bool throwError)
+		{
+        	PropDef foundPropDef = null;
+			ClassDef currentClassDef = this;
+    		while (currentClassDef != null)
+    		{
+    			if (currentClassDef.PropDefcol.Contains(propertyName))
+    			{
+    				foundPropDef = currentClassDef.PropDefcol[propertyName];
+					break;
+    			}
+    			else
+    			{
+    				currentClassDef = currentClassDef.SuperClassClassDef;
+    			}
+    		}
+        	if (foundPropDef != null)
+			{
+				return foundPropDef;
+			} else if (throwError)
+			{
+				throw new InvalidPropertyNameException(String.Format(
+                   	"The property definition for the property '{0}' could not be " +
+                   	"found.", propertyName));
+			} else 
+			{
+				return null;
+			}
+        }
+
+    	#endregion //Returning defs
     }
 }

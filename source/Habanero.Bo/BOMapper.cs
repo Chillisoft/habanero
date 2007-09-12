@@ -34,11 +34,11 @@ namespace Habanero.BO
         /// not available</returns>
         public Dictionary<string, object> GetLookupList(string propertyName)
         {
-            PropDef def = _businessObject.ClassDef.GetPropDef(propertyName);
+            PropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName);
             //return def.GetLookupList(_businessObject.GetDatabaseConnection());
-            if (def.LookupList != null)
+            if (propDef.LookupList != null)
             {
-                return def.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
+                return propDef.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
             }
             else
             {
@@ -139,17 +139,17 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the lookup list related to the specified property in the
-        /// class definition
+        /// Returns the class definition related to the specified database 
+        /// lookup list for the specified property in the class definition
         /// </summary>
         /// <param name="propertyName">The property name</param>
-        /// <returns>Returns the lookup list or null if not available</returns>
+        /// <returns>Returns the class definition or null if not available</returns>
         public ClassDef GetLookupListClassDef(string propertyName)
         {
-            PropDef def = _businessObject.ClassDef.GetPropDef(propertyName);
-            if (def.LookupList != null && def.LookupList.GetType() == typeof (DatabaseLookupList))
+            PropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName);
+            if (propDef.LookupList != null && propDef.LookupList.GetType() == typeof (DatabaseLookupList))
             {
-                return ((DatabaseLookupList) def.LookupList).ClassDef;
+                return ((DatabaseLookupList) propDef.LookupList).ClassDef;
             }
             return null;
         }

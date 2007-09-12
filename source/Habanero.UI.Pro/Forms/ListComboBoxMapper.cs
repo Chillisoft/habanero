@@ -24,10 +24,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="cbx">The ComboBox object</param>
         /// <param name="propName">The property name</param>
-        /// <param name="isReadOnceOnly">Whether the control is read-once only
-        /// </param>
-        public ListComboBoxMapper(ComboBox cbx, string propName, bool isReadOnceOnly)
-            : base(cbx, propName, isReadOnceOnly)
+		/// <param name="isReadOnly">Whether this control is read only</param>
+		public ListComboBoxMapper(ComboBox cbx, string propName, bool isReadOnly)
+            : base(cbx, propName, isReadOnly)
         {
             _comboBox = cbx;
             _comboBox.SelectedIndexChanged += new EventHandler(ValueChangedHandler);

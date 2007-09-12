@@ -20,9 +20,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="control">The control to map</param>
         /// <param name="propName">The property name</param>
-        /// <param name="isReadOnceOnly">Whether the object is read once only</param>
-        public NumericUpDownMoneyMapper(NumericUpDown control, string propName, bool isReadOnceOnly)
-            : base(control, propName, isReadOnceOnly)
+		/// <param name="isReadOnly">Whether this control is read only</param>
+		public NumericUpDownMoneyMapper(NumericUpDown control, string propName, bool isReadOnly)
+            : base(control, propName, isReadOnly)
         {
             _numericUpDown.DecimalPlaces = 2;
             _numericUpDown.Maximum = Int32.MaxValue;
@@ -56,18 +56,17 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="sender">The object that notified of the event</param>
         /// <param name="e">Attached arguments regarding the event</param>
-        private void ValueChangedHandler(object sender, EventArgs e)
+		private void ValueChangedHandler(object sender, EventArgs e)
         {
-            if (_businessObject != null && !_isReadOnceOnly)
-            {
-                decimal newValue = Convert.ToDecimal(_numericUpDown.Value);
-                decimal oldValue = Convert.ToDecimal(_businessObject.GetPropertyValue(_propertyName));
-                if (newValue != oldValue)
-                {
-                    //log.Debug("setting property value to " + _numericUpDown.Value + " of type " + _numericUpDown.Value.GetType().Name);
-                    _businessObject.SetPropertyValue(_propertyName, newValue);
-                }
-            }
+			if (!_isEditable) return;
+
+        	decimal newValue = Convert.ToDecimal(_numericUpDown.Value);
+        	decimal oldValue = Convert.ToDecimal(_businessObject.GetPropertyValue(_propertyName));
+        	if (newValue != oldValue)
+        	{
+        		//log.Debug("setting property value to " + _numericUpDown.Value + " of type " + _numericUpDown.Value.GetType().Name);
+        		_businessObject.SetPropertyValue(_propertyName, newValue);
+        	}
         }
     }
 }
