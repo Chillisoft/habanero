@@ -70,6 +70,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TestResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TestRSAPasswordCrypter.cs" />
     <Compile Include="TestSerialisationUtilities.cs" />
     <Compile Include="TestSortedStringCollection.cs" />
     <Compile Include="TestStringUtilities.cs" />

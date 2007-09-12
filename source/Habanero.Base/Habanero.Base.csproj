@@ -186,6 +186,7 @@
     <Compile Include="Exceptions\UnknownTypeNameException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RSAPasswordCrypter.cs" />
     <Compile Include="XMLWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

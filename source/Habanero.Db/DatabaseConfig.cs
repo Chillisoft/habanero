@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Configuration;
 using System.Data;
+using System.Security.Cryptography;
 using Habanero.Base;
 
 namespace Habanero.DB
@@ -23,6 +24,7 @@ namespace Habanero.DB
         private String _userName;
         private String _password;
         private String _port;
+        private ICrypter _passwordCrypter = new NullCrypter();
 
         /// <summary>
         /// A deparameterised constructor
@@ -142,6 +144,32 @@ namespace Habanero.DB
             set { _port = value; }
         }
 
+        internal string DecryptedPassword
+        {
+            get { return _passwordCrypter.DecryptString(Password);  }
+        }
+
+        /// <summary>
+        /// Sets the private key to use to decrypt the password.  The private key is in xml format.   
+        /// </summary>
+        /// <param name="xmlPrivateKey">The xml format of the RSA key (RSA.ToXmlString(true))</param>
+        public void SetPrivateKey(string xmlPrivateKey)
+        {
+            RSA rsa = RSA.Create();
+            rsa.FromXmlString(xmlPrivateKey);
+            SetPrivateKey(rsa);
+
+        }
+
+        /// <summary>
+        /// Sets the private key to use to decrypt password. The private key is an RSA object.
+        /// </summary>
+        /// <param name="privateKey">The RSA object which has the private key</param>
+        public void SetPrivateKey(RSA privateKey)
+        {
+            _passwordCrypter = new RSAPasswordCrypter(privateKey);
+        }
+
         /// <summary>
         /// Creates a new configuration object by reading the "DatabaseConfig"
         /// settings from the project's configuration settings
@@ -163,7 +191,7 @@ namespace Habanero.DB
         {
             ConnectionStringFactory factory =
                 ConnectionStringFactory.GetFactory(this.Vendor + "_" + alternateAssemblyName);
-            return factory.GetConnectionString(this.Server, this.Database, this.UserName, this.Password, this.Port);
+            return factory.GetConnectionString(this.Server, this.Database, this.UserName, this.DecryptedPassword, this.Port);
         }
 
         /// <summary>
@@ -173,7 +201,7 @@ namespace Habanero.DB
         public String GetConnectionString()
         {
             ConnectionStringFactory factory = ConnectionStringFactory.GetFactory(this.Vendor);
-            return factory.GetConnectionString(this.Server, this.Database, this.UserName, this.Password, this.Port);
+            return factory.GetConnectionString(this.Server, this.Database, this.UserName, this.DecryptedPassword, this.Port);
         }
 
         /// <summary>

@@ -39,6 +39,7 @@ namespace Habanero.UI.Base
     {
         private IDefClassFactory _defClassFactory;
         private DatabaseConfig _databaseConfig;
+        private string _privateKey;
 
         /// <summary>
         /// Constructor to initialise a new application with basic application
@@ -65,6 +66,17 @@ namespace Habanero.UI.Base
         /// </summary>
         public DatabaseConfig DatabaseConfig {
             set { _databaseConfig = value; }
+        }
+
+        /// <summary>
+        /// Sets the private key used to decrypt the database password. If your database password as supplied is
+        /// in plaintext then this is not necessary. If you supply the DatabaseConfig object you can also set the
+        /// private key on that instead.
+        /// </summary>
+        /// <param name="xmlPrivateKey">The private key (RSA) in xml format</param>
+        public void SetPrivateKey(string xmlPrivateKey)
+        {
+            _privateKey = xmlPrivateKey;
         }
 
         /// <summary>
@@ -105,6 +117,7 @@ namespace Habanero.UI.Base
          protected  override void  SetupDatabaseConnection()
                 {
             if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
+            if (_privateKey != null) _databaseConfig.SetPrivateKey(_privateKey);
             DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
         }
 
