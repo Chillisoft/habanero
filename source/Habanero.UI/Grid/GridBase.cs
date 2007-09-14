@@ -39,9 +39,10 @@ namespace Habanero.UI.Grid
         {
             _setCollection = new SetCollectionDelegate(SetCollectionInSTAThread);
             _setSortColumn = new SetSortColumnDelegate(SetSortColumnInSTAThread);
+			DataSourceChanged += Grid_DataSourceChanged;
         }
 
-        /// <summary>
+    	/// <summary>
         /// Sets the business object collection displayed in the grid.  This
         /// collection must be pre-loaded using the collection's Load() command.
         /// </summary>
@@ -177,6 +178,15 @@ namespace Habanero.UI.Grid
             //this.DataSource = _dataTable;
             FireCollectionChanged();
         }
+		
+		private void Grid_DataSourceChanged(object sender, EventArgs e)
+		{
+			if (Columns.Contains("ID"))
+			{
+				DataGridViewColumn col = Columns["ID"];
+				col.Visible = false;
+			}
+		}
 
         /// <summary>
         /// Returns the business object collection being displayed in the grid
