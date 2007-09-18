@@ -58,7 +58,9 @@
     <Compile Include="Forms\ComboBoxMapper.cs" />
     <Compile Include="Forms\ControlMapper.cs" />
     <Compile Include="Forms\ControlMapperCollection.cs" />
+    <Compile Include="Forms\DateTimePickerController.cs" />
     <Compile Include="Forms\DateTimePickerMapper.cs" />
+    <Compile Include="Forms\DateTimePickerNullableMapper.cs" />
     <Compile Include="Forms\DbConnectionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
