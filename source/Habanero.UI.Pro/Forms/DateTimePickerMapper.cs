@@ -27,13 +27,10 @@ namespace Habanero.UI.Forms
             : base(dtp, propName, isReadOnly)
         {
             _dateTimePicker = dtp;
-            EventInfo valueChangedEventInfo = dtp.GetType().GetEvent("ValueChanged");
-            valueChangedEventInfo.AddEventHandler(_dateTimePicker, new EventHandler(ValueChangedHandler));
-            //_valuePropertyInfo = _dateTimePicker.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);			
-            //_dateTimePicker.ValueChanged += new EventHandler(ValueChangedHandler);
+        	AddValueChangedHandler(new EventHandler(ValueChangedHandler));
         }
 
-        /// <summary>
+    	/// <summary>
         /// A handler to carry out changes to the business object when the
         /// value has changed in the user interface
         /// </summary>
@@ -45,7 +42,7 @@ namespace Habanero.UI.Forms
 
         	//DateTime newValue = _dateTimePicker.Value;
         	object newValue = GetValueOfDateTimePicker();
-        	object oldValue = _businessObject.GetPropertyValue(_propertyName);
+			object oldValue = GetPropertyValue();
         	if (oldValue != null || newValue != null)
         	{
         		if (oldValue == null || !oldValue.Equals(newValue))
@@ -83,6 +80,11 @@ namespace Habanero.UI.Forms
             }
         }
 
+		private void AddValueChangedHandler(EventHandler eventHandler)
+		{
+			DateTimePickerUtil.AddValueChangedHandler(_dateTimePicker, eventHandler);
+		}
+		
         /// <summary>
         /// Updates the interface when the value has been changed in the
         /// object being represented
@@ -98,13 +100,7 @@ namespace Habanero.UI.Forms
             {
                 SetValueOfDateTimePicker(Convert.ToDateTime(propValue));
             }
-//			if (_businessObject.GetPropertyValue(_propertyName) == null) {
-//				_dateTimePicker.Text = "";
-//			}
-//			else {
-//				//_dateTimePicker.Value = (DateTime)_businessObject.GetPropertyValue(_propertyName);
-//				SetValueOfDateTimePicker(_businessObject.GetPropertyValue(_propertyName));
-//			}
         }
+
     }
 }

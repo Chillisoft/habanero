@@ -109,5 +109,28 @@ namespace Habanero.UI.Util
                 picker.Format = DateTimePickerFormat.Time;
             }
         }
+
+		///<summary>
+		/// Adds a ValueChanged handler for the date-time picker
+		///</summary>
+		///<param name="dateTimePicker">The date-time picker</param>
+		///<param name="eventHandler">The Handler to add</param>
+		public static void AddValueChangedHandler(Control dateTimePicker, EventHandler eventHandler)
+		{
+			EventInfo valueChangedEventInfo = dateTimePicker.GetType().GetEvent("ValueChanged");
+			valueChangedEventInfo.AddEventHandler(dateTimePicker, eventHandler);
+		}
+
+		///<summary>
+		/// Removes a ValueChanged handler for the date-time picker
+		///</summary>
+		///<param name="dateTimePicker">The date-time picker</param>
+		///<param name="eventHandler">The Handler to remove</param>
+		public static void RemoveValueChangedHandler(Control dateTimePicker, EventHandler eventHandler)
+		{
+			EventInfo valueChangedEventInfo = dateTimePicker.GetType().GetEvent("ValueChanged");
+			valueChangedEventInfo.RemoveEventHandler(dateTimePicker, eventHandler);
+		}
+
     }
 }

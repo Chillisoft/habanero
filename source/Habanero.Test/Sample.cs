@@ -55,9 +55,11 @@ namespace Habanero.Test
                 new PropDef("SampleText", typeof (String), PropReadWriteRule.ReadWrite, "SampleText",  null));
             lPropDefCol.Add(
                 new PropDef("SampleText2", typeof (String), PropReadWriteRule.ReadWrite, "SampleText2", null));
-            lPropDefCol.Add(
-                new PropDef("SampleDate", typeof (DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
-            lPropDefCol.Add(
+			lPropDefCol.Add(
+				new PropDef("SampleDate", typeof(DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
+			lPropDefCol.Add(
+				new PropDef("SampleDateNullable", typeof(DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
+			lPropDefCol.Add(
                 new PropDef("SampleBoolean", typeof (Boolean), PropReadWriteRule.ReadWrite, "SampleBoolean",
                             null));
             lPropDefCol.Add(
@@ -117,6 +119,12 @@ namespace Habanero.Test
         {
             get { return (DateTime) this.GetPropertyValue("SampleDate"); }
             set { this.SetPropertyValue("SampleDate", value); }
+        }
+
+		public DateTime? SampleDateNullable
+        {
+			get { return (DateTime?)this.GetPropertyValue("SampleDateNullable"); }
+			set { this.SetPropertyValue("SampleDateNullable", value); }
         }
 
         public Guid SampleLookupID

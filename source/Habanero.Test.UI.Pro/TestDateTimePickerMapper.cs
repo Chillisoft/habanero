@@ -12,9 +12,9 @@ namespace Habanero.Test.UI.BoControls
     [TestFixture]
     public class TestDateTimePickerMapper : TestMapperBase
     {
-        private DateTimePicker dte;
-        private DateTimePickerMapper mapper;
-        private Sample s;
+        private DateTimePicker _dateTimePicker;
+        private DateTimePickerMapper _dateTimePickerMapper;
+        private Sample _sample;
 
         public TestDateTimePickerMapper()
         {
@@ -23,35 +23,35 @@ namespace Habanero.Test.UI.BoControls
         [SetUp]
         public void SetupTest()
         {
-            dte = new DateTimePicker();
-            mapper = new DateTimePickerMapper(dte, "SampleDate", false);
-            s = new Sample();
+            _dateTimePicker = new DateTimePicker();
+            _dateTimePickerMapper = new DateTimePickerMapper(_dateTimePicker, "SampleDate", false);
+            _sample = new Sample();
         }
 
         [Test]
         public void TestConstructor()
         {
-            Assert.AreSame(dte, mapper.Control);
-            Assert.AreSame("SampleDate", mapper.PropertyName);
+            Assert.AreSame(_dateTimePicker, _dateTimePickerMapper.Control);
+            Assert.AreSame("SampleDate", _dateTimePickerMapper.PropertyName);
         }
 
         [Test]
         public void TestDateTimePickerValue()
         {
-            s.SampleDate = new DateTime(2000, 1, 1);
-            mapper.BusinessObject = s;
-            Assert.AreEqual(new DateTime(2000, 1, 1), dte.Value, "Value is not set.");
-            s.SampleDate = new DateTime(2001, 2, 2);
-            Assert.AreEqual(new DateTime(2001, 2, 2), dte.Value, "Value is not set after changing bo prop");
+            _sample.SampleDate = new DateTime(2000, 1, 1);
+            _dateTimePickerMapper.BusinessObject = _sample;
+            Assert.AreEqual(new DateTime(2000, 1, 1), _dateTimePicker.Value, "Value is not set.");
+            _sample.SampleDate = new DateTime(2001, 2, 2);
+            Assert.AreEqual(new DateTime(2001, 2, 2), _dateTimePicker.Value, "Value is not set after changing bo prop");
         }
 
         [Test]
         public void TestSettingDateTimePickerValueUpdatesBO()
         {
-            s.SampleDate = new DateTime(2000, 1, 1);
-            mapper.BusinessObject = s;
-            dte.Value = new DateTime(2002, 3, 3);
-            Assert.AreEqual(new DateTime(2002, 3, 3), s.SampleDate,
+            _sample.SampleDate = new DateTime(2000, 1, 1);
+            _dateTimePickerMapper.BusinessObject = _sample;
+            _dateTimePicker.Value = new DateTime(2002, 3, 3);
+            Assert.AreEqual(new DateTime(2002, 3, 3), _sample.SampleDate,
                             "BO property value isn't changed when datetimepicker value is changed.");
         }
 
@@ -59,11 +59,11 @@ namespace Habanero.Test.UI.BoControls
         public void TestDisplayingRelatedProperty()
         {
             SetupClassDefs(new DateTime(2004, 1, 1));
-            mapper = new DateTimePickerMapper(dte, "MyRelationship.MyRelatedTestProp", true);
-            mapper.BusinessObject = itsMyBo;
-            Assert.AreEqual(2004, dte.Value.Year);
-            Assert.AreEqual(1, dte.Value.Month);
-            Assert.AreEqual(1, dte.Value.Day);
+            _dateTimePickerMapper = new DateTimePickerMapper(_dateTimePicker, "MyRelationship.MyRelatedTestProp", true);
+            _dateTimePickerMapper.BusinessObject = itsMyBo;
+            Assert.AreEqual(2004, _dateTimePicker.Value.Year);
+            Assert.AreEqual(1, _dateTimePicker.Value.Month);
+            Assert.AreEqual(1, _dateTimePicker.Value.Day);
         }
     }
 }

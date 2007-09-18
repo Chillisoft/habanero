@@ -213,7 +213,17 @@ namespace Habanero.BO
                         catch (InvalidCastException)
                         {
                             newValue = value;
-                        }
+						}
+						catch (FormatException)
+						{
+							if (value is string && String.IsNullOrEmpty((string)value))
+							{
+								newValue = null;
+							} else
+							{
+								throw;
+							}
+						}
                     }
                     _isValid = _propDef.isValueValid(newValue, ref _invalidReason);
                     _currentValue = newValue;
