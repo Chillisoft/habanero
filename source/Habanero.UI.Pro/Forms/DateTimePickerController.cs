@@ -48,6 +48,7 @@ namespace Habanero.UI.Forms
 			SetupDisplayBox();
 			NullDisplayValue = "";
 			Value = null;
+			UpdateFocusState();
 		}
 
 		~DateTimePickerController()
@@ -81,7 +82,6 @@ namespace Habanero.UI.Forms
 			_displayBox.Controls.Add(_displayText);
 			_dateTimePicker.Controls.Add(_displayBox);
 			_displayBox.Visible = false;
-			UpdateFocusState();
 		}
 
 		private void ResizeDisplayBox()
