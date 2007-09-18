@@ -24,9 +24,9 @@ namespace Habanero.UI.Forms
 		private PropertyInfo _showCheckBoxPropInfo;
 		private PropertyInfo _checkedPropInfo;
 		private bool _supportsCheckBox;
-		
-		public event EventHandler ValueChanged;
 
+		private event EventHandler _valueChanged;
+		
 		#region Setup Controller
 
 		///<summary>
@@ -42,6 +42,7 @@ namespace Habanero.UI.Forms
 			_dateTimePicker.GotFocus += DateTimePicker_GotFocus;
 			_dateTimePicker.LostFocus += DateTimePicker_LostFocus;
 			_dateTimePicker.Resize += DateTimePicker_Resize;
+			_dateTimePicker.EnabledChanged += DateTimePicker_EnabledChanged;
 			_showCheckBoxPropInfo = _dateTimePicker.GetType().GetProperty("ShowCheckBox", BindingFlags.Instance | BindingFlags.Public);
 			_checkedPropInfo = _dateTimePicker.GetType().GetProperty("Checked", BindingFlags.Instance | BindingFlags.Public);
 			_supportsCheckBox = _showCheckBoxPropInfo != null && _checkedPropInfo != null;
@@ -59,6 +60,7 @@ namespace Habanero.UI.Forms
 			_dateTimePicker.GotFocus -= DateTimePicker_GotFocus;
 			_dateTimePicker.LostFocus -= DateTimePicker_LostFocus;
 			_dateTimePicker.Resize -= DateTimePicker_Resize;
+			_dateTimePicker.EnabledChanged -= DateTimePicker_EnabledChanged;
 			_dateTimePicker.Controls.Remove(_displayBox);
 			_dateTimePicker = null;
 		}
@@ -157,7 +159,16 @@ namespace Habanero.UI.Forms
 				FireValueChanged();
 			}
 		}
-		
+
+		/// <summary>
+		/// Occurs when the <see cref="Value"/> property changes.
+		/// </summary>
+		public event EventHandler ValueChanged
+		{
+			add { _valueChanged += value; }
+			remove { _valueChanged -= value; }
+		}
+
 		#endregion //Properties
 
 		#region State Control
@@ -202,15 +213,20 @@ namespace Habanero.UI.Forms
 
 		private void FireValueChanged()
 		{
-			if (ValueChanged != null)
+			if (_valueChanged != null)
 			{
-				ValueChanged(this, EventArgs.Empty);
+				_valueChanged(this, EventArgs.Empty);
 			}
 		}
 
 		#endregion //State Control
 
 		#region Control Events
+
+		private void DateTimePicker_EnabledChanged(object sender, EventArgs e)
+		{
+			UpdateFocusState();
+		}
 
 		private void DateTimePicker_LostFocus(object sender, EventArgs e)
 		{
