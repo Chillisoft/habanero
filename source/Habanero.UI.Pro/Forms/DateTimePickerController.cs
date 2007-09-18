@@ -81,12 +81,30 @@ namespace Habanero.UI.Forms
 			_displayBox.Controls.Add(_displayText);
 			_dateTimePicker.Controls.Add(_displayBox);
 			_displayBox.Visible = false;
+			UpdateFocusState();
 		}
 
 		private void ResizeDisplayBox()
 		{
 			_displayBox.Width = _dateTimePicker.Width - 22 - 2;
 			_displayBox.Height = _dateTimePicker.Height - 7;
+		}
+
+		private void UpdateFocusState()
+		{
+			if (_dateTimePicker.Focused)
+			{
+				_displayBox.BackColor = SystemColors.Highlight;
+				_displayBox.ForeColor = SystemColors.HighlightText;
+				_displayText.BackColor = SystemColors.Highlight;
+				_displayText.ForeColor = SystemColors.HighlightText;
+			} else
+			{
+				_displayBox.BackColor = _dateTimePicker.BackColor;
+				_displayBox.ForeColor = _dateTimePicker.ForeColor;
+				_displayText.BackColor = _dateTimePicker.BackColor;
+				_displayText.ForeColor = _dateTimePicker.ForeColor;
+			}
 		}
 
 		#endregion //Setup Controller
@@ -157,8 +175,8 @@ namespace Habanero.UI.Forms
 
 		private bool ApplyValueFormat()
 		{
-			if (!IsNull()) return false;
 			_displayBox.Visible = false;
+			if (!IsNull()) return false;
 			if (CheckBoxVisible)
 			{
 				CheckBoxChecked = true;
@@ -169,12 +187,13 @@ namespace Habanero.UI.Forms
 
 		private bool ApplyBlankFormat()
 		{
-			if (_isNull) return false;
+			if (IsNull()) return false;
 			if (!CheckBoxVisible)
 			{
 				_displayBox.Visible = true;
 			} else
 			{
+				_displayBox.Visible = false;
 				CheckBoxChecked = false;
 			}
 			_isNull = true;
@@ -195,18 +214,12 @@ namespace Habanero.UI.Forms
 
 		private void DateTimePicker_LostFocus(object sender, EventArgs e)
 		{
-			_displayBox.BackColor = _dateTimePicker.BackColor;
-			_displayBox.ForeColor = _dateTimePicker.ForeColor;
-			_displayText.BackColor = _dateTimePicker.BackColor;
-			_displayText.ForeColor = _dateTimePicker.ForeColor;
+			UpdateFocusState();
 		}
-
+		
 		private void DateTimePicker_GotFocus(object sender, EventArgs e)
 		{
-			_displayBox.BackColor = SystemColors.Highlight;
-			_displayBox.ForeColor = SystemColors.HighlightText;
-			_displayText.BackColor = SystemColors.Highlight;
-			_displayText.ForeColor = SystemColors.HighlightText;
+			UpdateFocusState();
 		}
 
 		private void DateTimePicker_Resize(object sender, EventArgs e)
@@ -291,7 +304,7 @@ namespace Habanero.UI.Forms
 			{
 				if (_supportsCheckBox)
 				{
-					return (bool)GetControlProp(_showCheckBoxPropInfo);
+					return (bool)GetControlProp(_checkedPropInfo);
 				} else
 				{
 					return true;
@@ -301,7 +314,7 @@ namespace Habanero.UI.Forms
 			{
 				if (_supportsCheckBox)
 				{
-					SetControlProp(_showCheckBoxPropInfo, value);
+					SetControlProp(_checkedPropInfo, value);
 				} 
 			}
 		}		

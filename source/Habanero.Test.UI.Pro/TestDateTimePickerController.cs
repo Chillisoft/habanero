@@ -26,6 +26,8 @@ namespace Habanero.Test.UI.Application
 			Assert.IsNotNull(_nullDisplayControl, "The Date Time Picker was not set up correctly.");
 		}
 
+		#region Set Value Tests
+
 		[Test]
 		public void TestSetPickerValue()
 		{
@@ -48,10 +50,9 @@ namespace Habanero.Test.UI.Application
 		public void TestSetNullValue()
 		{
 			_dateTimePickerController.Value = null;
-			Assert.AreEqual(null, _dateTimePickerController.Value);
+			Assert.AreEqual(null, _dateTimePickerController.Value, "The value should be null after it is set to null");
 			Assert.IsTrue(_nullDisplayControl.Visible, "Null display value control should be visible when there is a null value.");
 		}
-
 
 		[Test]
 		public void TestSetNullThenControllerValue()
@@ -59,13 +60,69 @@ namespace Habanero.Test.UI.Application
 			TestSetNullValue();
 			TestSetControllerValue();
 		}
-
+		
 		[Test]
 		public void TestSetNullThenPickerValue()
 		{
 			TestSetNullValue();
 			TestSetPickerValue();
 		}
+
+		#endregion //Set Value Tests
+
+		#region Checkbox Tests
+
+		[Test]
+		public void TestSetControllerValueWithCheckbox()
+		{
+			DateTime sampleDate = new DateTime(2002, 02, 02, 02, 02, 02);
+			_dateTimePicker.ShowCheckBox = true;
+			_dateTimePickerController.Value = sampleDate;
+			Assert.AreEqual(sampleDate, _dateTimePicker.Value);
+			Assert.IsTrue(_dateTimePicker.Checked, "Checkbox should be checked when there is a value.");
+			Assert.IsFalse(_nullDisplayControl.Visible, "Null display value control should not be visible when the checkbox is visible.");
+		}
+
+		[Test]
+		public void TestSetNullValueWithCheckbox()
+		{
+			_dateTimePicker.ShowCheckBox = true;
+			_dateTimePickerController.Value = null;
+			Assert.IsFalse(_dateTimePicker.Checked, "Checkbox should be unchecked when the value is null.");
+			Assert.AreEqual(null, _dateTimePickerController.Value, "The value should be null after it is set to null");
+			Assert.IsFalse(_nullDisplayControl.Visible, "Null display value control should not be visible when the checkbox is visible.");
+		}
+
+		[Test]
+		public void TestSetNullThenControllerValueWithCheckbox()
+		{
+			TestSetNullValueWithCheckbox();
+			TestSetControllerValueWithCheckbox();
+		}
+
+		[Test]
+		public void TestSetCheckboxChecked()
+		{
+			DateTime sampleDate = new DateTime(2002, 02, 02, 02, 02, 02);
+			_dateTimePickerController.Value = sampleDate;
+			TestSetNullValueWithCheckbox();
+			_dateTimePicker.Checked = true;
+			Assert.AreEqual(sampleDate, _dateTimePickerController.Value,
+				"The value should be restored when the checkbox is checked again.");
+		}
+
+		[Test]
+		public void TestSetCheckboxUnChecked()
+		{
+			TestSetControllerValueWithCheckbox();
+			_dateTimePicker.Checked = false;
+			Assert.AreEqual(null, _dateTimePickerController.Value,
+				"The value should be set to null when the checkbox is unchecked.");
+		}
+
+		#endregion //Checkbox Tests
+		
+		#region Event Tests
 
 		[Test]
 		public void TestSetControllerValueFiresEvent()
@@ -100,6 +157,42 @@ namespace Habanero.Test.UI.Application
 			_dateTimePickerController.ValueChanged -= handleValueChanged;
 		}
 
+		[Test, Ignore("The dateTimePicker does not throw any event when the checked property is changed programatically, so this test will never work")]
+		public void TestCheckingCheckboxFiresEvent()
+		{
+			DateTime sampleDate = new DateTime(2002, 02, 02, 02, 02, 02);
+			bool isFired = false;
+			EventHandler handleValueChanged = delegate
+			{
+				isFired = true;
+			};
+			_dateTimePickerController.Value = sampleDate;
+			TestSetNullValueWithCheckbox();
+			_dateTimePickerController.ValueChanged += handleValueChanged;
+			_dateTimePicker.Checked = true;
+			Assert.IsTrue(isFired, "The ValueChanged event should have fired after checking the checkbox.");
+			_dateTimePickerController.ValueChanged -= handleValueChanged;
+		}
+
+		[Test, Ignore("The dateTimePicker does not throw any event when the checked property is changed programatically, so this test will never work")]
+		public void TestUnCheckingCheckboxFiresEvent()
+		{
+			DateTime sampleDate = new DateTime(2002, 02, 02, 02, 02, 02);
+			bool isFired = false;
+			EventHandler handleValueChanged = delegate
+			{
+				isFired = true;
+			};
+			_dateTimePickerController.Value = null;
+			TestSetControllerValueWithCheckbox();
+			_dateTimePickerController.ValueChanged += handleValueChanged;
+			_dateTimePicker.Checked = false;
+			Assert.IsTrue(isFired, "The ValueChanged event should have fired after unchecking the checkbox.");
+			_dateTimePickerController.ValueChanged -= handleValueChanged;
+		}
+		
+		#endregion //Event Tests
+
 		[Test]
 		public void TestSetNullDisplayValue()
 		{
@@ -110,5 +203,7 @@ namespace Habanero.Test.UI.Application
 			Control displayText = _nullDisplayControl.Controls[0];
 			Assert.AreEqual(nullDisplayValue, displayText.Text, "Null display text should equal whas has just been set.");
 		}
+
+		
 	}
 }
