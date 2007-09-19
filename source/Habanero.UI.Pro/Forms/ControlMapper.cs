@@ -214,7 +214,6 @@ namespace Habanero.UI.Forms
 			{
 				_isEditable = false;
 			}
-			_control.Enabled = _isEditable;
 			if (_isEditable)
 			{
 				_control.ResetBackColor();
@@ -224,6 +223,7 @@ namespace Habanero.UI.Forms
     			_control.ForeColor = Color.Black;
     			_control.BackColor = Color.Beige;
 			}
+			_control.Enabled = _isEditable;
 		}
 
 
