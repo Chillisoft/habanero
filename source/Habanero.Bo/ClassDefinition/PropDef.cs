@@ -329,7 +329,7 @@ namespace Habanero.BO.ClassDefinition
         protected internal bool isValueValid(Object propValue,
                                              ref string errorMessage)
         {
-            if (_compulsory && propValue == null) {
+           if (_compulsory && (propValue == null || propValue is string && (string)propValue == String.Empty)) {
                 errorMessage = this.PropertyName + " is a compulsory field and has no value.";
                 return false;
             }
