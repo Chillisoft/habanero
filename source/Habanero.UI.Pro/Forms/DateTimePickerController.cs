@@ -42,7 +42,9 @@ namespace Habanero.UI.Forms
 			_dateTimePicker.GotFocus += DateTimePicker_GotFocus;
 			_dateTimePicker.LostFocus += DateTimePicker_LostFocus;
 			_dateTimePicker.Resize += DateTimePicker_Resize;
-			_dateTimePicker.EnabledChanged += DateTimePicker_EnabledChanged;
+			_dateTimePicker.EnabledChanged += DateTimePicker_ColorChanged;
+			_dateTimePicker.BackColorChanged += DateTimePicker_ColorChanged;
+			_dateTimePicker.ForeColorChanged += DateTimePicker_ColorChanged;
 			_showCheckBoxPropInfo = _dateTimePicker.GetType().GetProperty("ShowCheckBox", BindingFlags.Instance | BindingFlags.Public);
 			_checkedPropInfo = _dateTimePicker.GetType().GetProperty("Checked", BindingFlags.Instance | BindingFlags.Public);
 			_supportsCheckBox = _showCheckBoxPropInfo != null && _checkedPropInfo != null;
@@ -60,7 +62,9 @@ namespace Habanero.UI.Forms
 			_dateTimePicker.GotFocus -= DateTimePicker_GotFocus;
 			_dateTimePicker.LostFocus -= DateTimePicker_LostFocus;
 			_dateTimePicker.Resize -= DateTimePicker_Resize;
-			_dateTimePicker.EnabledChanged -= DateTimePicker_EnabledChanged;
+			_dateTimePicker.EnabledChanged -= DateTimePicker_ColorChanged;
+			_dateTimePicker.BackColorChanged -= DateTimePicker_ColorChanged;
+			_dateTimePicker.ForeColorChanged -= DateTimePicker_ColorChanged;
 			_dateTimePicker.Controls.Remove(_displayBox);
 			_dateTimePicker = null;
 		}
@@ -98,15 +102,13 @@ namespace Habanero.UI.Forms
 			{
 				_displayBox.BackColor = SystemColors.Highlight;
 				_displayBox.ForeColor = SystemColors.HighlightText;
-				_displayText.BackColor = SystemColors.Highlight;
-				_displayText.ForeColor = SystemColors.HighlightText;
 			} else
 			{
 				_displayBox.BackColor = _dateTimePicker.BackColor;
-				_displayBox.ForeColor = _dateTimePicker.ForeColor;
-				_displayText.BackColor = _dateTimePicker.BackColor;
-				_displayText.ForeColor = _dateTimePicker.ForeColor;
+				_displayBox.ForeColor = _dateTimePicker.BackColor;
 			}
+			_displayText.BackColor = _displayBox.BackColor;
+			_displayText.ForeColor = _displayBox.ForeColor;
 		}
 
 		#endregion //Setup Controller
@@ -223,7 +225,7 @@ namespace Habanero.UI.Forms
 
 		#region Control Events
 
-		private void DateTimePicker_EnabledChanged(object sender, EventArgs e)
+		private void DateTimePicker_ColorChanged(object sender, EventArgs e)
 		{
 			UpdateFocusState();
 		}
