@@ -76,7 +76,7 @@ namespace Habanero.BO
             }
 		}
 
-		#region IRelationshipCol Members
+    	#region IRelationshipCol Members
 
 		/// <summary>
         /// Returns the business object that is related to this object
@@ -116,6 +116,17 @@ namespace Habanero.BO
 															 " was accessed as a 'single' relationship (using GetRelatedObject()).");
 			}
 			return ((SingleRelationship)relationship).GetRelatedObject<T>(_bo.GetDatabaseConnection());
+    	}
+
+		
+    	///<summary>
+    	/// Determines whether the Relationship Collections contains the specified Relationship
+    	///</summary>
+    	///<param name="relationshipName">The name of the relationship to search for</param>
+    	///<returns></returns>
+    	public bool Contains(string relationshipName)
+    	{
+			return _relationships.ContainsKey(relationshipName);
     	}
 
     	#endregion
@@ -182,9 +193,29 @@ namespace Habanero.BO
             ((SingleRelationship) this[relationshipName]).SetRelatedObject(relatedObject);
         }
 
+        ///<summary>
+        /// Returns an Iterator that iterates through the RelationshipCol
+        ///</summary>
         public IEnumerator<Relationship> GetEnumerator()
         {
             return _relationships.Values.GetEnumerator();
         }
+
+    	#region IEnumerable Members
+
+    	///<summary>
+    	///Returns an enumerator that iterates through a collection.
+    	///</summary>
+    	///
+    	///<returns>
+    	///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+    	///</returns>
+    	///<filterpriority>2</filterpriority>
+    	IEnumerator IEnumerable.GetEnumerator()
+    	{
+			return _relationships.Values.GetEnumerator();
+    	}
+
+    	#endregion
     }
 }

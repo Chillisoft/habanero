@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Habanero.BO
 {
@@ -6,7 +6,7 @@ namespace Habanero.BO
     /// An interface to model a collection of relationships between
     /// business objects
     /// </summary>
-    public interface IRelationshipCol
+	public interface IRelationshipCol : IEnumerable<Relationship>
     {
         /// <summary>
         /// Returns the business object that is related to this object
@@ -75,5 +75,11 @@ namespace Habanero.BO
         /// <returns>The Relationship object</returns>
         Relationship this[string name] { get;}
 
+    	///<summary>
+    	/// Determines whether the Relationship Collections contains the specified Relationship
+    	///</summary>
+    	///<param name="relationshipName">The name of the relationship to search for</param>
+    	///<returns></returns>
+    	bool Contains(string relationshipName);
     }
 }

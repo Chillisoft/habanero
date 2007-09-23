@@ -216,7 +216,7 @@ namespace Habanero.BO
             {
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
-                    if (uiProperty.PropertyName.IndexOf(".") == -1)
+					if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
                     {
                         changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
                     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Base.Exceptions;
 using Habanero.DB;
@@ -11,13 +12,14 @@ namespace Habanero.BO
     /// <summary>
     /// Manages a collection of transactions to commit to the database
     /// </summary>
-    public class Transaction
+	public class Transaction : ITransactionCommitter, ITransaction
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.Transaction");
 
-        private SortedList _colTransactions = null;
         private IDatabaseConnection _databaseConnection;
-        private IList _listTransactions;
+		private SortedDictionary<string, ITransaction> _transactions;
+		private Guid _transactionId = Guid.NewGuid();
+    	private int _numberOfRowsUpdated;
 
         /// <summary>
         /// Constructor to initialise a transaction
@@ -38,139 +40,289 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Clears the collection of transactions
-        /// </summary>
-        private void ClearTransactionCol()
-        {
-            _colTransactions = new SortedList();
-            _listTransactions = new ArrayList();
-        }
-
-        /// <summary>
         /// Adds an Itransaction object to the collection of transactions
         /// </summary>
         /// <param name="transaction">An Itransaction object</param>
         public void AddTransactionObject(ITransaction transaction)
         {
-            //check if the transaction object is in a valid state before adding to the col
-            transaction.CheckPersistRules();
+			////check if the transaction object is in a valid state before adding to the col
+			//transaction.CheckPersistRules();
+			transaction.AddingToTransaction(this);
             //if the transaction already exists then ignore
-            if (!_colTransactions.ContainsKey(transaction.StrID()))
+			if (!_transactions.ContainsKey(transaction.StrID()))
             {
-                _colTransactions.Add(transaction.StrID(), transaction);
-                _listTransactions.Add(transaction);
+				_transactions.Add(transaction.StrID(), transaction);
             }
+        }
+
+        /// <summary>
+        /// Clears the collection of transactions
+        /// </summary>
+        private void ClearTransactionCol()
+        {
+        	_numberOfRowsUpdated = 0;
+			_transactions = new SortedDictionary<string, ITransaction>();
         }
 
         /// <summary>
         /// Rolls back all transactions in the collection
         /// </summary>
-        public void CancelAllEdits()
+        public void CancelTransaction()
         {
-            ITransaction transaction;
-            foreach (DictionaryEntry item in _colTransactions)
-            {
-                transaction = (ITransaction) item.Value;
-                transaction.TransactionRolledBack();
-            }
             TransactionRolledBack();
             ClearTransactionCol();
         }
+		
+    	///<summary>
+    	/// This returns the number of rows that were affected by the 
+    	/// transaction
+    	///</summary>
+    	public int NumberOfRowsUpdated
+    	{
+    		get { return _numberOfRowsUpdated; }
+    	}
 
-        /// <summary>
-        /// Rolls back all transactions in the collection
-        /// </summary>
-        /// TODO ERIC - this method surprises me - it completely duplicates
-        /// the above (why not put it inside the above)
-        /// - could remove duplication in method above
-        private void TransactionRolledBack()
-        {
-            ITransaction transaction;
-            foreach (DictionaryEntry item in _colTransactions)
-            {
-                transaction = (ITransaction) item.Value;
-                transaction.TransactionRolledBack();
-            }
-        }
+    	/// <summary>
+		/// Cancels edits for all transactions in the collection
+		/// </summary>
+		public void CancelEdits()
+		{
+			TransactionCancelEdits();
+		}
 
-        /// <summary>
+    	
+    	/// <summary>
         /// Commits all transactions in the collection to the database
         /// </summary>
-        public void CommitTransaction()
-        {
-            IDbConnection connection = DatabaseConnection.CurrentConnection.GetConnection();
-            connection.Open();
+		public void CommitTransaction()
+    	{
+    		IDbConnection connection = _databaseConnection.GetConnection();
+    		//IDbConnection connection = DatabaseConnection.CurrentConnection.GetConnection();
+    		connection.Open();
+    		using (IDbTransaction dbTransaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+    		{
+    			try
+    			{
+    				BeforeCommit();
+    				SqlStatementCollection statementCollection = GetPersistSql();
+    				if (statementCollection.Count > 0)
+    				{
+    					_numberOfRowsUpdated = _databaseConnection.ExecuteSql(statementCollection, dbTransaction);
+    					dbTransaction.Commit();
+    				}
+    				else
+    				{
+    					_numberOfRowsUpdated = 0;
+    				}
+    				AfterCommit();
+    			}
+    			catch (Exception e)
+    			{
+    				log.Error("Error commiting transaction: " + Environment.NewLine +
+    				          ExceptionUtilities.GetExceptionString(e, 4, true));
+    				dbTransaction.Rollback();
+    				TransactionRolledBack();
+    				throw;
+    			}
+    			finally
+    			{
+    				if (connection != null && connection.State == ConnectionState.Open)
+    				{
+    					connection.Close();
+    				}
+    			}
+    		}
+    		TransactionCommited();
+    		ClearTransactionCol();
+    	}
 
-            IDbTransaction dbTransaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
-            //ITransaction transaction;
-            try
-            {
-                foreach (ITransaction transaction in _listTransactions)
-                {
-                    //transaction = (ITransaction)item.Value;
-                    transaction.BeforeCommit();
-                }
-                foreach (ITransaction transaction in _listTransactions)
-                {
-                    //transaction = (ITransaction)item.Value;
-                    if (transaction.GetPersistSql().Count > 0)
-                    {
-                        _databaseConnection.ExecuteSql(transaction.GetPersistSql(), dbTransaction);
-                    }
-                }
-                dbTransaction.Commit();
-            }
-            catch (Exception e)
-            {
-                log.Error("Error commiting transaction: " + Environment.NewLine + ExceptionUtilities.GetExceptionString(e, 4, true));
-                dbTransaction.Rollback();
-                TransactionRolledBack();
-                throw e;
-            }
-            finally
-            {
-                if (connection != null && connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
-            }
+    	#region ITransaction Implementation
 
-            foreach (ITransaction transaction in _listTransactions)
-            {
-                //transaction = (ITransaction)item.Value;
-                transaction.AfterCommit();
-            }
-            TransactionCommited();
-            ClearTransactionCol();
-        }
-
-        /// <summary>
+		/// <summary>
         /// Carries out final steps on all transactions in the collection
         /// after they have been committed
         /// </summary>
         private void TransactionCommited()
         {
-            ITransaction transaction;
-            foreach (DictionaryEntry item in _colTransactions)
+			foreach (ITransaction transaction in _transactions.Values)
             {
-                transaction = (ITransaction) item.Value;
-                transaction.TransactionCommited();
+                transaction.TransactionCommitted();
             }
         }
 
-        /// <summary>
-        /// Cancels edits for all transactions in the collection
-        /// </summary>
-        /// TODO ERIC - this seems to duplicate CancelAllEdits() - one of them
-        /// needs to be renamed
-        public void CancelEdits()
-        {
-            ITransaction transaction;
-            foreach (DictionaryEntry item in _colTransactions)
-            {
-                transaction = (ITransaction) item.Value;
-                transaction.TransactionCancelEdits();
-            }
-        }
+		/// <summary>
+		/// Returns the sql statement collection needed to carry out 
+		/// persistance to the database</summary>
+		/// <returns>Returns an ISqlStatementCollection object</returns>
+		private SqlStatementCollection GetPersistSql()
+		{
+			SqlStatementCollection statementCollection;
+			statementCollection = new SqlStatementCollection();
+			foreach (ITransaction transaction in _transactions.Values)
+			{
+				ISqlStatementCollection thisStatementCollection = transaction.GetPersistSql();
+				statementCollection.Add(thisStatementCollection);
+			}
+			return statementCollection;
+		}
+
+		/// <summary>
+		/// Rolls back all transactions in the collection
+		/// </summary>
+		private void TransactionRolledBack()
+		{
+			foreach (ITransaction transaction in _transactions.Values)
+			{
+				transaction.TransactionRolledBack();
+			}
+		}
+
+		/// <summary>
+		/// Cancels the edit
+		/// </summary>
+		private void TransactionCancelEdits()
+		{
+			foreach (ITransaction transaction in _transactions.Values)
+			{
+				transaction.TransactionCancelEdits();
+			}
+		}
+
+		/// <summary>
+		/// Carries out additional steps before committing changes to the
+		/// database, and returns true if it is ok to continue.
+		/// If false is returned, then the commit will be aborted.
+		/// </summary>
+		/// <returns>Returns an indication of whether it is 
+		/// ok to continue with the commit.</returns>
+		private void BeforeCommit()
+		{
+			foreach (ITransaction transaction in _transactions.Values)
+			{
+				transaction.BeforeCommit();
+			}
+		}
+
+    	/// <summary>
+    	/// Carries out additional steps after committing changes to the
+    	/// database
+    	/// </summary>
+    	private void AfterCommit()
+		{
+			foreach (ITransaction transaction in _transactions.Values)
+			{
+				transaction.AfterCommit();
+			}
+		}
+		
+
+		#endregion //ITransaction interface
+
+    	#region ITransaction Members
+
+    	/// <summary>
+    	/// Carries out final steps on all transactions in the collection
+    	/// after they have been committed
+    	/// </summary>
+    	void ITransaction.TransactionCommitted()
+    	{
+			TransactionCommited();
+    	}
+
+    	/// <summary>
+    	/// Returns the sql statement collection needed to carry out 
+    	/// persistance to the database</summary>
+    	/// <returns>Returns an ISqlStatementCollection object</returns>
+    	ISqlStatementCollection ITransaction.GetPersistSql()
+    	{
+			return GetPersistSql();
+    	}
+
+		/// <summary>
+		/// Notifies this ITransaction object that it has been added to the 
+		/// specified Transaction object
+		/// </summary>
+		bool ITransaction.AddingToTransaction(ITransactionCommitter transaction)
+		{
+			return true;
+		}
+
+		///// <summary>
+		///// Checks a number of rules, including concurrency, duplicates and
+		///// duplicate primary keys
+		///// </summary>
+		//void ITransaction.CheckPersistRules()
+		//{
+		//    //All transactions have their persist rules checked when
+		//    // they are added the the transaction, so there is nothing 
+		//    // to be checked for this Transaction's transaction collection.
+		//}
+
+    	/// <summary>
+    	/// Rolls back the transactions
+    	/// </summary>
+    	void ITransaction.TransactionRolledBack()
+    	{
+			TransactionRolledBack();
+    	}
+
+    	/// <summary>
+    	/// Cancels the edit
+    	/// </summary>
+    	void ITransaction.TransactionCancelEdits()
+    	{
+			TransactionCancelEdits();
+    	}
+
+    	/// <summary>
+    	/// Returns the transaction ranking
+    	/// </summary>
+    	/// <returns>Returns the ranking as an integer</returns>
+    	int ITransaction.TransactionRanking()
+    	{
+    		int ranking = int.MinValue;
+			//Set the ranking to the maximum ranking of the transaction collection
+    		foreach (ITransaction transaction in _transactions.Values)
+    		{
+    			int thisRanking = transaction.TransactionRanking();
+				if (thisRanking > ranking)
+				{
+					ranking = thisRanking;
+				}
+    		}
+    		return ranking;
+    	}
+
+    	/// <summary>
+    	/// Returns the ID as a string
+    	/// </summary>
+    	/// <returns>Returns a string</returns>
+    	string ITransaction.StrID()
+    	{
+			return _transactionId.ToString();
+    	}
+
+		/// <summary>
+		/// Carries out additional steps before committing changes to the
+		/// database, and returns true if it is ok to continue.
+		/// If false is returned, then the commit will be aborted.
+		/// </summary>
+		/// <returns>Returns an indication of whether it is 
+		/// ok to continue with the commit.</returns>
+		void ITransaction.BeforeCommit()
+    	{
+			BeforeCommit();
+    	}
+
+    	/// <summary>
+    	/// Carries out additional steps after committing changes to the
+    	/// database
+    	/// </summary>
+    	void ITransaction.AfterCommit()
+    	{
+			AfterCommit();
+    	}
+
+    	#endregion
     }
 }

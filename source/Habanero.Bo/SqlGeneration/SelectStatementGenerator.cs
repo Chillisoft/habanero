@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 
@@ -85,6 +86,7 @@ namespace Habanero.BO.SqlGeneration
                 statement += ", " + currentClassDef.SuperClassClassDef.TableName;
                 foreach (PropDef def in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
                 {
+					//TODO: Mark - Shouldn't this also have the field Delimiters?
                     where += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
                     where += " = " + currentClassDef.TableName + "." + def.FieldName;
                     where += " AND ";
@@ -143,5 +145,7 @@ namespace Habanero.BO.SqlGeneration
             } while (i < classDefs.Count);
             return "";
         }
+
+		
     }
 }

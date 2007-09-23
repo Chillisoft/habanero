@@ -16,7 +16,7 @@ namespace Habanero.Test.BO
         {
             return new BOCollectionEditableDataSetProvider(itsCollection);
         }
-
+		
         [Test]
         public void TestUpdateRowUpdatesBusinessObject()
         {
@@ -27,10 +27,8 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAcceptChangesSavesBusinessObjects()
         {
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-            itsTable.Rows[0]["TestProp"] = "bo1prop1updated";
+        	SetupSaveExpectation();
+			itsTable.Rows[0]["TestProp"] = "bo1prop1updated";
             itsTable.AcceptChanges();
         }
 
@@ -60,20 +58,17 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAcceptChangesSavesNewBusinessObjects()
         {
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-            ((BOCollectionEditableDataSetProvider) itsProvider).Connection = itsConnection;
+        	SetupSaveExpectation();
+        	((BOCollectionEditableDataSetProvider) itsProvider).Connection = itsConnection;
             itsTable.Rows.Add(new object[] {null, "bo3prop1", "bo3prop2"});
             itsTable.AcceptChanges();
         }
 
-        [Test]
+
+    	[Test]
         public void TestDeleteRowDeletesBOOnSave()
         {
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+			SetupSaveExpectation();
 
             itsTable.AcceptChanges();
             itsTable.Rows[0].Delete();
