@@ -6,6 +6,7 @@ using Habanero.Base;
 using Habanero.Test;
 using NMock;
 using NUnit.Framework;
+using Rhino.Mocks;
 using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.BO
@@ -105,20 +106,24 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-
-            Mock itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
-            IDatabaseConnection itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
-
-
-//			itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-//			itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+			MockRepository mock = new MockRepository();
+        	IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            //Mock itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
+            //IDatabaseConnection itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
+        	Expect.Call(itsConnection.GetConnection())
+				.Return(DatabaseConnection.CurrentConnection.GetConnection())
+				.Repeat.Times(2);
+			Expect.Call(itsConnection.ExecuteSql(null, null))
+				.Return(1)
+				.Repeat.Times(1);
+			//itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+			//                                                 DatabaseConnection.CurrentConnection.GetConnection());
+			//itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+			mock.ReplayAll();
 
             MyBO bo = (MyBO) classDef.CreateNewBusinessObject(itsConnection);
-//			bo.SetPropertyValue("TestProp", "Hello") ;
-//			bo.Save() ;
+			//bo.SetPropertyValue("TestProp", "Hello") ;
+			//bo.Save() ;
 
             bo.SetPropertyValue("TestProp", "Goodbye");
             bo.Save();

@@ -126,19 +126,29 @@ namespace Habanero.Test.General
             RelationshipDefCol relDefCol = new RelationshipDefCol();
 
             //Define Owner Relationships
-            RelKeyDef relKeyDef = new RelKeyDef();
-            PropDef propDef = lPropDefCol["ContactPersonID"];
+            RelKeyDef relKeyDef;
+        	PropDef propDef;
+        	RelPropDef lRelPropDef;
+			RelationshipDef relDef;
+        	relKeyDef = new RelKeyDef();
+        	propDef = lPropDefCol["ContactPersonID"];
+        	lRelPropDef = new RelPropDef(propDef, "OwnerId");
+        	relKeyDef.Add(lRelPropDef);
+        	relDef = new MultipleRelationshipDef("Owner", typeof(Car),
+        	                                     relKeyDef, false, "",
+        	                                     DeleteParentAction.DereferenceRelated);
+        	relDefCol.Add(relDef);
 
-            RelPropDef lRelPropDef = new RelPropDef(propDef, "OwnerId");
-            relKeyDef.Add(lRelPropDef);
-
-            RelationshipDef relDef = new MultipleRelationshipDef("Owner", typeof (Car),
-                                                                 relKeyDef, false, "", 
-                                                                 DeleteParentAction.DereferenceRelated);
-
-            relDefCol.Add(relDef);
-
-            return relDefCol;
+			relKeyDef = new RelKeyDef();
+			propDef = lPropDefCol["ContactPersonID"];
+			lRelPropDef = new RelPropDef(propDef, "ContactPersonID");
+			relKeyDef.Add(lRelPropDef);
+			relDef = new MultipleRelationshipDef("Addresses", typeof(Address),
+													 relKeyDef, false, "",
+													 DeleteParentAction.DeleteRelated);
+			relDefCol.Add(relDef);
+			
+			return relDefCol;
         }
 
         private static PropDefCol CreateBOPropDef()
@@ -178,6 +188,7 @@ namespace Habanero.Test.General
             lPropDefCol.Add(propDef);
 
             propDef = lPropDefCol.Add("ContactPersonID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
+
             return lPropDefCol;
         }
 
@@ -263,14 +274,19 @@ namespace Habanero.Test.General
 
         #endregion //Properties
 
-        #region RelationShips
+        #region Relationships
 
-        public BusinessObjectCollection<BusinessObject> GetCarsOwned()
-        {
-            return Relationships.GetRelatedCollection("Owner");
-        }
+		public BusinessObjectCollection<BusinessObject> GetCarsOwned()
+		{
+			return Relationships.GetRelatedCollection("Owner");
+		}
 
-        #endregion //Relationships
+		public BusinessObjectCollection<Address> Addresses
+		{
+			get { return Relationships.GetRelatedCollection<Address>("Addresses"); }
+		}
+
+		#endregion //Relationships
 
         #region ForTesting
 

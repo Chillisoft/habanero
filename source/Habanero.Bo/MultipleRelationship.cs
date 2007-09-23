@@ -21,7 +21,8 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        internal MultipleRelationship(BusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        // Note: Mark - I Changed this to public from internal TODO - investigate if there was a good reason to have it internal
+        public MultipleRelationship(BusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
         }
@@ -31,7 +32,7 @@ namespace Habanero.BO
 		/// through the specific relationship
 		/// </summary>
 		/// <returns>Returns a collection of business objects</returns>
-		public BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol()
+		public virtual BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol()
 		{
 			return GetRelatedBusinessObjectCol<BusinessObject>();
 		}
@@ -41,7 +42,7 @@ namespace Habanero.BO
     	/// through the specific relationship
     	/// </summary>
     	/// <returns>Returns a collection of business objects</returns>
-    	public BusinessObjectCollection<T> GetRelatedBusinessObjectCol<T>()
+		public virtual BusinessObjectCollection<T> GetRelatedBusinessObjectCol<T>()
     		where T : BusinessObject
         {
 			BusinessObject busObj;

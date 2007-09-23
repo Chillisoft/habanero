@@ -127,49 +127,16 @@ namespace Habanero.DB
                 _tableName = tableName;
             }
 
-            /// <summary>
-            /// Does nothing
-            /// </summary>
-            public void TransactionCommited()
-            {
-            }
+            
+        	#region ITransaction Members
 
-            /// <summary>
-            /// Returns the sql statement to update the number in the
-            /// database
+        	/// <summary>
+            /// Returns the number as a string
             /// </summary>
-            /// <returns>Returns an ISqlStatementCollection containing
-            /// the statement</returns>
-            public ISqlStatementCollection GetPersistSql()
+            /// <returns>Returns a string</returns>
+            public string StrID()
             {
-                SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
-                                                          " update " + _tableName + " set SettingValue = ");
-                statement.AddParameterToStatement(_newNumber.ToString());
-                statement.Statement.Append(" where SettingName = ");
-                statement.AddParameterToStatement(_settingName);
-
-                return new SqlStatementCollection(statement);
-            }
-
-            /// <summary>
-            /// Does nothing
-            /// </summary>
-            public void CheckPersistRules()
-            {
-            }
-
-            /// <summary>
-            /// Does nothing
-            /// </summary>
-            public void TransactionRolledBack()
-            {
-            }
-
-            /// <summary>
-            /// Does nothing
-            /// </summary>
-            public void TransactionCancelEdits()
-            {
+                return _newNumber.ToString();
             }
 
             /// <summary>
@@ -181,14 +148,20 @@ namespace Habanero.DB
                 return int.MinValue;
             }
 
-            /// <summary>
-            /// Returns the number as a string
-            /// </summary>
-            /// <returns>Returns a string</returns>
-            public string StrID()
-            {
-                return _newNumber.ToString();
-            }
+			/// <summary>
+			/// Does nothing
+			/// </summary>
+        	public bool AddingToTransaction(ITransactionCommitter transaction)
+        	{
+        		return true;
+        	}
+
+			///// <summary>
+			///// Does nothing
+			///// </summary>
+			//public void CheckPersistRules()
+			//{
+			//}
 
             /// <summary>
             /// Does nothing
@@ -197,12 +170,53 @@ namespace Habanero.DB
             {
             }
 
+			/// <summary>
+			/// Returns the sql statement to update the number in the
+			/// database
+			/// </summary>
+			/// <returns>Returns an ISqlStatementCollection containing
+			/// the statement</returns>
+			public ISqlStatementCollection GetPersistSql()
+			{
+				SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
+														  " update " + _tableName + " set SettingValue = ");
+				statement.AddParameterToStatement(_newNumber.ToString());
+				statement.Statement.Append(" where SettingName = ");
+				statement.AddParameterToStatement(_settingName);
+
+				return new SqlStatementCollection(statement);
+			}
+
             /// <summary>
             /// Does nothing
             /// </summary>
             public void AfterCommit()
             {
             }
+
+             /// <summary>
+            /// Does nothing
+            /// </summary>
+            public void TransactionCommitted()
+            {
+            }
+
+			/// <summary>
+			/// Does nothing
+			/// </summary>
+			public void TransactionRolledBack()
+			{
+			}
+
+			/// <summary>
+			/// Does nothing
+			/// </summary>
+			public void TransactionCancelEdits()
+			{
+			}
+
+       	#endregion
+
         }
     }
 }

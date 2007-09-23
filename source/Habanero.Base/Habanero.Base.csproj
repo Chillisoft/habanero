@@ -18,7 +18,7 @@
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
     <RootNamespace>Habanero.Base</RootNamespace>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>
@@ -93,6 +93,7 @@
     <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
     <Compile Include="HabaneroApp.cs" />
     <Compile Include="IApplicationVersionUpgrader.cs" />
+    <Compile Include="ITransactionCommitter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

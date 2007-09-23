@@ -129,6 +129,19 @@ namespace Habanero.BO.ClassDefinition
 			protected set { _keepReferenceToRelatedObject = value; }
         }
 
+    	internal ClassDef RelatedObjectClassDef
+    	{
+    		get
+    		{
+				ClassDef classDef = null;
+				if (ClassDef.ClassDefs.Contains(RelatedObjectAssemblyName, RelatedObjectClassName))
+				{
+					classDef = ClassDef.ClassDefs[RelatedObjectAssemblyName, RelatedObjectClassName];
+				}
+    			return classDef;
+    		}
+    	}
+
 		#endregion Properties
 
 		#region Type Initialisation

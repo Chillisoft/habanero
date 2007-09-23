@@ -126,7 +126,7 @@ namespace Habanero.Test.General
         /// returns the Car identified by id.
         /// </summary>
         /// <remarks>
-        /// If the Contact person is already leaded then an identical copy of it will be returned.
+        /// If the Car is already leaded then an identical copy of it will be returned.
         /// </remarks>
         /// <param name="id">The object primary Key</param>
         /// <returns>The loaded business object</returns>

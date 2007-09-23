@@ -18,7 +18,7 @@
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
     <RootNamespace>Habanero.BO</RootNamespace>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
     <FileUpgradeFlags>
@@ -113,6 +113,7 @@
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
     <Compile Include="CriteriaManager\SQLCriteriaCreator.cs" />
+    <Compile Include="DeleteHelper.cs" />
     <Compile Include="IBusinessObjectCollection.cs" />
     <Compile Include="IDataSetProvider.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />

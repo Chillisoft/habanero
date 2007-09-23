@@ -8,6 +8,7 @@ using Habanero.Base;
 using Habanero.Test;
 using NMock;
 using NUnit.Framework;
+using Rhino.Mocks;
 using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.BO
@@ -42,8 +43,8 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetupTest()
         {
-            itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
-            itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
+			itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
+			itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
             itsCollection = new BusinessObjectCollection<BusinessObject>(itsClassDef);
             itsBo1 = itsClassDef.CreateNewBusinessObject(itsConnection);
             itsBo1.SetPropertyValue("TestProp", "bo1prop1");
@@ -53,11 +54,9 @@ namespace Habanero.Test.BO
             itsBo2.SetPropertyValue("TestProp", "bo2prop1");
             itsBo2.SetPropertyValue("TestProp2", "s2");
             itsCollection.Add(itsBo2);
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+        	SetupSaveExpectation();
             itsBo1.Save();
-            itsBo1.Save();
+            //itsBo1.Save();
             itsProvider = CreateDataSetProvider(itsCollection);
             BOMapper mapper = new BOMapper(itsCollection.SampleBo);
             itsTable = itsProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
@@ -66,6 +65,15 @@ namespace Habanero.Test.BO
 
         protected abstract IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col);
 
+		protected void SetupSaveExpectation()
+		{
+			itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+				DatabaseConnection.CurrentConnection.GetConnection());
+			itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+				DatabaseConnection.CurrentConnection.GetConnection());
+			itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql",
+				1, new object[] { null, null });
+		}
 
         [Test]
         public void TestCorrectNumberOfRows()

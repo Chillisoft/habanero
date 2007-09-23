@@ -150,9 +150,9 @@ namespace Habanero.Test.General
             IDatabaseConnection connection = (IDatabaseConnection) connectionControl.MockInstance;
             connectionControl.ExpectAndReturn("LoadDataReader", null, new object[] {null});
             connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-
-            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            connectionControl.ExpectAndReturn("ExecuteSql", 3, new object[] {null, null});
+			connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+			connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+			connectionControl.ExpectAndReturn("ExecuteSql", 3, new object[] { null, null });
 
             FilledCircle myCircle = new FilledCircle();
             myCircle.SetDatabaseConnection(connection);

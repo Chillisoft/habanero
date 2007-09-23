@@ -217,16 +217,17 @@ namespace Habanero.UI.Forms
 			_control.Enabled = _isEditable;
 			if (_isEditable)
 			{
-				_control.ForeColor = SystemColors.WindowText;
-				_control.BackColor = SystemColors.Window;
+				_control.ResetBackColor();
+				_control.ResetForeColor();
 			} else
 			{
-				_control.ForeColor = Color.Black;
-				_control.BackColor = Color.Beige;
+    			_control.ForeColor = Color.Black;
+    			_control.BackColor = Color.Beige;
 			}
 		}
 
-        /// <summary>
+
+    	/// <summary>
         /// Handler to carry out changes where the value of a business
         /// object property has changed
         /// </summary>

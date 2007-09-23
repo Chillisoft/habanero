@@ -51,8 +51,8 @@ namespace Habanero.BO
         private IConcurrencyControl _concurrencyControl;
         private ITransactionLog _transactionLog;
         protected IDatabaseConnection _connection;
-
-        #endregion //Fields
+    	
+		#endregion //Fields
 
         #region Constructors
 
@@ -758,62 +758,66 @@ namespace Habanero.BO
         {
         }
 
+		private bool NeedsPersisting()
+		{
+			return !(State.IsDeleted && State.IsNew) && (State.IsDirty || State.IsNew);
+		}
 
         /// <summary>
         /// Commits to the database any changes made to the object
         /// </summary>
         public void Save()
         {
-            if (!BeforeSave())
-            {
-                return;
-            }
+			Transaction transaction = new Transaction(_connection);
+			transaction.AddTransactionObject(this);
+			transaction.CommitTransaction();
+			//if (!BeforeSave())
+			//{
+			//    return;
+			//}
 
-            string reasonNotSaved = "";
-            if (!(State.IsDeleted && State.IsNew))
-            {
-                if (State.IsDirty || State.IsNew)
-                {
-                    //log.Debug("Save - Object of type " + this.GetType().Name + " is dirty or new, saving.") ;
-                    if (IsValid(out reasonNotSaved))
-                    {
-                        CheckPersistRules();
-                        UpdatedConcurrencyControlProperties();
-                        //GlobalRegistry.SynchronisationController.UpdateSynchronisationProperties(this);
+			//string reasonNotSaved = "";
+			//if (NeedsPersisting())
+			//{
+			//    //log.Debug("Save - Object of type " + this.GetType().Name + " is dirty or new, saving.") ;
+			//    if (IsValid(out reasonNotSaved))
+			//    {
+			//        CheckPersistRules();
+			//        UpdatedConcurrencyControlProperties();
+			//        //GlobalRegistry.SynchronisationController.UpdateSynchronisationProperties(this);
 
-                        BeforeUpdateToDB();
-                        int numRowsUpdated;
-                        ISqlStatementCollection statementCollection = GetPersistSql();
-                        numRowsUpdated = _connection.ExecuteSql(statementCollection, null);
-                        if (_transactionLog != null)
-                        {
-                            _transactionLog.RecordTransactionLog(this, WindowsIdentity.GetCurrent().Name);
-                        }
-                        if (numRowsUpdated == statementCollection.Count)
-                        {
-                            UpdateBusinessObjectBaseCol();
-                            _boPropCol.BackupPropertyValues();
-                        }
-                        else
-                        {
-                            throw new DatabaseReadException(
-                                "An Error occured while saving an object to the database. Please contact your system administrator",
-                                "An Error occured while saving an object to the database: " + numRowsUpdated +
-                                " were updated whereas " + statementCollection.Count +
-                                " row(s) should have been updated ",
-                                GetPersistSql().ToString(), this.GetDatabaseConnection().ErrorSafeConnectString());
-                        }
-                    }
-                    else
-                    {
-                        throw (new BusObjectInAnInvalidStateException(reasonNotSaved));
-                    }
-                } //Isdirty || new
-            }
+			//        BeforeUpdateToDB();
+			//        int numRowsUpdated;
+			//        ISqlStatementCollection statementCollection = GetPersistSql();
+			//        numRowsUpdated = _connection.ExecuteSql(statementCollection, null);
+			//        if (_transactionLog != null)
+			//        {
+			//            _transactionLog.RecordTransactionLog(this, WindowsIdentity.GetCurrent().Name);
+			//        }
+			//        if (numRowsUpdated == statementCollection.Count)
+			//        {
+			//            UpdateBusinessObjectBaseCol();
+			//            _boPropCol.BackupPropertyValues();
+			//        }
+			//        else
+			//        {
+			//            throw new DatabaseReadException(
+			//                "An Error occured while saving an object to the database. Please contact your system administrator",
+			//                "An Error occured while saving an object to the database: " + numRowsUpdated +
+			//                " were updated whereas " + statementCollection.Count +
+			//                " row(s) should have been updated ",
+			//                GetPersistSql().ToString(), this.GetDatabaseConnection().ErrorSafeConnectString());
+			//        }
+			//    }
+			//    else
+			//    {
+			//        throw (new BusObjectInAnInvalidStateException(reasonNotSaved));
+			//    }
+			//} //if (NeedsPersisting())...
 
-            UpdateAfterSave();
+			//UpdateAfterSave();
 
-            AfterSave();
+			//AfterSave();
         }
 
         /// <summary>
@@ -964,10 +968,6 @@ namespace Habanero.BO
             }
         }
 
-        #endregion //Persistance
-
-        #region Concurrency
-
         /// <summary>
         /// Checks a number of rules, including concurrency, duplicates and
         /// duplicate primary keys
@@ -977,7 +977,12 @@ namespace Habanero.BO
             CheckConcurrencyBeforePersisting();
             CheckForDuplicatePrimaryKey();
             CheckForDuplicates();
+        	CheckForPreventDelete();
         }
+
+        #endregion //Persistance
+		
+        #region Concurrency
 
         /// <summary>
         /// Checks concurrency before persisting to the database
@@ -1230,13 +1235,35 @@ namespace Habanero.BO
                     "BOKey argument was null.");
             }
             return lBOKey.DatabaseWhereClause(sql);
-        }
+		}
 
-        #endregion //Concurrency
+		#endregion //Check Duplicates
 
-        #region Sql Statements
+    	#region Check Deletion
 
-        /// <summary>
+    	protected void CheckForPreventDelete()
+    	{
+			//Only check if this businessobject is being deleted
+			if (State.IsDeleted)
+			{
+				string reason;
+				if (!CheckCanDelete(out reason))
+				{
+					throw new BusinessObjectReferentialIntegrityException(reason);
+				}
+			}
+    	}
+
+    	private bool CheckCanDelete(out string reason)
+    	{
+    		return DeleteHelper.CheckCanDelete(this, out reason);
+    	}
+
+    	#endregion //Check Deletion
+
+		#region Sql Statements
+
+		/// <summary>
         /// Parses the parameter sql information into the given search
         /// expression
         /// </summary>
@@ -1374,6 +1401,9 @@ namespace Habanero.BO
         {
             SqlStatement deleteSql;
             SqlStatementCollection statementCollection = new SqlStatementCollection();
+
+        	//AddRelationshipDeleteStatements(statementCollection);
+
             deleteSql = new SqlStatement(this.GetConnection());
             deleteSql.Statement = new StringBuilder(@"DELETE FROM " + TableName +
                                                     " WHERE " + WhereClause(deleteSql));
@@ -1390,7 +1420,26 @@ namespace Habanero.BO
             return statementCollection;
         }
 
-        /// <summary>
+		//private void AddRelationshipDeleteStatements(SqlStatementCollection statementCollection)
+		//{
+		//    foreach (Relationship relationship in _relationshipCol)
+		//    {
+		//        MultipleRelationship multipleRelationship = relationship as MultipleRelationship;
+		//        if (multipleRelationship != null)
+		//        {
+		//            BusinessObjectCollection<BusinessObject> boCol;
+		//            boCol = multipleRelationship.GetRelatedBusinessObjectCol();
+		//            foreach (BusinessObject businessObject in boCol)
+		//            {
+		//                SqlStatementCollection deleteSqlStatementCollection;
+		//                deleteSqlStatementCollection = businessObject.GetDeleteSql();
+		//                statementCollection.Add(deleteSqlStatementCollection);
+		//            }
+		//        }
+		//    }
+    	//}
+
+    	/// <summary>
         /// Returns an "insert" sql statement list for inserting this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
@@ -1436,25 +1485,109 @@ namespace Habanero.BO
         #endregion //Sql Statements
 
         #region Implement ITransaction
+		
+		/// <summary>
+		/// Returns the transaction ranking
+		/// </summary>
+		/// <returns>Returns zero</returns>
+		/// TODO ERIC - what is a transaction ranking? some kind of priority
+		/// scheme?
+		int ITransaction.TransactionRanking()
+		{
+			return 0;
+		}
 
-        /// <summary>
+		/// <summary>
+		/// Notifies this ITransaction object that it has been added to the 
+		/// specified Transaction object
+		/// </summary>
+		bool ITransaction.AddingToTransaction(ITransactionCommitter transaction)
+        {
+			if (!BeforeSave()) return false;
+			if (NeedsPersisting())
+			{
+				this.CheckPersistRules();
+				CascadeIfDeleting(transaction);
+			}
+			return true;
+        }
+
+    	private void CascadeIfDeleting(ITransactionCommitter transaction)
+    	{
+    		if (State.IsDeleted && !(State.IsNew))
+    		{
+    			foreach (Relationship relationship in _relationshipCol)
+    			{
+    				MultipleRelationship multipleRelationship = relationship as MultipleRelationship;
+    				if (multipleRelationship != null)
+    				{
+    					BusinessObjectCollection<BusinessObject> boCol;
+    					boCol = multipleRelationship.GetRelatedBusinessObjectCol();
+    					foreach (BusinessObject businessObject in boCol)
+    					{
+							businessObject.Delete();
+
+    						transaction.AddTransactionObject(businessObject);
+    					}
+    				}
+    			}
+    		}
+    	}
+
+    	//TODO!!! This stuff needs to have a better solution - database operations 
+		//performed in after apply edit, should be in the
+		// same transaction as the applyedit.  Look at Transaction for more.
+		/// <summary>
+		/// Carries out additional steps before committing changes to the
+		/// database
+		/// </summary>
+		void ITransaction.BeforeCommit()
+		{
+			if (NeedsPersisting())
+			{
+				string reasonNotSaved;
+				if (IsValid(out reasonNotSaved))
+				{
+					// v- this is called by the transaction anyway:
+					//this.CheckPersistRules();
+					UpdatedConcurrencyControlProperties();
+					BeforeUpdateToDB();
+				}
+				else
+				{
+					throw new BusObjectInAnInvalidStateException(reasonNotSaved);
+					//throw new UserException(reasonNotSaved);
+				}
+			}
+		}
+
+ 		/// <summary>
+		/// Carries out additional steps after committing changes to the
+		/// database
+		/// </summary>
+		void ITransaction.AfterCommit()
+		{
+			if (NeedsPersisting())
+			{
+				if (_transactionLog != null)
+				{
+					_transactionLog.RecordTransactionLog(this, WindowsIdentity.GetCurrent().Name);
+				}
+				UpdateBusinessObjectBaseCol();
+				_boPropCol.BackupPropertyValues();
+			}
+		}
+
+       /// <summary>
         /// Carries out additional steps once the transaction has been committed
         /// to the database
         /// </summary>
-        void ITransaction.TransactionCommited()
+        void ITransaction.TransactionCommitted()
         {
-            _boPropCol.BackupPropertyValues();
             this.UpdateAfterSave();
+			this.AfterSave();
         }
-
-        /// <summary>
-        /// Checks the persistance rules
-        /// </summary>
-        void ITransaction.CheckPersistRules()
-        {
-            this.CheckPersistRules();
-        }
-
+		
         /// <summary>
         /// Cancels the edit
         /// </summary>
@@ -1469,47 +1602,6 @@ namespace Habanero.BO
         void ITransaction.TransactionRolledBack()
         {
             //Do nothing
-        }
-
-        /// <summary>
-        /// Returns the transaction ranking
-        /// </summary>
-        /// <returns>Returns zero</returns>
-        /// TODO ERIC - what is a transaction ranking? some kind of priority
-        /// scheme?
-        int ITransaction.TransactionRanking()
-        {
-            return 0;
-        }
-
-        //TODO!!! This stuff needs to have a better solution - database operations 
-        //performed in after apply edit, should be in the
-        // same transaction as the applyedit.  Look at Transaction for more.
-        /// <summary>
-        /// Carries out additional steps before committing changes to the
-        /// database
-        /// </summary>
-        void ITransaction.BeforeCommit()
-        {
-            string reasonNotSaved;
-            if (IsValid(out reasonNotSaved))
-            {
-                this.BeforeSave();
-                this.CheckPersistRules();
-            }
-            else
-            {
-                throw new UserException(reasonNotSaved);
-            }
-        }
-
-        /// <summary>
-        /// Carries out additional steps after committing changes to the
-        /// database
-        /// </summary>
-        void ITransaction.AfterCommit()
-        {
-            this.AfterSave();
         }
 
         #endregion //ITransaction

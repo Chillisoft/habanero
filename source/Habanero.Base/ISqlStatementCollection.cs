@@ -20,5 +20,25 @@ namespace Habanero.Base
         /// <returns>Returns the sql statement at the index position
         /// chosen</returns>
         ISqlStatement this[int index] { get; }
+
+    	/// <summary>
+    	/// Adds a sql statement object to the collection
+    	/// </summary>
+    	/// <param name="statement">The sql statement object</param>
+    	void Add(ISqlStatement statement);
+
+    	/// <summary>
+    	/// Adds the contents of another sql statement collection into this
+    	/// collection
+    	/// </summary>
+    	/// <param name="statementCollection">The other collection</param>
+    	void Add(ISqlStatementCollection statementCollection);
+
+    	/// <summary>
+    	/// Inserts a sql statement object at the position specified
+    	/// </summary>
+    	/// <param name="index">The position to insert at</param>
+    	/// <param name="sql">The sql statement object to add</param>
+    	void Insert(int index, ISqlStatement sql);
     }
 }

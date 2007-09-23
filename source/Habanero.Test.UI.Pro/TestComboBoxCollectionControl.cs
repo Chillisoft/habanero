@@ -42,13 +42,8 @@ namespace Habanero.Test.UI.BoControls
             IDatabaseConnection databaseConnectionMock =
                 (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
 
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-
+        	SetupSaveExpectation();
+			SetupSaveExpectation();
 
             MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
             bo1.SetPropertyValue("TestProp", "abc");
@@ -71,7 +66,16 @@ namespace Habanero.Test.UI.BoControls
             itsControl.Confirmer = confirmerMock;
         }
 
-        [TearDown]
+    	private void SetupSaveExpectation()
+    	{
+    		itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+    		                                                 DatabaseConnection.CurrentConnection.GetConnection());
+    		itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+    		                                                 DatabaseConnection.CurrentConnection.GetConnection());
+    		itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+    	}
+
+    	[TearDown]
         public void TearDownTest()
         {
             itsConfirmerMockControl.Verify();
@@ -108,9 +112,7 @@ namespace Habanero.Test.UI.BoControls
             selectedBo.SetPropertyValue("TestProp", "xyz");
             Assert.IsTrue(selectedBo.State.IsDirty);
 
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+			SetupSaveExpectation();
 
             itsControl.CollectionComboBox.SelectedIndex = 2;
             Assert.AreEqual(2, itsControl.CollectionComboBox.SelectedIndex);
@@ -143,9 +145,8 @@ namespace Habanero.Test.UI.BoControls
             BusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
 
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+			SetupSaveExpectation();
+
             itsControl.Buttons.ClickButton("Save");
             Assert.IsFalse(selectedBo.State.IsDirty);
         }
@@ -171,9 +172,9 @@ namespace Habanero.Test.UI.BoControls
             Assert.IsTrue(itsControl.SelectedBusinessObject.State.IsNew);
             itsControl.SelectedBusinessObject.SetPropertyValue("TestProp", "qwe");
             itsControl.SelectedBusinessObject.SetPropertyValue("TestProp2", "rty");
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+
+			SetupSaveExpectation();
+
             itsControl.Buttons.ClickButton("Save");
             Assert.IsFalse(itsControl.SelectedBusinessObject.State.IsNew);
             Assert.IsTrue(itsControl.Buttons["Add"].Enabled);
