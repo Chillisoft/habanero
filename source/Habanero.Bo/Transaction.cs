@@ -17,7 +17,8 @@ namespace Habanero.BO
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.Transaction");
 
         private IDatabaseConnection _databaseConnection;
-		private SortedDictionary<string, ITransaction> _transactions;
+		private SortedDictionary<string, ITransaction> _transactions= new SortedDictionary<string, ITransaction>();
+        private List<ITransaction> _transactionList = new List<ITransaction>();
 		private Guid _transactionId = Guid.NewGuid();
     	private int _numberOfRowsUpdated;
 
@@ -52,6 +53,7 @@ namespace Habanero.BO
 			if (!_transactions.ContainsKey(transaction.StrID()))
             {
 				_transactions.Add(transaction.StrID(), transaction);
+                _transactionList.Add(transaction);
             }
         }
 
@@ -61,7 +63,8 @@ namespace Habanero.BO
         private void ClearTransactionCol()
         {
         	_numberOfRowsUpdated = 0;
-			_transactions = new SortedDictionary<string, ITransaction>();
+            _transactions.Clear();
+            _transactionList.Clear();
         }
 
         /// <summary>
@@ -144,7 +147,7 @@ namespace Habanero.BO
         /// </summary>
         private void TransactionCommited()
         {
-			foreach (ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactionList)
             {
                 transaction.TransactionCommitted();
             }
@@ -154,11 +157,11 @@ namespace Habanero.BO
 		/// Returns the sql statement collection needed to carry out 
 		/// persistance to the database</summary>
 		/// <returns>Returns an ISqlStatementCollection object</returns>
-		private SqlStatementCollection GetPersistSql()
+		internal SqlStatementCollection GetPersistSql()
 		{
 			SqlStatementCollection statementCollection;
 			statementCollection = new SqlStatementCollection();
-			foreach (ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactionList)
 			{
 				ISqlStatementCollection thisStatementCollection = transaction.GetPersistSql();
 				statementCollection.Add(thisStatementCollection);
@@ -171,7 +174,7 @@ namespace Habanero.BO
 		/// </summary>
 		private void TransactionRolledBack()
 		{
-			foreach (ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactionList)
 			{
 				transaction.TransactionRolledBack();
 			}
@@ -182,7 +185,7 @@ namespace Habanero.BO
 		/// </summary>
 		private void TransactionCancelEdits()
 		{
-			foreach (ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactionList)
 			{
 				transaction.TransactionCancelEdits();
 			}
@@ -197,7 +200,7 @@ namespace Habanero.BO
 		/// ok to continue with the commit.</returns>
 		private void BeforeCommit()
 		{
-			foreach (ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactionList)
 			{
 				transaction.BeforeCommit();
 			}
@@ -209,7 +212,7 @@ namespace Habanero.BO
     	/// </summary>
     	private void AfterCommit()
 		{
-			foreach (ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactionList)
 			{
 				transaction.AfterCommit();
 			}
@@ -272,25 +275,6 @@ namespace Habanero.BO
     	void ITransaction.TransactionCancelEdits()
     	{
 			TransactionCancelEdits();
-    	}
-
-    	/// <summary>
-    	/// Returns the transaction ranking
-    	/// </summary>
-    	/// <returns>Returns the ranking as an integer</returns>
-    	int ITransaction.TransactionRanking()
-    	{
-    		int ranking = int.MinValue;
-			//Set the ranking to the maximum ranking of the transaction collection
-    		foreach (ITransaction transaction in _transactions.Values)
-    		{
-    			int thisRanking = transaction.TransactionRanking();
-				if (thisRanking > ranking)
-				{
-					ranking = thisRanking;
-				}
-    		}
-    		return ranking;
     	}
 
     	/// <summary>

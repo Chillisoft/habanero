@@ -1485,17 +1485,6 @@ namespace Habanero.BO
         #endregion //Sql Statements
 
         #region Implement ITransaction
-		
-		/// <summary>
-		/// Returns the transaction ranking
-		/// </summary>
-		/// <returns>Returns zero</returns>
-		/// TODO ERIC - what is a transaction ranking? some kind of priority
-		/// scheme?
-		int ITransaction.TransactionRanking()
-		{
-			return 0;
-		}
 
 		/// <summary>
 		/// Notifies this ITransaction object that it has been added to the 

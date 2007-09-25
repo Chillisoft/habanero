@@ -12,12 +12,6 @@ namespace Habanero.Base
 		/// <returns>Returns a string</returns>
 		string StrID();
 
-		/// <summary>
-		/// Returns the transaction ranking
-		/// </summary>
-		/// <returns>Returns the ranking as an integer</returns>
-		int TransactionRanking();
-
     	/// <summary>
 		/// Notifies this ITransaction object that it has been added to the 
 		/// specified Transaction object.
