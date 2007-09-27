@@ -17,6 +17,7 @@ namespace Habanero.BO
             LogManager.GetLogger("Habanero.BO.BOCollectionEditableDataSetProvider");
 
         private Hashtable _rowStates;
+        private Hashtable _rowIDs;
         private Hashtable _deletedRowIDs;
         private IDatabaseConnection _connection;
         private bool _isBeingAdded = false;
@@ -48,7 +49,7 @@ namespace Habanero.BO
         {
             _table.TableNewRow += new DataTableNewRowEventHandler(NewRowHandler);
             _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
-            _table.RowDeleted += new DataRowChangeEventHandler(RowDeletedHandler);
+            _table.RowDeleting += new DataRowChangeEventHandler(RowDeletedHandler);
             _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(BusinessObjectAddedToCollectionHandler);
         }
 
@@ -81,6 +82,7 @@ namespace Habanero.BO
         public override void InitialiseLocalData()
         {
             _rowStates = new Hashtable();
+            _rowIDs = new Hashtable();
             _deletedRowIDs = new Hashtable();
         }
 
@@ -100,12 +102,21 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected void RowDeletedHandler(object sender, DataRowChangeEventArgs e)
         {
-            BusinessObject changedBo = _collection.Find(e.Row["ID", DataRowVersion.Original].ToString());
+            BusinessObject changedBo = null;
+            if (e.Row.HasVersion(DataRowVersion.Original))
+            {
+                changedBo = _collection.Find(e.Row["ID", DataRowVersion.Original].ToString());
+            }
+            else
+            {
+                changedBo = _collection.Find(e.Row["ID"].ToString());
+            }
             if (changedBo != null)
             {
                 changedBo.Delete();
                 _rowStates[e.Row] = RowState.Deleted;
                 _deletedRowIDs[e.Row] = changedBo.ID.ToString();
+                _rowIDs.Remove(e.Row);
             }
         }
 
@@ -143,13 +154,23 @@ namespace Habanero.BO
             if (_rowStates[e.Row] != null)
             {
                 BusinessObject changedBo;
-                if ((RowState) _rowStates[e.Row] != RowState.Deleted)
+                if ((RowState) _rowStates[e.Row] == RowState.Edited)
                 {
                     changedBo = _collection.Find(e.Row["ID"].ToString());
+                    //changedBo = _collection.Find(_rowIDs[e.Row].ToString());
                     changedBo.Restore();
                     _rowStates.Remove(e.Row);
                 }
-                else
+                else if ((RowState)_rowStates[e.Row] == RowState.Added)
+                {
+                    //changedBo = _collection.Find(e.Row["ID"].ToString());
+                    changedBo = _collection.Find(_rowIDs[e.Row].ToString());
+                    changedBo.Delete();
+                    _collection.Remove(changedBo);
+                    _rowStates.Remove(e.Row);
+                    // should deletedRowIDs be added to?
+                }
+                else if ((RowState)_rowStates[e.Row] == RowState.Deleted)
                 {
                     changedBo = _collection.Find((string) _deletedRowIDs[e.Row]);
                     changedBo.Restore();
@@ -266,6 +287,11 @@ namespace Habanero.BO
                 AddNewRowToCollection(newBo);
                 //log.Debug(newBo.GetDebugOutput()) ;
                 e.Row["ID"] = newBo.ID.ToString();
+                if (!_rowIDs.ContainsKey(e.Row))
+                {
+                    _rowIDs.Add(e.Row, e.Row["ID"]);
+                }
+
                 AddToRowStates(e.Row, RowState.Added);
 
                 //log.Debug("Row added complete.") ;
@@ -318,7 +344,13 @@ namespace Habanero.BO
                 values[i++] = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
             }
             _table.LoadDataRow(values, false);
-            _rowStates.Add(this._table.Rows[this.FindRow(e.BusinessObject)], RowState.Added);
+
+            DataRow newRow = _table.Rows[FindRow(e.BusinessObject)];
+            if (!_rowIDs.ContainsKey(newRow))
+            {
+                _rowIDs.Add(newRow, newRow["ID"]);
+            }
+            _rowStates.Add(newRow, RowState.Added);
             _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
 
             //log.Debug("Done adding bo to collection " + e.BusinessObject.ID);
