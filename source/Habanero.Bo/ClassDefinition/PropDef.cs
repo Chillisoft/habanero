@@ -326,15 +326,21 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="errorMessage">A string which may be amended to reflect
         /// an error message if the value is not valid</param>
         /// <returns>Returns true if valid, false if not</returns>
-        protected internal bool isValueValid(Object propValue,
-                                             ref string errorMessage)
+        protected internal bool isValueValid(Object propValue, ref string errorMessage)
         {
-           if (_compulsory && (propValue == null || propValue is string && (string)propValue == String.Empty)) {
-                errorMessage = this.PropertyName + " is a compulsory field and has no value.";
-                return false;
+            if (_compulsory)
+            {
+                if (propValue == null
+                    || propValue == DBNull.Value
+                    || (propValue is string && (string) propValue == String.Empty))
+                {
+                    errorMessage = String.Format("'{0}' is a compulsory field and has no value.", PropertyName);
+                    return false;
+                }
             }
+
             errorMessage = "";
-            if (!(_propRule == null))
+            if (_propRule != null)
             {
                 return _propRule.isPropValueValid(PropertyName, propValue, ref errorMessage);
             }

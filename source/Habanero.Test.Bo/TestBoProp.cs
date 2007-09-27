@@ -60,6 +60,178 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestPropCompulsoryForStrings()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                PropReadWriteRule.ReadWrite, null, null, true);
+            BOProp boProp = new BOProp(propDef);
+
+            boProp.Value = null;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = DBNull.Value;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+            
+            boProp.Value = "";
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "New Value";
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void TestPropCompulsoryForGuids()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "Guid",
+                PropReadWriteRule.ReadWrite, null, null, true);
+            BOProp boProp = new BOProp(propDef);
+
+            boProp.Value = null;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = DBNull.Value;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "";
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = Guid.Empty;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = Guid.NewGuid();
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void TestPropCompulsoryForIntegers()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "Int32",
+                PropReadWriteRule.ReadWrite, null, null, true);
+            BOProp boProp = new BOProp(propDef);
+
+            boProp.Value = null;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = DBNull.Value;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "";
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = 0;
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void TestPropCompulsoryForDecimals()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "Decimal",
+                PropReadWriteRule.ReadWrite, null, null, true);
+            BOProp boProp = new BOProp(propDef);
+
+            boProp.Value = null;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = DBNull.Value;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "";
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = 0.0m;
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void TestPropCompulsoryForDoubles()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "Double",
+                PropReadWriteRule.ReadWrite, null, null, true);
+            BOProp boProp = new BOProp(propDef);
+
+            boProp.Value = null;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = DBNull.Value;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "";
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = 0.0d;
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void TestPropCompulsoryForDateTime()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "DateTime",
+                PropReadWriteRule.ReadWrite, null, null, true);
+            BOProp boProp = new BOProp(propDef);
+
+            boProp.Value = null;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = DBNull.Value;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "";
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = DateTime.Now;
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void TestPropCompulsoryForBooleans()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "Boolean",
+                PropReadWriteRule.ReadWrite, null, null, true);
+            BOProp boProp = new BOProp(propDef);
+
+            boProp.Value = null;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = DBNull.Value;
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "";
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = true;
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
         public void TestPropBrokenRuleRestore()
         {
             //Test compulsory with no default set
