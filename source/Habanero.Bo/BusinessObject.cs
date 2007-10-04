@@ -41,7 +41,7 @@ namespace Habanero.BO
         private static Dictionary<string, WeakReference> _allLoadedBusinessObjects = new Dictionary<string, WeakReference>();
 
         //set object as new by default.
-        private BOState _boState = new BOState();
+        private BOState _boState;
 
         protected ClassDef _classDef;
         protected BOPropCol _boPropCol;
@@ -104,6 +104,7 @@ namespace Habanero.BO
         }
 
         private void Initialise(IDatabaseConnection conn, ClassDef def) {
+            _boState = new BOState(this);
             State.IsDeleted = false;
             State.IsDirty = false;
             State.IsEditing = false;

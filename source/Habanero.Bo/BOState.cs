@@ -6,6 +6,12 @@ namespace Habanero.BO
 {
     public class BOState
     {
+        private readonly BusinessObject _bo;
+
+        public BOState(BusinessObject bo)
+        {
+            _bo = bo;
+        }
         private States _flagState = States.isNew;
         /// <summary>
         /// An enumeration that describes the object's state
@@ -63,6 +69,22 @@ namespace Habanero.BO
         {
             get { return GetBOFlagValue(States.isDirty); }
             internal set { SetBOFlagValue(States.isDirty, value); }
+        }
+
+        public bool IsValid
+        {
+            get { return _bo.IsValid();  }
+        }
+
+        public string IsValidMessage
+        {
+            get
+            {
+                string message;
+                _bo.IsValid(out message);
+                return message;
+
+            }
         }
 
         /// <summary>
