@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Security.Cryptography;
+using Habanero.Base;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -12,6 +14,11 @@ namespace Habanero.Test.DB
     public class TestDatabaseConfig
     {
         private IDictionary settingsMySql;
+        private RSA rsa;
+        private RSAPasswordCrypter crypter;
+        private string password;
+        private string encryptedPassword;
+        private DatabaseConfig encryptedConfig;
 
         [TestFixtureSetUp]
         public void FixtureSetup()
@@ -23,6 +30,12 @@ namespace Habanero.Test.DB
             settingsMySql.Add("username", "d");
             settingsMySql.Add("password", "e");
             settingsMySql.Add("port", "f");
+
+            rsa = RSA.Create();
+            crypter = new RSAPasswordCrypter(rsa);
+            password = "password";
+            encryptedPassword = crypter.EncryptString(password);
+            encryptedConfig = new DatabaseConfig(DatabaseConfig.MySql, "a", "b", "c", encryptedPassword, "e");
         }
 
         [Test]
@@ -72,5 +85,40 @@ namespace Habanero.Test.DB
             Assert.AreEqual(connectString, config.GetConnectionString(),
                             "ConnectionStringFactory not working for MySql using ConfigData");
         }
+
+        [Test]
+        public void TestEncryptedPassword()
+        {
+            Assert.AreEqual(encryptedPassword, encryptedConfig.Password);
+            Assert.AreEqual(encryptedPassword, encryptedConfig.DecryptedPassword);
+            encryptedConfig.SetPrivateKey(rsa.ToXmlString(true));
+            Assert.AreEqual(password, encryptedConfig.DecryptedPassword);
+        }
+
+        [Test]
+        public void TestSetPrivateKeyRSA()
+        {
+            encryptedConfig.SetPrivateKey(rsa);
+            Assert.AreEqual(password, encryptedConfig.DecryptedPassword);
+        }
+
+        [Test]
+        public void TestConnectionStringEncryptedPassword()
+        {
+            encryptedConfig.SetPrivateKey(rsa.ToXmlString(true));
+            String connectString =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetConnectionString("a", "b", "c", password, "e");
+
+            Assert.AreEqual(connectString, encryptedConfig.GetConnectionString());
+        }
+
+        [Test]
+        public void TestToStringEncryptedPassword()
+        {
+            encryptedConfig.SetPrivateKey(rsa.ToXmlString(true));
+            DatabaseConfig d2 = new DatabaseConfig(DatabaseConfig.MySql, "a", "b", "c", encryptedPassword, "e");
+            Assert.AreEqual(d2.ToString(), encryptedConfig.ToString());
+        }
+
     }
 }
