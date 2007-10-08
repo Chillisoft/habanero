@@ -35,6 +35,7 @@ namespace Habanero.Test.DB
             crypter = new RSAPasswordCrypter(rsa);
             password = "password";
             encryptedPassword = crypter.EncryptString(password);
+            
         }
 
         [SetUp]
