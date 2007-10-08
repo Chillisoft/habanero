@@ -167,22 +167,9 @@ namespace Habanero.BO
         public void Refresh()
         {
             Clear();
-            ISqlStatement refreshSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            refreshSql.Statement.Append(_sampleBo.GetSelectSql(_limit));
-            if (_criteriaExpression != null)
-            {
-                refreshSql.AppendWhere();
-                SqlCriteriaCreator creator = new SqlCriteriaCreator(_criteriaExpression, _boClassDef);
-                creator.AppendCriteriaToStatement(refreshSql);
-            }
-            if (_extraSearchCriteriaLiteral.Length > 0)
-            {
-                refreshSql.AppendWhere();
-                refreshSql.Statement.Append(_extraSearchCriteriaLiteral);
-            }
+        	ISqlStatement refreshSql = CreateLoadSqlStatement(_sampleBo, _boClassDef, _criteriaExpression, _limit, _extraSearchCriteriaLiteral);
 
-
-            using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(refreshSql, _orderByClause))
+        	using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(refreshSql, _orderByClause))
             {
                 try
                 {
@@ -205,7 +192,25 @@ namespace Habanero.BO
             }
 		}
 
-		#region Load Methods
+    	internal static ISqlStatement CreateLoadSqlStatement(BusinessObject businessObject, ClassDef classDef, IExpression criteriaExpression, int limit, string extraSearchCriteriaLiteral)
+    	{
+    		ISqlStatement refreshSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+			refreshSql.Statement.Append(businessObject.GetSelectSql(limit));
+			if (criteriaExpression != null)
+    		{
+    			refreshSql.AppendWhere();
+				SqlCriteriaCreator creator = new SqlCriteriaCreator(criteriaExpression, classDef);
+    			creator.AppendCriteriaToStatement(refreshSql);
+    		}
+			if (!String.IsNullOrEmpty(extraSearchCriteriaLiteral))
+    		{
+    			refreshSql.AppendWhere();
+				refreshSql.Statement.Append(extraSearchCriteriaLiteral);
+    		}
+    		return refreshSql;
+    	}
+
+    	#region Load Methods
 
 		/// <summary>
         /// Loads the entire collection for the type of object.

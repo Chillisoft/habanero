@@ -9,7 +9,7 @@ namespace Habanero.BO
     {
         protected RelationshipDef _relDef;
         protected readonly BusinessObject _owningBo;
-        protected RelKey _relKey;
+        protected internal RelKey _relKey;
 
         /// <summary>
         /// Constructor to initialise a new relationship

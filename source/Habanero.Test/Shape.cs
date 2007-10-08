@@ -50,6 +50,7 @@ namespace Habanero.Test
            //                                                      relKeyDef, false, "", DeleteParentAction.DereferenceRelated);
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             //relDefCol.Add(relDef);
+			
             ClassDef lClassDef = new ClassDef(typeof (Shape), primaryKey, lPropDefCol, keysCol, relDefCol);
 			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
