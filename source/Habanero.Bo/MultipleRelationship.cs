@@ -10,7 +10,7 @@ namespace Habanero.BO
     /// </summary>
     public class MultipleRelationship : Relationship
     {
-		private IBusinessObjectCollection _boCol;
+		internal IBusinessObjectCollection _boCol;
 		//private BusinessObjectCollection<BusinessObject> _boCol;
 
         /// <summary>

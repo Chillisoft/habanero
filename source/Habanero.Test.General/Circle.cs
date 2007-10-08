@@ -41,5 +41,11 @@ namespace Habanero.Test.General
 			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
+
+		public int Radius
+		{
+			get { return (int)this.GetPropertyValue("Radius"); }
+			set { this.SetPropertyValue("Radius", value); }
+		}
     }
 }

@@ -41,14 +41,18 @@ namespace Habanero.BO.CriteriaManager
         private void ConstructSqlCriteriaCreator(IExpression exp, ClassDef classDef)
         {
             _expression = exp;
-            ClassDef lClassDef = classDef;
-            String tableName = lClassDef.TableName;
-            foreach (PropDef def in lClassDef.PropDefcol)
-            {
-                _expression.SetParameterSqlInfo(def, tableName);
-            }
-
-            //		//TODO:Use DB Connection to get field/date separators - use parametrized sql
+            //ClassDef lClassDef = classDef;
+        	ClassDef thisClassDef = classDef;
+			while (thisClassDef != null)
+			{
+				String tableName = thisClassDef.TableName;
+				foreach (PropDef def in thisClassDef.PropDefcol)
+				{
+					_expression.SetParameterSqlInfo(def, tableName);
+				}
+				thisClassDef = thisClassDef.SuperClassClassDef;
+			}
+        	//		//TODO:Use DB Connection to get field/date separators - use parametrized sql
             //		mSqlExpression = exp.SqlExpressionString("", "", "", "");
         }
 

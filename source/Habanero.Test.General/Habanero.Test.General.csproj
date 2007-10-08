@@ -208,6 +208,7 @@
     <Compile Include="TestOneToOneRelationship.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestShapeCircleRelationship.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
