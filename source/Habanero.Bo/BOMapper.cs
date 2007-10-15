@@ -5,6 +5,7 @@ using System.Reflection;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base;
+using Habanero.Util.File;
 using log4net;
 
 namespace Habanero.BO
@@ -147,9 +148,16 @@ namespace Habanero.BO
         public ClassDef GetLookupListClassDef(string propertyName)
         {
             PropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName);
-            if (propDef.LookupList != null && propDef.LookupList.GetType() == typeof (DatabaseLookupList))
-            {
-                return ((DatabaseLookupList) propDef.LookupList).ClassDef;
+            if (propDef.LookupList != null) {
+                if (propDef.LookupList.GetType() == typeof (DatabaseLookupList)) {
+                    return ((DatabaseLookupList) propDef.LookupList).ClassDef;
+                }
+                else if (propDef.LookupList.GetType() == typeof (BusinessObjectLookupList)) {
+                    Type lookupListType = null;
+                    TypeLoader.LoadClassType(ref lookupListType, ((BusinessObjectLookupList) propDef.LookupList).AssemblyName,
+                                             ((BusinessObjectLookupList) propDef.LookupList).ClassName, "Class", "Lookup List");
+                    return ClassDef.ClassDefs[lookupListType];
+                }
             }
             return null;
         }
