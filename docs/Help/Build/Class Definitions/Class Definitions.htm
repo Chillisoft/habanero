@@ -106,7 +106,7 @@ Definitions</a></font></b></font></td>
 
 
 
-<p><b>Class definitions for: Habanero Beta v1.0b</b></p>
+<p><b>Class definitions for: Habanero Beta v1.0.2b</b></p>
 <p>This section covers a list of explanations, possible options and 
 limitations for all class definitions as listed in the class definitions XML 
 file (usually called &quot;classdefs.xml&quot;).&nbsp; The class definitions are 
@@ -126,12 +126,12 @@ specifications further along for specific options and limitations.</p>
   &lt;superClass class=&quot;class_inherited_from&quot; assembly=&quot;its_assembly&quot; /&gt;
 
   &lt;property name=&quot;property_name&quot; /&gt;
-  &lt;property name=&quot;property_name&quot; type=&quot;Guid&quot; isCompulsory=&quot;true&quot;&gt;
+  &lt;property name=&quot;property_name&quot; type=&quot;Guid&quot; compulsory=&quot;true&quot;&gt;
     &lt;rule name=&quot;rule name&quot; message=&quot;message for user if rule broken&quot; /&gt;
       &lt;add key=&quot;min&quot; value=&quot;0&quot; /&gt;
       &lt;add key=&quot;max&quot; value=&quot;300&quot; /&gt;
     &lt;/rule&gt;
-    &lt;databaseLookupList sql=&quot;select display_field, value_field from table_name&quot; /&gt;
+    &lt;databaseLookupList sql=&quot;select value_field, display_field from table_name&quot; /&gt;
   &lt;/property&gt;
 
   &lt;key name=&quot;keydef name&quot; message=&quot;message to user&quot; ignoreIfNull=&quot;true&quot;&gt;
@@ -143,7 +143,7 @@ specifications further along for specific options and limitations.</p>
   &lt;/primaryKey&gt;
 
   &lt;relationship name=&quot;rel_name&quot; type=&quot;multiple&quot; relatedClass=&quot;class&quot; relatedAssembly=&quot;assembly&quot;&gt;
-    &lt;relatedProperty name=&quot;related_prop_name&quot; relatedProperty=&quot;related_prop_name&quot; /&gt;
+    &lt;relatedProperty property=&quot;related_prop_name&quot; relatedProperty=&quot;related_prop_name&quot; /&gt;
   &lt;/relationship&gt;
 
   &lt;ui&gt;
@@ -151,7 +151,7 @@ specifications further along for specific options and limitations.</p>
       &lt;column property=&quot;property_name&quot; /&gt;
       &lt;column heading=&quot;column_heading&quot; property=&quot;property_name&quot; width=&quot;100&quot; /&gt;
     &lt;/grid&gt;
-    &lt;form height=&quot;400&quot; width=&quot;450&quot; heading=&quot;edit_form_heading&quot;&gt;
+    &lt;form height=&quot;400&quot; width=&quot;450&quot; title=&quot;edit_form_heading&quot;&gt;
       &lt;tab name=&quot;form_name&quot;&gt;
         &lt;columnLayout width=&quot;350&quot;&gt;
           &lt;field property=&quot;property_name&quot; /&gt;
@@ -865,9 +865,10 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         <td class="specvaluebottom"><b>keepReference</b> =<i>true</i>/false 
         (keep a reference in memory to the class, can set this to false if your 
         application is very memory-intensive)<br>
-        <b>orderBy</b> (the field name(s) to append to the sql order-by clause)<br>
+        <b>orderBy</b> (the field name(s) to append to the sql order-by clause, 
+        multiple relationships only)<br>
         <b>deleteAction</b> =DeleteRelated/DereferenceRelated/<i>Prevent</i> (what action to take  when the related object is 
-        deleted)</td>
+        deleted, multiple relationships only)</td>
       </tr>
     </table>
     </font>
@@ -1135,7 +1136,8 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         <td width=170 class="specname">Description:</td>
         <td class="specvalue">Holds a column of controls in an editing form.&nbsp; 
         If you will only have one column, then you don't need to include this 
-        element.</td>
+        element, unless the column width is intended to be less than the full 
+        width available.</td>
       </tr>
       <tr>
         <td class="specname">Comes under:</td>
