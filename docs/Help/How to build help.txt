@@ -16,5 +16,5 @@ I've looked at two leading GUI's:
 Using SHFB
   - copy appropriate files to the Build directory (see the help text file)
   - update the class definitions html too
-  - double click on the .shfb file and compile
+  - double click on the .shfb file, amend the version number and compile
   - copy the CHM output file to the right docs folder
