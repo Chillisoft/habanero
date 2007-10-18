@@ -7,7 +7,7 @@
     <asmlist>
       <inputassembly>
         <option>library</option>
-        <file dir="${configdir}\Build\Debug" name="Habanero.UI.Pro.dll" />
+        <file dir="${configdir}\bin" name="Habanero.UI.Pro.dll" />
       </inputassembly>
     </asmlist>
   </input>
