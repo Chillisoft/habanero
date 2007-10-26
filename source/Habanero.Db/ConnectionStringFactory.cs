@@ -68,9 +68,11 @@ namespace Habanero.DB
                     return new ConnectionStringOracleFactory();
                 case DatabaseConfig.Oracle + "_SYSTEM.DATA.ORACLECLIENT":
                     return new ConnectionStringOracleFactory();
-                case DatabaseConfig.Access:
-                    return new ConnectionStringAccessFactory();
-                default:
+				case DatabaseConfig.Access:
+					return new ConnectionStringAccessFactory();
+				case DatabaseConfig.PostgreSql:
+					return new ConnectionStringPostgreSqlFactory();
+				default:
                     return null;
             }
         }

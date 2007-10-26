@@ -61,23 +61,21 @@ namespace Habanero.DB
                 {
                     return new DatabaseConnectionSqlServer(assemblyName, fullClassName, config.GetConnectionString());
                 }
-            }
-            else if (string.Compare(config.Vendor, DatabaseConfig.Oracle, true) == 0)
-            {
-                if (String.IsNullOrEmpty(assemblyName))
-                {
-                    return
-                        new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection",
-                                                     config.GetConnectionString());
-//                        new DatabaseConnectionOracle("Oracle.DataAccess", "Oracle.DataAccess.Client.OracleConnection",
-//                                                     config.GetConnectionString());
-                }
-                else
-                {
-                    return new DatabaseConnectionOracle(assemblyName, fullClassName, config.GetConnectionString());
-                }
-            }
-            else if (string.Compare(config.Vendor, DatabaseConfig.Access, true) == 0)
+            } else if (string.Compare(config.Vendor, DatabaseConfig.Oracle, true) == 0)
+			{
+				if (String.IsNullOrEmpty(assemblyName))
+				{
+					return
+						new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection",
+													 config.GetConnectionString());
+					//                        new DatabaseConnectionOracle("Oracle.DataAccess", "Oracle.DataAccess.Client.OracleConnection",
+					//                                                     config.GetConnectionString());
+				} else
+				{
+					return new DatabaseConnectionOracle(assemblyName, fullClassName, config.GetConnectionString());
+				}
+			} 
+			else if (string.Compare(config.Vendor, DatabaseConfig.Access, true) == 0)
             {
                 if (String.IsNullOrEmpty(assemblyName))
                 {
@@ -90,6 +88,18 @@ namespace Habanero.DB
                     return new DatabaseConnectionAccess(assemblyName, fullClassName, config.GetConnectionString());
                 }
             }
+			else if (string.Compare(config.Vendor, DatabaseConfig.PostgreSql, true) == 0)
+			{
+				if (String.IsNullOrEmpty(assemblyName))
+				{
+					return
+						new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection",
+													 config.GetConnectionString());
+				} else
+				{
+					return new DatabaseConnectionPostgreSql(assemblyName, fullClassName, config.GetConnectionString());
+				}
+			} 
             else
             {
                 return null;

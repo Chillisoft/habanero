@@ -9,6 +9,17 @@ using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
 
+// Limiting the number of records for a Select
+// -------------------------------------------
+// SQL Server: SELECT TOP 10 * FROM [TABLE]
+// DB2: SELECT * FROM [TABLE] FETCH FIRST 10 ROWS ONLY
+// PostgreSQL: SELECT * FROM [TABLE] LIMIT 10
+// Oracle: SELECT * FROM [TABLE] WHERE ROWNUM <= 10
+// Sybase: SET ROWCOUNT 10 SELECT * FROM [TABLE]
+// Firebird: SELECT FIRST 10 * FROM [TABLE]
+// MySQL: SELECT * FROM [TABLE] LIMIT 10
+
+
 namespace Habanero.DB
 {
     /// <summary>

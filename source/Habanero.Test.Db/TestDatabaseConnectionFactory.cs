@@ -50,12 +50,20 @@ namespace Habanero.Test.DB
         }
         */
 
-        [Test]
-        public void TestCreateConnectionAccess()
-        {
-            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000");
-            DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
-            Assert.AreEqual("System.Data.OleDb", connection.TestConnection.GetType().Namespace);
-        }
-    }
+		[Test]
+		public void TestCreateConnectionAccess()
+		{
+			DatabaseConfig config = new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000");
+			DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
+			Assert.AreEqual("System.Data.OleDb", connection.TestConnection.GetType().Namespace);
+		}
+
+		[Test]
+		public void TestCreateConnectionPostgreSql()
+		{
+			DatabaseConfig config = new DatabaseConfig(DatabaseConfig.PostgreSql, "test", "test", "test", "test", "1000");
+			DatabaseConnection connection = DatabaseConnectionFactory.CreateConnection(config);
+			Assert.AreEqual("Npgsql", connection.TestConnection.GetType().Namespace);
+		}
+	}
 }

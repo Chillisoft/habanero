@@ -69,5 +69,16 @@ namespace Habanero.Test.DB
             Assert.AreEqual("System.Data.OleDb", conn.TestConnection.GetType().Namespace,
                             "Namespace of Access connection is wrong.");
         }
+
+		[Test]
+		public void TestCreateDatabaseConnectionPostgreSql()
+		{
+			DatabaseConnection conn = new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection");
+			conn.ConnectionString =
+				new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000").GetConnectionString();
+			Assert.AreEqual("Npgsql", conn.TestConnection.GetType().Namespace,
+							"Namespace of PostgreSql connection is wrong.");
+		}
+
     }
 }

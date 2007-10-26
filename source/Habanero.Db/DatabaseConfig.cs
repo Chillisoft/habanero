@@ -7,16 +7,17 @@ using Habanero.Base;
 
 namespace Habanero.DB
 {
-    /// <summary>
+	/// <summary>
     /// Stores database configuration settings and creates connections
     /// using these settings
     /// </summary>
-    public class DatabaseConfig : IDatabaseConfig
+    public partial class DatabaseConfig : IDatabaseConfig
     {
         public const string MySql = "MYSQL";
         public const string SqlServer = "SQLSERVER";
         public const string Oracle = "ORACLE";
-        public const string Access = "ACCESS";
+		public const string Access = "ACCESS";
+		public const string PostgreSql = "POSTGRESQL";
 
         private String _vendor;
         private String _server;

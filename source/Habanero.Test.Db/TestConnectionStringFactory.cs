@@ -10,6 +10,28 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestConnectionStringFactory
     {
+		[Test]
+		public void TestGetFactory()
+		{
+			Assert.AreSame(typeof(ConnectionStringSqlServerFactory),
+						   ConnectionStringFactory.GetFactory(DatabaseConfig.SqlServer).GetType(),
+						   "GetFactory not creating correct type : SqlServer.");
+			Assert.AreSame(typeof(ConnectionStringOracleFactory),
+						   ConnectionStringFactory.GetFactory(DatabaseConfig.Oracle).GetType(),
+						   "GetFactory not creating correct type : Oracle.");
+			Assert.AreSame(typeof(ConnectionStringMySqlFactory),
+						   ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetType(),
+						   "GetFactory not creating correct type : MySql.");
+			Assert.AreSame(typeof(ConnectionStringAccessFactory),
+						   ConnectionStringFactory.GetFactory(DatabaseConfig.Access).GetType(),
+						   "GetFactory not creating correct type : Access.");
+			Assert.AreSame(typeof(ConnectionStringPostgreSqlFactory),
+						   ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetType(),
+						   "GetFactory not creating correct type : PostgreSql.");
+		}
+
+    	#region SqlServer
+
         [Test]
         public void TestSqlServer()
         {
@@ -33,6 +55,10 @@ namespace Habanero.Test.DB
                             "ConnectionStringFactory not working for Sql Server");
         }
 
+    	#endregion //SqlServer
+
+    	#region Oracle
+
         [Test]
         public void TestOracle()
         {
@@ -53,6 +79,10 @@ namespace Habanero.Test.DB
             Assert.AreEqual("Data Source=testdatasource;user ID=testuser;", conn,
                             "ConnectionStringFactory not working for Oracle");
         }
+
+    	#endregion //Oracle
+
+    	#region MySql
 
         [Test]
         public void TestMySql()
@@ -114,6 +144,10 @@ namespace Habanero.Test.DB
                 "ConnectionStringFactory not working for MySql");
         }
 
+    	#endregion //MySql
+
+    	#region Access
+
         [Test]
         public void TestAccess()
         {
@@ -126,15 +160,71 @@ namespace Habanero.Test.DB
                 "ConnectionStringFactory not working for Access");
         }
 
-        [Test]
-        public void TestGetFactory()
-        {
-            Assert.AreSame(typeof (ConnectionStringMySqlFactory),
-                           ConnectionStringFactory.GetFactory(DatabaseConfig.MySql).GetType(),
-                           "GetFactory not creating correct type : MySql.");
-            Assert.AreSame(typeof (ConnectionStringSqlServerFactory),
-                           ConnectionStringFactory.GetFactory(DatabaseConfig.SqlServer).GetType(),
-                           "GetFactory not creating correct type : SqlServer.");
-        }
+    	#endregion //Access
+
+    	#region PostgreSql
+
+		[Test]
+		public void TestPostgreSql()
+		{
+			String conn =
+				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("testserver", "testdb",
+																							 "testusername",
+																							 "testpassword", "testport");
+			Assert.AreEqual(
+				"Server=testserver;Port=testport;Database=testdb;Userid=testusername;Password=testpassword;", conn,
+				"ConnectionStringFactory not working for PostgreSql");
+		}
+
+		[Test]
+		public void TestPostgreSqlNoPassword()
+		{
+			String conn =
+				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("testserver", "testdb",
+																							 "testusername", "",
+																							 "testport");
+			Assert.AreEqual("Server=testserver;Port=testport;Database=testdb;Userid=testusername;", conn,
+							"ConnectionStringFactory not working for PostgreSql");
+		}
+
+		[Test, ExpectedException(typeof(ArgumentException))]
+		public void TestPostgreSqlNoServerName()
+		{
+			String conn =
+				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("", "testdb",
+																							 "testusername",
+																							 "testpassword", "testport");
+		}
+
+		[Test, ExpectedException(typeof(ArgumentException))]
+		public void TestPostgreSqlNoUserName()
+		{
+			String conn =
+				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("sdf", "testdb", "",
+																							 "testpassword", "testport");
+		}
+
+		[Test, ExpectedException(typeof(ArgumentException))]
+		public void TestPostgreSqlNoDatabaseName()
+		{
+			String conn =
+				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("sdf", "", "sasdf",
+																							 "testpassword", "testport");
+		}
+
+		[Test]
+		public void TestPostgreSqlNoPort()
+		{
+			String conn =
+				ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetConnectionString("testserver", "testdb",
+																							 "testusername",
+																							 "testpassword", "");
+			Assert.AreEqual(
+				"Server=testserver;Port=5432;Database=testdb;Userid=testusername;Password=testpassword;", conn,
+				"ConnectionStringFactory not working for PostgreSql");
+		}
+
+    	#endregion //PostgreSql
+		
     }
 }
