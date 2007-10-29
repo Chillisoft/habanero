@@ -595,6 +595,8 @@ namespace Habanero.DB
                     statement.SetupCommand(cmd);
                     //cmd.CommandText = sql;
                     totalRowsAffected += cmd.ExecuteNonQuery();
+                    statement.DoAfterExecute(this, transaction, cmd);
+                    //statement.UpdateAutoIncrement(this);
                 }
                 if (!inTransaction)
                 {
@@ -740,6 +742,12 @@ namespace Habanero.DB
                     "There was an error reading the database. Please contact your system administrator.",
                     "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
+        }
+
+        public virtual long GetLastAutoIncrementingID(string tableName, IDbTransaction tran, IDbCommand command)
+        {
+            throw new NotImplementedException("GetLastAutoIncrementingID is not implemented on DatabaseConnection of type " + _className +
+                                              " in assembly " + _assemblyName);
         }
     }
 }

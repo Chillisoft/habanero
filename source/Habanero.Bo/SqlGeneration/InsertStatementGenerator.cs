@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Data;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.DB;
@@ -21,6 +22,7 @@ namespace Habanero.BO.SqlGeneration
         private SqlStatementCollection _statementCollection;
         private IDbConnection _conn;
         private bool _firstField;
+        private ClassDef _currentClassDef;
 
         /// <summary>
         /// Constructor to initialise the generator
@@ -42,36 +44,37 @@ namespace Habanero.BO.SqlGeneration
         public SqlStatementCollection Generate()
         {
             _statementCollection = new SqlStatementCollection();
+            _currentClassDef = _bo.ClassDef;
             bool includeAllProps;
             BOPropCol propsToInclude;
             string tableName;
 
-            includeAllProps = !_bo.ClassDef.IsUsingClassTableInheritance();
-            propsToInclude = _bo.ClassDef.PropDefcol.CreateBOPropertyCol(true);
-            if (_bo.ClassDef.IsUsingClassTableInheritance())
+            includeAllProps = !_currentClassDef.IsUsingClassTableInheritance();
+            propsToInclude = _currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+            if (_currentClassDef.IsUsingClassTableInheritance())
             {
                 propsToInclude.Add(
-                    _bo.ClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
+                    _currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
             }
             tableName = _bo.TableName;
             GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
 
             if (_bo.ClassDef.IsUsingClassTableInheritance())
             {
-                ClassDef currentClassDef = _bo.ClassDef.SuperClassClassDef;
-                while (currentClassDef.IsUsingClassTableInheritance())
+                _currentClassDef = _bo.ClassDef.SuperClassClassDef;
+                while (_currentClassDef.IsUsingClassTableInheritance())
                 {
                     includeAllProps = false;
-                    propsToInclude = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+                    propsToInclude = _currentClassDef.PropDefcol.CreateBOPropertyCol(true);
                     propsToInclude.Add(
-                        currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
-                    tableName = currentClassDef.TableName;
+                        _currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
+                    tableName = _currentClassDef.TableName;
                     GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
-                    currentClassDef = currentClassDef.SuperClassClassDef;
+                    _currentClassDef = _currentClassDef.SuperClassClassDef;
                 }
                 includeAllProps = false;
-                propsToInclude = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
-                tableName = currentClassDef.TableName;
+                propsToInclude = _currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+                tableName = _currentClassDef.TableName;
                 GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
             }
 
@@ -90,14 +93,21 @@ namespace Habanero.BO.SqlGeneration
         /// <param name="tableName">The table name</param>
         private void GenerateSingleInsertStatement(bool includeAllProps, BOPropCol propsToInclude, string tableName)
         {
-            this.InitialiseStatement();
+            ISupportsAutoIncrementingField supportsAutoIncrementingField = null;
+            if (_bo.HasAutoIncrementingField)
+            {
+                supportsAutoIncrementingField = new SupportsAutoIncrementingFieldBO(_bo);
+            }
+            this.InitialiseStatement(tableName, supportsAutoIncrementingField);
+           
 
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
-               // BOProp prop = (BOProp) item.Value;
+                // BOProp prop = (BOProp) item.Value;
                 if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
                 {
-                    AddPropToInsertStatement(prop);
+                    if (propsToInclude.AutoIncrementingPropertyName != prop.PropertyName)
+                        AddPropToInsertStatement(prop);
                 }
             }
             _insertSql.Statement.Append(@"INSERT INTO " + tableName + " (" + _dbFieldList.ToString() + ") VALUES (" +
@@ -108,11 +118,16 @@ namespace Habanero.BO.SqlGeneration
         /// <summary>
         /// Initialises the sql statement
         /// </summary>
-        private void InitialiseStatement()
+        private void InitialiseStatement(string tableName, ISupportsAutoIncrementingField supportsAutoIncrementingField)
         {
             _dbFieldList = new StringBuilder(_bo.Props.Count * 20);
             _dbValueList = new StringBuilder(_bo.Props.Count * 20);
-            _insertSql = new SqlStatement(_conn);
+            InsertSqlStatement statement = new InsertSqlStatement(_conn);
+            statement.TableName = tableName;
+            statement.SupportsAutoIncrementingField = supportsAutoIncrementingField;
+
+            _insertSql = statement;
+            
             _gen = new ParameterNameGenerator(_conn);
             _firstField = true;
         }

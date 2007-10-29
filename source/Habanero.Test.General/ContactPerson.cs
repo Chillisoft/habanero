@@ -155,7 +155,7 @@ namespace Habanero.Test.General
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Surname", "System", "String", PropReadWriteRule.ReadWrite, "Surname", null, true);
+                new PropDef("Surname", "System", "String", PropReadWriteRule.ReadWrite, "Surname", null, true, false);
             propDef.PropRule = new PropRuleString("ContactPerson-" + propDef.PropertyName, "", 2, 50, null);
             lPropDefCol.Add(propDef);
 

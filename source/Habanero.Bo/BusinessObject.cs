@@ -51,8 +51,9 @@ namespace Habanero.BO
         private IConcurrencyControl _concurrencyControl;
         private ITransactionLog _transactionLog;
         protected IDatabaseConnection _connection;
-    	
-		#endregion //Fields
+        private bool _hasAutoIncrementingField;
+
+        #endregion //Fields
 
         #region Constructors
 
@@ -749,6 +750,11 @@ namespace Habanero.BO
         protected virtual string ConnectionString
         {
             get { return _connection.ConnectionString; }
+        }
+
+        internal bool HasAutoIncrementingField
+        {
+            get { return !String.IsNullOrEmpty(_boPropCol.AutoIncrementingPropertyName); }
         }
 
         /// <summary>

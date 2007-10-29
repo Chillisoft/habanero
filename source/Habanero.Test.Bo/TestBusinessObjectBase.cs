@@ -131,5 +131,24 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Goodbye", bo.GetPropertyValueString("TestProp"));
         }
 
+        [Test]
+
+        public void TestSaveUpdatesAutoIncrementingField()
+        {
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID();
+
+            TestAutoInc bo = new TestAutoInc();
+            bo.SetPropertyValue("testfield", "testing 123");
+            Assert.IsFalse(bo.TestAutoIncID.HasValue);
+            bo.Save();
+            Assert.IsNotNull(bo.TestAutoIncID);
+            Assert.AreNotEqual(0, bo.TestAutoIncID);
+            Assert.IsFalse(bo.State.IsDirty);
+
+
+            
+        }
+
     }
 }

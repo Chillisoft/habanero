@@ -93,6 +93,7 @@
   <ItemGroup>
     <Compile Include="ConnectionStringPostgreSqlFactory.cs" />
     <Compile Include="DatabaseConnectionPostgreSql.cs" />
+    <Compile Include="InsertSqlStatement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

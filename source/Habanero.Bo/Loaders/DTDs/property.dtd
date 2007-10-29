@@ -11,4 +11,5 @@
 	databaseField CDATA #IMPLIED
 	default CDATA #IMPLIED
   compulsory ( true | false ) "false"
+  auto-incrementing ( true | false ) "false"
 >

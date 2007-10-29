@@ -40,9 +40,9 @@ namespace Habanero.BO.ClassDefinition
 		}
 
 		public PropDef CreatePropDef(string propertyName, string assemblyName, string typeName,
-		                             PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory)
+		                             PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing)
 		{
-			return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString, compulsory);
+            return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString, compulsory, autoIncrementing);
 		}
 
 		public PropRuleDate CreatePropRuleDate(string name, string message)

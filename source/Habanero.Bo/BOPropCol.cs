@@ -11,6 +11,7 @@ namespace Habanero.BO
     public class BOPropCol 
     {
         private Dictionary<string, BOProp> _boProps;
+        private string _autoIncrementingPropertyName;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
@@ -192,6 +193,12 @@ namespace Habanero.BO
             {
                 return _boProps.Count;
             }
+        }
+
+        public string AutoIncrementingPropertyName
+        {
+            get { return _autoIncrementingPropertyName; }
+            set { _autoIncrementingPropertyName = value; }
         }
     }
 }

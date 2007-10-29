@@ -332,6 +332,7 @@
     <Compile Include="SqlGeneration\InsertStatementGenerator.cs" />
     <Compile Include="SqlGeneration\SelectStatementGenerator.cs" />
     <Compile Include="SqlGeneration\UpdateStatementGenerator.cs" />
+    <Compile Include="SupportsAutoIncrementingFieldBO.cs" />
     <Compile Include="Transaction.cs">
       <SubType>Code</SubType>
     </Compile>

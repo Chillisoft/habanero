@@ -569,7 +569,21 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-    	/// <summary>
+        /// <summary>
+        /// Returns whether this class has an autoincrementing field or not. Checks the propdefs for whether
+        /// one of them is autoincrementing, returning true if this is the case.
+        /// </summary>
+        public bool HasAutoIncrementingField
+        {
+            get {
+                foreach (PropDef def in _propDefCol) {
+                    if (def.AutoIncrementing) return true;
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Indicates whether ClassTableInheritance is being used. See
         /// the ORMapping enumeration for more detail.
         /// </summary>

@@ -46,7 +46,7 @@ namespace Habanero.Test.BO
         {
             //Test compulsory with no default set
             PropDef lPropDefWithRules = new PropDef("PropNameWithRules", "System", "String",
-                                                    PropReadWriteRule.ReadWrite, null, null, true);
+                                                    PropReadWriteRule.ReadWrite, null, null, true, false);
             lPropDefWithRules.PropRule = new PropRuleString(lPropDefWithRules.PropertyName, "", -1, -1, null);
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsFalse(lBOProp.isValid);
@@ -63,7 +63,7 @@ namespace Habanero.Test.BO
         public void TestPropCompulsoryForStrings()
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
-                PropReadWriteRule.ReadWrite, null, null, true);
+                PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
@@ -87,7 +87,7 @@ namespace Habanero.Test.BO
         public void TestPropCompulsoryForGuids()
         {
             PropDef propDef = new PropDef("TestProp", "System", "Guid",
-                PropReadWriteRule.ReadWrite, null, null, true);
+                PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
@@ -115,7 +115,7 @@ namespace Habanero.Test.BO
         public void TestPropCompulsoryForIntegers()
         {
             PropDef propDef = new PropDef("TestProp", "System", "Int32",
-                PropReadWriteRule.ReadWrite, null, null, true);
+                PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
@@ -139,7 +139,7 @@ namespace Habanero.Test.BO
         public void TestPropCompulsoryForDecimals()
         {
             PropDef propDef = new PropDef("TestProp", "System", "Decimal",
-                PropReadWriteRule.ReadWrite, null, null, true);
+                PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
@@ -163,7 +163,7 @@ namespace Habanero.Test.BO
         public void TestPropCompulsoryForDoubles()
         {
             PropDef propDef = new PropDef("TestProp", "System", "Double",
-                PropReadWriteRule.ReadWrite, null, null, true);
+                PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
@@ -187,7 +187,7 @@ namespace Habanero.Test.BO
         public void TestPropCompulsoryForDateTime()
         {
             PropDef propDef = new PropDef("TestProp", "System", "DateTime",
-                PropReadWriteRule.ReadWrite, null, null, true);
+                PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
@@ -211,7 +211,7 @@ namespace Habanero.Test.BO
         public void TestPropCompulsoryForBooleans()
         {
             PropDef propDef = new PropDef("TestProp", "System", "Boolean",
-                PropReadWriteRule.ReadWrite, null, null, true);
+                PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;

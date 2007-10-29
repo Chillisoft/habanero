@@ -21,7 +21,7 @@ namespace Habanero.BO.ClassDefinition
 		
 		PrimaryKeyDef CreatePrimaryKeyDef();
 
-		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory);
+		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing);
 
 		PropRuleDate CreatePropRuleDate(string name, string message);
 

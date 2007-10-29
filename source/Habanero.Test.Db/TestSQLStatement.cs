@@ -1,8 +1,10 @@
 using System;
 using System.Data;
 using System.Text;
+using Habanero.Base;
 using Habanero.DB;
 using NUnit.Framework;
+using Rhino.Mocks;
 //using ByteFX.Data.MySqlClient;
 
 namespace Habanero.Test.DB
@@ -145,6 +147,7 @@ namespace Habanero.Test.DB
             Assert.AreEqual("select * from bob WHERE that = this ORDER BY this", sql.Statement.ToString());
         }
 
+      
         //[Test]
         //public void TestOracleClobField()
         //{

@@ -369,6 +369,7 @@ namespace Habanero.Test
         //    return bo;
         //}
 
+
     }
 
     public class MyRelatedBo : BusinessObject

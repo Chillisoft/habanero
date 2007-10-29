@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="TestDeleteHelper.cs" />
     <Compile Include="TestExpression.cs" />
+    <Compile Include="TestInsertStatementGenerator.cs" />
     <Compile Include="TestPropDef.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,3 +1,6 @@
+using System.Data;
+using System.Reflection;
+
 namespace Habanero.DB
 {
     /// <summary>
@@ -66,6 +69,12 @@ namespace Habanero.DB
         public override string GetLimitClauseForEnd(int limit)
         {
             return "limit " + limit;
+        }
+
+        public override long GetLastAutoIncrementingID(string tableName, IDbTransaction tran, IDbCommand command)
+        {
+            PropertyInfo propInfo = command.GetType().GetProperty("LastInsertedId", BindingFlags.Public | BindingFlags.Instance);
+            return (long)propInfo.GetValue(command, null);
         }
     }
 }

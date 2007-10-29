@@ -151,6 +151,9 @@ namespace Habanero.BO.ClassDefinition
             foreach (PropDef lPropDef in this)
             {
                 lBOPropertyCol.Add(lPropDef.CreateBOProp(newObject));
+                if (lPropDef.AutoIncrementing) {
+                    lBOPropertyCol.AutoIncrementingPropertyName = lPropDef.PropertyName;
+                }
             }
             return lBOPropertyCol;
         }

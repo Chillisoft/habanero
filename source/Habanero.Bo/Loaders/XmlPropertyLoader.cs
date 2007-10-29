@@ -21,6 +21,7 @@ namespace Habanero.BO.Loaders
         private string _databaseFieldName;
         private PropDef _propDef;
         private bool _compulsory;
+        private bool _autoIncrementing;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -88,11 +89,12 @@ namespace Habanero.BO.Loaders
             LoadDefaultValue();
             LoadDatabaseFieldName();
             LoadCompulsory();
+            LoadAutoIncrementing();
 
             _reader.Read();
 
 			_propDef = _defClassFactory.CreatePropDef(_propertyName, _assemblyName, _typeName, 
-				_readWriteRule, _databaseFieldName, _defaultValueString, _compulsory);
+				_readWriteRule, _databaseFieldName, _defaultValueString, _compulsory, _autoIncrementing);
 			//_propDef = new PropDef(_propertyName, _assemblyName, _typeName, 
 			//    _readWriteRule, _databaseFieldName, _defaultValueString);
 
@@ -110,6 +112,8 @@ namespace Habanero.BO.Loaders
                                                                            DtdLoader, _defClassFactory);
             }
         }
+
+
 
 
         /// <summary>
@@ -205,6 +209,11 @@ namespace Habanero.BO.Loaders
         private void LoadCompulsory()
         {
             _compulsory = Convert.ToBoolean(_reader.GetAttribute("compulsory"));
+        }
+
+        private void LoadAutoIncrementing()
+        {
+            _autoIncrementing = Convert.ToBoolean(_reader.GetAttribute("auto-incrementing"));
         }
     }
 }

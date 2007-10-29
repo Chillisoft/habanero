@@ -18,6 +18,7 @@ namespace Habanero.DB
         private IDbCommand _sampleCommand;
         private ParameterNameGenerator _gen;
 
+
         /// <summary>
         /// Constructor to initialise a new sql statement
         /// </summary>
@@ -278,6 +279,11 @@ namespace Habanero.DB
             {
                 this.Statement.Append(" ORDER BY " + orderByCriteria);
             }
+        }
+
+        internal virtual void DoAfterExecute(DatabaseConnection conn, IDbTransaction tran, IDbCommand command)
+        {
+            
         }
     }
 }

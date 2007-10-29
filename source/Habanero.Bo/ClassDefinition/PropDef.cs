@@ -60,8 +60,8 @@ namespace Habanero.BO.ClassDefinition
         private PropRuleBase _propRule;
         private ILookupList _lookupList = new NullLookupList();
     	private bool _compulsory = false;
+        private bool _autoIncrementing = false;
 
-        
         #region Constuctor and destructors
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Habanero.BO.ClassDefinition
                        PropReadWriteRule propRWStatus,
                        string databaseFieldName,
                        object defaultValue) :
-							this(propName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, false)
+							this(propName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, false, false)
         {
         }
 
@@ -100,7 +100,7 @@ namespace Habanero.BO.ClassDefinition
                        Type propType,
                        PropReadWriteRule propRWStatus,
                        object defaultValue) 
-			:this(propName, propType,null,null, propRWStatus, null, defaultValue, null, false)
+			:this(propName, propType,null,null, propRWStatus, null, defaultValue, null, false, false)
         {
         }
 
@@ -120,13 +120,14 @@ namespace Habanero.BO.ClassDefinition
 		/// <param name="defaultValue">The default value that a property 
 		/// of a new object will be set to</param>
 		/// <param name="compulsory">Whether this property is a required field or not.</param>
+		/// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
 		public PropDef(string propName,
 					string assemblyName, string typeName,
 					PropReadWriteRule propRWStatus,
 					string databaseFieldName,
 					string defaultValue, 
-                    bool compulsory)
-            : this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue, compulsory)
+                    bool compulsory, bool autoIncrementing)
+            : this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue, compulsory, autoIncrementing)
 		{
 		}
 
@@ -134,7 +135,7 @@ namespace Habanero.BO.ClassDefinition
 					   Type propType, string assemblyName, string typeName,
 					   PropReadWriteRule propRWStatus,
 					   string databaseFieldName,
-					   object defaultValue, string defaultValueString, bool compulsory)
+					   object defaultValue, string defaultValueString, bool compulsory, bool autoIncrementing)
 		{			
 			ArgumentValidationHelper.CheckStringArgumentNotEmpty(propName, "propName","This field is compulsary for the PropDef class.");
 			if (propName.IndexOfAny(new char[] { '.', '-', '|' }) != -1)
@@ -168,6 +169,7 @@ namespace Habanero.BO.ClassDefinition
 				_defaultValueString = defaultValueString;
 			}
 		    _compulsory = compulsory;
+		    _autoIncrementing = autoIncrementing;
 		}
 
 		#endregion
@@ -311,6 +313,16 @@ namespace Habanero.BO.ClassDefinition
 		{
 			return (!(_lookupList is NullLookupList));
 		}
+
+        /// <summary>
+        /// Indicates whether this property is auto-incrementing (from the database)
+        /// In this case when the BusinessObject is inserted the field will be filled
+        /// from the database field.
+        /// </summary>
+        public bool AutoIncrementing
+        {
+            get { return _autoIncrementing; }
+        }
 
 		#endregion
 
@@ -557,7 +569,7 @@ namespace Habanero.BO.ClassDefinition
 			}
 		}
 
-    	private void validateDefaultValue(object defaultValue)
+        private void validateDefaultValue(object defaultValue)
     	{
     		if (!_hasDefaultValueBeenValidated)
     		{

@@ -39,7 +39,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCreateLatePropDefInvalidTypeNotAccessed()
         {
-            PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadWrite, null, "", false);
+            PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadWrite, null, "", false, false);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [ExpectedException(typeof(UnknownTypeNameException))]
         public void TestCreateLatePropDefInvalidType()
         {
-            PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadWrite, null, "", false);
+            PropDef propDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadWrite, null, "", false, false);
             Type propType = propDef.PropertyType;
             Assert.Fail("This line should not be reached because the previous line should have failed.");
         }
@@ -61,7 +61,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCreateLatePropDefInvalidDefaultNotAccessed()
         {
-            PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false);
+            PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false, false);
             //No error
         }
 
@@ -69,7 +69,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [ExpectedException(typeof(FormatException))]
         public void TestCreateLatePropDefInvalidDefault()
         {
-            PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false);
+            PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false, false);
             object defaultValue = lPropDef.DefaultValue;
             Assert.Fail("This line should not be reached because the previous line should have failed.");
         }
