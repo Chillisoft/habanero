@@ -226,6 +226,12 @@ namespace Habanero.BO
     			refreshSql.AppendWhere();
 				refreshSql.Statement.Append(extraSearchCriteriaLiteral);
     		}
+
+            if (limit > 0)
+            {
+                string limitClause = businessObject.GetDatabaseConnection().GetLimitClauseForEnd(limit);
+                if (!String.IsNullOrEmpty(limitClause)) refreshSql.Statement.Append(" " + limitClause);
+            }
     		return refreshSql;
     	}
 

@@ -78,7 +78,8 @@ namespace Habanero.BO.SqlGeneration
             string statement = "SELECT ";
             if (limit > 0)
             {
-                statement += " " + _connection.GetLimitClauseForBeginning(limit) + " ";
+                string limitClause = _connection.GetLimitClauseForBeginning(limit);
+                if (!string.IsNullOrEmpty(limitClause)) statement += limitClause + " ";
             }
 
             foreach (BOProp prop in _bo.Props.SortedValues)
@@ -117,10 +118,6 @@ namespace Habanero.BO.SqlGeneration
                 statement += where.Substring(0, where.Length - 5);
             }
 
-            if (limit > 0)
-            {
-                statement += " " + _connection.GetLimitClauseForEnd(limit) + " ";
-            }
             return statement;
         }
 

@@ -232,7 +232,7 @@ namespace Habanero.BO.Loaders
 
         private void LoadAutoIncrementing()
         {
-            _autoIncrementing = Convert.ToBoolean(_reader.GetAttribute("auto-incrementing"));
+            _autoIncrementing = Convert.ToBoolean(_reader.GetAttribute("autoIncrementing"));
         }
     }
 }

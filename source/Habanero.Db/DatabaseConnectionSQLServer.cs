@@ -17,6 +17,9 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using System.Data;
+
 namespace Habanero.DB
 {
     /// <summary>
@@ -47,5 +50,25 @@ namespace Habanero.DB
             : base(assemblyName, className, connectString)
         {
         } //		protected override IDbConnection GetNewConnection() {
+
+        /// <summary>
+        /// Gets the value of the last auto-incrementing number.  This called after doing an insert statement so that
+        /// the inserted auto-number can be retrieved.  The table name, current IDbTransaction and IDbCommand are passed
+        /// in so that they can be used if necessary.  
+        /// </summary>
+        /// <param name="tableName">The name of the table inserted into</param>
+        /// <param name="tran">The current transaction, the one the insert was done in</param>
+        /// <param name="command">The Command the did the insert statement</param>
+        /// <returns></returns>
+        public override long GetLastAutoIncrementingID(string tableName, IDbTransaction tran, IDbCommand command)
+        {
+            long id = 0;
+            using (IDataReader reader = LoadDataReader(String.Format("SELECT IDENT_CURRENT('{0}')", tableName))) {
+                if (reader.Read()) {
+                    id = Convert.ToInt64(reader.GetValue(0));
+                }
+            }
+            return id;
+        }
     }
 }

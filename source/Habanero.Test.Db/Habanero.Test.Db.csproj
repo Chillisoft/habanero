@@ -137,6 +137,7 @@
     <Compile Include="TestDatabaseUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestMySqlDatabaseConnection.cs" />
     <Compile Include="TestParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>

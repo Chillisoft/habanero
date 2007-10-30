@@ -53,7 +53,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(null, def.DefaultValue, "The default default is null");
             Assert.AreEqual("TestProp", def.FieldName,
                             "The field name should be the same as the property name by default");
-            Assert.AreEqual(false, def.AutoIncrementing, "auto-incrementing should be false by default");
+            Assert.AreEqual(false, def.AutoIncrementing, "autoIncrementing should be false by default");
         }
 
 
@@ -247,7 +247,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestBusinessObjectWithAutoIncrementingField()
         {
             PropDef def = itsLoader.LoadProperty(
-                      @"<property name=""TestProp"" auto-incrementing=""true"" />");
+                      @"<property name=""TestProp"" autoIncrementing=""true"" />");
             Assert.AreEqual(true, def.AutoIncrementing);
         }
 

@@ -90,6 +90,15 @@ namespace Habanero.DB
             return "limit " + limit;
         }
 
+        /// <summary>
+        /// Gets the value of the last auto-incrementing number.  This called after doing an insert statement so that
+        /// the inserted auto-number can be retrieved.  The table name, current IDbTransaction and IDbCommand are passed
+        /// in so that they can be used if necessary.  
+        /// </summary>
+        /// <param name="tableName">The name of the table inserted into</param>
+        /// <param name="tran">The current transaction, the one the insert was done in</param>
+        /// <param name="command">The Command the did the insert statement</param>
+        /// <returns></returns>
         public override long GetLastAutoIncrementingID(string tableName, IDbTransaction tran, IDbCommand command)
         {
             PropertyInfo propInfo = command.GetType().GetProperty("LastInsertedId", BindingFlags.Public | BindingFlags.Instance);

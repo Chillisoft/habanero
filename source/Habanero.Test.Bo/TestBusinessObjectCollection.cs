@@ -60,5 +60,43 @@ namespace Habanero.Test.BO
             Assert.AreSame(bo1, col.FindByGuid(bo1.MyBoID));
         }
 
+        [Test]
+        public void TestCreateLoadSqlStatementLimitClauseAtEnd()
+        {
+            MyBO bo1 = new MyBO();
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof (MyBO)], null, 10, null);
+            Assert.AreEqual("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO limit 10", statement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestCreateLoadSqlStatementLimitClauseAtBeginning()
+        {
+            MyBO bo1 = new MyBO();
+            bo1.SetDatabaseConnection(new MyDatabaseConnection());
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], null, 10, null);
+            Assert.AreEqual("SELECT TOP 10 MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statement.Statement.ToString());
+        }
+
+
+        private class MyDatabaseConnection : DatabaseConnection
+        {
+            public MyDatabaseConnection() : base("test", "test") { }
+
+            public override string GetLimitClauseForBeginning(int limit)
+            {
+                return "TOP " + limit;
+            }
+
+            public override string LeftFieldDelimiter
+            {
+                get { return ""; }
+            }
+
+            public override string RightFieldDelimiter
+            {
+                get { return ""; }
+            }
+        }
+
     }
 }

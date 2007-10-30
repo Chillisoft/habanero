@@ -192,6 +192,7 @@
     </Compile>
     <Compile Include="TestRelationshipDef.cs" />
     <Compile Include="TestRelProp.cs" />
+    <Compile Include="TestSelectStatementGenerator.cs" />
     <Compile Include="TestSingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>

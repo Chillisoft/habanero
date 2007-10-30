@@ -763,6 +763,16 @@ namespace Habanero.DB
             }
         }
 
+        /// <summary>
+        /// Gets the value of the last auto-incrementing number.  This called after doing an insert statement so that
+        /// the inserted auto-number can be retrieved.  The table name, current IDbTransaction and IDbCommand are passed
+        /// in so that they can be used if necessary.  Note, this must be overridden in subclasses to include support
+        /// for this feature in different databases - otherwise a NotImplementedException will be thrown.
+        /// </summary>
+        /// <param name="tableName">The name of the table inserted into</param>
+        /// <param name="tran">The current transaction, the one the insert was done in</param>
+        /// <param name="command">The Command the did the insert statement</param>
+        /// <returns></returns>
         public virtual long GetLastAutoIncrementingID(string tableName, IDbTransaction tran, IDbCommand command)
         {
             throw new NotImplementedException("GetLastAutoIncrementingID is not implemented on DatabaseConnection of type " + _className +

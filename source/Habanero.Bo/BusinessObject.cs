@@ -1358,10 +1358,10 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Generates a sql statement with no search clause
+        /// Generates a sql statement with no search clause.  It may have a where clause because of joins required by
+        /// inheritance when using class table inheritance, but no other search clauses will be attached.
         /// </summary>
         /// <returns>Returns a sql string</returns>
-        /// TODO ERIC - seems to add a "where" clause anyway
         protected virtual string SelectSqlWithNoSearchClause()
         {
             return new SelectStatementGenerator(this, this._connection).Generate(-1);
@@ -1369,10 +1369,10 @@ namespace Habanero.BO
 
         /// <summary>
         /// Returns a sql statement with no search clause but including a
-        /// "where " (or "and " where appropriate) statement
+        /// "where " (or "and " where appropriate) statement.  Uses SelectSqlWithNoSearchClause() and appends
+        /// a "where" or "and" depending on which one is appropriate.
         /// </summary>
         /// <returns>Returns a sql string</returns>
-        /// TODO ERIC - if this uses above then it will have "where" already
         internal string SelectSqlWithNoSearchClauseIncludingWhere()
         {
             string basicSelect = SelectSqlWithNoSearchClause();

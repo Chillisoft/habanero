@@ -50,7 +50,7 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""TestAutoInc"" assembly=""Habanero.Test"" table=""testautoinc"" >
-					<property  name=""testautoincid"" type=""Int32"" auto-incrementing=""true"" />
+					<property  name=""testautoincid"" type=""Int32"" autoIncrementing=""true"" />
 					<property  name=""testfield"" />
 					<primaryKey isObjectID=""false"">
 						<prop name=""testautoincid"" />
