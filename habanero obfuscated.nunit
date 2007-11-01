@@ -1,12 +1,12 @@
 ﻿<NUnitProject>
   <Settings activeconfig="Debug" />
   <Config name="Debug" binpathtype="Auto">
-    <assembly path="Obfuscated\Habanero.Test.BO.dll" />
-    <assembly path="Obfuscated\Habanero.Test.DB.dll" />
-    <assembly path="Obfuscated\Habanero.Test.General.dll" />
-    <assembly path="Obfuscated\Habanero.Test.dll" />
-    <assembly path="Obfuscated\Habanero.Test.UI.dll" />
-    <assembly path="Obfuscated\Habanero.Test.UI.Pro.dll" />
+    <assembly path="obfuscated\Habanero.Test.BO.dll" />
+    <assembly path="obfuscated\Habanero.Test.DB.dll" />
+    <assembly path="obfuscated\Habanero.Test.General.dll" />
+    <assembly path="obfuscated\Habanero.Test.dll" />
+    <assembly path="obfuscated\Habanero.Test.UI.dll" />
+    <assembly path="obfuscated\Habanero.Test.UI.Pro.dll" />
   </Config>
   <Config name="Release" binpathtype="Auto" />
 </NUnitProject>
