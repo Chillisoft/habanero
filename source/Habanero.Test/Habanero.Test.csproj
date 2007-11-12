@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchitectureTest.cs" />
+    <Compile Include="BeforeSaveBo.cs" />
     <Compile Include="MyBo.cs" />
     <Compile Include="MyDBConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

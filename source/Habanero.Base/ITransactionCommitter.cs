@@ -33,7 +33,7 @@ namespace Habanero.Base
 		/// Adds an Itransaction object to the collection of transactions
 		/// </summary>
 		/// <param name="transaction">An Itransaction object</param>
-		void AddTransactionObject(ITransaction transaction);
+		bool AddTransactionObject(ITransaction transaction);
 
 		///<summary>
 		/// This returns the number of rows that were affected by the 

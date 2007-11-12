@@ -62,16 +62,17 @@ namespace Habanero.BO
         /// Adds an Itransaction object to the collection of transactions
         /// </summary>
         /// <param name="transaction">An Itransaction object</param>
-        public void AddTransactionObject(ITransaction transaction)
+        public bool AddTransactionObject(ITransaction transaction)
         {
 			////check if the transaction object is in a valid state before adding to the col
 			//transaction.CheckPersistRules();
-			transaction.AddingToTransaction(this);
+			bool mustAdd = transaction.AddingToTransaction(this);
             //if the transaction already exists then ignore
-			if (!_transactions.ContainsKey(transaction.StrID()))
+			if (mustAdd && !_transactions.ContainsKey(transaction.StrID()))
             {
 				_transactions.Add(transaction.StrID(), transaction);
             }
+            return mustAdd;
         }
 
         /// <summary>
