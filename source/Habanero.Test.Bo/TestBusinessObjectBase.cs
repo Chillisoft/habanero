@@ -45,6 +45,8 @@ namespace Habanero.Test.BO
         [Test]
         public void TestInstantiate()
         {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
             string t = bo.GetPropertyValueString("TestProp");
         }
@@ -133,6 +135,7 @@ namespace Habanero.Test.BO
 				.Return(DatabaseConnection.CurrentConnection.GetConnection())
 				.Repeat.Times(2);
 			Expect.Call(itsConnection.ExecuteSql(null, null))
+                .IgnoreArguments()
 				.Return(1)
 				.Repeat.Times(1);
 			//itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
@@ -151,7 +154,6 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-
         public void TestSaveUpdatesAutoIncrementingField()
         {
             ClassDef.ClassDefs.Clear();
@@ -164,9 +166,56 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(bo.TestAutoIncID);
             Assert.AreNotEqual(0, bo.TestAutoIncID);
             Assert.IsFalse(bo.State.IsDirty);
+        }
 
+        [Test]
+        public void TestSaveWithBeforeSaveImplemented()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = BeforeSaveBo.LoadDefaultClassDef();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            Expect.Call(itsConnection.GetConnection())
+                .Return(DatabaseConnection.CurrentConnection.GetConnection())
+                .Repeat.Times(2);
+            Expect.Call(itsConnection.ExecuteSql(null, null))
+                .IgnoreArguments()
+                .Return(1)
+                .Repeat.Times(1);
+            mock.ReplayAll();
 
+            BeforeSaveBo bo = (BeforeSaveBo)classDef.CreateNewBusinessObject(itsConnection);
+            bo.FirstPart = "foo";
+            bo.SecondPart = "bar";
+            Assert.AreEqual("", bo.CombinedParts);
+            bo.Save();
+            Assert.AreEqual("foobar", bo.CombinedParts);
+            mock.VerifyAll();
+        }
+
+        [Test]
+        public void TestSaveWithBeforeSaveFalse()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = BeforeSaveBo.LoadDefaultClassDef();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            Expect.Call(itsConnection.GetConnection())
+                .Return(DatabaseConnection.CurrentConnection.GetConnection())
+                .Repeat.Times(1);
+            Expect.Call(itsConnection.ExecuteSql(null, null))
+                .IgnoreArguments()
+                .Repeat.Never();
+            mock.ReplayAll();
             
+            BeforeSaveBo bo = (BeforeSaveBo)classDef.CreateNewBusinessObject(itsConnection);
+            bo.FirstPart = "foo";
+            bo.SecondPart = "bar";
+            bo.BeforeSaveReturnValue = false;
+            Assert.AreEqual("", bo.CombinedParts);
+            bo.Save();
+            Assert.AreEqual("foobar", bo.CombinedParts);
+            mock.VerifyAll();
         }
 
     }
