@@ -66,8 +66,8 @@ namespace Habanero.UI.Forms
             }
             BusinessObject lookupBo = _lookupTypeClassDef.CreateNewBusinessObject();
             BoPanelControl boCtl = new BoPanelControl(lookupBo, "");
-            boCtl.Height = 180;
-            boCtl.Width = 240;
+            boCtl.Height = _lookupTypeClassDef.UIDefCol["default"].UIForm.Height;
+            boCtl.Width = _lookupTypeClassDef.UIDefCol["default"].UIForm.Width;
             OKCancelDialog dialog =
                 new OKCancelDialog(boCtl, "Add a new entry", _comboBox.PointToScreen(new Point(0, 0)));
             if (dialog.ShowDialog() == DialogResult.OK)

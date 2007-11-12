@@ -162,9 +162,10 @@ namespace Habanero.DB
                                                           "username, password and port. Consult the documentation for " +
                                                           "more detail on available options for these settings.", ex);
                 }
-                if (con.State != ConnectionState.Open && this._className == "System.Data.OleDb.OleDbConnection") {
-                    con.Open();
-                }
+				//Mark - I have no Idea what the point of the next 3 lines are but I have commented them out because they are pointless :)
+				//if (con.State != ConnectionState.Open && this._className == "System.Data.OleDb.OleDbConnection") {
+				//    con.Open();
+				//}
 //			if (con.State != ConnectionState.Open) 
 //			{
 //				con.Open() ;
