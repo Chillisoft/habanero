@@ -175,7 +175,8 @@ namespace Habanero.DB
         		return true;
         	}
 
-			///// <summary>
+
+            ///// <summary>
 			///// Does nothing
 			///// </summary>
 			//public void CheckPersistRules()
@@ -185,7 +186,7 @@ namespace Habanero.DB
             /// <summary>
             /// Does nothing
             /// </summary>
-            public void BeforeCommit()
+            public void BeforeCommit(ITransactionCommitter transactionCommitter)
             {
             }
 

@@ -55,11 +55,11 @@ namespace Habanero.Base
 		///// </summary>
 		//void CheckPersistRules();
 
-		/// <summary>
-		/// Carries out additional steps before committing changes to the
-		/// database.
-		/// </summary>
-		void BeforeCommit();
+        /// <summary>
+        /// Carries out additional steps before committing changes to the
+        /// database
+        /// </summary>
+        void BeforeCommit(ITransactionCommitter transactionCommitter);
 
 		/// <summary>
 		/// Returns the sql statement collection needed to carry out 
@@ -88,6 +88,6 @@ namespace Habanero.Base
         /// Cancels the edit
         /// </summary>
         void TransactionCancelEdits();
-		    	
+
     }
 }

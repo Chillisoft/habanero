@@ -850,7 +850,7 @@ namespace Habanero.BO
         /// Carries out updates to the object after changes have been
         /// committed to the database
         /// </summary>
-        protected void UpdateAfterSave()
+        private void UpdateAfterSave()
         {
             if (!State.IsDeleted)
             {
@@ -887,29 +887,20 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Steps to carry out before the Save() command is run
+        /// Steps to carry out before the Save() command is run. You can add objects to the current
+        /// transaction using this method, such as a database number generator.  No validity checks are 
+        /// made to the BusinessObject after this step, so be careful not to invalidate the object.
         /// </summary>
-        /// <returns>Returns true</returns>
-        /// TODO ERIC - what is meant to be returned? (in overridden methods)
-        protected internal virtual bool BeforeSave()
+        /// <param name="transactionCommitter">The current transaction committer - any objects added to this will
+        /// be committed in the same transaction as this one.</param>
+        protected internal virtual void BeforeSave(ITransactionCommitter transactionCommitter)
         {
-            return true;
         }
 
         /// <summary>
         /// Steps to carry out after the Save() command is run
         /// </summary>
         protected virtual void AfterSave()
-        {
-        }
-
-        /// <summary>
-        /// Steps to carry out before the object values are updated to the
-        /// database
-        /// </summary>
-        /// TODO ERIC - this method surprises me - what about Save()
-        /// and where is the UpdateToDB() method?
-        protected virtual void BeforeUpdateToDB()
         {
         }
 
@@ -1004,6 +995,18 @@ namespace Habanero.BO
             CheckForDuplicatePrimaryKey();
             CheckForDuplicates();
         	CheckForPreventDelete();
+        }
+
+        /// <summary>
+        /// Override this method in subclasses of BusinessObject to check custom rules for that
+        /// class.  The default implementation returns true and sets customRuleErrors to the empty string.
+        /// </summary>
+        /// <param name="customRuleErrors">The error string to display</param>
+        /// <returns>true if no custom rule errors are encountered.</returns>
+        protected virtual bool CheckCustomRules(out string customRuleErrors)
+        {
+            customRuleErrors = "";
+            return true;
         }
 
         #endregion //Persistance
@@ -1529,12 +1532,6 @@ namespace Habanero.BO
 		/// </summary>
 		bool ITransaction.AddingToTransaction(ITransactionCommitter transaction)
         {
-			if (!BeforeSave()) return false;
-			if (NeedsPersisting())
-			{
-				this.CheckPersistRules();
-				CascadeIfDeleting(transaction);
-			}
 			return true;
         }
 
@@ -1567,27 +1564,33 @@ namespace Habanero.BO
 		/// Carries out additional steps before committing changes to the
 		/// database
 		/// </summary>
-		void ITransaction.BeforeCommit()
+		void ITransaction.BeforeCommit(ITransactionCommitter transactionCommitter)
 		{
 			if (NeedsPersisting())
 			{
-				string reasonNotSaved;
-				if (IsValid(out reasonNotSaved))
+				string reasonNotSaved ;
+			    bool isvalid = IsValid(out reasonNotSaved);
+			    string customRuleErrors ;
+			    isvalid = CheckCustomRules(out customRuleErrors) && isvalid;
+			    if (isvalid)
 				{
-					// v- this is called by the transaction anyway:
-					//this.CheckPersistRules();
+                    BeforeSave(transactionCommitter);
+				    CheckPersistRules();
+                    CascadeIfDeleting(transactionCommitter);
 					UpdatedConcurrencyControlProperties();
-					BeforeUpdateToDB();
 				}
 				else
 				{
-					throw new BusObjectInAnInvalidStateException(reasonNotSaved);
-					//throw new UserException(reasonNotSaved);
+			        string errors = reasonNotSaved;
+                    if (!String.IsNullOrEmpty(errors)) errors += Environment.NewLine;
+			        errors += customRuleErrors;
+                    throw new BusObjectInAnInvalidStateException(errors);
 				}
 			}
 		}
 
- 		/// <summary>
+
+        /// <summary>
 		/// Carries out additional steps after committing changes to the
 		/// database
 		/// </summary>
