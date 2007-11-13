@@ -120,7 +120,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BOHelper.cs" />
     <Compile Include="BOKey.cs">
       <SubType>Code</SubType>
     </Compile>

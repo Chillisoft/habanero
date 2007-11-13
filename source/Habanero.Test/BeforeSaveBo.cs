@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -10,14 +11,6 @@ namespace Habanero.Test
     public class BeforeSaveBo: BusinessObject
     {
         //This class is not intended to be persisted by the tests
-
-        private bool _beforeSaveReturnValue = true;
-        
-        public bool BeforeSaveReturnValue
-        {
-            get { return _beforeSaveReturnValue; }
-            set { _beforeSaveReturnValue = value; }
-        }
 
         public Guid? BeforeSaveBoId
         {
@@ -45,10 +38,9 @@ namespace Habanero.Test
             set { SetPropertyValue("CombinedParts", value); }
         }
 
-        protected internal override bool BeforeSave()
+        protected internal override void BeforeSave(ITransactionCommitter transactionCommiter)
         {
             CombinedParts = FirstPart + SecondPart;
-            return _beforeSaveReturnValue;
         }
 
         public static ClassDef LoadDefaultClassDef()

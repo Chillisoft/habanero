@@ -123,7 +123,7 @@ namespace Habanero.BO
     		{
     			try
     			{
-    				BeforeCommit();
+    				BeforeCommit(this);
     				SqlStatementCollection statementCollection = GetPersistSql();
     				if (statementCollection.Count > 0)
     				{
@@ -215,12 +215,22 @@ namespace Habanero.BO
 		/// </summary>
 		/// <returns>Returns an indication of whether it is 
 		/// ok to continue with the commit.</returns>
-		private void BeforeCommit()
+        private void BeforeCommit(ITransactionCommitter transactionCommitter)
 		{
-			foreach (ITransaction transaction in _transactions.Values)
-			{
-				transaction.BeforeCommit();
-			}
+		    int i = 0;
+		    do {
+                int j = _transactions.Count;
+
+		        KeyValuePair<string, ITransaction>[] transactions = new KeyValuePair<string, ITransaction>[j];
+		        _transactions.CopyTo(transactions, 0);
+
+                for (int count = i; count < (j-i); count++) {
+		            ITransaction transaction = transactions[count].Value;
+		            transaction.BeforeCommit(this);
+		        }
+
+		        i = j;
+		    } while (i < _transactions.Count); 
 		}
 
     	/// <summary>
@@ -329,9 +339,9 @@ namespace Habanero.BO
 		/// </summary>
 		/// <returns>Returns an indication of whether it is 
 		/// ok to continue with the commit.</returns>
-		void ITransaction.BeforeCommit()
+        void ITransaction.BeforeCommit(ITransactionCommitter transactionCommitter)
     	{
-			BeforeCommit();
+            BeforeCommit(transactionCommitter);
     	}
 
     	/// <summary>

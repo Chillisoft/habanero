@@ -193,30 +193,7 @@ namespace Habanero.Test.BO
             mock.VerifyAll();
         }
 
-        [Test]
-        public void TestSaveWithBeforeSaveFalse()
-        {
-            ClassDef.ClassDefs.Clear();
-            ClassDef classDef = BeforeSaveBo.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            Expect.Call(itsConnection.GetConnection())
-                .Return(DatabaseConnection.CurrentConnection.GetConnection())
-                .Repeat.Times(1);
-            Expect.Call(itsConnection.ExecuteSql(null, null))
-                .IgnoreArguments()
-                .Repeat.Never();
-            mock.ReplayAll();
-            
-            BeforeSaveBo bo = (BeforeSaveBo)classDef.CreateNewBusinessObject(itsConnection);
-            bo.FirstPart = "foo";
-            bo.SecondPart = "bar";
-            bo.BeforeSaveReturnValue = false;
-            Assert.AreEqual("", bo.CombinedParts);
-            bo.Save();
-            Assert.AreEqual("foobar", bo.CombinedParts);
-            mock.VerifyAll();
-        }
+
 
     }
 }
