@@ -37,6 +37,7 @@ namespace Habanero.BO
 
         private IDatabaseConnection _databaseConnection;
 		private SortedDictionary<string, ITransaction> _transactions;
+        private List<ITransaction> _transactionsList;
 		private Guid _transactionId = Guid.NewGuid();
     	private int _numberOfRowsUpdated;
 
@@ -71,7 +72,10 @@ namespace Habanero.BO
 			if (mustAdd && !_transactions.ContainsKey(transaction.StrID()))
             {
 				_transactions.Add(transaction.StrID(), transaction);
+                _transactionsList.Add(transaction);
             }
+
+     
             return mustAdd;
         }
 
@@ -82,6 +86,7 @@ namespace Habanero.BO
         {
         	_numberOfRowsUpdated = 0;
 			_transactions = new SortedDictionary<string, ITransaction>();
+            _transactionsList = new List<ITransaction>();
         }
 
         /// <summary>
@@ -164,7 +169,7 @@ namespace Habanero.BO
         /// </summary>
         private void TransactionCommited()
         {
-			foreach (ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactionsList)
             {
                 transaction.TransactionCommitted();
             }
@@ -178,7 +183,7 @@ namespace Habanero.BO
 		{
 			SqlStatementCollection statementCollection;
 			statementCollection = new SqlStatementCollection();
-			foreach (ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactionsList)
 			{
 				ISqlStatementCollection thisStatementCollection = transaction.GetPersistSql();
 				statementCollection.Add(thisStatementCollection);
@@ -191,7 +196,7 @@ namespace Habanero.BO
 		/// </summary>
 		private void TransactionRolledBack()
 		{
-			foreach (ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactionsList)
 			{
 				transaction.TransactionRolledBack();
 			}
@@ -202,7 +207,7 @@ namespace Habanero.BO
 		/// </summary>
 		private void TransactionCancelEdits()
 		{
-			foreach (ITransaction transaction in _transactions.Values)
+            foreach (ITransaction transaction in _transactionsList)
 			{
 				transaction.TransactionCancelEdits();
 			}
@@ -219,18 +224,12 @@ namespace Habanero.BO
 		{
 		    int i = 0;
 		    do {
-                int j = _transactions.Count;
+                int j = _transactionsList.Count;
 
-		        KeyValuePair<string, ITransaction>[] transactions = new KeyValuePair<string, ITransaction>[j];
-		        _transactions.CopyTo(transactions, 0);
-
-                for (int count = i; count < (j-i); count++) {
-		            ITransaction transaction = transactions[count].Value;
-		            transaction.BeforeCommit(this);
-		        }
-
+		        List<ITransaction> transactions = _transactionsList.GetRange(i, j - i);
+                transactions.ForEach(delegate(ITransaction obj) { obj.BeforeCommit(this); });
 		        i = j;
-		    } while (i < _transactions.Count); 
+            } while (i < _transactionsList.Count); 
 		}
 
     	/// <summary>
@@ -239,7 +238,7 @@ namespace Habanero.BO
     	/// </summary>
     	private void AfterCommit()
 		{
-			foreach (ITransaction transaction in _transactions.Values)
+            foreach (ITransaction transaction in _transactionsList)
 			{
 				transaction.AfterCommit();
 			}
@@ -312,7 +311,7 @@ namespace Habanero.BO
     	{
     		int ranking = int.MinValue;
 			//Set the ranking to the maximum ranking of the transaction collection
-    		foreach (ITransaction transaction in _transactions.Values)
+            foreach (ITransaction transaction in _transactionsList)
     		{
     			int thisRanking = transaction.TransactionRanking();
 				if (thisRanking > ranking)

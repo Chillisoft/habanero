@@ -76,7 +76,7 @@ namespace Habanero.BO
                     "business object collection, with the type given as '{0}'. " +
                     "Check that the given type exists and has been correctly " +
                     "defined in the relationship and class definitions for the classes " +
-                    "involved.", _relDef.RelatedObjectClassType));
+                    "involved.", _relDef.RelatedObjectClassType), ex);
             }
 			if (!(busObj is T))
 			{

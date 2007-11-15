@@ -11,36 +11,22 @@ namespace Habanero.UI.Forms
     /// </summary>
     public class BoTabColControl : UserControl
     {
-        //private delegate void AddTabPageDelegate(TabPage page, BusinessObjectBase bo);
-        //private delegate void TabChangedDelegate();
-
-        private readonly IBusinessObjectControl _boControl;
+        private delegate void VoidDelegate();
+        private delegate void SetCollectionDelegate(IList col);
+        private IBusinessObjectControl _boControl;
         private TabControl _tabControl;
         private Hashtable _pageBoTable;
         private Hashtable _boPageTable;
-
-        //private AddTabPageDelegate _addTabPageDelegate;
-        //private TabChangedDelegate _tabChanged; 
 
         private EventHandler tabChangedHandler;
 
         /// <summary>
         /// Constructor to initialise a new tab control
         /// </summary>
-        /// <param name="boControl">The business object control that is
-        /// displaying the business object information in the tab page</param>
-        public BoTabColControl(IBusinessObjectControl boControl)
+        public BoTabColControl()
         {
             Permission.Check(this);
-            _boControl = boControl;
-            if (boControl is Control)
-            {
-                ((Control) _boControl).Dock = DockStyle.Fill;
-            }
-            else
-            {
-                throw new ArgumentException("boControl must be of type Control or one of its subtypes.");
-            }
+           
             BorderLayoutManager manager = new BorderLayoutManager(this);
             _tabControl = new TabControl();
             manager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
@@ -48,9 +34,26 @@ namespace Habanero.UI.Forms
             _boPageTable = new Hashtable();
 
             tabChangedHandler = new EventHandler(TabChangedHandler);
+        }
 
-            //_addTabPageDelegate = new AddTabPageDelegate(AddTabPageInSTAThread);
-            //_tabChanged = new TabChangedDelegate(TabChangedInSTAThread) ;
+        /// <summary>
+        /// Sets the boControl that will be displayed on each tab page.  This must be called
+        /// before the BoTabColControl can be used.
+        /// </summary>
+        /// <param name="boControl">The business object control that is
+        /// displaying the business object information in the tab page</param>
+        public void SetBusinessObjectControl(IBusinessObjectControl boControl)
+        {
+            _boControl = boControl;
+            if (boControl is Control)
+            {
+                ((Control)_boControl).Dock = DockStyle.Fill;
+            }
+            else
+            {
+                throw new ArgumentException("boControl must be of type Control or one of its subtypes.");
+            }
+            
         }
 
         /// <summary>
@@ -60,6 +63,15 @@ namespace Habanero.UI.Forms
         /// <param name="col">The business object collection to create tab pages
         /// for</param>
         public void SetCollection(IList col)
+        {
+            try {
+                BeginInvoke(new SetCollectionDelegate(SetCollectionInSTAThread), new object[] {col});
+            } catch (InvalidOperationException) {
+                SetCollectionInSTAThread(col);
+            }
+        }
+
+        private void SetCollectionInSTAThread(IList col)
         {
             _tabControl.SelectedIndexChanged -= tabChangedHandler;
             ClearTabPages();
@@ -97,7 +109,6 @@ namespace Habanero.UI.Forms
         {
             if (_tabControl.SelectedTab != null)
             {
-                //BeginInvoke(_tabChanged, new object[] {});
                 _tabControl.SelectedTab.Controls.Clear();
                 _tabControl.SelectedTab.Controls.Add((Control) _boControl);
                 _boControl.SetBusinessObject(GetBo(_tabControl.SelectedTab));
@@ -152,23 +163,7 @@ namespace Habanero.UI.Forms
             _tabControl.TabPages.Add(page);
             _pageBoTable.Add(page, bo);
             _boPageTable.Add(bo, page);
-//			try
-//			{
-//				BeginInvoke(_addTabPageDelegate, new object[] {page, bo}); // needed to do the call on the Forms thread.  See info about STA thread model.
-//			}
-//			catch (InvalidOperationException)
-//			{
-//				this.AddTabPageInSTAThread(page, bo);
-//			}
         }
-
-
-//		private void AddTabPageInSTAThread(TabPage page, BusinessObjectBase bo)
-//		{
-//			_tabControl.TabPages.Add(page);
-//			_pageBoTable.Add(page, bo);
-//			_boPageTable.Add(bo, page);
-//		}
 
         /// <summary>
         /// Returns the TabPage object that is representing the given
