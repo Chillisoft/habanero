@@ -17,9 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.UI", "Habanero.Test.UI\Habanero.Test.UI.csproj", "{979540B1-0154-4870-8BD7-B70AA61492D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "Habanero.Test\Habanero.Test.csproj", "{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9B32C6E9-037A-4610-85CB-95C9A050CF7C} = {9B32C6E9-037A-4610-85CB-95C9A050CF7C}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.BO", "Habanero.Test.Bo\Habanero.Test.BO.csproj", "{D624008C-47BA-44CC-9CC8-DCEC9F0005B3}"
 EndProject

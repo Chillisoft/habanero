@@ -27,15 +27,24 @@ namespace Habanero.Util.File
     /// </summary>
     public class CSVFileWriter
     {
-        private StreamWriter _writer;
+        private TextWriter _writer;
 
         /// <summary>
         /// Constructor to initialise the writer
         /// </summary>
-        /// <param name="strFileName">The file name</param>
-        public CSVFileWriter(string strFileName)
+        /// <param name="fileName">The file name</param>
+        public CSVFileWriter(string fileName)
         {
-            _writer = new StreamWriter(strFileName, false);
+            _writer = new StreamWriter(fileName, false);
+        }
+
+        /// <summary>
+        /// Constructor to initialise the writer
+        /// </summary>
+        /// <param name="textWriter">The text writer to use</param>
+        public CSVFileWriter(TextWriter textWriter)
+        {
+            _writer = textWriter;
         }
 
         /// <summary>
@@ -51,7 +60,7 @@ namespace Habanero.Util.File
                 {
                     _writer.Write(",");
                 }
-                _writer.Write(column.Caption);
+                _writer.Write(PrepareForCsv(column.Caption));
                 firstCol = false;
             }
 
@@ -65,15 +74,23 @@ namespace Habanero.Util.File
                     {
                         _writer.Write(",");
                     }
-                    string val = Habanero.Util.StringUtilities.ReplaceSingleQuotesWithTwo(row[i].ToString());
-                    if (val.IndexOf(",") != -1)
-                    {
-                        val = "\"" + val + "\"";
-                    }
+                    string val = row[i].ToString();
+                    val = PrepareForCsv(val);
                     _writer.Write(val);
                 }
                 _writer.WriteLine();
             }
+        }
+
+        private static string PrepareForCsv(string val)
+        {
+            //val = StringUtilities.ReplaceSingleQuotesWithTwo(val);
+            val = StringUtilities.ReplaceDoubleQuotesWithTwo(val);
+            if (val.IndexOf(",") != -1 || val.IndexOf("\"") != -1)
+            {
+                val = "\"" + val + "\"";
+            }
+            return val;
         }
 
         /// <summary>
