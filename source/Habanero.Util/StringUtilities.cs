@@ -64,12 +64,27 @@ namespace Habanero.Util
 			foreach (char c in inputString)
 			{
 				string str = c.ToString();
+			    string prevStr = "";
+                if (counter > 0)
+                {
+                    prevStr = inputString.Substring(counter - 1, 1);
+                }
+			    int temp = 0;
+
+                // The rules are, add space if:
+                //   - the letter is upper case
+                //   - this is not the first letter
+                //   - this is not a space
+                //   - there is already a space before this
+                //   - this is a number and there is no number just before
 				if (str == str.ToUpper() && counter > 0
 					&& str != " "
-					&& inputString.Substring(counter - 1, 1) != " ")
+					&& prevStr != " "
+                    && !(Int32.TryParse(str, out temp) && Int32.TryParse(prevStr, out temp)))
 				{
 					formatted += delimiter + str;
-				} else
+				}
+                else
 				{
 					formatted += str;
 				}

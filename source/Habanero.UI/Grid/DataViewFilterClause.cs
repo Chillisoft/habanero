@@ -99,6 +99,12 @@ namespace Habanero.UI.Grid
                 case FilterClauseOperator.OpLessThanOrEqualTo:
                     opClause = " <= ";
                     break;
+                case FilterClauseOperator.OpGreaterThan:
+                    opClause = " > ";
+                    break;
+                case FilterClauseOperator.OpLessThan:
+                    opClause = " < ";
+                    break;
                 default:
                     opClause = " <unsupported operator> ";
                     break;

@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Grid;
@@ -56,6 +57,22 @@ namespace Habanero.UI.Grid
             //BusinessObject b = new BusinessObject();
             //b.Props["test"].PropertyValueString
             return new DataViewIntegerFilterClause(filterColumn, clauseOperator, filterValue);
+        }
+
+        /// <summary>
+        /// Creates a new filter clause that filters integer values
+        /// </summary>
+        /// <param name="filterColumn">The column of data on which to do the
+        /// filtering</param>
+        /// <param name="clauseOperator">The clause operator</param>
+        /// <param name="filterValue">The filter value to be compared to</param>
+        /// <returns>Returns the new filter clause object</returns>
+        public IFilterClause CreateDateFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
+                                                       DateTime filterValue)
+        {
+            //BusinessObject b = new BusinessObject();
+            //b.Props["test"].PropertyValueString
+            return new DataViewDateFilterClause(filterColumn, clauseOperator, filterValue);
         }
 
         /// <summary>

@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
+using Habanero.UI.Forms;
 
 namespace Habanero.UI.Grid
 {
@@ -202,11 +204,15 @@ namespace Habanero.UI.Grid
         }
 
         /// <summary>
+        /// DEPRECATED.
         /// Adds a date-time picker that filters a date column on the date
         /// chosen by the user.  If a date is chosen by the user, setting the 
         /// filter-greater-than argument to "true" displays only rows with 
         /// dates above or equal to that specified, while "false" will 
         /// show all rows with dates less than or equal to the specified date.
+        /// This filter caters only for dates without times.  Rather use
+        /// AddDateFilterDateTimePicker, which provides greater flexibility
+        /// and accuracy.
         /// </summary>
         /// <param name="columnName">The name of the date-time column to be 
         /// filtered on</param>
@@ -215,9 +221,6 @@ namespace Habanero.UI.Grid
         /// the given date should be accepted, or false if all dates below or
         /// equal should be accepted</param>
         /// <returns>Returns the new DateTimePicker object added</returns>
-        /// TODO ERIC - if user wants to show exact date, can they use this or
-        /// should they use a text-box filter? (discuss this issue in the summary)
-        /// - if changed, amend FilterControl too
         public DateTimePicker AddStringFilterDateTimeEditor(string columnName, Object defaultDate,
                                                             bool filterGreaterThan)
         {
@@ -238,6 +241,96 @@ namespace Habanero.UI.Grid
             _controls.Add(dte);
             return dte;
         }
+
+        /// <summary>
+        /// Adds a date-time picker that filters a date column on the date
+        /// chosen by the user.  The given operator compares the chosen date
+        /// with the date shown in the given column name.
+        /// </summary>
+        /// <param name="columnName">The name of the date-time column to be 
+        /// filtered on</param>
+        /// <param name="defaultDate">The default date or null</param>
+        /// <param name="filterClauseOperator">The operator used to compare
+        /// with the date chosen by the user.  The chosen date is on the
+        /// right side of the equation.</param>
+        /// <param name="ignoreTime">Sets all times produced by the DateTimePicker
+        /// to 12am before comparing dates</param>
+        /// <returns>Returns the new DateTimePicker object added</returns>
+        public DateTimePicker AddDateFilterDateTimePicker(string columnName, Object defaultDate,
+                                                            FilterClauseOperator filterClauseOperator, bool ignoreTime)
+        {
+            DateTimePicker dte;
+            if (defaultDate == null)
+            {
+                dte = (DateTimePicker)ControlFactory.CreateDateTimePicker();
+            }
+            else
+            {
+                dte = (DateTimePicker)ControlFactory.CreateDateTimePicker((DateTime)defaultDate);
+            }
+            dte.Width = _filterWidth;
+
+            _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator, ignoreTime));
+            dte.ValueChanged += new EventHandler(FilterControlValueChangedHandler);
+            FireFilterClauseChanged(dte);
+            _controls.Add(dte);
+            return dte;
+        }
+
+        /// <summary>
+        /// Adds a DateRangeComboBox filter from which the user can choose a typical
+        /// date range option, such as "Today" or "Previous Year", which calculates
+        /// a start and end date so that only rows with a date within that range
+        /// will be shown
+        /// </summary>
+        /// <param name="columnName">The name of the data column to be 
+        /// filtered on</param>
+        /// <param name="options">The collection of DateOptions to show</param>
+        /// <param name="includeStartDate">Includes all dates that match the start
+        /// date exactly</param>
+        /// <param name="includeEndDate">Includes all dates that match the end
+        /// date exactly</param>
+        /// <returns>Returns the new DateRangeComboBox added</returns>
+        public DateRangeComboBox AddDateRangeFilterComboBox(string columnName, List<DateRangeComboBox.DateOptions> options, bool includeStartDate, bool includeEndDate)
+        {
+            //ComboBox cb = ControlFactory.CreateComboBox(); // Std v Pro conflict
+            DateRangeComboBox cb = new DateRangeComboBox(options);
+            return ConfigureDateRangeComboBox(columnName, cb, includeStartDate, includeEndDate);
+        }
+
+        /// <summary>
+        /// Adds a DateRangeComboBox filter from which the user can choose a typical
+        /// date range option, such as "Today" or "Previous Year", which calculates
+        /// a start and end date so that only rows with a date within that range
+        /// will be shown
+        /// </summary>
+        /// <param name="columnName">The name of the data column to be 
+        /// filtered on</param>
+        /// <param name="includeStartDate">Includes all dates that match the start
+        /// date exactly</param>
+        /// <param name="includeEndDate">Includes all dates that match the end
+        /// date exactly</param>
+        /// <returns>Returns the new DateRangeComboBox added</returns>
+        public DateRangeComboBox AddDateRangeFilterComboBox(string columnName, bool includeStartDate, bool includeEndDate)
+        {
+            //ComboBox cb = ControlFactory.CreateComboBox();
+            DateRangeComboBox cb = new DateRangeComboBox();
+            return ConfigureDateRangeComboBox(columnName, cb, includeStartDate, includeEndDate);
+        }
+
+        /// <summary>
+        /// Configures the given DateRangeComboBox and sets up the filter control
+        /// </summary>
+        private DateRangeComboBox ConfigureDateRangeComboBox(string columnName, DateRangeComboBox cb, bool includeStartDate, bool includeEndDate)
+        {
+            cb.Width = _filterWidth;
+            _filterUIs.Add(new FilterUIDateRangeString(_clauseFactory, columnName, cb, includeStartDate, includeEndDate));
+            cb.SelectedIndexChanged += new EventHandler(FilterControlValueChangedHandler);
+            cb.TextChanged += new EventHandler(FilterControlValueChangedHandler);
+            FireFilterClauseChanged(cb);
+            _controls.Add(cb);
+            return cb;
+        } 
 
         /// <summary>
         /// Returns the controls held in the collection of filters
@@ -367,9 +460,11 @@ namespace Habanero.UI.Grid
         }
 
         /// <summary>
+        /// DEPRECATED.
         /// Manages a Date-Time Picker through which the user can select a date
         /// to serve as either a greater-than or less-than watershed, depending
-        /// on the boolean set in the constructor
+        /// on the boolean set in the constructor.  Rather use FilterUIDate,
+        /// which is more flexible and more accurate.
         /// </summary>
         private class FilterUIDateString : FilterUI
         {
@@ -401,6 +496,98 @@ namespace Habanero.UI.Grid
                         _clauseFactory.CreateStringFilterClause(_columnName, op,
                                                                 ((DateTime)_dateTimePicker.Value).ToString(
                                                                     "yyyy/MM/dd"));
+                }
+                else
+                {
+                    return _clauseFactory.CreateNullFilterClause();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Provides a filter clause from a given DateTime Picker, using the
+        /// column name and filter clause operator provided
+        /// </summary>
+        private class FilterUIDate : FilterUI
+        {
+            private readonly DateTimePicker _dateTimePicker;
+            private readonly FilterClauseOperator _filterClauseOperator;
+            private readonly bool _ignoreTime;
+
+            public FilterUIDate(IFilterClauseFactory clauseFactory, string columnName, DateTimePicker dtp,
+                                      FilterClauseOperator op, bool ignoreTime)
+                : base(clauseFactory, columnName)
+            {
+                _dateTimePicker = dtp;
+                _filterClauseOperator = op;
+                _ignoreTime = ignoreTime;
+            }
+
+            public override IFilterClause GetFilterClause()
+            {
+                if (_dateTimePicker.Value != null)
+                {
+                    DateTime date = _dateTimePicker.Value;
+                    if (_ignoreTime)
+                    {
+                        date = new DateTime(date.Year, date.Month, date.Day);
+                    }
+                    return _clauseFactory.CreateDateFilterClause(_columnName, _filterClauseOperator, date);
+                }
+                else
+                {
+                    return _clauseFactory.CreateNullFilterClause();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Manages a Date-Time Picker through which the user can select a date
+        /// to serve as either a greater-than or less-than watershed, depending
+        /// on the boolean set in the constructor
+        /// </summary>
+        private class FilterUIDateRangeString : FilterUI
+        {
+            private readonly DateRangeComboBox _dateRangeComboBox;
+            private readonly bool _filterIncludeStart;
+            private readonly bool _filterIncludeEnd;
+
+            public FilterUIDateRangeString(IFilterClauseFactory clauseFactory, string columnName, DateRangeComboBox drcb,
+                                      bool filterIncludeStart, bool filterIncludeEnd)
+                : base(clauseFactory, columnName)
+            {
+                _dateRangeComboBox = drcb;
+                _filterIncludeStart = filterIncludeStart;
+                _filterIncludeEnd = filterIncludeEnd;
+            }
+
+            public override IFilterClause GetFilterClause()
+            {
+                if (_dateRangeComboBox.SelectedIndex > 0)
+                {
+                    FilterClauseOperator op;
+                    if (_filterIncludeStart)
+                    {
+                        op = FilterClauseOperator.OpGreaterThanOrEqualTo;
+                    }
+                    else
+                    {
+                        op = FilterClauseOperator.OpGreaterThan;
+                    }
+                    IFilterClause startClause = _clauseFactory.CreateDateFilterClause(_columnName, op, _dateRangeComboBox.StartDate);
+                    if (_filterIncludeEnd)
+                    {
+                        op = FilterClauseOperator.OpLessThanOrEqualTo;
+                    }
+                    else
+                    {
+                        op = FilterClauseOperator.OpLessThan;
+                    }
+                    IFilterClause endClause = _clauseFactory.CreateDateFilterClause(_columnName, op, _dateRangeComboBox.EndDate);
+
+                    return
+                        _clauseFactory.CreateCompositeFilterClause(startClause, FilterClauseCompositeOperator.OpAnd,
+                                                                   endClause);
                 }
                 else
                 {

@@ -56,6 +56,15 @@ namespace Habanero.Test
             output = StringUtilities.DelimitPascalCase("smallTestString", " ");
             Assert.AreEqual("small Test String", output);
 
+            output = StringUtilities.DelimitPascalCase("Test3", " ");
+            Assert.AreEqual("Test 3", output);
+
+            output = StringUtilities.DelimitPascalCase("Test36", " ");
+            Assert.AreEqual("Test 36", output);
+
+            output = StringUtilities.DelimitPascalCase("365", " ");
+            Assert.AreEqual("365", output);
+
             output = StringUtilities.DelimitPascalCase("", " ");
             Assert.AreEqual("", output);
 

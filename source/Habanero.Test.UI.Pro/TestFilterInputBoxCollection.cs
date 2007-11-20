@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using System.Windows.Forms;
+using Habanero.Base;
+using Habanero.UI.Forms;
 using Habanero.UI.Grid;
 using NUnit.Framework;
 using System;
@@ -25,17 +28,33 @@ namespace Habanero.Test.UI.Generic
             DateTimePicker testDateTimePicker = filterInputBoxCol.AddStringFilterDateTimeEditor("test", null, true);
             Assert.AreEqual(3, filterInputBoxCol.GetControls().Count);
 
-            CheckBox testCheckBox = filterInputBoxCol.AddBooleanFilterCheckBox("test", "textbox", true);
+            DateTimePicker testDateTimePicker2 = filterInputBoxCol.AddDateFilterDateTimePicker("test", null, FilterClauseOperator.OpGreaterThan, false);
             Assert.AreEqual(4, filterInputBoxCol.GetControls().Count);
+
+            CheckBox testCheckBox = filterInputBoxCol.AddBooleanFilterCheckBox("test", "textbox", true);
+            Assert.AreEqual(5, filterInputBoxCol.GetControls().Count);
             
             ComboBox testComboBox = filterInputBoxCol.AddStringFilterComboBox("test", new ArrayList(), true);
-            Assert.AreEqual(5, filterInputBoxCol.GetControls().Count);
+            Assert.AreEqual(6, filterInputBoxCol.GetControls().Count);
+
+            DateRangeComboBox testDRComboBox = filterInputBoxCol.AddDateRangeFilterComboBox("test", true, false);
+            Assert.AreEqual(7, filterInputBoxCol.GetControls().Count);
+
+            List<DateRangeComboBox.DateOptions> options = new List<DateRangeComboBox.DateOptions>();
+            options.Add(DateRangeComboBox.DateOptions.Today);
+            options.Add(DateRangeComboBox.DateOptions.Yesterday);
+            DateRangeComboBox testDRComboBox2 = filterInputBoxCol.AddDateRangeFilterComboBox("test", options, true, false);
+            Assert.AreEqual(8, filterInputBoxCol.GetControls().Count);
+            Assert.AreEqual(2, testDRComboBox2.OptionsToDisplay.Count);
             
             Assert.AreSame(testLabel, filterInputBoxCol.GetControls()[0]);
             Assert.AreSame(testTextBox, filterInputBoxCol.GetControls()[1]);
             Assert.AreSame(testDateTimePicker, filterInputBoxCol.GetControls()[2]);
-            Assert.AreSame(testCheckBox, filterInputBoxCol.GetControls()[3]);
-            Assert.AreSame(testComboBox, filterInputBoxCol.GetControls()[4]);
+            Assert.AreSame(testDateTimePicker2, filterInputBoxCol.GetControls()[3]);
+            Assert.AreSame(testCheckBox, filterInputBoxCol.GetControls()[4]);
+            Assert.AreSame(testComboBox, filterInputBoxCol.GetControls()[5]);
+            Assert.AreSame(testDRComboBox, filterInputBoxCol.GetControls()[6]);
+            Assert.AreSame(testDRComboBox2, filterInputBoxCol.GetControls()[7]);
         }
 
         [Test]
@@ -60,6 +79,9 @@ namespace Habanero.Test.UI.Generic
             DateTimePicker testDateTimePicker = filterInputBoxCol.AddStringFilterDateTimeEditor("test", testTime, true);
             Assert.AreEqual(testTime, testDateTimePicker.Value);
 
+            DateTimePicker testDateTimePicker2 = filterInputBoxCol.AddDateFilterDateTimePicker("test", testTime, FilterClauseOperator.OpGreaterThan, false);
+            Assert.AreEqual(testTime, testDateTimePicker2.Value);
+
             CheckBox testCheckBox = filterInputBoxCol.AddBooleanFilterCheckBox("test", "textbox", true);
             Assert.AreEqual(true, testCheckBox.Checked);
 
@@ -68,6 +90,9 @@ namespace Habanero.Test.UI.Generic
             ComboBox testComboBox = filterInputBoxCol.AddStringFilterComboBox("test", testOptions, true);
             Assert.AreEqual("", testComboBox.Items[0]);
             Assert.AreEqual("testoption1", testComboBox.Items[1]);
+
+            // DateRangeComboBox testDRCB = filterInputBoxCol.AddDateRangeFilterComboBox("test", true, false);
+            // default options already tested under TestDateRangeComboBox
 
             filterInputBoxCol.DisableControls();
             Assert.IsFalse(testLabel.Enabled);
@@ -97,10 +122,31 @@ namespace Habanero.Test.UI.Generic
             ComboBox testComboBox2 = filterInputBoxCol.AddStringFilterComboBox("test4", testOptions, true);
             testComboBox2.SelectedItem = "testoption1";
 
-            string testFilterClause = "(((test0 like '*testvalue*')" +
+            DateRangeComboBox testDRCB = filterInputBoxCol.AddDateRangeFilterComboBox("test5", true, false);
+            testDRCB.UseFixedNowDate = true;
+            testDRCB.FixedNowDate = new DateTime(2007, 1, 2, 3, 4, 5, 6);
+            testDRCB.SelectedItem = "Today";
+
+            string testFilterClause = "((((test0 like '*testvalue*')" +
                                       " and (test1 >= '" + testTime.ToString("yyyy/MM/dd") + "'))" +
                                       " and (test2 = 'true'))" +
-                                      " and (test4 = 'testoption1')";
+                                      " and (test4 = 'testoption1'))" +
+                                      " and ((test5 >= #02 Jan 2007 00:00:00#)" +
+                                      " and (test5 < #02 Jan 2007 03:04:05#))";
+            Assert.AreEqual(testFilterClause, filterInputBoxCol.GetFilterClause().GetFilterClauseString());
+        }
+
+        [Test]
+        public void TestDateFilters()
+        {
+            FilterInputBoxCollection filterInputBoxCol = new FilterInputBoxCollection(new DataViewFilterClauseFactory());
+
+            DateTime testTime = DateTime.Now;
+            filterInputBoxCol.AddDateFilterDateTimePicker("test0", testTime, FilterClauseOperator.OpGreaterThan, false);
+            filterInputBoxCol.AddDateFilterDateTimePicker("test1", testTime, FilterClauseOperator.OpEquals, true);
+
+            string testFilterClause = "(test0 > #" + testTime.ToString("dd MMM yyyy HH:mm:ss") + "#)" +
+                                      " and (test1 = #" + testTime.ToString("dd MMM yyyy 00:00:00") + "#)";
             Assert.AreEqual(testFilterClause, filterInputBoxCol.GetFilterClause().GetFilterClauseString());
         }
 
