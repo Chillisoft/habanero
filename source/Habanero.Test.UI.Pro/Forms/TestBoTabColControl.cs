@@ -8,7 +8,7 @@ using Habanero.UI.Forms;
 using NMock;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Application
+namespace Habanero.Test.UI.Forms
 {
     /// <summary>
     /// Summary description for TestBoTabColControl.
@@ -40,8 +40,8 @@ namespace Habanero.Test.UI.Application
 
         [
             Test,
-                ExpectedException(typeof (ArgumentException),
-                    "boControl must be of type Control or one of its subtypes.")]
+            ExpectedException(typeof (ArgumentException),
+                "boControl must be of type Control or one of its subtypes.")]
         public void TestCheckForControlSubClass()
         {
             Mock mock = new DynamicMock(typeof (IBusinessObjectControl));
