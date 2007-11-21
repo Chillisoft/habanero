@@ -4,7 +4,7 @@ using Habanero.Test.General;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.BoControls
+namespace Habanero.Test.UI.Forms
 {
     /// <summary>
     /// Summary description for TestCollectionComboBoxMapper.

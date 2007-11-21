@@ -49,33 +49,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\TestBoTabColControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Forms\TestCheckBoxMapper.cs" />
+    <Compile Include="Forms\TestCollectionComboBoxMapper.cs" />
+    <Compile Include="Forms\TestComboBoxCollectionControl.cs" />
+    <Compile Include="Forms\TestControlMapper.cs" />
+    <Compile Include="Forms\TestDateRangeComboBox.cs" />
+    <Compile Include="Forms\TestDateTimePickerController.cs" />
+    <Compile Include="Forms\TestDateTimePickerMapper.cs" />
+    <Compile Include="Forms\TestDateTimePickerNullableMapper.cs" />
+    <Compile Include="Forms\TestDefaultBOEditorForm.cs" />
+    <Compile Include="Forms\TestEditableGridButtonControl.cs" />
+    <Compile Include="Forms\TestListComboBoxMapper.cs" />
+    <Compile Include="Forms\TestListViewCollectionMapper.cs" />
+    <Compile Include="Forms\TestLookupComboBoxMapper.cs" />
+    <Compile Include="Forms\TestMapperBase.cs" />
+    <Compile Include="Forms\TestMultiSelector.cs" />
+    <Compile Include="Forms\TestMultiSelectorModel.cs" />
+    <Compile Include="Forms\TestNumericUpDownIntegerMapper.cs" />
+    <Compile Include="Forms\TestNumericUpDownMoneyMapper.cs" />
+    <Compile Include="Forms\TestPanelFactory.cs" />
+    <Compile Include="Forms\TestReadOnlyGridButtonControl.cs" />
+    <Compile Include="Forms\TestTextBoxMapper.cs" />
+    <Compile Include="Grid\TestEditableGrid.cs" />
+    <Compile Include="Grid\TestFilterControl.cs" />
+    <Compile Include="Grid\TestFilterInputBoxCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestBoTabColControl.cs" />
-    <Compile Include="TestCheckBoxMapper.cs" />
-    <Compile Include="TestCollectionComboBoxMapper.cs" />
-    <Compile Include="TestComboBoxCollectionControl.cs" />
-    <Compile Include="TestControlMapper.cs" />
-    <Compile Include="TestDateRangeComboBox.cs" />
-    <Compile Include="TestDateTimePickerController.cs" />
-    <Compile Include="TestDateTimePickerMapper.cs" />
-    <Compile Include="TestDateTimePickerNullableMapper.cs" />
-    <Compile Include="TestDefaultBOEditorForm.cs" />
-    <Compile Include="TestEditableGrid.cs" />
-    <Compile Include="TestEditableGridButtonControl.cs" />
-    <Compile Include="TestFilterControl.cs" />
-    <Compile Include="TestFilterInputBoxCollection.cs" />
-    <Compile Include="TestListComboBoxMapper.cs" />
-    <Compile Include="TestListViewCollectionMapper.cs" />
-    <Compile Include="TestLookupComboBoxMapper.cs" />
-    <Compile Include="TestMapperBase.cs" />
-    <Compile Include="TestMultiSelector.cs" />
-    <Compile Include="TestMultiSelectorModel.cs" />
-    <Compile Include="TestNumericUpDownIntegerMapper.cs" />
-    <Compile Include="TestNumericUpDownMoneyMapper.cs" />
-    <Compile Include="TestPanelFactory.cs" />
-    <Compile Include="TestReadOnlyGridButtonControl.cs" />
-    <Compile Include="TestTextBoxMapper.cs" />
-    <Compile Include="TestWizard.cs" />
+    <Compile Include="Util\TestWizard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
@@ -109,6 +111,9 @@
       <Project>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</Project>
       <Name>Habanero.UI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Base\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

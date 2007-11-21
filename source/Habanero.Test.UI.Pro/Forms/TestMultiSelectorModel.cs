@@ -4,7 +4,7 @@ using System.Text;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Application
+namespace Habanero.Test.UI.Forms
 {
     /// <summary>
     /// Tests the standard MultiSelector control's model

@@ -6,7 +6,7 @@ using Habanero.UI.Base;
 using Habanero.UI.Grid;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Application
+namespace Habanero.Test.UI.Grid
 {
     /// <summary>
     /// Summary description for TestEditableGrid.

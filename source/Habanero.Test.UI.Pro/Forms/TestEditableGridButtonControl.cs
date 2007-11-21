@@ -3,7 +3,7 @@ using Habanero.UI.Grid;
 using NMock;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Application
+namespace Habanero.Test.UI.Forms
 {
     /// <summary>
     /// Summary description for TestEditableGridButtonControl.

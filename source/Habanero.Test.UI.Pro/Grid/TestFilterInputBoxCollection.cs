@@ -7,7 +7,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 
-namespace Habanero.Test.UI.Generic
+namespace Habanero.Test.UI.Grid
 {
     /// <summary>
     /// Summary description for TestFilterInputBoxCollection.

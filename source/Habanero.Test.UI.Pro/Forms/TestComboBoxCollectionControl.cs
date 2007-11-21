@@ -9,7 +9,7 @@ using NMock;
 using NUnit.Framework;
 using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.UI.BoControls
+namespace Habanero.Test.UI.Forms
 {
     /// <summary>
     /// Summary description for TestComboBoxCollectionControl.
@@ -42,8 +42,8 @@ namespace Habanero.Test.UI.BoControls
             IDatabaseConnection databaseConnectionMock =
                 (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
 
-        	SetupSaveExpectation();
-			SetupSaveExpectation();
+            SetupSaveExpectation();
+            SetupSaveExpectation();
 
             MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
             bo1.SetPropertyValue("TestProp", "abc");
@@ -66,16 +66,16 @@ namespace Habanero.Test.UI.BoControls
             itsControl.Confirmer = confirmerMock;
         }
 
-    	private void SetupSaveExpectation()
-    	{
-    		itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-    		                                                 DatabaseConnection.CurrentConnection.GetConnection());
-    		itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-    		                                                 DatabaseConnection.CurrentConnection.GetConnection());
-    		itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-    	}
+        private void SetupSaveExpectation()
+        {
+            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                             DatabaseConnection.CurrentConnection.GetConnection());
+            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                             DatabaseConnection.CurrentConnection.GetConnection());
+            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+        }
 
-    	[TearDown]
+        [TearDown]
         public void TearDownTest()
         {
             itsConfirmerMockControl.Verify();
@@ -112,7 +112,7 @@ namespace Habanero.Test.UI.BoControls
             selectedBo.SetPropertyValue("TestProp", "xyz");
             Assert.IsTrue(selectedBo.State.IsDirty);
 
-			SetupSaveExpectation();
+            SetupSaveExpectation();
 
             itsControl.CollectionComboBox.SelectedIndex = 2;
             Assert.AreEqual(2, itsControl.CollectionComboBox.SelectedIndex);
@@ -127,7 +127,7 @@ namespace Habanero.Test.UI.BoControls
         public void TestUpdateBusinessObjectWithConfirmFalse()
         {
             itsConfirmerMockControl.ExpectAndReturn("Confirm", false,
-              new object[] {"Do you want to want to save before moving on?"});
+                                                    new object[] {"Do you want to want to save before moving on?"});
             itsControl.CollectionComboBox.SelectedIndex = 1;
 
             BusinessObject selectedBo = itsControl.SelectedBusinessObject;
@@ -145,7 +145,7 @@ namespace Habanero.Test.UI.BoControls
             BusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
 
-			SetupSaveExpectation();
+            SetupSaveExpectation();
 
             itsControl.Buttons.ClickButton("Save");
             Assert.IsFalse(selectedBo.State.IsDirty);
@@ -173,7 +173,7 @@ namespace Habanero.Test.UI.BoControls
             itsControl.SelectedBusinessObject.SetPropertyValue("TestProp", "qwe");
             itsControl.SelectedBusinessObject.SetPropertyValue("TestProp2", "rty");
 
-			SetupSaveExpectation();
+            SetupSaveExpectation();
 
             itsControl.Buttons.ClickButton("Save");
             Assert.IsFalse(itsControl.SelectedBusinessObject.State.IsNew);

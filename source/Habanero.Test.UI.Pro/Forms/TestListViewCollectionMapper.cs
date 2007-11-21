@@ -7,7 +7,7 @@ using Habanero.Test.General;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.BoControls
+namespace Habanero.Test.UI.Forms
 {
     [TestFixture ]
     public class TestListViewCollectionMapper
@@ -61,5 +61,4 @@ namespace Habanero.Test.UI.BoControls
             Assert.AreEqual(2, itsListView.Items.Count);
         }        
     }
-
 }

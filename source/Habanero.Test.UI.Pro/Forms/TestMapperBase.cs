@@ -7,7 +7,7 @@ using Habanero.Test;
 //using NMock;
 using Rhino.Mocks;
 
-namespace Habanero.Test.UI.BoControls
+namespace Habanero.Test.UI.Forms
 {
     /// <summary>
     /// Summary description for TestMapperBase.
@@ -23,11 +23,11 @@ namespace Habanero.Test.UI.BoControls
 
         protected void SetupClassDefs(object propValue)
         {
-			MockRepository mock = new MockRepository();
+            MockRepository mock = new MockRepository();
 
             //Mock mockDbConnection = new DynamicMock(typeof (IDatabaseConnection));
             //IDatabaseConnection connection = (IDatabaseConnection) mockDbConnection.MockInstance;
-			IDatabaseConnection connection = mock.CreateMock<IDatabaseConnection>();
+            IDatabaseConnection connection = mock.CreateMock<IDatabaseConnection>();
 
             //Mock relColControl = new DynamicMock(typeof (IRelationshipCol));
             //IRelationshipCol mockRelCol = (IRelationshipCol) relColControl.MockInstance;
@@ -41,15 +41,15 @@ namespace Habanero.Test.UI.BoControls
             Guid myRelatedBoGuid = new Guid(relatedBo.ID.GetObjectId().Substring(3, 38));
             itsMyBo.SetPropertyValue("RelatedID", myRelatedBoGuid);
             relatedBo.SetPropertyValue("MyRelatedTestProp", propValue);
-			itsMyBo.Relationships = mockRelCol;
+            itsMyBo.Relationships = mockRelCol;
 
-			//relColControl.ExpectAndReturn("GetRelatedObject", relatedBo, new object[] {"MyRelationship"});
-        	Expect.Call(mockRelCol.GetRelatedObject("MyRelationship")).Return(relatedBo).Repeat.Any();
+            //relColControl.ExpectAndReturn("GetRelatedObject", relatedBo, new object[] {"MyRelationship"});
+            Expect.Call(mockRelCol.GetRelatedObject("MyRelationship")).Return(relatedBo).Repeat.Any();
 			
             //mockDbConnection.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(), new object[] {});
-        	Expect.Call(connection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).Repeat.Any();
+            Expect.Call(connection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).Repeat.Any();
 
-			mock.ReplayAll();
+            mock.ReplayAll();
         }
     }
 }

@@ -10,7 +10,7 @@ using NMock;
 using NUnit.Framework;
 using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.UI.BoControls
+namespace Habanero.Test.UI.Forms
 {
     /// <summary>
     /// Summary description for TestDefaultBOEditory.

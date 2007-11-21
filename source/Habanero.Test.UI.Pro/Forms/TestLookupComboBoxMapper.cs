@@ -5,7 +5,7 @@ using Habanero.Test.General;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.BoControls
+namespace Habanero.Test.UI.Forms
 {
     /// <summary>
     /// Summary description for TestComboBoxMapper.
@@ -96,14 +96,14 @@ namespace Habanero.Test.UI.BoControls
         {
             cbx = new ComboBox();
             mapper = new LookupComboBoxMapper(cbx, "SampleLookup2ID", false);
-              mapper.SetLookupList(Sample.BOLookupCollection);
-             s = new Sample();
+            mapper.SetLookupList(Sample.BOLookupCollection);
+            s = new Sample();
             s.SetPropertyValue("SampleLookup2ID", Sample.BOLookupCollection["Test2"]);
             mapper.BusinessObject = s;
             Assert.AreEqual(4, cbx.Items.Count);
-             Assert.AreSame(typeof (string), cbx.Items[0].GetType());
+            Assert.AreSame(typeof (string), cbx.Items[0].GetType());
             Assert.IsTrue(cbx.Items.Contains("Test1"));
-             Assert.AreEqual("Test2", (string) cbx.SelectedItem);
+            Assert.AreEqual("Test2", (string) cbx.SelectedItem);
         }
 
         [Test]

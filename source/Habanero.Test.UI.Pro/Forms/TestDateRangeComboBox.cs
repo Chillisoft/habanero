@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using Habanero.Test.UI.BoControls;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Pro
+namespace Habanero.Test.UI.Forms
 {
     [TestFixture]
     public class TestDateRangeComboBox

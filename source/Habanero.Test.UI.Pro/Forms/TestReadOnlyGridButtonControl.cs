@@ -9,7 +9,7 @@ using NMock;
 using NUnit.Framework;
 using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test.UI.Application
+namespace Habanero.Test.UI.Forms
 {
     /// <summary>
     /// Summary description for TestReadOnlyGridButtonControl.
