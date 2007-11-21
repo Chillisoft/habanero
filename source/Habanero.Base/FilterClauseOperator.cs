@@ -42,6 +42,14 @@ namespace Habanero.Base
         /// <summary>
         /// The data is less than or equal to the filter value
         /// </summary>
-        OpLessThanOrEqualTo
+        OpLessThanOrEqualTo,
+        /// <summary>
+        /// The data is greater than the filter value
+        /// </summary>
+        OpGreaterThan,
+        /// <summary>
+        /// The data is less than the filter value
+        /// </summary>
+        OpLessThan
     }
 }

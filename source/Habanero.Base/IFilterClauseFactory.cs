@@ -17,6 +17,8 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+
 namespace Habanero.Base
 {
     /// <summary>
@@ -44,6 +46,16 @@ namespace Habanero.Base
         /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
         IFilterClause CreateIntegerFilterClause(string columnName, FilterClauseOperator clauseOperator, int filterValue);
+
+        /// <summary>
+        /// Creates a new filter clause that filters date values
+        /// </summary>
+        /// <param name="columnName">The column of data on which to do the
+        /// filtering</param>
+        /// <param name="clauseOperator">The clause operator</param>
+        /// <param name="filterValue">The filter value to be compared to</param>
+        /// <returns>Returns the new filter clause object</returns>
+        IFilterClause CreateDateFilterClause(string columnName, FilterClauseOperator clauseOperator, DateTime filterValue);
 
         /// <summary>
         /// Creates a new composite filter clause combining two given filter

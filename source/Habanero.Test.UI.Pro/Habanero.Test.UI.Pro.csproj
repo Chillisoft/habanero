@@ -55,6 +55,7 @@
     <Compile Include="TestCollectionComboBoxMapper.cs" />
     <Compile Include="TestComboBoxCollectionControl.cs" />
     <Compile Include="TestControlMapper.cs" />
+    <Compile Include="TestDateRangeComboBox.cs" />
     <Compile Include="TestDateTimePickerController.cs" />
     <Compile Include="TestDateTimePickerMapper.cs" />
     <Compile Include="TestDateTimePickerNullableMapper.cs" />

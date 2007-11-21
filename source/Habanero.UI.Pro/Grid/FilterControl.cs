@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
+using Habanero.UI.Forms;
 
 namespace Habanero.UI.Grid
 {
@@ -115,11 +117,15 @@ namespace Habanero.UI.Grid
         }
 
         /// <summary>
+        /// DEPRECATED.
         /// Adds a date-time picker that filters a date column on the date
         /// chosen by the user.  If a date is chosen by the user, setting the 
         /// filter-greater-than argument to "true" displays only rows with 
         /// dates above or equal to that specified, while "false" will 
         /// show all rows with dates less than or equal to the specified date.
+        /// This filter caters only for dates without times.  Rather use
+        /// AddDateFilterDateTimePicker, which provides greater flexibility
+        /// and accuracy.
         /// </summary>
         /// <param name="label">The label to appear before the editor</param>
         /// <param name="columnName">The column of data on which to do the
@@ -137,6 +143,73 @@ namespace Habanero.UI.Grid
                 _filterInputBoxCollection.AddStringFilterDateTimeEditor(columnName, defaultValue, filterGreaterThan);
             _layoutManager.AddControl(picker);
             return picker;
+        }
+
+        /// <summary>
+        /// Adds a date-time picker that filters a date column on the date
+        /// chosen by the user.  The given operator compares the chosen date
+        /// with the date shown in the given column name.
+        /// </summary>
+        /// <param name="label">The label to appear before the editor</param>
+        /// <param name="columnName">The column of data on which to do the
+        /// filtering</param>
+        /// <param name="defaultValue">The default date or null</param>
+        /// <param name="filterClauseOperator">The operator used to compare
+        /// with the date chosen by the user.  The chosen date is on the
+        /// right side of the equation.</param>
+        /// <param name="ignoreTime">Sets all times produced by the DateTimePicker
+        /// to 12am before comparing dates</param>
+        /// <returns>Returns the new DateTimePicker added</returns>
+        public DateTimePicker AddDateFilterDateTimePicker(string label, string columnName, object defaultValue,
+                                                            FilterClauseOperator filterClauseOperator, bool ignoreTime)
+        {
+            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
+            DateTimePicker picker =
+                _filterInputBoxCollection.AddDateFilterDateTimePicker(columnName, defaultValue, filterClauseOperator, ignoreTime);
+            _layoutManager.AddControl(picker);
+            return picker;
+        }
+
+        /// <summary>
+        /// Adds a ComboBox filter from which the user can choose an option, so that
+        /// only rows with that option in the specified column will be shown
+        /// </summary>
+        /// <param name="label">The label to appear before the ComboBox</param>
+        /// <param name="columnName">The column of data on which to do the
+        /// filtering</param>
+        /// <param name="includeStartDate">Includes all dates that match the start
+        /// date exactly</param>
+        /// <param name="includeEndDate">Includes all dates that match the end
+        /// date exactly</param>
+        /// <returns>Returns the new ComboBox added</returns>
+        public DateRangeComboBox AddDateRangeFilterComboBox(string label, string columnName, bool includeStartDate, bool includeEndDate)
+        {
+            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
+            DateRangeComboBox cb = _filterInputBoxCollection.AddDateRangeFilterComboBox(columnName, includeStartDate, includeEndDate);
+            _layoutManager.AddControl(cb);
+            return cb;
+        }
+
+        /// <summary>
+        /// Adds a ComboBox filter from which the user can choose an option, so that
+        /// only rows with that option in the specified column will be shown.  This
+        /// overload allows a given collection of DateOptions to be shown.
+        /// </summary>
+        /// <param name="label">The label to appear before the ComboBox</param>
+        /// <param name="columnName">The column of data on which to do the
+        /// filtering</param>
+        /// <param name="options">The collection of DateOptions to show</param>
+        /// <param name="includeStartDate">Includes all dates that match the start
+        /// date exactly</param>
+        /// <param name="includeEndDate">Includes all dates that match the end
+        /// date exactly</param>
+        /// <returns>Returns the new ComboBox added</returns>
+        public DateRangeComboBox AddDateRangeFilterComboBox(string label, string columnName, List<DateRangeComboBox.DateOptions> options, bool includeStartDate, bool includeEndDate)
+        {
+            _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
+            DateRangeComboBox cb = _filterInputBoxCollection.AddDateRangeFilterComboBox(columnName, options, includeStartDate, includeEndDate);
+            _layoutManager.AddControl(cb);
+            return cb;
         }
 
         /// <summary>

@@ -74,6 +74,7 @@
     <Compile Include="Grid\DataGridViewDateTimeColumn.cs" />
     <Compile Include="Grid\DataGridViewNumericUpDownColumn.cs" />
     <Compile Include="Grid\DataViewCompositeFilterClause.cs" />
+    <Compile Include="Grid\DataViewDateFilterClause.cs" />
     <Compile Include="Grid\DataViewFilterClause.cs" />
     <Compile Include="Grid\DataViewFilterClauseFactory.cs" />
     <Compile Include="Grid\DataViewIntegerFilterClause.cs" />

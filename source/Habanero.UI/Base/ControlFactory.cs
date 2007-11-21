@@ -386,10 +386,13 @@ namespace Habanero.UI.Base
             return rButton;
         }
 
+        /// <summary>
+        /// Creates a new GroupBox
+        /// </summary>
+        /// <returns>Returns the new GroupBox</returns>
         public static GroupBox CreateGroupBox( )
         {
             return new GroupBox();
-            
         }
     }
 }
