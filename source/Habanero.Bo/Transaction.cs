@@ -179,7 +179,7 @@ namespace Habanero.BO
 		/// Returns the sql statement collection needed to carry out 
 		/// persistance to the database</summary>
 		/// <returns>Returns an ISqlStatementCollection object</returns>
-		private SqlStatementCollection GetPersistSql()
+		internal SqlStatementCollection GetPersistSql()
 		{
 			SqlStatementCollection statementCollection;
 			statementCollection = new SqlStatementCollection();
