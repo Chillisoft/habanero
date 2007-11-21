@@ -215,7 +215,7 @@ namespace Habanero.BO
         /// </summary>
         ~BusinessObject()
         {
-            AllLoaded().Remove(this.ID.ToString());
+            if (this.ID != null) AllLoaded().Remove(this.ID.ToString());
             if (_primaryKey.GetOrigObjectID().Length > 0)
             {
                 if (AllLoaded().ContainsKey(_primaryKey.GetOrigObjectID()))
