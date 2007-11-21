@@ -17,37 +17,36 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Xml;
-using Habanero.UI.Forms;
-using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
-using Habanero.Util;
-using Habanero.DB;
-using Habanero;
+using NUnit.Framework;
 
-namespace Habanero.Test
+
+namespace Habanero.Test.Base
 {
-    /// <summary>
-    /// TODO - Test:
-    /// - Filepath constructor
-    /// - ReadXmlValue
-    /// - WriteXmlValue
-    /// - WriteXmlDocToFile
-    /// - WriteXmlDocToFile
-    /// </summary>
     [TestFixture]
-    public class TestXmlWrapper
+    public class TestRSAPasswordCrypter
     {
         [Test]
-        public void TestWrapper()
+        public void TestEncrypt()
         {
-            XmlDocument doc = new XmlDocument();
-            XmlWrapper wrapper = new XmlWrapper(doc);
+            RSA rsa = RSA.Create();
+            ICrypter crypter = new RSAPasswordCrypter(rsa);
+            string encrypted = crypter.EncryptString("testmessage");
+            Assert.AreEqual(256, encrypted.Length);
+        }
 
-            Assert.AreEqual(doc, wrapper.XmlDocument);
+        [Test]
+        public void TestDecrypt()
+        {
+            RSA rsa = RSA.Create();
+            ICrypter crypter = new RSAPasswordCrypter(rsa);
+            string encrypted = crypter.EncryptString("testmessage");
+            string decrypted = crypter.DecryptString(encrypted);
+            Assert.AreEqual("testmessage", decrypted);
         }
     }
 }

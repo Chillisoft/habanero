@@ -27,7 +27,7 @@ using Habanero.Util;
 using NUnit.Framework;
 using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util
 {
     /// <summary>
     /// This Test Class tests the functionality of the LongText custom property class.

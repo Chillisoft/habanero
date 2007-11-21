@@ -23,7 +23,7 @@ using System.IO;
 using NUnit.Framework;
 using Habanero.Util;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util
 {
     [TestFixture]
     public class TestSortedStringCollection

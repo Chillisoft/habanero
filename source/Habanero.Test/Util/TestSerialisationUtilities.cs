@@ -18,35 +18,34 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
-using Habanero.Base;
+using System.Drawing;
+using System.IO;
+using System.Resources;
 using NUnit.Framework;
+using Habanero.Util;
 
-
-namespace Habanero.Test
+namespace Habanero.Test.Util
 {
     [TestFixture]
-    public class TestRSAPasswordCrypter
+    public class TestSerialisationUtilities
     {
-        [Test]
-        public void TestEncrypt()
+        private ResourceManager _resourceManager;
+
+        [SetUp]
+        public void SetUpResources()
         {
-            RSA rsa = RSA.Create();
-            ICrypter crypter = new RSAPasswordCrypter(rsa);
-            string encrypted = crypter.EncryptString("testmessage");
-            Assert.AreEqual(256, encrypted.Length);
+            _resourceManager = new ResourceManager("Habanero.Test.TestResources", typeof(TestJpgMetaData).Assembly);
         }
 
         [Test]
-        public void TestDecrypt()
+        public void TestTwoWayConversion()
         {
-            RSA rsa = RSA.Create();
-            ICrypter crypter = new RSAPasswordCrypter(rsa);
-            string encrypted = crypter.EncryptString("testmessage");
-            string decrypted = crypter.DecryptString(encrypted);
-            Assert.AreEqual("testmessage", decrypted);
+            Image image = (Image)_resourceManager.GetObject("TestJpeg");
+
+            byte[] bytesOut = SerialisationUtilities.ObjectToByteArray(image);
+            Object objectOut = SerialisationUtilities.ByteArrayToObject(bytesOut);
+
+            Assert.AreEqual(image.GetType(), objectOut.GetType());
         }
     }
 }

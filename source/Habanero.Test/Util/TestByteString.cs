@@ -26,10 +26,11 @@ using Habanero.BO.Loaders;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.Util;
+using Habanero.Test;
 using NUnit.Framework;
 using BusinessObject=Habanero.BO.BusinessObject;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util
 {
     /// <summary>
     /// This Test Class tests the functionality of the ByteString custom property class.

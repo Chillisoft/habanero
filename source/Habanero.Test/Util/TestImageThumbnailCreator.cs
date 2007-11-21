@@ -22,7 +22,7 @@ using System.Resources;
 using NUnit.Framework;
 using Habanero.Util;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util
 {
     [TestFixture]
     public class TestImageThumbnailCreator

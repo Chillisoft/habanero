@@ -20,7 +20,7 @@
 using NUnit.Framework;
 using Habanero.Base;
 
-namespace Habanero.Test
+namespace Habanero.Test.Base
 {
     [TestFixture]
     public class TestNullCrypter

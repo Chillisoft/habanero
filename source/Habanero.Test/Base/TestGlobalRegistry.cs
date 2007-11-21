@@ -26,7 +26,7 @@ using Habanero.Base.Exceptions;
 using Habanero.Util;
 using Habanero.DB;
 
-namespace Habanero.Test
+namespace Habanero.Test.Base
 {
     [TestFixture]
     public class TestGlobalRegistry
@@ -39,6 +39,16 @@ namespace Habanero.Test
 
         [SetUp]
         public void ResetRegistry()
+        {
+            GlobalRegistry.ApplicationName = appName;
+            GlobalRegistry.ApplicationVersion = appVersion;
+            GlobalRegistry.DatabaseVersion = dbVersion;
+            GlobalRegistry.Settings = settings;
+            GlobalRegistry.UIExceptionNotifier = exNotifier;
+        }
+
+        [TearDown]
+        public void RestoreRegistry()
         {
             GlobalRegistry.ApplicationName = appName;
             GlobalRegistry.ApplicationVersion = appVersion;

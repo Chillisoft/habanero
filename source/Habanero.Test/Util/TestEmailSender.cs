@@ -18,10 +18,11 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using NUnit.Framework;
 using Habanero.Util;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util
 {
     /// <summary>
     /// This class does a call on the methods but does not actually send anything
@@ -29,6 +30,21 @@ namespace Habanero.Test
     [TestFixture]
     public class TestEmailSender
     {
+        private ISettings _settings = GlobalRegistry.Settings;
+
+        [SetUp]
+        public void SetupFixture()
+        {
+            _settings = GlobalRegistry.Settings;
+            GlobalRegistry.Settings = null;
+        }
+
+        [TearDown]
+        public void RestoreSettings()
+        {
+            GlobalRegistry.Settings = _settings;
+        }
+
         [Test]
         public void TestServerSettings()
         {

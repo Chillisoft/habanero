@@ -35,9 +35,22 @@ namespace Habanero.Test.DB
         Mock itsConnMock;
         ISettings _itsSettings;
         Mock itsSettingsMock;
-        
+
+        private string appName = GlobalRegistry.ApplicationName;
+        private string appVersion = GlobalRegistry.ApplicationVersion;
+        private int dbVersion = GlobalRegistry.DatabaseVersion;
+        private ISettings settings = GlobalRegistry.Settings;
+        private IExceptionNotifier exNotifier = GlobalRegistry.UIExceptionNotifier;
+
         [SetUp]
-        public void SetupFixture() {
+        public void SetupFixture()
+        {
+            GlobalRegistry.ApplicationName = appName;
+            GlobalRegistry.ApplicationVersion = appVersion;
+            GlobalRegistry.DatabaseVersion = dbVersion;
+            GlobalRegistry.Settings = settings;
+            GlobalRegistry.UIExceptionNotifier = exNotifier;
+
             itsConnMock = new DynamicMock(typeof(IDatabaseConnection));
             itsConn = (IDatabaseConnection)itsConnMock.MockInstance;
             itsDbMigrator = new DBMigrator(itsConn);
@@ -46,8 +59,17 @@ namespace Habanero.Test.DB
             itsDbMigrator.AddMigration(3, "migration3;");
 
             itsSettingsMock = new DynamicMock(typeof(ISettings));
-            _itsSettings = (ISettings)itsSettingsMock.MockInstance;            
-       
+            _itsSettings = (ISettings)itsSettingsMock.MockInstance;
+        }
+
+        [TearDown]
+        public void RestoreRegistry()
+        {
+            GlobalRegistry.ApplicationName = appName;
+            GlobalRegistry.ApplicationVersion = appVersion;
+            GlobalRegistry.DatabaseVersion = dbVersion;
+            GlobalRegistry.Settings = settings;
+            GlobalRegistry.UIExceptionNotifier = exNotifier;
         }
         
         [Test]

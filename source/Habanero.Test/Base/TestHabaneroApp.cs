@@ -27,7 +27,7 @@ using Habanero.Util;
 using Habanero.DB;
 using Habanero;
 
-namespace Habanero.Test
+namespace Habanero.Test.Base
 {
     [TestFixture]
     public class TestHabaneroApp

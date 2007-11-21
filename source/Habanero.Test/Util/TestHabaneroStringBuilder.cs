@@ -24,9 +24,8 @@ using System.Text;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util
 {
-
     [TestFixture]
     public class TestHabaneroStringBuilder
     {
@@ -140,5 +139,4 @@ namespace Habanero.Test
             Assert.AreEqual("Installation,Pipeclamps,'MP HI 1/4'',4.04", s.PutBackQuotedSections().ToString());
         }
     }
-
 }

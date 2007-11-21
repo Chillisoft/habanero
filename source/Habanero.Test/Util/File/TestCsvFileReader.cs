@@ -6,7 +6,7 @@ using System.Text;
 using Habanero.Util.File;
 using NUnit.Framework;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util.File
 {
     [TestFixture]
     public class TestCsvFileReader
@@ -69,7 +69,7 @@ namespace Habanero.Test
             {
                 string columnName = column.ColumnName;
                 Assert.IsTrue(values.Contains(columnName),
-                    String.Format("The column '{0}' does not exist in the csv output.", columnName));
+                              String.Format("The column '{0}' does not exist in the csv output.", columnName));
             }
             int counter = 0;
             while (csvFileReader.MoveToNextLine())
@@ -81,7 +81,7 @@ namespace Habanero.Test
                 {
                     string dataValue = dataRow[counter2].ToString();
                     Assert.AreEqual(dataValue, value,
-                        String.Format("Csv data value was not as expected at [{0},{1}](base 0).", counter, counter2));
+                                    String.Format("Csv data value was not as expected at [{0},{1}](base 0).", counter, counter2));
                     counter2++;
                 };
                 counter++;

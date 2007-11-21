@@ -17,35 +17,37 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Drawing;
-using System.IO;
-using System.Resources;
+using System.Xml;
+using Habanero.UI.Forms;
 using NUnit.Framework;
+using Habanero.Base;
+using Habanero.Base.Exceptions;
+using Habanero.BO.ClassDefinition;
+using Habanero.UI.Base;
 using Habanero.Util;
+using Habanero.DB;
+using Habanero;
 
-namespace Habanero.Test
+namespace Habanero.Test.Base
 {
+    /// <summary>
+    /// TODO - Test:
+    /// - Filepath constructor
+    /// - ReadXmlValue
+    /// - WriteXmlValue
+    /// - WriteXmlDocToFile
+    /// - WriteXmlDocToFile
+    /// </summary>
     [TestFixture]
-    public class TestSerialisationUtilities
+    public class TestXmlWrapper
     {
-        private ResourceManager _resourceManager;
-
-        [SetUp]
-        public void SetUpResources()
-        {
-            _resourceManager = new ResourceManager("Habanero.Test.TestResources", typeof(TestJpgMetaData).Assembly);
-        }
-
         [Test]
-        public void TestTwoWayConversion()
+        public void TestWrapper()
         {
-            Image image = (Image)_resourceManager.GetObject("TestJpeg");
+            XmlDocument doc = new XmlDocument();
+            XmlWrapper wrapper = new XmlWrapper(doc);
 
-            byte[] bytesOut = SerialisationUtilities.ObjectToByteArray(image);
-            Object objectOut = SerialisationUtilities.ByteArrayToObject(bytesOut);
-
-            Assert.AreEqual(image.GetType(), objectOut.GetType());
+            Assert.AreEqual(doc, wrapper.XmlDocument);
         }
     }
 }

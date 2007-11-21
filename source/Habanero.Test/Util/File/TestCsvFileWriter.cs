@@ -6,7 +6,7 @@ using System.Text;
 using Habanero.Util.File;
 using NUnit.Framework;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util.File
 {
     [TestFixture]
     public class TestCsvFileWriter

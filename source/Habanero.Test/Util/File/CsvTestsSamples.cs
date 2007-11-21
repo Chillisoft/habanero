@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util.File
 {
     internal class CsvTestsSamples
     {

@@ -25,7 +25,7 @@ using Habanero.Base.Exceptions;
 using NUnit.Framework;
 using Habanero.Util;
 
-namespace Habanero.Test
+namespace Habanero.Test.Util
 {
     /// <summary>
     /// TODO:
