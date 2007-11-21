@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Generic
+namespace Habanero.Test.UI.Base
 {
     /// <summary>
     /// Summary description for TestControlFactory.

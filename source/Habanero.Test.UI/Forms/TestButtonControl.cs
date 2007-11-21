@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Generic
+namespace Habanero.Test.UI.Forms
 {
     [TestFixture]
     public class TestButtonControl

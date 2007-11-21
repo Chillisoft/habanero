@@ -73,6 +73,7 @@
     <Compile Include="Forms\TestPanelFactory.cs" />
     <Compile Include="Forms\TestReadOnlyGridButtonControl.cs" />
     <Compile Include="Forms\TestTextBoxMapper.cs" />
+    <Compile Include="Forms\TestTreeViewTableEditor.cs" />
     <Compile Include="Grid\TestEditableGrid.cs" />
     <Compile Include="Grid\TestFilterControl.cs" />
     <Compile Include="Grid\TestFilterInputBoxCollection.cs" />

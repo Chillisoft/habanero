@@ -22,7 +22,7 @@ using Habanero.Base;
 using Habanero.UI.Grid;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Generic
+namespace Habanero.Test.UI.Grid
 {
     /// <summary>
     /// Summary description for TestDataViewFilterClauseBuilderWithStrings.
