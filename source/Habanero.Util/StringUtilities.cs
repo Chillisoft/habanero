@@ -27,15 +27,25 @@ namespace Habanero.Util
 	/// </summary>
 	public class StringUtilities
 	{
-		/// <summary>
-		/// Replaces single quotes with double quotes in the given string
-		/// </summary>
-		/// <param name="value">The string to amend</param>
-		/// <returns>Returns the reformatted string</returns>
-		public static string ReplaceSingleQuotesWithTwo(string value)
-		{
-			return value.Replace("'", "''");
-		}
+        /// <summary>
+        /// Replaces single quotes with two single quotes in the given string
+        /// </summary>
+        /// <param name="value">The string to amend</param>
+        /// <returns>Returns the reformatted string</returns>
+        public static string ReplaceSingleQuotesWithTwo(string value)
+        {
+            return value.Replace("'", "''");
+        }
+
+        /// <summary>
+        /// Replaces double quotes with two double quotes in the given string
+        /// </summary>
+        /// <param name="value">The string to amend</param>
+        /// <returns>Returns the reformatted string</returns>
+        public static string ReplaceDoubleQuotesWithTwo(string value)
+        {
+            return value.Replace("\"", "\"\"");
+        }
 
 		/// <summary>
 		/// Breaks up a Pascal-cased string into sections that are divided

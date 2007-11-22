@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -29,18 +30,28 @@ namespace Habanero.Util.File
     /// </summary>
     public class CSVFileReader
     {
-        StreamReader _reader;
+        TextReader _reader;
         string _currentLine;
         int _lineNo;
 
         /// <summary>
         /// Constructor to initialise a new reader
         /// </summary>
-        /// <param name="strFileName">The file name</param>
-        public CSVFileReader(string strFileName)
+        /// <param name="fileName">The file name</param>
+        public CSVFileReader(string fileName)
         {
             _lineNo = 0;
-            _reader = new StreamReader(strFileName);
+            _reader = new StreamReader(fileName);
+        }
+
+        /// <summary>
+        /// Constructor to initialise a new reader
+        /// </summary>
+        /// <param name="textReader">The text reader to read the information from</param>
+        public CSVFileReader(TextReader textReader)
+        {
+            _lineNo = 0;
+            _reader = textReader;
         }
 
         /// <summary>
@@ -62,14 +73,13 @@ namespace Habanero.Util.File
         }
 
         /// <summary>
-        /// Loads the values and returns them in a list
+        /// Loads all the values for the current line and returns them in a list
         /// </summary>
-        /// <param name="numValues">The number of values to load</param>
         /// <returns>Returns a list of values</returns>
-        public IList GetValues(int numValues)
+        public List<string> GetValues()
         {
             HabaneroStringBuilder stringBuilder = new HabaneroStringBuilder(_currentLine.Replace(",\"\",", ",,"));
-            stringBuilder.SetQuotes(new string[] {"\""});
+            stringBuilder.SetQuotes(new string[] { "\"" });
             stringBuilder.RemoveQuotedSections();
             if (stringBuilder.IndexOf("\"") > -1)
             {
@@ -82,11 +92,10 @@ namespace Habanero.Util.File
                 _currentLine = _currentLine + nextLine;
 
                 _lineNo++;
-                return GetValues(numValues);
+                return GetValues();
             }
-            IList values = new ArrayList();
-
-
+            List<string> values = new List<string>();
+            
             int commaPos = 0;
             int pos = 0;
             int endPos = 0;
@@ -109,10 +118,21 @@ namespace Habanero.Util.File
                 values.Add(value);
                 pos = commaPos + 1;
             } while (commaPos != -1);
+            return values;
+        }
 
+        /// <summary>
+        /// Loads the values and returns them in a list
+        /// </summary>
+        /// <param name="numValues">The minimum number of values to load. 
+        /// If there are more values than this number then all the values are loaded, 
+        /// otherwise the extra required values are made up with empty strings.</param>
+        /// <returns>Returns a list of values</returns>
+        public List<string> GetValues(int numValues)
+        {
+            List<string> values = GetValues();
             for (int i = values.Count; i < numValues; i++)
                 values.Add("");
-
             return values;
         }
 

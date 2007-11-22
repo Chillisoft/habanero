@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Habanero.Util
@@ -38,7 +39,7 @@ namespace Habanero.Util
     public class HabaneroStringBuilder
     {
         private StringBuilder _string;
-        private ArrayList _quotedSections = new ArrayList(); //this stores an 
+        private List<QuotedSection> _quotedSections = new List<QuotedSection>(); //this stores an 
             // array list of all quoted sections that have been removed from 
             // the original string, along with the position the quoted section 
             // was removed from (so that it can be replaced when required)
@@ -78,61 +79,55 @@ namespace Habanero.Util
         public HabaneroStringBuilder RemoveQuotedSections()
         {
             _quotedSections.Clear();
-            String s = _string.ToString();
-            IList doubleQuotedSections = new ArrayList();
+            String newString = _string.ToString();
+            List<QuotedSection> doubleQuotedSections = new List<QuotedSection>();
             foreach (String quote in _quotes)
             {
-                int pos = s.IndexOf(quote);
+                int pos = newString.IndexOf(quote);
                 while (pos != -1)
                 {
-                    int pos2 = s.Substring(pos + 1, s.Length - pos - 1).IndexOf(quote);
+                    int pos2 = newString.Substring(pos + 1, newString.Length - pos - 1).IndexOf(quote);
                     if (pos2 == 0)
                     {
                         doubleQuotedSections.Add(new QuotedSection(pos, quote));
-                        s = s.Remove(pos, pos2 + 2);
+                        newString = newString.Remove(pos, pos2 + 2);
                     }
-                    pos = s.IndexOf(quote, pos + 1);
+                    pos = newString.IndexOf(quote, pos + 1);
                 }
             }
+            int offset = 0;
             foreach (String quote in _quotes)
             {
-                int pos = s.IndexOf(quote);
+                int pos = newString.IndexOf(quote);
                 while (pos != -1)
                 {
-                    int pos2 = s.Substring(pos + 1, s.Length - pos - 1).IndexOf(quote);
+                    int pos2 = newString.Substring(pos + 1, newString.Length - pos - 1).IndexOf(quote);
                     if (pos2 != -1)
                     {
-                        //if (pos2 == 0) {
-                        //	quotedSections.Add(new QuotedSection(pos, quote)) ;
-                        //} 
-                        //else 
-                        //{
-                        string quoteString = s.Substring(pos, pos2 + 2);
-                        for (int i = doubleQuotedSections.Count - 1; i >= 0; i--)
+                        int quoteLength = pos2 + 2;
+                        string quoteString = newString.Substring(pos, quoteLength);
+                        int quoteOffset = 0;
+                        for (int i = 0; i < doubleQuotedSections.Count; )
                         {
-                            QuotedSection doubleQuotedSection = (QuotedSection) doubleQuotedSections[i];
-                            int adjustedPos;
-                            int insertionPos;
-                            if (doubleQuotedSection.pos > pos + pos2)
+                            QuotedSection doubleQuotedSection = doubleQuotedSections[i];
+                            int quotePos = doubleQuotedSection.pos - offset - pos;
+                            if (quotePos < 0 || quotePos > quoteLength)
                             {
-                                adjustedPos = doubleQuotedSection.pos - (i + 1)*2;
-                                insertionPos = adjustedPos - pos + (i + 1)*2;
-                            }
-                            else
+                                //Outside the quoted string
+                                i++;
+                            } else 
                             {
-                                adjustedPos = doubleQuotedSection.pos;
-                                insertionPos = adjustedPos - pos;
-                            }
-                            if (adjustedPos >= pos && adjustedPos <= pos + pos2)
-                            {
-                                quoteString = quoteString.Insert(insertionPos, doubleQuotedSection.quotedSection);
+                                //Within the quoted string
+                                quoteString = quoteString.Insert(quotePos + quoteOffset, doubleQuotedSection.quotedSection);
+                                quoteOffset += doubleQuotedSection.quotedSection.Length;
                                 doubleQuotedSections.Remove(doubleQuotedSection);
                             }
                         }
+
+                        offset += quoteLength;
                         _quotedSections.Add(new QuotedSection(pos, quoteString));
-                        //}
-                        s = s.Remove(pos, pos2 + 2);
-                        pos = s.IndexOf(quote);
+                        newString = newString.Remove(pos, quoteLength);
+                        pos = newString.IndexOf(quote);
                     }
                     else
                     {
@@ -141,14 +136,24 @@ namespace Habanero.Util
                 }
             }
 
-
-            _string = new StringBuilder(s);
+            _string = new StringBuilder(newString);
             if (doubleQuotedSections.Count > 0)
             {
                 for (int i = doubleQuotedSections.Count - 1; i >= 0; i--)
                 {
-                    _string.Insert(((QuotedSection) doubleQuotedSections[i]).pos,
-                                   ((QuotedSection) doubleQuotedSections[i]).quotedSection);
+                    QuotedSection doubleQuotedSection = doubleQuotedSections[i];
+                    _string.Insert(doubleQuotedSection.pos, doubleQuotedSection.quotedSection);
+                    //Add the offset from this insert to each quoted section that follows.
+                    for( int j = 0; j < _quotedSections.Count; j++) 
+                    {
+                        if (_quotedSections[j].pos > doubleQuotedSection.pos)
+                        {
+                            _quotedSections.Insert(j, new QuotedSection(
+                                _quotedSections[j].pos + doubleQuotedSection.quotedSection.Length,
+                                _quotedSections[j].quotedSection));
+                            _quotedSections.RemoveAt(j + 1);
+                        }
+                    }
                 }
             }
             return this;
@@ -163,14 +168,14 @@ namespace Habanero.Util
         /// removed quoted sections put back</returns>
         public HabaneroStringBuilder PutBackQuotedSections()
         {
-            if (this._quotedSections.Count > 0)
+            if (_quotedSections.Count > 0)
             {
                 for (int i = _quotedSections.Count - 1; i >= 0; i--)
                 {
-                    _string.Insert(((QuotedSection) this._quotedSections[i]).pos,
-                                   ((QuotedSection) this._quotedSections[i]).quotedSection);
+                    _string.Insert((_quotedSections[i]).pos,
+                                   (_quotedSections[i]).quotedSection);
                 }
-                this._quotedSections.Clear();
+                _quotedSections.Clear();
             }
             return this;
         }
@@ -212,18 +217,18 @@ namespace Habanero.Util
         /// <returns>Returns a HabaneroStringBuilder object</returns>
         public HabaneroStringBuilder Substring(int startIndex, int length)
         {
-            HabaneroStringBuilder s = new HabaneroStringBuilder(_string.ToString().Substring(startIndex, length));
-            if (this._quotedSections != null)
+            HabaneroStringBuilder newHabaneroStringBuilder = new HabaneroStringBuilder(_string.ToString().Substring(startIndex, length));
+            if (_quotedSections != null)
             {
-                foreach (QuotedSection quote in this._quotedSections)
+                foreach (QuotedSection quote in _quotedSections)
                 {
                     if ((quote.pos >= startIndex) && (quote.pos <= startIndex + length))
                     {
-                        s._quotedSections.Add(new QuotedSection(quote.pos - startIndex, quote.quotedSection));
+                        newHabaneroStringBuilder._quotedSections.Add(new QuotedSection(quote.pos - startIndex, quote.quotedSection));
                     }
                 }
             }
-            return s;
+            return newHabaneroStringBuilder;
         }
 
         /// <summary>
@@ -233,18 +238,18 @@ namespace Habanero.Util
         /// <returns>Returns a HabaneroStringBuilder object</returns>
         public HabaneroStringBuilder Substring(int startIndex)
         {
-            HabaneroStringBuilder s = new HabaneroStringBuilder(_string.ToString().Substring(startIndex));
-            if (this._quotedSections != null)
+            HabaneroStringBuilder newHabaneroStringBuilder = new HabaneroStringBuilder(_string.ToString().Substring(startIndex));
+            if (_quotedSections != null)
             {
-                foreach (QuotedSection quote in this._quotedSections)
+                foreach (QuotedSection quote in _quotedSections)
                 {
                     if (quote.pos >= startIndex)
                     {
-                        s._quotedSections.Add(new QuotedSection(quote.pos - startIndex, quote.quotedSection));
+                        newHabaneroStringBuilder._quotedSections.Add(new QuotedSection(quote.pos - startIndex, quote.quotedSection));
                     }
                 }
             }
-            return s;
+            return newHabaneroStringBuilder;
         }
 
         /// <summary>
@@ -287,9 +292,8 @@ namespace Habanero.Util
             }
             return this;
         }
-
-
-        internal ArrayList QuotedSections
+        
+        internal List<QuotedSection> QuotedSections
         {
             get { return _quotedSections; }
             set { _quotedSections = value; }

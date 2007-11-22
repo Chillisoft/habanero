@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ArchitectureTest.cs" />
     <Compile Include="BeforeSaveBo.cs" />
+    <Compile Include="CsvTestsSamples.cs" />
     <Compile Include="MyBo.cs" />
     <Compile Include="MyDBConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +56,8 @@
     <Compile Include="Shape.cs" />
     <Compile Include="TestAutoInc.cs" />
     <Compile Include="TestByteString.cs" />
+    <Compile Include="TestCsvFileReader.cs" />
+    <Compile Include="TestCsvFileWriter.cs" />
     <Compile Include="TestDelayedMethodCall.cs" />
     <Compile Include="TestEmailSender.cs" />
     <Compile Include="TestGlobalRegistry.cs" />

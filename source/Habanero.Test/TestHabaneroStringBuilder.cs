@@ -51,12 +51,12 @@ namespace Habanero.Test
         public void TestPutBackQuotedSections()
         {
             HabaneroStringBuilder s = new HabaneroStringBuilder("A quoted  is needed to test this functionality");
-            s.QuotedSections = new ArrayList();
+            s.QuotedSections = new List<HabaneroStringBuilder.QuotedSection>();
             s.QuotedSections.Add(new HabaneroStringBuilder.QuotedSection(9, "'test'"));
             s.PutBackQuotedSections();
             Assert.AreEqual("A quoted 'test' is needed to test this functionality", s.ToString());
             s = new HabaneroStringBuilder("A quoted  is needed to  this functionality");
-            s.QuotedSections = new ArrayList();
+            s.QuotedSections = new List<HabaneroStringBuilder.QuotedSection>();
             s.QuotedSections.Add(new HabaneroStringBuilder.QuotedSection(9, "'test'"));
             s.QuotedSections.Add(new HabaneroStringBuilder.QuotedSection(23, "\"test\""));
             s.PutBackQuotedSections();
@@ -77,6 +77,17 @@ namespace Habanero.Test
         }
 
         [Test]
+        public void TestRemoveAndPutBackQuotedSectionsAdvanced()
+        {
+            HabaneroStringBuilder s = new HabaneroStringBuilder(
+                "Peter''s car''s engine said: 'That''s Mark''s Car' and 'That''s Eric''s car'.");
+            s.RemoveQuotedSections();
+            Assert.AreEqual("Peter's car's engine said:  and .", s.ToString());
+            s.PutBackQuotedSections();
+            Assert.AreEqual("Peter's car's engine said: 'That's Mark's Car' and 'That's Eric's car'.", s.ToString());
+        }
+
+        [Test]
         public void TestSubString()
         {
             HabaneroStringBuilder s = new HabaneroStringBuilder("Hello");
@@ -84,7 +95,7 @@ namespace Habanero.Test
             Assert.AreEqual("llo", s.Substring(2).ToString());
 
             s = new HabaneroStringBuilder("A quoted  is needed to  this functionality");
-            s.QuotedSections = new ArrayList();
+            s.QuotedSections = new List<HabaneroStringBuilder.QuotedSection>();
             s.QuotedSections.Add(new HabaneroStringBuilder.QuotedSection(9, "'test'"));
             s.QuotedSections.Add(new HabaneroStringBuilder.QuotedSection(23, "\"test\""));
             HabaneroStringBuilder sub = s.Substring(9);
