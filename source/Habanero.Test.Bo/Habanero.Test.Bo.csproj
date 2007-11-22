@@ -130,7 +130,13 @@
     <Compile Include="ClassDefinition\TestRelPropDef.cs" />
     <Compile Include="ContactPerson.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
+    <Compile Include="Loaders\TestXmlSuperClassLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIFormFieldLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormGridLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIFormLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIGridColumnLoader.cs" />
+    <Compile Include="Loaders\TestXmlUIGridLoader.cs" />
+    <Compile Include="Loaders\TestXmlUILoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -142,33 +148,21 @@
     <Compile Include="Loaders\TestXmlPropertyLoader.cs" />
     <Compile Include="Loaders\TestXmlPropertyRuleLoader.cs" />
     <Compile Include="Loaders\TestXmlRelationshipLoader.cs" />
-    <Compile Include="Loaders\TestXmlSuperClassDescLoader.cs" />
-    <Compile Include="Loaders\TestXmlUIDefLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormColumnLoader.cs" />
-    <Compile Include="Loaders\TestXmlUIFormDefLoader.cs" />
-    <Compile Include="Loaders\TestXmlUIFormPropertyLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormTabLoader.cs" />
-    <Compile Include="Loaders\TestXmlUIGridDefLoader.cs" />
-    <Compile Include="Loaders\TestXmlUIGridPropertyLoader.cs" />
+    <Compile Include="SqlGeneration\TestInsertStatementGenerator.cs" />
+    <Compile Include="SqlGeneration\TestSelectStatementGenerator.cs" />
+    <Compile Include="TestBOCollectionDataProvider.cs" />
+    <Compile Include="TestBOCollectionEditableDataProvider.cs" />
+    <Compile Include="TestBOCollectionReadOnlyDataSetProvider.cs" />
     <Compile Include="TestBoKey.cs" />
     <Compile Include="TestBoMapper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestBoProp.cs" />
     <Compile Include="TestBoPropCol.cs" />
-    <Compile Include="TestBusinessObjectBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="TestBusinessObject.cs" />
     <Compile Include="TestBusinessObjectCollection.cs" />
-    <Compile Include="TestBusinessObjectCollectionDataProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestBusinessObjectCollectionEditableDataProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TestBusinessObjectCollectionReadOnlyDataSetProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TestBusinessObjectLookupList.cs" />
     <Compile Include="TestClassDef.cs">
       <SubType>Code</SubType>
@@ -178,7 +172,6 @@
     </Compile>
     <Compile Include="TestDeleteHelper.cs" />
     <Compile Include="TestExpression.cs" />
-    <Compile Include="TestInsertStatementGenerator.cs" />
     <Compile Include="TestPropDef.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -192,7 +185,6 @@
     </Compile>
     <Compile Include="TestRelationshipDef.cs" />
     <Compile Include="TestRelProp.cs" />
-    <Compile Include="TestSelectStatementGenerator.cs" />
     <Compile Include="TestSingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>

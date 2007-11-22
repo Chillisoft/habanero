@@ -47,39 +47,39 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchitectureTest.cs" />
+    <Compile Include="Base\TestGlobalRegistry.cs" />
+    <Compile Include="Base\TestHabaneroApp.cs" />
+    <Compile Include="Base\TestNullCrypter.cs" />
+    <Compile Include="Base\TestProgressIndicators.cs" />
+    <Compile Include="Base\TestRSAPasswordCrypter.cs" />
+    <Compile Include="Base\TestXmlWrapper.cs" />
     <Compile Include="BeforeSaveBo.cs" />
-    <Compile Include="CsvTestsSamples.cs" />
     <Compile Include="MyBo.cs" />
     <Compile Include="MyDBConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sample.cs" />
     <Compile Include="Shape.cs" />
     <Compile Include="TestAutoInc.cs" />
-    <Compile Include="TestByteString.cs" />
-    <Compile Include="TestCsvFileReader.cs" />
-    <Compile Include="TestCsvFileWriter.cs" />
-    <Compile Include="TestDelayedMethodCall.cs" />
-    <Compile Include="TestEmailSender.cs" />
-    <Compile Include="TestGlobalRegistry.cs" />
-    <Compile Include="TestHabaneroApp.cs" />
-    <Compile Include="TestHabaneroStringBuilder.cs" />
-    <Compile Include="TestImageThumbnailCreator.cs" />
-    <Compile Include="TestJpgMetaData.cs" />
-    <Compile Include="TestLongText.cs" />
-    <Compile Include="TestNullCrypter.cs" />
-    <Compile Include="TestProgressIndicators.cs" />
     <Compile Include="TestResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TestResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TestRSAPasswordCrypter.cs" />
-    <Compile Include="TestSerialisationUtilities.cs" />
-    <Compile Include="TestSortedStringCollection.cs" />
-    <Compile Include="TestStringUtilities.cs" />
     <Compile Include="TestUsingDatabase.cs" />
-    <Compile Include="TestXmlDocumentValidator.cs" />
-    <Compile Include="TestXmlWrapper.cs" />
+    <Compile Include="Util\File\CsvTestsSamples.cs" />
+    <Compile Include="Util\File\TestCsvFileReader.cs" />
+    <Compile Include="Util\File\TestCsvFileWriter.cs" />
+    <Compile Include="Util\TestByteString.cs" />
+    <Compile Include="Util\TestDelayedMethodCall.cs" />
+    <Compile Include="Util\TestEmailSender.cs" />
+    <Compile Include="Util\TestHabaneroStringBuilder.cs" />
+    <Compile Include="Util\TestImageThumbnailCreator.cs" />
+    <Compile Include="Util\TestJpgMetaData.cs" />
+    <Compile Include="Util\TestLongText.cs" />
+    <Compile Include="Util\TestSerialisationUtilities.cs" />
+    <Compile Include="Util\TestSortedStringCollection.cs" />
+    <Compile Include="Util\TestStringUtilities.cs" />
+    <Compile Include="Util\TestXmlDocumentValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
@@ -123,6 +123,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TestResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Base\Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
