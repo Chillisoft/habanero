@@ -25,10 +25,10 @@ using BusinessObject=Habanero.BO.BusinessObject;
 namespace Habanero.Test.BO
 {
     /// <summary>
-    /// Summary description for TestBusinessObjectCollectionReadOnlyDataSetProvider.
+    /// Summary description for TestBOCollectionReadOnlyDataSetProvider.
     /// </summary>
     [TestFixture]
-    public class TestBusinessObjectCollectionReadOnlyDataSetProvider : TestBusinessObjectCollectionDataProvider
+    public class TestBOCollectionReadOnlyDataSetProvider : TestBOCollectionDataProvider
     {
         protected override IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col)
         {

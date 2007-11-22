@@ -27,7 +27,7 @@ namespace Habanero.Test.BO.Loaders
     /// Summary description for TestXmlUIPropertyLoader.
     /// </summary>
     [TestFixture]
-    public class TestXmlUIFormPropertyLoader
+    public class TestXmlUIFormFieldLoader
     {
         private XmlUIFormFieldLoader loader;
 

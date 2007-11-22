@@ -24,10 +24,10 @@ using NUnit.Framework;
 namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
-    /// Summary description for TestXmlUIGridDefLoader.
+    /// Summary description for TestXmlUIGridLoader.
     /// </summary>
     [TestFixture]
-    public class TestXmlUIGridDefLoader
+    public class TestXmlUIGridLoader
     {
         private XmlUIGridLoader loader;
 

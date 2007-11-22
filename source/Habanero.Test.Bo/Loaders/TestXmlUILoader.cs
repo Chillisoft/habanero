@@ -27,7 +27,7 @@ namespace Habanero.Test.BO.Loaders
     /// Summary description for TestXmlUIColllectionsLoader.
     /// </summary>
     [TestFixture]
-    public class TestXmlUIDefLoader
+    public class TestXmlUILoader
     {
         private XmlUILoader itsLoader;
 

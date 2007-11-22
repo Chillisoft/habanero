@@ -31,10 +31,10 @@ using BusinessObject=Habanero.BO.BusinessObject;
 namespace Habanero.Test.BO
 {
     /// <summary>
-    /// Summary description for TestBusinessObjectBase.
+    /// Summary description for TestBusinessObject.
     /// </summary>
     [TestFixture]
-    public class TestBusinessObjectBase : TestUsingDatabase
+    public class TestBusinessObject : TestUsingDatabase
     {
         [TestFixtureSetUp]
         public void TestFixtureSetup()

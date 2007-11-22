@@ -25,10 +25,10 @@ using NUnit.Framework;
 namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
-    /// Summary description for TestXmlSuperClassDescLoader.
+    /// Summary description for TestXmlSuperClassLoader.
     /// </summary>
     [TestFixture]
-    public class TestXmlSuperClassDescLoader
+    public class TestXmlSuperClassLoader
     {
         private XmlSuperClassLoader itsLoader;
 

@@ -36,7 +36,7 @@ namespace Habanero.Test.BO
     /// Summary description for Class1.
     /// </summary>   
     //[TestFixture] 
-    public abstract class TestBusinessObjectCollectionDataProvider : TestUsingDatabase
+    public abstract class TestBOCollectionDataProvider : TestUsingDatabase
     {
         protected XmlClassLoader itsLoader;
         protected ClassDef itsClassDef;

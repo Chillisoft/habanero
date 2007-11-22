@@ -31,7 +31,7 @@ namespace Habanero.Test.BO.Loaders
     /// Summary description for TestXmlUIPropertyLoader.
     /// </summary>
     [TestFixture]
-    public class TestXmlUIGridPropertyLoader
+    public class TestXmlUIGridColumnLoader
     {
         private XmlUIGridColumnLoader loader;
 
