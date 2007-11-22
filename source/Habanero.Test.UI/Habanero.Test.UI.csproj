@@ -46,18 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\TestBorderLayoutManager.cs" />
+    <Compile Include="Base\TestColumnLayoutManager.cs" />
+    <Compile Include="Base\TestControlCollection.cs" />
+    <Compile Include="Base\TestControlFactory.cs" />
+    <Compile Include="Base\TestFlowLayoutManager.cs" />
+    <Compile Include="Base\TestGridLayoutManager.cs" />
+    <Compile Include="Base\TestLayoutManager.cs" />
+    <Compile Include="Forms\TestButtonControl.cs" />
+    <Compile Include="Grid\TestDataViewFilterClauseFactory.cs" />
+    <Compile Include="Grid\TestDataViewFilterClauseFactoryWithStrings.cs" />
+    <Compile Include="Grid\TestReadOnlyGrid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestBorderLayoutManager.cs" />
-    <Compile Include="TestButtonControl.cs" />
-    <Compile Include="TestColumnLayoutManager.cs" />
-    <Compile Include="TestControlCollection.cs" />
-    <Compile Include="TestControlFactory.cs" />
-    <Compile Include="TestDataViewFilterClauseFactory.cs" />
-    <Compile Include="TestDataViewFilterClauseFactoryWithStrings.cs" />
-    <Compile Include="TestFlowLayoutManager.cs" />
-    <Compile Include="TestGridLayoutManager.cs" />
-    <Compile Include="TestLayoutManager.cs" />
-    <Compile Include="TestReadOnlyGrid.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
@@ -87,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
