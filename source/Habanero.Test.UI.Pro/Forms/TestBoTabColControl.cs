@@ -34,7 +34,8 @@ namespace Habanero.Test.UI.Forms
             itsCol.Add(itsBo1);
             itsCol.Add(itsBo2);
 
-            itsTabColControl = new BoTabColControl(new NullBusinessObjectControl());
+            itsTabColControl = new BoTabColControl();
+            itsTabColControl.SetBusinessObjectControl(new NullBusinessObjectControl());
             itsTabColControl.SetCollection(itsCol);
         }
 
@@ -46,7 +47,8 @@ namespace Habanero.Test.UI.Forms
         {
             Mock mock = new DynamicMock(typeof (IBusinessObjectControl));
             IBusinessObjectControl mockBoControl = (IBusinessObjectControl) mock.MockInstance;
-            BoTabColControl testControl = new BoTabColControl(mockBoControl);
+            BoTabColControl testControl = new BoTabColControl();
+            testControl.SetBusinessObjectControl(mockBoControl);
         }
 
         [Test]
@@ -85,7 +87,8 @@ namespace Habanero.Test.UI.Forms
         [Test]
         public void TestSettingCollectionTwice()
         {
-            BoTabColControl tabColControl = new BoTabColControl(new NullBusinessObjectControl());
+            BoTabColControl tabColControl = new BoTabColControl();
+            tabColControl.SetBusinessObjectControl(new NullBusinessObjectControl());
             tabColControl.SetCollection(itsCol);
             tabColControl.SetCollection(itsCol);
             Assert.AreEqual(2, itsTabColControl.TabControl.TabPages.Count);
