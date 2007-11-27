@@ -208,15 +208,13 @@ namespace Habanero.UI.Grid
         }
 
         /// <summary>
-        /// Returns a single selected business object (null if none are selected)
+        /// Returns or sets the single selected business object (null if none are selected)
         /// denoted by where the current selected cell is
         /// </summary>
         public BusinessObject SelectedBusinessObject
         {
-             get
-             {
-                 return this.Grid.SelectedBusinessObject;
-             }
+            get { return this.Grid.SelectedBusinessObject; }
+            set { this.Grid.SelectedBusinessObject = value; }
         }
 
         /// <summary>
