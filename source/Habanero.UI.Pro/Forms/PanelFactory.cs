@@ -323,8 +323,9 @@ namespace Habanero.UI.Forms
                     manager.FixColumn(col*2 + 1, uiFormTab[col].Width - manager.GetFixedColumnWidth(col*2));
                 }
             }
-
+            // TODO: Should this not be the PanelFactoryInfo Preferred Height and Width?
             p.Height = manager.GetFixedHeightIncludingGaps();
+            p.Width = manager.GetFixedWidthIncludingGaps();
             return new PanelFactoryInfo(p, controlMappers, _firstControl);
         }
 
