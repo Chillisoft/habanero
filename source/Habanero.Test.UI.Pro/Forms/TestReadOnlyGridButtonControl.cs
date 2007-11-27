@@ -98,7 +98,7 @@ namespace Habanero.Test.UI.Forms
         public void TestAddButtonClickSuccessfulAdd()
         {
             itsGridMock.ExpectAndReturn("UIName", "default", new object[]{} );
-            itsObjectCreatorMock.ExpectAndReturn("CreateObject", itsBo, new object[] {itsEditor, "default"});
+            itsObjectCreatorMock.ExpectAndReturn("CreateObject", itsBo, new object[] {itsEditor, null, "default"});
             itsGridMock.Expect("AddBusinessObject", new object[] {itsBo});
             itsButtons.ObjectCreator = itsCreator;
             itsButtons.ObjectEditor = itsEditor;
@@ -112,7 +112,7 @@ namespace Habanero.Test.UI.Forms
         public void TestAddButtonClickUnsuccessfulAdd()
         {
             itsGridMock.ExpectAndReturn("UIName", "default", new object[] { });
-            itsObjectCreatorMock.ExpectAndReturn("CreateObject", null, new object[] {itsEditor, "default"});
+            itsObjectCreatorMock.ExpectAndReturn("CreateObject", null, new object[] {itsEditor, null, "default"});
             itsGridMock.ExpectNoCall("AddBusinessObject", new Type[] {typeof (object)});
             itsButtons.ObjectCreator = itsCreator;
             itsButtons.ObjectEditor = itsEditor;

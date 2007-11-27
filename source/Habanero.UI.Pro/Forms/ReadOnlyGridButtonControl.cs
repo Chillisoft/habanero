@@ -23,6 +23,7 @@ namespace Habanero.UI.Forms
 
         private IObjectEditor _objectEditor;
         private IObjectCreator _objectCreator;
+        private IObjectInitialiser _objectInitialiser;
         private RowDoubleClickedHandler _doubleClickedDelegate;
 
         /// <summary>
@@ -56,16 +57,7 @@ namespace Habanero.UI.Forms
         {
             if (e.BusinessObject != null)
             {
-                if (_objectEditor == null)
-                {
-                    throw new NullReferenceException("There was an attempt to edit " +
-                                                     "a business object when the object editor has not been " +
-                                                     "set.  When the ReadOnlyGridWithButtons is instantiated, " +
-                                                     "either use the single-parameter constructor that assigns a " +
-                                                     "default editor or create a customised object editor and " +
-                                                     "assign that through the appropriate constructor.");
-                }
-
+                CheckEditorExists();
                 _objectEditor.EditObject(e.BusinessObject, _readOnlyGrid.UIName);
             }
         }
@@ -80,16 +72,7 @@ namespace Habanero.UI.Forms
             BusinessObject selectedBo = _readOnlyGrid.SelectedBusinessObject;
             if (selectedBo != null)
             {
-                if (_objectEditor == null)
-                {
-                    throw new NullReferenceException("There was an attempt to edit " +
-                                                     "a business object when the object editor has not been " +
-                                                     "set.  When the ReadOnlyGridWithButtons is instantiated, " +
-                                                     "either use the single-parameter constructor that assigns a " +
-                                                     "default editor or create a customised object editor and " +
-                                                     "assign that through the appropriate constructor.");
-                }
-
+                CheckEditorExists();
                 //if
                 _objectEditor.EditObject(selectedBo, _readOnlyGrid.UIName);
                 //				{
@@ -105,17 +88,8 @@ namespace Habanero.UI.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddButtonClickHandler(object sender, EventArgs e)
         {
-            if (_objectCreator == null)
-            {
-                throw new NullReferenceException("There was an attempt to create " +
-                                                 "a new business object when the object creator has not been " +
-                                                 "set.  When the ReadOnlyGridWithButtons is instantiated, " +
-                                                 "either use the single-parameter constructor that assigns a " +
-                                                 "default creator or create a customised object creator and " +
-                                                 "assign that through the appropriate constructor.");
-            }
-
-            BusinessObject newObject = (BusinessObject)_objectCreator.CreateObject(this._objectEditor, _readOnlyGrid.UIName);
+            CheckCreatorExists();
+            BusinessObject newObject = (BusinessObject)_objectCreator.CreateObject(this._objectEditor, _objectInitialiser, _readOnlyGrid.UIName);
             if (newObject != null)
             {
                 _readOnlyGrid.SelectedBusinessObject = null;
@@ -141,6 +115,41 @@ namespace Habanero.UI.Forms
         public IObjectCreator ObjectCreator
         {
             set { _objectCreator = value; }
+        }
+
+        /// <summary>
+        /// Sets the object initialiser.  This initialiser would typically be called to 
+        /// initialise a business object after it is created.
+        /// </summary>
+        public IObjectInitialiser ObjectInitialiser
+        {
+            set { _objectInitialiser = value; }
+        }
+
+        private void CheckCreatorExists()
+        {
+            if (_objectCreator == null)
+            {
+                throw new NullReferenceException("There was an attempt to create " +
+                                                 "a new business object when the object creator has not been " +
+                                                 "set.  When the ReadOnlyGridWithButtons is instantiated, " +
+                                                 "either use the single-parameter constructor that assigns a " +
+                                                 "default creator or create a customised object creator and " +
+                                                 "assign that through the appropriate constructor.");
+            }
+        }
+
+        private void CheckEditorExists()
+        {
+            if (_objectEditor == null)
+            {
+                throw new NullReferenceException("There was an attempt to edit " +
+                                                 "a business object when the object editor has not been " +
+                                                 "set.  When the ReadOnlyGridWithButtons is instantiated, " +
+                                                 "either use the single-parameter constructor that assigns a " +
+                                                 "default editor or create a customised object editor and " +
+                                                 "assign that through the appropriate constructor.");
+            }
         }
     }
 }

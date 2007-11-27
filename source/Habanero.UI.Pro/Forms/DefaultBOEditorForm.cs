@@ -88,16 +88,34 @@ namespace Habanero.UI.Forms
             okbutton.NotifyDefault(true);
             AcceptButton = okbutton;
             CancelButton = cancelButton;
- 
+
             this.Text = def.Title;
-            this.Height = def.Height;
-            this.Width = def.Width;
+            SetupFormSize(def);
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.ControlBox = false;
 
-
             CreateLayout();
+        }
+
+        protected virtual void SetupFormSize(UIForm def)
+        {
+            int width = def.Width;
+            int minWidth = _boPanel.Width +
+                Margin.Left + Margin.Right;
+            if (width < minWidth)
+            {
+                width = minWidth;
+            }
+            int height = def.Height;
+            int minHeight = _boPanel.Height + _buttons.Height + 
+                Margin.Top + Margin.Bottom;
+            if (height < minHeight)
+            {
+                height = minHeight;
+            }
+            this.Height = height;
+            this.Width = width;
         }
 
         /// <summary>
@@ -123,9 +141,10 @@ namespace Habanero.UI.Forms
         /// </summary>
         protected virtual void CreateLayout()
         {
-            BorderLayoutManager manager = new BorderLayoutManager(this);
-            manager.AddControl(this.BoPanel, BorderLayoutManager.Position.Centre);
-            manager.AddControl(this.Buttons, BorderLayoutManager.Position.South);
+            BorderLayoutManager borderLayoutManager;
+            borderLayoutManager = new BorderLayoutManager(this);
+            borderLayoutManager.AddControl(this.BoPanel, BorderLayoutManager.Position.Centre);
+            borderLayoutManager.AddControl(this.Buttons, BorderLayoutManager.Position.South);
         }
 
         /// <summary>
