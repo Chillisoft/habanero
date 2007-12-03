@@ -44,10 +44,13 @@ namespace Habanero.Test.DB
 			Assert.AreSame(typeof(ConnectionStringAccessFactory),
 						   ConnectionStringFactory.GetFactory(DatabaseConfig.Access).GetType(),
 						   "GetFactory not creating correct type : Access.");
-			Assert.AreSame(typeof(ConnectionStringPostgreSqlFactory),
-						   ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetType(),
-						   "GetFactory not creating correct type : PostgreSql.");
-		}
+            Assert.AreSame(typeof(ConnectionStringPostgreSqlFactory),
+                           ConnectionStringFactory.GetFactory(DatabaseConfig.PostgreSql).GetType(),
+                           "GetFactory not creating correct type : PostgreSql.");
+            Assert.AreSame(typeof(ConnectionStringSQLiteFactory),
+                           ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetType(),
+                           "GetFactory not creating correct type : SQLite.");
+        }
 
     	#region SqlServer
 
@@ -244,6 +247,73 @@ namespace Habanero.Test.DB
 		}
 
     	#endregion //PostgreSql
-		
+
+        #region SQLite
+
+        [Test]
+        public void TestSQLite()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb",
+                                                                                             "testusername",
+                                                                                             "testpassword", "testport");
+            Assert.AreEqual(
+                "Data Source=testdb;Password=testpassword;BinaryGUID=Off", conn,
+                "ConnectionStringFactory not working for SQLite");
+        }
+
+        [Test]
+        public void TestSQLiteNoPassword()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb",
+                                                                                             "testusername", "",
+                                                                                             "testport");
+            Assert.AreEqual("Data Source=testdb;BinaryGUID=Off", conn,
+                            "ConnectionStringFactory not working for SQLite");
+        }
+
+        public void TestSQLiteNoServerName()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("", "testdb",
+                                                                                             "testusername",
+                                                                                             "testpassword", "testport");
+            Assert.AreEqual(
+                "Data Source=testdb;Password=testpassword;BinaryGUID=Off", conn,
+                "ConnectionStringFactory not working for SQLite");
+        }
+
+        public void TestSQLiteNoUserName()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb", "",
+                                                                                             "testpassword", "testport");
+            Assert.AreEqual(
+                "Data Source=testdb;Password=testpassword;BinaryGUID=Off", conn,
+                "ConnectionStringFactory not working for SQLite");
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void TestSQLiteNoDatabaseName()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "", "testusername",
+                                                                                             "testpassword", "testport");
+        }
+
+        [Test]
+        public void TestSQLiteNoPort()
+        {
+            String conn =
+                ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb",
+                                                                                             "testusername",
+                                                                                             "testpassword", "");
+            Assert.AreEqual(
+                "Data Source=testdb;Password=testpassword;BinaryGUID=Off", conn,
+                "ConnectionStringFactory not working for SQLite");
+        }
+
+        #endregion //SQLite
     }
 }

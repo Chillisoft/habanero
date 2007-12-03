@@ -36,7 +36,8 @@ namespace Habanero.DB
         public const string SqlServer = "SQLSERVER";
         public const string Oracle = "ORACLE";
 		public const string Access = "ACCESS";
-		public const string PostgreSql = "POSTGRESQL";
+        public const string PostgreSql = "POSTGRESQL";
+        public const string SQLite = "SQLITE";
 
         private String _vendor;
         private String _server;

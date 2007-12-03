@@ -128,30 +128,29 @@ namespace Habanero.BO
             // properties for the object are reloaded from the datareader else 
             // a new object is created and the data for it is loaded from the 
             // datareader. The object is then added to the object manager.
-            BOProp prop;
             BOPropCol propCol = new BOPropCol();
-            BOPrimaryKey lPrimaryKey;
-            foreach (PropDef lPropDef in obj.ClassDef.PrimaryKeyDef)
+            ClassDef classDef = obj.ClassDef;
+            Type boType = obj.GetType();
+            PrimaryKeyDef primaryKeyDef = classDef.PrimaryKeyDef;
+            foreach (PropDef propDef in primaryKeyDef)
             {
-                prop = lPropDef.CreateBOProp(false);
-
+                BOProp prop = propDef.CreateBOProp(false);
                 prop.InitialiseProp(dr[prop.DatabaseFieldName]);
                 propCol.Add(prop);
-
-                obj.PrimaryKey = (BOPrimaryKey)obj.ClassDef.PrimaryKeyDef.CreateBOKey(obj.Props);
+                //obj.PrimaryKey = (BOPrimaryKey)obj.ClassDef.PrimaryKeyDef.CreateBOKey(obj.Props);
             }
-            lPrimaryKey = (BOPrimaryKey)obj.ClassDef.PrimaryKeyDef.CreateBOKey(propCol);
-
-            BusinessObject lTempBusObj =
-                BOLoader.Instance.GetLoadedBusinessObject(lPrimaryKey.GetObjectId(), false);
+            BOPrimaryKey primaryKey = (BOPrimaryKey)primaryKeyDef.CreateBOKey(propCol);
+            BusinessObject lTempBusObj = GetLoadedBusinessObject(primaryKey.GetObjectId(), false);
+            //BusinessObject lTempBusObj =
+            //    BOLoader.Instance.GetLoadedBusinessObject(primaryKey.GetObjectId(), false);
             bool isReplacingSuperClassObject = false;
-            if (lTempBusObj != null && obj.GetType().IsSubclassOf(lTempBusObj.GetType()))
+            if (lTempBusObj != null && boType.IsSubclassOf(lTempBusObj.GetType()))
             {
                 isReplacingSuperClassObject = true;
             }
             if (lTempBusObj == null || isReplacingSuperClassObject)
             {
-                lTempBusObj = obj.ClassDef.InstantiateBusinessObject();
+                lTempBusObj = classDef.CreateNewBusinessObject(obj.GetDatabaseConnection()); //InstantiateBusinessObject();
                 LoadFromDataReader(lTempBusObj, dr);
                 try
                 {
@@ -167,7 +166,7 @@ namespace Habanero.BO
                                                        lTempBusObj.ID.GetObjectId(), ex);
                 }
             }
-            else if (lTempBusObj.GetType().IsSubclassOf(obj.GetType()))
+            else if (lTempBusObj.GetType().IsSubclassOf(boType))
             {
                 //TODO - refresh this subclass object.  It can be done using the current datareader because
                 //the current data reader is for an object of the superclass type.
@@ -199,9 +198,9 @@ namespace Habanero.BO
         [ReflectionPermission(SecurityAction.Demand)]
         internal BusinessObject GetBusinessObject(BusinessObject obj, IExpression searchExpression)
         {
-            BusinessObject lTempBusObj = obj.ClassDef.InstantiateBusinessObject();
-            lTempBusObj.SetDatabaseConnection(obj.GetDatabaseConnection());
-            IDataReader dr = LoadDataReader(lTempBusObj, obj.GetDatabaseConnection(), searchExpression);
+            IDatabaseConnection databaseConnection = obj.GetDatabaseConnection();
+            BusinessObject lTempBusObj = obj.ClassDef.CreateNewBusinessObject(databaseConnection);
+            IDataReader dr = LoadDataReader(lTempBusObj, databaseConnection, searchExpression);
             try
             {
                 if (dr.Read())
@@ -333,19 +332,19 @@ namespace Habanero.BO
             //If the object is already in loaded then refresh it and return it if required.
             if (BusinessObject.AllLoaded().ContainsKey(id))
             {
-                BusinessObject lBusinessObject;
                 WeakReference weakRef = BusinessObject.AllLoaded()[id];
                 //If the reference is valid return object else remove object from 
                 // Collection
                 if (weakRef.IsAlive && weakRef.Target != null)
                 {
-                    lBusinessObject = (BusinessObject)weakRef.Target;
+                    BusinessObject loadedBusinessObject;
+                    loadedBusinessObject = (BusinessObject)weakRef.Target;
                     //Apply concurrency Control Strategy to the Business Object
                     if (refreshIfReqNotCurrent)
                     {
-                        lBusinessObject.CheckConcurrencyOnGettingObjectFromObjectManager();
+                        loadedBusinessObject.CheckConcurrencyOnGettingObjectFromObjectManager();
                     }
-                    return lBusinessObject;
+                    return loadedBusinessObject;
                 }
                 else
                 {
@@ -427,14 +426,17 @@ namespace Habanero.BO
             if (searchExpression == null)
             {
                 selectSql.Statement.Append(obj.SelectSqlStatement(selectSql));
-                return DatabaseConnection.CurrentConnection.LoadDataReader(selectSql);
+                return connection.LoadDataReader(selectSql);
+                //return DatabaseConnection.CurrentConnection.LoadDataReader(selectSql);
             }
             else
             {
                 obj.ParseParameterInfo(searchExpression);
                 selectSql.Statement.Append(obj.SelectSqlWithNoSearchClauseIncludingWhere());
-                searchExpression.SqlExpressionString(selectSql, DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
-                                                     DatabaseConnection.CurrentConnection.RightFieldDelimiter);
+                searchExpression.SqlExpressionString(selectSql, connection.LeftFieldDelimiter,
+                                                     connection.RightFieldDelimiter);
+                //searchExpression.SqlExpressionString(selectSql, DatabaseConnection.CurrentConnection.LeftFieldDelimiter,
+                //                                     DatabaseConnection.CurrentConnection.RightFieldDelimiter);
                 return obj.GetDatabaseConnection().LoadDataReader(selectSql);
             }
         }

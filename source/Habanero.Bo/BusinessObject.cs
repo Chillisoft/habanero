@@ -123,29 +123,6 @@ namespace Habanero.BO
 
         }
 
-        private void Initialise(IDatabaseConnection conn, ClassDef def) {
-            _boState = new BOState(this);
-            State.IsDeleted = false;
-            State.IsDirty = false;
-            State.IsEditing = false;
-            State.IsNew = true;
-            if (conn != null)
-            {
-                _connection = conn;
-            }
-            else
-            {
-                _connection = DatabaseConnection.CurrentConnection;
-            }
-            if (def != null) {
-                _classDef = def;
-            } else {
-                _classDef = ClassDef.ClassDefs[this.GetType()];
-            }
-
-            ConstructFromClassDef(true);
-        }
-
         /// <summary>
         /// Constructor that specifies a primary key ID
         /// </summary>
@@ -164,12 +141,6 @@ namespace Habanero.BO
             //todo: Check if not already loaded in object manager if already loaded raise error
             //TODO: think about moving these to after load
             Initialise(conn, null);
-            //_connection = conn;
-            //SetIsNew(false);
-            //SetIsDeleted(false);
-            //SetIsDirty(false);
-            //SetIsEditing(false);
-            //ConstructFromClassDef(false);
             _primaryKey = id;
             if (!BOLoader.Instance.Load(this))
             {
@@ -225,6 +196,32 @@ namespace Habanero.BO
             }
             ReleaseWriteLocks();
             ReleaseReadLocks();
+        }
+
+        private void Initialise(IDatabaseConnection conn, ClassDef def)
+        {
+            _boState = new BOState(this);
+            State.IsDeleted = false;
+            State.IsDirty = false;
+            State.IsEditing = false;
+            State.IsNew = true;
+            if (conn != null)
+            {
+                _connection = conn;
+            }
+            else
+            {
+                _connection = DatabaseConnection.CurrentConnection;
+            }
+            if (def != null)
+            {
+                _classDef = def;
+            }
+            else
+            {
+                _classDef = ClassDef.ClassDefs[this.GetType()];
+            }
+            ConstructFromClassDef(true);
         }
 
         #endregion //Constructors
@@ -1337,25 +1334,27 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         protected internal  virtual string SelectSqlStatement(SqlStatement selectSql)
         {
-            string statement = SelectSqlWithNoSearchClause();
-            if (statement.IndexOf(" WHERE ") == -1)
-            {
-                statement += " WHERE ";
-            }
-            else
-            {
-                statement += " AND ";
-            }
-            //			ClassDef currentClassDef = this.ClassDef ;
-            //			while (currentClassDef.IsUsingClassTableInheritance()) {
-            //				foreach (DictionaryEntry entry in currentClassDef.SuperClassClassDef.PrimaryKeyDef) {
-            //					PropDef def = (PropDef) entry.Value;
-            //					statement += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
-            //					statement += " = " + currentClassDef.TableName + "." + def.FieldName;
-            //					statement += " AND ";
-            //				}
-            //				currentClassDef = currentClassDef.SuperClassClassDef ;
-            //			}
+            string statement = SelectSqlWithNoSearchClauseIncludingWhere();
+            //string statement = SelectSqlWithNoSearchClause();
+            //if (statement.IndexOf(" WHERE ") == -1)
+            //{
+            //    statement += " WHERE ";
+            //}
+            //else
+            //{
+            //    statement += " AND ";
+            //}
+
+            ////			ClassDef currentClassDef = this.ClassDef ;
+            ////			while (currentClassDef.IsUsingClassTableInheritance()) {
+            ////				foreach (DictionaryEntry entry in currentClassDef.SuperClassClassDef.PrimaryKeyDef) {
+            ////					PropDef def = (PropDef) entry.Value;
+            ////					statement += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
+            ////					statement += " = " + currentClassDef.TableName + "." + def.FieldName;
+            ////					statement += " AND ";
+            ////				}
+            ////				currentClassDef = currentClassDef.SuperClassClassDef ;
+            ////			}
             statement += WhereClause(selectSql);
             return statement;
         }
@@ -1369,7 +1368,7 @@ namespace Habanero.BO
         {
             return new SelectStatementGenerator(this, this._connection).Generate(-1);
         }
-
+        
         /// <summary>
         /// Returns a sql statement with no search clause but including a
         /// "where " (or "and " where appropriate) statement.  Uses SelectSqlWithNoSearchClause() and appends

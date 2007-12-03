@@ -48,8 +48,12 @@ namespace Habanero.DB
 //            if (connectionNamespace.Substring(0, 17) == "Oracle.DataAccess")
             {
                 _prefixCharacter = ":";
-            } 
-			else if (connectionNamespace == "Npgsql")
+            }
+            else if (connectionNamespace == "Npgsql")
+            {
+                _prefixCharacter = ":";
+            }
+            else if (connectionNamespace == "System.Data.SQLite")
             {
                 _prefixCharacter = ":";
             }
