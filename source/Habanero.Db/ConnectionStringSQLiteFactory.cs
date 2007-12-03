@@ -71,12 +71,12 @@ namespace Habanero.DB
         {
             if (password == "")
             {
-                return String.Format("Data Source={0};BinaryGUID=Off", database);
+                return String.Format("Data Source={0};BinaryGUID=False", database);
             }
             else
             {
                 return
-                    String.Format("Data Source={0};Password={1};BinaryGUID=Off", database, password);
+                    String.Format("Data Source={0};Password={1};BinaryGUID=False", database, password);
             }
         }
     }

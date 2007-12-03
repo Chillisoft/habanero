@@ -258,7 +258,7 @@ namespace Habanero.Test.DB
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
             Assert.AreEqual(
-                "Data Source=testdb;Password=testpassword;BinaryGUID=Off", conn,
+                "Data Source=testdb;Password=testpassword;BinaryGUID=False", conn,
                 "ConnectionStringFactory not working for SQLite");
         }
 
@@ -269,7 +269,7 @@ namespace Habanero.Test.DB
                 ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb",
                                                                                              "testusername", "",
                                                                                              "testport");
-            Assert.AreEqual("Data Source=testdb;BinaryGUID=Off", conn,
+            Assert.AreEqual("Data Source=testdb;BinaryGUID=False", conn,
                             "ConnectionStringFactory not working for SQLite");
         }
 
@@ -280,7 +280,7 @@ namespace Habanero.Test.DB
                                                                                              "testusername",
                                                                                              "testpassword", "testport");
             Assert.AreEqual(
-                "Data Source=testdb;Password=testpassword;BinaryGUID=Off", conn,
+                "Data Source=testdb;Password=testpassword;BinaryGUID=False", conn,
                 "ConnectionStringFactory not working for SQLite");
         }
 
@@ -290,7 +290,7 @@ namespace Habanero.Test.DB
                 ConnectionStringFactory.GetFactory(DatabaseConfig.SQLite).GetConnectionString("testserver", "testdb", "",
                                                                                              "testpassword", "testport");
             Assert.AreEqual(
-                "Data Source=testdb;Password=testpassword;BinaryGUID=Off", conn,
+                "Data Source=testdb;Password=testpassword;BinaryGUID=False", conn,
                 "ConnectionStringFactory not working for SQLite");
         }
 
@@ -310,7 +310,7 @@ namespace Habanero.Test.DB
                                                                                              "testusername",
                                                                                              "testpassword", "");
             Assert.AreEqual(
-                "Data Source=testdb;Password=testpassword;BinaryGUID=Off", conn,
+                "Data Source=testdb;Password=testpassword;BinaryGUID=False", conn,
                 "ConnectionStringFactory not working for SQLite");
         }
 

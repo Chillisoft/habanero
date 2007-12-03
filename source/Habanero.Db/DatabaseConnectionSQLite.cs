@@ -71,11 +71,12 @@ namespace Habanero.DB
             {
                 using (
                     IDataReader reader =
-                        LoadDataReader(String.Format("Select seq from SQLITE_SEQUENCE where name = '{0}'", tableName)))
+                        LoadDataReader(String.Format("Select seq from SQLITE_SEQUENCE where Upper(name) = Upper('{0}')", tableName)))
                 {
                     if (reader.Read())
                     {
                         id = Convert.ToInt64(reader.GetValue(0));
+                        id += 1;
                     }
                 }
             } catch(Exception ex)
