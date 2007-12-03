@@ -79,7 +79,7 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise a new business object
         /// </summary>
-        protected internal BusinessObject() : this(DatabaseConnection.CurrentConnection)
+        protected internal BusinessObject() : this((IDatabaseConnection)null)
         {
         }
 
@@ -95,7 +95,7 @@ namespace Habanero.BO
         /// Constructor that specifies a class definition
         /// </summary>
         /// <param name="def">The class definition</param>
-        protected internal BusinessObject(ClassDef def) : this(def, DatabaseConnection.CurrentConnection)
+        protected internal BusinessObject(ClassDef def) : this(def, null)
         {
         }
 
@@ -120,14 +120,13 @@ namespace Habanero.BO
                 }
             }
             AddToLoadedBusinessObjectCol(this);
-
         }
 
         /// <summary>
         /// Constructor that specifies a primary key ID
         /// </summary>
         /// <param name="id">The primary key ID</param>
-        protected BusinessObject(BOPrimaryKey id) : this(id, DatabaseConnection.CurrentConnection)
+        protected BusinessObject(BOPrimaryKey id) : this(id, null)
         {
         }
 
@@ -155,7 +154,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="searchExpression">A search expression</param>
         protected BusinessObject(IExpression searchExpression)
-            : this(searchExpression, DatabaseConnection.CurrentConnection)
+            : this(searchExpression, null)
         {
         }
 
@@ -168,7 +167,7 @@ namespace Habanero.BO
         protected BusinessObject(IExpression searchExpression, IDatabaseConnection conn)
         {
             //todo: Check if not already loaded in object manager if already loaded raise error
-            _connection = conn;
+            InitialiseDatabaseConnection(conn);
             State.IsNew = false;
             State.IsDeleted = false;
             State.IsDirty = false;
@@ -187,7 +186,7 @@ namespace Habanero.BO
         ~BusinessObject()
         {
             if (this.ID != null) AllLoaded().Remove(this.ID.ToString());
-            if (_primaryKey.GetOrigObjectID().Length > 0)
+            if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
             {
                 if (AllLoaded().ContainsKey(_primaryKey.GetOrigObjectID()))
                 {
@@ -205,14 +204,7 @@ namespace Habanero.BO
             State.IsDirty = false;
             State.IsEditing = false;
             State.IsNew = true;
-            if (conn != null)
-            {
-                _connection = conn;
-            }
-            else
-            {
-                _connection = DatabaseConnection.CurrentConnection;
-            }
+            InitialiseDatabaseConnection(conn);
             if (def != null)
             {
                 _classDef = def;
@@ -222,6 +214,24 @@ namespace Habanero.BO
                 _classDef = ClassDef.ClassDefs[this.GetType()];
             }
             ConstructFromClassDef(true);
+        }
+
+        protected void InitialiseDatabaseConnection(IDatabaseConnection conn)
+        {
+            if (conn != null)
+            {
+                _connection = conn;
+            }
+            else
+            {
+                _connection = DefaultDatabaseConnection();
+                if (_connection == null)
+                {
+                    throw new ArgumentException("The DefaultDatabaseConnection returned a null reference. " +
+                                                "Please ensure that the overridden DefaultDatabaseConnection " +
+                                                "returns a connection object.");
+                }
+            }
         }
 
         #endregion //Constructors
@@ -732,6 +742,17 @@ namespace Habanero.BO
         #endregion //Editing Property Values
 
         #region Persistance
+
+        /// <summary>
+        /// This method returns the default Database Connection to use when initialising
+        /// an object of this type. The default is the DatabaseConnection.CurrentConnection object.
+        /// Override this method if you want to use another connection for this object specifically.
+        /// </summary>
+        /// <returns>The default Database Connection for this object.</returns>
+        protected virtual IDatabaseConnection DefaultDatabaseConnection()
+        {
+            return DatabaseConnection.CurrentConnection;
+        }
 
         /// <summary>
         /// Returns the database connection

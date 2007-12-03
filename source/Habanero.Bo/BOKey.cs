@@ -322,21 +322,38 @@ namespace Habanero.BO
         /// <returns>Returns true if equal</returns>
         public static bool operator ==(BOKey lhs, BOKey rhs)
         {
+            bool lhsIsNull = false;
+            int lhsPropsCount = 0;
             try
             {
-                if (lhs._props.Count != rhs._props.Count)
-                {
-                    return false;
-                }
+                lhsPropsCount = lhs._props.Count;
             }
             catch (NullReferenceException)
             {
+                lhsIsNull = true;
+            }
+            bool rhsIsNull = false;
+            int rhsPropsCount = 0;
+            try
+            {
+                rhsPropsCount = rhs._props.Count;
+            }
+            catch (NullReferenceException)
+            {
+                rhsIsNull = true;
+            }
+            if (rhsIsNull && lhsIsNull)
+            {
+                return true;
+            } else if (rhsIsNull || lhsIsNull)
+            {
                 return false;
             }
-            catch (Exception e)
+            if (lhsPropsCount != rhsPropsCount)
             {
-                throw;
+                return false;
             }
+
             foreach (BOProp prop in lhs._props.Values)
             {
                 if (rhs.Contains(prop.PropertyName))
