@@ -225,12 +225,12 @@ namespace Habanero.BO
             else
             {
                 _connection = DefaultDatabaseConnection();
-                if (_connection == null)
-                {
-                    throw new ArgumentException("The DefaultDatabaseConnection returned a null reference. " +
-                                                "Please ensure that the overridden DefaultDatabaseConnection " +
-                                                "returns a connection object.");
-                }
+                //if (_connection == null)
+                //{
+                //    throw new ArgumentException("The DefaultDatabaseConnection returned a null reference. " +
+                //                                "Please ensure that the overridden DefaultDatabaseConnection " +
+                //                                "returns a connection object.");
+                //}
             }
         }
 
