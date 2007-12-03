@@ -89,15 +89,25 @@ namespace Habanero.Test.DB
                             "Namespace of Access connection is wrong.");
         }
 
-		[Test]
-		public void TestCreateDatabaseConnectionPostgreSql()
-		{
-			DatabaseConnection conn = new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection");
-			conn.ConnectionString =
-				new DatabaseConfig(DatabaseConfig.Access, "test", "test", "test", "test", "1000").GetConnectionString();
-			Assert.AreEqual("Npgsql", conn.TestConnection.GetType().Namespace,
-							"Namespace of PostgreSql connection is wrong.");
-		}
+        [Test]
+        public void TestCreateDatabaseConnectionPostgreSql()
+        {
+            DatabaseConnection conn = new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection");
+            conn.ConnectionString =
+                new DatabaseConfig(DatabaseConfig.PostgreSql, "test", "test", "test", "test", "1000").GetConnectionString();
+            Assert.AreEqual("Npgsql", conn.TestConnection.GetType().Namespace,
+                            "Namespace of PostgreSql connection is wrong.");
+        }
+
+        [Test]
+        public void TestCreateDatabaseConnectionSQLite()
+        {
+            DatabaseConnection conn = new DatabaseConnectionSQLite("System.Data.SQLite", "System.Data.SQLite.SQLiteConnection");
+            conn.ConnectionString =
+                new DatabaseConfig(DatabaseConfig.SQLite, "test", "test", "test", "test", "1000").GetConnectionString();
+            Assert.AreEqual("System.Data.SQLite", conn.TestConnection.GetType().Namespace,
+                            "Namespace of SQLite connection is wrong.");
+        }
 
     }
 }

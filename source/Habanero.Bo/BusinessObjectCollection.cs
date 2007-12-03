@@ -56,23 +56,22 @@ namespace Habanero.BO
         //private ArrayList _list;
 
         /// <summary>
-        /// Default constructor. The classdef will be implied from TBusinessObject
+        /// Default constructor. 
+        /// The classdef will be implied from TBusinessObject and the Current Database Connection will be used.
         /// </summary>
         public BusinessObjectCollection()
-            : this(ClassDef.ClassDefs[typeof(TBusinessObject)])
-    {}
+            : this(null, null)
+        {
+        }
 
         /// <summary>
         /// Use this constructor if you will only know TBusinessObject at run time - BusinessObject will be the generic type
         /// and the objects in the collection will be determined from the classDef passed in.
         /// </summary>
         /// <param name="classDef">The classdef of the objects to be contained in this collection</param>
-        public BusinessObjectCollection(ClassDef classDef)
+        public BusinessObjectCollection(ClassDef classDef) 
+            :this (classDef, null)
         {
-            _boClassDef = classDef;
-            //_list = new ArrayList();
-            _sampleBo = _boClassDef.CreateNewBusinessObject();
-            _lookupTable = new Hashtable();
         }
 
         /// <summary>
@@ -82,9 +81,46 @@ namespace Habanero.BO
         /// <param name="bo">The business object whose class definition
         /// is used to initialise the collection</param>
         public BusinessObjectCollection(TBusinessObject bo)
-            : this(bo.ClassDef)
+            : this(null, bo)
         {
         }
+
+        /// <summary>
+        /// Constructor to initialise a new collection with a specified Database Connection.
+        /// This Database Connection will be used to load the collection.
+        /// </summary>
+        /// <param name="databaseConnection">The Database Connection to used to load the collection</param>
+        public BusinessObjectCollection(IDatabaseConnection databaseConnection)
+            : this(null, null)
+        {
+            _sampleBo.SetDatabaseConnection(databaseConnection);
+        }
+
+        private BusinessObjectCollection(ClassDef classDef, TBusinessObject sampleBo)
+        {
+            if (classDef == null)
+            {
+                if (sampleBo == null)
+                {
+                    _boClassDef = ClassDef.ClassDefs[typeof (TBusinessObject)];
+                } else
+                {
+                    _boClassDef = sampleBo.ClassDef;
+                }
+            } else
+            {
+                _boClassDef = classDef;
+            }
+            if (sampleBo != null)
+            {
+                _sampleBo = sampleBo;
+            } else
+            {
+                _sampleBo = _boClassDef.CreateNewBusinessObject();
+            }
+            _lookupTable = new Hashtable();
+        }
+
 
         /// <summary>
         /// Handles the event of a business object being added
@@ -186,14 +222,17 @@ namespace Habanero.BO
         public void Refresh()
         {
             Clear();
-        	ISqlStatement refreshSql = CreateLoadSqlStatement(_sampleBo, _boClassDef, _criteriaExpression, _limit, _extraSearchCriteriaLiteral);
-
-        	using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(refreshSql, _orderByClause))
+            IDatabaseConnection boDatabaseConnection = _sampleBo.GetDatabaseConnection();
+            //Create the SqlStatement for the _sampleBo's database connection
+        	ISqlStatement refreshSql = CreateLoadSqlStatement(_sampleBo, _boClassDef, 
+                _criteriaExpression, _limit, _extraSearchCriteriaLiteral);
+        	using (IDataReader dr = boDatabaseConnection.LoadDataReader(refreshSql, _orderByClause))
             {
                 try
                 {
                     TBusinessObject lTempBusObj;
-					lTempBusObj = (TBusinessObject)_boClassDef.InstantiateBusinessObject();
+                    lTempBusObj = (TBusinessObject)_boClassDef.CreateNewBusinessObject(boDatabaseConnection); 
+                    //lTempBusObj = (TBusinessObject)_boClassDef.InstantiateBusinessObject();
 					//lTempBusObj = (BusinessObjectBase)Activator.CreateInstance(_boClassDef.ClassType, true);
 					while (dr.Read())
                     {
@@ -213,7 +252,8 @@ namespace Habanero.BO
 
     	internal static ISqlStatement CreateLoadSqlStatement(BusinessObject businessObject, ClassDef classDef, IExpression criteriaExpression, int limit, string extraSearchCriteriaLiteral)
     	{
-    		ISqlStatement refreshSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+    	    IDatabaseConnection boDatabaseConnection = businessObject.GetDatabaseConnection();
+    		ISqlStatement refreshSql = new SqlStatement(boDatabaseConnection.GetConnection());
 			refreshSql.Statement.Append(businessObject.GetSelectSql(limit));
 			if (criteriaExpression != null)
     		{
@@ -229,7 +269,7 @@ namespace Habanero.BO
 
             if (limit > 0)
             {
-                string limitClause = businessObject.GetDatabaseConnection().GetLimitClauseForEnd(limit);
+                string limitClause = boDatabaseConnection.GetLimitClauseForEnd(limit);
                 if (!String.IsNullOrEmpty(limitClause)) refreshSql.Statement.Append(" " + limitClause);
             }
     		return refreshSql;

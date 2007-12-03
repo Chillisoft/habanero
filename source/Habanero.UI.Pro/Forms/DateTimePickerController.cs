@@ -65,7 +65,10 @@ namespace Habanero.UI.Forms
 			_dateTimePicker.EnabledChanged -= DateTimePicker_ColorChanged;
 			_dateTimePicker.BackColorChanged -= DateTimePicker_ColorChanged;
 			_dateTimePicker.ForeColorChanged -= DateTimePicker_ColorChanged;
-			_dateTimePicker.Controls.Remove(_displayBox);
+            ControlsHelper.SafeGui(_dateTimePicker, delegate()
+            {
+                _dateTimePicker.Controls.Remove(_displayBox);
+            });
 			_dateTimePicker = null;
 		}
 

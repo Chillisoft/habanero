@@ -438,29 +438,39 @@ namespace Habanero.BO.ClassDefinition
         /// Creates a new business object
         /// </summary>
         /// <returns>Returns a new business object</returns>
-        internal BusinessObject InstantiateBusinessObject()
-        {
-            return (BusinessObject) Activator.CreateInstance(MyClassType, true);
-        }
-
-        /// <summary>
-        /// Creates a new business object using this class definition
-        /// </summary>
-        /// <returns>Returns a new business object</returns>
-        internal BusinessObject InstantiateBusinessObjectWithClassDef()
+        private BusinessObject InstantiateBusinessObject()
+        // This was internal, but it's been made private because you should rather use CreateNewBusinessObject
         {
             try
             {
-                return (BusinessObject)Activator.CreateInstance(MyClassType, new object[] { });
+                return (BusinessObject) Activator.CreateInstance(MyClassType, true);
             }
             catch (MissingMethodException ex)
             {
                 throw new MissingMethodException("Each class that implements " +
-                     "BusinessObject needs to have a constructor with an argument " +
-                     "to accept a ClassDef object and pass it to the base class " +
-                     "(eg. public _className(ClassDef classDef) : base(classDef) {} )", ex);
+                     "BusinessObject needs to have a parameterless constructor.", ex);
             }
         }
+                
+        ///// <summary>
+        ///// Creates a new business object using this class definition
+        ///// </summary>
+        ///// <returns>Returns a new business object</returns>
+        //private BusinessObject InstantiateBusinessObjectWithClassDef()
+        //// This was internal, but it's been made private because you should rather use CreateNewBusinessObject
+        //{
+        //    try
+        //    {
+        //        return (BusinessObject)Activator.CreateInstance(MyClassType, new object[] { });
+        //    }
+        //    catch (MissingMethodException ex)
+        //    {
+        //        throw new MissingMethodException("Each class that implements " +
+        //             "BusinessObject needs to have a constructor with an argument " +
+        //             "to accept a ClassDef object and pass it to the base class " +
+        //             "(eg. public _className(ClassDef classDef) : base(classDef) {} )", ex);
+        //    }
+        //}
 
         /// <summary>
         /// Creates a new collection of relationships.
@@ -505,7 +515,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns the new object</returns>
         public BusinessObject CreateNewBusinessObject()
         {
-            return this.InstantiateBusinessObjectWithClassDef();
+            return InstantiateBusinessObject(); //this.InstantiateBusinessObjectWithClassDef();
         }
 
         /// <summary>
@@ -516,7 +526,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns the new object</returns>
         public BusinessObject CreateNewBusinessObject(IDatabaseConnection conn)
         {
-            BusinessObject newObj = this.InstantiateBusinessObjectWithClassDef();
+            BusinessObject newObj = InstantiateBusinessObject(); //this.InstantiateBusinessObjectWithClassDef();
             newObj.SetDatabaseConnection(conn);
             return newObj;
         }

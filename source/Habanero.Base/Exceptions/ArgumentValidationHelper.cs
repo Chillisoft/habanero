@@ -163,7 +163,7 @@ namespace Habanero.Base.Exceptions
             if (! (parameterType.IsSubclassOf(expectedType)))
             {
                 throw new HabaneroArgumentException(parameterName,
-                                                    parameterName + " Argument is expected to be of type " +
+                                                    "The '" + parameterName + "' argument is expected to be of type " +
                                                     expectedType.Name + ".\n" + message);
             }
         }

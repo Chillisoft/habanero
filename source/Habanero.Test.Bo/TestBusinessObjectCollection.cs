@@ -25,6 +25,7 @@ using Habanero.Base;
 using Habanero.Test;
 using NMock;
 using NUnit.Framework;
+using Rhino.Mocks;
 using BusinessObject = Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.BO
@@ -77,10 +78,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual("SELECT TOP 10 MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statement.Statement.ToString());
         }
 
-
-        private class MyDatabaseConnection : DatabaseConnection
+        public class MyDatabaseConnection : DatabaseConnection
         {
-            public MyDatabaseConnection() : base("test", "test") { }
+            public MyDatabaseConnection() : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection") { }
 
             public override string GetLimitClauseForBeginning(int limit)
             {

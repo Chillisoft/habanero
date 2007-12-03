@@ -90,7 +90,17 @@ namespace Habanero.Test.DB
 			Assert.AreEqual(":Param0", gen.GetNextParameterName());
 		}
 
-
+        [Test]
+        public void TestNameGenerationSQLite()
+        {
+            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SQLite, "test", "test", "test", "test", "1000");
+            IDbConnection dbConn = DatabaseConnectionFactory.CreateConnection(config).TestConnection;
+            ParameterNameGenerator gen = new ParameterNameGenerator(dbConn);
+            Assert.AreEqual(":Param0", gen.GetNextParameterName());
+            Assert.AreEqual(":Param1", gen.GetNextParameterName());
+            gen.Reset();
+            Assert.AreEqual(":Param0", gen.GetNextParameterName());
+        }
 
     }
 }

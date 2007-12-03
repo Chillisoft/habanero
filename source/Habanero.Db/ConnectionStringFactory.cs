@@ -89,9 +89,11 @@ namespace Habanero.DB
                     return new ConnectionStringOracleFactory();
 				case DatabaseConfig.Access:
 					return new ConnectionStringAccessFactory();
-				case DatabaseConfig.PostgreSql:
-					return new ConnectionStringPostgreSqlFactory();
-				default:
+                case DatabaseConfig.PostgreSql:
+                    return new ConnectionStringPostgreSqlFactory();
+                case DatabaseConfig.SQLite:
+                    return new ConnectionStringSQLiteFactory();
+                default:
                     return null;
             }
         }

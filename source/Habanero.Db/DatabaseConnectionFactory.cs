@@ -107,18 +107,32 @@ namespace Habanero.DB
                     return new DatabaseConnectionAccess(assemblyName, fullClassName, config.GetConnectionString());
                 }
             }
-			else if (string.Compare(config.Vendor, DatabaseConfig.PostgreSql, true) == 0)
-			{
-				if (String.IsNullOrEmpty(assemblyName))
-				{
-					return
-						new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection",
-													 config.GetConnectionString());
-				} else
-				{
-					return new DatabaseConnectionPostgreSql(assemblyName, fullClassName, config.GetConnectionString());
-				}
-			} 
+            else if (string.Compare(config.Vendor, DatabaseConfig.PostgreSql, true) == 0)
+            {
+                if (String.IsNullOrEmpty(assemblyName))
+                {
+                    return
+                        new DatabaseConnectionPostgreSql("Npgsql", "Npgsql.NpgsqlConnection",
+                                                     config.GetConnectionString());
+                }
+                else
+                {
+                    return new DatabaseConnectionPostgreSql(assemblyName, fullClassName, config.GetConnectionString());
+                }
+            }
+            else if (string.Compare(config.Vendor, DatabaseConfig.SQLite, true) == 0)
+            {
+                if (String.IsNullOrEmpty(assemblyName))
+                {
+                    return
+                        new DatabaseConnectionSQLite("System.Data.SQLite", "System.Data.SQLite.SQLiteConnection",
+                                                     config.GetConnectionString());
+                }
+                else
+                {
+                    return new DatabaseConnectionSQLite(assemblyName, fullClassName, config.GetConnectionString());
+                }
+            }
             else
             {
                 return null;
