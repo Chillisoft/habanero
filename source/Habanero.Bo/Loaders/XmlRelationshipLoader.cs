@@ -224,15 +224,16 @@ namespace Habanero.BO.Loaders
                         "relationship will link.");
                 }
                 
-                if (!_propDefCol.Contains(defName))
-                {
-                    throw new InvalidXmlDefinitionException(String.Format(
-                        "In a 'relatedProperty' element, the property '{0}' given in the " +
-                        "'name' attribute has not been defined among the class's " +
-                        "property definitions. Either add " +
-                        "the property definition or check the spelling and " +
-                        "capitalisation.", defName));
-                }
+                //This error was moved to where the relationship object is created for a BusinessObject
+                //if (!_propDefCol.Contains(defName))
+                //{
+                //    throw new InvalidXmlDefinitionException(String.Format(
+                //        "In a 'relatedProperty' element, the property '{0}' given in the " +
+                //        "'property' attribute has not been defined among the class's " +
+                //        "property definitions. Either add " +
+                //        "the property definition or check the spelling and " +
+                //        "capitalisation.", defName));
+                //}
 				_relKeyDef.Add(_defClassFactory.CreateRelPropDef(_propDefCol[defName], relPropName));
 				//_relKeyDef.Add(new RelPropDef(_propDefCol[defName], relPropName));
                 ReadAndIgnoreEndTag();

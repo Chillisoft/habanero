@@ -117,8 +117,15 @@ namespace Habanero.BO
             _relatedBo = relatedObject;
             foreach (RelProp relProp in _relKey)
             {
-                _owningBo.SetPropertyValue(relProp.OwnerPropertyName,
-                                             _relatedBo.GetPropertyValue(relProp.RelatedClassPropName));
+                object relatedObjectValue;
+                if (_relatedBo != null)
+                {
+                    relatedObjectValue = _relatedBo.GetPropertyValue(relProp.RelatedClassPropName);
+                } else
+                {
+                    relatedObjectValue = null;
+                }
+                _owningBo.SetPropertyValue(relProp.OwnerPropertyName, relatedObjectValue);
             }
             _storedRelationshipExpression = _relKey.RelationshipExpression().ExpressionString();
         }

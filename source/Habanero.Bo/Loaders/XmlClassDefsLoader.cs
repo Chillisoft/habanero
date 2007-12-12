@@ -19,7 +19,9 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 using Habanero.Util;
@@ -161,6 +163,98 @@ namespace Habanero.BO.Loaders
             {
                 _classDefList.Add(classLoader.LoadClass(_reader.ReadOuterXml()));
             } while (_reader.Name == "class");
+            DoPostLoadChecks();
+        }
+
+        private void DoPostLoadChecks()
+        {
+            CheckRelationships();
+        }
+
+        private void CheckRelationships()
+        {
+            Dictionary<ClassDef, PropDefCol> loadedFullPropertyLists = new Dictionary<ClassDef, PropDefCol>();
+            foreach (ClassDef classDef in _classDefList)
+            {
+                CheckRelationships(loadedFullPropertyLists, classDef);
+            }
+        }
+
+        private void CheckRelationships(Dictionary<ClassDef, PropDefCol> loadedFullPropertyLists, ClassDef classDef)
+        {
+            if (classDef == null) return;
+
+            PropDefCol allProps;
+            allProps = GetAllClassDefProps(loadedFullPropertyLists, classDef);
+            foreach (RelationshipDef relationshipDef in classDef.RelationshipDefCol)
+            {
+                //// Check Related Object
+                //if (!_classDefList.Contains(relationshipDef.RelatedObjectAssemblyName, relationshipDef.RelatedObjectClassName))
+                //{
+                //    throw new InvalidXmlDefinitionException(String.Format(
+                //            "In a 'relatedProperty' element for the '{0}' relationship of " +
+                //            "the '{1}' class, the property '{2}' given in the " +
+                //            "'property' attribute does not exist for the class or for any of it's superclasses. " +
+                //            "Either add the property definition or check the spelling and " +
+                //            "capitalisation of the specified property.",
+                //            relationshipDef.RelationshipName, classDef.ClassName, ownerPropertyName));
+                //}
+                
+                // Check Relationship Properties
+                foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+                {
+                    string ownerPropertyName = relPropDef.OwnerPropertyName;
+                    if (!allProps.Contains(ownerPropertyName))
+                    {
+                        throw new InvalidXmlDefinitionException(String.Format(
+                            "In a 'relatedProperty' element for the '{0}' relationship of " + 
+                            "the '{1}' class, the property '{2}' given in the " +
+                            "'property' attribute does not exist for the class or for any of it's superclasses. " +
+                            "Either add the property definition or check the spelling and " +
+                            "capitalisation of the specified property.", 
+                            relationshipDef.RelationshipName, classDef.ClassName, ownerPropertyName));
+                    }
+                }
+            }
+
+            
+        }
+
+        private PropDefCol GetAllClassDefProps(Dictionary<ClassDef, PropDefCol> loadedFullPropertyLists, ClassDef classDef)
+        {
+            PropDefCol allProps;
+            if (loadedFullPropertyLists.ContainsKey(classDef))
+            {
+                allProps = loadedFullPropertyLists[classDef];
+            }
+            else
+            {
+                allProps = new PropDefCol();
+                ClassDef currentClassDef = classDef;
+                while (currentClassDef != null)
+                {
+                    foreach (PropDef propDef in classDef.PropDefcol)
+                    {
+                        if (!allProps.Contains(propDef.PropertyName))
+                        {
+                            allProps.Add(propDef);
+                        }
+                    }
+                    currentClassDef = GetSuperClassClassDef(currentClassDef);
+                }
+                loadedFullPropertyLists.Add(classDef, allProps);
+            }
+            return allProps;
+        }
+
+        private ClassDef GetSuperClassClassDef(ClassDef currentClassDef)
+        {
+            SuperClassDef superClassDef = currentClassDef.SuperClassDef;
+            if (superClassDef != null)
+            {
+                return _classDefList[superClassDef.AssemblyName, superClassDef.ClassName];
+            }
+            return null;
         }
     }
 }
