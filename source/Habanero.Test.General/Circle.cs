@@ -56,15 +56,23 @@ namespace Habanero.Test.General
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             ClassDef lClassDef = new ClassDef(typeof (Circle), primaryKey, lPropDefCol, keysCol, relDefCol);
+            
             lClassDef.SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
+
 			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
+        public Guid? CircleID
+        {
+            get { return (Guid?)GetPropertyValue("CircleID"); }
+            set { SetPropertyValue("CircleID", value); }
+        }
+
 		public int Radius
 		{
-			get { return (int)this.GetPropertyValue("Radius"); }
-			set { this.SetPropertyValue("Radius", value); }
+			get { return (int)GetPropertyValue("Radius"); }
+			set { SetPropertyValue("Radius", value); }
 		}
     }
 }

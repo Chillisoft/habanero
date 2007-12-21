@@ -40,7 +40,7 @@ namespace Habanero.BO.ClassDefinition
 		
 		PrimaryKeyDef CreatePrimaryKeyDef();
 
-		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing);
+		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length);
 
 		PropRuleDate CreatePropRuleDate(string name, string message);
 
@@ -56,7 +56,7 @@ namespace Habanero.BO.ClassDefinition
 
 		SimpleLookupList CreateSimpleLookupList(Dictionary<string, object> displayValueDictionary);
 
-		SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping);
+		SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping, string id, string discriminator);
 
 		UIDef CreateUIDef(string name, UIForm uiForm, UIGrid uiGrid);
 

@@ -33,19 +33,21 @@ namespace Habanero.Test.General
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            SetupTest();
+            SetupTestWithoutPrimaryKey();
         }
+
         public static void RunTest()
         {
             TestInheritanceSingleTable test = new TestInheritanceSingleTable();
-            test.SetupTest();
+            test.SetupTestWithoutPrimaryKey();
         }
 
 
         protected override void SetupInheritanceSpecifics()
         {
-            Circle.GetClassDef().SuperClassDef =
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef =
                 new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
         }
 
         protected override void SetStrID()
@@ -56,7 +58,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestCircleIsUsingSingleTableInheritance()
         {
-            Assert.AreEqual(ORMapping.SingleTableInheritance, Circle.GetClassDef().SuperClassDef.ORMapping);
+            Assert.AreEqual(ORMapping.SingleTableInheritance, CircleNoPrimaryKey.GetClassDef().SuperClassDef.ORMapping);
         }
 
         [Test]
@@ -91,15 +93,19 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
-            Assert.AreEqual("INSERT INTO Shape (Radius, ShapeID, ShapeName) VALUES (?Param0, ?Param1, ?Param2)",
+            Assert.AreEqual("INSERT INTO Shape (Radius, ShapeID, ShapeName, ShapeType) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
                             itsInsertSql[0].Statement.ToString(),
                             "Concrete Table Inheritance insert Sql seems to be incorrect.");
+            Assert.AreEqual(4, itsInsertSql[0].Parameters.Count, "There should be 4 parameters.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
                             "Parameter ShapeID has incorrect value");
             Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[2]).Value,
                             "Parameter ShapeName has incorrect value");
             Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
                             "Parameter Radius has incorrect value");
+            Assert.AreEqual("CircleNoPrimaryKey", ((IDbDataParameter)itsInsertSql[0].Parameters[3]).Value,
+                            "Discriminator has incorrect value");
+
         }
 
         [Test]
@@ -108,15 +114,16 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, itsUpdateSql.Count,
                             "There should only be one update sql statement when using single table inheritance.");
             Assert.AreEqual(
-                "UPDATE Shape SET Radius = ?Param0, ShapeID = ?Param1, ShapeName = ?Param2 WHERE ShapeID = ?Param3",
+                "UPDATE Shape SET Radius = ?Param0, ShapeName = ?Param1 WHERE ShapeID = ?Param2",
                 itsUpdateSql[0].Statement.ToString());
-            Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
-                            "Parameter ShapeID has incorrect value");
-            Assert.AreEqual("MyShape", ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
+            // Is Object ID so doesn't get changed
+            //Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
+            //                "Parameter ShapeID has incorrect value");
+            Assert.AreEqual("MyShape", ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
                             "Parameter ShapeName has incorrect value");
             Assert.AreEqual(10, ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
                             "Parameter Radius has incorrect value");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[3]).Value,
+            Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
                             "Parameter ShapeID has incorrect value");
         }
 
@@ -135,10 +142,90 @@ namespace Habanero.Test.General
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                "SELECT Shape.Radius, Shape.ShapeID, Shape.ShapeName FROM Shape WHERE ShapeID = ?Param0",
+                "SELECT Shape.Radius, Shape.ShapeID, Shape.ShapeName FROM Shape WHERE ShapeType = 'CircleNoPrimaryKey' AND ShapeID = ?Param0",
                 selectSql.Statement.ToString(), "Select sql is incorrect for single table inheritance.");
             Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
                             "Parameter ShapeID is incorrect in select where clause for single table inheritance.");
+        }
+
+        // TODO: Would like to separate these tests out later, but needs a structure
+        //  change and I'm out of time right now.
+        [Test]
+        public void TestDatabaseReadWrite()
+        {
+            // Test inserting & selecting
+            Shape shape = new Shape();
+            shape.ShapeName = "MyShape";
+            shape.Save();
+
+            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
+            shapes.LoadAll();
+            Assert.AreEqual(1, shapes.Count);
+
+            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
+            circles.LoadAll();
+            Assert.AreEqual(0, circles.Count);
+
+            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+            circle.Radius = 5;
+            circle.ShapeName = "Circle";
+            circle.Save();
+
+            shapes.LoadAll();
+            Assert.AreEqual(2, shapes.Count);
+            Assert.AreEqual("MyShape", shapes[0].ShapeName);
+            Assert.AreEqual("Circle", shapes[1].ShapeName);
+
+            circles.LoadAll();
+            Assert.AreEqual(1, circles.Count);
+            Assert.AreEqual(circles[0].ShapeID, shapes[1].ShapeID);
+            Assert.AreEqual(5, circles[0].Radius);
+            Assert.AreEqual("Circle", circles[0].ShapeName);
+
+            // Test updating
+            shape.ShapeName = "MyShapeChanged";
+            shape.Save();
+            circle.ShapeName = "CircleChanged";
+            circle.Radius = 10;
+            circle.Save();
+
+            shapes.LoadAll();
+            Assert.AreEqual("MyShapeChanged", shapes[0].ShapeName);
+            Assert.AreEqual("CircleChanged", shapes[1].ShapeName);
+            circles.LoadAll();
+            Assert.AreEqual(10, circles[0].Radius);
+            Assert.AreEqual("CircleChanged", circles[0].ShapeName);
+
+            // Test deleting
+            shape.Delete();
+            shape.Save();
+            circle.Delete();
+            circle.Save();
+            shapes.LoadAll();
+            Assert.AreEqual(0, shapes.Count);
+            circles.LoadAll();
+            Assert.AreEqual(0, circles.Count);
+        }
+
+        // Provided in case the above test fails and the rows remain in the database
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            Shape shape = BOLoader.Instance.GetBusinessObject<Shape>(
+                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'");
+            if (shape != null)
+            {
+                shape.Delete();
+                shape.Save();
+            }
+
+            CircleNoPrimaryKey circle = BOLoader.Instance.GetBusinessObject<CircleNoPrimaryKey>(
+                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'");
+            if (circle != null)
+            {
+                circle.Delete();
+                circle.Save();
+            }
         }
     }
 }

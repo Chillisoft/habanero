@@ -24,12 +24,15 @@ using NUnit.Framework;
 
 namespace Habanero.Test.General
 {
-    /// <summary>
-    /// Summary description for TestInheritanceHeirarchyConcreteTable.
-    /// </summary>
     [TestFixture]
     public class TestInheritanceHeirarchyConcreteTable : TestInheritanceHeirarchyBase
     {
+        [TestFixtureSetUp]
+        public void SetupFixture()
+        {
+            SetupTest();
+        }
+
         protected override void SetupInheritanceSpecifics()
         {
             Circle.GetClassDef().SuperClassDef =

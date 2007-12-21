@@ -99,10 +99,11 @@ namespace Habanero.BO.SqlGeneration
             {
                 if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
                 {
+                    PrimaryKeyDef primaryKeyDef = _bo.ClassDef.PrimaryKeyDef;
+                    if (primaryKeyDef == null) primaryKeyDef = (PrimaryKeyDef) _bo.ID.KeyDef;
                     if (prop.IsDirty &&
-                        ((_bo.ClassDef.PrimaryKeyDef.IsObjectID &&
-                          !_bo.ClassDef.PrimaryKeyDef.Contains(prop.PropertyName)) ||
-                         !_bo.ClassDef.PrimaryKeyDef.IsObjectID))
+                        ((primaryKeyDef.IsObjectID && !primaryKeyDef.Contains(prop.PropertyName)) ||
+                         !primaryKeyDef.IsObjectID))
                     {
                         includedProps++;
                         _updateSql.Statement.Append(prop.DatabaseFieldName);

@@ -28,24 +28,26 @@ using NUnit.Framework;
 namespace Habanero.Test.General
 {
     /// <summary>
-    /// Summary description for TestInheritanceHeirarchySingleTable.
+    /// This class tests an inheritance heirarchy of three classes, with the
+    /// children both using single table inheritance
     /// </summary>
     [TestFixture]
     public class TestInheritanceHeirarchySingleTable : TestInheritanceHeirarchyBase
     {
-        public TestInheritanceHeirarchySingleTable()
+        [TestFixtureSetUp]
+        public void SetupFixture()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            SetupTestForFilledCircleNoPK();
         }
 
         protected override void SetupInheritanceSpecifics()
         {
-            Circle.GetClassDef().SuperClassDef =
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef =
                 new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
-            FilledCircle.GetClassDef().SuperClassDef =
-                new SuperClassDef(Circle.GetClassDef(), ORMapping.SingleTableInheritance);
+            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef =
+                new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.SingleTableInheritance);
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
+            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
         }
 
         protected override void SetStrID()
@@ -56,8 +58,8 @@ namespace Habanero.Test.General
         [Test]
         public void TestFilledCircleIsUsingSingleTableInheritance()
         {
-            Assert.AreEqual(ORMapping.SingleTableInheritance, Circle.GetClassDef().SuperClassDef.ORMapping);
-            Assert.AreEqual(ORMapping.SingleTableInheritance, FilledCircle.GetClassDef().SuperClassDef.ORMapping);
+            Assert.AreEqual(ORMapping.SingleTableInheritance, CircleNoPrimaryKey.GetClassDef().SuperClassDef.ORMapping);
+            Assert.AreEqual(ORMapping.SingleTableInheritance, FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef.ORMapping);
         }
 
         [Test]
@@ -93,8 +95,8 @@ namespace Habanero.Test.General
         [Test]
         public void TestCircleSelectSql()
         {
-            Assert.AreEqual("SELECT Shape.Colour, Shape.Radius, Shape.ShapeID, Shape.ShapeName FROM Shape",
-                            itsSelectSql.Statement.ToString().Substring(0, 76),
+            Assert.AreEqual("SELECT Shape.Colour, Shape.Radius, Shape.ShapeID, Shape.ShapeName FROM Shape WHERE ShapeType = 'FilledCircleNoPrimaryKey' AND ShapeID = ?Param0",
+                            itsSelectSql.Statement.ToString(),//.Substring(0, 76),
                             "select statement is incorrect for Single Table inheritance");
         }
 
@@ -104,7 +106,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
             Assert.AreEqual(
-                "INSERT INTO Shape (Colour, Radius, ShapeID, ShapeName) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+                "INSERT INTO Shape (Colour, Radius, ShapeID, ShapeName, ShapeType) VALUES (?Param0, ?Param1, ?Param2, ?Param3, ?Param4)",
                 itsInsertSql[0].Statement.ToString(), "Concrete Table Inheritance insert Sql seems to be incorrect.");
             Assert.AreEqual(3, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
                             "Parameter Colour has incorrect value");
@@ -122,17 +124,17 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, itsUpdateSql.Count,
                             "There should only be one update sql statement when using single table inheritance.");
             Assert.AreEqual(
-                "UPDATE Shape SET Colour = ?Param0, Radius = ?Param1, ShapeID = ?Param2, ShapeName = ?Param3 WHERE ShapeID = ?Param4",
+                "UPDATE Shape SET Colour = ?Param0, Radius = ?Param1, ShapeName = ?Param2 WHERE ShapeID = ?Param3",
                 itsUpdateSql[0].Statement.ToString());
             Assert.AreEqual(3, ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
                             "Parameter Colour has incorrect value");
-            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter) itsUpdateSql[0].Parameters[3]).Value,
+            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
                             "Parameter ShapeName has incorrect value");
-            Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
-                            "Parameter ShapeID has incorrect value");
+            //Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
+            //                "Parameter ShapeID has incorrect value");
             Assert.AreEqual(10, ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
                             "Parameter Radius has incorrect value");
-            Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsUpdateSql[0].Parameters[4]).Value,
+            Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsUpdateSql[0].Parameters[3]).Value,
                             "Parameter ShapeID has incorrect value");
         }
 
@@ -145,6 +147,139 @@ namespace Habanero.Test.General
                             "Delete Sql for single table inheritance is incorrect.");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");
+        }
+
+        // TODO: Would like to separate these tests out later, but needs a structure
+        //  change and I'm out of time right now.
+        //[Test]
+        //public void TestDatabaseReadWrite()
+        //{
+        //    // Test inserting & selecting
+        //    Shape shape = new Shape();
+        //    shape.ShapeName = "MyShape";
+        //    shape.Save();
+
+        //    BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
+        //    shapes.LoadAll();
+        //    Assert.AreEqual(1, shapes.Count);
+
+        //    BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
+        //    circles.LoadAll();
+        //    Assert.AreEqual(0, circles.Count);
+
+        //    BusinessObjectCollection<FilledCircleNoPrimaryKey> filledCircles = new BusinessObjectCollection<FilledCircleNoPrimaryKey>();
+        //    filledCircles.LoadAll();
+        //    Assert.AreEqual(0, filledCircles.Count);
+
+        //    CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+        //    circle.Radius = 5;
+        //    circle.ShapeName = "Circle";
+        //    circle.Save();
+
+        //    shapes.LoadAll();
+        //    Assert.AreEqual(2, shapes.Count);
+        //    Assert.AreEqual("MyShape", shapes[0].ShapeName);
+        //    Assert.AreEqual("Circle", shapes[1].ShapeName);
+
+        //    circles.LoadAll();
+        //    Assert.AreEqual(1, circles.Count);
+        //    Assert.AreEqual(circles[0].ShapeID, shapes[1].ShapeID);
+        //    Assert.AreEqual(5, circles[0].Radius);
+        //    Assert.AreEqual("Circle", circles[0].ShapeName);
+
+        //    FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey();
+        //    filledCircle.Colour = 3;
+        //    filledCircle.Radius = 7;
+        //    filledCircle.ShapeName = "FilledCircle";
+        //    filledCircle.Save();
+
+        //    shapes.LoadAll();
+        //    Assert.AreEqual(3, shapes.Count);
+        //    Assert.AreEqual("MyShape", shapes[0].ShapeName);
+        //    Assert.AreEqual("Circle", shapes[1].ShapeName);
+        //    Assert.AreEqual("FilledCircle", shapes[2].ShapeName);
+
+        //    circles.LoadAll();
+        //    Assert.AreEqual(2, circles.Count);
+        //    Assert.AreEqual(circles[1].ShapeID, shapes[2].ShapeID);
+        //    Assert.AreEqual(7, circles[1].Radius);
+        //    Assert.AreEqual("FilledCircle", circles[1].ShapeName);
+
+        //    filledCircles.LoadAll();
+        //    Assert.AreEqual(1, filledCircles.Count);
+        //    Assert.AreEqual(filledCircles[0].ShapeID, shapes[2].ShapeID);
+        //    Assert.AreEqual(7, filledCircles[0].Radius);
+        //    Assert.AreEqual("FilledCircle", filledCircles[0].ShapeName);
+        //    Assert.AreEqual(3, filledCircles[0].Colour);
+
+        //    // Test updating
+        //    shape.ShapeName = "MyShapeChanged";
+        //    shape.Save();
+        //    circle.ShapeName = "CircleChanged";
+        //    circle.Radius = 10;
+        //    circle.Save();
+        //    filledCircle.ShapeName = "FilledCircleChanged";
+        //    filledCircle.Radius = 12;
+        //    filledCircle.Colour = 4;
+        //    filledCircle.Save();
+
+        //    shapes.LoadAll();
+        //    Assert.AreEqual("MyShapeChanged", shapes[0].ShapeName);
+        //    Assert.AreEqual("CircleChanged", shapes[1].ShapeName);
+        //    Assert.AreEqual("FilledCircleChanged", shapes[2].ShapeName);
+        //    circles.LoadAll();
+        //    Assert.AreEqual(10, circles[0].Radius);
+        //    Assert.AreEqual(12, circles[1].Radius);
+        //    Assert.AreEqual("CircleChanged", circles[0].ShapeName);
+        //    Assert.AreEqual("FilledCircleChanged", circles[1].ShapeName);
+        //    filledCircles.LoadAll();
+        //    Assert.AreEqual(4, filledCircles[0].Colour);
+        //    Assert.AreEqual(12, filledCircles[0].Radius);
+        //    Assert.AreEqual("FilledCircleChanged", filledCircles[0].ShapeName);
+
+        //    // Test deleting
+        //    shape.Delete();
+        //    shape.Save();
+        //    circle.Delete();
+        //    circle.Save();
+        //    filledCircle.Delete();
+        //    filledCircle.Save();
+
+        //    shapes.LoadAll();
+        //    Assert.AreEqual(0, shapes.Count);
+        //    circles.LoadAll();
+        //    Assert.AreEqual(0, circles.Count);
+        //    filledCircles.LoadAll();
+        //    Assert.AreEqual(0, filledCircles.Count);
+        //}
+
+        // Provided in case the above test fails and the rows remain in the database
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+//            Shape shape = BOLoader.Instance.GetBusinessObject<Shape>(
+//                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'");
+//            if (shape != null)
+//            {
+//                shape.Delete();
+//                shape.Save();
+//            }
+//
+//            CircleNoPrimaryKey circle = BOLoader.Instance.GetBusinessObject<CircleNoPrimaryKey>(
+//                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'");
+//            if (circle != null)
+//            {
+//                circle.Delete();
+//                circle.Save();
+//            }
+//
+//            FilledCircleNoPrimaryKey filledCircle = BOLoader.Instance.GetBusinessObject<FilledCircleNoPrimaryKey>(
+//                "ShapeName = 'FilledCircle' OR ShapeName = 'FilledCircleChanged'");
+//            if (filledCircle != null)
+//            {
+//                filledCircle.Delete();
+//                filledCircle.Save();
+//            }
         }
     }
 }

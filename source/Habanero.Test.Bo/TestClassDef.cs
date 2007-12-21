@@ -119,5 +119,39 @@ namespace Habanero.Test.BO
 			ClassDef.LoadClassDefs(loader);
 			Assert.AreEqual(4, ClassDef.ClassDefs.Count);
 		}
+
+        [Test]
+        public void TestImmediateChildren()
+        {
+            ClassDef.ClassDefs.Clear();
+            XmlClassLoader loader = new XmlClassLoader();
+            ClassDef parentClassDef = loader.LoadClass(
+                @"<class name=""Parent"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef childClassDef = loader.LoadClass(
+                @"<class name=""Child"" assembly=""Habanero.Test"">
+					<superClass class=""Parent"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""blah"" />
+                    <property  name=""Prop1"" />
+				</class>
+			");
+            ClassDef grandchildClassDef = loader.LoadClass(
+                @"<class name=""Grandchild"" assembly=""Habanero.Test"">
+					<superClass class=""Child"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""blah"" />
+                    <property  name=""Prop2"" />
+				</class>
+			");
+            ClassDef.ClassDefs.Add(parentClassDef);
+            ClassDef.ClassDefs.Add(childClassDef);
+            ClassDef.ClassDefs.Add(grandchildClassDef);
+
+            ClassDefCol children = parentClassDef.ImmediateChildren;
+            Assert.AreEqual(1, children.Count);
+            Assert.IsTrue(children.Contains(childClassDef));
+        }
     }
 }

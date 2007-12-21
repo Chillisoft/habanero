@@ -28,16 +28,20 @@ namespace Habanero.Test.General
     {
         private ClassDef shapeClassDef;
         private ClassDef circleClassDef;
+        private ClassDef circleNoPrimaryKeyClassDef;
         private BusinessObject objShape;
         private BusinessObject objCircle;
+        private BusinessObject objCircleNoPrimaryKey;
 
         [TestFixtureSetUp]
         public void SetupTest()
         {
             shapeClassDef = Shape.GetClassDef();
             circleClassDef = Circle.GetClassDef();
+            circleNoPrimaryKeyClassDef = CircleNoPrimaryKey.GetClassDef();
             objShape = new Shape();
             objCircle = new Circle();
+            objCircleNoPrimaryKey = new CircleNoPrimaryKey();
         }
 
         [Test]
@@ -85,5 +89,16 @@ namespace Habanero.Test.General
         //    Assert.AreEqual(1, objCircle.Relationships.Count,
         //                    "The Circle object should have one relationship inherited from Shape");
         //}
+
+        [Test]
+        public void TestCircleNoPrimaryKeyInheritsID()
+        {
+            Assert.IsNull(circleNoPrimaryKeyClassDef.PrimaryKeyDef);
+            Assert.IsNotNull(shapeClassDef.PrimaryKeyDef);
+
+            Shape parent = (Shape) objCircleNoPrimaryKey;
+            Assert.AreEqual(objCircleNoPrimaryKey.ID, parent.ID);
+            Assert.AreEqual(objCircleNoPrimaryKey.GetPropertyValue("ShapeID"), parent.GetPropertyValue("ShapeID"));
+        }
     }
 }

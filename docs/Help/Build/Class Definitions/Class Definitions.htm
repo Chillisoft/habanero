@@ -106,7 +106,7 @@ Definitions</a></font></b></font></td>
 
 
 
-<p><b>Class definitions for: Habanero v1.1.1</b></p>
+<p><b>Class definitions for: Habanero v1.1.2</b></p>
 <p>This section covers a list of explanations, possible options and 
 limitations for all class definitions as listed in the class definitions XML 
 file (usually called &quot;classdefs.xml&quot;).&nbsp; The class definitions are 
@@ -355,7 +355,13 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
         <td class="specvaluebottom"><b>orMapping</b> =<i>ClassTableInheritance</i>/SingleTableInheritance/ConcreteTableInheritance 
-        (the type of inheritance used)</td>
+        (the type of inheritance used)<br/>
+        <b>id</b> (in ClassTableInheritance, the property in the child class that has a 
+        copy of the parent's ID, use empty string if child has no primary key and just inherits parent's ID,
+        null value assumes child has a field with the name of the parent's ID that is not the child's ID)<br/>
+        <b>discriminator</b> (in SingleTableInheritance, sets the column in the parent's db table
+        that holds the type of the class in that row)
+        </td>
       </tr>
     </table>
     </font>
@@ -412,7 +418,9 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         (limitations on how often the value can be read or written to)<br>
         <b>auto-incrementing</b> =true/<i>false</i> 
         (whether this property is an auto-incrementing primary key, isObjectID must
-        be false on the primary key)</td>
+        be false on the primary key)<br/>
+        <b>length</b> (for strings, the maximum length the string can be)
+        </td>
       </tr>
     </table>
     </font>
@@ -1293,6 +1301,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
   </tr>
 
   </table>
+
   
   
 </body>

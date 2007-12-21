@@ -319,6 +319,34 @@ namespace Habanero.Test.BO
                               mProp.PropertyName + ">";
             Assert.AreEqual(dirtyXml, mProp.DirtyXml);
         }
+
+        [Test]
+        public void TestPropLengthForStrings()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                PropReadWriteRule.ReadWrite, null, null, false, false, 5);
+            BOProp boProp = new BOProp(propDef);
+
+            boProp.Value = "abcdef";
+            Assert.IsFalse(boProp.isValid);
+            Assert.IsTrue(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = null;
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "";
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "abc";
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+
+            boProp.Value = "abcde";
+            Assert.IsTrue(boProp.isValid);
+            Assert.IsFalse(boProp.InvalidReason.Length > 0);
+        }
     }
 
 }

@@ -41,6 +41,7 @@ namespace Habanero.BO.Loaders
         private PropDef _propDef;
         private bool _compulsory;
         private bool _autoIncrementing;
+        private int _length;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -109,11 +110,12 @@ namespace Habanero.BO.Loaders
             LoadDatabaseFieldName();
             LoadCompulsory();
             LoadAutoIncrementing();
+            LoadLength();
 
             _reader.Read();
 
-			_propDef = _defClassFactory.CreatePropDef(_propertyName, _assemblyName, _typeName, 
-				_readWriteRule, _databaseFieldName, _defaultValueString, _compulsory, _autoIncrementing);
+			_propDef = _defClassFactory.CreatePropDef(_propertyName, _assemblyName, _typeName, _readWriteRule,
+                _databaseFieldName, _defaultValueString, _compulsory, _autoIncrementing, _length);
 			//_propDef = new PropDef(_propertyName, _assemblyName, _typeName, 
 			//    _readWriteRule, _databaseFieldName, _defaultValueString);
 
@@ -224,15 +226,54 @@ namespace Habanero.BO.Loaders
             _databaseFieldName = _reader.GetAttribute("databaseField");
         }
 
-
+        /// <summary>
+        /// Loads the attribute that determines whether the property is compulsory or not
+        /// </summary>
         private void LoadCompulsory()
         {
             _compulsory = Convert.ToBoolean(_reader.GetAttribute("compulsory"));
         }
 
+        /// <summary>
+        /// Loads the attribute that determines whether this property is auto-incrementing
+        /// </summary>
         private void LoadAutoIncrementing()
         {
             _autoIncrementing = Convert.ToBoolean(_reader.GetAttribute("autoIncrementing"));
+        }
+
+        /// <summary>
+        /// Loads the length attribute used to set a maximum length for a string
+        /// </summary>
+        private void LoadLength()
+        {
+            string length = _reader.GetAttribute("length");
+            if (length != null)
+            {
+                if (!Int32.TryParse(length, out _length))
+                {
+                    throw new InvalidXmlDefinitionException(String.Format(
+                        "In the property definition for '{0}', the 'length' " +
+                        "was set to an invalid integer value.", _propertyName));
+                }
+                if (_length < 0)
+                {
+                    throw new InvalidXmlDefinitionException(String.Format(
+                        "In the property definition for '{0}', the 'length' " +
+                        "was set to an invalid negative value.", _propertyName));
+                }
+                else if (_typeName != "String")
+                {
+                    throw new InvalidXmlDefinitionException(String.Format(
+                        "In the property definition for '{0}', a 'length' " +
+                        "attribute was provided for a property type that cannot " +
+                        "use the attribute.", _propertyName));
+                }
+            }
+            else
+            {
+                _length = Int32.MaxValue;
+            }
         }
     }
 }

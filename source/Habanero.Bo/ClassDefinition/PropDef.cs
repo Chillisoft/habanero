@@ -80,6 +80,7 @@ namespace Habanero.BO.ClassDefinition
         private ILookupList _lookupList = new NullLookupList();
     	private bool _compulsory = false;
         private bool _autoIncrementing = false;
+        private int _length;
 
         #region Constuctor and destructors
 
@@ -101,7 +102,7 @@ namespace Habanero.BO.ClassDefinition
                        PropReadWriteRule propRWStatus,
                        string databaseFieldName,
                        object defaultValue) :
-							this(propName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, false, false)
+							this(propName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, false, false, Int32.MaxValue)
         {
         }
 
@@ -119,7 +120,35 @@ namespace Habanero.BO.ClassDefinition
                        Type propType,
                        PropReadWriteRule propRWStatus,
                        object defaultValue) 
-			:this(propName, propType,null,null, propRWStatus, null, defaultValue, null, false, false)
+			:this(propName, propType,null,null, propRWStatus, null, defaultValue, null, false, false, Int32.MaxValue)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propName">The name of the property (e.g. "surname")</param>
+        /// <param name="assemblyName">The assembly name of the property type</param>
+        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValue">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        public PropDef(string propName,
+                    string assemblyName, string typeName,
+                    PropReadWriteRule propRWStatus,
+                    string databaseFieldName,
+                    string defaultValue,
+                    bool compulsory,
+                    bool autoIncrementing)
+            : this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue, compulsory, autoIncrementing, Int32.MaxValue)
         {
         }
 
@@ -140,13 +169,16 @@ namespace Habanero.BO.ClassDefinition
 		/// of a new object will be set to</param>
 		/// <param name="compulsory">Whether this property is a required field or not.</param>
 		/// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+		/// <param name="length">The maximum length for a string</param>
 		public PropDef(string propName,
 					string assemblyName, string typeName,
 					PropReadWriteRule propRWStatus,
 					string databaseFieldName,
 					string defaultValue, 
-                    bool compulsory, bool autoIncrementing)
-            : this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue, compulsory, autoIncrementing)
+                    bool compulsory,
+                    bool autoIncrementing,
+                    int length)
+            : this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue, compulsory, autoIncrementing, length)
 		{
 		}
 
@@ -154,7 +186,8 @@ namespace Habanero.BO.ClassDefinition
 					   Type propType, string assemblyName, string typeName,
 					   PropReadWriteRule propRWStatus,
 					   string databaseFieldName,
-					   object defaultValue, string defaultValueString, bool compulsory, bool autoIncrementing)
+					   object defaultValue, string defaultValueString,
+                       bool compulsory, bool autoIncrementing, int length)
 		{			
 			ArgumentValidationHelper.CheckStringArgumentNotEmpty(propName, "propName","This field is compulsary for the PropDef class.");
 			if (propName.IndexOfAny(new char[] { '.', '-', '|' }) != -1)
@@ -189,6 +222,7 @@ namespace Habanero.BO.ClassDefinition
 			}
 		    _compulsory = compulsory;
 		    _autoIncrementing = autoIncrementing;
+		    _length = length;
 		}
 
 		#endregion
@@ -343,6 +377,14 @@ namespace Habanero.BO.ClassDefinition
             get { return _autoIncrementing; }
         }
 
+        /// <summary>
+        /// Returns the maximum length for a string property
+        /// </summary>
+        public int Length
+        {
+            get { return _length; }
+        }
+
 		#endregion
 
         
@@ -366,6 +408,15 @@ namespace Habanero.BO.ClassDefinition
                     || (propValue is string && (string) propValue == String.Empty))
                 {
                     errorMessage = String.Format("'{0}' is a compulsory field and has no value.", PropertyName);
+                    return false;
+                }
+            }
+
+            if (propValue is string && _length != Int32.MaxValue)
+            {
+                if (((string)propValue).Length > _length)
+                {
+                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", PropertyName, _length);
                     return false;
                 }
             }

@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.Util;
@@ -25,7 +26,8 @@ using NUnit.Framework;
 namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
-    /// Summary description for TestXmlSuperClassLoader.
+    /// Still to test:
+    ///   - is ID required for ClassTableInheritance, and what are the implications?
     /// </summary>
     [TestFixture]
     public class TestXmlSuperClassLoader
@@ -68,15 +70,91 @@ namespace Habanero.Test.BO.Loaders
             ClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
             ClassDef superClassDef = def.SuperClassClassDef;
             Assert.AreSame(parentDef, superClassDef);
+            Assert.IsNull(def.Discriminator);
         }
 
         [Test]
-        public void TestORMapping()
+        public void TestSingleTableInheritance()
+        {
+            SuperClassDef def =
+                itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" discriminator=""propname"" />");
+            Assert.AreEqual(ORMapping.SingleTableInheritance, def.ORMapping);
+            Assert.AreEqual("propname", def.Discriminator);
+            Assert.IsNull(def.ID);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSingleTableInheritanceException()
         {
             SuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" />");
-            Assert.AreEqual(ORMapping.SingleTableInheritance, def.ORMapping);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSingleTableInheritanceWithIDException()
+        {
+            SuperClassDef def =
+                itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" id="""" />");
+        }
+
+        [Test]
+        public void TestConcreteTableInheritance()
+        {
+            SuperClassDef def =
+                itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" />");
+            Assert.AreEqual(ORMapping.ConcreteTableInheritance, def.ORMapping);
+            Assert.IsNull(def.ID);
+            Assert.IsNull(def.Discriminator);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestConcreteTableInheritanceWithIDException()
+        {
+            SuperClassDef def =
+                itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" id=""prop"" />");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestConcreteTableInheritanceWithDiscriminatorException()
+        {
+            SuperClassDef def =
+                itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" discriminator="""" />");
+        }
+
+        [Test]
+        public void TestClassTableInheritanceWithEmptyID()
+        {
+            SuperClassDef def =
+                itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" id="""" />");
+            Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
+            Assert.AreEqual("", def.ID);
+            Assert.IsNull(def.Discriminator);
+        }
+
+        [Test]
+        public void TestClassTableInheritanceWithID()
+        {
+            SuperClassDef def =
+                itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" id=""propname"" />");
+            Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
+            Assert.AreEqual("propname", def.ID);
+            Assert.IsNull(def.Discriminator);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestClassTableInheritanceWithDiscriminatorException()
+        {
+            SuperClassDef def =
+                itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" discriminator="""" />");
         }
     }
 }

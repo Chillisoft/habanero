@@ -235,26 +235,29 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadPrimaryKeyDef(string xmlDef)
         {
-            if (xmlDef == null)
+            if (xmlDef == null && _SuperClassDef == null)
             {
-                throw new InvalidXmlDefinitionException("Could not find a " +
-                    "'primaryKey' element in the class definition for the class '" +
-                    _ClassName + "'.  Each class definition requires a primary key " +
+                throw new InvalidXmlDefinitionException(String.Format("Could not find a " +
+                    "'primaryKey' element in the class definition for the class '{0}'. " +
+                    "Each class definition requires a primary key " +
                     "definition, which is composed of one or more property definitions, " +
-                    "implying that you will need at least one 'property' element as " +
-                    "well.");
+                    "implying that you will need at least one 'prop' element as " +
+                    "well.", _ClassName));
             }
-			//_PrimaryKeyDef = new PrimaryKeyDef();
-            XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(DtdLoader, _defClassFactory);
-            _PrimaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _PropDefCol);
-            if (_PrimaryKeyDef == null)
+            if (xmlDef != null)
             {
-                throw new InvalidXmlDefinitionException("There was an error loading " +
-                    "the 'primaryKey' element in the class definition for the class '" +
-                    _ClassName + "'.  Each class definition requires a primary key " +
-                    "definition, which is composed of one or more property definitions, " +
-                    "implying that you will need at least one 'property' element as " +
-                    "well.");
+                //_PrimaryKeyDef = new PrimaryKeyDef();
+                XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(DtdLoader, _defClassFactory);
+                _PrimaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _PropDefCol);
+                if (_PrimaryKeyDef == null)
+                {
+                    throw new InvalidXmlDefinitionException(String.Format("There was an error loading " +
+                        "the 'primaryKey' element in the class definition for the class '{0}. '" +
+                        "Each class definition requires a primary key " +
+                        "definition, which is composed of one or more property definitions, " +
+                        "implying that you will need at least one 'prop' element as " +
+                        "well.", _ClassName));
+                }
             }
         }
 

@@ -28,15 +28,16 @@ using NUnit.Framework;
 namespace Habanero.Test.General
 {
     /// <summary>
-    /// Tests the default type of class table inheritance, where the child contains a
-    /// foreign key to the parent ID that is not the child's ID field
+    /// Tests class table inheritance where the child table does not have a
+    /// field named after the parent ID, but simply copies the parent ID
+    /// value into the child ID
     /// </summary>
     [TestFixture]
-    public class TestInheritanceClassTable : TestInheritanceBase
+    public class TestInheritanceClassTableCopyID : TestInheritanceBase
     {
         public static void RunTest()
         {
-            TestInheritanceClassTable test = new TestInheritanceClassTable();
+            TestInheritanceClassTableCopyID test = new TestInheritanceClassTableCopyID();
             test.SetupTest();
             test.TestSuperClassKey();
         }
@@ -51,7 +52,7 @@ namespace Habanero.Test.General
         {
             Circle.GetClassDef().SuperClassDef =
                 new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
-            Circle.GetClassDef().SuperClassDef.ID = "ShapeID";
+            Circle.GetClassDef().SuperClassDef.ID = "CircleID";
         }
 
         protected override void SetStrID()
@@ -108,13 +109,11 @@ namespace Habanero.Test.General
                             "Parameter ShapeID has incorrect value in first insert statement using class table inheritance");
             Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
                             "Parameter ShapeName has incorrect value in first insert statement using class table inheritance");
-            Assert.AreEqual("INSERT INTO Circle (CircleID, Radius, ShapeID) VALUES (?Param0, ?Param1, ?Param2)",
+            Assert.AreEqual("INSERT INTO Circle (CircleID, Radius) VALUES (?Param0, ?Param1)",
                             itsInsertSql[1].Statement.ToString(),
                             "Class Table inheritance: Second Sql statement is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[1].Parameters[0]).Value,
                             "Parameter CircleID has incorrect value in second insert statement using class table inheritance.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[1].Parameters[2]).Value,
-                            "Parameter ShapeID has incorrect value in second insert statement using class table inheritance.");
             Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[1].Parameters[1]).Value,
                             "Parameter Radius has incorrect value in second insert statement using class table inheritance.");
         }
@@ -171,7 +170,7 @@ namespace Habanero.Test.General
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                "SELECT Circle.CircleID, Circle.Radius, Shape.ShapeID, Shape.ShapeName FROM Circle, Shape WHERE Shape.ShapeID = Circle.ShapeID AND CircleID = ?Param0",
+                "SELECT Circle.CircleID, Circle.Radius, Shape.ShapeID, Shape.ShapeName FROM Circle, Shape WHERE Shape.ShapeID = Circle.CircleID AND CircleID = ?Param0",
                 selectSql.Statement.ToString(), "Select sql is incorrect for class table inheritance.");
             Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,
                             "Parameter CircleID is incorrect in select where clause for class table inheritance.");
@@ -207,8 +206,8 @@ namespace Habanero.Test.General
 
             circles.LoadAll();
             Assert.AreEqual(1, circles.Count);
-            Assert.AreEqual(circles[0].ShapeID, shapes[1].ShapeID);
-            Assert.IsNotNull(circles[0].CircleID);
+            Assert.AreEqual(circles[0].CircleID, shapes[1].ShapeID);
+            Assert.AreEqual(circles[0].ShapeID, shapes[1].ShapeID); //still gets inherited
             Assert.AreEqual(5, circles[0].Radius);
             Assert.AreEqual("Circle", circles[0].ShapeName);
 
@@ -225,7 +224,7 @@ namespace Habanero.Test.General
             circles.LoadAll();
             Assert.AreEqual(10, circles[0].Radius);
             Assert.AreEqual("CircleChanged", circles[0].ShapeName);
-            
+
             // Test deleting
             shape.Delete();
             shape.Save();

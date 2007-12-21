@@ -19,6 +19,7 @@
 
 using System;
 using System.Text.RegularExpressions;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
 {
@@ -135,5 +136,46 @@ namespace Habanero.Util
 				return false;
 			}
 		}
-	}
+
+        /// <summary>
+        /// Indicates the number of times a given string appears in a larger string
+        /// </summary>
+        /// <param name="fullText">The string to search within</param>
+        /// <param name="searchText">The section to search for</param>
+        /// <returns>Returns the number of occurrences</returns>
+        public static int CountOccurrences(string fullText, string searchText)
+        {
+            int occurred = 0;
+            for (int i = 0; i < fullText.Length; i++)
+            {
+                if (i + searchText.Length <= fullText.Length &&
+                    fullText.Substring(i, searchText.Length).Contains(searchText))
+                {
+                    occurred++;
+                }
+            }
+            return occurred;
+        }
+
+        /// <summary>
+        /// Returns the portion of the string that is left of the given
+        /// search text
+        /// </summary>
+        /// <param name="fullText">The string to search within</param>
+        /// <param name="searchText">The section to the right of the desired
+        /// text</param>
+        /// <returns>Returns the abbreviated string portion</returns>
+        public static string GetLeftSection(string fullText, string searchText)
+        {
+            if (fullText.Contains(searchText))
+            {
+                return fullText.Substring(0, fullText.IndexOf(searchText));
+            }
+            else
+            {
+                throw new UserException(String.Format("The given search term '{0}' " +
+                    "does not exist in the text '{1}'.", searchText, fullText));
+            }
+        }
+    }
 }

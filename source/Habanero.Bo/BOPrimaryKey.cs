@@ -25,7 +25,9 @@ using Habanero.BO.ClassDefinition;
 namespace Habanero.BO
 {
     /// <summary>
-    /// Manages a primary key
+    /// Manages a primary key, which is a collection of its properties, each
+    /// holding runtime values.  The description of the primary key structure is held
+    /// in PrimaryKeyDef.
     /// </summary>
     public class BOPrimaryKey : BOKey
     {
@@ -149,15 +151,24 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the key of the super-class
+        /// Returns the primary key of the super-class.  If not found, it
+        /// searches higher up the heirarchy and returns the higher primary
+        /// key or null if none is found.
         /// </summary>
-        /// <param name="subClassDef">The sub-class definition</param>
-        /// <param name="subClassObj">The sub-class</param>
-        /// <returns>Returns a BOKey object</returns>
+        /// <param name="subClassDef">The class definition to search on</param>
+        /// <param name="subClassObj">The business object</param>
+        /// <returns>Returns a BOKey object or null</returns>
         public static BOKey GetSuperClassKey(ClassDef subClassDef, BusinessObject subClassObj)
         {
-            BOKey superKey = subClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(subClassObj.Props);
-            return superKey;
+            while (subClassDef.SuperClassClassDef.PrimaryKeyDef == null)
+            {
+                if (subClassDef.SuperClassClassDef == null) return null;
+                else
+                {
+                    subClassDef = subClassDef.SuperClassClassDef;
+                }
+            }
+            return subClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(subClassObj.Props);
         }
 
         /// <summary>

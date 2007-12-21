@@ -58,10 +58,10 @@ namespace Habanero.BO.ClassDefinition
 			return new PrimaryKeyDef();
 		}
 
-		public PropDef CreatePropDef(string propertyName, string assemblyName, string typeName,
-		                             PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing)
+		public PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule,
+            string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length)
 		{
-            return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString, compulsory, autoIncrementing);
+            return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString, compulsory, autoIncrementing, length);
 		}
 
 		public PropRuleDate CreatePropRuleDate(string name, string message)
@@ -109,9 +109,9 @@ namespace Habanero.BO.ClassDefinition
 			return new SimpleLookupList(displayValueDictionary);
 		}
 
-		public SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping)
+        public SuperClassDef CreateSuperClassDef(string assemblyName, string className, ORMapping orMapping, string id, string discriminator)
 		{
-			return new SuperClassDef(assemblyName, className, orMapping);
+			return new SuperClassDef(assemblyName, className, orMapping, id, discriminator);
 		}
 
 		public UIDef CreateUIDef(string name, UIForm uiForm, UIGrid uiGrid)

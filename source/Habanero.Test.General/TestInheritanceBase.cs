@@ -47,6 +47,21 @@ namespace Habanero.Test.General
             selectSql.Statement.Append(objCircle.SelectSqlStatement(selectSql));
         }
 
+        public void SetupTestWithoutPrimaryKey()
+        {
+            this.SetupDBConnection();
+            SetupInheritanceSpecifics();
+            objCircle = new CircleNoPrimaryKey();
+            SetStrID();
+            objCircle.SetPropertyValue("ShapeName", "MyShape");
+            objCircle.SetPropertyValue("Radius", 10);
+            itsInsertSql = objCircle.GetInsertSql();
+            itsUpdateSql = objCircle.GetUpdateSql();
+            itsDeleteSql = objCircle.GetDeleteSql();
+            selectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            selectSql.Statement.Append(objCircle.SelectSqlStatement(selectSql));
+        }
+
         protected abstract void SetupInheritanceSpecifics();
         protected abstract void SetStrID();
     }
