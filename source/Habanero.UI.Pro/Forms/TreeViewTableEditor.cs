@@ -151,11 +151,25 @@ namespace Habanero.UI.Forms
                                                           MessageBoxIcon.Exclamation);
                     if (result == DialogResult.Yes)
                     {
-                        ((EditableGrid)this.DataGrid.Grid).AcceptChanges();
+                        try
+                        {
+                            ((EditableGrid) DataGrid.Grid).AcceptChanges();
+                        }
+                        catch (Exception)
+                        {
+                            e.Cancel = true;
+                        }
                     }
                     if (result == DialogResult.No)
                     {
-                        ((EditableGrid)this.DataGrid.Grid).RejectChanges();
+                        try
+                        {
+                            ((EditableGrid) DataGrid.Grid).RejectChanges();
+                        }
+                        catch (Exception)
+                        {
+                            e.Cancel = true;
+                        }
                     }
                     if (result == DialogResult.Cancel) e.Cancel = true;
                 }

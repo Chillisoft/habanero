@@ -19,6 +19,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 
@@ -104,15 +105,55 @@ namespace Habanero.BO.SqlGeneration
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 statement += ", " + currentClassDef.SuperClassClassDef.TableName;
-                foreach (PropDef def in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
-                {
-					//TODO: Mark - Shouldn't this also have the field Delimiters?
-                    where += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
-                    where += " = " + currentClassDef.TableName + "." + def.FieldName;
-                    where += " AND ";
-                }
+                where += GetParentKeyMatchWhereClause(currentClassDef);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
+
+            //TODO Eric - because of the class structure, this doesn't use parameterised SQL
+            if (_classDef.IsUsingSingleTableInheritance())
+            {
+                if (_bo.ClassDef.SuperClassDef.Discriminator == null)
+                {
+                    throw new InvalidXmlDefinitionException("A super class has been defined " +
+                        "using Single Table Inheritance, but no discriminator column has been set.");
+                }
+                where += string.Format("{0} = '{1}'", _classDef.SuperClassDef.Discriminator, _classDef.ClassName);
+                where += " AND ";
+            }
+            //while (true)
+            //{
+            //    ClassDef classDefWithSTI = null;
+            //    foreach (ClassDef def in currentClassDef.ImmediateChildren)
+            //    {
+            //        if (def.IsUsingSingleTableInheritance())
+            //        {
+            //            classDefWithSTI = def;
+            //            break;
+            //        }
+            //    }
+
+            //    if (currentClassDef.IsUsingSingleTableInheritance() || classDefWithSTI != null)
+            //    {
+            //        string discriminator;
+            //        if (currentClassDef.SuperClassDef != null)
+            //        {
+            //            discriminator = currentClassDef.SuperClassDef.Discriminator;
+            //        }
+            //        else
+            //        {
+            //            discriminator = classDefWithSTI.SuperClassDef.Discriminator;
+            //        }
+            //        if (discriminator == null)
+            //        {
+            //            throw new InvalidXmlDefinitionException("A super class has been defined " +
+            //                "using Single Table Inheritance, but no discriminator column has been set.");
+            //        }
+            //        where += string.Format("{0} = '{1}'", _classDef.SuperClassDef.Discriminator, _classDef.ClassName);
+            //        where += " AND ";
+            //    }
+            //    else break;
+            //}
+
             if (where.Length > 7)
             {
                 statement += where.Substring(0, where.Length - 5);
@@ -162,6 +203,41 @@ namespace Habanero.BO.SqlGeneration
             return "";
         }
 
-		
+        /// <summary>
+        /// Creates the where clause which determines how the parent
+        /// table should match up with child table, depending on the ID attribute
+        /// given by the user.  For ClassTableInheritance only.
+        /// </summary>
+        private static string GetParentKeyMatchWhereClause(ClassDef currentClassDef)
+		{
+            string parentIDCopyFieldName = currentClassDef.SuperClassDef.ID;
+            string where = "";
+            foreach (PropDef def in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
+            {
+                //TODO: Mark - Shouldn't this also have the field Delimiters?
+                where += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
+
+                PrimaryKeyDef parentID = currentClassDef.SuperClassClassDef.PrimaryKeyDef;
+                if (parentIDCopyFieldName == null ||
+                    parentIDCopyFieldName == "")
+                {
+                    where += " = " + currentClassDef.TableName + "." + def.FieldName;
+                }
+                else
+                {
+                    if (parentID.Count > 1)
+                    {
+                        throw new InvalidXmlDefinitionException("For a super class definition " +
+                            "using class table inheritance, the ID attribute can only refer to a " +
+                            "parent with a single primary key.  Leaving out the attribute will " +
+                            "allow composite primary keys where the child's copies have the same " +
+                            "field name as the parent.");
+                    }
+                    where += " = " + currentClassDef.TableName + "." + parentIDCopyFieldName;
+                }
+                where += " AND ";
+            }
+            return where;
+		}
     }
 }

@@ -646,6 +646,27 @@ namespace Habanero.BO.ClassDefinition
             return (this.SuperClassDef != null) && (this.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance);
         }
 
+        /// <summary>
+        /// Returns a collection of all the class defs that indicate a direct
+        /// inheritance from this one
+        /// </summary>
+        /// <returns>Returns a ClassDefCol collection</returns>
+        public ClassDefCol ImmediateChildren
+        {
+            get
+            {
+                ClassDefCol children = new ClassDefCol();
+                foreach (ClassDef def in ClassDefs)
+                {
+                    if (def._superClassDef != null && def._superClassDef.SuperClassClassDef == this)
+                    {
+                        children.Add(def);
+                    }
+                }
+                return children;
+            }
+        }
+
         #endregion //Superclasses&inheritance
 		
         #region Returning Defs

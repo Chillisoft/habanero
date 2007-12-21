@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base.Exceptions;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -150,5 +151,37 @@ namespace Habanero.Test.Util
                 Assert.AreEqual(result, resultValue, "Converted values should be equal");
         }
 
+        [Test]
+        public void TestCountOccurrences()
+        {
+            string test = "a";
+            Assert.AreEqual(0, StringUtilities.CountOccurrences(test, "b"));
+            Assert.AreEqual(1, StringUtilities.CountOccurrences(test, "a"));
+            Assert.AreEqual(0, StringUtilities.CountOccurrences(test, "A"));
+
+            test = "a bc a abc";
+            Assert.AreEqual(3, StringUtilities.CountOccurrences(test, "a"));
+            Assert.AreEqual(2, StringUtilities.CountOccurrences(test, "c"));
+            Assert.AreEqual(3, StringUtilities.CountOccurrences(test, " "));
+            Assert.AreEqual(1, StringUtilities.CountOccurrences(test, "abc"));
+            Assert.AreEqual(2, StringUtilities.CountOccurrences(test, "bc"));
+        }
+
+        [Test]
+        public void TestGetLeftSection()
+        {
+            string test = "abcdef";
+            Assert.AreEqual("abc", StringUtilities.GetLeftSection(test, "d"));
+            Assert.AreEqual("abcde", StringUtilities.GetLeftSection(test, "f"));
+            Assert.AreEqual("a", StringUtilities.GetLeftSection(test, "bcdef"));
+            Assert.AreEqual("", StringUtilities.GetLeftSection(test, "abcdef"));
+        }
+
+        [Test, ExpectedException(typeof(UserException))]
+        public void TestGetLeftSectionException()
+        {
+            string test = "abcdef";
+            string result = StringUtilities.GetLeftSection(test, "g");
+        }
     }
 }

@@ -109,13 +109,19 @@ namespace Habanero.BO
         {
             Initialise(conn, def);
             Guid myID = Guid.NewGuid();
-            _primaryKey.SetObjectID(myID);
+            if (_primaryKey != null)
+            {
+                _primaryKey.SetObjectID(myID);
+            }
             ClassDef currentClassDef = this.ClassDef;
             if (currentClassDef != null)
             {
                 while (currentClassDef.IsUsingClassTableInheritance())
                 {
-                    this.InitialisePropertyValue(currentClassDef.SuperClassClassDef.PrimaryKeyDef.KeyName, myID);
+                    if (currentClassDef.SuperClassClassDef.PrimaryKeyDef != null)
+                    {
+                        InitialisePropertyValue(currentClassDef.SuperClassClassDef.PrimaryKeyDef.KeyName, myID);
+                    }
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
             }
@@ -261,16 +267,23 @@ namespace Habanero.BO
             {
                 classDefToUseForPrimaryKey = classDefToUseForPrimaryKey.SuperClassClassDef;
             }
+
             if ((classDefToUseForPrimaryKey.SuperClassDef == null) ||
                 (classDefToUseForPrimaryKey.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance) ||
                 (_classDef.SuperClassDef.ORMapping == ORMapping.ClassTableInheritance))
             {
-                _primaryKey = (BOPrimaryKey)classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
+                {
+                    _primaryKey = (BOPrimaryKey) classDefToUseForPrimaryKey.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                }
             }
             else
             {
-                _primaryKey =
-                    (BOPrimaryKey)classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
+                {
+                    _primaryKey = (BOPrimaryKey)
+                        classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                }
             }
             _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
         }
@@ -324,11 +337,36 @@ namespace Habanero.BO
         #region Properties
 
         /// <summary>
-        /// Returns the ID
+        /// Returns the primary key ID of this object.  If there is no primary key on this
+        /// class, the primary key of the nearest suitable parent is found and populated
+        /// with the values held for that key in this object.  This is a possible situation
+        /// in some forms of inheritance.
         /// </summary>
         public BOPrimaryKey ID
         {
-            get { return _primaryKey; }
+            get
+            {
+                if (_primaryKey == null)
+                {
+                    ClassDefinition.ClassDef classDef = this.ClassDef;
+                    while (classDef.SuperClassDef != null && classDef.PrimaryKeyDef == null)
+                    {
+                        classDef = classDef.SuperClassClassDef;
+                    }
+                    if (classDef.PrimaryKeyDef != null)
+                    {
+                        BOPrimaryKey parentPrimaryKey = new BOPrimaryKey(classDef.PrimaryKeyDef);
+                        foreach (PropDef propDef in parentPrimaryKey.KeyDef)
+                        {
+                            BOProp prop = new BOProp(propDef);
+                            prop.Value = this.Props[prop.PropertyName].Value;
+                            parentPrimaryKey.Add(prop);
+                        }
+                        return parentPrimaryKey;
+                    }
+                }
+                return _primaryKey;
+            }
         }
 
         /// <summary>
@@ -736,6 +774,7 @@ namespace Habanero.BO
 
         internal BOPrimaryKey PrimaryKey
         {
+            get { return _primaryKey; }
             set { _primaryKey = value; }
         }
 
@@ -968,9 +1007,9 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Deletes the object
+        /// Marks the business object for deleting.  Calling Save() will
+        /// then carry out the deletion from the database.
         /// </summary>
-        /// TODO ERIC - clarify these comments
         public void Delete()
         {
             if (!State.IsEditing)
@@ -1139,11 +1178,22 @@ namespace Habanero.BO
                         SqlStatement checkDuplicateSql =
                             new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
                         checkDuplicateSql.Statement.Append(this.GetSelectSql());
-                        string whereClause = " ( NOT (" + WhereClause(checkDuplicateSql) + ")) AND " +
-                                             GetCheckForDuplicateWhereClause(lBOKey, checkDuplicateSql);
+                        
+                        // Special case where child and parent have same ID name causes ambiguous field name
+                        string idWhereClause = WhereClause(checkDuplicateSql);
+                        string id = StringUtilities.GetLeftSection(idWhereClause, " ");
+                        if (StringUtilities.CountOccurrences(checkDuplicateSql.ToString(), id) >= 3)
+                        {
+                            idWhereClause = idWhereClause.Insert(idWhereClause.IndexOf(id),
+                                            _classDef.TableName + ".");
+                        }
+
+                        string whereClause = " ( NOT (" + idWhereClause + ")) AND " +
+                            GetCheckForDuplicateWhereClause(lBOKey, checkDuplicateSql);
                         checkDuplicateSql.AppendCriteria(whereClause);
                         //string whereClause = " WHERE ( NOT " + WhereClause() +
                         //	") AND " + GetCheckForDuplicateWhereClause(lBOKey);
+
                         using (IDataReader dr = this._connection.LoadDataReader(checkDuplicateSql))
                         {
                             //_classDef.SelectSql + whereClause)) {  //)  DatabaseConnection.CurrentConnection.LoadDataReader
@@ -1331,7 +1381,8 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         protected internal virtual string WhereClause(SqlStatement sql)
         {
-            return _primaryKey.PersistedDatabaseWhereClause(sql);
+            //return _primaryKey.PersistedDatabaseWhereClause(sql);
+            return ID.PersistedDatabaseWhereClause(sql);
         }
 
         /// <summary>
@@ -1448,47 +1499,11 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         protected internal SqlStatementCollection GetDeleteSql()
         {
-            SqlStatement deleteSql;
-            SqlStatementCollection statementCollection = new SqlStatementCollection();
-
-        	//AddRelationshipDeleteStatements(statementCollection);
-
-            deleteSql = new SqlStatement(this.GetConnection());
-            deleteSql.Statement = new StringBuilder(@"DELETE FROM " + TableName +
-                                                    " WHERE " + WhereClause(deleteSql));
-            statementCollection.Add(deleteSql);
-            ClassDef currentClassDef = this.ClassDef;
-            while (currentClassDef.IsUsingClassTableInheritance())
-            {
-                deleteSql = new SqlStatement(this.GetConnection());
-                deleteSql.Statement.Append("DELETE FROM " + currentClassDef.SuperClassClassDef.TableName + " WHERE " +
-                                           WhereClauseForSuperClass(deleteSql, currentClassDef));
-                statementCollection.Add(deleteSql);
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
-            return statementCollection;
+            DeleteStatementGenerator generator = new DeleteStatementGenerator(this, GetConnection());
+            return generator.Generate();
         }
 
-		//private void AddRelationshipDeleteStatements(SqlStatementCollection statementCollection)
-		//{
-		//    foreach (Relationship relationship in _relationshipCol)
-		//    {
-		//        MultipleRelationship multipleRelationship = relationship as MultipleRelationship;
-		//        if (multipleRelationship != null)
-		//        {
-		//            BusinessObjectCollection<BusinessObject> boCol;
-		//            boCol = multipleRelationship.GetRelatedBusinessObjectCol();
-		//            foreach (BusinessObject businessObject in boCol)
-		//            {
-		//                SqlStatementCollection deleteSqlStatementCollection;
-		//                deleteSqlStatementCollection = businessObject.GetDeleteSql();
-		//                statementCollection.Add(deleteSqlStatementCollection);
-		//            }
-		//        }
-		//    }
-    	//}
-
-    	/// <summary>
+		/// <summary>
         /// Returns an "insert" sql statement list for inserting this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>

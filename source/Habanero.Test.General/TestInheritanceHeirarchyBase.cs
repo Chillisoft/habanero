@@ -33,7 +33,6 @@ namespace Habanero.Test.General
         protected string itsFilledCircleId;
         protected SqlStatement itsLoadSql;
 
-        [TestFixtureSetUp]
         public void SetupTest()
         {
             this.SetupDBConnection();
@@ -49,6 +48,40 @@ namespace Habanero.Test.General
             itsDeleteSql = itsFilledCircle.GetDeleteSql();
             itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
             itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
+        }
+
+        public void SetupTestForFilledCircleNoPK()
+        {
+            this.SetupDBConnection();
+            SetupInheritanceSpecifics();
+            itsFilledCircle = new FilledCircleNoPrimaryKey();
+            SetStrID();
+            itsFilledCircle.SetPropertyValue("Colour", 3);
+            itsFilledCircle.SetPropertyValue("Radius", 10);
+            itsFilledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
+
+            itsInsertSql = itsFilledCircle.GetInsertSql();
+            itsUpdateSql = itsFilledCircle.GetUpdateSql();
+            itsDeleteSql = itsFilledCircle.GetDeleteSql();
+            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
+        }
+
+        public void SetupTestForFilledCircleInheritsCircleNoPK()
+        {
+            this.SetupDBConnection();
+            SetupInheritanceSpecifics();
+            itsFilledCircle = new FilledCircleInheritsCircleNoPK();
+            SetStrID();
+            itsFilledCircle.SetPropertyValue("Colour", 3);
+            itsFilledCircle.SetPropertyValue("Radius", 10);
+            itsFilledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
+
+            itsInsertSql = itsFilledCircle.GetInsertSql();
+            itsUpdateSql = itsFilledCircle.GetUpdateSql();
+            itsDeleteSql = itsFilledCircle.GetDeleteSql();
+            //itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            //itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
         }
 
         protected abstract void SetupInheritanceSpecifics();

@@ -21,6 +21,7 @@ using System.Collections;
 using System.Data;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.DB;
@@ -72,8 +73,7 @@ namespace Habanero.BO.SqlGeneration
             propsToInclude = _currentClassDef.PropDefcol.CreateBOPropertyCol(true);
             if (_currentClassDef.IsUsingClassTableInheritance())
             {
-                propsToInclude.Add(
-                    _currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
+                AddParentID(propsToInclude);
             }
             tableName = _bo.TableName;
             GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
@@ -85,8 +85,7 @@ namespace Habanero.BO.SqlGeneration
                 {
                     includeAllProps = false;
                     propsToInclude = _currentClassDef.PropDefcol.CreateBOPropertyCol(true);
-                    propsToInclude.Add(
-                        _currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
+                    AddParentID(propsToInclude);
                     tableName = _currentClassDef.TableName;
                     GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
                     _currentClassDef = _currentClassDef.SuperClassClassDef;
@@ -96,7 +95,6 @@ namespace Habanero.BO.SqlGeneration
                 tableName = _currentClassDef.TableName;
                 GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
             }
-
 
             return _statementCollection;
         }
@@ -129,8 +127,40 @@ namespace Habanero.BO.SqlGeneration
                         AddPropToInsertStatement(prop);
                 }
             }
-            _insertSql.Statement.Append(@"INSERT INTO " + tableName + " (" + _dbFieldList.ToString() + ") VALUES (" +
-                                       _dbValueList.ToString() + ")");
+
+            ClassDef classDefWithSTI = null;
+            foreach (ClassDef def in _bo.ClassDef.ImmediateChildren)
+            {
+                if (def.IsUsingSingleTableInheritance())
+                {
+                    classDefWithSTI = def;
+                    break;
+                }
+            }
+
+            if (_bo.ClassDef.IsUsingSingleTableInheritance() || classDefWithSTI != null)
+            {
+                string discriminator;
+                if (_bo.ClassDef.SuperClassDef != null)
+                {
+                    discriminator = _bo.ClassDef.SuperClassDef.Discriminator;
+                }
+                else
+                {
+                    discriminator = classDefWithSTI.SuperClassDef.Discriminator;
+                }
+                if (discriminator == null)
+                {
+                    throw new InvalidXmlDefinitionException("A super class has been defined " +
+                        "using Single Table Inheritance, but no discriminator column has been set.");
+                }
+                PropDef propDef = new PropDef(discriminator, typeof(string), PropReadWriteRule.ReadWrite, null);
+                BOProp className = new BOProp(propDef, _bo.ClassDef.ClassName);
+                AddPropToInsertStatement(className);
+            }
+
+            _insertSql.Statement.Append(@"INSERT INTO " + tableName + " (" + _dbFieldList + ") VALUES (" +
+                                       _dbValueList + ")");
             _statementCollection.Insert(0, _insertSql);
         }
 
@@ -169,6 +199,46 @@ namespace Habanero.BO.SqlGeneration
             _insertSql.AddParameter(paramName, prop.Value);
             //_insertSql.AddParameter(paramName, DatabaseUtil.PrepareValue(prop.PropertyValue));
             _firstField = false;
+        }
+
+        /// <summary>
+        /// Determines which parent ID field to add to the insertion list, depending on which
+        /// ID attribute was specified in the class definition.  There are four possibilities:
+        ///    1) The child contains a foreign key to the parent, with the parent ID's name
+        ///    2) No attribute was given, assumes the above.
+        ///    3) The child's ID has a copy of the parent's ID value
+        ///    4) The child has no ID and just inherits the parent's ID (still has the parent's
+        ///        ID as a field in its own table)
+        /// </summary>
+        private void AddParentID(BOPropCol propsToInclude)
+        {
+            if (_currentClassDef.SuperClassClassDef.PrimaryKeyDef == null) return;
+
+            string parentIDCopyFieldName = _currentClassDef.SuperClassDef.ID;
+            PrimaryKeyDef parentID = _currentClassDef.SuperClassClassDef.PrimaryKeyDef;
+            if (parentIDCopyFieldName == null ||
+                parentIDCopyFieldName == "" ||
+                parentID.KeyName == parentIDCopyFieldName)
+            {
+                propsToInclude.Add(
+                    _currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
+            }
+            else if (parentIDCopyFieldName != _currentClassDef.PrimaryKeyDef.KeyName)
+            {
+                if (parentID.Count > 1)
+                {
+                    throw new InvalidXmlDefinitionException("For a super class definition " +
+                        "using class table inheritance, the ID attribute can only refer to a " +
+                        "parent with a single primary key.  Leaving out the attribute will " +
+                        "allow composite primary keys where the child's copies have the same " +
+                        "field name as the parent.");
+                }
+                BOProp parentProp = parentID.CreateBOKey(_bo.Props).GetBOPropCol()[parentID.KeyName];
+                PropDef profDef = new PropDef(parentIDCopyFieldName, parentProp.PropertyType, PropReadWriteRule.ReadWrite, null);
+                BOProp newProp = new BOProp(profDef);
+                newProp.Value = parentProp.Value;
+                propsToInclude.Add(newProp);
+            }
         }
     }
 }

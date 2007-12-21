@@ -170,6 +170,28 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(1, def.PrimaryKeyDef.Count);
         }
 
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestClassWithNoPrimaryKeyException()
+        {
+            ClassDef def = loader.LoadClass(
+                @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+				    <property  name=""TestProp"" />					
+				</class>");
+        }
+
+        [Test]
+        public void TestClassWithInheritanceAndNoPrimaryKey()
+        {
+            ClassDef def = loader.LoadClass(
+                @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+                    <superClass class=""SomeTestClass"" assembly=""Habanero.Test.BO.Loaders"" />
+					<property  name=""TestProp"" />
+				</class>
+			");
+            Assert.IsNull(def.PrimaryKeyDef);
+            Assert.IsNotNull(def.SuperClassDef);
+        }
+
         [Test, ExpectedException(typeof (InvalidXmlDefinitionException))]
         public void TestClassWithMoreThanOnePrimaryKeyDef()
         {

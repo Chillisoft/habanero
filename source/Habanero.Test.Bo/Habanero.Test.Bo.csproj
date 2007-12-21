@@ -156,6 +156,7 @@
     <Compile Include="TestBOCollectionEditableDataProvider.cs" />
     <Compile Include="TestBOCollectionReadOnlyDataSetProvider.cs" />
     <Compile Include="TestBoKey.cs" />
+    <Compile Include="TestBOLoader.cs" />
     <Compile Include="TestBoMapper.cs">
       <SubType>Code</SubType>
     </Compile>

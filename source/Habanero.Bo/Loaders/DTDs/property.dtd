@@ -12,4 +12,5 @@
 	default CDATA #IMPLIED
   compulsory ( true | false ) "false"
   autoIncrementing ( true | false ) "false"
+  length CDATA #IMPLIED
 >

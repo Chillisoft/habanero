@@ -32,11 +32,20 @@ using log4net;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// Provides methods to load business objects for given search criteria.
+    /// In practice, you would typically call BOLoader.Instance.SomeMethod.
+    /// </summary>
     public class BOLoader
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOLoader");
 
         private BOLoader() {}
+
+        /// <summary>
+        /// Provides an instance of the loader which can be used to call
+        /// individual methods
+        /// </summary>
         public static BOLoader Instance = new BOLoader();
 
         /// <summary>
@@ -132,6 +141,11 @@ namespace Habanero.BO
             ClassDef classDef = obj.ClassDef;
             Type boType = obj.GetType();
             PrimaryKeyDef primaryKeyDef = classDef.PrimaryKeyDef;
+            if (primaryKeyDef == null)
+            {
+                primaryKeyDef = (PrimaryKeyDef)obj.ID.KeyDef;
+            }
+
             foreach (PropDef propDef in primaryKeyDef)
             {
                 BOProp prop = propDef.CreateBOProp(false);
@@ -259,17 +273,15 @@ namespace Habanero.BO
 
         //TODO:Peter - make a better load that doesn't use a bo col.
         /// <summary>
-        /// Returns the business object of the type provided and that meets the
-        /// search criteria
+        /// Returns the business object of the type provided that meets the
+        /// search criteria.  An exception is thrown if more than one business
+        /// object is found that matches the criteria.  If that could arise, rather use
+        /// GetBusinessObjectCol.
         /// </summary>
         /// <param name="criteria">The search criteria</param>
-        /// <param name="T">The business object type</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object
         /// matches the criteria</exception>
-        /// TODO ERIC - i don't understand why the exception is thrown, since
-        /// the normal pattern is just to return the first one that meets
-        /// expectations
         public T GetBusinessObject<T>(string criteria) where T:BusinessObject
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
@@ -441,14 +453,108 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Returns the database connection for the given business object
+        /// </summary>
+        /// <param name="bo">The business object</param>
+        /// <returns>Returns the connection</returns>
         public IDatabaseConnection GetDatabaseConnection(BusinessObject bo)
         {
             return bo.GetDatabaseConnection();
         }
 
+        /// <summary>
+        /// Sets the database connection for a given business object
+        /// </summary>
+        /// <param name="bo">The business object</param>
+        /// <param name="connection">The connection</param>
         public void SetDatabaseConnection(BusinessObject bo, IDatabaseConnection connection)
         {
             bo.SetDatabaseConnection(connection);
         }
+
+
+        #region Load By ID Methods
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given
+        /// primary key
+        /// </summary>
+        /// <param name="id">The primary key ID</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object
+        /// matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a
+        /// multiple primary key</exception>
+        public T GetBusinessObjectByID<T>(Guid id) where T : BusinessObject
+        {
+            return GetBusinessObjectByID<T>(id.ToString("B"));
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given
+        /// primary key
+        /// </summary>
+        /// <param name="id">The primary key ID</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object
+        /// matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a
+        /// multiple primary key</exception>
+        public T GetBusinessObjectByID<T>(int id) where T : BusinessObject
+        {
+            return GetBusinessObjectByID<T>(id.ToString());
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given
+        /// primary key
+        /// </summary>
+        /// <param name="id">The primary key ID</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object
+        /// matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a
+        /// multiple primary key</exception>
+        public T GetBusinessObjectByID<T>(string id) where T : BusinessObject
+        {
+            ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
+            if (classDef.PrimaryKeyDef.Count > 1)
+            {
+                throw new InvalidPropertyException("A business object cannot be loaded " +
+                   "with a single ID when there are multiple properties making up " +
+                   "the primary key.");
+            }
+            string criteria = string.Format("{0}='{1}'", classDef.PrimaryKeyDef.KeyName, id);
+            return GetBusinessObject<T>(criteria);
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given
+        /// primary key.  This method is useful when you have a composite primary key.
+        /// </summary>
+        /// <param name="primaryKey">The primary key object that contains the specific
+        /// search values</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object
+        /// matches the criteria</exception>
+        public T GetBusinessObjectByID<T>(BOPrimaryKey primaryKey) where T : BusinessObject
+        {
+            string criteria = "";
+            foreach (BOProp boProp in primaryKey.GetBOPropCol().Values)
+            {
+                if (criteria.Length > 0) criteria += " AND ";
+                string propValue = boProp.Value.ToString();
+                if (boProp.PropertyType == typeof(Guid))
+                {
+                    propValue = ((Guid)boProp.Value).ToString("B");
+                }
+                criteria += String.Format("{0}='{1}'", boProp.DatabaseFieldName, propValue);
+            }
+
+            return GetBusinessObject<T>(criteria);
+        }
+
+        #endregion
     }
 }

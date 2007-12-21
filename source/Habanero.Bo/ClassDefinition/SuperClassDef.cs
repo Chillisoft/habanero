@@ -32,6 +32,8 @@ namespace Habanero.BO.ClassDefinition
 		private ClassDef _superClassClassDef;
 		private string _className;
 		private string _assemblyName;
+	    private string _id;
+	    private string _discriminator;
 
 		#region Constructors
 
@@ -54,12 +56,20 @@ namespace Habanero.BO.ClassDefinition
 		/// <param name="className">The class name of the superClass</param>
 		/// <param name="mapping">The type of OR-Mapping to use. See
 		/// the ORMapping enumeration for more detail.</param>
-		public SuperClassDef(string assemblyName, string className, ORMapping mapping)
+		/// <param name="id">In ClassTableInheritance, this determines which property
+		/// in the child has a copy of the parent ID.  Provide an empty string if in
+		/// the code the child simply inherits the parent's ID.</param>
+		/// <param name="discriminator">In SingleTableInheritance, this determines
+		/// the name of the database column that stores the type name of the class
+		/// being stored in that particular row.</param>
+		public SuperClassDef(string assemblyName, string className, ORMapping mapping, string id, string discriminator)
 		{
 			_orMapping = mapping;
 			_superClassClassDef = null;
 			_assemblyName = assemblyName;
 			_className = className;
+		    _id = id;
+		    _discriminator = discriminator;
 		}
 
 		#endregion Constructors
@@ -107,6 +117,48 @@ namespace Habanero.BO.ClassDefinition
 				_className = value;
 			}
 		}
+
+        /// <summary>
+        /// Returns the name of the property that identifies which field
+        /// in the child class (containing the super class definition)
+        /// contains a copy of the parent's ID.  An empty string implies
+        /// that the parent's ID is simply inherited and is used as the
+        /// child's ID.  This property applies only to ClassTableInheritance.
+        /// </summary>
+        public string ID
+        {
+            get { return _id; }
+            set
+            {
+                if (value != null && _orMapping != ClassDefinition.ORMapping.ClassTableInheritance)
+                {
+                    throw new ArgumentException("An 'ID' property has been specified " +
+                        "for a super-class definition where the OR-mapping type is other than " +
+                        "ClassTableInheritance.");
+                }
+                _id = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the name of the discriminator column used to determine which class is being
+        /// referred to in a row of the database table.
+        /// This property applies only to SingleTableInheritance.
+        /// </summary>
+        public string Discriminator
+        {
+            get { return _discriminator; }
+            set
+            {
+                if (value != null && _orMapping != ClassDefinition.ORMapping.SingleTableInheritance)
+                {
+                    throw new ArgumentException("A 'Discriminator' property has been specified " +
+                        "for a super-class definition where the OR-mapping type is other than " +
+                        "SingleTableInheritance.");
+                }
+                _discriminator = value;
+            }
+        }
 
 		/// <summary>
 		/// Returns the class definition for this super-class

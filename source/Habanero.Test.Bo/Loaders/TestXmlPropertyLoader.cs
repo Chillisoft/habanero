@@ -251,6 +251,30 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(true, def.AutoIncrementing);
         }
 
+        [Test]
+        public void TestBusinessObjectWithLength()
+        {
+            PropDef def = itsLoader.LoadProperty(
+                      @"<property name=""TestProp"" length=""5"" />");
+            Assert.AreEqual(5, def.Length);
+        }
 
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestBusinessObjectWithInvalidLengthException()
+        {
+            itsLoader.LoadProperty(@"<property name=""TestProp"" length=""fff"" />");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestBusinessObjectWithNegativeLengthException()
+        {
+            itsLoader.LoadProperty(@"<property name=""TestProp"" length=""-1"" />");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestBusinessObjectWithLengthForNonString()
+        {
+            itsLoader.LoadProperty(@"<property name=""TestProp"" type=""bool"" length=""5"" />");
+        }
     }
 }

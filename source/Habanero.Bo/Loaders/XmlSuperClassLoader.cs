@@ -34,6 +34,8 @@ namespace Habanero.BO.Loaders
         private ORMapping _orMapping;
         private string _className;
     	private string _assemblyName;
+        private string _discriminator;
+        private string _id;
 
 
         /// <summary>
@@ -82,7 +84,7 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a SuperClassDef object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateSuperClassDef(_assemblyName, _className, _orMapping);
+			return _defClassFactory.CreateSuperClassDef(_assemblyName, _className, _orMapping, _id, _discriminator);
 			//return new SuperClassDef(_assemblyName, _className, _orMapping);
 		}
 
@@ -107,6 +109,27 @@ namespace Habanero.BO.Loaders
                     "SingleTableInheritance and ConcreteTableInheritance.", orMappingType), ex);
             }
 
+            _id = _reader.GetAttribute("id");
+            if (!String.IsNullOrEmpty(_id) && _orMapping != ORMapping.ClassTableInheritance)
+            {
+                throw new InvalidXmlDefinitionException("In a superClass definition, an 'id' " +
+                    "attribute has been specified for an OR-mapping type other than " +
+                    "ClassTableInheritance.");
+            }
+
+            _discriminator = _reader.GetAttribute("discriminator");
+            if (!String.IsNullOrEmpty(_discriminator) && _orMapping != ORMapping.SingleTableInheritance)
+            {
+                throw new InvalidXmlDefinitionException("In a superClass definition, a 'discriminator' " +
+                    "attribute has been specified for an OR-mapping type other than " +
+                    "SingleTableInheritance.");
+            }
+            else if (_discriminator == null && _orMapping == ORMapping.SingleTableInheritance)
+            {
+                throw new InvalidXmlDefinitionException("In a superClass definition, a 'discriminator' " +
+                    "attribute is missing where the SingleTableInheritance OR-mapping type has been " +
+                    "specified.");
+            }
         }
     }
 }

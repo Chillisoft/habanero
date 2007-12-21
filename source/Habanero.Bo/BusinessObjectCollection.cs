@@ -116,6 +116,12 @@ namespace Habanero.BO
                 _sampleBo = sampleBo;
             } else
             {
+                if (_boClassDef == null)
+                {
+                    throw new UserException(String.Format("A business object collection is " +
+                        "being created for the type '{0}', but no class definitions have " +
+                        "been loaded for this type.", typeof(TBusinessObject).Name));
+                }
                 _sampleBo = _boClassDef.CreateNewBusinessObject();
             }
             _lookupTable = new Hashtable();

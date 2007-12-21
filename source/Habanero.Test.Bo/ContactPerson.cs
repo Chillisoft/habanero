@@ -58,11 +58,46 @@ namespace Habanero.Test.BO
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
 			    </class>
-
-
 			");
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithSurnameAsPrimaryKey()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPerson"" assembly=""Habanero.Test.BO"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+					<primaryKey isObjectID=""false"" >
+						<prop name=""Surname"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithCompositePrimaryKey()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPerson"" assembly=""Habanero.Test.BO"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+					<primaryKey isObjectID=""false"" >
+						<prop name=""ContactPersonID"" />
+                        <prop name=""Surname"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
         }
 
         public string Surname

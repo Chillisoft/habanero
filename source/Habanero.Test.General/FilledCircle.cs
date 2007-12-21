@@ -63,5 +63,17 @@ namespace Habanero.Test.General
 			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
+
+        public Guid? FilledCircleID
+        {
+            get { return (Guid?)GetPropertyValue("FilledCircleID"); }
+            set { SetPropertyValue("FilledCircleID", value); }
+        }
+
+        public Int32? Colour
+        {
+            get { return (Int32?)GetPropertyValue("Colour"); }
+            set { SetPropertyValue("Colour", value); }
+        }
     }
 }
