@@ -141,6 +141,7 @@
     <Compile Include="File\TypeLoader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Utilities.cs" />
     <Compile Include="XmlDocumentValidator.cs">
       <SubType>Code</SubType>
     </Compile>
