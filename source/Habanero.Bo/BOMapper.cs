@@ -135,20 +135,24 @@ namespace Habanero.BO
             else if (propertyName.IndexOf("-") != -1)
             {
                 string virtualPropName = propertyName.Substring(1, propertyName.Length - 2);
+                string className = this._businessObject.GetType().Name;
                 try
                 {
-                    PropertyInfo propInfo =
-                        this._businessObject.GetType().GetProperty(virtualPropName,
-                                                                     BindingFlags.Public | BindingFlags.Instance);
+                    PropertyInfo propInfo = this._businessObject.GetType().GetProperty(
+                        virtualPropName, BindingFlags.Public | BindingFlags.Instance);
+                    if (propInfo == null)
+                    {
+                        throw new TargetInvocationException(new Exception(
+                            String.Format("Virtual property '{0}' does not exist for object of type '{1}'.", virtualPropName, className)));
+                    }
                     object propValue = propInfo.GetValue(this._businessObject, new object[] {});
                     return propValue;
                 }
-
                 catch (TargetInvocationException ex)
                 {
-                    log.Error("Error retrieving virtual property " + virtualPropName + " from object of type " +
-                              this._businessObject.GetType().Name + Environment.NewLine +
-                              ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true));
+                    log.Error(String.Format("Error retrieving virtual property '{0}' from object of type '{1}'" +
+                              Environment.NewLine + "{2}", virtualPropName, className,
+                              ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                     throw ex.InnerException;
                 }
             }
