@@ -296,6 +296,33 @@ namespace Habanero.BO.ClassDefinition
             set { _tableName = value; }
         }
 
+        /// <summary>
+        /// The name of the table where single table inheritance
+        /// is being used in the table name is being inherited from
+        /// some parent
+        /// </summary>
+        public string InheritedTableName
+        {
+            get
+            {
+                ClassDef currentClassDef = this;
+                while (currentClassDef.SuperClassDef != null &&
+                       currentClassDef.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
+                {
+                    currentClassDef = currentClassDef.SuperClassClassDef;
+                }
+                if ((currentClassDef.SuperClassDef != null) &&
+                    (currentClassDef.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance))
+                {
+                    return currentClassDef.SuperClassClassDef.TableName;
+                }
+                else
+                {
+                    return currentClassDef.TableName;
+                }
+            }
+        }
+
 
         /// <summary>
         /// The collection of property definitions

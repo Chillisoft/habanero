@@ -65,35 +65,26 @@ namespace Habanero.BO.SqlGeneration
         {
             _statementCollection = new SqlStatementCollection();
             _currentClassDef = _bo.ClassDef;
-            bool includeAllProps;
             BOPropCol propsToInclude;
             string tableName;
 
-            includeAllProps = !_currentClassDef.IsUsingClassTableInheritance();
-            propsToInclude = _currentClassDef.PropDefcol.CreateBOPropertyCol(true);
-            if (_currentClassDef.IsUsingClassTableInheritance())
-            {
-                AddParentID(propsToInclude);
-            }
+            propsToInclude = GetPropsToInclude(_currentClassDef);
             tableName = _bo.TableName;
-            GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
+            GenerateSingleInsertStatement(propsToInclude, tableName);
 
             if (_bo.ClassDef.IsUsingClassTableInheritance())
             {
                 _currentClassDef = _bo.ClassDef.SuperClassClassDef;
                 while (_currentClassDef.IsUsingClassTableInheritance())
                 {
-                    includeAllProps = false;
-                    propsToInclude = _currentClassDef.PropDefcol.CreateBOPropertyCol(true);
-                    AddParentID(propsToInclude);
+                    propsToInclude = GetPropsToInclude(_currentClassDef);
                     tableName = _currentClassDef.TableName;
-                    GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
+                    GenerateSingleInsertStatement(propsToInclude, tableName);
                     _currentClassDef = _currentClassDef.SuperClassClassDef;
                 }
-                includeAllProps = false;
-                propsToInclude = _currentClassDef.PropDefcol.CreateBOPropertyCol(true);
-                tableName = _currentClassDef.TableName;
-                GenerateSingleInsertStatement(includeAllProps, propsToInclude, tableName);
+                propsToInclude = GetPropsToInclude(_currentClassDef);
+                tableName = _currentClassDef.InheritedTableName;
+                GenerateSingleInsertStatement(propsToInclude, tableName);
             }
 
             return _statementCollection;
@@ -103,12 +94,10 @@ namespace Habanero.BO.SqlGeneration
         /// Generates an "insert" sql statement for the properties in the
         /// business object
         /// </summary>
-        /// <param name="includeAllProps">Whether to include all the object's
-        /// properties</param>
         /// <param name="propsToInclude">A collection of properties to insert,
         /// if the previous include-all boolean was not set to true</param>
         /// <param name="tableName">The table name</param>
-        private void GenerateSingleInsertStatement(bool includeAllProps, BOPropCol propsToInclude, string tableName)
+        private void GenerateSingleInsertStatement(BOPropCol propsToInclude, string tableName)
         {
             ISupportsAutoIncrementingField supportsAutoIncrementingField = null;
             if (_bo.HasAutoIncrementingField)
@@ -121,15 +110,16 @@ namespace Habanero.BO.SqlGeneration
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
                 // BOProp prop = (BOProp) item.Value;
-                if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
+                if (propsToInclude.Contains(prop.PropertyName))
                 {
                     if (propsToInclude.AutoIncrementingPropertyName != prop.PropertyName)
                         AddPropToInsertStatement(prop);
                 }
             }
 
+            ClassDef classDef = _currentClassDef; //rather than _bo.ClassDef
             ClassDef classDefWithSTI = null;
-            foreach (ClassDef def in _bo.ClassDef.ImmediateChildren)
+            foreach (ClassDef def in classDef.ImmediateChildren)
             {
                 if (def.IsUsingSingleTableInheritance())
                 {
@@ -138,12 +128,12 @@ namespace Habanero.BO.SqlGeneration
                 }
             }
 
-            if (_bo.ClassDef.IsUsingSingleTableInheritance() || classDefWithSTI != null)
+            if (classDef.IsUsingSingleTableInheritance() || classDefWithSTI != null)
             {
                 string discriminator;
-                if (_bo.ClassDef.SuperClassDef != null)
+                if (classDef.SuperClassDef != null)
                 {
-                    discriminator = _bo.ClassDef.SuperClassDef.Discriminator;
+                    discriminator = classDef.SuperClassDef.Discriminator;
                 }
                 else
                 {
@@ -212,18 +202,24 @@ namespace Habanero.BO.SqlGeneration
         /// </summary>
         private void AddParentID(BOPropCol propsToInclude)
         {
-            if (_currentClassDef.SuperClassClassDef.PrimaryKeyDef == null) return;
+            ClassDef currentClassDef = _currentClassDef;
+            while (currentClassDef.SuperClassClassDef != null &&
+                currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
+            {
+                currentClassDef = currentClassDef.SuperClassClassDef;
+            }
+            if (currentClassDef.SuperClassClassDef.PrimaryKeyDef == null) return;
 
-            string parentIDCopyFieldName = _currentClassDef.SuperClassDef.ID;
-            PrimaryKeyDef parentID = _currentClassDef.SuperClassClassDef.PrimaryKeyDef;
+            string parentIDCopyFieldName = currentClassDef.SuperClassDef.ID;
+            PrimaryKeyDef parentID = currentClassDef.SuperClassClassDef.PrimaryKeyDef;
             if (parentIDCopyFieldName == null ||
                 parentIDCopyFieldName == "" ||
                 parentID.KeyName == parentIDCopyFieldName)
             {
                 propsToInclude.Add(
-                    _currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
+                    currentClassDef.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol());
             }
-            else if (parentIDCopyFieldName != _currentClassDef.PrimaryKeyDef.KeyName)
+            else if (parentIDCopyFieldName != currentClassDef.PrimaryKeyDef.KeyName)
             {
                 if (parentID.Count > 1)
                 {
@@ -239,6 +235,29 @@ namespace Habanero.BO.SqlGeneration
                 newProp.Value = parentProp.Value;
                 propsToInclude.Add(newProp);
             }
+        }
+
+        /// <summary>
+        /// Builds a collection of properties to include in the insertion,
+        /// depending on the inheritance type
+        /// </summary>
+        private BOPropCol GetPropsToInclude(ClassDef currentClassDef)
+        {
+            BOPropCol propsToInclude = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+            
+            if (currentClassDef.IsUsingClassTableInheritance())
+            {
+                AddParentID(propsToInclude);
+            }
+
+            while (currentClassDef.IsUsingSingleTableInheritance() ||
+                currentClassDef.IsUsingConcreteTableInheritance())
+            {
+                propsToInclude.Add(currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true));
+                currentClassDef = currentClassDef.SuperClassClassDef;
+            }
+
+            return propsToInclude;
         }
     }
 }

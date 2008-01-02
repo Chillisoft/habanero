@@ -118,6 +118,12 @@ namespace Habanero.BO
             {
                 while (currentClassDef.IsUsingClassTableInheritance())
                 {
+                    while (currentClassDef.SuperClassClassDef != null &&
+                            currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
+                    {
+                        currentClassDef = currentClassDef.SuperClassClassDef;
+                    }
+
                     if (currentClassDef.SuperClassClassDef.PrimaryKeyDef != null)
                     {
                         InitialisePropertyValue(currentClassDef.SuperClassClassDef.PrimaryKeyDef.KeyName, myID);

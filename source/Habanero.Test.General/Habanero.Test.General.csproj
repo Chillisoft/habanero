@@ -123,6 +123,8 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="CircleNoPrimaryKey.cs" />
+    <Compile Include="FilledCircleNoPrimaryKeyInheritsCircle.cs" />
+    <Compile Include="TestInheritanceHeirarchyClassSingle.cs" />
     <Compile Include="TestInheritanceHeirarchySingleClass.cs" />
     <Compile Include="FilledCircleInheritsCircleNoPK.cs" />
     <Compile Include="FilledCircleNoPrimaryKey.cs" />
