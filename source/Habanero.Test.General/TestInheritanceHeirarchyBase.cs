@@ -80,8 +80,25 @@ namespace Habanero.Test.General
             itsInsertSql = itsFilledCircle.GetInsertSql();
             itsUpdateSql = itsFilledCircle.GetUpdateSql();
             itsDeleteSql = itsFilledCircle.GetDeleteSql();
-            //itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
-            //itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
+            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
+        }
+
+        public void SetupTestForFilledCircleNoPrimaryKeyInheritsCircle()
+        {
+            this.SetupDBConnection();
+            SetupInheritanceSpecifics();
+            itsFilledCircle = new FilledCircleNoPrimaryKeyInheritsCircle();
+            SetStrID();
+            itsFilledCircle.SetPropertyValue("Colour", 3);
+            itsFilledCircle.SetPropertyValue("Radius", 10);
+            itsFilledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
+
+            itsInsertSql = itsFilledCircle.GetInsertSql();
+            itsUpdateSql = itsFilledCircle.GetUpdateSql();
+            itsDeleteSql = itsFilledCircle.GetDeleteSql();
+            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
         }
 
         protected abstract void SetupInheritanceSpecifics();

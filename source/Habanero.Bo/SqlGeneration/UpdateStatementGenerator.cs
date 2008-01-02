@@ -56,25 +56,23 @@ namespace Habanero.BO.SqlGeneration
         public SqlStatementCollection Generate()
         {
             _statementCollection = new SqlStatementCollection();
-            bool includeAllProps;
             BOPropCol propsToInclude;
             string tableName;
             ClassDef currentClassDef = _bo.ClassDef;
+
             while (currentClassDef.IsUsingClassTableInheritance())
             {
-                includeAllProps = false;
-                propsToInclude = currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true);
+                propsToInclude = GetPropsToInclude(currentClassDef.SuperClassClassDef);
                 if (propsToInclude.Count > 0)
                 {
-                    tableName = currentClassDef.SuperClassClassDef.TableName;
-                    GenerateSingleUpdateStatement(tableName, includeAllProps, propsToInclude, true, currentClassDef);
+                    tableName = currentClassDef.SuperClassClassDef.InheritedTableName;
+                    GenerateSingleUpdateStatement(tableName, propsToInclude, true, currentClassDef);
                 }
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
-            includeAllProps = !_bo.ClassDef.IsUsingClassTableInheritance();
-            propsToInclude = _bo.ClassDef.PropDefcol.CreateBOPropertyCol(true);
+            propsToInclude = GetPropsToInclude(_bo.ClassDef);
             tableName = _bo.TableName;
-            GenerateSingleUpdateStatement(tableName, includeAllProps, propsToInclude, false, _bo.ClassDef);
+            GenerateSingleUpdateStatement(tableName, propsToInclude, false, _bo.ClassDef);
             return _statementCollection;
         }
 
@@ -83,13 +81,11 @@ namespace Habanero.BO.SqlGeneration
         /// business object
         /// </summary>
         /// <param name="tableName">The table name</param>
-        /// <param name="includeAllProps">Whether to include all the object's
-        /// properties</param>
         /// <param name="propsToInclude">A collection of properties to update,
         /// if the previous include-all boolean was not set to true</param>
         /// <param name="isSuperClassStatement">Whether a super-class is involved</param>
         /// <param name="currentClassDef">The current class definition</param>
-        private void GenerateSingleUpdateStatement(string tableName, bool includeAllProps, BOPropCol propsToInclude,
+        private void GenerateSingleUpdateStatement(string tableName, BOPropCol propsToInclude,
                                                    bool isSuperClassStatement, ClassDef currentClassDef)
         {
             _updateSql = new SqlStatement(_conn);
@@ -97,7 +93,7 @@ namespace Habanero.BO.SqlGeneration
             int includedProps = 0;
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
-                if (includeAllProps || propsToInclude.Contains(prop.PropertyName))
+                if (propsToInclude.Contains(prop.PropertyName))
                 {
                     PrimaryKeyDef primaryKeyDef = _bo.ClassDef.PrimaryKeyDef;
                     if (primaryKeyDef == null) primaryKeyDef = (PrimaryKeyDef) _bo.ID.KeyDef;
@@ -127,6 +123,24 @@ namespace Habanero.BO.SqlGeneration
             {
                 _statementCollection.Add(_updateSql);
             }
+        }
+
+        /// <summary>
+        /// Builds a collection of properties to include in the update,
+        /// depending on the inheritance type
+        /// </summary>
+        private BOPropCol GetPropsToInclude(ClassDef currentClassDef)
+        {
+            BOPropCol propsToInclude = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+
+            while (currentClassDef.IsUsingSingleTableInheritance() ||
+                currentClassDef.IsUsingConcreteTableInheritance())
+            {
+                propsToInclude.Add(currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true));
+                currentClassDef = currentClassDef.SuperClassClassDef;
+            }
+
+            return propsToInclude;
         }
     }
 }

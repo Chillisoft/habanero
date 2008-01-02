@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base;
+using Habanero.Util;
 
 namespace Habanero.BO.SqlGeneration
 {
@@ -92,8 +93,8 @@ namespace Habanero.BO.SqlGeneration
                 statement += _connection.RightFieldDelimiter;
                 statement += ", ";
             }
-
             statement = statement.Remove(statement.Length - 2, 2);
+
             currentClassDef = _classDef;
             while (currentClassDef.IsUsingSingleTableInheritance())
             {
@@ -104,55 +105,26 @@ namespace Habanero.BO.SqlGeneration
 
             while (currentClassDef.IsUsingClassTableInheritance())
             {
-                statement += ", " + currentClassDef.SuperClassClassDef.TableName;
+                statement += ", " + currentClassDef.SuperClassClassDef.InheritedTableName;
                 where += GetParentKeyMatchWhereClause(currentClassDef);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
 
             //TODO Eric - because of the class structure, this doesn't use parameterised SQL
-            if (_classDef.IsUsingSingleTableInheritance())
+            if (_bo.ClassDef.IsUsingSingleTableInheritance())
             {
                 if (_bo.ClassDef.SuperClassDef.Discriminator == null)
                 {
                     throw new InvalidXmlDefinitionException("A super class has been defined " +
                         "using Single Table Inheritance, but no discriminator column has been set.");
                 }
-                where += string.Format("{0} = '{1}'", _classDef.SuperClassDef.Discriminator, _classDef.ClassName);
-                where += " AND ";
+                string discriminatorClause = GetDiscriminatorClause(_bo.ClassDef, _bo.ClassDef.SuperClassDef.Discriminator);
+                if (StringUtilities.CountOccurrences(discriminatorClause, " OR ") > 0)
+                {
+                    discriminatorClause = "(" + discriminatorClause + ")";
+                }
+                where += discriminatorClause + " AND ";
             }
-            //while (true)
-            //{
-            //    ClassDef classDefWithSTI = null;
-            //    foreach (ClassDef def in currentClassDef.ImmediateChildren)
-            //    {
-            //        if (def.IsUsingSingleTableInheritance())
-            //        {
-            //            classDefWithSTI = def;
-            //            break;
-            //        }
-            //    }
-
-            //    if (currentClassDef.IsUsingSingleTableInheritance() || classDefWithSTI != null)
-            //    {
-            //        string discriminator;
-            //        if (currentClassDef.SuperClassDef != null)
-            //        {
-            //            discriminator = currentClassDef.SuperClassDef.Discriminator;
-            //        }
-            //        else
-            //        {
-            //            discriminator = classDefWithSTI.SuperClassDef.Discriminator;
-            //        }
-            //        if (discriminator == null)
-            //        {
-            //            throw new InvalidXmlDefinitionException("A super class has been defined " +
-            //                "using Single Table Inheritance, but no discriminator column has been set.");
-            //        }
-            //        where += string.Format("{0} = '{1}'", _classDef.SuperClassDef.Discriminator, _classDef.ClassName);
-            //        where += " AND ";
-            //    }
-            //    else break;
-            //}
 
             if (where.Length > 7)
             {
@@ -160,6 +132,27 @@ namespace Habanero.BO.SqlGeneration
             }
 
             return statement;
+        }
+
+        /// <summary>
+        /// This is a recursive method used to add any child classes onto the where
+        /// clause that checks the discriminator column in single table inheritance.
+        /// (eg. if you load all the Cars, that should include all the BMWs that
+        /// inherit from Car)
+        /// </summary>
+        private string GetDiscriminatorClause(ClassDef classDef, string discriminator)
+        {
+            string where = "";
+            
+            where += string.Format("{0} = '{1}'", discriminator, classDef.ClassName);
+            
+            foreach (ClassDef def in classDef.ImmediateChildren)
+            {
+                where += " OR ";
+                where += GetDiscriminatorClause(def, discriminator);
+            }
+
+            return where;
         }
 
         /// <summary>
@@ -210,6 +203,15 @@ namespace Habanero.BO.SqlGeneration
         /// </summary>
         private static string GetParentKeyMatchWhereClause(ClassDef currentClassDef)
 		{
+            ClassDef origClassDef = currentClassDef;
+
+            while (currentClassDef.SuperClassClassDef.SuperClassClassDef != null &&
+                currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
+            {
+                currentClassDef = currentClassDef.SuperClassClassDef;
+            }
+            if (currentClassDef.SuperClassClassDef.PrimaryKeyDef == null) return "";
+
             string parentIDCopyFieldName = currentClassDef.SuperClassDef.ID;
             string where = "";
             foreach (PropDef def in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
@@ -221,7 +223,7 @@ namespace Habanero.BO.SqlGeneration
                 if (parentIDCopyFieldName == null ||
                     parentIDCopyFieldName == "")
                 {
-                    where += " = " + currentClassDef.TableName + "." + def.FieldName;
+                    where += " = " + origClassDef.TableName + "." + def.FieldName;
                 }
                 else
                 {
@@ -233,7 +235,7 @@ namespace Habanero.BO.SqlGeneration
                             "allow composite primary keys where the child's copies have the same " +
                             "field name as the parent.");
                     }
-                    where += " = " + currentClassDef.TableName + "." + parentIDCopyFieldName;
+                    where += " = " + origClassDef.TableName + "." + parentIDCopyFieldName;
                 }
                 where += " AND ";
             }
