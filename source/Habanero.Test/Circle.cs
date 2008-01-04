@@ -20,23 +20,20 @@
 using System;
 using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Test.General
+namespace Habanero.Test
 {
-    /// <summary>
-    /// FilledCircle with no primary key, used for special forms of inheritance, eg SingleTableInheritance
-    /// </summary>
-    public class FilledCircleNoPrimaryKey : CircleNoPrimaryKey
+    public class Circle : Shape
     {
 
         public static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (FilledCircleNoPrimaryKey)))
+            if (!ClassDef.IsDefined(typeof (Circle)))
             {
                 return CreateClassDef();
             }
             else
             {
-                return ClassDef.ClassDefs[typeof (FilledCircleNoPrimaryKey)];
+                return ClassDef.ClassDefs[typeof (Circle)];
             }
         }
 
@@ -50,21 +47,32 @@ namespace Habanero.Test.General
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Colour", typeof (int), PropReadWriteRule.ReadWrite, "Colour", null);
+                new PropDef("Radius", typeof (int), PropReadWriteRule.ReadWrite, "Radius", null);
             lPropDefCol.Add(propDef);
+            propDef = lPropDefCol.Add("CircleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
+            PrimaryKeyDef primaryKey = new PrimaryKeyDef();
+            primaryKey.IsObjectID = true;
+            primaryKey.Add(lPropDefCol["CircleID"]);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
-            //ClassDef lClassDef = new ClassDef(typeof (FilledCircleNoPrimaryKey), null, lPropDefCol, keysCol, relDefCol);
-            ClassDef lClassDef = new ClassDef(typeof(FilledCircleNoPrimaryKey), null, "FilledCircle", lPropDefCol, keysCol, relDefCol, null);
-            lClassDef.SuperClassDef = new SuperClassDef(Circle.GetClassDef(), ORMapping.ConcreteTableInheritance);
-			ClassDef.ClassDefs.Add(lClassDef);
+            ClassDef lClassDef = new ClassDef(typeof (Circle), primaryKey, lPropDefCol, keysCol, relDefCol);
+            
+            lClassDef.SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
+
+            ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
-        public Int32? Colour
+        public Guid? CircleID
         {
-            get { return (Int32?)GetPropertyValue("Colour"); }
-            set { SetPropertyValue("Colour", value); }
+            get { return (Guid?)GetPropertyValue("CircleID"); }
+            set { SetPropertyValue("CircleID", value); }
+        }
+
+        public int Radius
+        {
+            get { return (int)GetPropertyValue("Radius"); }
+            set { SetPropertyValue("Radius", value); }
         }
     }
 }

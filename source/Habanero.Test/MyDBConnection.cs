@@ -21,7 +21,7 @@ using System;
 using System.Collections;
 using Habanero.DB;
 
-namespace Habanero.Test.General
+namespace Habanero.Test
 {
     /// <summary>
     /// Summary description for MyDBConnection.

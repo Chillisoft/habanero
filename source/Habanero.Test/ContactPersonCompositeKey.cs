@@ -24,7 +24,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.DB;
 
-namespace Habanero.Test.General
+namespace Habanero.Test
 {
     /// <summary>
     /// Summary description for ContactPersonCompositeKey.
@@ -35,11 +35,11 @@ namespace Habanero.Test.General
     {
         #region Constructors
 
-        internal ContactPersonCompositeKey() : base()
+        public ContactPersonCompositeKey() : base()
         {
         }
 
-        internal ContactPersonCompositeKey(BOPrimaryKey id) : base(id)
+        public ContactPersonCompositeKey(BOPrimaryKey id) : base(id)
         {
         }
 
@@ -74,7 +74,7 @@ namespace Habanero.Test.General
             ClassDef lClassDef =
                 new ClassDef(typeof (ContactPersonCompositeKey), primaryKey, lPropDefCol, keysCol, relDefs);
             lClassDef.HasObjectID = false;
-			ClassDef.ClassDefs.Add(lClassDef);
+            ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
@@ -175,12 +175,12 @@ namespace Habanero.Test.General
 
         #region ForTesting
 
-        internal static void ClearContactPersonCol()
+        public static void ClearContactPersonCol()
         {
             BusinessObject.ClearLoadedBusinessObjectBaseCol();
         }
 
-        internal static void DeleteAllContactPeople()
+        public static void DeleteAllContactPeople()
         {
             string sql = "DELETE FROM ContactPersonCompositeKey";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);

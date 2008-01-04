@@ -24,11 +24,11 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 
-namespace Habanero.Test.General
+namespace Habanero.Test
 {
-	public class Address: BusinessObject
-	{
-		#region Constructors
+    public class Address: BusinessObject
+    {
+        #region Constructors
 
         public Address() : base()
         {
@@ -38,20 +38,20 @@ namespace Habanero.Test.General
         {
         }
 
-		public Address(ClassDef classDef)
-			: base(classDef)
+        public Address(ClassDef classDef)
+            : base(classDef)
         {
         }
 
         protected static ClassDef GetClassDef()
         {
-			if (!ClassDef.IsDefined(typeof(Address)))
+            if (!ClassDef.IsDefined(typeof(Address)))
             {
                 return CreateClassDef();
             }
             else
             {
-				return ClassDef.ClassDefs[typeof(Address)];
+                return ClassDef.ClassDefs[typeof(Address)];
             }
         }
 
@@ -74,7 +74,7 @@ namespace Habanero.Test.General
 
 
             ClassDef classDef = new ClassDef(typeof (Address), primaryKey, propDefCol, keysCol, relDefCol);
-			ClassDef.ClassDefs.Add(classDef);
+            ClassDef.ClassDefs.Add(classDef);
             return classDef;
         }
 
@@ -84,7 +84,7 @@ namespace Habanero.Test.General
 
             //Define Relationships
             RelKeyDef relKeyDef = new RelKeyDef();
-			PropDef propDef = lPropDefCol["ContactPersonID"];
+            PropDef propDef = lPropDefCol["ContactPersonID"];
 
             RelPropDef relPropDef = new RelPropDef(propDef, "ContactPersonID");
             relKeyDef.Add(relPropDef);
@@ -100,19 +100,19 @@ namespace Habanero.Test.General
         {
             PropDefCol propDefCol = new PropDefCol();
             propDefCol.Add("AddressID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
-			propDefCol.Add("ContactPersonID", typeof(Guid), PropReadWriteRule.ReadWrite, null);
-			propDefCol.Add("AddressLine1", typeof(String), PropReadWriteRule.ReadWrite, null);
-			propDefCol.Add("AddressLine2", typeof(String), PropReadWriteRule.ReadWrite, null);
-			propDefCol.Add("AddressLine3", typeof(String), PropReadWriteRule.ReadWrite, null);
-			propDefCol.Add("AddressLine4", typeof(String), PropReadWriteRule.ReadWrite, null);
-			return propDefCol;
+            propDefCol.Add("ContactPersonID", typeof(Guid), PropReadWriteRule.ReadWrite, null);
+            propDefCol.Add("AddressLine1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            propDefCol.Add("AddressLine2", typeof(String), PropReadWriteRule.ReadWrite, null);
+            propDefCol.Add("AddressLine3", typeof(String), PropReadWriteRule.ReadWrite, null);
+            propDefCol.Add("AddressLine4", typeof(String), PropReadWriteRule.ReadWrite, null);
+            return propDefCol;
         }
 
         /// <summary>
-		/// returns the Address identified by id.
+        /// returns the Address identified by id.
         /// </summary>
         /// <remarks>
-		/// If the Address is already leaded then an identical copy of it will be returned.
+        /// If the Address is already leaded then an identical copy of it will be returned.
         /// </remarks>
         /// <param name="id">The object primary Key</param>
         /// <returns>The loaded business object</returns>
@@ -120,11 +120,11 @@ namespace Habanero.Test.General
         ///  if the object has been deleted already</exception>
         public static Address GetCar(BOPrimaryKey id)
         {
-			Address myAddress = (Address)BOLoader.Instance.GetLoadedBusinessObject(id);
+            Address myAddress = (Address)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myAddress == null)
             {
-				myAddress = new Address(id);
-               // AddToLoadedBusinessObjectCol(myCar);
+                myAddress = new Address(id);
+                // AddToLoadedBusinessObjectCol(myCar);
             }
             return myAddress;
         }
@@ -137,55 +137,55 @@ namespace Habanero.Test.General
 
         #region Properties
 
-		public Guid AddressID
-		{
-			get { return (Guid)GetPropertyValue("AddressID"); }
-		}
+        public Guid AddressID
+        {
+            get { return (Guid)GetPropertyValue("AddressID"); }
+        }
 		
-		public Guid? ContactPersonID
-		{
-			get { return (Guid?)GetPropertyValue("ContactPersonID"); }
-			set { SetPropertyValue("ContactPersonID", value); }
-		}
+        public Guid? ContactPersonID
+        {
+            get { return (Guid?)GetPropertyValue("ContactPersonID"); }
+            set { SetPropertyValue("ContactPersonID", value); }
+        }
 
-		public string AddressLine1
-		{
-			get { return (string)GetPropertyValue("AddressLine1"); }
-			set { SetPropertyValue("AddressLine1", value); }
-		}
+        public string AddressLine1
+        {
+            get { return (string)GetPropertyValue("AddressLine1"); }
+            set { SetPropertyValue("AddressLine1", value); }
+        }
 
-		public string AddressLine2
-		{
-			get { return (string)GetPropertyValue("AddressLine2"); }
-			set { SetPropertyValue("AddressLine2", value); }
-		}
+        public string AddressLine2
+        {
+            get { return (string)GetPropertyValue("AddressLine2"); }
+            set { SetPropertyValue("AddressLine2", value); }
+        }
 
-		public string AddressLine3
-		{
-			get { return (string)GetPropertyValue("AddressLine3"); }
-			set { SetPropertyValue("AddressLine3", value); }
-		}
+        public string AddressLine3
+        {
+            get { return (string)GetPropertyValue("AddressLine3"); }
+            set { SetPropertyValue("AddressLine3", value); }
+        }
 
-		public string AddressLine4
-		{
-			get { return (string)GetPropertyValue("AddressLine4"); }
-			set { SetPropertyValue("AddressLine4", value); }
-		}
+        public string AddressLine4
+        {
+            get { return (string)GetPropertyValue("AddressLine4"); }
+            set { SetPropertyValue("AddressLine4", value); }
+        }
 
-		#endregion //Properties
+        #endregion //Properties
 
         #region Relationships
 
-		public ContactPerson GetContactPerson()
+        public ContactPerson GetContactPerson()
         {
-			return (ContactPerson)Relationships.GetRelatedObject("ContactPerson");
+            return (ContactPerson)Relationships.GetRelatedObject("ContactPerson");
         }
 
         #endregion //Relationships
 
         #region ForTesting
 
-        internal static void DeleteAllAddresses()
+        public static void DeleteAllAddresses()
         {
             string sql = "DELETE FROM Address";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
@@ -207,7 +207,7 @@ namespace Habanero.Test.General
         }
 
         protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
-                                                                                  string orderByClause)
+                                                                                              string orderByClause)
         {
             BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(GetClassDef());
             bOCol.Load(searchCriteria, orderByClause);
@@ -215,6 +215,5 @@ namespace Habanero.Test.General
         }
 
         #endregion
-	}
-
+    }
 }

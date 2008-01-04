@@ -45,11 +45,12 @@ namespace Habanero.UI.Grid
         /// </summary>
         public ReadOnlyGrid() : base()
         {
-            this.ReadOnly = true;
-            this.CollectionChanged += new EventHandler(CollectionChangedHandler);
-            this.DoubleClick += new EventHandler(DoubleClickHandler);
-            this.AllowUserToAddRows = false;
-            this.AllowUserToDeleteRows = false;
+            ReadOnly = true;
+            CollectionChanged += new EventHandler(CollectionChangedHandler);
+            DoubleClick += new EventHandler(DoubleClickHandler);
+            AllowUserToAddRows = false;
+            AllowUserToDeleteRows = false;
+            SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
         /// <summary>
@@ -81,12 +82,13 @@ namespace Habanero.UI.Grid
         }
 
         /// <summary>
-        /// Gets and sets the selected business object
+        /// Gets and sets the selected business object in the grid
         /// </summary>
         public BusinessObject SelectedBusinessObject
         {
             set
             {
+                ClearSelection();
                 if (value == null)
                 {
                     if (this.CurrentRow == null) return;
@@ -100,9 +102,13 @@ namespace Habanero.UI.Grid
                     {
                         this.SetSelectedRowCore(i, true);
                         this.SetCurrentCellAddressCore(1, i, true, false, false);
-                        return;
+                        break;
                     }
                     i++;
+                }
+                if (!CurrentRow.Displayed)
+                {
+                    FirstDisplayedScrollingRowIndex = Rows.IndexOf(CurrentRow);
                 }
             }
             get { return this.GetSelectedBusinessObject(); }
@@ -111,6 +117,7 @@ namespace Habanero.UI.Grid
         /// <summary>
         /// Returns a list of the business objects currently selected
         /// </summary>
+        // TODO Eric: why is this an IList instead of IBusinessObjectCollection?
         public IList SelectedBusinessObjects
         {
             get { return this.GetSelectedBusinessObjects(); }

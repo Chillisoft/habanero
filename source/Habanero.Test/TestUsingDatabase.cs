@@ -19,7 +19,6 @@
 
 using Habanero.DB;
 using Habanero.Test;
-using Habanero.Test.General;
 
 namespace Habanero.Test
 {

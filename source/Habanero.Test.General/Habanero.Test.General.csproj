@@ -121,37 +121,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Address.cs" />
-    <Compile Include="CircleNoPrimaryKey.cs" />
-    <Compile Include="FilledCircleNoPrimaryKeyInheritsCircle.cs" />
     <Compile Include="TestInheritanceHeirarchyClassSingle.cs" />
     <Compile Include="TestInheritanceHeirarchySingleClass.cs" />
-    <Compile Include="FilledCircleInheritsCircleNoPK.cs" />
-    <Compile Include="FilledCircleNoPrimaryKey.cs" />
     <Compile Include="TestInheritanceClassTableNoID.cs" />
     <Compile Include="TestInheritanceClassTableCopyID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Car.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Circle.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ColContactPeople.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ContactPerson.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ContactPersonCompositeKey.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Engine.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FilledCircle.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestBOSqlGeneration.cs">

@@ -24,7 +24,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.DB;
 
-namespace Habanero.Test.General
+namespace Habanero.Test
 {
     /// <summary>
     /// Summary description for Engine.
@@ -33,11 +33,11 @@ namespace Habanero.Test.General
     {
         #region Constructors
 
-        internal Engine() : base()
+        public Engine() : base()
         {
         }
 
-        internal Engine(BOPrimaryKey id) : base(id)
+        public Engine(BOPrimaryKey id) : base(id)
         {
         }
 
@@ -72,7 +72,7 @@ namespace Habanero.Test.General
 
             ClassDef lClassDef = new ClassDef(typeof (Engine), primaryKey, lPropDefCol, keysCol, relDefCol);
             lClassDef.TableName = "Table_Engine";
-			ClassDef.ClassDefs.Add(lClassDef);
+            ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
@@ -154,7 +154,7 @@ namespace Habanero.Test.General
             BusinessObject.ClearLoadedBusinessObjectBaseCol();
         }
 
-        internal static void DeleteAllEngines()
+        public static void DeleteAllEngines()
         {
             string sql = "DELETE FROM " + GetClassDef().TableName;
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
@@ -176,7 +176,7 @@ namespace Habanero.Test.General
         }
 
         protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
-                                                                                  string orderByClause)
+                                                                                              string orderByClause)
         {
             BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(GetClassDef());
             bOCol.Load(searchCriteria, orderByClause);

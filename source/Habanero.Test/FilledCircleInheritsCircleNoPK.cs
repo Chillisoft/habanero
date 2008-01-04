@@ -18,29 +18,22 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.Bo.ClassDefinition;
-using Habanero.Bo;
+using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Test.General
+namespace Habanero.Test
 {
-    public class Shape : BusinessObject
+    public class FilledCircleInheritsCircleNoPK : CircleNoPrimaryKey
     {
-        public static Shape GetNewObject()
-        {
-            Shape obj = new Shape();
-            AddToLoadedBusinessObjectCol(obj);
-            return obj;
-        }
 
         public static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (Shape)))
+            if (!ClassDef.IsDefined(typeof(FilledCircleInheritsCircleNoPK)))
             {
                 return CreateClassDef();
             }
             else
             {
-                return ClassDef.GetClassDefCol[typeof (Shape)];
+                return ClassDef.ClassDefs[typeof(FilledCircleInheritsCircleNoPK)];
             }
         }
 
@@ -54,33 +47,31 @@ namespace Habanero.Test.General
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("ShapeName", typeof (String), PropReadWriteRule.ReadManyWriteMany, "ShapeName", null);
+                new PropDef("Colour", typeof (int), PropReadWriteRule.ReadWrite, "Colour", null);
             lPropDefCol.Add(propDef);
-            propDef = lPropDefCol.Add("ShapeID", typeof (Guid), PropReadWriteRule.ReadManyWriteOnce, null);
+            propDef = lPropDefCol.Add("FilledCircleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
-            primaryKey.Add(lPropDefCol["ShapeID"]);
+            primaryKey.Add(lPropDefCol["FilledCircleID"]);
             KeyDefCol keysCol = new KeyDefCol();
-            KeyDef lKeyDef = new KeyDef();
-            lKeyDef.Add(lPropDefCol["ShapeName"]);
-            keysCol.Add(lKeyDef);
-            RelKeyDef relKeyDef = new RelKeyDef();
-            RelPropDef lRelPropDef = new RelPropDef(propDef, "OwnerID");
-            relKeyDef.Add(lRelPropDef);
-            RelationshipDef relDef = new MultipleRelationshipDef("Owner", typeof (Shape),
-                                                                 relKeyDef, false, "", -1, -1,
-                                                                 DeleteParentAction.DereferenceRelatedObjects);
             RelationshipDefCol relDefCol = new RelationshipDefCol();
-            relDefCol.Add(relDef);
-            ClassDef lClassDef = new ClassDef(typeof (Shape), primaryKey, lPropDefCol, keysCol, relDefCol);
-			ClassDef.GetClassDefCol.Add(lClassDef);
+            //ClassDef lClassDef = new ClassDef(typeof(FilledCircleInheritsCircleNoPK), primaryKey, lPropDefCol, keysCol, relDefCol);
+            ClassDef lClassDef = new ClassDef(typeof(FilledCircleInheritsCircleNoPK), primaryKey, "FilledCircle", lPropDefCol, keysCol, relDefCol, null);
+            lClassDef.SuperClassDef = new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.ConcreteTableInheritance);
+            ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
-        public string ShapeName
+        public Guid? FilledCircleID
         {
-            get { return (string) this.GetPropertyValue("ShapeName"); }
-            set { this.SetPropertyValue("ShapeName", value); }
+            get { return (Guid?)GetPropertyValue("FilledCircleID"); }
+            set { SetPropertyValue("FilledCircleID", value); }
+        }
+
+        public Int32? Colour
+        {
+            get { return (Int32?)GetPropertyValue("Colour"); }
+            set { SetPropertyValue("Colour", value); }
         }
     }
 }

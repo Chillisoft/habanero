@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address.cs" />
     <Compile Include="ArchitectureTest.cs" />
     <Compile Include="Base\TestGlobalRegistry.cs" />
     <Compile Include="Base\TestHabaneroApp.cs" />
@@ -54,6 +55,17 @@
     <Compile Include="Base\TestRSAPasswordCrypter.cs" />
     <Compile Include="Base\TestXmlWrapper.cs" />
     <Compile Include="BeforeSaveBo.cs" />
+    <Compile Include="Car.cs" />
+    <Compile Include="Circle.cs" />
+    <Compile Include="CircleNoPrimaryKey.cs" />
+    <Compile Include="ColContactPeople.cs" />
+    <Compile Include="ContactPerson.cs" />
+    <Compile Include="ContactPersonCompositeKey.cs" />
+    <Compile Include="Engine.cs" />
+    <Compile Include="FilledCircle.cs" />
+    <Compile Include="FilledCircleInheritsCircleNoPK.cs" />
+    <Compile Include="FilledCircleNoPrimaryKey.cs" />
+    <Compile Include="FilledCircleNoPrimaryKeyInheritsCircle.cs" />
     <Compile Include="MyBo.cs" />
     <Compile Include="MyDBConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

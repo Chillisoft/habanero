@@ -41,6 +41,8 @@ namespace Habanero.Test
         //{
         //}
 
+        public MyBO(IDatabaseConnection conn) : base(conn){}
+
         protected override ClassDef ConstructClassDef()
         {
             return _classDef;

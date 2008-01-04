@@ -17,20 +17,18 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-
-namespace CoreBoTester
+namespace Habanero.Test
 {
-	/// <summary>
-	/// Summary description for Class1.
-	/// </summary>
-	public class Class1
-	{
-		public Class1()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-	}
+    /// <summary>
+    /// Summary description for Class2.
+    /// </summary>
+    public class ColContactPeople
+    {
+        public ColContactPeople()
+        {
+            //
+            // TODO: Add constructor logic here
+            //
+        }
+    }
 }

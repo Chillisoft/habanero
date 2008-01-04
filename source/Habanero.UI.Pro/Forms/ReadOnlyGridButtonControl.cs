@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.UI.Base;
@@ -25,6 +27,8 @@ namespace Habanero.UI.Forms
         private IObjectCreator _objectCreator;
         private IObjectInitialiser _objectInitialiser;
         private RowDoubleClickedHandler _doubleClickedDelegate;
+        private Button _deleteButton;
+        private bool _confirmDeletion;
 
         /// <summary>
         /// Constructor to initialise a new button control
@@ -33,11 +37,15 @@ namespace Habanero.UI.Forms
         public ReadOnlyGridButtonControl(IReadOnlyGrid readOnlyGrid)
         {
             Permission.Check(this);
+            _deleteButton = this.AddButton("Delete", new EventHandler(DeleteButtonClickHandler));
+            _deleteButton.Visible = false;
             this.AddButton("Add", new EventHandler(AddButtonClickHandler));
             this.AddButton("Edit", new EventHandler(EditButtonClickHandler));
             this._readOnlyGrid = readOnlyGrid;
             _doubleClickedDelegate = new RowDoubleClickedHandler(RowDoubleClickedHandler);
             this._readOnlyGrid.RowDoubleClicked += _doubleClickedDelegate;
+
+            _confirmDeletion = true;
         }
 
         /// <summary>
@@ -99,6 +107,65 @@ namespace Habanero.UI.Forms
         }
 
         /// <summary>
+        /// Handles the event of the "Delete" button being pressed
+        /// </summary>
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        private void DeleteButtonClickHandler(object sender, EventArgs e)
+        {
+            IList boCol = _readOnlyGrid.SelectedBusinessObjects;
+            if (boCol.Count > 0)
+            {
+                if (ConfirmDeletion && MessageBox.Show("Are you sure you want to delete the selected row(s)?",
+                    "Delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+                {
+                    return;
+                }
+
+                while (boCol.Count > 0)
+                {
+                    BusinessObject bo = (BusinessObject) boCol[0];
+                    bo.Delete();
+                    try
+                    {
+                        bo.Save();
+                    }
+                    catch (Exception ex)
+                    {
+                        GlobalRegistry.UIExceptionNotifier.Notify(ex,
+                                                                  "A selected row could not be deleted.",
+                                                                  "Deletion Error");
+                        bo.Restore();
+                        return;
+                    }
+                }
+                _readOnlyGrid.SelectedBusinessObject = _readOnlyGrid.SelectedBusinessObject;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility of the "Delete" button.  When
+        /// visible, clicking the delete button will require "yes"
+        /// confirmation from the user and will then delete the
+        /// current row if possible.
+        /// </summary>
+        public bool ShowDefaultDeleteButton
+        {
+            get { return _deleteButton.Visible; }
+            set { _deleteButton.Visible = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the boolean value that determines whether to confirm
+        /// deletion with the user when they have clicked the Delete button
+        /// </summary>
+        public bool ConfirmDeletion
+        {
+            get { return _confirmDeletion; }
+            set { _confirmDeletion = value; }
+        }
+
+        /// <summary>
         /// Sets the object editor.  This editor would typically be called to edit
         /// the currently selected object on the grid if such a provision is made 
         /// on the grid.
@@ -126,6 +193,10 @@ namespace Habanero.UI.Forms
             set { _objectInitialiser = value; }
         }
 
+        /// <summary>
+        /// Checks that the object creator has been defined and throws
+        /// an exception if not
+        /// </summary>
         private void CheckCreatorExists()
         {
             if (_objectCreator == null)
@@ -139,6 +210,10 @@ namespace Habanero.UI.Forms
             }
         }
 
+        /// <summary>
+        /// Checks that the object editor has been defined and throws
+        /// an exception if not
+        /// </summary>
         private void CheckEditorExists()
         {
             if (_objectEditor == null)

@@ -20,23 +20,20 @@
 using System;
 using Habanero.BO.ClassDefinition;
 
-namespace Habanero.Test.General
+namespace Habanero.Test
 {
-    /// <summary>
-    /// FilledCircle with no primary key, used for special forms of inheritance, eg SingleTableInheritance
-    /// </summary>
-    public class FilledCircleNoPrimaryKeyInheritsCircle : Circle
+    public class CircleNoPrimaryKey : Shape
     {
 
         public static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof(FilledCircleNoPrimaryKeyInheritsCircle)))
+            if (!ClassDef.IsDefined(typeof(CircleNoPrimaryKey)))
             {
                 return CreateClassDef();
             }
             else
             {
-                return ClassDef.ClassDefs[typeof (FilledCircleNoPrimaryKeyInheritsCircle)];
+                return ClassDef.ClassDefs[typeof(CircleNoPrimaryKey)];
             }
         }
 
@@ -50,21 +47,23 @@ namespace Habanero.Test.General
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Colour", typeof (int), PropReadWriteRule.ReadWrite, "Colour", null);
+                new PropDef("Radius", typeof (int), PropReadWriteRule.ReadWrite, "Radius", null);
             lPropDefCol.Add(propDef);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
-            //ClassDef lClassDef = new ClassDef(typeof (FilledCircleNoPrimaryKeyInheritsCircle), null, lPropDefCol, keysCol, relDefCol);
-            ClassDef lClassDef = new ClassDef(typeof(FilledCircleNoPrimaryKeyInheritsCircle), null, "FilledCircle", lPropDefCol, keysCol, relDefCol, null);
-            lClassDef.SuperClassDef = new SuperClassDef(Circle.GetClassDef(), ORMapping.ConcreteTableInheritance);
-			ClassDef.ClassDefs.Add(lClassDef);
+            ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, "Circle", lPropDefCol, keysCol, relDefCol, null);
+            //ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, lPropDefCol, keysCol, relDefCol);
+            
+            lClassDef.SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
+
+            ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
-        public Int32? Colour
+        public int Radius
         {
-            get { return (Int32?)GetPropertyValue("Colour"); }
-            set { SetPropertyValue("Colour", value); }
+            get { return (int)GetPropertyValue("Radius"); }
+            set { SetPropertyValue("Radius", value); }
         }
     }
 }
