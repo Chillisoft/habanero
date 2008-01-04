@@ -25,7 +25,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.DB;
 
-namespace Habanero.Test.General
+namespace Habanero.Test
 {
     public class Car : BusinessObject
     {
@@ -74,7 +74,7 @@ namespace Habanero.Test.General
 
 
             ClassDef lClassDef = new ClassDef(typeof (Car), primaryKey, lPropDefCol, keysCol, relDefCol);
-			ClassDef.ClassDefs.Add(lClassDef);
+            ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
@@ -157,7 +157,7 @@ namespace Habanero.Test.General
             if (myCar == null)
             {
                 myCar = new Car(id);
-               // AddToLoadedBusinessObjectCol(myCar);
+                // AddToLoadedBusinessObjectCol(myCar);
             }
             return myCar;
         }
@@ -193,7 +193,7 @@ namespace Habanero.Test.General
 
         #region ForTesting
 
-        internal static void DeleteAllCars()
+        public static void DeleteAllCars()
         {
             string sql = "DELETE FROM Car";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
@@ -215,7 +215,7 @@ namespace Habanero.Test.General
         }
 
         protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
-                                                                                  string orderByClause)
+                                                                                              string orderByClause)
         {
             BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(GetClassDef());
             bOCol.Load(searchCriteria, orderByClause);

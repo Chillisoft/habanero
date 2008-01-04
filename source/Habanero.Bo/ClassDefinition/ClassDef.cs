@@ -367,7 +367,7 @@ namespace Habanero.BO.ClassDefinition
         public RelationshipDefCol RelationshipDefCol
         {
             get { return _relationshipDefCol; }
-			protected set { _relationshipDefCol = value; }
+			set { _relationshipDefCol = value; }
         }
 
         /// <summary>

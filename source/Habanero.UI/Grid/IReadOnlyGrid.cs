@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using Habanero.BO;
 using Habanero.UI.Base;
 
@@ -39,6 +40,11 @@ namespace Habanero.UI.Grid
         /// Gets and sets the currently selected business object
         /// </summary>
         BusinessObject SelectedBusinessObject { set; get; }
+
+        /// <summary>
+        /// Returns a list of the business objects currently selected
+        /// </summary>
+        IList SelectedBusinessObjects { get; }
         
         /// <summary>
         /// Adds a business object to the collection being represented

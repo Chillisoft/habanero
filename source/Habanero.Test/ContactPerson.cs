@@ -26,17 +26,8 @@ using Habanero.BO.CriteriaManager;
 using Habanero.BO;
 using Habanero.DB;
 
-namespace Habanero.Test.General
+namespace Habanero.Test
 {
-    // TODO:
-    //	internal class ContactPersonCreator: IObjectCreator	
-    //	{
-    //		public BusinessObjectBase CreateBusinessObject ()
-    //		{
-    //			return new ContactPerson();
-    //		}
-    //	}
-
     public class ContactPerson : BusinessObject
     {
         #region Fields
@@ -136,7 +127,7 @@ namespace Habanero.Test.General
             RelationshipDefCol relDefs = CreateRelationshipDefCol(lPropDefCol);
 
             ClassDef lClassDef = new ClassDef(typeof (ContactPerson), primaryKey, lPropDefCol, keysCol, relDefs);
-			ClassDef.ClassDefs.Add(lClassDef);
+            ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
 
@@ -146,28 +137,28 @@ namespace Habanero.Test.General
 
             //Define Owner Relationships
             RelKeyDef relKeyDef;
-        	PropDef propDef;
-        	RelPropDef lRelPropDef;
-			RelationshipDef relDef;
-        	relKeyDef = new RelKeyDef();
-        	propDef = lPropDefCol["ContactPersonID"];
-        	lRelPropDef = new RelPropDef(propDef, "OwnerId");
-        	relKeyDef.Add(lRelPropDef);
-        	relDef = new MultipleRelationshipDef("Owner", typeof(Car),
-        	                                     relKeyDef, false, "",
-        	                                     DeleteParentAction.DereferenceRelated);
-        	relDefCol.Add(relDef);
+            PropDef propDef;
+            RelPropDef lRelPropDef;
+            RelationshipDef relDef;
+            relKeyDef = new RelKeyDef();
+            propDef = lPropDefCol["ContactPersonID"];
+            lRelPropDef = new RelPropDef(propDef, "OwnerId");
+            relKeyDef.Add(lRelPropDef);
+            relDef = new MultipleRelationshipDef("Owner", typeof(Car),
+                                                 relKeyDef, false, "",
+                                                 DeleteParentAction.DereferenceRelated);
+            relDefCol.Add(relDef);
 
-			relKeyDef = new RelKeyDef();
-			propDef = lPropDefCol["ContactPersonID"];
-			lRelPropDef = new RelPropDef(propDef, "ContactPersonID");
-			relKeyDef.Add(lRelPropDef);
-			relDef = new MultipleRelationshipDef("Addresses", typeof(Address),
-													 relKeyDef, false, "",
-													 DeleteParentAction.DeleteRelated);
-			relDefCol.Add(relDef);
+            relKeyDef = new RelKeyDef();
+            propDef = lPropDefCol["ContactPersonID"];
+            lRelPropDef = new RelPropDef(propDef, "ContactPersonID");
+            relKeyDef.Add(lRelPropDef);
+            relDef = new MultipleRelationshipDef("Addresses", typeof(Address),
+                                                 relKeyDef, false, "",
+                                                 DeleteParentAction.DeleteRelated);
+            relDefCol.Add(relDef);
 			
-			return relDefCol;
+            return relDefCol;
         }
 
         private static PropDefCol CreateBOPropDef()
@@ -265,6 +256,12 @@ namespace Habanero.Test.General
 
         #region Properties
 
+        public Guid? ContactPersonID
+        {
+            get { return (Guid?)GetPropertyValue("ContactPersonID"); }
+            set { SetPropertyValue("ContactPersonID", value); }
+        }
+
         public string Surname
         {
             get { return GetPropertyValueString("Surname"); }
@@ -295,26 +292,26 @@ namespace Habanero.Test.General
 
         #region Relationships
 
-		public BusinessObjectCollection<BusinessObject> GetCarsOwned()
-		{
-			return Relationships.GetRelatedCollection("Owner");
-		}
+        public BusinessObjectCollection<BusinessObject> GetCarsOwned()
+        {
+            return Relationships.GetRelatedCollection("Owner");
+        }
 
-		public BusinessObjectCollection<Address> Addresses
-		{
-			get { return Relationships.GetRelatedCollection<Address>("Addresses"); }
-		}
+        public BusinessObjectCollection<Address> Addresses
+        {
+            get { return Relationships.GetRelatedCollection<Address>("Addresses"); }
+        }
 
-		#endregion //Relationships
+        #endregion //Relationships
 
         #region ForTesting
 
-        internal static void ClearContactPersonCol()
+        public static void ClearContactPersonCol()
         {
             BusinessObject.ClearLoadedBusinessObjectBaseCol();
         }
 
-        internal static void DeleteAllContactPeople()
+        public static void DeleteAllContactPeople()
         {
             string sql = "DELETE FROM ContactPerson";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
@@ -330,13 +327,13 @@ namespace Habanero.Test.General
             return _primaryKey.GetObjectNewID();
         }
 
-        protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol()
+        public static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol()
         {
             return LoadBusinessObjCol("", "");
         }
 
-        protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
-                                                                                  string orderByClause)
+        public static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
+                                                                                              string orderByClause)
         {
             BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(GetClassDef());
             bOCol.Load(searchCriteria, orderByClause);
@@ -344,5 +341,18 @@ namespace Habanero.Test.General
         }
 
         #endregion
+
+        public void AddPreventDeleteRelationship()
+        {
+            RelKeyDef relKeyDef = new RelKeyDef();
+            RelPropDef lRelPropDef = new RelPropDef(ClassDef.PropDefcol["ContactPersonID"], "ContactPersonID");
+            relKeyDef.Add(lRelPropDef);
+            RelationshipDef relDef = new MultipleRelationshipDef("AddressesNoDelete", typeof(Address),
+                                                                  relKeyDef, false, "", DeleteParentAction.Prevent);
+            ClassDef.RelationshipDefCol = new RelationshipDefCol();
+            ClassDef.RelationshipDefCol.Add(relDef);
+
+            ((RelationshipCol)Relationships).Add(new MultipleRelationship(this, relDef, Props));
+        }
     }
 }
