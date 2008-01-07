@@ -188,6 +188,11 @@ namespace Habanero.UI.Forms
                         new GridLayoutManager.ControlInfo(ControlFactory.CreateLabel(field.Label, isCompulsory));
                     Control ctl = ControlFactory.CreateControl(field.ControlType);
 
+                    if (ctl is TextBox && _boArray[0].Props[field.PropertyName].PropertyType == typeof(bool))
+                    {
+                        ctl = ControlFactory.CreateControl(typeof (CheckBox));
+                    }
+
                     bool editable = CheckIfEditable(field, ctl);
 
                     if (ctl is TextBox)
