@@ -71,5 +71,21 @@ namespace Habanero.Test.UI.Grid
             Assert.AreSame(typeof (DataGridViewTextBoxColumn), grid.Columns[1].GetType());
             Assert.AreSame(typeof (DataGridViewComboBoxColumn), grid.Columns[2].GetType());
         }
+
+        [Test]
+        public void TestPropertyAssignments()
+        {
+            Assert.IsFalse(grid.ConfirmDeletion);
+            grid.ConfirmDeletion = true;
+            Assert.IsTrue(grid.ConfirmDeletion);
+
+            Assert.AreEqual(EditableGrid.DeleteKeyBehaviours.DeleteRow, grid.DeleteKeyBehaviour);
+            grid.DeleteKeyBehaviour = EditableGrid.DeleteKeyBehaviours.ClearContents;
+            Assert.AreEqual(EditableGrid.DeleteKeyBehaviours.ClearContents, grid.DeleteKeyBehaviour);
+            grid.DeleteKeyBehaviour = EditableGrid.DeleteKeyBehaviours.None;
+            Assert.AreEqual(EditableGrid.DeleteKeyBehaviours.None, grid.DeleteKeyBehaviour);
+            grid.DeleteKeyBehaviour = EditableGrid.DeleteKeyBehaviours.DeleteRow;
+            Assert.AreEqual(EditableGrid.DeleteKeyBehaviours.DeleteRow, grid.DeleteKeyBehaviour);
+        }
     }
 }

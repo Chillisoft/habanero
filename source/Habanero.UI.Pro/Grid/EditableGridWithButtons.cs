@@ -20,7 +20,10 @@ namespace Habanero.UI.Grid
     /// SetCollection().<br/>
     /// To have further control of particular aspects of the buttons or
     /// grid, access the standard functionality through the Grid and
-    /// Buttons properties (eg. myGridWithButtons.Buttons.AddButton(...)).
+    /// Buttons properties (eg. myGridWithButtons.Buttons.AddButton(...)).<br/>
+    /// Note that this grid does not warn the user when it is being closed
+    /// with unsaved changes.  The Closing event on the parent form needs to
+    /// be used to do a dirty check and prevent closing.
     /// </summary>
     public class EditableGridWithButtons : UserControl, IGridWithButtons
     {
@@ -76,6 +79,16 @@ namespace Habanero.UI.Grid
         public GridBase Grid
         {
             get { return _grid; }
+        }
+
+        /// <summary>
+        /// Gets or sets the boolean value that determines whether to confirm
+        /// deletion with the user when they have chosen to delete a row
+        /// </summary>
+        public bool ConfirmDeletion
+        {
+            get { return _grid.ConfirmDeletion; }
+            set { _grid.ConfirmDeletion = value; }
         }
 
         /// <summary>

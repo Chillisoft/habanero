@@ -177,6 +177,16 @@ namespace Habanero.UI.Grid
         }
 
         /// <summary>
+        /// Gets or sets the boolean value that determines whether to confirm
+        /// deletion with the user when they have clicked the Delete button
+        /// </summary>
+        public bool ConfirmDeletion
+        {
+            get { return _buttons.ConfirmDeletion; }
+            set { _buttons.ConfirmDeletion = value; }
+        }
+
+        /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
         /// grid.  This method assumes a default ui definition is to be
