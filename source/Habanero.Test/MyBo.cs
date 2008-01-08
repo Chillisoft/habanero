@@ -99,14 +99,8 @@ namespace Habanero.Test
 								</columnLayout>
 							</tab>
 						</form>
-					</ui>
-
-
-
-
+					</ui>                    
 				</class>
-
-
 			");
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
@@ -138,6 +132,41 @@ namespace Habanero.Test
 								</columnLayout>
 							</tab>
 						</form>
+					</ui>
+                    <ui name=""Success1"">
+						<grid sortColumn=""TestProp"">
+							<column property=""TestProp"" />
+						</grid>
+					</ui>
+                    <ui name=""Success2"">
+						<grid sortColumn=""TestProp asc"">
+							<column property=""TestProp"" />
+						</grid>
+					</ui>
+                    <ui name=""Success3"">
+						<grid sortColumn=""TestProp desc"">
+							<column property=""TestProp"" />
+						</grid>
+					</ui>
+                    <ui name=""Success4"">
+						<grid sortColumn=""TestProp des"">
+							<column property=""TestProp"" />
+						</grid>
+					</ui>
+                    <ui name=""Error1"">
+						<grid sortColumn=""TestProps"">
+							<column property=""TestProp"" />
+						</grid>
+					</ui>
+                    <ui name=""Error2"">
+						<grid sortColumn=""TestProps desc"">
+							<column property=""TestProp"" />
+						</grid>
+					</ui>
+                    <ui name=""Error3"">
+						<grid sortColumn=""TestProps descs"">
+							<column property=""TestProp"" />
+						</grid>
 					</ui>
 				</class>
 

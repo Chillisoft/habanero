@@ -79,6 +79,10 @@ namespace Habanero.Test.UI.Grid
             grid.ConfirmDeletion = true;
             Assert.IsTrue(grid.ConfirmDeletion);
 
+            Assert.IsTrue(grid.ComboBoxClickOnce);
+            grid.ComboBoxClickOnce = false;
+            Assert.IsFalse(grid.ComboBoxClickOnce);
+
             Assert.AreEqual(EditableGrid.DeleteKeyBehaviours.DeleteRow, grid.DeleteKeyBehaviour);
             grid.DeleteKeyBehaviour = EditableGrid.DeleteKeyBehaviours.ClearContents;
             Assert.AreEqual(EditableGrid.DeleteKeyBehaviours.ClearContents, grid.DeleteKeyBehaviour);
@@ -86,6 +90,10 @@ namespace Habanero.Test.UI.Grid
             Assert.AreEqual(EditableGrid.DeleteKeyBehaviours.None, grid.DeleteKeyBehaviour);
             grid.DeleteKeyBehaviour = EditableGrid.DeleteKeyBehaviours.DeleteRow;
             Assert.AreEqual(EditableGrid.DeleteKeyBehaviours.DeleteRow, grid.DeleteKeyBehaviour);
+
+            Assert.IsTrue(grid.CompulsoryColumnsBold);
+            grid.CompulsoryColumnsBold = false;
+            Assert.IsFalse(grid.CompulsoryColumnsBold);
         }
     }
 }

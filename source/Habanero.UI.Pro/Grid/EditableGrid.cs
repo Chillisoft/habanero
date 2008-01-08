@@ -22,8 +22,9 @@ namespace Habanero.UI.Grid
     public class EditableGrid : GridBase, IEditableGrid
     {
         private bool _confirmDeletion;
+        private bool _comboBoxClickOnce;
         private DeleteKeyBehaviours _deleteKeyBehaviour;
-
+        
         /// <summary>
         /// Indicates what action should be taken when a selection of
         /// cells is selected and the Delete key is pressed.  Note that
@@ -47,9 +48,12 @@ namespace Habanero.UI.Grid
         {
             Permission.Check(this);
             _confirmDeletion = false;
+            _comboBoxClickOnce = true;
             _deleteKeyBehaviour = DeleteKeyBehaviours.DeleteRow;
+            CompulsoryColumnsBold = true;
 
             UserDeletingRow += new DataGridViewRowCancelEventHandler(ConfirmRowDeletion);
+            CellClick += new DataGridViewCellEventHandler(CellClickHandler);
         }
 
         /// <summary>
@@ -60,6 +64,18 @@ namespace Habanero.UI.Grid
         {
             get { return _confirmDeletion; }
             set { _confirmDeletion = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the boolean value that determines whether clicking on
+        /// a ComboBox cell causes the drop-down to appear immediately.  Set this
+        /// to false if the user should click twice (first to select, then to
+        /// edit).
+        /// </summary>
+        public bool ComboBoxClickOnce
+        {
+            get { return _comboBoxClickOnce; }
+            set { _comboBoxClickOnce = value; }
         }
 
         /// <summary>
@@ -198,6 +214,25 @@ namespace Habanero.UI.Grid
                 return this.ProcessDeleteKey(e.KeyData);
             }
             return base.ProcessDataGridViewKey(e);
+        }
+
+        /// <summary>
+        /// Carries out additional actions when a cell is clicked.  Specifically, if
+        /// a combobox cell is clicked, the cell goes into edit mode immediately.
+        /// </summary>
+        private void CellClickHandler(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex != -1 && e.ColumnIndex != -1)
+            {
+                if (!CurrentCell.IsInEditMode && Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
+                {
+                    BeginEdit(true);
+                    if (EditingControl is DataGridViewComboBoxEditingControl)
+                    {
+                        ((DataGridViewComboBoxEditingControl) EditingControl).DroppedDown = true;
+                    }
+                }
+            }
         }
     }
 }

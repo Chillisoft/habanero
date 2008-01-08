@@ -19,12 +19,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Grid;
+using Habanero.Util;
 using log4net;
 using BusinessObject=Habanero.BO.BusinessObject;
 
@@ -47,6 +52,7 @@ namespace Habanero.UI.Grid
         private SetCollectionDelegate _setCollection;
         private SetSortColumnDelegate _setSortColumn;
         private string _uiName;
+        private bool _compulsoryColumnsBold;
         
         public event EventHandler CollectionChanged;
         public event EventHandler FilterUpdated;
@@ -58,7 +64,9 @@ namespace Habanero.UI.Grid
         {
             _setCollection = new SetCollectionDelegate(SetCollectionInSTAThread);
             _setSortColumn = new SetSortColumnDelegate(SetSortColumnInSTAThread);
-			DataSourceChanged += Grid_DataSourceChanged;
+            _compulsoryColumnsBold = false;
+			
+            DataSourceChanged += Grid_DataSourceChanged;
         }
 
     	/// <summary>
@@ -73,8 +81,15 @@ namespace Habanero.UI.Grid
         {
             try
             {
-                BeginInvoke(_setCollection, new object[] { col, uiName });
-                // needed to do the call on the Forms thread.  See info about STA thread model.
+                if (InvokeRequired)
+                {
+                    BeginInvoke(_setCollection, new object[] {col, uiName});
+                }
+                else
+                {
+                    this.SetCollectionInSTAThread(col, uiName);
+                }
+    	        // needed to do the call on the Forms thread.  See info about STA thread model.
             }
             catch (InvalidOperationException)
             {
@@ -172,6 +187,7 @@ namespace Habanero.UI.Grid
                 col.Name = dataColumn.ColumnName;
                 col.DataPropertyName = dataColumn.ColumnName;
                 //col.MappingName = dataColumn.ColumnName;
+                col.SortMode = DataGridViewColumnSortMode.Automatic;
 
                 switch (gridColumn.Alignment)
                 {
@@ -185,20 +201,80 @@ namespace Habanero.UI.Grid
                         col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                         break;
                 }
-                this.Columns.Add(col);
+                if (CompulsoryColumnsBold &&
+                    collection.ClassDef.PropDefcol[gridColumn.PropertyName].Compulsory)
+                {
+                    Font newFont = new Font(DefaultCellStyle.Font, FontStyle.Bold);
+                    col.HeaderCell.Style.Font = newFont;
+                }
+
+                Columns.Add(col);
                 colNum++;
             }
 
             _dataTableDefaultView = _dataTable.DefaultView;
-
             this.AutoGenerateColumns = false;
             this.DataSource = _dataTableDefaultView;
-
             //this.DataSource = _dataTable;
+            SetSorting(grid);
             FireCollectionChanged();
         }
-		
-		private void Grid_DataSourceChanged(object sender, EventArgs e)
+
+        /// <summary>
+        /// Sets the sort column as per the SortColumn property for
+        /// the given grid definition
+        /// </summary>
+        private void SetSorting(UIGrid grid)
+        {
+            if (!String.IsNullOrEmpty(grid.SortColumn))
+            {
+                bool columnNameExists = false;
+                string columnName = grid.SortColumn;
+                if (grid.SortColumn.Contains(" "))
+                {
+                    columnName = StringUtilities.GetLeftSection(grid.SortColumn, " ");
+                }
+                foreach (UIGridColumn column in grid)
+                {
+                    if (column.PropertyName == columnName)
+                    {
+                        columnNameExists = true;
+                    }
+                }
+                if (!columnNameExists)
+                {
+                    throw new InvalidXmlDefinitionException(String.Format(
+                        "In a 'sortOrder' attribute on a 'grid' element, the " +
+                        "column name '{0}' does not exist.", grid.SortColumn));
+                }
+
+                ListSortDirection direction = ListSortDirection.Ascending;
+                if (grid.SortColumn.Contains(" "))
+                {
+                    string sortOrder = StringUtilities.GetRightSection(grid.SortColumn, columnName + " ");
+                    if (sortOrder.ToLower() == "asc")
+                    {
+                        direction = ListSortDirection.Ascending;
+                    }
+                    else if (sortOrder.ToLower() == "desc" || sortOrder.ToLower() == "des")
+                    {
+                        direction = ListSortDirection.Descending;
+                    }
+                    else
+                    {
+                        throw new InvalidXmlDefinitionException(String.Format(
+                            "In a 'sortOrder' attribute on a 'grid' element, the " +
+                            "attribute given as '{0}' was not valid.  The correct " +
+                            "definition has the form of 'columnName' or " +
+                            "'columnName asc' or 'columnName desc'.", grid.SortColumn));
+                    }
+                }
+
+                Sort(Columns[columnName], direction);
+            }
+        }
+
+        private void Grid_DataSourceChanged(object sender, EventArgs e)
 		{
 			if (Columns.Contains("ID"))
 			{
@@ -229,6 +305,16 @@ namespace Habanero.UI.Grid
         public string UIName
         {
             get { return _uiName; }
+        }
+
+        /// <summary>
+        /// Gets or sets the boolean value that determines whether column
+        /// headers for compulsory values should be in bold type or not
+        /// </summary>
+        public bool CompulsoryColumnsBold
+        {
+            get { return _compulsoryColumnsBold; }
+            set { _compulsoryColumnsBold = value; }
         }
 
         /// <summary>

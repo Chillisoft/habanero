@@ -27,11 +27,6 @@ namespace Habanero.UI.Grid
     public interface IGridWithButtons
     {
         /// <summary>
-        /// Returns the grid object
-        /// </summary>
-        GridBase Grid { get; }
-
-        /// <summary>
         /// Saves the changes made to the grid, committing them to the
         /// database
         /// </summary>

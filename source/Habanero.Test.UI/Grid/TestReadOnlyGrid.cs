@@ -18,7 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System.Data;
+using System.Threading;
 using System.Windows.Forms;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.Test;
@@ -64,8 +66,6 @@ namespace Habanero.Test.UI.Grid
             itsDataSource = grid.DataTable;
         }
 
-
-
         [TearDown]
         public void TearDown()
         {
@@ -95,6 +95,55 @@ namespace Habanero.Test.UI.Grid
         {
             IBusinessObjectCollection cloneCol = grid.GetCollectionClone();
             Assert.AreEqual(cloneCol.Count,2 );
+        }
+
+        /// <summary>
+        /// The following few tests monitor the sorting done in Gridbase based
+        /// on the "sortColumn" attribute and apply equally to EditableGrid
+        /// </summary>
+        [Test]
+        public void TestSortColumnAttributeDefault()
+        {
+            Assert.IsNull(grid.SortedColumn);
+            Assert.AreEqual(SortOrder.None, grid.SortOrder);
+        }
+
+        [Test]
+        public void TestSortColumnAttributeSuccess()
+        {
+            grid.SetCollection(grid.GetCollection(), "Success1");
+            Assert.AreEqual("TestProp", grid.SortedColumn.Name);
+            Assert.AreEqual(SortOrder.Ascending, grid.SortOrder);
+
+            grid.SetCollection(grid.GetCollection(), "Success2");
+            Assert.AreEqual("TestProp", grid.SortedColumn.Name);
+            Assert.AreEqual(SortOrder.Ascending, grid.SortOrder);
+
+            grid.SetCollection(grid.GetCollection(), "Success3");
+            Assert.AreEqual("TestProp", grid.SortedColumn.Name);
+            Assert.AreEqual(SortOrder.Descending, grid.SortOrder);
+
+            grid.SetCollection(grid.GetCollection(), "Success4");
+            Assert.AreEqual("TestProp", grid.SortedColumn.Name);
+            Assert.AreEqual(SortOrder.Descending, grid.SortOrder);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSortColumnAttributeExceptionColumnName()
+        {
+            grid.SetCollection(grid.GetCollection(), "Error1");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSortColumnAttributeExceptionColumnNameAndOrder()
+        {
+            grid.SetCollection(grid.GetCollection(), "Error2");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSortColumnAttributeExceptionOrder()
+        {
+            grid.SetCollection(grid.GetCollection(), "Error3");
         }
     }
 }

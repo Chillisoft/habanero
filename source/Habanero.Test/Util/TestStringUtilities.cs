@@ -181,7 +181,24 @@ namespace Habanero.Test.Util
         public void TestGetLeftSectionException()
         {
             string test = "abcdef";
-            string result = StringUtilities.GetLeftSection(test, "g");
+            StringUtilities.GetLeftSection(test, "g");
+        }
+
+        [Test]
+        public void TestGetRightSection()
+        {
+            string test = "abcdef";
+            Assert.AreEqual("ef", StringUtilities.GetRightSection(test, "d"));
+            Assert.AreEqual("bcdef", StringUtilities.GetRightSection(test, "a"));
+            Assert.AreEqual("f", StringUtilities.GetRightSection(test, "abcde"));
+            Assert.AreEqual("", StringUtilities.GetRightSection(test, "abcdef"));
+        }
+
+        [Test, ExpectedException(typeof(UserException))]
+        public void TestGetRightSectionException()
+        {
+            string test = "abcdef";
+            StringUtilities.GetRightSection(test, "g");
         }
     }
 }

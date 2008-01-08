@@ -177,5 +177,27 @@ namespace Habanero.Util
                     "does not exist in the text '{1}'.", searchText, fullText));
             }
         }
+
+        /// <summary>
+        /// Returns the portion of the string that is right of the given
+        /// search text
+        /// </summary>
+        /// <param name="fullText">The string to search within</param>
+        /// <param name="searchText">The section to the left of the desired
+        /// text</param>
+        /// <returns>Returns the abbreviated string portion</returns>
+        public static string GetRightSection(string fullText, string searchText)
+        {
+            if (fullText.Contains(searchText))
+            {
+                int startPos = fullText.IndexOf(searchText) + searchText.Length;
+                return fullText.Substring(startPos, fullText.Length - startPos);
+            }
+            else
+            {
+                throw new UserException(String.Format("The given search term '{0}' " +
+                    "does not exist in the text '{1}'.", searchText, fullText));
+            }
+        }
     }
 }
