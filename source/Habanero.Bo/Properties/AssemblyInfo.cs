@@ -50,8 +50,8 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.1.2.*")]
-[assembly: AssemblyFileVersion("1.1.2.*")]
+[assembly: AssemblyVersion("1.1.3.*")]
+[assembly: AssemblyFileVersion("1.1.3.*")]
 
 [assembly: InternalsVisibleTo("Habanero.Test.BO, PublicKeyToken=7b53dd5883ca0b56, PublicKey=00240000048000009400000006020000002400005253413100040000010001009126953f2db9d54b13abba1eb18275db8309cf275f4e22ad469ba5f5064d5c1ef2a90fa94ab16316da85bb9fcb213502f297ad8802ca4bf8f0427ba791a0ece5645b63d707b208d9c0f5d55b7f7f348902aa17ee6991d954809a87bda38cdc29db6bda22e9181f0f9c35200512e591949ad0d40fb854a17d735cd4152a36079f")]
 [assembly: InternalsVisibleTo("Habanero.Test, PublicKeyToken=c826c4967ee16d9f, PublicKey=0024000004800000940000000602000000240000525341310004000001000100998e334d635727dc279b113c47f37e3c88fd614456852c63e9efb0bfba24e6fa6c768b1b4c48a67922112e7ef237ead874f73d43404dc4452cf157a476877ef3c7a5df796e0e66b84bb185edcb87c660af2c2c8edd048f5eabad8c48bb20e31f2b5ceea942126583ba9f08c7228eda89525c72c7682898affae88f4cbdd74ea9")]
