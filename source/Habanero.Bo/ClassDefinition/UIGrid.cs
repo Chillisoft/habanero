@@ -29,6 +29,7 @@ namespace Habanero.BO.ClassDefinition
     public class UIGrid : ICollection
     {
         private IList _list;
+        private string _sortColumn;
 
         /// <summary>
         /// Constructor to initialise a new collection of definitions
@@ -120,6 +121,19 @@ namespace Habanero.BO.ClassDefinition
         public IEnumerator GetEnumerator()
         {
             return _list.GetEnumerator();
+        }
+
+        /// <summary>
+        /// The column on which rows are ordered initially.
+        /// Indicate the direction by adding " asc" or " desc"
+        /// after the column name (" asc" is assumed if left out).  If this
+        /// property is not specified, rows will be listed in the order
+        /// they were added to the database.
+        /// </summary>
+        public string SortColumn
+        {
+            get { return _sortColumn; }
+            set { _sortColumn = value; }
         }
 
     }

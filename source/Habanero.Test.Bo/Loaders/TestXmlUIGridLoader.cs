@@ -50,6 +50,19 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(2, def.Count);
             Assert.AreEqual("testheading1", def[0].Heading);
             Assert.AreEqual("testheading2", def[1].Heading);
+            Assert.IsEmpty(def.SortColumn);
+        }
+
+        [Test]
+        public void TestSortColumn()
+        {
+            UIGrid def =
+                loader.LoadUIGridDef(
+                    @"
+					<grid sortColumn=""testpropname1 desc"">
+						<column heading=""testheading1"" property=""testpropname1""  />
+					</grid>");
+            Assert.AreEqual("testpropname1 desc", def.SortColumn);
         }
     }
 }

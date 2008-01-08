@@ -76,7 +76,7 @@ namespace Habanero.UI.Grid
         /// specific control over the grid using its associated properties and 
         /// methods.
         /// </summary>
-        public GridBase Grid
+        public EditableGrid Grid
         {
             get { return _grid; }
         }
