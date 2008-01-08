@@ -135,7 +135,6 @@
     <Compile Include="Util\HelpAboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Util\IWizardStep.cs" />
     <Compile Include="Util\PopupProgressIndicator.cs" />
     <Compile Include="Util\SplashScreen.cs">
       <SubType>Form</SubType>
@@ -143,8 +142,6 @@
     <Compile Include="Util\SqlScratchPad.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Util\Wizard.cs" />
-    <Compile Include="Util\WizardStepEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\DbConnectionControl.resx">

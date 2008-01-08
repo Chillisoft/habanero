@@ -100,6 +100,34 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ControlsHelper.cs" />
     <Compile Include="Util\DialogUtilities.cs" />
+    <Compile Include="Wizard\IWizardController.cs" />
+    <Compile Include="Wizard\IWizardStep.cs" />
+    <Compile Include="Wizard\MessageWizardStep.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\MessageWizardStep.designer.cs">
+      <DependentUpon>MessageWizardStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStep.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStep.Designer.cs">
+      <DependentUpon>NullWizardStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\WizardControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardControl.designer.cs">
+      <DependentUpon>WizardControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\WizardController.cs" />
+    <Compile Include="Wizard\WizardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardForm.designer.cs">
+      <DependentUpon>WizardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\WizardStepException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
@@ -122,6 +150,18 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\ButtonControl.resx">
       <DependentUpon>ButtonControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\MessageWizardStep.resx">
+      <DependentUpon>MessageWizardStep.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\WizardControl.resx">
+      <DependentUpon>WizardControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\WizardForm.resx">
+      <DependentUpon>WizardForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
