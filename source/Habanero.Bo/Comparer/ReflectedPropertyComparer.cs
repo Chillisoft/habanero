@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -57,33 +58,34 @@ namespace Habanero.BO.Comparer
 				return 1;
 			}
 
-			IComparer comparer = Comparer<T>.Default;
-			return comparer.Compare(x1, y1);
 
-			//if (x1 is string)
-			//{
-			//    return String.Compare((string)x1, (string)y1);
-			//}
 
-			//if (x1 is int)
-			//{
-			//    if ((int)x1 < (int)y1) return -1;
-			//    if ((int)x1 > (int)y1) return 1;
-			//    return 0;
-			//}
+            if (x1 is string)
+            {
+                return String.Compare((string)x1, (string)y1);
+            }
 
-			//if (x1 is double)
-			//{
-			//    if (Math.Abs((double)x1 - (double)y1) < 0.00001) return 0;
-			//    if ((double)x1 < (double)y1) return -1;
-			//    if ((double)x1 > (double)y1) return 1;
-			//}
+            if (x1 is int)
+            {
+                if ((int)x1 < (int)y1) return -1;
+                if ((int)x1 > (int)y1) return 1;
+                return 0;
+            }
 
-			//if (x1 is DateTime)
-			//{
-			//    return ((DateTime)x1).CompareTo(y1);
-			//}
+            if (x1 is double)
+            {
+                if (Math.Abs((double)x1 - (double)y1) < 0.00001) return 0;
+                if ((double)x1 < (double)y1) return -1;
+                if ((double)x1 > (double)y1) return 1;
+            }
 
+            if (x1 is DateTime)
+            {
+                return ((DateTime)x1).CompareTo(y1);
+            }
+
+            IComparer comparer = Comparer<T>.Default;
+            return comparer.Compare(x1, y1);
 			//return 0;
 		}
 	}
