@@ -123,6 +123,24 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestBORuleString()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithStringRule();
+            Assert.IsTrue(classDef.PropDefcol.Contains("TestProp"), "TestProp must exist");
+            PropDef propDef = classDef.PropDefcol["TestProp"];
+            Assert.IsNotNull(propDef.PropRule, "TestProp must have a rule");
+            string errorMessage = "";
+            Assert.IsTrue(propDef.PropRule.isPropValueValid("TestProp", "abcde", ref errorMessage), "Property value of length 5 must pass");
+            Assert.IsFalse(propDef.PropRule.isPropValueValid("TestProp", "abcdef", ref errorMessage), "Property value of length 6 must not pass");
+            BusinessObject bo = classDef.CreateNewBusinessObject();
+            bo.SetPropertyValue("TestProp", "abcde");
+            Assert.IsTrue(bo.IsValid(), "BO should be valid with a TestProp value of 'abcde'");
+            bo.SetPropertyValue("TestProp", "abcdef");
+            Assert.IsFalse(bo.IsValid(), "BO should not be valid with a TestProp value of 'abcdef'");
+        }
+
+        [Test]
         public void TestApplyEditResetsPreviousValues()
         {
             ClassDef.ClassDefs.Clear();
