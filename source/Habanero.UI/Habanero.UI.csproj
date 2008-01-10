@@ -53,6 +53,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Base\IBusinessObjectControl.cs" />
+    <Compile Include="Base\UISettings.cs" />
     <Compile Include="Forms\ButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

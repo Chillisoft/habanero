@@ -66,10 +66,11 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="appName">The application name</param>
         /// <param name="appVersion">The application version</param>
-        public HabaneroAppForm(string appName, string appVersion) : base(appName, appVersion) {}
-
-
-
+        public HabaneroAppForm(string appName, string appVersion) : base(appName, appVersion)
+        {
+            SetupUISettings();
+        }
+        
         /// <summary>
         /// Sets the definition class factory.
         /// </summary>
@@ -83,7 +84,8 @@ namespace Habanero.UI.Base
         /// connection information along with the database vendor name 
         /// (eg. MySql, Oracle).
         /// </summary>
-        public DatabaseConfig DatabaseConfig {
+        public DatabaseConfig DatabaseConfig
+        {
             set { _databaseConfig = value; }
         }
 
@@ -122,27 +124,53 @@ namespace Habanero.UI.Base
             }
         }
 
+        /// <summary>
+        /// Loads the class definitions
+        /// </summary>
         protected override void SetupClassDefs()
         {
             if (LoadClassDefs) ClassDef.LoadClassDefs(GetXmlClassDefsLoader());
         }
 
+        /// <summary>
+        /// Initialises the settings.  If not provided, DatabaseSettings
+        /// is assumed.
+        /// </summary>
         protected override void SetupSettings()
         {
             if (Settings == null) Settings = new DatabaseSettings();
             GlobalRegistry.Settings = Settings;
         }
 
-         protected  override void  SetupDatabaseConnection()
-                {
+        /// <summary>
+        /// Sets up the database connection.  If not provided, then
+        /// reads the connection from the config file.
+        /// </summary>
+        protected override void  SetupDatabaseConnection()
+        {
             if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
             if (_privateKey != null) _databaseConfig.SetPrivateKey(_privateKey);
             DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
         }
 
-        protected  override void SetupExceptionNotifier() {
+        /// <summary>
+        /// Sets up the exception notifier used to display
+        /// exceptions to the final user.  If not specified,
+        /// assumes the FormExceptionNotifier.
+        /// </summary>
+        protected override void SetupExceptionNotifier()
+        {
             if (ExceptionNotifier == null) ExceptionNotifier = new FormExceptionNotifier();
             GlobalRegistry.UIExceptionNotifier = ExceptionNotifier;
+        }
+
+        /// <summary>
+        /// Sets up the class that stores the user interface
+        /// settings
+        /// </summary>
+        protected void SetupUISettings()
+        {
+            GlobalRegistry.UISettings = new UISettings();
         }
     }
 }

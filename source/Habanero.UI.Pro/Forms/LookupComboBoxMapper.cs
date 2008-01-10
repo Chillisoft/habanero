@@ -15,6 +15,7 @@ namespace Habanero.UI.Forms
     /// </summary>
     public class LookupComboBoxMapper : ComboBoxMapper
     {
+        private bool _allowRightClick = true;
 
         /// <summary>
         /// Constructor to initialise the mapper
@@ -130,6 +131,20 @@ namespace Habanero.UI.Forms
             }
         }
 
+
+        public override bool RightClickEnabled
+        {
+            get
+            {
+                return base.RightClickEnabled && _allowRightClick;
+            }
+            set
+            {
+                _allowRightClick = value;
+                base.RightClickEnabled = value;
+            }
+        }
+
         /// <summary>
         /// Sets up the list of items to display and calls SetLookupList()
         /// to populate the ComboBox with this list
@@ -140,7 +155,18 @@ namespace Habanero.UI.Forms
             Dictionary<string, object> col = mapper.GetLookupList(_propertyName);
             if (_lookupTypeClassDef == null)
             {
-                SetupRightClickBehaviour();
+                //SetupRightClickBehaviour();
+                if (GlobalRegistry.UISettings.PermitComboBoxRightClick != null)
+                {
+                    if (GlobalRegistry.UISettings.PermitComboBoxRightClick(_businessObject.ClassDef.ClassType, _comboBox))
+                    {
+                        RightClickEnabled = _allowRightClick; //true;
+                    }
+                }
+                else
+                {
+                    RightClickEnabled = _allowRightClick; //true;
+                }
             }
             //if (col.Count == 0) {
             //throw new LookupListNotSetException();

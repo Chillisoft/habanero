@@ -95,6 +95,7 @@
     <Compile Include="IApplicationVersionUpgrader.cs" />
     <Compile Include="ISupportsAutoIncrementingField.cs" />
     <Compile Include="ITransactionCommitter.cs" />
+    <Compile Include="IUISettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

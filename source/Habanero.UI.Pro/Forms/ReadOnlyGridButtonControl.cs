@@ -166,30 +166,32 @@ namespace Habanero.UI.Forms
         }
 
         /// <summary>
-        /// Sets the object editor.  This editor would typically be called to edit
-        /// the currently selected object on the grid if such a provision is made 
-        /// on the grid.
+        /// Gets and sets the object editor, which is the control used to edit
+        /// the selected business object
         /// </summary>
         public IObjectEditor ObjectEditor
         {
+            get { return _objectEditor; }
             set { _objectEditor = value; }
         }
 
         /// <summary>
-        /// Sets the object creator.  This creator would typically be called to 
-        /// add a business object if such a provision is made on the grid.
+        /// Gets and sets the object creator, which is the control used to create
+        /// a new business object
         /// </summary>
         public IObjectCreator ObjectCreator
         {
+            get { return _objectCreator; }
             set { _objectCreator = value; }
         }
 
         /// <summary>
-        /// Sets the object initialiser.  This initialiser would typically be called to 
-        /// initialise a business object after it is created.
+        /// Sets the object initialiser, which is used to initialise a business
+        /// object when it is created
         /// </summary>
         public IObjectInitialiser ObjectInitialiser
         {
+            get { return _objectInitialiser; }
             set { _objectInitialiser = value; }
         }
 
