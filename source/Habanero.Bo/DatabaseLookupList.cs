@@ -256,7 +256,13 @@ namespace Habanero.BO
             ArrayList list = new ArrayList(dt.Rows.Count);
             foreach (DataRow row in dt.Rows)
             {
+                string originalValue = null;
+                int count = 1;
                 string stringValue = DBNull.Value.Equals(row[1]) ? "" : (string)row[1];
+                while (_lookupList.ContainsKey(stringValue)) {
+                    if (originalValue == null) originalValue = stringValue;
+                    stringValue = originalValue + "(" + ++count + ")";
+                }
                 _lookupList.Add(stringValue, new Guid((string)row[0]));
             }
             _lastCallTime = DateTime.Now;

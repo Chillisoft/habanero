@@ -71,13 +71,10 @@ namespace Habanero.Base
         /// <summary>
         /// Gets and sets the application name
         /// </summary>
-        public static string ApplicationName {
-            get {
-                return _applicationName;
-            }
-            set {
-                _applicationName = value;
-            }
+        public static string ApplicationName
+        {
+            get { return _applicationName; }
+            set { _applicationName = value; }
         }
 
         /// <summary>
@@ -85,28 +82,17 @@ namespace Habanero.Base
         /// </summary>
         public static string ApplicationVersion
         {
-            get
-            {
-                return _applicationVersion;
-            }
-            set
-            {
-                _applicationVersion = value;
-            }
+            get { return _applicationVersion; }
+            set { _applicationVersion = value; }
         }        
         
         /// <summary>
         /// Gets and sets the database version as an integer
         /// </summary>
-        public static int DatabaseVersion {
-            get
-            {
-                return _databaseVersion;
-            }
-            set
-            {
-                _databaseVersion = value;
-            }
+        public static int DatabaseVersion
+        {
+            get { return _databaseVersion; }
+            set { _databaseVersion = value; }
         }
     }
 }

@@ -207,16 +207,15 @@ namespace Habanero.BO
             SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
 			foreach (BusinessObject bo in col)
 			{
-                if (sortedLookupList.ContainsKey(bo.ToString()))
+			    string stringValue = bo.ToString();
+                string originalValue = null;
+                int count = 1;
+                while (sortedLookupList.ContainsKey(stringValue))
                 {
-                    throw new HabaneroApplicationException(String.Format(
-                        "A duplication error occurred while compiling a business " +
-                        "object lookup list.  The key '{0}' has already been added. " +
-                        "One possible cause is that a customised ToString() method has not " +
-                        "been added to the business object.",
-                        bo.ToString()));
+                    if (originalValue == null) originalValue = stringValue;
+                    stringValue = originalValue + "(" + ++count + ")";
                 }
-				sortedLookupList.Add(bo.ToString(), bo);
+                sortedLookupList.Add(stringValue, bo);
 			}
 		    Dictionary<string, object> lookupList = new Dictionary<string, object>();
             foreach (string key in sortedLookupList.Keys)

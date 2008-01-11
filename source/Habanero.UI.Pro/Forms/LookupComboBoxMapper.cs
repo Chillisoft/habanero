@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
 
@@ -15,6 +17,7 @@ namespace Habanero.UI.Forms
     /// </summary>
     public class LookupComboBoxMapper : ComboBoxMapper
     {
+        private bool _allowRightClick = true;
 
         /// <summary>
         /// Constructor to initialise the mapper
@@ -54,24 +57,33 @@ namespace Habanero.UI.Forms
             //log.Debug("ValueChanged in LookupComboBoxMapper") ;
             if (_businessObject != null && _comboBox.SelectedIndex != -1)
             {
-                string selectedOption = (string)_comboBox.SelectedItem;
+                string selectedOption = (string) _comboBox.SelectedItem;
                 Object newValue = null;
-                if (selectedOption != null && selectedOption.Length > 0) {
+                if (selectedOption != null && selectedOption.Length > 0)
+                {
                     newValue = _collection[selectedOption];
-                } else {
+                }
+                else
+                {
                     newValue = null;
                 }
-                if (newValue != null) {
-                    if (newValue.Equals(Guid.Empty)) {
-                        if (_businessObject.GetPropertyValue(_propertyName) != null) {
+                if (newValue != null)
+                {
+                    if (newValue.Equals(Guid.Empty))
+                    {
+                        if (_businessObject.GetPropertyValue(_propertyName) != null)
+                        {
                             _businessObject.SetPropertyValue(_propertyName, null);
                         }
                     }
                     else if (_businessObject.GetPropertyValue(_propertyName) == null ||
-                             !newValue.Equals(_businessObject.GetPropertyValue(_propertyName))) {
+                             !newValue.Equals(_businessObject.GetPropertyValue(_propertyName)))
+                    {
                         _businessObject.SetPropertyValue(_propertyName, newValue);
                     }
-                } else {
+                }
+                else
+                {
                     _businessObject.SetPropertyValue(_propertyName, null);
                 }
             }
@@ -94,28 +106,39 @@ namespace Habanero.UI.Forms
                 {
                     _comboBox.SelectedIndex = -1;
                 }
-                else {
+                else
+                {
                     SetValueFromLookupList();
                 }
             }
         }
 
-        private void SetValueFromLookupList() {
+        /// <summary>
+        /// Populates the ComboBox's list of items using the
+        /// strings provided by the colleciton
+        /// </summary>
+        private void SetValueFromLookupList()
+        {
             try
             {
-                foreach (KeyValuePair<string, object> pair in _collection) {
+                foreach (KeyValuePair<string, object> pair in _collection)
+                {
                     if (pair.Value == null) continue;
-                    if (pair.Value is BusinessObject) {
-                        if (((BO.BusinessObject)pair.Value).ID.GetGuid().Equals( _businessObject.GetPropertyValue(_propertyName))) {
+                    if (pair.Value is BusinessObject)
+                    {
+                        if (((BO.BusinessObject)pair.Value).ID.GetGuid().Equals( _businessObject.GetPropertyValue(_propertyName)))
+                        {
                             _comboBox.SelectedItem = pair.Key;
                             break;
                         }
-                        else if (_businessObject.GetPropertyValue(_propertyName) != null && String.Compare(((BO.BusinessObject)pair.Value).ID.ToString(), _businessObject.GetPropertyValue(_propertyName).ToString()) == 0) {
+                        else if (_businessObject.GetPropertyValue(_propertyName) != null && String.Compare(((BO.BusinessObject)pair.Value).ID.ToString(), _businessObject.GetPropertyValue(_propertyName).ToString()) == 0)
+                        {
                             _comboBox.SelectedItem = pair.Key;
                             break;
                         }
                     }
-                    if (pair.Value != null && pair.Value.Equals( _businessObject.GetPropertyValue(_propertyName))) {
+                    if (pair.Value != null && pair.Value.Equals( _businessObject.GetPropertyValue(_propertyName)))
+                    {
                         _comboBox.SelectedItem = pair.Key;
                         break;
                     }
@@ -131,6 +154,20 @@ namespace Habanero.UI.Forms
         }
 
         /// <summary>
+        /// Gets or sets whether the user is able to right-click to
+        /// add additional items to the drop-down list
+        /// </summary>
+        public override bool RightClickEnabled
+        {
+            get { return base.RightClickEnabled && _allowRightClick; }
+            set
+            {
+                _allowRightClick = value;
+                base.RightClickEnabled = value;
+            }
+        }
+
+        /// <summary>
         /// Sets up the list of items to display and calls SetLookupList()
         /// to populate the ComboBox with this list
         /// </summary>
@@ -140,7 +177,21 @@ namespace Habanero.UI.Forms
             Dictionary<string, object> col = mapper.GetLookupList(_propertyName);
             if (_lookupTypeClassDef == null)
             {
-                SetupRightClickBehaviour();
+                //SetupRightClickBehaviour();
+                if (_attributes != null && !_attributes.Contains("rightClickEnabled") &&
+                    GlobalUIRegistry.UISettings != null &&
+                    GlobalUIRegistry.UISettings.PermitComboBoxRightClick != null)
+                {
+                    Type boType = mapper.GetLookupListClassDef(_propertyName).ClassType;
+                    if (GlobalUIRegistry.UISettings.PermitComboBoxRightClick(boType, this))
+                    {
+                        RightClickEnabled = _allowRightClick;
+                    }
+                }
+                else
+                {
+                    RightClickEnabled = _allowRightClick;
+                }
             }
             //if (col.Count == 0) {
             //throw new LookupListNotSetException();
@@ -176,7 +227,8 @@ namespace Habanero.UI.Forms
             _collection = col;
             _comboBox.Items.Clear();
             _comboBox.Items.Add("");
-            foreach (KeyValuePair<string, object> pair in _collection) {
+            foreach (KeyValuePair<string, object> pair in _collection)
+            {
                 lbl.Text = pair.Key;
                 if (lbl.PreferredWidth > width)
                 {
@@ -194,6 +246,25 @@ namespace Habanero.UI.Forms
         protected override void SetupComboBoxItems()
         {
             SetupLookupList();
+        }
+
+        /// <summary>
+        /// Initialises the control using the attributes already provided
+        /// </summary>
+        protected override void InitialiseWithAttributes()
+        {
+            if (_attributes["rightClickEnabled"] != null)
+            {
+                string isEnabled = (string)_attributes["rightClickEnabled"];
+                if (isEnabled != "true" && isEnabled != "false")
+                {
+                    throw new InvalidXmlDefinitionException("An error " +
+                        "occurred while reading the 'rightClickEnabled' parameter " +
+                        "from the class definitions.  The 'value' " +
+                        "attribute must hold either 'true' or 'false'.");
+                }
+                _allowRightClick = Convert.ToBoolean(isEnabled);
+            }
         }
     }
 }

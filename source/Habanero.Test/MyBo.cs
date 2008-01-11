@@ -366,6 +366,30 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
+        public static ClassDef LoadClassDefWithStringRule()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"">
+                        <rule name=""TestProp"">
+                            <add key=""maxLength"" value=""5"" />
+                        </rule>
+                    </property>
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui />                    
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadClassDefWithRelationship()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
