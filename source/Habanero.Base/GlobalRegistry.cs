@@ -30,7 +30,6 @@ namespace Habanero.Base
         private static string _applicationName;
         private static string _applicationVersion;
         private static int _databaseVersion;
-        private static IUISettings _uiSettings;
 
         /// <summary>
         /// Gets and sets the application's settings storer, which stores
@@ -94,15 +93,6 @@ namespace Habanero.Base
         {
             get { return _databaseVersion; }
             set { _databaseVersion = value; }
-        }
-
-        /// <summary>
-        /// Gets and sets the database version as an integer
-        /// </summary>
-        public static IUISettings UISettings
-        {
-            get { return _uiSettings; }
-            set { _uiSettings = value; }
         }
     }
 }

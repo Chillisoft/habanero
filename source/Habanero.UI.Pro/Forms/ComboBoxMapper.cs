@@ -75,21 +75,18 @@ namespace Habanero.UI.Forms
         }
 
         /// <summary>
-        /// Sets up a handler so that right-clicking on the ComboBox will
-        /// allow the user to create a new business object using a form that is
-        /// provided.  A tooltip is also added to indicate this possibility to
-        /// the user.
+        /// Removes the handler that enables right-clicking on the ComboBox
         /// </summary>
         protected void DisableRightClickBehaviour()
         {
             //BOMapper mapper = new BOMapper(_businessObject);
             //_lookupTypeClassDef = mapper.GetLookupListClassDef(_propertyName);
-            if (_lookupTypeClassDef != null)
-            {
+            //if (_lookupTypeClassDef != null)
+            //{
                 ToolTip toolTip = new ToolTip();
                 toolTip.SetToolTip(_comboBox, "");
-                _comboBox.MouseUp -= new MouseEventHandler(ComboBoxMouseUpHandler);
-            }
+                _comboBox.MouseUp -= ComboBoxMouseUpHandler;
+            //}
         }
 
         /// <summary>

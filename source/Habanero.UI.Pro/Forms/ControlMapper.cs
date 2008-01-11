@@ -16,7 +16,7 @@ namespace Habanero.UI.Forms
     /// This provides a super class for objects that map user interface
     /// controls
     /// </summary>
-    public abstract class ControlMapper
+    public abstract class ControlMapper : IControlMapper
     {
         protected static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.ControlMapper");
         protected Control _control;

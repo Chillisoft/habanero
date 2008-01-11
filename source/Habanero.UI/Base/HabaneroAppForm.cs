@@ -170,7 +170,7 @@ namespace Habanero.UI.Base
         /// </summary>
         protected void SetupUISettings()
         {
-            GlobalRegistry.UISettings = new UISettings();
+            GlobalUIRegistry.UISettings = new UISettings();
         }
     }
 }
