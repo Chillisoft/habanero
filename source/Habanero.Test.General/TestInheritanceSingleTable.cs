@@ -151,7 +151,7 @@ namespace Habanero.Test.General
             else
             {
                 Assert.AreEqual(
-                    "SELECT Shape.Radius, Shape.ShapeID, Shape.ShapeName FROM Shape WHERE ShapeType = 'CircleNoPrimaryKey' AND ShapeID = ?Param0",
+                    "SELECT Shape.Radius, Shape.ShapeID, Shape.ShapeName FROM Shape WHERE (ShapeType = 'CircleNoPrimaryKey' AND ShapeID = ?Param0)",
                     selectSql.Statement.ToString(), "Select sql is incorrect for single table inheritance.");
             }
             Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,

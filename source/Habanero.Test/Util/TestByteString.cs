@@ -126,7 +126,12 @@ namespace Habanero.Test.Util
         public void TestHashCode()
         {
             ByteString byteString = new ByteString("test");
-            Assert.AreEqual(byteString.GetHashCode(), -354185609);
+            if (Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") == "x86") {
+                Assert.AreEqual(-354185609, byteString.GetHashCode());
+            } else {
+                Assert.AreEqual(-871206010, byteString.GetHashCode());
+            }
+
         }
 
         [Test]
