@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Xml;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -40,6 +41,7 @@ namespace Habanero.BO.Loaders
         private bool _editable;
         private int _width;
         private UIGridColumn.PropAlignment _alignment;
+        private Hashtable _propertyAttributes;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -85,7 +87,7 @@ namespace Habanero.BO.Loaders
         protected override object Create()
         {
 			return _defClassFactory.CreateUIGridProperty(_heading, _propertyName, 
-				_gridControlType, _editable, _width, _alignment);
+				_gridControlType, _editable, _width, _alignment, _propertyAttributes);
 			//return
 			//    new UIGridProperty(_heading, _propertyName, _gridControlType, _editable, _width,
 			//                       _alignment);
@@ -103,6 +105,7 @@ namespace Habanero.BO.Loaders
             LoadIsReadOnly();
             LoadWidth();
             LoadAlignment();
+            LoadParameters();
         }
 
         /// <summary>
@@ -225,6 +228,43 @@ namespace Habanero.BO.Loaders
             else
             {
                 _alignment = UIGridColumn.PropAlignment.centre;
+            }
+        }
+
+        /// <summary>
+        /// Loads the attributes from the reader. This method is
+        /// called by LoadFromReader().
+        /// </summary>
+        private void LoadParameters()
+        {
+            _propertyAttributes = new Hashtable();
+            //System.Console.WriteLine(_reader.Name);
+            _reader.Read();
+            //System.Console.WriteLine(_reader.Name);
+
+            while (_reader.Name == "parameter")
+            {
+                string attName = _reader.GetAttribute("name");
+                string attValue = _reader.GetAttribute("value");
+                if (attName == null || attName.Length == 0 ||
+                    attValue == null || attValue.Length == 0)
+                {
+                    throw new InvalidXmlDefinitionException("In a " +
+                        "'parameter' element, either the 'name' or " +
+                        "'value' attribute has been omitted.");
+                }
+
+                try
+                {
+                    _propertyAttributes.Add(attName, attValue);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidXmlDefinitionException("An error occurred " +
+                        "while loading a 'parameter' element.  There may " +
+                        "be duplicates with the same 'name' attribute.", ex);
+                }
+                ReadAndIgnoreEndTag();
             }
         }
     }

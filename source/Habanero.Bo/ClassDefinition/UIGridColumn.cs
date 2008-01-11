@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -33,6 +34,7 @@ namespace Habanero.BO.ClassDefinition
         private bool _editable;
         private int _width;
         private PropAlignment _alignment;
+        private readonly Hashtable _parameters;
 
         /// <summary>
         /// An enumeration to specify a horizontal alignment in a grid
@@ -55,14 +57,15 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="width">The width</param>
         /// <param name="alignment">The horizontal alignment</param>
         public UIGridColumn(string heading, string propertyName, Type gridControlType, bool editable, int width,
-                            PropAlignment alignment)
+                            PropAlignment alignment, Hashtable parameters)
         {
             _heading = heading;
             _propertyName = propertyName;
             _gridControlType = gridControlType;
             _editable = editable;
             _width = width;
-            this._alignment = alignment;
+            _alignment = alignment;
+            _parameters = parameters;
         }
 
         /// <summary>
@@ -117,6 +120,31 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _alignment; }
             protected set { _alignment = value; }
+        }
+
+        /// <summary>
+        /// Returns the Hashtable containing the property parameters
+        /// </summary>
+        public Hashtable Parameters
+        {
+            get { return _parameters; }
+        }
+
+        /// <summary>
+        /// Returns the parameter value for the name provided
+        /// </summary>
+        /// <param name="parameterName">The parameter name</param>
+        /// <returns>Returns the parameter value or null if not found</returns>
+        public object GetParameterValue(string parameterName)
+        {
+            if (_parameters.ContainsKey(parameterName))
+            {
+                return _parameters[parameterName];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

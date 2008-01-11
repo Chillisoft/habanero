@@ -201,7 +201,7 @@ namespace Habanero.Test
                 UIGrid col = new UIGrid();
                 col.Add(
                     new UIGridColumn("Text:", "SampleText", typeof (DataGridTextBoxColumn), true, 100,
-                                       UIGridColumn.PropAlignment.left));
+                                       UIGridColumn.PropAlignment.left, null));
                 return col;
             }
         }
