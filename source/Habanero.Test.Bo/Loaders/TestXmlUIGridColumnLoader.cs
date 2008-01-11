@@ -97,5 +97,15 @@ namespace Habanero.Test.BO.Loaders
         {
             loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""testx"" assembly=""System.Windows.Forms"" />");
         }
+
+        [Test]
+        public void TestPropertyAttributes()
+        {
+            UIGridColumn uiProp =
+                loader.LoadUIProperty(
+                    @"<column heading=""testlabel"" property=""testpropname"" ><parameter name=""TestAtt"" value=""TestValue"" /><parameter name=""TestAtt2"" value=""TestValue2"" /></column>");
+            Assert.AreEqual("TestValue", uiProp.GetParameterValue("TestAtt"));
+            Assert.AreEqual("TestValue2", uiProp.GetParameterValue("TestAtt2"));
+        }
     }
 }

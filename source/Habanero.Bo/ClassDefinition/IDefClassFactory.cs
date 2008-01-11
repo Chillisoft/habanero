@@ -73,7 +73,7 @@ namespace Habanero.BO.ClassDefinition
 
 		UIGrid CreateUIGridDef();
 
-		UIGridColumn CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool editable, int width, UIGridColumn.PropAlignment alignment);
+        UIGridColumn CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool editable, int width, UIGridColumn.PropAlignment alignment, System.Collections.Hashtable propertyAttributes);
 
 		PropDefCol CreatePropDefCol();
 

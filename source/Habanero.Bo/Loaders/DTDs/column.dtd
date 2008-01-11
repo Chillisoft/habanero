@@ -1,4 +1,5 @@
-<!ELEMENT column EMPTY>
+#include parameter.dtd
+<!ELEMENT column (parameter*)>
 <!ATTLIST column
 	heading CDATA #IMPLIED
 	property CDATA #REQUIRED
