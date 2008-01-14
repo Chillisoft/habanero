@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -34,6 +35,8 @@ namespace Habanero.Test.General
 
         public void SetupTest()
         {
+            ClassDef.ClassDefs.Clear();
+
             this.SetupDBConnection();
             SetupInheritanceSpecifics();
             objCircle = new Circle();
@@ -49,6 +52,7 @@ namespace Habanero.Test.General
 
         public void SetupTestWithoutPrimaryKey()
         {
+            ClassDef.ClassDefs.Clear();
             this.SetupDBConnection();
             SetupInheritanceSpecifics();
             objCircle = new CircleNoPrimaryKey();

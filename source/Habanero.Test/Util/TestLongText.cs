@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Data;
 using System.Text;
 using Habanero.BO.ClassDefinition;
@@ -90,7 +91,15 @@ namespace Habanero.Test.Util
         public void TestHashCode()
         {
             LongText longText = new LongText("test");
-            Assert.AreEqual(longText.GetHashCode(), -354185609);
+            
+            if (Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") == "x86")
+            {
+                Assert.AreEqual(-354185609, longText.GetHashCode());
+            }
+            else
+            {
+                Assert.AreEqual(-871206010, longText.GetHashCode());
+            }
         }
 
         [Test]
