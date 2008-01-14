@@ -201,7 +201,7 @@ namespace Habanero.UI.Grid
                         col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                         break;
                 }
-                if (CompulsoryColumnsBold &&
+                if (CompulsoryColumnsBold && collection.ClassDef.PropDefcol.Contains(gridColumn.PropertyName) &&
                     collection.ClassDef.PropDefcol[gridColumn.PropertyName].Compulsory)
                 {
                     Font newFont = new Font(DefaultCellStyle.Font, FontStyle.Bold);
