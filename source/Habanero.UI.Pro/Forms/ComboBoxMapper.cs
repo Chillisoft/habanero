@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -66,7 +67,7 @@ namespace Habanero.UI.Forms
         {
             BOMapper mapper = new BOMapper(_businessObject);
             _lookupTypeClassDef = mapper.GetLookupListClassDef(_propertyName);
-            if (_lookupTypeClassDef != null)
+            if (_lookupTypeClassDef != null && _lookupTypeClassDef.UIDefCol["default"].UIForm != null)
             {
                 ToolTip toolTip = new ToolTip();
                 toolTip.SetToolTip(_comboBox, "Right click to add a new entry.");
@@ -112,9 +113,24 @@ namespace Habanero.UI.Forms
             {
                 try
                 {
+                    ArrayList originalCol = new ArrayList();
+                    foreach (object item in _comboBox.Items)
+                    {
+                        originalCol.Add(item.ToString());
+                    }
                     lookupBo.Save();
                     SetupComboBoxItems();
-                    _comboBox.SelectedItem = lookupBo;
+
+                    string newItem = lookupBo.ToString();
+                    foreach (object item in _comboBox.Items)
+                    {
+                        if (!originalCol.Contains(item))
+                        {
+                            newItem = item.ToString();
+                            break;
+                        }
+                    }
+                    _comboBox.SelectedItem = newItem;
                 }
                 catch (Exception ex)
                 {
