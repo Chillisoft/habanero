@@ -133,6 +133,7 @@ namespace Habanero.UI.Grid
             UIGrid grid = collection.ClassDef.UIDefCol[uiName].UIGrid;
             _dataTable = _dataSetProvider.GetDataTable(grid);
             _dataTable.TableName = "Table";
+            _dateColumnIndices.Clear();
 
             this.Columns.Clear();
 
