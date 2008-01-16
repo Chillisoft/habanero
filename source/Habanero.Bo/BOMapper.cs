@@ -180,7 +180,8 @@ namespace Habanero.BO
                     throw new TargetInvocationException(new Exception(
                                                             String.Format("Virtual property set for '{0}' does not exist for object of type '{1}'.", virtualPropName, className)));
                 }
-                propInfo.SetValue(this._businessObject, value, new object[] { });
+                object newValue = Convert.ChangeType(value, propInfo.PropertyType);
+                propInfo.SetValue(this._businessObject, newValue, new object[] { });
             }
             catch (TargetInvocationException ex)
             {

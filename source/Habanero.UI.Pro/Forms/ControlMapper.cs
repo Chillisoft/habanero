@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.Util.File;
 using log4net;
@@ -196,7 +197,6 @@ namespace Habanero.UI.Forms
 					//Add needed handlers
 					_businessObject.Props[_propertyName].Updated += this.BOPropValueUpdatedHandler;
 				}
-                
             }
         }
 
@@ -214,6 +214,19 @@ namespace Habanero.UI.Forms
 			{
 				_isEditable = false;
 			}
+            if (_isEditable)
+            {
+                PropDef propDef = _businessObject.ClassDef.PropDefcol[_propertyName];
+                switch(propDef.ReadWriteRule)
+                {
+                    case PropReadWriteRule.ReadOnly:
+                        _isEditable = false;
+                        break;
+                    case PropReadWriteRule.WriteOnce:
+                        _isEditable = _businessObject.State.IsNew;
+                        break;
+                }
+            }
 			if (_isEditable)
 			{
 				_control.ResetBackColor();

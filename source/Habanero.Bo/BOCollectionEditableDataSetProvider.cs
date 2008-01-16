@@ -260,11 +260,11 @@ namespace Habanero.BO
 					if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
                     {
                         changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
-                    } else if (uiProperty.PropertyName.IndexOf(".") == -1)
-                    {
-                        //Set a reflected property
-                        boMapper.SetVirtualPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
-                    }
+                    } //else if (uiProperty.PropertyName.IndexOf(".") == -1)
+                    //{
+                    //    //Set a reflected property
+                    //    boMapper.SetVirtualPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
+                    //}
                 }
                 this.AddToRowStates(e.Row, RowState.Edited);
             }
@@ -359,20 +359,22 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectAddedToCollectionHandler(object sender, BOEventArgs e)
         {
+            BusinessObject businessObject = e.BusinessObject;
             //log.Debug("BO Added to collection " + e.BusinessObject.ID);
             _table.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
             DataRow row = _table.NewRow();
-            object[] values = new object[_uiGridProperties.Count + 1];
-            values[0] = e.BusinessObject.ID.ToString();
-            int i = 1;
-            BOMapper mapper = new BOMapper(e.BusinessObject);
-            foreach (UIGridColumn gridProperty in _uiGridProperties)
-            {
-                values[i++] = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
-            }
+            //object[] values = new object[_uiGridProperties.Count + 1];
+            //values[0] = businessObject.ID.ToString();
+            //int i = 1;
+            //BOMapper mapper = new BOMapper(businessObject);
+            //foreach (UIGridColumn gridProperty in _uiGridProperties)
+            //{
+            //    values[i++] = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
+            //}
+            object[] values = GetValues(businessObject);
             _table.LoadDataRow(values, false);
 
-            DataRow newRow = _table.Rows[FindRow(e.BusinessObject)];
+            DataRow newRow = _table.Rows[FindRow(businessObject)];
             if (!_rowIDs.ContainsKey(newRow))
             {
                 _rowIDs.Add(newRow, newRow["ID"]);

@@ -80,33 +80,39 @@ namespace Habanero.BO
             }
             foreach (BusinessObject businessObjectBase in _collection)
             {
-                object[] values = new object[_uiGridProperties.Count + 1];
-                values[0] = businessObjectBase.ID.ToString();
-                int i = 1;
-                BOMapper mapper = new BOMapper(businessObjectBase);
-                foreach (UIGridColumn gridProperty in _uiGridProperties)
-                {
-                    object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
-                    // object val = businessObjectBase.GetPropertyValue(gridProperty.PropertyName);
-
-                    if (val != null && val is DateTime)
-                    {
-                        val = ((DateTime) val).ToString("yyyy/MM/dd");
-                    }
-                    else if (val == null)
-                    {
-                        val = "";
-                    }
-                    else if (val is Guid)
-                    {
-                        val = ((Guid) val).ToString("B");
-                    }
-                    values[i++] = val;
-                }
+                object[] values = GetValues(businessObjectBase);
                 _table.LoadDataRow(values, true);
             }
             this.AddHandlersForUpdates();
             return _table;
+        }
+
+        protected object[] GetValues(BusinessObject businessObjectBase)
+        {
+            object[] values = new object[_uiGridProperties.Count + 1];
+            values[0] = businessObjectBase.ID.ToString();
+            int i = 1;
+            BOMapper mapper = new BOMapper(businessObjectBase);
+            foreach (UIGridColumn gridProperty in _uiGridProperties)
+            {
+                object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
+                // object val = businessObjectBase.GetPropertyValue(gridProperty.PropertyName);
+
+                if (val != null && val is DateTime)
+                {
+                    val = ((DateTime) val).ToString("yyyy/MM/dd");
+                }
+                else if (val == null)
+                {
+                    val = "";
+                }
+                else if (val is Guid)
+                {
+                    val = ((Guid) val).ToString("B");
+                }
+                values[i++] = val;
+            }
+            return values;
         }
 
         /// <summary>

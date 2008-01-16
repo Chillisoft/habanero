@@ -74,25 +74,10 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddedHandler(object sender, BOEventArgs e)
         {
-            object[] values = new object[_uiGridProperties.Count + 1];
-            values[0] = e.BusinessObject.ID.ToString();
-            int i = 1;
-            BOMapper mapper = new BOMapper(e.BusinessObject);
-            foreach (UIGridColumn gridProperty in _uiGridProperties)
-            {
-                object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
-                if (val != null && val is DateTime)
-                {
-                    val = ((DateTime) val).ToString("yyyy/MM/dd");
-                }
-                else if (val == null)
-                {
-                    val = "";
-                }
-                values[i++] = val;
-            }
+            BusinessObject businessObject = e.BusinessObject;
+            object[] values = GetValues(businessObject);
             _table.LoadDataRow(values, true);
-            e.BusinessObject.Updated += new EventHandler<BOEventArgs>(UpdatedHandler);
+            businessObject.Updated += new EventHandler<BOEventArgs>(UpdatedHandler);
         }
 
         /// <summary>
@@ -102,31 +87,17 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void UpdatedHandler(object sender, BOEventArgs e)
         {
-            int rowNum = this.FindRow(e.BusinessObject);
+            BusinessObject businessObject = e.BusinessObject;
+            int rowNum = this.FindRow(businessObject);
             if (rowNum == -1)
             {
                 return;
             }
-
-            object[] values = new object[_uiGridProperties.Count + 1];
-            values[0] = e.BusinessObject.ID.ToString();
-            int i = 1;
-            BOMapper mapper = new BOMapper(e.BusinessObject);
-            foreach (UIGridColumn gridProperty in _uiGridProperties)
-            {
-                object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
-                if (val != null && val is DateTime)
-                {
-                    val = ((DateTime) val).ToString("yyyy/MM/dd");
-                }
-                else if (val == null)
-                {
-                    val = "";
-                }
-                values[i++] = val;
-            }
+            object[] values = GetValues(businessObject);
             _table.Rows[rowNum].ItemArray = values;
         }
+
+        
 
         /// <summary>
         /// Initialises the local data
