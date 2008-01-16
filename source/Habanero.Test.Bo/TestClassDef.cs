@@ -153,5 +153,61 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, children.Count);
             Assert.IsTrue(children.Contains(childClassDef));
         }
+
+        [Test]
+        public void TestPropDefColAddCollection()
+        {
+            PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
+
+            PropDefCol col1 = new PropDefCol();
+            col1.Add(propDef1);
+            col1.Add(propDef2);
+            Assert.AreEqual(2, col1.Count);
+
+            PropDefCol col2 = new PropDefCol();
+            col2.Add(col1);
+            Assert.AreEqual(2, col2.Count);
+            Assert.IsTrue(col2.Contains("prop1"));
+            Assert.IsTrue(col2.Contains("prop2"));
+        }
+
+        [Test]
+        public void TestPropDefColIncludingInheritance()
+        {
+            ClassDef.ClassDefs.Clear();
+            XmlClassLoader loader = new XmlClassLoader();
+            ClassDef parentClassDef = loader.LoadClass(
+                @"<class name=""Parent"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef childClassDef = loader.LoadClass(
+                @"<class name=""Child"" assembly=""Habanero.Test"">
+					<superClass class=""Parent"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""blah"" />
+                    <property  name=""Prop1"" />
+				</class>
+			");
+            ClassDef grandchildClassDef = loader.LoadClass(
+                @"<class name=""Grandchild"" assembly=""Habanero.Test"">
+					<superClass class=""Child"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""blah"" />
+                    <property  name=""Prop2"" />
+				</class>
+			");
+            ClassDef.ClassDefs.Add(parentClassDef);
+            ClassDef.ClassDefs.Add(childClassDef);
+            ClassDef.ClassDefs.Add(grandchildClassDef);
+
+            Assert.AreEqual(1, parentClassDef.PropDefColIncludingInheritance.Count);
+            Assert.AreEqual(2, childClassDef.PropDefColIncludingInheritance.Count);
+            Assert.AreEqual(3, grandchildClassDef.PropDefColIncludingInheritance.Count);
+
+            Assert.AreEqual(1, parentClassDef.PropDefcol.Count);
+            Assert.AreEqual(1, childClassDef.PropDefcol.Count);
+            Assert.AreEqual(1, grandchildClassDef.PropDefcol.Count);
+        }
     }
 }

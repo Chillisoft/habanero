@@ -69,6 +69,7 @@ namespace Habanero.UI.Base
         public HabaneroAppForm(string appName, string appVersion) : base(appName, appVersion)
         {
             SetupUISettings();
+            SetupDateDisplaySettings();
         }
         
         /// <summary>
@@ -171,6 +172,15 @@ namespace Habanero.UI.Base
         protected void SetupUISettings()
         {
             GlobalUIRegistry.UISettings = new UISettings();
+        }
+
+        /// <summary>
+        /// Sets up the class that stores the user interface
+        /// settings
+        /// </summary>
+        protected void SetupDateDisplaySettings()
+        {
+            GlobalUIRegistry.DateDisplaySettings = new DateDisplaySettings();
         }
     }
 }

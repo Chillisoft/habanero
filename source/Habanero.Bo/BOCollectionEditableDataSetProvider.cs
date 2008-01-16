@@ -304,6 +304,10 @@ namespace Habanero.BO
                         {
                             e.Row[uiProperty.PropertyName] = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
                         }
+                        if (newBo.Props.Contains(uiProperty.PropertyName))
+                        {
+                            newBo.Props[uiProperty.PropertyName].DisplayName = uiProperty.Heading;
+                        }
                     }
                 }
 

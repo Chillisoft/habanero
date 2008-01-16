@@ -46,6 +46,7 @@ namespace Habanero.BO
         protected string _origInvalidReason = "";
         protected bool _isObjectNew = false;
         protected bool _isDirty = false;
+        protected string _displayName = "";
 
         public event EventHandler<BOPropEventArgs> Updated;
 
@@ -56,6 +57,7 @@ namespace Habanero.BO
         internal BOProp(PropDef propDef)
         {
             _propDef = propDef;
+            _displayName = propDef.PropertyName;
         }
 
         /// <summary>
@@ -173,7 +175,7 @@ namespace Habanero.BO
             }
 
             _invalidReason = "";
-            _isValid = _propDef.isValueValid(propValue, ref _invalidReason);
+            _isValid = _propDef.isValueValid(DisplayName, propValue, ref _invalidReason);
 
             _currentValue = propValue;
             _isObjectNew = isObjectNew;
@@ -244,7 +246,7 @@ namespace Habanero.BO
 							}
 						}
                     }
-                    _isValid = _propDef.isValueValid(newValue, ref _invalidReason);
+                    _isValid = _propDef.isValueValid(DisplayName, newValue, ref _invalidReason);
                     _currentValue = newValue;
                     FireBOPropValueUpdated();
                     _isDirty = true;
@@ -518,6 +520,33 @@ namespace Habanero.BO
         public ParameterType ParameterType
         {
             get { return _propDef.ParameterType; }
+        }
+
+        /// <summary>
+        /// The field name as given to the user in the user interface
+        /// (eg. "Computer Part" rather than "ComputerPartID").  This
+        /// property is used to improve error messaging, so that the
+        /// user recognises the property name as displayed to them,
+        /// rather than as it is represented in the code.
+        /// </summary>
+        public string DisplayName
+        {
+            get { return _displayName; }
+            set
+            {
+                _displayName = value;
+                if (value[value.Length - 1] == ':')
+                {
+                    _displayName = value.Substring(0, value.Length - 1);
+                }
+
+                if (_invalidReason.Contains(String.Format("'{0}'", PropertyName)))
+                {
+                    _invalidReason = _invalidReason.Replace(
+                        String.Format("'{0}'", PropertyName),
+                        String.Format("'{0}'", _displayName));
+                }
+            }
         }
     }
 

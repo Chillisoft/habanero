@@ -76,6 +76,19 @@ namespace Habanero.BO.ClassDefinition
             _propDefs.Add(propDef.PropertyName.ToUpper(), propDef);
         }
 
+        /// <summary>
+        /// Adds all the property definitions from the given collection
+        /// into this one.
+        /// </summary>
+        /// <param name="propDefCol">The collection of property definitions</param>
+        public void Add(PropDefCol propDefCol)
+        {
+            foreach (PropDef def in propDefCol)
+            {
+                Add(def);
+            }
+        }
+
         ///// <summary>
         ///// Create a new property definition and add it to the collection
         ///// </summary>

@@ -18,16 +18,19 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using Habanero.UI.Base;
 using Habanero.UI.Grid;
 using Habanero.Util;
 using log4net;
@@ -53,6 +56,7 @@ namespace Habanero.UI.Grid
         private SetSortColumnDelegate _setSortColumn;
         private string _uiName;
         private bool _compulsoryColumnsBold;
+        private Dictionary<int, string> _dateColumnIndices;
         
         public event EventHandler CollectionChanged;
         public event EventHandler FilterUpdated;
@@ -67,6 +71,9 @@ namespace Habanero.UI.Grid
             _compulsoryColumnsBold = false;
 			
             DataSourceChanged += Grid_DataSourceChanged;
+
+            _dateColumnIndices = new Dictionary<int, string>();
+            CellFormatting += CellFormattingHandler;
         }
 
     	/// <summary>
@@ -144,6 +151,11 @@ namespace Habanero.UI.Grid
             foreach (UIGridColumn gridColumn in grid)
             {
                 dataColumn = _dataTable.Columns[colNum];
+                PropDef propDef = null;
+                if (collection.ClassDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
+                {
+                    propDef = collection.ClassDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
+                }
 
                 if (gridColumn.GridControlType == typeof(DataGridViewComboBoxColumn))
                 {
@@ -175,7 +187,7 @@ namespace Habanero.UI.Grid
                 {
                     DataGridViewDateTimeColumn dateTimeCol = new DataGridViewDateTimeColumn();
                     col = dateTimeCol;
-
+                    _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
                 }
                 else
                 {
@@ -189,23 +201,25 @@ namespace Habanero.UI.Grid
                 //col.MappingName = dataColumn.ColumnName;
                 col.SortMode = DataGridViewColumnSortMode.Automatic;
 
-                switch (gridColumn.Alignment)
-                {
-                    case UIGridColumn.PropAlignment.centre:
-                        col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                        break;
-                    case UIGridColumn.PropAlignment.left:
-                        col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                        break;
-                    case UIGridColumn.PropAlignment.right:
-                        col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                        break;
-                }
-                if (CompulsoryColumnsBold && collection.ClassDef.PropDefcol.Contains(gridColumn.PropertyName) &&
-                    collection.ClassDef.PropDefcol[gridColumn.PropertyName].Compulsory)
+                SetAlignment(col, gridColumn);
+                if (CompulsoryColumnsBold && propDef != null && propDef.Compulsory)
                 {
                     Font newFont = new Font(DefaultCellStyle.Font, FontStyle.Bold);
                     col.HeaderCell.Style.Font = newFont;
+                }
+
+                if (propDef != null && propDef.PropertyType == typeof(DateTime)
+                    && gridColumn.GridControlType != typeof(DataGridViewDateTimeColumn))
+                {
+                    _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
+                }
+
+                if (propDef != null && propDef.PropertyName != gridColumn.Heading)
+                {
+                    foreach (BusinessObject bo in _collection)
+                    {
+                        bo.Props[propDef.PropertyName].DisplayName = gridColumn.Heading;
+                    }
                 }
 
                 Columns.Add(col);
@@ -513,6 +527,63 @@ namespace Habanero.UI.Grid
             else
             {
                 _dataTableDefaultView.Sort = columnName + " DESC";
+            }
+        }
+
+        /// <summary>
+        /// Handles the CellFormatting event.  For date formatting, this only
+        /// serves as a special-case handler for text columns, which don't know
+        /// how to apply date formats to a string.
+        /// </summary>
+        private void CellFormattingHandler(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (_dateColumnIndices.ContainsKey(e.ColumnIndex) && e.Value != null && e.Value != DBNull.Value)
+            {
+                string format = GetDateFormatString(_dateColumnIndices[e.ColumnIndex]);
+                DateTime dt;
+                if (e.Value is DateTime) dt = (DateTime)e.Value;
+                else
+                {
+                    if (!DateTime.TryParse((string)e.Value, out dt)) return;
+                }
+                e.Value = dt.ToString(format, DateTimeFormatInfo.CurrentInfo);
+                e.FormattingApplied = true;
+            }
+        }
+
+        /// <summary>
+        /// Calculates the appropriate date format string.  First preference
+        /// is given to the date format for the column as given in the class
+        /// defs, followed by the global grid date display format, and the
+        /// short date format of the user's environment as the last option.
+        /// </summary>
+        private static string GetDateFormatString(string defDateFormatParameter)
+        {
+            string format = defDateFormatParameter;
+            if (format == null)
+            {
+                format = GlobalUIRegistry.DateDisplaySettings.GridDateFormat;
+            }
+            if (format == null) format = "d";
+            return format;
+        }
+
+        /// <summary>
+        /// Sets the alignment of the column
+        /// </summary>
+        private static void SetAlignment(DataGridViewColumn column, UIGridColumn columnDef)
+        {
+            switch (columnDef.Alignment)
+            {
+                case UIGridColumn.PropAlignment.centre:
+                    column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    break;
+                case UIGridColumn.PropAlignment.left:
+                    column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                    break;
+                case UIGridColumn.PropAlignment.right:
+                    column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    break;
             }
         }
     }
