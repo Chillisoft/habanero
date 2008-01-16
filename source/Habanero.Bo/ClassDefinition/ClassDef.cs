@@ -334,6 +334,27 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// The collection of property definitions for this
+        /// class and any properties inherited from parent classes
+        /// </summary>
+        public PropDefCol PropDefColIncludingInheritance
+        {
+            get
+            {
+                PropDefCol col = new PropDefCol();
+                col.Add(PropDefcol);
+
+                ClassDef currentClassDef = this;
+                while (currentClassDef.SuperClassClassDef != null)
+                {
+                    currentClassDef = currentClassDef.SuperClassClassDef;
+                    col.Add(currentClassDef.PropDefcol);
+                }
+                return col;
+            }
+        }
+
+        /// <summary>
         /// The collection of key definitions
         /// </summary>
         public KeyDefCol KeysCol

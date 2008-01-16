@@ -254,14 +254,18 @@ namespace Habanero.BO
             BusinessObject changedBo = _collection.Find(e.Row["ID"].ToString());
             if (changedBo != null && !_isBeingAdded)
             {
+                BOMapper boMapper = new BOMapper(changedBo);
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
 					if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
                     {
                         changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
+                    } else if (uiProperty.PropertyName.IndexOf(".") == -1)
+                    {
+                        //Set a reflected property
+                        boMapper.SetVirtualPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
                     }
                 }
-
                 this.AddToRowStates(e.Row, RowState.Edited);
             }
         }
@@ -299,6 +303,10 @@ namespace Habanero.BO
                         if (DBNull.Value.Equals(e.Row[uiProperty.PropertyName]))
                         {
                             e.Row[uiProperty.PropertyName] = newBo.GetPropertyValueToDisplay(uiProperty.PropertyName);
+                        }
+                        if (newBo.Props.Contains(uiProperty.PropertyName))
+                        {
+                            newBo.Props[uiProperty.PropertyName].DisplayName = uiProperty.Heading;
                         }
                     }
                 }

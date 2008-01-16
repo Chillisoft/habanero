@@ -184,6 +184,8 @@ namespace Habanero.UI.Forms
                     {
                         isCompulsory = false;
                     }
+                    _boArray[0].Props[field.PropertyName].DisplayName = field.Label;
+
                     controls[currentRow, currentColumn + 0] =
                         new GridLayoutManager.ControlInfo(ControlFactory.CreateLabel(field.Label, isCompulsory));
                     Control ctl = ControlFactory.CreateControl(field.ControlType);
@@ -256,6 +258,8 @@ namespace Habanero.UI.Forms
                         NumericUpDown upDown = (NumericUpDown) ctl;
                         upDown.Enter += new EventHandler(UpDownEnterHandler);
                     }
+
+                    CheckGeneralParameters(field, ctl);
 
                     ControlMapper ctlMapper =
                         ControlMapper.Create(field.MapperTypeName, field.MapperAssembly, ctl, field.PropertyName, !editable);
@@ -332,6 +336,31 @@ namespace Habanero.UI.Forms
             p.Height = manager.GetFixedHeightIncludingGaps();
             p.Width = manager.GetFixedWidthIncludingGaps();
             return new PanelFactoryInfo(p, controlMappers, _firstControl);
+        }
+
+        /// <summary>
+        /// Checks for a range of parameters that may apply to some or all fields
+        /// </summary>
+        private void CheckGeneralParameters(UIFormField field, Control ctl)
+        {
+            if (field.GetParameterValue("alignment") != null)
+            {
+                string alignmentParam = field.GetParameterValue("alignment").ToString().ToLower().Trim();
+                HorizontalAlignment alignment;
+                if (alignmentParam == "left") alignment = HorizontalAlignment.Left;
+                else if (alignmentParam == "right") alignment = HorizontalAlignment.Right;
+                else if (alignmentParam == "center") alignment = HorizontalAlignment.Center;
+                else if (alignmentParam == "centre") alignment = HorizontalAlignment.Center;
+                else
+                {
+                    throw new InvalidXmlDefinitionException(String.Format(
+                        "In a 'parameter' element, the value '{0}' given for 'alignment' was " +
+                        "invalid.  The available options are: left, right, center and centre.",
+                        alignmentParam));
+                }
+                if (ctl is TextBox) ((TextBox) ctl).TextAlign = alignment;
+                if (ctl is NumericUpDown) ((NumericUpDown) ctl).TextAlign = alignment;
+            }
         }
 
         /// <summary>

@@ -29,35 +29,35 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBoProp
     {
-        private PropDef mPropDef;
-        private BOProp mProp;
+        private PropDef _propDef;
+        private BOProp _prop;
 
         [SetUp]
         public void init()
         {
-            mPropDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
-            mProp = mPropDef.CreateBOProp(false);
+            _propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            _prop = _propDef.CreateBOProp(false);
         }
 
         [Test]
         public void TestSetBOPropValue()
         {
-            mProp.Value = "Prop Value";
-            Assert.AreEqual("Prop Value", mProp.Value);
+            _prop.Value = "Prop Value";
+            Assert.AreEqual("Prop Value", _prop.Value);
         }
 
         [Test]
         public void TestRestorePropValue()
         {
-            mProp.InitialiseProp("OrigionalValue");
-            mProp.Value = "Prop New Value";
-            Assert.AreEqual("Prop New Value", mProp.Value);
-            Assert.IsTrue(mProp.IsDirty);
-            Assert.IsTrue(mProp.isValid);
-            mProp.RestorePropValue();
-            Assert.AreEqual("OrigionalValue", mProp.Value);
-            Assert.IsFalse(mProp.IsDirty);
-            Assert.IsTrue(mProp.isValid);
+            _prop.InitialiseProp("OrigionalValue");
+            _prop.Value = "Prop New Value";
+            Assert.AreEqual("Prop New Value", _prop.Value);
+            Assert.IsTrue(_prop.IsDirty);
+            Assert.IsTrue(_prop.isValid);
+            _prop.RestorePropValue();
+            Assert.AreEqual("OrigionalValue", _prop.Value);
+            Assert.IsFalse(_prop.IsDirty);
+            Assert.IsTrue(_prop.isValid);
         }
 
         [Test]
@@ -275,13 +275,13 @@ namespace Habanero.Test.BO
         [Test]
         public void TestBackupProp()
         {
-            mProp.InitialiseProp("OrigionalValue");
-            mProp.Value = "Prop New Value";
-            Assert.AreEqual("Prop New Value", mProp.Value);
-            mProp.BackupPropValue();
-            Assert.AreEqual("Prop New Value", mProp.Value);
-            Assert.IsFalse(mProp.IsDirty);
-            Assert.IsTrue(mProp.isValid);
+            _prop.InitialiseProp("OrigionalValue");
+            _prop.Value = "Prop New Value";
+            Assert.AreEqual("Prop New Value", _prop.Value);
+            _prop.BackupPropValue();
+            Assert.AreEqual("Prop New Value", _prop.Value);
+            Assert.IsFalse(_prop.IsDirty);
+            Assert.IsTrue(_prop.isValid);
         }
 
         [Test]
@@ -289,35 +289,35 @@ namespace Habanero.Test.BO
         // value is set but has not changed.
         public void TestDirtyProp()
         {
-            mProp.InitialiseProp("OrigionalValue");
-            mProp.Value = "OrigionalValue";
-            Assert.IsFalse(mProp.IsDirty);
-            Assert.IsTrue(mProp.isValid);
+            _prop.InitialiseProp("OrigionalValue");
+            _prop.Value = "OrigionalValue";
+            Assert.IsFalse(_prop.IsDirty);
+            Assert.IsTrue(_prop.isValid);
         }
 
         [Test]
         //Test persisted property value is returned correctly.
         public void TestPersistedPropValue()
         {
-            mProp.InitialiseProp("OrigionalValue");
-            mProp.Value = "New Value";
-            Assert.IsTrue(mProp.IsDirty);
-            Assert.AreEqual("OrigionalValue", mProp.PersistedPropertyValue);
-            Assert.AreEqual("PropName = 'New Value'", mProp.DatabaseNameFieldNameValuePair(null));
-            Assert.AreEqual("PropName = 'OrigionalValue'", mProp.PersistedDatabaseNameFieldNameValuePair(null));
+            _prop.InitialiseProp("OrigionalValue");
+            _prop.Value = "New Value";
+            Assert.IsTrue(_prop.IsDirty);
+            Assert.AreEqual("OrigionalValue", _prop.PersistedPropertyValue);
+            Assert.AreEqual("PropName = 'New Value'", _prop.DatabaseNameFieldNameValuePair(null));
+            Assert.AreEqual("PropName = 'OrigionalValue'", _prop.PersistedDatabaseNameFieldNameValuePair(null));
         }
 
         [Test]
         //Test DirtyXML.
         public void TestDirtyXml()
         {
-            mProp.InitialiseProp("OrigionalValue");
-            mProp.Value = "New Value";
-            Assert.IsTrue(mProp.IsDirty);
-            string dirtyXml = "<" + mProp.PropertyName + "><PreviousValue>OrigionalValue" +
+            _prop.InitialiseProp("OrigionalValue");
+            _prop.Value = "New Value";
+            Assert.IsTrue(_prop.IsDirty);
+            string dirtyXml = "<" + _prop.PropertyName + "><PreviousValue>OrigionalValue" +
                               "</PreviousValue><NewValue>New Value</NewValue></" +
-                              mProp.PropertyName + ">";
-            Assert.AreEqual(dirtyXml, mProp.DirtyXml);
+                              _prop.PropertyName + ">";
+            Assert.AreEqual(dirtyXml, _prop.DirtyXml);
         }
 
         [Test]
@@ -346,6 +346,65 @@ namespace Habanero.Test.BO
             boProp.Value = "abcde";
             Assert.IsTrue(boProp.isValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void TestDisplayNameAssignment()
+        {
+            Assert.AreEqual("PropName", _prop.DisplayName);
+            _prop.DisplayName = "Prop Name";
+            Assert.AreEqual("Prop Name", _prop.DisplayName);
+            Assert.IsFalse(_prop.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void TestDisplayNameSetAfterInvalid()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                                          PropReadWriteRule.ReadWrite, null, null, false, false, 5);
+            BOProp boProp = new BOProp(propDef);
+
+            Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
+
+            boProp.Value = "abcdef";
+            Assert.IsTrue(boProp.InvalidReason.Contains("'TestProp'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
+
+            boProp.DisplayName = "Test Prop";
+            Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
+            Assert.IsTrue(boProp.InvalidReason.Contains("'Test Prop'"));
+        }
+
+        [Test]
+        public void TestDisplayNameSetBeforeInvalid()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                                          PropReadWriteRule.ReadWrite, null, null, false, false, 5);
+            BOProp boProp = new BOProp(propDef);
+
+            Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
+
+            boProp.DisplayName = "Test Prop";
+            boProp.Value = "abcdef";
+            Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
+            Assert.IsTrue(boProp.InvalidReason.Contains("'Test Prop'"));
+        }
+
+        [Test]
+        public void TestDisplayNameSetAfterCompulsoryInitialisation()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                                  PropReadWriteRule.ReadWrite, null, null, true, false);
+            BOProp boProp = propDef.CreateBOProp(true);
+
+            Assert.IsTrue(boProp.InvalidReason.Contains("'TestProp'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
+
+            boProp.DisplayName = "Test Prop";
+            Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
+            Assert.IsTrue(boProp.InvalidReason.Contains("'Test Prop'"));
         }
     }
 

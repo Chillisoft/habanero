@@ -398,16 +398,22 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="propValue">The property value to be tested</param>
         /// <param name="errorMessage">A string which may be amended to reflect
         /// an error message if the value is not valid</param>
+        /// <param name="displayName">The name of the property as presented to the user
+        /// in the user interface, clarifies error messaging</param>
         /// <returns>Returns true if valid, false if not</returns>
-        protected internal bool isValueValid(Object propValue, ref string errorMessage)
+        protected internal bool isValueValid(string displayName, Object propValue, ref string errorMessage)
         {
+            if (displayName == null)
+            {
+                displayName = PropertyName;
+            }
             if (_compulsory)
             {
                 if (propValue == null
                     || propValue == DBNull.Value
                     || (propValue is string && (string) propValue == String.Empty))
                 {
-                    errorMessage = String.Format("'{0}' is a compulsory field and has no value.", PropertyName);
+                    errorMessage = String.Format("'{0}' is a compulsory field and has no value.", displayName);
                     return false;
                 }
             }
@@ -416,7 +422,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (((string)propValue).Length > _length)
                 {
-                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", PropertyName, _length);
+                    errorMessage = String.Format("'{0}' cannot be longer than {1} characters.", displayName, _length);
                     return false;
                 }
             }
@@ -424,7 +430,7 @@ namespace Habanero.BO.ClassDefinition
             errorMessage = "";
             if (_propRule != null)
             {
-                return _propRule.isPropValueValid(PropertyName, propValue, ref errorMessage);
+                return _propRule.isPropValueValid(displayName, propValue, ref errorMessage);
             }
             else
             {

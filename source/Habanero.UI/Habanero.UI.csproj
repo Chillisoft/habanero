@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\DateDisplaySettings.cs" />
     <Compile Include="Base\GlobalUIRegistry.cs" />
     <Compile Include="Base\HabaneroAppForm.cs" />
     <Compile Include="Base\BorderLayoutManager.cs" />

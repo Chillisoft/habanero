@@ -55,6 +55,7 @@
     <Compile Include="Base\TestControlCollection.cs" />
     <Compile Include="Base\TestControlFactory.cs" />
     <Compile Include="Base\TestFlowLayoutManager.cs" />
+    <Compile Include="Base\TestGlobalUIRegistry.cs" />
     <Compile Include="Base\TestGridLayoutManager.cs" />
     <Compile Include="Base\TestLayoutManager.cs" />
     <Compile Include="Forms\TestButtonControl.cs" />
