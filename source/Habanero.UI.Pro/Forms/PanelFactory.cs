@@ -184,7 +184,8 @@ namespace Habanero.UI.Forms
                     {
                         isCompulsory = false;
                     }
-                    _boArray[0].Props[field.PropertyName].DisplayName = field.Label;
+                    if (_boArray[0].Props.Contains(field.PropertyName)) 
+                        _boArray[0].Props[field.PropertyName].DisplayName = field.Label;
 
                     controls[currentRow, currentColumn + 0] =
                         new GridLayoutManager.ControlInfo(ControlFactory.CreateLabel(field.Label, isCompulsory));

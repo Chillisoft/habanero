@@ -216,15 +216,16 @@ namespace Habanero.UI.Forms
 			}
             if (_isEditable)
             {
-                PropDef propDef = _businessObject.ClassDef.PropDefcol[_propertyName];
-                switch(propDef.ReadWriteRule)
-                {
-                    case PropReadWriteRule.ReadOnly:
-                        _isEditable = false;
-                        break;
-                    case PropReadWriteRule.WriteOnce:
-                        _isEditable = _businessObject.State.IsNew;
-                        break;
+                if (_businessObject.ClassDef.PropDefcol.Contains(_propertyName)) {
+                    PropDef propDef = _businessObject.ClassDef.PropDefcol[_propertyName];
+                    switch (propDef.ReadWriteRule) {
+                        case PropReadWriteRule.ReadOnly:
+                            _isEditable = false;
+                            break;
+                        case PropReadWriteRule.WriteOnce:
+                            _isEditable = _businessObject.State.IsNew;
+                            break;
+                    }
                 }
             }
 			if (_isEditable)
