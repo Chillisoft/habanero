@@ -57,6 +57,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\ComboBoxMapper.cs" />
+    <Compile Include="Forms\ComboBoxRightClickController.cs" />
     <Compile Include="Forms\ControlMapper.cs" />
     <Compile Include="Forms\ControlMapperCollection.cs" />
     <Compile Include="Forms\DateRangeComboBox.cs">

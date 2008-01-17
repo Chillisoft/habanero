@@ -190,6 +190,7 @@ namespace Habanero.UI.Forms
 					_businessObject.Props[_propertyName].Updated -= this.BOPropValueUpdatedHandler;
 				}
 				_businessObject = value;
+                OnBusinessObjectChanged();
             	UpdateIsEditable();
                 ValueUpdated();
 				if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
@@ -200,7 +201,9 @@ namespace Habanero.UI.Forms
             }
         }
 
-		/// <summary>
+        protected virtual void OnBusinessObjectChanged() { }
+
+        /// <summary>
 		/// Updates the isEditable flag and updates 
 		/// the control according to the current state
 		/// </summary>

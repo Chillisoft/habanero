@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using Habanero.Base;
 
 namespace Habanero.UI.Wizard
 {
@@ -141,12 +142,19 @@ namespace Habanero.UI.Wizard
 
         private void uxNextButton_Click(object sender, EventArgs e)
         {
-            if (_wizardController.IsLastStep())
+            try
             {
-                Finish();
-            }
-            else {
-                Next();
+                if (_wizardController.IsLastStep())
+                {
+                    Finish();
+                }
+                else
+                {
+                    Next();
+                }
+            } catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "Cannot complete this wizard step due to an error:", "Wizard Step Error");
             }
         }
 
