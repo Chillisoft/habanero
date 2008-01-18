@@ -94,6 +94,8 @@ namespace Habanero.Test.BO
                             "The object returned should be the one with the ID = MockBOID");
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), ltempBO.GetPropertyValue("MockBOID"),
                             "The object returned should be the one with the ID = MockBOID");
+            mMockBo.Delete();
+            mMockBo.Save();
         }
     }
 
@@ -141,7 +143,7 @@ namespace Habanero.Test.BO
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["MockBOID"]);
-            ClassDef lClassDef = new ClassDef(typeof(MockBO), primaryKey, lPropDefCol, keysCol, null);
+            ClassDef lClassDef = new ClassDef(typeof(MockBO), primaryKey, lPropDefCol, keysCol, new RelationshipDefCol());
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }

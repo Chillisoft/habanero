@@ -80,6 +80,8 @@ namespace Habanero.Test.BO
             Assert.AreSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
             MockBO.ClearLoadedBusinessObjectBaseCol();
             Assert.AreNotSame(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection));
+            mMockBo.Delete();
+            mMockBo.Save();
         }
 
         [Test]
@@ -107,6 +109,37 @@ namespace Habanero.Test.BO
             Assert.IsTrue(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
             MockBO.ClearLoadedBusinessObjectBaseCol();
             Assert.IsTrue(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
+            mMockBo.Delete();
+            mMockBo.Save();
+        }
+
+        [Test]
+        public void TestGetRelatedObject()
+        {
+            RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, true);
+            SingleRelationship rel = (SingleRelationship)lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
+            Assert.AreEqual(lRelationshipDef.RelationshipName, rel.RelationshipName);
+            Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
+            Assert.IsFalse(rel.HasRelationship(), "Should be false since props are not defaulted in Mock bo");
+            //Set a related object
+            mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
+            //Save the object, so that the relationship can retrieve the object from the database
+            mMockBo.Save();
+            Assert.IsTrue(rel.HasRelationship(), "Should have a related object since the relating props have values");
+            MockBO ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
+            Assert.IsNotNull(ltempBO, "The related object should exist");
+            //Clear the related object
+            mMockBo.SetPropertyValue("MockBOProp1", null);
+            Assert.IsFalse(rel.HasRelationship(), "Should not have a related object since the relating props have been set to null");
+            ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
+            Assert.IsNull(ltempBO, "The related object should now be null");
+            //Set a related object again
+            mMockBo.SetPropertyValue("MockBOProp1", mMockBo.GetPropertyValue("MockBOID"));
+            Assert.IsTrue(rel.HasRelationship(), "Should have a related object since the relating props have values again");
+            ltempBO = (MockBO)rel.GetRelatedObject(DatabaseConnection.CurrentConnection);
+            Assert.IsNotNull(ltempBO, "The related object should exist again"); 
+            mMockBo.Delete();
+            mMockBo.Save();
         }
     }
 
