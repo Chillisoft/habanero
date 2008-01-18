@@ -156,30 +156,39 @@ namespace Habanero.UI.Pro.Forms
 
         private bool OpenCreateDialog(out BusinessObject newBo)
         {
-            if (_objectCreator != null && _objectEditor != null)
+            try
             {
-                newBo = (BusinessObject)_objectCreator.CreateObject(_objectEditor, _objectInitialiser, GetUiDefName());
-                return newBo != null;
-            }
-            else
-            {
-                newBo = _lookupTypeClassDef.CreateNewBusinessObject();
-                BoPanelControl boCtl = new BoPanelControl(newBo, GetUiDefName());
-                UIForm uiForm = _lookupTypeClassDef.UIDefCol[GetUiDefName()].UIForm;
-                boCtl.Height = uiForm.Height;
-                boCtl.Width = uiForm.Width;
-                OKCancelDialog dialog =
-                    new OKCancelDialog(boCtl, "Add a new entry", _comboBox.PointToScreen(new Point(0, 0)));
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (_objectCreator != null && _objectEditor != null)
                 {
-                    newBo.Save();
-                    return true;
+                    newBo = (BusinessObject)_objectCreator.CreateObject(_objectEditor, _objectInitialiser, GetUiDefName());
+                    return newBo != null;
                 }
                 else
                 {
-                    newBo = null;
-                    return false;
+                    newBo = _lookupTypeClassDef.CreateNewBusinessObject();
+                    BoPanelControl boCtl = new BoPanelControl(newBo, GetUiDefName());
+                    UIForm uiForm = _lookupTypeClassDef.UIDefCol[GetUiDefName()].UIForm;
+                    boCtl.Height = uiForm.Height;
+                    boCtl.Width = uiForm.Width;
+                    OKCancelDialog dialog =
+                        new OKCancelDialog(boCtl, "Add a new entry", _comboBox.PointToScreen(new Point(0, 0)));
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        newBo.Save();
+                        return true;
+                    }
+                    else
+                    {
+                        newBo = null;
+                        return false;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "Cannot create a new item for the combo box", "Error");
+                newBo = null;
+                return false;
             }
         }
     }
