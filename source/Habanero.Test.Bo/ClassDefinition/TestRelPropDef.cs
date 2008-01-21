@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -60,7 +61,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("PropName", relProp.RelatedClassPropName);
         }
 
-        [Test, ExpectedException()]
+        [Test, ExpectedException(typeof(HabaneroArgumentException))]
         public void TestAddNullException()
         {
             RelPropDef relPropDef = new RelPropDef(null, "");
