@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -84,6 +85,43 @@ namespace Habanero.Test.BO.ClassDefinition
                           "This is true since the values for the properties should have defaulted to 1 each");
 
             Assert.AreEqual("(PropName = '1' AND PropName2 = '2')", relKey.RelationshipExpression().ExpressionString());
+        }
+
+        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+        public void TestAddNullException()
+        {
+            RelKeyDef col = new RelKeyDef();
+            col.Add(null);
+        }
+
+        [Test]
+        public void TestRemove()
+        {
+            PropDef propDef = new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, null);
+            RelPropDef relPropDef = new RelPropDef(propDef, "prop");
+            RelKeyDefDefInheritor relKeyDef = new RelKeyDefDefInheritor();
+
+            relKeyDef.CallRemove(relPropDef);
+            relKeyDef.Add(relPropDef);
+            Assert.AreEqual(1, relKeyDef.Count);
+            relKeyDef.CallRemove(relPropDef);
+            Assert.AreEqual(0, relKeyDef.Count);
+        }
+
+        [Test, ExpectedException(typeof(InvalidPropertyNameException))]
+        public void TestThisIndexerException()
+        {
+            RelKeyDef relKeyDef = new RelKeyDef();
+            RelPropDef relPropDef = relKeyDef["prop"];
+        }
+
+        // Grants access to protected methods
+        private class RelKeyDefDefInheritor : RelKeyDef
+        {
+            public void CallRemove(RelPropDef relPropDef)
+            {
+                Remove(relPropDef);
+            }
         }
     }
 }

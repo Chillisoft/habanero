@@ -66,6 +66,7 @@
     <Compile Include="FilledCircleInheritsCircleNoPK.cs" />
     <Compile Include="FilledCircleNoPrimaryKey.cs" />
     <Compile Include="FilledCircleNoPrimaryKeyInheritsCircle.cs" />
+    <Compile Include="MultiPropBO.cs" />
     <Compile Include="MyBo.cs" />
     <Compile Include="MyDBConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -131,5 +131,14 @@ namespace Habanero.BO.ClassDefinition
         {
             return _defs.GetEnumerator();
         }
+
+        /// <summary>
+        /// Returns a count of the number of ui definitions held
+        /// in this collection
+        /// </summary>
+        public int Count
+        {
+            get { return _defs.Count; }
+        }
     }
 }

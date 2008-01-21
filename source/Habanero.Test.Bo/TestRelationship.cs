@@ -23,6 +23,7 @@ using System.Text;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO

@@ -124,10 +124,30 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassDefinition\TestUIFormGrid.cs" />
+    <Compile Include="ClassDefinition\TestUIGridColumn.cs" />
+    <Compile Include="ClassDefinition\TestUIGrid.cs" />
+    <Compile Include="ClassDefinition\TestUIFormField.cs" />
+    <Compile Include="ClassDefinition\TestUIFormTab.cs" />
+    <Compile Include="ClassDefinition\TestUIFormColumn.cs" />
+    <Compile Include="ClassDefinition\TestUIForm.cs" />
+    <Compile Include="ClassDefinition\TestUIDefCol.cs" />
+    <Compile Include="ClassDefinition\TestUIDef.cs" />
+    <Compile Include="ClassDefinition\TestSuperClassDef.cs" />
+    <Compile Include="ClassDefinition\TestRelationshipDefCol.cs" />
+    <Compile Include="ClassDefinition\TestPropDefCol.cs" />
+    <Compile Include="ClassDefinition\TestPrimaryKeyDef.cs" />
+    <Compile Include="ClassDefinition\TestMultipleRelationshipDef.cs" />
+    <Compile Include="ClassDefinition\TestClassDef.cs" />
+    <Compile Include="ClassDefinition\TestClassDefCol.cs" />
     <Compile Include="ClassDefinition\TestKeyDef.cs" />
+    <Compile Include="ClassDefinition\TestKeyDefCol.cs" />
     <Compile Include="ClassDefinition\TestPropDef.cs" />
+    <Compile Include="ClassDefinition\TestRelationshipDef.cs" />
     <Compile Include="ClassDefinition\TestRelKeyDef.cs" />
     <Compile Include="ClassDefinition\TestRelPropDef.cs" />
+    <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
+    <Compile Include="Comparer\TestComparers.cs" />
     <Compile Include="ContactPerson.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="Loaders\TestXmlSuperClassLoader.cs" />
@@ -165,17 +185,11 @@
     <Compile Include="TestBusinessObject.cs" />
     <Compile Include="TestBusinessObjectCollection.cs" />
     <Compile Include="TestBusinessObjectLookupList.cs" />
-    <Compile Include="TestClassDef.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TestDatabaseLookupList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestDeleteHelper.cs" />
     <Compile Include="TestExpression.cs" />
-    <Compile Include="TestPropDef.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TestPropRuleDate.cs" />
     <Compile Include="TestPropRuleDecimal.cs" />
     <Compile Include="TestPropRuleInt.cs" />
@@ -184,7 +198,6 @@
     <Compile Include="TestRelationshipCol.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestRelationshipDef.cs" />
     <Compile Include="TestRelProp.cs" />
     <Compile Include="TestSingleRelationship.cs">
       <SubType>Code</SubType>

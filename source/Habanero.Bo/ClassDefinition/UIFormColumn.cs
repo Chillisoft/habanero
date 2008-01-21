@@ -65,7 +65,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="field">A form field definition</param>
         public void Remove(UIFormField field)
         {
-            _list.Add(field);
+            _list.Remove(field);
         }
 
         /// <summary>

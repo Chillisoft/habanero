@@ -561,7 +561,7 @@ namespace Habanero.UI.Grid
         private static string GetDateFormatString(string defDateFormatParameter)
         {
             string format = defDateFormatParameter;
-            if (format == null)
+            if (format == null && GlobalUIRegistry.DateDisplaySettings != null)
             {
                 format = GlobalUIRegistry.DateDisplaySettings.GridDateFormat;
             }
