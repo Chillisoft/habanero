@@ -72,7 +72,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(keyDef, col.GetThis("mykey"));
         }
 
-        [Test, ExpectedException()]
+        [Test, ExpectedException(typeof(ArgumentException))]
         public void TestThisIndexerException()
         {
             KeyDefColInheritor col = new KeyDefColInheritor();
