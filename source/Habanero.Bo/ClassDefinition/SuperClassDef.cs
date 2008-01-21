@@ -68,8 +68,8 @@ namespace Habanero.BO.ClassDefinition
 			_superClassClassDef = null;
 			_assemblyName = assemblyName;
 			_className = className;
-		    _id = id;
-		    _discriminator = discriminator;
+		    ID = id;
+		    Discriminator = discriminator;
 		}
 
 		#endregion Constructors

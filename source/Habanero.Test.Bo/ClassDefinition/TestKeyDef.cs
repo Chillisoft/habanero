@@ -20,14 +20,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
 {
-
-
-
     [TestFixture]
     public class TestKeyDef
     {
@@ -56,6 +55,55 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("PropName", lPropDef.PropertyName);
             Assert.IsTrue(mKeyDef.IgnoreIfNull);
         }
+
+        [Test, ExpectedException(typeof(InvalidPropertyNameException))]
+        public void TestThisInvalidPropertyNameException()
+        {
+            KeyDef keyDef = new KeyDef();
+            PropDef propDef = keyDef["wrongprop"];
+        }
+
+        [Test, ExpectedException(typeof(HabaneroArgumentException))]
+        public void TestAddNullException()
+        {
+            KeyDef keyDef = new KeyDef();
+            keyDef.Add(null);
+        }
+
+        [Test]
+        public void TestRemove()
+        {
+            PropDef propDef = new PropDef("prop", typeof(String), PropReadWriteRule.ReadWrite, null);
+            KeyDefInheritor keyDef = new KeyDefInheritor();
+
+            keyDef.CallRemove(propDef);
+            Assert.AreEqual(0, keyDef.Count);
+            keyDef.Add(propDef);
+            Assert.AreEqual(1, keyDef.Count);
+            keyDef.CallRemove(propDef);
+            Assert.AreEqual(0, keyDef.Count);
+        }
+
+        [Test]
+        public void TestIsValid()
+        {
+            PropDef propDef = new PropDef("prop", typeof(String), PropReadWriteRule.ReadWrite, null);
+            KeyDef keyDef = new KeyDef();
+            Assert.IsFalse(keyDef.IsValid());
+
+            keyDef.Add(propDef);
+            Assert.IsTrue(keyDef.IsValid());
+        }
+
+        // Exposes protected methods for testing
+        private class KeyDefInheritor : KeyDef
+        {
+            public void CallRemove(PropDef propDef)
+            {
+                Remove(propDef);
+            }
+        }
+
     }
 
 }

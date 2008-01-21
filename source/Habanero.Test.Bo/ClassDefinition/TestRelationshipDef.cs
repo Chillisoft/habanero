@@ -27,20 +27,15 @@ using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.ClassDefinition
 {
-
-
     [TestFixture]
-    public class RelationshipDefTester : TestUsingDatabase
+    public class TestRelationshipDef : TestUsingDatabase
     {
-        #region MockBO For Testing
-
         private RelationshipDef mRelationshipDef;
         private RelKeyDef mRelKeyDef;
         private PropDefCol mPropDefCol;
         private MockBO mMockBo;
-
 
         [TestFixtureSetUp]
         public void init()
@@ -97,25 +92,95 @@ namespace Habanero.Test.BO
             mMockBo.Delete();
             mMockBo.Save();
         }
+
+        [Test]
+        public void TestProtectedSets()
+        {
+            RelationshipDefInheritor relDef = new RelationshipDefInheritor();
+            RelKeyDef relKeyDef = new RelKeyDef();
+            PropDef propDef = new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, null);
+            relKeyDef.Add(new RelPropDef(propDef, ""));
+
+            Assert.AreEqual("rel", relDef.RelationshipName);
+            relDef.SetRelationshipName("newrel");
+            Assert.AreEqual("newrel", relDef.RelationshipName);
+
+            Assert.AreEqual(typeof(MyRelatedBo), relDef.RelatedObjectClassType);
+            relDef.SetRelatedObjectClassType(typeof(MyBO));
+            Assert.AreEqual(typeof(MyBO), relDef.RelatedObjectClassType);
+
+            Assert.AreEqual("Habanero.Test", relDef.RelatedObjectAssemblyName);
+            relDef.SetRelatedObjectAssemblyName("someassembly");
+            Assert.AreEqual("someassembly", relDef.RelatedObjectAssemblyName);
+
+            Assert.AreEqual("Habanero.Test.MyBO", relDef.RelatedObjectClassName);
+            relDef.SetRelatedObjectClassName("someclass");
+            Assert.AreEqual("someclass", relDef.RelatedObjectClassName);
+
+            Assert.AreEqual(0, relDef.RelKeyDef.Count);
+            relDef.SetRelKeyDef(relKeyDef);
+            Assert.AreEqual(1, relDef.RelKeyDef.Count);
+
+            Assert.IsTrue(relDef.KeepReferenceToRelatedObject);
+            relDef.SetKeepReferenceToRelatedObject(false);
+            Assert.IsFalse(relDef.KeepReferenceToRelatedObject);
+        }
+
+        private class RelationshipDefInheritor : RelationshipDef
+        {
+            public RelationshipDefInheritor() : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true)
+            {}
+
+            public override Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol)
+            {
+                return new SingleRelationship(null, null, null);
+            }
+
+            public void SetRelationshipName(string name)
+            {
+                RelationshipName = name;
+            }
+
+            public void SetRelatedObjectAssemblyName(string name)
+            {
+                RelatedObjectAssemblyName = name;
+            }
+
+            public void SetRelatedObjectClassName(string name)
+            {
+                RelatedObjectClassName = name;
+            }
+
+            public void SetRelatedObjectClassType(Type type)
+            {
+                RelatedObjectClassType = type;
+            }
+
+            public void SetRelKeyDef(RelKeyDef relKeyDef)
+            {
+                RelKeyDef = relKeyDef;
+            }
+
+            public void SetKeepReferenceToRelatedObject(bool keepRef)
+            {
+                KeepReferenceToRelatedObject = keepRef;
+            }
+        }
     }
+
+    #region MockBO For Testing
 
     internal class MockBO : BusinessObject
     {
-        public MockBO()
-            : base()
-        {
-        }
+        public MockBO() {}
 
-        public MockBO(ClassDef def)
-            : base(def)
-        {
-        }
+        public MockBO(ClassDef def) : base(def)
+        {}
 
         public static MockBO Create()
         {
             return (MockBO)ClassDef.ClassDefs[typeof(MockBO)].CreateNewBusinessObject();
         }
-
 
         protected static ClassDef GetClassDef()
         {
@@ -154,11 +219,8 @@ namespace Habanero.Test.BO
             PropDef propDef =
                 new PropDef("MockBOProp1", typeof(Guid), PropReadWriteRule.ReadWrite, "MockBOProp1", null);
             lPropDefCol.Add(propDef);
-
             lPropDefCol.Add("MockBOProp2", typeof(string), PropReadWriteRule.WriteOnce, "MockBOProp2", null);
-
-            propDef =
-                lPropDefCol.Add("MockBOID", typeof(Guid), PropReadWriteRule.WriteOnce, "MockBOID", null);
+            lPropDefCol.Add("MockBOID", typeof(Guid), PropReadWriteRule.WriteOnce, "MockBOID", null);
             return lPropDefCol;
         }
 
@@ -173,9 +235,11 @@ namespace Habanero.Test.BO
         {
             get { return _boPropCol; }
         }
-
+        
         #endregion //For Testing
     }
 
-        #endregion
+    #endregion
+
+    
 }

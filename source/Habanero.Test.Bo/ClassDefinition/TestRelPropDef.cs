@@ -59,5 +59,45 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("Prop", relProp.OwnerPropertyName);
             Assert.AreEqual("PropName", relProp.RelatedClassPropName);
         }
+
+        [Test, ExpectedException()]
+        public void TestAddNullException()
+        {
+            RelPropDef relPropDef = new RelPropDef(null, "");
+        }
+
+        [Test]
+        public void TestProtectedGetsAndSets()
+        {
+            PropDef propDef = new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("prop2", typeof(string), PropReadWriteRule.ReadWrite, null);
+            RelPropDefInheritor relPropDef = new RelPropDefInheritor(propDef);
+
+            Assert.AreEqual(propDef, relPropDef.GetSetOwnerProperty);
+            relPropDef.GetSetOwnerProperty = propDef2;
+            Assert.AreEqual(propDef2, relPropDef.GetSetOwnerProperty);
+
+            Assert.AreEqual("relprop", relPropDef.RelatedClassPropName);
+            relPropDef.SetRelatedClassPropName("newrelprop");
+            Assert.AreEqual("newrelprop", relPropDef.RelatedClassPropName);
+        }
+
+        // Grants access to protected methods
+        private class RelPropDefInheritor : RelPropDef
+        {
+            public RelPropDefInheritor(PropDef propDef) : base(propDef, "relprop")
+            {}
+
+            public PropDef GetSetOwnerProperty
+            {
+                get { return OwnerProperty; }
+                set { OwnerProperty = value;}
+            }
+
+            public void SetRelatedClassPropName(string name)
+            {
+                RelatedClassPropName = name;
+            }
+        }
     }
 }

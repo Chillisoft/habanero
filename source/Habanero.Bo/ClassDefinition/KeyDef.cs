@@ -256,12 +256,13 @@ namespace Habanero.BO.ClassDefinition
 		//    return _propDefs.Values.GetEnumerator();
 		//}
 
+        /// <summary>
+        /// Returns a count of the number of property definitions held
+        /// in this key definition
+        /// </summary>
         public int Count
         {
-            get
-            {
-                return _propDefs.Count;
-            }
+            get { return _propDefs.Count; }
         }
 
 		#region IEnumerable<PropDef> Members
