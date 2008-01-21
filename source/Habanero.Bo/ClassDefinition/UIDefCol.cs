@@ -66,7 +66,18 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns true if contained</returns>
         public bool Contains(UIDef def)
         {
-            return _defs.ContainsKey(def.Name);
+            return Contains(def.Name);
+        }
+
+        /// <summary>
+        /// Indicates whether a ui definition with the given name is contained in the
+        /// collection
+        /// </summary>
+        /// <param name="uiDefName">The ui definition name</param>
+        /// <returns>Returns true if contained</returns>
+        public bool Contains(string uiDefName)
+        {
+            return _defs.ContainsKey(uiDefName);
         }
 
         /// <summary>

@@ -148,6 +148,7 @@ namespace Habanero.BO
 		{
 			MatchList listOfPaths = new MatchList();
 			if (matchesConditionDelegate == null) return listOfPaths;
+            if (relationshipDefCol == null) return listOfPaths;
 			if (alreadyChecked.Contains(relationshipDefCol)) return listOfPaths;
 			alreadyChecked.Add(relationshipDefCol);
 			foreach (RelationshipDef relationshipDef in relationshipDefCol)

@@ -192,7 +192,6 @@ namespace Habanero.BO
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
             }
-            
 		}
 
 		/// <summary>
@@ -207,15 +206,9 @@ namespace Habanero.BO
             SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
 			foreach (BusinessObject bo in col)
 			{
-			    string stringValue = bo.ToString();
-                string originalValue = null;
-                int count = 1;
-                while (sortedLookupList.ContainsKey(stringValue))
-                {
-                    if (originalValue == null) originalValue = stringValue;
-                    stringValue = originalValue + "(" + ++count + ")";
-                }
-                sortedLookupList.Add(stringValue, bo);
+                string stringValue = bo.ToString();
+                stringValue = GetAvailableDisplayValue(sortedLookupList, stringValue);
+			    sortedLookupList.Add(stringValue, bo);
 			}
 		    Dictionary<string, object> lookupList = new Dictionary<string, object>();
             foreach (string key in sortedLookupList.Keys)
@@ -225,7 +218,25 @@ namespace Habanero.BO
             return lookupList;
 		}
 
-		#endregion ILookupList Implementation
+        ///<summary>
+        /// Returns a unique display value for an item of the given name, so that it can be added to the list without the risk of having duplicate entries.
+        ///</summary>
+        ///<param name="sortedLookupList">The list of existing values</param>
+        ///<param name="stringValue">The new value to determine a display value for</param>
+        ///<returns>Returns a unique display value for an item of the given name.</returns>
+        public static string GetAvailableDisplayValue(SortedDictionary<string, object> sortedLookupList, string stringValue)
+        {
+            string originalValue = null;
+            int count = 1;
+            while (sortedLookupList.ContainsKey(stringValue))
+            {
+                if (originalValue == null) originalValue = stringValue;
+                stringValue = originalValue + "(" + ++count + ")";
+            }
+            return stringValue;
+        }
+
+        #endregion ILookupList Implementation
 
 		#region Type Initialisation
 

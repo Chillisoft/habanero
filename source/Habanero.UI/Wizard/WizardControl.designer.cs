@@ -28,31 +28,12 @@ namespace Habanero.UI.Wizard
         /// </summary>
         private void InitializeComponent()
         {
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.uxNextButton = new System.Windows.Forms.Button();
             this.uxPreviousButton = new System.Windows.Forms.Button();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            this.pnlButtons = new System.Windows.Forms.Panel();
+            this.pnlWizardStep = new System.Windows.Forms.Panel();
+            this.pnlButtons.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(5);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.uxNextButton);
-            this.splitContainer1.Panel2.Controls.Add(this.uxPreviousButton);
-            this.splitContainer1.Size = new System.Drawing.Size(338, 283);
-            this.splitContainer1.SplitterDistance = 235;
-            this.splitContainer1.TabIndex = 0;
             // 
             // uxNextButton
             // 
@@ -76,23 +57,42 @@ namespace Habanero.UI.Wizard
             this.uxPreviousButton.UseVisualStyleBackColor = true;
             this.uxPreviousButton.Click += new System.EventHandler(this.uxPreviousButton_Click);
             // 
+            // pnlButtons
+            // 
+            this.pnlButtons.Controls.Add(this.uxPreviousButton);
+            this.pnlButtons.Controls.Add(this.uxNextButton);
+            this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlButtons.Location = new System.Drawing.Point(0, 239);
+            this.pnlButtons.Name = "pnlButtons";
+            this.pnlButtons.Size = new System.Drawing.Size(338, 44);
+            this.pnlButtons.TabIndex = 1;
+            // 
+            // pnlWizardStep
+            // 
+            this.pnlWizardStep.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlWizardStep.Location = new System.Drawing.Point(0, 0);
+            this.pnlWizardStep.Name = "pnlWizardStep";
+            this.pnlWizardStep.Size = new System.Drawing.Size(338, 239);
+            this.pnlWizardStep.TabIndex = 0;
+            // 
             // WizardControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.pnlWizardStep);
+            this.Controls.Add(this.pnlButtons);
             this.Name = "WizardControl";
             this.Size = new System.Drawing.Size(338, 283);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.ResumeLayout(false);
+            this.pnlButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Button uxNextButton;
         private System.Windows.Forms.Button uxPreviousButton;
+        private System.Windows.Forms.Panel pnlButtons;
+        private System.Windows.Forms.Panel pnlWizardStep;
     }
 }

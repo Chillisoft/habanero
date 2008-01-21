@@ -77,28 +77,32 @@ namespace Habanero.BO
         public T GetRelatedObject<T>(IDatabaseConnection connection)
 			where T :BusinessObject
         {
+            IExpression newRelationshipExpression = _relKey.RelationshipExpression();
             if (_relatedBo == null ||
-                (_storedRelationshipExpression != _relKey.RelationshipExpression().ExpressionString()))
+                (_storedRelationshipExpression != newRelationshipExpression.ExpressionString()))
             {
                 //log.Debug("Retrieving related object, in relationship " + this.RelationshipName) ;
                 if (HasRelationship())
                 {
                     //log.Debug("HasRelationship returned true, loading object.") ;
                     BusinessObject busObj =
-                        (BusinessObject) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
+                        (BusinessObject)Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
                     busObj.SetDatabaseConnection(connection);
 
-                    IExpression relExp = _relKey.RelationshipExpression();
-                    busObj = BOLoader.Instance.GetBusinessObject(busObj, relExp);
+                    busObj = BOLoader.Instance.GetBusinessObject(busObj, newRelationshipExpression);
                     if (_relDef.KeepReferenceToRelatedObject)
                     {
                         _relatedBo = busObj;
-                        _storedRelationshipExpression = relExp.ExpressionString();
+                        _storedRelationshipExpression = newRelationshipExpression.ExpressionString();
                     }
                     else
                     {
                         return (T)busObj;
                     }
+                } else
+                {
+                    _relatedBo = null;
+                    _storedRelationshipExpression = newRelationshipExpression.ExpressionString();
                 }
             }
             else

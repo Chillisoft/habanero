@@ -18,6 +18,7 @@ namespace Habanero.UI.Forms
     public class LookupComboBoxMapper : ComboBoxMapper
     {
         private bool _allowRightClick = true;
+        private bool _isRightClickInitialised;
 
         /// <summary>
         /// Constructor to initialise the mapper
@@ -175,7 +176,7 @@ namespace Habanero.UI.Forms
         {
             BOMapper mapper = new BOMapper(_businessObject);
             Dictionary<string, object> col = mapper.GetLookupList(_propertyName);
-            if (_lookupTypeClassDef == null)
+            if (!_isRightClickInitialised)
             {
                 //SetupRightClickBehaviour();
                 if (_attributes != null && !_attributes.Contains("rightClickEnabled") &&
@@ -192,26 +193,12 @@ namespace Habanero.UI.Forms
                 {
                     RightClickEnabled = _allowRightClick;
                 }
+                _isRightClickInitialised = true;
             }
-            //if (col.Count == 0) {
-            //throw new LookupListNotSetException();
-            //} else {
             SetLookupList(col);
-            //}
             if (col.Count > 0 && _businessObject.GetPropertyValue(_propertyName) != null)
             {
                 SetValueFromLookupList();
-               // foreach (KeyValuePair<string, object> pair in _collection)
-               // {
-               //     if (pair.Value != null && pair.Value.Equals( _businessObject.GetPropertyValue(_propertyName)))
-               //     {
-               //         _comboBox.SelectedItem = pair.Key;
-               //     }
-               // }
-               //// _comboBox.SelectedItem =
-               // //    _collection.FindByGuid((Guid) _businessObject.GetPropertyValue(_propertyName));
-               // _comboBox.SelectionStart = 0;
-               // _comboBox.SelectionLength = 0;
             }
         }
 
@@ -220,7 +207,7 @@ namespace Habanero.UI.Forms
         /// ComboBox with the collection of items provided
         /// </summary>
         /// <param name="col">The items used to populate the list</param>
-        public void SetLookupList(Dictionary<string, object> col)
+        public override void SetLookupList(Dictionary<string, object> col)
         {
             int width = _comboBox.Width;
             Label lbl = ControlFactory.CreateLabel("", false);
@@ -255,15 +242,15 @@ namespace Habanero.UI.Forms
         {
             if (_attributes["rightClickEnabled"] != null)
             {
-                string isEnabled = (string)_attributes["rightClickEnabled"];
-                if (isEnabled != "true" && isEnabled != "false")
+                string rightClickEnabled = (string)_attributes["rightClickEnabled"];
+                if (rightClickEnabled != "true" && rightClickEnabled != "false")
                 {
                     throw new InvalidXmlDefinitionException("An error " +
                         "occurred while reading the 'rightClickEnabled' parameter " +
                         "from the class definitions.  The 'value' " +
                         "attribute must hold either 'true' or 'false'.");
                 }
-                _allowRightClick = Convert.ToBoolean(isEnabled);
+                _allowRightClick = Convert.ToBoolean(rightClickEnabled);
             }
         }
     }

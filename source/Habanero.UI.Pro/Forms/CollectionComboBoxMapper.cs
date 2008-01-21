@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.UI.Base;
+using Habanero.UI.Pro.Forms;
 using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
@@ -17,27 +18,18 @@ namespace Habanero.UI.Forms
     {
         private readonly ComboBox _comboBox;
 		private IBusinessObjectCollection _collection;
-        private string _uiDefName;
         private MouseEventHandler _mouseClickHandler;
+        private ComboBoxRightClickController _comboBoxRightClickController;
+
 
         /// <summary>
         /// Constructor to create a new collection ComboBox mapper object.
-        /// Sets the UIDefName to "default".
         /// </summary>
         /// <param name="comboBox">The ComboBox object to map</param>
-        public CollectionComboBoxMapper(ComboBox comboBox) : this(comboBox, "default")
-        {
-        }
-
-        /// <summary>
-        /// A constructor as before, but with the provision of a string name
-        /// for the object
-        /// </summary>
-        public CollectionComboBoxMapper(ComboBox comboBox, string uiDefName)
+        public CollectionComboBoxMapper(ComboBox comboBox)
         {
             Permission.Check(this);
             _comboBox = comboBox;
-            _uiDefName = uiDefName;
         }
 
         /// <summary>
@@ -55,6 +47,7 @@ namespace Habanero.UI.Forms
                 _collection.BusinessObjectRemoved -= new EventHandler<BOEventArgs>(BusinessObjectRemovedHandler);
             }
             _collection = collection;
+            SetupComboBoxRightClickController();
             SetComboBoxCollection(_comboBox, _collection, includeBlank);
 //			_comboBox.Items.Clear();
 //			foreach (BusinessObjectBase businessObjectBase in _collection) {
@@ -63,6 +56,27 @@ namespace Habanero.UI.Forms
 
             _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(BusinessObjectAddedHandler);
             _collection.BusinessObjectRemoved += new EventHandler<BOEventArgs>(BusinessObjectRemovedHandler);
+        }
+
+        private void SetupComboBoxRightClickController()
+        {
+            _comboBoxRightClickController = new ComboBoxRightClickController(_comboBox, _collection.ClassDef);
+            _comboBoxRightClickController.NewObjectCreated += NewComboBoxObjectCreated;
+        }
+
+        private void NewComboBoxObjectCreated(BusinessObject businessObject)
+        {
+            _collection.Add(businessObject);
+            _comboBox.SelectedItem = businessObject;
+        }
+
+        ///<summary>
+        /// The controller used to handle the right-click pop-up form behaviour
+        ///</summary>
+        public ComboBoxRightClickController ComboBoxRightClickController
+        {
+            get { return _comboBoxRightClickController; }
+            set { _comboBoxRightClickController = value; }
         }
 
         /// <summary>
@@ -159,36 +173,8 @@ namespace Habanero.UI.Forms
         /// </summary>
         public void SetupRightClickBehaviour()
         {
-            BOMapper mapper = new BOMapper(_collection.SampleBo);
-            if (mapper.GetUIDef(_uiDefName) != null)
-            {
-                ToolTip toolTip = new ToolTip();
-                toolTip.SetToolTip(_comboBox, "Right click to add a new entry.");
-                _mouseClickHandler = new MouseEventHandler(ComboBoxMouseUpHandler);
-                _comboBox.MouseUp += _mouseClickHandler; 
-            }
+            _comboBoxRightClickController.SetupRightClickBehaviour();
         }
-
-        /// <summary>
-        /// A handler to deal with the release of a mouse button on the
-        /// ComboBox, allowing the user to add a new business object.
-        /// See SetupRightClickBehaviour() for more detail.
-        /// </summary>
-        /// <param name="sender">The object that notified of the change</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void ComboBoxMouseUpHandler(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-            {
-                return;
-            }
-            BusinessObject newBo = _collection.ClassDef.CreateNewBusinessObject();
-            DefaultBOEditorForm form = new DefaultBOEditorForm(newBo, _uiDefName);
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                _collection.Add(newBo);
-                _comboBox.SelectedItem = newBo;
-            }
-        }
+        
     }
 }

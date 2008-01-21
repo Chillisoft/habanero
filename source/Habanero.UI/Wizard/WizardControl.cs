@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using Habanero.Base;
 
 namespace Habanero.UI.Wizard
 {
@@ -58,7 +59,7 @@ namespace Habanero.UI.Wizard
         /// </summary>
         public Control CurrentControl
         {
-            get { return this.splitContainer1.Panel1.Controls[0]; }
+            get { return this.pnlWizardStep.Controls[0]; }
         }
 
         /// <summary>
@@ -129,9 +130,9 @@ namespace Habanero.UI.Wizard
         {
             Control stepControl = step as Control;
             if (stepControl != null) {
-                splitContainer1.Panel1.Controls.Clear();
+                pnlWizardStep.Controls.Clear();
                 stepControl.Dock = DockStyle.Fill;
-                splitContainer1.Panel1.Controls.Add(stepControl);
+                pnlWizardStep.Controls.Add(stepControl);
                 step.InitialiseStep();
             } else {
                 throw new WizardStepException("IWizardStep of type " + step.GetType().FullName + " is not a Control");
@@ -141,12 +142,19 @@ namespace Habanero.UI.Wizard
 
         private void uxNextButton_Click(object sender, EventArgs e)
         {
-            if (_wizardController.IsLastStep())
+            try
             {
-                Finish();
-            }
-            else {
-                Next();
+                if (_wizardController.IsLastStep())
+                {
+                    Finish();
+                }
+                else
+                {
+                    Next();
+                }
+            } catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex, "Cannot complete this wizard step due to an error:", "Wizard Step Error");
             }
         }
 

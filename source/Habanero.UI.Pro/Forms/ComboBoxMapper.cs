@@ -8,6 +8,7 @@ using Habanero.BO;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
+using Habanero.UI.Pro.Forms;
 using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
@@ -17,10 +18,11 @@ namespace Habanero.UI.Forms
     /// </summary>
     public abstract class ComboBoxMapper : ControlMapper
     {
-        protected ClassDef _lookupTypeClassDef;
         protected ComboBox _comboBox;
         protected Dictionary<string, object> _collection;
         protected bool _rightClickEnabled;
+        protected ClassDef _lookupTypeClassDef;
+        protected ComboBoxRightClickController _comboBoxRightClickController;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -56,6 +58,27 @@ namespace Habanero.UI.Forms
                 _rightClickEnabled = value;
             }
         }
+        
+        ///<summary>
+        /// The controller used to handle the right-click pop-up form behaviour
+        ///</summary>
+        public ComboBoxRightClickController ComboBoxRightClickController
+        {
+            get { return _comboBoxRightClickController; }
+            set { _comboBoxRightClickController = value; }
+        }
+
+
+        protected override void OnBusinessObjectChanged()
+        {
+            if (_comboBoxRightClickController == null && _businessObject != null)
+            {
+                BOMapper mapper = new BOMapper(_businessObject);
+                _lookupTypeClassDef = mapper.GetLookupListClassDef(_propertyName);
+                _comboBoxRightClickController = new ComboBoxRightClickController(_comboBox, _lookupTypeClassDef);
+                _comboBoxRightClickController.NewObjectCreated += NewObjectCreated;
+            }
+        }
 
         /// <summary>
         /// Sets up a handler so that right-clicking on the ComboBox will
@@ -65,13 +88,35 @@ namespace Habanero.UI.Forms
         /// </summary>
         protected void SetupRightClickBehaviour()
         {
-            BOMapper mapper = new BOMapper(_businessObject);
-            _lookupTypeClassDef = mapper.GetLookupListClassDef(_propertyName);
-            if (_lookupTypeClassDef != null && _lookupTypeClassDef.UIDefCol["default"].UIForm != null)
+            _comboBoxRightClickController.SetupRightClickBehaviour();
+        }
+
+        private void NewObjectCreated(BusinessObject businessObject)
+        {
+            try
             {
-                ToolTip toolTip = new ToolTip();
-                toolTip.SetToolTip(_comboBox, "Right click to add a new entry.");
-                _comboBox.MouseUp += new MouseEventHandler(ComboBoxMouseUpHandler);
+                SortedDictionary<string, object> sortedDictionary = new SortedDictionary<string, object>();
+                foreach (KeyValuePair<string, object> keyValuePair in _collection)
+                {
+                    sortedDictionary.Add(keyValuePair.Key,keyValuePair.Value);
+                }
+                string newItem = businessObject.ToString();
+                newItem = BusinessObjectLookupList.GetAvailableDisplayValue(sortedDictionary, newItem);
+                sortedDictionary.Add(newItem, businessObject);
+                Dictionary<string, object> dictionary = new Dictionary<string, object>(sortedDictionary.Count);
+                foreach (KeyValuePair<string, object> keyValuePair in sortedDictionary)
+                {
+                    dictionary.Add(keyValuePair.Key, keyValuePair.Value);
+                }
+                SetLookupList(dictionary);
+                _comboBox.SelectedItem = newItem;
+            }
+            catch (Exception ex)
+            {
+                GlobalRegistry.UIExceptionNotifier.Notify(ex,
+                                                          "There was an problem adding a new " +
+                                                          _lookupTypeClassDef.ClassName + " to the list: ",
+                                                          "Error adding");
             }
         }
 
@@ -80,65 +125,9 @@ namespace Habanero.UI.Forms
         /// </summary>
         protected void DisableRightClickBehaviour()
         {
-            //BOMapper mapper = new BOMapper(_businessObject);
-            //_lookupTypeClassDef = mapper.GetLookupListClassDef(_propertyName);
-            //if (_lookupTypeClassDef != null)
-            //{
-                ToolTip toolTip = new ToolTip();
-                toolTip.SetToolTip(_comboBox, "");
-                _comboBox.MouseUp -= ComboBoxMouseUpHandler;
-            //}
-        }
-
-        /// <summary>
-        /// A handler to deal with the release of a mouse button on the
-        /// ComboBox, allowing the user to add a new business object.
-        /// See SetupRightClickBehaviour() for more detail.
-        /// </summary>
-        /// <param name="sender">The object that notified of the change</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void ComboBoxMouseUpHandler(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
+            if (_comboBoxRightClickController != null)
             {
-                return;
-            }
-            BusinessObject lookupBo = _lookupTypeClassDef.CreateNewBusinessObject();
-            BoPanelControl boCtl = new BoPanelControl(lookupBo, "");
-            boCtl.Height = _lookupTypeClassDef.UIDefCol["default"].UIForm.Height;
-            boCtl.Width = _lookupTypeClassDef.UIDefCol["default"].UIForm.Width;
-            OKCancelDialog dialog =
-                new OKCancelDialog(boCtl, "Add a new entry", _comboBox.PointToScreen(new Point(0, 0)));
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    ArrayList originalCol = new ArrayList();
-                    foreach (object item in _comboBox.Items)
-                    {
-                        originalCol.Add(item.ToString());
-                    }
-                    lookupBo.Save();
-                    SetupComboBoxItems();
-
-                    string newItem = lookupBo.ToString();
-                    foreach (object item in _comboBox.Items)
-                    {
-                        if (!originalCol.Contains(item))
-                        {
-                            newItem = item.ToString();
-                            break;
-                        }
-                    }
-                    _comboBox.SelectedItem = newItem;
-                }
-                catch (Exception ex)
-                {
-                    GlobalRegistry.UIExceptionNotifier.Notify(ex,
-                                                              "There was an problem adding a new " +
-                                                              _lookupTypeClassDef.ClassName + " to the list: ",
-                                                              "Error adding");
-                }
+                _comboBoxRightClickController.DisableRightClickBehaviour();
             }
         }
 
@@ -146,5 +135,12 @@ namespace Habanero.UI.Forms
         /// Sets up the items to be listed in the ComboBox
         /// </summary>
         protected abstract void SetupComboBoxItems();
+
+        /// <summary>
+        /// This method is called by SetupLookupList() and populates the
+        /// ComboBox with the collection of items provided
+        /// </summary>
+        /// <param name="col">The items used to populate the list</param>
+        public abstract void SetLookupList(Dictionary<string, object> col);
     }
 }
