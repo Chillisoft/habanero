@@ -19,6 +19,7 @@
 
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.UI.Base;
 
 namespace Habanero.Test
 {
@@ -31,6 +32,7 @@ namespace Habanero.Test
         {
             //GlobalRegistry.SynchronisationController = new NullSynchronisationController();
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
+            GlobalUIRegistry.UISettings = new UISettings();
         }
     }
 }
