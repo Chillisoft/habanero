@@ -18,10 +18,13 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.IO;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.Loaders;
 using Habanero.Util;
+using Habanero.Util.File;
 using NMock;
 using NUnit.Framework;
 
@@ -136,12 +139,40 @@ TestDtd3";
         }
 
         [Test]
-        public void TestLoadFromResource() {
+        public void TestLoadFromResource()
+        {
             DtdLoader loader = new DtdLoader();
             string dtd = loader.LoadDtd("class");
             Assert.AreNotEqual(0, dtd.Length);
             Assert.AreNotEqual("#include", dtd.Substring(0, 8));
         }
-        
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestDtdNodeInvalidException()
+        {
+            DtdLoader loader = new DtdLoader();
+            string dtd = loader.LoadDtd("notexists");
+        }
+
+        [Test, ExpectedException(typeof(FileNotFoundException))]
+        public void TestDtdNotFoundException()
+        {
+            DtdLoader loader = new DtdLoader(new TextFileLoader(), "somepath");
+            string dtd = loader.LoadDtd("notexists");
+        }
+
+        [Test, ExpectedException(typeof(FileNotFoundException))]
+        public void TestDtdNotFoundExceptionWithEmptyPath()
+        {
+            DtdLoader loader = new DtdLoader(new TextFileLoader(), "");
+            string dtd = loader.LoadDtd("notexists");
+        }
+
+        [Test, ExpectedException(typeof(FileNotFoundException))]
+        public void TestDtdNotFoundExceptionWithIncludesList()
+        {
+            DtdLoader loader = new DtdLoader(new TextFileLoader(), "somepath");
+            string dtd = loader.LoadDtd("somefile", new ArrayList());
+        }
     }
 }

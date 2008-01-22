@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base.Exceptions;
 using Habanero.BO.Loaders;
 using Habanero.BO;
 using NUnit.Framework;
@@ -31,11 +32,43 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlPropertyRuleLoader
     {
+        private XmlRuleLoader _loader;
+
+        [SetUp]
+        public void Initialise()
+        {
+            _loader = new XmlRuleLoader(); 
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoKeyAttribute()
+        {
+            _loader.LoadRule(typeof(int).Name, @"
+                <rule name=""TestRule"" message=""Test Message"">
+                    <add value=""1"" />
+                </rule>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoValueAttribute()
+        {
+            _loader.LoadRule(typeof(int).Name, @"
+                <rule name=""TestRule"" message=""Test Message"">
+                    <add key=""max"" />
+                </rule>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoAddElements()
+        {
+            _loader.LoadRule(typeof(int).Name, @"
+                <rule name=""TestRule"" message=""Test Message"">
+                </rule>");
+        }
 
         [Test]
         public void TestRuleOfInteger() {
-            XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(int).Name, @"<rule name=""Test Rule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
+            PropRuleBase rule = _loader.LoadRule(typeof(int).Name, @"<rule name=""Test Rule"" message=""Test Message""><add key=""min"" value=""2""/><add key=""max"" value=""10"" /></rule>");
             Assert.AreEqual("PropRuleInteger", rule.GetType().Name, "Incorrect rule type created.");
             Assert.AreEqual("Test Rule", rule.Name, "Name name is not being read from xml correctly.");
             Assert.AreEqual("Test Message", rule.Message, "Message is not being read from xml correctly.");
@@ -48,19 +81,17 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleIntegerNoValues()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""><add key=""max"" value=""1""/></rule>");
+            PropRuleBase rule = _loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""><add key=""max"" value=""1""/></rule>");
             Assert.AreEqual(int.MinValue, ((PropRuleInteger)rule).MinValue);
-            rule = loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""><add key=""min"" value=""1""/></rule>");
+            rule = _loader.LoadRule(typeof(int).Name, @"<rule name=""TestRule"" message=""Test Message""><add key=""min"" value=""1""/></rule>");
             Assert.AreEqual(int.MaxValue, ((PropRuleInteger)rule).MaxValue);
         }
 
         //[Test]
         //public void TestIsCompulsory()
         //{
-        //    XmlPropertyRuleLoader loader = new XmlPropertyRuleIntegerLoader();
         //    PropRuleBase propRule =
-        //        loader.LoadPropertyRule(
+        //        _loader.LoadPropertyRule(
         //            @"<propertyRuleInteger name=""TestInt"" isCompulsory=""true""></propertyRuleInteger>");
         //    Assert.IsTrue(propRule.IsCompulsory, "Property should be compulsory as defined in the xml");
         //}
@@ -68,8 +99,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleString()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(string).Name, @"<rule name=""TestString"" message=""String Test Message""><add key=""maxLength"" value=""100""/></rule>");
+            PropRuleBase rule = _loader.LoadRule(typeof(string).Name, @"<rule name=""TestString"" message=""String Test Message""><add key=""maxLength"" value=""100""/></rule>");
 
             Assert.AreEqual("PropRuleString", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("TestString", rule.Name, "Rule name is not being read from xml correctly.");
@@ -80,7 +110,7 @@ namespace Habanero.Test.BO.Loaders
                             "An empty string should be the default pattern match string according to the dtd.");
             Assert.AreEqual(0, ((PropRuleString)rule).MinLength,
                             "0 should be the default minlength according to the dtd.");
-            rule = loader.LoadRule(typeof(string).Name, @"<rule name=""TestString"" message=""String Test Message""><add key=""minLength"" value=""1""/></rule>");
+            rule = _loader.LoadRule(typeof(string).Name, @"<rule name=""TestString"" message=""String Test Message""><add key=""minLength"" value=""1""/></rule>");
             Assert.AreEqual(-1, ((PropRuleString)rule).MaxLength,
                             "-1 should be the default maxlength according to the dtd.");
         }
@@ -88,8 +118,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleStringAttributes()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(string).Name,
+            PropRuleBase rule = _loader.LoadRule(typeof(string).Name,
                         @"<rule name=""TestString"" message=""String Test Message"" >
                             <add key=""patternMatch"" value=""Test Pattern"" />
                             <add key=""minLength"" value=""5"" />          
@@ -106,9 +135,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDate()
         {
-
-            XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(DateTime).Name,
+            PropRuleBase rule = _loader.LoadRule(typeof(DateTime).Name,
                         @"<rule name=""TestDate""  >
                             <add key=""min"" value=""01 Feb 2004"" />
                             <add key=""max"" value=""09 Oct 2004"" />
@@ -125,8 +152,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDecimal()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(Decimal).Name,
+            PropRuleBase rule = _loader.LoadRule(typeof(Decimal).Name,
                         @"<rule name=""TestDec"" >
                             <add key=""min"" value=""1.5"" />
                             <add key=""max"" value=""8.2"" />
@@ -141,33 +167,47 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDecimalNoValues()
         {
-            XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule(typeof(Decimal).Name, @"<rule name=""TestDec""><add key=""max"" value=""1""/></rule>");
+            PropRuleBase rule = _loader.LoadRule(typeof(Decimal).Name, @"<rule name=""TestDec""><add key=""max"" value=""1""/></rule>");
             Assert.AreEqual(Decimal.MinValue, ((PropRuleDecimal)rule).MinValue);
-            rule = loader.LoadRule(typeof(Decimal).Name, @"<rule name=""TestDec""><add key=""min"" value=""1""/></rule>");
+            rule = _loader.LoadRule(typeof(Decimal).Name, @"<rule name=""TestDec""><add key=""min"" value=""1""/></rule>");
             Assert.AreEqual(Decimal.MaxValue, ((PropRuleDecimal)rule).MaxValue);
-        }     
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoRuleForCustomType()
+        {
+            PropRuleBase rule = _loader.LoadRule(typeof(TimeSpan).Name,
+                @"<rule name=""TestCustom"">
+                    <add key=""bob"" value=""billy"" />
+                </rule>");
+        }
    
         [Test]
-        public void TestCustomRuleClass() {
-            XmlRuleLoader loader = new XmlRuleLoader();
-            PropRuleBase rule = loader.LoadRule("CustomProperty",
+        public void TestCustomRuleClass()
+        {
+            PropRuleBase rule = _loader.LoadRule("CustomProperty",
                         @"<rule name=""TestCustom"" class=""Habanero.Test.BO.Loaders.MyRule"" assembly=""Habanero.Test.BO"">
                             <add key=""bob"" value=""billy"" />
-                        </rule>                          
-");
+                        </rule>");
             Assert.AreEqual("MyRule", rule.GetType().Name, "Incorrect property rule type created.");
             Assert.AreEqual("billy", ((MyRule)rule).Bob);
         }
 
-
+        [Test, ExpectedException(typeof(TypeLoadException))]
+        public void TestCustomRuleMustInheritFromPropRuleBase()
+        {
+            PropRuleBase rule = _loader.LoadRule(typeof(TimeSpan).Name,
+                @"<rule name=""TestCustom"" class=""Habanero.Test.MyBO"" assembly=""Habanero.Test"">
+                    <add key=""bob"" value=""billy"" />
+                </rule>");
+        }
     }
 
     public class MyRule : PropRuleBase
     {
         private string _bob;
 
-        public MyRule(string name, string message)
+        public MyRule(string name, string message, Dictionary<string, object> parameters)
 			: base(name, message)
 		{
 		}

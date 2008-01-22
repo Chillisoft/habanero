@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections;
+using System.Xml;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -60,5 +62,42 @@ namespace Habanero.Test.BO.Loaders
 			");
             Assert.AreEqual(2, classDefList.Count);
         }
+
+        [Test, ExpectedException(typeof(XmlException))]
+        public void TestNoRootNodeException()
+        {
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            ClassDefCol classDefList = loader.LoadClassDefs(@"<invalidRootNode>");
+        }
+
+        // Trying to catch the exception in line 209 of XmlClassDefsLoader
+        //   but the exception gets caught earlier.
+//        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+//        public void TestRelatedPropertyException()
+//        {
+//            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+//            ClassDefCol classDefList = loader.LoadClassDefs(@"
+//					<classes>
+//						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+//							<property name=""TestClassID"" />
+//                            <primaryKey>
+//                                <prop name=""TestClassID""/>
+//                            </primaryKey>
+//						</class>
+//						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
+//							<property name=""TestRelatedClassID"" />
+//							<property name=""TestClassID"" />
+//                            <primaryKey>
+//                                <prop name=""TestRelatedClassID""/>
+//                            </primaryKey>
+//                            <relationship name=""TestClass"" type=""single"" relatedClass=""TestClass"" relatedAssembly=""Habanero.Test.BO.Loaders"" >
+//                                <relatedProperty name=""notexists"" relatedProperty=""notexists"" />
+//                            </relationship>
+//						</class>
+//					</classes>
+//			");
+//        }
+
+
     }
 }

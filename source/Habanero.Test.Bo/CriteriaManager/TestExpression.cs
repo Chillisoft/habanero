@@ -243,6 +243,60 @@ namespace Habanero.Test.BO
             Assert.AreEqual("(param1 = ?Param0  AND  (param2 = ?Param1  OR  param2 = ?Param2))", st.Statement.ToString());
         }
 
+        [Test]
+        public void TestAppendExpression()
+        {
+            IExpression exp = Expression.CreateExpression("param1 = 'test' AND param2 = 3");
+            IExpression result = Expression.AppendExpression(exp, new SqlOperator("or"), "param2 = 4");
+
+            Assert.AreEqual("((param1 = 'test'  AND  param2 = '3') OR param2 = '4')",
+                result.ExpressionString());
+        }
+
+        [Test]
+        public void TestParameterConstructors()
+        {
+            Parameter param = new Parameter("prop", "field", "=", "value");
+            Assert.AreEqual("prop = 'value'", param.ExpressionString());
+            Assert.AreEqual("[field]", param.FieldFullName("[", "]"));
+
+            param = new Parameter("prop", "table", "field", "=", "value", ParameterType.String);
+            Assert.AreEqual("prop = 'value'", param.ExpressionString());
+            Assert.AreEqual("[table].[field]", param.FieldFullName("[", "]"));
+        }
+
+        [Test]
+        public void TestParameterTypes()
+        {
+            Parameter param = new Parameter("prop", "table", "field", "=", "value", ParameterType.String);
+            Assert.AreEqual("value", param.GetParameterValueAsObject());
+
+            param = new Parameter("prop", "table", "field", "=", "true", ParameterType.Bool);
+            Assert.AreEqual(true, param.GetParameterValueAsObject());
+
+            param = new Parameter("prop", "table", "field", "=", "2007/2/1", ParameterType.Date);
+            Assert.AreEqual(new DateTime(2007, 2, 1), param.GetParameterValueAsObject());
+
+            param = new Parameter("prop", "table", "field", "=", "2.1", ParameterType.Number);
+            Assert.AreEqual(2.1, param.GetParameterValueAsObject());
+        }
+
+        [Test]
+        public void TestGetSqlStringWithNoParameters()
+        {
+            Parameter param = new Parameter("prop", "table", "field", "=", "value", ParameterType.String);
+            Assert.AreEqual("", param.GetSqlStringWithNoParameters());
+        }
+
+        [Test]
+        public void TestSqlExpressionString()
+        {
+            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlOperator op = new SqlOperator("OR");
+            op.SqlExpressionString(statement, "", "");
+            op.SetParameterSqlInfo(null, null);  //for test coverage :)
+        }
+
         public static void RunTest()
         {
             TestExpression expTest = new TestExpression();

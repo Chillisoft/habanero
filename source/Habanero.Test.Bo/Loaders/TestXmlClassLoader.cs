@@ -19,6 +19,7 @@
 
 using System;
 using System.IO;
+using System.Xml;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -69,6 +70,32 @@ namespace Habanero.Test.BO.Loaders
         //{
         //    loader.LoadClass("<classDef name=\"TestClass\" assembly=\"Habanero.Test.BO.NoExist\" />");
         //}
+
+        [Test, ExpectedException(typeof(XmlException))]
+        public void TestClassWithNoAssembly()
+        {
+            ClassDef def = loader.LoadClass(@"
+                <class name=""TestClass"" >
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			");
+        }
+
+        [Test, ExpectedException(typeof(XmlException))]
+        public void TestClassWithNoClassname()
+        {
+            ClassDef def = loader.LoadClass(@"
+                <class assembly=""Habanero.Test.BO.Loaders"">
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			");
+        }
 
         [Test]
         public void TestNoTableName()
@@ -153,6 +180,15 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TestClass", def.ClassName);
         }
 
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestClassWithNoProps()
+        {
+            ClassDef def = loader.LoadClass(
+                @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+				</class>
+			");
+        }
+
         [Test]
         public void TestClassWithPrimaryKeyDef()
         {
@@ -206,6 +242,29 @@ namespace Habanero.Test.BO.Loaders
 					<primaryKey>
 						<prop name=""TestProp2"" />
 					</primaryKey>
+				</class>
+			");
+        }
+
+        // Not reaching the exception I was trying to cover (line 254 of XmlClassLoader)
+//        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+//        public void TestClassWithInvalidPrimaryKeyDef()
+//        {
+//            loader.LoadClass(@"
+//				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+//					<property name=""TestProp"" />
+//					<primaryKey/>
+//				</class>
+//			");
+//        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestClassWithPrimaryKeyAndNoProps()
+        {
+            ClassDef def = loader.LoadClass(
+                @"<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+					<property  name=""TestProp"" />
+					<primaryKey/>
 				</class>
 			");
         }
@@ -323,6 +382,26 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNotNull(uiDef);
             Assert.IsNotNull(uiDef.UIForm);
             Assert.IsNull(uiDef.UIGrid);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void TestEmptyXmlStringException()
+        {
+            ClassDef def = loader.LoadClass("");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidClassElementException()
+        {
+            ClassDef def = loader.LoadClass(@"
+				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+					<property  name=""TestProp"" />
+					<primaryKey>
+						<prop name=""TestProp"" />
+					</primaryKey>
+                    <invalid/>
+				</class>
+			");
         }
     }
 

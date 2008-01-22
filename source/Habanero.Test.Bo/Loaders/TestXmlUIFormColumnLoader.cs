@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -51,6 +52,22 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(123, col.Width);
             Assert.AreEqual("testlabel1", col[0].Label);
             Assert.AreEqual("testlabel2", col[1].Label);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidWidth()
+        {
+            loader.LoadUIFormColumn(@"
+				<columnLayout width=""aaa"">
+					<field property=""testpropname1"" />
+				</columnLayout>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoFields()
+        {
+            loader.LoadUIFormColumn(@"
+				<columnLayout></columnLayout>");
         }
     }
 }

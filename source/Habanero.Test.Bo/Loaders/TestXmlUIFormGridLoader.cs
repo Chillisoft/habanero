@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 //using Habanero.UI.Grid;
@@ -38,17 +39,30 @@ namespace Habanero.Test.BO.Loaders
             loader = new XmlUIFormGridLoader();
         }
 
-		// TODO: This test uses Habanero.UI.Pro, please investigate if this is necessary
-		// and then fix this so that it can be uncommented ( - Mark (2007/07/26) )
-		//[Test]
-		//public void TestSimpleGrid()
-		//{
-		//    UIFormGrid formGrid =
-		//        loader.LoadUIFormGrid(
-		//            @"<formGrid relationship=""testrelationshipname"" reverseRelationship=""testcorrespondingrelationshipname"" />");
-		//    Assert.AreEqual("testrelationshipname", formGrid.RelationshipName);
-		//    Assert.AreEqual("testcorrespondingrelationshipname", formGrid.CorrespondingRelationshipName);
-		//    Assert.AreEqual(typeof (EditableGrid), formGrid.GridType);
-		//}
+        // Exludes default grid type, because this resides in Habanero.UI.Pro
+        [Test]
+        public void TestDefaults()
+        {
+            UIFormGrid formGrid = loader.LoadUIFormGrid(@"
+                <formGrid relationship=""rel"" reverseRelationship=""correl"" type=""MyBO"" assembly=""Habanero.Test""/>");
+            Assert.AreEqual("rel", formGrid.RelationshipName);
+            Assert.AreEqual("correl", formGrid.CorrespondingRelationshipName);
+            Assert.AreEqual(typeof(MyBO), formGrid.GridType);
+        }
+
+        // Requires Habanero.UI.Pro
+        //[Test]
+        //public void TestDefaultGridType()
+        //{
+        //    UIFormGrid formGrid = loader.LoadUIFormGrid(@"<formGrid/>");
+        //    Assert.AreEqual(typeof(EditableGrid), formGrid.GridType);
+        //}
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestGridTypeNotExists()
+        {
+            loader.LoadUIFormGrid(@"
+                <formGrid relationship=""rel"" reverseRelationship=""correl"" type=""mygrid"" assembly=""somewhere""/>");
+        }
     }
 }

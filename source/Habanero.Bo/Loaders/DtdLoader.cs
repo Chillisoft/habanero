@@ -72,15 +72,19 @@ namespace Habanero.BO.Loaders
             {
                 return LoadDtd(dtdName, new ArrayList());
             }
-            else {
+            else
+            {
                 string dtdFileName = _dtdPath + dtdName + ".dtd";
-                if (!System.IO.File.Exists(dtdFileName)) {
+                if (!File.Exists(dtdFileName))
+                {
                     string errorMessage = "The Document Type Definition (DTD) for " +
                                           "the XML element '" + dtdName + "' was not found in the ";
-                    if (_dtdPath == null || _dtdPath.Length == 0) {
+                    if (_dtdPath == null || _dtdPath.Length == 0)
+                    {
                         errorMessage += "application's output/execution directory (eg. bin/debug). ";
                     }
-                    else {
+                    else
+                    {
                         errorMessage += "path: '" + _dtdPath + "'. ";
                     }
                     errorMessage += "Ensure that you have a .DTD file for each of the XML class " +
@@ -100,13 +104,14 @@ namespace Habanero.BO.Loaders
         /// <param name="alreadyIncludedFiles">A list of files already
         /// included</param>
         /// <returns>Returns a string containing the dtd</returns>
-        private string LoadDtd(string fileName, IList alreadyIncludedFiles)
+        internal string LoadDtd(string fileName, IList alreadyIncludedFiles)
         {
             TextReader reader = null;
             string dtd = "";
-            if (_resourceManager == null) {
-                
-                if (!System.IO.File.Exists(fileName)) {
+            if (_resourceManager == null)
+            {
+                if (!File.Exists(fileName))
+                {
                     throw new FileNotFoundException("The Document Type Definition " +
                                                     "(DTD) file, '" + fileName + "', was not found.  Please ensure " +
                                                     "that you have a DTD for each type of XML element you are " +
@@ -115,25 +120,31 @@ namespace Habanero.BO.Loaders
                                                     "the element name was spelt correctly and has the correct capitalisation.");
                 }
                 reader = _textFileLoader.LoadTextFile(fileName);
-            } else {
+            }
+            else
+            {
                 string dtdName = fileName;
-                if (fileName.EndsWith(".dtd")) {
+                if (fileName.EndsWith(".dtd"))
+                {
                     dtdName = fileName.Substring(0, fileName.Length - 4);
                 }
                 object o = _resourceManager.GetObject(dtdName);
                 if (o == null) o = _resourceManager.GetObject("_" + dtdName);
-                if (o == null) o = _resourceManager.GetObject(dtdName.Substring(0, 1).ToUpper() + dtdName.Substring(1, dtdName.Length - 1));
-                if (o == null) o = _resourceManager.GetObject(dtdName.Substring(0, 2).ToUpper() + dtdName.Substring(2, dtdName.Length - 2));
-                if (o == null) {
+                if (o == null) o = _resourceManager.GetObject(dtdName.Substring(0, 1).ToUpper() +
+                                                   dtdName.Substring(1, dtdName.Length - 1));
+                if (o == null) o = _resourceManager.GetObject(dtdName.Substring(0, 2).ToUpper() +
+                                                   dtdName.Substring(2, dtdName.Length - 2));
+                if (o == null)
+                {
                     throw new InvalidXmlDefinitionException("An invalid node '" + dtdName +
                                                             "' was encountered when loading the class definitions.");
                 }
                 reader = new StringReader((string) o);
             }
-        	do
-        	{
-        		string line = reader.ReadLine().Trim();
-        		if (line.StartsWith("#include"))
+            do
+            {
+                string line = reader.ReadLine().Trim();
+                if (line.StartsWith("#include"))
                 {
                     string fileToInclude = line.Substring(9);
                     if (!alreadyIncludedFiles.Contains(fileToInclude))
@@ -147,7 +158,7 @@ namespace Habanero.BO.Loaders
                     dtd += line;
                     dtd += Environment.NewLine;
                 }
-        	} while (reader.Peek() != -1);
+            } while (reader.Peek() != -1);
             return dtd;
         }
     }

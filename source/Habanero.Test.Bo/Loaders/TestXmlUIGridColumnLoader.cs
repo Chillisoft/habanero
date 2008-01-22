@@ -62,6 +62,12 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(100, uiProp.Width);
         }
 
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoPropertyName()
+        {
+            loader.LoadUIProperty(@"<column />");
+        }
+
         [Test]
         public void TestAssemblyAttributeForSystem()
         {
@@ -86,6 +92,31 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(typeof(MyBO), uiProp.GridControlType);
         }
 
+        [Test]
+        public void TestAlignment()
+        {
+            UIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" />");
+            Assert.AreEqual(UIGridColumn.PropAlignment.left, uiProp.Alignment);
+
+            uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""left"" />");
+            Assert.AreEqual(UIGridColumn.PropAlignment.left, uiProp.Alignment);
+
+            uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""right"" />");
+            Assert.AreEqual(UIGridColumn.PropAlignment.right, uiProp.Alignment);
+
+            uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""centre"" />");
+            Assert.AreEqual(UIGridColumn.PropAlignment.centre, uiProp.Alignment);
+
+            uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""center"" />");
+            Assert.AreEqual(UIGridColumn.PropAlignment.centre, uiProp.Alignment);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidAlignmentValue()
+        {
+            loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""123"" />");
+        }
+
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestInvalidAssemblyAttribute()
         {
@@ -98,6 +129,18 @@ namespace Habanero.Test.BO.Loaders
             loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""testx"" assembly=""System.Windows.Forms"" />");
         }
 
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidEditableValue()
+        {
+            loader.LoadUIProperty(@"<column property=""testpropname"" editable=""123"" />");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidWidthValue()
+        {
+            loader.LoadUIProperty(@"<column property=""testpropname"" width=""abc"" />");
+        }
+
         [Test]
         public void TestPropertyAttributes()
         {
@@ -107,5 +150,35 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TestValue", uiProp.GetParameterValue("TestAtt"));
             Assert.AreEqual("TestValue2", uiProp.GetParameterValue("TestAtt2"));
         }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestParameterWithNoName()
+        {
+            loader.LoadUIProperty(@"
+                <column property=""testpropname"" >
+                    <parameter value=""left"" />
+                </column>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestParameterWithNoValue()
+        {
+            loader.LoadUIProperty(@"
+                <column property=""testpropname"" >
+                    <parameter name=""alignment"" />
+                </column>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestDuplicateParameterNames()
+        {
+            loader.LoadUIProperty(@"
+                <column property=""testpropname"" >
+                    <parameter name=""alignment"" value=""left"" />
+                    <parameter name=""alignment"" value=""right"" />
+                </column>");
+        }
+
+        
     }
 }

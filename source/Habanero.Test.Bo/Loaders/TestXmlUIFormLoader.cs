@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -140,5 +141,68 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("testheading", col.Title);
         }
 
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestMixedElementsUnderForm()
+        {
+            loader.LoadUIFormDef(@"
+				<form width=""100"" height=""120"" title=""testheading"">
+					<tab name=""testtab"">
+						<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
+					</tab>
+					<field label=""testlabel3"" property=""testpropname3"" type=""Button"" mapperType=""testmappertypename3"" />
+                </form>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestMixedElementsUnderTab()
+        {
+            loader.LoadUIFormDef(@"
+				<form width=""100"" height=""120"" title=""testheading"">
+					<tab name=""testtab"">
+						<field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
+						<columnLayout>
+						    <field label=""testlabel1"" property=""testpropname1"" type=""Button"" mapperType=""testmappertypename1"" />
+                        </columnLayout>
+					</tab>
+                </form>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestMixedElementsUnderFormColumn()
+        {
+            loader.LoadUIFormDef(@"
+				<form>
+					<columnLayout>
+					    <field property=""testpropname1"" />
+				        <tab name=""testtab"">
+					        <field property=""testpropname1"" />
+    					</tab>
+                    </columnLayout>
+                </form>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoElementsUnderForm()
+        {
+            loader.LoadUIFormDef(@"<form/>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidWidth()
+        {
+            loader.LoadUIFormDef(@"
+                <form width=""abc"">
+                    <field property=""testpropname1"" />
+                </form>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidHeight()
+        {
+            loader.LoadUIFormDef(@"
+                <form height=""abc"">
+                    <field property=""testpropname1"" />
+                </form>");
+        }
     }
 }

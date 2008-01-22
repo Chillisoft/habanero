@@ -60,24 +60,10 @@ namespace Habanero.Test.BO.Loaders
             itsLoader.LoadPrimaryKey(@"<primaryKeyDef><prop name=""TestProp"" /></primaryKeyDef>", itsPropDefs);
         }
 
-        [
-            Test,
-                ExpectedException(typeof (InvalidXmlDefinitionException),
-                    "A primaryKey node must have one or more prop nodes")]
+        [Test, ExpectedException(typeof (InvalidXmlDefinitionException), "A primaryKey node must have one or more prop nodes")]
         public void TestWithNoProps()
         {
             itsLoader.LoadPrimaryKey(@"<primaryKey></primaryKey>", itsPropDefs);
-        }
-
-        [
-            Test,
-                ExpectedException(typeof(ArgumentException),
-                    "The property name 'TestProp' does not exist in the " +
-                    "collection of property definitions.")]
-        public void TestWithPropThatDoesNotExist()
-        {
-            PropDefCol propDefs = new PropDefCol();
-            itsLoader.LoadPrimaryKey(@"<primaryKey><prop name=""TestProp"" /></primaryKey>", propDefs);
         }
 
         [Test]
@@ -90,6 +76,24 @@ namespace Habanero.Test.BO.Loaders
                     itsPropDefs);
             Assert.AreEqual(2, def.Count, "Def should have one property in it.");
             Assert.AreEqual(false, def.IsObjectID, "Def should not be an objectID");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropElementMissingName()
+        {
+            itsLoader.LoadPrimaryKey(@"
+                <primaryKey>
+                    <prop />
+                </primaryKey>", itsPropDefs);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropElementForNonExistingProp()
+        {
+            itsLoader.LoadPrimaryKey(@"
+                <primaryKey>
+                    <prop name=""doesntexist"" />
+                </primaryKey>", itsPropDefs);
         }
     }
 }

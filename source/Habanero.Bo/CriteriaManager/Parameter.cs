@@ -180,7 +180,7 @@ namespace Habanero.BO.CriteriaManager
         /// Returns the parameter value in valid sql format
         /// </summary>
         /// <returns>Returns a string</returns>
-        private string GetSqlStringWithNoParameters()
+        internal string GetSqlStringWithNoParameters()
         {
             string strOp = _sqlOperator.ToUpper().Trim();
             if (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS")
@@ -201,7 +201,7 @@ namespace Habanero.BO.CriteriaManager
         /// a Decimal object.
         /// </summary>
         /// <returns>Returns the value as an object</returns>
-        private object GetParameterValueAsObject()
+        internal object GetParameterValueAsObject()
         {
             switch (_parameterType)
             {
@@ -272,7 +272,7 @@ namespace Habanero.BO.CriteriaManager
         /// See IExpression.SqlExpressionString for more detail.
         /// </summary>
         /// <returns>Returns a string with the full name</returns>
-        private string FieldFullName(string tableFieldNameLeftSeperator,
+        internal string FieldFullName(string tableFieldNameLeftSeperator,
                                      string tableFieldNameRightSeperator)
         {
             if (_tableName.Length > 0)

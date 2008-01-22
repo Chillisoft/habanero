@@ -2,4 +2,6 @@
 <!ATTLIST formGrid
 	relationship NMTOKEN #REQUIRED
 	reverseRelationship NMTOKEN #REQUIRED
+  type NMTOKEN "Habanero.UI.Grid.EditableGrid"
+	assembly NMTOKEN "Habanero.UI.Pro"
 >

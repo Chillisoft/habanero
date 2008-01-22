@@ -88,15 +88,40 @@ namespace Habanero.Test.BO.Loaders
             itsLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /></keyDef>", itsPropDefs);
         }
 
-        [
-            Test,
-                ExpectedException(typeof(ArgumentException),
-                    "The property name 'TestProp2' does not exist in the " +
-                    "collection of property definitions.")]
-        public void TestLoadKeyNonExistentProp()
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidIgnoreIfNullValue()
         {
-            itsLoader.LoadKey(@"<key name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>",
-                              itsPropDefs);
+            itsLoader.LoadKey(@"
+                <key name=""Key1"" ignoreIfNull=""invalidvalue"">
+                    <prop name=""TestProp"" />
+                </key>", itsPropDefs);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropElementInvalid()
+        {
+            itsLoader.LoadKey(@"
+                <key name=""Key1"">
+                    <props name=""TestProp"" />
+                </key>", itsPropDefs);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropElementMissingName()
+        {
+            itsLoader.LoadKey(@"
+                <key name=""Key1"">
+                    <prop />
+                </key>", itsPropDefs);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropElementForNonExistingProp()
+        {
+            itsLoader.LoadKey(@"
+                <key name=""Key1"">
+                    <prop name=""doesntexist"" />
+                </key>", itsPropDefs);
         }
     }
 }

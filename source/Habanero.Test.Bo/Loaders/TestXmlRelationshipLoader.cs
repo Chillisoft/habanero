@@ -123,5 +123,42 @@ namespace Habanero.Test.BO.Loaders
             RelationshipDef relDef = itsLoader.LoadRelationship(relationshipWithTwoProps, itsPropDefs);
             Assert.AreEqual(2, relDef.RelKeyDef.Count, "There should be two relatedProperty in the relationship.");
         }
+
+        [Test]
+        public void TestSetKeepReference()
+        {
+            RelationshipDef relDef =
+                itsLoader.LoadRelationship(
+                singleRelationshipString.Replace(@"BO""", @"BO"" keepReference=""false"" "), itsPropDefs);
+            Assert.IsFalse(relDef.KeepReferenceToRelatedObject);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidDeleteAction()
+        {
+            itsLoader.LoadRelationship(
+                multipleRelationshipString.Replace(@"TestOrder""", @"TestOrder"" deleteAction=""invalid"" "),
+                itsPropDefs);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoOwnerProperty()
+        {
+            itsLoader.LoadRelationship(@"
+					<relationship name=""rel"" type=""multiple"" relatedClass=""ass"" relatedAssembly=""ass"">
+						<relatedProperty relatedProperty=""TestRelatedProp"" />
+					</relationship>",
+                itsPropDefs);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoRelatedProperty()
+        {
+            itsLoader.LoadRelationship(@"
+					<relationship name=""rel"" type=""multiple"" relatedClass=""ass"" relatedAssembly=""ass"">
+						<relatedProperty property=""TestProp"" />
+					</relationship>",
+                itsPropDefs);
+        }
     }
 }

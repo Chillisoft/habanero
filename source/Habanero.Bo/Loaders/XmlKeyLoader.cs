@@ -169,7 +169,7 @@ namespace Habanero.BO.Loaders
                         "which specifies the name of an existing property definition " +
                         "which makes up the alternate key.");
                 }
-                if (_propDefCol[propName] != null)
+                if (_propDefCol.Contains(propName))
                 {
                     _keyDef.Add(_propDefCol[propName]);
                 }

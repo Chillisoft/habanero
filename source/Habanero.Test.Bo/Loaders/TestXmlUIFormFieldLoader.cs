@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -74,5 +75,57 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TestValue2", uiProp.GetParameterValue("TestAtt2"));
         }
 
+        [Test]
+        public void TestPasswordTextBoxAssembly()
+        {
+            UIFormField uiProp =
+                loader.LoadUIProperty(@"<field property=""testpropname"" type=""PasswordTextBox"" />");
+            Assert.AreEqual("Habanero.UI.Forms.PasswordTextBox", uiProp.ControlTypeName);
+            Assert.AreEqual("Habanero.UI", uiProp.ControlAssemblyName);
+        }
+
+        [Test]
+        public void TestAutomaticLabelCreation()
+        {
+            UIFormField uiProp = loader.LoadUIProperty(@"<field property=""testpropname"" />");
+            Assert.AreEqual("testpropname:", uiProp.Label);
+
+            uiProp = loader.LoadUIProperty(@"<field property=""TestPropName"" />");
+            Assert.AreEqual("Test Prop Name:", uiProp.Label);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidEditableValue()
+        {
+            loader.LoadUIProperty(@"<field property=""testpropname"" editable=""123"" />");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestDuplicateParameters()
+        {
+            loader.LoadUIProperty(@"
+                <field property=""testpropname"" >
+                    <parameter name=""TestAtt"" value=""TestValue"" />
+                    <parameter name=""TestAtt"" value=""TestValue2"" />
+                </field>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestParameterMissingName()
+        {
+            loader.LoadUIProperty(@"
+                <field property=""testpropname"" >
+                    <parameter value=""TestValue"" />
+                </field>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestParameterMissingValue()
+        {
+            loader.LoadUIProperty(@"
+                <field property=""testpropname"" >
+                    <parameter name=""TestAtt"" />
+                </field>");
+        }
     }
 }

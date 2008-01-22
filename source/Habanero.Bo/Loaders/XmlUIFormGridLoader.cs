@@ -109,8 +109,8 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadGridType()
         {
-            string className = "Habanero.UI.Grid.EditableGrid"; //"_reader.GetAttribute("gridType");
-            string assemblyName = "Habanero.UI.Pro";
+            string className = _reader.GetAttribute("type");
+            string assemblyName = _reader.GetAttribute("assembly");
             try
             {
                 _gridType = TypeLoader.LoadType(assemblyName, className);

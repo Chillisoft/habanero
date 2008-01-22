@@ -73,6 +73,13 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNull(def.Discriminator);
         }
 
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestInvalidInheritanceType()
+        {
+            itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""class"" assembly=""ass"" orMapping=""invalid"" />");
+        }
+
         [Test]
         public void TestSingleTableInheritance()
         {
@@ -124,7 +131,7 @@ namespace Habanero.Test.BO.Loaders
         {
             SuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
-                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" discriminator="""" />");
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""ConcreteTableInheritance"" discriminator=""abc"" />");
         }
 
         [Test]
@@ -154,7 +161,7 @@ namespace Habanero.Test.BO.Loaders
         {
             SuperClassDef def =
                 itsLoader.LoadSuperClassDesc(
-                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" discriminator="""" />");
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" discriminator=""abc"" />");
         }
     }
 }

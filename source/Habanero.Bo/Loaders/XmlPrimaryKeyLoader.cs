@@ -136,7 +136,7 @@ namespace Habanero.BO.Loaders
                         "must have a 'name' attribute that provides the name of the " +
                         "property definition that serves as the primary key.");
                 }
-                if (_propDefCol[propName] != null)
+                if (_propDefCol.Contains(propName))
                 {
                     _primaryKeyDef.Add(_propDefCol[propName]);
                 }

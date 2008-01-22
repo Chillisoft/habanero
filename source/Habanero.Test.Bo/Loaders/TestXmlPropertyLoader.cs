@@ -56,6 +56,17 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(false, def.AutoIncrementing, "autoIncrementing should be false by default");
         }
 
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoPropsInString()
+        {
+            itsLoader.LoadProperty(@"");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropertyWithNoName()
+        {
+            itsLoader.LoadProperty(@"<property />");
+        }
 
         [Test]
         public void TestPropertyWithType()
@@ -70,6 +81,12 @@ namespace Habanero.Test.BO.Loaders
             PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadOnly"" />");
             Assert.AreEqual(PropReadWriteRule.ReadOnly, def.ReadWriteRule,
                             "Property read write rule should be same as that specified in xml");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestPropertyWithInvalidReadWriterule()
+        {
+            itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""invalid"" />");
         }
 
         [Test]
@@ -214,6 +231,37 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
         }
 
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSimpleLookupListNoItems()
+        {
+            PropDef def = itsLoader.LoadProperty(@"
+				<property  name=""TestProp"">
+					<simpleLookupList></simpleLookupList>
+				</property>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSimpleLookupListItemHasNoDisplay()
+        {
+            PropDef def = itsLoader.LoadProperty(@"
+				<property  name=""TestProp"">
+					<simpleLookupList>
+						<item value=""{C2887FB1-7F4F-4534-82AB-FED92F954783}"" />
+                    </simpleLookupList>
+				</property>");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSimpleLookupListItemHasNoValue()
+        {
+            PropDef def = itsLoader.LoadProperty(@"
+				<property  name=""TestProp"">
+					<simpleLookupList>
+						<item display=""s1"" />
+                    </simpleLookupList>
+				</property>");
+        }
+
         [Test]
         public void TestBusinessObjectLookupList()
         {
@@ -275,6 +323,16 @@ namespace Habanero.Test.BO.Loaders
         public void TestBusinessObjectWithLengthForNonString()
         {
             itsLoader.LoadProperty(@"<property name=""TestProp"" type=""bool"" length=""5"" />");
+        }
+
+        [Test]
+        public void TestLookupListLoaderConstructors()
+        {
+            XmlBusinessObjectLookupListLoader bollLoader = new XmlBusinessObjectLookupListLoader();
+            Assert.AreEqual(typeof(XmlBusinessObjectLookupListLoader), bollLoader.GetType());
+
+            XmlDatabaseLookupListLoader dllLoader = new XmlDatabaseLookupListLoader();
+            Assert.AreEqual(typeof(XmlDatabaseLookupListLoader), dllLoader.GetType());
         }
     }
 }

@@ -147,6 +147,17 @@ namespace Habanero.Test.BO.CriteriaManager
             Assert.AreEqual("(Name = 'Te' '(st' AND Field1 >= 1)", tree.Left.CompleteExpression);
             Assert.AreEqual("((Name = 'Te' '(st' AND Field1 >= 1) OR Field2 <= 2)", tree.CompleteExpression);
         }
+
+        [Test]
+        public void TestSetLeftAndRight()
+        {
+            CriteriaExpression tree = new CriteriaExpression("Name = 'Peter' AND Age < 30");
+            tree.Left = new CriteriaExpression("Height > 20");
+            tree.Right = new CriteriaExpression("Town = 'Durban'");
+            
+            Assert.AreEqual("(Height > 20)", tree.Left.CompleteExpression);
+            Assert.AreEqual("(Town = Durban)", tree.Right.CompleteExpression);
+        }
     }
 
 }

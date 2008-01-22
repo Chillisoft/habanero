@@ -150,6 +150,8 @@
     <Compile Include="Comparer\TestComparers.cs" />
     <Compile Include="ContactPerson.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
+    <Compile Include="CriteriaManager\TestExpression.cs" />
+    <Compile Include="Loaders\TestDtdsResource.cs" />
     <Compile Include="Loaders\TestXmlSuperClassLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormFieldLoader.cs" />
     <Compile Include="Loaders\TestXmlUIFormGridLoader.cs" />
@@ -189,7 +191,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestDeleteHelper.cs" />
-    <Compile Include="TestExpression.cs" />
     <Compile Include="TestPropRuleDate.cs" />
     <Compile Include="TestPropRuleDecimal.cs" />
     <Compile Include="TestPropRuleInt.cs" />

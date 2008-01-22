@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -63,6 +64,12 @@ namespace Habanero.Test.BO.Loaders
 						<column heading=""testheading1"" property=""testpropname1""  />
 					</grid>");
             Assert.AreEqual("testpropname1 desc", def.SortColumn);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestNoColumns()
+        {
+            loader.LoadUIGridDef(@"<grid/>");
         }
     }
 }
