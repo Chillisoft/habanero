@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
 using BusinessObject=Habanero.BO.BusinessObject;
@@ -209,15 +211,22 @@ namespace Habanero.UI.Forms
 		/// </summary>
 		private void UpdateIsEditable()
 		{
-			_isEditable = !_isReadOnly && _businessObject != null
-					&& _businessObject.Props.Contains(_propertyName);
+            bool virtualPropertySetExists = false;
+            if (_businessObject != null && _propertyName.IndexOf(".") == -1 && _propertyName.IndexOf("-") != -1)
+            {
+                string virtualPropName = _propertyName.Substring(1, _propertyName.Length - 2);
+                PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
+                virtualPropertySetExists = propertyInfo != null && propertyInfo.CanWrite;
+            }
+            _isEditable = !_isReadOnly && _businessObject != null
+                    && (_businessObject.Props.Contains(_propertyName) || virtualPropertySetExists);
 			if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsObjectID &&
 				_businessObject.ID.Contains(_propertyName) &&
 				!_businessObject.State.IsNew)
 			{
 				_isEditable = false;
 			}
-            if (_isEditable)
+            if (_isEditable && !virtualPropertySetExists)
             {
                 if (_businessObject.ClassDef.PropDefColIncludingInheritance.Contains(_propertyName))
                 {
@@ -336,6 +345,12 @@ namespace Habanero.UI.Forms
 			{
 				return null;
 			}
+        }
+
+        protected virtual void SetPropertyValue(object value)
+        {
+            BOMapper boMapper = new BOMapper(_businessObject);
+            boMapper.SetDisplayPropertyValue(_propertyName, value);
         }
 
         /// <summary>

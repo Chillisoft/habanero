@@ -49,7 +49,8 @@ namespace Habanero.UI.Forms
 			object oldValue = GetPropertyValue();
 			if ( oldValue == null || !oldValue.Equals(newValue))
 			{
-				_businessObject.SetPropertyValue(_propertyName, newValue);
+                SetPropertyValue(newValue);
+                //_businessObject.SetPropertyValue(_propertyName, newValue);
 			}
         }
 		    	

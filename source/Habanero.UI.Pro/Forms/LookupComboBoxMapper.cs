@@ -70,22 +70,26 @@ namespace Habanero.UI.Forms
                 }
                 if (newValue != null)
                 {
+                    object propertyValue = GetPropertyValue();
                     if (newValue.Equals(Guid.Empty))
                     {
-                        if (_businessObject.GetPropertyValue(_propertyName) != null)
+                        if (propertyValue != null)
                         {
-                            _businessObject.SetPropertyValue(_propertyName, null);
+                            SetPropertyValue(null);
+                            //_businessObject.SetPropertyValue(_propertyName, null);
                         }
                     }
-                    else if (_businessObject.GetPropertyValue(_propertyName) == null ||
-                             !newValue.Equals(_businessObject.GetPropertyValue(_propertyName)))
+                    else if (propertyValue == null ||
+                             !newValue.Equals(propertyValue))
                     {
-                        _businessObject.SetPropertyValue(_propertyName, newValue);
+                        SetPropertyValue(newValue);
+                        //_businessObject.SetPropertyValue(_propertyName, newValue);
                     }
                 }
                 else
                 {
-                    _businessObject.SetPropertyValue(_propertyName, null);
+                    SetPropertyValue(null);
+                    //_businessObject.SetPropertyValue(_propertyName, null);
                 }
             }
             //log.Debug("ValueChanged in LookupComboBoxMapper complete") ;
@@ -103,7 +107,7 @@ namespace Habanero.UI.Forms
             }
             else
             {
-                if (_businessObject.GetPropertyValue(_propertyName) == null)
+                if (GetPropertyValue() == null)
                 {
                     _comboBox.SelectedIndex = -1;
                 }
@@ -125,27 +129,27 @@ namespace Habanero.UI.Forms
                 foreach (KeyValuePair<string, object> pair in _collection)
                 {
                     if (pair.Value == null) continue;
+                    object boPropertyValue = GetPropertyValue();
                     if (pair.Value is BusinessObject)
                     {
-                        if (((BO.BusinessObject)pair.Value).ID.GetGuid().Equals( _businessObject.GetPropertyValue(_propertyName)))
+                        BusinessObject pairValueBo = (BusinessObject)pair.Value;
+                        if (pairValueBo.ID.GetGuid().Equals(boPropertyValue))
                         {
                             _comboBox.SelectedItem = pair.Key;
                             break;
                         }
-                        else if (_businessObject.GetPropertyValue(_propertyName) != null && String.Compare(((BO.BusinessObject)pair.Value).ID.ToString(), _businessObject.GetPropertyValue(_propertyName).ToString()) == 0)
+                        else if (boPropertyValue != null && String.Compare(pairValueBo.ID.ToString(), boPropertyValue.ToString()) == 0)
                         {
                             _comboBox.SelectedItem = pair.Key;
                             break;
                         }
                     }
-                    if (pair.Value != null && pair.Value.Equals( _businessObject.GetPropertyValue(_propertyName)))
+                    if (pair.Value != null && pair.Value.Equals(boPropertyValue))
                     {
                         _comboBox.SelectedItem = pair.Key;
                         break;
                     }
                 }
-                //_comboBox.SelectedItem =
-                //    _collection.FindByGuid((Guid) _businessObject.GetPropertyValue(_propertyName));
                 _comboBox.SelectionStart = 0;
                 _comboBox.SelectionLength = 0;
             }
@@ -183,10 +187,14 @@ namespace Habanero.UI.Forms
                     GlobalUIRegistry.UISettings != null &&
                     GlobalUIRegistry.UISettings.PermitComboBoxRightClick != null)
                 {
-                    Type boType = mapper.GetLookupListClassDef(_propertyName).ClassType;
-                    if (GlobalUIRegistry.UISettings.PermitComboBoxRightClick(boType, this))
+                    ClassDef lookupClassDef = mapper.GetLookupListClassDef(_propertyName);
+                    if (lookupClassDef != null)
                     {
-                        RightClickEnabled = _allowRightClick;
+                        Type boType = lookupClassDef.ClassType;
+                        if (GlobalUIRegistry.UISettings.PermitComboBoxRightClick(boType, this))
+                        {
+                            RightClickEnabled = _allowRightClick;
+                        }
                     }
                 }
                 else
@@ -196,7 +204,7 @@ namespace Habanero.UI.Forms
                 _isRightClickInitialised = true;
             }
             SetLookupList(col);
-            if (col.Count > 0 && _businessObject.GetPropertyValue(_propertyName) != null)
+            if (col.Count > 0 && GetPropertyValue() != null)
             {
                 SetValueFromLookupList();
             }
@@ -224,6 +232,18 @@ namespace Habanero.UI.Forms
                 _comboBox.Items.Add(pair.Key);
             }
             _comboBox.DropDownWidth = width;
+        }
+
+
+        protected override object GetPropertyValue()
+        {
+            if (_propertyName.IndexOf(".") != -1 || _propertyName.IndexOf("-") != -1)
+            {
+                return base.GetPropertyValue();
+            } else
+            {
+                return _businessObject.GetPropertyValue(_propertyName);
+            }
         }
 
         /// <summary>

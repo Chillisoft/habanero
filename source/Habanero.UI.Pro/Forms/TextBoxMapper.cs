@@ -124,7 +124,8 @@ namespace Habanero.UI.Forms
 
         	try
         	{
-        		_businessObject.SetPropertyValue(_propertyName, value);
+                SetPropertyValue(value);
+                //_businessObject.SetPropertyValue(_propertyName, value);
         	}
         	catch (FormatException)
         	{

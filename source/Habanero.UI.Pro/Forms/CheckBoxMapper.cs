@@ -53,7 +53,8 @@ namespace Habanero.UI.Forms
             if (valueChanged)
             {
                 //log.Debug("setting property value to " + newValue + " of type bool");
-                _businessObject.SetPropertyValue(_propertyName, newValue);
+                SetPropertyValue(newValue);
+                //_businessObject.SetPropertyValue(_propertyName, newValue);
             }
         }
 

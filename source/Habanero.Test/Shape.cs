@@ -86,5 +86,10 @@ namespace Habanero.Test
             get { return (string) GetPropertyValue("ShapeName"); }
             set { SetPropertyValue("ShapeName", value); }
         }
+
+        public string ShapeNameGetOnly
+        {
+            get { return ShapeName; }
+        }
     }
 }

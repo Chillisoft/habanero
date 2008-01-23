@@ -24,6 +24,7 @@ using System.Reflection;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base;
+using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
 
@@ -54,9 +55,9 @@ namespace Habanero.BO
         /// not available</returns>
         public Dictionary<string, object> GetLookupList(string propertyName)
         {
-            PropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName);
+            PropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName, false);
             //return def.GetLookupList(_businessObject.GetDatabaseConnection());
-            if (propDef.LookupList != null)
+            if (propDef != null && propDef.LookupList != null)
             {
                 return propDef.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
             }
@@ -145,50 +146,39 @@ namespace Habanero.BO
         private object GetVirtualPropertyValue(string propertyName)
         {
             string virtualPropName = propertyName.Substring(1, propertyName.Length - 2);
-            Type type = this._businessObject.GetType();
-            string className = type.Name;
-            try
+            return ReflectionUtilities.GetPropertyValue(_businessObject, virtualPropName);
+        }
+
+        ///<summary>
+        /// Sets a property of a Business Object given the property name 
+        /// (or the virtual property name delimited by dashes) and the value.
+        ///</summary>
+        ///<param name="propertyName">The name of the property to set.</param>
+        ///<param name="value">The value to set.</param>
+        public void SetDisplayPropertyValue(string propertyName, object value)
+        {
+            if (propertyName.IndexOf(".") != -1)
             {
-                PropertyInfo propInfo = type.GetProperty( virtualPropName, BindingFlags.Public | BindingFlags.Instance);
-                if (propInfo == null)
-                {
-                    throw new TargetInvocationException(new Exception(
-                                                            String.Format("Virtual property '{0}' does not exist for object of type '{1}'.", virtualPropName, className)));
-                }
-                object propValue = propInfo.GetValue(this._businessObject, new object[] {});
-                return propValue;
+                //Do Nothing
             }
-            catch (TargetInvocationException ex)
+            else if (propertyName.IndexOf("-") != -1)
             {
-                log.Error(String.Format("Error retrieving virtual property '{0}' from object of type '{1}'" +
-                                        Environment.NewLine + "{2}", virtualPropName, className,
-                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
-                throw ex.InnerException;
+                SetVirtualPropertyValue(propertyName, value);
+            }
+            else
+            {
+                _businessObject.SetPropertyValue(propertyName, value);
             }
         }
 
         internal void SetVirtualPropertyValue(string propertyName, object value)
         {
+            if (_businessObject == null) return;
             string virtualPropName = propertyName.Substring(1, propertyName.Length - 2);
-            Type type = this._businessObject.GetType();
-            string className = type.Name;
-            try
+            PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
+            if (propertyInfo != null && propertyInfo.CanWrite)
             {
-                PropertyInfo propInfo = type.GetProperty(virtualPropName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty);
-                if (propInfo == null)
-                {
-                    throw new TargetInvocationException(new Exception(
-                                                            String.Format("Virtual property set for '{0}' does not exist for object of type '{1}'.", virtualPropName, className)));
-                }
-                object newValue = Convert.ChangeType(value, propInfo.PropertyType);
-                propInfo.SetValue(this._businessObject, newValue, new object[] { });
-            }
-            catch (TargetInvocationException ex)
-            {
-                log.Error(String.Format("Error setting virtual property '{0}' for object of type '{1}'" +
-                                        Environment.NewLine + "{2}", virtualPropName, className,
-                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
-                throw ex.InnerException;
+                ReflectionUtilities.SetPropertyValue(_businessObject, virtualPropName, value);
             }
         }
 
@@ -201,8 +191,9 @@ namespace Habanero.BO
         public ClassDef GetLookupListClassDef(string propertyName)
         {
             ClassDef classDef = _businessObject.ClassDef;
-            PropDef propDef = classDef.GetPropDef(propertyName);
-            if (propDef.LookupList != null) {
+            PropDef propDef = classDef.GetPropDef(propertyName, false);
+
+            if (propDef != null && propDef.LookupList != null) {
                 if (propDef.LookupList is DatabaseLookupList) 
                 {
                     return ((DatabaseLookupList) propDef.LookupList).ClassDef;

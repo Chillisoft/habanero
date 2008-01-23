@@ -33,7 +33,7 @@ namespace Habanero.Test.UI.Forms
             _txtReadonly = new TextBox();
             _readOnlyMapper = new TextBoxMapper(_txtReadonly, "ShapeName", true);
             _txtReflectedProperty = new TextBox();
-            _reflectedPropertyMapper = new TextBoxMapper(_txtReflectedProperty, "-ShapeName-", false);
+            _reflectedPropertyMapper = new TextBoxMapper(_txtReflectedProperty, "-ShapeNameGetOnly-", false);
             _txtNormal = new TextBox();
             _normalMapper = new TextBoxMapper(_txtNormal, "ShapeName", false);
             _shape = new Shape();
@@ -133,15 +133,27 @@ namespace Habanero.Test.UI.Forms
         #endregion
 
         #region Test Reflected Property Mapper
-		
+
         [Test]
-        public void TestReflectedDisablesControl()
+        public void TestReflectedWithNoSetDisablesControl()
         {
             Assert.IsFalse(_txtReflectedProperty.Enabled,
-                           "A reflected property control should be disabled before it gets and object");
+                           "A reflected property control should be disabled before it gets an object");
             _reflectedPropertyMapper.BusinessObject = _shape;
             Assert.IsFalse(_txtReflectedProperty.Enabled,
                            "A reflected property control should be disabled once it has an object");
+        }
+
+        [Test]
+        public void TestReflectedWithSetEnablesControl()
+        {
+            TextBox txtReflectedPropertyWithSet = new TextBox();
+            TextBoxMapper reflectedPropertyWithSetMapper = new TextBoxMapper(txtReflectedPropertyWithSet, "-ShapeName-", false);
+            Assert.IsFalse(txtReflectedPropertyWithSet.Enabled,
+                           "A reflected property control should be disabled before it gets an object");
+            reflectedPropertyWithSetMapper.BusinessObject = _shape;
+            Assert.IsTrue(txtReflectedPropertyWithSet.Enabled,
+                           "A reflected property control should be enabled once it has an object if the reflected property has a set");
         }
 
         [Test]

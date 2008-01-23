@@ -48,13 +48,15 @@ namespace Habanero.UI.Forms
                 {
                     if (_businessObject.GetPropertyValue(_propertyName) != null)
                     {
-                        _businessObject.SetPropertyValue(_propertyName, null);
+                        SetPropertyValue(null);
+                        //_businessObject.SetPropertyValue(_propertyName, null);
                     }
                 }
                 else if (_businessObject.GetPropertyValue(_propertyName) == null ||
                          !newValue.Equals(_businessObject.GetPropertyValue(_propertyName)))
                 {
-                    _businessObject.SetPropertyValue(_propertyName, newValue);
+                    SetPropertyValue(newValue);
+                    //_businessObject.SetPropertyValue(_propertyName, newValue);
                 }
             }
             //log.Debug("ValueChanged in LookupComboBoxMapper complete") ;

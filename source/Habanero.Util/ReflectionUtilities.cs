@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using Habanero.Base.Exceptions;
+using log4net;
 
 namespace Habanero.Util
 {
@@ -32,6 +33,8 @@ namespace Habanero.Util
     ///</summary>
     public static class ReflectionUtilities
     {
+        private static readonly ILog log = LogManager.GetLogger("Habanero.Util.ReflectionUtilities");
+
         ///<summary>
         /// This method is used to set the enum value of a property of an object.
         /// This is done entirely using reflection.
@@ -42,8 +45,8 @@ namespace Habanero.Util
         public static void setEnumPropertyValue(object obj, string propertyName, string enumItemName)
         {
             if (obj == null) throw new HabaneroArgumentException("obj");
-            if (propertyName == "") throw new HabaneroArgumentException("propertyName");
-            if (enumItemName == "") throw new HabaneroArgumentException("enumItemName");
+            if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");
+            if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("enumItemName");
             Type parameterType = obj.GetType();
             PropertyInfo propInfo = parameterType.GetProperty(
                 propertyName, BindingFlags.Instance | BindingFlags.Public);
@@ -88,7 +91,7 @@ namespace Habanero.Util
         public static string getEnumPropertyValue(object obj, string propertyName)
         {
             if (obj == null) throw new HabaneroArgumentException("obj");
-            if (propertyName == "") throw new HabaneroArgumentException("propertyName");
+            if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");
             Type parameterType = obj.GetType();
             PropertyInfo propInfo = parameterType.GetProperty(
                 propertyName, BindingFlags.Instance | BindingFlags.Public);
@@ -113,7 +116,100 @@ namespace Habanero.Util
             }
             else throw new ReflectionException("Cannot find public property ('" + propertyName + "')");
         }
+
+        ///<summary>
+        /// Returns the value of a property of an object using reflection
+        ///</summary>
+        ///<param name="obj">The object to get the value from</param>
+        ///<param name="propertyName">The name of the property to get the value from</param>
+        ///<returns>The value of the specified property of the supplied object</returns>
+        ///<exception cref="HabaneroArgumentException">This error is thrown when an invalid parameter is given</exception>
+        ///<exception cref="TargetInvocationException">This error is thrown when there is an error in finding the property on the supplied object</exception>
+        ///<exception cref="Exception">This is a general exception that is thrown if there is an error in retrieving the value.</exception>
+        public static object GetPropertyValue(object obj, string propertyName)
+        {
+            if (obj == null) throw new HabaneroArgumentException("obj");
+            if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");
+            Type type = obj.GetType();
+            string className = type.Name;
+            try
+            {
+                PropertyInfo propInfo = GetPropertyInfo(type, propertyName);
+                if (propInfo == null)
+                {
+                    throw new TargetInvocationException(new Exception(
+                                                            String.Format("Virtual property '{0}' does not exist for object of type '{1}'.", propertyName, className)));
+                }
+                object propValue = propInfo.GetValue(obj, new object[] { });
+                return propValue;
+            }
+            catch (TargetInvocationException ex)
+            {
+                log.Error(String.Format("Error retrieving virtual property '{0}' from object of type '{1}'" +
+                                        Environment.NewLine + "{2}", propertyName, className,
+                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                throw ex.InnerException;
+            }
+        }
+
+        ///<summary>
+        /// Returns the PropertyInfo for the specified property, otherwise it returns nothing if the property does not exist
+        ///</summary>
+        ///<param name="type">The type to find the specifed property on</param>
+        ///<param name="propertyName">The name of the property to search for</param>
+        ///<returns>The PropertyInfo object representing the requested method, or null if it does not exist.</returns>
+        ///<exception cref="HabaneroArgumentException">This error is thrown when an invalid parameter is given</exception>
+        public static PropertyInfo GetPropertyInfo(Type type, string propertyName)
+        {
+            if (type == null) throw new HabaneroArgumentException("type");
+            if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");
+            try
+            {
+                return type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        ///<summary>
+        /// Sets the value of a property of an object using reflection
+        ///</summary>
+        ///<param name="obj">The object for which to set the value</param>
+        ///<param name="propertyName">The name of the property to be set</param>
+        ///<param name="value">The value that is to be set</param>
+        ///<exception cref="HabaneroArgumentException">This error is thrown when an invalid parameter is given</exception>
+        ///<exception cref="TargetInvocationException">This error is thrown when there is an error in finding the property on the supplied object</exception>
+        ///<exception cref="Exception">This is a general exception that is thrown if there is an error in retrieving the value.</exception>
+        public static void SetPropertyValue(object obj, string propertyName, object value)
+        {
+            if (obj == null) throw new HabaneroArgumentException("obj");
+            if (String.IsNullOrEmpty(propertyName)) throw new HabaneroArgumentException("propertyName");
+            Type type = obj.GetType();
+            string className = type.Name;
+            try
+            {
+                PropertyInfo propInfo = GetPropertyInfo(type, propertyName);
+                if (propInfo == null)
+                {
+                    throw new TargetInvocationException(new Exception(
+                                                            String.Format("Virtual property set for '{0}' does not exist for object of type '{1}'.", propertyName, className)));
+                }
+                object newValue = Convert.ChangeType(value, propInfo.PropertyType);
+                propInfo.SetValue(obj, newValue, new object[] { });
+            }
+            catch (TargetInvocationException ex)
+            {
+                log.Error(String.Format("Error setting virtual property '{0}' for object of type '{1}'" +
+                                        Environment.NewLine + "{2}", propertyName, className,
+                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                throw ex.InnerException;
+            }
+        }
     }
+
+    
 
     /// <summary>
     /// Provides an exception to throw when the reflection cannot be done
