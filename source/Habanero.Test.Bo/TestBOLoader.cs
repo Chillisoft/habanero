@@ -157,6 +157,9 @@ namespace Habanero.Test.BO
         [Test]
         public void TestLoadMethod()
         {
+            ClassDef.ClassDefs.Clear();
+            ContactPerson.LoadDefaultClassDef();
+
             ContactPerson cp1 = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             cp1.Surname = "def";
             BOLoader.Instance.Load(cp1, new Parameter("Surname = abc"));
@@ -166,6 +169,9 @@ namespace Habanero.Test.BO
         [Test]
         public void TestSetDatabaseConnection()
         {
+            ClassDef.ClassDefs.Clear();
+            ContactPerson.LoadDefaultClassDef();
+
             ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             Assert.IsNotNull(cp.GetDatabaseConnection());
             BOLoader.Instance.SetDatabaseConnection(cp, null);
