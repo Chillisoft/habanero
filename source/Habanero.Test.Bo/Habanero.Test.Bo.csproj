@@ -149,6 +149,7 @@
     <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
     <Compile Include="Comparer\TestComparers.cs" />
     <Compile Include="ContactPerson.cs" />
+    <Compile Include="TestBOKeyCol.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestExpression.cs" />
     <Compile Include="Loaders\TestDtdsResource.cs" />

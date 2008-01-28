@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Data;
 using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
@@ -122,6 +123,29 @@ namespace Habanero.Test.BO
             newBo.SetPropertyValue("TestProp", "TestVal");
             itsCollection.Add(newBo);
             Assert.AreEqual("TestVal", itsTable.Rows[2][1]);
+        }
+
+        [Test, ExpectedException(typeof(DuplicateNameException))]
+        public void TestDuplicateColumnNames()
+        {
+            BOMapper mapper = new BOMapper(itsCollection.SampleBo);
+            itsTable = itsProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").GetUIGridProperties());
+        }
+
+        [Test]
+        public void TestFind()
+        {
+            BusinessObject bo = ((BOCollectionEditableDataSetProvider) itsProvider).Find(0);
+            Assert.AreEqual(itsCollection[0], bo);
+
+            MyBO unlistedBO = new MyBO();
+            Assert.AreEqual(-1, ((BOCollectionEditableDataSetProvider) itsProvider).FindRow(unlistedBO));
+        }
+
+        [Test]
+        public void TestGetConnection()
+        {
+            Assert.IsNull(((BOCollectionEditableDataSetProvider) itsProvider).Connection);
         }
     }
 }

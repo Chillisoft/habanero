@@ -244,6 +244,13 @@ namespace Habanero.Test
 							</tab>
 						</form>
 					</ui>
+					<ui name=""duplicateColumns"">
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+					</ui>
 				</class>
 
 

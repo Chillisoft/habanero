@@ -187,6 +187,7 @@ namespace Habanero.Test.BO
 			mock.VerifyAll();
 		}
 
+        [Test]
         public void TestVirtualPropertyValue()
         {
             Mock mockDbConnection = new DynamicMock(typeof (IDatabaseConnection));
@@ -198,6 +199,16 @@ namespace Habanero.Test.BO
 
             BOMapper mapper = new BOMapper(bo1);
             Assert.AreEqual("MyNameIsMyBo", mapper.GetPropertyValueToDisplay("-MyName-"));
+        }
+
+        [Test]
+        public void TestGetLookupListDoesntExist()
+        {
+            ClassDef.ClassDefs.Clear();
+            itsClassDef = MyBO.LoadClassDefWithNoLookup();
+            MyBO bo = new MyBO();
+            BOMapper mapper = new BOMapper(bo);
+            Assert.AreEqual(0, mapper.GetLookupList("TestProp").Count);
         }
     }
 }

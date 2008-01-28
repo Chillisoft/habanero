@@ -218,10 +218,11 @@ namespace Habanero.BO
                     {
                         return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    // Eric: looks faulty
+                    //else
+                    //{
+                    //    return false;
+                    //}
                 }
                 return false;
             }

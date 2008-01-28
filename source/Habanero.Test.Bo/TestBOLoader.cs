@@ -21,6 +21,7 @@ using System;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO;
+using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
@@ -54,6 +55,9 @@ namespace Habanero.Test.BO
 
             cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abcde");
             Assert.IsNull(cp);
+
+            cp = (ContactPerson)BOLoader.Instance.GetBusinessObject(new ContactPerson(), new Parameter("Surname = invalid"));
+            Assert.IsNull(cp);
         }
 
         [Test, ExpectedException(typeof(UserException))]
@@ -75,6 +79,11 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, col.Count);
             Assert.AreEqual("abc", col[0].Surname);
             Assert.AreEqual("abcd", col[1].Surname);
+
+            BusinessObjectCollection<BusinessObject> col2 = BOLoader.Instance.GetBusinessObjectCol(typeof(ContactPerson), "FirstName = aa", "Surname");
+            Assert.AreEqual(2, col.Count);
+            Assert.AreEqual("abc", ((ContactPerson)col2[0]).Surname);
+            Assert.AreEqual("abcd", ((ContactPerson)col2[1]).Surname);
 
             col = BOLoader.Instance.GetBusinessObjectCol<ContactPerson>("FirstName = aaaa", "Surname");
             Assert.AreEqual(0, col.Count);
@@ -133,6 +142,34 @@ namespace Habanero.Test.BO
             ContactPerson cp1 = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             ContactPerson cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(cp1.PrimaryKey);
             Assert.AreEqual(cp1, cp2);
+        }
+
+        [Test, ExpectedException(typeof(InvalidPropertyException))]
+        public void TestGetBusinessObjectByIDWithMultiplePrimaryKeys()
+        {
+            ClassDef.ClassDefs.Clear();
+            ContactPersonCompositeKey.LoadClassDefs();
+
+            ContactPersonCompositeKey cp2 =
+                BOLoader.Instance.GetBusinessObjectByID<ContactPersonCompositeKey>("someIDvalue");
+        }
+
+        [Test]
+        public void TestLoadMethod()
+        {
+            ContactPerson cp1 = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            cp1.Surname = "def";
+            BOLoader.Instance.Load(cp1, new Parameter("Surname = abc"));
+            Assert.AreEqual("abc", cp1.Surname);
+        }
+
+        [Test]
+        public void TestSetDatabaseConnection()
+        {
+            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            Assert.IsNotNull(cp.GetDatabaseConnection());
+            BOLoader.Instance.SetDatabaseConnection(cp, null);
+            Assert.IsNull(cp.GetDatabaseConnection());
         }
     }
 }

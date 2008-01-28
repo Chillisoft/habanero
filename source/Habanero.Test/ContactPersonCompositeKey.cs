@@ -43,6 +43,11 @@ namespace Habanero.Test
         {
         }
 
+        public static void LoadClassDefs()
+        {
+            CreateClassDef();
+        }
+
         protected override ClassDef ConstructClassDef()
         {
             return GetClassDef();
@@ -78,7 +83,7 @@ namespace Habanero.Test
             return lClassDef;
         }
 
-        private static RelationshipDefCol CreateRelationshipDefCol(PropDefCol lPropDefCol)
+        protected static RelationshipDefCol CreateRelationshipDefCol(PropDefCol lPropDefCol)
         {
             RelationshipDefCol relDefCol = new RelationshipDefCol();
 
@@ -103,7 +108,7 @@ namespace Habanero.Test
             return relDefCol;
         }
 
-        private static PropDefCol CreateBOPropDef()
+        protected static PropDefCol CreateBOPropDef()
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef = new PropDef("Surname", typeof (String), PropReadWriteRule.ReadWrite, null);

@@ -176,8 +176,11 @@ namespace Habanero.UI.Forms
         }
 
         /// <summary>
-        /// Controls access to the business object being represented
-        /// by the control.  Where the business object has been amended or
+        /// Gets and sets the broader business object that has a property
+        /// being mapped by this mapper.  In other words, this property
+        /// does not return the exact business object being shown in the
+        /// control, but rather the broader business object shown in the
+        /// form.  Where the business object has been amended or
         /// altered, the ValueUpdated() method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
