@@ -37,15 +37,15 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            this.SetupDBConnection();
-            ClassDef.ClassDefs.Clear();
+            SetupDBConnection();
+            ContactPerson.CreateSampleData();
             ContactPerson.LoadDefaultClassDef();
         }
 
-        [SetUp]
-        public void SetupTest()
+        [TestFixtureTearDown]
+        public void TearDown()
         {
-
+            ContactPerson.DeleteAllContactPeople();
         }
 
         [Test]

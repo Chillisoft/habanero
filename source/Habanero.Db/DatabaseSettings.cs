@@ -261,7 +261,7 @@ namespace Habanero.DB
         /// <returns>Returns a sql statement object</returns>
         private SqlStatement CreateSelectStatement(string settingName, DateTime date)
         {
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append("select SettingValue from " + _tableName + " where SettingName = ");
             statement.AddParameterToStatement(settingName);
             statement.Statement.Append(" and (StartDate < ");
@@ -282,7 +282,7 @@ namespace Habanero.DB
         /// <returns>Returns a sql statement object</returns>
         private SqlStatement CreateUpdateStatementNoDate(string settingName, string settingValue)
         {
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append("update " + _tableName + " set SettingValue = ");
             statement.AddParameterToStatement(settingValue);
             statement.Statement.Append(" where SettingName = ");
@@ -298,7 +298,7 @@ namespace Habanero.DB
         /// <returns>Returns a sql statement object</returns>
         private SqlStatement CreateInsertStatement(string settingName, string settingValue)
         {
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append("insert into " + _tableName + " (SettingName, SettingValue, StartDate, EndDate) ");
             statement.Statement.Append("values (");
             statement.AddParameterToStatement(settingName);

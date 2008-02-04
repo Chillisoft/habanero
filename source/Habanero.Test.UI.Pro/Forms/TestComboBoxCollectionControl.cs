@@ -72,7 +72,18 @@ namespace Habanero.Test.UI.Forms
                                                              DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
+            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                             DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+        }
+
+        private void SetupSaveExpectationGetConnectionTwice()
+        {
+            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                             DatabaseConnection.CurrentConnection.GetConnection());
+            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                             DatabaseConnection.CurrentConnection.GetConnection());
+            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] { null, null });
         }
 
         [TearDown]
@@ -112,7 +123,7 @@ namespace Habanero.Test.UI.Forms
             selectedBo.SetPropertyValue("TestProp", "xyz");
             Assert.IsTrue(selectedBo.State.IsDirty);
 
-            SetupSaveExpectation();
+            SetupSaveExpectationGetConnectionTwice();
 
             itsControl.CollectionComboBox.SelectedIndex = 2;
             Assert.AreEqual(2, itsControl.CollectionComboBox.SelectedIndex);
@@ -145,7 +156,7 @@ namespace Habanero.Test.UI.Forms
             BusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
 
-            SetupSaveExpectation();
+            SetupSaveExpectationGetConnectionTwice();
 
             itsControl.Buttons.ClickButton("Save");
             Assert.IsFalse(selectedBo.State.IsDirty);

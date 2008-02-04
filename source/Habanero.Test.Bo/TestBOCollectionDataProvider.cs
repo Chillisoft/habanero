@@ -90,6 +90,8 @@ namespace Habanero.Test.BO
 				DatabaseConnection.CurrentConnection.GetConnection());
 			itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
 				DatabaseConnection.CurrentConnection.GetConnection());
+            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                DatabaseConnection.CurrentConnection.GetConnection());
 			itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql",
 				1, new object[] { null, null });
 		}

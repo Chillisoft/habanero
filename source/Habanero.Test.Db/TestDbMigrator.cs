@@ -79,7 +79,7 @@ namespace Habanero.Test.DB
         
         [Test]
         public void TestGetMigration() {
-            Assert.AreEqual(new SqlStatement(itsConn.GetConnection(), "migration2;"), itsDbMigrator.GetMigration(2));
+            Assert.AreEqual(new SqlStatement(itsConn, "migration2;"), itsDbMigrator.GetMigration(2));
         }
 
         [Test]
@@ -87,20 +87,20 @@ namespace Habanero.Test.DB
         {
             SqlStatementCollection  sqlCol = itsDbMigrator.GetMigrationSql(0, 3);
             Assert.AreEqual(3, sqlCol.Count);
-            Assert.AreEqual(new SqlStatement(itsConn.GetConnection(), "migration1;"), sqlCol[0]);
+            Assert.AreEqual(new SqlStatement(itsConn, "migration1;"), sqlCol[0]);
         }
         
         [Test]
         public void TestGetMigrateSqlBoundaries() {
             SqlStatementCollection sqlCol = itsDbMigrator.GetMigrationSql(1, 2);
             Assert.AreEqual(1, sqlCol.Count);
-            Assert.AreEqual(new SqlStatement(itsConn.GetConnection(), "migration2;"), sqlCol[0]);
+            Assert.AreEqual(new SqlStatement(itsConn, "migration2;"), sqlCol[0]);
         }
         
         [Test]
         public void TestMigrate() {
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { new SqlStatementCollection(new SqlStatement(itsConn.GetConnection(), "migration2;")) });
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { new SqlStatementCollection(new SqlStatement(itsConn, "migration2;")) });
             itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
             itsDbMigrator.Migrate(1, 2);
             itsConnMock.Verify();
@@ -138,8 +138,8 @@ namespace Habanero.Test.DB
             itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
             itsSettingsMock.ExpectAndReturn("SetString", null, new object[] {DBMigrator.DatabaseVersionSetting, "3"});
             SqlStatementCollection col = new SqlStatementCollection();
-            col.Add(new SqlStatement(itsConn.GetConnection(), "migration2;"));
-            col.Add(new SqlStatement(itsConn.GetConnection(), "migration3;"));
+            col.Add(new SqlStatement(itsConn, "migration2;"));
+            col.Add(new SqlStatement(itsConn, "migration3;"));
             itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { col  });
           
             itsDbMigrator.MigrateTo(3);
@@ -155,7 +155,7 @@ namespace Habanero.Test.DB
 
         [Test]
         public void TestAddSqlStatement() {
-            SqlStatement statement = new SqlStatement(itsConn.GetConnection(), "test");
+            SqlStatement statement = new SqlStatement(itsConn, "test");
             itsDbMigrator.AddMigration(4, statement);
             Assert.AreEqual(statement, itsDbMigrator.GetMigration(4));
             

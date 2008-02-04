@@ -42,7 +42,7 @@ namespace Habanero.Test.DB
             // MockRepository mockRepository = new MockRepository();
             MockSupportsAutoIncrementingID mockSupportsAutoIncrementingID = new MockSupportsAutoIncrementingID();
 
-            InsertSqlStatement sql = new InsertSqlStatement(DatabaseConnection.CurrentConnection.GetConnection(), "insert into testautoinc (testfield) values ('testing')");
+            InsertSqlStatement sql = new InsertSqlStatement(DatabaseConnection.CurrentConnection, "insert into testautoinc (testfield) values ('testing')");
             sql.TableName = "testautoinc";
             sql.SupportsAutoIncrementingField = mockSupportsAutoIncrementingID;
 

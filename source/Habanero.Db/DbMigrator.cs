@@ -63,7 +63,7 @@ namespace Habanero.DB
         /// <param name="number">The migration number</param>
         /// <param name="sql">The sql statement string to add</param>
         public void AddMigration(int number, string sql) {
-            AddMigration(number, new SqlStatement(_connection.GetConnection() , sql));
+            AddMigration(number, new SqlStatement(_connection, sql));
         }
         
         /// <summary>

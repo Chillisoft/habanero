@@ -289,6 +289,10 @@ namespace Habanero.UI.Grid
             }
         }
 
+        /// <summary>
+        /// This action is included due to a flaw in DataGridView that
+        /// causes the hidden ID column to reappear when data is changed
+        /// </summary>
         private void Grid_DataSourceChanged(object sender, EventArgs e)
 		{
 			if (Columns.Contains("ID"))

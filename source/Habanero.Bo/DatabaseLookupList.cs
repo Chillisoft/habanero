@@ -249,7 +249,7 @@ namespace Habanero.BO
                 return _lookupList;
             }
             _lookupList = new Dictionary<string, object>();
-            ISqlStatement statement = new SqlStatement(connection.GetConnection());
+            ISqlStatement statement = new SqlStatement(connection);
             statement.Statement.Append(_statement);
 
             DataTable dt = connection.LoadDataTable(statement, "", "");

@@ -41,6 +41,18 @@ namespace Habanero.Test.BO
             SetupDBConnection();
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            ContactPerson.CreateSampleData();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ContactPerson.DeleteAllContactPeople();
+        }
+
         [Test]
         public void TestGetBusinessObject()
         {

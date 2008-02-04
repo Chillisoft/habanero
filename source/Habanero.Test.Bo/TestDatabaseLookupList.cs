@@ -70,7 +70,7 @@ namespace Habanero.Test.BO
         {
             dbConnMock = new DynamicMock(typeof (IDatabaseConnection));
             conn = (IDatabaseConnection) dbConnMock.MockInstance;
-            statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append(Sql);
             dbConnMock.ExpectAndReturn("LoadDataTable", dt, new object[] {statement, "", ""});
             dbConnMock.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),

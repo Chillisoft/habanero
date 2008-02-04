@@ -32,6 +32,7 @@ namespace Habanero.BO.CriteriaManager
     public class SqlCriteriaCreator
     {
         private IExpression _expression;
+        private IDatabaseConnection _connection;
 
         /// <summary>
         /// Constructor to initialise a new criteria creator
@@ -49,6 +50,15 @@ namespace Habanero.BO.CriteriaManager
         /// </summary>
         public SqlCriteriaCreator(IExpression exp, ClassDef classDef)
         {
+            ConstructSqlCriteriaCreator(exp, classDef);
+        }
+
+        /// <summary>
+        /// Constructor as before, but with a class definition specified
+        /// </summary>
+        public SqlCriteriaCreator(IExpression exp, ClassDef classDef, IDatabaseConnection connection)
+        {
+            _connection = connection;
             ConstructSqlCriteriaCreator(exp, classDef);
         }
 
@@ -85,8 +95,14 @@ namespace Habanero.BO.CriteriaManager
         /// <param name="sqlStatement">The sql statement to append to</param>
         public void AppendCriteriaToStatement(ISqlStatement sqlStatement)
         {
-            //TODO:Use DB Connection to get field/date separators
-            _expression.SqlExpressionString(sqlStatement, "", "");
+            string leftDelimiter = "";
+            string rightDelimiter = "";
+            if (_connection != null)
+            {
+                leftDelimiter = _connection.LeftFieldDelimiter;
+                rightDelimiter = _connection.RightFieldDelimiter;
+            }
+            _expression.SqlExpressionString(sqlStatement, leftDelimiter, rightDelimiter);
         }
     }
 }

@@ -75,7 +75,7 @@ namespace Habanero.DB
             _seedValue = seedValue;
 
             SqlStatement statement =
-                new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
+                new SqlStatement(DatabaseConnection.CurrentConnection,
                                  "select SettingValue from " + _tableName + " where SettingName = ");
             statement.AddParameterToStatement(_settingName);
             IDataReader reader = null;
@@ -198,7 +198,7 @@ namespace Habanero.DB
 			/// the statement</returns>
 			public ISqlStatementCollection GetPersistSql()
 			{
-				SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
+				SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection,
 														  " update " + _tableName + " set SettingValue = ");
 				statement.AddParameterToStatement(_newNumber.ToString());
 				statement.Statement.Append(" where SettingName = ");

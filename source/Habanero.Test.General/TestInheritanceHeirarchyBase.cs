@@ -46,7 +46,7 @@ namespace Habanero.Test.General
             itsInsertSql = itsFilledCircle.GetInsertSql();
             itsUpdateSql = itsFilledCircle.GetUpdateSql();
             itsDeleteSql = itsFilledCircle.GetDeleteSql();
-            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
         }
 
@@ -63,7 +63,7 @@ namespace Habanero.Test.General
             itsInsertSql = itsFilledCircle.GetInsertSql();
             itsUpdateSql = itsFilledCircle.GetUpdateSql();
             itsDeleteSql = itsFilledCircle.GetDeleteSql();
-            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
         }
 
@@ -80,7 +80,7 @@ namespace Habanero.Test.General
             itsInsertSql = itsFilledCircle.GetInsertSql();
             itsUpdateSql = itsFilledCircle.GetUpdateSql();
             itsDeleteSql = itsFilledCircle.GetDeleteSql();
-            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
         }
 
@@ -97,7 +97,7 @@ namespace Habanero.Test.General
             itsInsertSql = itsFilledCircle.GetInsertSql();
             itsUpdateSql = itsFilledCircle.GetUpdateSql();
             itsDeleteSql = itsFilledCircle.GetDeleteSql();
-            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
         }
 

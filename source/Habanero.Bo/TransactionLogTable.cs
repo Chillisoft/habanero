@@ -73,7 +73,7 @@ namespace Habanero.BO
         public void RecordTransactionLog(BusinessObject busObj, string logonUserName)
         {
             //TODO: Peter - make this proper parametrized Sql
-            SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             string sql = "INSERT INTO " + this._transactionLogTable + " (" +
                          this._dateTimeUpdatedFieldName + ", " +
                          this._logonUserFieldName + ", " +

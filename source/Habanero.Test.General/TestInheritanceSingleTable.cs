@@ -93,7 +93,7 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
-            Assert.AreEqual("INSERT INTO Shape (Radius, ShapeID, ShapeName, ShapeType) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+            Assert.AreEqual("INSERT INTO `Shape` (`Radius`, `ShapeID`, `ShapeName`, `ShapeType`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
                             itsInsertSql[0].Statement.ToString(),
                             "Concrete Table Inheritance insert Sql seems to be incorrect.");
             Assert.AreEqual(4, itsInsertSql[0].Parameters.Count, "There should be 4 parameters.");
@@ -114,7 +114,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, itsUpdateSql.Count,
                             "There should only be one update sql statement when using single table inheritance.");
             Assert.AreEqual(
-                "UPDATE Shape SET Radius = ?Param0, ShapeName = ?Param1 WHERE ShapeID = ?Param2",
+                "UPDATE `Shape` SET `Radius` = ?Param0, `ShapeName` = ?Param1 WHERE `ShapeID` = ?Param2",
                 itsUpdateSql[0].Statement.ToString());
             // Is Object ID so doesn't get changed
             //Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
@@ -132,7 +132,7 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(1, itsDeleteSql.Count,
                             "There should only be one delete sql statement when using single table inheritance.");
-            Assert.AreEqual("DELETE FROM Shape WHERE ShapeID = ?Param0", itsDeleteSql[0].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM `Shape` WHERE `ShapeID` = ?Param0", itsDeleteSql[0].Statement.ToString(),
                             "Delete Sql for single table inheritance is incorrect.");
             Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");
@@ -142,7 +142,7 @@ namespace Habanero.Test.General
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                    "SELECT Shape.Radius, Shape.ShapeID, Shape.ShapeName FROM Shape WHERE ShapeType = 'CircleNoPrimaryKey' AND ShapeID = ?Param0",
+                    "SELECT `Shape`.`Radius`, `Shape`.`ShapeID`, `Shape`.`ShapeName` FROM `Shape` WHERE `ShapeType` = 'CircleNoPrimaryKey' AND `ShapeID` = ?Param0",
                     selectSql.Statement.ToString(), "Select sql is incorrect for single table inheritance.");
          
             Assert.AreEqual(strID, ((IDbDataParameter) selectSql.Parameters[0]).Value,

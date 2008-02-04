@@ -87,10 +87,8 @@ namespace Habanero.BO.SqlGeneration
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
                 string tableName = GetTableName(prop, classDefs);
-                statement += tableName + ".";
-                statement += _connection.LeftFieldDelimiter;
-                statement += prop.DatabaseFieldName;
-                statement += _connection.RightFieldDelimiter;
+
+                statement += SqlGenerationHelper.FormatTableAndFieldName(tableName, prop.DatabaseFieldName, _connection);
                 statement += ", ";
             }
             statement = statement.Remove(statement.Length - 2, 2);
@@ -100,12 +98,12 @@ namespace Habanero.BO.SqlGeneration
             {
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
-            statement += " FROM " + currentClassDef.TableName;
+            statement += " FROM " + SqlGenerationHelper.FormatTableName(currentClassDef.TableName, _connection);
             string where = " WHERE ";
 
             while (currentClassDef.IsUsingClassTableInheritance())
             {
-                statement += ", " + currentClassDef.SuperClassClassDef.InheritedTableName;
+                statement += ", " + SqlGenerationHelper.FormatTableName(currentClassDef.SuperClassClassDef.InheritedTableName, _connection);
                 where += GetParentKeyMatchWhereClause(currentClassDef);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
@@ -144,7 +142,8 @@ namespace Habanero.BO.SqlGeneration
         {
             string where = "";
             
-            where += string.Format("{0} = '{1}'", discriminator, classDef.ClassName);
+            where += string.Format("{0} = '{1}'",
+                SqlGenerationHelper.FormatFieldName(discriminator, _connection), classDef.ClassName);
             
             foreach (ClassDef def in classDef.ImmediateChildren)
             {
@@ -201,7 +200,7 @@ namespace Habanero.BO.SqlGeneration
         /// table should match up with child table, depending on the ID attribute
         /// given by the user.  For ClassTableInheritance only.
         /// </summary>
-        private static string GetParentKeyMatchWhereClause(ClassDef currentClassDef)
+        private string GetParentKeyMatchWhereClause(ClassDef currentClassDef)
 		{
             ClassDef origClassDef = currentClassDef;
 
@@ -216,14 +215,16 @@ namespace Habanero.BO.SqlGeneration
             string where = "";
             foreach (PropDef def in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
             {
-                //TODO: Mark - Shouldn't this also have the field Delimiters?
-                where += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
-
+                where += SqlGenerationHelper.FormatTableAndFieldName(
+                    currentClassDef.SuperClassClassDef.TableName, def.FieldName, _connection);
+                    
                 PrimaryKeyDef parentID = currentClassDef.SuperClassClassDef.PrimaryKeyDef;
                 if (parentIDCopyFieldName == null ||
                     parentIDCopyFieldName == "")
                 {
-                    where += " = " + origClassDef.TableName + "." + def.FieldName;
+                    where += " = " +
+                        SqlGenerationHelper.FormatTableAndFieldName(
+                            origClassDef.TableName, def.FieldName, _connection);
                 }
                 else
                 {
@@ -235,7 +236,9 @@ namespace Habanero.BO.SqlGeneration
                             "allow composite primary keys where the child's copies have the same " +
                             "field name as the parent.");
                     }
-                    where += " = " + origClassDef.TableName + "." + parentIDCopyFieldName;
+                    where += " = " +
+                        SqlGenerationHelper.FormatTableAndFieldName(
+                            origClassDef.TableName, parentIDCopyFieldName, _connection);
                 }
                 where += " AND ";
             }

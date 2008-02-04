@@ -46,7 +46,7 @@ namespace Habanero.Test.General
             IExpression exp = Expression.CreateExpression("PK3Prop = 'test'");
             ContactPerson cp = new ContactPerson();
             SqlCriteriaCreator creator = new SqlCriteriaCreator(exp, cp);
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             creator.AppendCriteriaToStatement(statement);
             Assert.AreEqual("ContactPerson.PK3_Prop = ?Param0", statement.Statement.ToString());
             Assert.AreEqual("test", ((IDbDataParameter) statement.Parameters[0]).Value);

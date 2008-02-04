@@ -23,7 +23,7 @@ using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.CriteriaManager
 {
     /// <summary>
     /// Summary description for TestExpression.
@@ -56,7 +56,7 @@ namespace Habanero.Test.BO
             IExpression exp =
                 new Expression(new Parameter("Field1", ">=", "value1"), new SqlOperator("AND"),
                                new Parameter("Field2", ">=", "value2"));
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "[", "]");
             Assert.AreEqual("([Field1] >= ?Param0 AND [Field2] >= ?Param1)", st.Statement.ToString());
             Assert.AreEqual("value1", ((IDbDataParameter) st.Parameters[0]).Value);
@@ -69,7 +69,7 @@ namespace Habanero.Test.BO
             IExpression exp =
                 new Expression(new Parameter("Field1", "tbName", "DBField1", ">=", "value1"), new SqlOperator("OR"),
                                new Parameter("Field2", "tbName", "DBField2", ">=", "value2"));
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "[", "]");
             Assert.AreEqual("([tbName].[DBField1] >= ?Param0 OR [tbName].[DBField2] >= ?Param1)",
                             st.Statement.ToString());
@@ -83,7 +83,7 @@ namespace Habanero.Test.BO
             IExpression exp =
                 new Expression(new Parameter("Field1", "tb", "DBField1", ">=", "value1"), new SqlOperator("OR"),
                                new Parameter("Field2", "tb", "DBField2", ">=", "value2"));
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("(tb.DBField1 >= ?Param0 OR tb.DBField2 >= ?Param1)", st.Statement.ToString());
             Assert.AreEqual("value1", ((IDbDataParameter) st.Parameters[0]).Value);
@@ -96,7 +96,7 @@ namespace Habanero.Test.BO
             IExpression exp =
                 new Expression(new Parameter("Field1", "tb", "DBField1", ">=", "value'1"), new SqlOperator("OR"),
                                new Parameter("Field2", "tb", "DBField2", ">=", "value2"));
-            SqlStatement st1 = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st1 = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st1, "", "");
             Assert.AreEqual("(tb.DBField1 >= ?Param0 OR tb.DBField2 >= ?Param1)", st1.Statement.ToString());
             Assert.AreEqual("value'1", ((IDbDataParameter) st1.Parameters[0]).Value);
@@ -105,7 +105,7 @@ namespace Habanero.Test.BO
             exp =
                 new Expression(new Parameter("Field1", "tb", "DBField1", ">=", "value''1"), new SqlOperator("OR"),
                                new Parameter("Field2", "tb", "DBField2", ">=", "value2"));
-            SqlStatement st2 = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st2 = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st2, "", "");
             Assert.AreEqual("(tb.DBField1 >= ?Param0 OR tb.DBField2 >= ?Param1)", st2.Statement.ToString());
             Assert.AreEqual("value''1", ((IDbDataParameter) st2.Parameters[0]).Value);
@@ -118,7 +118,7 @@ namespace Habanero.Test.BO
             IExpression exp =
                 new Expression(new Parameter("Field1", "tb", "DBField1", "IN", "('a', 'zzz')"), new SqlOperator("OR"),
                                new Parameter("Field2", "tb", "DBField2", "in", "('12 mar 2004', '27 mar 2004')"));
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("(tb.DBField1 IN ('a', 'zzz') OR tb.DBField2 IN ('12 mar 2004', '27 mar 2004'))",
                             st.Statement.ToString());
@@ -130,13 +130,13 @@ namespace Habanero.Test.BO
             IExpression exp =
                 new Expression(new Parameter("Field1", "tb", "DBField1", "IN", "('a', 'zzz')"), new SqlOperator("OR"),
                                new Parameter("Field2", "tb", "DBField2", "in", "('12 mar 2004', '27 mar 2004')"));
-            SqlStatement st1 = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st1 = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st1, "", "");
             Assert.AreEqual("(tb.DBField1 IN ('a', 'zzz') OR tb.DBField2 IN ('12 mar 2004', '27 mar 2004'))",
                             st1.Statement.ToString());
 
             exp = new Expression(exp, new SqlOperator("And"), new Parameter("Field3", "=", "a"));
-            SqlStatement st2 = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st2 = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st2, "", "");
             Assert.AreEqual(
                 "((tb.DBField1 IN ('a', 'zzz') OR tb.DBField2 IN ('12 mar 2004', '27 mar 2004')) AND Field3 = ?Param0)",
@@ -150,7 +150,7 @@ namespace Habanero.Test.BO
             IExpression exp =
                 new Expression(new Parameter("Field1", "tb", "DBField1", "Is", "Null"), new SqlOperator("OR"),
                                new Parameter("Field2", "tb", "DBField2", "is", "Not null"));
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("(tb.DBField1 IS NULL OR tb.DBField2 IS NOT NULL)", st.Statement.ToString());
         }
@@ -176,7 +176,7 @@ namespace Habanero.Test.BO
         //public void TestParameterParsingSql()
         //{
         //    IExpression exp = new Parameter("Field1 = ''te'st'''");
-        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+        //    SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
         //    exp.SqlExpressionString(st, "", "");
         //    Assert.AreEqual("Field1 = ?Param0", st.Statement.ToString());
         //    Assert.AreEqual("'te'st''", ((IDbDataParameter) st.Parameters[0]).Value);
@@ -186,7 +186,7 @@ namespace Habanero.Test.BO
         public void TestExpressionParsingSql()
         {
             IExpression exp = Expression.CreateExpression("Field1 = 'test' and Field2 = 'test2' or Field2 = 'test2'");
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("((Field1 = ?Param0  AND  Field2 = ?Param1)  OR  Field2 = ?Param2)", st.Statement.ToString());
             Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
@@ -198,7 +198,7 @@ namespace Habanero.Test.BO
         public void TestExpressionParsingSqlSingleParameter()
         {
             IExpression exp = Expression.CreateExpression("Field1 = 'test'");
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("Field1 = ?Param0", st.Statement.ToString());
             Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
@@ -211,7 +211,7 @@ namespace Habanero.Test.BO
                 new MockParameterSqlInfo("testfieldname", "paramName", ParameterType.String, "tableName");
             IExpression exp = Expression.CreateExpression("paramName = 'test'");
             exp.SetParameterSqlInfo(paramSql1, "tbl");
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("tbl.testfieldname = ?Param0", st.Statement.ToString());
             Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
@@ -227,7 +227,7 @@ namespace Habanero.Test.BO
             IExpression exp = Expression.CreateExpression("paramName = 'test' and paramName2 = '10 Feb 2003'");
             exp.SetParameterSqlInfo(paramSql2, "tbl2");
             exp.SetParameterSqlInfo(paramSql1, "tbl");
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("(tbl.testfieldname = ?Param0  AND  tbl2.testfieldname2 = ?Param1)", st.Statement.ToString());
             Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
@@ -238,7 +238,7 @@ namespace Habanero.Test.BO
         public void TestOrInBracketsWithAndOutsideBrackets()
         {
             IExpression exp = Expression.CreateExpression("param1 = 'test' AND (param2 = 3 or param2 = 4)");
-            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("(param1 = ?Param0  AND  (param2 = ?Param1  OR  param2 = ?Param2))", st.Statement.ToString());
         }
@@ -250,7 +250,7 @@ namespace Habanero.Test.BO
             IExpression result = Expression.AppendExpression(exp, new SqlOperator("or"), "param2 = 4");
 
             Assert.AreEqual("((param1 = 'test'  AND  param2 = '3') OR param2 = '4')",
-                result.ExpressionString());
+                            result.ExpressionString());
         }
 
         [Test]
@@ -291,7 +291,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestSqlExpressionString()
         {
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             SqlOperator op = new SqlOperator("OR");
             op.SqlExpressionString(statement, "", "");
             op.SetParameterSqlInfo(null, null);  //for test coverage :)

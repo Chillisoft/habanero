@@ -81,6 +81,40 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Provides an indexing facility so the properties can be accessed
+        /// with square brackets like an array
+        /// </summary>
+        /// <param name="index">The index position of the item to retrieve</param>
+        /// <returns>Returns the matching BOProp object or null if not found
+        /// </returns>
+        public BOProp this[int index]
+        {
+            get
+            {
+                if (_props.Count < index + 1)
+                {
+                    throw new IndexOutOfRangeException(String.Format(
+                        "A collection of keys is being accessed with the index " +
+                        "position '{0}', but the collection does not contain that " +
+                        "many items.", index));
+                }
+
+                string propName = "";
+                int count = 0;
+                foreach (KeyValuePair<string, BOProp> pair in _props)
+                {
+                    if (count == index)
+                    {
+                        propName = pair.Key;
+                        break;
+                    }
+                    count++;
+                }
+                return _props[propName];
+            }
+        }
+
+        /// <summary>
         /// Adds a BOProp object to the key
         /// </summary>
         /// <param name="boProp">The BOProp to add</param>
@@ -266,6 +300,25 @@ namespace Habanero.BO
                     propString.Append(" AND ");
                 }
                 propString.Append(prop.PropertyName + "=" + prop.Value);
+            }
+            return propString.ToString();
+        }
+
+        /// <summary>
+        /// Returns a string containing all the properties and their values,
+        /// but using the values at last persistence rather than any dirty values
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        public string PersistedValueString()
+        {
+            StringBuilder propString = new StringBuilder(_props.Count * 30);
+            foreach (BOProp prop in _props.Values)
+            {
+                if (propString.Length > 0)
+                {
+                    propString.Append(" AND ");
+                }
+                propString.Append(prop.PropertyName + "=" + prop.PersistedPropertyValue);
             }
             return propString.ToString();
         }

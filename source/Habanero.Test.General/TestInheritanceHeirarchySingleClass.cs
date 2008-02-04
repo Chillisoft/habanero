@@ -97,7 +97,7 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(2, itsInsertSql.Count,
                             "There should be 2 insert sql statements.");
-            Assert.AreEqual("INSERT INTO Shape (Radius, ShapeID, ShapeName, ShapeType) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+            Assert.AreEqual("INSERT INTO `Shape` (`Radius`, `ShapeID`, `ShapeName`, `ShapeType`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
                             itsInsertSql[0].Statement.ToString(),
                             "First insert Sql statement is incorrect.");
             Assert.AreEqual(10, ((IDbDataParameter)itsInsertSql[0].Parameters[0]).Value,
@@ -110,7 +110,7 @@ namespace Habanero.Test.General
                             "Parameter ShapeType has incorrect value.");
 
             Assert.AreEqual(
-                "INSERT INTO FilledCircle (Colour, FilledCircleID, ShapeID) VALUES (?Param0, ?Param1, ?Param2)",
+                "INSERT INTO `FilledCircle` (`Colour`, `FilledCircleID`, `ShapeID`) VALUES (?Param0, ?Param1, ?Param2)",
                 itsInsertSql[1].Statement.ToString(), "Sql statement is incorrect.");
             Assert.AreEqual(3, ((IDbDataParameter) itsInsertSql[1].Parameters[0]).Value,
                             "Parameter Colour has incorrect value.");
@@ -138,7 +138,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(2, itsUpdateSql.Count,
                             "There should be 2 update sql statements.");
 
-            Assert.AreEqual("UPDATE Shape SET Radius = ?Param0, ShapeID = ?Param1, ShapeName = ?Param2 WHERE ShapeID = ?Param3",
+            Assert.AreEqual("UPDATE `Shape` SET `Radius` = ?Param0, `ShapeID` = ?Param1, `ShapeName` = ?Param2 WHERE `ShapeID` = ?Param3",
                             itsUpdateSql[0].Statement.ToString(),
                             "Update sql statement is incorrect.");
             Assert.AreEqual(10, ((IDbDataParameter)itsUpdateSql[0].Parameters[0]).Value,
@@ -150,7 +150,7 @@ namespace Habanero.Test.General
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsUpdateSql[0].Parameters[3]).Value,
                             "Parameter ShapeID in where clause has incorrect value.");
 
-            Assert.AreEqual("UPDATE FilledCircle SET Colour = ?Param0 WHERE FilledCircleID = ?Param1",
+            Assert.AreEqual("UPDATE `FilledCircle` SET `Colour` = ?Param0 WHERE `FilledCircleID` = ?Param1",
                             itsUpdateSql[1].Statement.ToString(),
                             "Update sql statement is incorrect.");
             Assert.AreEqual(3, ((IDbDataParameter) itsUpdateSql[1].Parameters[0]).Value,
@@ -165,6 +165,10 @@ namespace Habanero.Test.General
             IMock connectionControl = new DynamicMock(typeof (IDatabaseConnection));
             IDatabaseConnection connection = (IDatabaseConnection) connectionControl.MockInstance;
             connectionControl.ExpectAndReturn("LoadDataReader", null, new object[] {null});
+            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
             connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
             connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
             connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
@@ -185,12 +189,12 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(2, itsDeleteSql.Count,
                             "There should be 2 delete sql statements.");
-            Assert.AreEqual("DELETE FROM FilledCircle WHERE FilledCircleID = ?Param0",
+            Assert.AreEqual("DELETE FROM `FilledCircle` WHERE `FilledCircleID` = ?Param0",
                             itsDeleteSql[0].Statement.ToString(),
                             "First delete sql statement is incorrect.");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
                             "Parameter FilledCircleID has incorrect value.");
-            Assert.AreEqual("DELETE FROM Shape WHERE ShapeID = ?Param0", itsDeleteSql[1].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM `Shape` WHERE `ShapeID` = ?Param0", itsDeleteSql[1].Statement.ToString(),
                             "Second delete sql statement is incorrect.");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsDeleteSql[1].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value.");
@@ -200,7 +204,7 @@ namespace Habanero.Test.General
         public void TestSelectSql()
         {
             Assert.AreEqual(
-                "SELECT FilledCircle.Colour, FilledCircle.FilledCircleID, Shape.Radius, Shape.ShapeID, Shape.ShapeName FROM FilledCircle, Shape WHERE Shape.ShapeID = FilledCircle.ShapeID AND FilledCircleID = ?Param0",
+                "SELECT `FilledCircle`.`Colour`, `FilledCircle`.`FilledCircleID`, `Shape`.`Radius`, `Shape`.`ShapeID`, `Shape`.`ShapeName` FROM `FilledCircle`, `Shape` WHERE `Shape`.`ShapeID` = `FilledCircle`.`ShapeID` AND `FilledCircleID` = ?Param0",
                 itsSelectSql.Statement.ToString(), "Select sql is incorrect for class table inheritance.");
             Assert.AreEqual(itsFilledCircleId, ((IDbDataParameter) itsSelectSql.Parameters[0]).Value,
                             "Parameter FilledCircleID is incorrect in select where clause for class table inheritance.");

@@ -23,6 +23,7 @@ using System.Globalization;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
+using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Util;
@@ -419,19 +420,19 @@ namespace Habanero.BO
         {
             if (PersistedPropertyValue == null)
             {
-                return this.DatabaseFieldName + " is NULL ";
+                return SqlGenerationHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
             }
             else
             {
                 if (sql == null)
                 {
-                    return this.DatabaseFieldName + " = '" + this.PersistedPropertyValueString + "'";
+                    return DatabaseFieldName + " = '" + PersistedPropertyValueString + "'";
                 }
                 else
                 {
                     string paramName = sql.ParameterNameGenerator.GetNextParameterName();
                     sql.AddParameter(paramName, PersistedPropertyValue);
-                    return this.DatabaseFieldName + " = " + paramName;
+                    return SqlGenerationHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
                 }
             }
         }
@@ -450,19 +451,19 @@ namespace Habanero.BO
         {
             if (_currentValue == null)
             {
-                return this.DatabaseFieldName + " is NULL ";
+                return SqlGenerationHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
             }
             else
             {
                 if (sql == null)
                 {
-                    return this.DatabaseFieldName + " = '" + this.PropertyValueString + "'";
+                    return DatabaseFieldName + " = '" + PropertyValueString + "'";
                 }
                 else
                 {
                     String paramName = sql.ParameterNameGenerator.GetNextParameterName();
-                    sql.AddParameter(paramName, this.Value);
-                    return this.DatabaseFieldName + " = " + paramName;
+                    sql.AddParameter(paramName, Value);
+                    return SqlGenerationHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
                 }
             }
         }

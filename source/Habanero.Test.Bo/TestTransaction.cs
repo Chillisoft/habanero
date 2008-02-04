@@ -41,6 +41,12 @@ namespace Habanero.Test.BO
             ContactPerson.DeleteAllContactPeople();
         }
 
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            ContactPerson.DeleteAllContactPeople();
+        }
+
         [Test]
         public void TestTransactionSuccess()
         {
@@ -132,8 +138,8 @@ namespace Habanero.Test.BO
 
             //Test canceledits to transaction
             transact.CancelEdits();
-            Assert.IsTrue(myContact_1.Surname.Length == 0);
-            Assert.IsTrue(myContact_2.Surname.Length == 0);
+            Assert.IsTrue(String.IsNullOrEmpty(myContact_1.Surname));
+            Assert.IsTrue(String.IsNullOrEmpty(myContact_2.Surname));
             Assert.IsFalse(myContact_2.IsValid());
             Assert.IsFalse(myContact_2.IsValid());
         }

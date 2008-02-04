@@ -259,12 +259,12 @@ namespace Habanero.BO
     	internal static ISqlStatement CreateLoadSqlStatement(BusinessObject businessObject, ClassDef classDef, IExpression criteriaExpression, int limit, string extraSearchCriteriaLiteral)
     	{
     	    IDatabaseConnection boDatabaseConnection = businessObject.GetDatabaseConnection();
-    		ISqlStatement refreshSql = new SqlStatement(boDatabaseConnection.GetConnection());
+    		ISqlStatement refreshSql = new SqlStatement(boDatabaseConnection);
 			refreshSql.Statement.Append(businessObject.GetSelectSql(limit));
 			if (criteriaExpression != null)
     		{
     			refreshSql.AppendWhere();
-				SqlCriteriaCreator creator = new SqlCriteriaCreator(criteriaExpression, classDef);
+				SqlCriteriaCreator creator = new SqlCriteriaCreator(criteriaExpression, classDef, boDatabaseConnection);
     			creator.AppendCriteriaToStatement(refreshSql);
     		}
 			if (!String.IsNullOrEmpty(extraSearchCriteriaLiteral))

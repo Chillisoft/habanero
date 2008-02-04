@@ -29,22 +29,10 @@ namespace Habanero.Test.BO
 {
     class ContactPerson: BusinessObject
     {
-        public ContactPerson() : base() { }
+        public ContactPerson() { }
 
-        internal ContactPerson(BOPrimaryKey id)
-            : base(id)
-        {
-        }
+        internal ContactPerson(BOPrimaryKey id) : base(id) { }
 
-        public Guid ContactPersonID
-        {
-            get { return (Guid) this.GetPropertyValue("ContactPersonID"); }
-        }
-
-        public override string ToString()
-        {
-            return (string)this.GetPropertyValue("Surname");
-        }
         public static ClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -100,10 +88,44 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+        public static ClassDef LoadFullClassDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPerson"" assembly=""Habanero.Test.BO"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" compulsory=""true"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public Guid ContactPersonID
+        {
+            get { return (Guid)GetPropertyValue("ContactPersonID"); }
+        }
+
         public string Surname
         {
-            get { return GetPropertyValueString("Surname"); }
+            get { return (string)GetPropertyValue("Surname"); }
             set { SetPropertyValue("Surname", value); }
+        }
+        public string FirstName
+        {
+            get { return (string)GetPropertyValue("FirstName"); }
+            set { SetPropertyValue("FirstName", value); }
+        }
+
+        public override string ToString()
+        {
+            return Surname;
         }
 
         /// <summary>
@@ -125,12 +147,32 @@ namespace Habanero.Test.BO
             }
             return myContactPerson;
         }
+
         internal static void DeleteAllContactPeople()
         {
             string sql = "DELETE FROM ContactPerson";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
+        public static void CreateSampleData()
+        {
+            ClassDef.ClassDefs.Clear();
+            LoadFullClassDef();
 
+            string[] surnames = {"zzz", "abc", "abcd"};
+            string[] firstNames = {"a", "aa", "aa"};
+
+            for (int i = 0; i<surnames.Length; i++)
+            {
+                if (BOLoader.Instance.GetBusinessObject<ContactPerson>("surname = " + surnames[i]) == null)
+                {
+                    ContactPerson contact = new ContactPerson();
+                    contact.Surname = surnames[i];
+                    contact.FirstName = firstNames[i];
+                    contact.Save();
+                }
+            }
+            ClassDef.ClassDefs.Clear();
+        }
     }
 }

@@ -56,7 +56,7 @@ namespace Habanero.DB
         /// </summary>
         public override string LeftFieldDelimiter
         {
-            get { return ""; }
+            get { return "`"; }
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Habanero.DB
         /// </summary>
         public override string RightFieldDelimiter
         {
-            get { return ""; }
+            get { return "`"; }
         }
 
         /// <summary>

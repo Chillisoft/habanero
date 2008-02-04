@@ -19,6 +19,7 @@
 
 using System.Collections;
 using System.Data;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.DB;
@@ -32,7 +33,7 @@ namespace Habanero.BO.SqlGeneration
     public class UpdateStatementGenerator
     {
         private BusinessObject _bo;
-        private IDbConnection _conn;
+        private IDatabaseConnection _connection;
         private SqlStatementCollection _statementCollection;
         private SqlStatement _updateSql;
 
@@ -41,11 +42,11 @@ namespace Habanero.BO.SqlGeneration
         /// </summary>
         /// <param name="bo">The business object whose properties are to
         /// be updated</param>
-        /// <param name="conn">A database connection</param>
-        public UpdateStatementGenerator(BusinessObject bo, IDbConnection conn)
+        /// <param name="connection">A database connection</param>
+        public UpdateStatementGenerator(BusinessObject bo, IDatabaseConnection connection)
         {
             _bo = bo;
-            _conn = conn;
+            _connection = connection;
         }
 
         /// <summary>
@@ -88,8 +89,9 @@ namespace Habanero.BO.SqlGeneration
         private void GenerateSingleUpdateStatement(string tableName, BOPropCol propsToInclude,
                                                    bool isSuperClassStatement, ClassDef currentClassDef)
         {
-            _updateSql = new SqlStatement(_conn);
-            _updateSql.Statement.Append(@"UPDATE " + tableName + " SET ");
+            _updateSql = new SqlStatement(_connection);
+            _updateSql.Statement.Append(
+                @"UPDATE " + SqlGenerationHelper.FormatTableName(tableName, _connection) + " SET ");
             int includedProps = 0;
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
@@ -102,7 +104,7 @@ namespace Habanero.BO.SqlGeneration
                          !primaryKeyDef.IsObjectID))
                     {
                         includedProps++;
-                        _updateSql.Statement.Append(prop.DatabaseFieldName);
+                        _updateSql.Statement.Append(SqlGenerationHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
                         _updateSql.Statement.Append(" = ");
                         _updateSql.AddParameterToStatement(prop.Value);
                         //_updateSql.AddParameterToStatement(DatabaseUtil.PrepareValue(prop.PropertyValue));

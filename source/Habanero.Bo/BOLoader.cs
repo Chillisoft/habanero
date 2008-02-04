@@ -434,7 +434,7 @@ namespace Habanero.BO
         /// <returns>Returns an IDataReader object</returns>
         internal IDataReader LoadDataReader(BusinessObject obj, IDatabaseConnection connection, IExpression searchExpression)
         {
-            SqlStatement selectSql = new SqlStatement(connection.GetConnection());
+            SqlStatement selectSql = new SqlStatement(connection);
             if (searchExpression == null)
             {
                 selectSql.Statement.Append(obj.SelectSqlStatement(selectSql));

@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -100,6 +101,13 @@ namespace Habanero.Test.BO
             BOProp prop = boKey["invalidpropname"];
         }
 
+        [Test, ExpectedException(typeof(IndexOutOfRangeException))]
+        public void TestIndexerIntegerOutOfRange()
+        {
+            BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
+            BOProp prop = boKey[2];
+        }
+
         [Test, ExpectedException(typeof(HabaneroArgumentException))]
         public void TestAddNullBOProp()
         {
@@ -153,6 +161,25 @@ namespace Habanero.Test.BO
             boKey["PropName"].Value = "blah";
             Assert.IsTrue(boKey == otherKey);
             Assert.IsTrue(boKey.Equals(otherKey));
+        }
+
+        [Test]
+        public void TestIntegerIndexer()
+        {
+            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadOnly, null);
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadOnly, null);
+            
+            BOPropCol propCol = new BOPropCol();
+            propCol.Add(propDef1.CreateBOProp(false));
+            propCol.Add(propDef2.CreateBOProp(false));
+            
+            KeyDef keyDef = new KeyDef();
+            keyDef.Add(propDef1);
+            keyDef.Add(propDef2);
+            BOKey boKey = keyDef.CreateBOKey(propCol);
+
+            Assert.AreEqual(propCol["PropName1"], boKey[0]);
+            Assert.AreEqual(propCol["PropName2"], boKey[1]);
         }
     }
 }

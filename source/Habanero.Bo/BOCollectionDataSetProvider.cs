@@ -87,6 +87,12 @@ namespace Habanero.BO
             return _table;
         }
 
+        /// <summary>
+        /// Gets a list of the property values to display to the user
+        /// </summary>
+        /// <param name="businessObjectBase">The business object whose
+        /// properties are to be displayed</param>
+        /// <returns>Returns an array of values</returns>
         protected object[] GetValues(BusinessObject businessObjectBase)
         {
             object[] values = new object[_uiGridProperties.Count + 1];
@@ -154,7 +160,9 @@ namespace Habanero.BO
         {
             for (int i = 0; i < _table.Rows.Count; i++)
             {
-                if (_table.Rows[i][0].ToString() == bo.ID.ToString())
+                string tableValue = _table.Rows[i][0].ToString();
+                string propValue = bo.ID.PersistedValueString();
+                if (_table.Rows[i][0].ToString() == bo.ID.ToString())//PersistedValueString())
                 {
                     return i;
                 }

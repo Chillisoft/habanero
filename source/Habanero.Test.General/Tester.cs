@@ -848,7 +848,7 @@ namespace Habanero.Test.General
                                                                                   string orderByClause)
         {
             TransactionLog lTransactionLog = new TransactionLog();
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append(lTransactionLog.SelectSqlWithNoSearchClause());
             if (searchCriteria.Length > 0)
             {

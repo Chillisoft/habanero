@@ -19,6 +19,7 @@
 
 using System;
 using System.Data;
+using Habanero.Base;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -38,7 +39,7 @@ namespace Habanero.Test.DB
             try
             {
                 this.SetupDBConnection();
-                IDbConnection connection = DatabaseConnection.CurrentConnection.GetConnection();
+                IDatabaseConnection connection = DatabaseConnection.CurrentConnection;
                 testCollection = new SqlStatementCollection();
                 testStatement1 = new SqlStatement(connection);
                 testStatement2 = new SqlStatement(connection);

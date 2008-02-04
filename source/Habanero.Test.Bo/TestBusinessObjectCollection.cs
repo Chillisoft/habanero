@@ -66,7 +66,7 @@ namespace Habanero.Test.BO
         {
             MyBO bo1 = new MyBO();
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof (MyBO)], null, 10, null);
-            Assert.AreEqual("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO limit 10", statement.Statement.ToString());
+            Assert.AreEqual("SELECT `MyBO`.`MyBoID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` FROM `MyBO` limit 10", statement.Statement.ToString());
         }
 
         [Test]

@@ -42,6 +42,12 @@ namespace Habanero.Test.BO
             base.SetupDBConnection();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ContactPerson.DeleteAllContactPeople();
+        }
+
         [Test]
         public void TestInstantiate()
         {
@@ -86,9 +92,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestGetPropertyValueToDisplayWithBOLookupList()
         {
+            ContactPerson.CreateSampleData();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithBOLookup();
             ContactPerson.LoadDefaultClassDef();
+
             ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);
@@ -99,9 +107,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestBOLookupListWithString()
         {
+            ContactPerson.CreateSampleData();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPerson.LoadDefaultClassDef();
+
             ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "abc");
@@ -112,9 +122,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestBOLookupListNull()
         {
+            ContactPerson.CreateSampleData();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPerson.LoadDefaultClassDef();
+
             ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", null);

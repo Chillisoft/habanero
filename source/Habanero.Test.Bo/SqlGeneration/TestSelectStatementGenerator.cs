@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.SqlGeneration;
 using Habanero.DB;
@@ -43,7 +44,7 @@ namespace Habanero.Test.BO.SqlGeneration
             MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
             SelectStatementGenerator statementGen = new SelectStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            Assert.AreEqual("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statementGen.Generate(10),
+            Assert.AreEqual("SELECT `MyBO`.`MyBoID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` FROM `MyBO`", statementGen.Generate(10),
                             "A limit clause should not be appended to the basic select as it has to appear after the search criteria and should thus be added later.");
         }
 
@@ -58,12 +59,30 @@ namespace Habanero.Test.BO.SqlGeneration
                             "A limit clause should be prepended to the basic select.");
         }
 
-        private class MyDatabaseConnection : DatabaseConnection
+        [Test]
+        public void TestDelimitedTableNameWithSpaces()
         {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            MyBO bo = new MyBO();
+            ClassDef.ClassDefs[typeof (MyBO)].TableName = "My BO";
+            SelectStatementGenerator statementGen = new SelectStatementGenerator(bo, new MyDatabaseConnection(true));
+            Assert.AreEqual("SELECT [My BO].[MyBoID], [My BO].[TestProp], [My BO].[TestProp2] FROM [My BO]", statementGen.Generate(0));
+        }
+
+        public class MyDatabaseConnection : DatabaseConnection
+        {
+            private bool _useStandardDelimiters = false;
+
             public MyDatabaseConnection() : this("test", "test") {}
 
             public MyDatabaseConnection(string assemblyName, string className)
                 : base(assemblyName, className) {}
+
+            public MyDatabaseConnection(bool useStandardDelimiters) : this()
+            {
+                _useStandardDelimiters = useStandardDelimiters;
+            }
 
             public override string GetLimitClauseForBeginning(int limit)
             {
@@ -72,12 +91,20 @@ namespace Habanero.Test.BO.SqlGeneration
 
             public override string LeftFieldDelimiter
             {
-                get { return ""; }
+                get
+                {
+                    if (_useStandardDelimiters) return base.LeftFieldDelimiter;
+                    else return "";
+                }
             }
 
             public override string RightFieldDelimiter
             {
-                get { return ""; }
+                get
+                {
+                    if (_useStandardDelimiters) return base.RightFieldDelimiter;
+                    else return "";
+                }
             }
         }
     }

@@ -126,19 +126,27 @@ namespace Habanero.UI.Forms
         {
             try
             {
+                object boPropertyValue = GetPropertyValue();
                 foreach (KeyValuePair<string, object> pair in _collection)
                 {
                     if (pair.Value == null) continue;
-                    object boPropertyValue = GetPropertyValue();
                     if (pair.Value is BusinessObject)
                     {
                         BusinessObject pairValueBo = (BusinessObject)pair.Value;
-                        if (pairValueBo.ID.GetGuid().Equals(boPropertyValue))
+                        if (pairValueBo.ClassDef.PrimaryKeyDef.IsObjectID
+                            && pairValueBo.ID.GetGuid().Equals(boPropertyValue))
                         {
                             _comboBox.SelectedItem = pair.Key;
                             break;
                         }
                         else if (boPropertyValue != null && String.Compare(pairValueBo.ID.ToString(), boPropertyValue.ToString()) == 0)
+                        {
+                            _comboBox.SelectedItem = pair.Key;
+                            break;
+                        }
+                        else if (boPropertyValue != null &&
+                            pairValueBo.ID[0].Value != null &&
+                            String.Compare(pairValueBo.ID[0].Value.ToString(), boPropertyValue.ToString()) == 0)
                         {
                             _comboBox.SelectedItem = pair.Key;
                             break;

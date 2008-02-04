@@ -17,31 +17,42 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Habanero.Base;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.BO.SqlGeneration;
 using Habanero.DB;
+using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.General
+namespace Habanero.Test.BO.SqlGeneration
 {
     [TestFixture]
-    public class TestBOSqlGeneration : TestUsingDatabase
+    public class TestDeleteStatementGenerator: TestUsingDatabase
     {
-        private Shape shape;
-        private SqlStatementCollection insertSql;
 
         [TestFixtureSetUp]
-        public void SetupTestFixture()
+        public void SetupFixture()
         {
             this.SetupDBConnection();
-            shape = new Shape();
-            insertSql = shape.GetInsertSql();
         }
 
+        // TODO: this test awaits the addition of delimiters to MySQL
         [Test]
-        public void TestInsertSql()
+        public void TestDelimitedTableNameWithSpaces()
         {
-            Assert.AreEqual(1, insertSql.Count, "There should only be one insert statement.");
-            Assert.AreEqual("INSERT INTO `Shape` (`ShapeID`, `ShapeName`) VALUES (?Param0, ?Param1)",
-                            insertSql[0].Statement.ToString(), "Insert Sql is being created incorrectly");
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID();
+            TestAutoInc bo = new TestAutoInc();
+            ClassDef.ClassDefs[typeof (TestAutoInc)].TableName = "test autoinc";
+
+            DeleteStatementGenerator gen = new DeleteStatementGenerator(bo, DatabaseConnection.CurrentConnection);
+            ISqlStatementCollection statementCol = gen.Generate();
+            //DeleteSqlStatement statement = (DeleteSqlStatement)statementCol[0];
+            //Assert.AreEqual("PUT STUFF HERE", statement.Statement.ToString());
         }
     }
 }

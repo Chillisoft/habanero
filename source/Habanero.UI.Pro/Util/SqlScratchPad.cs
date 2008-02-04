@@ -82,7 +82,7 @@ namespace Habanero.UI.Util
                 {
                     DataTable table =
                         DatabaseConnection.CurrentConnection.LoadDataTable(
-                            new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(), _scriptTextBox.Text),
+                            new SqlStatement(DatabaseConnection.CurrentConnection, _scriptTextBox.Text),
                             "", "");
                     _resultGrid.DataSource = table;
                     _statusTextBox.Text = Convert.ToString(table.Rows.Count) + " row returned.";

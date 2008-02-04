@@ -44,7 +44,7 @@ namespace Habanero.Test.BO.SqlGeneration
         public void TestSqlStatementType()
         {
             MockBO bo = new MockBO();
-            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection.GetConnection());
+            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             ISqlStatementCollection statementCol = gen.Generate();
             Assert.AreEqual(1, statementCol.Count);
             Assert.AreSame(typeof(InsertSqlStatement), statementCol[0].GetType());
@@ -55,7 +55,7 @@ namespace Habanero.Test.BO.SqlGeneration
         public void TestSqlStatementTableName()
         {
             MockBO bo = new MockBO();
-            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection.GetConnection());
+            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             ISqlStatementCollection statementCol = gen.Generate();
             InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
             Assert.AreEqual("MockBO", statement.TableName);
@@ -65,7 +65,7 @@ namespace Habanero.Test.BO.SqlGeneration
         public void TestAutoIncrementObjNotApplicable()
         {
             MockBO bo = new MockBO();
-            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection.GetConnection());
+            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             ISqlStatementCollection statementCol = gen.Generate();
             InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
             Assert.AreEqual(null, statement.SupportsAutoIncrementingField);
@@ -77,7 +77,7 @@ namespace Habanero.Test.BO.SqlGeneration
             ClassDef.ClassDefs.Clear();
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
             TestAutoInc bo = new TestAutoInc();
-            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection.GetConnection());
+            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             ISqlStatementCollection statementCol = gen.Generate();
             InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
             Assert.AreSame(typeof(SupportsAutoIncrementingFieldBO), statement.SupportsAutoIncrementingField.GetType());
@@ -89,12 +89,17 @@ namespace Habanero.Test.BO.SqlGeneration
             ClassDef.ClassDefs.Clear();
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
             TestAutoInc bo = new TestAutoInc();
-            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection.GetConnection());
+            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             ISqlStatementCollection statementCol = gen.Generate();
             InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
 
-            Assert.AreEqual("INSERT INTO testautoinc (testfield) VALUES (?Param0)", statement.Statement.ToString());
+            Assert.AreEqual("INSERT INTO `testautoinc` (`testfield`) VALUES (?Param0)", statement.Statement.ToString());
         }
+
+
+
+
+
 
         //[Test]
         //public void TestIdAttributeWithMultiplePrimaryKey()

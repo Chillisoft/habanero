@@ -25,26 +25,45 @@ using Habanero.Base;
 
 namespace Habanero.DB
 {
-    public class InsertSqlStatement : SqlStatement {
+    public class InsertSqlStatement : SqlStatement
+    {
         private string _tableName;
         private ISupportsAutoIncrementingField _supportsAutoIncrementingFIELD;
 
-        public InsertSqlStatement(IDbConnection connection, string statement) : base(connection, statement) {}
-        public InsertSqlStatement(IDbConnection connection) : base(connection) {}
+        /// <summary>
+        /// Constructor to initialise a new insert sql statement
+        /// </summary>
+        /// <param name="connection">The database connection used for the statement</param>
+        /// <param name="statement">The statement in string form</param>
+        public InsertSqlStatement(IDatabaseConnection connection, string statement) : base(connection, statement) {}
 
+        /// <summary>
+        /// Constructor to initialise a new insert sql statement
+        /// </summary>
+        /// <param name="connection">The database connection used for the statement</param>
+        public InsertSqlStatement(IDatabaseConnection connection) : base(connection) {}
+
+        /// <summary>
+        /// The name of the table to insert into
+        /// </summary>
         public string TableName
         {
             get { return _tableName; }
             set { _tableName = value; }
         }
 
+        /// <summary>
+        /// Whether an auto-incrementing field is supported
+        /// </summary>
         public ISupportsAutoIncrementingField SupportsAutoIncrementingField
         {
             get { return _supportsAutoIncrementingFIELD; }
             set { _supportsAutoIncrementingFIELD = value; }
         }
 
-
+        /// <summary>
+        /// Provides steps to carry out after execution of the statement
+        /// </summary>
         internal override void DoAfterExecute(DatabaseConnection conn, IDbTransaction tran, IDbCommand command)
         {
             if (_supportsAutoIncrementingFIELD != null && _tableName != null) {

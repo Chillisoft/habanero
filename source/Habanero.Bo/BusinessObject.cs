@@ -583,9 +583,20 @@ namespace Habanero.BO
                     if (pair.Value.Equals(GetPropertyValue(propName)))
                     {
                         return pair.Key;
-                    } else if (pair.Value is BusinessObject) {
-                        if (String.Compare(((BusinessObject) pair.Value).ID.ToString(), GetPropertyValueString(propName)) == 0)
+                    }
+                    else if (pair.Value is BusinessObject)
+                    {
+                        BusinessObject bo = (BusinessObject) pair.Value;
+                        if (bo.ClassDef.PrimaryKeyDef.IsObjectID &&
+                            String.Compare(bo.ID.ToString(), GetPropertyValueString(propName)) == 0)
+                        {
                             return pair.Value.ToString();
+                        }
+                        else if (bo.ID[0].Value != null &&
+                            String.Compare(bo.ID[0].Value.ToString(), GetPropertyValueString(propName)) == 0)
+                        {
+                            return pair.Value.ToString();
+                        }
                     }
                     
                 }
@@ -668,7 +679,7 @@ namespace Habanero.BO
             {
                 if (prop.PropertyType == typeof(Guid))
                     propValue = ((BusinessObject)propValue)._primaryKey.GetGuid();
-                else propValue = ((BusinessObject)propValue).ID.ToString();
+                else propValue = ((BusinessObject)propValue).ID[0].Value.ToString();
             } else if (propValue is string && ClassDef.GetPropDef(propName).HasLookupList()) {
                 Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
                 if (lookupList.ContainsKey((string)propValue))
@@ -1182,7 +1193,7 @@ namespace Habanero.BO
                     if (lBOKey.MustCheckKey())
                     {
                         SqlStatement checkDuplicateSql =
-                            new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+                            new SqlStatement(DatabaseConnection.CurrentConnection);
                         checkDuplicateSql.Statement.Append(this.GetSelectSql());
                         
                         // Special case where child and parent have same ID name causes ambiguous field name
@@ -1273,7 +1284,7 @@ namespace Habanero.BO
                 //Only check if the primaryKey is 
                 if (_primaryKey.MustCheckKey())
                 {
-                    SqlStatement checkSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+                    SqlStatement checkSql = new SqlStatement(DatabaseConnection.CurrentConnection);
                     checkSql.Statement.Append(this.GetSelectSql());
                     string whereClause = " WHERE " + _primaryKey.DatabaseWhereClause(checkSql);
                     checkSql.Statement.Append(whereClause);
@@ -1505,7 +1516,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         protected internal SqlStatementCollection GetDeleteSql()
         {
-            DeleteStatementGenerator generator = new DeleteStatementGenerator(this, GetConnection());
+            DeleteStatementGenerator generator = new DeleteStatementGenerator(this, _connection);
             return generator.Generate();
         }
 
@@ -1515,7 +1526,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         protected internal SqlStatementCollection GetInsertSql()
         {
-            InsertStatementGenerator gen = new InsertStatementGenerator(this, this.GetConnection());
+            InsertStatementGenerator gen = new InsertStatementGenerator(this, _connection);
             return gen.Generate();
         }
 
@@ -1525,7 +1536,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         protected internal SqlStatementCollection GetUpdateSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(this, this.GetConnection());
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(this, _connection);
             return gen.Generate();
         }
 

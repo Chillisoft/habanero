@@ -149,6 +149,9 @@
     <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
     <Compile Include="Comparer\TestComparers.cs" />
     <Compile Include="ContactPerson.cs" />
+    <Compile Include="CriteriaManager\TestSqlCriteriaCreator.cs" />
+    <Compile Include="SqlGeneration\TestDeleteStatementGenerator.cs" />
+    <Compile Include="SqlGeneration\TestUpdateStatementGenerator.cs" />
     <Compile Include="TestBOKeyCol.cs" />
     <Compile Include="CriteriaManager\TestCriteriaParser.cs" />
     <Compile Include="CriteriaManager\TestExpression.cs" />

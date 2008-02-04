@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Data;
 using System.Text;
@@ -40,7 +41,7 @@ namespace Habanero.BO.SqlGeneration
         private ParameterNameGenerator _gen;
         private SqlStatement _insertSql;
         private SqlStatementCollection _statementCollection;
-        private IDbConnection _conn;
+        private IDatabaseConnection _connection;
         private bool _firstField;
         private ClassDef _currentClassDef;
 
@@ -49,11 +50,11 @@ namespace Habanero.BO.SqlGeneration
         /// </summary>
         /// <param name="bo">The business object whose properties are to
         /// be inserted</param>
-        /// <param name="conn">A database connection</param>
-        public InsertStatementGenerator(BusinessObject bo, IDbConnection conn)
+        /// <param name="connection">A database connection</param>
+        public InsertStatementGenerator(BusinessObject bo, IDatabaseConnection connection)
         {
             _bo = bo;
-            _conn = conn;
+            _connection = connection;
         }
 
         /// <summary>
@@ -149,8 +150,10 @@ namespace Habanero.BO.SqlGeneration
                 AddPropToInsertStatement(className);
             }
 
-            _insertSql.Statement.Append(@"INSERT INTO " + tableName + " (" + _dbFieldList + ") VALUES (" +
-                                       _dbValueList + ")");
+            _insertSql.Statement.Append(String.Format(
+                "INSERT INTO {0} ({1}) VALUES ({2})",
+                SqlGenerationHelper.FormatTableName(tableName, _connection),
+                _dbFieldList, _dbValueList));
             _statementCollection.Insert(0, _insertSql);
         }
 
@@ -161,13 +164,13 @@ namespace Habanero.BO.SqlGeneration
         {
             _dbFieldList = new StringBuilder(_bo.Props.Count * 20);
             _dbValueList = new StringBuilder(_bo.Props.Count * 20);
-            InsertSqlStatement statement = new InsertSqlStatement(_conn);
+            InsertSqlStatement statement = new InsertSqlStatement(_connection);
             statement.TableName = tableName;
             statement.SupportsAutoIncrementingField = supportsAutoIncrementingField;
 
             _insertSql = statement;
             
-            _gen = new ParameterNameGenerator(_conn);
+            _gen = new ParameterNameGenerator(_connection.GetConnection());
             _firstField = true;
         }
 
@@ -183,7 +186,7 @@ namespace Habanero.BO.SqlGeneration
                 _dbFieldList.Append(", ");
                 _dbValueList.Append(", ");
             }
-            _dbFieldList.Append(prop.DatabaseFieldName);
+            _dbFieldList.Append(SqlGenerationHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
             paramName = _gen.GetNextParameterName();
             _dbValueList.Append(paramName);
             _insertSql.AddParameter(paramName, prop.Value);

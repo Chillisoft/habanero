@@ -46,7 +46,7 @@ namespace Habanero.Test.General
             itsInsertSql = objCircle.GetInsertSql();
             itsUpdateSql = objCircle.GetUpdateSql();
             itsDeleteSql = objCircle.GetDeleteSql();
-            selectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             selectSql.Statement.Append(objCircle.SelectSqlStatement(selectSql));
         }
 
@@ -62,7 +62,7 @@ namespace Habanero.Test.General
             itsInsertSql = objCircle.GetInsertSql();
             itsUpdateSql = objCircle.GetUpdateSql();
             itsDeleteSql = objCircle.GetDeleteSql();
-            selectSql = new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection());
+            selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             selectSql.Statement.Append(objCircle.SelectSqlStatement(selectSql));
         }
 

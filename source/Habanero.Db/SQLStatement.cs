@@ -32,27 +32,37 @@ namespace Habanero.DB
     public class SqlStatement : ISqlStatement
     {
         private StringBuilder _statement;
-        private IDbConnection _connection;
+        private IDatabaseConnection _connection;
         private IList _parameters;
         private IDbCommand _sampleCommand;
         private ParameterNameGenerator _gen;
+        private IDbConnection _idbConnection;
 
 
         /// <summary>
         /// Constructor to initialise a new sql statement
         /// </summary>
         /// <param name="connection">A database connection</param>
-        public SqlStatement(IDbConnection connection)
+        public SqlStatement(IDatabaseConnection connection)
         {
             _parameters = new ArrayList();
             _connection = connection;
-            if (connection != null)
+            if (_connection != null)
             {
-                _sampleCommand = _connection.CreateCommand();
-                _gen = new ParameterNameGenerator(connection);
+                _idbConnection = _connection.GetConnection();
+                if (_idbConnection != null)
+                {
+                    _sampleCommand = _idbConnection.CreateCommand();
+                    _gen = new ParameterNameGenerator(_idbConnection);
+                }
+                else
+                {
+                    _gen = new ParameterNameGenerator(null);
+                }
             }
             else
             {
+                _idbConnection = null;
                 _gen = new ParameterNameGenerator(null);
             }
             _statement = new StringBuilder(100);
@@ -64,7 +74,8 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="connection">A database connection</param>
         /// <param name="statement">An existing sql statement</param>
-        public SqlStatement(IDbConnection connection, string statement) : this(connection)
+        public SqlStatement(IDatabaseConnection connection, string statement)
+            : this(connection)
         {
             _statement = new StringBuilder(statement);
         }
@@ -91,7 +102,7 @@ namespace Habanero.DB
                 paramValue = DBNull.Value;
             }
             IDbDataParameter newParameter = _sampleCommand.CreateParameter();
-            //			if ((paramValue is string) && (_connection is MySqlConnection)) {
+            //			if ((paramValue is string) && (_idbConnection is MySqlConnection)) {
             //				((MySqlParameter) newParameter).MySqlDbType = MySqlDbType.String ;
             //			}
             newParameter.ParameterName = paramName;
@@ -130,7 +141,7 @@ namespace Habanero.DB
 
         private void databaseSpecificParameterSettings(IDbDataParameter newParameter, object paramValue)
         {
-            string connectionNamespace = _connection.GetType().Namespace;
+            string connectionNamespace = _idbConnection.GetType().Namespace;
             if (connectionNamespace == "System.Data.OracleClient")
             {
                 if (paramValue.GetType().Name == "LongText")
@@ -300,9 +311,20 @@ namespace Habanero.DB
             }
         }
 
+        /// <summary>
+        /// Carries out instructions after execution of the sql statement
+        /// </summary>
         internal virtual void DoAfterExecute(DatabaseConnection conn, IDbTransaction tran, IDbCommand command)
         {
-            
+        }
+
+        /// <summary>
+        /// Gets the database connection provided upon
+        /// instantiation of this sql statement
+        /// </summary>
+        public IDatabaseConnection Connection
+        {
+            get { return _connection; }
         }
     }
 }

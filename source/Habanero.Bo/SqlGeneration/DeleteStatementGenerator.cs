@@ -19,6 +19,7 @@
 
 using System.Data;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.DB;
@@ -32,17 +33,17 @@ namespace Habanero.BO.SqlGeneration
     public class DeleteStatementGenerator
     {
         private BusinessObject _bo;
-        private IDbConnection _conn;
+        private IDatabaseConnection _connection;
         
         /// <summary>
         /// Constructor to initialise the generator
         /// </summary>
         /// <param name="bo">The business object to be deleted</param>
-        /// <param name="conn">The database connection</param>
-        public DeleteStatementGenerator(BusinessObject bo, IDbConnection conn)
+        /// <param name="connection">The database connection</param>
+        public DeleteStatementGenerator(BusinessObject bo, IDatabaseConnection connection)
         {
             _bo = bo;
-            _conn = conn;
+            _connection = connection;
         }
 
         /// <summary>
@@ -57,8 +58,9 @@ namespace Habanero.BO.SqlGeneration
 
             //AddRelationshipDeleteStatements(statementCollection);
 
-            deleteSql = new SqlStatement(_conn);
-            deleteSql.Statement = new StringBuilder(@"DELETE FROM " + _bo.TableName +
+            deleteSql = new SqlStatement(_connection);
+            deleteSql.Statement = new StringBuilder(
+                @"DELETE FROM " + SqlGenerationHelper.FormatTableName(_bo.TableName, _connection) +
                                                     " WHERE " + _bo.WhereClause(deleteSql));
             statementCollection.Add(deleteSql);
             ClassDef currentClassDef = _bo.ClassDef;
@@ -69,9 +71,11 @@ namespace Habanero.BO.SqlGeneration
                 {
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
-                deleteSql = new SqlStatement(_conn);
-                deleteSql.Statement.Append("DELETE FROM " + currentClassDef.SuperClassClassDef.TableName + " WHERE " +
-                                           _bo.WhereClauseForSuperClass(deleteSql, currentClassDef));
+                deleteSql = new SqlStatement(_connection);
+                deleteSql.Statement.Append(
+                    "DELETE FROM " +
+                    SqlGenerationHelper.FormatTableName(currentClassDef.SuperClassClassDef.TableName, _connection) +
+                    " WHERE " + _bo.WhereClauseForSuperClass(deleteSql, currentClassDef));
                 statementCollection.Add(deleteSql);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }

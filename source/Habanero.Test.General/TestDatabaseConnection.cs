@@ -66,7 +66,7 @@ namespace Habanero.Test.General
             using (
                 IDataReader dr =
                     DatabaseConnection.CurrentConnection.LoadDataReader(
-                        new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
+                        new SqlStatement(DatabaseConnection.CurrentConnection,
                                          "SELECT * FROM TestTableRead Order By TestTableReadData")))
             {
                 try
@@ -103,11 +103,11 @@ namespace Habanero.Test.General
             //	@"data source=Core;database=WorkShopManagement;uid=sa;pwd=;";
             IDataReader dr =
                 DatabaseConnection.CurrentConnection.LoadDataReader(
-                    new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
+                    new SqlStatement(DatabaseConnection.CurrentConnection,
                                      "SELECT * FROM TestTableRead Order By TestTableReadData"));
             IDataReader dr2 =
                 DatabaseConnection.CurrentConnection.LoadDataReader(
-                    new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
+                    new SqlStatement(DatabaseConnection.CurrentConnection,
                                      "SELECT * FROM TestTableRead Order By TestTableReadData"));
             Assert.IsNotNull(dr);
             Assert.IsNotNull(dr2);
@@ -160,7 +160,7 @@ namespace Habanero.Test.General
             Console.WriteLine("creating second datareader.");
             IDataReader dr2 =
                 DatabaseConnection.CurrentConnection.LoadDataReader(
-                    new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
+                    new SqlStatement(DatabaseConnection.CurrentConnection,
                                      "SELECT * FROM TestTableRead Order By TestTableReadData"));
             Assert.IsTrue(rolledBack);
             Console.WriteLine("reading from second datareader.");
@@ -192,7 +192,7 @@ namespace Habanero.Test.General
             dr2.Close();
             dr2 =
                 DatabaseConnection.CurrentConnection.LoadDataReader(
-                    new SqlStatement(DatabaseConnection.CurrentConnection.GetConnection(),
+                    new SqlStatement(DatabaseConnection.CurrentConnection,
                                      "SELECT * FROM TestTableRead Order By TestTableReadData"));
             Assert.IsTrue(dr2.Read());
             Assert.IsTrue(dr2.Read());

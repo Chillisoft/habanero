@@ -94,6 +94,7 @@ namespace Habanero.BO
                 return;
             }
             object[] values = GetValues(businessObject);
+            //values[0] = _table.Rows[rowNum].ItemArray[0];
             _table.Rows[rowNum].ItemArray = values;
         }
 

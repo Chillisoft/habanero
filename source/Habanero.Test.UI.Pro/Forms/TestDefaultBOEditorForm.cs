@@ -62,6 +62,8 @@ namespace Habanero.Test.UI.Forms
                                                              DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
+            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                             DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
             itsEditor.Buttons.ClickButton("OK");
             Assert.IsFalse(itsEditor.Visible);

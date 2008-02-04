@@ -31,7 +31,7 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestSqlStatement
     {
-        private IDbConnection connection;
+        private IDatabaseConnection connection;
         private String rawStatement;
         private SqlStatement testStatement;
         private IDbDataParameter addedParameter;
@@ -47,14 +47,14 @@ namespace Habanero.Test.DB
         public void SetupTestFixture()
         {
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000");
-            connection = DatabaseConnectionFactory.CreateConnection(config).TestConnection;
+            connection = DatabaseConnectionFactory.CreateConnection(config);
             testStatement = new SqlStatement(connection);
             rawStatement = "insert into tb1 (field1, field2, field3) values (@Param1, @Param2, @Param3)";
             testStatement.Statement.Append(rawStatement);
             addedParameter = testStatement.AddParameter("Param1", "12345");
             testStatement.AddParameter("Param2", "67890");
             testStatement.AddParameter("Param3", "13579");
-            command = connection.CreateCommand();
+            command = connection.GetConnection().CreateCommand();
             testStatement.SetupCommand(command);
         }
 
