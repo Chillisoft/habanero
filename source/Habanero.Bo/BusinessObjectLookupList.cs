@@ -47,6 +47,7 @@ namespace Habanero.BO
         private string _criteria;
         private Dictionary<string, object> _displayValueDictionary;
         private DateTime _lastCallTime;
+        private string _sort = null;
 
         #region Constructors
 
@@ -104,10 +105,14 @@ namespace Habanero.BO
         /// <param name="className">The class from which to load the values</param>
         /// <param name="criteria">Sql criteria to apply on loading of the 
         /// collection</param>
-        public BusinessObjectLookupList(string assemblyName, string className, string criteria)
+        /// <param name="sort">The property to sort on.
+        /// The possible formats are: "property", "property asc",
+        /// "property desc" and "property des".</param>
+        public BusinessObjectLookupList(string assemblyName, string className, string criteria, string sort)
             : this(assemblyName, className)
         {
             _criteria = criteria;
+            Sort = sort;
         }
 
 		#endregion Constructors
@@ -157,7 +162,20 @@ namespace Habanero.BO
             set { _criteria = value; }
         }
 
-		#endregion Properties
+        /// <summary>
+        /// Gets and sets the sort string used to sort the lookup
+        /// list.  This string must contain the name of a property
+        /// belonging to the business object used to construct the list.
+        /// The possible formats are: "property", "property asc",
+        /// "property desc" and "property des".
+        /// </summary>
+        public string Sort
+        {
+            get { return _sort; }
+            set { _sort = FormatSortAttribute(value); }
+        }
+
+        #endregion Properties
 
 		#region ILookupList Implementation
 
@@ -168,7 +186,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of string-value pairs</returns>
         public Dictionary<string, object> GetLookupList()
         {
-            return this.GetLookupList(null);
+            return GetLookupList(null);
         }
 
         /// <summary>
@@ -184,10 +202,12 @@ namespace Habanero.BO
             {
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
-            } else {
+            }
+            else
+            {
                 BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[MyBoType]);
-                if (_criteria == null) col.Load("", "");
-                else col.Load(_criteria, "");
+                if (_criteria == null) col.Load("", _sort);
+                else col.Load(_criteria, _sort);
                 _displayValueDictionary = CreateDisplayValueDictionary(col);
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
@@ -201,34 +221,47 @@ namespace Habanero.BO
 		/// </summary>
 		/// <param name="col">The business object collection</param>
 		/// <returns>Returns a collection of display-value pairs</returns>
-        public static Dictionary<string, object> CreateDisplayValueDictionary(IBusinessObjectCollection col)
+        public Dictionary<string, object> CreateDisplayValueDictionary(IBusinessObjectCollection col)
 		{
-            SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
-			foreach (BusinessObject bo in col)
-			{
-                string stringValue = bo.ToString();
-                stringValue = GetAvailableDisplayValue(sortedLookupList, stringValue);
-			    sortedLookupList.Add(stringValue, bo);
-			}
-		    Dictionary<string, object> lookupList = new Dictionary<string, object>();
-            foreach (string key in sortedLookupList.Keys)
-		    {
-		        lookupList.Add(key, sortedLookupList[key]);
-		    }
-            return lookupList;
+            if (String.IsNullOrEmpty(_sort))
+            {
+                SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
+                foreach (BusinessObject bo in col)
+                {
+                    string stringValue = GetAvailableDisplayValue(new ArrayList(sortedLookupList.Keys), bo.ToString());
+                    sortedLookupList.Add(stringValue, bo);
+                }
+
+                Dictionary<string, object> lookupList = new Dictionary<string, object>();
+                foreach (string key in sortedLookupList.Keys)
+                {
+                    lookupList.Add(key, sortedLookupList[key]);
+                }
+                return lookupList;
+            }
+            else
+            {
+                Dictionary<string, object> lookupList = new Dictionary<string, object>();
+                foreach (BusinessObject bo in col)
+                {
+                    string stringValue = GetAvailableDisplayValue(new ArrayList(lookupList.Keys), bo.ToString());
+                    lookupList.Add(stringValue, bo);
+                }
+                return lookupList;
+            }
 		}
 
         ///<summary>
         /// Returns a unique display value for an item of the given name, so that it can be added to the list without the risk of having duplicate entries.
         ///</summary>
-        ///<param name="sortedLookupList">The list of existing values</param>
+        ///<param name="lookupList">The list of existing values</param>
         ///<param name="stringValue">The new value to determine a display value for</param>
         ///<returns>Returns a unique display value for an item of the given name.</returns>
-        public static string GetAvailableDisplayValue(SortedDictionary<string, object> sortedLookupList, string stringValue)
+        public static string GetAvailableDisplayValue(ArrayList lookupList, string stringValue)
         {
             string originalValue = null;
             int count = 1;
-            while (sortedLookupList.ContainsKey(stringValue))
+            while (lookupList.Contains(stringValue))
             {
                 if (originalValue == null) originalValue = stringValue;
                 stringValue = originalValue + "(" + ++count + ")";
@@ -276,15 +309,90 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <returns>Returns an ICollection object</returns>
-        private static ICollection CreateValueList(IBusinessObjectCollection col)
+        private ICollection CreateValueList(IBusinessObjectCollection col)
         {
-            SortedStringCollection valueList = new SortedStringCollection();
-            foreach (BusinessObject bo in col)
+            if (String.IsNullOrEmpty(_sort))
             {
-                valueList.Add(bo.ToString());
+                SortedStringCollection valueList = new SortedStringCollection();
+                foreach (BusinessObject bo in col)
+                {
+                    valueList.Add(bo.ToString());
+                }
+                return valueList;
             }
-            return valueList;
-		}
+            else
+            {
+                ArrayList valueList = new ArrayList();
+                foreach (BusinessObject bo in col)
+                {
+                    valueList.Add(bo.ToString());
+                }
+                return valueList;
+            }
+        }
 
+        /// <summary>
+        /// Indicates whether the given sort attribute is valid
+        /// </summary>
+        private string FormatSortAttribute(string sortAttribute)
+        {
+            string modifiedString = sortAttribute;
+            if (!String.IsNullOrEmpty(sortAttribute))
+            {
+                string propertyName = sortAttribute;
+                if (sortAttribute.Contains(" "))
+                {
+                    propertyName = StringUtilities.GetLeftSection(sortAttribute, " ");
+                }
+
+                ClassDef classDef = ClassDef.ClassDefs[_assemblyName, _className];
+                if (classDef == null)
+                {
+                    return sortAttribute;
+                    // Throwing this error is problematic during loading of classDefs when not
+                    //    all the defs have loaded yet.  Rather let the missing column be
+                    //    exposed by a database error.
+                    //throw new InvalidXmlDefinitionException(String.Format(
+                    //    "In a 'businessLookupList' element, " +
+                    //    "the class definitions for class '{0}' and assembly '{1}' could " +
+                    //    "not be found.  Check that the class definitions for that type have " +
+                    //    "been loaded.", _className, _assemblyName));
+                }
+
+                bool propertyNameExists = false;
+                foreach (PropDef propDef in classDef.PropDefColIncludingInheritance)
+                {
+                    if (propDef.PropertyName.ToLower() == propertyName.ToLower())
+                    {
+                        propertyNameExists = true;
+                    }
+                }
+                if (!propertyNameExists)
+                {
+                    throw new InvalidXmlDefinitionException(String.Format(
+                        "In a 'sort' attribute on a 'businessLookupList' element, the " +
+                        "property name '{0}' does not exist.", propertyName));
+                }
+
+                if (sortAttribute.Contains(" "))
+                {
+                    string sortOrder = StringUtilities.GetRightSection(sortAttribute, propertyName + " ");
+                    if (sortOrder.ToLower() == "des")
+                    {
+                        modifiedString = propertyName + " desc";
+                    }
+                    else if (sortOrder.ToLower() != "asc" && sortOrder.ToLower() != "desc")
+                    {
+                        throw new InvalidXmlDefinitionException(String.Format(
+                            "In a 'sort' attribute on a 'businessLookupList' element, the " +
+                            "attribute given as '{0}' was not valid.  The correct " +
+                            "definition has the form of 'property' or " +
+                            "'property asc' or 'property desc'.", sortAttribute));
+                    }
+                }
+            }
+
+            return modifiedString;
+        }
 	}
 }

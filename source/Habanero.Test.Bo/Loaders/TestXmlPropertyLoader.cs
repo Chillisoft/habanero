@@ -170,8 +170,6 @@ namespace Habanero.Test.BO.Loaders
         public void TestDatabaseLookupListWithClassDef()
         {
         	ClassDef.ClassDefs.Clear();
-            XmlClassLoader loader = new XmlClassLoader();
-
             ClassDef classDef = MyBO.LoadDefaultClassDef();
 
 			PropDef def =
@@ -287,8 +285,21 @@ namespace Habanero.Test.BO.Loaders
 						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" criteria=""Test"" />
 					</property>");
             BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
-            //Assert.AreEqual(5, source.GetLookupList().Count, "LookupList should have 5 keyvaluepairs");
             Assert.AreEqual("Test", source.Criteria);
+        }
+
+        [Test]
+        public void TestBusinessObjectLookupListWithSort()
+        {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+
+            PropDef def = itsLoader.LoadProperty(
+                    @"<property  name=""TestProp"">
+						<businessObjectLookupList class=""MyBO"" assembly=""Habanero.Test"" sort=""TestProp asc"" />
+					</property>");
+            BusinessObjectLookupList source = (BusinessObjectLookupList)def.LookupList;
+            Assert.AreEqual("TestProp asc", source.Sort);
         }
 
         [Test]

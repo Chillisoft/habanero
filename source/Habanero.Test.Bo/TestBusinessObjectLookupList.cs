@@ -22,11 +22,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NMock;
 using NUnit.Framework;
+using System.Collections;
 
 namespace Habanero.Test.BO
 {
@@ -70,7 +72,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestLookupListTimeout()
+        public void TestTimeout()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPerson), 100);
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
@@ -80,13 +82,108 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestLookupListCriteria()
+        public void TestCriteria()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO", 
-                "ContactPerson", "surname='zzz'");
+                "ContactPerson", "surname='zzz'", "");
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
         }
 
+        [Test]
+        public void TestSortAttribute()
+        {
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPerson));
+            Assert.IsNull(source.Sort);
+
+            source = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "", "surname");
+            Assert.AreEqual("surname", source.Sort);
+
+            source.Sort = "surname asc";
+            Assert.AreEqual("surname asc", source.Sort);
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSortInvalidProperty()
+        {
+            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "", "invalidprop");
+        }
+
+        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        public void TestSortInvalidDirection()
+        {
+            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "", "surname invalidorder");
+        }
+
+        //  This test is excluded because the sort attribute is checked in the middle of
+        //  class def loading when not all the defs have been loaded.
+        //[Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        //public void TestSortInvalidClassAndAssembly()
+        //{
+        //    BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
+        //        "InvalidClass", "", "surname");
+        //    source.Sort = "surname desc";
+        //}
+
+        [Test]
+        public void TestSortingByDefault()
+        {
+            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson");
+            Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            ArrayList items = new ArrayList(col.Values);
+
+            Assert.AreEqual(3, col.Count);
+            Assert.AreEqual("abc", items[0].ToString());
+            Assert.AreEqual("abcd", items[1].ToString());
+            Assert.AreEqual("zzz", items[2].ToString());
+        }
+
+        [Test]
+        public void TestSortingCollection()
+        {
+            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "", "surname");
+            Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            ArrayList items = new ArrayList(col.Values);
+            
+            Assert.AreEqual(3, col.Count);
+            Assert.AreEqual("abc", items[0].ToString());
+            Assert.AreEqual("abcd", items[1].ToString());
+            Assert.AreEqual("zzz", items[2].ToString());
+
+            source = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "", "surname asc");
+            col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            items = new ArrayList(col.Values);
+
+            Assert.AreEqual(3, col.Count);
+            Assert.AreEqual("abc", items[0].ToString());
+            Assert.AreEqual("abcd", items[1].ToString());
+            Assert.AreEqual("zzz", items[2].ToString());
+
+            source = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "", "surname desc");
+            col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            items = new ArrayList(col.Values);
+
+            Assert.AreEqual(3, col.Count);
+            Assert.AreEqual("zzz", items[0].ToString());
+            Assert.AreEqual("abcd", items[1].ToString());
+            Assert.AreEqual("abc", items[2].ToString());
+
+            source = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "", "surname des");
+            col = source.GetLookupList(DatabaseConnection.CurrentConnection);
+            items = new ArrayList(col.Values);
+
+            Assert.AreEqual(3, col.Count);
+            Assert.AreEqual("zzz", items[0].ToString());
+            Assert.AreEqual("abcd", items[1].ToString());
+            Assert.AreEqual("abc", items[2].ToString());
+        }
     }
 }
