@@ -30,7 +30,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
 	public interface IDefClassFactory
 	{
-		BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria);
+		BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort);
 
 		ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
 

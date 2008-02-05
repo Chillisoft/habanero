@@ -31,9 +31,9 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
 	internal class DefClassFactory : IDefClassFactory
 	{
-		public BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria)
+		public BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort)
 		{
-			return new BusinessObjectLookupList(assemblyName, className, criteria);
+			return new BusinessObjectLookupList(assemblyName, className, criteria, sort);
 		}
 
 		public ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef,

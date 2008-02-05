@@ -91,24 +91,22 @@ namespace Habanero.UI.Forms
             _comboBoxRightClickController.SetupRightClickBehaviour();
         }
 
+        /// <summary>
+        /// When a new object is added to the combo-box, the string is
+        /// formatted correctly (especially to avoid duplication of items).  Because
+        /// of the complications of the different sorting options, any new items are
+        /// just added to the end of the list until the form is reloaded.
+        /// </summary>
+        /// <param name="businessObject"></param>
         private void NewObjectCreated(BusinessObject businessObject)
         {
             try
             {
-                SortedDictionary<string, object> sortedDictionary = new SortedDictionary<string, object>();
-                foreach (KeyValuePair<string, object> keyValuePair in _collection)
-                {
-                    sortedDictionary.Add(keyValuePair.Key,keyValuePair.Value);
-                }
-                string newItem = businessObject.ToString();
-                newItem = BusinessObjectLookupList.GetAvailableDisplayValue(sortedDictionary, newItem);
-                sortedDictionary.Add(newItem, businessObject);
-                Dictionary<string, object> dictionary = new Dictionary<string, object>(sortedDictionary.Count);
-                foreach (KeyValuePair<string, object> keyValuePair in sortedDictionary)
-                {
-                    dictionary.Add(keyValuePair.Key, keyValuePair.Value);
-                }
-                SetLookupList(dictionary);
+                string newItem =
+                    BusinessObjectLookupList.GetAvailableDisplayValue(
+                    new ArrayList(_collection.Keys), businessObject.ToString());
+                _collection.Add(newItem, businessObject);
+                SetLookupList(_collection);
                 _comboBox.SelectedItem = newItem;
             }
             catch (Exception ex)
