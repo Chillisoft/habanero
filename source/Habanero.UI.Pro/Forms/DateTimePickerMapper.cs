@@ -30,6 +30,19 @@ namespace Habanero.UI.Forms
         	AddValueChangedHandler(new EventHandler(ValueChangedHandler));
         }
 
+        /// <summary>
+        /// Initialises the control using the attributes already provided
+        /// </summary>
+        protected override void InitialiseWithAttributes()
+        {
+            if (_attributes.Contains("dateFormat"))
+            {
+                String dateFormat = (string)_attributes["dateFormat"];
+                DateTimePickerUtil.SetCustomFormat(_dateTimePicker, dateFormat);
+            }
+            base.InitialiseWithAttributes();
+        }
+
     	/// <summary>
         /// A handler to carry out changes to the business object when the
         /// value has changed in the user interface
@@ -85,7 +98,7 @@ namespace Habanero.UI.Forms
 		{
 			DateTimePickerUtil.AddValueChangedHandler(_dateTimePicker, eventHandler);
 		}
-		
+
         /// <summary>
         /// Updates the interface when the value has been changed in the
         /// object being represented

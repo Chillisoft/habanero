@@ -32,6 +32,19 @@ namespace Habanero.UI.Forms
 			_dateTimePickerController.ValueChanged += ValueChangedHandler;
 		}
 
+        /// <summary>
+        /// Initialises the control using the attributes already provided
+        /// </summary>
+        protected override void InitialiseWithAttributes()
+        {
+            if (_attributes.Contains("dateFormat"))
+            {
+                String dateFormat = (string)_attributes["dateFormat"];
+                DateTimePickerUtil.SetCustomFormat(_dateTimePicker, dateFormat);
+            }
+            base.InitialiseWithAttributes();
+        }
+
 		///<summary>
 		/// The DateTimePickerController that controls the DateTimePicker
 		///</summary>

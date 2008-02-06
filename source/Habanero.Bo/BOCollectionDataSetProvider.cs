@@ -106,7 +106,7 @@ namespace Habanero.BO
 
                 if (val != null && val is DateTime)
                 {
-                    val = ((DateTime) val).ToString("yyyy/MM/dd");
+                    val = ((DateTime) val).ToString("yyyy/MM/dd HH:mm:ss");
                 }
                 else if (val == null)
                 {

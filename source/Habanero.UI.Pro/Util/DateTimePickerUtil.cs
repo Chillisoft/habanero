@@ -92,6 +92,27 @@ namespace Habanero.UI.Util
         }
 
         /// <summary>
+        /// Specify the custom format for the given date-time picker
+        /// </summary>
+        /// <param name="dateTimePicker">The date-time picker</param>
+        /// <param name="customFormat">The custom format to set for the date-time picker</param>
+        public static void SetCustomFormat(Control dateTimePicker, string customFormat)
+        {
+            if (dateTimePicker.GetType().Name == "UltraDateTimeEditor")
+            {
+                PropertyInfo propInfo =
+                    dateTimePicker.GetType().GetProperty("FormatString", BindingFlags.Instance | BindingFlags.Public);
+                propInfo.SetValue(dateTimePicker, customFormat, new object[] { });
+            }
+            else if (dateTimePicker is DateTimePicker)
+            {
+                DateTimePicker picker = (DateTimePicker)dateTimePicker;
+                picker.Format = DateTimePickerFormat.Custom;
+                picker.CustomFormat = customFormat;
+            }
+        }
+
+        /// <summary>
         /// Specify the time format in the given date-time picker
         /// </summary>
         /// <param name="dateTimePicker">The date-time picker</param>
