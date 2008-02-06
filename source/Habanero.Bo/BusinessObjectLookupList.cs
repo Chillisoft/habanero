@@ -208,22 +208,23 @@ namespace Habanero.BO
                 BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[MyBoType]);
                 if (_criteria == null) col.Load("", _sort);
                 else col.Load(_criteria, _sort);
-                _displayValueDictionary = CreateDisplayValueDictionary(col);
+                _displayValueDictionary = CreateDisplayValueDictionary(col, String.IsNullOrEmpty(Sort));
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
             }
 		}
-
+                
 		/// <summary>
 		/// Returns a collection of string Guid pairs from the business object
 		/// collection provided. Each pair consists of a string version of a
 		/// business object and the object's ID.
 		/// </summary>
 		/// <param name="col">The business object collection</param>
-		/// <returns>Returns a collection of display-value pairs</returns>
-        public Dictionary<string, object> CreateDisplayValueDictionary(IBusinessObjectCollection col)
-		{
-            if (String.IsNullOrEmpty(_sort))
+        /// <param name="sortByDisplayValue">Must the collection be sorted by the display value or not</param>
+        /// <returns>Returns a collection of display-value pairs</returns>
+        public static Dictionary<string, object> CreateDisplayValueDictionary(IBusinessObjectCollection col, bool sortByDisplayValue)
+        {
+            if (sortByDisplayValue)
             {
                 SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
                 foreach (BusinessObject bo in col)
