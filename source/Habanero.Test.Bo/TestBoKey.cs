@@ -25,6 +25,10 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+    /// <summary>
+    /// TODO: Can add a new private method to return a boKey where the creation
+    /// of the boKey instance is uniform (see methods near the bottom)
+    /// </summary>
     [TestFixture]
     public class TestBoKey
     {
@@ -33,6 +37,8 @@ namespace Habanero.Test.BO
 
         private BOPropCol _boPropCol2;
         private KeyDef _keyDef2;
+
+        private bool _updatedEventHandled = false;
 
         [SetUp]
         public void Init()
@@ -180,6 +186,61 @@ namespace Habanero.Test.BO
 
             Assert.AreEqual(propCol["PropName1"], boKey[0]);
             Assert.AreEqual(propCol["PropName2"], boKey[1]);
+        }
+
+        [Test]
+        public void TestPropertyValueStringBeforeLastEdit()
+        {
+            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadOnly, null);
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadOnly, null);
+
+            BOPropCol propCol = new BOPropCol();
+            propCol.Add(propDef1.CreateBOProp(false));
+            propCol.Add(propDef2.CreateBOProp(false));
+
+            KeyDef keyDef = new KeyDef();
+            keyDef.Add(propDef1);
+            keyDef.Add(propDef2);
+            BOKey boKey = keyDef.CreateBOKey(propCol);
+
+            Assert.AreEqual("PropName1= AND PropName2=", boKey.PropertyValueStringBeforeLastEdit());
+
+            propCol["PropName1"].Value = "one";
+            Assert.AreEqual("PropName1= AND PropName2=", boKey.PropertyValueStringBeforeLastEdit());
+
+            propCol["PropName1"].Value = "two";
+            Assert.AreEqual("PropName1=one AND PropName2=", boKey.PropertyValueStringBeforeLastEdit());
+
+            propCol["PropName2"].Value = "one";
+            Assert.AreEqual("PropName1=one AND PropName2=", boKey.PropertyValueStringBeforeLastEdit());
+
+            propCol["PropName2"].Value = "two";
+            Assert.AreEqual("PropName1=one AND PropName2=one", boKey.PropertyValueStringBeforeLastEdit());
+        }
+
+        [Test]
+        public void TestUpdatedEvent()
+        {
+            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadOnly, null);
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadOnly, null);
+
+            BOPropCol propCol = new BOPropCol();
+            propCol.Add(propDef1.CreateBOProp(false));
+            propCol.Add(propDef2.CreateBOProp(false));
+
+            KeyDef keyDef = new KeyDef();
+            keyDef.Add(propDef1);
+            keyDef.Add(propDef2);
+            BOKey boKey = keyDef.CreateBOKey(propCol);
+
+            boKey.Updated += UpdatedEventHandler;
+            propCol["PropName1"].Value = "new value";
+            Assert.IsTrue(_updatedEventHandled);
+        }
+
+        void UpdatedEventHandler(object sender, BOKeyEventArgs e)
+        {
+            _updatedEventHandled = true;
         }
     }
 }

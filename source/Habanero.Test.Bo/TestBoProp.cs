@@ -49,15 +49,24 @@ namespace Habanero.Test.BO
         [Test]
         public void TestRestorePropValue()
         {
-            _prop.InitialiseProp("OrigionalValue");
+            _prop.InitialiseProp("OriginalValue");
+            
             _prop.Value = "Prop New Value";
             Assert.AreEqual("Prop New Value", _prop.Value);
             Assert.IsTrue(_prop.IsDirty);
-            Assert.IsTrue(_prop.isValid);
+            Assert.IsTrue(_prop.IsValid);
+
+            _prop.Value = "Second New Value";
+            Assert.AreEqual("Second New Value", _prop.Value);
+            Assert.AreEqual("Prop New Value", _prop.ValueBeforeLastEdit);
+            Assert.IsTrue(_prop.IsDirty);
+            Assert.IsTrue(_prop.IsValid);
+
             _prop.RestorePropValue();
-            Assert.AreEqual("OrigionalValue", _prop.Value);
+            Assert.AreEqual("OriginalValue", _prop.Value);
+            Assert.AreEqual("OriginalValue", _prop.ValueBeforeLastEdit);
             Assert.IsFalse(_prop.IsDirty);
-            Assert.IsTrue(_prop.isValid);
+            Assert.IsTrue(_prop.IsValid);
         }
 
         [Test]
@@ -68,13 +77,13 @@ namespace Habanero.Test.BO
                                                     PropReadWriteRule.ReadWrite, null, null, true, false);
             lPropDefWithRules.PropRule = new PropRuleString(lPropDefWithRules.PropertyName, "", -1, -1, null);
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
-            Assert.IsFalse(lBOProp.isValid);
+            Assert.IsFalse(lBOProp.IsValid);
             Assert.IsTrue(lBOProp.InvalidReason.Length > 0);
             lBOProp.Value = "New Value";
-            Assert.IsTrue(lBOProp.isValid);
+            Assert.IsTrue(lBOProp.IsValid);
             Assert.IsFalse(lBOProp.InvalidReason.Length > 0);
             lBOProp.RestorePropValue();
-            Assert.IsFalse(lBOProp.isValid);
+            Assert.IsFalse(lBOProp.IsValid);
             Assert.IsTrue(lBOProp.InvalidReason.Length > 0);
         }
 
@@ -86,19 +95,19 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = DBNull.Value;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
             
             boProp.Value = "";
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "New Value";
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
         }
 
@@ -110,23 +119,23 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = DBNull.Value;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "";
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = Guid.Empty;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = Guid.NewGuid();
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
         }
 
@@ -138,19 +147,19 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = DBNull.Value;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "";
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = 0;
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
         }
 
@@ -162,19 +171,19 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = DBNull.Value;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "";
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = 0.0m;
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
         }
 
@@ -186,19 +195,19 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = DBNull.Value;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "";
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = 0.0d;
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
         }
 
@@ -210,19 +219,19 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = DBNull.Value;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "";
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = DateTime.Now;
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
         }
 
@@ -234,19 +243,19 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = null;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = DBNull.Value;
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "";
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = true;
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
         }
 
@@ -258,7 +267,7 @@ namespace Habanero.Test.BO
                                                     PropReadWriteRule.ReadWrite, null);
             lPropDefWithRules.PropRule = new PropRuleString(lPropDefWithRules.PropertyName, "", 50, 51, null);
             BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
-            Assert.IsTrue(lBOProp.isValid);
+            Assert.IsTrue(lBOProp.IsValid);
             try
             {
                 lBOProp.Value = "New Value";
@@ -267,21 +276,29 @@ namespace Habanero.Test.BO
             {
                 //do nothing
             }
-            Assert.IsFalse(lBOProp.isValid);
+            Assert.IsFalse(lBOProp.IsValid);
             lBOProp.RestorePropValue();
-            Assert.IsTrue(lBOProp.isValid);
+            Assert.IsTrue(lBOProp.IsValid);
         }
 
         [Test]
         public void TestBackupProp()
         {
-            _prop.InitialiseProp("OrigionalValue");
+            _prop.InitialiseProp("OriginalValue");
             _prop.Value = "Prop New Value";
             Assert.AreEqual("Prop New Value", _prop.Value);
+
+            _prop.Value = "Second New Value";
+            Assert.AreEqual("Second New Value", _prop.Value);
+            Assert.AreEqual("OriginalValue", _prop.PersistedPropertyValue);
+            Assert.AreEqual("Prop New Value", _prop.ValueBeforeLastEdit);
+            
             _prop.BackupPropValue();
-            Assert.AreEqual("Prop New Value", _prop.Value);
+            Assert.AreEqual("Second New Value", _prop.Value);
+            Assert.AreEqual("Second New Value", _prop.PersistedPropertyValue);
+            Assert.AreEqual("Second New Value", _prop.ValueBeforeLastEdit);
             Assert.IsFalse(_prop.IsDirty);
-            Assert.IsTrue(_prop.isValid);
+            Assert.IsTrue(_prop.IsValid);
         }
 
         [Test]
@@ -289,32 +306,45 @@ namespace Habanero.Test.BO
         // value is set but has not changed.
         public void TestDirtyProp()
         {
-            _prop.InitialiseProp("OrigionalValue");
-            _prop.Value = "OrigionalValue";
+            _prop.InitialiseProp("OriginalValue");
+            _prop.Value = "OriginalValue";
             Assert.IsFalse(_prop.IsDirty);
-            Assert.IsTrue(_prop.isValid);
+            Assert.IsTrue(_prop.IsValid);
         }
 
         [Test]
         //Test persisted property value is returned correctly.
         public void TestPersistedPropValue()
         {
-            _prop.InitialiseProp("OrigionalValue");
+            _prop.InitialiseProp("OriginalValue");
             _prop.Value = "New Value";
             Assert.IsTrue(_prop.IsDirty);
-            Assert.AreEqual("OrigionalValue", _prop.PersistedPropertyValue);
+            Assert.AreEqual("OriginalValue", _prop.PersistedPropertyValue);
             Assert.AreEqual("PropName = 'New Value'", _prop.DatabaseNameFieldNameValuePair(null));
-            Assert.AreEqual("PropName = 'OrigionalValue'", _prop.PersistedDatabaseNameFieldNameValuePair(null));
+            Assert.AreEqual("PropName = 'OriginalValue'", _prop.PersistedDatabaseNameFieldNameValuePair(null));
+        }
+
+        [Test]
+        public void TestValueBeforeLastEdit()
+        {
+            _prop.InitialiseProp("OriginalValue");
+            Assert.AreEqual("OriginalValue", _prop.ValueBeforeLastEdit);
+            _prop.Value = "New Value";
+            Assert.AreEqual("OriginalValue", _prop.ValueBeforeLastEdit);
+            _prop.Value = "Second New Value";
+            Assert.AreEqual("New Value", _prop.ValueBeforeLastEdit);
+            _prop.Value = "Third New Value";
+            Assert.AreEqual("Second New Value", _prop.ValueBeforeLastEdit);
         }
 
         [Test]
         //Test DirtyXML.
         public void TestDirtyXml()
         {
-            _prop.InitialiseProp("OrigionalValue");
+            _prop.InitialiseProp("OriginalValue");
             _prop.Value = "New Value";
             Assert.IsTrue(_prop.IsDirty);
-            string dirtyXml = "<" + _prop.PropertyName + "><PreviousValue>OrigionalValue" +
+            string dirtyXml = "<" + _prop.PropertyName + "><PreviousValue>OriginalValue" +
                               "</PreviousValue><NewValue>New Value</NewValue></" +
                               _prop.PropertyName + ">";
             Assert.AreEqual(dirtyXml, _prop.DirtyXml);
@@ -328,23 +358,23 @@ namespace Habanero.Test.BO
             BOProp boProp = new BOProp(propDef);
 
             boProp.Value = "abcdef";
-            Assert.IsFalse(boProp.isValid);
+            Assert.IsFalse(boProp.IsValid);
             Assert.IsTrue(boProp.InvalidReason.Length > 0);
 
             boProp.Value = null;
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "";
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "abc";
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
 
             boProp.Value = "abcde";
-            Assert.IsTrue(boProp.isValid);
+            Assert.IsTrue(boProp.IsValid);
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
         }
 

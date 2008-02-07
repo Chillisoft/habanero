@@ -22,28 +22,28 @@ using System;
 namespace Habanero.BO
 {
     /// <summary>
-    /// Provides BOProp related arguments to an event
+    /// Provides BOKey related arguments to an event
     /// </summary>
-    public class BOPropEventArgs: EventArgs
+    public class BOKeyEventArgs: EventArgs
     {
-        private readonly BOProp _prop;
+        private readonly BOKey _boKey;
 
         /// <summary>
         /// Constructor to initialise a new event argument
-        /// with the affected BOProp
+        /// with the affected BOKey
         /// </summary>
-        /// <param name="prop">The affected BOProp</param>
-        public BOPropEventArgs(BOProp prop)
+        /// <param name="boKey">The affected BOKey</param>
+        public BOKeyEventArgs(BOKey boKey)
         {
-            _prop = prop;
+            _boKey = boKey;
         }
 
         /// <summary>
-        /// Gets the BOProp affected in the event
+        /// Gets the BOKey affected in the event
         /// </summary>
-        public BOProp Prop
+        public BOKey BOKey
         {
-            get { return _prop; }
+            get { return _boKey; }
         }
 
     }

@@ -112,6 +112,7 @@
     <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
+    <Compile Include="BOKeyEventArgs.cs" />
     <Compile Include="CriteriaManager\SQLCriteriaCreator.cs" />
     <Compile Include="DeleteHelper.cs" />
     <Compile Include="IBusinessObjectCollection.cs" />

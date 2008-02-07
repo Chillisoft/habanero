@@ -40,6 +40,12 @@ namespace Habanero.BO
         private KeyDef _keyDef;
 
         /// <summary>
+        /// Indicates that the value held by one of the properties in the
+        /// key has been changed
+        /// </summary>
+        public event EventHandler<BOKeyEventArgs> Updated;
+
+        /// <summary>
         /// Constructor to initialise a new instance
         /// </summary>
         /// <param name="lKeyDef">The key definition</param>
@@ -128,6 +134,18 @@ namespace Habanero.BO
                     "exists in the key collection.", boProp.PropertyName));
             }
             _props.Add(boProp.PropertyName, boProp);
+            boProp.Updated += delegate { FireValueUpdated(); };
+        }
+
+        /// <summary>
+        /// Fires an Updated event
+        /// </summary>
+        private void FireValueUpdated()
+        {
+            if (this.Updated != null)
+            {
+                Updated(this, new BOKeyEventArgs(this));
+            }
         }
 
         /// <summary>
@@ -319,6 +337,26 @@ namespace Habanero.BO
                     propString.Append(" AND ");
                 }
                 propString.Append(prop.PropertyName + "=" + prop.PersistedPropertyValue);
+            }
+            return propString.ToString();
+        }
+
+        /// <summary>
+        /// Returns a string containing all the properties and their values,
+        /// but using the values held before the last time they were edited.  This
+        /// method differs from PersistedValueString in that the properties may have
+        /// been edited several times since their last persistence.
+        /// </summary>
+        public string PropertyValueStringBeforeLastEdit()
+        {
+            StringBuilder propString = new StringBuilder(_props.Count * 30);
+            foreach (BOProp prop in _props.Values)
+            {
+                if (propString.Length > 0)
+                {
+                    propString.Append(" AND ");
+                }
+                propString.Append(prop.PropertyName + "=" + prop.ValueBeforeLastEdit);
             }
             return propString.ToString();
         }

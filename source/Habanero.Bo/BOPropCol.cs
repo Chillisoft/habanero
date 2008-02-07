@@ -163,7 +163,7 @@ namespace Habanero.BO
             StringBuilder reason = new StringBuilder();
             foreach (BOProp prop in this)
             {
-                if (!prop.isValid)
+                if (!prop.IsValid)
                 {
                     reason.Append(prop.InvalidReason + Environment.NewLine);
                     propsValid = false;

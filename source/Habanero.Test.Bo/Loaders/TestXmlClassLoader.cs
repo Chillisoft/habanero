@@ -129,6 +129,22 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("myTable", def.TableName);
         }
 
+        [Test]
+        public void TestTableNameWithSpaces()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" table=""my Table"">
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			");
+            Assert.AreEqual("my Table", def.TableName);
+        }
+
 //        [Test]
 //        public void TestSupportsSynchronisation()
 //        {

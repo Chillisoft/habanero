@@ -48,7 +48,12 @@ namespace Habanero.BO
         protected bool _isObjectNew = false;
         protected bool _isDirty = false;
         protected string _displayName = "";
+        protected object _valueBeforeLastEdit;
 
+        /// <summary>
+        /// Indicates that the value held by the property has been
+        /// changed
+        /// </summary>
         public event EventHandler<BOPropEventArgs> Updated;
 
         /// <summary>
@@ -184,6 +189,7 @@ namespace Habanero.BO
             _origInvalidReason = _invalidReason;
             _origValueIsValid = _isValid;
             _persistedValue = propValue;
+            _valueBeforeLastEdit = propValue;
         }
 
         /// <summary>
@@ -194,6 +200,7 @@ namespace Habanero.BO
             _isValid = _origValueIsValid;
             _invalidReason = _origInvalidReason;
             _currentValue = _persistedValue;
+            _valueBeforeLastEdit = _persistedValue;
             _isDirty = false;
             FireBOPropValueUpdated();
         }
@@ -206,6 +213,7 @@ namespace Habanero.BO
         protected internal void BackupPropValue()
         {
             _persistedValue = _currentValue;
+            _valueBeforeLastEdit = _currentValue;
             _origInvalidReason = _invalidReason;
             _origValueIsValid = _isValid;
             _isDirty = false;
@@ -248,10 +256,11 @@ namespace Habanero.BO
 						}
                     }
                     _isValid = _propDef.isValueValid(DisplayName, newValue, ref _invalidReason);
+                    _valueBeforeLastEdit = _currentValue;
                     _currentValue = newValue;
                     FireBOPropValueUpdated();
                     _isDirty = true;
-//					if (!_isValid) {
+//					if (!_IsValid) {
 //						throw new InvalidPropertyValueException(_invalidReason);
 //					}
                 }
@@ -259,7 +268,16 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Calls the Updated() method
+        /// Gets the value held before the value was last updated.
+        /// If the object has just been created, this v
+        /// </summary>
+        public object ValueBeforeLastEdit
+        {
+            get { return _valueBeforeLastEdit; }
+        }
+
+        /// <summary>
+        /// Fires an Updated event
         /// </summary>
         protected void FireBOPropValueUpdated()
         {
@@ -374,7 +392,7 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates whether the property value is valid
         /// </summary>
-        internal bool isValid
+        internal bool IsValid
         {
             get { return _isValid; }
         }

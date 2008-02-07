@@ -71,7 +71,7 @@ namespace Habanero.BO.Loaders {
         ///&lt;!ATTLIST class
         ///		name NMTOKEN #REQUIRED
         ///		assembly NMTOKEN #REQUIRED
-        ///		table NMTOKEN #IMPLIED
+        ///		table CDATA #IMPLIED
         ///&gt;
         ///
         ///.
@@ -88,6 +88,7 @@ namespace Habanero.BO.Loaders {
         ///	class NMTOKEN #REQUIRED
         ///	assembly NMTOKEN #REQUIRED
         ///  criteria CDATA #IMPLIED
+        ///  sort CDATA #IMPLIED
         ///&gt;.
         /// </summary>
         internal static string businessObjectLookupList {

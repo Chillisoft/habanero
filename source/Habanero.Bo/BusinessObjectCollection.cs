@@ -172,7 +172,23 @@ namespace Habanero.BO
             base.Add(bo);
             _lookupTable.Add(bo.ID.ToString(), bo);
             bo.Deleted += BusinessObjectDeletedHandler;
+            bo.PrimaryKey.Updated += UpdateLookupTable;
             this.FireBusinessObjectAdded(bo);
+        }
+
+        /// <summary>
+        /// Updates the lookup table when a primary key property has
+        /// changed
+        /// </summary>
+        private void UpdateLookupTable(object sender, BOKeyEventArgs e)
+        {
+            string oldID = e.BOKey.PropertyValueStringBeforeLastEdit();
+            if (_lookupTable.Contains(oldID))
+            {
+                BusinessObject bo = (BusinessObject) _lookupTable[oldID];
+                _lookupTable.Remove(oldID);
+                _lookupTable.Add(bo.ID.ToString(), bo);
+            }
         }
 
         /// <summary>
