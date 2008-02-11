@@ -22,9 +22,6 @@ using Habanero.Test;
 
 namespace Habanero.Test
 {
-    /// <summary>
-    /// Summary description for TestUsingDatabase.
-    /// </summary>
     public class TestUsingDatabase : ArchitectureTest
     {
         public void SetupDBConnection()

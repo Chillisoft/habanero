@@ -192,15 +192,6 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Sets the class definition path.  The class definitions specify
-        /// the format and limitations of the data.
-        /// </summary>
-        public string ClassDefsPath
-        {
-            set { _classDefsPath = value; }
-        }
-
-        /// <summary>
         /// Sets the class definition file name.  The class definitions specify
         /// the format and limitations of the data.
         /// </summary>

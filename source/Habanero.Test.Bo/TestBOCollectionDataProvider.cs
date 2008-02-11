@@ -57,6 +57,15 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             itsLoader = new XmlClassLoader();
             itsClassDef = MyBO.LoadClassDefWithLookup();
+
+            OrderItem.CreateTable();
+            OrderItem.LoadDefaultClassDef();
+        }
+
+        [TestFixtureTearDown]
+        public void TearDownFixure()
+        {
+            OrderItem.DropTable();
         }
 
         [SetUp]
@@ -80,6 +89,12 @@ namespace Habanero.Test.BO
             BOMapper mapper = new BOMapper(itsCollection.SampleBo);
             itsTable = itsProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
             itsDatabaseConnectionMockControl.Verify();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            OrderItem.ClearTable();
         }
 
         protected abstract IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col);

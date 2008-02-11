@@ -98,8 +98,6 @@ namespace Habanero.BO
             _table.Rows[rowNum].ItemArray = values;
         }
 
-        
-
         /// <summary>
         /// Initialises the local data
         /// </summary>

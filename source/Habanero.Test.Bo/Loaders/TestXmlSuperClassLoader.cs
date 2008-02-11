@@ -83,12 +83,19 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestSingleTableInheritance()
         {
-            SuperClassDef def =
-                itsLoader.LoadSuperClassDesc(
+            SuperClassDef def = itsLoader.LoadSuperClassDesc(
                     @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" discriminator=""propname"" />");
             Assert.AreEqual(ORMapping.SingleTableInheritance, def.ORMapping);
             Assert.AreEqual("propname", def.Discriminator);
             Assert.IsNull(def.ID);
+        }
+
+        [Test]
+        public void TestSingleTableInheritanceDiscriminatorWithSpaces()
+        {
+            SuperClassDef def = itsLoader.LoadSuperClassDesc(
+                    @"<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" orMapping=""SingleTableInheritance"" discriminator=""prop name"" />");
+            Assert.AreEqual("prop name", def.Discriminator);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]

@@ -165,6 +165,7 @@ namespace Habanero.BO
                 string ValueBLE = bo.ID.PropertyValueStringBeforeLastEdit();
                 string ValueCur = bo.ID.ToString();
                 if (gridIDValue == bo.ID.PropertyValueStringBeforeLastEdit() ||
+                    gridIDValue == bo.ID.PersistedValueString() ||
                     gridIDValue == bo.ID.ToString())
                 {
                     return i;

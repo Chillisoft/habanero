@@ -56,7 +56,6 @@ namespace Habanero.Test.Base
             //app.AppName = "testappchange";
             //app.AppVersion = "v2";
             app.ClassDefsFileName = "newdefs.xml";
-            app.ClassDefsPath = "testfolder";
             app.ExceptionNotifier = new ConsoleExceptionNotifier();
             app.LoadClassDefs = false;
             app.Settings = new ConfigFileSettings();

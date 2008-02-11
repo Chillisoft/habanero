@@ -4,5 +4,5 @@
 		assembly NMTOKEN #REQUIRED
 		orMapping ( ClassTableInheritance | SingleTableInheritance | ConcreteTableInheritance ) "ClassTableInheritance"
     id CDATA #IMPLIED
-    discriminator NMTOKEN #IMPLIED
+    discriminator CDATA #IMPLIED
 >

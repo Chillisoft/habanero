@@ -78,6 +78,37 @@ namespace Habanero.Test.BO
             Assert.AreEqual("SELECT TOP 10 MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statement.Statement.ToString());
         }
 
+        [Test]
+        public void TestRestoreAll()
+        {
+            ContactPerson.LoadDefaultClassDef();
+            ContactPerson contact1 = new ContactPerson();
+            contact1.Surname = "Soap";
+            ContactPerson contact2 = new ContactPerson();
+            contact2.Surname = "Hope";
+            BusinessObjectCollection<ContactPerson> col = new BusinessObjectCollection<ContactPerson>();
+            col.Add(contact1);
+            col.Add(contact2);
+            col.SaveAll();
+
+            Assert.AreEqual("Soap", col[0].Surname);
+            Assert.AreEqual("Hope", col[1].Surname);
+
+            contact1.Surname = "Cope";
+            contact2.Surname = "Pope";
+            Assert.AreEqual("Cope", col[0].Surname);
+            Assert.AreEqual("Pope", col[1].Surname);
+
+            col.RestoreAll();
+            Assert.AreEqual("Soap", col[0].Surname);
+            Assert.AreEqual("Hope", col[1].Surname);
+
+            contact1.Delete();
+            contact2.Delete();
+            col.SaveAll();
+            Assert.AreEqual(0, col.Count);
+        }
+
         public class MyDatabaseConnection : DatabaseConnection
         {
             public MyDatabaseConnection() : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection") { }

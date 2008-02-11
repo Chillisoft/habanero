@@ -115,6 +115,14 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
+        public void TestPropertyWithDatabaseFieldNameWithSpaces()
+        {
+            PropDef def =
+                itsLoader.LoadProperty(@"<property name=""TestProp"" databaseField=""Test FieldName"" />");
+            Assert.AreEqual("Test FieldName", def.FieldName);
+        }
+
+        [Test]
         public void TestPropertyWithPropRule()
         {
             PropDef def =
