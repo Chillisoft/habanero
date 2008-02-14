@@ -74,7 +74,7 @@ namespace Habanero.UI.Forms
         protected override void ValueUpdated()
         {
             object propValue = GetPropertyValue();
-            if (propValue == null)
+            if (propValue == null || propValue == DBNull.Value)
             {
 				_dateTimePickerController.Value = null;
             }
