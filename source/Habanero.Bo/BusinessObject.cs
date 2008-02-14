@@ -668,6 +668,10 @@ namespace Habanero.BO
                     propValue = false;
                 }
             }
+            if (DBNull.Value.Equals(propValue))
+            {
+                propValue = null;
+            }
             if (prop.PropertyType.IsSubclassOf(typeof (CustomProperty)))
             {
                 if (propValue != null && prop.PropertyType != propValue.GetType())

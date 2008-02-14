@@ -81,7 +81,8 @@ namespace Habanero.Test.UI.Forms
             itsEditor.Buttons.ClickButton("Cancel");
             Assert.IsFalse(itsEditor.Visible);
             Assert.AreEqual(DialogResult.Cancel, itsEditor.DialogResult);
-            Assert.AreEqual("", itsBo.GetPropertyValue("TestProp"), itsBo.GetPropertyValue("TestProp").ToString());
+            object propertyValue = itsBo.GetPropertyValue("TestProp");
+            Assert.AreEqual(null, propertyValue, propertyValue != null ? propertyValue.ToString() : null);
             itsEditor.Dispose();
         }
     }

@@ -154,53 +154,66 @@ namespace Habanero.BO
                 //obj.PrimaryKey = (BOPrimaryKey)obj.ClassDef.PrimaryKeyDef.CreateBOKey(obj.Props);
             }
             BOPrimaryKey primaryKey = (BOPrimaryKey)primaryKeyDef.CreateBOKey(propCol);
-            BusinessObject lTempBusObj = GetLoadedBusinessObject(primaryKey.GetObjectId(), false);
+            BusinessObject tempBusObj = GetLoadedBusinessObject(primaryKey.GetObjectId(), false);
             //BusinessObject lTempBusObj =
             //    BOLoader.Instance.GetLoadedBusinessObject(primaryKey.GetObjectId(), false);
+            Type tempBusObjType = null;
+            if (tempBusObj != null)
+            {
+                tempBusObjType = tempBusObj.GetType();
+            }
+            if (tempBusObj != null && boType != tempBusObjType &&
+                !boType.IsSubclassOf(tempBusObjType) && !tempBusObjType.IsSubclassOf(boType))
+            {
+                throw new Exception(String.Format("There are two objects of differing types with the same primary key. " + 
+                    "The object type for the object being loaded is '{0}', where the object type found in " +
+                    "the loaded objects with the same primary key is '{1}'. The shared primary key is '{2}'.",
+                    boType.Name, tempBusObjType.Name, primaryKey.GetObjectId()));
+            }
             bool isReplacingSuperClassObject = false;
-            if (lTempBusObj != null && boType.IsSubclassOf(lTempBusObj.GetType()))
+            if (tempBusObj != null && boType.IsSubclassOf(tempBusObjType))
             {
                 isReplacingSuperClassObject = true;
             }
-            if (lTempBusObj == null || isReplacingSuperClassObject)
+            if (tempBusObj == null || isReplacingSuperClassObject)
             {
-                lTempBusObj = classDef.CreateNewBusinessObject(obj.GetDatabaseConnection()); //InstantiateBusinessObject();
-                LoadFromDataReader(lTempBusObj, dr);
+                tempBusObj = classDef.CreateNewBusinessObject(obj.GetDatabaseConnection()); //InstantiateBusinessObject();
+                LoadFromDataReader(tempBusObj, dr);
                 try
                 {
                     if (isReplacingSuperClassObject)
                     {
-                        BusinessObject.AllLoaded().Remove(lTempBusObj.ID.GetObjectId());
+                        BusinessObject.AllLoaded().Remove(tempBusObj.ID.GetObjectId());
                     }
-                    BusinessObject.AllLoaded().Add(lTempBusObj.ID.GetObjectId(), new WeakReference(lTempBusObj));
+                    BusinessObject.AllLoaded().Add(tempBusObj.ID.GetObjectId(), new WeakReference(tempBusObj));
                 }
                 catch (Exception ex)
                 {
                     throw new Exception("The object with id " +
-                                                       lTempBusObj.ID.GetObjectId(), ex);
+                                                       tempBusObj.ID.GetObjectId(), ex);
                 }
             }
-            else if (lTempBusObj.GetType().IsSubclassOf(boType))
+            else if (tempBusObjType.IsSubclassOf(boType))
             {
                 //TODO - refresh this subclass object.  It can be done using the current datareader because
                 //the current data reader is for an object of the superclass type.
             }
             else
             {
-                if (lTempBusObj.State.IsDirty)
+                if (tempBusObj.State.IsDirty)
                 {
                     log.Debug(
                         "An attempt was made to load an object already loaded that was in edit mode.  Refresh from database ignored." +
                         Environment.NewLine +
-                        "BO Type: " + lTempBusObj.GetType().Name + Environment.NewLine + " Stack Trace: " +
+                        "BO Type: " + tempBusObjType.Name + Environment.NewLine + " Stack Trace: " +
                         Environment.StackTrace);
                 }
                 else
                 {
-                    LoadProperties(lTempBusObj, dr);
+                    LoadProperties(tempBusObj, dr);
                 }
             }
-            return lTempBusObj;
+            return tempBusObj;
         }
 
         /// <summary>

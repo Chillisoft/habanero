@@ -98,6 +98,14 @@ namespace Habanero.UI.Forms
             CreateLayout();
         }
 
+        private void DefaultBOEditorForm_Load(object sender, EventArgs e)
+        {
+            if (_panelFactoryInfo.ControlMappers.BusinessObject == null && _bo != null)
+            {
+                _panelFactoryInfo.ControlMappers.BusinessObject = _bo;
+            }
+        }
+
         protected virtual void SetupFormSize(UIForm def)
         {
             int width = def.Width;
@@ -155,6 +163,7 @@ namespace Habanero.UI.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void CancelButtonHandler(object sender, EventArgs e)
         {
+            _panelFactoryInfo.ControlMappers.BusinessObject = null;
             _bo.Restore();
             this.DialogResult = DialogResult.Cancel;
             this.Close();
@@ -201,6 +210,7 @@ namespace Habanero.UI.Forms
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
+                _panelFactoryInfo.ControlMappers.BusinessObject = null;
             }
             catch (Exception ex)
             {
@@ -239,5 +249,20 @@ namespace Habanero.UI.Forms
         {
             get { return _buttons; }
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // DefaultBOEditorForm
+            // 
+            this.ClientSize = new System.Drawing.Size(292, 266);
+            this.Name = "DefaultBOEditorForm";
+            this.Load += new System.EventHandler(this.DefaultBOEditorForm_Load);
+            this.ResumeLayout(false);
+
+        }
+
+        
     }
 }
