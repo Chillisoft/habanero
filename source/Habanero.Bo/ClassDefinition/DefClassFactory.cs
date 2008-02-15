@@ -135,9 +135,10 @@ namespace Habanero.BO.ClassDefinition
 		}
 
 		public UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-		                                           bool editable, Hashtable propertyAttributes)
+                                                   bool editable, Hashtable propertyAttributes, TriggerCol triggers)
 		{
-			return new UIFormField(label, propertyName, controlTypeName, controlAssembly, mapperTypeName, mapperAssembly, editable, propertyAttributes);
+			return new UIFormField(label, propertyName, controlTypeName, controlAssembly,
+                mapperTypeName, mapperAssembly, editable, propertyAttributes, triggers);
 		}
 
 		public UIFormTab CreateUIFormTab()
@@ -145,7 +146,13 @@ namespace Habanero.BO.ClassDefinition
 			return new UIFormTab();
 		}
 
-		public UIGrid CreateUIGridDef()
+        public Trigger CreateTrigger(string triggeredBy, string target, string conditionValue, string action,
+                                                 string value)
+        {
+            return new Trigger(triggeredBy, target, conditionValue, action, value);
+        }
+
+        public UIGrid CreateUIGridDef()
 		{
 			return new UIGrid();
 		}

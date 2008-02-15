@@ -62,6 +62,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TextBox", uiProp.ControlType.Name);
             Assert.AreEqual("TextBoxMapper", uiProp.MapperTypeName);
             Assert.AreEqual(true, uiProp.Editable);
+            Assert.AreEqual(0, uiProp.Triggers.Count);
         }
 
 
@@ -126,6 +127,41 @@ namespace Habanero.Test.BO.Loaders
                 <field property=""testpropname"" >
                     <parameter name=""TestAtt"" />
                 </field>");
+        }
+
+        [Test]
+        public void TestTriggers()
+        {
+            UIFormField field =
+                loader.LoadUIProperty(@"<field property=""prop""><trigger action=""action"" value=""value"" /></field>");
+            Assert.AreEqual(1, field.Triggers.Count);
+            Assert.AreEqual("action", field.Triggers[0].Action);
+
+            loader = new XmlUIFormFieldLoader();
+            field = loader.LoadUIProperty(@"
+                <field property=""prop"">
+                    <trigger action=""action1"" value=""value"" />
+                    <trigger action=""action2"" value=""value2"" />
+                </field>");
+            Assert.AreEqual(2, field.Triggers.Count);
+            Assert.AreEqual("action1", field.Triggers[0].Action);
+            Assert.AreEqual("action2", field.Triggers[1].Action);
+        }
+
+        [Test]
+        public void TestTriggersAndParameters()
+        {
+            UIFormField field = loader.LoadUIProperty(@"
+                <field property=""prop"">
+                    <parameter name=""TestAtt"" value=""TestValue"" />
+                    <parameter name=""TestAtt2"" value=""TestValue"" />
+                    <trigger action=""action"" value=""value"" />
+                    <trigger action=""action2"" value=""value2"" />                    
+                </field>");
+            Assert.AreEqual(2, field.Triggers.Count);
+            Assert.AreEqual("action", field.Triggers[0].Action);
+            Assert.AreEqual("action2", field.Triggers[1].Action);
+            Assert.AreEqual(2, field.Parameters.Count);
         }
     }
 }

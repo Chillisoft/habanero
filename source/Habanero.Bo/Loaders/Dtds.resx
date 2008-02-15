@@ -178,6 +178,9 @@
   <data name="tab" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\tab.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="trigger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>DTDs\trigger.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="ui" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>DTDs\ui.dtd;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

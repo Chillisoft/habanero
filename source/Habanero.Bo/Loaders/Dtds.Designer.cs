@@ -158,7 +158,8 @@ namespace Habanero.BO.Loaders {
         
         /// <summary>
         ///   Looks up a localized string similar to #include parameter.dtd
-        ///&lt;!ELEMENT field (parameter*)&gt;
+        ///#include trigger.dtd
+        ///&lt;!ELEMENT field (parameter*, trigger*)&gt;
         ///&lt;!ATTLIST field
         ///	label CDATA #IMPLIED
         ///	property NMTOKEN #REQUIRED
@@ -366,7 +367,7 @@ namespace Habanero.BO.Loaders {
         ///		assembly NMTOKEN #REQUIRED
         ///		orMapping ( ClassTableInheritance | SingleTableInheritance | ConcreteTableInheritance ) &quot;ClassTableInheritance&quot;
         ///    id CDATA #IMPLIED
-        ///    discriminator NMTOKEN #IMPLIED
+        ///    discriminator CDATA #IMPLIED
         ///&gt;.
         /// </summary>
         internal static string superClass {
@@ -388,6 +389,22 @@ namespace Habanero.BO.Loaders {
         internal static string tab {
             get {
                 return ResourceManager.GetString("tab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!ELEMENT trigger EMPTY&gt;
+        ///&lt;!ATTLIST trigger
+        ///	triggeredBy NMTOKEN #IMPLIED
+        ///	conditionValue CDATA #IMPLIED
+        ///	action NMTOKEN #REQUIRED
+        ///	value CDATA #REQUIRED
+        ///  target NMTOKEN #IMPLIED
+        ///&gt;.
+        /// </summary>
+        internal static string trigger {
+            get {
+                return ResourceManager.GetString("trigger", resourceCulture);
             }
         }
         

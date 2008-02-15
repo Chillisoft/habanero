@@ -38,6 +38,7 @@ namespace Habanero.BO.ClassDefinition
 		private Type _controlType;
 		private bool _editable;
         private readonly Hashtable _parameters;
+        private TriggerCol _triggers;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -50,9 +51,10 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="editable">Whether the control is read-only (cannot
         /// be edited directly)</param>
         /// <param name="parameters">The property attributes</param>
+        /// <param name="triggers">The collection of triggers managed by the field</param>
         public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
-                           bool editable, Hashtable parameters)
-			:this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, parameters )
+                           bool editable, Hashtable parameters, TriggerCol triggers)
+			:this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, parameters, triggers)
 		{}
 
         /// <summary>
@@ -67,13 +69,18 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="editable">Whether the control is read-only (cannot
         /// be edited directly)</param>
         /// <param name="parameters">The property attributes</param>
+        /// <param name="triggers">The collection of triggers managed by the field</param>
         public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-                           bool editable, Hashtable parameters)
-			: this(label, propertyName, null, controlTypeName, controlAssembly, mapperTypeName, mapperAssembly, editable, parameters)
+                           bool editable, Hashtable parameters, TriggerCol triggers)
+			: this(label, propertyName, null, controlTypeName, controlAssembly,
+                    mapperTypeName, mapperAssembly, editable, parameters, triggers)
 		{}
 
+        /// <summary>
+        /// The master constructor for all of the possible arguments
+        /// </summary>
         private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-                           bool editable, Hashtable parameters)
+                           bool editable, Hashtable parameters, TriggerCol triggers)
         {
 			if (controlType != null)
         	{
@@ -84,13 +91,18 @@ namespace Habanero.BO.ClassDefinition
         		_controlTypeName = controlTypeName;
         		_controlAssembly = controlAssembly;
         	}
-            this._label = label;
-            this._propertyName = propertyName;
-            this._mapperTypeName = mapperTypeName;
-            this._mapperAssembly = mapperAssembly;
-            this._editable = editable;
-            this._parameters = parameters;
-            //this._controlType = controlType;
+            _label = label;
+            _propertyName = propertyName;
+            _mapperTypeName = mapperTypeName;
+            _mapperAssembly = mapperAssembly;
+            _editable = editable;
+            _parameters = parameters;
+            //_controlType = controlType;
+            _triggers = triggers;
+            if (_triggers == null)
+            {
+                _triggers = new TriggerCol();
+            }
 		}
 
 		#region Properties
@@ -187,6 +199,15 @@ namespace Habanero.BO.ClassDefinition
         public Hashtable Parameters
         {
             get { return this._parameters; }
+        }
+
+        /// <summary>
+        /// Returns the collection of triggers managed by this
+        /// field
+        /// </summary>
+        public TriggerCol Triggers
+        {
+            get { return _triggers; }
         }
 
 		#endregion

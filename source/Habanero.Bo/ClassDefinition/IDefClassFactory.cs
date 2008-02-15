@@ -66,10 +66,12 @@ namespace Habanero.BO.ClassDefinition
 
 		UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName);
 
-		UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, System.Collections.Hashtable propertyAttributes);
+		UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, System.Collections.Hashtable propertyAttributes, TriggerCol triggers);
 //		UIFormField CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly, bool editable, System.Collections.Hashtable propertyAttributes);
 
 		UIFormTab CreateUIFormTab();
+
+        Trigger CreateTrigger(string triggeredBy, string target, string conditionValue, string action, string value);
 
 		UIGrid CreateUIGridDef();
 

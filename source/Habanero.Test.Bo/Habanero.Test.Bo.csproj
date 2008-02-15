@@ -124,6 +124,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassDefinition\TestTriggerCol.cs" />
+    <Compile Include="ClassDefinition\TestTrigger.cs" />
     <Compile Include="ClassDefinition\TestUIFormGrid.cs" />
     <Compile Include="ClassDefinition\TestUIGridColumn.cs" />
     <Compile Include="ClassDefinition\TestUIGrid.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Comparer\TestComparers.cs" />
     <Compile Include="ContactPerson.cs" />
     <Compile Include="CriteriaManager\TestSqlCriteriaCreator.cs" />
+    <Compile Include="Loaders\TestXmlTriggerLoader.cs" />
     <Compile Include="SqlGeneration\TestDeleteStatementGenerator.cs" />
     <Compile Include="SqlGeneration\TestUpdateStatementGenerator.cs" />
     <Compile Include="TestBOKeyCol.cs" />

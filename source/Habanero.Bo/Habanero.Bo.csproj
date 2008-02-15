@@ -94,6 +94,8 @@
     <Compile Include="BOLoader.cs" />
     <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOState.cs" />
+    <Compile Include="ClassDefinition\TriggerCol.cs" />
+    <Compile Include="ClassDefinition\Trigger.cs" />
     <Compile Include="ClassDefinition\UIDef.cs" />
     <Compile Include="ClassDefinition\UIDefCol.cs" />
     <Compile Include="ClassDefinition\UIForm.cs" />
@@ -117,6 +119,7 @@
     <Compile Include="DeleteHelper.cs" />
     <Compile Include="IBusinessObjectCollection.cs" />
     <Compile Include="IDataSetProvider.cs" />
+    <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -349,6 +352,7 @@
     <None Include="Loaders\DTDs\classes.dtd" />
     <None Include="Loaders\DTDs\column.dtd" />
     <None Include="Loaders\DTDs\columnLayout.dtd" />
+    <None Include="Loaders\DTDs\trigger.dtd" />
     <None Include="Loaders\DTDs\databaseLookupList.dtd" />
     <None Include="Loaders\DTDs\field.dtd" />
     <None Include="Loaders\DTDs\form.dtd" />

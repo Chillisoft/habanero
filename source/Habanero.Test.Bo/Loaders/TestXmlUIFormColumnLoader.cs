@@ -69,5 +69,19 @@ namespace Habanero.Test.BO.Loaders
             loader.LoadUIFormColumn(@"
 				<columnLayout></columnLayout>");
         }
+
+        [Test]
+        public void TestTriggers()
+        {
+            UIFormColumn column = loader.LoadUIFormColumn(
+                @"<columnLayout>
+					<field property=""testpropname1"" >
+                        <trigger action=""action"" value=""value"" />
+                    </field>
+                    <field property=""testpropname2"" />
+				</columnLayout>");
+            Assert.AreEqual(1, column[0].Triggers.Count);
+            Assert.AreEqual(0, column[1].Triggers.Count);
+        }
     }
 }

@@ -32,6 +32,19 @@ namespace Habanero.Test.BO.ClassDefinition
     public class TestUIFormField
     {
         [Test]
+        public void TestTriggerAccess()
+        {
+            UIFormField field = new UIFormField("label", "prop", "control", "ass", "mapper", "mapass",
+                true, null, null);
+            Assert.IsNotNull(field.Triggers);
+            Assert.AreEqual(0, field.Triggers.Count);
+
+            Trigger trigger = new Trigger("prop1", null, null, "action", "value");
+            field.Triggers.Add(trigger);
+            Assert.AreEqual(1, field.Triggers.Count);
+        }
+
+        [Test]
         public void TestProtectedSets()
         {
             UIFormFieldInheritor field = new UIFormFieldInheritor();
@@ -73,7 +86,8 @@ namespace Habanero.Test.BO.ClassDefinition
         // Grants access to protected fields
         private class UIFormFieldInheritor : UIFormField
         {
-            public UIFormFieldInheritor() : base("label", "prop", "control", null, null, null, true, null)
+            public UIFormFieldInheritor()
+                : base("label", "prop", "control", null, null, null, true, null, null)
             {}
 
             public void SetLabel(string name)

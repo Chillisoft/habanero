@@ -42,6 +42,7 @@ namespace Habanero.BO.Loaders
 		//private Type _controlType;
         private bool _editable;
         private Hashtable _propertyAttributes;
+        private TriggerCol _triggers = new TriggerCol();
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -87,7 +88,8 @@ namespace Habanero.BO.Loaders
         protected override object Create()
         {
 			return _defClassFactory.CreateUIFormProperty(_label, _propertyName,
-				_controlTypeName, _controlAssembly, _mapperTypeName, _mapperTypeAssembly, _editable, _propertyAttributes);
+				_controlTypeName, _controlAssembly, _mapperTypeName, _mapperTypeAssembly,
+                _editable, _propertyAttributes, _triggers);
 			//return _defClassFactory.CreateUIFormProperty(_label, _propertyName, 
 			//    _controlType, _mapperTypeName, _mapperTypeAssembly, _editable, _propertyAttributes);
         }
@@ -105,6 +107,7 @@ namespace Habanero.BO.Loaders
             LoadMapperTypeAssembly();
             LoadEditable();
             LoadParameters();
+            LoadTriggers();
         }
 
         /// <summary>
@@ -216,8 +219,8 @@ namespace Habanero.BO.Loaders
                     attValue == null || attValue.Length == 0)
                 {
                     throw new InvalidXmlDefinitionException("In a " +
-                        "'parameter' element, either the 'name' or " +
-                        "'value' attribute has been omitted.");
+                                                            "'parameter' element, either the 'name' or " +
+                                                            "'value' attribute has been omitted.");
                 }
 
                 try
@@ -227,10 +230,26 @@ namespace Habanero.BO.Loaders
                 catch (Exception ex)
                 {
                     throw new InvalidXmlDefinitionException("An error occurred " +
-                        "while loading a 'parameter' element.  There may " +
-                        "be duplicates with the same 'name' attribute.", ex);
+                                                            "while loading a 'parameter' element.  There may " +
+                                                            "be duplicates with the same 'name' attribute.", ex);
                 }
                 ReadAndIgnoreEndTag();
+            }
+        }
+
+        /// <summary>
+        /// Loads the triggers for the property
+        /// </summary>
+        private void LoadTriggers()
+        {
+            _triggers = new TriggerCol();
+            while (_reader.Name == "trigger")
+            {
+                XmlTriggerLoader propLoader = new XmlTriggerLoader(DtdLoader, _defClassFactory);
+                while (_reader.Name == "trigger")
+                {
+                    _triggers.Add(propLoader.LoadTrigger(_reader.ReadOuterXml()));
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 #include parameter.dtd
-<!ELEMENT field (parameter*)>
+#include trigger.dtd
+<!ELEMENT field (parameter*, trigger*)>
 <!ATTLIST field
 	label CDATA #IMPLIED
 	property NMTOKEN #REQUIRED

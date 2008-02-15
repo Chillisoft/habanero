@@ -174,6 +174,27 @@ namespace Habanero.Util
         }
 
         ///<summary>
+        /// Returns the PropertyInfo for the specified property, otherwise it returns nothing if the property does not exist
+        ///</summary>
+        ///<param name="type">The type to find the specifed property on</param>
+        ///<param name="methodName">The name of the property to search for</param>
+        ///<returns>The PropertyInfo object representing the requested method, or null if it does not exist.</returns>
+        ///<exception cref="HabaneroArgumentException">This error is thrown when an invalid parameter is given</exception>
+        public static MethodInfo GetMethodInfo(Type type, string methodName)
+        {
+            if (type == null) throw new HabaneroArgumentException("type");
+            if (String.IsNullOrEmpty(methodName)) throw new HabaneroArgumentException("methodName");
+            try
+            {
+                return type.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        ///<summary>
         /// Sets the value of a property of an object using reflection
         ///</summary>
         ///<param name="obj">The object for which to set the value</param>
@@ -203,6 +224,38 @@ namespace Habanero.Util
             {
                 log.Error(String.Format("Error setting virtual property '{0}' for object of type '{1}'" +
                                         Environment.NewLine + "{2}", propertyName, className,
+                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                throw ex.InnerException;
+            }
+        }
+
+        /// <summary>
+        /// Executes a parameterless method of an object using reflection
+        /// </summary>
+        /// <param name="obj">The object owning the method</param>
+        /// <param name="methodName">The name of the method</param>
+        public static void ExecuteMethod(object obj, string methodName)
+        {
+            if (obj == null) throw new HabaneroArgumentException("obj");
+            if (String.IsNullOrEmpty(methodName)) throw new HabaneroArgumentException("methodName");
+            Type type = obj.GetType();
+            string className = type.Name;
+            try
+            {
+                MethodInfo methodInfo = GetMethodInfo(type, methodName);
+                if (methodInfo == null)
+                {
+                    throw new TargetInvocationException(
+                        new Exception(String.Format(
+                                          "Virtual method call for '{0}' does not exist for object of type '{1}'.",
+                                          methodName, className)));
+                }
+                methodInfo.Invoke(obj, new object[] {});
+            }
+            catch (TargetInvocationException ex)
+            {
+                log.Error(String.Format("Error calling virtual method '{0}' for object of type '{1}'" +
+                                        Environment.NewLine + "{2}", methodName, className,
                                         ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
                 throw ex.InnerException;
             }

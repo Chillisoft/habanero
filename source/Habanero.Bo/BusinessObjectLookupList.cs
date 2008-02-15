@@ -191,6 +191,18 @@ namespace Habanero.BO
 
         /// <summary>
         /// Returns a lookup-list for all the business objects stored under
+        /// the class definition held in this instance
+        /// </summary>
+        /// <param name="ignoreTimeout">Whether to ignore the timeout and reload
+        /// from the database regardless of when the lookup list was last loaded.</param>
+        /// <returns>Returns a collection of string-value pairs</returns>
+        public Dictionary<string, object> GetLookupList(bool ignoreTimeout)
+        {
+            return GetLookupList(null, ignoreTimeout);
+        }
+
+        /// <summary>
+        /// Returns a lookup-list for all the business objects stored under
         /// the class definition held in this instance, using the database
         /// connection provided
         /// </summary>
@@ -198,7 +210,23 @@ namespace Habanero.BO
         /// <returns>Returns a collection of string-value pairs</returns>
         public Dictionary<string, object> GetLookupList(IDatabaseConnection connection)
         {
-            if (DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout)
+            return GetLookupList(connection, false);
+		}
+
+        /// <summary>
+        /// Returns a lookup-list for all the business objects stored under
+        /// the class definition held in this instance, using the database
+        /// connection provided.  An option is included to ignore the default
+        /// timeout, which causes use of a cached version within the timeout
+        /// period.
+        /// </summary>
+        /// <param name="connection">The database connection</param>
+        /// <param name="ignoreTimeout">Whether to ignore the timeout and reload
+        /// from the database regardless of when the lookup list was last loaded.</param>
+        /// <returns>Returns a collection of string-value pairs</returns>
+        public Dictionary<string, object> GetLookupList(IDatabaseConnection connection, bool ignoreTimeout)
+        {
+            if (!ignoreTimeout && DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout)
             {
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
@@ -212,7 +240,7 @@ namespace Habanero.BO
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
             }
-		}
+        }
                 
 		/// <summary>
 		/// Returns a collection of string Guid pairs from the business object

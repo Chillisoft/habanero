@@ -33,7 +33,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestRemove()
         {
-            UIFormField field = new UIFormField("label", "prop", "control", null, null, null, true, null);
+            UIFormField field = new UIFormField("label", "prop", "control", null, null, null, true, null, null);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field);
 
@@ -45,8 +45,8 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCopyTo()
         {
-            UIFormField field1 = new UIFormField("label", "prop", "control", null, null, null, true, null);
-            UIFormField field2 = new UIFormField("label", "prop", "control", null, null, null, true, null);
+            UIFormField field1 = new UIFormField("label", "prop", "control", null, null, null, true, null, null);
+            UIFormField field2 = new UIFormField("label", "prop", "control", null, null, null, true, null, null);
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
