@@ -572,8 +572,8 @@ namespace Habanero.UI.Forms
                 case "filterReverse":
                     AddTriggerForFilterReverse(sourceControl, targetControl, trigger, bo, sourceProperty, targetProperty);
                     break;
-                case "enable":
-                case "enableOnce":
+                case "setEditable":
+                case "setEditableOnce":
                     AddTriggerForEnable(sourceControl, targetControl, trigger);
                     break;
             }
@@ -778,7 +778,7 @@ namespace Habanero.UI.Forms
 
         /// <summary>
         /// Adds a trigger that enables or disables a control.  Disabling
-        /// is only added for the action of "enable" (ie. "enableOnce" only
+        /// is only added for the action of "setEditable" (ie. "setEditableOnce" only
         /// carries out the action once).
         /// </summary>
         private static void AddTriggerForEnable(Control sourceControl, Control targetControl, Trigger trigger)
@@ -801,7 +801,7 @@ namespace Habanero.UI.Forms
                             relevantControl.Enabled = enabled;
                         }
                     };
-            if (trigger.Action == "enable")
+            if (trigger.Action == "setEditable")
             {
                 sourceControl.TextChanged +=
                     delegate

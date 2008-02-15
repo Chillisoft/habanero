@@ -104,13 +104,13 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, null, null, "execute", "1")));
             Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, "prop", null, "filter", "1")));
             Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, "prop", null, "filterReverse", "1")));
-            Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, "prop", null, "enable", "1")));
-            Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, "prop", null, "enableOnce", "1")));
+            Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, "prop", null, "setEditable", "1")));
+            Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, "prop", null, "setEditableOnce", "1")));
 
             //no trig/target given
             Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, null, null, "execute", "1")));
-            Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, null, null, "enable", "1")));
-            Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, null, null, "enableOnce", "1")));
+            Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, null, null, "setEditable", "1")));
+            Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, null, null, "setEditableOnce", "1")));
             Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, null, null, "assignLiteral", "1")));
             Assert.IsTrue(Trigger.CheckTriggerValid(new Trigger(null, null, null, "assignProperty", "1")));
 
@@ -134,8 +134,8 @@ namespace Habanero.Test.BO.ClassDefinition
             //no value
             col.Add(new Trigger(null, null, null, "execute", null));
             col.Add(new Trigger(null, null, null, "execute", ""));
-            col.Add(new Trigger(null, null, null, "enable", null));
-            col.Add(new Trigger(null, null, null, "enableOnce", null));
+            col.Add(new Trigger(null, null, null, "setEditable", null));
+            col.Add(new Trigger(null, null, null, "setEditableOnce", null));
             col.Add(new Trigger(null, null, null, "assignLiteral", null));
             col.Add(new Trigger(null, null, null, "assignProperty", null));
 

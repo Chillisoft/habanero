@@ -186,7 +186,7 @@ namespace Habanero.BO.ClassDefinition
         {
             string[] actions = {
                                    "assignLiteral", "assignProperty",
-                                   "execute", "filter", "filterReverse", "enable", "enableOnce"
+                                   "execute", "filter", "filterReverse", "setEditable", "setEditableOnce"
                                };
             ArrayList actionsList = new ArrayList(actions);
             if (!actionsList.Contains(action))
@@ -208,7 +208,7 @@ namespace Habanero.BO.ClassDefinition
 
             string[] exemptActions = {
                                          "assignLiteral", "assignProperty",
-                                         "execute", "enable", "enableOnce"
+                                         "execute", "setEditable", "setEditableOnce"
                                      };
             ArrayList actionsList = new ArrayList(exemptActions);
             if (String.IsNullOrEmpty(trigger.TriggeredBy) &&
