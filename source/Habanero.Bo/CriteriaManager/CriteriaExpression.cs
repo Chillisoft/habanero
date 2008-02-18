@@ -111,22 +111,24 @@ namespace Habanero.BO.CriteriaManager
                         quotesRemovedExpression.Substring(1, expressionWithoutQuotes.Length - 2).PutBackQuotedSections());
                     return;
                 }
-                _left =
-                    new CriteriaExpression(
-                        quotesRemovedExpression.Substring(1, bracketSearchPos - 1).PutBackQuotedSections().ToString().
-                            Trim(), _operators);
+                _left = new CriteriaExpression(quotesRemovedExpression.Substring(1, bracketSearchPos - 1)
+                    .PutBackQuotedSections().ToString().Trim(), _operators);
+                int pos = -1;
+                string foundOperator = "";
                 foreach (String op in _operators)
                 {
-                    int pos = expressionWithoutQuotes.IndexOf(op, bracketSearchPos);
-                    if (pos != -1)
+                    int thisPos = expressionWithoutQuotes.IndexOf(op, bracketSearchPos);
+                    if ((thisPos != -1 && thisPos < pos) || pos == -1)
                     {
-                        _right =
-                            new CriteriaExpression(
-                                quotesRemovedExpression.Substring(pos + op.Length).PutBackQuotedSections().ToString().
-                                    Trim(), _operators);
-                        _expression = op;
-                        break;
+                        pos = thisPos;
+                        foundOperator = op;
                     }
+                }
+                if (pos != -1)
+                {
+                    _right = new CriteriaExpression(quotesRemovedExpression.Substring(pos + foundOperator.Length)
+                        .PutBackQuotedSections().ToString().Trim(), _operators);
+                    _expression = foundOperator;
                 }
             }
             else
@@ -136,14 +138,10 @@ namespace Habanero.BO.CriteriaManager
                     int pos = expressionWithoutQuotes.IndexOf(op);
                     if (pos != -1 && !IsPosInsideBrackets(expressionWithoutQuotes, pos))
                     {
-                        _left =
-                            new CriteriaExpression(
-                                quotesRemovedExpression.Substring(0, pos).PutBackQuotedSections().ToString().Trim(),
-                                _operators);
-                        _right =
-                            new CriteriaExpression(
-                                quotesRemovedExpression.Substring(pos + op.Length).PutBackQuotedSections().ToString().
-                                    Trim(), _operators);
+                        _left = new CriteriaExpression(quotesRemovedExpression.Substring(0, pos)
+                            .PutBackQuotedSections().ToString().Trim(), _operators);
+                        _right = new CriteriaExpression(quotesRemovedExpression.Substring(pos + op.Length)
+                            .PutBackQuotedSections().ToString().Trim(), _operators);
                         _expression = op;
                         break;
                     }
