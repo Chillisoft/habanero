@@ -259,6 +259,27 @@ namespace Habanero.UI.Grid
         public DateTimePicker AddDateFilterDateTimePicker(string columnName, Object defaultDate,
                                                             FilterClauseOperator filterClauseOperator, bool ignoreTime)
         {
+            return AddDateFilterDateTimePicker(columnName, defaultDate, filterClauseOperator, ignoreTime, false);
+        }
+
+        /// <summary>
+        /// Adds a date-time picker that filters a date column on the date
+        /// chosen by the user.  The given operator compares the chosen date
+        /// with the date shown in the given column name.
+        /// </summary>
+        /// <param name="columnName">The name of the date-time column to be 
+        /// filtered on</param>
+        /// <param name="defaultDate">The default date or null</param>
+        /// <param name="filterClauseOperator">The operator used to compare
+        /// with the date chosen by the user.  The chosen date is on the
+        /// right side of the equation.</param>
+        /// <param name="ignoreTime">Sets all times produced by the DateTimePicker
+        /// to 12am before comparing dates</param>
+        /// <param name="nullable">Must the date time picker be nullable</param>
+        /// <returns>Returns the new DateTimePicker object added</returns>
+        public DateTimePicker AddDateFilterDateTimePicker(string columnName, Object defaultDate,
+                                                            FilterClauseOperator filterClauseOperator, bool ignoreTime, bool nullable)
+        {
             DateTimePicker dte;
             if (defaultDate == null)
             {
@@ -269,9 +290,20 @@ namespace Habanero.UI.Grid
                 dte = (DateTimePicker)ControlFactory.CreateDateTimePicker((DateTime)defaultDate);
             }
             dte.Width = _filterWidth;
-
-            _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator, ignoreTime));
-            dte.ValueChanged += new EventHandler(FilterControlValueChangedHandler);
+            if (nullable)
+            {
+                DateTimePickerController dateTimePickerController = new DateTimePickerController(dte);
+                _filterUIs.Add(new FilterUIDateNullable(_clauseFactory, columnName, dateTimePickerController, filterClauseOperator, ignoreTime));
+                dateTimePickerController.ValueChanged += delegate(object sender, EventArgs e)
+                {
+                    FilterControlValueChangedHandler(dte, e);
+                };
+            }
+            else
+            {
+                _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator, ignoreTime));
+                dte.ValueChanged += new EventHandler(FilterControlValueChangedHandler);
+            }
             FireFilterClauseChanged(dte);
             _controls.Add(dte);
             return dte;
@@ -530,9 +562,70 @@ namespace Habanero.UI.Grid
                     DateTime date = _dateTimePicker.Value;
                     if (_ignoreTime)
                     {
-                        date = new DateTime(date.Year, date.Month, date.Day);
+                        date = date.Date;
                     }
-                    return _clauseFactory.CreateDateFilterClause(_columnName, _filterClauseOperator, date);
+                    if (_filterClauseOperator == FilterClauseOperator.OpLike)
+                    {
+                        IFilterClause startClause = _clauseFactory.CreateDateFilterClause(
+                            _columnName, FilterClauseOperator.OpGreaterThanOrEqualTo, date);
+                        IFilterClause endClause = _clauseFactory.CreateDateFilterClause(
+                            _columnName, FilterClauseOperator.OpLessThan, date.AddDays(1));
+                        return _clauseFactory.CreateCompositeFilterClause(
+                            startClause, FilterClauseCompositeOperator.OpAnd, endClause);
+                    }
+                    else
+                    {
+                        return _clauseFactory.CreateDateFilterClause(_columnName, _filterClauseOperator, date);
+                    }
+                }
+                else
+                {
+                    return _clauseFactory.CreateNullFilterClause();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Provides a filter clause from a given Nuillable DateTime Picker, using the
+        /// column name and filter clause operator provided
+        /// </summary>
+        private class FilterUIDateNullable : FilterUI
+        {
+            private readonly DateTimePickerController _dateTimePickerController;
+            private readonly FilterClauseOperator _filterClauseOperator;
+            private readonly bool _ignoreTime;
+
+            public FilterUIDateNullable(IFilterClauseFactory clauseFactory, string columnName, DateTimePickerController dtp,
+                                      FilterClauseOperator op, bool ignoreTime)
+                : base(clauseFactory, columnName)
+            {
+                _dateTimePickerController = dtp;
+                _filterClauseOperator = op;
+                _ignoreTime = ignoreTime;
+            }
+
+            public override IFilterClause GetFilterClause()
+            {
+                if (_dateTimePickerController.Value.HasValue)
+                {
+                    DateTime date = _dateTimePickerController.Value.Value;
+                    if (_ignoreTime)
+                    {
+                        date = date.Date;
+                    }
+                    if (_filterClauseOperator == FilterClauseOperator.OpLike)
+                    {
+                        IFilterClause startClause = _clauseFactory.CreateDateFilterClause(
+                            _columnName, FilterClauseOperator.OpGreaterThanOrEqualTo, date);
+                        IFilterClause endClause = _clauseFactory.CreateDateFilterClause(
+                            _columnName, FilterClauseOperator.OpLessThan, date.AddDays(1));
+                        return _clauseFactory.CreateCompositeFilterClause(
+                            startClause, FilterClauseCompositeOperator.OpAnd, endClause);
+                    }
+                    else
+                    {
+                        return _clauseFactory.CreateDateFilterClause(_columnName, _filterClauseOperator, date);
+                    }
                 }
                 else
                 {

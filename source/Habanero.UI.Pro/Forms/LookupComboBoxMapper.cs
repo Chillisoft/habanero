@@ -110,6 +110,7 @@ namespace Habanero.UI.Forms
                 if (GetPropertyValue() == null)
                 {
                     _comboBox.SelectedIndex = -1;
+                    _comboBox.Text = "";
                 }
                 else
                 {
@@ -186,8 +187,14 @@ namespace Habanero.UI.Forms
         /// </summary>
         private void SetupLookupList()
         {
+            if (_businessObject == null)
+            {
+                Dictionary<string, object> emptyList = new Dictionary<string, object>();
+                SetLookupList(emptyList);                
+            }
+            Dictionary<string, object> col;
             BOMapper mapper = new BOMapper(_businessObject);
-            Dictionary<string, object> col = mapper.GetLookupList(_propertyName);
+            col = mapper.GetLookupList(_propertyName);
             if (!_isRightClickInitialised)
             {
                 //SetupRightClickBehaviour();
@@ -248,9 +255,14 @@ namespace Habanero.UI.Forms
             if (_propertyName.IndexOf(".") != -1 || _propertyName.IndexOf("-") != -1)
             {
                 return base.GetPropertyValue();
-            } else
+            }
+            else if (_businessObject != null)
             {
                 return _businessObject.GetPropertyValue(_propertyName);
+            }
+            else 
+            {
+                return null;
             }
         }
 

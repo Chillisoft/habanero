@@ -106,7 +106,7 @@ namespace Habanero.UI.Grid
                     }
                     i++;
                 }
-                if (!CurrentRow.Displayed)
+                if (CurrentRow != null && !CurrentRow.Displayed)
                 {
                     FirstDisplayedScrollingRowIndex = Rows.IndexOf(CurrentRow);
                 }

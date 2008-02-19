@@ -32,6 +32,12 @@ namespace Habanero.Test.General
         {
         }
 
+        [TestFixtureSetUp]
+        public void SetupTestFixture()
+        {
+            SetupDBConnection();
+        }
+
         /// <summary>
         /// Used by Gui to step through the application. If the reason for failing a test is 
         /// not obvious.

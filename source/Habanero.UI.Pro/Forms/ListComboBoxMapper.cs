@@ -72,7 +72,7 @@ namespace Habanero.UI.Forms
             {
                 SetupList();
             }
-            _comboBox.SelectedItem =_businessObject.GetPropertyValue(_propertyName);
+            _comboBox.SelectedItem = GetPropertyValue();// _businessObject.GetPropertyValue(_propertyName);
         }
 
         /// <summary>

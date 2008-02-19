@@ -158,6 +158,35 @@ namespace Habanero.Test.BO.CriteriaManager
             Assert.AreEqual("(Height > 20)", tree.Left.CompleteExpression);
             Assert.AreEqual("(Town = Durban)", tree.Right.CompleteExpression);
         }
+
+        [Test]
+        public void TestWithDoubleBrackets()
+        {
+            String[] operators = new String[]
+                {
+                    "OR",
+                    "AND"
+                };
+            CriteriaExpression tree =
+                new CriteriaExpression("(Name = 'Test' OR Field1 >= 1) AND (Field2 <= 2 OR Name = 'Test2')", operators);
+            //Test left side
+            CriteriaExpression leftExpression = tree.Left;
+            Assert.AreEqual("(Name = 'Test' OR Field1 >= 1)", leftExpression.CompleteExpression);
+            Assert.AreEqual("Name = 'Test'", leftExpression.Left.CompleteExpression);
+            Assert.AreEqual("OR", leftExpression.Expression);
+            Assert.AreEqual("Field1 >= 1", leftExpression.Right.CompleteExpression);
+            //Tes operator
+            Assert.AreEqual("AND", tree.Expression);
+            //Test right side
+            CriteriaExpression rightExpression = tree.Right;
+            Assert.AreEqual("(Field2 <= 2 OR Name = 'Test2')", rightExpression.CompleteExpression);
+            Assert.AreEqual("Field2 <= 2", rightExpression.Left.CompleteExpression);
+            Assert.AreEqual("OR", rightExpression.Expression);
+            Assert.AreEqual("Name = 'Test2'", rightExpression.Right.CompleteExpression);
+            //Test complete
+            Assert.AreEqual("((Name = 'Test' OR Field1 >= 1) AND (Field2 <= 2 OR Name = 'Test2'))", tree.CompleteExpression);
+        }
+
     }
 
 }

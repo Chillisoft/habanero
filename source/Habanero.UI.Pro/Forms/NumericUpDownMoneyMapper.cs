@@ -59,9 +59,9 @@ namespace Habanero.UI.Forms
 		private void ValueChangedHandler(object sender, EventArgs e)
         {
 			if (!_isEditable) return;
-
+            if(_businessObject == null) return;
         	decimal newValue = Convert.ToDecimal(_numericUpDown.Value);
-        	decimal oldValue = Convert.ToDecimal(_businessObject.GetPropertyValue(_propertyName));
+            decimal oldValue = Convert.ToDecimal(GetPropertyValue());//_businessObject.GetPropertyValue(_propertyName));
         	if (newValue != oldValue)
         	{
         		//log.Debug("setting property value to " + _numericUpDown.Value + " of type " + _numericUpDown.Value.GetType().Name);

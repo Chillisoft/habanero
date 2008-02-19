@@ -352,8 +352,11 @@ namespace Habanero.UI.Forms
 
         protected virtual void SetPropertyValue(object value)
         {
-            BOMapper boMapper = new BOMapper(_businessObject);
-            boMapper.SetDisplayPropertyValue(_propertyName, value);
+            if (_businessObject != null)
+            {
+                BOMapper boMapper = new BOMapper(_businessObject);
+                boMapper.SetDisplayPropertyValue(_propertyName, value);
+            }
         }
 
         /// <summary>

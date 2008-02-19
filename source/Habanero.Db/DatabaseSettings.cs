@@ -264,7 +264,7 @@ namespace Habanero.DB
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append("select SettingValue from " + _tableName + " where SettingName = ");
             statement.AddParameterToStatement(settingName);
-            statement.Statement.Append(" and (StartDate < ");
+            statement.Statement.Append(" and (StartDate <= ");
             statement.AddParameterToStatement(date);
             statement.Statement.Append(" or StartDate is null) ");
             statement.Statement.Append(" and (EndDate > ");

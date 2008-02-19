@@ -408,7 +408,13 @@ namespace Habanero.UI.Grid
         /// <param name="filterClause">The filter clause</param>
         public void ApplyFilter(IFilterClause filterClause)
         {
-            _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
+            if (filterClause != null)
+            {
+                _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
+            } else
+            {
+                _dataTableDefaultView.RowFilter = null;
+            }
             FireFilterUpdated();
             //filterUpdatedMethodCaller.Call(new VoidMethod(FireFilterUpdated)) ;
         }
@@ -432,6 +438,7 @@ namespace Habanero.UI.Grid
         protected virtual BusinessObject GetSelectedBusinessObject()
         {
             if (this.CurrentCell == null) return null;
+            if (!this.CurrentCell.Selected) return null;
             int rownum = this.CurrentCell.RowIndex;
             int i = 0;
             foreach (DataRowView dataRowView in _dataTableDefaultView)

@@ -67,30 +67,36 @@ namespace Habanero.UI.Forms
 			_dateTimePicker.ForeColorChanged -= DateTimePicker_ColorChanged;
             ControlsHelper.SafeGui(_dateTimePicker, delegate()
             {
-                _dateTimePicker.Controls.Remove(_displayBox);
+                try
+                {
+                    _dateTimePicker.Controls.Clear();
+                } catch {}
             });
 			_dateTimePicker = null;
 		}
 
 		private void SetupDisplayBox()
 		{
-			_displayBox = new Panel();
-			_displayBox.BorderStyle = BorderStyle.None;
-			_displayBox.Location = new Point(2, 2);
-			ResizeDisplayBox();
-			_displayBox.BackColor = _dateTimePicker.BackColor;
-			_displayBox.ForeColor = _dateTimePicker.ForeColor;
-			_displayBox.MouseUp += DateTimePicker_MouseUp;
-			_displayBox.KeyDown += DateTimePicker_KeyDown;
-			_displayText = new Label();
-			_displayText.Location = new Point(0, 0);
-			_displayText.AutoSize = true;
-			_displayText.Text = "";
-			_displayText.MouseUp += DateTimePicker_MouseUp;
-			_displayText.KeyDown += DateTimePicker_KeyDown;
-			_displayBox.Controls.Add(_displayText);
-			_dateTimePicker.Controls.Add(_displayBox);
-			_displayBox.Visible = false;
+		    ControlsHelper.SafeGui(_dateTimePicker, delegate()
+		    {
+		        _displayBox = new Panel();
+		        _displayBox.BorderStyle = BorderStyle.None;
+		        _displayBox.Location = new Point(2, 2);
+		        ResizeDisplayBox();
+		        _displayBox.BackColor = _dateTimePicker.BackColor;
+		        _displayBox.ForeColor = _dateTimePicker.ForeColor;
+		        _displayBox.MouseUp += DateTimePicker_MouseUp;
+		        _displayBox.KeyDown += DateTimePicker_KeyDown;
+		        _displayText = new Label();
+		        _displayText.Location = new Point(0, 0);
+		        _displayText.AutoSize = true;
+		        _displayText.Text = "";
+		        _displayText.MouseUp += DateTimePicker_MouseUp;
+		        _displayText.KeyDown += DateTimePicker_KeyDown;
+		        _displayBox.Controls.Add(_displayText);
+		        _dateTimePicker.Controls.Add(_displayBox);
+		        _displayBox.Visible = false;
+		    });
 		}
 
 		private void ResizeDisplayBox()
