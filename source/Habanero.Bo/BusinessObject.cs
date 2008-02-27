@@ -47,9 +47,6 @@ namespace Habanero.BO
     public class BusinessObject : ITransaction
     {
 
-
-
-        
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         public event EventHandler<BOEventArgs> Updated;
@@ -554,43 +551,56 @@ namespace Habanero.BO
         /// <returns>Returns the property value</returns>
         internal object GetPropertyValueToDisplay(string propName)
         {
+            object propertyValue = GetPropertyValue(propName);
+            
             if (Props[propName].PropertyType == typeof(Guid) && this.GetPropertyValue(propName) != null &&
                 !this.ID.Contains(propName))
             {
-                Guid myGuid = (Guid) GetPropertyValue(propName);
+                Guid myGuid = (Guid)propertyValue;
                 Dictionary<string, object> lookupList = this.ClassDef.GetLookupList(propName).GetLookupList();
 
-                foreach (KeyValuePair<string, object> pair in lookupList) {
+                foreach (KeyValuePair<string, object> pair in lookupList)
+                {
+
                     if (pair.Value == null) continue;
                     if (pair.Value is BusinessObject)
                     {
-                        if (((BusinessObject)pair.Value)._primaryKey.GetGuid().Equals(myGuid)) {
+                        BusinessObject bo = (BusinessObject)pair.Value;
+                        if (bo._primaryKey.GetGuid().Equals(myGuid))
+                        {
                             return pair.Key;
                         }
                     }
-                    else {
-                        if (pair.Value.Equals(myGuid)) {
+                    else
+                    {
+                        if (pair.Value.Equals(myGuid))
+                        {
                             return pair.Key;
                         }
                     }
                 }
                 return myGuid;
-            } else if (ClassDef.GetPropDef(propName).HasLookupList()) {
+            }
+            else if (ClassDef.GetPropDef(propName).HasLookupList())
+            {
                 Dictionary<string, object> lookupList = this.ClassDef.GetLookupList(propName).GetLookupList();
                 foreach (KeyValuePair<string, object> pair in lookupList)
                 {
+                    
                     if (pair.Value == null) continue;
-                    if (pair.Value.Equals(GetPropertyValue(propName)))
+                    if (pair.Value is string && pair.Value.Equals(Convert.ToString(propertyValue)))
+                    {
+                        return pair.Key;
+                    }
+                    if (pair.Value.Equals(propertyValue))
                     {
                         return pair.Key;
                     }
                     else if (pair.Value is BusinessObject)
                     {
-                        BusinessObject bo = (BusinessObject) pair.Value;
-                        if (bo.ClassDef.PrimaryKeyDef.IsObjectID &&
-                            String.Compare(bo.ID.ToString(), GetPropertyValueString(propName)) == 0)
-                        {
-                            return pair.Value.ToString();
+                        BusinessObject bo = (BusinessObject)pair.Value;
+                        if (String.Compare(bo.ID.ToString(), GetPropertyValueString(propName)) == 0)
+                        {    return pair.Value.ToString();
                         }
                         else if (bo.ID[0].Value != null &&
                             String.Compare(bo.ID[0].Value.ToString(), GetPropertyValueString(propName)) == 0)
@@ -598,15 +608,14 @@ namespace Habanero.BO
                             return pair.Value.ToString();
                         }
                     }
-                    
+
                 }
-                return GetPropertyValue(propName);
+                return propertyValue;
             }
             else
             {
-                return GetPropertyValue(propName);
+                return propertyValue;
             }
-
         }
 
         /// <summary>

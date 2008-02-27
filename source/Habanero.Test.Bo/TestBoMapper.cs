@@ -55,6 +55,16 @@ namespace Habanero.Test.BO
             Assert.AreEqual("s1", mapper.GetPropertyValueToDisplay("TestProp2"));
         }
 
+        [Test]
+        public void TestGetPropertyValueToDisplay_SimpleLookup()
+        {
+            ClassDef.ClassDefs.Clear();
+            itsClassDef = MyBO.LoadClassDefWithSimpleIntegerLookup();
+            MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject();
+            bo1.SetPropertyValue("TestProp2", "Text");
+            BOMapper mapper = new BOMapper(bo1);
+            Assert.AreEqual("Text", mapper.GetPropertyValueToDisplay("TestProp2"));
+        }
 		//[Test]
 		//public void TestGetPropertyValueWithDot()
 		//{
