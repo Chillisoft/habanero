@@ -554,48 +554,60 @@ namespace Habanero.BO
         /// <returns>Returns the property value</returns>
         internal object GetPropertyValueToDisplay(string propName)
         {
+            object propertyValue = GetPropertyValue(propName);
             if (Props[propName].PropertyType == typeof(Guid) && this.GetPropertyValue(propName) != null &&
                 !this.ID.Contains(propName))
             {
-                Guid myGuid = (Guid) GetPropertyValue(propName);
+                Guid myGuid = (Guid)propertyValue;
                 Dictionary<string, object> lookupList = this.ClassDef.GetLookupList(propName).GetLookupList();
 
-                foreach (KeyValuePair<string, object> pair in lookupList) {
+                foreach (KeyValuePair<string, object> pair in lookupList)
+                {
                     if (pair.Value == null) continue;
                     if (pair.Value is BusinessObject)
                     {
-                        if (((BusinessObject)pair.Value)._primaryKey.GetGuid().Equals(myGuid)) {
+                        if (((BusinessObject)pair.Value)._primaryKey.GetGuid().Equals(myGuid))
+                        {
                             return pair.Key;
                         }
                     }
-                    else {
-                        if (pair.Value.Equals(myGuid)) {
+                    else
+                    {
+                        if (pair.Value.Equals(myGuid))
+                        {
                             return pair.Key;
                         }
                     }
                 }
                 return myGuid;
-            } else if (ClassDef.GetPropDef(propName).HasLookupList()) {
+            }
+            else if (ClassDef.GetPropDef(propName).HasLookupList())
+            {
                 Dictionary<string, object> lookupList = this.ClassDef.GetLookupList(propName).GetLookupList();
                 foreach (KeyValuePair<string, object> pair in lookupList)
                 {
                     if (pair.Value == null) continue;
-                    if (pair.Value.Equals(GetPropertyValue(propName)))
+                    if (pair.Value is string && pair.Value.Equals(Convert.ToString(propertyValue)))
                     {
                         return pair.Key;
-                    } else if (pair.Value is BusinessObject) {
-                        if (String.Compare(((BusinessObject) pair.Value).ID.ToString(), GetPropertyValueString(propName)) == 0)
+                    }
+                    if (pair.Value.Equals(propertyValue))
+                    {
+                        return pair.Key;
+                    }
+                    else if (pair.Value is BusinessObject)
+                    {
+                        if (String.Compare(((BusinessObject)pair.Value).ID.ToString(), GetPropertyValueString(propName)) == 0)
                             return pair.Value.ToString();
                     }
-                    
+
                 }
-                return GetPropertyValue(propName);
+                return propertyValue;
             }
             else
             {
-                return GetPropertyValue(propName);
+                return propertyValue;
             }
-
         }
 
         /// <summary>
