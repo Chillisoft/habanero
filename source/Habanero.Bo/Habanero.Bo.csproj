@@ -73,6 +73,18 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Habanero.Base, Version=1.1.3.20791, Culture=neutral, PublicKeyToken=1fb6a9c86f815c07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Habanero.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.DB, Version=1.1.3.20792, Culture=neutral, PublicKeyToken=13cd8e0ef3c14147, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Habanero.DB.dll</HintPath>
+    </Reference>
+    <Reference Include="Habanero.Util, Version=1.1.3.20792, Culture=neutral, PublicKeyToken=6373b1b341138aa8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Habanero.Util.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\log4net.dll</HintPath>
@@ -363,20 +375,6 @@
     <None Include="Loaders\DTDs\tab.dtd" />
     <None Include="Loaders\DTDs\ui.dtd" />
     <None Include="Loaders\DTDs\Rule.dtd" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
-      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
-      <Name>Habanero.DB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
-      <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
-      <Name>Habanero.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
-      <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
-      <Name>Habanero.Util</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Loaders\Dtds.resx">

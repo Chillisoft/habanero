@@ -252,6 +252,44 @@ namespace Habanero.Test
 			return itsClassDef;
         }
 
+        public static ClassDef LoadClassDefWithSimpleIntegerLookup()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+                    <property name=""TestProp2"" type=""Int32"" default=""1"" compulsory=""true"">
+                      <simpleLookupList>
+                        <item display=""Integer"" value=""2"" />
+                        <item display=""Selection"" value=""3"" />
+                        <item display=""Text"" value=""1"" />
+                      </simpleLookupList>
+                    </property>
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadClassDefWithStringLookup()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

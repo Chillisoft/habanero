@@ -80,7 +80,6 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-
         public static ClassDef LoadClassDefWithCompositePrimaryKey()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
