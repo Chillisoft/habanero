@@ -1621,10 +1621,18 @@ namespace Habanero.BO
 		{
 			if (NeedsPersisting())
 			{
-				string reasonNotSaved ;
-			    bool isvalid = IsValid(out reasonNotSaved);
-			    string customRuleErrors ;
-			    isvalid = CheckCustomRules(out customRuleErrors) && isvalid;
+				string reasonNotSaved = "";
+                string customRuleErrors = "";
+			    bool isvalid;
+                if (State.IsDeleted)
+                {
+                    isvalid = true;
+                }
+                else
+                {
+                    isvalid = IsValid(out reasonNotSaved);
+                    isvalid = CheckCustomRules(out customRuleErrors) && isvalid;
+                }
 			    if (isvalid)
 				{
                     BeforeSave(transactionCommitter);
