@@ -29,6 +29,13 @@ namespace Habanero.Test.BO
 {
     class ContactPerson: BusinessObject
     {
+        public enum ContactType
+        {
+            Family,
+            Friend,
+            Business
+        }
+
         public ContactPerson() : base() { }
 
         internal ContactPerson(BOPrimaryKey id)
@@ -124,6 +131,7 @@ namespace Habanero.Test.BO
             }
             return myContactPerson;
         }
+
         internal static void DeleteAllContactPeople()
         {
             string sql = "DELETE FROM ContactPerson";

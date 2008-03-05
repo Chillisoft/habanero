@@ -607,7 +607,10 @@ namespace Habanero.BO.ClassDefinition
 					if (MyPropertyType == typeof(Guid))
 					{
 						defaultValue = new Guid(_defaultValueString);
-					} else
+					} else if (MyPropertyType.IsEnum)
+					{
+					    defaultValue = Enum.Parse(MyPropertyType, _defaultValueString);
+					} else 
 					{
 						try
 						{

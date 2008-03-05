@@ -113,6 +113,28 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestCreatePropDefWithEnumType()
+        {
+            PropDef propDef = new PropDef("EnumProp", typeof(ContactPerson.ContactType), PropReadWriteRule.ReadWrite, ContactPerson.ContactType.Family);
+            Assert.AreEqual("Habanero.Test.BO", propDef.PropertyTypeAssemblyName);
+            Assert.AreEqual("Habanero.Test.BO.ContactPerson+ContactType", propDef.PropertyTypeName);
+            Assert.AreEqual("Family", propDef.DefaultValueString);
+            Assert.AreEqual(ContactPerson.ContactType.Family, propDef.DefaultValue);
+        }
+
+        [Test]
+        public void TestCreatePropDefWithEnumTypeString()
+        {
+            PropDef propDef = new PropDef("EnumProp", "Habanero.Test.BO", "ContactPerson+ContactType", 
+                PropReadWriteRule.ReadWrite, "EnumProp" , "Family", false, false);
+            Assert.AreEqual(typeof(ContactPerson.ContactType), propDef.PropertyType);
+            Assert.AreEqual("Habanero.Test.BO", propDef.PropertyTypeAssemblyName);
+            Assert.AreEqual("ContactPerson+ContactType", propDef.PropertyTypeName);
+            Assert.AreEqual("Family", propDef.DefaultValueString);
+            Assert.AreEqual(ContactPerson.ContactType.Family, propDef.DefaultValue);
+        }
+
+        [Test]
         public void TestCreateBOProp()
         {
             BOProp prop = _propDef.CreateBOProp(false);
