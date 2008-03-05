@@ -157,7 +157,12 @@ namespace Habanero.BO
                     {
                         propValue = ((DateTime)propValue).TimeOfDay;
                     }
-                    else {
+                    else if (this.PropertyType.IsEnum && propValue is string)
+                    {
+                        propValue = Enum.Parse(this.PropertyType, (string)propValue);
+                    }
+                    else
+                    {
                         try {
                             propValue = Convert.ChangeType(propValue, this.PropertyType);
                         }

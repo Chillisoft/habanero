@@ -29,6 +29,13 @@ namespace Habanero.Test.BO
 {
     class ContactPerson: BusinessObject
     {
+        public enum ContactType
+        {
+            Family,
+            Friend,
+            Business
+        }
+
         public ContactPerson() { }
 
         internal ContactPerson(BOPrimaryKey id) : base(id) { }

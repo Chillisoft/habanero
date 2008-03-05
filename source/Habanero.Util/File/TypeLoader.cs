@@ -148,11 +148,7 @@ namespace Habanero.Util.File
                         "Unable to load the {0} type{1}, given the 'assembly' as: '{2}', " +
                         "and the 'type' as: '{3}'. Check that the type exists in the " +
                         "given assembly name and that spelling and capitalisation are correct.",
-                        new object[]
-                            {
-                                loadingTypeDesc, loadingFor,
-                                assemblyName, className
-                            });
+                        loadingTypeDesc, loadingFor, assemblyName, className);
                     throw new UnknownTypeNameException(errorMessage, ex);
                 }
             }

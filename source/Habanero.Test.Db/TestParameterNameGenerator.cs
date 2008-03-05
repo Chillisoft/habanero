@@ -90,7 +90,7 @@ namespace Habanero.Test.DB
 			Assert.AreEqual(":Param0", gen.GetNextParameterName());
 		}
 
-        [Test]
+        [Test, Ignore("Issue with SQLite 64-bit driver")]
         public void TestNameGenerationSQLite()
         {
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SQLite, "test", "test", "test", "test", "1000");

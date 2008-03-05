@@ -69,6 +69,8 @@ namespace Habanero.Test.BO
             Assert.IsTrue(_prop.IsValid);
         }
 
+        #region Tests for Compulsory Attribute
+
         [Test]
         public void TestPropCompulsoryRestore()
         {
@@ -259,6 +261,8 @@ namespace Habanero.Test.BO
             Assert.IsFalse(boProp.InvalidReason.Length > 0);
         }
 
+        #endregion //Tests for Compulsory Attribute
+        
         [Test]
         public void TestPropBrokenRuleRestore()
         {
@@ -436,6 +440,80 @@ namespace Habanero.Test.BO
             Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
             Assert.IsTrue(boProp.InvalidReason.Contains("'Test Prop'"));
         }
+
+        #region Tests for Enum type Bo Props
+
+        [Test]
+        public void TestBoPropWithEnumCreate()
+        {
+            PropDef propDef = new PropDef("EnumProp", typeof(ContactPerson.ContactType), PropReadWriteRule.ReadWrite, ContactPerson.ContactType.Family);
+            //Create the property for a new object (default will be set)
+            BOProp boProp;
+            boProp = propDef.CreateBOProp(true);
+            Assert.AreEqual(ContactPerson.ContactType.Family, boProp.Value);
+            Assert.AreEqual("Family", boProp.PropertyValueString);
+            //Create the property for anexisting object (default will not be set)
+            boProp = propDef.CreateBOProp(false);
+            Assert.AreEqual(null, boProp.Value);
+            Assert.AreEqual("", boProp.PropertyValueString);
+        }
+
+        public void TestBoPropWithEnumValueChange()
+        {
+            PropDef propDef = new PropDef("EnumProp", typeof(ContactPerson.ContactType), PropReadWriteRule.ReadWrite, ContactPerson.ContactType.Family);
+            //Create the property for anexisting object (default will not be set)
+            BOProp boProp = propDef.CreateBOProp(false);
+            Assert.AreEqual(null, boProp.Value);
+            Assert.AreEqual("", boProp.PropertyValueString);
+            boProp.InitialiseProp(ContactPerson.ContactType.Business);
+            Assert.IsFalse(boProp.IsDirty);
+            Assert.AreEqual(ContactPerson.ContactType.Business, boProp.Value);
+            Assert.AreEqual("Business", boProp.PropertyValueString);
+            boProp.Value = ContactPerson.ContactType.Friend;
+            Assert.IsTrue(boProp.IsDirty);
+            Assert.AreEqual(ContactPerson.ContactType.Friend, boProp.Value);
+            Assert.AreEqual("Friend", boProp.PropertyValueString);
+            boProp.RestorePropValue();
+            Assert.IsFalse(boProp.IsDirty);
+            Assert.AreEqual(ContactPerson.ContactType.Business, boProp.Value);
+            Assert.AreEqual("Business", boProp.PropertyValueString);
+        }
+
+        public void TestBoPropWithEnumPersistValue()
+        {
+            PropDef propDef = new PropDef("EnumProp", typeof(ContactPerson.ContactType), PropReadWriteRule.ReadWrite, ContactPerson.ContactType.Family);
+            //Create the property for anexisting object (default will not be set)
+            BOProp boProp = propDef.CreateBOProp(false);
+            Assert.AreEqual(null, boProp.Value);
+            Assert.AreEqual(null, boProp.PersistedPropertyValue);
+            Assert.AreEqual("", boProp.PropertyValueString);
+            Assert.AreEqual("", boProp.PersistedPropertyValueString);
+            boProp.InitialiseProp(ContactPerson.ContactType.Business);
+            Assert.IsFalse(boProp.IsDirty);
+            Assert.AreEqual(ContactPerson.ContactType.Business, boProp.Value);
+            Assert.AreEqual(ContactPerson.ContactType.Business, boProp.PersistedPropertyValue);
+            Assert.AreEqual("Business", boProp.PersistedPropertyValueString);
+            Assert.AreEqual("Business", boProp.PropertyValueString);
+        }
+
+        public void TestBoPropWithEnumPersistValueFromString()
+        {
+            PropDef propDef = new PropDef("EnumProp", typeof(ContactPerson.ContactType), PropReadWriteRule.ReadWrite, ContactPerson.ContactType.Family);
+            //Create the property for anexisting object (default will not be set)
+            BOProp boProp = propDef.CreateBOProp(false);
+            Assert.AreEqual(null, boProp.Value);
+            Assert.AreEqual(null, boProp.PersistedPropertyValue);
+            Assert.AreEqual("", boProp.PropertyValueString);
+            Assert.AreEqual("", boProp.PersistedPropertyValueString);
+            boProp.InitialiseProp("Business");
+            Assert.IsFalse(boProp.IsDirty);
+            Assert.AreEqual(ContactPerson.ContactType.Business, boProp.Value);
+            Assert.AreEqual(ContactPerson.ContactType.Business, boProp.PersistedPropertyValue);
+            Assert.AreEqual("Business", boProp.PersistedPropertyValueString);
+            Assert.AreEqual("Business", boProp.PropertyValueString);
+        }
+
+        #endregion //Tests for Enum type Bo Props
     }
 
 }

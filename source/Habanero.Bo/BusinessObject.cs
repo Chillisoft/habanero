@@ -777,7 +777,14 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         protected internal bool IsValid(out string invalidReason)
         {
-            return Props.IsValid(out invalidReason);
+            string customRuleErrors;
+            bool valid = Props.IsValid(out invalidReason);
+            valid &= CheckCustomRules(out customRuleErrors);
+            if (!String.IsNullOrEmpty(customRuleErrors))
+            {
+                invalidReason = customRuleErrors + Environment.NewLine + invalidReason;
+            }
+            return valid;
         }
 
         /// <summary>
@@ -787,7 +794,7 @@ namespace Habanero.BO
         protected internal bool IsValid()
         {
             string invalidReason;
-            return Props.IsValid(out invalidReason);
+            return IsValid(out invalidReason);
         }
 
         /// <summary>
@@ -1633,10 +1640,18 @@ namespace Habanero.BO
 		{
 			if (NeedsPersisting())
 			{
-				string reasonNotSaved ;
-			    bool isvalid = IsValid(out reasonNotSaved);
-			    string customRuleErrors ;
-			    isvalid = CheckCustomRules(out customRuleErrors) && isvalid;
+				string reasonNotSaved = "";
+                string customRuleErrors = "";
+			    bool isvalid;
+                if (State.IsDeleted)
+                {
+                    isvalid = true;
+                }
+                else
+                {
+                    isvalid = IsValid(out reasonNotSaved);
+                    isvalid = CheckCustomRules(out customRuleErrors) && isvalid;
+                }
 			    if (isvalid)
 				{
                     BeforeSave(transactionCommitter);

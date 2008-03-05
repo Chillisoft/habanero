@@ -85,7 +85,7 @@ namespace Habanero.Test.DB
             Assert.AreEqual("Npgsql", connection.TestConnection.GetType().Namespace);
         }
 
-        [Test]
+        [Test, Ignore("Issue with SQLite 64-bit driver")]
         public void TestCreateConnectionSQLite()
         {
             DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SQLite, "test", "test", "test", "test", "1000");
