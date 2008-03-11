@@ -28,7 +28,53 @@ namespace Habanero.BO
     /// Provides an exception to throw when a business object is not found
     /// </summary>
     [Serializable()]
-    public class BusinessObjectNotFoundException : Exception
+    public abstract class BusinessObjectException : Exception
+    {
+        /// <summary>
+        /// Constructor to initialise the exception
+        /// </summary>
+        public BusinessObjectException()
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display
+        /// </summary>
+        /// <param name="message">The error message</param>
+        public BusinessObjectException(string message)
+            : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display, and the inner exception specified
+        /// </summary>
+        /// <param name="message">The error message</param>
+        /// <param name="inner">The inner exception</param>
+        public BusinessObjectException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with the serialisation info
+        /// and streaming context provided
+        /// </summary>
+        /// <param name="info">The serialisation info</param>
+        /// <param name="context">The streaming context</param>
+        protected BusinessObjectException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Provides an exception to throw when a business object is not found
+    /// </summary>
+    [Serializable()]
+    public class BusinessObjectNotFoundException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -73,7 +119,7 @@ namespace Habanero.BO
 	/// a business object are being violated
 	/// </summary>
 	[Serializable()]
-	public class BusinessObjectReferentialIntegrityException : Exception
+    public class BusinessObjectReferentialIntegrityException : BusinessObjectException
 	{
 		/// <summary>
 		/// Constructor to initialise the exception
@@ -119,7 +165,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a property value is invalid
     /// </summary>
     [Serializable()]
-    public class InvalidPropertyNameException : Exception
+    public class InvalidPropertyNameException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -168,7 +214,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a property value is invalid
     /// </summary>
     [Serializable()]
-    public class InvalidPropertyValueException : Exception
+    public class InvalidPropertyValueException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -213,7 +259,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a property is invalid
     /// </summary>
     [Serializable()]
-    public class InvalidPropertyException : Exception
+    public class InvalidPropertyException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -262,7 +308,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a property is invalid
     /// </summary>
     [Serializable()]
-    public class InvalidKeyException : Exception
+    public class InvalidKeyException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -312,7 +358,7 @@ namespace Habanero.BO
     /// invalid state
     /// </summary>
     [Serializable()]
-    public class BusObjectInAnInvalidStateException : Exception
+    public class BusObjectInAnInvalidStateException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -359,7 +405,7 @@ namespace Habanero.BO
     /// business object's concurrency control
     /// </summary>
     [Serializable()]
-    public class BusObjectConcurrencyControlException : Exception, ISerializable
+    public class BusObjectConcurrencyControlException : BusinessObjectException, ISerializable
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -748,7 +794,7 @@ namespace Habanero.BO
     /// while the object is already in edit mode
     /// </summary>
     [Serializable()]
-    public class EditingException : Exception, ISerializable
+    public class EditingException : BusinessObjectException, ISerializable
     {
         protected object mobj; //TODO move this such that it has type BusObj
 
