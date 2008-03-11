@@ -201,7 +201,7 @@ namespace Habanero.BO
         protected bool CheckPatternMatchRule(string propName, Object propValue,
                                              ref string errorMessage)
         {
-            if (_patternMatch.Length == 0)
+            if (_patternMatch.Length == 0 || String.IsNullOrEmpty(Convert.ToString(propValue)))
             {
                 return true;
             }
