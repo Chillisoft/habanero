@@ -136,16 +136,14 @@ namespace Habanero.BO
                 int intPropRule = (int)propValue;
                 if (intPropRule < _minValue)
                 {
-                    errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
-                        propName, Name);
+                    errorMessage = GetBaseErrorMessage(propValue, propName);
                     if (Message != null) errorMessage += Message;
                     else errorMessage += "The value cannot be less than " + _minValue + ".";
                     valueValid = false;
                 }
                 if (intPropRule > _maxValue)
                 {
-                    errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
-                        propName, Name);
+                    errorMessage = GetBaseErrorMessage(propValue, propName);
                     if (Message != null) errorMessage += Message;
                     else errorMessage += "The value cannot be more than " + _maxValue + ".";
                     valueValid = false;
