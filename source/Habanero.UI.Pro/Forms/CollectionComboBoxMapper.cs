@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.UI.Base;
-using Habanero.UI.Pro.Forms;
 using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms

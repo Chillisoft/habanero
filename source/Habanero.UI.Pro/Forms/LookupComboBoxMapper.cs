@@ -153,7 +153,19 @@ namespace Habanero.UI.Forms
                             break;
                         }
                     }
-                    if (pair.Value != null && pair.Value.Equals(boPropertyValue))
+                    bool found = false;
+                    if (pair.Value != null)
+                    {
+                        if (pair.Value is string)
+                        {
+                            found = pair.Value.Equals(Convert.ToString(boPropertyValue));
+                        }
+                        else
+                        {
+                            found = pair.Value.Equals(boPropertyValue);
+                        }
+                    }
+                    if (found)
                     {
                         _comboBox.SelectedItem = pair.Key;
                         break;

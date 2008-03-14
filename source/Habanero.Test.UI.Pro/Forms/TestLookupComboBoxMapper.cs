@@ -13,9 +13,9 @@ namespace Habanero.Test.UI.Forms
     [TestFixture]
     public class TestLookupComboBoxMapper : TestUsingDatabase
     {
-        private ComboBox cbx;
-        private LookupComboBoxMapper mapper;
-        private Sample s;
+        private ComboBox _comboBox;
+        private LookupComboBoxMapper _lookupComboBoxMapper;
+        private Sample _sample;
 
         [TestFixtureSetUp]
         public void SetupFixture()
@@ -26,99 +26,99 @@ namespace Habanero.Test.UI.Forms
         [SetUp]
         public void SetupTest()
         {
-            cbx = new ComboBox();
-            mapper = new LookupComboBoxMapper(cbx, "SampleLookupID", false);
-            s = new Sample();
-            mapper.SetLookupList(Sample.LookupCollection);
+            _comboBox = new ComboBox();
+            _lookupComboBoxMapper = new LookupComboBoxMapper(_comboBox, "SampleLookupID", false);
+            _sample = new Sample();
+            _lookupComboBoxMapper.SetLookupList(Sample.LookupCollection);
 
         }
 
         [Test]
         public void TestConstructor()
         {
-            Assert.AreSame(cbx, mapper.Control);
-            Assert.AreSame("SampleLookupID", mapper.PropertyName);
+            Assert.AreSame(_comboBox, _lookupComboBoxMapper.Control);
+            Assert.AreSame("SampleLookupID", _lookupComboBoxMapper.PropertyName);
         }
 
         [Test]
         public void TestSetLookupList()
         {
-            Assert.AreEqual(4, cbx.Items.Count);
-            Assert.AreSame(typeof (string), cbx.Items[0].GetType());
-            Assert.IsTrue(cbx.Items.Contains("Test1"));
+            Assert.AreEqual(4, _comboBox.Items.Count);
+            Assert.AreSame(typeof (string), _comboBox.Items[0].GetType());
+            Assert.IsTrue(_comboBox.Items.Contains("Test1"));
         }
 
         [Test]
         public void TestComboBoxValue()
         {
-            s.SampleLookupID = new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}");
-            mapper.BusinessObject = s;
-            Assert.AreEqual("Test1", (string)cbx.SelectedItem, "Value is not set.");
-            s.SampleLookupID = new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}");
-            Assert.AreEqual("Test2", (string)cbx.SelectedItem, "Value is not set after changing bo prop");
+            _sample.SampleLookupID = new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}");
+            _lookupComboBoxMapper.BusinessObject = _sample;
+            Assert.AreEqual("Test1", (string)_comboBox.SelectedItem, "Value is not set.");
+            _sample.SampleLookupID = new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}");
+            Assert.AreEqual("Test2", (string)_comboBox.SelectedItem, "Value is not set after changing bo prop");
         }
 
         [Test]
         public void TestSettingComboValueUpdatesBO()
         {
-            s.SampleLookupID = new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}");
-            mapper.BusinessObject = s;
-            cbx.SelectedIndex = 2;
-            string selected = (string) cbx.SelectedItem;
-            Assert.AreEqual(Sample.LookupCollection[selected], s.SampleLookupID,
+            _sample.SampleLookupID = new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}");
+            _lookupComboBoxMapper.BusinessObject = _sample;
+            _comboBox.SelectedIndex = 2;
+            string selected = (string) _comboBox.SelectedItem;
+            Assert.AreEqual(Sample.LookupCollection[selected], _sample.SampleLookupID,
                             "BO property value isn't changed when control value is changed.");
         }
 
 //		[Test, ExpectedException(typeof (LookupListNotSetException), "You must set the lookup list before using a control that requires it.")]
 //		public void TestNotSettingLookupList() {
-//			cbx = new ComboBox();
-//			mapper = new LookupComboBoxMapper(cbx, "SampleLookupID", false);
-//			s.SampleLookupID = Sample.LookupCollection[0].Id;
-//			mapper.BusinessObject = s;
+//			_comboBox = new ComboBox();
+//			_lookupComboBoxMapper = new LookupComboBoxMapper(_comboBox, "SampleLookupID", false);
+//			_sample.SampleLookupID = Sample.LookupCollection[0].Id;
+//			_lookupComboBoxMapper.BusinessObject = _sample;
 //		}
 
         [Test]
         public void TestUsingPropWithLookupSource()
         {
-            cbx = new ComboBox();
-            mapper = new LookupComboBoxMapper(cbx, "SampleLookup2ID", false);
-            s = new Sample();
-            s.SetPropertyValue("SampleLookup2ID", new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}"));
-            mapper.BusinessObject = s;
-            Assert.AreEqual(4, cbx.Items.Count);
-            Assert.AreSame(typeof (string), cbx.Items[0].GetType());
-            Assert.IsTrue(cbx.Items.Contains("Test1"));
-            Assert.AreEqual("Test2", (string) cbx.SelectedItem);
+            _comboBox = new ComboBox();
+            _lookupComboBoxMapper = new LookupComboBoxMapper(_comboBox, "SampleLookup2ID", false);
+            _sample = new Sample();
+            _sample.SetPropertyValue("SampleLookup2ID", new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}"));
+            _lookupComboBoxMapper.BusinessObject = _sample;
+            Assert.AreEqual(4, _comboBox.Items.Count);
+            Assert.AreSame(typeof (string), _comboBox.Items[0].GetType());
+            Assert.IsTrue(_comboBox.Items.Contains("Test1"));
+            Assert.AreEqual("Test2", (string) _comboBox.SelectedItem);
         }
 
         [Test]
         public void TestUsingBOLookupList()
         {
-            cbx = new ComboBox();
-            mapper = new LookupComboBoxMapper(cbx, "SampleLookup2ID", false);
-            mapper.SetLookupList(Sample.BOLookupCollection);
-            s = new Sample();
-            s.SetPropertyValue("SampleLookup2ID", Sample.BOLookupCollection["Test2"]);
-            mapper.BusinessObject = s;
-            Assert.AreEqual(4, cbx.Items.Count);
-            Assert.AreSame(typeof (string), cbx.Items[0].GetType());
-            Assert.IsTrue(cbx.Items.Contains("Test1"));
-            Assert.AreEqual("Test2", (string) cbx.SelectedItem);
+            _comboBox = new ComboBox();
+            _lookupComboBoxMapper = new LookupComboBoxMapper(_comboBox, "SampleLookup2ID", false);
+            _lookupComboBoxMapper.SetLookupList(Sample.BOLookupCollection);
+            _sample = new Sample();
+            _sample.SetPropertyValue("SampleLookup2ID", Sample.BOLookupCollection["Test2"]);
+            _lookupComboBoxMapper.BusinessObject = _sample;
+            Assert.AreEqual(4, _comboBox.Items.Count);
+            Assert.AreSame(typeof (string), _comboBox.Items[0].GetType());
+            Assert.IsTrue(_comboBox.Items.Contains("Test1"));
+            Assert.AreEqual("Test2", (string) _comboBox.SelectedItem);
         }
 
         [Test]
         public void TestUsingBOLookupListStr()
         {
-            cbx = new ComboBox();
-            mapper = new LookupComboBoxMapper(cbx, "SampleLookup3ID", false);
-            mapper.SetLookupList(Sample.BOLookupCollection);
-            s = new Sample();
-            s.SetPropertyValue("SampleLookup3ID", Sample.BOLookupCollection["Test2"]);
-            mapper.BusinessObject = s;
-            Assert.AreEqual(4, cbx.Items.Count);
-            Assert.AreSame(typeof(string), cbx.Items[0].GetType());
-            Assert.IsTrue(cbx.Items.Contains("Test1"));
-            Assert.AreEqual("Test2", (string)cbx.SelectedItem);
+            _comboBox = new ComboBox();
+            _lookupComboBoxMapper = new LookupComboBoxMapper(_comboBox, "SampleLookup3ID", false);
+            _lookupComboBoxMapper.SetLookupList(Sample.BOLookupCollection);
+            _sample = new Sample();
+            _sample.SetPropertyValue("SampleLookup3ID", Sample.BOLookupCollection["Test2"]);
+            _lookupComboBoxMapper.BusinessObject = _sample;
+            Assert.AreEqual(4, _comboBox.Items.Count);
+            Assert.AreSame(typeof(string), _comboBox.Items[0].GetType());
+            Assert.IsTrue(_comboBox.Items.Contains("Test1"));
+            Assert.AreEqual("Test2", (string)_comboBox.SelectedItem);
         }
     }
 }

@@ -11,14 +11,8 @@ namespace Habanero.UI.Forms
     /// </summary>
     public class BoTabColControl : UserControl
     {
-        private delegate void VoidDelegate();
-        private delegate void SetCollectionDelegate(IList col);
-        private IBusinessObjectControl _boControl;
         private TabControl _tabControl;
-        private Hashtable _pageBoTable;
-        private Hashtable _boPageTable;
-
-        private EventHandler tabChangedHandler;
+        private CollectionTabControlMapper _collectionTabControlMapper;
 
         /// <summary>
         /// Constructor to initialise a new tab control
@@ -26,14 +20,10 @@ namespace Habanero.UI.Forms
         public BoTabColControl()
         {
             Permission.Check(this);
-           
             BorderLayoutManager manager = new BorderLayoutManager(this);
             _tabControl = new TabControl();
             manager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
-            _pageBoTable = new Hashtable();
-            _boPageTable = new Hashtable();
-
-            tabChangedHandler = new EventHandler(TabChangedHandler);
+            _collectionTabControlMapper = new CollectionTabControlMapper(_tabControl);
         }
 
         /// <summary>
@@ -44,62 +34,18 @@ namespace Habanero.UI.Forms
         /// displaying the business object information in the tab page</param>
         public void SetBusinessObjectControl(IBusinessObjectControl boControl)
         {
-            _boControl = boControl;
-            if (boControl is Control)
-            {
-                ((Control)_boControl).Dock = DockStyle.Fill;
-            }
-            else
-            {
-                throw new ArgumentException("boControl must be of type Control or one of its subtypes.");
-            }
-            
+            _collectionTabControlMapper.SetBusinessObjectControl(boControl);
         }
 
         /// <summary>
         /// Sets the collection of tab pages for the collection of business
         /// objects provided
         /// </summary>
-        /// <param name="col">The business object collection to create tab pages
+        /// <param name="businessObjectCollection">The business object collection to create tab pages
         /// for</param>
-        public void SetCollection(IList col)
+        public void SetCollection(IBusinessObjectCollection businessObjectCollection)
         {
-            try {
-                BeginInvoke(new SetCollectionDelegate(SetCollectionInSTAThread), new object[] {col});
-            } catch (InvalidOperationException) {
-                SetCollectionInSTAThread(col);
-            }
-        }
-
-        private void SetCollectionInSTAThread(IList col)
-        {
-            _tabControl.SelectedIndexChanged -= tabChangedHandler;
-            ClearTabPages();
-            foreach (BusinessObject bo in col)
-            {
-                TabPage page = new TabPage(bo.ToString());
-                //page.Text =  ;
-                AddTabPage(page, bo);
-            }
-
-
-            if (col.Count > 0)
-            {
-                _tabControl.SelectedIndex = 0;
-            }
-            _tabControl.SelectedIndexChanged += tabChangedHandler;
-            TabChanged();
-        }
-
-        /// <summary>
-        /// Handles the event that the user chooses a different tab. Calls the
-        /// TabChanged() method.
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void TabChangedHandler(object sender, EventArgs e)
-        {
-            TabChanged();
+            _collectionTabControlMapper.SetCollection(businessObjectCollection);
         }
 
         /// <summary>
@@ -107,22 +53,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         public void TabChanged()
         {
-            if (_tabControl.SelectedTab != null)
-            {
-                _tabControl.SelectedTab.Controls.Clear();
-                _tabControl.SelectedTab.Controls.Add((Control) _boControl);
-                _boControl.SetBusinessObject(GetBo(_tabControl.SelectedTab));
-            }
-        }
-
-        /// <summary>
-        /// Carries out additional steps when the user selects a different tab
-        /// </summary>
-        private void TabChangedInSTAThread()
-        {
-            _tabControl.SelectedTab.Controls.Clear();
-            _tabControl.SelectedTab.Controls.Add((Control) _boControl);
-            _boControl.SetBusinessObject(GetBo(_tabControl.SelectedTab));
+            _collectionTabControlMapper.TabChanged();
         }
 
         /// <summary>
@@ -141,28 +72,7 @@ namespace Habanero.UI.Forms
         /// </returns>
         public BusinessObject GetBo(TabPage tabPage)
         {
-            if (tabPage == null) return null;
-
-            if (_pageBoTable.ContainsKey(tabPage))
-            {
-                return (BusinessObject) _pageBoTable[tabPage];
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Adds a tab page to represent the given business object
-        /// </summary>
-        /// <param name="page">The TabPage object to add</param>
-        /// <param name="bo">The business ojbect to represent</param>
-        private void AddTabPage(TabPage page, BusinessObject bo)
-        {
-            _tabControl.TabPages.Add(page);
-            _pageBoTable.Add(page, bo);
-            _boPageTable.Add(bo, page);
+            return _collectionTabControlMapper.GetBo(tabPage);
         }
 
         /// <summary>
@@ -173,25 +83,7 @@ namespace Habanero.UI.Forms
         /// <returns>Returns the TabPage object, or null if not found</returns>
         public TabPage GetTabPage(BusinessObject bo)
         {
-            if (_boPageTable.ContainsKey(bo))
-            {
-                return (TabPage) _boPageTable[bo];
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Clears the tab pages
-        /// </summary>
-        private void ClearTabPages()
-        {
-            _tabControl.Controls.Clear();
-            //_tabControl.TabPages.Clear() ;
-            _pageBoTable.Clear();
-            _boPageTable.Clear();
+            return _collectionTabControlMapper.GetTabPage(bo);
         }
 
         /// <summary>
@@ -200,8 +92,8 @@ namespace Habanero.UI.Forms
         /// </summary>
         public BusinessObject CurrentBusinessObject
         {
-            get { return GetBo(_tabControl.SelectedTab); }
-            set { _tabControl.SelectedTab = GetTabPage(value); }
+            get { return _collectionTabControlMapper.CurrentBusinessObject; }
+            set { _collectionTabControlMapper.CurrentBusinessObject = value; }
         }
     }
 }

@@ -42,6 +42,11 @@ namespace Habanero.UI.Forms
                 String dateFormat = (string)_attributes["dateFormat"];
                 DateTimePickerUtil.SetCustomFormat(_dateTimePicker, dateFormat);
             }
+            if (_attributes.Contains("showUpDown"))
+            {
+                bool showUpDown = Convert.ToBoolean(_attributes["showUpDown"]);
+                DateTimePickerUtil.SetShowUpDown(_dateTimePicker, showUpDown);
+            }
             base.InitialiseWithAttributes();
         }
 

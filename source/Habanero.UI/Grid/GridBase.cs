@@ -130,7 +130,9 @@ namespace Habanero.UI.Grid
             _dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
             _dataSetProvider.ObjectInitialiser = _objectInitialiser;
             _uiName = uiName;
-            UIGrid grid = collection.ClassDef.UIDefCol[uiName].UIGrid;
+            ClassDef classDef = collection.ClassDef;
+            UIDef uiDef = classDef.UIDefCol[uiName];
+            UIGrid grid = uiDef.UIGrid;
             _dataTable = _dataSetProvider.GetDataTable(grid);
             _dataTable.TableName = "Table";
             _dateColumnIndices.Clear();
@@ -153,11 +155,10 @@ namespace Habanero.UI.Grid
             {
                 dataColumn = _dataTable.Columns[colNum];
                 PropDef propDef = null;
-                if (collection.ClassDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
+                if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
                 {
-                    propDef = collection.ClassDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
+                    propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
                 }
-
                 if (gridColumn.GridControlType == typeof(DataGridViewComboBoxColumn))
                 {
                     DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();

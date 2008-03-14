@@ -122,16 +122,30 @@ namespace Habanero.UI.Util
             {
                 PropertyInfo propInfo =
                     dateTimePicker.GetType().GetProperty("FormatString", BindingFlags.Instance | BindingFlags.Public);
-                propInfo.SetValue(dateTimePicker, "hh:mm:ss", new object[] {});
+                propInfo.SetValue(dateTimePicker, "hh:mm:ss", new object[] { });
             }
             else if (dateTimePicker is DateTimePicker)
             {
-                DateTimePicker picker = (DateTimePicker) dateTimePicker;
+                DateTimePicker picker = (DateTimePicker)dateTimePicker;
                 picker.Format = DateTimePickerFormat.Time;
             }
         }
 
-		///<summary>
+        /// <summary>
+        /// Specify the time format in the given date-time picker
+        /// </summary>
+        /// <param name="dateTimePicker">The date-time picker</param>
+        /// <param name="showUpDown">Specifies if the Up/Down control must be shown or not</param>
+        public static void SetShowUpDown(Control dateTimePicker, bool showUpDown)
+        {
+            if (dateTimePicker is DateTimePicker)
+            {
+                DateTimePicker picker = (DateTimePicker)dateTimePicker;
+                picker.ShowUpDown = showUpDown;
+            }
+        }
+
+        ///<summary>
 		/// Adds a ValueChanged handler for the date-time picker
 		///</summary>
 		///<param name="dateTimePicker">The date-time picker</param>

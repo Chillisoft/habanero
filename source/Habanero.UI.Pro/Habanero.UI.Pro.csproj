@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="Forms\CheckBoxMapper.cs" />
     <Compile Include="Forms\CollectionComboBoxMapper.cs" />
+    <Compile Include="Forms\CollectionTabControlMapper.cs" />
     <Compile Include="Forms\ComboBoxCollectionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -74,6 +75,8 @@
     <Compile Include="Forms\DefaultBOEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\DelegatedObjectEditor.cs" />
+    <Compile Include="Forms\DelegatedObjectInitialiser.cs" />
     <Compile Include="Forms\EditableGridButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

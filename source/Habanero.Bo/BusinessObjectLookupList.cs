@@ -252,7 +252,11 @@ namespace Habanero.BO
         /// <returns>Returns a collection of display-value pairs</returns>
         public static Dictionary<string, object> CreateDisplayValueDictionary(IBusinessObjectCollection col, bool sortByDisplayValue)
         {
-            if (sortByDisplayValue)
+            if (col == null)
+            {
+                return new Dictionary<string, object>();
+            } 
+            else if (sortByDisplayValue)
             {
                 SortedDictionary<string, object> sortedLookupList = new SortedDictionary<string, object>();
                 foreach (BusinessObject bo in col)

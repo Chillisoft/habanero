@@ -50,6 +50,7 @@ namespace Habanero.BO
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         public event EventHandler<BOEventArgs> Updated;
+        public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
 
         #region Fields
@@ -950,7 +951,7 @@ namespace Habanero.BO
             {
                 if (AllLoaded().ContainsKey(ID.GetObjectNewID()))
                 {
-                    //System.Console.WriteLine("My line");//TODO ??
+                    //System.Console.WriteLine("My line");//TODO: ??
                 }
                 // set the flags back
                 State.IsEditing = false;
@@ -964,6 +965,7 @@ namespace Habanero.BO
                 {
                     AddToLoadedBusinessObjectCol(this);
                 }
+                FireSaved();
             }
             else
             {
@@ -1065,6 +1067,17 @@ namespace Habanero.BO
             if (this.Updated != null)
             {
                 this.Updated(this, new BOEventArgs(this));
+            }
+        }
+
+        /// <summary>
+        /// Fires the Saved event.
+        /// </summary>
+        private void FireSaved()
+        {
+            if (this.Saved != null)
+            {
+                this.Saved(this, new BOEventArgs(this));
             }
         }
 

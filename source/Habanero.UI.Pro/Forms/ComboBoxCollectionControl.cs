@@ -144,8 +144,7 @@ namespace Habanero.UI.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddButtonClickHandler(object sender, EventArgs e)
         {
-     
-                _panelFactoryInfo.ControlMappers.BusinessObject = _collection.ClassDef.CreateNewBusinessObject(_databaseConnection);
+            _panelFactoryInfo.ControlMappers.BusinessObject = _collection.ClassDef.CreateNewBusinessObject(_databaseConnection);
             _collectionComboBox.SelectedIndex = -1;
             _collectionComboBox.Enabled = false;
             _buttons["Add"].Enabled = false;

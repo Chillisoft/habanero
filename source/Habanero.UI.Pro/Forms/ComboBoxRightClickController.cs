@@ -9,7 +9,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Forms;
 
-namespace Habanero.UI.Pro.Forms
+namespace Habanero.UI.Forms
 {
     ///<summary>
     /// This controller sets up the right-click pop-up form behaviour for a combo box.
