@@ -69,7 +69,6 @@ namespace Habanero.BO
         private ITransactionLog _transactionLog;
         protected IDatabaseConnection _connection;
         private bool _hasAutoIncrementingField;
-
         #endregion //Fields
 
         #region Constructors

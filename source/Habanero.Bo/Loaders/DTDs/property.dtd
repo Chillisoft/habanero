@@ -7,7 +7,7 @@
 	name NMTOKEN #REQUIRED
 	type CDATA "String"
 	assembly NMTOKEN "System"
-	readWriteRule (	ReadWrite | ReadOnly | WriteOnce ) "ReadWrite"
+	readWriteRule (	ReadWrite | ReadOnly | WriteOnce | WriteNotNew | WriteNew ) "ReadWrite"
 	databaseField CDATA #IMPLIED
 	default CDATA #IMPLIED
   compulsory ( true | false ) "false"

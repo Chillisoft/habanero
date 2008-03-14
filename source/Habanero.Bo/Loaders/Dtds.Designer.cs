@@ -287,11 +287,11 @@ namespace Habanero.BO.Loaders {
         ///	name NMTOKEN #REQUIRED
         ///	type CDATA &quot;String&quot;
         ///	assembly NMTOKEN &quot;System&quot;
-        ///	readWriteRule (	ReadWrite | ReadOnly | WriteOnce ) &quot;ReadWrite&quot;
+        ///	readWriteRule (	ReadWrite | ReadOnly | WriteOnce | WriteNotNew | WriteNew ) &quot;ReadWrite&quot;
         ///	databaseField CDATA #IMPLIED
         ///	default CDATA #IMPLIED
         ///  compulsory ( true | false ) &quot;false&quot;
-        ///  autoIncrementing ( true | false ) &quot;fa [rest of string was truncated]&quot;;.
+        ///  autoIncremen [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string property {
             get {
@@ -398,7 +398,7 @@ namespace Habanero.BO.Loaders {
         ///	triggeredBy NMTOKEN #IMPLIED
         ///	conditionValue CDATA #IMPLIED
         ///	action NMTOKEN #REQUIRED
-        ///	value CDATA #REQUIRED
+        ///	value CDATA #IMPLIED
         ///  target NMTOKEN #IMPLIED
         ///&gt;.
         /// </summary>

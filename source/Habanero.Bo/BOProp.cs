@@ -20,6 +20,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Threading;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
@@ -114,7 +115,7 @@ namespace Habanero.BO
             {
                 propValue = null;
             }
-
+            
             try
             {
                 if (propValue != null)
@@ -191,10 +192,11 @@ namespace Habanero.BO
             _currentValue = propValue;
             _isObjectNew = isObjectNew;
             //Set up origional properties s.t. property can be backed up and restored.
-            _origInvalidReason = _invalidReason;
-            _origValueIsValid = _isValid;
-            _persistedValue = propValue;
-            _valueBeforeLastEdit = propValue;
+            BackupPropValue();
+            //_origInvalidReason = _invalidReason;
+            //_origValueIsValid = _isValid;
+            //_persistedValue = propValue;
+            //_valueBeforeLastEdit = propValue;
         }
 
         /// <summary>
@@ -259,6 +261,25 @@ namespace Habanero.BO
 								throw;
 							}
 						}
+                    }
+                    switch (_propDef.ReadWriteRule)
+                    {
+                        case PropReadWriteRule.ReadWrite:
+                            break;
+                        case PropReadWriteRule.ReadOnly:
+                            break;
+                        case PropReadWriteRule.WriteOnce:
+                            if (_persistedValue != null && _persistedValue != newValue)
+                            {
+                                throw new BusinessObjectReadWriteRuleException(_propDef);
+                            }
+                            break;
+                        case PropReadWriteRule.WriteNotNew:
+                            break;
+                        case PropReadWriteRule.WriteNew:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                     _isValid = _propDef.isValueValid(DisplayName, newValue, ref _invalidReason);
                     _valueBeforeLastEdit = _currentValue;

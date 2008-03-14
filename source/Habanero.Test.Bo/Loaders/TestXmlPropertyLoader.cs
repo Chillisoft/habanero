@@ -78,8 +78,40 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropertyWithReadWriteRule()
         {
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadWrite"" />");
+            Assert.AreEqual(PropReadWriteRule.ReadWrite, def.ReadWriteRule,
+                            "Property read write rule should be same as that specified in xml");
+        }
+
+        [Test]
+        public void TestPropertyWithReadOnlyRule()
+        {
             PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""ReadOnly"" />");
             Assert.AreEqual(PropReadWriteRule.ReadOnly, def.ReadWriteRule,
+                            "Property read write rule should be same as that specified in xml");
+        }
+
+        [Test]
+        public void TestPropertyWithWriteOnceRule()
+        {
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteOnce"" />");
+            Assert.AreEqual(PropReadWriteRule.WriteOnce, def.ReadWriteRule,
+                            "Property read write rule should be same as that specified in xml");
+        }
+
+        [Test]
+        public void TestPropertyWithWriteNotNewRule()
+        {
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteNotNew"" />");
+            Assert.AreEqual(PropReadWriteRule.WriteNotNew, def.ReadWriteRule,
+                            "Property read write rule should be same as that specified in xml");
+        }
+
+        [Test]
+        public void TestPropertyWithWriteNewRule()
+        {
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" readWriteRule=""WriteNew"" />");
+            Assert.AreEqual(PropReadWriteRule.WriteNew, def.ReadWriteRule,
                             "Property read write rule should be same as that specified in xml");
         }
 
