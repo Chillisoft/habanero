@@ -140,16 +140,14 @@ namespace Habanero.BO
             }
             if ((DateTime) propValue < _minValue)
             {
-                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
-                    propName, Name);
+                errorMessage = GetBaseErrorMessage(propValue, propName);
                 if (Message != null) errorMessage += Message;
                 else errorMessage += "The date cannot be before " + _minValue + ".";
                 return false;
             }
             if ((DateTime) propValue > _maxValue)
             {
-                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
-                    propName, Name);
+                errorMessage = GetBaseErrorMessage(propValue, propName);
                 if (Message != null) errorMessage += Message;
                 else errorMessage += "The date cannot be after " + _maxValue + ".";
                 return false;

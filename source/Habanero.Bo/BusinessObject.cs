@@ -1673,13 +1673,24 @@ namespace Habanero.BO
 				}
 				else
 				{
-			        string errors = reasonNotSaved;
-                    if (!String.IsNullOrEmpty(errors)) errors += Environment.NewLine;
-			        errors += customRuleErrors;
+				    string errors = this.ToString();
+                    errors = AppendErrors(errors,reasonNotSaved);
+                    errors = AppendErrors(errors,customRuleErrors);
+                    //string errors = this.ToString() + Environment.NewLine;
+                    //errors += reasonNotSaved;
+                    //if (!String.IsNullOrEmpty(errors)) errors += Environment.NewLine;
+                    //errors += customRuleErrors;
                     throw new BusObjectInAnInvalidStateException(errors);
 				}
 			}
 		}
+
+        private static string AppendErrors(string errors, string appendError)
+        {
+            if (!String.IsNullOrEmpty(errors)) errors += Environment.NewLine;
+            errors += appendError;
+            return errors;
+        }
 
 
         /// <summary>

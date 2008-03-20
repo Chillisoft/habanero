@@ -33,43 +33,45 @@ namespace Habanero.Test.BO
         {
             PropRuleString rule = new PropRuleString("Surname", "Test", 2, 50, null);
 
-            string errorMessage = "";
-
-            //Test less than max length
-            Assert.IsFalse(rule.isPropValueValid("Propname", "", ref errorMessage));
+            string errorMessage;
+            
+            //Test less than min length
+            errorMessage = "";
+            Assert.IsFalse(rule.isPropValueValid("Propname", "a", ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
             //Test valid data
+            errorMessage = "";
             Assert.IsTrue(rule.isPropValueValid("Propname", "fdfsdafasdfsdf", ref errorMessage));
             Assert.IsFalse(errorMessage.Length > 0);
             //test greater than max length
-            Assert.IsFalse(
-                rule.isPropValueValid("Propname", "MySurnameIsTooLongByFarThisWill Cause and Error in Bus object", ref errorMessage));
+            errorMessage = "";
+            Assert.IsFalse(rule.isPropValueValid("Propname", 
+                "MySurnameIsTooLongByFarThisWill Cause and Error in Bus object", ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
-            //Test lengths and not compulsory
 
+            //Test lengths and not compulsory
             rule = new PropRuleString("Surname", "Test", 10, 20, null);
             errorMessage = "";
-
             Assert.IsTrue(rule.isPropValueValid("Propname", null, ref errorMessage));
             Assert.IsTrue(errorMessage.Length == 0);
+            //test zero length strings
             errorMessage = "";
-            Assert.IsFalse(rule.isPropValueValid("Propname", "", ref errorMessage)); //test zero length strings
-            Assert.IsTrue(errorMessage.Length > 0);
-            errorMessage = "";
+            Assert.IsTrue(rule.isPropValueValid("Propname", "", ref errorMessage)); 
+            Assert.IsTrue(errorMessage.Length == 0);
 
             //Test that it ignores negative max length
             rule = new PropRuleString("Surname", "Test", -10, -1, null);
+            errorMessage = "";
             Assert.IsTrue(rule.isPropValueValid("Propname", "", ref errorMessage)); //test zero length strings
             Assert.IsFalse(errorMessage.Length > 0);
-            errorMessage = "";
 
+            errorMessage = "";
             Assert.IsTrue(rule.isPropValueValid("Propname", "ffff", ref errorMessage)); //test zero length strings
             Assert.IsFalse(errorMessage.Length > 0);
-            errorMessage = "";
 
+            errorMessage = "";
             Assert.IsFalse(rule.isPropValueValid("Propname", 11, ref errorMessage)); //test zero length strings
             Assert.IsTrue(errorMessage.Length > 0);
-            errorMessage = "";
         }
 
         [Test]

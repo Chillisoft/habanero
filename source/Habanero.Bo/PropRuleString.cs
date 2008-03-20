@@ -129,7 +129,6 @@ namespace Habanero.BO
                                 string patternMatch)
 			: base(ruleName, message)
         {
-            //TODO_Err: how to test for a valid regexpression?
             _minLength = minLength;
             _maxLength = maxLength;
             _patternMatch = patternMatch ?? "";
@@ -148,15 +147,14 @@ namespace Habanero.BO
         {
             errorMessage = "";
             //Check if propertyValue is of the correct type.
-            if (propValue == null)
+            if (propValue == null || String.IsNullOrEmpty(Convert.ToString(propValue)))
             {
                 return true;
             }
             if (!(propValue is string))
             {
-                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. " +
-                    "It is not a type of string.",
-                    propName, Name);
+                errorMessage = GetBaseErrorMessage(propValue, propName)
+                        + "It is not a type of string.";
                 return false;
             }
             if (!base.isPropValueValid(propName, propValue, ref errorMessage))
@@ -207,10 +205,9 @@ namespace Habanero.BO
             }
             if (!Regex.IsMatch((string) propValue, _patternMatch))
             {
-                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
-                    propName, Name);
+                errorMessage = GetBaseErrorMessage(propValue, propName);
                 if (Message != null) errorMessage += Message;
-                else errorMessage += "It does not fit the required format.";
+                else errorMessage += "It does not fit the required format of '" + _patternMatch + "'.";
                 return false;
             }
             return true;
@@ -231,22 +228,22 @@ namespace Habanero.BO
             //Check the appropriate length rules
             if (_minLength > 0 && ((string) propValue).Length < _minLength)
             {
-                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
-                    propName, Name);
+                errorMessage = GetBaseErrorMessage(propValue, propName);
                 if (Message != null) errorMessage += Message;
                 else errorMessage += "The length cannot be less than " + _minLength + " character(s).";
                 return false;
             }
             if (_maxLength > 0 && ((string) propValue).Length > _maxLength)
             {
-                errorMessage = String.Format("'{0}' is not valid for the rule '{1}'. ",
-                    propName, Name);
+                errorMessage = GetBaseErrorMessage(propValue, propName);
                 if (Message != null) errorMessage += Message;
                 else errorMessage += "The length cannot be more than " + _maxLength + " character(s).";
                 return false;
             }
             return true;
         }
+
+
 
         /// <summary>
         /// Returns the maximum length the string can be
