@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Data.OleDb;
 using System.Text;
 using Habanero.Base;
 using Habanero.Util;
@@ -147,6 +148,14 @@ namespace Habanero.DB
                 if (paramValue.GetType().Name == "LongText")
                 {
                     ReflectionUtilities.setEnumPropertyValue(newParameter,"OracleType","Clob");
+                }
+            }
+            if (_idbConnection is System.Data.OleDb.OleDbConnection)
+            {
+                System.Data.OleDb.OleDbParameter oleDbParameter = newParameter as System.Data.OleDb.OleDbParameter;
+                if (oleDbParameter != null && paramValue is DateTime && oleDbParameter.OleDbType == OleDbType.DBTimeStamp)
+                {
+                    oleDbParameter.OleDbType = OleDbType.Date;
                 }
             }
         }
