@@ -54,12 +54,12 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates whether the property value is valid against the rules
         /// </summary>
-        /// <param name="propName">The property name being checked</param>
+        /// <param name="displayName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal virtual bool isPropValueValid(string propName, Object propValue,
+        protected internal virtual bool isPropValueValid(string displayName, Object propValue,
                                                          ref string errorMessage)
         {
             errorMessage = "";
@@ -149,11 +149,11 @@ namespace Habanero.BO
 			}
 			return parameters;
 		}
-        protected string GetBaseErrorMessage(object propValue, string propName)
+        protected string GetBaseErrorMessage(object propValue, string displayName)
         {
             string errorMessage;
             errorMessage = String.Format("'{0}' for property '{1}' is not valid for the rule '{2}'. ",
-                                         propValue, propName, Name);
+                                         propValue, displayName, Name);
             return errorMessage;
         }
     }

@@ -35,6 +35,7 @@ namespace Habanero.BO
         private int _maxLength = -1;
         private int _minLength = 0;
     	private string _patternMatch = ""; //regex pattern match
+        private string _patternMatchMessage = "";
 
         ///// <summary>
         ///// Constructor to initialise a new rule
@@ -52,6 +53,8 @@ namespace Habanero.BO
         //    _minLength = minLength;
         //}
 
+        #region Constructors
+
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
@@ -63,6 +66,55 @@ namespace Habanero.BO
 		{
 			base.Parameters = parameters;
 		}
+
+        /// <summary>
+        /// Constructor to initialise a new rule
+        /// </summary>
+        /// <param name="ruleName">The rule name</param>
+        /// <param name="message">The rule failure message</param>
+        /// <param name="minLength">The minimum length required for the string</param>
+        /// <param name="maxLength">The maximum length allowed for the string</param>
+        /// <param name="patternMatch">The pattern match as a regular
+        /// expression that the string must conform to.  See 
+        /// System.Text.RegularExpressions for more information on regular
+        /// expression formatting.</param>
+        public PropRuleString(string ruleName,
+                               string message,
+                                int minLength,
+                                int maxLength,
+                                string patternMatch)
+            : base(ruleName, message)
+        {
+            _minLength = minLength;
+            _maxLength = maxLength;
+            _patternMatch = patternMatch ?? "";
+        }
+
+        /// <summary>
+        /// Constructor to initialise a new rule
+        /// </summary>
+        /// <param name="ruleName">The rule name</param>
+        /// <param name="message">The rule failure message</param>
+        /// <param name="minLength">The minimum length required for the string</param>
+        /// <param name="maxLength">The maximum length allowed for the string</param>
+        /// <param name="patternMatch">The pattern match as a regular expression that the string must conform to.  
+        /// See System.Text.RegularExpressions for more information on regular expression formatting.</param>
+        /// <param name="patternMatchMessage">This message will be used when the Pattern Match rule has failed.</param>
+        public PropRuleString(string ruleName,
+                               string message,
+                                int minLength,
+                                int maxLength,
+                                string patternMatch,
+                                string patternMatchMessage)
+            : base(ruleName, message)
+        {
+            _minLength = minLength;
+            _maxLength = maxLength;
+            _patternMatchMessage = patternMatchMessage;
+            _patternMatch = patternMatch ?? "";
+        }
+
+        #endregion //Constructors
 
         /// <summary>
         /// Sets up the parameters to the rule, that is the individual pairs
@@ -81,6 +133,9 @@ namespace Habanero.BO
 						{
 							case "patternMatch":
 								_patternMatch = Convert.ToString(value);
+								break;
+                            case "patternMatchMessage":
+								_patternMatchMessage = Convert.ToString(value);
 								break;
 							case "minLength":
 								_minLength = Convert.ToInt32(value);
@@ -112,37 +167,14 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Constructor to initialise a new rule
-        /// </summary>
-        /// <param name="ruleName">The rule name</param>
-        /// <param name="message">The rule failure message</param>
-        /// <param name="minLength">The minimum length required for the string</param>
-        /// <param name="maxLength">The maximum length allowed for the string</param>
-        /// <param name="patternMatch">The pattern match as a regular
-        /// expression that the string must conform to.  See 
-        /// System.Text.RegularExpressions for more information on regular
-        /// expression formatting.</param>
-        public PropRuleString(string ruleName,
-                               string message,
-                                int minLength,
-                                int maxLength,
-                                string patternMatch)
-			: base(ruleName, message)
-        {
-            _minLength = minLength;
-            _maxLength = maxLength;
-            _patternMatch = patternMatch ?? "";
-        }
-
-        /// <summary>
         /// Indicates whether the property value is valid against the rules
         /// </summary>
-        /// <param name="propName">The property name being checked</param>
+        /// <param name="displayName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal override bool isPropValueValid(string propName, Object propValue,
+        protected internal override bool isPropValueValid(string displayName, Object propValue,
                                                           ref string errorMessage)
         {
             errorMessage = "";
@@ -153,21 +185,21 @@ namespace Habanero.BO
             }
             if (!(propValue is string))
             {
-                errorMessage = GetBaseErrorMessage(propValue, propName)
+                errorMessage = GetBaseErrorMessage(propValue, displayName)
                         + "It is not a type of string.";
                 return false;
             }
-            if (!base.isPropValueValid(propName, propValue, ref errorMessage))
+            if (!base.isPropValueValid(displayName, propValue, ref errorMessage))
             {
                 return false;
             }
  
-            if (!CheckLengthRule(propName, propValue, ref errorMessage))
+            if (!CheckLengthRule(displayName, propValue, ref errorMessage))
             {
                 return false;
             }
 
-            if (!CheckPatternMatchRule(propName, propValue, ref errorMessage))
+            if (!CheckPatternMatchRule(displayName, propValue, ref errorMessage))
             {
                 return false;
             }
@@ -183,8 +215,9 @@ namespace Habanero.BO
 			List<string> parameters = new List<string>();
 			parameters.Add("minLength");
 			parameters.Add("maxLength");
-			parameters.Add("patternMatch");
-			return parameters;
+            parameters.Add("patternMatch");
+            parameters.Add("patternMatchMessage");
+            return parameters;
     	}
 
     	/// <summary>
@@ -206,8 +239,18 @@ namespace Habanero.BO
             if (!Regex.IsMatch((string) propValue, _patternMatch))
             {
                 errorMessage = GetBaseErrorMessage(propValue, propName);
-                if (Message != null) errorMessage += Message;
-                else errorMessage += "It does not fit the required format of '" + _patternMatch + "'.";
+                if (!String.IsNullOrEmpty(_patternMatchMessage))
+                {
+                    errorMessage += _patternMatchMessage;
+                }
+                else if (!String.IsNullOrEmpty(Message))
+                {
+                    errorMessage += Message;
+                }
+                else
+                {
+                    errorMessage += "It does not fit the required format of '" + _patternMatch + "'.";
+                }
                 return false;
             }
             return true;
@@ -263,13 +306,23 @@ namespace Habanero.BO
 			protected set { _minLength = value; }
         }
 
-		/// <summary>
-		/// Returns the pattern match regular expression for the string
-		/// </summary>
-		public string PatternMatch
-		{
-			get { return _patternMatch; }
-			protected set { _patternMatch = value; }
-		}
+        /// <summary>
+        /// Returns the pattern match regular expression for the string
+        /// </summary>
+        public string PatternMatch
+        {
+            get { return _patternMatch; }
+            protected set { _patternMatch = value; }
+        }
+
+
+        /// <summary>
+        /// Returns the pattern match error message which is displayed if the pattern match fails.
+        /// </summary>
+        public string PatternMatchMessage
+        {
+            get { return _patternMatchMessage; }
+            set { _patternMatchMessage = value; }
+        }
     }
 }

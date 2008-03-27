@@ -123,27 +123,27 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates whether the property value is valid against the rules
         /// </summary>
-        /// <param name="propName">The property name being checked</param>
+        /// <param name="displayName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal override bool isPropValueValid(string propName, object propValue, ref string errorMessage)
+        protected internal override bool isPropValueValid(string displayName, object propValue, ref string errorMessage)
         {
-            bool valueValid = base.isPropValueValid(propName, propValue, ref errorMessage);
+            bool valueValid = base.isPropValueValid(displayName, propValue, ref errorMessage);
             if (propValue is int)
             {
                 int intPropRule = (int)propValue;
                 if (intPropRule < _minValue)
                 {
-                    errorMessage = GetBaseErrorMessage(propValue, propName);
+                    errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (Message != null) errorMessage += Message;
                     else errorMessage += "The value cannot be less than " + _minValue + ".";
                     valueValid = false;
                 }
                 if (intPropRule > _maxValue)
                 {
-                    errorMessage = GetBaseErrorMessage(propValue, propName);
+                    errorMessage = GetBaseErrorMessage(propValue, displayName);
                     if (Message != null) errorMessage += Message;
                     else errorMessage += "The value cannot be more than " + _maxValue + ".";
                     valueValid = false;

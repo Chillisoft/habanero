@@ -121,16 +121,16 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates whether the property value is valid against the rules
         /// </summary>
-        /// <param name="propName">The property name being checked</param>
+        /// <param name="displayName">The property name being checked</param>
         /// <param name="propValue">The value to check</param>
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal override bool isPropValueValid(string propName, Object propValue,
+        protected internal override bool isPropValueValid(string displayName, Object propValue,
                                                           ref string errorMessage)
         {
             errorMessage = "";
-            if (!base.isPropValueValid(propName, propValue, ref errorMessage))
+            if (!base.isPropValueValid(displayName, propValue, ref errorMessage))
             {
                 return false;
             }
@@ -140,14 +140,14 @@ namespace Habanero.BO
             }
             if ((DateTime) propValue < _minValue)
             {
-                errorMessage = GetBaseErrorMessage(propValue, propName);
+                errorMessage = GetBaseErrorMessage(propValue, displayName);
                 if (Message != null) errorMessage += Message;
                 else errorMessage += "The date cannot be before " + _minValue + ".";
                 return false;
             }
             if ((DateTime) propValue > _maxValue)
             {
-                errorMessage = GetBaseErrorMessage(propValue, propName);
+                errorMessage = GetBaseErrorMessage(propValue, displayName);
                 if (Message != null) errorMessage += Message;
                 else errorMessage += "The date cannot be after " + _maxValue + ".";
                 return false;
