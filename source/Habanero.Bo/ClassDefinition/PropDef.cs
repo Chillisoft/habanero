@@ -313,6 +313,33 @@ namespace Habanero.BO.ClassDefinition
         /// of a new object will be set to</param>
         /// <param name="compulsory">Whether this property is a required field or not.</param>
         /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        public PropDef(string propertyName,
+                    Type propType,
+                    PropReadWriteRule propRWStatus,
+                    string databaseFieldName,
+                    object defaultValue,
+                    bool compulsory,
+                    bool autoIncrementing)
+            : this(propertyName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, compulsory, autoIncrementing)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="propType">The type of the property (e.g. string)</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValue">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
         /// <param name="length">The maximum length for a string</param>
         /// <param name="displayName">The display name for the property</param>
         /// <param name="description">The description of the property</param>

@@ -528,11 +528,16 @@ namespace Habanero.Test.BO
 
         private static BOProp CreateWriteOnceBoProp(bool isNew)
         {
+            return CreateWriteOnceBoProp(isNew, null);
+        }
+
+        private static BOProp CreateWriteOnceBoProp(bool isNew, object defaultValue)
+        {
             BOProp boProp;
-            PropDef propDef = new PropDef("TestProp", "System", "String",
-                                          PropReadWriteRule.WriteOnce, null, null, true, false);
+            PropDef propDef = new PropDef("TestProp", typeof(String),
+                                          PropReadWriteRule.WriteOnce, null, defaultValue, true, false);
             boProp = propDef.CreateBOProp(isNew);
-            Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
+            Assert.AreEqual(defaultValue, boProp.Value, "BOProp value should start being the default value");
             boProp.Value = "TestValue";
             Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value.");
             boProp.Value = "TestValue2";
@@ -549,12 +554,19 @@ namespace Habanero.Test.BO
         {
             CreateWriteOnceBoProp(true);
         }
+ 
+        [Test]
+        public void TestUpdateProp_WriteOnce_New_With_Default()
+        {
+            CreateWriteOnceBoProp(true, "My Default");
+        }
 
         [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
         public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain()
         {
             BOProp boProp = CreateWriteOnceBoProp(true);
             boProp.BackupPropValue();
+            boProp.IsObjectNew = false;
             boProp.Value = "NewValue";
         }
 

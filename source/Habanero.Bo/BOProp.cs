@@ -288,7 +288,7 @@ namespace Habanero.BO
                     }
                     break;
                 case PropReadWriteRule.WriteOnce:
-                    if (_persistedValue != null && _persistedValue != newValue)
+                    if (!_isObjectNew && _persistedValue != null && _persistedValue != newValue)
                     {
                         throw new BusinessObjectReadWriteRuleException(_propDef);
                     }
