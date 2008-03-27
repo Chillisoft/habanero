@@ -1655,6 +1655,7 @@ namespace Habanero.BO
 				string reasonNotSaved = "";
                 string customRuleErrors = "";
 			    bool isvalid;
+                BeforeSave(transactionCommitter);
                 if (State.IsDeleted)
                 {
                     isvalid = true;
@@ -1666,7 +1667,6 @@ namespace Habanero.BO
                 }
 			    if (isvalid)
 				{
-                    BeforeSave(transactionCommitter);
 				    CheckPersistRules();
                     CascadeIfDeleting(transactionCommitter);
 					UpdatedConcurrencyControlProperties();
