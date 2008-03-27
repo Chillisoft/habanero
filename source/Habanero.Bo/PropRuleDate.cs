@@ -141,15 +141,27 @@ namespace Habanero.BO
             if ((DateTime) propValue < _minValue)
             {
                 errorMessage = GetBaseErrorMessage(propValue, displayName);
-                if (Message != null) errorMessage += Message;
-                else errorMessage += "The date cannot be before " + _minValue + ".";
+                if (!String.IsNullOrEmpty(Message))
+                {
+                    errorMessage += Message;
+                }
+                else
+                {
+                    errorMessage += "The date cannot be before " + _minValue + ".";
+                }
                 return false;
             }
             if ((DateTime) propValue > _maxValue)
             {
                 errorMessage = GetBaseErrorMessage(propValue, displayName);
-                if (Message != null) errorMessage += Message;
-                else errorMessage += "The date cannot be after " + _maxValue + ".";
+                if (!String.IsNullOrEmpty(Message))
+                {
+                    errorMessage += Message;
+                }
+                else
+                {
+                    errorMessage += "The date cannot be after " + _maxValue + ".";
+                }
                 return false;
             }
             return true;

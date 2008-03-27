@@ -137,15 +137,27 @@ namespace Habanero.BO
                 if (intPropRule < _minValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
-                    if (Message != null) errorMessage += Message;
-                    else errorMessage += "The value cannot be less than " + _minValue + ".";
+                    if (!String.IsNullOrEmpty(Message))
+                    {
+                        errorMessage += Message;
+                    }
+                    else
+                    {
+                        errorMessage += "The value cannot be less than " + _minValue + ".";
+                    }
                     valueValid = false;
                 }
                 if (intPropRule > _maxValue)
                 {
                     errorMessage = GetBaseErrorMessage(propValue, displayName);
-                    if (Message != null) errorMessage += Message;
-                    else errorMessage += "The value cannot be more than " + _maxValue + ".";
+                    if (!String.IsNullOrEmpty(Message))
+                    {
+                        errorMessage += Message;
+                    }
+                    else
+                    {
+                        errorMessage += "The value cannot be more than " + _maxValue + ".";
+                    }
                     valueValid = false;
                 }
             }

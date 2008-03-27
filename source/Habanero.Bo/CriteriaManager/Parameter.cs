@@ -208,7 +208,15 @@ namespace Habanero.BO.CriteriaManager
                 case ParameterType.Bool:
                     return Convert.ToBoolean(_parameterValue);
                 case ParameterType.Date:
-                    return Convert.ToDateTime(_parameterValue);
+                    switch(_parameterValue.ToUpper())
+                    {
+                        case "TODAY":
+                            return DateTime.Today;
+                        case "NOW":
+                            return DateTime.Now;
+                        default:
+                            return Convert.ToDateTime(_parameterValue);
+                    }
                 case ParameterType.Number:
                     return Convert.ToDecimal(_parameterValue);
                 case ParameterType.String:

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base;
+using Habanero.BO.CriteriaManager;
 using Habanero.Util;
 using Habanero.Util.File;
 
@@ -233,16 +234,23 @@ namespace Habanero.BO
             }
             else
             {
-                BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[MyBoType]);
-                if (_criteria == null) col.Load("", _sort);
-                else col.Load(_criteria, _sort);
+                ClassDef classDef = ClassDef.ClassDefs[MyBoType];
+                BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
+                if (_criteria != null)
+                {
+                    col.Load(_criteria, _sort);
+                }
+                else
+                {
+                    col.Load("", _sort);
+                }
                 _displayValueDictionary = CreateDisplayValueDictionary(col, String.IsNullOrEmpty(Sort));
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
             }
         }
-                
-		/// <summary>
+
+        /// <summary>
 		/// Returns a collection of string Guid pairs from the business object
 		/// collection provided. Each pair consists of a string version of a
 		/// business object and the object's ID.

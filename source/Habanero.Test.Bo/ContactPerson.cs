@@ -49,6 +49,7 @@ namespace Habanero.Test.BO
 				<class name=""ContactPerson"" assembly=""Habanero.Test.BO"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
@@ -113,6 +114,8 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+        #region Properties
+
         public Guid ContactPersonID
         {
             get { return (Guid)GetPropertyValue("ContactPersonID"); }
@@ -128,6 +131,14 @@ namespace Habanero.Test.BO
             get { return (string)GetPropertyValue("FirstName"); }
             set { SetPropertyValue("FirstName", value); }
         }
+
+        public DateTime DateOfBirth
+        {
+            get { return (DateTime)GetPropertyValue("DateOfBirth"); }
+            set { SetPropertyValue("DateOfBirth", value); }
+        }
+
+        #endregion //Properties
 
         public override string ToString()
         {

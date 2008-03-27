@@ -327,15 +327,15 @@ namespace Habanero.Test
             return _primaryKey.GetObjectNewID();
         }
 
-        public static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol()
+        public static BusinessObjectCollection<ContactPerson> LoadBusinessObjCol()
         {
             return LoadBusinessObjCol("", "");
         }
 
-        public static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
+        public static BusinessObjectCollection<ContactPerson> LoadBusinessObjCol(string searchCriteria,
                                                                                               string orderByClause)
         {
-            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(GetClassDef());
+            BusinessObjectCollection<ContactPerson> bOCol = new BusinessObjectCollection<ContactPerson>(GetClassDef());
             bOCol.Load(searchCriteria, orderByClause);
             return bOCol;
         }

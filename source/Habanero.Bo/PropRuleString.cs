@@ -272,15 +272,27 @@ namespace Habanero.BO
             if (_minLength > 0 && ((string) propValue).Length < _minLength)
             {
                 errorMessage = GetBaseErrorMessage(propValue, propName);
-                if (Message != null) errorMessage += Message;
-                else errorMessage += "The length cannot be less than " + _minLength + " character(s).";
+                if (!String.IsNullOrEmpty(Message))
+                {
+                    errorMessage += Message;
+                }
+                else
+                {
+                    errorMessage += "The length cannot be less than " + _minLength + " character(s).";
+                }
                 return false;
             }
             if (_maxLength > 0 && ((string) propValue).Length > _maxLength)
             {
                 errorMessage = GetBaseErrorMessage(propValue, propName);
-                if (Message != null) errorMessage += Message;
-                else errorMessage += "The length cannot be more than " + _maxLength + " character(s).";
+                if (!String.IsNullOrEmpty(Message))
+                {
+                    errorMessage += Message;
+                }
+                else
+                {
+                    errorMessage += "The length cannot be more than " + _maxLength + " character(s).";
+                }
                 return false;
             }
             return true;

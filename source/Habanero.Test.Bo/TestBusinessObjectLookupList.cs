@@ -40,6 +40,13 @@ namespace Habanero.Test.BO
         public void SetupTestFixture()
         {
             SetupDBConnection();
+        }
+
+        [SetUp]
+        public void SetupTest()
+        {
+            ContactPerson.DeleteAllContactPeople();
+            ContactPerson.ClearLoadedBusinessObjectBaseCol();
             ContactPerson.CreateSampleData();
             ContactPerson.LoadDefaultClassDef();
         }
@@ -84,10 +91,98 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCriteria()
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO", 
+            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
                 "ContactPerson", "surname='zzz'", "");
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
+        }
+
+        [Test]
+        public void TestTodayDateStringCriteria()
+        {
+            ContactPerson.DeleteAllContactPeople();
+            BusinessObjectCollection<ContactPerson> myCol = new BusinessObjectCollection<ContactPerson>();
+            myCol.LoadAll();
+            Assert.AreEqual(myCol.Count, 0);
+            ContactPerson contactPerson1 = new ContactPerson();
+            contactPerson1.Surname = "aaa";
+            contactPerson1.DateOfBirth = DateTime.Today.AddDays(-1);
+            contactPerson1.Save();
+            ContactPerson contactPerson2 = new ContactPerson();
+            contactPerson2.Surname = "bbb";
+            contactPerson2.DateOfBirth = DateTime.Today;
+            contactPerson2.Save();
+            ContactPerson contactPerson3 = new ContactPerson();
+            contactPerson3.Surname = "ccc";
+            contactPerson3.DateOfBirth = DateTime.Today.AddDays(1);
+            contactPerson3.Save();
+
+            BusinessObjectLookupList businessObjectLookupList;
+            Dictionary<string, object> col;
+
+            //ContactPerson.ClearContactPersonCol();
+            businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "DateOfBirth < 'Today'", "");
+            col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            Assert.AreEqual(1, col.Count);
+            Assert.IsTrue(col.ContainsValue(contactPerson1));
+            businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "DateOfBirth = 'today'", "");
+            col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            Assert.AreEqual(1, col.Count);
+            Assert.IsTrue(col.ContainsValue(contactPerson2));
+            businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "DateOfBirth >= TODAY", "");
+            col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            Assert.AreEqual(2, col.Count);
+            Assert.IsTrue(col.ContainsValue(contactPerson2));
+            Assert.IsTrue(col.ContainsValue(contactPerson3));
+        }
+
+        [Test]
+        public void TestNowDateStringCriteria()
+        {
+            ContactPerson.DeleteAllContactPeople();
+            BusinessObjectCollection<ContactPerson> myCol = new BusinessObjectCollection<ContactPerson>();
+            myCol.LoadAll();
+            Assert.AreEqual(myCol.Count, 0);
+            ContactPerson contactPerson1 = new ContactPerson();
+            contactPerson1.Surname = "aaa";
+            contactPerson1.DateOfBirth = DateTime.Now.AddMinutes(-1);
+            contactPerson1.Save();
+            ContactPerson contactPerson2 = new ContactPerson();
+            contactPerson2.Surname = "bbb";
+            contactPerson2.DateOfBirth = DateTime.Now.AddMinutes(-1);
+            contactPerson2.Save();
+            ContactPerson contactPerson3 = new ContactPerson();
+            contactPerson3.Surname = "ccc";
+            contactPerson3.DateOfBirth = DateTime.Now.AddMinutes(-1);
+            contactPerson3.Save();
+
+            BusinessObjectLookupList businessObjectLookupList;
+            Dictionary<string, object> col;
+
+            //ContactPerson.ClearContactPersonCol();
+            businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "DateOfBirth < 'Now'", "");
+            col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            Assert.AreEqual(3, col.Count);
+            Assert.IsTrue(col.ContainsValue(contactPerson1));
+            Assert.IsTrue(col.ContainsValue(contactPerson2));
+            Assert.IsTrue(col.ContainsValue(contactPerson3));
+            businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "DateOfBirth > 'now'", "");
+            col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            Assert.AreEqual(0, col.Count);
+            ContactPerson contactPerson4 = new ContactPerson();
+            contactPerson4.Surname = "ddd";
+            contactPerson4.DateOfBirth = DateTime.Now.AddMinutes(5);
+            contactPerson4.Save();
+            businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
+                "ContactPerson", "DateOfBirth > NOW", "");
+            col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
+            Assert.AreEqual(1, col.Count);
+            Assert.IsTrue(col.ContainsValue(contactPerson4));
         }
 
         [Test]

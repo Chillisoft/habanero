@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.BO;
 using NUnit.Framework;
 
@@ -56,7 +57,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjects()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = new ContactPerson();
             p.FirstName = "a";
@@ -71,7 +72,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjectsFromObjectManager()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = new ContactPerson();
             p.FirstName = "a";
@@ -89,7 +90,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjectsFromObjectManagerAndFresh()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = new ContactPerson();
             p.FirstName = "a";
@@ -111,7 +112,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjectsSortOrder()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = new ContactPerson();
             p.FirstName = "a";
@@ -133,7 +134,7 @@ namespace Habanero.Test.General
         public void TestLoadBusinessObjectsSearchCriteria()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = new ContactPerson();
             p.FirstName = "a";
@@ -152,10 +153,83 @@ namespace Habanero.Test.General
         }
 
         [Test]
+        public void TestLoadBusinessObjectsWithTodayDateStringSearchCriteria()
+        {
+            ContactPerson.DeleteAllContactPeople();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
+            Assert.AreEqual(myCol.Count, 0);
+            ContactPerson contactPerson1 = new ContactPerson();
+            contactPerson1.FirstName = "a";
+            contactPerson1.Surname = "aaa";
+            contactPerson1.DateOfBirth = DateTime.Today.AddDays(-1);
+            contactPerson1.Save();
+            ContactPerson contactPerson2 = new ContactPerson();
+            contactPerson2.FirstName = "b";
+            contactPerson2.Surname = "bbb";
+            contactPerson2.DateOfBirth = DateTime.Today;
+            contactPerson2.Save();
+            ContactPerson contactPerson3 = new ContactPerson();
+            contactPerson3.FirstName = "c";
+            contactPerson3.Surname = "ccc";
+            contactPerson3.DateOfBirth = DateTime.Today.AddDays(1);
+            contactPerson3.Save();
+            //ContactPerson.ClearContactPersonCol();
+            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth < 'Today'", "DateOfBirth");
+            Assert.AreEqual(1, myCol.Count);
+            Assert.AreSame(contactPerson1, myCol[0]);
+            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth = today", "DateOfBirth");
+            Assert.AreEqual(1, myCol.Count);
+            Assert.AreSame(contactPerson2, myCol[0]);
+            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth >= 'TODAY'", "DateOfBirth");
+            Assert.AreEqual(2, myCol.Count);
+            Assert.AreSame(contactPerson2, myCol[0]);
+            Assert.AreSame(contactPerson3, myCol[1]);
+        }
+
+        [Test]
+        public void TestLoadBusinessObjectsWithNowDateStringSearchCriteria()
+        {
+            ContactPerson.DeleteAllContactPeople();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
+            Assert.AreEqual(myCol.Count, 0);
+            ContactPerson contactPerson1 = new ContactPerson();
+            contactPerson1.FirstName = "a";
+            contactPerson1.Surname = "aaa";
+            contactPerson1.DateOfBirth = DateTime.Now.AddMinutes(-1);
+            contactPerson1.Save();
+            ContactPerson contactPerson2 = new ContactPerson();
+            contactPerson2.FirstName = "b";
+            contactPerson2.Surname = "bbb";
+            contactPerson2.DateOfBirth = DateTime.Now.AddMinutes(-1);
+            contactPerson2.Save();
+            ContactPerson contactPerson3 = new ContactPerson();
+            contactPerson3.FirstName = "c";
+            contactPerson3.Surname = "ccc";
+            contactPerson3.DateOfBirth = DateTime.Now.AddMinutes(-1);
+            contactPerson3.Save();
+            //ContactPerson.ClearContactPersonCol();
+            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth < 'Now'", "FirstName");
+            Assert.AreEqual(3, myCol.Count);
+            Assert.AreSame(contactPerson1, myCol[0]);
+            Assert.AreSame(contactPerson2, myCol[1]);
+            Assert.AreSame(contactPerson3, myCol[2]);
+            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth > 'now'", "FirstName");
+            Assert.AreEqual(0, myCol.Count);
+            ContactPerson contactPerson4 = new ContactPerson();
+            contactPerson4.FirstName = "d";
+            contactPerson4.Surname = "ddd";
+            contactPerson4.DateOfBirth = DateTime.Now.AddMinutes(5);
+            contactPerson4.Save();
+            myCol = ContactPerson.LoadBusinessObjCol("DateOfBirth > NOW", "FirstName");
+            Assert.AreEqual(1, myCol.Count);
+            Assert.AreSame(contactPerson4, myCol[0]);
+        }
+
+        [Test]
         public void TestLoadBusinessObjectsSearchCriteriaWithOR()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = new ContactPerson();
             p.FirstName = "a";
@@ -185,7 +259,7 @@ namespace Habanero.Test.General
         public void TestRefreshBOCol()
         {
             ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection<BusinessObject> myCol = ContactPerson.LoadBusinessObjCol();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
             Assert.AreEqual(myCol.Count, 0);
             ContactPerson p = new ContactPerson();
             p.FirstName = "a";
