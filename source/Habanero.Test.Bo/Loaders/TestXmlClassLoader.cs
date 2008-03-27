@@ -130,6 +130,38 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
+        public void TestAutoDisplayName()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"">
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			");
+            Assert.AreEqual("Test Class", def.DisplayName);
+        }
+
+        [Test]
+        public void TestDisplayName()
+        {
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" displayName=""Testing Class"">
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			");
+            Assert.AreEqual("Testing Class", def.DisplayName);
+        }
+
+        [Test]
         public void TestTableNameWithSpaces()
         {
             ClassDef def =

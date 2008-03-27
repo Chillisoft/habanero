@@ -80,6 +80,7 @@ namespace Habanero.BO.ClassDefinition
 		private string _databaseName = "Default";
 		//private string _SelectSql = "";
 		private string _tableName = "";
+        private string _displayName = "";
 		private bool _hasObjectID = true;
 		private PrimaryKeyDef _primaryKeyDef;
 		private PropDefCol _propDefCol;
@@ -95,7 +96,8 @@ namespace Habanero.BO.ClassDefinition
 
         private static PropDef _versionNumberPropDef =
             new PropDef("SyncVersionNumber", typeof (int), PropReadWriteRule.ReadWrite, 0);
-		
+
+
         #region Constructors
 
         /// <summary>
@@ -115,7 +117,7 @@ namespace Habanero.BO.ClassDefinition
                           KeyDefCol keyDefCol,
                           RelationshipDefCol relationshipDefCol,
                           UIDefCol uiDefCol)
-			: this(classType, null, null, null, tableName,primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
+            : this(classType, null, null, null, tableName, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
         {
         }
 
@@ -129,7 +131,7 @@ namespace Habanero.BO.ClassDefinition
                         RelationshipDefCol relationshipDefCol,
                         UIDefCol uiDefCol) :
                             this(
-							classType, null, null, null, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
+                            classType, null, null, null, null, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
         {
         }
 
@@ -141,7 +143,7 @@ namespace Habanero.BO.ClassDefinition
                         PropDefCol propDefCol,
                         KeyDefCol keyDefCol,
                         RelationshipDefCol relationshipDefCol) :
-							this(classType, null, null, null, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, null)
+                            this(classType, null, null, null, null, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, null)
         {
         }
 
@@ -154,8 +156,8 @@ namespace Habanero.BO.ClassDefinition
                         string tableName,
                         PropDefCol propDefCol,
                         KeyDefCol keyDefCol,
-                        RelationshipDefCol relationshipDefCol) 
-			:this(classType, null, null, databaseName, tableName, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, null)
+                        RelationshipDefCol relationshipDefCol)
+            : this(classType, null, null, databaseName, tableName, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, null)
         {
         }
 
@@ -171,7 +173,7 @@ namespace Habanero.BO.ClassDefinition
                         KeyDefCol keyDefCol,
                         RelationshipDefCol relationshipDefCol,
                         UIDefCol uiDefCol)
-			:this(classType,null,null,databaseName,tableName,primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol,uiDefCol)
+			:this(classType,null,null,databaseName,tableName, null,primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol,uiDefCol)
         {}
 
 		/// <summary>
@@ -184,7 +186,21 @@ namespace Habanero.BO.ClassDefinition
 						KeyDefCol keyDefCol,
 						RelationshipDefCol relationshipDefCol,
 						UIDefCol uiDefCol)
-			:this(null,assemblyName,className,null,null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
+			:this(assemblyName,className, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
+		{}
+
+		/// <summary>
+		/// As before, but excludes the table name
+		/// </summary>
+		public ClassDef(string assemblyName,
+                        string className,
+                        string displayName,
+						PrimaryKeyDef primaryKeyDef,
+						PropDefCol propDefCol,
+						KeyDefCol keyDefCol,
+						RelationshipDefCol relationshipDefCol,
+						UIDefCol uiDefCol)
+			:this(null,assemblyName,className,null,null, displayName, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
 		{}
 
 		private ClassDef(Type classType,
@@ -192,6 +208,7 @@ namespace Habanero.BO.ClassDefinition
 						string className,
 						string databaseName,
 						string tableName,
+                        string displayName,
 						PrimaryKeyDef primaryKeyDef,
 						PropDefCol propDefCol,
 						KeyDefCol keyDefCol,
@@ -208,7 +225,8 @@ namespace Habanero.BO.ClassDefinition
 				_classType = null;
 			}
 			_databaseName = databaseName;
-			if (tableName == null || tableName.Length == 0)
+		    _displayName = displayName ?? "";
+		    if (tableName == null || tableName.Length == 0)
 				_tableName = _className;
 			else
 				_tableName = tableName;
@@ -294,6 +312,23 @@ namespace Habanero.BO.ClassDefinition
                 return _tableName; //.ToLower() ;
             }
             set { _tableName = value; }
+        }
+
+        ///<summary>
+        /// The display name for the class
+        ///</summary>
+        public string DisplayName
+        {
+            get
+            {
+                if (!String.IsNullOrEmpty(_displayName))
+                {
+                    return _displayName;
+                } else
+                {
+                    return StringUtilities.DelimitPascalCase(ClassName, " ");
+                }
+            }
         }
 
         /// <summary>

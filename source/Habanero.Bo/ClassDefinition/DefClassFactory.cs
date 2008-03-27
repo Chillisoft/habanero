@@ -36,11 +36,11 @@ namespace Habanero.BO.ClassDefinition
 			return new BusinessObjectLookupList(assemblyName, className, criteria, sort);
 		}
 
-		public ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef,
+        public ClassDef CreateClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef,
 		                               PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol,
 		                               UIDefCol uiDefCol)
 		{
-			return new ClassDef(assemblyName, className, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol);
+			return new ClassDef(assemblyName, className, displayName, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol);
 		}
 
 		public DatabaseLookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className)

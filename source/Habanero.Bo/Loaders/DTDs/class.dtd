@@ -9,5 +9,6 @@
 		name NMTOKEN #REQUIRED
 		assembly NMTOKEN #REQUIRED
 		table CDATA #IMPLIED
+		displayName CDATA #IMPLIED
 >
 

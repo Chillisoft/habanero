@@ -34,15 +34,16 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlClassLoader : XmlLoader
     {
-        private PropDefCol _PropDefCol;
-        private PrimaryKeyDef _PrimaryKeyDef;
-        private KeyDefCol _KeyDefCol;
-        private RelationshipDefCol _RelationshipDefCol;
-        private string _ClassName;
-        private string _AssemblyName;
-        private SuperClassDef _SuperClassDef;
-        private UIDefCol _UIDefCol;
-        private string _TableName;
+        private PropDefCol _propDefCol;
+        private PrimaryKeyDef _primaryKeyDef;
+        private KeyDefCol _keyDefCol;
+        private RelationshipDefCol _relationshipDefCol;
+        private string _className;
+        private string _assemblyName;
+        private SuperClassDef _superClassDef;
+        private UIDefCol _uiDefCol;
+        private string _tableName;
+        private string _displayName;
         //private bool _SupportsSynchronising;
 
         /// <summary>
@@ -100,18 +101,18 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a class definition</returns>
         protected override object Create()
         {
-			ClassDef def = _defClassFactory.CreateClassDef(_AssemblyName, _ClassName, _PrimaryKeyDef, _PropDefCol, 
-							 _KeyDefCol, _RelationshipDefCol, _UIDefCol);
+            ClassDef def = _defClassFactory.CreateClassDef(_assemblyName, _className, _displayName, _primaryKeyDef, _propDefCol, 
+							 _keyDefCol, _relationshipDefCol, _uiDefCol);
 			//ClassDef def =
-			//    new ClassDef(_AssemblyName,_ClassName, _PrimaryKeyDef, _PropDefCol, 
-			//                 _KeyDefCol, _RelationshipDefCol, _UIDefCol);
-			if (_SuperClassDef != null)
+			//    new ClassDef(_assemblyName,_className, _primaryKeyDef, _propDefCol, 
+			//                 _keyDefCol, _relationshipDefCol, _uiDefCol);
+			if (_superClassDef != null)
             {
-                def.SuperClassDef = _SuperClassDef;
+                def.SuperClassDef = _superClassDef;
             }
-            if (_TableName != null && _TableName.Length > 0)
+            if (_tableName != null && _tableName.Length > 0)
             {
-                def.TableName = _TableName;
+                def.TableName = _tableName;
             }
             //def.SupportsSynchronising = _SupportsSynchronising;
             return def;
@@ -122,10 +123,11 @@ namespace Habanero.BO.Loaders
         /// </summary>
         protected override void LoadFromReader()
         {
-            _SuperClassDef = null;
+            _superClassDef = null;
             _reader.Read();
             LoadClassInfo();
             LoadTableName();
+            LoadDisplayName();
             //LoadSupportsSynchronisation();
 
             _reader.Read();
@@ -184,7 +186,7 @@ namespace Habanero.BO.Loaders
             if (xmlDef != null)
         {
             XmlSuperClassLoader superClassLoader = new XmlSuperClassLoader(DtdLoader, _defClassFactory);
-                _SuperClassDef = superClassLoader.LoadSuperClassDesc(xmlDef);
+                _superClassDef = superClassLoader.LoadSuperClassDesc(xmlDef);
             }
         }
 
@@ -193,12 +195,12 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadRelationshipDefs(List<string> xmlDefs)
         {
-			_RelationshipDefCol = _defClassFactory.CreateRelationshipDefCol();
-			//_RelationshipDefCol = new RelationshipDefCol();
+			_relationshipDefCol = _defClassFactory.CreateRelationshipDefCol();
+			//_relationshipDefCol = new RelationshipDefCol();
 			XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory);
             foreach (string relDefXml in xmlDefs)
             {
-                _RelationshipDefCol.Add(relationshipLoader.LoadRelationship(relDefXml, _PropDefCol));
+                _relationshipDefCol.Add(relationshipLoader.LoadRelationship(relDefXml, _propDefCol));
             }
         }
 
@@ -207,12 +209,12 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadUIDefs(List<string> xmlDefs)
         {
-			_UIDefCol = _defClassFactory.CreateUIDefCol();
-			//_UIDefCol = new UIDefCol();
+			_uiDefCol = _defClassFactory.CreateUIDefCol();
+			//_uiDefCol = new UIDefCol();
             XmlUILoader loader = new XmlUILoader(DtdLoader, _defClassFactory);
             foreach (string uiDefXml in xmlDefs)
             {
-                _UIDefCol.Add(loader.LoadUIDef(uiDefXml));
+                _uiDefCol.Add(loader.LoadUIDef(uiDefXml));
             }
         }
 
@@ -221,12 +223,12 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadKeyDefs(List<string> xmlDefs)
         {
-			_KeyDefCol = _defClassFactory.CreateKeyDefCol();
-			//_KeyDefCol = new KeyDefCol();
+			_keyDefCol = _defClassFactory.CreateKeyDefCol();
+			//_keyDefCol = new KeyDefCol();
             XmlKeyLoader loader = new XmlKeyLoader(DtdLoader, _defClassFactory);
             foreach (string keyDefXml in xmlDefs)
             {
-                _KeyDefCol.Add(loader.LoadKey(keyDefXml, _PropDefCol));
+                _keyDefCol.Add(loader.LoadKey(keyDefXml, _propDefCol));
             }
         }
 
@@ -235,28 +237,28 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadPrimaryKeyDef(string xmlDef)
         {
-            if (xmlDef == null && _SuperClassDef == null)
+            if (xmlDef == null && _superClassDef == null)
             {
                 throw new InvalidXmlDefinitionException(String.Format("Could not find a " +
                     "'primaryKey' element in the class definition for the class '{0}'. " +
                     "Each class definition requires a primary key " +
                     "definition, which is composed of one or more property definitions, " +
                     "implying that you will need at least one 'prop' element as " +
-                    "well.", _ClassName));
+                    "well.", _className));
             }
             if (xmlDef != null)
             {
-                //_PrimaryKeyDef = new PrimaryKeyDef();
+                //_primaryKeyDef = new PrimaryKeyDef();
                 XmlPrimaryKeyLoader primaryKeyLoader = new XmlPrimaryKeyLoader(DtdLoader, _defClassFactory);
-                _PrimaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _PropDefCol);
-                if (_PrimaryKeyDef == null)
+                _primaryKeyDef = primaryKeyLoader.LoadPrimaryKey(xmlDef, _propDefCol);
+                if (_primaryKeyDef == null)
                 {
                     throw new InvalidXmlDefinitionException(String.Format("There was an error loading " +
                         "the 'primaryKey' element in the class definition for the class '{0}. '" +
                         "Each class definition requires a primary key " +
                         "definition, which is composed of one or more property definitions, " +
                         "implying that you will need at least one 'prop' element as " +
-                        "well.", _ClassName));
+                        "well.", _className));
                 }
             }
         }
@@ -272,19 +274,19 @@ namespace Habanero.BO.Loaders
                     "definitions have been specified for the class definition of '{0}'. " +
                     "Each class requires at least one 'property' and 'primaryKey' " +
                     "element which define the mapping from the database table fields to " +
-                    "properties in the class that is being mapped to.", _ClassName));
+                    "properties in the class that is being mapped to.", _className));
             }
-			_PropDefCol = _defClassFactory.CreatePropDefCol();
-            //_PropDefCol = new PropDefCol();
+			_propDefCol = _defClassFactory.CreatePropDefCol();
+            //_propDefCol = new PropDefCol();
             XmlPropertyLoader propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);
             foreach (string propDefXml in xmlDefs)
             {
-                _PropDefCol.Add(propLoader.LoadProperty(propDefXml));
+                _propDefCol.Add(propLoader.LoadProperty(propDefXml));
             }
             //			XmlNodeList xmlPropDefs = _lassElement.GetElementsByTagName("propertyDef");
             //			XmlPropertyLoader propLoader = new XmlPropertyLoader(_dtdPath);
             //			foreach (XmlNode xmlPropDef in xmlPropDefs) {
-            //				_PropDefCol.Add(propLoader.LoadProperty(xmlPropDef.OuterXml));
+            //				_propDefCol.Add(propLoader.LoadProperty(xmlPropDef.OuterXml));
             //			}
         }
 
@@ -293,7 +295,15 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadTableName()
         {
-            _TableName = _reader.GetAttribute("table");
+            _tableName = _reader.GetAttribute("table");
+        }
+
+        /// <summary>
+        /// Loads the display name attribute
+        /// </summary>
+        private void LoadDisplayName()
+        {
+            _displayName = _reader.GetAttribute("displayName");
         }
 
         /// <summary>
@@ -301,23 +311,23 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadClassInfo()
         {
-            _ClassName = _reader.GetAttribute("name");
-            _AssemblyName = _reader.GetAttribute("assembly");
+            _className = _reader.GetAttribute("name");
+            _assemblyName = _reader.GetAttribute("assembly");
 
-            if (_AssemblyName == null || _AssemblyName.Length == 0)
+            if (_assemblyName == null || _assemblyName.Length == 0)
             {
                 string errorMessage = "No assembly name has been specified for the " +
                                       "class definition";
-                if (_ClassName != null && _ClassName.Length > 0)
+                if (_className != null && _className.Length > 0)
                 {
-                    errorMessage += " of '" + _ClassName + "'";
+                    errorMessage += " of '" + _className + "'";
                 }
                 errorMessage += ". Within each 'class' element you need to set " +
                                 "the 'assembly' attribute, which refers to the project or assembly " +
                                 "that contains the class which is being mapped to.";
                 throw new XmlException(errorMessage);
             }
-            if (_ClassName == null || _ClassName.Length == 0)
+            if (_className == null || _className.Length == 0)
             {
                 throw new XmlException("No 'name' attribute has been specified for a " +
                    "'class' element.  The 'name' attribute indicates the name of the " +
@@ -341,7 +351,7 @@ namespace Habanero.BO.Loaders
         //        throw new InvalidXmlDefinitionException(String.Format(
         //            "In the class definition for '{0}', the value provided for " +
         //            "the 'supportsSynchronising' attribute is not valid. The value " +
-        //            "needs to be 'true' or 'false'.", _ClassName));
+        //            "needs to be 'true' or 'false'.", _className));
         //    }
         //}
     }

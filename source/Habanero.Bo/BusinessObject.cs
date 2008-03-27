@@ -1673,7 +1673,7 @@ namespace Habanero.BO
 				}
 				else
 				{
-				    string errors = String.Format("Errors occurred for the Business Object '{0}':", this.ToString());
+				    string errors = String.Format("Errors occurred for the '{0}' identified as '{1}':", ClassDef.DisplayName, this.ToString());
                     errors = AppendErrors(errors,reasonNotSaved);
                     errors = AppendErrors(errors,customRuleErrors);
                     //string errors = this.ToString() + Environment.NewLine;

@@ -32,7 +32,7 @@ namespace Habanero.BO.ClassDefinition
 	{
 		BusinessObjectLookupList CreateBusinessObjectLookupList(string assemblyName, string className, string criteria, string sort);
 
-		ClassDef CreateClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
+		ClassDef CreateClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol);
 
         DatabaseLookupList CreateDatabaseLookupList(string sqlString, int timeout, string assemblyName, string className);
 		
