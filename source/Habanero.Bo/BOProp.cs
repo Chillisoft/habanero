@@ -64,7 +64,7 @@ namespace Habanero.BO
         internal BOProp(PropDef propDef)
         {
             _propDef = propDef;
-            _displayName = propDef.PropertyName;
+            _displayName = propDef.DisplayName;
         }
 
         /// <summary>
@@ -262,25 +262,7 @@ namespace Habanero.BO
 							}
 						}
                     }
-                    switch (_propDef.ReadWriteRule)
-                    {
-                        case PropReadWriteRule.ReadWrite:
-                            break;
-                        case PropReadWriteRule.ReadOnly:
-                            break;
-                        case PropReadWriteRule.WriteOnce:
-                            if (_persistedValue != null && _persistedValue != newValue)
-                            {
-                                throw new BusinessObjectReadWriteRuleException(_propDef);
-                            }
-                            break;
-                        case PropReadWriteRule.WriteNotNew:
-                            break;
-                        case PropReadWriteRule.WriteNew:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    CheckReadWriteRule(newValue);
                     _isValid = _propDef.isValueValid(DisplayName, newValue, ref _invalidReason);
                     _valueBeforeLastEdit = _currentValue;
                     _currentValue = newValue;
@@ -290,6 +272,41 @@ namespace Habanero.BO
 //						throw new InvalidPropertyValueException(_invalidReason);
 //					}
                 }
+            }
+        }
+
+        private void CheckReadWriteRule(object newValue)
+        {
+            switch (_propDef.ReadWriteRule)
+            {
+                case PropReadWriteRule.ReadWrite:
+                    break;
+                case PropReadWriteRule.ReadOnly:
+                    if (_persistedValue != newValue)
+                    {
+                        throw new BusinessObjectReadWriteRuleException(_propDef);
+                    }
+                    break;
+                case PropReadWriteRule.WriteOnce:
+                    if (_persistedValue != null && _persistedValue != newValue)
+                    {
+                        throw new BusinessObjectReadWriteRuleException(_propDef);
+                    }
+                    break;
+                case PropReadWriteRule.WriteNotNew:
+                    if (_isObjectNew && _persistedValue != newValue)
+                    {
+                        throw new BusinessObjectReadWriteRuleException(_propDef);
+                    }
+                    break;
+                case PropReadWriteRule.WriteNew:
+                    if (!_isObjectNew && _persistedValue != newValue)
+                    {
+                        throw new BusinessObjectReadWriteRuleException(_propDef);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -576,23 +593,46 @@ namespace Habanero.BO
         /// </summary>
         public string DisplayName
         {
-            get { return _displayName; }
+            get
+            {
+                if (HasDisplayName())
+                {
+                    return _displayName;
+                }
+                else
+                {
+                    return StringUtilities.DelimitPascalCase(PropertyName, " ");
+                }
+            }
             set
             {
-                _displayName = value;
-                if (value[value.Length - 1] == ':')
+                string newDisplayName = value ?? "";
+                if (newDisplayName.EndsWith(":") || newDisplayName.EndsWith("?"))
                 {
-                    _displayName = value.Substring(0, value.Length - 1);
+                    newDisplayName = newDisplayName.Substring(0, newDisplayName.Length - 1);
                 }
-
-                if (_invalidReason.Contains(String.Format("'{0}'", PropertyName)))
+                if (_displayName != newDisplayName)
                 {
-                    _invalidReason = _invalidReason.Replace(
-                        String.Format("'{0}'", PropertyName),
-                        String.Format("'{0}'", _displayName));
+                    if (_invalidReason.Contains(String.Format("'{0}'", DisplayName)))
+                    {
+                        _invalidReason = _invalidReason.Replace(
+                            String.Format("'{0}'", DisplayName),
+                            String.Format("'{0}'", newDisplayName));
+                    }
+                    _displayName = newDisplayName;
                 }
             }
         }
+
+        ///<summary>
+        /// Does the business object property have a specified display name or not.
+        ///</summary>
+        ///<returns>True if a display name has been set for this property, otherwise false.</returns>
+        public bool HasDisplayName()
+        {
+            return !String.IsNullOrEmpty(_displayName);
+        }
+
     }
 
 }

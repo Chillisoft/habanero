@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -71,10 +72,10 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Returns the heading
         /// </summary>
-        public string Heading
+        internal string Heading
         {
             get { return _heading; }
-            protected set { _heading = value; }
+            set { _heading = value; }
         }
 
         /// <summary>
@@ -129,6 +130,44 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _parameters; }
         }
+
+        #region Helper Methods
+
+        ///<summary>
+        /// Gets the heading for this grid column.
+        ///</summary>
+        ///<returns> The heading for this grid column </returns>
+        public string GetHeading()
+        {
+            return GetHeading(null);
+        }
+
+        ///<summary>
+        /// Gets the heading for this grid column given a classDef.
+        ///</summary>
+        ///<param name="classDef">The class definition that corresponds to this grid column. </param>
+        ///<returns> The heading for this grid column </returns>
+        public string GetHeading(ClassDef classDef)
+        {
+            if (!String.IsNullOrEmpty(_heading))
+            {
+                return _heading;
+            }
+            string heading = null;
+            PropDef propDef = ClassDefHelper.GetPropDefByPropName(classDef, PropertyName);
+            if (propDef != null)
+            {
+                heading = propDef.DisplayName;
+            }
+            if (String.IsNullOrEmpty(heading))
+            {
+                heading = StringUtilities.DelimitPascalCase(_propertyName, " ");
+            }
+            return heading;
+        }
+       
+
+        #endregion //Helper Methods
 
         /// <summary>
         /// Returns the parameter value for the name provided

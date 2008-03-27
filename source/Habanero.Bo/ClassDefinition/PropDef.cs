@@ -24,6 +24,7 @@ using Habanero.BO.Comparer;
 using Habanero.BO.CriteriaManager;
 using Habanero.BO;
 using Habanero.Base;
+using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
 
@@ -67,7 +68,8 @@ namespace Habanero.BO.ClassDefinition
     public class PropDef : IParameterSqlInfo
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
-        private string _propName;
+        private string _propertyName;
+        private string _description;
 		private string _propTypeAssemblyName;
     	private string _propTypeName;
 		private Type _propType;
@@ -87,13 +89,17 @@ namespace Habanero.BO.ClassDefinition
     	private bool _compulsory = false;
         private bool _autoIncrementing = false;
         private int _length;
+        private string _displayName;
+        private bool _keepValuePrivate = false;
 
         #region Constuctor and destructors
+
+        #region Progressive Public Constructors
 
         /// <summary>
         /// This constructor is used to create a propdef using it's property type and other information. 
         /// </summary>
-        /// <param name="propName">The name of the property (e.g. "surname")</param>
+        /// <param name="propertyName" >The name of the property (e.g. "surname")</param>
         /// <param name="propType">The type of the property (e.g. string)</param>
         /// <param name="propRWStatus">Rules for how a property can be accessed.
 		/// See PropReadWriteRule enumeration for more detail.</param>
@@ -103,12 +109,12 @@ namespace Habanero.BO.ClassDefinition
         /// the database has already been set up.</param>
         /// <param name="defaultValue">The default value that a property 
         /// of a new object will be set to</param>
-        public PropDef(string propName,
+        public PropDef(string propertyName,
                        Type propType,
                        PropReadWriteRule propRWStatus,
                        string databaseFieldName,
                        object defaultValue) :
-							this(propName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, false, false, Int32.MaxValue)
+							this(propertyName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null)
         {
         }
 
@@ -116,17 +122,17 @@ namespace Habanero.BO.ClassDefinition
 		/// This constructor is used to create a propdef using it's property type and other information. 
 		/// The database field name is presumed to be the same as the property name.
 		/// </summary>
-		/// <param name="propName">The name of the property (e.g. "surname")</param>
+		/// <param name="propertyName">The name of the property (e.g. "surname")</param>
 		/// <param name="propType">The type of the property (e.g. string)</param>
 		/// <param name="propRWStatus">Rules for how a property can be accessed.
 		/// See PropReadWriteRule enumeration for more detail.</param>
 		/// <param name="defaultValue">The default value that a property 
 		/// of a new object will be set to</param>
-        public PropDef(string propName,
+        public PropDef(string propertyName,
                        Type propType,
                        PropReadWriteRule propRWStatus,
                        object defaultValue) 
-			:this(propName, propType,null,null, propRWStatus, null, defaultValue, null, false, false, Int32.MaxValue)
+			:this(propertyName, propType,null,null, propRWStatus, null, defaultValue, null)
         {
         }
 
@@ -134,9 +140,136 @@ namespace Habanero.BO.ClassDefinition
         /// This constructor is used to create a propdef using property type assembly and class name and other information. 
         /// The default value and the property type are loaded when they are needed.
         /// </summary>
-        /// <param name="propName">The name of the property (e.g. "surname")</param>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
         /// <param name="assemblyName">The assembly name of the property type</param>
         /// <param name="typeName">The type name of the property type (e.g. "string")</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValueString">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        public PropDef(string propertyName,
+                    string assemblyName, string typeName,
+                    PropReadWriteRule propRWStatus,
+                    string databaseFieldName,
+                    string defaultValueString,
+                    bool compulsory,
+                    bool autoIncrementing)
+            : this(propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString, compulsory, autoIncrementing)
+        {
+        }
+
+		/// <summary>
+		/// This constructor is used to create a propdef using property type assembly and class name and other information. 
+		/// The default value and the property type are loaded when they are needed.
+		/// </summary>
+		/// <param name="propertyName">The name of the property (e.g. "surname")</param>
+		/// <param name="assemblyName">The assembly name of the property type</param>
+		/// <param name="typeName">The type name of the property type (e.g. "string")</param>
+		/// <param name="propRWStatus">Rules for how a property can be accessed.
+		/// See PropReadWriteRule enumeration for more detail.</param>
+		/// <param name="databaseFieldName">The database field name - this
+		/// allows you to have a database field name that is different to the
+		/// property name, which is useful for migrating systems where
+		/// the database has already been set up.</param>
+		/// <param name="defaultValueString">The default value that a property 
+		/// of a new object will be set to</param>
+		/// <param name="compulsory">Whether this property is a required field or not.</param>
+		/// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+		/// <param name="length">The maximum length for a string</param>
+		public PropDef(string propertyName,
+					string assemblyName, string typeName,
+					PropReadWriteRule propRWStatus,
+					string databaseFieldName,
+					string defaultValueString, 
+                    bool compulsory,
+                    bool autoIncrementing,
+                    int length)
+            : this(propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString, compulsory, autoIncrementing, length)
+		{
+		}
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="assemblyName">The assembly name of the property type</param>
+        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValueString">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        /// <param name="length">The maximum length for a string</param>
+        /// <param name="displayName">The display name for the property</param>
+        /// <param name="description">The description of the property</param>
+        public PropDef(string propertyName,
+                    string assemblyName, string typeName,
+                    PropReadWriteRule propRWStatus,
+                    string databaseFieldName,
+                    string defaultValueString,
+                    bool compulsory,
+                    bool autoIncrementing,
+                    int length,
+                    string displayName,
+                    string description)
+            : this(propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString, compulsory, autoIncrementing, length, displayName, description)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="assemblyName">The assembly name of the property type</param>
+        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValueString">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        /// <param name="length">The maximum length for a string</param>
+        /// <param name="displayName">The display name for the property</param>
+        /// <param name="description">The description of the property</param>
+        /// <param name="keepValuePrivate">Whether this property must keep its value private or not</param>
+        public PropDef(string propertyName,
+                    string assemblyName, string typeName,
+                    PropReadWriteRule propRWStatus,
+                    string databaseFieldName,
+                    string defaultValueString,
+                    bool compulsory,
+                    bool autoIncrementing,
+                    int length,
+                    string displayName,
+                    string description,
+                    bool keepValuePrivate)
+            : this(propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString, compulsory, autoIncrementing, length, displayName, description, keepValuePrivate)
+        {
+        }
+
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="propType">The type of the property (e.g. string)</param>
         /// <param name="propRWStatus">Rules for how a property can be accessed.
         /// See PropReadWriteRule enumeration for more detail.</param>
         /// <param name="databaseFieldName">The database field name - this
@@ -147,91 +280,159 @@ namespace Habanero.BO.ClassDefinition
         /// of a new object will be set to</param>
         /// <param name="compulsory">Whether this property is a required field or not.</param>
         /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
-        public PropDef(string propName,
-                    string assemblyName, string typeName,
+        /// <param name="length">The maximum length for a string</param>
+        /// <param name="displayName">The display name for the property</param>
+        /// <param name="description">The description of the property</param>
+        public PropDef(string propertyName,
+                    Type propType,
                     PropReadWriteRule propRWStatus,
                     string databaseFieldName,
-                    string defaultValue,
+                    object defaultValue,
                     bool compulsory,
-                    bool autoIncrementing)
-            : this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue, compulsory, autoIncrementing, Int32.MaxValue)
+                    bool autoIncrementing,
+                    int length,
+                    string displayName,
+                    string description)
+            : this(propertyName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, compulsory, autoIncrementing, length, displayName, description)
         {
         }
 
-		/// <summary>
-		/// This constructor is used to create a propdef using property type assembly and class name and other information. 
-		/// The default value and the property type are loaded when they are needed.
-		/// </summary>
-		/// <param name="propName">The name of the property (e.g. "surname")</param>
-		/// <param name="assemblyName">The assembly name of the property type</param>
-		/// <param name="typeName">The type name of the property type (e.g. "string")</param>
-		/// <param name="propRWStatus">Rules for how a property can be accessed.
-		/// See PropReadWriteRule enumeration for more detail.</param>
-		/// <param name="databaseFieldName">The database field name - this
-		/// allows you to have a database field name that is different to the
-		/// property name, which is useful for migrating systems where
-		/// the database has already been set up.</param>
-		/// <param name="defaultValue">The default value that a property 
-		/// of a new object will be set to</param>
-		/// <param name="compulsory">Whether this property is a required field or not.</param>
-		/// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
-		/// <param name="length">The maximum length for a string</param>
-		public PropDef(string propName,
-					string assemblyName, string typeName,
-					PropReadWriteRule propRWStatus,
-					string databaseFieldName,
-					string defaultValue, 
+        /// <summary>
+        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
+        /// The default value and the property type are loaded when they are needed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
+        /// <param name="propType">The type of the property (e.g. string)</param>
+        /// <param name="propRWStatus">Rules for how a property can be accessed.
+        /// See PropReadWriteRule enumeration for more detail.</param>
+        /// <param name="databaseFieldName">The database field name - this
+        /// allows you to have a database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up.</param>
+        /// <param name="defaultValue">The default value that a property 
+        /// of a new object will be set to</param>
+        /// <param name="compulsory">Whether this property is a required field or not.</param>
+        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
+        /// <param name="length">The maximum length for a string</param>
+        /// <param name="displayName">The display name for the property</param>
+        /// <param name="description">The description of the property</param>
+        /// <param name="keepValuePrivate">Whether this property must keep its value private or not</param>
+        public PropDef(string propertyName,
+                    Type propType,
+                    PropReadWriteRule propRWStatus,
+                    string databaseFieldName,
+                    object defaultValue,
                     bool compulsory,
                     bool autoIncrementing,
-                    int length)
-            : this(propName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValue, compulsory, autoIncrementing, length)
-		{
-		}
+                    int length,
+                    string displayName,
+                    string description,
+                    bool keepValuePrivate)
+            : this(propertyName, propType, null, null, propRWStatus, databaseFieldName, defaultValue, null, compulsory, autoIncrementing, length, displayName, description, keepValuePrivate)
+        {
+        }
 
-		private PropDef(string propName,
-					   Type propType, string assemblyName, string typeName,
-					   PropReadWriteRule propRWStatus,
-					   string databaseFieldName,
-					   object defaultValue, string defaultValueString,
-                       bool compulsory, bool autoIncrementing, int length)
-		{			
-			ArgumentValidationHelper.CheckStringArgumentNotEmpty(propName, "propName","This field is compulsary for the PropDef class.");
-			if (propName.IndexOfAny(new char[] { '.', '-', '|' }) != -1)
-			{
-				throw new ArgumentException(
-					"A property name cannot contain any of the following characters: [.-|]  Invalid property name " +
-					propName);
-			}
-			_propName = propName;
-			if (propType != null)
-			{
-				MyPropertyType = propType;
-			}else
-			{
-				_propTypeAssemblyName = assemblyName;
-				_propTypeName = typeName;
-			}
-			_propRWStatus = propRWStatus;
-			if (databaseFieldName != null)
-			{
-				_databaseFieldName = databaseFieldName;
-			}else
-			{
-				_databaseFieldName = propName;
-			}
-			if (defaultValue != null)
-			{
-				MyDefaultValue = defaultValue;
-			}else
-			{
-				_defaultValueString = defaultValueString;
-			}
-		    _compulsory = compulsory;
-		    _autoIncrementing = autoIncrementing;
-		    _length = length;
-		}
+        #endregion //Progressive Public Constructors
 
-		#endregion
+        #region Progressive Private Constructors
+
+        private PropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus)
+            : this(propertyName, propType, assemblyName, typeName, propRWStatus, null)
+        { }
+
+        private PropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+               string databaseFieldName)
+            : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, null, null)
+        { }
+
+        private PropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+               string databaseFieldName, object defaultValue, string defaultValueString)
+            : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue, defaultValueString, false)
+        { }
+
+        private PropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+               string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory)
+            : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue, defaultValueString, compulsory, false)
+        { }
+
+        private PropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+               string databaseFieldName, object defaultValue, string defaultValueString,
+               bool compulsory, bool autoIncrementing)
+            : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue, defaultValueString, compulsory, autoIncrementing, int.MaxValue)
+        { }
+
+        private PropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+               string databaseFieldName, object defaultValue, string defaultValueString,
+               bool compulsory, bool autoIncrementing, int length)
+            : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue, defaultValueString, compulsory, autoIncrementing, length, "")
+        { }
+
+        private PropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+               string databaseFieldName, object defaultValue, string defaultValueString,
+               bool compulsory, bool autoIncrementing, int length, string displayName)
+            : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue, defaultValueString, compulsory, autoIncrementing, length, displayName, "")
+        { }
+
+        private PropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+               string databaseFieldName, object defaultValue, string defaultValueString,
+               bool compulsory, bool autoIncrementing, int length, string displayName, string description)
+            : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue, defaultValueString, compulsory, autoIncrementing, length, displayName, description, false)
+        { }
+
+        #endregion //Progressive Private Constructors
+
+        private PropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+                string databaseFieldName, object defaultValue, string defaultValueString,
+                bool compulsory, bool autoIncrementing, int length,
+                string displayName, string description, bool keepValuePrivate)
+        {
+            SetupPropDef(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
+                         defaultValueString, compulsory, autoIncrementing, length, displayName, description,
+                         keepValuePrivate);
+        }
+
+        private void SetupPropDef(string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus, string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate)
+        {
+            ArgumentValidationHelper.CheckStringArgumentNotEmpty(propertyName, "propertyName", "This field is compulsary for the PropDef class.");
+            if (propertyName.IndexOfAny(new char[] { '.', '-', '|' }) != -1)
+            {
+                throw new ArgumentException(
+                    "A property name cannot contain any of the following characters: [.-|]  Invalid property name " +
+                    propertyName);
+            }
+            _propertyName = propertyName;
+            if (propType != null)
+            {
+                MyPropertyType = propType;
+            }else
+            {
+                _propTypeAssemblyName = assemblyName;
+                _propTypeName = typeName;
+            }
+            _propRWStatus = propRWStatus;
+            if (databaseFieldName != null)
+            {
+                _databaseFieldName = databaseFieldName;
+            }else
+            {
+                _databaseFieldName = propertyName;
+            }
+            if (defaultValue != null)
+            {
+                MyDefaultValue = defaultValue;
+            }else
+            {
+                _defaultValueString = defaultValueString;
+            }
+            _compulsory = compulsory;
+            _autoIncrementing = autoIncrementing;
+            _length = length;
+            _displayName = displayName;
+            _description = description;
+            _keepValuePrivate = keepValuePrivate;
+        }
+
+        #endregion
 
 
 		#region Properties
@@ -241,8 +442,26 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public string PropertyName
         {
-            get { return _propName; }
-			protected set{ _propName = value;}
+            get { return _propertyName; }
+			protected set{ _propertyName = value;}
+        }
+
+        ///<summary>
+        /// The display name for the property.
+        ///</summary>
+        public string DisplayName
+        {
+            get { return _displayName; }
+            protected set { _displayName = value; }
+        }
+
+        ///<summary>
+        /// The description of the property.
+        ///</summary>
+        public string Description
+        {
+            get { return _description; }
+            protected set { _description = value; }
         }
 		
 		/// <summary>
@@ -391,6 +610,16 @@ namespace Habanero.BO.ClassDefinition
             get { return _length; }
         }
 
+        ///<summary>
+        /// Returns whether this property should keep its value private where possible.
+        /// This will usually be set to 'true' for password fields. This will then prevent
+        /// the value being revealed in error messages and by default controls the user interface.
+        ///</summary>
+        public bool KeepValuePrivate
+        {
+            get { return _keepValuePrivate; }
+        }
+
 		#endregion
 
         
@@ -524,7 +753,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public string ParameterName
         {
-            get { return _propName; }
+            get { return _propertyName; }
         }
 
         /// <summary>
@@ -607,6 +836,18 @@ namespace Habanero.BO.ClassDefinition
 			get
 			{
 				object defaultValue = null;
+                if (MyPropertyType == typeof(DateTime) && _defaultValueString != null)
+                {
+                    switch(_defaultValueString.ToUpper())
+                    {
+                        case "TODAY":
+                            return DateTime.Today;
+                            break;
+                        case "NOW":
+                            return DateTime.Now;
+                            break;
+                    }
+                }
 				if (_defaultValue == null && _defaultValueString != null)
 				{
 					_hasDefaultValueBeenValidated = false;
@@ -653,6 +894,7 @@ namespace Habanero.BO.ClassDefinition
 				}
 			}
 		}
+               
 
         private void validateDefaultValue(object defaultValue)
     	{

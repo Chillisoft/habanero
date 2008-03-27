@@ -17,6 +17,7 @@
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -30,7 +31,9 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlUIFormFieldLoader
     {
+
         private XmlUIFormFieldLoader loader;
+
 
         [SetUp]
         public void SetupTest()
@@ -62,9 +65,17 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TextBox", uiProp.ControlType.Name);
             Assert.AreEqual("TextBoxMapper", uiProp.MapperTypeName);
             Assert.AreEqual(true, uiProp.Editable);
+            Assert.AreEqual(null, uiProp.ToolTipText);
             Assert.AreEqual(0, uiProp.Triggers.Count);
         }
 
+        [Test]
+        public void TestToolTip()
+        {
+            UIFormField uiProp =
+                loader.LoadUIProperty(@"<field property=""testpropname"" toolTipText=""My Tool Tip"" />");
+            Assert.AreEqual("My Tool Tip", uiProp.ToolTipText);
+        }
 
         [Test]
         public void TestPropertyAttributes()
@@ -89,10 +100,12 @@ namespace Habanero.Test.BO.Loaders
         public void TestAutomaticLabelCreation()
         {
             UIFormField uiProp = loader.LoadUIProperty(@"<field property=""testpropname"" />");
-            Assert.AreEqual("testpropname:", uiProp.Label);
+            Assert.AreEqual(null, uiProp.Label);
+            Assert.AreEqual("testpropname:", uiProp.GetLabel());
 
             uiProp = loader.LoadUIProperty(@"<field property=""TestPropName"" />");
-            Assert.AreEqual("Test Prop Name:", uiProp.Label);
+            Assert.AreEqual(null, uiProp.Label);
+            Assert.AreEqual("Test Prop Name:", uiProp.GetLabel());
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]

@@ -33,6 +33,12 @@ namespace Habanero.Test.General
         {
         }
 
+        [TestFixtureSetUp]
+        public void SetupTestFixture()
+        {
+            SetupDBConnection();
+        }
+
         public static void RunTest()
         {
             TestCarOwnerRelationship test = new TestCarOwnerRelationship();
@@ -55,6 +61,7 @@ namespace Habanero.Test.General
         }
 
         //Test that the related object does not have a reference held
+        [Test]
         public void TestGetCarOwnerIsNotSame()
         {
             Car.DeleteAllCars();

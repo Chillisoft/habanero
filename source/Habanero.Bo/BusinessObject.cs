@@ -957,7 +957,7 @@ namespace Habanero.BO
                 State.IsNew = false;
                 if (!(_boPropCol == null))
                 {
-                    _boPropCol.setIsObjectNew(false);
+                    _boPropCol.SetIsObjectNew(false);
                 }
                 State.IsDeleted = false;
                 if (!AllLoaded().ContainsKey(ID.GetObjectId()))

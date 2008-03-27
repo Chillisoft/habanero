@@ -9,4 +9,5 @@
 	mapperType NMTOKEN "TextBoxMapper"
   mapperAssembly NMTOKEN #IMPLIED
   editable ( true | false ) "true"
+	toolTipText CDATA #IMPLIED
 >

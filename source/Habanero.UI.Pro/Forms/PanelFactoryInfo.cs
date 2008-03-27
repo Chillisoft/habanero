@@ -16,6 +16,7 @@ namespace Habanero.UI.Forms
         private int _preferredHeight;
         private int _preferredWidth;
         private IDictionary<string, EditableGrid> _formGrids;
+        private ToolTip _toolTip;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -105,6 +106,12 @@ namespace Habanero.UI.Forms
         public Control FirstControlToFocus
         {
             get { return _firstControlToFocus; }
+        }
+
+        internal ToolTip ToolTip
+        {
+            get { return _toolTip; }
+            set { _toolTip = value; }
         }
     }
 }

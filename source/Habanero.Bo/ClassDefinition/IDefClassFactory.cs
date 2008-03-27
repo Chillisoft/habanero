@@ -40,7 +40,7 @@ namespace Habanero.BO.ClassDefinition
 		
 		PrimaryKeyDef CreatePrimaryKeyDef();
 
-		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length);
+		PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate);
 
 		PropRuleDate CreatePropRuleDate(string name, string message);
 
@@ -66,7 +66,7 @@ namespace Habanero.BO.ClassDefinition
 
 		UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName);
 
-		UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, System.Collections.Hashtable propertyAttributes, TriggerCol triggers);
+		UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, System.Collections.Hashtable propertyAttributes, TriggerCol triggers);
 //		UIFormField CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly, bool editable, System.Collections.Hashtable propertyAttributes);
 
 		UIFormTab CreateUIFormTab();

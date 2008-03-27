@@ -35,13 +35,81 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestTriggerAccess()
         {
             UIFormField field = new UIFormField("label", "prop", "control", "ass", "mapper", "mapass",
-                true, null, null);
+                true, null, null, null);
             Assert.IsNotNull(field.Triggers);
             Assert.AreEqual(0, field.Triggers.Count);
 
             Trigger trigger = new Trigger("prop1", null, null, "action", "value");
             field.Triggers.Add(trigger);
             Assert.AreEqual(1, field.Triggers.Count);
+        }
+
+        [Test]
+        public void TestFieldDefaultLabel()
+        {
+            UIFormField uiFormField;
+            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, null, null, null);
+            Assert.AreEqual("Test Property:", uiFormField.GetLabel());
+            uiFormField = new UIFormField(null, "TestProperty", typeof(CheckBox), null, null, true, null, null, null);
+            Assert.AreEqual("Test Property?", uiFormField.GetLabel());
+        }
+
+        [Test]
+        public void TestFieldDefaultLabelFromClassDef()
+        {
+            ClassDef classDef = CreateTestClassDef("");
+            UIFormField uiFormField;
+            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, null, null, null);
+            Assert.AreEqual("Tested Property:", uiFormField.GetLabel(classDef));
+            uiFormField = new UIFormField(null, "TestProperty", typeof(CheckBox), null, null, true, null, null, null);
+            Assert.AreEqual("Tested Property?", uiFormField.GetLabel(classDef));
+        }
+
+        [Test]
+        public void TestFieldToolTip()
+        {
+            UIFormField uiFormField;
+            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, "This is my ToolTipText", null, null);
+            Assert.AreEqual("This is my ToolTipText", uiFormField.GetToolTipText());
+        }
+
+        [Test]
+        public void TestFieldToolTipFromClassDef()
+        {
+            ClassDef classDef = CreateTestClassDef("");
+            UIFormField uiFormField;
+            uiFormField = new UIFormField(null, "TestProperty", typeof(TextBox), null, null, true, null, null, null);
+            Assert.AreEqual("This is a property for testing.", uiFormField.GetToolTipText(classDef));
+        }
+
+        [Test]
+        public void TestFieldDefaultLabelFromRelatedClassDef()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = CreateTestClassDef("");
+            ClassDef classDef2 = CreateTestClassDef("2");
+            ClassDef.ClassDefs.Add(classDef2);
+            RelKeyDef relKeyDef = new RelKeyDef();
+            RelPropDef relPropDef = new RelPropDef(classDef.PropDefcol["TestProperty"], "TestProperty2");
+            relKeyDef.Add(relPropDef);
+            SingleRelationshipDef def = new SingleRelationshipDef("TestRel", classDef2.AssemblyName, classDef2.ClassName, relKeyDef, false);
+            classDef.RelationshipDefCol.Add(def);
+
+            UIFormField uiFormField;
+            uiFormField = new UIFormField(null, "TestRel.TestProperty2", typeof(TextBox), null, null, true, null, null, null);
+            Assert.AreEqual("Tested Property2:", uiFormField.GetLabel(classDef));
+        }
+
+        private static ClassDef CreateTestClassDef(string suffix)
+        {
+            PropDefCol propDefCol = new PropDefCol();
+            PropDef propDef = new PropDef("TestProperty" + suffix, typeof(string), PropReadWriteRule.ReadWrite, null, null, false, false, 100,
+                                          "Tested Property" + suffix, "This is a property for testing.");
+            propDefCol.Add(propDef);
+            PrimaryKeyDef primaryKeyDef = new PrimaryKeyDef();
+            primaryKeyDef.Add(propDef);
+            return new ClassDef("TestAssembly", "TestClass" + suffix, primaryKeyDef, 
+                                propDefCol, new KeyDefCol(), new RelationshipDefCol(), new UIDefCol());
         }
 
         [Test]
@@ -87,7 +155,7 @@ namespace Habanero.Test.BO.ClassDefinition
         private class UIFormFieldInheritor : UIFormField
         {
             public UIFormFieldInheritor()
-                : base("label", "prop", "control", null, null, null, true, null, null)
+                : base("label", "prop", "control", null, null, null, true, null, null, null)
             {}
 
             public void SetLabel(string name)

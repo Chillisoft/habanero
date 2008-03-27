@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -25,7 +26,7 @@ namespace Habanero.UI.Forms
     public class PanelFactory
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.PanelFactory");
-        private BusinessObject[] _boArray;
+        private BusinessObject _currentBusinessObject;
         //private IUserInterfaceMapper[] _uiArray;
         private UIForm _uiForm;
         private Control _firstControl;
@@ -75,8 +76,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         private void InitialiseFactory(BusinessObject bo)
         {
-            _boArray = new BusinessObject[1];
-            _boArray[0] = bo;
+            _currentBusinessObject = bo;
             _emailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
         }
 
@@ -129,7 +129,7 @@ namespace Habanero.UI.Forms
             {
                 factoryInfo.PreferredWidth = _uiForm.Width;
             }
-            AttachTriggers(_uiForm, factoryInfo, _boArray[0]);
+            AttachTriggers(_uiForm, factoryInfo, _currentBusinessObject);
             return factoryInfo;
         }
 
@@ -145,8 +145,9 @@ namespace Habanero.UI.Forms
             {
                 return CreatePanelWithGrid(uiFormTab.UIFormGrid);
             }
-            Panel p = new Panel();
-            GridLayoutManager manager = new GridLayoutManager(p);
+            Panel panel = new Panel();
+            ToolTip toolTip = new ToolTip();
+            GridLayoutManager manager = new GridLayoutManager(panel);
             int rowCount = 0;
             int colCount = 0;
             colCount += uiFormTab.Count;
@@ -180,7 +181,9 @@ namespace Habanero.UI.Forms
                 {
                     //log.Debug("Creating label and control for property " + property.PropertyName + " with mapper type " + property.MapperTypeName) ;
                     bool isCompulsory = false;
-                    PropDef propDef = _boArray[0].ClassDef.GetPropDef(field.PropertyName, false);
+                    ClassDef classDef = _currentBusinessObject.ClassDef;
+                    //PropDef propDef = classDef.GetPropDef(field.PropertyName, false);
+                    PropDef propDef = field.GetPropDefIfExists(classDef);
                     if (propDef != null)
                     {
                         isCompulsory = propDef.Compulsory;
@@ -189,16 +192,30 @@ namespace Habanero.UI.Forms
                     {
                         isCompulsory = false;
                     }
-                    if (_boArray[0].Props.Contains(field.PropertyName)) 
-                        _boArray[0].Props[field.PropertyName].DisplayName = field.Label;
+                    string labelCaption = field.GetLabel(classDef);
+                    BOPropCol boPropCol = _currentBusinessObject.Props;
+                    if (boPropCol.Contains(field.PropertyName))
+                    {
+                        BOProp boProp = boPropCol[field.PropertyName];
+                        if (!boProp.HasDisplayName())
+                        {
+                            boProp.DisplayName = labelCaption;
+                        }
+                    }
 
-                    controls[currentRow, currentColumn + 0] =
-                        new GridLayoutManager.ControlInfo(ControlFactory.CreateLabel(field.Label, isCompulsory));
+                    Label labelControl = ControlFactory.CreateLabel(labelCaption, isCompulsory);
+                    controls[currentRow, currentColumn + 0] = new GridLayoutManager.ControlInfo(labelControl);
                     Control ctl = ControlFactory.CreateControl(field.ControlType);
 
-                    if (ctl is TextBox && _boArray[0].Props.Contains(field.PropertyName) && _boArray[0].Props[field.PropertyName].PropertyType == typeof(bool))
+                    if (ctl is TextBox && propDef != null)
                     {
-                        ctl = ControlFactory.CreateControl(typeof (CheckBox));
+                        if (propDef.PropertyType == typeof (bool))
+                        {
+                            ctl = ControlFactory.CreateControl(typeof (CheckBox));
+                        } else if (propDef.PropertyType == typeof(string) && propDef.KeepValuePrivate)
+                        {
+                            ctl = ControlFactory.CreatePasswordTextBox();
+                        }
                     }
 
                     bool editable = CheckIfEditable(field, ctl);
@@ -271,7 +288,7 @@ namespace Habanero.UI.Forms
                         ControlMapper.Create(field.MapperTypeName, field.MapperAssembly, ctl, field.PropertyName, !editable);
                     ctlMapper.SetPropertyAttributes(field.Parameters);
                     controlMappers.Add(ctlMapper);
-                    ctlMapper.BusinessObject = _boArray[0];
+                    ctlMapper.BusinessObject = _currentBusinessObject;
 
                     int colSpan = 1;
                     if (field.GetParameterValue("colSpan") != null)
@@ -311,6 +328,12 @@ namespace Habanero.UI.Forms
                     }
                     controls[currentRow, currentColumn + 1] = new GridLayoutManager.ControlInfo(ctl, rowSpan, colSpan);
                     currentRow++;
+                    string toolTipText = field.GetToolTipText(classDef);
+                    if (!String.IsNullOrEmpty(toolTipText))
+                    {
+                        toolTip.SetToolTip(labelControl, toolTipText);
+                        toolTip.SetToolTip(ctl, toolTipText);
+                    }
                     //log.Debug("Done creating label and control");
                 }
                 currentColumn += 2;
@@ -339,9 +362,11 @@ namespace Habanero.UI.Forms
                 }
             }
             // TODO: Should this not be the PanelFactoryInfo Preferred Height and Width?
-            p.Height = manager.GetFixedHeightIncludingGaps();
-            p.Width = manager.GetFixedWidthIncludingGaps();
-            return new PanelFactoryInfo(p, controlMappers, _firstControl);
+            panel.Height = manager.GetFixedHeightIncludingGaps();
+            panel.Width = manager.GetFixedWidthIncludingGaps();
+            PanelFactoryInfo panelFactoryInfo = new PanelFactoryInfo(panel, controlMappers, _firstControl);
+            panelFactoryInfo.ToolTip = toolTip;
+            return panelFactoryInfo;
         }
 
         /// <summary>
@@ -464,7 +489,7 @@ namespace Habanero.UI.Forms
         {
             EditableGrid myGrid = new EditableGrid();
 
-            BusinessObject bo = _boArray[0];
+            BusinessObject bo = _currentBusinessObject;
             ClassDef classDef = ClassDef.ClassDefs[bo.GetType()];
             myGrid.ObjectInitialiser =
                 new RelationshipObjectInitialiser(bo, classDef.GetRelationship(formGrid.RelationshipName),

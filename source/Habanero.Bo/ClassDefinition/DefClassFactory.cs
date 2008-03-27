@@ -58,11 +58,12 @@ namespace Habanero.BO.ClassDefinition
 			return new PrimaryKeyDef();
 		}
 
-		public PropDef CreatePropDef(string propertyName, string assemblyName, string typeName, PropReadWriteRule readWriteRule,
-            string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length)
-		{
-            return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString, compulsory, autoIncrementing, length);
-		}
+        public PropDef CreatePropDef(string propertyName, string assemblyName, string typeName,
+            PropReadWriteRule readWriteRule, string databaseFieldName, string defaultValueString,
+            bool compulsory, bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate)
+        {
+            return new PropDef(propertyName, assemblyName, typeName, readWriteRule, databaseFieldName, defaultValueString, compulsory, autoIncrementing, length, displayName, description, keepValuePrivate);
+        }
 
 		public PropRuleDate CreatePropRuleDate(string name, string message)
 		{
@@ -135,10 +136,10 @@ namespace Habanero.BO.ClassDefinition
 		}
 
 		public UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-                                                   bool editable, Hashtable propertyAttributes, TriggerCol triggers)
+                                                   bool editable, string toolTipText, Hashtable propertyAttributes, TriggerCol triggers)
 		{
 			return new UIFormField(label, propertyName, controlTypeName, controlAssembly,
-                mapperTypeName, mapperAssembly, editable, propertyAttributes, triggers);
+                mapperTypeName, mapperAssembly, editable, toolTipText, propertyAttributes, triggers);
 		}
 
 		public UIFormTab CreateUIFormTab()

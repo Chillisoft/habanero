@@ -186,10 +186,6 @@ namespace Habanero.BO.Loaders
         private void LoadHeading()
         {
             _heading = _reader.GetAttribute("heading");
-            if (_heading == null)
-            {
-                _heading = StringUtilities.DelimitPascalCase(_propertyName, " ");
-            }
         }
 
         /// <summary>

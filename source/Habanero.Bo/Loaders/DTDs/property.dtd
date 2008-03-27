@@ -5,12 +5,15 @@
 <!ELEMENT property (rule*, databaseLookupList*, simpleLookupList*, businessObjectLookupList*)>
 <!ATTLIST property
 	name NMTOKEN #REQUIRED
+	displayName CDATA #IMPLIED
 	type CDATA "String"
 	assembly NMTOKEN "System"
 	readWriteRule (	ReadWrite | ReadOnly | WriteOnce | WriteNotNew | WriteNew ) "ReadWrite"
 	databaseField CDATA #IMPLIED
 	default CDATA #IMPLIED
-  compulsory ( true | false ) "false"
-  autoIncrementing ( true | false ) "false"
-  length CDATA #IMPLIED
+	description CDATA #IMPLIED
+    compulsory ( true | false ) "false"
+    autoIncrementing ( true | false ) "false"
+    length CDATA #IMPLIED
+    keepValuePrivate ( true | false ) "false"
 >

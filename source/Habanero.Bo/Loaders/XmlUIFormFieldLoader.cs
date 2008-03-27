@@ -43,6 +43,7 @@ namespace Habanero.BO.Loaders
         private bool _editable;
         private Hashtable _propertyAttributes;
         private TriggerCol _triggers = new TriggerCol();
+        private string _toolTipText;
 
         /// <summary>
         /// Constructor to initialise a new loader
@@ -89,7 +90,7 @@ namespace Habanero.BO.Loaders
         {
 			return _defClassFactory.CreateUIFormProperty(_label, _propertyName,
 				_controlTypeName, _controlAssembly, _mapperTypeName, _mapperTypeAssembly,
-                _editable, _propertyAttributes, _triggers);
+                _editable, _toolTipText, _propertyAttributes, _triggers);
 			//return _defClassFactory.CreateUIFormProperty(_label, _propertyName, 
 			//    _controlType, _mapperTypeName, _mapperTypeAssembly, _editable, _propertyAttributes);
         }
@@ -106,6 +107,7 @@ namespace Habanero.BO.Loaders
             LoadMapperTypeName();
             LoadMapperTypeAssembly();
             LoadEditable();
+            LoadToolTipText();
             LoadParameters();
             LoadTriggers();
         }
@@ -176,10 +178,6 @@ namespace Habanero.BO.Loaders
         private void LoadLabel()
         {
             _label = _reader.GetAttribute("label");
-            if (_label == null)
-            {
-                _label = StringUtilities.DelimitPascalCase(_propertyName, " ") + ":";
-            }
         }
 
         /// <summary>
@@ -198,6 +196,15 @@ namespace Habanero.BO.Loaders
                     "in a 'field' element is invalid. The valid options " +
                     "are 'true' and 'false'.", ex);
             }
+        }
+
+        /// <summary>
+        /// Loads the tool tip text value from the reader. This method is
+        /// called by LoadFromReader().
+        /// </summary>
+        private void LoadToolTipText()
+        {
+            _toolTipText = _reader.GetAttribute("toolTipText");
         }
 
         /// <summary>

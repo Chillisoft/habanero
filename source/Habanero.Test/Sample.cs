@@ -69,35 +69,37 @@ namespace Habanero.Test
 
         private static ClassDef CreateClassDef()
         {
+            PropDef propDef;
             PropDefCol lPropDefCol = new PropDefCol();
             lPropDefCol.Add(
                 new PropDef("SampleText", typeof (String), PropReadWriteRule.ReadWrite, "SampleText",  null));
             lPropDefCol.Add(
-                new PropDef("SampleText2", typeof (String), PropReadWriteRule.ReadWrite, "SampleText2", null));
-			lPropDefCol.Add(
+                new PropDef("SampleText2", typeof(String), PropReadWriteRule.ReadWrite, "SampleText2", null));
+            lPropDefCol.Add(
+                new PropDef("SampleTextPrivate", typeof(String), PropReadWriteRule.ReadWrite, "SampleTextPrivate", null,
+                false, false, int.MaxValue, null, null, true));
+            lPropDefCol.Add(
+                new PropDef("SampleTextDescribed", typeof(String), PropReadWriteRule.ReadWrite, "SampleTextDescribed", null,
+                false, false, int.MaxValue, null, "This is a sample text property that has a description.", false));
+            lPropDefCol.Add(
 				new PropDef("SampleDate", typeof(DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
 			lPropDefCol.Add(
 				new PropDef("SampleDateNullable", typeof(DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
 			lPropDefCol.Add(
-                new PropDef("SampleBoolean", typeof (Boolean), PropReadWriteRule.ReadWrite, "SampleBoolean",
-                            null));
+                new PropDef("SampleBoolean", typeof (Boolean), PropReadWriteRule.ReadWrite, "SampleBoolean", null));
             lPropDefCol.Add(
-                new PropDef("SampleLookupID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookupID",
-                            null));
+                new PropDef("SampleLookupID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookupID", null));
             lPropDefCol.Add(
                 new PropDef("SampleInt", typeof (int), PropReadWriteRule.ReadWrite, "SampleInt", 0));
             lPropDefCol.Add(
-                new PropDef("SampleMoney", typeof (Decimal), PropReadWriteRule.ReadWrite, "SampleInt",
-                            new Decimal(0)));
-            PropDef lPropDef =
-                new PropDef("SampleLookup2ID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookup2ID",
-                            null);
+                new PropDef("SampleMoney", typeof (Decimal), PropReadWriteRule.ReadWrite, "SampleInt", new Decimal(0)));
+            propDef = new PropDef("SampleLookup2ID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookup2ID", null);
             itsLookupCollection = new Dictionary<string, object>();
             itsLookupCollection.Add("Test1", new Guid("{6E8B3DDB-1B13-4566-868D-57478C1F4BEE}"));
             itsLookupCollection.Add("Test2", new Guid("{7209B956-96A0-4720-8E49-DE154FA0E096}"));
             itsLookupCollection.Add("Test3", new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}"));
-            lPropDef.LookupList = new SimpleLookupList(itsLookupCollection);
-            lPropDefCol.Add(lPropDef);
+            propDef.LookupList = new SimpleLookupList(itsLookupCollection);
+            lPropDefCol.Add(propDef);
                 lPropDefCol.Add(new PropDef("SampleLookup3ID", typeof (String), PropReadWriteRule.ReadWrite, "SampleLookup3ID",
                                             null));
             PropDef def = new PropDef("SampleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
@@ -189,7 +191,7 @@ namespace Habanero.Test
                 Hashtable propertyAttributes = new Hashtable();
                 propertyAttributes.Add("numLines", 3);
                 col.Add(
-                    new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", false,
+                    new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", false, null,
                                        propertyAttributes, null));
                 tab.Add(col);
                 def.Add(tab);
@@ -214,17 +216,42 @@ namespace Habanero.Test
             def.Width = 350;
             UIFormTab tab = new UIFormTab();
             UIFormColumn col = new UIFormColumn(100);
-            col.Add(new UIFormField("Text:", "SampleText", typeof (TextBox), "TextBoxMapper", "", true, new Hashtable(), null));
+            col.Add(new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", true, null, new Hashtable(), null));
             col.Add(
-                new UIFormField("Date:", "SampleDate", typeof(DateTimePicker), "DateTimePickerMapper", "", true,
+                new UIFormField("Date:", "SampleDate", typeof(DateTimePicker), "DateTimePickerMapper", "", true, null,
                                    new Hashtable(), null));
             col.Add(
-                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", true, new Hashtable(), null));
+                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", true, null, new Hashtable(), null));
             tab.Add(col);
             def.Add(tab);
             return def;
         }
 
+        public static UIForm SampleUserInterfaceMapperPrivatePropOnly()
+        {
+            UIForm def = new UIForm();
+            def.Height = 300;
+            def.Width = 350;
+            UIFormTab tab = new UIFormTab();
+            def.Add(tab);
+            UIFormColumn col = new UIFormColumn(100);
+            tab.Add(col);
+            col.Add(new UIFormField("Private Text:", "SampleTextPrivate", typeof(TextBox), "TextBoxMapper", "", true, null, new Hashtable(), null));
+            return def;
+        }
+
+        public static UIForm SampleUserInterfaceMapperDescribedPropOnly(string toolTipText)
+        {
+            UIForm def = new UIForm();
+            def.Height = 300;
+            def.Width = 350;
+            UIFormTab tab = new UIFormTab();
+            def.Add(tab);
+            UIFormColumn col = new UIFormColumn(100);
+            tab.Add(col);
+            col.Add(new UIFormField("Described Text:", "SampleTextDescribed", typeof(TextBox), "TextBoxMapper", "", true, toolTipText, new Hashtable(), null));
+            return def;
+        }
 
         public static UIForm SampleUserInterfaceMapper2Cols()
         {
@@ -235,12 +262,12 @@ namespace Habanero.Test
             UIFormColumn col1 = new UIFormColumn(100);
             UIFormColumn col2 = new UIFormColumn(150);
             col1.Add(
-                new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", true, new Hashtable(), null));
+                new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", true, null, new Hashtable(), null));
             col1.Add(
-                new UIFormField("Date:", "SampleDate", typeof(DateTimePicker), "DateTimePickerMapper", "", true,
+                new UIFormField("Date:", "SampleDate", typeof(DateTimePicker), "DateTimePickerMapper", "", true, null,
                                    new Hashtable(), null));
             col2.Add(
-                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", true, new Hashtable(), null));
+                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", true, null, new Hashtable(), null));
             tab.Add(col1);
             tab.Add(col2);
             def.Add(tab);
@@ -258,12 +285,12 @@ namespace Habanero.Test
             UIFormColumn col1 = new UIFormColumn(100);
             UIFormColumn col2 = new UIFormColumn(150);
             col1.Add(
-                new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", true, new Hashtable(), null));
+                new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", true, null, new Hashtable(), null));
             col1.Add(
-                new UIFormField("Date:", "SampleDate", typeof(DateTimePicker), "DateTimePickerMapper", "", true,
+                new UIFormField("Date:", "SampleDate", typeof(DateTimePicker), "DateTimePickerMapper", "", true, null,
                                    new Hashtable(), null));
             col2.Add(
-                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", true, new Hashtable(), null));
+                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", true, null, new Hashtable(), null));
             tab1.Add(col1);
             tab2.Add(col2);
             def.Add(tab1);
@@ -282,13 +309,13 @@ namespace Habanero.Test
             propertyAttributes.Add("numLines", 3);
             propertyAttributes.Add("colSpan", 2);
             col.Add(
-                new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", false, propertyAttributes, null));
+                new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", false, null, propertyAttributes, null));
             col.Add(
-                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", false, new Hashtable(), null));
+                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", false, null, new Hashtable(), null));
             tab.Add(col);
             UIFormColumn col2 = new UIFormColumn(100);
             col2.Add(
-                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", false, new Hashtable(), null));
+                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", false, null, new Hashtable(), null));
             tab.Add(col2);
             def.Add(tab);
             return def;
@@ -305,13 +332,13 @@ namespace Habanero.Test
             propertyAttributes.Add("numLines", 3);
             propertyAttributes.Add("rowSpan", 2);
             col.Add(
-                new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", false, propertyAttributes, null));
+                new UIFormField("Text:", "SampleText", typeof(TextBox), "TextBoxMapper", "", false, null, propertyAttributes, null));
             tab.Add(col);
             UIFormColumn col2 = new UIFormColumn(100);
             col2.Add(
-                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", false, new Hashtable(), null));
+                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", false, null, new Hashtable(), null));
             col2.Add(
-                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", false, new Hashtable(), null));
+                new UIFormField("Text2:", "SampleText2", typeof(TextBox), "TextBoxMapper", "", false, null, new Hashtable(), null));
             tab.Add(col2);
             def.Add(tab);
             return def;

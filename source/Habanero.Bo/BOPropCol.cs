@@ -177,7 +177,7 @@ namespace Habanero.BO
         /// Sets the IsObjectNew setting in each property to that specified
         /// </summary>
         /// <param name="bValue">Whether the object is set as new</param>
-        internal void setIsObjectNew(bool bValue)
+        internal void SetIsObjectNew(bool bValue)
         {
             foreach (BOProp prop in this)
             {

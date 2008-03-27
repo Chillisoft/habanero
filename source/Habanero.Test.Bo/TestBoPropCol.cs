@@ -40,10 +40,10 @@ namespace Habanero.Test.BO
         public void init()
         {
             mBOPropCol = new BOPropCol();
-            mPropDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            mPropDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadWrite, null);
             mBOPropCol.Add(mPropDef.CreateBOProp(false));
 
-            mPropDef = new PropDef("Prop2", typeof(string), PropReadWriteRule.ReadOnly, null);
+            mPropDef = new PropDef("Prop2", typeof(string), PropReadWriteRule.ReadWrite, null);
             mPropDef.PropRule = new PropRuleString(mPropDef.PropertyName, "Test Message", 1, 10, null);
             mBOPropCol.Add(mPropDef.CreateBOProp(false));
 

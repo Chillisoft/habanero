@@ -145,6 +145,7 @@ namespace Habanero.Test.BO
         //[Test]
         public void TestOrderItemChangeItemAndFind()
         {
+            OrderItem.ClearTable();
             OrderItem car = OrderItem.AddOrder1Car();
             OrderItem chair = OrderItem.AddOrder2Chair();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();

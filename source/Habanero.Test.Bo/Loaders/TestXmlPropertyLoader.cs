@@ -54,6 +54,9 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("TestProp", def.FieldName,
                             "The field name should be the same as the property name by default");
             Assert.AreEqual(false, def.AutoIncrementing, "autoIncrementing should be false by default");
+            Assert.AreEqual(null, def.DisplayName, "The display name is null");
+            Assert.AreEqual(null, def.Description, "The description is null");
+            Assert.AreEqual(false, def.KeepValuePrivate, "keepValuePrivate should be false by default");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
@@ -73,6 +76,27 @@ namespace Habanero.Test.BO.Loaders
         {
             PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" type=""Int32"" />");
             Assert.AreEqual(typeof (int), def.PropertyType, "Property type should be same as that specified in xml");
+        }
+
+        [Test]
+        public void TestPropertyWithDescription()
+        {
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" description=""Property for Testing"" />");
+            Assert.AreEqual("Property for Testing", def.Description, "Property description should be same as that specified in xml");
+        }
+
+        [Test]
+        public void TestPropertyWithDisplayValue()
+        {
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" displayName=""Test Property"" />");
+            Assert.AreEqual("Test Property", def.DisplayName, "Property description should be same as that specified in xml");
+        }
+
+        [Test]
+        public void TestPropertyWithKeepValuePrivate()
+        {
+            PropDef def = itsLoader.LoadProperty(@"<property  name=""TestProp"" keepValuePrivate=""true"" />");
+            Assert.AreEqual(true, def.KeepValuePrivate, "Property 'keep value private' attribute should be same as that specified in xml");
         }
 
         [Test]
@@ -135,6 +159,27 @@ namespace Habanero.Test.BO.Loaders
                 itsLoader.LoadProperty(
                     @"<property  name=""TestProp"" type=""Guid"" default=""{38373667-B06A-40c5-B4CE-299CE925E121}"" />");
             Assert.AreEqual(new Guid("{38373667-B06A-40c5-B4CE-299CE925E121}"), def.DefaultValue,
+                            "Default value should be same as that specified in xml");
+        }
+
+        [Test]
+        public void TestPropertyWithDateTimeDefaultValueToday()
+        {
+            PropDef def = itsLoader.LoadProperty(
+                    @"<property  name=""TestProp"" type=""DateTime"" default=""Today"" />");
+            Assert.AreEqual(DateTime.Today, def.DefaultValue,
+                            "Default value should be same as that specified in xml");
+        }
+
+        [Test]
+        public void TestPropertyWithDateTimeDefaultValueNow()
+        {
+            PropDef def = itsLoader.LoadProperty(
+                    @"<property  name=""TestProp"" type=""DateTime"" default=""Now"" />");
+            DateTime nowBefore = DateTime.Now;
+            DateTime defaultValue = Convert.ToDateTime(def.DefaultValue);
+            DateTime nowAfter = DateTime.Now;
+            Assert.IsTrue(nowBefore <= defaultValue && defaultValue <= nowAfter,
                             "Default value should be same as that specified in xml");
         }
 

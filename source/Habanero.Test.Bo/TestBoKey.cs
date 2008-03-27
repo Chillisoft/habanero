@@ -49,20 +49,20 @@ namespace Habanero.Test.BO
         	_keyDef2 = new KeyDef();
 
             //Props for KeyDef 1
-            PropDef lPropDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            PropDef lPropDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadWrite, null);
             _boPropCol1.Add(lPropDef.CreateBOProp(false));
             _keyDef1.Add(lPropDef);
 
-            lPropDef = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadOnly, null);
+            lPropDef = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadWrite, null);
             _boPropCol1.Add(lPropDef.CreateBOProp(false));
             _keyDef1.Add(lPropDef);
 
             //Props for KeyDef 2
-            lPropDef = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadOnly, null);
+            lPropDef = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadWrite, null);
             _boPropCol2.Add(lPropDef.CreateBOProp(false));
             _keyDef2.Add(lPropDef);
 
-            lPropDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            lPropDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadWrite, null);
             _boPropCol2.Add(lPropDef.CreateBOProp(false));
             _keyDef2.Add(lPropDef);
         }
@@ -191,8 +191,8 @@ namespace Habanero.Test.BO
         [Test]
         public void TestPropertyValueStringBeforeLastEdit()
         {
-            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadOnly, null);
-            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadOnly, null);
+            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null);
 
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef1.CreateBOProp(false));
@@ -221,8 +221,8 @@ namespace Habanero.Test.BO
         [Test]
         public void TestUpdatedEvent()
         {
-            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadOnly, null);
-            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadOnly, null);
+            PropDef propDef1 = new PropDef("PropName1", typeof(string), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("PropName2", typeof(string), PropReadWriteRule.ReadWrite, null);
 
             BOPropCol propCol = new BOPropCol();
             propCol.Add(propDef1.CreateBOProp(false));

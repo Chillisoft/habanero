@@ -66,6 +66,62 @@ namespace Habanero.Test.UI.Forms
             Assert.AreSame(typeof (TextBox), pnl.Controls[5].GetType());
         }
 
+        [Test]
+        public void TestWithOnePrivateProperty()
+        {
+            Sample s = new Sample();
+            PanelFactory factory = new PanelFactory(s, Sample.SampleUserInterfaceMapperPrivatePropOnly());
+            PanelFactoryInfo pnlInfo = factory.CreatePanel();
+            Panel pnl = pnlInfo.Panel;
+            Assert.AreEqual(2, pnl.Controls.Count, "The panel should have 2 controls.");
+            Assert.AreEqual(1, pnlInfo.ControlMappers.Count, "The PanelInfo should have 1 mappers");
+            Assert.AreSame(typeof(Label), pnl.Controls[0].GetType());
+            Assert.AreSame(typeof(PasswordTextBox), pnl.Controls[1].GetType());
+        }
+
+        [Test]
+        public void TestToolTipWithOneDescribedProperty()
+        {
+            Sample s = new Sample();
+            PanelFactory factory = new PanelFactory(s, Sample.SampleUserInterfaceMapperDescribedPropOnly(null));
+            PanelFactoryInfo pnlInfo = factory.CreatePanel();
+            Panel pnl = pnlInfo.Panel;
+            Assert.AreEqual(2, pnl.Controls.Count, "The panel should have 2 controls.");
+            Assert.AreEqual(1, pnlInfo.ControlMappers.Count, "The PanelInfo should have 1 mappers");
+            Assert.AreSame(typeof(Label), pnl.Controls[0].GetType());
+            Assert.AreSame(typeof(TextBox), pnl.Controls[1].GetType());
+            ToolTip toolTip = pnlInfo.ToolTip;
+            string toolTipText;
+            //The label should have the description of the property as it's tooltip.
+            toolTipText = toolTip.GetToolTip(pnl.Controls[0]);
+            Assert.AreSame("This is a sample text property that has a description.", toolTipText);
+            //The textbox should also have the description of the property as it's tooltip.
+            toolTipText = toolTip.GetToolTip(pnl.Controls[1]);
+            Assert.AreSame("This is a sample text property that has a description.", toolTipText);
+        }
+
+        [Test]
+        public void TestToolTipWithOneDescribedPropertyWithSpecifiedToolTip()
+        {
+            Sample s = new Sample();
+            string controlToolTipText = "This is my control with a tool tip.";
+            PanelFactory factory = new PanelFactory(s, Sample.SampleUserInterfaceMapperDescribedPropOnly(controlToolTipText));
+            PanelFactoryInfo pnlInfo = factory.CreatePanel();
+            Panel pnl = pnlInfo.Panel;
+            Assert.AreEqual(2, pnl.Controls.Count, "The panel should have 2 controls.");
+            Assert.AreEqual(1, pnlInfo.ControlMappers.Count, "The PanelInfo should have 1 mappers");
+            Assert.AreSame(typeof(Label), pnl.Controls[0].GetType());
+            Assert.AreSame(typeof(TextBox), pnl.Controls[1].GetType());
+            ToolTip toolTip = pnlInfo.ToolTip;
+            string toolTipText;
+            //The label should have the description of the property as it's tooltip.
+            toolTipText = toolTip.GetToolTip(pnl.Controls[0]);
+            Assert.AreSame(controlToolTipText, toolTipText);
+            //The textbox should also have the description of the property as it's tooltip.
+            toolTipText = toolTip.GetToolTip(pnl.Controls[1]);
+            Assert.AreSame(controlToolTipText, toolTipText);
+        }
+
         //TODO! Think about how this can be accomplished
         //		[Test]
         //		public void TestWithMoreThanOneBO() {

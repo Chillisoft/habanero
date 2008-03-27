@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using Habanero.Util;
 using Habanero.Util.File;
 
 namespace Habanero.BO.ClassDefinition
@@ -39,6 +40,7 @@ namespace Habanero.BO.ClassDefinition
 		private bool _editable;
         private readonly Hashtable _parameters;
         private TriggerCol _triggers;
+        private string _toolTipText;
 
         /// <summary>
         /// Constructor to initialise a new definition
@@ -48,13 +50,13 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="controlType">The control type</param>
         /// <param name="mapperTypeName">The mapper type name</param>
         /// <param name="mapperAssembly">The mapper assembly</param>
-        /// <param name="editable">Whether the control is read-only (cannot
-        /// be edited directly)</param>
+        /// <param name="editable">Whether the control is editable or not</param>
+        /// <param name="toolTipText">The tool tip text to be used.</param>
         /// <param name="parameters">The property attributes</param>
         /// <param name="triggers">The collection of triggers managed by the field</param>
         public UIFormField(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly,
-                           bool editable, Hashtable parameters, TriggerCol triggers)
-			:this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, parameters, triggers)
+                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers)
+            : this(label, propertyName, controlType, null, null, mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers)
 		{}
 
         /// <summary>
@@ -66,21 +68,21 @@ namespace Habanero.BO.ClassDefinition
 		/// <param name="controlAssembly">The control assembly</param>
         /// <param name="mapperTypeName">The mapper type name</param>
         /// <param name="mapperAssembly">The mapper assembly</param>
-        /// <param name="editable">Whether the control is read-only (cannot
-        /// be edited directly)</param>
+        /// <param name="editable">Whether the control is editable or not</param>
+        /// <param name="toolTipText">The tool tip text to be used.</param>
         /// <param name="parameters">The property attributes</param>
         /// <param name="triggers">The collection of triggers managed by the field</param>
         public UIFormField(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-                           bool editable, Hashtable parameters, TriggerCol triggers)
+                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers)
 			: this(label, propertyName, null, controlTypeName, controlAssembly,
-                    mapperTypeName, mapperAssembly, editable, parameters, triggers)
+                    mapperTypeName, mapperAssembly, editable, toolTipText, parameters, triggers)
 		{}
 
         /// <summary>
         /// The master constructor for all of the possible arguments
         /// </summary>
         private UIFormField(string label, string propertyName, Type controlType, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly,
-                           bool editable, Hashtable parameters, TriggerCol triggers)
+                           bool editable, string toolTipText, Hashtable parameters, TriggerCol triggers)
         {
 			if (controlType != null)
         	{
@@ -96,6 +98,7 @@ namespace Habanero.BO.ClassDefinition
             _mapperTypeName = mapperTypeName;
             _mapperAssembly = mapperAssembly;
             _editable = editable;
+            _toolTipText = toolTipText;
             _parameters = parameters;
             //_controlType = controlType;
             _triggers = triggers;
@@ -110,10 +113,10 @@ namespace Habanero.BO.ClassDefinition
 		/// <summary>
         /// Returns the label
         /// </summary>
-        public string Label
+        internal string Label
         {
             get { return _label; }
-            protected set { _label = value; }
+            set { _label = value; }
         }
 
         /// <summary>
@@ -193,6 +196,14 @@ namespace Habanero.BO.ClassDefinition
             protected set { _editable = value; }
         }
 
+        ///<summary>
+        /// Returns the text that will be shown in the Tool Tip for the control.
+        ///</summary>
+        public string ToolTipText
+        {
+            get { return _toolTipText; }
+        }
+
         /// <summary>
         /// Returns the Hashtable containing the property attributes
         /// </summary>
@@ -211,6 +222,100 @@ namespace Habanero.BO.ClassDefinition
         }
 
 		#endregion
+
+        #region Helper Methods
+
+        ///<summary>
+        /// Gets the property definition for the property that this field refers to.
+        /// This property could be on a related object. If the property is not found, then 
+        /// nul is returned.
+        ///</summary>
+        ///<param name="classDef">The class definition that this field is for.</param>
+        ///<returns>The property definition that is refered to, otherwise null. </returns>
+        public PropDef GetPropDefIfExists(ClassDef classDef)
+        {
+            return ClassDefHelper.GetPropDefByPropName(classDef, PropertyName);
+        }
+
+        ///<summary>
+        /// Gets the text that will be shown in the tool tip for the control.
+        ///</summary>
+        /// <returns> The text that will be used for the tool tip for this control. </returns>
+        public string GetToolTipText()
+        {
+            return GetToolTipText(null);
+        }
+
+        ///<summary>
+        /// Gets the text that will be shown in the tool tip for the control given a classDef.
+        ///</summary>
+        ///<param name="classDef">The class definition that corresponds to this form field. </param>
+        /// <returns> The text that will be used for the tool tip for this control. </returns>
+        public string GetToolTipText(ClassDef classDef)
+        {
+            if (!String.IsNullOrEmpty(_toolTipText))
+            {
+                return _toolTipText;
+            }
+            string toolTipText = null;
+            PropDef propDef = GetPropDefIfExists(classDef);
+            if (propDef != null)
+            {
+                toolTipText = propDef.Description;
+            }
+            if (String.IsNullOrEmpty(toolTipText))
+            {
+                toolTipText = null;
+            }
+            return toolTipText;
+        }
+
+        ///<summary>
+        /// Gets the label for this form field.
+        ///</summary>
+        ///<returns> The label for this form field </returns>
+        public string GetLabel()
+        {
+            return GetLabel(null);
+        }
+
+        ///<summary>
+        /// Gets the label for this form field given a classDef.
+        ///</summary>
+        ///<param name="classDef">The class definition that corresponds to this form field. </param>
+        ///<returns> The label for this form field </returns>
+        public string GetLabel(ClassDef classDef)
+        {
+            if (!String.IsNullOrEmpty(_label))
+            {
+                return _label;
+            }
+            string label = null;
+            PropDef propDef = GetPropDefIfExists(classDef);
+            if (propDef != null)
+            {
+                label = propDef.DisplayName + LabelSuffix;
+            }
+            if (String.IsNullOrEmpty(label))
+            {
+                label = StringUtilities.DelimitPascalCase(_propertyName, " ") + LabelSuffix;
+            }
+            return label;
+        }
+
+        private string LabelSuffix
+        {
+            get
+            {
+                if (ControlTypeName.EndsWith("CheckBox"))
+                {
+                    return "?";
+                }
+                return ":";
+            }
+        }
+
+        #endregion //Helper Methods
 
 		/// <summary>
 		/// Returns the parameter value for the name provided
@@ -244,7 +349,8 @@ namespace Habanero.BO.ClassDefinition
 				TypeLoader.ClassTypeInfo(_controlType, out _controlAssembly, out _controlTypeName);
 			}
 		}
+               
 
-		#endregion Type Initialisation
+        #endregion Type Initialisation
     }
 }

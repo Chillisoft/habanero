@@ -195,8 +195,14 @@ namespace Habanero.DB
             {
                 foreach (IDbConnection dbConnection in _connections)
                 {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
+                    try
+                    {
+                        dbConnection.Close();
+                        dbConnection.Dispose();
+                    } catch (Exception ex)
+                    {
+                        log.Warn("Error closing and disposing connection", ex);
+                    }
                 }
                 _connections = new ArrayList(5);
                 _connectString = value;

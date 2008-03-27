@@ -35,7 +35,7 @@ namespace Habanero.Test.BO
         [SetUp]
         public void init()
         {
-            _propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            _propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadWrite, null);
             _prop = _propDef.CreateBOProp(false);
         }
 
@@ -385,9 +385,9 @@ namespace Habanero.Test.BO
         [Test]
         public void TestDisplayNameAssignment()
         {
-            Assert.AreEqual("PropName", _prop.DisplayName);
-            _prop.DisplayName = "Prop Name";
             Assert.AreEqual("Prop Name", _prop.DisplayName);
+            _prop.DisplayName = "Property Name";
+            Assert.AreEqual("Property Name", _prop.DisplayName);
             Assert.IsFalse(_prop.InvalidReason.Length > 0);
         }
 
@@ -400,14 +400,17 @@ namespace Habanero.Test.BO
 
             Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
             Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Property'"));
 
             boProp.Value = "abcdef";
-            Assert.IsTrue(boProp.InvalidReason.Contains("'TestProp'"));
-            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
-
-            boProp.DisplayName = "Test Prop";
             Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
             Assert.IsTrue(boProp.InvalidReason.Contains("'Test Prop'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Property'"));
+
+            boProp.DisplayName = "Test Property";
+            Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
+            Assert.IsTrue(boProp.InvalidReason.Contains("'Test Property'"));
         }
 
         [Test]
@@ -419,11 +422,13 @@ namespace Habanero.Test.BO
 
             Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
             Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Property'"));
 
-            boProp.DisplayName = "Test Prop";
+            boProp.DisplayName = "Test Property";
             boProp.Value = "abcdef";
             Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
-            Assert.IsTrue(boProp.InvalidReason.Contains("'Test Prop'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
+            Assert.IsTrue(boProp.InvalidReason.Contains("'Test Property'"));
         }
 
         [Test]
@@ -433,18 +438,38 @@ namespace Habanero.Test.BO
                                   PropReadWriteRule.ReadWrite, null, null, true, false);
             BOProp boProp = propDef.CreateBOProp(true);
 
-            Assert.IsTrue(boProp.InvalidReason.Contains("'TestProp'"));
-            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
-
-            boProp.DisplayName = "Test Prop";
             Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
             Assert.IsTrue(boProp.InvalidReason.Contains("'Test Prop'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Property'"));
+
+            boProp.DisplayName = "Test Property";
+            Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
+            Assert.IsFalse(boProp.InvalidReason.Contains("'Test Prop'"));
+            Assert.IsTrue(boProp.InvalidReason.Contains("'Test Property'"));
         }
 
         #region Tests for Read Write Rules
 
+        #region Shared Methods
+
+        private static void WriteTestValues(BOProp boProp)
+        {
+            boProp.Value = "TestValue";
+            Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value.");
+            boProp.Value = "TestValue2";
+            Assert.AreEqual("TestValue2", boProp.Value, "BOProp value should now have the given value.");
+            boProp.Value = "TestValue3";
+            Assert.AreEqual("TestValue3", boProp.Value, "BOProp value should now have the given value.");
+            boProp.Value = "TestValue4";
+            Assert.AreEqual("TestValue4", boProp.Value, "BOProp value should now have the given value.");
+        }
+
+        #endregion //Shared Methods
+
+        #region Test ReadWrite
+
         [Test]
-        public void TestUpdatePropReadWriteNew()
+        public void TestUpdateProp_ReadWrite_New()
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadWrite, null, null, true, false);
@@ -452,10 +477,13 @@ namespace Habanero.Test.BO
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
             boProp.Value = "TestValue";
             Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
+            boProp.BackupPropValue();
+            boProp.Value = "TestValue2";
+            Assert.AreEqual("TestValue2", boProp.Value, "BOProp value should now have the given value");
         }
 
         [Test]
-        public void TestUpdatePropReadWriteExisting()
+        public void TestUpdateProp_ReadWrite_Existing()
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadWrite, null, null, true, false);
@@ -463,35 +491,40 @@ namespace Habanero.Test.BO
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
             boProp.Value = "TestValue";
             Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
+            boProp.BackupPropValue();
+            boProp.Value = "TestValue2";
+            Assert.AreEqual("TestValue2", boProp.Value, "BOProp value should now have the given value");
         }
 
-        //[Test]
-        //public void TestUpdatePropReadOnlyNew()
-        //{
-        //    PropDef propDef = new PropDef("TestProp", "System", "String",
-        //                          PropReadWriteRule.ReadOnly, null, null, true, false);
-        //    BOProp boProp = propDef.CreateBOProp(true);
-        //    Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
-        //    boProp.Value = "TestValue";
-        //    Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
-        //}
+        #endregion //Test ReadWrite
 
-        //[Test]
-        //public void TestUpdatePropReadOnlyExisting()
-        //{
-        //    PropDef propDef = new PropDef("TestProp", "System", "String",
-        //                          PropReadWriteRule.ReadOnly, null, null, true, false);
-        //    BOProp boProp = propDef.CreateBOProp(false);
-        //    Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
-        //    boProp.Value = "TestValue";
-        //    Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
-        //}
+        #region Test ReadOnly
 
-        [Test]
-        public void TestUpdateProp_WriteOnce_New()
+        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        public void TestUpdateProp_ReadOnly_New()
         {
-            CreateWriteOnceBoProp(true);
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                                  PropReadWriteRule.ReadOnly, null, null, true, false);
+            BOProp boProp = propDef.CreateBOProp(true);
+            Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
+            boProp.Value = "TestValue";
+            //Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
         }
+
+        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        public void TestUpdateProp_ReadOnly_Existing()
+        {
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                                  PropReadWriteRule.ReadOnly, null, null, true, false);
+            BOProp boProp = propDef.CreateBOProp(false);
+            Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
+            boProp.Value = "TestValue";
+            //Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
+        }
+
+        #endregion //Test ReadOnly
+
+        #region Test WriteOnce
 
         private static BOProp CreateWriteOnceBoProp(bool isNew)
         {
@@ -511,6 +544,12 @@ namespace Habanero.Test.BO
             return boProp;
         }
 
+        [Test]
+        public void TestUpdateProp_WriteOnce_New()
+        {
+            CreateWriteOnceBoProp(true);
+        }
+
         [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
         public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain()
         {
@@ -520,15 +559,113 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestUpdatePropWriteOnceExisting()
+        public void TestUpdateProp_WriteOnce_Existing()
         {
+            CreateWriteOnceBoProp(false);
+        }
+
+        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        public void TestUpdateProp_WriteOnce_Existing_WriteAgain()
+        {
+            BOProp boProp = CreateWriteOnceBoProp(false);
+            boProp.BackupPropValue();
+            boProp.Value = "NewValue";
+        }
+
+        #endregion //Test WriteOnce
+
+        #region Test WriteNew
+
+        private static BOProp CreateWriteNewBoProp(bool isNew)
+        {
+            BOProp boProp;
             PropDef propDef = new PropDef("TestProp", "System", "String",
-                                  PropReadWriteRule.WriteOnce, null, null, true, false);
-            BOProp boProp = propDef.CreateBOProp(false);
+                                          PropReadWriteRule.WriteNew, null, null, true, false);
+            boProp = propDef.CreateBOProp(isNew);
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
             boProp.Value = "TestValue";
-            Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
+            Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value.");
+            boProp.Value = "TestValue2";
+            Assert.AreEqual("TestValue2", boProp.Value, "BOProp value should now have the given value.");
+            boProp.Value = "TestValue3";
+            Assert.AreEqual("TestValue3", boProp.Value, "BOProp value should now have the given value.");
+            boProp.Value = "TestValue4";
+            Assert.AreEqual("TestValue4", boProp.Value, "BOProp value should now have the given value.");
+            return boProp;
         }
+
+        [Test]
+        public void TestUpdateProp_WriteNew_New()
+        {
+            CreateWriteNewBoProp(true);
+        }
+
+        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        public void TestUpdateProp_WriteNew_NewPersisted_WriteAgain()
+        {
+            BOProp boProp = CreateWriteNewBoProp(true);
+            boProp.BackupPropValue();
+            boProp.IsObjectNew = false;
+            boProp.Value = "NewValue";
+        }
+
+        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        public void TestUpdateProp_WriteNew_Existing()
+        {
+            CreateWriteNewBoProp(false);
+        }
+
+        #endregion //Test WriteNew
+
+        #region Test WriteNotNew
+
+        private static BOProp CreateWriteNotNewBoProp(bool isNew)
+        {
+            BOProp boProp;
+            PropDef propDef = new PropDef("TestProp", "System", "String",
+                                          PropReadWriteRule.WriteNotNew, null, null, true, false);
+            boProp = propDef.CreateBOProp(isNew);
+            Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
+            return boProp;
+        }
+
+        private static BOProp CreateWriteNotNewBoPropWithValues(bool isNew)
+        {
+            BOProp boProp = CreateWriteNotNewBoProp(isNew);
+            WriteTestValues(boProp);
+            return boProp;
+        }
+
+        [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
+        public void TestUpdateProp_WriteNotNew_New()
+        {
+            CreateWriteNotNewBoPropWithValues(true);
+        }
+
+        [Test]
+        public void TestUpdateProp_WriteNotNew_NewPersisted_WriteAgain()
+        {
+            BOProp boProp = CreateWriteNotNewBoProp(true);
+            boProp.BackupPropValue();
+            boProp.IsObjectNew = false;
+            WriteTestValues(boProp);
+        }
+
+        [Test]
+        public void TestUpdateProp_WriteNotNew_Existing()
+        {
+            CreateWriteNotNewBoPropWithValues(false);
+        }
+
+        [Test]
+        public void TestUpdateProp_WriteNotNew_Existing_WriteAgain()
+        {
+            BOProp boProp = CreateWriteNotNewBoPropWithValues(false);
+            boProp.BackupPropValue();
+            WriteTestValues(boProp);
+        }
+
+        #endregion //Test WriteNotNew
 
         #endregion //Tests for Read Write Rules
 

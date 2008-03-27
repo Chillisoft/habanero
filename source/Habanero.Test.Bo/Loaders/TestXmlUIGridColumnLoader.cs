@@ -93,6 +93,18 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
+        public void TestAutomaticHeadingCreation()
+        {
+            UIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" />");
+            Assert.AreEqual(null, uiProp.Heading);
+            Assert.AreEqual("testpropname", uiProp.GetHeading());
+
+            uiProp = loader.LoadUIProperty(@"<column property=""TestPropName"" />");
+            Assert.AreEqual(null, uiProp.Heading);
+            Assert.AreEqual("Test Prop Name", uiProp.GetHeading());
+        }
+
+        [Test]
         public void TestAlignment()
         {
             UIGridColumn uiProp = loader.LoadUIProperty(@"<column property=""testpropname"" />");

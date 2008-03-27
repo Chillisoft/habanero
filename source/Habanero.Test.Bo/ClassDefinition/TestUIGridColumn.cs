@@ -48,6 +48,53 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestFieldDefaultLabel()
+        {
+            UIGridColumn uiGridColumn;
+            uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, UIGridColumn.PropAlignment.left, null);
+            Assert.AreEqual("Test Property", uiGridColumn.GetHeading());
+        }
+
+        [Test]
+        public void TestFieldDefaultLabelFromClassDef()
+        {
+            ClassDef classDef = CreateTestClassDef("");
+            UIGridColumn uiGridColumn;
+            uiGridColumn = new UIGridColumn(null, "TestProperty", typeof(DataGridViewTextBoxColumn), false, 100, UIGridColumn.PropAlignment.left , null);
+            Assert.AreEqual("Tested Property", uiGridColumn.GetHeading(classDef));
+        }
+
+        [Test]
+        public void TestFieldDefaultLabelFromRelatedClassDef()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = CreateTestClassDef("");
+            ClassDef classDef2 = CreateTestClassDef("2");
+            ClassDef.ClassDefs.Add(classDef2);
+            RelKeyDef relKeyDef = new RelKeyDef();
+            RelPropDef relPropDef = new RelPropDef(classDef.PropDefcol["TestProperty"], "TestProperty2");
+            relKeyDef.Add(relPropDef);
+            SingleRelationshipDef def = new SingleRelationshipDef("TestRel", classDef2.AssemblyName, classDef2.ClassName, relKeyDef, false);
+            classDef.RelationshipDefCol.Add(def);
+
+            UIGridColumn uiGridColumn;
+            uiGridColumn = new UIGridColumn(null, "TestRel.TestProperty2", typeof(DataGridViewTextBoxColumn), false, 100, UIGridColumn.PropAlignment.left, null);
+            Assert.AreEqual("Tested Property2", uiGridColumn.GetHeading(classDef));
+        }
+
+        private static ClassDef CreateTestClassDef(string suffix)
+        {
+            PropDefCol propDefCol = new PropDefCol();
+            PropDef propDef = new PropDef("TestProperty" + suffix, typeof(string), PropReadWriteRule.ReadWrite, null, null, false, false, 100,
+                                          "Tested Property" + suffix, null);
+            propDefCol.Add(propDef);
+            PrimaryKeyDef primaryKeyDef = new PrimaryKeyDef();
+            primaryKeyDef.Add(propDef);
+            return new ClassDef("TestAssembly", "TestClass" + suffix, primaryKeyDef,
+                                propDefCol, new KeyDefCol(), new RelationshipDefCol(), new UIDefCol());
+        }
+
+        [Test]
         public void TestProtectedSets()
         {
             UIGridColumnInheritor column = new UIGridColumnInheritor();

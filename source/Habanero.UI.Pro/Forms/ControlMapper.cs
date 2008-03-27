@@ -189,24 +189,48 @@ namespace Habanero.UI.Forms
             get { return _businessObject; }
             set
             {
-				if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
-				{
-					//Remove existing handlers
-					_businessObject.Props[_propertyName].Updated -= this.BOPropValueUpdatedHandler;
-				}
-				_businessObject = value;
+                RemoveCurrentBOPropHandlers();
+                _businessObject = value;
                 OnBusinessObjectChanged();
             	UpdateIsEditable();
                 ValueUpdated();
-				if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
-				{
-					//Add needed handlers
-					_businessObject.Props[_propertyName].Updated += this.BOPropValueUpdatedHandler;
-				}
+                AddCurrentBOPropHandlers();
             }
         }
 
         protected virtual void OnBusinessObjectChanged() { }
+
+        private void AddCurrentBOPropHandlers()
+        {
+            BOProp boProp = CurrentBOProp();
+            if (boProp != null)
+            {
+                //Add needed handlers
+                boProp.Updated += this.BOPropValueUpdatedHandler;
+            }
+        }
+
+        private void RemoveCurrentBOPropHandlers()
+        {
+            BOProp boProp = CurrentBOProp();
+            if (boProp != null)
+            {
+                //Remove existing handlers
+                boProp.Updated -= this.BOPropValueUpdatedHandler;
+            }
+        }
+
+        protected BOProp CurrentBOProp()
+        {
+			if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
+			{
+				return _businessObject.Props[_propertyName];
+			} else
+			{
+			    return null;
+			}
+        }
+
 
         /// <summary>
 		/// Updates the isEditable flag and updates 
@@ -234,13 +258,27 @@ namespace Habanero.UI.Forms
                 if (_businessObject.ClassDef.PropDefColIncludingInheritance.Contains(_propertyName))
                 {
                     PropDef propDef = _businessObject.ClassDef.PropDefColIncludingInheritance[_propertyName];
+                    BOProp boProp = CurrentBOProp();
                     switch (propDef.ReadWriteRule)
                     {
                         case PropReadWriteRule.ReadOnly:
                             _isEditable = false;
                             break;
                         case PropReadWriteRule.WriteOnce:
+                            object persistedPropertyValue = boProp.PersistedPropertyValue;
+                            if (persistedPropertyValue is string)
+                            {
+                                _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
+                            } else
+                            {
+                                _isEditable = persistedPropertyValue == null;
+                            }
+                            break;
+                        case PropReadWriteRule.WriteNew:
                             _isEditable = _businessObject.State.IsNew;
+                            break;
+                        case PropReadWriteRule.WriteNotNew:
+                            _isEditable = !_businessObject.State.IsNew;
                             break;
                     }
                 }

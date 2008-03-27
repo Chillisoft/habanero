@@ -83,9 +83,17 @@ namespace Habanero.BO
         /// Constructor to initialise the exception
         /// </summary>
         /// <param name="propDef">The property definition for the property that had the ReadWriteRule which threw the error.</param>
-        public BusinessObjectReadWriteRuleException(PropDef propDef)
+        public BusinessObjectReadWriteRuleException(PropDef propDef): this(propDef, ConstructMessage(propDef))
         {
             _propDef = propDef;
+        }
+
+        private static string ConstructMessage(PropDef propDef)
+        {
+            if (propDef == null) return "";
+            string displayName = String.IsNullOrEmpty(propDef.DisplayName) ? propDef.PropertyName : propDef.DisplayName;
+            return String.Format("Error writing to property '{0}' because it is configured as a '{1}' property.",
+                                 displayName, propDef.ReadWriteRule.ToString());
         }
 
         /// <summary>

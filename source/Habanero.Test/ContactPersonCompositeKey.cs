@@ -122,22 +122,22 @@ namespace Habanero.Test
             lPropDefCol.Add(propDef);
 
             //Create concurrency control properties
-            propDef = new PropDef("DateLastUpdated", typeof (DateTime), PropReadWriteRule.ReadOnly, DateTime.Now);
+            propDef = new PropDef("DateLastUpdated", typeof(DateTime), PropReadWriteRule.ReadWrite, DateTime.Now);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("UserLastUpdated", typeof (string), PropReadWriteRule.ReadOnly, null);
+            propDef = new PropDef("UserLastUpdated", typeof(string), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("MachineLastUpdated", typeof (string), PropReadWriteRule.ReadOnly, null);
+            propDef = new PropDef("MachineLastUpdated", typeof(string), PropReadWriteRule.ReadWrite, null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("VersionNumber", typeof (int), PropReadWriteRule.ReadOnly, 1);
+            propDef = new PropDef("VersionNumber", typeof(int), PropReadWriteRule.ReadWrite, 1);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("PK1Prop1", typeof (string), PropReadWriteRule.ReadOnly, "PK1_Prop1", null);
+            propDef = new PropDef("PK1Prop1", typeof(string), PropReadWriteRule.ReadWrite, "PK1_Prop1", null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("PK1Prop2", typeof (string), PropReadWriteRule.ReadOnly, "PK1_Prop2", null);
+            propDef = new PropDef("PK1Prop2", typeof(string), PropReadWriteRule.ReadWrite, "PK1_Prop2", null);
             lPropDefCol.Add(propDef);
 
             return lPropDefCol;

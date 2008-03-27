@@ -216,11 +216,15 @@ namespace Habanero.UI.Grid
                     _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
                 }
 
-                if (propDef != null && propDef.PropertyName != gridColumn.Heading)
+                if (propDef != null && propDef.PropertyName != gridColumn.GetHeading(classDef))
                 {
                     foreach (BusinessObject bo in _collection)
                     {
-                        bo.Props[propDef.PropertyName].DisplayName = gridColumn.Heading;
+                        BOProp boProp = bo.Props[propDef.PropertyName];
+                        if (!boProp.HasDisplayName())
+                        {
+                            boProp.DisplayName = gridColumn.GetHeading(classDef);
+                        }
                     }
                 }
 

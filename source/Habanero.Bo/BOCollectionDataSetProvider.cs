@@ -60,6 +60,7 @@ namespace Habanero.BO
             DataColumn column = _table.Columns.Add();
             column.Caption = "ID";
             column.ColumnName = "ID";
+            ClassDef classDef = _collection.ClassDef;
             foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
                 column = _table.Columns.Add();
@@ -71,10 +72,9 @@ namespace Habanero.BO
                         "per property can be specified.", uiProperty.PropertyName));
                 }
                 column.ColumnName = uiProperty.PropertyName;
-                column.Caption = uiProperty.Heading;
+                column.Caption = uiProperty.GetHeading(classDef);
                 column.ReadOnly = !uiProperty.Editable;
-                column.ExtendedProperties.Add("LookupList",
-                                              _collection.ClassDef.GetLookupList(uiProperty.PropertyName));
+                column.ExtendedProperties.Add("LookupList", classDef.GetLookupList(uiProperty.PropertyName));
                 column.ExtendedProperties.Add("Width", uiProperty.Width);
                 column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
             }

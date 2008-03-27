@@ -42,6 +42,9 @@ namespace Habanero.BO.Loaders
         private bool _compulsory;
         private bool _autoIncrementing;
         private int _length;
+        private string _description;
+        private string _displayName;
+        private bool _keepValuePrivate;
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -104,18 +107,21 @@ namespace Habanero.BO.Loaders
         {
             _reader.Read();
             LoadPropertyName();
+            LoadDisplayName();
             LoadPropertyType();
             LoadReadWriteRule();
             LoadDefaultValue();
             LoadDatabaseFieldName();
+            LoadDescription();
             LoadCompulsory();
             LoadAutoIncrementing();
             LoadLength();
+            LoadKeepValuePrivate();
 
             _reader.Read();
 
 			_propDef = _defClassFactory.CreatePropDef(_propertyName, _assemblyName, _typeName, _readWriteRule,
-                _databaseFieldName, _defaultValueString, _compulsory, _autoIncrementing, _length);
+                _databaseFieldName, _defaultValueString, _compulsory, _autoIncrementing, _length, _displayName, _description, _keepValuePrivate);
 			//_propDef = new PropDef(_propertyName, _assemblyName, _typeName, 
 			//    _readWriteRule, _databaseFieldName, _defaultValueString);
 
@@ -149,6 +155,14 @@ namespace Habanero.BO.Loaders
                    "set. Each 'property' element requires a 'name' attribute that " +
                    "specifies the name of the property in the class to map to.");
             }
+        }
+
+        /// <summary>
+        /// Loads the property display name from the reader
+        /// </summary>
+        private void LoadDisplayName()
+        {
+            _displayName = _reader.GetAttribute("displayName");
         }
 
         /// <summary>
@@ -227,6 +241,14 @@ namespace Habanero.BO.Loaders
         }
 
         /// <summary>
+        /// Loads the property description from the reader
+        /// </summary>
+        private void LoadDescription()
+        {
+            _description = _reader.GetAttribute("description");
+        }
+
+        /// <summary>
         /// Loads the attribute that determines whether the property is compulsory or not
         /// </summary>
         private void LoadCompulsory()
@@ -240,6 +262,14 @@ namespace Habanero.BO.Loaders
         private void LoadAutoIncrementing()
         {
             _autoIncrementing = Convert.ToBoolean(_reader.GetAttribute("autoIncrementing"));
+        }
+
+        /// <summary>
+        /// Loads the attribute that determines whether the property must keep its value private or not
+        /// </summary>
+        private void LoadKeepValuePrivate()
+        {
+            _keepValuePrivate = Convert.ToBoolean(_reader.GetAttribute("keepValuePrivate"));
         }
 
         /// <summary>

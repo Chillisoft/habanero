@@ -67,6 +67,7 @@ namespace Habanero.Test.General
             //Assert.AreEqual(car.GetDriver().ID, person.ID);
         }
 
+        [Test]
         public void TestGetCarDriverNull()
         {
             Car.DeleteAllCars();
@@ -75,6 +76,7 @@ namespace Habanero.Test.General
             Assert.IsTrue(car.GetDriver() == null);
         }
 
+        [Test]
         public void TestGetCarDriverIsSame()
         {
             Car.DeleteAllCars();
