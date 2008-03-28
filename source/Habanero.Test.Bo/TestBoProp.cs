@@ -571,6 +571,15 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain_SameValue()
+        {
+            BOProp boProp = CreateWriteOnceBoProp(true);
+            boProp.BackupPropValue();
+            boProp.IsObjectNew = false;
+            boProp.Value = "TestValue4";
+        }
+
+        [Test]
         public void TestUpdateProp_WriteOnce_Existing()
         {
             CreateWriteOnceBoProp(false);
@@ -582,6 +591,14 @@ namespace Habanero.Test.BO
             BOProp boProp = CreateWriteOnceBoProp(false);
             boProp.BackupPropValue();
             boProp.Value = "NewValue";
+        }
+
+        [Test]
+        public void TestUpdateProp_WriteOnce_Existing_WriteAgain_SameValue()
+        {
+            BOProp boProp = CreateWriteOnceBoProp(false);
+            boProp.BackupPropValue();
+            boProp.Value = "TestValue4";
         }
 
         #endregion //Test WriteOnce
