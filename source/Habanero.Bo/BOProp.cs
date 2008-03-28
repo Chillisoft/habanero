@@ -288,19 +288,19 @@ namespace Habanero.BO
                     }
                     break;
                 case PropReadWriteRule.WriteOnce:
-                    if (!_isObjectNew && _persistedValue != null && _persistedValue != newValue)
+                    if ((!(_isObjectNew)) && _persistedValue != null && !_persistedValue.Equals(newValue))
                     {
                         throw new BusinessObjectReadWriteRuleException(_propDef);
                     }
                     break;
                 case PropReadWriteRule.WriteNotNew:
-                    if (_isObjectNew && _persistedValue != newValue)
+                    if (_isObjectNew && !_persistedValue.Equals(newValue))
                     {
                         throw new BusinessObjectReadWriteRuleException(_propDef);
                     }
                     break;
                 case PropReadWriteRule.WriteNew:
-                    if (!_isObjectNew && _persistedValue != newValue)
+                    if (!_isObjectNew && !_persistedValue.Equals(newValue))
                     {
                         throw new BusinessObjectReadWriteRuleException(_propDef);
                     }
