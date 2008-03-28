@@ -292,7 +292,7 @@ namespace Habanero.Test
 
         #region Relationships
 
-        public BusinessObjectCollection<BusinessObject> GetCarsOwned()
+        public IBusinessObjectCollection GetCarsOwned()
         {
             return Relationships.GetRelatedCollection("Owner");
         }

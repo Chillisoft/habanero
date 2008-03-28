@@ -143,7 +143,7 @@ namespace Habanero.UI.Forms
                 && this.DataGrid.Grid != null
                 && this.DataGrid.Grid.GetCollection() != null)
             {
-                if (((BusinessObjectCollection<BusinessObject>)this.DataGrid.Grid.GetCollection()).IsDirty)
+                if (this.DataGrid.Grid.GetCollection().IsDirty)
                 {
                     DialogResult result = MessageBox.Show("Do you want to save changes?",
                                                           "Save?",

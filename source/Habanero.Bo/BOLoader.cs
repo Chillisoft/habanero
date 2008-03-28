@@ -28,6 +28,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
+using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -263,41 +264,83 @@ namespace Habanero.BO
         /// Loads the business object from the database as long as it meets
         /// the search expression provided
         /// </summary>
-        /// <param name="searchExpression">The search expression used to
-        /// locate the business object</param>
+        /// <param name="businessObject">The business object to be loaded</param>
+        /// <param name="searchExpression">The search expression used to locate the business object</param>
         /// <returns>Returns true if the object was successfully loaded</returns>
-        internal virtual bool Load(BusinessObject obj, IExpression searchExpression)
+        internal virtual bool Load(BusinessObject businessObject, IExpression searchExpression)
         {
             bool loaded;
 
-            loaded = Refresh(obj, searchExpression);
-            obj.AfterLoad();
+            loaded = Refresh(businessObject, searchExpression);
+            businessObject.AfterLoad();
             return loaded;
         }
 
         /// <summary>
         /// Loads the properties, using the data record provided
         /// </summary>
+        /// <param name="businessObject">The business object to be loaded</param>
         /// <param name="dr">The IDataRecord object</param>
-        internal void LoadFromDataReader(BusinessObject obj, IDataRecord dr)
+        internal void LoadFromDataReader(BusinessObject businessObject, IDataRecord dr)
         {
-            LoadProperties(obj, dr);
+            LoadProperties(businessObject, dr);
         }
 
-        //TODO:Peter - make a better load that doesn't use a bo col.
+        #region Single Business Object Methods
+
         /// <summary>
-        /// Returns the business object of the type provided that meets the
-        /// search criteria.  An exception is thrown if more than one business
-        /// object is found that matches the criteria.  If that could arise, rather use
-        /// GetBusinessObjectCol.
+        /// Returns the business object of the type provided that meets the search criteria.  
+        /// An exception is thrown if more than one business object is found that matches the criteria.  
+        /// If that situation could arise, rather use GetBusinessObjectCol.
         /// </summary>
         /// <param name="criteria">The search criteria</param>
         /// <returns>Returns the business object found</returns>
-        /// <exception cref="UserException">Thrown if more than one object
-        /// matches the criteria</exception>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObject<T>(string criteria) where T:BusinessObject
         {
-            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
+            return GetBusinessObject<T>(null, criteria);
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that meets the search criteria.  
+        /// An exception is thrown if more than one business object is found that matches the criteria.  
+        /// If that situation could arise, rather use GetBusinessObjectCol.
+        /// </summary>
+        /// <param name="boType">The type of the business objects to be loaded</param>
+        /// <param name="criteria">The search criteria</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        public BusinessObject GetBusinessObject(Type boType, string criteria)
+        {
+            return GetBusinessObject(ClassDef.ClassDefs[boType], criteria);
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that meets the search criteria.  
+        /// An exception is thrown if more than one business object is found that matches the criteria.  
+        /// If that situation could arise, rather use GetBusinessObjectCol.
+        /// </summary>
+        /// <param name="classDef">The class definition for the businessobject to be loaded</param>
+        /// <param name="criteria">The search criteria</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        public BusinessObject GetBusinessObject(ClassDef classDef, string criteria)
+        {
+            return GetBusinessObject<BusinessObject>(classDef, criteria);
+        }
+
+        //TODO:Peter - make a better load that doesn't use a bo col.
+        private static T GetBusinessObject<T>(ClassDef classDef, string criteria) where T : BusinessObject
+        {
+            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>(classDef);
+            if (classDef == null)
+            {
+                classDef = col.ClassDef;
+            }
+            if (classDef == null)
+            {
+                return null;
+            }
             col.Load(criteria, "");
             if (col.Count < 1)
             {
@@ -305,8 +348,8 @@ namespace Habanero.BO
             }
             else if (col.Count > 1)
             {
-                throw new UserException("Loading a " + typeof(T).Name + " with criteria " + criteria +
-                                        " returned more than one record when only one was expected.");
+                throw new UserException("Loading a '" + classDef.DisplayName + "' with criteria '" + criteria +
+                                        "' returned more than one record when only one was expected.");
             }
             else
             {
@@ -314,15 +357,9 @@ namespace Habanero.BO
             }
         }
 
+        #endregion //Single Business Object Methods
 
-        ///// <summary>
-        ///// Creates a new business object from the class definition
-        ///// </summary>
-        ///// <returns></returns>
-        //public BusinessObject CreateNewBusinessObject(ClassDef classDef)
-        //{
-        //    return classDef.InstantiateBusinessObject();
-        //}
+        #region Loaded Business Object Methods
 
         /// <summary>
         /// Loads a business object by ID
@@ -379,19 +416,9 @@ namespace Habanero.BO
             return null;
         }
 
-        /// <summary>
-        /// Returns a business object collection with objects that meet the
-        /// given search criteria, ordered as specified
-        /// </summary>
-        /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
-        /// <returns>Returns a business object collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, string orderByClause) where T:BusinessObject
-        {
-            BusinessObjectCollection<T> boCol = new BusinessObjectCollection<T>();
-            boCol.Load(searchCriteria, orderByClause);
-            return boCol;
-        }
+        #endregion //Loaded Business Object Methods
+
+        #region Business Object Collection Methods
 
         /// <summary>
         /// Returns a business object collection with objects that meet the
@@ -400,12 +427,36 @@ namespace Habanero.BO
         /// <param name="searchCriteria">The search criteria</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(Type boType, string searchCriteria,
-                                                                         string orderByClause)
+        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, string orderByClause) 
+            where T:BusinessObject
         {
-			BusinessObjectCollection<BusinessObject> boCol = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
-			boCol.Load(searchCriteria, orderByClause);
-			return boCol;
+            return GetBusinessObjectCollection<T>(null, searchCriteria, orderByClause);
+        }
+
+        /// <summary>
+        /// Returns a business object collection with objects that meet the
+        /// given search criteria, ordered as specified
+        /// </summary>
+        /// <param name="boType">The type of the business objects to be loaded</param>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <returns>Returns a business object collection</returns>
+        public IBusinessObjectCollection GetBusinessObjectCol(Type boType, string searchCriteria, string orderByClause)
+        {
+            return GetBusinessObjectCol(ClassDef.ClassDefs[boType], searchCriteria, orderByClause);
+        }
+
+        /// <summary>
+        /// Returns a business object collection with objects that meet the
+        /// given search criteria, ordered as specified
+        /// </summary>
+        /// <param name="classDef">The class definition for the business objects to be loaded</param>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <returns>Returns a business object collection</returns>
+        public IBusinessObjectCollection GetBusinessObjectCol(ClassDef classDef, string searchCriteria, string orderByClause)
+        {
+            return GetBusinessObjectCollection(classDef, null, searchCriteria, orderByClause);
         }
 
 		/// <summary>
@@ -418,25 +469,82 @@ namespace Habanero.BO
 		public BusinessObjectCollection<T> GetBusinessObjectCol<T>(IExpression searchExpression, string orderByClause)
 			where T: BusinessObject
 		{
-			BusinessObjectCollection<T> bOCol = new BusinessObjectCollection<T>();
-			bOCol.Load(searchExpression, orderByClause);
-			return bOCol;
+            return GetBusinessObjectCollection<T>(searchExpression, null, orderByClause);
 		}
 
 		/// <summary>
 		/// Returns a business object collection with objects that meet the
 		/// given search expression, ordered as specified
 		/// </summary>
+		/// <param name="boType">The type of the business objects to be loaded</param>
 		/// <param name="searchExpression">The search expression</param>
 		/// <param name="orderByClause">The order-by clause</param>
 		/// <returns>Returns a business object collection</returns>
-		public BusinessObjectCollection<BusinessObject> GetBusinessObjectCol(Type boType, IExpression searchExpression,
-																		 string orderByClause)
+        public IBusinessObjectCollection GetBusinessObjectCol(Type boType, IExpression searchExpression, string orderByClause)
 		{
-			BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[boType]);
-            bOCol.Load(searchExpression, orderByClause);
-            return bOCol;
+			return GetBusinessObjectCol(ClassDef.ClassDefs[boType], searchExpression, orderByClause);
         }
+
+        /// <summary>
+        /// Returns a business object collection with objects that meet the
+        /// given search expression, ordered as specified
+        /// </summary>
+        /// <param name="classDef">The class definition for the business objects to be loaded</param>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <returns>Returns a business object collection</returns>
+        public IBusinessObjectCollection GetBusinessObjectCol(ClassDef classDef, IExpression searchExpression, string orderByClause)
+        {
+            return GetBusinessObjectCollection(classDef, searchExpression, null, orderByClause);
+        }
+
+        private static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(IExpression searchExpression, string searchCriteria, string orderByClause)
+            where T :BusinessObject
+        {
+            BusinessObjectCollection<T> businessObjectCollection = new BusinessObjectCollection<T>();
+            if (searchExpression != null)
+            {
+                businessObjectCollection.Load(searchExpression, orderByClause);
+            } else
+            {
+                businessObjectCollection.Load(searchCriteria, orderByClause);
+            }
+            return businessObjectCollection;
+        }
+
+        private static IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef, IExpression searchExpression, string searchCriteria, string orderByClause)
+        {
+            IBusinessObjectCollection businessObjectCollection = CreateBusinessObjectCollection(classDef);
+            if (searchExpression != null)
+            {
+                businessObjectCollection.Load(searchExpression, orderByClause);
+            }
+            else
+            {
+                businessObjectCollection.Load(searchCriteria, orderByClause);
+            }
+            return businessObjectCollection;
+        }
+
+        ///<summary>
+        /// Creates a BusinessObjectCollection for classes of the type specified by the class definition.
+        ///</summary>
+        ///<param name="classDef">The class definition to use in creating the BusinessObjectCollection. </param>
+        ///<returns> A BusinessObjectCollection of the correct type. </returns>
+        private static IBusinessObjectCollection CreateBusinessObjectCollection(ClassDef classDef)
+        {
+            if (classDef == null)
+            {
+                return null;
+            }
+            Type type = typeof(BusinessObjectCollection<>);
+            type = type.MakeGenericType(classDef.ClassType);
+            return (IBusinessObjectCollection)Activator.CreateInstance(type, classDef);
+        }
+
+        
+
+        #endregion //Business Object Collection Methods
 
         /// <summary>
         /// Loads an IDataReader object using the database connection provided
@@ -489,49 +597,187 @@ namespace Habanero.BO
 
         #region Load By ID Methods
 
+        #region Generic Methods
+
         /// <summary>
-        /// Returns the business object of the type provided that has the given
-        /// primary key
+        /// Returns the business object of the type provided that has the given primary key.
         /// </summary>
         /// <param name="id">The primary key ID</param>
         /// <returns>Returns the business object found</returns>
-        /// <exception cref="UserException">Thrown if more than one object
-        /// matches the criteria</exception>
-        /// <exception cref="InvalidPropertyException">Thrown if there is a
-        /// multiple primary key</exception>
-        public T GetBusinessObjectByID<T>(Guid id) where T : BusinessObject
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
+        public T GetBusinessObjectByID<T>(Guid id) 
+            where T : BusinessObject
         {
             return GetBusinessObjectByID<T>(id.ToString("B"));
         }
 
         /// <summary>
-        /// Returns the business object of the type provided that has the given
-        /// primary key
+        /// Returns the business object of the type provided that has the given primary key.
         /// </summary>
         /// <param name="id">The primary key ID</param>
         /// <returns>Returns the business object found</returns>
-        /// <exception cref="UserException">Thrown if more than one object
-        /// matches the criteria</exception>
-        /// <exception cref="InvalidPropertyException">Thrown if there is a
-        /// multiple primary key</exception>
-        public T GetBusinessObjectByID<T>(int id) where T : BusinessObject
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
+        public T GetBusinessObjectByID<T>(int id) 
+            where T : BusinessObject
         {
             return GetBusinessObjectByID<T>(id.ToString());
         }
 
         /// <summary>
-        /// Returns the business object of the type provided that has the given
-        /// primary key
+        /// Returns the business object of the type provided that has the given primary key.
         /// </summary>
         /// <param name="id">The primary key ID</param>
         /// <returns>Returns the business object found</returns>
-        /// <exception cref="UserException">Thrown if more than one object
-        /// matches the criteria</exception>
-        /// <exception cref="InvalidPropertyException">Thrown if there is a
-        /// multiple primary key</exception>
-        public T GetBusinessObjectByID<T>(string id) where T : BusinessObject
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
+        public T GetBusinessObjectByID<T>(string id) 
+            where T : BusinessObject
         {
-            ClassDef classDef = ClassDef.ClassDefs[typeof(T)];
+            return GetBusinessObjectByID<T>(null, id);
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given primary key.  
+        /// This method is useful when you have a composite primary key.
+        /// </summary>
+        /// <param name="primaryKey">The primary key object that contains the specific search values</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        public T GetBusinessObjectByID<T>(BOPrimaryKey primaryKey)
+            where T : BusinessObject
+        {
+            return GetBusinessObjectByID<T>(null, primaryKey);
+        }
+
+        #endregion //Generic Methods
+
+        #region Type Loaded Methods
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given primary key.
+        /// </summary>
+        /// <param name="boType">The type of the business object to be loaded</param>
+        /// <param name="id">The primary key ID</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
+        public BusinessObject GetBusinessObjectByID(Type boType, Guid id)
+        {
+            return GetBusinessObjectByID(boType, id.ToString("B"));
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given primary key.
+        /// </summary>
+        /// <param name="boType">The type of the business object to be loaded</param>
+        /// <param name="id">The primary key ID</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
+        public BusinessObject GetBusinessObjectByID(Type boType, int id)
+        {
+            return GetBusinessObjectByID(boType, id.ToString());
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given primary key.
+        /// </summary>
+        /// <param name="boType">The type of the business object to be loaded</param>
+        /// <param name="id">The primary key ID</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
+        public BusinessObject GetBusinessObjectByID(Type boType, string id)
+        {
+            return GetBusinessObjectByID<BusinessObject>(ClassDef.ClassDefs[boType], id);
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given primary key.  
+        /// This method is useful when you have a composite primary key.
+        /// </summary>
+        /// <param name="boType">The type of the business object to be loaded</param>
+        /// <param name="primaryKey">The primary key object that contains the specific search values</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        public BusinessObject GetBusinessObjectByID(Type boType, BOPrimaryKey primaryKey)
+        {
+            return GetBusinessObjectByID<BusinessObject>(ClassDef.ClassDefs[boType], primaryKey);
+        }
+
+        #endregion //Type Loaded Methods
+
+        #region ClassDef Loaded Methods
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given primary key.
+        /// </summary>
+        /// <param name="classDef">The class definition for the business object to be loaded</param>
+        /// <param name="id">The primary key ID</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
+        public BusinessObject GetBusinessObjectByID(ClassDef classDef, Guid id)
+        {
+            return GetBusinessObjectByID(classDef, id.ToString("B"));
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given primary key.
+        /// </summary>
+        /// <param name="classDef">The class definition for the business object to be loaded</param>
+        /// <param name="id">The primary key ID</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
+        public BusinessObject GetBusinessObjectByID(ClassDef classDef, int id)
+        {
+            return GetBusinessObjectByID(classDef, id.ToString());
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given primary key.
+        /// </summary>
+        /// <param name="classDef">The class definition for the business object to be loaded</param>
+        /// <param name="id">The primary key ID</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
+        public BusinessObject GetBusinessObjectByID(ClassDef classDef, string id)
+        {
+            return GetBusinessObjectByID<BusinessObject>(classDef, id);
+        }
+
+        /// <summary>
+        /// Returns the business object of the type provided that has the given primary key.  
+        /// This method is useful when you have a composite primary key.
+        /// </summary>
+        /// <param name="classDef">The class definition for the business object to be loaded</param>
+        /// <param name="primaryKey">The primary key object that contains the specific search values</param>
+        /// <returns>Returns the business object found</returns>
+        /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
+        public BusinessObject GetBusinessObjectByID(ClassDef classDef, BOPrimaryKey primaryKey)
+        {
+            return GetBusinessObjectByID<BusinessObject>(classDef, primaryKey);
+        }
+
+        #endregion //ClassDef Loaded Methods
+
+        #region Private Methods
+
+        private static T GetBusinessObjectByID<T>(ClassDef classDef, string id) 
+            where T : BusinessObject
+        {
+            if (classDef == null)
+            {
+                classDef = ClassDef.ClassDefs[typeof(T)];
+                if (classDef == null)
+                {
+                    return null;
+                }
+            }
             if (classDef.PrimaryKeyDef.Count > 1)
             {
                 throw new InvalidPropertyException("A business object cannot be loaded " +
@@ -539,20 +785,16 @@ namespace Habanero.BO
                    "the primary key.");
             }
             string criteria = string.Format("{0}='{1}'", classDef.PrimaryKeyDef.KeyName, id);
-            return GetBusinessObject<T>(criteria);
-        }
-
-        /// <summary>
-        /// Returns the business object of the type provided that has the given
-        /// primary key.  This method is useful when you have a composite primary key.
-        /// </summary>
-        /// <param name="primaryKey">The primary key object that contains the specific
-        /// search values</param>
-        /// <returns>Returns the business object found</returns>
-        /// <exception cref="UserException">Thrown if more than one object
-        /// matches the criteria</exception>
-        public T GetBusinessObjectByID<T>(BOPrimaryKey primaryKey) where T : BusinessObject
+            return GetBusinessObject<T>(classDef, criteria);
+        }        
+        
+        private static T GetBusinessObjectByID<T>(ClassDef classDef, BOPrimaryKey primaryKey)
+            where T : BusinessObject
         {
+            if (classDef == null)
+            {
+                classDef = ClassDef.ClassDefs[typeof(T)];
+            }
             string criteria = "";
             foreach (BOProp boProp in primaryKey.GetBOPropCol().Values)
             {
@@ -565,9 +807,11 @@ namespace Habanero.BO
                 criteria += String.Format("{0}='{1}'", boProp.DatabaseFieldName, propValue);
             }
 
-            return GetBusinessObject<T>(criteria);
+            return GetBusinessObject<T>(classDef,criteria);
         }
 
-        #endregion
+        #endregion //Private Methods
+
+        #endregion //Load By ID Methods
     }
 }

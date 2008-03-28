@@ -22,7 +22,6 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO;
 using Habanero.DB;
 using Habanero.Base;
-using Habanero.Test;
 using NMock;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -56,6 +55,36 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestGetPropertyValueToDisplay_BusinessObjectLookupList()
+        {
+            ContactPerson.CreateSampleData();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithBOLookup();
+            ContactPerson.LoadDefaultClassDef();
+
+            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            BusinessObject bo = classDef.CreateNewBusinessObject();
+            bo.SetPropertyValue("TestProp2", cp);
+            Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
+            Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
+        }
+
+        [Test]
+        public void TestGetPropertyValueToDisplay_BusinessObjectLookupList_NotInList()
+        {
+            ContactPerson.CreateSampleData();
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithBOLookup("Surname <> abc");
+            ContactPerson.LoadDefaultClassDef();
+
+            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            BusinessObject bo = classDef.CreateNewBusinessObject();
+            bo.SetPropertyValue("TestProp2", cp);
+            Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
+            Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
+        }
+
+        [Test]
         public void TestGetPropertyValueToDisplay_SimpleLookup()
         {
             ClassDef.ClassDefs.Clear();
@@ -65,6 +94,7 @@ namespace Habanero.Test.BO
             BOMapper mapper = new BOMapper(bo1);
             Assert.AreEqual("Text", mapper.GetPropertyValueToDisplay("TestProp2"));
         }
+
 		//[Test]
 		//public void TestGetPropertyValueWithDot()
 		//{

@@ -18,10 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Xml;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.BO;
 using Habanero.Base;
+using Habanero.Util;
 using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test
@@ -376,6 +378,10 @@ namespace Habanero.Test
 
         public static ClassDef LoadClassDefWithBOLookup()
         {
+            return LoadClassDefWithBOLookup("");
+        }
+        public static ClassDef LoadClassDefWithBOLookup(string boLookupCriteria)
+        {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
@@ -384,7 +390,9 @@ namespace Habanero.Test
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
-						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.BO"" />
+						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.BO"" "
+                    + (String.IsNullOrEmpty(boLookupCriteria) ? "" : String.Format(@"criteria=""{0}"" ", ConvertToXmlString(boLookupCriteria, XmlNodeType.Attribute)))
+                    + @"/>
 					</property>
 					<primaryKey>
 						<prop name=""MyBoID"" />
@@ -410,6 +418,63 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
+        private static string ConvertToXmlString(string input, XmlNodeType xmlNodeType)
+        {
+            XmlDocument doc;
+            doc = new XmlDocument();
+            doc.LoadXml("<foo/>");
+            string result = input;
+            switch (xmlNodeType)
+            {
+                case XmlNodeType.None:
+                    break;
+                case XmlNodeType.Element:
+                    break;
+                case XmlNodeType.Attribute:
+                    XmlAttribute newAttribute = doc.CreateAttribute("genre");
+                    newAttribute.Value = input;
+                    doc.DocumentElement.Attributes.Append(newAttribute);
+                    result = newAttribute.InnerXml;
+                    break;
+                case XmlNodeType.Text:
+                    doc.DocumentElement.InnerText = input;
+                    result = doc.DocumentElement.InnerXml;
+                    break;
+                case XmlNodeType.CDATA:
+                    break;
+                case XmlNodeType.EntityReference:
+                    break;
+                case XmlNodeType.Entity:
+                    break;
+                case XmlNodeType.ProcessingInstruction:
+                    break;
+                case XmlNodeType.Comment:
+                    break;
+                case XmlNodeType.Document:
+                    break;
+                case XmlNodeType.DocumentType:
+                    break;
+                case XmlNodeType.DocumentFragment:
+                    break;
+                case XmlNodeType.Notation:
+                    break;
+                case XmlNodeType.Whitespace:
+                    break;
+                case XmlNodeType.SignificantWhitespace:
+                    break;
+                case XmlNodeType.EndElement:
+                    break;
+                case XmlNodeType.EndEntity:
+                    break;
+                case XmlNodeType.XmlDeclaration:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("xmlNodeType");
+            }
+            return result;
+        }
+
 
         public static ClassDef LoadClassDefWithBOStringLookup()
         {

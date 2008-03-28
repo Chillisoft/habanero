@@ -168,7 +168,7 @@ namespace Habanero.Test
 
         #region RelationShips
 
-        public BusinessObjectCollection<BusinessObject> GetCarsDriven()
+        public IBusinessObjectCollection GetCarsDriven()
         {
             return Relationships.GetRelatedCollection("Driver");
             //			return Car.LoadBusinessObjCol("DriverFK1 = " + 

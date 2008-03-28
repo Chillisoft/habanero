@@ -234,20 +234,29 @@ namespace Habanero.BO
             }
             else
             {
-                ClassDef classDef = ClassDef.ClassDefs[MyBoType];
-                BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-                if (_criteria != null)
-                {
-                    col.Load(_criteria, _sort);
-                }
-                else
-                {
-                    col.Load("", _sort);
-                }
+                ClassDef classDef = LookupBoClassDef;
+                IBusinessObjectCollection col = BOLoader.Instance.GetBusinessObjectCol(classDef, _criteria ?? "", _sort);
+                //BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
+                //if (_criteria != null)
+                //{
+                //    col.Load(_criteria, _sort);
+                //}
+                //else
+                //{
+                //    col.Load("", _sort);
+                //}
                 _displayValueDictionary = CreateDisplayValueDictionary(col, String.IsNullOrEmpty(Sort));
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
             }
+        }
+
+        ///<summary>
+        /// Returns the class definition for the business object type that is the source of the list for this lookup
+        ///</summary>
+        public ClassDef LookupBoClassDef
+        {
+            get { return ClassDef.ClassDefs[MyBoType]; }
         }
 
         /// <summary>
@@ -339,7 +348,8 @@ namespace Habanero.BO
         /// <returns>Returns an ICollection object</returns>
         public ICollection GetValueCollection()
         {
-            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(ClassDef.ClassDefs[MyBoType]);
+		    ClassDef classDef = LookupBoClassDef;
+		    BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
             col.Load("", "");
             return CreateValueList(col);
         }

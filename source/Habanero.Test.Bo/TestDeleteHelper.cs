@@ -113,7 +113,7 @@ namespace Habanero.Test.BO
 
 		private static TestBO1 PopulateObjectWithSomePrevents()
 		{
-			BusinessObjectCollection<BusinessObject> children;
+			IBusinessObjectCollection children;
 			TestBO1 testBO1;
 			testBO1 = new TestBO1();
 			testBO1.MyBoID = "1";
@@ -129,7 +129,7 @@ namespace Habanero.Test.BO
 
 		private static TestBO1 PopulateObjectWithNoPrevents()
 		{
-			BusinessObjectCollection<BusinessObject> children;
+			IBusinessObjectCollection children;
 			TestBO1 testBO1;
 			testBO1 = new TestBO1();
 			testBO1.MyBoID = "1";
@@ -143,12 +143,12 @@ namespace Habanero.Test.BO
 
 		private static TestBO1 PopulateObjectWithTieredPrevents()
 		{
-			BusinessObjectCollection<BusinessObject> children2;
-			BusinessObjectCollection<BusinessObject> children3;
-			BusinessObjectCollection<BusinessObject> children4;
-			BusinessObjectCollection<BusinessObject> children5;
-			BusinessObjectCollection<BusinessObject> children6;
-			BusinessObjectCollection<BusinessObject> children7;
+			IBusinessObjectCollection children2;
+			IBusinessObjectCollection children3;
+			IBusinessObjectCollection children4;
+			IBusinessObjectCollection children5;
+			IBusinessObjectCollection children6;
+			IBusinessObjectCollection children7;
 			TestBO1 testBO1;
 			testBO1 = new TestBO1();
 			testBO1.MyBoID = "1";
@@ -176,19 +176,18 @@ namespace Habanero.Test.BO
 			return testBO1;
 		}
 
-		private static BusinessObjectCollection<BusinessObject> AddRelatedObjects<T>(TestBO testBO, 
+		private static IBusinessObjectCollection AddRelatedObjects<T>(TestBO testBO, 
 			string relationshipName, int numberOfBos)
 			where T : TestBO, new()
 		{
 			return AddRelatedObjects<T>(testBO, relationshipName, numberOfBos, false);
 		}
 
-		private static BusinessObjectCollection<BusinessObject> AddRelatedObjects<T>(TestBO testBO, 
+		private static IBusinessObjectCollection AddRelatedObjects<T>(TestBO testBO, 
 			string relationshipName, int numberOfBos, bool isNew)
 			where T : TestBO, new()
 		{
-			BusinessObjectCollection<BusinessObject> children;
-			children = testBO.Relationships.GetRelatedCollection(relationshipName);
+			IBusinessObjectCollection children = testBO.Relationships.GetRelatedCollection(relationshipName);
 			for (int count = 1; count <= numberOfBos; count++ )
 			{
 				T testBO2;

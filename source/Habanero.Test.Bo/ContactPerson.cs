@@ -105,6 +105,7 @@ namespace Habanero.Test.BO
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
                     <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>

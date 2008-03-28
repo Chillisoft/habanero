@@ -77,7 +77,7 @@ namespace Habanero.BO
 				if (relationship == null) continue;
 				if (pair.Value == null)
 				{
-					BusinessObjectCollection<BusinessObject> boCol;
+					IBusinessObjectCollection boCol;
 					boCol = relationship.GetRelatedBusinessObjectCol();
 					if (boCol.Count > 0)
 					{
@@ -92,7 +92,7 @@ namespace Habanero.BO
 				}
 				else if (pair.Value.Count > 0)
 				{
-					BusinessObjectCollection<BusinessObject> boCol;
+					IBusinessObjectCollection boCol;
 					boCol = relationship.GetRelatedBusinessObjectCol();
 					foreach (BusinessObject businessObject in boCol)
 					{

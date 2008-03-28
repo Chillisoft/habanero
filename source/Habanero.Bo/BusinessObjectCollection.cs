@@ -127,7 +127,6 @@ namespace Habanero.BO
             _lookupTable = new Hashtable();
         }
 
-
         /// <summary>
         /// Handles the event of a business object being added
         /// </summary>

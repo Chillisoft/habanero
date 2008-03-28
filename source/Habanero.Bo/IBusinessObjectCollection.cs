@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.CriteriaManager;
 
 namespace Habanero.BO
 {
@@ -194,5 +195,23 @@ namespace Habanero.BO
         /// <param name="isAscending">Whether to sort in ascending order, set
         /// false for descending order</param>
         void Sort(string propertyName, bool isBoProperty, bool isAscending);
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided,
+        /// loaded in the order specified.  
+        /// Use empty quotes, (or the LoadAll method) to load the
+        /// entire collection for the type of object.
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        void Load(string searchCriteria, string orderByClause);
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided in
+        /// an expression, loaded in the order specified
+        /// </summary>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        void Load(IExpression searchExpression, string orderByClause);
 	}
 }

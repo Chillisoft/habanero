@@ -51,9 +51,9 @@ namespace Habanero.BO
 		/// through the specific relationship
 		/// </summary>
 		/// <returns>Returns a collection of business objects</returns>
-		public virtual BusinessObjectCollection<BusinessObject> GetRelatedBusinessObjectCol()
+		public virtual IBusinessObjectCollection GetRelatedBusinessObjectCol()
 		{
-			return GetRelatedBusinessObjectCol<BusinessObject>();
+            return GetRelatedBusinessObjectColInternal<BusinessObject>(false);
 		}
 
     	/// <summary>
@@ -64,51 +64,66 @@ namespace Habanero.BO
 		public virtual BusinessObjectCollection<T> GetRelatedBusinessObjectCol<T>()
     		where T : BusinessObject
         {
-			BusinessObject busObj;
+    	    IBusinessObjectCollection boCol = GetRelatedBusinessObjectColInternal<T>(true);
+    	    return (BusinessObjectCollection<T>)boCol;
+        }
+
+        private IBusinessObjectCollection GetRelatedBusinessObjectColInternal<T>(bool useGenericParameter)
+    		where T : BusinessObject
+        {
+            BusinessObject busObj;
+            Type type = _relDef.RelatedObjectClassType;
+            Type collectionItemType;
+            if(useGenericParameter)
+            {
+                collectionItemType = typeof (T);
+            } else
+            {
+                collectionItemType = type;
+            }
             try
             {
-                busObj = (BusinessObject) Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
+                busObj = (BusinessObject)Activator.CreateInstance(type, true);
             }
             catch (Exception ex)
             {
                 throw new UnknownTypeNameException(String.Format(
-                    "An error occurred while attempting to load a related " +
-                    "business object collection, with the type given as '{0}'. " +
-                    "Check that the given type exists and has been correctly " +
-                    "defined in the relationship and class definitions for the classes " +
-                    "involved.", _relDef.RelatedObjectClassType), ex);
+                                                       "An error occurred while attempting to load a related " +
+                                                       "business object collection, with the type given as '{0}'. " +
+                                                       "Check that the given type exists and has been correctly " +
+                                                       "defined in the relationship and class definitions for the classes " +
+                                                       "involved.", type), ex);
             }
-			if (!(busObj is T))
-			{
-				throw new HabaneroArgumentException(String.Format(
-					"An error occurred while attempting to load a related " +
-                    "business object collection of type '{0}' into a " +
-					"collection of the specified generic type('{1}').",
-					_relDef.RelatedObjectClassType, typeof(T)));
-			}
-    		bool isGenericBaseType = typeof (T).Equals(typeof (BusinessObject));
-    		IBusinessObjectCollection boCol;
-			if (isGenericBaseType)
-			{
-				boCol = BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
-				                                     ((MultipleRelationshipDef) _relDef).OrderBy);
-			} else
-			{
-				boCol = BOLoader.Instance.GetBusinessObjectCol<T>(
-					_relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
-			}
-
-    		if (this._relDef.KeepReferenceToRelatedObject)
+            if (!(type == collectionItemType || type.IsSubclassOf(collectionItemType)))
             {
-				//// TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object
-				//// gets added with the foreign key nothing will pick that up other than a reload.
-				////if (_boCol == null) {
-				//_boCol = BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
-				////                                     ((MultipleRelationshipDef) _relDef).OrderBy);
-				////}
-            	_boCol = boCol;
+                throw new HabaneroArgumentException(String.Format(
+                                                        "An error occurred while attempting to load a related " +
+                                                        "business object collection of type '{0}' into a " +
+                                                        "collection of the specified generic type('{1}').",
+                                                        type, typeof(T)));
             }
-			return (BusinessObjectCollection<T>)boCol;
+            IBusinessObjectCollection boCol;
+            if (useGenericParameter)
+            {
+                boCol = BOLoader.Instance.GetBusinessObjectCol<T>(
+                    _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
+            } else
+            {
+                boCol = BOLoader.Instance.GetBusinessObjectCol(type, 
+                    _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
+            }
+
+            if (this._relDef.KeepReferenceToRelatedObject)
+            {
+                //// TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object
+                //// gets added with the foreign key nothing will pick that up other than a reload.
+                ////if (_boCol == null) {
+                //_boCol = BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
+                ////                                     ((MultipleRelationshipDef) _relDef).OrderBy);
+                ////}
+                _boCol = boCol;
+            }
+            return boCol;
         }
     }
 }

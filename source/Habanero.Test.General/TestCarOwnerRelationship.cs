@@ -124,10 +124,10 @@ namespace Habanero.Test.General
 
             Assert.AreEqual(1, person.GetCarsOwned().Count, "there should be one car for this person");
 
-            BusinessObjectCollection<BusinessObject> carsOwned = person.GetCarsOwned();
+            IBusinessObjectCollection carsOwned = person.GetCarsOwned();
             Car carOwned = (Car) carsOwned[0];
             Assert.AreEqual(car.ID, carOwned.ID);
-            BusinessObjectCollection<BusinessObject> carsOwned2 = person.GetCarsOwned();
+            IBusinessObjectCollection carsOwned2 = person.GetCarsOwned();
             Assert.IsFalse(object.ReferenceEquals(carsOwned, carsOwned2),
                            "The references should not be equal since the collection should be reloaded each time");
         }

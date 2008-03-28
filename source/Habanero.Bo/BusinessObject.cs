@@ -557,9 +557,10 @@ namespace Habanero.BO
                 !this.ID.Contains(propName))
             {
                 Guid myGuid = (Guid)propertyValue;
-                Dictionary<string, object> lookupList = this.ClassDef.GetLookupList(propName).GetLookupList();
+                ILookupList lookupList = this.ClassDef.GetLookupList(propName);
+                Dictionary<string, object> list = lookupList.GetLookupList();
 
-                foreach (KeyValuePair<string, object> pair in lookupList)
+                foreach (KeyValuePair<string, object> pair in list)
                 {
 
                     if (pair.Value == null) continue;
@@ -577,6 +578,17 @@ namespace Habanero.BO
                         {
                             return pair.Key;
                         }
+                    }
+                }
+                //Item was not found in the list, so try some alternate methods
+                if (lookupList is BusinessObjectLookupList)
+                {
+                    BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
+                    ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
+                    BusinessObject businessObject = BOLoader.Instance.GetBusinessObjectByID(classDef, myGuid);
+                    if (businessObject != null)
+                    {
+                        return businessObject.ToString();
                     }
                 }
                 return myGuid;
@@ -1628,7 +1640,7 @@ namespace Habanero.BO
     				MultipleRelationship multipleRelationship = relationship as MultipleRelationship;
     				if (multipleRelationship != null)
     				{
-    					BusinessObjectCollection<BusinessObject> boCol;
+    					IBusinessObjectCollection boCol;
     					boCol = multipleRelationship.GetRelatedBusinessObjectCol();
     					foreach (BusinessObject businessObject in boCol)
     					{

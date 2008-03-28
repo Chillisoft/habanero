@@ -66,6 +66,12 @@ namespace Habanero.BO.ClassDefinition
 			}
 		}
 
+        //public ClassDef Get<T>()
+        //    where T : BusinessObject
+        //{
+        //    return this[typeof(T)];
+        //}
+
 		/// <summary>
 		/// Provides an indexing facility for the collection so that items
 		/// in the collection can be accessed like an array 

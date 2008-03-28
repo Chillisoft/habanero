@@ -92,7 +92,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("abc", col[0].Surname);
             Assert.AreEqual("abcd", col[1].Surname);
 
-            BusinessObjectCollection<BusinessObject> col2 = BOLoader.Instance.GetBusinessObjectCol(typeof(ContactPerson), "FirstName = aa", "Surname");
+            IBusinessObjectCollection col2 = BOLoader.Instance.GetBusinessObjectCol(typeof(ContactPerson), "FirstName = aa", "Surname");
             Assert.AreEqual(2, col.Count);
             Assert.AreEqual("abc", ((ContactPerson)col2[0]).Surname);
             Assert.AreEqual("abcd", ((ContactPerson)col2[1]).Surname);
