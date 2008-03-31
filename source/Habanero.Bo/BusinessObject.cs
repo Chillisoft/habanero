@@ -1665,7 +1665,7 @@ namespace Habanero.BO
 			if (NeedsPersisting())
 			{
 				string reasonNotSaved = "";
-                string customRuleErrors = "";
+                //string customRuleErrors = "";
 			    bool isvalid;
                 BeforeSave(transactionCommitter);
                 if (State.IsDeleted)
@@ -1675,7 +1675,7 @@ namespace Habanero.BO
                 else
                 {
                     isvalid = IsValid(out reasonNotSaved);
-                    isvalid = CheckCustomRules(out customRuleErrors) && isvalid;
+                    //isvalid = CheckCustomRules(out customRuleErrors) && isvalid;
                 }
 			    if (isvalid)
 				{
@@ -1687,7 +1687,7 @@ namespace Habanero.BO
 				{
 				    string errors = String.Format("Errors occurred for the '{0}' identified as '{1}':", ClassDef.DisplayName, this.ToString());
                     errors = AppendErrors(errors,reasonNotSaved);
-                    errors = AppendErrors(errors,customRuleErrors);
+                    //errors = AppendErrors(errors,customRuleErrors);
                     //string errors = this.ToString() + Environment.NewLine;
                     //errors += reasonNotSaved;
                     //if (!String.IsNullOrEmpty(errors)) errors += Environment.NewLine;
