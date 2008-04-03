@@ -268,7 +268,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadPropDefs(List<string> xmlDefs)
         {
-            if (xmlDefs.Count == 0)
+            if (xmlDefs.Count == 0 && _superClassDef == null)
             {
                 throw new InvalidXmlDefinitionException(String.Format("No property " +
                     "definitions have been specified for the class definition of '{0}'. " +

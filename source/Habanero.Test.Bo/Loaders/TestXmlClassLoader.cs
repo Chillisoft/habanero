@@ -238,6 +238,38 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
+        public void TestClassWithNoProps_WithSuperClass()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef.LoadClassDefs(
+                new XmlClassDefsLoader(
+                    @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+						</class>
+					</classes>",
+                                 new DtdLoader()));
+            ClassDef def =
+                loader.LoadClass(
+                    @"
+				<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"">
+					<superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" />					
+				</class>
+			");
+            Assert.AreEqual(0, def.PropDefcol.Count, "Should contain no properties.");
+            Assert.IsNotNull(def.SuperClassDef);
+            //ClassDef parentDef = ClassDef.ClassDefs[typeof(TestClass)];
+            ClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
+            ClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
+            Assert.AreSame(parentDef, superClassDef);
+
+        }
+
+        [Test]
         public void TestClassWithPrimaryKeyDef()
         {
             ClassDef def =
