@@ -557,7 +557,7 @@ namespace Habanero.BO
     /// business object's concurrency control, where another user has
     /// subsequently edited the record being saved
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class BusObjOptimisticConcurrencyControlException : BusObjectConcurrencyControlException, ISerializable
     {
         private string mUserNameEdited;
@@ -716,7 +716,7 @@ namespace Habanero.BO
     /// business object's concurrency control, where another user has deleted
     /// the record in question
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class BusObjDeleteConcurrencyControlException : BusObjectConcurrencyControlException
     {
         /// <summary>
@@ -782,7 +782,7 @@ namespace Habanero.BO
     /// object edit.  Typically occurs if another user/process has edited the
     /// object in the database since it was last loaded by the object manager
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class BusObjBeginEditConcurrencyControlException : BusObjOptimisticConcurrencyControlException
     {
         /// <summary>
@@ -862,7 +862,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a new edit state is being set
     /// while the object is already in edit mode
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class EditingException : BusinessObjectException, ISerializable
     {
         protected object mobj; //TODO move this such that it has type BusObj
@@ -939,7 +939,7 @@ namespace Habanero.BO
     /// business object's concurrency control, where a save is being attempted
     /// when another user has duplicated the record in question
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class BusObjDuplicateConcurrencyControlException : BusObjectConcurrencyControlException
     {
         /// <summary>

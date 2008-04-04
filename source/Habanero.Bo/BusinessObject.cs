@@ -490,11 +490,24 @@ namespace Habanero.BO
         #endregion //Properties
 
         #region Editing Property Values
+        ///<summary>
+        /// This method can be overridden by a class that inherits from Business object.
+        /// The method allows the Business object developer to add customised rules that determine.
+        /// The editable state of a business object.
+        /// E.g. Once an invoice is paid it is no longer editable. Or when a course is old it is no
+        /// longer editable. This allows a UI developer to standise Code for enabling and disabling controls.
+        ///</summary>
+        public virtual bool IsEditable
+        {
+            get { return true; }
+        }
 
         /// <summary>
         /// Sets the object's state into editing mode.  The original state can
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
+        /// TODO: Put rules in begin edit to prevent the editing of this property.
+        /// How to test
         /// </summary>
         private void BeginEdit()
         {

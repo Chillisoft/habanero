@@ -278,7 +278,7 @@ namespace Habanero.BO
         private void CheckReadWriteRule(object newValue)
         {
             switch (_propDef.ReadWriteRule)
-            {
+            {                            
                 case PropReadWriteRule.ReadWrite:
                     break;
                 case PropReadWriteRule.ReadOnly:
