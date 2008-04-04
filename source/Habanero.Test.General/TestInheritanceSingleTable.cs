@@ -117,7 +117,7 @@ namespace Habanero.Test.General
                 "UPDATE `Shape` SET `Radius` = ?Param0, `ShapeName` = ?Param1 WHERE `ShapeID` = ?Param2",
                 itsUpdateSql[0].Statement.ToString());
             // Is Object ID so doesn't get changed
-            //Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
+            //Assert.AreEqual(strID, ((IDbDataParameter) _updateSql[0].Parameters[1]).Value,
             //                "Parameter ShapeID has incorrect value");
             Assert.AreEqual("MyShape", ((IDbDataParameter) itsUpdateSql[0].Parameters[1]).Value,
                             "Parameter ShapeName has incorrect value");

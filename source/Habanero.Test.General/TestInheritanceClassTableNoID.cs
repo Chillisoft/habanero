@@ -136,7 +136,7 @@ namespace Habanero.Test.General
             Assert.AreEqual("UPDATE `Shape` SET `ShapeName` = ?Param0 WHERE `ShapeID` = ?Param1",
                             itsUpdateSql[0].Statement.ToString(),
                             "Class table inheritance: first update sql statement is incorrect.");
-            //Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
+            //Assert.AreEqual(strID, ((IDbDataParameter) _updateSql[0].Parameters[0]).Value,
             //                "Parameter ShapeID has incorrect value in first update statement using class table inheritance");
             Assert.AreEqual("MyShape", ((IDbDataParameter) itsUpdateSql[0].Parameters[0]).Value,
                             "Parameter ShapeName has incorrect value in first update statement using class table inheritance");

@@ -25,80 +25,80 @@ namespace Habanero.Test.General
 {
     public abstract class TestInheritanceHeirarchyBase : TestUsingDatabase
     {
-        protected BusinessObject itsFilledCircle;
-        protected SqlStatementCollection itsInsertSql;
-        protected SqlStatementCollection itsUpdateSql;
-        protected SqlStatementCollection itsDeleteSql;
-        protected SqlStatement itsSelectSql;
-        protected string itsFilledCircleId;
-        protected SqlStatement itsLoadSql;
+        protected BusinessObject _filledCircle;
+        protected SqlStatementCollection _insertSql;
+        protected SqlStatementCollection _updateSql;
+        protected SqlStatementCollection _deleteSql;
+        protected SqlStatement _selectSql;
+        protected string _filledCircleId;
+        protected SqlStatement _loadSql;
 
         public void SetupTest()
         {
             this.SetupDBConnection();
             SetupInheritanceSpecifics();
-            itsFilledCircle = new FilledCircle();
+            _filledCircle = new FilledCircle();
             SetStrID();
-            itsFilledCircle.SetPropertyValue("Colour", 3);
-            itsFilledCircle.SetPropertyValue("Radius", 10);
-            itsFilledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
+            _filledCircle.SetPropertyValue("Colour", 3);
+            _filledCircle.SetPropertyValue("Radius", 10);
+            _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            itsInsertSql = itsFilledCircle.GetInsertSql();
-            itsUpdateSql = itsFilledCircle.GetUpdateSql();
-            itsDeleteSql = itsFilledCircle.GetDeleteSql();
-            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
+            _insertSql = _filledCircle.GetInsertSql();
+            _updateSql = _filledCircle.GetUpdateSql();
+            _deleteSql = _filledCircle.GetDeleteSql();
+            _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
+            _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
         public void SetupTestForFilledCircleNoPK()
         {
             this.SetupDBConnection();
             SetupInheritanceSpecifics();
-            itsFilledCircle = new FilledCircleNoPrimaryKey();
+            _filledCircle = new FilledCircleNoPrimaryKey();
             SetStrID();
-            itsFilledCircle.SetPropertyValue("Colour", 3);
-            itsFilledCircle.SetPropertyValue("Radius", 10);
-            itsFilledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
+            _filledCircle.SetPropertyValue("Colour", 3);
+            _filledCircle.SetPropertyValue("Radius", 10);
+            _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            itsInsertSql = itsFilledCircle.GetInsertSql();
-            itsUpdateSql = itsFilledCircle.GetUpdateSql();
-            itsDeleteSql = itsFilledCircle.GetDeleteSql();
-            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
+            _insertSql = _filledCircle.GetInsertSql();
+            _updateSql = _filledCircle.GetUpdateSql();
+            _deleteSql = _filledCircle.GetDeleteSql();
+            _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
+            _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
         public void SetupTestForFilledCircleInheritsCircleNoPK()
         {
             this.SetupDBConnection();
             SetupInheritanceSpecifics();
-            itsFilledCircle = new FilledCircleInheritsCircleNoPK();
+            _filledCircle = new FilledCircleInheritsCircleNoPK();
             SetStrID();
-            itsFilledCircle.SetPropertyValue("Colour", 3);
-            itsFilledCircle.SetPropertyValue("Radius", 10);
-            itsFilledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
+            _filledCircle.SetPropertyValue("Colour", 3);
+            _filledCircle.SetPropertyValue("Radius", 10);
+            _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            itsInsertSql = itsFilledCircle.GetInsertSql();
-            itsUpdateSql = itsFilledCircle.GetUpdateSql();
-            itsDeleteSql = itsFilledCircle.GetDeleteSql();
-            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
+            _insertSql = _filledCircle.GetInsertSql();
+            _updateSql = _filledCircle.GetUpdateSql();
+            _deleteSql = _filledCircle.GetDeleteSql();
+            _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
+            _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
         public void SetupTestForFilledCircleNoPrimaryKeyInheritsCircle()
         {
             this.SetupDBConnection();
             SetupInheritanceSpecifics();
-            itsFilledCircle = new FilledCircleNoPrimaryKeyInheritsCircle();
+            _filledCircle = new FilledCircleNoPrimaryKeyInheritsCircle();
             SetStrID();
-            itsFilledCircle.SetPropertyValue("Colour", 3);
-            itsFilledCircle.SetPropertyValue("Radius", 10);
-            itsFilledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
+            _filledCircle.SetPropertyValue("Colour", 3);
+            _filledCircle.SetPropertyValue("Radius", 10);
+            _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            itsInsertSql = itsFilledCircle.GetInsertSql();
-            itsUpdateSql = itsFilledCircle.GetUpdateSql();
-            itsDeleteSql = itsFilledCircle.GetDeleteSql();
-            itsSelectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            itsSelectSql.Statement.Append(itsFilledCircle.SelectSqlStatement(itsSelectSql));
+            _insertSql = _filledCircle.GetInsertSql();
+            _updateSql = _filledCircle.GetUpdateSql();
+            _deleteSql = _filledCircle.GetDeleteSql();
+            _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
+            _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
         protected abstract void SetupInheritanceSpecifics();
