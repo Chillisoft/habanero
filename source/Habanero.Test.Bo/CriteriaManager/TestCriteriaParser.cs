@@ -59,6 +59,42 @@ namespace Habanero.Test.BO.CriteriaManager
         }
 
         [Test]
+        public void TestSimpleExpression_Like()
+        {
+            CriteriaExpression tree = new CriteriaExpression("Name like 'Pet%'");
+            Assert.AreEqual(" LIKE", tree.Expression);
+            Assert.AreEqual("Name", tree.Left.Expression);
+            Assert.AreEqual("Pet%", tree.Right.Expression);
+        }
+
+        [Test]
+        public void TestSimpleExpression_NotLike()
+        {
+            CriteriaExpression tree = new CriteriaExpression("Name not like 'Pet%'");
+            Assert.AreEqual(" NOT LIKE", tree.Expression);
+            Assert.AreEqual("Name", tree.Left.Expression);
+            Assert.AreEqual("Pet%", tree.Right.Expression);
+        }
+
+        [Test]
+        public void TestSimpleExpression_In()
+        {
+            CriteriaExpression tree = new CriteriaExpression("Name in ('Peter', 'Mark')");
+            Assert.AreEqual(" IN", tree.Expression);
+            Assert.AreEqual("Name", tree.Left.Expression);
+            Assert.AreEqual("Peter', 'Mark", tree.Right.Expression);
+        }
+
+        [Test]
+        public void TestSimpleExpression_NotIn()
+        {
+            CriteriaExpression tree = new CriteriaExpression("Name not in ('Peter', 'Mark')");
+            Assert.AreEqual(" NOT IN", tree.Expression);
+            Assert.AreEqual("Name", tree.Left.Expression);
+            Assert.AreEqual("Peter', 'Mark", tree.Right.Expression);
+        }
+
+        [Test]
         public void TestComplexExpression()
         {
             CriteriaExpression tree = new CriteriaExpression("Name = 'Peter' AND Age < 30");

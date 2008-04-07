@@ -43,7 +43,9 @@ namespace Habanero.BO.CriteriaManager
                 "<",
                 " IS NOT",
                 " IS",
+                " NOT LIKE",
                 " LIKE",
+                " NOT IN",
                 " IN"
             };
 
