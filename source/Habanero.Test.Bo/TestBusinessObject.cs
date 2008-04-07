@@ -18,15 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
-using Habanero.DB;
 using Habanero.Base;
-using Habanero.Test;
-using NMock;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using NUnit.Framework;
 using Rhino.Mocks;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.BO
 {
@@ -39,7 +36,7 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            base.SetupDBConnection();
+            SetupDBConnection();
         }
 
         [TearDown]
@@ -52,9 +49,9 @@ namespace Habanero.Test.BO
         public void TestInstantiate()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            MyBO.LoadDefaultClassDef();
             MyBO bo = new MyBO();
-            string t = bo.GetPropertyValueString("TestProp");
+            bo.GetPropertyValueString("TestProp");
         }
 
         //[Test]
@@ -128,7 +125,7 @@ namespace Habanero.Test.BO
             ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPerson.LoadDefaultClassDef();
 
-            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", null);
             Assert.AreEqual(null, bo.GetPropertyValue("TestProp2"));
@@ -224,7 +221,66 @@ namespace Habanero.Test.BO
             mock.VerifyAll();
         }
 
+        [Test, ExpectedException(typeof(BusObjDeleteException),
+              ExpectedMessage = "You cannot delete the 'MyBoNotEditableDeletable', as the IsDeleted is set to false for the object",
+               MatchType = MessageMatch.Contains)]
+        public void TestCannotDelete_IsDeletable_False()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            BusinessObject bo = classDef.CreateNewBusinessObject();
+            bo.Delete();
+        }
 
+        [Test, ExpectedException(typeof(BusObjEditableException),
+              ExpectedMessage = "You cannot Edit the 'MyBoNotEditableDeletable', as the IsEditable is set to false for the object",
+               MatchType = MessageMatch.Contains)]
+        public void TestCannotEdit_IsEditable_False()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            bo.TestProp = "new";
+        }
+        [Test]
+        public void TestCanDelete_IsDeletable_True()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            bo.Deletable = true;
+            bo.Editable = true;
+            bo.Delete();
+        }
 
+        [Test]
+        public void TestCanEdit_IsEditable_True()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            bo.Editable = true;
+            bo.TestProp = "new";
+        }
+        [Test]
+        public void TestCanEdit_IsDeletable_False()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            bo.Editable = true;
+            bo.Deletable = false;
+            bo.TestProp = "new";
+        }
+        [Test]
+        public void TestCanDelete_IsEditable_False()
+        {
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
+            MyBoNotEditableDeletable bo = (MyBoNotEditableDeletable)classDef.CreateNewBusinessObject();
+            bo.Editable = false;
+            bo.Deletable = true;
+            bo.Delete();
+        }
     }
 }

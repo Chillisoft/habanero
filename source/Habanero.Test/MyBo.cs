@@ -16,14 +16,12 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
-
+#pragma warning disable RedundantThisQualifier
 using System;
 using System.Xml;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.BO;
 using Habanero.Base;
-using Habanero.Util;
 using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test
@@ -33,7 +31,7 @@ namespace Habanero.Test
     /// </summary>
     public class MyBO : BusinessObject
     {
-        public MyBO(): base() {}
+        public MyBO() {}
 
         //public MyBO(ClassDef def) : base(def)
         //{
@@ -597,7 +595,7 @@ namespace Habanero.Test
     {
         private static ClassDef itsClassDef;
 
-        public MyRelatedBo() : base()
+        public MyRelatedBo()
         {
         }
 
@@ -630,6 +628,168 @@ namespace Habanero.Test
 				</class>
 			");
             return itsClassDef;
+        }
+    }
+
+//    /// <summary>
+//    /// MyBoNotDeletable used for testing the when Deletable set to false. 
+//    /// The architecture should prevent deletion.
+//    /// </summary>
+//    public class MyBoNotDeletable : BusinessObject
+//    {
+
+
+//        private bool _deletable = false;
+//        public MyBoNotDeletable() {}
+
+//        public MyBoNotDeletable(IDatabaseConnection conn) : base(conn) { }
+
+//        protected override ClassDef ConstructClassDef()
+//        {
+//            return _classDef;
+//        }
+
+//        public string MyName
+//        {
+//            get { return "MyBoNotDeletable"; }
+//        }
+
+//        public Guid MyBoNotDeletableID
+//        {
+//            get
+//            {
+//                return (Guid)this.GetPropertyValue("MyBoNotDeletableID");
+//            }
+//        }
+
+//        public static ClassDef LoadDefaultClassDef()
+//        {
+//            XmlClassLoader itsLoader = new XmlClassLoader();
+//            ClassDef itsClassDef =
+//                itsLoader.LoadClass(
+//                    @"
+//				<class name=""MyBoNotDeletable"" assembly=""Habanero.Test"">
+//					<property  name=""MyBoNotDeletableID"" />
+//					<property  name=""TestProp"" />
+//					<primaryKey>
+//						<prop name=""MyBoNotDeletableID"" />
+//					</primaryKey>
+//					<ui>
+//					</ui>                   
+//				</class>
+//			");
+//            ClassDef.ClassDefs.Add(itsClassDef);
+//            return itsClassDef;
+//        }
+//        public bool Deletable
+//        {
+//            get { return _deletable; }
+//            set { _deletable = value; }
+//        }
+//        ///<summary>
+//        /// This method can be overridden by a class that inherits from Business object.
+//        /// The method allows the Business object developer to add customised rules that determine.
+//        /// The Deletable state of a business object. E.g. Invoices can never be delted once created. 
+//        /// Objects cannot be deteled once they have reached certain stages e.g. a customer order after it is accepted.
+//        ///</summary>
+//        public override bool IsDeletable(out string message)
+//        {
+//            message = "";
+//            return  _deletable; 
+//        }
+    //}
+
+    /// <summary>
+    /// MyBoNotEditableDeletable used for testing the when Editable set to false. 
+    /// The framework should prevent any editing.
+    /// </summary>
+    public class MyBoNotEditableDeletable : BusinessObject
+    {
+        private bool _editable = false;
+        private bool _deletable = false; 
+
+
+        public MyBoNotEditableDeletable() { }
+
+        public MyBoNotEditableDeletable(IDatabaseConnection conn) : base(conn) { }
+
+        protected override ClassDef ConstructClassDef()
+        {
+            return _classDef;
+        }
+
+        public string MyName
+        {
+            get { return "MyBoNotEditableDeletable"; }
+        }
+
+        public Guid MyBoNotEditableID
+        {
+            get
+            {
+                return (Guid)this.GetPropertyValue("MyBoNotEditableID");
+            }
+        }
+
+        public string TestProp
+        {
+            get
+            {
+                return (string)this.GetPropertyValue("TestProp");
+            }
+            set
+            {
+                this.SetPropertyValue("TestProp",value);
+            }
+        }
+
+        public static ClassDef LoadDefaultClassDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBoNotEditableDeletable"" assembly=""Habanero.Test"">
+					<property  name=""MyBoNotEditableID"" />
+					<property  name=""TestProp"" />
+					<primaryKey>
+						<prop name=""MyBoNotEditableID"" />
+					</primaryKey>
+					<ui>
+					</ui>                   
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public bool Editable
+        {
+            get { return _editable; }
+            set { _editable = value; }
+        }
+        public bool Deletable
+        {
+            get { return _deletable; }
+            set { _deletable = value; }
+        }
+        ///<summary>
+        /// This method can be overridden by a class that inherits from Business object.
+        /// The method allows the Business object developer to add customised rules that determine.
+        /// The editable state of a business object.
+        /// E.g. Once an invoice is paid it is no longer editable. Or when a course is old it is no
+        /// longer editable. This allows a UI developer to standise Code for enabling and disabling controls.
+        ///</summary>
+        public override bool IsEditable(out string message)
+        {
+            message = "";
+            return _editable; 
+        }
+
+        public override bool IsDeletable(out string message)
+        {
+            message = "";
+            return _deletable; 
         }
     }
 }

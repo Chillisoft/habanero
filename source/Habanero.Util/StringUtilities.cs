@@ -70,7 +70,7 @@ namespace Habanero.Util
                 {
                     prevStr = inputString.Substring(counter - 1, 1);
                 }
-			    int temp = 0;
+			    int temp;
 
                 // The rules are, add space if:
                 //   - the letter is upper case
@@ -198,6 +198,18 @@ namespace Habanero.Util
                 throw new UserException(String.Format("The given search term '{0}' " +
                     "does not exist in the text '{1}'.", searchText, fullText));
             }
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="origMessage"></param>
+        ///<param name="messageToAppend"></param>
+        ///<returns></returns>
+        public static string AppendMessage(string origMessage, string messageToAppend)
+        {
+            if (!String.IsNullOrEmpty(origMessage)) origMessage += Environment.NewLine;
+            origMessage += messageToAppend;
+            return origMessage;        
         }
     }
 }

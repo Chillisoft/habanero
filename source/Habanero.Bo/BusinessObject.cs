@@ -16,23 +16,20 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with Habanero Standard.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
-
+#pragma warning disable RedundantThisQualifier
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Security.Permissions;
 using System.Security.Principal;
-using System.Text;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 using Habanero.BO.SqlGeneration;
 using Habanero.DB;
-using Habanero.Base;
 using Habanero.Util;
 using log4net;
-
 
 namespace Habanero.BO
 {
@@ -55,7 +52,7 @@ namespace Habanero.BO
 
         #region Fields
 
-        private static Dictionary<string, WeakReference> _allLoadedBusinessObjects = new Dictionary<string, WeakReference>();
+        private static readonly Dictionary<string, WeakReference> _allLoadedBusinessObjects = new Dictionary<string, WeakReference>();
 
         //set object as new by default.
         private BOState _boState;
@@ -68,7 +65,7 @@ namespace Habanero.BO
         private IConcurrencyControl _concurrencyControl;
         private ITransactionLog _transactionLog;
         protected IDatabaseConnection _connection;
-        private bool _hasAutoIncrementingField;
+        //private bool _hasAutoIncrementingField;
         #endregion //Fields
 
         #region Constructors
@@ -351,7 +348,7 @@ namespace Habanero.BO
             {
                 if (_primaryKey == null)
                 {
-                    ClassDefinition.ClassDef classDef = this.ClassDef;
+                    ClassDef classDef = this.ClassDef;
                     while (classDef.SuperClassDef != null && classDef.PrimaryKeyDef == null)
                     {
                         classDef = classDef.SuperClassClassDef;
@@ -490,16 +487,34 @@ namespace Habanero.BO
         #endregion //Properties
 
         #region Editing Property Values
+
         ///<summary>
         /// This method can be overridden by a class that inherits from Business object.
         /// The method allows the Business object developer to add customised rules that determine.
         /// The editable state of a business object.
         /// E.g. Once an invoice is paid it is no longer editable. Or when a course is old it is no
         /// longer editable. This allows a UI developer to standise Code for enabling and disabling controls.
-        ///</summary>
-        public virtual bool IsEditable
+        /// These rules are applied to new object as well so if you want a new object 
+        /// to be editable then you must include this.State.IsNew in evaluating IsEditable.
+        /// </summary>
+        public virtual bool IsEditable(out string message)
         {
-            get { return true; }
+            message = "";
+            return true; 
+        }
+
+        ///<summary>
+        /// This method can be overridden by a class that inherits from Business object.
+        /// The method allows the Business object developer to add customised rules that determine.
+        /// The Deletable state of a business object. E.g. Invoices can never be delted once created. 
+        /// Objects cannot be deteled once they have reached certain stages e.g. a customer order after it is accepted.
+        /// These rules are applied to new object as well so if you want a new object 
+        /// to be deletable then you must include this.State.IsNew in evaluating IsDeletable.
+        ///</summary>
+        public virtual bool IsDeletable(out string message)
+        {
+            message = "";
+            return true; 
         }
 
         /// <summary>
@@ -511,6 +526,23 @@ namespace Habanero.BO
         /// </summary>
         private void BeginEdit()
         {
+            BeginEdit(false);
+        }
+
+        /// <summary>
+        /// Sets the object's state into editing mode.  The original state can
+        /// be restored with Restore() and changes can be committed to the
+        /// database by calling Save().
+        /// TODO: Put rules in begin edit to prevent the editing of this property.
+        /// How to test
+        /// </summary>
+        private void BeginEdit(bool delete)
+        {
+            string message;
+            if (!this.IsEditable(out message) && !delete)
+            {
+                throw new BusObjEditableException(this,message);             
+            }
             CheckNotEditing();
             CheckConcurrencyBeforeBeginEditing();
             State.IsEditing = true;
@@ -710,7 +742,7 @@ namespace Habanero.BO
             {
                 if (propValue != null && prop.PropertyType != propValue.GetType())
                 {
-                    propValue = System.Activator.CreateInstance(prop.PropertyType, new object[] {propValue, false});
+                    propValue = Activator.CreateInstance(prop.PropertyType, new object[] {propValue, false});
                 }
             }
             if (propValue is BusinessObject)
@@ -1075,12 +1107,22 @@ namespace Habanero.BO
         /// </summary>
         public void Delete()
         {
+            CheckIsDeletable();
             if (!State.IsEditing)
             {
-                BeginEdit();
+                BeginEdit(true);
             }
             State.IsDirty = true;
             State.IsDeleted = true;
+        }
+
+        private void CheckIsDeletable()
+        {
+            string errMsg;
+            if (!IsDeletable(out errMsg))
+            {
+                throw new BusObjDeleteException(this,errMsg);
+            }
         }
 
         /// <summary>
@@ -1381,7 +1423,7 @@ namespace Habanero.BO
                         }
                         finally
                         {
-                            if (dr != null & !(dr.IsClosed))
+                            if (dr != null && !(dr.IsClosed))
                             {
                                 dr.Close();
                             }
@@ -1398,7 +1440,7 @@ namespace Habanero.BO
         /// <param name="sql">The sql statement used to generate and track
         /// parameters</param>
         /// <returns>Returns a string</returns>
-        private string GetCheckForDuplicateWhereClause(BOKey lBOKey, SqlStatement sql)
+        private static string GetCheckForDuplicateWhereClause(BOKey lBOKey, SqlStatement sql)
         {
             if (lBOKey == null)
             {
@@ -1618,8 +1660,6 @@ namespace Habanero.BO
             return GetSelectSql(-1);
         }
 
-        
-
         #endregion //Sql Statements
 
         #region Implement ITransaction
@@ -1698,7 +1738,7 @@ namespace Habanero.BO
 				}
 				else
 				{
-				    string errors = String.Format("Errors occurred for the '{0}' identified as '{1}':", ClassDef.DisplayName, this.ToString());
+				    string errors = String.Format("Errors occurred for the '{0}' identified as '{1}':", ClassDef.DisplayName, this);
                     errors = AppendErrors(errors,reasonNotSaved);
                     //errors = AppendErrors(errors,customRuleErrors);
                     //string errors = this.ToString() + Environment.NewLine;
@@ -1712,9 +1752,7 @@ namespace Habanero.BO
 
         private static string AppendErrors(string errors, string appendError)
         {
-            if (!String.IsNullOrEmpty(errors)) errors += Environment.NewLine;
-            errors += appendError;
-            return errors;
+            return StringUtilities.AppendMessage(errors, appendError);
         }
 
 

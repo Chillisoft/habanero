@@ -27,7 +27,7 @@ namespace Habanero.BO
     /// <summary>
     /// Provides an exception to throw when a business object is not found
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public abstract class BusinessObjectException : Exception
     {
         /// <summary>
@@ -74,7 +74,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a there is an issue writing to a property on 
     /// the businessobject due to the ReadWriteRule that has been set up for the property.
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class BusinessObjectReadWriteRuleException : BusinessObjectException
     {
         private readonly PropDef _propDef;
@@ -93,7 +93,7 @@ namespace Habanero.BO
             if (propDef == null) return "";
             string displayName = String.IsNullOrEmpty(propDef.DisplayName) ? propDef.PropertyName : propDef.DisplayName;
             return String.Format("Error writing to property '{0}' because it is configured as a '{1}' property.",
-                                 displayName, propDef.ReadWriteRule.ToString());
+                                 displayName, propDef.ReadWriteRule);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Habanero.BO
     /// <summary>
     /// Provides an exception to throw when a business object is not found
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class BusinessObjectNotFoundException : BusinessObjectException
     {
         /// <summary>
@@ -187,7 +187,7 @@ namespace Habanero.BO
 	/// Provides an exception to throw when a the referential integrity constraints of 
 	/// a business object are being violated
 	/// </summary>
-	[Serializable()]
+	[Serializable]
     public class BusinessObjectReferentialIntegrityException : BusinessObjectException
 	{
 		/// <summary>
@@ -233,14 +233,13 @@ namespace Habanero.BO
     /// <summary>
     /// Provides an exception to throw when a property value is invalid
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class InvalidPropertyNameException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
         /// </summary>
         public InvalidPropertyNameException()
-            : base()
         {
         }
 
@@ -282,13 +281,13 @@ namespace Habanero.BO
     /// <summary>
     /// Provides an exception to throw when a property value is invalid
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class InvalidPropertyValueException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
         /// </summary>
-        public InvalidPropertyValueException() : base()
+        public InvalidPropertyValueException()
         {
         }
 
@@ -327,14 +326,13 @@ namespace Habanero.BO
     /// <summary>
     /// Provides an exception to throw when a property is invalid
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class InvalidPropertyException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
         /// </summary>
         public InvalidPropertyException()
-            : base()
         {
         }
 
@@ -376,14 +374,13 @@ namespace Habanero.BO
     /// <summary>
     /// Provides an exception to throw when a property is invalid
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class InvalidKeyException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
         /// </summary>
         public InvalidKeyException()
-            : base()
         {
         }
 
@@ -426,13 +423,13 @@ namespace Habanero.BO
     /// Provides an exception to throw when a business object is in an
     /// invalid state
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class BusObjectInAnInvalidStateException : BusinessObjectException
     {
         /// <summary>
         /// Constructor to initialise the exception
         /// </summary>
-        public BusObjectInAnInvalidStateException() : base()
+        public BusObjectInAnInvalidStateException()
         {
         }
 
@@ -473,7 +470,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when an error has occurred with the
     /// business object's concurrency control
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class BusObjectConcurrencyControlException : BusinessObjectException, ISerializable
     {
         /// <summary>
@@ -560,11 +557,11 @@ namespace Habanero.BO
     [Serializable]
     public class BusObjOptimisticConcurrencyControlException : BusObjectConcurrencyControlException, ISerializable
     {
-        private string mUserNameEdited;
-        private string mMachineNameEdited;
-        private DateTime mDateUpdated;
-        private string mObjectID;
-        private string mClassName;
+        private readonly string mUserNameEdited;
+        private readonly string mMachineNameEdited;
+        private readonly DateTime mDateUpdated;
+        private readonly string mObjectID;
+        private readonly string mClassName;
 
         /// <summary>
         /// Constructor to initialise the exception with a set of concurrency
@@ -870,7 +867,7 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise the exception
         /// </summary>
-        public EditingException() : base()
+        public EditingException()
         {
         }
 
@@ -1005,6 +1002,53 @@ namespace Habanero.BO
         /// <param name="context">The streaming context</param>
         protected BusObjDuplicateConcurrencyControlException(SerializationInfo info, StreamingContext context)
             : base(info, context)
+        {
+        }
+    }
+    /// <summary>
+    /// Provides an exception to throw when the object cannot be deleted due to either the 
+    /// custom rules being broken for a deletion or the IsDeletable flag being set to false.
+    /// </summary>
+    [Serializable]
+    public class BusObjDeleteException : BusinessObjectException
+    {
+        /// <summary>
+        /// Constructor to initialise the exception with details regarding the
+        /// object whose record was deleted
+        /// </summary>
+        /// <param name="bo">The business object in question</param>
+        /// <param name="message">Additional err message</param>
+        public BusObjDeleteException(BusinessObject bo, string message):
+                base(
+                    string.Format(
+                        "You cannot delete the '{0}', as the IsDeleted is set to false for the object. " +
+                        "ObjectID: {1}, also identified as {2} \n " + 
+                        "Message: {3}",
+                        bo.ClassName, bo.ID, bo,message))
+        {
+        }
+    }
+    /// <summary>
+    /// Provides an exception to throw when the object cannot be deleted due to either the 
+    /// custom rules being broken for a deletion or the IsDeletable flag being set to false.
+    /// </summary>
+    [Serializable]
+    public class BusObjEditableException : BusinessObjectException
+    {
+        /// <summary>
+        /// Constructor to initialise the exception with details regarding the
+        /// object whose record was deleted
+        /// </summary>
+        /// <param name="bo">The business object in question</param>
+        /// <param name="message">Additional message</param>
+        public BusObjEditableException(BusinessObject bo, string message)
+            :
+                base(
+                    string.Format(
+                        "You cannot Edit the '{0}', as the IsEditable is set to false for the object. " +
+                        "ObjectID: {1}, also identified as {2} \n " + 
+                        "Message: {3}",
+                        bo.ClassName, bo.ID, bo,message))
         {
         }
     }
