@@ -188,10 +188,10 @@ namespace Habanero.Test
             propDef = new PropDef("VersionNumber", typeof(int), PropReadWriteRule.ReadWrite, 1);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("PK2Prop1", typeof(string), PropReadWriteRule.WriteNew, "PK2_Prop1", null);
+            propDef = new PropDef("PK2Prop1", typeof(string), PropReadWriteRule.ReadWrite, "PK2_Prop1", null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("PK2Prop2", typeof(string), PropReadWriteRule.WriteNew, "PK2_Prop2", null);
+            propDef = new PropDef("PK2Prop2", typeof(string), PropReadWriteRule.ReadWrite, "PK2_Prop2", null);
             lPropDefCol.Add(propDef);
 
             propDef = new PropDef("PK3Prop", typeof (string), PropReadWriteRule.WriteNew, "PK3_Prop", null);
