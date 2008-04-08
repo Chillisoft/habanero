@@ -21,6 +21,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 //using Habanero.UI.Grid;
+using Habanero.UI.Grid;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders
@@ -39,7 +40,6 @@ namespace Habanero.Test.BO.Loaders
             loader = new XmlUIFormGridLoader();
         }
 
-        // Exludes default grid type, because this resides in Habanero.UI.Pro
         [Test]
         public void TestDefaults()
         {
@@ -50,13 +50,12 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(typeof(MyBO), formGrid.GridType);
         }
 
-        // Requires Habanero.UI.Pro
-        //[Test]
-        //public void TestDefaultGridType()
-        //{
-        //    UIFormGrid formGrid = loader.LoadUIFormGrid(@"<formGrid/>");
-        //    Assert.AreEqual(typeof(EditableGrid), formGrid.GridType);
-        //}
+        [Test]
+        public void TestDefaultGridType()
+        {
+            UIFormGrid formGrid = loader.LoadUIFormGrid(@"<formGrid relationship=""rel"" reverseRelationship=""correl"" />");
+            Assert.AreEqual(typeof(EditableGrid), formGrid.GridType);
+        }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestGridTypeNotExists()

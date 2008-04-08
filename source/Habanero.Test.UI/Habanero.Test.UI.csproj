@@ -58,9 +58,35 @@
     <Compile Include="Base\TestGlobalUIRegistry.cs" />
     <Compile Include="Base\TestGridLayoutManager.cs" />
     <Compile Include="Base\TestLayoutManager.cs" />
+    <Compile Include="Forms\TestBoTabColControl.cs" />
     <Compile Include="Forms\TestButtonControl.cs" />
+    <Compile Include="Forms\TestCheckBoxMapper.cs" />
+    <Compile Include="Forms\TestCollectionComboBoxMapper.cs" />
+    <Compile Include="Forms\TestComboBoxCollectionControl.cs" />
+    <Compile Include="Forms\TestControlMapper.cs" />
+    <Compile Include="Forms\TestDateRangeComboBox.cs" />
+    <Compile Include="Forms\TestDateTimePickerController.cs" />
+    <Compile Include="Forms\TestDateTimePickerMapper.cs" />
+    <Compile Include="Forms\TestDateTimePickerNullableMapper.cs" />
+    <Compile Include="Forms\TestDefaultBOEditorForm.cs" />
+    <Compile Include="Forms\TestEditableGridButtonControl.cs" />
+    <Compile Include="Forms\TestListComboBoxMapper.cs" />
+    <Compile Include="Forms\TestListViewCollectionMapper.cs" />
+    <Compile Include="Forms\TestLookupComboBoxMapper.cs" />
+    <Compile Include="Forms\TestMapperBase.cs" />
+    <Compile Include="Forms\TestMultiSelector.cs" />
+    <Compile Include="Forms\TestMultiSelectorModel.cs" />
+    <Compile Include="Forms\TestNumericUpDownIntegerMapper.cs" />
+    <Compile Include="Forms\TestNumericUpDownMoneyMapper.cs" />
+    <Compile Include="Forms\TestPanelFactory.cs" />
+    <Compile Include="Forms\TestReadOnlyGridButtonControl.cs" />
+    <Compile Include="Forms\TestTextBoxMapper.cs" />
+    <Compile Include="Forms\TestTreeViewTableEditor.cs" />
     <Compile Include="Grid\TestDataViewFilterClauseFactory.cs" />
     <Compile Include="Grid\TestDataViewFilterClauseFactoryWithStrings.cs" />
+    <Compile Include="Grid\TestEditableGrid.cs" />
+    <Compile Include="Grid\TestFilterControl.cs" />
+    <Compile Include="Grid\TestFilterInputBoxCollection.cs" />
     <Compile Include="Grid\TestReadOnlyGrid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />
@@ -79,6 +105,10 @@
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
       <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
       <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.General\Habanero.Test.General.csproj">
+      <Project>{F30A2151-F894-44E4-8F71-492B8C245745}</Project>
+      <Name>Habanero.Test.General</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
       <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>

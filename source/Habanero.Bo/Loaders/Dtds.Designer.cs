@@ -200,7 +200,7 @@ namespace Habanero.BO.Loaders {
         ///	relationship NMTOKEN #REQUIRED
         ///	reverseRelationship NMTOKEN #REQUIRED
         ///  type NMTOKEN &quot;Habanero.UI.Grid.EditableGrid&quot;
-        ///	assembly NMTOKEN &quot;Habanero.UI.Pro&quot;
+        ///	assembly NMTOKEN &quot;Habanero.UI&quot;
         ///&gt;.
         /// </summary>
         internal static string formGrid {
