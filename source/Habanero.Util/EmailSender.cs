@@ -134,6 +134,10 @@ namespace Habanero.Util
             {
                 throw new System.Exception("Please specify the SMTP Host Name before attempting to send.");
             }
+            if (_toAddresses.Count == 0)
+            {
+                throw new System.Exception("No Email Addresses were provoided");
+            }
             MailMessage message = new MailMessage();
             message.From = new MailAddress(_fromAddress);
             addAddresses(message.To, _toAddresses);
