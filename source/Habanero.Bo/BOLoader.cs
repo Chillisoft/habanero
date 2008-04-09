@@ -514,6 +514,7 @@ namespace Habanero.BO
 
         private static IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef, IExpression searchExpression, string searchCriteria, string orderByClause)
         {
+            if (classDef == null) throw new ArgumentNullException("classDef");
             IBusinessObjectCollection businessObjectCollection = CreateBusinessObjectCollection(classDef);
             if (searchExpression != null)
             {
