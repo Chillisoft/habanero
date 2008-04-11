@@ -121,7 +121,7 @@ namespace Habanero.BO.SqlGeneration
 
             _insertSql.Statement.Append(String.Format(
                 "INSERT INTO {0} ({1}) VALUES ({2})",
-                SqlGenerationHelper.FormatTableName(tableName, _connection),
+                SqlFormattingHelper.FormatTableName(tableName, _connection),
                 _dbFieldList, _dbValueList));
             _statementCollection.Insert(0, _insertSql);
         }
@@ -197,7 +197,7 @@ namespace Habanero.BO.SqlGeneration
                 _dbFieldList.Append(", ");
                 _dbValueList.Append(", ");
             }
-            _dbFieldList.Append(SqlGenerationHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
+            _dbFieldList.Append(SqlFormattingHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
             paramName = _gen.GetNextParameterName();
             _dbValueList.Append(paramName);
             _insertSql.AddParameter(paramName, prop.Value);

@@ -91,7 +91,7 @@ namespace Habanero.BO.SqlGeneration
         {
             _updateSql = new SqlStatement(_connection);
             _updateSql.Statement.Append(
-                @"UPDATE " + SqlGenerationHelper.FormatTableName(tableName, _connection) + " SET ");
+                @"UPDATE " + SqlFormattingHelper.FormatTableName(tableName, _connection) + " SET ");
             int includedProps = 0;
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
@@ -104,7 +104,7 @@ namespace Habanero.BO.SqlGeneration
                          !primaryKeyDef.IsObjectID))
                     {
                         includedProps++;
-                        _updateSql.Statement.Append(SqlGenerationHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
+                        _updateSql.Statement.Append(SqlFormattingHelper.FormatFieldName(prop.DatabaseFieldName, _connection));
                         _updateSql.Statement.Append(" = ");
                         _updateSql.AddParameterToStatement(prop.Value);
                         //_updateSql.AddParameterToStatement(DatabaseUtil.PrepareValue(prop.PropertyValue));

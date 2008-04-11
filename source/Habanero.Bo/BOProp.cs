@@ -481,7 +481,7 @@ namespace Habanero.BO
         {
             if (PersistedPropertyValue == null)
             {
-                return SqlGenerationHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
+                return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
             }
             else
             {
@@ -493,7 +493,7 @@ namespace Habanero.BO
                 {
                     string paramName = sql.ParameterNameGenerator.GetNextParameterName();
                     sql.AddParameter(paramName, PersistedPropertyValue);
-                    return SqlGenerationHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
+                    return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
                 }
             }
         }
@@ -512,7 +512,7 @@ namespace Habanero.BO
         {
             if (_currentValue == null)
             {
-                return SqlGenerationHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
+                return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
             }
             else
             {
@@ -524,7 +524,7 @@ namespace Habanero.BO
                 {
                     String paramName = sql.ParameterNameGenerator.GetNextParameterName();
                     sql.AddParameter(paramName, Value);
-                    return SqlGenerationHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
+                    return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " = " + paramName;
                 }
             }
         }

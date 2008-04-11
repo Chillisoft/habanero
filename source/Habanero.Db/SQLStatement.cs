@@ -32,6 +32,8 @@ namespace Habanero.DB
     /// </summary>
     public class SqlStatement : ISqlStatement
     {
+        private const string WHERE_CLAUSE_TOKEN = " WHERE ";
+        private const string AND_TOKEN = " AND ";
         private StringBuilder _statement;
         private IDatabaseConnection _connection;
         private IList _parameters;
@@ -220,6 +222,21 @@ namespace Habanero.DB
             this.Statement.Append(paramName);
         }
 
+        ///<summary>
+        /// Adds a join clause to the sql statement
+        ///</summary>
+        ///<param name="joinType">The type of join to be created. eg. 'LEFT JOIN'</param>
+        ///<param name="joinTable">The table to be joined to this sql statement</param>
+        ///<param name="joinCriteria">The criteria on which the join is created</param>
+        public void AddJoin(string joinType, string joinTable, string joinCriteria)
+        {
+            string statement = _statement.ToString();
+            int pos = statement.IndexOf(WHERE_CLAUSE_TOKEN);
+            //string joinClause = String.Format(" {0} {1} {2} {3}", joinType.Trim().ToUpper(),
+            //    SqlGenerationHelper);
+            //_statement.Insert(pos);
+        }
+
         /// <summary>
         /// Indicates whether this sql statement instance is equal in
         /// content to the one specified
@@ -280,14 +297,16 @@ namespace Habanero.DB
         {
             if (criteria != null && criteria.Length > 0)
             {
-                if (this.Statement.ToString().IndexOf(" WHERE ") != -1)
-                {
-                    this.Statement.Append(" AND " + criteria);
-                }
-                else
-                {
-                    this.Statement.Append(" WHERE " + criteria);
-                }
+                AppendWhere();
+                this.Statement.Append(criteria);
+                //if (this.Statement.ToString().IndexOf(" WHERE ") != -1)
+                //{
+                //    this.Statement.Append(" AND " + criteria);
+                //}
+                //else
+                //{
+                //    this.Statement.Append(" WHERE " + criteria);
+                //}
             }
         }
 
@@ -297,13 +316,13 @@ namespace Habanero.DB
         /// </summary>
         public void AppendWhere()
         {
-            if (this.Statement.ToString().IndexOf(" WHERE ") != -1)
+            if (this.Statement.ToString().IndexOf(WHERE_CLAUSE_TOKEN) != -1)
             {
-                this.Statement.Append(" AND ");
+                this.Statement.Append(AND_TOKEN);
             }
             else
             {
-                this.Statement.Append(" WHERE ");
+                this.Statement.Append(WHERE_CLAUSE_TOKEN);
             }
         }
 

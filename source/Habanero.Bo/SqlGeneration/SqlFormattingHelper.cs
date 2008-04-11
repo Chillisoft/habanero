@@ -22,12 +22,12 @@ using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 
-namespace Habanero.BO.SqlGeneration
+namespace Habanero.DB
 {
     /// <summary>
     /// Provides some additional utilities for sql statement generators
     /// </summary>
-    public class SqlGenerationHelper
+    public class SqlFormattingHelper
     {
         /// <summary>
         /// Formats the table name correctly using field delimiters

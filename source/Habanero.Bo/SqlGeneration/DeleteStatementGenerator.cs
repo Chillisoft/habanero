@@ -60,7 +60,7 @@ namespace Habanero.BO.SqlGeneration
 
             deleteSql = new SqlStatement(_connection);
             deleteSql.Statement = new StringBuilder(
-                @"DELETE FROM " + SqlGenerationHelper.FormatTableName(_bo.TableName, _connection) +
+                @"DELETE FROM " + SqlFormattingHelper.FormatTableName(_bo.TableName, _connection) +
                                                     " WHERE " + _bo.WhereClause(deleteSql));
             statementCollection.Add(deleteSql);
             ClassDef currentClassDef = _bo.ClassDef;
@@ -74,7 +74,7 @@ namespace Habanero.BO.SqlGeneration
                 deleteSql = new SqlStatement(_connection);
                 deleteSql.Statement.Append(
                     "DELETE FROM " +
-                    SqlGenerationHelper.FormatTableName(currentClassDef.SuperClassClassDef.TableName, _connection) +
+                    SqlFormattingHelper.FormatTableName(currentClassDef.SuperClassClassDef.TableName, _connection) +
                     " WHERE " + _bo.WhereClauseForSuperClass(deleteSql, currentClassDef));
                 statementCollection.Add(deleteSql);
                 currentClassDef = currentClassDef.SuperClassClassDef;

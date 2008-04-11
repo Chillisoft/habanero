@@ -20,6 +20,7 @@
 using System;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO;
+using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using Habanero.Base;
 using Habanero.Test;
@@ -40,6 +41,11 @@ namespace Habanero.Test.BO
         public void TestFixtureSetup()
         {
             base.SetupDBConnection();
+        }
+
+        [SetUp]
+        public void SetupTest()
+        {
             ClassDef.ClassDefs.Clear();
             ClassDef myboClassDef = MyBO.LoadDefaultClassDef();
         }
@@ -62,7 +68,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCreateLoadSqlStatementLimitClauseAtEnd()
+        public void TestCreateLoadSqlStatement_LimitClauseAtEnd()
         {
             MyBO bo1 = new MyBO();
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof (MyBO)], null, 10, null);
@@ -70,13 +76,29 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCreateLoadSqlStatementLimitClauseAtBeginning()
+        public void TestCreateLoadSqlStatement_LimitClauseAtBeginning()
         {
             MyBO bo1 = new MyBO();
             bo1.SetDatabaseConnection(new MyDatabaseConnection());
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], null, 10, null);
             Assert.AreEqual("SELECT TOP 10 MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statement.Statement.ToString());
         }
+
+        //[Test]
+        //public void TestCreateLoadSqlStatement_RelatedObjectProperties()
+        //{
+        //    ClassDef.ClassDefs.Clear();
+        //    MyBO.LoadClassDefWithRelationship();
+        //    MyBO bo1 = new MyBO();
+        //    string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
+        //    IExpression expression = Expression.CreateExpression(criteria);
+        //    ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+        //    Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+        //        "FROM `MyBO` LEFT JOIN `MyRelatedBo` AS `MyRelationship` " +
+        //        "ON `MyBO`.`RelatedID` = `MyRelationship`.`MyRelatedBoID` " +
+        //        "WHERE `MyBO`.`TestProp` = ?Param0 AND `MyRelationship`.`MyRelatedTestProp` = ?Param1", 
+        //        statement.Statement.ToString());
+        //} 
 
         [Test]
         public void TestRestoreAll()

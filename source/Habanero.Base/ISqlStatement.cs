@@ -61,6 +61,14 @@ namespace Habanero.Base
         /// <param name="obj">The parameter to add</param>
         void AddParameterToStatement(object obj);
 
+        ///<summary>
+        /// Adds a join clause to the sql statement
+        ///</summary>
+        ///<param name="joinType">The type of join to be created. eg. 'LEFT JOIN'</param>
+        ///<param name="joinTable">The table to be joined to this sql statement</param>
+        ///<param name="joinCriteria">The criteria on which the join is created</param>
+        void AddJoin(string joinType, string joinTable, string joinCriteria);
+
         /// <summary>
         /// Appends a criteria clause to the sql statement
         /// </summary>

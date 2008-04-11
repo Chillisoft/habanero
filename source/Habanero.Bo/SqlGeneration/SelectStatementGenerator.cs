@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base;
+using Habanero.DB;
 using Habanero.Util;
 
 namespace Habanero.BO.SqlGeneration
@@ -88,7 +89,7 @@ namespace Habanero.BO.SqlGeneration
             {
                 string tableName = GetTableName(prop, classDefs);
 
-                statement += SqlGenerationHelper.FormatTableAndFieldName(tableName, prop.DatabaseFieldName, _connection);
+                statement += SqlFormattingHelper.FormatTableAndFieldName(tableName, prop.DatabaseFieldName, _connection);
                 statement += ", ";
             }
             statement = statement.Remove(statement.Length - 2, 2);
@@ -98,12 +99,12 @@ namespace Habanero.BO.SqlGeneration
             {
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
-            statement += " FROM " + SqlGenerationHelper.FormatTableName(currentClassDef.TableName, _connection);
+            statement += " FROM " + SqlFormattingHelper.FormatTableName(currentClassDef.TableName, _connection);
             string where = " WHERE ";
 
             while (currentClassDef.IsUsingClassTableInheritance())
             {
-                statement += ", " + SqlGenerationHelper.FormatTableName(currentClassDef.SuperClassClassDef.InheritedTableName, _connection);
+                statement += ", " + SqlFormattingHelper.FormatTableName(currentClassDef.SuperClassClassDef.InheritedTableName, _connection);
                 where += GetParentKeyMatchWhereClause(currentClassDef);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
@@ -143,7 +144,7 @@ namespace Habanero.BO.SqlGeneration
             string where = "";
             
             where += string.Format("{0} = '{1}'",
-                SqlGenerationHelper.FormatFieldName(discriminator, _connection), classDef.ClassName);
+                SqlFormattingHelper.FormatFieldName(discriminator, _connection), classDef.ClassName);
             
             foreach (ClassDef def in classDef.ImmediateChildren)
             {
@@ -215,7 +216,7 @@ namespace Habanero.BO.SqlGeneration
             string where = "";
             foreach (PropDef def in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
             {
-                where += SqlGenerationHelper.FormatTableAndFieldName(
+                where += SqlFormattingHelper.FormatTableAndFieldName(
                     currentClassDef.SuperClassClassDef.TableName, def.FieldName, _connection);
                     
                 PrimaryKeyDef parentID = currentClassDef.SuperClassClassDef.PrimaryKeyDef;
@@ -223,7 +224,7 @@ namespace Habanero.BO.SqlGeneration
                     parentIDCopyFieldName == "")
                 {
                     where += " = " +
-                        SqlGenerationHelper.FormatTableAndFieldName(
+                        SqlFormattingHelper.FormatTableAndFieldName(
                             origClassDef.TableName, def.FieldName, _connection);
                 }
                 else
@@ -237,7 +238,7 @@ namespace Habanero.BO.SqlGeneration
                             "field name as the parent.");
                     }
                     where += " = " +
-                        SqlGenerationHelper.FormatTableAndFieldName(
+                        SqlFormattingHelper.FormatTableAndFieldName(
                             origClassDef.TableName, parentIDCopyFieldName, _connection);
                 }
                 where += " AND ";
