@@ -350,14 +350,10 @@ namespace Habanero.BO
             {
                 if (_primaryKey == null)
                 {
-                    ClassDef classDef = this.ClassDef;
-                    while (classDef.SuperClassDef != null && classDef.PrimaryKeyDef == null)
+                    PrimaryKeyDef primaryKeyDef = this.ClassDef.GetPrimaryKeyDef();
+                    if (primaryKeyDef != null)
                     {
-                        classDef = classDef.SuperClassClassDef;
-                    }
-                    if (classDef.PrimaryKeyDef != null)
-                    {
-                        BOPrimaryKey parentPrimaryKey = new BOPrimaryKey(classDef.PrimaryKeyDef);
+                        BOPrimaryKey parentPrimaryKey = new BOPrimaryKey(primaryKeyDef);
                         foreach (PropDef propDef in parentPrimaryKey.KeyDef)
                         {
                             BOProp prop = new BOProp(propDef);

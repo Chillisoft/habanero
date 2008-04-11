@@ -97,9 +97,9 @@ namespace Habanero.BO.Loaders
             _collection.SortColumn = _reader.GetAttribute("sortColumn");
 
             _reader.Read();
-            XmlUIGridColumnLoader propLoader = new XmlUIGridColumnLoader(DtdLoader, _defClassFactory);
             while (_reader.Name == "column")
             {
+                XmlUIGridColumnLoader propLoader = new XmlUIGridColumnLoader(DtdLoader, _defClassFactory);
                 _collection.Add(propLoader.LoadUIProperty(_reader.ReadOuterXml()));
             }
 

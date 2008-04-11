@@ -399,7 +399,9 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// The primary key definition
+        /// The primary key definition for this class definition.
+        /// This could be null if the primary key is inherited from the super class.
+        /// To retrieve the primary key that is used for this class use the GetPrimaryKeyDef() method.
         /// </summary>
         public PrimaryKeyDef PrimaryKeyDef
         {
@@ -493,9 +495,12 @@ namespace Habanero.BO.ClassDefinition
 				propCol.Add(superClassDef.createBOPropertyCol(newObject));
                 if (this.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance)
                 {
-                    foreach (PropDef def in superClassDef.PrimaryKeyDef)
+                    if (superClassDef.PrimaryKeyDef != null)
                     {
-                        propCol.Remove(def.PropertyName);
+                        foreach (PropDef def in superClassDef.PrimaryKeyDef)
+                        {
+                            propCol.Remove(def.PropertyName);
+                        }
                     }
                 } 
                 else if (this.SuperClassDef.ORMapping == ORMapping.SingleTableInheritance)
@@ -836,6 +841,25 @@ namespace Habanero.BO.ClassDefinition
 		public PropDef GetPropDef(string propertyName)
         {
         	return GetPropDef(propertyName, true);
+        }
+
+        ///<summary>
+        /// Retrieves the primary key definition for this class, traversing 
+        /// the SuperClass structure to get the primary key definition if necessary
+        ///</summary>
+        ///<returns>The primary key for this class</returns>
+        public PrimaryKeyDef GetPrimaryKeyDef()
+        {
+            PrimaryKeyDef primaryKeyDef = PrimaryKeyDef;
+            if (primaryKeyDef == null)
+            {
+                ClassDef superClassClassDef = SuperClassClassDef;
+                if (superClassClassDef != null)
+                {
+                    primaryKeyDef = superClassClassDef.GetPrimaryKeyDef();
+                }
+            }
+            return primaryKeyDef;
         }
 
 		/// <summary>

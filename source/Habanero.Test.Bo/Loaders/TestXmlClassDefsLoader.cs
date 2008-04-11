@@ -61,6 +61,43 @@ namespace Habanero.Test.BO.Loaders
 					</classes>
 			");
             Assert.AreEqual(2, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
+        }
+
+        [Test]
+        public void TestLoadClassDefs_WithInheritedClassWithNoPrimaryKey()
+        {
+            XmlClassDefsLoader loader = new XmlClassDefsLoader();
+            ClassDefCol classDefList =
+                loader.LoadClassDefs(
+                    @"
+					<classes>
+						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClassID"" />
+                            <primaryKey>
+                                <prop name=""TestClassID""/>
+                            </primaryKey>
+						</class>
+						<class name=""TestClass2"" assembly=""Habanero.Test.BO.Loaders"" >
+							<property  name=""TestClass2ID"" />
+                            <primaryKey>
+                                <prop name=""TestClass2ID""/>
+                            </primaryKey>
+						</class>
+						<class name=""TestClassInherited"" assembly=""Habanero.Test.BO.Loaders"" >							
+                            <superClass class=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" />
+						</class>
+					</classes>
+			");
+            Assert.AreEqual(3, classDefList.Count);
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass2"), "Class 'TestClass2' should have been loaded.");
+            Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClassInherited"), "Class 'TestClassInherited' should have been loaded.");
+            ClassDef classDefTestClass = classDefList["Habanero.Test.BO.Loaders", "TestClass"];
+            ClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
+            Assert.IsNotNull(classDefInherited.SuperClassDef);
+            Assert.IsNull(classDefInherited.PrimaryKeyDef);
         }
 
         [Test, ExpectedException(typeof(XmlException))]

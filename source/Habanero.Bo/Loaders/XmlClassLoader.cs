@@ -184,8 +184,8 @@ namespace Habanero.BO.Loaders
         private void LoadSuperClassDesc(string xmlDef)
         {
             if (xmlDef != null)
-        {
-            XmlSuperClassLoader superClassLoader = new XmlSuperClassLoader(DtdLoader, _defClassFactory);
+            {
+                XmlSuperClassLoader superClassLoader = new XmlSuperClassLoader(DtdLoader, _defClassFactory);
                 _superClassDef = superClassLoader.LoadSuperClassDesc(xmlDef);
             }
         }
@@ -197,9 +197,9 @@ namespace Habanero.BO.Loaders
         {
 			_relationshipDefCol = _defClassFactory.CreateRelationshipDefCol();
 			//_relationshipDefCol = new RelationshipDefCol();
-			XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory);
             foreach (string relDefXml in xmlDefs)
             {
+                XmlRelationshipLoader relationshipLoader = new XmlRelationshipLoader(DtdLoader, _defClassFactory);
                 _relationshipDefCol.Add(relationshipLoader.LoadRelationship(relDefXml, _propDefCol));
             }
         }
@@ -211,9 +211,9 @@ namespace Habanero.BO.Loaders
         {
 			_uiDefCol = _defClassFactory.CreateUIDefCol();
 			//_uiDefCol = new UIDefCol();
-            XmlUILoader loader = new XmlUILoader(DtdLoader, _defClassFactory);
             foreach (string uiDefXml in xmlDefs)
             {
+                XmlUILoader loader = new XmlUILoader(DtdLoader, _defClassFactory);
                 _uiDefCol.Add(loader.LoadUIDef(uiDefXml));
             }
         }
@@ -225,9 +225,9 @@ namespace Habanero.BO.Loaders
         {
 			_keyDefCol = _defClassFactory.CreateKeyDefCol();
 			//_keyDefCol = new KeyDefCol();
-            XmlKeyLoader loader = new XmlKeyLoader(DtdLoader, _defClassFactory);
             foreach (string keyDefXml in xmlDefs)
             {
+                XmlKeyLoader loader = new XmlKeyLoader(DtdLoader, _defClassFactory);
                 _keyDefCol.Add(loader.LoadKey(keyDefXml, _propDefCol));
             }
         }
@@ -278,9 +278,9 @@ namespace Habanero.BO.Loaders
             }
 			_propDefCol = _defClassFactory.CreatePropDefCol();
             //_propDefCol = new PropDefCol();
-            XmlPropertyLoader propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);
             foreach (string propDefXml in xmlDefs)
             {
+                XmlPropertyLoader propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);
                 _propDefCol.Add(propLoader.LoadProperty(propDefXml));
             }
             //			XmlNodeList xmlPropDefs = _lassElement.GetElementsByTagName("propertyDef");

@@ -107,9 +107,6 @@ namespace Habanero.BO.Loaders
             //else
             //{
 
-                XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
-                XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
-            XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
 
                 List<UIFormField> fields = new List<UIFormField>();
                 string contentType = "";
@@ -122,6 +119,7 @@ namespace Habanero.BO.Loaders
                             throw new InvalidXmlDefinitionException(MixedContentMessage);
                         }
                         contentType = "columnLayout";
+                        XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
                         _tab.Add(columnLoader.LoadUIFormColumn(_reader.ReadOuterXml()));
                     }
                     else if (_reader.Name == "field")
@@ -131,6 +129,7 @@ namespace Habanero.BO.Loaders
                             throw new InvalidXmlDefinitionException(MixedContentMessage);
                         }
                         contentType = "field";
+                        XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
                         fields.Add(fieldLoader.LoadUIProperty(_reader.ReadOuterXml()));
 
                     } else if (_reader.Name == "formGrid") {
@@ -139,6 +138,7 @@ namespace Habanero.BO.Loaders
                              throw new InvalidXmlDefinitionException(MixedContentMessage);
                          }
                         contentType = "formGrid";
+                        XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
                         _tab.UIFormGrid = gridLoader.LoadUIFormGrid(_reader.ReadOuterXml());
 
                     }

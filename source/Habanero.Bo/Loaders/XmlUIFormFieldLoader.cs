@@ -252,9 +252,9 @@ namespace Habanero.BO.Loaders
             _triggers = new TriggerCol();
             while (_reader.Name == "trigger")
             {
-                XmlTriggerLoader propLoader = new XmlTriggerLoader(DtdLoader, _defClassFactory);
                 while (_reader.Name == "trigger")
                 {
+                    XmlTriggerLoader propLoader = new XmlTriggerLoader(DtdLoader, _defClassFactory);
                     _triggers.Add(propLoader.LoadTrigger(_reader.ReadOuterXml()));
                 }
             }

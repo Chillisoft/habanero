@@ -48,14 +48,15 @@ namespace Habanero.BO
         /// <returns>Returns a business object or null if not found</returns>
         public static BusinessObject GetBusinessObjectWithGuid(Guid id, ClassDef classDef)
         {
-            if (!classDef.PrimaryKeyDef.IsObjectID)
+            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
+            if (!primaryKeyDef.IsObjectID)
             {
                 throw new HabaneroApplicationException(
                     "GetBusinessObjectWithGuid can only be used for objects that use Guids as primary keys.");
             }
             else
             {
-                string primaryKeyField = classDef.PrimaryKeyDef.KeyName;
+                string primaryKeyField = primaryKeyDef.KeyName;
                 BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
                 col.Load(primaryKeyField + " = '" + id.ToString("B").ToUpper() + "'", "");
                 if (col.Count == 1)

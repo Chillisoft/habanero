@@ -106,16 +106,18 @@ namespace Habanero.Test.General
             Assert.AreEqual(1, _insertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
             Assert.AreEqual(
-                "INSERT INTO `Shape` (`Colour`, `Radius`, `ShapeID`, `ShapeName`, `ShapeType`) VALUES (?Param0, ?Param1, ?Param2, ?Param3, ?Param4)",
+                "INSERT INTO `Shape` (`ShapeType`, `Colour`, `Radius`, `ShapeID`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3, ?Param4)",
                 _insertSql[0].Statement.ToString(), "Concrete Table Inheritance insert Sql seems to be incorrect.");
-            Assert.AreEqual(3, ((IDbDataParameter) _insertSql[0].Parameters[0]).Value,
+            Assert.AreEqual("FilledCircleNoPrimaryKey", ((IDbDataParameter)_insertSql[0].Parameters[0]).Value,
+                            "Discriminator has incorrect value");
+            Assert.AreEqual(3, ((IDbDataParameter)_insertSql[0].Parameters[1]).Value,
                             "Parameter Colour has incorrect value");
-            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter) _insertSql[0].Parameters[3]).Value,
-                            "Parameter ShapeName has incorrect value");
-            Assert.AreEqual(_filledCircleId, ((IDbDataParameter) _insertSql[0].Parameters[2]).Value,
-                            "Parameter ShapeID has incorrect value");
-            Assert.AreEqual(10, ((IDbDataParameter) _insertSql[0].Parameters[1]).Value,
+            Assert.AreEqual(10, ((IDbDataParameter) _insertSql[0].Parameters[2]).Value,
                             "Parameter Radius has incorrect value");
+            Assert.AreEqual(_filledCircleId, ((IDbDataParameter) _insertSql[0].Parameters[3]).Value,
+                            "Parameter ShapeID has incorrect value");
+            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter) _insertSql[0].Parameters[4]).Value,
+                            "Parameter ShapeName has incorrect value");
         }
 
         [Test]
