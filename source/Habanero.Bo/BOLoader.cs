@@ -141,7 +141,7 @@ namespace Habanero.BO
             BOPropCol propCol = new BOPropCol();
             ClassDef classDef = obj.ClassDef;
             Type boType = obj.GetType();
-            PrimaryKeyDef primaryKeyDef = classDef.PrimaryKeyDef;
+            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
             if (primaryKeyDef == null)
             {
                 primaryKeyDef = (PrimaryKeyDef)obj.ID.KeyDef;
@@ -778,13 +778,14 @@ namespace Habanero.BO
                     return null;
                 }
             }
-            if (classDef.PrimaryKeyDef.Count > 1)
+            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
+            if (primaryKeyDef.Count > 1)
             {
                 throw new InvalidPropertyException("A business object cannot be loaded " +
                    "with a single ID when there are multiple properties making up " +
                    "the primary key.");
             }
-            string criteria = string.Format("{0}='{1}'", classDef.PrimaryKeyDef.KeyName, id);
+            string criteria = string.Format("{0}='{1}'", primaryKeyDef.KeyName, id);
             return GetBusinessObject<T>(classDef, criteria);
         }        
         

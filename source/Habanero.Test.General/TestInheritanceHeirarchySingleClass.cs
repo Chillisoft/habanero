@@ -97,17 +97,17 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(2, _insertSql.Count,
                             "There should be 2 insert sql statements.");
-            Assert.AreEqual("INSERT INTO `Shape` (`Radius`, `ShapeID`, `ShapeName`, `ShapeType`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+            Assert.AreEqual("INSERT INTO `Shape` (`ShapeType`, `Radius`, `ShapeID`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
                             _insertSql[0].Statement.ToString(),
                             "First insert Sql statement is incorrect.");
-            Assert.AreEqual(10, ((IDbDataParameter)_insertSql[0].Parameters[0]).Value,
+            Assert.AreEqual("FilledCircleInheritsCircleNoPK", ((IDbDataParameter)_insertSql[0].Parameters[0]).Value,
+                            "Discriminator ('ShapeType') has incorrect value.");
+            Assert.AreEqual(10, ((IDbDataParameter)_insertSql[0].Parameters[1]).Value,
                             "Parameter Radius has incorrect value.");
-            Assert.AreEqual(_filledCircleId, ((IDbDataParameter)_insertSql[0].Parameters[1]).Value,
+            Assert.AreEqual(_filledCircleId, ((IDbDataParameter)_insertSql[0].Parameters[2]).Value,
                             "Parameter ShapeID has incorrect value.");
-            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter)_insertSql[0].Parameters[2]).Value,
+            Assert.AreEqual("MyFilledCircle", ((IDbDataParameter)_insertSql[0].Parameters[3]).Value,
                             "Parameter ShapeName has incorrect value.");
-            Assert.AreEqual("FilledCircleInheritsCircleNoPK", ((IDbDataParameter)_insertSql[0].Parameters[3]).Value,
-                            "Parameter ShapeType has incorrect value.");
 
             Assert.AreEqual(
                 "INSERT INTO `FilledCircle` (`Colour`, `FilledCircleID`, `ShapeID`) VALUES (?Param0, ?Param1, ?Param2)",

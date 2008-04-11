@@ -266,7 +266,7 @@ namespace Habanero.UI.Forms
             }
             _isEditable = !_isReadOnly && _businessObject != null
                     && (_businessObject.Props.Contains(_propertyName) || virtualPropertySetExists);
-			if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsObjectID &&
+            if (_isEditable && _businessObject.ClassDef.GetPrimaryKeyDef().IsObjectID &&
 				_businessObject.ID.Contains(_propertyName) &&
 				!_businessObject.State.IsNew)
 			{

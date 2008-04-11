@@ -106,7 +106,8 @@ namespace Habanero.BO.SqlGeneration
                 supportsAutoIncrementingField = new SupportsAutoIncrementingFieldBO(_bo);
             }
             this.InitialiseStatement(tableName, supportsAutoIncrementingField);
-           
+
+            ModifyForInheritance(propsToInclude);
 
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
@@ -118,6 +119,15 @@ namespace Habanero.BO.SqlGeneration
                 }
             }
 
+            _insertSql.Statement.Append(String.Format(
+                "INSERT INTO {0} ({1}) VALUES ({2})",
+                SqlGenerationHelper.FormatTableName(tableName, _connection),
+                _dbFieldList, _dbValueList));
+            _statementCollection.Insert(0, _insertSql);
+        }
+
+        private void ModifyForInheritance(BOPropCol propsToInclude)
+        {
             ClassDef classDef = _currentClassDef; //rather than _bo.ClassDef
             ClassDef classDefWithSTI = null;
             foreach (ClassDef def in classDef.ImmediateChildren)
@@ -143,18 +153,19 @@ namespace Habanero.BO.SqlGeneration
                 if (discriminator == null)
                 {
                     throw new InvalidXmlDefinitionException("A super class has been defined " +
-                        "using Single Table Inheritance, but no discriminator column has been set.");
+                                                            "using Single Table Inheritance, but no discriminator column has been set.");
                 }
-                PropDef propDef = new PropDef(discriminator, typeof(string), PropReadWriteRule.ReadWrite, null);
-                BOProp className = new BOProp(propDef, _bo.ClassDef.ClassName);
-                AddPropToInsertStatement(className);
+                if (propsToInclude.Contains(discriminator) && _bo.Props.Contains(discriminator))
+                {
+                    BOProp boProp = _bo.Props[discriminator];
+                    boProp.Value = _bo.ClassDef.ClassName;
+                } else 
+                {
+                    PropDef propDef = new PropDef(discriminator, typeof (string), PropReadWriteRule.ReadWrite, null);
+                    BOProp className = new BOProp(propDef, _bo.ClassDef.ClassName);
+                    AddPropToInsertStatement(className);
+                }
             }
-
-            _insertSql.Statement.Append(String.Format(
-                "INSERT INTO {0} ({1}) VALUES ({2})",
-                SqlGenerationHelper.FormatTableName(tableName, _connection),
-                _dbFieldList, _dbValueList));
-            _statementCollection.Insert(0, _insertSql);
         }
 
         /// <summary>

@@ -93,18 +93,18 @@ namespace Habanero.Test.General
         {
             Assert.AreEqual(1, itsInsertSql.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
-            Assert.AreEqual("INSERT INTO `Shape` (`Radius`, `ShapeID`, `ShapeName`, `ShapeType`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
+            Assert.AreEqual("INSERT INTO `Shape` (`ShapeType`, `Radius`, `ShapeID`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
                             itsInsertSql[0].Statement.ToString(),
                             "Concrete Table Inheritance insert Sql seems to be incorrect.");
             Assert.AreEqual(4, itsInsertSql[0].Parameters.Count, "There should be 4 parameters.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
-                            "Parameter ShapeID has incorrect value");
-            Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[2]).Value,
-                            "Parameter ShapeName has incorrect value");
-            Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
-                            "Parameter Radius has incorrect value");
-            Assert.AreEqual("CircleNoPrimaryKey", ((IDbDataParameter)itsInsertSql[0].Parameters[3]).Value,
+            Assert.AreEqual("CircleNoPrimaryKey", ((IDbDataParameter)itsInsertSql[0].Parameters[0]).Value,
                             "Discriminator has incorrect value");
+            Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
+                            "Parameter Radius has incorrect value");
+            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[2]).Value,
+                            "Parameter ShapeID has incorrect value");
+            Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[3]).Value,
+                            "Parameter ShapeName has incorrect value");
 
         }
 

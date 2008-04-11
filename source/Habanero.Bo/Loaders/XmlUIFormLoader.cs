@@ -110,9 +110,6 @@ namespace Habanero.BO.Loaders
 
 
             _reader.Read();
-            XmlUIFormTabLoader tabLoader = new XmlUIFormTabLoader(DtdLoader, _defClassFactory);
-            XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
-            XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
             List<UIFormColumn> columns = new List<UIFormColumn>();
             List<UIFormField> fields = new List<UIFormField>();
             string contentType = "";
@@ -123,6 +120,7 @@ namespace Habanero.BO.Loaders
                             "A form can have either a set of 'tab', 'columnLayout' or 'field' nodes, but not a mixture.");
                     }
                     contentType = "tab";
+                    XmlUIFormTabLoader tabLoader = new XmlUIFormTabLoader(DtdLoader, _defClassFactory);
                     _uiForm.Add(tabLoader.LoadUIFormTab(_reader.ReadOuterXml()));
                 }
                 else if (_reader.Name == "columnLayout") {
@@ -131,6 +129,7 @@ namespace Habanero.BO.Loaders
                             "A form can have either a set of 'tab', 'columnLayout' or 'field' nodes, but not a mixture.");
                     }
                     contentType = "columnLayout";
+                    XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
                     columns.Add(columnLoader.LoadUIFormColumn(_reader.ReadOuterXml()));
                 }
                 else if (_reader.Name == "field") {
@@ -139,6 +138,7 @@ namespace Habanero.BO.Loaders
                             "A form can have either a set of 'tab', 'columnLayout' or 'field' nodes, but not a mixture.");
                     }
                     contentType = "field";
+                    XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
                     fields.Add(fieldLoader.LoadUIProperty(_reader.ReadOuterXml()));
 
                 } else {
