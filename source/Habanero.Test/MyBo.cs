@@ -55,6 +55,17 @@ namespace Habanero.Test
             get { return "MyNameIsMyBo"; }
         }
 
+        public string TestProp
+        {
+            get
+            {
+                return (string) this.GetPropertyValue("TestProp");
+            }
+            set
+            {
+                this.SetPropertyValue("TestProp", value);
+            }
+        }
         public Guid MyBoID
         {
             get
@@ -106,6 +117,35 @@ namespace Habanero.Test
 			");
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
+        }
+
+        public static ClassDef LoadDefaultClassDefGizmox()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" assembly=""Gizmox.WebGUI.Forms"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" assembly=""Gizmox.WebGUI.Forms"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
         }
 
         public static ClassDef LoadClassDefWithNoLookup()

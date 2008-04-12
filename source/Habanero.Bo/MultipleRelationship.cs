@@ -62,16 +62,15 @@ namespace Habanero.BO
     	/// </summary>
     	/// <returns>Returns a collection of business objects</returns>
 		public virtual BusinessObjectCollection<T> GetRelatedBusinessObjectCol<T>()
-    		where T : BusinessObject
+    		where T : BusinessObject, new()
         {
     	    IBusinessObjectCollection boCol = GetRelatedBusinessObjectColInternal<T>(true);
     	    return (BusinessObjectCollection<T>)boCol;
         }
 
-        private IBusinessObjectCollection GetRelatedBusinessObjectColInternal<T>(bool useGenericParameter)
-    		where T : BusinessObject
+        private IBusinessObjectCollection GetRelatedBusinessObjectColInternal<T>(bool useGenericParameter) 
+    		where T : BusinessObject, new()
         {
-            BusinessObject busObj;
             Type type = _relDef.RelatedObjectClassType;
             Type collectionItemType;
             if(useGenericParameter)
@@ -83,7 +82,7 @@ namespace Habanero.BO
             }
             try
             {
-                busObj = (BusinessObject)Activator.CreateInstance(type, true);
+                Activator.CreateInstance(type, true);
             }
             catch (Exception ex)
             {
@@ -113,7 +112,7 @@ namespace Habanero.BO
                     _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
             }
 
-            if (this._relDef.KeepReferenceToRelatedObject)
+            if (_relDef.KeepReferenceToRelatedObject)
             {
                 //// TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object
                 //// gets added with the foreign key nothing will pick that up other than a reload.

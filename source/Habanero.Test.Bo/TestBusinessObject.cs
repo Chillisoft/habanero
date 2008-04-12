@@ -299,5 +299,22 @@ namespace Habanero.Test.BO
             bo.Deletable = true;
             bo.Delete();
         }
+
+        [Test]
+        public void TestPropValueHasChanged()
+        {
+            int? x = 1;
+            int? y = 1;
+            Assert.IsFalse(BusinessObject.PropValueHasChanged(x, y));
+
+            object z = 1;
+            Assert.IsFalse(BusinessObject.PropValueHasChanged(x, z));
+
+            Assert.IsFalse(BusinessObject.PropValueHasChanged(null, null));
+            Assert.IsTrue(BusinessObject.PropValueHasChanged(null, x));
+            Assert.IsTrue(BusinessObject.PropValueHasChanged(x, null));
+            x = null;
+            Assert.IsTrue(BusinessObject.PropValueHasChanged(x, y));
+        }
     }
 }

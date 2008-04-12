@@ -18,16 +18,12 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.BO.ClassDefinition;
+using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
-using Habanero.Base;
-using Habanero.Test;
-using NMock;
 using NUnit.Framework;
-using Rhino.Mocks;
-using BusinessObject = Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.BO
 {
@@ -40,14 +36,14 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            base.SetupDBConnection();
+            SetupDBConnection();
         }
 
         [SetUp]
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            ClassDef myboClassDef = MyBO.LoadDefaultClassDef();
+            MyBO.LoadDefaultClassDef();
         }
 
         [Test]
@@ -130,6 +126,31 @@ namespace Habanero.Test.BO
             col.SaveAll();
             Assert.AreEqual(0, col.Count);
         }
+
+        [Test]
+        public void TestCreateBusinessObject()
+        {
+            ContactPerson.LoadDefaultClassDef(); 
+            BusinessObjectCollection<ContactPerson> cpCol = new BusinessObjectCollection<ContactPerson>();
+            ContactPerson newCP = cpCol.CreateBusinessObject();
+            Assert.IsTrue(newCP.State.IsNew);
+            Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
+        }
+
+
+        [Test]
+        public void TestPersistOfCreatedBusinessObject()
+        {
+            ContactPerson.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPerson> cpCol = new BusinessObjectCollection<ContactPerson>();
+            ContactPerson newCP = cpCol.CreateBusinessObject();
+            newCP.Surname = Guid.NewGuid().ToString();
+           
+            newCP.Save();
+            Assert.AreEqual(1, cpCol.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+        }
+
 
         public class MyDatabaseConnection : DatabaseConnection
         {

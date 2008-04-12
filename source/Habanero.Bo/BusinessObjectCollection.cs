@@ -43,8 +43,9 @@ namespace Habanero.BO
     /// class. The business objects contained in this collection must
     /// inherit from BusinessObject.
     /// </summary>
-	public class BusinessObjectCollection<TBusinessObject> : List<TBusinessObject>, IEnumerable<TBusinessObject>, IBusinessObjectCollection 
-		where TBusinessObject : BusinessObject
+	public class BusinessObjectCollection<TBusinessObject> 
+        : List<TBusinessObject>, IEnumerable<TBusinessObject>, IBusinessObjectCollection  
+		where TBusinessObject : BusinessObject, new()
     {
         private ClassDef _boClassDef;
         private IExpression _criteriaExpression;
@@ -53,6 +54,7 @@ namespace Habanero.BO
         private string _extraSearchCriteriaLiteral = "";
         private int _limit = -1;
         private Hashtable _lookupTable;
+        private List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
         //private ArrayList _list;
 
         /// <summary>
@@ -343,6 +345,7 @@ namespace Habanero.BO
 		{
 			Load(searchExpression, orderByClause, "");
 		}
+
 
         /// <summary>
         /// Loads business objects that match the search criteria provided
@@ -691,7 +694,7 @@ namespace Habanero.BO
 		/// </summary>
 		/// <returns>Returns the cloned copy</returns>
 		public BusinessObjectCollection<DestType> Clone<DestType>()
-			where DestType : BusinessObject
+			where DestType : BusinessObject, new()
 		{
 			BusinessObjectCollection<DestType> clonedCol = new BusinessObjectCollection<DestType>(_boClassDef);
 			if (!typeof(DestType).IsSubclassOf(typeof(TBusinessObject)) &&
@@ -969,6 +972,39 @@ namespace Habanero.BO
 			get { return false; }
     	}
 
-    	#endregion
+        /// <summary>
+        /// The list of business objects that have been created via this collection (@see CreateBusinessObject) and have not
+        /// yet been persisted.
+        /// </summary>
+        public List<TBusinessObject> CreatedBusinessObjects
+        {
+            get { return _createdBusinessObjects; }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Creates a business object of type TBusinessObject
+        /// Adds this BO to the CreatedBusinessObjects list. When the object is saved it will
+        /// be added to the actual bo collection.
+        /// </summary>
+        /// <returns></returns>
+        public TBusinessObject CreateBusinessObject()
+        {
+            TBusinessObject newBO = new TBusinessObject();
+            newBO.Saved += delegate(object sender, BOEventArgs e)
+                               {
+                                   _createdBusinessObjects.Remove((TBusinessObject)e.BusinessObject);
+                                   Add((TBusinessObject)e.BusinessObject);
+                               };
+            _createdBusinessObjects.Add(newBO);
+            return newBO;
+        }
+
+        BusinessObject IBusinessObjectCollection.CreateBusinessObject()
+        {
+            return CreateBusinessObject();
+        }
+
     }
 }

@@ -27,7 +27,7 @@ namespace Habanero.BO.Comparer
     /// Compares two business objects on the date-time property specified 
     /// in the constructor
     /// </summary>
-    public class DateTimeComparer<T> : IComparer<T> where T : BusinessObject
+    public class DateTimeComparer<T> : IComparer<T> where T: BusinessObject, new()
     {
         private readonly string _propName;
 

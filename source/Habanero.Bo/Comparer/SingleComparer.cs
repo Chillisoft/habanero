@@ -27,7 +27,7 @@ namespace Habanero.BO.Comparer
     /// Compares two business objects on the Single property specified 
     /// in the constructor
     /// </summary>
-    public class SingleComparer<T> : IComparer<T> where T : BusinessObject
+    public class SingleComparer<T> : IComparer<T> where T: BusinessObject, new()
     {
         private readonly string _propName;
 

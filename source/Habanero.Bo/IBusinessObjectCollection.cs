@@ -213,5 +213,13 @@ namespace Habanero.BO
         /// <param name="searchExpression">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
         void Load(IExpression searchExpression, string orderByClause);
+
+        /// <summary>
+        /// Creates a business object of type TBusinessObject
+        /// Adds this BO to the CreatedBusinessObjects list. When the object is saved it will
+        /// be added to the actual bo collection.
+        /// </summary>
+        /// <returns></returns>
+        BusinessObject CreateBusinessObject();
 	}
 }

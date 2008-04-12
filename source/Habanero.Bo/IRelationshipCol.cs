@@ -52,7 +52,7 @@ namespace Habanero.BO
 		/// the relationship specified is a multiple relationship, when a
 		/// single one was expected</exception>
 		T GetRelatedObject<T>(string relationshipName) 
-			where T: BusinessObject;
+			where T: BusinessObject, new();
 
         /// <summary>
         /// Returns a collection of business objects that are connected to
@@ -76,7 +76,7 @@ namespace Habanero.BO
 		/// the relationship specified is a single relationship, when a
 		/// multiple one was expected</exception>
 		BusinessObjectCollection<T> GetRelatedCollection<T>(string relationshipName)
-			where T : BusinessObject;
+			where T : BusinessObject, new();
 
         /// <summary>
         /// Relates a business object to this object through the type of

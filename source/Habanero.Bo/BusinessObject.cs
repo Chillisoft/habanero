@@ -75,7 +75,7 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise a new business object
         /// </summary>
-        protected internal BusinessObject() : this((IDatabaseConnection)null)
+        public BusinessObject() : this((IDatabaseConnection)null)
         {
         }
 
@@ -696,8 +696,8 @@ namespace Habanero.BO
         /// Sets a property value to a new value
         /// </summary>
         /// <param name="propName">The property name</param>
-        /// <param name="propValue">The new value to set to</param>
-        public void SetPropertyValue(string propName, object propValue)
+        /// <param name="newPropValue">The new value to set to</param>
+        public void SetPropertyValue(string propName, object newPropValue)
         {
             BOProp prop = Props[propName];
             if (prop == null)
@@ -708,68 +708,75 @@ namespace Habanero.BO
                     propName, ClassName));
             }
 
-            if (!(propValue is Guid))
+            if (!(newPropValue is Guid))
             {
-                if (propValue is string && prop.PropertyType == typeof(Guid))
+                if (newPropValue is string && prop.PropertyType == typeof(Guid))
                 {
                 	Guid guidValue;
-					if (StringUtilities.GuidTryParse((string) propValue, out guidValue))
+					if (StringUtilities.GuidTryParse((string) newPropValue, out guidValue))
 					{
-						propValue = guidValue;
+						newPropValue = guidValue;
 					} else 
 					{
                         if (this.ClassDef.GetPropDef(propName).HasLookupList()) {
                             Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
-                            propValue = lookupList[(string)propValue];
-                            if (propValue is BusinessObject) {
-                                propValue = ((BusinessObject) (propValue))._primaryKey.GetGuid();
+                            newPropValue = lookupList[(string)newPropValue];
+                            if (newPropValue is BusinessObject) {
+                                newPropValue = ((BusinessObject) (newPropValue))._primaryKey.GetGuid();
                             }
                         }
                     }
                 }
-                if (propValue != null && propValue.Equals(DBNull.Value) && prop.PropertyType == typeof(bool))
+                if (newPropValue != null && newPropValue.Equals(DBNull.Value) && prop.PropertyType == typeof(bool))
                 {
-                    propValue = false;
+                    newPropValue = false;
                 }
             }
-            if (DBNull.Value.Equals(propValue))
+            if (DBNull.Value.Equals(newPropValue))
             {
-                propValue = null;
+                newPropValue = null;
             }
             if (prop.PropertyType.IsSubclassOf(typeof (CustomProperty)))
             {
-                if (propValue != null && prop.PropertyType != propValue.GetType())
+                if (newPropValue != null && prop.PropertyType != newPropValue.GetType())
                 {
-                    propValue = Activator.CreateInstance(prop.PropertyType, new object[] {propValue, false});
+                    newPropValue = Activator.CreateInstance(prop.PropertyType, new object[] {newPropValue, false});
                 }
             }
-            if (propValue is BusinessObject)
+            if (newPropValue is BusinessObject)
             {
                 if (prop.PropertyType == typeof(Guid))
-                    propValue = ((BusinessObject)propValue)._primaryKey.GetGuid();
-                else propValue = ((BusinessObject)propValue).ID[0].Value.ToString();
-            } else if (propValue is string && ClassDef.GetPropDef(propName).HasLookupList()) {
+                    newPropValue = ((BusinessObject)newPropValue)._primaryKey.GetGuid();
+                else newPropValue = ((BusinessObject)newPropValue).ID[0].Value.ToString();
+            } else if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList()) {
                 Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
-                if (lookupList.ContainsKey((string)propValue))
-                    propValue = lookupList[(string)propValue];
-                if (propValue is BusinessObject) {
-                    propValue = ((BusinessObject) (propValue)).ID.ToString();
+                if (lookupList.ContainsKey((string)newPropValue))
+                    newPropValue = lookupList[(string)newPropValue];
+                if (newPropValue is BusinessObject) {
+                    newPropValue = ((BusinessObject) (newPropValue)).ID.ToString();
                 }
             }
             // If the property will be changed by this set then
             // check if object is already editing (i.e. another property value has 
             // been changed if it is not then check that this object is still fresh
             // if the object is not fresh then throw appropriate exception.
-            if (prop.Value != propValue)
+            if (PropValueHasChanged(prop.Value, newPropValue))
             {
                 if (!State.IsEditing)
                 {
                     BeginEdit();
                 }
                 State.IsDirty = true;
-                prop.Value = propValue;
+                prop.Value = newPropValue;
                 FireUpdatedEvent();
             }
+        }
+
+        internal static bool PropValueHasChanged(object propValue, object newPropValue)
+        {
+            if (propValue == newPropValue) return false;
+            if (propValue != null) return !propValue.Equals(newPropValue);
+            else return (newPropValue != null);
         }
 
         /// <summary>
