@@ -623,6 +623,7 @@ namespace Habanero.Test
 			ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+               
 
         //public static MyBO Create()
         //{
@@ -661,6 +662,26 @@ namespace Habanero.Test
                 itsLoader.LoadClass(
                     @"
 				<class name=""MyRelatedBo"" assembly=""Habanero.Test"">
+					<property  name=""MyRelatedBoID"" />
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" />
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+				</class>
+			");
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithSingleTableInheritance()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"">
+                    <superClass class=""MyBO"" assembly=""Habanero.Test"" 
+                        orMapping=""SingleTableInheritance"" discriminator=""TestProp"" />
 					<property  name=""MyRelatedBoID"" />
 					<property  name=""MyRelatedTestProp"" />
 					<property  name=""MyBoID"" />

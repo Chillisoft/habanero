@@ -317,7 +317,7 @@ namespace Habanero.BO
                 string[] parts = parameterName.Split('.');
                 string propertyName = parts[parts.Length - 1];
                 ClassDefinition.ClassDef currentClassDef = classDef;
-                string fullTableName = currentClassDef.TableName;
+                string fullTableName = currentClassDef.InheritedTableName;
                 for(int i = 0; i < parts.Length - 1; i++ )
                 {
                     string relationshipName = parts[i];
@@ -334,7 +334,7 @@ namespace Habanero.BO
                                 "the Business Object Collection load criteria in the parameter " +
                                 "'{2}' refers to the class '{3}' from the assembly '{4}'. " +
                                 "This related class is not found in the loaded class definitions.",
-                                relationshipName, currentClassDef.TableName, parameterName, 
+                                relationshipName, currentClassDef.ClassName, parameterName, 
                                 relationshipDef.RelatedObjectClassName, relationshipDef.RelatedObjectAssemblyName));
                         }
                         currentClassDef = relationshipDef.RelatedObjectClassDef;
@@ -342,7 +342,7 @@ namespace Habanero.BO
                     {
                         throw new SqlStatementException(String.Format("The relationship '{0}' of the class '{1}'" + 
                             " referred to in the Business Object Collection load criteria in the parameter '{2}' does not exist.",
-                            relationshipName, currentClassDef.TableName, parameterName ));
+                            relationshipName, currentClassDef.ClassName, parameterName));
                     }
                     if (joinedRelationshipTables.Contains(fullTableName))
                     {
@@ -350,7 +350,7 @@ namespace Habanero.BO
                     } else
                     {
                         //Add join
-                        string joinTableAs = SqlFormattingHelper.FormatTableName(currentClassDef.TableName, databaseConnection);
+                        string joinTableAs = SqlFormattingHelper.FormatTableName(currentClassDef.InheritedTableName, databaseConnection);
                         joinTableAs += " AS ";
                         joinTableAs += SqlFormattingHelper.FormatTableName(fullTableName, databaseConnection);
                         string joinCriteria = "";

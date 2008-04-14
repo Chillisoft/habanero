@@ -129,7 +129,24 @@ namespace Habanero.Test.BO
                 "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationship`.`MyRelatedTestProp` = ?Param1)",
                 statement.Statement.ToString());
         }
-        
+
+        [Test]
+        public void TestCreateLoadSqlStatement_RelatedSingleInheritedObjectProperties()
+        {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            ClassDef.ClassDefs.Add(MyRelatedBo.LoadClassDefWithSingleTableInheritance());
+            MyBO bo1 = new MyBO();
+            string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
+            IExpression expression = Expression.CreateExpression(criteria);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+            Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+                "FROM (`MyBO`) INNER JOIN `MyBO` AS `MyBOMyRelationship` " +
+                "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
+                "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationship`.`MyRelatedTestProp` = ?Param1)",
+                statement.Statement.ToString());
+        }
+
         #endregion //Test Related Object Properties in Criteria
 
         [Test]
