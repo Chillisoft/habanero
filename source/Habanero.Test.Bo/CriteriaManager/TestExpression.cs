@@ -188,7 +188,7 @@ namespace Habanero.Test.BO.CriteriaManager
             IExpression exp = Expression.CreateExpression("Field1 = 'test' and Field2 = 'test2' or Field2 = 'test2'");
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
-            Assert.AreEqual("((Field1 = ?Param0  AND  Field2 = ?Param1)  OR  Field2 = ?Param2)", st.Statement.ToString());
+            Assert.AreEqual("((Field1 = ?Param0 AND Field2 = ?Param1) OR Field2 = ?Param2)", st.Statement.ToString());
             Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
             Assert.AreEqual("test2", ((IDbDataParameter) st.Parameters[1]).Value);
             Assert.AreEqual("test2", ((IDbDataParameter) st.Parameters[2]).Value);
@@ -208,9 +208,9 @@ namespace Habanero.Test.BO.CriteriaManager
         public void TestParameterSqlInfo()
         {
             IParameterSqlInfo paramSql1 =
-                new MockParameterSqlInfo("testfieldname", "paramName", ParameterType.String, "tableName");
+                new MockParameterSqlInfo("testfieldname", "paramName", ParameterType.String, "tbl");
             IExpression exp = Expression.CreateExpression("paramName = 'test'");
-            exp.SetParameterSqlInfo(paramSql1, "tbl");
+            exp.SetParameterSqlInfo(paramSql1);
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
             Assert.AreEqual("tbl.testfieldname = ?Param0", st.Statement.ToString());
@@ -221,15 +221,15 @@ namespace Habanero.Test.BO.CriteriaManager
         public void TestParameterSqlInfoWithMoreThanOne()
         {
             IParameterSqlInfo paramSql1 =
-                new MockParameterSqlInfo("testfieldname", "paramName", ParameterType.String, "tableName");
+                new MockParameterSqlInfo("testfieldname", "paramName", ParameterType.String, "tbl");
             IParameterSqlInfo paramSql2 =
-                new MockParameterSqlInfo("testfieldname2", "paramName2", ParameterType.Date, "tableName");
+                new MockParameterSqlInfo("testfieldname2", "paramName2", ParameterType.Date, "tbl2");
             IExpression exp = Expression.CreateExpression("paramName = 'test' and paramName2 = '10 Feb 2003'");
-            exp.SetParameterSqlInfo(paramSql2, "tbl2");
-            exp.SetParameterSqlInfo(paramSql1, "tbl");
+            exp.SetParameterSqlInfo(paramSql2);
+            exp.SetParameterSqlInfo(paramSql1);
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
-            Assert.AreEqual("(tbl.testfieldname = ?Param0  AND  tbl2.testfieldname2 = ?Param1)", st.Statement.ToString());
+            Assert.AreEqual("(tbl.testfieldname = ?Param0 AND tbl2.testfieldname2 = ?Param1)", st.Statement.ToString());
             Assert.AreEqual("test", ((IDbDataParameter) st.Parameters[0]).Value);
             Assert.AreEqual(new DateTime(2003, 02, 10), ((IDbDataParameter) st.Parameters[1]).Value);
         }
@@ -240,7 +240,7 @@ namespace Habanero.Test.BO.CriteriaManager
             IExpression exp = Expression.CreateExpression("param1 = 'test' AND (param2 = 3 or param2 = 4)");
             SqlStatement st = new SqlStatement(DatabaseConnection.CurrentConnection);
             exp.SqlExpressionString(st, "", "");
-            Assert.AreEqual("(param1 = ?Param0  AND  (param2 = ?Param1  OR  param2 = ?Param2))", st.Statement.ToString());
+            Assert.AreEqual("(param1 = ?Param0 AND (param2 = ?Param1 OR param2 = ?Param2))", st.Statement.ToString());
         }
 
         [Test]
@@ -249,7 +249,7 @@ namespace Habanero.Test.BO.CriteriaManager
             IExpression exp = Expression.CreateExpression("param1 = 'test' AND param2 = 3");
             IExpression result = Expression.AppendExpression(exp, new SqlOperator("or"), "param2 = 4");
 
-            Assert.AreEqual("((param1 = 'test'  AND  param2 = '3') OR param2 = '4')",
+            Assert.AreEqual("((param1 = 'test' AND param2 = '3') OR param2 = '4')",
                             result.ExpressionString());
         }
 
@@ -294,7 +294,7 @@ namespace Habanero.Test.BO.CriteriaManager
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             SqlOperator op = new SqlOperator("OR");
             op.SqlExpressionString(statement, "", "");
-            op.SetParameterSqlInfo(null, null);  //for test coverage :)
+            op.SetParameterSqlInfo(null);  //for test coverage :)
         }
 
         public static void RunTest()

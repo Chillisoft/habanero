@@ -1490,7 +1490,8 @@ namespace Habanero.BO
         {
             foreach (BOProp prop in _boPropCol)
             {
-               searchExpression.SetParameterSqlInfo(prop, _classDef.TableName);
+                PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(prop.PropDef, _classDef);
+                searchExpression.SetParameterSqlInfo(propDefParameterSQLInfo);
             }
         }
 

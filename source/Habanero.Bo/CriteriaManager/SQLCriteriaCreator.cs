@@ -74,10 +74,11 @@ namespace Habanero.BO.CriteriaManager
         	ClassDef thisClassDef = classDef;
 			while (thisClassDef != null)
 			{
-				String tableName = thisClassDef.TableName;
-				foreach (PropDef def in thisClassDef.PropDefcol)
+				//String tableName = thisClassDef.TableName;
+				foreach (PropDef propDef in thisClassDef.PropDefcol)
 				{
-					_expression.SetParameterSqlInfo(def, tableName);
+                    PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef, thisClassDef);
+                    _expression.SetParameterSqlInfo(propDefParameterSQLInfo);
 				}
 				thisClassDef = thisClassDef.SuperClassClassDef;
 			}

@@ -80,21 +80,57 @@ namespace Habanero.Test.BO
             Assert.AreEqual("SELECT TOP 10 MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statement.Statement.ToString());
         }
 
-        //[Test]
-        //public void TestCreateLoadSqlStatement_RelatedObjectProperties()
-        //{
-        //    ClassDef.ClassDefs.Clear();
-        //    MyBO.LoadClassDefWithRelationship();
-        //    MyBO bo1 = new MyBO();
-        //    string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
-        //    IExpression expression = Expression.CreateExpression(criteria);
-        //    ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
-        //    Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
-        //        "FROM `MyBO` LEFT JOIN `MyRelatedBo` AS `MyRelationship` " +
-        //        "ON `MyBO`.`RelatedID` = `MyRelationship`.`MyRelatedBoID` " +
-        //        "WHERE `MyBO`.`TestProp` = ?Param0 AND `MyRelationship`.`MyRelatedTestProp` = ?Param1", 
-        //        statement.Statement.ToString());
-        //} 
+        #region Test Related Object Properties in Criteria
+
+        [Test, ExpectedException(typeof(SqlStatementException),
+          ExpectedMessage = "The relationship 'MyUnknownRelationship' of the class 'MyBO'" +
+                            " referred to in the Business Object Collection load criteria in the parameter " +
+                            "'MyUnknownRelationship.MyRelatedTestProp' does not exist.")]
+        public void TestCreateLoadSqlStatement_RelatedObjectProperties_RelationshipDoesntExist()
+        {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyBO bo1 = new MyBO();
+            string criteria = "TestProp = 'Test' and MyUnknownRelationship.MyRelatedTestProp = 'TestValue'";
+            IExpression expression = Expression.CreateExpression(criteria);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+        }
+
+        [Test, ExpectedException(typeof(SqlStatementException),
+          ExpectedMessage = "The relationship 'MyRelationship' of the class 'MyBO' " +
+            "referred to in the Business Object Collection load criteria in the parameter " +
+            "'MyRelationship.MyRelatedTestProp' refers to the class 'MyRelatedBo' "+
+            "from the assembly 'Habanero.Test'. This related class is not found in the loaded class definitions.")]
+        public void TestCreateLoadSqlStatement_RelatedObjectProperties_RelationshipClassHasNoDef()
+        {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyBO bo1 = new MyBO();
+            string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
+            IExpression expression = Expression.CreateExpression(criteria);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+        }
+
+        [Test]
+        public void TestCreateLoadSqlStatement_RelatedObjectProperties()
+        {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            ClassDef.ClassDefs.Add(MyRelatedBo.LoadClassDef());
+            MyBO bo1 = new MyBO();
+            string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
+            IExpression expression = Expression.CreateExpression(criteria);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+            Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+                "FROM (`MyBO`) INNER JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
+                "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
+                "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationship`.`MyRelatedTestProp` = ?Param1)",
+                statement.Statement.ToString());
+        }
+        
+        #endregion //Test Related Object Properties in Criteria
 
         [Test]
         public void TestRestoreAll()

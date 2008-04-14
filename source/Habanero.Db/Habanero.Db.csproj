@@ -158,12 +158,14 @@
     <Compile Include="ParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SqlFormattingHelper.cs" />
     <Compile Include="SqlStatement.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SqlStatementCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SqlStatementException.cs" />
     <Compile Include="XmlDatabaseConfig.cs">
       <SubType>Code</SubType>
     </Compile>

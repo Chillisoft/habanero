@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.General
@@ -150,6 +151,37 @@ namespace Habanero.Test.General
             myCol = ContactPerson.LoadBusinessObjCol("Surname = 'bb'", "Surname");
             Assert.AreEqual(1, myCol.Count);
             Assert.AreSame(p, myCol[0]);
+        }
+
+        [Test]
+        public void TestLoadBusinessObjectsSearchCriteria_RelatedObjectCriteria()
+        {
+            ContactPerson.DeleteAllContactPeople();
+            BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
+            Assert.AreEqual(myCol.Count, 0);
+            ContactPerson contactPerson;
+            contactPerson = new ContactPerson();
+            contactPerson.FirstName = "a";
+            contactPerson.Surname = "bb";
+            contactPerson.Save();
+            BOPrimaryKey contactPersonKey = contactPerson.ID;
+            
+            Address address = new Address();
+            address.AddressLine1 = "Chillisoft";
+            address.ContactPersonID = contactPerson.ContactPersonID;
+            address.Save();
+
+            contactPerson = new ContactPerson();
+            contactPerson.FirstName = "aa";
+            contactPerson.Surname = "abc";
+            contactPerson.Save();
+            ContactPerson.ClearContactPersonCol();
+            contactPerson = ContactPerson.GetContactPerson(contactPersonKey);
+            myCol = ContactPerson.LoadBusinessObjCol();
+            Assert.AreEqual(2, myCol.Count);
+            myCol = ContactPerson.LoadBusinessObjCol("Addresses.AddressLine1 = 'Chillisoft'", "Surname");
+            Assert.AreEqual(1, myCol.Count);
+            Assert.AreSame(contactPerson, myCol[0]);
         }
 
         [Test]

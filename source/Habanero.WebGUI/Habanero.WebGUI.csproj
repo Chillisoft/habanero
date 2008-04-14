@@ -30,8 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gizmox.WebGUI.Common, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL" />
-    <Reference Include="Gizmox.WebGUI.Forms, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=c508b41386c60f1d, processorArchitecture=MSIL" />
+    <Reference Include="Gizmox.WebGUI.Common, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Gizmox.WebGUI.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Gizmox.WebGUI.Forms, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=c508b41386c60f1d, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Gizmox.WebGUI.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\log4net.dll</HintPath>
@@ -49,8 +53,6 @@
     </Compile>
     <Compile Include="ButtonControl.Designer.cs">
       <DependentUpon>ButtonControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ButtonControl1.cs">
     </Compile>
     <Compile Include="CheckBoxMapper.cs" />
     <Compile Include="Class1.cs" />

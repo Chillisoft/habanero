@@ -217,7 +217,7 @@ namespace Habanero.BO.SqlGeneration
             foreach (PropDef def in currentClassDef.SuperClassClassDef.PrimaryKeyDef)
             {
                 where += SqlFormattingHelper.FormatTableAndFieldName(
-                    currentClassDef.SuperClassClassDef.TableName, def.FieldName, _connection);
+                    currentClassDef.SuperClassClassDef.TableName, def.DatabaseFieldName, _connection);
                     
                 PrimaryKeyDef parentID = currentClassDef.SuperClassClassDef.PrimaryKeyDef;
                 if (parentIDCopyFieldName == null ||
@@ -225,7 +225,7 @@ namespace Habanero.BO.SqlGeneration
                 {
                     where += " = " +
                         SqlFormattingHelper.FormatTableAndFieldName(
-                            origClassDef.TableName, def.FieldName, _connection);
+                            origClassDef.TableName, def.DatabaseFieldName, _connection);
                 }
                 else
                 {

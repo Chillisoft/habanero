@@ -34,18 +34,6 @@ namespace Habanero.BO.CriteriaManager
         private static string[] _operators = new string[] {" OR ", " AND "};
 
         /// <summary>
-        /// Copies across the parameterised sql info (see IParameterSqlInfo for
-        /// more detail)
-        /// </summary>
-        /// <param name="info">The IParameterSqlInfo object</param>
-        /// <param name="tableName">The table name</param>
-        public void SetParameterSqlInfo(IParameterSqlInfo info, String tableName)
-        {
-            _leftExpression.SetParameterSqlInfo(info, tableName);
-            _rightExpression.SetParameterSqlInfo(info, tableName);
-        }
-
-        /// <summary>
         /// Constructor to create a new expression.  If this is part of a linked
         /// list of expressions that make up a complete expression, then the
         /// expressions to the left and/or right can also be specified.
@@ -59,43 +47,6 @@ namespace Habanero.BO.CriteriaManager
             _leftExpression = leftExpression;
             _sqlOperator = expressionSqlOperator;
             _rightExpression = rightExpression;
-        }
-
-        /// <summary>
-        /// Creates a new IExpression object using the expression string provided.
-        /// </summary>
-        /// <param name="expressionClause">The expression string</param>
-        /// <returns>If the expression is a leaf object (it has no left and right
-        /// expressions), then a Parameter object is returned, otherwise an
-        /// Expression object is returned.</returns>
-        public static IExpression CreateExpression(string expressionClause)
-        {
-            CriteriaExpression c = new CriteriaExpression(expressionClause, _operators);
-            if (c.IsLeaf())
-            {
-                return new Parameter(expressionClause);
-            }
-            else
-            {
-                return new Expression(expressionClause);
-            }
-        }
-
-        /// <summary>
-        /// Appends a given expression string to the end of a given expression,
-        /// separated by the given sql operator.
-        /// </summary>
-        /// <param name="leftExpression">The expression object to append to</param>
-        /// <param name="expressionSqlOperator">The sql operator</param>
-        /// <param name="expressionClause">The new expression clause</param>
-        /// <returns>Returns the full expression object with the newly
-        /// attached expression</returns>
-        public static IExpression AppendExpression(IExpression leftExpression,
-                                                   SqlOperator expressionSqlOperator,
-                                                   string expressionClause)
-        {
-            IExpression expr = CreateExpression(expressionClause);
-            return new Expression(leftExpression, expressionSqlOperator, expr);
         }
 
         /// <summary>
@@ -135,6 +86,55 @@ namespace Habanero.BO.CriteriaManager
             }
         }
 
+        ///<summary>
+        /// The IExpression representing the left part of this expression
+        ///</summary>
+        public IExpression LeftExpression
+        {
+            get { return _leftExpression; }
+        }
+
+        ///<summary>
+        /// The SqlOperator representing the operator for this expression
+        ///</summary>
+        public SqlOperator SqlOperator
+        {
+            get { return _sqlOperator; }
+        }
+
+        ///<summary>
+        /// The IExpression representing the right part of this expression
+        ///</summary>
+        public IExpression RightExpression
+        {
+            get { return _rightExpression; }
+        }
+
+        #region IExpression Interface Implementation
+
+        /// <summary>
+        /// Copies across the parameterised sql info (see IParameterSqlInfo for
+        /// more detail)
+        /// </summary>
+        /// <param name="info">The IParameterSqlInfo object</param>
+        public void SetParameterSqlInfo(IParameterSqlInfo info)
+        {
+            _leftExpression.SetParameterSqlInfo(info);
+            _rightExpression.SetParameterSqlInfo(info);
+        }
+
+        ///<summary>
+        /// Creates and returns a copy of this IExpression instance.
+        ///</summary>
+        ///<returns>Returns a copy of this IExpression instance.</returns>
+        public IExpression Clone()
+        {
+            IExpression leftExpression = _leftExpression.Clone();
+            SqlOperator sqlOperator = (SqlOperator)_sqlOperator.Clone();
+            IExpression rightExpression = _rightExpression.Clone();
+            return new Expression(leftExpression, sqlOperator, rightExpression);
+        }
+                
         /// <summary>
         /// Returns the full expression as a string, including left and right
         /// expressions, surrounded by round brackets.
@@ -142,7 +142,7 @@ namespace Habanero.BO.CriteriaManager
         /// <returns>Returns the full expression string</returns>
         public string ExpressionString()
         {
-            return "(" + _leftExpression.ExpressionString() + " " + _sqlOperator.ExpressionString() +
+            return "(" + _leftExpression.ExpressionString() + " " + _sqlOperator.ExpressionString().Trim() +
                    " " + _rightExpression.ExpressionString() + ")";
         }
 
@@ -157,7 +157,7 @@ namespace Habanero.BO.CriteriaManager
             statement.Statement.Append("(");
             _leftExpression.SqlExpressionString(statement, tableNameFieldNameLeftSeparator,
                                                 tableNameFieldNameRightSeparator);
-            statement.Statement.Append(" " + _sqlOperator.ExpressionString() + " ");
+            statement.Statement.Append(" " + _sqlOperator.ExpressionString().Trim() + " ");
             _rightExpression.SqlExpressionString(statement, tableNameFieldNameLeftSeparator,
                                                  tableNameFieldNameRightSeparator);
             statement.Statement.Append(")");
@@ -166,12 +166,57 @@ namespace Habanero.BO.CriteriaManager
 //		public string SqlExpressionString(string tableNameFieldNameLeftSeperator,
 //		                                  string tableNameFieldNameRightSeperator,
 //		                                  string dateTimeLeftSeperator,
-//		                                  string dateTimeRightSeperator) {
+//		                                  string dateTimeRightSeperator) 
+//      {
 //			return "(" + _leftExpression.SqlExpressionString(tableNameFieldNameLeftSeperator,
 //			                                                 tableNameFieldNameRightSeperator, dateTimeLeftSeperator, dateTimeRightSeperator) +
 //				" " + _sqlOperator.ExpressionString() +
 //				" " + _rightExpression.SqlExpressionString(tableNameFieldNameLeftSeperator,
 //				                                           tableNameFieldNameRightSeperator, dateTimeLeftSeperator, dateTimeRightSeperator) + ")";
-//		}
+        //		}
+
+        #endregion //IExpression Interface Implementation
+
+        #region Static Members
+
+        /// <summary>
+        /// Creates a new IExpression object using the expression string provided.
+        /// </summary>
+        /// <param name="expressionClause">The expression string</param>
+        /// <returns>If the expression is a leaf object (it has no left and right
+        /// expressions), then a Parameter object is returned, otherwise an
+        /// Expression object is returned.</returns>
+        public static IExpression CreateExpression(string expressionClause)
+        {
+            CriteriaExpression c = new CriteriaExpression(expressionClause, _operators);
+            if (c.IsLeaf())
+            {
+                return new Parameter(expressionClause);
+            }
+            else
+            {
+                return new Expression(expressionClause);
+            }
+        }
+
+        /// <summary>
+        /// Appends a given expression string to the end of a given expression,
+        /// separated by the given sql operator.
+        /// </summary>
+        /// <param name="leftExpression">The expression object to append to</param>
+        /// <param name="expressionSqlOperator">The sql operator</param>
+        /// <param name="expressionClause">The new expression clause</param>
+        /// <returns>Returns the full expression object with the newly
+        /// attached expression</returns>
+        public static IExpression AppendExpression(IExpression leftExpression,
+                                                   SqlOperator expressionSqlOperator,
+                                                   string expressionClause)
+        {
+            IExpression expr = CreateExpression(expressionClause);
+            return new Expression(leftExpression, expressionSqlOperator, expr);
+        }
+
+        #endregion //Static Members
+
     }
 }

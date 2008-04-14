@@ -276,6 +276,8 @@ namespace Habanero.BO
             }
 		}
 
+        #region Create Load Statement
+
     	internal static ISqlStatement CreateLoadSqlStatement(BusinessObject businessObject, ClassDef classDef, IExpression criteriaExpression, int limit, string extraSearchCriteriaLiteral)
     	{
     	    IDatabaseConnection boDatabaseConnection = businessObject.GetDatabaseConnection();
@@ -283,8 +285,10 @@ namespace Habanero.BO
 			refreshSql.Statement.Append(businessObject.GetSelectSql(limit));
 			if (criteriaExpression != null)
     		{
+    		    IExpression loadCriteria = criteriaExpression.Clone();
+                DetermineJoins(classDef, boDatabaseConnection, refreshSql, loadCriteria);
     			refreshSql.AppendWhere();
-				SqlCriteriaCreator creator = new SqlCriteriaCreator(criteriaExpression, classDef, boDatabaseConnection);
+                SqlCriteriaCreator creator = new SqlCriteriaCreator(loadCriteria, classDef, boDatabaseConnection);
     			creator.AppendCriteriaToStatement(refreshSql);
     		}
 			if (!String.IsNullOrEmpty(extraSearchCriteriaLiteral))
@@ -301,9 +305,124 @@ namespace Habanero.BO
     		return refreshSql;
     	}
 
-    	#region Load Methods
+        private static void DetermineJoins(ClassDef classDef, IDatabaseConnection databaseConnection, ISqlStatement sqlStatement, IExpression criteriaExpression)
+        {
+            List<Parameter> relationshipParameters = new List<Parameter>();
+            AnalyzeExpression(criteriaExpression, ref relationshipParameters);
+            List<string> joinedRelationshipTables = new List<string>();
+            Dictionary<string, IParameterSqlInfo> relationshipParameterInformation = new Dictionary<string, IParameterSqlInfo>();
+            foreach (Parameter parameter in relationshipParameters)
+            {
+                string parameterName = parameter.ParameterName;
+                string[] parts = parameterName.Split('.');
+                string propertyName = parts[parts.Length - 1];
+                ClassDefinition.ClassDef currentClassDef = classDef;
+                string fullTableName = currentClassDef.TableName;
+                for(int i = 0; i < parts.Length - 1; i++ )
+                {
+                    string relationshipName = parts[i];
+                    string previousFullTableName = fullTableName;
+                    fullTableName += relationshipName;
+                    RelationshipDef relationshipDef;
+                    if (classDef.RelationshipDefCol.Contains(relationshipName))
+                    {
+                        relationshipDef = classDef.RelationshipDefCol[relationshipName];
+                        if (relationshipDef.RelatedObjectClassDef == null)
+                        {
+                            throw new SqlStatementException(String.Format(
+                                "The relationship '{0}' of the class '{1}' referred to in " +
+                                "the Business Object Collection load criteria in the parameter " +
+                                "'{2}' refers to the class '{3}' from the assembly '{4}'. " +
+                                "This related class is not found in the loaded class definitions.",
+                                relationshipName, currentClassDef.TableName, parameterName, 
+                                relationshipDef.RelatedObjectClassName, relationshipDef.RelatedObjectAssemblyName));
+                        }
+                        currentClassDef = relationshipDef.RelatedObjectClassDef;
+                    } else
+                    {
+                        throw new SqlStatementException(String.Format("The relationship '{0}' of the class '{1}'" + 
+                            " referred to in the Business Object Collection load criteria in the parameter '{2}' does not exist.",
+                            relationshipName, currentClassDef.TableName, parameterName ));
+                    }
+                    if (joinedRelationshipTables.Contains(fullTableName))
+                    {
+                        //Dont add join
+                    } else
+                    {
+                        //Add join
+                        string joinTableAs = SqlFormattingHelper.FormatTableName(currentClassDef.TableName, databaseConnection);
+                        joinTableAs += " AS ";
+                        joinTableAs += SqlFormattingHelper.FormatTableName(fullTableName, databaseConnection);
+                        string joinCriteria = "";
+                        foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+                        {
+                            joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
+                                previousFullTableName, relPropDef.OwnerPropertyName, databaseConnection);
+                            joinCriteria += " = ";
+                            joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
+                                fullTableName, relPropDef.RelatedClassPropName, databaseConnection);
+                        }
+                        sqlStatement.AddJoin("INNER JOIN", joinTableAs, joinCriteria );
+                        joinedRelationshipTables.Add(fullTableName);
+                    }
+                }
+                if (!relationshipParameterInformation.ContainsKey(parameterName))
+                {
+                    PropDefCol propDefCol = currentClassDef.PropDefcol;
+                    if (propDefCol.Contains(propertyName))
+                    {
+                        PropDef propDef = propDefCol[propertyName];
+                        PropDefParameterSQLInfo parameterSQLInfo = new PropDefParameterSQLInfo(
+                            parameterName, propDef, fullTableName);
+                        relationshipParameterInformation.Add(parameterName, parameterSQLInfo);
+                    }
+                }
+            }
+            foreach (KeyValuePair<string, IParameterSqlInfo> keyValuePair in relationshipParameterInformation)
+            {
+                criteriaExpression.SetParameterSqlInfo(keyValuePair.Value);
+            }
+        }
 
-		/// <summary>
+        private static void AnalyzeExpression(IExpression criteriaExpression, ref List<Parameter> parameters)
+        {
+            if (criteriaExpression is Expression)
+            {
+                Expression expression = criteriaExpression as Expression;
+                GetRelationshipParameters(expression.LeftExpression, ref parameters);
+                GetRelationshipParameters(expression.RightExpression, ref parameters);
+            } else if (criteriaExpression is Parameter)
+            {
+                GetRelationshipParameters(criteriaExpression, ref parameters);
+            }
+        }
+
+        private static void GetRelationshipParameters(IExpression expression, ref List<Parameter> parameters)
+        {
+            if (expression is Parameter)
+            {
+                Parameter parameter = (Parameter)expression;
+                if (IsRelationshipParameter(parameter))
+                {
+                    parameters.Add(parameter);
+                }
+            }
+            else
+            {
+                AnalyzeExpression(expression, ref parameters);
+            }
+        }
+
+        private static bool IsRelationshipParameter(Parameter parameter)
+        {
+            return parameter.ParameterName.Contains(".");
+        }
+
+        #endregion //Create Load Statement
+
+        #region Load Methods
+
+        /// <summary>
         /// Loads the entire collection for the type of object.
         /// </summary>
         public void LoadAll()

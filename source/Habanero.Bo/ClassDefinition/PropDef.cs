@@ -65,7 +65,7 @@ namespace Habanero.BO.ClassDefinition
     /// <li>Lazy initialisation of properties.</li>
     /// </ul>
     /// </futureEnhancements>
-    public class PropDef : IParameterSqlInfo
+    public class PropDef
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
         private string _propertyName;
@@ -548,7 +548,7 @@ namespace Habanero.BO.ClassDefinition
         /// property name, which is useful for migrating systems where
         /// the database has already been set up
         /// </summary>
-        protected internal string DatabaseFieldName
+        public string DatabaseFieldName
         {
             get { return _databaseFieldName; }
 			protected set{ _databaseFieldName = value;}
@@ -747,51 +747,7 @@ namespace Habanero.BO.ClassDefinition
         #endregion
 
         
-        #region IParameterSqlInfo Members
-
-        /// <summary>
-        /// Returns the parameter type (typically either DateTime or String)
-        /// </summary>
-        public ParameterType ParameterType
-        {
-            get
-            {
-                if (MyPropertyType == typeof (DateTime))
-                {
-                    return ParameterType.Date;
-                }
-                else
-                {
-                    return ParameterType.String;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns the database field name
-        /// </summary>
-        public string FieldName
-        {
-            get { return _databaseFieldName; }
-        }
-
-        /// <summary>
-        /// Returns the parameter name
-        /// </summary>
-        public string ParameterName
-        {
-            get { return _propertyName; }
-        }
-
-        /// <summary>
-        /// Returns an empty string
-        /// </summary>
-        public string TableName
-        {
-            get { return ""; }
-        }
-
-        #endregion
+        
 
 
         # region PropertyComparer
@@ -921,7 +877,12 @@ namespace Habanero.BO.ClassDefinition
 				}
 			}
 		}
-               
+
+        internal string TableName
+        {
+            get { return ""; }
+        }
+
 
         private void validateDefaultValue(object defaultValue)
     	{

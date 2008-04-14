@@ -199,7 +199,8 @@ namespace Habanero.Test.BO.ClassDefinition
             propDef.SetPropType(typeof(DateTime));
             Assert.AreEqual(typeof(DateTime), propDef.PropType);
 
-            Assert.AreEqual(ParameterType.Date, propDef.ParameterType);
+            PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef);
+            Assert.AreEqual(ParameterType.Date, propDefParameterSQLInfo.ParameterType);
             Assert.IsEmpty(propDef.TableName);
         }
 

@@ -37,6 +37,11 @@ namespace Habanero.DB
         /// <returns>Returns the formatted string</returns>
         public static string FormatTableName(string tableName, IDatabaseConnection connection)
         {
+            if ((connection.LeftFieldDelimiter != null && tableName.StartsWith(connection.LeftFieldDelimiter)) && 
+                (connection.RightFieldDelimiter != null && tableName.EndsWith(connection.RightFieldDelimiter)))
+            {
+                return tableName;
+            }
             return connection.LeftFieldDelimiter + tableName + connection.RightFieldDelimiter;
         }
 

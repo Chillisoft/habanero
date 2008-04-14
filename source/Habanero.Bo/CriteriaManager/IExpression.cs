@@ -64,20 +64,20 @@ namespace Habanero.BO.CriteriaManager
 
 
         //  Previous form of above - I've left the old comments here in case - ERIC
-        /// <param name="dateTimeLeftSeparator">In MS Access the datetime 
-        /// fields are not surrounded by ' but instead by a hash (e.g. 
-        /// datetimeField >= #01 jan 2004#)</param>
-        /// <param name="dateTimeRightSeparator">In MS Access the datetime 
-        /// fields are not surrounded by ' but instead by a hash (e.g. 
-        /// datetimeField >= #01 jan 2004#)</param>
-        /// <example> With the separators as "[" and "]", the resulting
-        /// stringExpression for a text data type will be
-        /// [tableName].[fieldName] = 'value'
-        /// dateTimeLeftSeparator = "to_date(" and dateTimeRightSeparator = ,'dd/mm/yyyy')"
-        /// will result in [tableName].[fieldName] = to_date(value,'dd/mm/yyyy') 
-        /// if the field is set up as a date and 
-        /// [tableName].[fieldName] = 'value' otherwise.</example>
-        /// 
+        ///// <param name="dateTimeLeftSeparator">In MS Access the datetime 
+        ///// fields are not surrounded by ' but instead by a hash (e.g. 
+        ///// datetimeField >= #01 jan 2004#)</param>
+        ///// <param name="dateTimeRightSeparator">In MS Access the datetime 
+        ///// fields are not surrounded by ' but instead by a hash (e.g. 
+        ///// datetimeField >= #01 jan 2004#)</param>
+        ///// <example> With the separators as "[" and "]", the resulting
+        ///// stringExpression for a text data type will be
+        ///// [tableName].[fieldName] = 'value'
+        ///// dateTimeLeftSeparator = "to_date(" and dateTimeRightSeparator = ,'dd/mm/yyyy')"
+        ///// will result in [tableName].[fieldName] = to_date(value,'dd/mm/yyyy') 
+        ///// if the field is set up as a date and 
+        ///// [tableName].[fieldName] = 'value' otherwise.</example>
+        ///// 
         //		SqlStatement SqlExpressionString(string tableNameFieldNameLeftSeparator,
         //		                           string tableNameFieldNameRightSeparator,
         //		                           string dateTimeLeftSeparator,
@@ -89,7 +89,12 @@ namespace Habanero.BO.CriteriaManager
         /// more detail)
         /// </summary>
         /// <param name="info">The IParameterSqlInfo object</param>
-        /// <param name="tableName">The table name</param>
-        void SetParameterSqlInfo(IParameterSqlInfo info, String tableName);
+        void SetParameterSqlInfo(IParameterSqlInfo info);
+
+        ///<summary>
+        /// Creates and returns a copy of this IExpression instance.
+        ///</summary>
+        ///<returns>Returns a copy of this IExpression instance.</returns>
+        IExpression Clone();
     }
 }

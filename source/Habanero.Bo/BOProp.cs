@@ -36,7 +36,7 @@ namespace Habanero.BO
     /// <summary>
     /// Stores the object's property value at any given point in time
     /// </summary>
-    public class BOProp : IParameterSqlInfo
+    public class BOProp
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
         protected object _currentValue = null;
@@ -75,6 +75,14 @@ namespace Habanero.BO
         internal BOProp(PropDef propDef, object propValue) : this(propDef)
         {
             InitialiseProp(propValue, true);
+        }
+        
+        ///<summary>
+        /// The property definition of the property that this BOProp represents.
+        ///</summary>
+        public PropDef PropDef
+        {
+            get { return _propDef; }
         }
 
         /// <summary>
@@ -550,38 +558,6 @@ namespace Habanero.BO
                        "</PreviousValue><NewValue>" + PropertyValueString + "</NewValue></" +
                        PropertyName + ">";
             }
-        }
-
-        /// <summary>
-        /// The name in the expression tree to be updated
-        /// </summary>
-        public string ParameterName
-        {
-            get { return PropertyName; }
-        }
-
-        /// <summary>
-        /// The table name to be added to the parameter
-        /// </summary>
-        public string TableName
-        {
-            get { return _propDef.TableName; }
-        }
-
-        /// <summary>
-        /// The field name to be added to the parameter
-        /// </summary>
-        public string FieldName
-        {
-            get { return DatabaseFieldName; }
-        }
-
-        /// <summary>
-        /// The parameter type to be added to the parameter
-        /// </summary>
-        public ParameterType ParameterType
-        {
-            get { return _propDef.ParameterType; }
         }
 
         /// <summary>

@@ -145,11 +145,49 @@ namespace Habanero.Util
         /// <returns>Returns the number of occurrences</returns>
         public static int CountOccurrences(string fullText, string searchText)
         {
+            return CountOccurrences(fullText, searchText, 0, fullText.Length);
+        }
+
+        /// <summary>
+        /// Indicates the number of times a given string appears in a larger string
+        /// </summary>
+        /// <param name="fullText">The string to search within</param>
+        /// <param name="searchText">The section to search for</param>
+        /// <param name="startIndex">The index of the position to start counting occurences from.</param>
+        /// <param name="length">The length of text to count occurences from.</param>
+        /// <returns>Returns the number of occurrences</returns>
+        public static int CountOccurrences(string fullText, string searchText, int startIndex, int length)
+        {
+            string text = fullText.Substring(startIndex, length);
+            string[] parts = text.Split(new string[] {searchText}, StringSplitOptions.None);
+            return parts.Length - 1;
+        }
+
+        /// <summary>
+        /// Indicates the number of times a given token appears in a string
+        /// </summary>
+        /// <param name="fullText">The string to search within</param>
+        /// <param name="token">The token to search for</param>
+        /// <returns>Returns the number of occurrences of the token</returns>
+        public static int CountOccurrences(string fullText, char token)
+        {
+            return CountOccurrences(fullText, token, 0, fullText.Length);
+        }
+
+	    /// <summary>
+        /// Indicates the number of times a given token appears in a string
+        /// </summary>
+        /// <param name="fullText">The string to search within</param>
+        /// <param name="token">The token to search for</param>
+        /// <param name="startIndex">The index of the position to start counting occurences from.</param>
+        /// <param name="length">The length of text to count occurences from.</param>
+        /// <returns>Returns the number of occurrences of the token</returns>
+        public static int CountOccurrences(string fullText, char token, int startIndex, int length)
+        {
             int occurred = 0;
-            for (int i = 0; i < fullText.Length; i++)
+            for (int i = startIndex; i < length; i++)
             {
-                if (i + searchText.Length <= fullText.Length &&
-                    fullText.Substring(i, searchText.Length).Contains(searchText))
+                if (token == fullText[i])
                 {
                     occurred++;
                 }

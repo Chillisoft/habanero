@@ -44,24 +44,24 @@ namespace Habanero.BO.ClassDefinition
         /// in the collection can be accessed like an array 
         /// (e.g. collection["surname"])
         /// </summary>
-        /// <exception cref="ArgumentException">Thrown if the key is not
-        /// found. If you are checking for the existence of a key, use the
+        /// <exception cref="ArgumentException">Thrown if the propertyName is not
+        /// found. If you are checking for the existence of a propertyName, use the
         /// Contains() method.</exception>
-        public PropDef this[string key]
+        public PropDef this[string propertyName]
         {
             get
             {
-                if (!Contains(key.ToUpper()))
+                if (!Contains(propertyName.ToUpper()))
                 {
                     throw new ArgumentException(String.Format(
                         "The property name '{0}' does not exist in the " +
-                        "collection of property definitions.", key));
+                        "collection of property definitions.", propertyName));
                 }
-                return (_propDefs[key.ToUpper()]);
+                return (_propDefs[propertyName.ToUpper()]);
 
                 //else
 
-                //return new PropDef("","",key,;
+                //return new PropDef("","",propertyName,;
                 //	Throw (New Exception( obj.PropertyName + " is already in this BOProperty Collection",   "obj", e));
             }
         }

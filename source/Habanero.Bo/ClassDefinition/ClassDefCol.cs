@@ -329,6 +329,9 @@ namespace Habanero.BO.ClassDefinition
 			if (includeNamespace && namespaceString != null && namespaceString.Length > 0)
 			{
 				namespaceString = " Namespace:" + namespaceString;
+			} else
+			{
+			    namespaceString = "";
 			}
 			assemblyName = TypeLoader.CleanUpAssemblyName(assemblyName);
     		string id = "Assembly:" + assemblyName + namespaceString + " _className:" + className;

@@ -51,7 +51,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(typeof (string), def.PropertyType,
                             "Property type should be the default as defined in the dtd");
             Assert.AreEqual(null, def.DefaultValue, "The default default is null");
-            Assert.AreEqual("TestProp", def.FieldName,
+            Assert.AreEqual("TestProp", def.DatabaseFieldName,
                             "The field name should be the same as the property name by default");
             Assert.AreEqual(false, def.AutoIncrementing, "autoIncrementing should be false by default");
             Assert.AreEqual(null, def.DisplayName, "The display name is null");
@@ -188,7 +188,7 @@ namespace Habanero.Test.BO.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(@"<property  name=""TestProp"" databaseField=""TestFieldName"" />");
-            Assert.AreEqual("TestFieldName", def.FieldName, "Field Name should be the same as that specified in xml");
+            Assert.AreEqual("TestFieldName", def.DatabaseFieldName, "Field Name should be the same as that specified in xml");
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace Habanero.Test.BO.Loaders
         {
             PropDef def =
                 itsLoader.LoadProperty(@"<property name=""TestProp"" databaseField=""Test FieldName"" />");
-            Assert.AreEqual("Test FieldName", def.FieldName);
+            Assert.AreEqual("Test FieldName", def.DatabaseFieldName);
         }
 
         [Test]

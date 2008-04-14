@@ -61,6 +61,8 @@ namespace Habanero.BO.CriteriaManager
         private ParameterType _parameterType = ParameterType.String;
         private const string _defaultValueSeperator = "'";
 
+        #region Constructors
+
         /// <summary>
         /// Constructor that creates a parameter based on the parameter clause
         /// provided
@@ -145,6 +147,10 @@ namespace Habanero.BO.CriteriaManager
             _parameterType = parameterType;
         }
 
+        #endregion //Constructors
+        
+        #region IExpression Interface Implementation
+
         /// <summary>
         /// Returns an expression string consisting of the parameter 
         /// name, operator and parameter value
@@ -156,7 +162,7 @@ namespace Habanero.BO.CriteriaManager
                 _parameterName + " " + _sqlOperator + " " + _defaultValueSeperator + _parameterValue +
                 _defaultValueSeperator;
         }
-
+        
         /// <summary>
         /// Creates a valid sql expression, e.g. for a "where" clause.
         /// See IExpression.SqlExpressionString for more detail.
@@ -165,7 +171,7 @@ namespace Habanero.BO.CriteriaManager
                                         string tableNameFieldNameRightSeparator)
         {
             statement.Statement.Append(
-                FieldFullName(tableNameFieldNameLeftSeparator, tableNameFieldNameRightSeparator) + SqlOperator() + " ");
+                FieldFullName(tableNameFieldNameLeftSeparator, tableNameFieldNameRightSeparator) + GetSqlOperator());
             if (this.DoesntRequireParametrisedValue())
             {
                 statement.Statement.Append(GetSqlStringWithNoParameters());
@@ -173,6 +179,30 @@ namespace Habanero.BO.CriteriaManager
             else
             {
                 statement.AddParameterToStatement(GetParameterValueAsObject());
+            }
+        }
+
+        #region SqlExpressionString Utility Methods
+
+        /// <summary>
+        /// Returns the full field name, including table name (where applicable),
+        /// field name and surrounding separators.  For instance, with the
+        /// separators as "[" and "]", the output would be:<br/>
+        /// <code>[tablename].[fieldname]</code><br/>
+        /// See IExpression.SqlExpressionString for more detail.
+        /// </summary>
+        /// <returns>Returns a string with the full name</returns>
+        internal string FieldFullName(string tableFieldNameLeftSeperator,
+                                     string tableFieldNameRightSeperator)
+        {
+            if (_tableName.Length > 0)
+            {
+                return tableFieldNameLeftSeperator + _tableName + tableFieldNameRightSeperator + "." +
+                       tableFieldNameLeftSeperator + _fieldName + tableFieldNameRightSeperator;
+            }
+            else
+            {
+                return tableFieldNameLeftSeperator + _fieldName + tableFieldNameRightSeperator;
             }
         }
 
@@ -224,8 +254,21 @@ namespace Habanero.BO.CriteriaManager
             }
             return _parameterValue;
         }
+        
+        /// <summary>
+        /// Indicates whether the sql operator is some variant of "IS" or "IN",
+        /// in which case a parameterised value is not required
+        /// </summary>
+        /// <returns>True if not required, false if required</returns>
+        public bool DoesntRequireParametrisedValue()
+        {
+            string strOp = _sqlOperator.ToUpper().Trim();
+            return (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS" || strOp == "IN" || strOp == "NOT IN");
+        }
 
-//		/// <summary>
+        #endregion //SqlExpressionString Utility Methods
+
+        //		/// <summary>
 //		/// Create a valid sql expression e.g. for a whereclause.
 //		/// </summary>
 //		/// <param name="tableFieldNameLeftSeperator">The left field seperator used
@@ -253,7 +296,7 @@ namespace Habanero.BO.CriteriaManager
 //		                                  string DateTimeLeftSeperator,
 //		                                  string DateTimeRightSeperator) {
 //			return FieldFullName(tableFieldNameLeftSeperator, tableFieldNameRightSeperator) +
-//				SqlOperator() + SqlParameterValue(DateTimeLeftSeperator, DateTimeRightSeperator);
+//				GetSqlOperator() + SqlParameterValue(DateTimeLeftSeperator, DateTimeRightSeperator);
 //		}
 
         /// <summary>
@@ -261,82 +304,42 @@ namespace Habanero.BO.CriteriaManager
         /// more detail)
         /// </summary>
         /// <param name="info">The IParameterSqlInfo object</param>
-        /// <param name="tableName">The table name</param>
-        public void SetParameterSqlInfo(IParameterSqlInfo info, String tableName)
+        public void SetParameterSqlInfo(IParameterSqlInfo info)
         {
             if (info.ParameterName.ToUpper() == this._parameterName.ToUpper())
             {
-                _tableName = tableName;
+                _tableName = info.TableName;
                 _fieldName = info.FieldName;
                 _parameterType = info.ParameterType;
             }
         }
 
-        /// <summary>
-        /// Returns the full field name, including table name (where applicable),
-        /// field name and surrounding separators.  For instance, with the
-        /// separators as "[" and "]", the output would be:<br/>
-        /// <code>[tablename].[fieldname]</code><br/>
-        /// See IExpression.SqlExpressionString for more detail.
-        /// </summary>
-        /// <returns>Returns a string with the full name</returns>
-        internal string FieldFullName(string tableFieldNameLeftSeperator,
-                                     string tableFieldNameRightSeperator)
+        ///<summary>
+        /// Creates and returns a copy of this IExpression instance.
+        ///</summary>
+        ///<returns>Returns a copy of this IExpression instance.</returns>
+        public IExpression Clone()
         {
-            if (_tableName.Length > 0)
-            {
-                return tableFieldNameLeftSeperator + _tableName + tableFieldNameRightSeperator + "." +
-                       tableFieldNameLeftSeperator + _fieldName + tableFieldNameRightSeperator;
-            }
-            else
-            {
-                return tableFieldNameLeftSeperator + _fieldName + tableFieldNameRightSeperator;
-            }
+            return new Parameter(_parameterName, _tableName, _fieldName, _sqlOperator, _parameterValue, _parameterType);
         }
+
+        #endregion //IExpression Interface Implementation
 
         /// <summary>
         /// Returns the sql operator, with a space before it
         /// </summary>
         /// <returns>Returns the operator as a string</returns>
-        private string SqlOperator()
+        private string GetSqlOperator()
         {
-            return " " + _sqlOperator;
+            return " " + _sqlOperator + " ";
         }
-
-        /// <summary>
-        /// Indicates whether the sql operator is some variant of "IS" or "IN",
-        /// in which case a parameterised value is not required
-        /// </summary>
-        /// <returns>True if not required, false if required</returns>
-        public bool DoesntRequireParametrisedValue()
+        
+        ///<summary>
+        /// The parameter name for this Parameter
+        ///</summary>
+        public string ParameterName
         {
-            string strOp = _sqlOperator.ToUpper().Trim();
-            return (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS" || strOp == "IN" || strOp == "NOT IN");
+            get { return _parameterName; }
         }
-
-        //		private string SqlParameterValue(string DateTimeLeftSeperator,
-//		                                 string DateTimeRightSeperator) {
-//			if (_sqlOperator.ToUpper().Trim() == "IS" ||
-//				_sqlOperator.ToUpper().Trim() == "IS NOT" ||
-//				_sqlOperator.ToUpper().Trim() == "NOT IS") {
-//				return " " + _parameterValue.ToUpper(); //return either NULL or NOT NULL 
-//			}
-//			if (_sqlOperator.ToUpper().Trim() == "IN" ||
-//				_sqlOperator.ToUpper().Trim() == "NOT IN") {
-//				return " " + _parameterValue;
-//			}
-//			if (_parameterType == ParameterType.Date) {
-//				return " " + DateTimeLeftSeperator + _parameterValue + DateTimeRightSeperator;
-//			}
-//			return " " + _defaultValueSeperator + ReplaceAllIllegalParameterValueCharacters() + _defaultValueSeperator;
-//		}
-
-//		/// <summary>
-//		/// Replace ' with '' if there is already a '' then replace with ''''
-//		/// </summary>
-//		/// <returns></returns>
-//		private string ReplaceAllIllegalParameterValueCharacters() {
-//			return _parameterValue.Replace("'", "''");
-//		}
     }
 }

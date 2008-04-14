@@ -200,5 +200,28 @@ namespace Habanero.Test.Util
             string test = "abcdef";
             StringUtilities.GetRightSection(test, "g");
         }
+
+        [Test]
+        public void TestCountOccurences_String()
+        {
+            string test = "I say hello to you: 'Hello to you'. Did you hear me say hello to you?";
+            Assert.AreEqual(2, StringUtilities.CountOccurrences(test, "hello to you"));
+            Assert.AreEqual(1, StringUtilities.CountOccurrences(test, "Hello to you"));
+            Assert.AreEqual(4, StringUtilities.CountOccurrences(test, "you"));
+            Assert.AreEqual(2, StringUtilities.CountOccurrences(test, "'"));
+            Assert.AreEqual(0, StringUtilities.CountOccurrences(test, "not found"));
+        }
+
+        [Test]
+        public void TestCountOccurences_Char()
+        {
+            string test = "I say hello to you: 'Hello to you'. Did you hear me say hello to you?";
+            Assert.AreEqual(1, StringUtilities.CountOccurrences(test, "I"));
+            Assert.AreEqual(1, StringUtilities.CountOccurrences(test, "i"));
+            Assert.AreEqual(5, StringUtilities.CountOccurrences(test, "e"));
+            Assert.AreEqual(2, StringUtilities.CountOccurrences(test, "'"));
+            Assert.AreEqual(1, StringUtilities.CountOccurrences(test, "?"));
+            Assert.AreEqual(0, StringUtilities.CountOccurrences(test, "#"));
+        }
     }
 }

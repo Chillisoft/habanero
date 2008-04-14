@@ -34,9 +34,17 @@ namespace Habanero.BO.CriteriaManager
         /// more detail)
         /// </summary>
         /// <param name="info">The IParameterSqlInfo object</param>
-        /// <param name="tableName">The table name</param>
-        public void SetParameterSqlInfo(IParameterSqlInfo info, String tableName)
+        public void SetParameterSqlInfo(IParameterSqlInfo info)
         {
+        }
+        
+        ///<summary>
+        /// Creates and returns a copy of this IExpression instance.
+        ///</summary>
+        ///<returns>Returns a copy of this IExpression instance.</returns>
+        public IExpression Clone()
+        {
+            return new SqlOperator(_operator);
         }
 
         /// <summary>

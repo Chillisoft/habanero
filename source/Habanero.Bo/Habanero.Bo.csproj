@@ -116,6 +116,7 @@
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
     <Compile Include="BOKeyEventArgs.cs" />
+    <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
     <Compile Include="CriteriaManager\SQLCriteriaCreator.cs" />
     <Compile Include="DeleteHelper.cs" />
     <Compile Include="IBusinessObjectCollection.cs" />
@@ -336,7 +337,6 @@
     <Compile Include="SqlGeneration\DeleteStatementGenerator.cs" />
     <Compile Include="SqlGeneration\InsertStatementGenerator.cs" />
     <Compile Include="SqlGeneration\SelectStatementGenerator.cs" />
-    <Compile Include="SqlGeneration\SqlFormattingHelper.cs" />
     <Compile Include="SqlGeneration\UpdateStatementGenerator.cs" />
     <Compile Include="SupportsAutoIncrementingFieldBO.cs" />
     <Compile Include="Transaction.cs">

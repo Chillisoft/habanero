@@ -32,14 +32,18 @@ namespace Habanero.DB
     /// </summary>
     public class SqlStatement : ISqlStatement
     {
+        private const string FROM_CLAUSE_TOKEN = " FROM ";
+        private const string JOIN_ON_TOKEN = " ON ";
         private const string WHERE_CLAUSE_TOKEN = " WHERE ";
         private const string AND_TOKEN = " AND ";
+        private const string ORDER_BY_CLAUSE_TOKEN = " ORDER BY ";
         private StringBuilder _statement;
         private IDatabaseConnection _connection;
         private IList _parameters;
         private IDbCommand _sampleCommand;
         private ParameterNameGenerator _gen;
         private IDbConnection _idbConnection;
+        
 
 
         /// <summary>
@@ -230,51 +234,20 @@ namespace Habanero.DB
         ///<param name="joinCriteria">The criteria on which the join is created</param>
         public void AddJoin(string joinType, string joinTable, string joinCriteria)
         {
-            string statement = _statement.ToString();
-            int pos = statement.IndexOf(WHERE_CLAUSE_TOKEN);
-            //string joinClause = String.Format(" {0} {1} {2} {3}", joinType.Trim().ToUpper(),
-            //    SqlGenerationHelper);
-            //_statement.Insert(pos);
-        }
-
-        /// <summary>
-        /// Indicates whether this sql statement instance is equal in
-        /// content to the one specified
-        /// </summary>
-        /// <param name="obj">The sql statement object to compare with</param>
-        /// <returns>Returns true if equal</returns>
-        public override bool Equals(object obj)
-        {
-            SqlStatement statement = obj as SqlStatement;
-            if (statement != null)
+            int posFrom = FindStatementClauseToken(FROM_CLAUSE_TOKEN);
+            if (posFrom == -1)
             {
-                
-                if (!_statement.ToString().Equals(statement.Statement.ToString()))
-                {
-                    return false;
-                }
-                if (_parameters.Count != statement.Parameters.Count)
-                {
-                    Console.WriteLine("Param count different");
-                    return false;
-                }
-                for (int i = 0; i < _parameters.Count; i++)
-                {
-                    IDbDataParameter myParam = (IDbDataParameter) _parameters[i];
-                    IDbDataParameter theirParam = (IDbDataParameter) statement.Parameters[i];
-                    if (!myParam.GetType().Equals(theirParam.GetType()) ||
-                        !myParam.ParameterName.Equals(theirParam.ParameterName) ||
-                        !myParam.Value.Equals(theirParam.Value))
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                throw new SqlStatementException("Cannot add a join clause to a SQL statement that does not contin a from clause.");
             }
-            else
+            int posWhere = FindStatementClauseToken(WHERE_CLAUSE_TOKEN);
+            if (posWhere == -1)
             {
-                return base.Equals(obj);
+                posWhere = _statement.Length;
             }
+            string joinClause = " " + joinType.Trim().ToUpper() + " " + SqlFormattingHelper.FormatTableName(joinTable, _connection) +
+                JOIN_ON_TOKEN + joinCriteria;
+            _statement.Insert(posWhere, ")" + joinClause);
+            _statement.Insert(posFrom + FROM_CLAUSE_TOKEN.Length, "(");
         }
 
         /// <summary>
@@ -316,7 +289,8 @@ namespace Habanero.DB
         /// </summary>
         public void AppendWhere()
         {
-            if (this.Statement.ToString().IndexOf(WHERE_CLAUSE_TOKEN) != -1)
+            int posWhere = FindStatementClauseToken(WHERE_CLAUSE_TOKEN);
+            if (posWhere != -1)
             {
                 this.Statement.Append(AND_TOKEN);
             }
@@ -335,7 +309,7 @@ namespace Habanero.DB
         {
             if (orderByCriteria != null && orderByCriteria.Length > 0)
             {
-                this.Statement.Append(" ORDER BY " + orderByCriteria);
+                this.Statement.Append(ORDER_BY_CLAUSE_TOKEN + orderByCriteria);
             }
         }
 
@@ -354,5 +328,81 @@ namespace Habanero.DB
         {
             get { return _connection; }
         }
+
+        /// <summary>
+        /// Indicates whether this sql statement instance is equal in
+        /// content to the one specified
+        /// </summary>
+        /// <param name="obj">The sql statement object to compare with</param>
+        /// <returns>Returns true if equal</returns>
+        public override bool Equals(object obj)
+        {
+            SqlStatement statement = obj as SqlStatement;
+            if (statement != null)
+            {
+
+                if (!_statement.ToString().Equals(statement.Statement.ToString()))
+                {
+                    return false;
+                }
+                if (_parameters.Count != statement.Parameters.Count)
+                {
+                    Console.WriteLine("Param count different");
+                    return false;
+                }
+                for (int i = 0; i < _parameters.Count; i++)
+                {
+                    IDbDataParameter myParam = (IDbDataParameter)_parameters[i];
+                    IDbDataParameter theirParam = (IDbDataParameter)statement.Parameters[i];
+                    if (!myParam.GetType().Equals(theirParam.GetType()) ||
+                        !myParam.ParameterName.Equals(theirParam.ParameterName) ||
+                        !myParam.Value.Equals(theirParam.Value))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return base.Equals(obj);
+            }
+        }
+
+        #region Utility Methods
+
+        private int FindStatementClauseToken(string token)
+        {
+            string statement = _statement.ToString();
+            int posToken = -1;
+            bool found = false;
+            do
+            {
+                posToken = statement.IndexOf(token, posToken + 1, StringComparison.InvariantCultureIgnoreCase);
+                if (posToken == -1)
+                {
+                    break;
+                }
+                int countQuotes;
+                countQuotes = StringUtilities.CountOccurrences(statement, _connection.LeftFieldDelimiter, 0, posToken);
+                if (_connection.LeftFieldDelimiter != _connection.RightFieldDelimiter)
+                {
+                    countQuotes += StringUtilities.CountOccurrences(statement, _connection.RightFieldDelimiter, 0, posToken);
+                }
+                if ((countQuotes % 2) == 0)
+                {
+                    countQuotes = StringUtilities.CountOccurrences(statement, '\'', 0, posToken);
+                    if ((countQuotes % 2) == 0)
+                    {
+                        found = true;
+                    }
+                }
+            } while (!found);
+            return posToken;
+        }
+
+        #endregion //Utility Methods
+
+
     }
 }
