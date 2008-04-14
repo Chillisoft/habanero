@@ -368,10 +368,9 @@ namespace Habanero.BO
                 }
                 if (!relationshipParameterInformation.ContainsKey(parameterName))
                 {
-                    PropDefCol propDefCol = currentClassDef.PropDefcol;
-                    if (propDefCol.Contains(propertyName))
+                    PropDef propDef = currentClassDef.GetPropDef(propertyName, false);
+                    if (propDef != null)
                     {
-                        PropDef propDef = propDefCol[propertyName];
                         PropDefParameterSQLInfo parameterSQLInfo = new PropDefParameterSQLInfo(
                             parameterName, propDef, fullTableName);
                         relationshipParameterInformation.Add(parameterName, parameterSQLInfo);
