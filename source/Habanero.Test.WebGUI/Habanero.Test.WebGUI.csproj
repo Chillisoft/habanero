@@ -51,9 +51,7 @@
   <ItemGroup>
     <Compile Include="TestControlMapperCollection.cs" />
     <Compile Include="TestCheckBoxMapper.cs" />
-    <Compile Include="TestClass1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestBase.cs" />
     <Compile Include="TestLookupComboBoxMapper.cs" />
     <Compile Include="TestTextBoxMapper.cs" />
   </ItemGroup>
