@@ -82,6 +82,40 @@ namespace Habanero.Util
             set { _smtpServerPort = value; }
         }
 
+        ///<summary>
+        /// Gets the List of Email Addresses used for SMTP Transactions.
+        ///</summary>
+        public IList toAddresses
+        {
+            get { return _toAddresses; }
+        }
+        ///<summary>
+        /// Gets the List of Subject associated with the Email.
+        ///</summary>
+        public string Subject
+        {
+            get { return _subject; }
+        }
+
+        ///<summary>
+        /// Gets the File Attachment Path used for SMTP Transactions.
+        ///</summary>
+        //TODO: cater for multiple attachments currently it does not make 
+        //      sense to return an IList of the Attachment paths as there 
+        //      can only be one attachment, however this will change when 
+        //      the system caters for multiple attachments
+        public string Attachment
+        {
+            get
+            {
+                if (_attachmentPaths.Count != 0)
+                {
+                    return _attachmentPaths[0] as string;
+                }
+                return "";
+            }
+        }
+
         /// <summary>
         /// Sends the email message using the "SmtpServer" setting in the
         /// configuration
@@ -172,7 +206,11 @@ namespace Habanero.Util
         {
             foreach (object toAddress in addressList)
             {
-                addToCol.Add(new MailAddress(toAddress.ToString()));
+                if (toAddress != null)
+                {
+                    addToCol.Add(new MailAddress(toAddress.ToString()));                    
+                }
+
             }
         }
     }
