@@ -120,13 +120,13 @@ namespace Habanero.DB
         /// <param name="startAfterVersion">The start version (exclusive)</param>
         /// <param name="endVersion">The end version (inclusive)</param>
         public void Migrate(int startAfterVersion, int endVersion) {
-            //for (int i = startAfterVersion; i <= endVersion; i++)
-            //{ 
-            //    _connection.ExecuteSql(GetMigrationSql(i, i));
-            //    SetCurrentVersion(endVersion);
-
-            //}
-            _connection.ExecuteSql(GetMigrationSql(startAfterVersion, endVersion));
+            //Each migration should be done separately because changes to DDL does not support rollback.
+            for (int i = startAfterVersion + 1; i <= endVersion; i++)
+            {
+                _connection.ExecuteSql(GetMigrationSql(i - 1, i));
+                SetCurrentVersion(i);
+            }
+            //_connection.ExecuteSql(GetMigrationSql(startAfterVersion, endVersion));
             SetCurrentVersion(endVersion);
         }
 
