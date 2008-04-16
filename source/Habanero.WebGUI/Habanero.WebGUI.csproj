@@ -55,7 +55,6 @@
       <DependentUpon>ButtonControl.cs</DependentUpon>
     </Compile>
     <Compile Include="CheckBoxMapper.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="ComboBoxMapper.cs" />
     <Compile Include="ControlFactory.cs" />
     <Compile Include="ControlMapper.cs" />

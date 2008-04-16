@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Windows.Forms;
 using Habanero.Base;
 
 namespace Habanero.Base.Exceptions
@@ -36,14 +35,7 @@ namespace Habanero.Base.Exceptions
         /// <param name="ex">The exception to display</param>
         public static void Display(Exception ex)
         {
-            if (ex is UserException)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            else
-            {
-                GlobalRegistry.UIExceptionNotifier.Notify(ex, "Error occurred", "Error");
-            }
+            GlobalRegistry.UIExceptionNotifier.Notify(ex, "Error occurred", "Error");
         }
 
         /// <summary>
