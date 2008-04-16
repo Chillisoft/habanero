@@ -106,9 +106,9 @@ namespace Habanero.Test.General
             Assert.AreEqual(car.ID, carOwned.ID);
         }
 
-        [Test]
         //Test the references should not be equal since the objects are reloaded each time
-            public void TestGetCarsOwnedByPersonNotHeldInMemory()
+        [Test]
+        public void TestGetCarsOwnedByPersonNotHeldInMemory()
         {
             Car.DeleteAllCars();
             ContactPerson.DeleteAllContactPeople();

@@ -57,10 +57,10 @@ namespace Habanero.Test.General
             Assert.AreEqual(person.GetCarsDriven().Count, 1);
         }
 
-        [Test]
         //TODO: Peter - I Commented out the last line because I had to make the collection reload each time it's
-            //retrieved in case a new object is created that would go into this collection.  There are currently no 
-            //events caught by a collection if a new object is created.
+        //retrieved in case a new object is created that would go into this collection.  There are currently no 
+        //events caught by a collection if a new object is created.
+        [Test]
             public void TestGetCarsDrivenByPersonHeldInMemory()
         {
             Car.DeleteAllCars();

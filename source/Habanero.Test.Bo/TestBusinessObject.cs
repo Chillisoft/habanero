@@ -86,8 +86,8 @@ namespace Habanero.Test.BO
         }
 
 
-        [Test]
         // This test is duplicated in TestBoMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
+        [Test]
         public void TestGetPropertyValueToDisplayWithBOLookupList()
         {
             ContactPerson.CreateSampleData();

@@ -349,7 +349,6 @@ namespace Habanero.Test.General
         //		}
         //
         [Test]
-        //[Ignore("coupling threads")]
             public void TestMultipleUpdates()
         {
             mContactPersonUpdateConcurrency.Surname = "New Surname";
@@ -363,7 +362,6 @@ namespace Habanero.Test.General
 
         [Test]
         [ExpectedException(typeof (BusObjDeleteConcurrencyControlException))]
-        //[Ignore("coupling threads")]
             public void TestDeleteObjectPriorToUpdatesConcurrencyControl()
         {
             ContactPerson myContact2 = ContactPerson.GetContactPerson(mContactPersonDeleteConcurrency.ID);
@@ -376,7 +374,6 @@ namespace Habanero.Test.General
 
         [Test]
         [ExpectedException(typeof (BusObjBeginEditConcurrencyControlException))]
-        //[Ignore("coupling threads")]
             public void TestBeginEditsOnADirtyObject()
         {
             ContactPerson.ClearContactPersonCol();
