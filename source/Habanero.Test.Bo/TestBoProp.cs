@@ -715,6 +715,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("", boProp.PropertyValueString);
         }
 
+        [Test]
         public void TestBoPropWithEnumValueChange()
         {
             PropDef propDef = new PropDef("EnumProp", typeof(ContactPerson.ContactType), PropReadWriteRule.ReadWrite, ContactPerson.ContactType.Family);
@@ -736,6 +737,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Business", boProp.PropertyValueString);
         }
 
+        [Test]
         public void TestBoPropWithEnumPersistValue()
         {
             PropDef propDef = new PropDef("EnumProp", typeof(ContactPerson.ContactType), PropReadWriteRule.ReadWrite, ContactPerson.ContactType.Family);
@@ -753,6 +755,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Business", boProp.PropertyValueString);
         }
 
+        [Test]
         public void TestBoPropWithEnumPersistValueFromString()
         {
             PropDef propDef = new PropDef("EnumProp", typeof(ContactPerson.ContactType), PropReadWriteRule.ReadWrite, ContactPerson.ContactType.Family);

@@ -60,7 +60,7 @@ namespace Habanero.Test.Util.File
             CompareToDataTable(CsvTestsSamples.CommasInHeaderCsvContents(), CsvTestsSamples.CommasInHeaderDataTable());
         }
 
-        [Test, Ignore("This needs to be fixed at some stage")]
+        [Test]
         public void TestCsvReaderAdvanced()
         {
             CompareToDataTable(CsvTestsSamples.AdvancedCsvContents(), CsvTestsSamples.AdvancedDataTable());

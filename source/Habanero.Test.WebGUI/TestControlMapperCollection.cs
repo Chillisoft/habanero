@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.BO.ClassDefinition;
 using Habanero.WebGUI;
 using NUnit.Framework;
 
@@ -21,6 +22,7 @@ namespace Habanero.Test.WebGUI
         [SetUp]
         public void TestSetup()
         {
+            ClassDef.ClassDefs.Clear();
             // set up a business object with some values and a ui def
             MyBO.LoadDefaultClassDefGizmox();
             _mybo = new MyBO();

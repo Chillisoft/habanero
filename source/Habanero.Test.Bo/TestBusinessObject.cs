@@ -230,7 +230,7 @@ namespace Habanero.Test.BO
             bo.Delete();
         }
 
-        [Test, Ignore("This fails with the JetBrains testing framework for some reason"), 
+        [Test, Ignore("This fails with the JetBrains testing framework because MessageMatch.Contains doesn't seem to be supported by Resharper 2.5"), 
             ExpectedException(typeof(BusObjDeleteException),
                 ExpectedMessage = "You cannot delete the 'MyBoNotEditableDeletable', as the IsDeleted is set to false for the object",
                 MatchType = MessageMatch.Contains)]
@@ -248,7 +248,7 @@ namespace Habanero.Test.BO
             bo.TestProp = "new";
         }
 
-        [Test, Ignore("This fails with the JetBrains testing framework for some reason"), 
+        [Test, Ignore("This fails with the JetBrains testing framework because MessageMatch.Contains doesn't seem to be supported by Resharper 2.5"), 
             ExpectedException(typeof(BusObjEditableException),
                 ExpectedMessage = "You cannot Edit the 'MyBoNotEditableDeletable', as the IsEditable is set to false for the object",
                 MatchType = MessageMatch.Contains)]

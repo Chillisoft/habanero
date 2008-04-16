@@ -322,6 +322,7 @@ namespace Habanero.Test.General
             Assert.IsTrue(myContact.Surname.Length == 0);
         }
 
+        [Test]
         public void TestStateAfterApplyEdit()
         {
             ContactPerson myContact = new ContactPerson();

@@ -83,17 +83,16 @@ namespace Habanero.Util
             List<QuotedSection> doubleQuotedSections = new List<QuotedSection>();
             foreach (String quote in _quotes)
             {
-                int pos = newString.IndexOf(quote);
-                while (pos != -1)
+                int posDouble = 0;
+                do
                 {
-                    int pos2 = newString.Substring(pos + 1, newString.Length - pos - 1).IndexOf(quote);
-                    if (pos2 == 0)
+                    posDouble = newString.IndexOf(quote + quote, posDouble);
+                    if (posDouble != -1)
                     {
-                        doubleQuotedSections.Add(new QuotedSection(pos, quote));
-                        newString = newString.Remove(pos, pos2 + 2);
+                        doubleQuotedSections.Add(new QuotedSection(posDouble, quote));
+                        newString = newString.Remove(posDouble, (quote + quote).Length);
                     }
-                    pos = newString.IndexOf(quote, pos + 1);
-                }
+                } while (posDouble != -1);
             }
             int offset = 0;
             foreach (String quote in _quotes)

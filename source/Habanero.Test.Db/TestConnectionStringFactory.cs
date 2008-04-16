@@ -273,6 +273,7 @@ namespace Habanero.Test.DB
                             "ConnectionStringFactory not working for SQLite");
         }
 
+        [Test]
         public void TestSQLiteNoServerName()
         {
             String conn =
@@ -284,6 +285,7 @@ namespace Habanero.Test.DB
                 "ConnectionStringFactory not working for SQLite");
         }
 
+        [Test]
         public void TestSQLiteNoUserName()
         {
             String conn =

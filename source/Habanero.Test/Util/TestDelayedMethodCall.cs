@@ -33,7 +33,7 @@ namespace Habanero.Test.Util
         /// because of our slow build server, may need further review because the tests
         /// are still failing sometimes on the server
         /// </summary>
-        [Test, Ignore("The delay is not working on the slow integration server")]
+        [Test]
         public void TestCall()
         {
             DateTime time = DateTime.Now;
@@ -41,14 +41,14 @@ namespace Habanero.Test.Util
             DelayedMethodCall call = new DelayedMethodCall(200, this);
             call.Call(new VoidMethodWithSender(MethodToCall));
              
-            while (!calledYet && (DateTime.Now - time).TotalMilliseconds < 600)
+            while (!calledYet && (DateTime.Now - time).TotalMilliseconds < 1000)
             {
                 //
             }
             Assert.IsTrue(calledYet);
             double difference = (DateTime.Now - time).TotalMilliseconds;
             Assert.GreaterOrEqual(difference, 200d);
-            Assert.LessOrEqual(difference, 550d);
+            Assert.LessOrEqual(difference, 950d);
         }
 
         private void MethodToCall(object sender)
