@@ -127,7 +127,7 @@ namespace Habanero.DB
                 SetCurrentVersion(i);
             }
             //_connection.ExecuteSql(GetMigrationSql(startAfterVersion, endVersion));
-            SetCurrentVersion(endVersion);
+            //SetCurrentVersion(endVersion);
         }
 
         /// <summary>

@@ -136,11 +136,15 @@ namespace Habanero.Test.DB
         public void TestMigrateTo() {
             itsDbMigrator.SetSettingsStorer(_itsSettings);
             itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] {DBMigrator.DatabaseVersionSetting, "3"});
-            SqlStatementCollection col = new SqlStatementCollection();
-            col.Add(new SqlStatement(itsConn, "migration2;"));
-            col.Add(new SqlStatement(itsConn, "migration3;"));
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { col  });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "3" });
+            SqlStatementCollection sqlStatementCollection;
+            sqlStatementCollection = new SqlStatementCollection();
+            sqlStatementCollection.Add(new SqlStatement(itsConn, "migration2;"));
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { sqlStatementCollection  });
+            sqlStatementCollection = new SqlStatementCollection();
+            sqlStatementCollection.Add(new SqlStatement(itsConn, "migration3;"));
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { sqlStatementCollection  });
           
             itsDbMigrator.MigrateTo(3);
             
