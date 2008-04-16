@@ -44,7 +44,7 @@ namespace Habanero.WebGUI
         public ReadOnlyGrid() : base()
         {
             ReadOnly = true;
-            CollectionChanged += new EventHandler(CollectionChangedHandler);
+            CollectionChanged += CollectionChangedHandler;
             //DoubleClick += new EventHandler(DoubleClickHandler);
             AllowUserToAddRows = false;
             AllowUserToDeleteRows = false;
@@ -77,6 +77,10 @@ namespace Habanero.WebGUI
             {
                 column.ReadOnly = true;
             }
+            this._dataTable.RowChanged += delegate
+                                              {
+                                                  this.Update();
+                                              };
         }
 
         /// <summary>

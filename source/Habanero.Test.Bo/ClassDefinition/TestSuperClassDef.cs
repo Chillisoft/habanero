@@ -84,7 +84,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNull(superClassDef.SuperClassClassDef);
             ClassDef classDef = new ClassDef(typeof(MyBO), null, null, null, null);
             superClassDef.SetSuperClassClassDef(classDef);
-            Assert.AreEqual(classDef, superClassDef.SuperClassClassDef);
+            Assert.AreSame(classDef, superClassDef.SuperClassClassDef);
 
             superClassDef.SetSuperClassClassDef(null);
             Assert.IsNull(superClassDef.SuperClassClassDef);

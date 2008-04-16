@@ -25,7 +25,7 @@ using Habanero.DB;
 
 namespace Habanero.Test.BO
 {
-    class ContactPerson: BusinessObject
+    class ContactPersonTestBO: BusinessObject
     {
         public enum ContactType
         {
@@ -34,9 +34,9 @@ namespace Habanero.Test.BO
             Business
         }
 
-        public ContactPerson() { }
+        public ContactPersonTestBO() { }
 
-        internal ContactPerson(BOPrimaryKey id) : base(id) { }
+        internal ContactPersonTestBO(BOPrimaryKey id) : base(id) { }
 
         public static ClassDef LoadDefaultClassDef()
         {
@@ -44,7 +44,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPerson"" assembly=""Habanero.Test.BO"">
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
@@ -63,7 +63,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPerson"" assembly=""Habanero.Test.BO"">
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
 					<primaryKey isObjectID=""false"" >
@@ -80,7 +80,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPerson"" assembly=""Habanero.Test.BO"">
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
 					<primaryKey isObjectID=""false"" >
@@ -99,7 +99,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPerson"" assembly=""Habanero.Test.BO"">
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
                     <property  name=""FirstName"" compulsory=""true"" />
@@ -107,6 +107,29 @@ namespace Habanero.Test.BO
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithAddressesRelationship()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
 			    </class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
@@ -137,6 +160,10 @@ namespace Habanero.Test.BO
             set { SetPropertyValue("DateOfBirth", value); }
         }
 
+        public RelatedBusinessObjectCollection<Address> Addresses
+        {
+            get { return (RelatedBusinessObjectCollection<Address>)this.Relationships.GetRelatedCollection<Address>("Addresses"); }
+        }
 
         #endregion //Properties
 
@@ -146,23 +173,23 @@ namespace Habanero.Test.BO
         }
 
         /// <summary>
-        /// returns the ContactPerson identified by id.
+        /// returns the ContactPersonTestBO identified by id.
         /// </summary>
         /// <remarks>
         /// If the Contact person is already leaded then an identical copy of it will be returned.
         /// </remarks>
         /// <param name="id">The object primary Key</param>
         /// <returns>The loaded business object</returns>
-        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
+        /// <exception cref="TestRelatedBusinessObjectCollection.BO.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
-        public static ContactPerson GetContactPerson(BOPrimaryKey id)
+        public static ContactPersonTestBO GetContactPerson(BOPrimaryKey id)
         {
-            ContactPerson myContactPerson = (ContactPerson)BOLoader.Instance.GetLoadedBusinessObject(id);
-            if (myContactPerson == null)
+            ContactPersonTestBO myContactPersonTestBOTestBO = (ContactPersonTestBO)BOLoader.Instance.GetLoadedBusinessObject(id);
+            if (myContactPersonTestBOTestBO == null)
             {
-                myContactPerson = new ContactPerson(id);
+                myContactPersonTestBOTestBO = new ContactPersonTestBO(id);
             }
-            return myContactPerson;
+            return myContactPersonTestBOTestBO;
         }
 
         internal static void DeleteAllContactPeople()
@@ -181,9 +208,9 @@ namespace Habanero.Test.BO
 
             for (int i = 0; i<surnames.Length; i++)
             {
-                if (BOLoader.Instance.GetBusinessObject<ContactPerson>("surname = " + surnames[i]) == null)
+                if (BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("surname = " + surnames[i]) == null)
                 {
-                    ContactPerson contact = new ContactPerson();
+                    ContactPersonTestBO contact = new ContactPersonTestBO();
                     contact.Surname = surnames[i];
                     contact.FirstName = firstNames[i];
                     contact.Save();

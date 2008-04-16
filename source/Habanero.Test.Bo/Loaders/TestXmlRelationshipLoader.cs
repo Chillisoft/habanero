@@ -37,9 +37,9 @@ namespace Habanero.Test.BO.Loaders
 						name=""TestRelationship"" 
 						type=""single"" 
 						relatedClass=""Habanero.Test.BO.Loaders.TestRelatedClass"" 
-						relatedAssembly=""Habanero.Test.BO""
-					>
-						<relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
+						relatedAssembly=""Habanero.Test.BO"" 
+                    >
+						    <relatedProperty property=""TestProp"" relatedProperty=""TestRelatedProp"" />
 
 					</relationship>";
 

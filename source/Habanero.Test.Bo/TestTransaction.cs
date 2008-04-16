@@ -36,27 +36,27 @@ namespace Habanero.Test.BO
             SetupDBConnection();
 
             ClassDef.ClassDefs.Clear();
-            ContactPerson.LoadDefaultClassDef();
-            ContactPerson.DeleteAllContactPeople();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.DeleteAllContactPeople();
         }
 
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            ContactPerson.DeleteAllContactPeople();
+            ContactPersonTestBO.DeleteAllContactPeople();
         }
 
         [Test]
         public void TestTransactionSuccess()
         {
-            ContactPerson myContact_1 = new ContactPerson();
+            ContactPersonTestBO myContact_1 = new ContactPersonTestBO();
             //Edit first object and save
             myContact_1.Surname = "My Surname 1";
             //myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
             Transaction transact = new Transaction(DatabaseConnection.CurrentConnection);
             transact.AddTransactionObject(myContact_1);
 
-            ContactPerson myContact_2 = new ContactPerson();
+            ContactPersonTestBO myContact_2 = new ContactPersonTestBO();
             myContact_2.Surname = "My Surname 2";
 
             Assert.IsTrue(myContact_2.IsValid());
@@ -74,12 +74,12 @@ namespace Habanero.Test.BO
             //Ensure object loaded from DB.
             BusinessObject.ClearLoadedBusinessObjectBaseCol();
 
-            ContactPerson myContact_3 = ContactPerson.GetContactPerson(myContact_1.ID);
+            ContactPersonTestBO myContact_3 = ContactPersonTestBO.GetContactPerson(myContact_1.ID);
 
             Assert.AreEqual(myContact_1.ID, myContact_3.ID);
             Assert.AreEqual(myContact_1.Surname, myContact_3.Surname);
 
-            ContactPerson myContact_4 = ContactPerson.GetContactPerson(myContact_2.ID);
+            ContactPersonTestBO myContact_4 = ContactPersonTestBO.GetContactPerson(myContact_2.ID);
 
             Assert.AreEqual(myContact_2.ID, myContact_4.ID);
             Assert.AreEqual(myContact_2.Surname, myContact_4.Surname);
@@ -88,14 +88,14 @@ namespace Habanero.Test.BO
         [Test]
         public void TestTransactionFail()
         {
-            ContactPerson myContact_1 = new ContactPerson();
+            ContactPersonTestBO myContact_1 = new ContactPersonTestBO();
             //Edit first object and save
             myContact_1.Surname = "My Surname 1";
             //myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
             Transaction transact = new Transaction(DatabaseConnection.CurrentConnection);
             transact.AddTransactionObject(myContact_1);
 
-            ContactPerson myContact_2 = new ContactPerson();
+            ContactPersonTestBO myContact_2 = new ContactPersonTestBO();
             myContact_2.Surname = "My Surname 1"; //Should result in a duplicate error when try to persist
             //will result in the commit failing
             Assert.IsTrue(myContact_2.IsValid());
@@ -125,7 +125,7 @@ namespace Habanero.Test.BO
             errorRaised = false;
             try
             {
-                ContactPerson myContact_3 = ContactPerson.GetContactPerson(myContact_1.ID);
+                ContactPersonTestBO myContact_3 = ContactPersonTestBO.GetContactPerson(myContact_1.ID);
             }
             //Expect this error since the object should not have been persisted to the DB.
             catch (BusinessObjectNotFoundException ex)
@@ -148,12 +148,12 @@ namespace Habanero.Test.BO
         {
             
             Transaction tran = new Transaction(DatabaseConnection.CurrentConnection);
-            List<ContactPerson> contactPersons = new List<ContactPerson>();
+            List<ContactPersonTestBO> contactPersons = new List<ContactPersonTestBO>();
             for (int i=0; i<100; i++) {
-                ContactPerson newContactPerson = new ContactPerson();
-                newContactPerson.SetDatabaseConnection(DatabaseConnection.CurrentConnection);
-                contactPersons.Add(newContactPerson);
-                tran.AddTransactionObject(newContactPerson);
+                ContactPersonTestBO newContactPersonTestBOTestBO = new ContactPersonTestBO();
+                newContactPersonTestBOTestBO.SetDatabaseConnection(DatabaseConnection.CurrentConnection);
+                contactPersons.Add(newContactPersonTestBOTestBO);
+                tran.AddTransactionObject(newContactPersonTestBOTestBO);
             }
             SqlStatementCollection statements = tran.GetPersistSql();
             Assert.AreEqual(100, statements.Count );

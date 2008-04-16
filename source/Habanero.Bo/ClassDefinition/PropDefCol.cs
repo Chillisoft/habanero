@@ -234,5 +234,37 @@ namespace Habanero.BO.ClassDefinition
 		}
 
 		#endregion
+
+        #region Equals
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            if (obj.GetType() != typeof(PropDefCol)) return false;
+            PropDefCol otherPropDefCol = (PropDefCol)obj;
+            if (this.Count != otherPropDefCol.Count) return false;
+            foreach (PropDef def in this)
+            {
+                if (!otherPropDefCol.Contains(def.PropertyName)) return false;
+            }
+            return true;
+        }
+
+        #endregion
+
+
+        ///<summary>
+        /// Clones the propdefcol.  The new propdefcol has the same propdefs in it.
+        ///</summary>
+        ///<returns></returns>
+        public PropDefCol Clone()
+        {
+            PropDefCol newPropDefCol = new PropDefCol();
+            foreach (PropDef def in this)
+            {
+                newPropDefCol.Add(def);
+            }
+            return newPropDefCol;
+        }
     }
 }

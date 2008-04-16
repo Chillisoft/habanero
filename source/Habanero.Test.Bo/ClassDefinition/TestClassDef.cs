@@ -73,7 +73,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(0, classDef.RelationshipDefCol.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
 
-            classDef = new ClassDef("db", typeof(String), primaryKeyDef, "table", propDefCol,
+            classDef = new ClassDef(typeof(String), primaryKeyDef, "table", propDefCol,
                                              keyDefCol, relDefCol, uiDefCol);
             //Assert.AreEqual("db", classDef.);  ? database has no usage
             Assert.AreEqual(typeof(String), classDef.ClassType);
@@ -84,7 +84,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(0, classDef.RelationshipDefCol.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
 
-            classDef = new ClassDef("db", typeof(String), primaryKeyDef, "table", propDefCol,
+            classDef = new ClassDef(typeof(String), primaryKeyDef, "table", propDefCol,
                                              keyDefCol, relDefCol);
             //Assert.AreEqual("db", classDef.);  ? database has no usage
             Assert.AreEqual(typeof(String), classDef.ClassType);
@@ -416,7 +416,7 @@ namespace Habanero.Test.BO.ClassDefinition
         // This class serves to access protected methods
         private class ClassDefInheritor : ClassDef
         {
-            public ClassDefInheritor() : base(typeof(ClassDef), null, null, null, null, null)
+            public ClassDefInheritor() : base(typeof(ClassDef), null, null, null, null, null,null)
             {}
 
             public void SetAssemblyName(string assemblyName)
@@ -460,9 +460,65 @@ namespace Habanero.Test.BO.ClassDefinition
             }
         }
 
-        private class TempBO : MyBO
+        [Test]
+        public void TestCloningAClassDef()
         {
-            private TempBO(){}
+            ClassDef originalClassDef = LoadClassDef();
+            ClassDef newClassDef = originalClassDef.Clone();
+            Assert.AreNotSame(newClassDef, originalClassDef);
+            Assert.AreEqual(newClassDef, originalClassDef);
+        }
+
+        [Test]
+        public void TestClonePropertiesAreDifferentButEqual()
+        {
+            ClassDef originalClassDef = LoadClassDef();
+            ClassDef newClassDef = originalClassDef.Clone();
+            Assert.AreNotSame(newClassDef.PropDefcol, originalClassDef.PropDefcol);
+            Assert.AreEqual(newClassDef.PropDefcol, originalClassDef.PropDefcol);
+        }
+
+
+
+        [Test]
+        public void TestEqualsNull()
+        {
+            ClassDef classDef1 = LoadClassDef();
+            ClassDef classDef2 = null;
+            Assert.AreNotEqual(classDef1, classDef2);    
+        }
+
+        [Test]
+        public void TestEquals()
+        {
+            ClassDef classDef1 = LoadClassDef();
+            ClassDef classDef2 = LoadClassDef();
+            Assert.AreEqual(classDef1, classDef2);
+        }
+
+        [Test]
+        public void TestEqualsDifferentType()
+        {
+            ClassDef classDef1 = LoadClassDef();
+            Assert.AreNotEqual(classDef1, "bob");
+        }
+
+        public static ClassDef LoadClassDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef def =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" />
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" />
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+				</class>
+			");
+            return def;
         }
     }
 }

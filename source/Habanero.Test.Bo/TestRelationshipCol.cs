@@ -27,7 +27,7 @@ namespace Habanero.Test.BO
     /// Summary description for TestRelationshipCol.
     /// </summary>
     [TestFixture]
-    public class TestRelationshipCol
+    public class TestRelationshipCol : TestUsingDatabase
     {
         private ClassDef itsClassDef;
         private ClassDef itsRelatedClassDef;
@@ -35,6 +35,7 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
+            base.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
             itsClassDef = MyBO.LoadClassDefWithRelationship();
             itsRelatedClassDef = MyRelatedBo.LoadClassDef();
@@ -105,5 +106,16 @@ namespace Habanero.Test.BO
             MyRelatedBo relatedBo1 = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
             bo1.Relationships.SetRelatedObject("MyMultipleRelationship", relatedBo1);
         }
+
+        //[Test]
+        //public void TestCreateBusinessObject()
+        //{
+        //    ContactPersonTestBO.LoadDefaultClassDef();
+        //    ContactPerson person = new ContactPerson();
+
+        //    Address address = person.Addresses.CreateBusinessObject();
+
+        //    Assert.AreSame(person, address.ContactPerson);
+        //}
     }
 }

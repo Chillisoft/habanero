@@ -73,7 +73,7 @@ namespace Habanero.BO
         /// <param name="connection">A database connection</param>
         /// <returns>Returns the related business object</returns>
         public T GetRelatedObject<T>(IDatabaseConnection connection)
-			where T: BusinessObject, new()
+			where T: BusinessObject
         {
             IExpression newRelationshipExpression = _relKey.RelationshipExpression();
             if (_relatedBo == null ||

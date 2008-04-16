@@ -150,8 +150,10 @@
     <Compile Include="ClassDefinition\TestRelPropDef.cs" />
     <Compile Include="Comparer\TestReflectedPropertyComparer.cs" />
     <Compile Include="Comparer\TestComparers.cs" />
-    <Compile Include="ContactPerson.cs" />
+    <Compile Include="ContactPersonTestBO.cs" />
     <Compile Include="CriteriaManager\TestSqlCriteriaCreator.cs" />
+    <Compile Include="TestMultipleRelationship.cs" />
+    <Compile Include="TestRelatedBusinessObjectCollection.cs" />
     <Compile Include="Loaders\TestXmlTriggerLoader.cs" />
     <Compile Include="SqlGeneration\TestDeleteStatementGenerator.cs" />
     <Compile Include="SqlGeneration\TestUpdateStatementGenerator.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="TestBusinessObject.cs" />
     <Compile Include="TestBusinessObjectCollection.cs" />
     <Compile Include="TestBusinessObjectLookupList.cs" />
+    <Compile Include="ClassDefinition\TestClassDefWithDyamicAttributes.cs" />
     <Compile Include="TestDatabaseLookupList.cs">
       <SubType>Code</SubType>
     </Compile>

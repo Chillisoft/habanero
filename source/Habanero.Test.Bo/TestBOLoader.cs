@@ -38,31 +38,31 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetUp()
         {
-            ContactPerson.CreateSampleData();
+            ContactPersonTestBO.CreateSampleData();
         }
 
         [TearDown]
         public void TearDown()
         {
-            ContactPerson.DeleteAllContactPeople();
+            ContactPersonTestBO.DeleteAllContactPeople();
         }
 
         [Test]
         public void TestGetBusinessObject()
         {
             ClassDef.ClassDefs.Clear();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
             Assert.AreEqual("abc", cp.Surname);
 
-            cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc AND FirstName = aa");
+            cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc AND FirstName = aa");
             Assert.AreEqual("abc", cp.Surname);
 
-            cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abcde");
+            cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abcde");
             Assert.IsNull(cp);
 
-            cp = (ContactPerson)BOLoader.Instance.GetBusinessObject(new ContactPerson(), new Parameter("Surname = invalid"));
+            cp = (ContactPersonTestBO)BOLoader.Instance.GetBusinessObject(new ContactPersonTestBO(), new Parameter("Surname = invalid"));
             Assert.IsNull(cp);
         }
 
@@ -70,28 +70,28 @@ namespace Habanero.Test.BO
         public void TestGetBusinessObjectDuplicatesException()
         {
             ClassDef.ClassDefs.Clear();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("FirstName = aa");
+            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("FirstName = aa");
         }
 
         [Test]
         public void TestGetBusinessObjectCollection()
         {
             ClassDef.ClassDefs.Clear();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
 
-            BusinessObjectCollection<ContactPerson> col = BOLoader.Instance.GetBusinessObjectCol<ContactPerson>("FirstName = aa", "Surname");
+            BusinessObjectCollection<ContactPersonTestBO> col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aa", "Surname");
             Assert.AreEqual(2, col.Count);
             Assert.AreEqual("abc", col[0].Surname);
             Assert.AreEqual("abcd", col[1].Surname);
 
-            IBusinessObjectCollection col2 = BOLoader.Instance.GetBusinessObjectCol(typeof(ContactPerson), "FirstName = aa", "Surname");
+            IBusinessObjectCollection col2 = BOLoader.Instance.GetBusinessObjectCol(typeof(ContactPersonTestBO), "FirstName = aa", "Surname");
             Assert.AreEqual(2, col.Count);
-            Assert.AreEqual("abc", ((ContactPerson)col2[0]).Surname);
-            Assert.AreEqual("abcd", ((ContactPerson)col2[1]).Surname);
+            Assert.AreEqual("abc", ((ContactPersonTestBO)col2[0]).Surname);
+            Assert.AreEqual("abcd", ((ContactPersonTestBO)col2[1]).Surname);
 
-            col = BOLoader.Instance.GetBusinessObjectCol<ContactPerson>("FirstName = aaaa", "Surname");
+            col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aaaa", "Surname");
             Assert.AreEqual(0, col.Count);
         }
 
@@ -100,10 +100,10 @@ namespace Habanero.Test.BO
         public void TestGetBusinessObjectByIDGuid()
         {
             ClassDef.ClassDefs.Clear();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPerson cp1 = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
-            ContactPerson cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(cp1.ContactPersonID);
+            ContactPersonTestBO cp1 = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
+            ContactPersonTestBO cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cp1.ContactPersonID);
             Assert.AreEqual(cp1, cp2);
         }
 
@@ -125,15 +125,15 @@ namespace Habanero.Test.BO
         public void TestGetBusinessObjectByIDString()
         {
             ClassDef.ClassDefs.Clear();
-            ContactPerson.LoadClassDefWithSurnameAsPrimaryKey();
+            ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey();
 
-            ContactPerson cp1 = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
-            ContactPerson cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(cp1.Surname);
+            ContactPersonTestBO cp1 = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
+            ContactPersonTestBO cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cp1.Surname);
             Assert.AreEqual(cp1, cp2);
 
             cp1.Surname = "a b";
             cp1.Save();
-            cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>("a b");
+            cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>("a b");
             Assert.AreEqual(cp1, cp2);
             cp1.Surname = "abc";
             cp1.Save();
@@ -143,10 +143,10 @@ namespace Habanero.Test.BO
         public void TestGetBusinessObjectByIDPrimaryKey()
         {
             ClassDef.ClassDefs.Clear();
-            ContactPerson.LoadClassDefWithCompositePrimaryKey();
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
             
-            ContactPerson cp1 = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
-            ContactPerson cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(cp1.PrimaryKey);
+            ContactPersonTestBO cp1 = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
+            ContactPersonTestBO cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cp1.PrimaryKey);
             Assert.AreEqual(cp1, cp2);
         }
 
@@ -164,9 +164,9 @@ namespace Habanero.Test.BO
         public void TestLoadMethod()
         {
             ClassDef.ClassDefs.Clear();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPerson cp1 = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            ContactPersonTestBO cp1 = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
             cp1.Surname = "def";
             BOLoader.Instance.Load(cp1, new Parameter("Surname = abc"));
             Assert.AreEqual("abc", cp1.Surname);
@@ -176,9 +176,9 @@ namespace Habanero.Test.BO
         public void TestSetDatabaseConnection()
         {
             ClassDef.ClassDefs.Clear();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
             Assert.IsNotNull(cp.GetDatabaseConnection());
             BOLoader.Instance.SetDatabaseConnection(cp, null);
             Assert.IsNull(cp.GetDatabaseConnection());

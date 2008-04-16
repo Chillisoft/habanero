@@ -30,7 +30,7 @@ namespace Habanero.BO
     /// </summary>
     public class RelationshipCol : IRelationshipCol
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipCol");
+      //  private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipCol");
         private BusinessObject _bo;
         private Dictionary<string, Relationship> _relationships;
 
@@ -88,7 +88,7 @@ namespace Habanero.BO
                 {
                     throw new RelationshipNotFoundException("The relationship " + relationshipName +
                                                             " was not found on a BusinessObject of type " +
-                                                            this._bo.GetType().ToString());
+                                                            this._bo.GetType());
                 }
                 return _relationships[relationshipName];
             }
@@ -124,7 +124,7 @@ namespace Habanero.BO
 		/// <exception cref="InvalidRelationshipAccessException">Thrown if
 		/// the relationship specified is a multiple relationship, when a
 		/// single one was expected</exception>
-    	public T GetRelatedObject<T>(string relationshipName) where T : BusinessObject, new()
+    	public T GetRelatedObject<T>(string relationshipName) where T : BusinessObject
     	{
 			ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
 			Relationship relationship = this[relationshipName];
@@ -178,7 +178,7 @@ namespace Habanero.BO
         /// the relationship specified is a single relationship, when a
         /// multiple one was expected</exception>
         public BusinessObjectCollection<T> GetRelatedCollection<T>(string relationshipName)
-			where T: BusinessObject, new()
+			where T: BusinessObject
 		{
     	    MultipleRelationship multipleRelationship = GetMultipleRelationship(relationshipName);
     	    return multipleRelationship.GetRelatedBusinessObjectCol<T>();
@@ -242,5 +242,6 @@ namespace Habanero.BO
     	}
 
     	#endregion
+
     }
 }

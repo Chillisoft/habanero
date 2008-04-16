@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -71,6 +72,59 @@ namespace Habanero.Test.BO.ClassDefinition
             {
                 return Contains(propDef);
             }
+        }
+
+        [Test]
+        public void TestClonePropDefCol()
+        {
+            ClassDef originalClassDef = LoadClassDef();
+            PropDefCol newPropDefCol = originalClassDef.PropDefcol.Clone();
+            Assert.AreNotSame(newPropDefCol, originalClassDef.PropDefcol);
+            Assert.AreEqual(newPropDefCol, originalClassDef.PropDefcol);
+        }
+
+        [Test]
+        public void TestEqualsNull()
+        {
+            PropDefCol propDefCol1 = new PropDefCol();
+            PropDefCol propDefCol2 = null;
+            Assert.AreNotEqual(propDefCol1, propDefCol2);
+        }
+
+        [Test]
+        public void TestEquals()
+        {
+            PropDefCol propDefCol1 = new PropDefCol();
+            PropDef def = new PropDef("bob", typeof (string), PropReadWriteRule.ReadOnly, null);
+            propDefCol1.Add(def);
+            PropDefCol propDefCol2 = new PropDefCol();
+            propDefCol2.Add(def);
+            Assert.AreEqual(propDefCol1, propDefCol2);
+        }
+
+        [Test]
+        public void TestEqualsDifferentType()
+        {
+            PropDefCol propDefCol1 = new PropDefCol();
+            Assert.AreNotEqual(propDefCol1, "bob");
+        }
+
+        public static ClassDef LoadClassDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef def =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" />
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" />
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+				</class>
+			");
+            return def;
         }
     }
 }

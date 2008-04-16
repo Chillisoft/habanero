@@ -631,7 +631,7 @@ namespace Habanero.DB
             {
                 log.Error("Error writing to database : " + Environment.NewLine +
                           ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + sql.ToString());
+                log.Error("Sql: " + sql);
                 if (!inTransaction && transaction != null)
                 {
                     transaction.Rollback();

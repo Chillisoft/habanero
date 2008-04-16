@@ -74,6 +74,14 @@ namespace Habanero.Test
             }
         }
 
+        public BusinessObjectCollection<MyRelatedBo> MyMultipleRelationship
+        {
+            get
+            {
+                return this.Relationships.GetRelatedCollection<MyRelatedBo>("MyMultipleRelationship");
+            }
+        } 
+
         public static ClassDef LoadDefaultClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -430,7 +438,7 @@ namespace Habanero.Test
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" type=""Guid"" >
-						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.BO"" "
+						<businessObjectLookupList class=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" "
                     + (String.IsNullOrEmpty(boLookupCriteria) ? "" : String.Format(@"criteria=""{0}"" ", ConvertToXmlString(boLookupCriteria, XmlNodeType.Attribute)))
                     + @"/>
 					</property>
@@ -526,7 +534,7 @@ namespace Habanero.Test
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" >
-						<businessObjectLookupList class=""ContactPerson"" assembly=""Habanero.Test.BO"" />
+						<businessObjectLookupList class=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" />
 					</property>
 					<primaryKey>
 						<prop name=""MyBoID"" />
@@ -655,21 +663,38 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
+        public MyBO MyRelationship
+        {
+            get
+            {
+                return this.Relationships.GetRelatedObject<MyBO>("MyRelationship");
+            }
+        }
+
+        public Guid? MyBoID
+        {
+            get { return (Guid?) this.GetPropertyValue("MyBoID"); }
+        }
+
         public static ClassDef LoadClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyRelatedBo"" assembly=""Habanero.Test"">
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
 					<property  name=""MyRelatedBoID"" />
 					<property  name=""MyRelatedTestProp"" />
 					<property  name=""MyBoID"" />
 					<primaryKey>
 						<prop name=""MyRelatedBoID"" />
 					</primaryKey>
+					<relationship name=""MyRelationship"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
 				</class>
 			");
+            ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
 
@@ -690,6 +715,7 @@ namespace Habanero.Test
 					</primaryKey>
 				</class>
 			");
+            ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
     }

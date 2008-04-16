@@ -42,8 +42,8 @@ namespace Habanero.BO
     /// inherit from BusinessObject.
     /// </summary>
 	public class BusinessObjectCollection<TBusinessObject> 
-        : List<TBusinessObject>, IEnumerable<TBusinessObject>, IBusinessObjectCollection  
-		where TBusinessObject : BusinessObject, new()
+        : List<TBusinessObject>, IBusinessObjectCollection  
+		where TBusinessObject : BusinessObject
     {
         private ClassDef _boClassDef;
         private IExpression _criteriaExpression;
@@ -584,17 +584,18 @@ namespace Habanero.BO
         public new void RemoveAt(int index)
         {
             TBusinessObject boToRemove = this[index];
-            base.RemoveAt(index);
-			_lookupTable.Remove(boToRemove.ID.ToString());
-			boToRemove.Deleted -= BusinessObjectDeletedHandler;
-            this.FireBusinessObjectRemoved(boToRemove);
+            Remove(boToRemove);
+            //base.RemoveAt(index);
+            //_lookupTable.Remove(boToRemove.ID.ToString());
+            //boToRemove.Deleted -= BusinessObjectDeletedHandler;
+            //this.FireBusinessObjectRemoved(boToRemove);
         }
 
         /// <summary>
         /// Removes the specified business object from the collection
         /// </summary>
         /// <param name="bo">The business object to remove</param>
-        public new bool Remove(TBusinessObject bo)
+        public new virtual bool Remove(TBusinessObject bo)
         {
 			bool removed = base.Remove(bo);
             _lookupTable.Remove(bo.ID.ToString());
@@ -810,7 +811,7 @@ namespace Habanero.BO
 		/// </summary>
 		/// <returns>Returns the cloned copy</returns>
 		public BusinessObjectCollection<DestType> Clone<DestType>()
-			where DestType : BusinessObject, new()
+			where DestType : BusinessObject
 		{
 			BusinessObjectCollection<DestType> clonedCol = new BusinessObjectCollection<DestType>(_boClassDef);
 			if (!typeof(DestType).IsSubclassOf(typeof(TBusinessObject)) &&
@@ -921,19 +922,28 @@ namespace Habanero.BO
         /// Commits to the database all the business objects that are either
         /// new or have been altered since the last committal
         /// </summary>
-        public void SaveAll()
+        public virtual void SaveAll()
         {
-            Transaction t = new Transaction(DatabaseConnection.CurrentConnection);
+            Transaction transaction = new Transaction(DatabaseConnection.CurrentConnection);
+            SaveAllInTransaction(transaction);
+		}
+
+        protected virtual void SaveAllInTransaction(ITransactionCommitter transaction)
+        {
             foreach (TBusinessObject bo in this)
             {
                 if (bo.State.IsDirty || bo.State.IsNew)
                 {
-                    t.AddTransactionObject(bo);
+                    transaction.AddTransactionObject(bo);
                 }
             }
-            t.CommitTransaction();
-		}
-
+            foreach (TBusinessObject bo in this._createdBusinessObjects)
+            {
+                transaction.AddTransactionObject(bo);
+            }
+            transaction.CommitTransaction();
+            _createdBusinessObjects.Clear();
+        }
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
@@ -1097,6 +1107,8 @@ namespace Habanero.BO
             get { return _createdBusinessObjects; }
         }
 
+
+
         #endregion
 
         /// <summary>
@@ -1105,9 +1117,9 @@ namespace Habanero.BO
         /// be added to the actual bo collection.
         /// </summary>
         /// <returns></returns>
-        public TBusinessObject CreateBusinessObject()
+        public virtual TBusinessObject CreateBusinessObject()
         {
-            TBusinessObject newBO = new TBusinessObject();
+            TBusinessObject newBO = (TBusinessObject) Activator.CreateInstance(typeof(TBusinessObject));
             newBO.Saved += delegate(object sender, BOEventArgs e)
                                {
                                    _createdBusinessObjects.Remove((TBusinessObject)e.BusinessObject);

@@ -26,7 +26,7 @@ namespace Habanero.BO.Comparer
     /// Compares two business objects on the Guid property specified 
     /// in the constructor
     /// </summary>
-    public class GuidComparer<T> : IComparer<T> where T: BusinessObject, new()
+    public class GuidComparer<T> : IComparer<T> where T: BusinessObject
     {
         private readonly string _propName;
 

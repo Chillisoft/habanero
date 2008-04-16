@@ -42,7 +42,7 @@ namespace Habanero.Test.BO
         [TearDown]
         public void TearDown()
         {
-            ContactPerson.DeleteAllContactPeople();
+            ContactPersonTestBO.DeleteAllContactPeople();
         }
 
         [Test]
@@ -90,12 +90,12 @@ namespace Habanero.Test.BO
         [Test]
         public void TestGetPropertyValueToDisplayWithBOLookupList()
         {
-            ContactPerson.CreateSampleData();
+            ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithBOLookup();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);
             Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
@@ -105,12 +105,12 @@ namespace Habanero.Test.BO
         [Test]
         public void TestBOLookupListWithString()
         {
-            ContactPerson.CreateSampleData();
+            ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPerson cp = BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "abc");
             Assert.AreEqual(cp.ID.ToString(), bo.GetPropertyValue("TestProp2"));
@@ -120,12 +120,12 @@ namespace Habanero.Test.BO
         [Test]
         public void TestBOLookupListNull()
         {
-            ContactPerson.CreateSampleData();
+            ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
 
-            BOLoader.Instance.GetBusinessObject<ContactPerson>("Surname = abc");
+            BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", null);
             Assert.AreEqual(null, bo.GetPropertyValue("TestProp2"));

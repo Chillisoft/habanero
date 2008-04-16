@@ -170,6 +170,11 @@ namespace Habanero.Test
             set { SetPropertyValue("AddressLine4", value); }
         }
 
+        public ContactPerson ContactPerson
+        {
+            get { return this.Relationships.GetRelatedObject<ContactPerson>("ContactPerson"); }
+        }
+
         #endregion //Properties
 
         #region Relationships

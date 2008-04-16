@@ -32,7 +32,7 @@ namespace Habanero.BO.ClassDefinition
     {
         private static ClassDefCol _classDefcol;
         private static bool _instanceFlag = false;
-        private Dictionary<string, ClassDef> _classDefs;
+        private Dictionary<string, ClassDef> _classDefs;   
 
 		/// <summary>
 		/// Initialises an empty collection
@@ -320,7 +320,7 @@ namespace Habanero.BO.ClassDefinition
     	///<param name="className">The class's name</param>
     	///<returns>A string representing the Class Type.</returns>
 		///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
-		internal static string GetTypeId(string assemblyName, string className, bool includeNamespace)
+		private static string GetTypeId(string assemblyName, string className, bool includeNamespace)
     	{
     		string namespaceString;
     		className = StripOutNameSpace(className, out namespaceString);
@@ -342,7 +342,7 @@ namespace Habanero.BO.ClassDefinition
     	///<param name="classType">The class's Type object.</param>
     	///<returns>A string representing the Class Type.</returns>
 		///<param name="includeNamespace">Should the TypeId include the namespace or not</param>
-    	internal static string GetTypeId(Type classType, bool includeNamespace)
+    	private static string GetTypeId(Type classType, bool includeNamespace)
     	{
     		if (includeNamespace)
 				return GetTypeId(classType.Assembly.ManifestModule.ScopeName, classType.FullName, includeNamespace);
@@ -395,6 +395,8 @@ namespace Habanero.BO.ClassDefinition
     	}
 
     	#endregion
+
+ 
     }
 
     #region "self Tests"

@@ -26,7 +26,7 @@ namespace Habanero.BO.Comparer
     /// in the constructor
     /// </summary>
 	public class DoubleComparer<T> : PropertyComparer<T, Double>
-		where T: BusinessObject, new()
+		where T: BusinessObject
 	{
 
 		/// <summary>

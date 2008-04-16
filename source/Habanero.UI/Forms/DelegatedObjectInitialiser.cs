@@ -29,7 +29,7 @@ namespace Habanero.UI.Forms
     /// execute the corresponding supplied delegate.
     ///</summary>
     public class DelegatedObjectInitialiser<T> : IObjectInitialiser
-        where T: BusinessObject, new()
+        where T: BusinessObject
     {
         /// <summary>
         /// A delegate that contains the same parameters as the InitialiseObject method.
@@ -43,8 +43,8 @@ namespace Habanero.UI.Forms
         /// <param name="row">The DataRow object to initialise</param>
         public delegate void InitialiseDataRowDelegate(DataRow row);
 
-        private InitialiseObjectDelegate _initialiseObjectDelegate;
-        private InitialiseDataRowDelegate _initialiseDataRowDelegate;
+        private readonly InitialiseObjectDelegate _initialiseObjectDelegate;
+        private readonly InitialiseDataRowDelegate _initialiseDataRowDelegate;
 
 
         /// <summary>

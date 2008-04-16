@@ -46,7 +46,24 @@ namespace Habanero.BO
         {
         }
 
-		/// <summary>
+        ///<summary>
+        /// Returns the business object that owns this relationship e.g. Invoice has many lines
+        /// the owning BO would be invoice.
+        ///</summary>
+        public BusinessObject OwningBO
+        {
+            get { return _owningBo; }
+        }
+
+        ///<summary>
+        /// 
+        ///</summary>
+        public string OrderBy
+        {
+            get { return ((MultipleRelationshipDef) _relDef).OrderBy; }
+        }
+
+        /// <summary>
 		/// Returns the set of business objects that relate to this one
 		/// through the specific relationship
 		/// </summary>
@@ -62,15 +79,21 @@ namespace Habanero.BO
     	/// </summary>
     	/// <returns>Returns a collection of business objects</returns>
 		public virtual BusinessObjectCollection<T> GetRelatedBusinessObjectCol<T>()
-    		where T : BusinessObject, new()
+    		where T : BusinessObject
         {
     	    IBusinessObjectCollection boCol = GetRelatedBusinessObjectColInternal<T>(true);
     	    return (BusinessObjectCollection<T>)boCol;
         }
 
         private IBusinessObjectCollection GetRelatedBusinessObjectColInternal<T>(bool useGenericParameter) 
-    		where T : BusinessObject, new()
+    		where T : BusinessObject
         {
+            if(_boCol != null)
+            {
+                BOLoader.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
+                return _boCol;
+            }
+
             Type type = _relDef.RelatedObjectClassType;
             Type collectionItemType;
             if(useGenericParameter)
@@ -80,6 +103,7 @@ namespace Habanero.BO
             {
                 collectionItemType = type;
             }
+            //Check that the type can be created and raise appropriate error 
             try
             {
                 Activator.CreateInstance(type, true);
@@ -104,22 +128,16 @@ namespace Habanero.BO
             IBusinessObjectCollection boCol;
             if (useGenericParameter)
             {
-                boCol = BOLoader.Instance.GetBusinessObjectCol<T>(
-                    _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
+                boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<T>(this);
+                   // _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
             } else
             {
-                boCol = BOLoader.Instance.GetBusinessObjectCol(type, 
-                    _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
+                boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection(type, this); 
+                   // _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
             }
 
             if (_relDef.KeepReferenceToRelatedObject)
             {
-                //// TODO - Add a check to see if the count of objects has changed.  Removed this keep reference because if an object
-                //// gets added with the foreign key nothing will pick that up other than a reload.
-                ////if (_boCol == null) {
-                //_boCol = BOLoader.Instance.GetBusinessObjectCol(busObj.GetType(), _relKey.RelationshipExpression(),
-                ////                                     ((MultipleRelationshipDef) _relDef).OrderBy);
-                ////}
                 _boCol = boCol;
             }
             return boCol;

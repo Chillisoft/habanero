@@ -71,7 +71,7 @@ namespace Habanero.Util
         public string SmtpServerHost
         {
             get { return _smtpServerHost; }
-            set{ _smtpServerHost = value;}
+            set { _smtpServerHost = value; }
         }
 
         ///<summary>
@@ -83,13 +83,47 @@ namespace Habanero.Util
             set { _smtpServerPort = value; }
         }
 
+        ///<summary>
+        /// Gets the List of Email Addresses used for SMTP Transactions.
+        ///</summary>
+        public IList toAddresses
+        {
+            get { return _toAddresses; }
+        }
+        ///<summary>
+        /// Gets the List of Subject associated with the Email.
+        ///</summary>
+        public string Subject
+        {
+            get { return _subject; }
+        }
+
+        ///<summary>
+        /// Gets the File Attachment Path used for SMTP Transactions.
+        ///</summary>
+        //TODO: cater for multiple attachments currently it does not make 
+        //      sense to return an IList of the Attachment paths as there 
+        //      can only be one attachment, however this will change when 
+        //      the system caters for multiple attachments
+        public string Attachment
+        {
+            get
+            {
+                if (_attachmentPaths.Count != 0)
+                {
+                    return _attachmentPaths[0] as string;
+                }
+                return "";
+            }
+        }
+
         /// <summary>
         /// Sends the email message using the "SmtpServer" setting in the
         /// configuration
         /// </summary>
         public void Send()
         {
-            DoSend(null, null,null);
+            DoSend(null, null, null);
         }
 
         /// <summary>
@@ -100,7 +134,7 @@ namespace Habanero.Util
         /// <param name="password">The password used for authentification</param>
         public void SendAuthenticated(string username, string password)
         {
-            DoSend(username, password,null);
+            DoSend(username, password, null);
         }
 
         /// <summary>
@@ -156,13 +190,14 @@ namespace Habanero.Util
             smtpServer.Port = _smtpServerPort;
             if (authUsername != null && authPassword != null)
             {
-                NetworkCredential auth = new NetworkCredential(authUsername,authPassword);
+                NetworkCredential auth = new NetworkCredential(authUsername, authPassword);
                 if (authDomain != null)
                 {
                     auth.Domain = authDomain;
                 }
                 smtpServer.Credentials = auth;
-            } else
+            }
+            else
             {
                 smtpServer.UseDefaultCredentials = true;
             }
@@ -173,7 +208,10 @@ namespace Habanero.Util
         {
             foreach (object toAddress in addressList)
             {
-                addToCol.Add(new MailAddress(toAddress.ToString()));
+                if (toAddress != null)
+                {
+                    addToCol.Add(new MailAddress(toAddress.ToString()));
+                }
             }
         }
     }

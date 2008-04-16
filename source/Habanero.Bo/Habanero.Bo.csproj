@@ -312,6 +312,7 @@
     <Compile Include="PropRuleString.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RelatedBusinessObjectCollection.cs" />
     <Compile Include="Relationship.cs">
       <SubType>Code</SubType>
     </Compile>

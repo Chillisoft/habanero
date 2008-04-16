@@ -75,7 +75,7 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise a new business object
         /// </summary>
-        public BusinessObject() : this((IDatabaseConnection)null)
+        public  BusinessObject() : this((IDatabaseConnection)null)
         {
         }
 
@@ -127,6 +127,7 @@ namespace Habanero.BO
                     currentClassDef = currentClassDef.SuperClassClassDef;
                 }
             }
+
             AddToLoadedBusinessObjectCol(this);
         }
 

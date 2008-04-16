@@ -62,7 +62,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestRemove()
         {
-            ClassDef classDef = new ClassDef(typeof(String), null, null, null, null, null);
+            ClassDef classDef = new ClassDef(typeof(String), null, null, null, null, null,null);
             ClassDefCol col = new ClassDefCol();
             
             col.Add(classDef);
@@ -85,7 +85,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestNullClassNamespace()
         {
-            string nameSpace = "bob";
+            string nameSpace;
             ClassDefCol.StripOutNameSpace(null, out nameSpace);
             Assert.IsNull(nameSpace);
         }
@@ -97,5 +97,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 Finalize();
             }
         }
+
+
     }
 }

@@ -292,7 +292,7 @@ namespace Habanero.BO
         /// <param name="criteria">The search criteria</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
-        public T GetBusinessObject<T>(string criteria) where T: BusinessObject, new()
+        public T GetBusinessObject<T>(string criteria) where T: BusinessObject
         {
             return GetBusinessObject<T>(null, criteria);
         }
@@ -326,7 +326,7 @@ namespace Habanero.BO
         }
 
         //TODO:Peter - make a better load that doesn't use a bo col.
-        private static T GetBusinessObject<T>(ClassDef classDef, string criteria) where T: BusinessObject, new()
+        private static T GetBusinessObject<T>(ClassDef classDef, string criteria) where T: BusinessObject
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>(classDef);
             if (classDef == null)
@@ -424,7 +424,7 @@ namespace Habanero.BO
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
         public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, string orderByClause) 
-            where T:BusinessObject, new()
+            where T:BusinessObject
         {
             return GetBusinessObjectCollection<T>(null, searchCriteria, orderByClause);
         }
@@ -463,12 +463,12 @@ namespace Habanero.BO
 		/// <param name="orderByClause">The order-by clause</param>
 		/// <returns>Returns a business object collection</returns>
 		public BusinessObjectCollection<T> GetBusinessObjectCol<T>(IExpression searchExpression, string orderByClause)
-			where T: BusinessObject, new()
+			where T: BusinessObject
 		{
             return GetBusinessObjectCollection<T>(searchExpression, null, orderByClause);
 		}
 
-		/// <summary>
+        /// <summary>
 		/// Returns a business object collection with objects that meet the
 		/// given search expression, ordered as specified
 		/// </summary>
@@ -495,9 +495,15 @@ namespace Habanero.BO
         }
 
         private static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(IExpression searchExpression, string searchCriteria, string orderByClause)
-            where T: BusinessObject, new()
+            where T: BusinessObject
         {
             BusinessObjectCollection<T> businessObjectCollection = new BusinessObjectCollection<T>();
+            LoadBusinessObjectCollection(searchExpression, businessObjectCollection, orderByClause, searchCriteria);
+            return businessObjectCollection;
+        }
+
+        internal static void LoadBusinessObjectCollection(IExpression searchExpression, IBusinessObjectCollection businessObjectCollection, string orderByClause, string searchCriteria)
+        {
             if (searchExpression != null)
             {
                 businessObjectCollection.Load(searchExpression, orderByClause);
@@ -505,21 +511,29 @@ namespace Habanero.BO
             {
                 businessObjectCollection.Load(searchCriteria, orderByClause);
             }
-            return businessObjectCollection;
         }
 
         private static IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef, IExpression searchExpression, string searchCriteria, string orderByClause)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             IBusinessObjectCollection businessObjectCollection = CreateBusinessObjectCollection(classDef);
-            if (searchExpression != null)
-            {
-                businessObjectCollection.Load(searchExpression, orderByClause);
-            }
-            else
-            {
-                businessObjectCollection.Load(searchCriteria, orderByClause);
-            }
+            LoadBusinessObjectCollection(searchExpression, businessObjectCollection, orderByClause, searchCriteria);
+            return businessObjectCollection;
+        }
+
+        internal IBusinessObjectCollection GetRelatedBusinessObjectCollection<T>(MultipleRelationship relationship)
+            where T : BusinessObject
+        {
+            IBusinessObjectCollection businessObjectCollection = new RelatedBusinessObjectCollection<T>(relationship);
+            LoadBusinessObjectCollection(relationship._relKey.RelationshipExpression(), businessObjectCollection, relationship.OrderBy, "");
+            return businessObjectCollection;
+        }
+
+        internal IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type boType, MultipleRelationship relationship)
+        {
+            IBusinessObjectCollection businessObjectCollection =
+                CreateRelatedBusinessObjectCollection(boType, relationship);
+            LoadBusinessObjectCollection(relationship._relKey.RelationshipExpression(), businessObjectCollection, relationship.OrderBy, "");
             return businessObjectCollection;
         }
 
@@ -537,6 +551,20 @@ namespace Habanero.BO
             Type type = typeof(BusinessObjectCollection<>);
             type = type.MakeGenericType(classDef.ClassType);
             return (IBusinessObjectCollection)Activator.CreateInstance(type, classDef);
+        }
+
+        ///<summary>
+        /// Creates a RelatedBusinessObjectCollection.
+        ///</summary>
+        /// <param name="boType">The type of BO to make a generic collection of</param>
+        /// <param name="relationship">The multiple relationship this collection is for</param>
+        ///<returns> A BusinessObjectCollection of the correct type. </returns>
+        private static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType, MultipleRelationship relationship)
+        {
+
+            Type type = typeof(RelatedBusinessObjectCollection<>);
+            type = type.MakeGenericType(boType);
+            return (IBusinessObjectCollection)Activator.CreateInstance(type, relationship);
         }
 
         
@@ -604,7 +632,7 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
         public T GetBusinessObjectByID<T>(Guid id) 
-            where T: BusinessObject, new()
+            where T: BusinessObject
         {
             return GetBusinessObjectByID<T>(id.ToString("B"));
         }
@@ -617,7 +645,7 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
         public T GetBusinessObjectByID<T>(int id) 
-            where T: BusinessObject, new()
+            where T: BusinessObject
         {
             return GetBusinessObjectByID<T>(id.ToString());
         }
@@ -630,7 +658,7 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
         public T GetBusinessObjectByID<T>(string id) 
-            where T: BusinessObject, new()
+            where T: BusinessObject
         {
             return GetBusinessObjectByID<T>(null, id);
         }
@@ -643,7 +671,7 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObjectByID<T>(BOPrimaryKey primaryKey)
-            where T: BusinessObject, new()
+            where T: BusinessObject
         {
             return GetBusinessObjectByID<T>(null, primaryKey);
         }
@@ -765,7 +793,7 @@ namespace Habanero.BO
         #region Private Methods
 
         private static T GetBusinessObjectByID<T>(ClassDef classDef, string id) 
-            where T: BusinessObject, new()
+            where T: BusinessObject
         {
             if (classDef == null)
             {
@@ -787,7 +815,7 @@ namespace Habanero.BO
         }        
         
         private static T GetBusinessObjectByID<T>(ClassDef classDef, BOPrimaryKey primaryKey)
-            where T: BusinessObject, new()
+            where T: BusinessObject
         {
             if (classDef == null)
             {

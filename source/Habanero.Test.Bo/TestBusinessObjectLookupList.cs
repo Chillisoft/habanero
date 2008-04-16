@@ -41,34 +41,34 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetupTest()
         {
-            ContactPerson.DeleteAllContactPeople();
-            ContactPerson.ClearLoadedBusinessObjectBaseCol();
-            ContactPerson.CreateSampleData();
-            ContactPerson.LoadDefaultClassDef();
+            ContactPersonTestBO.DeleteAllContactPeople();
+            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
+            ContactPersonTestBO.CreateSampleData();
+            ContactPersonTestBO.LoadDefaultClassDef();
         }
 
         [TestFixtureTearDown]
         public void TearDown()
         {
-            ContactPerson.DeleteAllContactPeople();
+            ContactPersonTestBO.DeleteAllContactPeople();
         }
 
         [Test]
         public void TestGetLookupList() 
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof (ContactPerson));
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof (ContactPersonTestBO));
 
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(3, col.Count);
             foreach (object o in col.Values) {
-                Assert.AreSame(typeof(ContactPerson), o.GetType());
+                Assert.AreSame(typeof(ContactPersonTestBO), o.GetType());
             }
         }
 
         [Test]
         public void TestCallingGetLookupListTwiceOnlyAccessesDbOnce()
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPerson));
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Dictionary<string, object> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreSame(col2, col);
@@ -77,7 +77,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestTimeout()
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPerson), 100);
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPersonTestBO), 100);
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Thread.Sleep(250);
             Dictionary<string, object> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);
@@ -88,7 +88,7 @@ namespace Habanero.Test.BO
         public void TestCriteria()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "surname='zzz'", "");
+                "ContactPersonTestBO", "surname='zzz'", "");
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
         }
@@ -96,19 +96,19 @@ namespace Habanero.Test.BO
         [Test]
         public void TestTodayDateStringCriteria()
         {
-            ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection<ContactPerson> myCol = new BusinessObjectCollection<ContactPerson>();
+            ContactPersonTestBO.DeleteAllContactPeople();
+            BusinessObjectCollection<ContactPersonTestBO> myCol = new BusinessObjectCollection<ContactPersonTestBO>();
             myCol.LoadAll();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson contactPerson1 = new ContactPerson();
+            ContactPersonTestBO contactPerson1 = new ContactPersonTestBO();
             contactPerson1.Surname = "aaa";
             contactPerson1.DateOfBirth = DateTime.Today.AddDays(-1);
             contactPerson1.Save();
-            ContactPerson contactPerson2 = new ContactPerson();
+            ContactPersonTestBO contactPerson2 = new ContactPersonTestBO();
             contactPerson2.Surname = "bbb";
             contactPerson2.DateOfBirth = DateTime.Today;
             contactPerson2.Save();
-            ContactPerson contactPerson3 = new ContactPerson();
+            ContactPersonTestBO contactPerson3 = new ContactPersonTestBO();
             contactPerson3.Surname = "ccc";
             contactPerson3.DateOfBirth = DateTime.Today.AddDays(1);
             contactPerson3.Save();
@@ -116,19 +116,19 @@ namespace Habanero.Test.BO
             BusinessObjectLookupList businessObjectLookupList;
             Dictionary<string, object> col;
 
-            //ContactPerson.ClearContactPersonCol();
+            //ContactPersonTestBO.ClearContactPersonCol();
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "DateOfBirth < 'Today'", "");
+                "ContactPersonTestBO", "DateOfBirth < 'Today'", "");
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
             Assert.IsTrue(col.ContainsValue(contactPerson1));
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "DateOfBirth = 'today'", "");
+                "ContactPersonTestBO", "DateOfBirth = 'today'", "");
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
             Assert.IsTrue(col.ContainsValue(contactPerson2));
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "DateOfBirth >= TODAY", "");
+                "ContactPersonTestBO", "DateOfBirth >= TODAY", "");
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(2, col.Count);
             Assert.IsTrue(col.ContainsValue(contactPerson2));
@@ -138,19 +138,19 @@ namespace Habanero.Test.BO
         [Test]
         public void TestNowDateStringCriteria()
         {
-            ContactPerson.DeleteAllContactPeople();
-            BusinessObjectCollection<ContactPerson> myCol = new BusinessObjectCollection<ContactPerson>();
+            ContactPersonTestBO.DeleteAllContactPeople();
+            BusinessObjectCollection<ContactPersonTestBO> myCol = new BusinessObjectCollection<ContactPersonTestBO>();
             myCol.LoadAll();
             Assert.AreEqual(myCol.Count, 0);
-            ContactPerson contactPerson1 = new ContactPerson();
+            ContactPersonTestBO contactPerson1 = new ContactPersonTestBO();
             contactPerson1.Surname = "aaa";
             contactPerson1.DateOfBirth = DateTime.Now.AddMinutes(-1);
             contactPerson1.Save();
-            ContactPerson contactPerson2 = new ContactPerson();
+            ContactPersonTestBO contactPerson2 = new ContactPersonTestBO();
             contactPerson2.Surname = "bbb";
             contactPerson2.DateOfBirth = DateTime.Now.AddMinutes(-1);
             contactPerson2.Save();
-            ContactPerson contactPerson3 = new ContactPerson();
+            ContactPersonTestBO contactPerson3 = new ContactPersonTestBO();
             contactPerson3.Surname = "ccc";
             contactPerson3.DateOfBirth = DateTime.Now.AddMinutes(-1);
             contactPerson3.Save();
@@ -158,24 +158,24 @@ namespace Habanero.Test.BO
             BusinessObjectLookupList businessObjectLookupList;
             Dictionary<string, object> col;
 
-            //ContactPerson.ClearContactPersonCol();
+            //ContactPersonTestBO.ClearContactPersonCol();
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "DateOfBirth < 'Now'", "");
+                "ContactPersonTestBO", "DateOfBirth < 'Now'", "");
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(3, col.Count);
             Assert.IsTrue(col.ContainsValue(contactPerson1));
             Assert.IsTrue(col.ContainsValue(contactPerson2));
             Assert.IsTrue(col.ContainsValue(contactPerson3));
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "DateOfBirth > 'now'", "");
+                "ContactPersonTestBO", "DateOfBirth > 'now'", "");
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(0, col.Count);
-            ContactPerson contactPerson4 = new ContactPerson();
+            ContactPersonTestBO contactPerson4 = new ContactPersonTestBO();
             contactPerson4.Surname = "ddd";
             contactPerson4.DateOfBirth = DateTime.Now.AddMinutes(5);
             contactPerson4.Save();
             businessObjectLookupList = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "DateOfBirth > NOW", "");
+                "ContactPersonTestBO", "DateOfBirth > NOW", "");
             col = businessObjectLookupList.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreEqual(1, col.Count);
             Assert.IsTrue(col.ContainsValue(contactPerson4));
@@ -184,11 +184,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestSortAttribute()
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPerson));
+            BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPersonTestBO));
             Assert.IsNull(source.Sort);
 
             source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "", "surname");
+                "ContactPersonTestBO", "", "surname");
             Assert.AreEqual("surname", source.Sort);
 
             source.Sort = "surname asc";
@@ -199,14 +199,14 @@ namespace Habanero.Test.BO
         public void TestSortInvalidProperty()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "", "invalidprop");
+                "ContactPersonTestBO", "", "invalidprop");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestSortInvalidDirection()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "", "surname invalidorder");
+                "ContactPersonTestBO", "", "surname invalidorder");
         }
 
         //  This test is excluded because the sort attribute is checked in the middle of
@@ -223,7 +223,7 @@ namespace Habanero.Test.BO
         public void TestSortingByDefault()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson");
+                "ContactPersonTestBO");
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             ArrayList items = new ArrayList(col.Values);
 
@@ -237,7 +237,7 @@ namespace Habanero.Test.BO
         public void TestSortingCollection()
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "", "surname");
+                "ContactPersonTestBO", "", "surname");
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             ArrayList items = new ArrayList(col.Values);
             
@@ -247,7 +247,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("zzz", items[2].ToString());
 
             source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "", "surname asc");
+                "ContactPersonTestBO", "", "surname asc");
             col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             items = new ArrayList(col.Values);
 
@@ -257,7 +257,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("zzz", items[2].ToString());
 
             source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "", "surname desc");
+                "ContactPersonTestBO", "", "surname desc");
             col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             items = new ArrayList(col.Values);
 
@@ -267,7 +267,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("abc", items[2].ToString());
 
             source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPerson", "", "surname des");
+                "ContactPersonTestBO", "", "surname des");
             col = source.GetLookupList(DatabaseConnection.CurrentConnection);
             items = new ArrayList(col.Values);
 

@@ -93,7 +93,7 @@ namespace Habanero.Test.BO
             MyBO bo1 = new MyBO();
             string criteria = "TestProp = 'Test' and MyUnknownRelationship.MyRelatedTestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
-            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+            BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
                 bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
         }
 
@@ -109,7 +109,7 @@ namespace Habanero.Test.BO
             MyBO bo1 = new MyBO();
             string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
-            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+            BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
                 bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
         }
 
@@ -118,7 +118,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithRelationship();
-            ClassDef.ClassDefs.Add(MyRelatedBo.LoadClassDef());
+            MyRelatedBo.LoadClassDef();
             MyBO bo1 = new MyBO();
             string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
@@ -135,7 +135,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithRelationship();
-            ClassDef.ClassDefs.Add(MyRelatedBo.LoadClassDefWithSingleTableInheritance());
+            MyRelatedBo.LoadClassDefWithSingleTableInheritance();
             MyBO bo1 = new MyBO();
             string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
@@ -152,7 +152,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithRelationship();
-            ClassDef.ClassDefs.Add(MyRelatedBo.LoadClassDefWithSingleTableInheritance());
+            MyRelatedBo.LoadClassDefWithSingleTableInheritance();
             MyBO bo1 = new MyBO();
             string criteria = "TestProp = 'Test' and MyRelationship.TestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
@@ -169,12 +169,12 @@ namespace Habanero.Test.BO
         [Test]
         public void TestRestoreAll()
         {
-            ContactPerson.LoadDefaultClassDef();
-            ContactPerson contact1 = new ContactPerson();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO contact1 = new ContactPersonTestBO();
             contact1.Surname = "Soap";
-            ContactPerson contact2 = new ContactPerson();
+            ContactPersonTestBO contact2 = new ContactPersonTestBO();
             contact2.Surname = "Hope";
-            BusinessObjectCollection<ContactPerson> col = new BusinessObjectCollection<ContactPerson>();
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
             col.Add(contact1);
             col.Add(contact2);
             col.SaveAll();
@@ -200,9 +200,9 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCreateBusinessObject()
         {
-            ContactPerson.LoadDefaultClassDef(); 
-            BusinessObjectCollection<ContactPerson> cpCol = new BusinessObjectCollection<ContactPerson>();
-            ContactPerson newCP = cpCol.CreateBusinessObject();
+            ContactPersonTestBO.LoadDefaultClassDef(); 
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
             Assert.IsTrue(newCP.State.IsNew);
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
         }
@@ -211,9 +211,9 @@ namespace Habanero.Test.BO
         [Test]
         public void TestPersistOfCreatedBusinessObject()
         {
-            ContactPerson.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPerson> cpCol = new BusinessObjectCollection<ContactPerson>();
-            ContactPerson newCP = cpCol.CreateBusinessObject();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
             newCP.Surname = Guid.NewGuid().ToString();
            
             newCP.Save();
