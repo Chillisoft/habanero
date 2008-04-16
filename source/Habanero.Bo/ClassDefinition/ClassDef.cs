@@ -936,6 +936,12 @@ namespace Habanero.BO.ClassDefinition
 
         #region Equals
 
+        /// <summary>
+        /// Checks for equality between two classdefs. This checks that the properties
+        /// are the same between the two.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             if (obj == null) return false;

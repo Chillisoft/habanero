@@ -16,6 +16,12 @@ namespace Habanero.Test.BO
             base.SetupDBConnection();
         }
 
+        [SetUp]
+        public void SetupTest()
+        {
+            ClassDef.ClassDefs.Clear();
+        }
+
         [Test]
         public void TestTypeOfMultipleCollection()
         {
@@ -25,10 +31,17 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             
             Assert.AreSame(typeof(RelatedBusinessObjectCollection<Address>), cp.Addresses.GetType());
+        }
 
+        [Test]
+        public void TestReloadingRelationship()
+        {
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship();
+            new Address();
 
-            
-
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            IBusinessObjectCollection addresses = cp.Addresses;
+            Assert.AreSame(addresses, cp.Addresses);
         }
     }
 }
