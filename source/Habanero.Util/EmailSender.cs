@@ -210,7 +210,6 @@ namespace Habanero.Util
                 {
                     addToCol.Add(new MailAddress(toAddress.ToString()));                    
                 }
-
             }
         }
     }
