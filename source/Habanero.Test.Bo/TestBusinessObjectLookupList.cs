@@ -18,17 +18,13 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using Habanero.Base;
+using System.Threading;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.DB;
-using NMock;
 using NUnit.Framework;
-using System.Collections;
 
 namespace Habanero.Test.BO
 {
@@ -83,7 +79,7 @@ namespace Habanero.Test.BO
         {
             BusinessObjectLookupList source = new BusinessObjectLookupList(typeof(ContactPerson), 100);
             Dictionary<string, object> col = source.GetLookupList(DatabaseConnection.CurrentConnection);
-            System.Threading.Thread.Sleep(250);
+            Thread.Sleep(250);
             Dictionary<string, object> col2 = source.GetLookupList(DatabaseConnection.CurrentConnection);
             Assert.AreNotSame(col2, col);
         }

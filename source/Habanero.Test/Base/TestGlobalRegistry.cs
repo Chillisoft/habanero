@@ -17,14 +17,10 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
-using Habanero.DB;
+using NUnit.Framework;
 
 namespace Habanero.Test.Base
 {

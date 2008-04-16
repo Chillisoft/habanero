@@ -18,14 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
-using Habanero.BO;
-using Habanero.BO.Loaders;
 using Habanero.Base;
+using Habanero.BO.Loaders;
 using Habanero.Util;
 using Habanero.Util.File;
-using log4net;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.BO.ClassDefinition
 {

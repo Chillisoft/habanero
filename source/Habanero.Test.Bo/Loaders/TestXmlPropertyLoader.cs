@@ -19,11 +19,9 @@
 
 using System;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.BO;
-using Habanero.Base;
-using Habanero.Test;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders

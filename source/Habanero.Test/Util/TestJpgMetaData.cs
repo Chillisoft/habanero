@@ -17,13 +17,12 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using System.Drawing;
 using System.IO;
 using System.Resources;
 using Habanero.Base.Exceptions;
-using NUnit.Framework;
 using Habanero.Util;
+using NUnit.Framework;
 
 namespace Habanero.Test.Util
 {

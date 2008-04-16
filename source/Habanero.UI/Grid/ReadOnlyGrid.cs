@@ -24,7 +24,6 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using Habanero.BO;
-using Habanero.UI.Grid;
 using log4net;
 
 namespace Habanero.UI.Grid
@@ -60,8 +59,8 @@ namespace Habanero.UI.Grid
         /// <param name="e">Attached arguments regarding the event</param>
         private void DoubleClickHandler(object sender, EventArgs e)
         {
-            System.Drawing.Point pt = this.PointToClient(Cursor.Position);
-            DataGridView.HitTestInfo hti = this.HitTest(pt.X, pt.Y);
+            Point pt = this.PointToClient(Cursor.Position);
+            HitTestInfo hti = this.HitTest(pt.X, pt.Y);
             if (hti.Type == DataGridViewHitTestType.Cell)
             {
                 this.FireRowDoubleClicked(this.SelectedBusinessObject);

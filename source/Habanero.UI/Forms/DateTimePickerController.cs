@@ -19,12 +19,9 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using Habanero.UI.Util;
 
 namespace Habanero.UI.Forms

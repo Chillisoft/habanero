@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Habanero.Base.Exceptions;
@@ -127,7 +128,7 @@ namespace Habanero.Base
             if (_filename != string.Empty)
             {
                 XmlTextWriter writer = new XmlTextWriter(_filename,
-                                                         System.Text.Encoding.UTF8);
+                                                         Encoding.UTF8);
                 _doc.WriteTo(writer);
                 writer.Close();
             }

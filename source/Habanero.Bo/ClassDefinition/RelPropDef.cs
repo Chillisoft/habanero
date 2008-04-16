@@ -17,10 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
-using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {

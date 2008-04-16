@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Reflection;
-using Habanero.Base.Exceptions;
 using Habanero.Util;
 using NUnit.Framework;
 

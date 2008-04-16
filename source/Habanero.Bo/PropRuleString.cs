@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO

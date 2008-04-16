@@ -18,13 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using System.Data;
-using System.Threading;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
 using Habanero.BO;
-using Habanero.Test;
-using Habanero.UI.Base;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Grid;
 using NUnit.Framework;
 

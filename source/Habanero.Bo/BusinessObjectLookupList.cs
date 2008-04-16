@@ -20,10 +20,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.Base;
-using Habanero.BO.CriteriaManager;
 using Habanero.Util;
 using Habanero.Util.File;
 

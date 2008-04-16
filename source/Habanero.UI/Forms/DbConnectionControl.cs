@@ -18,33 +18,34 @@
 //---------------------------------------------------------------------------------
 
 
+using System.ComponentModel;
+using System.Windows.Forms;
 using Habanero.DB;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Forms
 {
     /// <summary>
     /// Provides a control form listing database settings
     /// </summary>
-    public class DbConnectionControl : System.Windows.Forms.UserControl
+    public class DbConnectionControl : UserControl
     {
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox PortTextBox;
-        private System.Windows.Forms.TextBox PasswordTextBox;
-        private System.Windows.Forms.TextBox UserNameTextBox;
-        private System.Windows.Forms.TextBox DatabaseTextBox;
-        private System.Windows.Forms.TextBox ServerTextBox;
-        private System.Windows.Forms.TextBox VendorTextBox;
+        private Label label6;
+        private Label label5;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private Label label1;
+        private TextBox PortTextBox;
+        private TextBox PasswordTextBox;
+        private TextBox UserNameTextBox;
+        private TextBox DatabaseTextBox;
+        private TextBox ServerTextBox;
+        private TextBox VendorTextBox;
 
         /// <summary> 
         /// Required designer variable
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private Container components = null;
 
         /// <summary>
         /// Constructor to initialise a new connection control

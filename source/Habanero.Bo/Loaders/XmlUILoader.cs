@@ -19,8 +19,6 @@
 
 using System.Xml;
 using Habanero.BO.ClassDefinition;
-using Habanero.Base;
-using Habanero.Util;
 
 namespace Habanero.BO.Loaders
 {

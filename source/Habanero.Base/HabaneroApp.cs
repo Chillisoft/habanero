@@ -18,12 +18,11 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using Habanero.Base.Exceptions;
 using log4net;
 using log4net.Config;
+using log4net.spi;
 
 namespace Habanero.Base
 {
@@ -95,7 +94,7 @@ namespace Habanero.Base
             }
             catch (Exception ex) {
                 string errorMessage = "There was a problem starting the application.";
-                if (log != null && log.Logger.IsEnabledFor(log4net.spi.Level.ERROR)) {
+                if (log != null && log.Logger.IsEnabledFor(Level.ERROR)) {
                     log.Error("---------------------------------------------" +
                               Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true));
                     errorMessage += " Please look at the log file for details of the problem.";

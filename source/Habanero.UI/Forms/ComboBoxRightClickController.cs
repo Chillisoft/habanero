@@ -19,15 +19,11 @@
 
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Forms;
 
 namespace Habanero.UI.Forms
 {

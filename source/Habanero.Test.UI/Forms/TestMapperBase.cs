@@ -19,13 +19,12 @@
 
 
 using System;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
-using Habanero.DB;
 using Habanero.Base;
-using Habanero.Test;
-//using NMock;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using Rhino.Mocks;
+//using NMock;
 
 namespace Habanero.Test.UI.Forms
 {

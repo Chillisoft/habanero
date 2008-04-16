@@ -18,11 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.Loaders;
 using NUnit.Framework;
 using Rhino.Mocks;
 

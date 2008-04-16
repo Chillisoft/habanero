@@ -23,7 +23,6 @@ using System.IO;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Loaders;
-using Habanero.Util;
 using Habanero.Util.File;
 using NMock;
 using NUnit.Framework;

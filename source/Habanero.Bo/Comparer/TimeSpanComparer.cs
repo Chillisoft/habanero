@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using Habanero.Base;
 
 namespace Habanero.BO.Comparer
 {

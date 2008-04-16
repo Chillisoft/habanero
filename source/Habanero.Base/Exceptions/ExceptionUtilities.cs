@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.Base;
 
 namespace Habanero.Base.Exceptions
 {

@@ -18,15 +18,15 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Data;
 using System.Text;
+using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.BO;
-using Habanero.Base;
 using Habanero.Util;
 using NUnit.Framework;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.Util
 {
@@ -143,7 +143,7 @@ namespace Habanero.Test.Util
             bo.SetPropertyValue("TestProp", value);
             ISqlStatementCollection sqlCol = bo.GetPersistSql();
             ISqlStatement sqlStatement = sqlCol[0];
-            System.Collections.IList parameters = sqlStatement.Parameters;
+            IList parameters = sqlStatement.Parameters;
             IDbDataParameter longTextParam = (IDbDataParameter) parameters[1];
             string oracleTypeEnumString = ReflectionUtilities.getEnumPropertyValue(longTextParam, "OracleType");
             Assert.IsTrue(oracleTypeEnumString == "Clob");

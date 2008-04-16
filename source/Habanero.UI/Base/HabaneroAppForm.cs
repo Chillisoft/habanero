@@ -19,19 +19,12 @@
 
 using System;
 using System.IO;
-using System.Xml;
-using Habanero.Base.Exceptions;
-using Habanero.BO;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
-using Habanero.Base;
-//using Habanero.UI.Misc;
-using Habanero.UI.Base;
 using Habanero.UI.Forms;
-using Habanero.Util;
-using log4net;
-using log4net.Config;
+//using Habanero.UI.Misc;
 
 namespace Habanero.UI.Base
 {

@@ -18,15 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System.Xml;
-using Habanero.UI.Forms;
-using NUnit.Framework;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
-using Habanero.Util;
-using Habanero.DB;
-using Habanero;
+using NUnit.Framework;
 
 namespace Habanero.Test.Base
 {

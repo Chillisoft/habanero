@@ -21,8 +21,6 @@
 using System;
 using System.Collections;
 using Habanero.BO;
-using Habanero.UI.Base;
-using Habanero.UI.Forms;
 
 namespace Habanero.UI.Forms
 {

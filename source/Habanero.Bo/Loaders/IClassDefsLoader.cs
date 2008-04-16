@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Collections;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.Loaders

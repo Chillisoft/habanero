@@ -18,11 +18,8 @@
 //---------------------------------------------------------------------------------
 
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using Habanero.UI.Wizard;
+using NUnit.Framework;
 
 namespace Habanero.Test.UI.Wizard
 {

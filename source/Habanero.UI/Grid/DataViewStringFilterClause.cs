@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
-using Habanero.UI.Grid;
+using Habanero.Util;
 
 namespace Habanero.UI.Grid
 {
@@ -48,7 +48,7 @@ namespace Habanero.UI.Grid
         {
             string valueClause;
             string finalFilterValue =
-                Habanero.Util.StringUtilities.ReplaceSingleQuotesWithTwo((string) _filterValue);
+                StringUtilities.ReplaceSingleQuotesWithTwo((string) _filterValue);
             if (_clauseOperator == FilterClauseOperator.OpLike)
             {
                 valueClause = "'*" + finalFilterValue + "*'";

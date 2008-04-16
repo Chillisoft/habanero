@@ -22,8 +22,6 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using Habanero.UI.Base;
-using Habanero.UI.Util;
 
 namespace Habanero.UI.Util
 {
@@ -176,19 +174,19 @@ namespace Habanero.UI.Util
         private void InitializeComponent()
         {
             this.AutoScaleMode = AutoScaleMode.None;
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.AutoScaleBaseSize = new Size(5, 13);
             this.ClientSize = new Size(0, 0);
             this.ControlBox = false;
-            this.Cursor = System.Windows.Forms.Cursors.AppStarting;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Cursor = Cursors.AppStarting;
+            this.FormBorderStyle = FormBorderStyle.None;
             this.Name = "SplashScreen";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             this.ControlBox = false;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = FormBorderStyle.None;
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         #endregion

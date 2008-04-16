@@ -18,10 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Habanero.BO.ClassDefinition;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 
 namespace Habanero.Test
@@ -151,7 +149,7 @@ namespace Habanero.Test
 
         internal static void ClearEngineCol()
         {
-            BusinessObject.ClearLoadedBusinessObjectBaseCol();
+            ClearLoadedBusinessObjectBaseCol();
         }
 
         public static void DeleteAllEngines()

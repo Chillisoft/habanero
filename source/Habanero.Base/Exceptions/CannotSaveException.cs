@@ -26,7 +26,7 @@ namespace Habanero.Base.Exceptions
     /// Provides an exception to throw when the application was unable
     /// to save data
     /// </summary>
-    public class CannotSaveException : System.Exception
+    public class CannotSaveException : Exception
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -50,7 +50,7 @@ namespace Habanero.Base.Exceptions
         /// </summary>
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
-        public CannotSaveException(string message, System.Exception inner) : base(message, inner)
+        public CannotSaveException(string message, Exception inner) : base(message, inner)
         {
         }
 

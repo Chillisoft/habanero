@@ -19,10 +19,7 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Grid
 {

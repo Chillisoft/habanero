@@ -17,11 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
 using Habanero.Base;
-using BusinessObject=Habanero.BO.BusinessObject;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.CriteriaManager
 {

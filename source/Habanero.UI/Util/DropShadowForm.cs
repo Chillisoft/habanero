@@ -19,9 +19,9 @@
 
 
 using System;
+using System.Drawing;
 using System.Security.Permissions;
 using System.Windows.Forms;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Util
 {
@@ -40,10 +40,10 @@ namespace Habanero.UI.Util
             // 
             // DropShadowForm
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(292, 266);
+            this.AutoScaleBaseSize = new Size(5, 13);
+            this.ClientSize = new Size(292, 266);
             this.Name = "DropShadowForm";
-            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.WindowState = FormWindowState.Minimized;
         }
 
         /// <summary>

@@ -21,7 +21,6 @@ using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Forms;
 using Noogen.WinForms;
@@ -138,7 +137,7 @@ namespace Habanero.UI.Base
         /// <returns>Returns the new ComboBox object</returns>
         public static ComboBox CreateComboBox()
         {
-            NComboBox cbx = new Noogen.WinForms.NComboBox();
+            NComboBox cbx = new NComboBox();
             cbx.DisableEntryNotInList = true;
             cbx.AutoComplete = true;
             cbx.CharacterCasing = CharacterCasing.Normal;

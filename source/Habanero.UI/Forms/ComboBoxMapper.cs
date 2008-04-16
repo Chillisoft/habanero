@@ -21,14 +21,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
 using Habanero.Base;
-using Habanero.UI.Base;
-using Habanero.UI.Forms;
-using BusinessObject=Habanero.BO.BusinessObject;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Forms
 {

@@ -19,16 +19,13 @@
 
 using System;
 using System.Data;
+using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.BO;
 using Habanero.DB;
-using Habanero.Base;
-using Habanero.Test;
 using NMock;
 using NUnit.Framework;
-using Rhino.Mocks;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.BO
 {

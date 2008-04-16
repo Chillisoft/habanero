@@ -18,13 +18,9 @@
 //---------------------------------------------------------------------------------
 
 
-using System;
 using System.Collections;
-using System.Data;
 using System.Windows.Forms;
 using Habanero.BO;
-using Habanero.UI.Base;
-using Habanero.UI.Grid;
 
 namespace Habanero.UI.Grid
 {

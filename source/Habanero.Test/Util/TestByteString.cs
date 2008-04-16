@@ -18,17 +18,14 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Data;
-using System.Text;
+using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.BO;
-using Habanero.Base;
 using Habanero.Util;
-using Habanero.Test;
 using NUnit.Framework;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.Util
 {
@@ -179,7 +176,7 @@ namespace Habanero.Test.Util
             bo.SetPropertyValue("TestProp", "test");
             ISqlStatementCollection sqlCol = bo.GetPersistSql();
             ISqlStatement sqlStatement = sqlCol[0];
-            System.Collections.IList parameters = sqlStatement.Parameters;
+            IList parameters = sqlStatement.Parameters;
             IDbDataParameter byteStringParam = (IDbDataParameter)parameters[1];
             Assert.IsTrue(byteStringParam.Value is byte[]);
             byte[] paramValue = (byte[])byteStringParam.Value;

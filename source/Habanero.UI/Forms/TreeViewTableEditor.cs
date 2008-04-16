@@ -20,12 +20,11 @@
 
 using System;
 using System.Collections;
+using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.UI.Base;
 using Habanero.UI.Grid;
-using Habanero.Util;
 
 namespace Habanero.UI.Forms
 {
@@ -256,10 +255,10 @@ namespace Habanero.UI.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this._splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this._treeView = new System.Windows.Forms.TreeView();
+            this._splitContainer1 = new SplitContainer();
+            this._treeView = new TreeView();
             _treeView.Name = "TreeView";
-            this._groupBox1 = new System.Windows.Forms.GroupBox();
+            this._groupBox1 = new GroupBox();
             this._gridAndButtons = new EditableGridWithButtons();
             this._splitContainer1.Panel1.SuspendLayout();
             this._splitContainer1.Panel2.SuspendLayout();
@@ -269,8 +268,8 @@ namespace Habanero.UI.Forms
             // 
             // _splitContainer1
             // 
-            this._splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this._splitContainer1.Dock = DockStyle.Fill;
+            this._splitContainer1.Location = new Point(0, 0);
             this._splitContainer1.Name = "SplitContainer";
             // 
             // _splitContainer1.Panel1
@@ -281,41 +280,41 @@ namespace Habanero.UI.Forms
             // _splitContainer1.Panel2
             // 
             this._splitContainer1.Panel2.Controls.Add(this._groupBox1);
-            this._splitContainer1.Size = new System.Drawing.Size(408, 231);
+            this._splitContainer1.Size = new Size(408, 231);
             this._splitContainer1.SplitterDistance = 136;
             this._splitContainer1.TabIndex = 0;
             // 
             // _treeView
             // 
-            this._treeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._treeView.Location = new System.Drawing.Point(0, 0);
+            this._treeView.Dock = DockStyle.Fill;
+            this._treeView.Location = new Point(0, 0);
             this._treeView.Name = "MyTreeView";
-            this._treeView.Size = new System.Drawing.Size(136, 231);
+            this._treeView.Size = new Size(136, 231);
             this._treeView.TabIndex = 1;
             // 
             // _groupBox1
             // 
             this._groupBox1.Controls.Add(this._gridAndButtons);
-            this._groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._groupBox1.Location = new System.Drawing.Point(0, 0);
+            this._groupBox1.Dock = DockStyle.Fill;
+            this._groupBox1.Location = new Point(0, 0);
             this._groupBox1.Name = "_groupBox1";
-            this._groupBox1.Size = new System.Drawing.Size(268, 231);
+            this._groupBox1.Size = new Size(268, 231);
             this._groupBox1.TabIndex = 0;
             this._groupBox1.TabStop = false;
             // 
             // _gridAndButtons
             // 
-            this._gridAndButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._gridAndButtons.Location = new System.Drawing.Point(3, 16);
+            this._gridAndButtons.Dock = DockStyle.Fill;
+            this._gridAndButtons.Location = new Point(3, 16);
             this._gridAndButtons.Name = "_gridAndButtons";
-            this._gridAndButtons.Size = new System.Drawing.Size(262, 212);
+            this._gridAndButtons.Size = new Size(262, 212);
             this._gridAndButtons.TabIndex = 0;
             // 
             // TreeViewTableEditor
             // 
             this.Controls.Add(this._splitContainer1);
             this.Name = "TreeViewTableEditor";
-            this.Size = new System.Drawing.Size(408, 231);
+            this.Size = new Size(408, 231);
             this._splitContainer1.Panel1.ResumeLayout(false);
             this._splitContainer1.Panel2.ResumeLayout(false);
             this._splitContainer1.ResumeLayout(false);

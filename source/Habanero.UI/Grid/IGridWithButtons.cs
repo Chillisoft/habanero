@@ -17,8 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using Habanero.UI.Grid;
-
 namespace Habanero.UI.Grid
 {
     /// <summary>

@@ -17,9 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;

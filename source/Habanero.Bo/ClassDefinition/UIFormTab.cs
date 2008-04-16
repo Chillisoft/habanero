@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections;
-using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.ClassDefinition
 {

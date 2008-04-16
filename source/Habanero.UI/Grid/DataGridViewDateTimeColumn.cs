@@ -19,7 +19,6 @@
 
 using System;
 using System.Windows.Forms;
-using Habanero.UI.Grid;
 
 namespace Habanero.UI.Grid
 {

@@ -19,16 +19,14 @@
 
 
 using System;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
 using Habanero.Base;
-using Habanero.Test;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Forms;
 using Habanero.UI.Grid;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.UI.Forms
 {

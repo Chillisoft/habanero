@@ -18,9 +18,8 @@
 //---------------------------------------------------------------------------------
 
 
-using System.Windows.Forms;
-using Habanero.UI.Forms;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using Habanero.UI.Grid;
 
 namespace Habanero.UI.Forms

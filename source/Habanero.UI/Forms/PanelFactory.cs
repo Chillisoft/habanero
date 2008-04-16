@@ -19,23 +19,18 @@
 
 
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
-using System.Reflection;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
-using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Forms;
 using Habanero.UI.Grid;
 using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
-using System.Collections.Generic;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
 {
@@ -492,7 +487,7 @@ namespace Habanero.UI.Forms
             if (tb.Text.IndexOf("@") != -1)
             {
                 string comm = "mailto:" + tb.Text;
-                System.Diagnostics.Process.Start(comm);
+                Process.Start(comm);
             }
         }
 

@@ -19,11 +19,10 @@
 
 using System;
 using System.Data;
-using Habanero.BO;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.BO
 {

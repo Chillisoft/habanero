@@ -20,16 +20,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Reflection;
 using System.Security.Permissions;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
-using Habanero.Base;
 
 namespace Habanero.BO
 {
@@ -316,7 +314,7 @@ namespace Habanero.BO
                 string parameterName = parameter.ParameterName;
                 string[] parts = parameterName.Split('.');
                 string propertyName = parts[parts.Length - 1];
-                ClassDefinition.ClassDef currentClassDef = classDef;
+                ClassDef currentClassDef = classDef;
                 string fullTableName = currentClassDef.InheritedTableName;
                 for(int i = 0; i < parts.Length - 1; i++ )
                 {

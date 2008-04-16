@@ -20,9 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-using Habanero.BO.ClassDefinition;
 using Habanero.BO;
-using Habanero.Test;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
 using NMock;

@@ -19,12 +19,7 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
-using Habanero.Base.Exceptions;
-using Habanero.UI.Forms;
 using Habanero.UI.Util;
 
 namespace Habanero.UI.Forms

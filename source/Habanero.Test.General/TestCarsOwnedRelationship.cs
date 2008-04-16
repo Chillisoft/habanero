@@ -73,7 +73,7 @@ namespace Habanero.Test.General
             Car carOwned = (Car) carsOwned[0];
             Assert.AreEqual(car.ID, carOwned.ID);
             IBusinessObjectCollection carsOwned2 = person.GetCarsOwned();
-            Assert.IsFalse(object.ReferenceEquals(carsOwned, carsOwned2),
+            Assert.IsFalse(ReferenceEquals(carsOwned, carsOwned2),
                            "The references should not be equal since the collection should be reloaded each time");
         }
     }

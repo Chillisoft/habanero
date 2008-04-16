@@ -21,9 +21,7 @@
 using System;
 using System.Reflection;
 using System.Windows.Forms;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.UI.Forms;
 using Habanero.UI.Util;
 
 namespace Habanero.UI.Forms

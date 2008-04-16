@@ -19,10 +19,9 @@
 
 using System.Data;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.General

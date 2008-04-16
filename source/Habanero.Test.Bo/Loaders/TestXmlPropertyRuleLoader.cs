@@ -20,8 +20,8 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base.Exceptions;
-using Habanero.BO.Loaders;
 using Habanero.BO;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders

@@ -19,16 +19,14 @@
 
 
 using System.Windows.Forms;
-using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
-using Habanero.DB;
 using Habanero.Base;
-using Habanero.Test;
+using Habanero.Base.Exceptions;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using Habanero.UI.Forms;
 using NMock;
 using NUnit.Framework;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.Test.UI.Forms
 {

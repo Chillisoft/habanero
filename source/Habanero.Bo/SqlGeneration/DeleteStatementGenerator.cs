@@ -17,11 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Data;
 using System.Text;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO;
 using Habanero.DB;
 
 namespace Habanero.BO.SqlGeneration

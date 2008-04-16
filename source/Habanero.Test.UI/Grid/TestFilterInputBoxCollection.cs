@@ -18,14 +18,14 @@
 //---------------------------------------------------------------------------------
 
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Forms;
 using Habanero.UI.Grid;
 using NUnit.Framework;
-using System;
-using System.Collections;
 
 namespace Habanero.Test.UI.Grid
 {

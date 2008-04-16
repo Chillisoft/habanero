@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 using NUnit.Framework;

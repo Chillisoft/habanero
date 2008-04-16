@@ -18,17 +18,13 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.Security.Permissions;
-using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
-using Habanero.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -73,7 +69,7 @@ namespace Habanero.BO
         /// higher up the chain return the bool
         internal virtual bool Refresh(BusinessObject obj, IExpression searchExpression)
         {
-            using (IDataReader dr = BOLoader.Instance.LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
+            using (IDataReader dr = Instance.LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
             {
                 try
                 {

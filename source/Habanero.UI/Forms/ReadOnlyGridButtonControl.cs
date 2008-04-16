@@ -21,12 +21,9 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
-using Habanero.BO;
 using Habanero.Base;
-using Habanero.UI.Base;
-using Habanero.UI.Forms;
+using Habanero.BO;
 using Habanero.UI.Grid;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
 {

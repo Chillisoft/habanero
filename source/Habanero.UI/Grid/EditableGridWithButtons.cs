@@ -22,7 +22,6 @@ using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
-using Habanero.UI.Grid;
 
 namespace Habanero.UI.Grid
 {

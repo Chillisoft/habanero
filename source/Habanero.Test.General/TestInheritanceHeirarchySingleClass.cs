@@ -18,12 +18,11 @@
 //---------------------------------------------------------------------------------
 
 using System.Data;
-using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
-using Habanero.DB;
 using Habanero.Base;
-using Habanero.Util;
+using Habanero.Base.Exceptions;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using NMock;
 using NUnit.Framework;
 

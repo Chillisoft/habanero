@@ -18,14 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.UI.Base;
 using NUnit.Framework;
-using Habanero.Base;
-using Habanero.Base.Exceptions;
-using Habanero.Util;
-using Habanero.DB;
 
 namespace Habanero.Test.UI.Base
 {

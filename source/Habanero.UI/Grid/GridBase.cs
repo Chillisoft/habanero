@@ -18,23 +18,19 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
-using System.Threading;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Grid;
 using Habanero.Util;
 using log4net;
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Grid
 {

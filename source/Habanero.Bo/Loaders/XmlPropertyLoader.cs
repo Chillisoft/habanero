@@ -18,12 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Xml;
 using System.Collections;
+using System.Xml;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.Base;
-using Habanero.Util;
 
 namespace Habanero.BO.Loaders
 {

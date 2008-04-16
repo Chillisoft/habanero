@@ -74,12 +74,12 @@ namespace Habanero.Test.General
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("OwnerId", person.GetPropertyValue("ContactPersonID"));
             Assert.AreEqual(car.GetOwner().ID, person.ID);
-            Assert.IsTrue(object.ReferenceEquals(person, car.GetOwner()),
+            Assert.IsTrue(ReferenceEquals(person, car.GetOwner()),
                           "Should be the same since GetOwner recovers object from object manager");
 
             person = car.GetOwner();
             ContactPerson.ClearContactPersonCol();
-            Assert.IsFalse(object.ReferenceEquals(person, car.GetOwner()),
+            Assert.IsFalse(ReferenceEquals(person, car.GetOwner()),
                            "Should not be the same since the Owner reference is being " +
                            " not maintained in the car class and the object is therefore " +
                            " being reloaded each time");
@@ -128,7 +128,7 @@ namespace Habanero.Test.General
             Car carOwned = (Car) carsOwned[0];
             Assert.AreEqual(car.ID, carOwned.ID);
             IBusinessObjectCollection carsOwned2 = person.GetCarsOwned();
-            Assert.IsFalse(object.ReferenceEquals(carsOwned, carsOwned2),
+            Assert.IsFalse(ReferenceEquals(carsOwned, carsOwned2),
                            "The references should not be equal since the collection should be reloaded each time");
         }
     }

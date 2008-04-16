@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
@@ -130,7 +129,7 @@ namespace Habanero.BO.ClassDefinition
             get { return _id; }
             set
             {
-                if (value != null && _orMapping != ClassDefinition.ORMapping.ClassTableInheritance)
+                if (value != null && _orMapping != ORMapping.ClassTableInheritance)
                 {
                     throw new ArgumentException("An 'ID' property has been specified " +
                         "for a super-class definition where the OR-mapping type is other than " +
@@ -150,7 +149,7 @@ namespace Habanero.BO.ClassDefinition
             get { return _discriminator; }
             set
             {
-                if (value != null && _orMapping != ClassDefinition.ORMapping.SingleTableInheritance)
+                if (value != null && _orMapping != ORMapping.SingleTableInheritance)
                 {
                     throw new ArgumentException("A 'Discriminator' property has been specified " +
                         "for a super-class definition where the OR-mapping type is other than " +

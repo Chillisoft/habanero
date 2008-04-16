@@ -20,7 +20,6 @@
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Grid;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Grid

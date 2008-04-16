@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -483,7 +484,7 @@ namespace Habanero.WebGUI
             if (tb.Text.IndexOf("@") != -1)
             {
                 string comm = "mailto:" + tb.Text;
-                System.Diagnostics.Process.Start(comm);
+                Process.Start(comm);
             }
         }
 

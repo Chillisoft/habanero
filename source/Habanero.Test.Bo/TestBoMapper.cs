@@ -18,10 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
-using Habanero.DB;
 using Habanero.Base;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using NMock;
 using NUnit.Framework;
 using Rhino.Mocks;

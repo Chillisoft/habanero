@@ -17,9 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -107,9 +104,9 @@ namespace Habanero.Test.BO
             Assert.AreEqual(mMockBo.GetPropertyValue("MockBOProp1"), ltempBO.GetPropertyValue("MockBOID"),
                             "The object returned should be the one with the ID = MockBOID");
 
-            Assert.IsTrue(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
+            Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
             MockBO.ClearLoadedBusinessObjectBaseCol();
-            Assert.IsTrue(object.ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
+            Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject(DatabaseConnection.CurrentConnection)));
             mMockBo.Delete();
             mMockBo.Save();
         }

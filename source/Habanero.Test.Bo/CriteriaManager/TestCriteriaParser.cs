@@ -18,8 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.BO.CriteriaManager;
 using NUnit.Framework;
 

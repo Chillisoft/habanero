@@ -18,13 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
-using System.Data;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO;
 using Habanero.DB;
 
 namespace Habanero.BO.SqlGeneration

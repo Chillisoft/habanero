@@ -19,11 +19,9 @@
 
 
 using System;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO;
 using Habanero.Base;
-using Habanero.UI.Base;
-using BusinessObject=Habanero.BO.BusinessObject;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Forms
 {

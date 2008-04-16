@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.DB;
-using Habanero.Test;
 
 namespace Habanero.Test
 {

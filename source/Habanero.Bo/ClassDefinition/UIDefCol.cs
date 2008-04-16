@@ -19,9 +19,7 @@
 
 using System;
 using System.Collections;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.ClassDefinition
 {

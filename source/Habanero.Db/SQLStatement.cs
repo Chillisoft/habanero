@@ -156,9 +156,9 @@ namespace Habanero.DB
                     ReflectionUtilities.setEnumPropertyValue(newParameter,"OracleType","Clob");
                 }
             }
-            if (_idbConnection is System.Data.OleDb.OleDbConnection)
+            if (_idbConnection is OleDbConnection)
             {
-                System.Data.OleDb.OleDbParameter oleDbParameter = newParameter as System.Data.OleDb.OleDbParameter;
+                OleDbParameter oleDbParameter = newParameter as OleDbParameter;
                 if (oleDbParameter != null && paramValue is DateTime && oleDbParameter.OleDbType == OleDbType.DBTimeStamp)
                 {
                     oleDbParameter.OleDbType = OleDbType.Date;

@@ -21,13 +21,11 @@
 
 using System;
 using Gizmox.WebGUI.Forms;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using log4net;
-
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.WebGUI
 {

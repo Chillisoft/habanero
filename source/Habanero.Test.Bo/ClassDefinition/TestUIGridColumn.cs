@@ -19,11 +19,7 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -128,7 +124,7 @@ namespace Habanero.Test.BO.ClassDefinition
         private class UIGridColumnInheritor : UIGridColumn
         {
             public UIGridColumnInheritor() : base("heading", null, null, true, 100,
-                UIGridColumn.PropAlignment.left, null)
+                PropAlignment.left, null)
             {}
 
             public void SetHeading(string name)

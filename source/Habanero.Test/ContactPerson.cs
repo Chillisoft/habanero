@@ -19,11 +19,9 @@
 
 // Static Model
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
-using Habanero.BO;
 using Habanero.DB;
 
 namespace Habanero.Test
@@ -308,7 +306,7 @@ namespace Habanero.Test
 
         public static void ClearContactPersonCol()
         {
-            BusinessObject.ClearLoadedBusinessObjectBaseCol();
+            ClearLoadedBusinessObjectBaseCol();
         }
 
         public static void DeleteAllContactPeople()

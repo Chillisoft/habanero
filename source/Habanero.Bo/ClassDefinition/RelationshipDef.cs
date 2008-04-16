@@ -19,8 +19,6 @@
 
 using System;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
-using Habanero.Util;
 using Habanero.Util.File;
 
 namespace Habanero.BO.ClassDefinition

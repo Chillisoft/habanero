@@ -24,7 +24,6 @@ using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using log4net;
 
-
 namespace Habanero.BO
 {
     /// <summary>
@@ -237,7 +236,7 @@ namespace Habanero.BO
                 {
                     log.Debug("RowCommitted:  Row state is null for row " + e.Row["ID"]);
                 }
-                catch (System.Data.RowNotInTableException)
+                catch (RowNotInTableException)
                 {
                     log.Debug("RowCommitted:  Row has been removed from table");
                 }

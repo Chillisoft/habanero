@@ -22,7 +22,6 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Util.File

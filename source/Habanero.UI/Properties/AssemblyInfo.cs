@@ -20,7 +20,6 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
@@ -29,7 +28,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Chillisoft")]
 [assembly: AssemblyProduct("Habanero.UI")]
-[assembly: AssemblyCopyright("Copyright Â© Chillisoft 2007")]
+[assembly: AssemblyCopyright("Copyright © Chillisoft 2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

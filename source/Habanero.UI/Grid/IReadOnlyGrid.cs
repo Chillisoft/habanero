@@ -20,7 +20,6 @@
 using System;
 using System.Collections;
 using Habanero.BO;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Grid
 {

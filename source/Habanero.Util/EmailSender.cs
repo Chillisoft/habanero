@@ -17,10 +17,11 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
 using System.Net;
-using Habanero.Base;
 using System.Net.Mail;
+using Habanero.Base;
 
 namespace Habanero.Util
 {
@@ -132,11 +133,11 @@ namespace Habanero.Util
 
             if (_smtpServerHost == null)
             {
-                throw new System.Exception("Please specify the SMTP Host Name before attempting to send.");
+                throw new Exception("Please specify the SMTP Host Name before attempting to send.");
             }
             if (_toAddresses.Count == 0)
             {
-                throw new System.Exception("No Email Addresses were provoided");
+                throw new Exception("No Email Addresses were provoided");
             }
             MailMessage message = new MailMessage();
             message.From = new MailAddress(_fromAddress);

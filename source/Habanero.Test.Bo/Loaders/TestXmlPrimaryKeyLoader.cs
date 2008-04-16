@@ -17,12 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.IO;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.Base;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders

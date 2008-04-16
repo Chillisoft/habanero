@@ -19,7 +19,6 @@
 
 using System;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.General

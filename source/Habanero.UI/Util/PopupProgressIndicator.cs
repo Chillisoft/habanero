@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 
-using System.Threading;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;

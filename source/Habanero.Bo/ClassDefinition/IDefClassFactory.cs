@@ -18,9 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -66,7 +65,7 @@ namespace Habanero.BO.ClassDefinition
 
 		UIFormGrid CreateUIFormGrid(string relationshipName, Type gridType, string correspondingRelationshipName);
 
-		UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, System.Collections.Hashtable propertyAttributes, TriggerCol triggers);
+		UIFormField CreateUIFormProperty(string label, string propertyName, string controlTypeName, string controlAssembly, string mapperTypeName, string mapperAssembly, bool editable, string toolTipText, Hashtable propertyAttributes, TriggerCol triggers);
 //		UIFormField CreateUIFormProperty(string label, string propertyName, Type controlType, string mapperTypeName, string mapperAssembly, bool editable, System.Collections.Hashtable propertyAttributes);
 
 		UIFormTab CreateUIFormTab();
@@ -75,7 +74,7 @@ namespace Habanero.BO.ClassDefinition
 
 		UIGrid CreateUIGridDef();
 
-        UIGridColumn CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool editable, int width, UIGridColumn.PropAlignment alignment, System.Collections.Hashtable propertyAttributes);
+        UIGridColumn CreateUIGridProperty(string heading, string propertyName, Type gridControlType, bool editable, int width, UIGridColumn.PropAlignment alignment, Hashtable propertyAttributes);
 
 		PropDefCol CreatePropDefCol();
 

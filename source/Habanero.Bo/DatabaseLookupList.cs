@@ -21,10 +21,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
-using Habanero.Base;
-using Habanero.Util;
 using Habanero.Util.File;
 
 namespace Habanero.BO

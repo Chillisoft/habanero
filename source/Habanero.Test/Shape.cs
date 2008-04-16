@@ -18,8 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.BO.ClassDefinition;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.Test
 {

@@ -20,7 +20,6 @@
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders

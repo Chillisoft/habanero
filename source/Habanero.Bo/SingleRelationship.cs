@@ -18,11 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
-using Habanero.DB;
-using Habanero.Base;
 using log4net;
 
 namespace Habanero.BO

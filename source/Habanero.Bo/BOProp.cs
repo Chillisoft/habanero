@@ -20,13 +20,10 @@
 using System;
 using System.Drawing;
 using System.Globalization;
-using System.Threading;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.CriteriaManager;
-using Habanero.BO.SqlGeneration;
 using Habanero.DB;
-using Habanero.Base;
 using Habanero.Util;
 using log4net;
 
@@ -296,19 +293,19 @@ namespace Habanero.BO
                     }
                     break;
                 case PropReadWriteRule.WriteOnce:
-                    if ((!(_isObjectNew)) && _persistedValue != null && !object.Equals(_persistedValue,newValue))
+                    if ((!(_isObjectNew)) && _persistedValue != null && !Equals(_persistedValue,newValue))
                     {
                         throw new BusinessObjectReadWriteRuleException(_propDef);
                     }
                     break;
                 case PropReadWriteRule.WriteNotNew:
-                    if (_isObjectNew && !object.Equals(_persistedValue,newValue))
+                    if (_isObjectNew && !Equals(_persistedValue,newValue))
                     {
                         throw new BusinessObjectReadWriteRuleException(_propDef);
                     }
                     break;
                 case PropReadWriteRule.WriteNew:
-                    if (!_isObjectNew && !object.Equals(_persistedValue, newValue))
+                    if (!_isObjectNew && !Equals(_persistedValue, newValue))
                     {
                         throw new BusinessObjectReadWriteRuleException(_propDef);
                     }

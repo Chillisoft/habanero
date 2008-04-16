@@ -18,8 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using NUnit.Framework;
 using Habanero.Util;
+using NUnit.Framework;
 
 namespace Habanero.Test.Util
 {

@@ -20,7 +20,6 @@
 using System;
 using System.Runtime.Serialization;
 
-
 namespace Habanero.BO
 {
     /// <summary>

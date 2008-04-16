@@ -92,11 +92,11 @@ namespace Habanero.Test.General
             car.SetPropertyValue("DriverFK1", person.GetPropertyValue("PK1Prop1"));
             car.SetPropertyValue("DriverFK2", person.GetPropertyValue("PK1Prop2"));
             Assert.AreEqual(car.GetDriver().ID, person.ID);
-            Assert.IsTrue(object.ReferenceEquals(person, car.GetDriver()));
+            Assert.IsTrue(ReferenceEquals(person, car.GetDriver()));
 
             person = car.GetDriver();
             ContactPersonCompositeKey.ClearContactPersonCol();
-            Assert.IsTrue(object.ReferenceEquals(person, car.GetDriver()),
+            Assert.IsTrue(ReferenceEquals(person, car.GetDriver()),
                           "Should be the same since the Driver reference is being " +
                           "maintained in the car class and the object is therefore " +
                           "not being reloaded");

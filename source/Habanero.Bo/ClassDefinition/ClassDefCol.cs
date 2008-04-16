@@ -20,9 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Util;
 using Habanero.Util.File;
 
 namespace Habanero.BO.ClassDefinition
@@ -282,13 +280,13 @@ namespace Habanero.BO.ClassDefinition
 
 		private string GetTypeIdForItem(Type key, out bool found)
 		{
-			string typeId = ClassDefCol.GetTypeId(key, false);
+			string typeId = GetTypeId(key, false);
 			found = false;
 			if (_classDefs.ContainsKey(typeId))
 				found = true;
 			else
 			{
-				typeId = ClassDefCol.GetTypeId(key, true);
+				typeId = GetTypeId(key, true);
                 if (_classDefs.ContainsKey(typeId))
 				{
 					found = true;
@@ -299,13 +297,13 @@ namespace Habanero.BO.ClassDefinition
 
 		private string GetTypeIdForItem(string assemblyName, string className, out bool found)
 		{
-			string typeId = ClassDefCol.GetTypeId(assemblyName, className, false);
+			string typeId = GetTypeId(assemblyName, className, false);
 			found = false;
             if (_classDefs.ContainsKey(typeId))
 				found = true;
 			else
 			{
-				typeId = ClassDefCol.GetTypeId(assemblyName, className, true);
+				typeId = GetTypeId(assemblyName, className, true);
                 if (_classDefs.ContainsKey(typeId))
 				{
 					found = true;

@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-using Habanero.UI.Base;
 using log4net;
 
 namespace Habanero.UI.Forms

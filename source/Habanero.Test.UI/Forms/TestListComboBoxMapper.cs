@@ -19,9 +19,6 @@
 
 
 using System.Windows.Forms;
-using Habanero.Base;
-using Habanero.BO;
-using Habanero.Test.General;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 

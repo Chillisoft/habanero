@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Data;
 using Habanero.Base;
 using Habanero.DB;
 using NUnit.Framework;

@@ -19,8 +19,6 @@
 
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.UI.Grid;
-using Habanero.Util;
 
 namespace Habanero.UI.Grid
 {

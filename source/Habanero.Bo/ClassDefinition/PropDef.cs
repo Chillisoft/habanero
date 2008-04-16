@@ -19,12 +19,9 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
-using Habanero.BO.CriteriaManager;
-using Habanero.BO;
-using Habanero.Base;
-using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
 
@@ -764,7 +761,7 @@ namespace Habanero.BO.ClassDefinition
         /// type is not one of those mentioned above</returns>
         public IComparer<T> GetPropertyComparer<T>() where T:BusinessObject
         {
-        	Type comparerType = typeof(PropertyComparer<,>);
+        	Type comparerType = typeof(PropertyComparer<, >);
         	comparerType = comparerType.MakeGenericType(typeof (T), PropertyType);
 			IComparer<T> comparer = (IComparer<T>)Activator.CreateInstance(comparerType, this.PropertyName);
         	return comparer;

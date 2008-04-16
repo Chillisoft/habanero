@@ -206,7 +206,7 @@ namespace Habanero.Test.General
 
             ContactPersonCompositeKey mySecondContactPerson = ContactPersonCompositeKey.GetContactPersonCompositeKey(id);
 
-            Assert.IsTrue(Object.ReferenceEquals(myContact, mySecondContactPerson));
+            Assert.IsTrue(ReferenceEquals(myContact, mySecondContactPerson));
             Assert.AreEqual(myContact.ID,
                             mySecondContactPerson.ID);
             Assert.AreEqual(myContact.GetPropertyValue("FirstName"), mySecondContactPerson.GetPropertyValue("FirstName"));
@@ -237,7 +237,7 @@ namespace Habanero.Test.General
             //			System.Console.WriteLine("ID:" + id.GetObjectId());
             //			System.Console.WriteLine("Contact.ID:" + myContact.ID.GetObjectId());
             ContactPersonCompositeKey mySecondContactPerson = ContactPersonCompositeKey.GetContactPersonCompositeKey(id);
-            Assert.IsTrue(Object.ReferenceEquals(myContact, mySecondContactPerson));
+            Assert.IsTrue(ReferenceEquals(myContact, mySecondContactPerson));
             Assert.AreEqual(myContact.ID,
                             mySecondContactPerson.ID);
             Assert.AreEqual(myContact.GetPropertyValue("FirstName"), mySecondContactPerson.GetPropertyValue("FirstName"));
@@ -248,7 +248,7 @@ namespace Habanero.Test.General
             myContact.Save(); //save the object to the DB
 
             ContactPersonCompositeKey myContactPerson3 = ContactPersonCompositeKey.GetContactPersonCompositeKey(id);
-            Assert.IsTrue(Object.ReferenceEquals(myContact, myContactPerson3));
+            Assert.IsTrue(ReferenceEquals(myContact, myContactPerson3));
             Assert.AreEqual(myContact.ID,
                             myContactPerson3.ID);
             Assert.AreEqual(myContact.GetPropertyValue("FirstName"), myContactPerson3.GetPropertyValue("FirstName"));

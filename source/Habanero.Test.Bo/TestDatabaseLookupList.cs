@@ -20,9 +20,10 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.DB;
-using Habanero.Base;
 using NMock;
 using NUnit.Framework;
 
@@ -115,7 +116,7 @@ namespace Habanero.Test.BO
 
             DatabaseLookupList source = new DatabaseLookupList(Sql, 100);
             Dictionary<string, object> col = source.GetLookupList(conn);
-            System.Threading.Thread.Sleep(250);
+            Thread.Sleep(250);
             Dictionary<string, object> col2 = source.GetLookupList(conn);
             Assert.AreNotSame(col2, col);
             dbConnMock.Verify();

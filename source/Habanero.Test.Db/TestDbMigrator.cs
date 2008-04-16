@@ -18,10 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Habanero.DB;
 using Habanero.Base;
+using Habanero.DB;
 using NMock;
 using NUnit.Framework;
 

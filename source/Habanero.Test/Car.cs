@@ -19,10 +19,8 @@
 
 // Static Model
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Habanero.BO.ClassDefinition;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 
 namespace Habanero.Test

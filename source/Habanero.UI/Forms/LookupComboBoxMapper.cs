@@ -23,10 +23,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Forms;
 
 namespace Habanero.UI.Forms
 {
@@ -193,7 +191,7 @@ namespace Habanero.UI.Forms
                 _comboBox.SelectionStart = 0;
                 _comboBox.SelectionLength = 0;
             }
-            catch (System.ObjectDisposedException)
+            catch (ObjectDisposedException)
             {
             }
         }

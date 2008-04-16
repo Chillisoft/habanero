@@ -20,11 +20,8 @@
 using System;
 using System.Collections;
 using System.Reflection;
-using Habanero.Base;
-using NUnit.Framework;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
-using Habanero.DB;
+using NUnit.Framework;
 
 namespace Habanero.Test.General
 {

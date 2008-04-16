@@ -19,17 +19,15 @@
 
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Forms;
 using Habanero.UI.Grid;
 using log4net;
-
-using BusinessObject=Habanero.BO.BusinessObject;
 
 namespace Habanero.UI.Forms
 {
@@ -275,9 +273,9 @@ namespace Habanero.UI.Forms
             // 
             // DefaultBOEditorForm
             // 
-            this.ClientSize = new System.Drawing.Size(292, 266);
+            this.ClientSize = new Size(292, 266);
             this.Name = "DefaultBOEditorForm";
-            this.Load += new System.EventHandler(this.DefaultBOEditorForm_Load);
+            this.Load += new EventHandler(this.DefaultBOEditorForm_Load);
             this.ResumeLayout(false);
 
         }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO.CriteriaManager

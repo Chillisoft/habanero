@@ -18,10 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.Base.Exceptions;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 

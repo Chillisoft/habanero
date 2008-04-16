@@ -19,8 +19,8 @@
 
 using System;
 using Habanero.Base;
-using NUnit.Framework;
 using Habanero.Util;
+using NUnit.Framework;
 
 namespace Habanero.Test.Util
 {

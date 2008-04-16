@@ -19,8 +19,6 @@
 
 using System;
 using Habanero.Base;
-using Habanero.BO;
-using Habanero.UI.Grid;
 
 namespace Habanero.UI.Grid
 {

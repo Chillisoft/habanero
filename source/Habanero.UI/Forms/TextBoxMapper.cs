@@ -19,9 +19,7 @@
 
 
 using System;
-using System.Globalization;
 using System.Windows.Forms;
-using Habanero.UI.Forms;
 
 namespace Habanero.UI.Forms
 {

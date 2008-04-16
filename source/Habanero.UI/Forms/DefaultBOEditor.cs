@@ -20,10 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-using Habanero.BO;
 using Habanero.Base;
-using Habanero.UI.Base;
-using BusinessObject=Habanero.BO.BusinessObject;
+using Habanero.BO;
 
 namespace Habanero.UI.Forms
 {

@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;

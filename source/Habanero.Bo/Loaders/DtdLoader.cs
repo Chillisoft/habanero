@@ -23,7 +23,6 @@ using System.IO;
 using System.Resources;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Util.File;
 
 namespace Habanero.BO.Loaders
 {

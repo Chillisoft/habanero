@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {

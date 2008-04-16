@@ -18,15 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
-using Habanero.BO.CriteriaManager;
-using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Comparer
