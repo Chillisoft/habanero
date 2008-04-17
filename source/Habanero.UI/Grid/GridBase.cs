@@ -360,7 +360,10 @@ namespace Habanero.UI.Grid
         {
             _collection.Add(bo);
             int row = GetRowOfBusinessObject(bo);
-            this.SetSelectedRowCore(row, true);
+            if (row != -1)
+            {
+                this.SetSelectedRowCore(row, true);
+            }
         }
 
         /// <summary>
