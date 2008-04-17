@@ -130,7 +130,15 @@ namespace Habanero.BO.SqlGeneration
         /// </summary>
         private BOPropCol GetPropsToInclude(ClassDef currentClassDef)
         {
-            BOPropCol propsToInclude = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+            BOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+
+            //BRETT/PETER TODO: this is to be changed, just here for now.
+            BOPropCol propsToInclude = new BOPropCol();
+
+            foreach (BOProp prop in propsToIncludeTemp)
+            {
+                if (prop.PropDef.Persistable) propsToInclude.Add(prop);
+            }
 
             while (currentClassDef.IsUsingSingleTableInheritance() ||
                 currentClassDef.IsUsingConcreteTableInheritance())

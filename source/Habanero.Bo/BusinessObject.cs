@@ -930,7 +930,7 @@ namespace Habanero.BO
 
         internal bool HasAutoIncrementingField
         {
-            get { return !String.IsNullOrEmpty(_boPropCol.AutoIncrementingPropertyName); }
+            get { return _boPropCol.HasAutoIncrementingField; }
         }
 
         /// <summary>

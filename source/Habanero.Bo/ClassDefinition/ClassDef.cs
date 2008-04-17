@@ -76,7 +76,7 @@ namespace Habanero.BO.ClassDefinition
         //private string _databaseName = "Default";
         //private string _SelectSql = "";
         private string _tableName = "";
-        private readonly string _displayName = "";
+        private string _displayName = "";
         private bool _hasObjectID = true;
         private PrimaryKeyDef _primaryKeyDef;
         private PropDefCol _propDefCol;
@@ -346,6 +346,7 @@ namespace Habanero.BO.ClassDefinition
                     return StringUtilities.DelimitPascalCase(ClassName, " ");
                 }
             }
+            set { _displayName = value; }
         }
 
         /// <summary>
@@ -974,6 +975,9 @@ namespace Habanero.BO.ClassDefinition
             ClassDef newClassDef = new ClassDef(this.AssemblyName, this.ClassName, this.PrimaryKeyDef,
                                                 this.PropDefcol != null ? this.PropDefcol.Clone() : null, this.KeysCol,
                                                 this.RelationshipDefCol, this.UIDefCol);
+            newClassDef.TableName = this.TableName;
+            newClassDef.DisplayName = this.DisplayName;
+           
             return newClassDef;
         }
     }

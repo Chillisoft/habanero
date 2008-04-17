@@ -111,7 +111,7 @@ namespace Habanero.BO.SqlGeneration
                 // BOProp prop = (BOProp) item.Value;
                 if (propsToInclude.Contains(prop.PropertyName))
                 {
-                    if (propsToInclude.AutoIncrementingPropertyName != prop.PropertyName)
+                    if (!prop.PropDef.AutoIncrementing) 
                         AddPropToInsertStatement(prop);
                 }
             }
@@ -254,8 +254,16 @@ namespace Habanero.BO.SqlGeneration
         /// </summary>
         private BOPropCol GetPropsToInclude(ClassDef currentClassDef)
         {
-            BOPropCol propsToInclude = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+            BOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
+
+            //BRETT/PETER TODO: this is to be changed, just here for now.
+            BOPropCol propsToInclude = new BOPropCol();
             
+            foreach (BOProp prop in propsToIncludeTemp)
+            {
+               if (prop.PropDef.Persistable)  propsToInclude.Add(prop);
+            }
+
             if (currentClassDef.IsUsingClassTableInheritance())
             {
                 AddParentID(propsToInclude);

@@ -30,7 +30,6 @@ namespace Habanero.BO
     public class BOPropCol 
     {
         private Dictionary<string, BOProp> _boProps;
-        private string _autoIncrementingPropertyName;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
@@ -214,10 +213,26 @@ namespace Habanero.BO
             }
         }
 
-        public string AutoIncrementingPropertyName
+        /// <summary>
+        /// Indicates whether any of the properties in this collection are defined as autoincrementing fields.
+        /// </summary>
+        public bool HasAutoIncrementingField
         {
-            get { return _autoIncrementingPropertyName; }
-            set { _autoIncrementingPropertyName = value; }
+            get
+            {
+                foreach (KeyValuePair<string, BOProp> pair in _boProps)
+                {
+                    if (pair.Value.PropDef.AutoIncrementing) return true;
+                }
+                return false;
+               
+            }
         }
+
+//        public string AutoIncrementingPropertyName
+//        {
+//            get { return _autoIncrementingPropertyName; }
+//            set { _autoIncrementingPropertyName = value; }
+//        }
     }
 }

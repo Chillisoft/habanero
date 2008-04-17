@@ -65,7 +65,8 @@ namespace Habanero.BO.SqlGeneration
         /// Generates a sql statement to read the business
         /// object's properties from the database
         /// </summary>
-        /// <param name="limit">The limit</param>
+        /// <param name="limit">The max number of items to read from the database. A value of 0 or less 
+        /// indicates no limit.</param>
         /// <returns>Returns a string</returns>
         public string Generate(int limit)
         {
@@ -86,6 +87,7 @@ namespace Habanero.BO.SqlGeneration
 
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
+                if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
                 string tableName = GetTableName(prop, classDefs);
 
                 statement += SqlFormattingHelper.FormatTableAndFieldName(tableName, prop.DatabaseFieldName, _connection);

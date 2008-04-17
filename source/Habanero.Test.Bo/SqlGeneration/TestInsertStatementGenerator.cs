@@ -93,6 +93,18 @@ namespace Habanero.Test.BO.SqlGeneration
             Assert.AreEqual("INSERT INTO `testautoinc` (`testfield`) VALUES (?Param0)", statement.Statement.ToString());
         }
 
+        [Test]
+        public void TestInsertStatementExcludesNonPersistableProps()
+        {
+            ClassDef.ClassDefs.Clear();
+            string newPropName = "NewProp";
+            MockBO bo = StatementGeneratorTestHelper.CreateMockBOWithExtraNonPersistableProp(newPropName);
+
+            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
+            ISqlStatementCollection statementCol = gen.Generate();
+            InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
+            Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
+        }
 
 
 

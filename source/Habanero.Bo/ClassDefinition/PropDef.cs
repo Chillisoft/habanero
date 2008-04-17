@@ -88,6 +88,7 @@ namespace Habanero.BO.ClassDefinition
         private int _length;
         private string _displayName;
         private bool _keepValuePrivate = false;
+        private bool _persistable = true;
 
         #region Constuctor and destructors
 
@@ -878,6 +879,15 @@ namespace Habanero.BO.ClassDefinition
         internal string TableName
         {
             get { return ""; }
+        }
+
+        ///<summary>
+        /// Cdfdasfkl;
+        ///</summary>
+        public bool Persistable
+        {
+            get { return _persistable; }
+            set { _persistable = value; }
         }
 
 

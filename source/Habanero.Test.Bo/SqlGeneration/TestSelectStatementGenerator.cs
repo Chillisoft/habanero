@@ -17,9 +17,11 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.SqlGeneration;
 using Habanero.DB;
+using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.SqlGeneration
@@ -64,6 +66,17 @@ namespace Habanero.Test.BO.SqlGeneration
             ClassDef.ClassDefs[typeof (MyBO)].TableName = "My BO";
             SelectStatementGenerator statementGen = new SelectStatementGenerator(bo, new MyDatabaseConnection(true));
             Assert.AreEqual("SELECT [My BO].[MyBoID], [My BO].[TestProp], [My BO].[TestProp2] FROM [My BO]", statementGen.Generate(0));
+        }
+
+        [Test]
+        public void TestInsertStatementExcludesNonPersistableProps()
+        {
+            string newPropName = "NewProp";
+            MockBO bo = StatementGeneratorTestHelper.CreateMockBOWithExtraNonPersistableProp(newPropName);
+
+            SelectStatementGenerator gen = new SelectStatementGenerator(bo, DatabaseConnection.CurrentConnection);
+            string statement = gen.Generate(0);
+            Assert.IsFalse(statement.ToString().Contains(newPropName));
         }
 
         public class MyDatabaseConnection : DatabaseConnection

@@ -187,6 +187,7 @@
     <Compile Include="TestInheritanceSingleTable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestNonPersistablePropDefs.cs" />
     <Compile Include="TestOneToOneRelationship.cs">
       <SubType>Code</SubType>
     </Compile>

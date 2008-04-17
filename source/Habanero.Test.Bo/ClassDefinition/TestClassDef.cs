@@ -478,6 +478,16 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(newClassDef.PropDefcol, originalClassDef.PropDefcol);
         }
 
+        [Test]
+        public void TestTableNamesAreCloned()
+        {
+            ClassDef originalClassDef = LoadClassDef();
+            ClassDef newClassDef = originalClassDef.Clone();
+            Assert.AreEqual(originalClassDef.TableName, newClassDef.TableName);
+            Assert.AreEqual(originalClassDef.DisplayName, newClassDef.DisplayName);
+        }
+
+       
 
 
         [Test]
@@ -509,7 +519,7 @@ namespace Habanero.Test.BO.ClassDefinition
             ClassDef def =
                 itsLoader.LoadClass(
                     @"
-				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBoTableName"" displayName=""My Related BO Display Name"">
 					<property  name=""MyRelatedBoID"" />
 					<property  name=""MyRelatedTestProp"" />
 					<property  name=""MyBoID"" />
