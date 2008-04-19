@@ -43,13 +43,11 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, col.CreatedBusinessObjects.Count);
         }
 
-
-
         [Test]
         public void TestCreateBusObjectCollectiongetCollectionFromParentMultipleTimes()
         {
             //SetupTests
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             //MultipleRelationship rel = (MultipleRelationship)bo.Relationships["MyMultipleRelationship"];
             //RelatedBusinessObjectCollection<MyRelatedBo> col = new RelatedBusinessObjectCollection<MyRelatedBo>(rel);
@@ -66,7 +64,7 @@ namespace Habanero.Test.BO
         public void TestPersistOfCreatedBusinessObjects()
         {
 
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
             newCP.Surname = Guid.NewGuid().ToString();
@@ -79,8 +77,8 @@ namespace Habanero.Test.BO
         public void TestRemoveRelatedObject()
         {
             //-----Create Test pack---------------------
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship();
-            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             Address address = contactPersonTestBO.Addresses.CreateBusinessObject();
             address.Save();
             Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
@@ -94,12 +92,15 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
             Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
         }
+
+
+
         [Test]
         public void TestRemoveRelatedObject_PersistToDB()
         {
             //-----Create Test pack---------------------
             Address address;
-            ContactPersonTestBO contactPersonTestBO = CreateContactPersonWithOneAddress(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
 
             //-----Run tests----------------------------
             //Run tests
@@ -111,22 +112,14 @@ namespace Habanero.Test.BO
             Assert.AreEqual(0, contactPersonTestBO.Addresses.Count);
         }
 
-        private ContactPersonTestBO CreateContactPersonWithOneAddress(out Address address)
-        {
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship();
-            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-            address = contactPersonTestBO.Addresses.CreateBusinessObject();
-            address.Save();
-            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
-            return contactPersonTestBO;
-        }
+
 
         [Test]
-        public void TestRemoveGuestAttendee_AlreadyInREmoveCollection()
+        public void TestRemoveGuestAttendee_AlreadyInRemoveCollection()
         {
             //-----Create Test pack---------------------
             Address address;
-            ContactPersonTestBO contactPersonTestBO = CreateContactPersonWithOneAddress(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
 
             //-----Run tests----------------------------
             contactPersonTestBO.Addresses.Remove(address);
@@ -135,5 +128,7 @@ namespace Habanero.Test.BO
             //-----Test results-------------------------
             Assert.AreEqual(1, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
         }
+
+
     }
 }

@@ -72,7 +72,7 @@ namespace Habanero.Test.BO
         [ExpectedException(typeof(HabaneroArgumentException))]
         public void TestCreateRelationshipWithNonBOType()
         {
-            RelationshipDef relDef = new MultipleRelationshipDef("Relation1", typeof(String), mRelKeyDef, false, "",
+            new MultipleRelationshipDef("Relation1", typeof(String), mRelKeyDef, false, "",
                                                                  DeleteParentAction.DeleteRelated);
         }
 

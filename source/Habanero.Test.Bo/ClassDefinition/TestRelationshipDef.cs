@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -232,11 +233,24 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             get { return _boPropCol; }
         }
-        
+
+        public Guid MockBOID
+        {
+            get { return (Guid) this.GetPropertyValue("MockBOID"); }
+        }
+
+        public Guid? MockBOProp1
+        {
+            get { return (Guid?) this.GetPropertyValue("MockBOProp1"); }
+            set { this.SetPropertyValue("MockBOProp1", value); }
+        }
+
         #endregion //For Testing
+
     }
 
-    #endregion
+    #endregion 
 
-    
+
+
 }

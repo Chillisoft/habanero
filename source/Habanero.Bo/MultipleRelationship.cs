@@ -30,7 +30,7 @@ namespace Habanero.BO
     public class MultipleRelationship : Relationship
     {
 		internal IBusinessObjectCollection _boCol;
-		//private BusinessObjectCollection<BusinessObject> _boCol;
+        //private BusinessObjectCollection<BusinessObject> _boCol;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -61,6 +61,15 @@ namespace Habanero.BO
         public string OrderBy
         {
             get { return ((MultipleRelationshipDef) _relDef).OrderBy; }
+        }
+
+        ///<summary>
+        /// Returns the appropriate delete action when the parent is deleted.
+        /// i.e. delete related objects, dereference related objects, prevent deletion.
+        ///</summary>
+        public DeleteParentAction DeleteParentAction
+        {
+            get { return ((MultipleRelationshipDef) _relDef).DeleteParentAction; }
         }
 
         /// <summary>

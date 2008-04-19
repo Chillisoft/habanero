@@ -124,7 +124,8 @@ namespace Habanero.Test
             //Releationships
             RelationshipDefCol relDefs = CreateRelationshipDefCol(lPropDefCol);
 
-            ClassDef lClassDef = new ClassDef(typeof (ContactPerson), primaryKey, lPropDefCol, keysCol, relDefs);
+            ClassDef lClassDef = new ClassDef(typeof (ContactPerson), primaryKey, "contact_person", lPropDefCol, keysCol, relDefs);
+            
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
@@ -311,7 +312,9 @@ namespace Habanero.Test
 
         public static void DeleteAllContactPeople()
         {
-            string sql = "DELETE FROM ContactPerson";
+            string sql = "DELETE FROM contact_person_address";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+             sql = "DELETE FROM contact_person";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

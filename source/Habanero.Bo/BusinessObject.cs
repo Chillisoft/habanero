@@ -840,6 +840,9 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         protected internal bool IsValid(out string invalidReason)
         {
+            invalidReason = "";
+            if (this.State.IsDeleted) return true;
+
             string customRuleErrors;
             bool valid = Props.IsValid(out invalidReason);
             valid &= CheckCustomRules(out customRuleErrors);
@@ -940,7 +943,7 @@ namespace Habanero.BO
         protected internal virtual void AfterLoad()
         {
         }
-
+        [Obsolete]
 		private bool NeedsPersisting()
 		{
 			return !(State.IsDeleted && State.IsNew) && (State.IsDirty || State.IsNew);
@@ -954,94 +957,60 @@ namespace Habanero.BO
 			Transaction transaction = new Transaction(_connection);
 			transaction.AddTransactionObject(this);
 			transaction.CommitTransaction();
-			//if (!BeforeSave())
-			//{
-			//    return;
-			//}
-
-			//string reasonNotSaved = "";
-			//if (NeedsPersisting())
-			//{
-			//    //log.Debug("Save - Object of type " + this.GetType().Name + " is dirty or new, saving.") ;
-			//    if (IsValid(out reasonNotSaved))
-			//    {
-			//        CheckPersistRules();
-			//        UpdatedConcurrencyControlProperties();
-			//        //GlobalRegistry.SynchronisationController.UpdateSynchronisationProperties(this);
-
-			//        BeforeUpdateToDB();
-			//        int numRowsUpdated;
-			//        ISqlStatementCollection statementCollection = GetPersistSql();
-			//        numRowsUpdated = _connection.ExecuteSql(statementCollection, null);
-			//        if (_transactionLog != null)
-			//        {
-			//            _transactionLog.RecordTransactionLog(this, WindowsIdentity.GetCurrent().Name);
-			//        }
-			//        if (numRowsUpdated == statementCollection.Count)
-			//        {
-			//            UpdateBusinessObjectBaseCol();
-			//            _boPropCol.BackupPropertyValues();
-			//        }
-			//        else
-			//        {
-			//            throw new DatabaseReadException(
-			//                "An Error occured while saving an object to the database. Please contact your system administrator",
-			//                "An Error occured while saving an object to the database: " + numRowsUpdated +
-			//                " were updated whereas " + statementCollection.Count +
-			//                " row(s) should have been updated ",
-			//                GetPersistSql().ToString(), this.GetDatabaseConnection().ErrorSafeConnectString());
-			//        }
-			//    }
-			//    else
-			//    {
-			//        throw (new BusObjectInAnInvalidStateException(reasonNotSaved));
-			//    }
-			//} //if (NeedsPersisting())...
-
-			//UpdateAfterSave();
-
-			//AfterSave();
         }
 
         /// <summary>
         /// Carries out updates to the object after changes have been
         /// committed to the database
         /// </summary>
-        private void UpdateAfterSave()
+        protected internal void UpdateStateAsPersisted()
         {
-            if (!State.IsDeleted)
+            if (State.IsDeleted)
             {
-                if (AllLoaded().ContainsKey(ID.GetObjectNewID()))
-                {
-                    //System.Console.WriteLine("My line");//TODO: ??
-                }
-                // set the flags back
-                State.IsEditing = false;
-                State.IsNew = false;
-                if (!(_boPropCol == null))
-                {
-                    _boPropCol.SetIsObjectNew(false);
-                }
-                State.IsDeleted = false;
-                if (!AllLoaded().ContainsKey(ID.GetObjectId()))
-                {
-                    AddToLoadedBusinessObjectCol(this);
-                }
-                FireSaved();
+                SetStateAsPermanentlyDeleted();
+                RemoveFromLoadedObjectsCollection();
+                FireDeleted();
             }
             else
             {
-                //Set the object state to an invalid state since the object has been deleted
-                State.IsEditing = false;
-                State.IsNew = true;
-                State.IsDeleted = true;
-                //Remove this object from the collection of objects since is is now invalid
-                AllLoaded().Remove(this.ID.ToString());
-                FireDeleted();
-            } //!IsDeleted
+                SetStateAsUpdated();
+                AddToLoadedObjectsCollection();
+                FireSaved();
+            }
+            ReleaseWriteLocks();
+        }
+
+        private void AddToLoadedObjectsCollection()
+        {
+            if (!AllLoaded().ContainsKey(ID.GetObjectId()))
+            {
+                AddToLoadedBusinessObjectCol(this);
+            }
+        }
+
+        private void RemoveFromLoadedObjectsCollection()
+        {
+            AllLoaded().Remove(this.ID.ToString());
+        }
+
+        private void SetStateAsUpdated()
+        {
+            State.IsNew = false;
+            if (!(_boPropCol == null))
+            {
+                _boPropCol.SetIsObjectNew(false);
+            }
+            State.IsDeleted = false;
             State.IsDirty = false;
             State.IsEditing = false;
-            ReleaseWriteLocks();
+        }
+
+        private void SetStateAsPermanentlyDeleted()
+        {
+            State.IsNew = true;
+            State.IsDeleted = true;
+            State.IsDirty = false;
+            State.IsEditing = false;
         }
 
         /// <summary>
@@ -1593,7 +1562,8 @@ namespace Habanero.BO
         {
             return this.GetPersistSql();
         }
-
+  
+        [Obsolete]
         protected internal ISqlStatementCollection GetPersistSql()
         {
             if (State.IsNew && !(State.IsDeleted))
@@ -1615,7 +1585,7 @@ namespace Habanero.BO
                 //return null;
             }
         }
-
+        [Obsolete]
         /// <summary>
         /// Builds a "delete" sql statement list for this object
         /// </summary>
@@ -1626,6 +1596,7 @@ namespace Habanero.BO
             return generator.Generate();
         }
 
+        [Obsolete]
 		/// <summary>
         /// Returns an "insert" sql statement list for inserting this object
         /// </summary>
@@ -1635,7 +1606,7 @@ namespace Habanero.BO
             InsertStatementGenerator gen = new InsertStatementGenerator(this, _connection);
             return gen.Generate();
         }
-
+        [Obsolete]
         /// <summary>
         /// Returns an "update" sql statement list for updating this object
         /// </summary>
@@ -1786,7 +1757,7 @@ namespace Habanero.BO
         /// </summary>
         void ITransaction.TransactionCommitted()
         {
-            this.UpdateAfterSave();
+            this.UpdateStateAsPersisted();
 			this.AfterSave();
         }
 		

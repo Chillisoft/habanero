@@ -29,13 +29,15 @@ namespace Habanero.BO
 
 		public static bool CheckCanDelete(BusinessObject bo, out string reason)
 		{
-			ClassDef classDef = bo.ClassDef;
+		    if (bo == null) throw new ArgumentNullException("bo");
+		    reason = "";
+
+		    ClassDef classDef = bo.ClassDef;
 			RelationshipDefCol relationshipDefCol;
 			relationshipDefCol = classDef.RelationshipDefCol;
 			MatchList listOfPaths = FindPreventDeleteRelationships(relationshipDefCol);
 			Dictionary<string, int> results = new Dictionary<string, int>();
 			CheckCanDeleteSafe(bo, new List<BusinessObject>(), listOfPaths, "", ref results);
-			reason = "";
 			foreach (KeyValuePair<string, int> pair in results)
 			{
 				reason += Environment.NewLine + String.Format(

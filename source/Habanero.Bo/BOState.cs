@@ -21,10 +21,16 @@ using System;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// The current state of a business object.
+    ///</summary>
     public class BOState
     {
         private readonly BusinessObject _bo;
 
+        ///<summary>
+        ///</summary>
+        ///<param name="bo"></param>
         public BOState(BusinessObject bo)
         {
             _bo = bo;
@@ -33,7 +39,7 @@ namespace Habanero.BO
         /// <summary>
         /// An enumeration that describes the object's state
         /// </summary>
-        [Flags()]
+        [Flags]
         private enum States
         {
             /// <summary>The object is new</summary>
@@ -88,11 +94,18 @@ namespace Habanero.BO
             internal set { SetBOFlagValue(States.isDirty, value); }
         }
 
+        /// <summary>
+        /// Indicates whether all of the property values of the object are valid
+        /// </summary>
+        /// <returns>Returns true if all are valid</returns>
         public bool IsValid
         {
             get { return _bo.IsValid();  }
         }
 
+        ///<summary>
+        /// Returns an invalid message if the object is valid <see IsValid()>
+        ///</summary>
         public string IsValidMessage
         {
             get

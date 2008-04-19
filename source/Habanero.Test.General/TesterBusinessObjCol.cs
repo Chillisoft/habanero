@@ -58,7 +58,7 @@ namespace Habanero.Test.General
         {
             ContactPerson.DeleteAllContactPeople();
             BusinessObjectCollection<ContactPerson> myCol = ContactPerson.LoadBusinessObjCol();
-            Assert.AreEqual(myCol.Count, 0);
+            Assert.AreEqual(0, myCol.Count);
             ContactPerson p = new ContactPerson();
             p.FirstName = "a";
             p.Surname = "bb";

@@ -60,22 +60,22 @@ namespace Habanero.BO
         /// Refreshes the business object by reloading from the database using
         /// a search expression
         /// </summary>
+        /// <param name="obj">The business object to refresh</param>
         /// <param name="searchExpression">The search expression used to
         /// locate the business object</param>
         /// <returns>Returns true if refreshed successfully</returns>
         /// <exception cref="BusinessObjectNotFoundException">Thrown if the
         /// business object was not found in the database</exception>
-        /// TODO ERIC - return false anywhere for failed operation? methods
-        /// higher up the chain return the bool
         internal virtual bool Refresh(BusinessObject obj, IExpression searchExpression)
         {
+            bool result;
             using (IDataReader dr = Instance.LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
             {
                 try
                 {
                     if (dr.Read())
                     {
-                        return LoadProperties(obj, dr);
+                        result = LoadProperties(obj, dr);
                     }
                     else
                     {
@@ -93,6 +93,11 @@ namespace Habanero.BO
                     }
                 }
             }
+            if (result)
+            {
+                obj.AfterLoad();
+            }
+            return result;
         }
 
         /// <summary>

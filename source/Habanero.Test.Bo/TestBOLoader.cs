@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -182,6 +183,22 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(cp.GetDatabaseConnection());
             BOLoader.Instance.SetDatabaseConnection(cp, null);
             Assert.IsNull(cp.GetDatabaseConnection());
+        }
+
+        [Test]
+        public void TestBOLoaderRefreshCallsAfterLoad()
+        {
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString();
+            cp.Save();
+            Assert.IsFalse(cp.AfterLoadCalled);
+
+            BOLoader.Instance.Refresh(cp);
+
+            Assert.IsTrue(cp.AfterLoadCalled);
         }
     }
 }

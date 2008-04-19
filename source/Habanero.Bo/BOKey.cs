@@ -316,7 +316,7 @@ namespace Habanero.BO
                 {
                     propString.Append(" AND ");
                 }
-                propString.Append(prop.PropertyName + "=" + prop.Value);
+                propString.Append(prop.PropertyName + "=" + (prop.Value is Guid ? ((Guid)prop.Value).ToString("B") : prop.Value));
             }
             return propString.ToString();
         }

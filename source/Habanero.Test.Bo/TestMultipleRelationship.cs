@@ -25,7 +25,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestTypeOfMultipleCollection()
         {
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             new Address();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
@@ -36,7 +36,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestReloadingRelationship()
         {
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             new Address();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();

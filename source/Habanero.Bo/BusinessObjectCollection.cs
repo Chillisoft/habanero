@@ -717,7 +717,7 @@ namespace Habanero.BO
 //            formattedSearchItem.Replace("}", "");
 //            formattedSearchItem.Insert(0, _boClassDef.PrimaryKeyDef.KeyName + "=");
 
-            string formattedSearchItem = string.Format("{0}={1}", _boClassDef.GetPrimaryKeyDef().KeyName, searchTerm);
+            string formattedSearchItem = string.Format("{0}={1}", _boClassDef.GetPrimaryKeyDef().KeyName, searchTerm.ToString("B"));
 
             if (_lookupTable.ContainsKey(formattedSearchItem))
             {

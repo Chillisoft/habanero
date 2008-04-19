@@ -71,7 +71,7 @@ namespace Habanero.Test
             RelationshipDefCol relDefCol = CreateRelationshipDefCol(propDefCol);
 
 
-            ClassDef classDef = new ClassDef(typeof (Address), primaryKey, propDefCol, keysCol, relDefCol);
+            ClassDef classDef = new ClassDef(typeof (Address),  primaryKey, "contact_person_address", propDefCol, keysCol, relDefCol);
             ClassDef.ClassDefs.Add(classDef);
             return classDef;
         }
@@ -190,7 +190,7 @@ namespace Habanero.Test
 
         public static void DeleteAllAddresses()
         {
-            string sql = "DELETE FROM Address";
+            string sql = "DELETE FROM contact_person_address";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

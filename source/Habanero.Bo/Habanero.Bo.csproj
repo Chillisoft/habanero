@@ -121,6 +121,7 @@
     <Compile Include="DeleteHelper.cs" />
     <Compile Include="IBusinessObjectCollection.cs" />
     <Compile Include="IDataSetProvider.cs" />
+    <Compile Include="ITransactionalBusinessObject.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -343,6 +344,10 @@
     <Compile Include="Transaction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TransactionalBusinessObject.cs" />
+    <Compile Include="TransactionalBusinessObjectDB.cs" />
+    <Compile Include="TransactionCommitterDB.cs" />
+    <Compile Include="TransactionCommitter.cs" />
     <Compile Include="TransactionLogTable.cs">
       <SubType>Code</SubType>
     </Compile>

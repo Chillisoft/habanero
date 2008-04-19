@@ -25,18 +25,21 @@ namespace Habanero.BO
 {
     /// <summary>
     /// Logs transactions in the same database that is used to store the
-    /// business objects
+    /// business objects. Used to log every change to the business object.
+    /// Stores datetime action carried out actionstype (CRUD). windows user, logged user. 
+    /// Database Field name and the dirty XML field (shows the previously persisted state
+    ///    and newly persisted state of the field.
     /// </summary>
     public class TransactionLogTable : ITransactionLog
     {
-        private string _transactionLogTable;
-        private string _dateTimeUpdatedFieldName;
-        private string _windowsUserFieldName;
-        private string _logonUserFieldName;
-        private string _machineUpdateName;
-        private string _businessObjectTypeNameFieldName;
-        private string _crudActionFieldName;
-        private string _dirtyXmlFieldName;
+        private readonly string _transactionLogTable;
+        private readonly string _dateTimeUpdatedFieldName;
+        private readonly string _windowsUserFieldName;
+        private readonly string _logonUserFieldName;
+        private readonly string _machineUpdateName;
+        private readonly string _businessObjectTypeNameFieldName;
+        private readonly string _crudActionFieldName;
+        private readonly string _dirtyXmlFieldName;
 
         /// <summary>
         /// Constructor to initialise a new log table
@@ -99,7 +102,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="busObj">The business object in question</param>
         /// <returns>Returns a string</returns>
-        private string GetCrudAction(BusinessObject busObj)
+        private static string GetCrudAction(BusinessObject busObj)
         {
             if (busObj.State.IsNew)
             {

@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -163,6 +164,65 @@ namespace Habanero.Test.BO
                 string id = parameter.Value.ToString();
                 Assert.AreEqual(contactPersons[i].ContactPersonID.ToString("B").ToUpper(), id.ToUpper());
             }
+        }
+
+        [Test, Ignore]
+        public void TestOrderOfCascadeDelete()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            Address address;
+            ContactPersonTestBO bo = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            bo.Delete();
+
+            //---------------Execute Test ----------------------
+            Transaction t = new Transaction();
+            t.AddTransactionObject(bo);
+            ITransaction iTransaction = t;
+            iTransaction.BeforeCommit(null);
+            ISqlStatementCollection statements = t.GetPersistSql();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, statements.Count);
+            string expectedDeleteAddress = "DELETE FROM `contact_person_address`";
+            string expectedDeleteContactPerson = "DELETE FROM `contact_person`";
+            Assert.AreEqual(expectedDeleteAddress, statements[0].Statement.ToString().Substring(0, expectedDeleteAddress.Length));
+            Assert.AreEqual(expectedDeleteContactPerson, statements[1].Statement.ToString().Substring(0, expectedDeleteContactPerson.Length));
+        }
+
+        [Test,Ignore]
+        public void TestDelete3LevelsDeep()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            Address address;
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            OrganisationTestBO.LoadDefaultClassDef();
+
+            OrganisationTestBO org = new OrganisationTestBO();
+            contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
+            org.Save();
+            contactPersonTestBO.Save();
+
+
+            //---------------Execute Test ----------------------
+
+            org.Delete();
+
+            Transaction t = new Transaction();
+            t.AddTransactionObject(org);
+            ITransaction iTransaction = t;
+            iTransaction.BeforeCommit(null);
+            ISqlStatementCollection statements = t.GetPersistSql();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, statements.Count);
+            string expectedDeleteAddress = "DELETE FROM `contact_person_address`";
+            string expectedDeleteContactPerson = "DELETE FROM `contact_person`";
+            string expectedDeleteOrganisation = "DELETE FROM `organisation`";
+            Assert.AreEqual(expectedDeleteAddress, statements[0].Statement.ToString().Substring(0, expectedDeleteAddress.Length));
+            Assert.AreEqual(expectedDeleteContactPerson, statements[1].Statement.ToString().Substring(0, expectedDeleteContactPerson.Length));
+            Assert.AreEqual(expectedDeleteOrganisation, statements[2].Statement.ToString().Substring(0, expectedDeleteOrganisation.Length));
         }
 
 

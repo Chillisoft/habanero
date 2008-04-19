@@ -22,11 +22,14 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
+using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
     class ContactPersonTestBO: BusinessObject
     {
+        private bool _afterLoadCalled;
+
         public enum ContactType
         {
             Family,
@@ -44,7 +47,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
@@ -63,7 +66,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
 					<primaryKey isObjectID=""false"" >
@@ -80,7 +83,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
 					<primaryKey isObjectID=""false"" >
@@ -99,7 +102,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
                     <property  name=""FirstName"" compulsory=""true"" />
@@ -113,21 +116,45 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
-        public static ClassDef LoadClassDefWithAddressesRelationship()
+        public static ClassDef LoadClassDefWithAddressesRelationship_DeleteRelated()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contactperson"">
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
                     <property  name=""FirstName"" compulsory=""true"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>
-					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"">
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""DeleteRelated"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+        public static ClassDef LoadClassDefWithAddressesRelationship_PreventDelete()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""Prevent"">
 						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
 					</relationship>
 			    </class>
@@ -165,6 +192,18 @@ namespace Habanero.Test.BO
             get { return (RelatedBusinessObjectCollection<Address>)this.Relationships.GetRelatedCollection<Address>("Addresses"); }
         }
 
+        public bool AfterLoadCalled
+        {
+            get { return _afterLoadCalled; }
+        }
+
+
+        protected internal override void AfterLoad()
+        {
+            base.AfterLoad();
+            _afterLoadCalled = true;
+        }
+
         #endregion //Properties
 
         public override string ToString()
@@ -194,7 +233,9 @@ namespace Habanero.Test.BO
 
         internal static void DeleteAllContactPeople()
         {
-            string sql = "DELETE FROM ContactPerson";
+            string sql = "DELETE FROM contact_person_address";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            sql = "DELETE FROM Contact_Person";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
@@ -217,6 +258,34 @@ namespace Habanero.Test.BO
                 }
             }
             ClassDef.ClassDefs.Clear();
+        }
+
+        public static ContactPersonTestBO CreateSavedContactPersonNoAddresses()
+        {
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            contactPersonTestBO.Surname = Guid.NewGuid().ToString();
+            contactPersonTestBO.FirstName = Guid.NewGuid().ToString();
+            contactPersonTestBO.Save();
+            return contactPersonTestBO;
+        }
+
+        public static ContactPersonTestBO CreateContactPersonWithOneAddress_CascadeDelete(out Address address)
+        {
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            ContactPersonTestBO contactPersonTestBO = CreateSavedContactPersonNoAddresses();
+            address = contactPersonTestBO.Addresses.CreateBusinessObject();
+            address.Save();
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+            return contactPersonTestBO;
+        }
+        public static ContactPersonTestBO CreateContactPersonWithOneAddress_PreventDelete(out Address address)
+        {
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_PreventDelete();
+            ContactPersonTestBO contactPersonTestBO = CreateSavedContactPersonNoAddresses();
+            address = contactPersonTestBO.Addresses.CreateBusinessObject();
+            address.Save();
+            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
+            return contactPersonTestBO;
         }
     }
 }
