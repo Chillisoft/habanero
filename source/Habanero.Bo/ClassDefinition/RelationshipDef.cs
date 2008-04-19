@@ -34,6 +34,7 @@ namespace Habanero.BO.ClassDefinition
 		private RelKeyDef _relKeyDef;
 		private string _relationshipName;
 		private bool _keepReferenceToRelatedObject;
+        private DeleteParentAction _deleteParentAction;
 
 		#region Constructors
 
@@ -49,24 +50,32 @@ namespace Habanero.BO.ClassDefinition
 		public RelationshipDef(string relationshipName,
 							   Type relatedObjectClassType,
 							   RelKeyDef relKeyDef,
-							   bool keepReferenceToRelatedObject)
-			:this(relationshipName, relatedObjectClassType, null,null,relKeyDef, keepReferenceToRelatedObject)
-		{}
+                               bool keepReferenceToRelatedObject,
+                               DeleteParentAction deleteParentAction)
+			:this(relationshipName, relatedObjectClassType, null,null,relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
+		{
+
+		}
 
 		public RelationshipDef(string relationshipName,
 								string relatedObjectAssemblyName,
 								string relatedObjectClassName,
 								RelKeyDef relKeyDef,
-								bool keepReferenceToRelatedObject)
-			:this(relationshipName, null, relatedObjectAssemblyName,relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject)
-		{}
+								bool keepReferenceToRelatedObject,
+                                DeleteParentAction deleteParentAction)
+			:this(relationshipName, null, relatedObjectAssemblyName,relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
+		{
+
+ 
+		}
 
     	private RelationshipDef(string relationshipName,
 								Type relatedObjectClassType,
 								string relatedObjectAssemblyName,
 								string relatedObjectClassName,
 								RelKeyDef relKeyDef,
-								bool keepReferenceToRelatedObject)
+								bool keepReferenceToRelatedObject,
+                                DeleteParentAction deleteParentAction)
 		{
             //ArgumentValidationHelper.CheckArgumentNotNull(relatedObjectClassType, "relatedObjectClassType");
             ArgumentValidationHelper.CheckArgumentNotNull(relKeyDef, "relKeyDef");
@@ -85,6 +94,7 @@ namespace Habanero.BO.ClassDefinition
 			_relKeyDef = relKeyDef;
             _relationshipName = relationshipName;
             _keepReferenceToRelatedObject = keepReferenceToRelatedObject;
+            _deleteParentAction = deleteParentAction;
         }
 
 		#endregion Constructors
@@ -180,7 +190,17 @@ namespace Habanero.BO.ClassDefinition
 			}
     	}
 
-		#endregion Type Initialisation
+        /// <summary>
+        /// Provides specific instructions with regards to deleting a parent
+        /// object.  See the DeleteParentAction enumeration for more detail.
+        /// </summary>
+        public DeleteParentAction DeleteParentAction
+        {
+            get { return _deleteParentAction; }
+            protected set { _deleteParentAction = value; }
+        }
+
+        #endregion Type Initialisation
 
         /// <summary>
         /// Create and return a new Relationship

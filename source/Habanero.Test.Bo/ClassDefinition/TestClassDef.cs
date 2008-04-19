@@ -340,7 +340,7 @@ namespace Habanero.Test.BO.ClassDefinition
             RelPropDef relPropDef = new RelPropDef(propDef, "relProp");
             RelKeyDef relKeyDef = new RelKeyDef();
             relKeyDef.Add(relPropDef);
-            RelationshipDef relDef = new SingleRelationshipDef("rel", typeof(MyRelatedBo), relKeyDef, true);
+            RelationshipDef relDef = new SingleRelationshipDef("rel", typeof(MyRelatedBo), relKeyDef, true, DeleteParentAction.Prevent);
             childClassDef.RelationshipDefCol.Add(relDef);
             Assert.AreEqual(relDef, childClassDef.GetRelationship("rel"));
 

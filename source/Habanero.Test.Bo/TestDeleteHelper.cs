@@ -230,7 +230,7 @@ namespace Habanero.Test.BO
 				relKeyDef.Add(relPropDef);
 				SingleRelationshipDef singleRelationshipDef = new SingleRelationshipDef(
 					"MyParent", assemblyName,
-					className + relatedClassSuffix, relKeyDef, false);
+                    className + relatedClassSuffix, relKeyDef, false, DeleteParentAction.Prevent);
 				relationshipDefCol.Add(singleRelationshipDef);
 			}
 			if (hasMultipleRelationship)

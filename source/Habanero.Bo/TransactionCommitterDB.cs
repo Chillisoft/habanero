@@ -49,27 +49,22 @@ namespace Habanero.BO
         {
             foreach (Relationship relationship in transaction.BusinessObject.Relationships)
             {
-                if (relationship is MultipleRelationship)
+                if (MustDeleteRelatedObjects(relationship))
                 {
-                    MultipleRelationship multipleRelationship = (MultipleRelationship) relationship;
-                    if (MustDeleteRelatedObjects(multipleRelationship))
+                    IBusinessObjectCollection col = relationship.GetRelatedBusinessObjectCol();
+                    for (int i = col.Count - 1; i >= 0; i--)
                     {
-                        IBusinessObjectCollection col = multipleRelationship.GetRelatedBusinessObjectCol();
-                        for (int i = col.Count - 1; i >= 0; i--)
-                        {
-                            BusinessObject bo = col[i];
-                            bo.Delete();
-                            TransactionalBusinessObjectDB deleteChildTransaction =new TransactionalBusinessObjectDB(bo);
-                            ExecuteTransactionToDataSource(deleteChildTransaction);
-                        }
+                        BusinessObject bo = col[i];
+                        bo.Delete();
+                        ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
                     }
                 }
             }
         }
 
-        private static bool MustDeleteRelatedObjects(MultipleRelationship multipleRelationship)
+        private static bool MustDeleteRelatedObjects(Relationship relationship)
         {
-            return multipleRelationship.DeleteParentAction == DeleteParentAction.DeleteRelated;
+            return relationship.DeleteParentAction == DeleteParentAction.DeleteRelated;
         }
 
         /// <summary>

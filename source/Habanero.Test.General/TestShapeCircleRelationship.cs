@@ -43,7 +43,7 @@ namespace Habanero.Test.General
 			propDef = classDef.PropDefcol["ShapeID"]; 
 			lRelPropDef = new RelPropDef(propDef, "ShapeID");
 			relKeyDef.Add(lRelPropDef);
-			relDef = new SingleRelationshipDef("Circle", typeof(Circle), relKeyDef, false);
+            relDef = new SingleRelationshipDef("Circle", typeof(Circle), relKeyDef, false, DeleteParentAction.Prevent);
 			classDef.RelationshipDefCol.Add(relDef);
 		}
 

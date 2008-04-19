@@ -39,8 +39,8 @@ namespace Habanero.BO.ClassDefinition
         /// reference to the related object.  Could be false for memory-
         /// intensive applications.</param>
         public SingleRelationshipDef(string relationshipName, Type relatedObjectClassType, RelKeyDef relKeyDef,
-                                     bool keepReferenceToRelatedObject)
-            : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject)
+                                     bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
+            : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
         {
 		}
 
@@ -55,8 +55,8 @@ namespace Habanero.BO.ClassDefinition
         /// reference to the related object.  Could be false for memory-
         /// intensive applications.</param>
 		public SingleRelationshipDef(string relationshipName, string relatedObjectAssemblyName, string relatedObjectClassName, RelKeyDef relKeyDef,
-									 bool keepReferenceToRelatedObject)
-			: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject)
+                                     bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
+			: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
 		{
 		}
 

@@ -133,7 +133,7 @@ namespace Habanero.BO
 				throw new InvalidRelationshipAccessException("The 'multiple' relationship " + relationshipName +
 															 " was accessed as a 'single' relationship (using GetRelatedObject()).");
 			}
-			return ((SingleRelationship)relationship).GetRelatedObject<T>(_bo.GetDatabaseConnection());
+			return ((SingleRelationship)relationship).GetRelatedObject<T>();
     	}
 
 		

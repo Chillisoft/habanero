@@ -29,7 +29,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test, ExpectedException(typeof(ArgumentException))]
         public void TestAddDuplicationException()
         {
-            SingleRelationshipDef relDef = new SingleRelationshipDef("rel", typeof(MyRelatedBo), new RelKeyDef(), true);
+            SingleRelationshipDef relDef = new SingleRelationshipDef("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent);
             RelationshipDefCol col = new RelationshipDefCol();
             col.Add(relDef);
             col.Add(relDef);
@@ -38,7 +38,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestRemove()
         {
-            SingleRelationshipDef relDef = new SingleRelationshipDef("rel", typeof(MyRelatedBo), new RelKeyDef(), true);
+            SingleRelationshipDef relDef = new SingleRelationshipDef("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent);
             RelationshipDefColInheritor col = new RelationshipDefColInheritor();
             
             col.CallRemove(relDef);

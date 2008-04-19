@@ -63,39 +63,7 @@ namespace Habanero.BO
             get { return ((MultipleRelationshipDef) _relDef).OrderBy; }
         }
 
-        ///<summary>
-        /// Returns the appropriate delete action when the parent is deleted.
-        /// i.e. delete related objects, dereference related objects, prevent deletion.
-        ///</summary>
-        public DeleteParentAction DeleteParentAction
-        {
-            get { return ((MultipleRelationshipDef) _relDef).DeleteParentAction; }
-        }
-
-        /// <summary>
-		/// Returns the set of business objects that relate to this one
-		/// through the specific relationship
-		/// </summary>
-		/// <returns>Returns a collection of business objects</returns>
-		public virtual IBusinessObjectCollection GetRelatedBusinessObjectCol()
-		{
-            return GetRelatedBusinessObjectColInternal<BusinessObject>(false);
-		}
-
-    	/// <summary>
-    	/// Returns the set of business objects that relate to this one
-    	/// through the specific relationship
-    	/// </summary>
-    	/// <returns>Returns a collection of business objects</returns>
-		public virtual BusinessObjectCollection<T> GetRelatedBusinessObjectCol<T>()
-    		where T : BusinessObject
-        {
-    	    IBusinessObjectCollection boCol = GetRelatedBusinessObjectColInternal<T>(true);
-    	    return (BusinessObjectCollection<T>)boCol;
-        }
-
-        private IBusinessObjectCollection GetRelatedBusinessObjectColInternal<T>(bool useGenericParameter) 
-    		where T : BusinessObject
+        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>() 
         {
             if(_boCol != null)
             {
@@ -104,14 +72,8 @@ namespace Habanero.BO
             }
 
             Type type = _relDef.RelatedObjectClassType;
-            Type collectionItemType;
-            if(useGenericParameter)
-            {
-                collectionItemType = typeof (T);
-            } else
-            {
-                collectionItemType = type;
-            }
+            Type collectionItemType = typeof (TBusinessObject);
+
             //Check that the type can be created and raise appropriate error 
             try
             {
@@ -132,18 +94,55 @@ namespace Habanero.BO
                                                         "An error occurred while attempting to load a related " +
                                                         "business object collection of type '{0}' into a " +
                                                         "collection of the specified generic type('{1}').",
-                                                        type, typeof(T)));
+                                                        type, typeof(TBusinessObject)));
             }
             IBusinessObjectCollection boCol;
-            if (useGenericParameter)
-            {
-                boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<T>(this);
+                boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
                    // _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
-            } else
+
+            if (_relDef.KeepReferenceToRelatedObject)
             {
-                boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection(type, this); 
-                   // _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
+                _boCol = boCol;
             }
+            return boCol;
+        }
+
+        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
+        {
+            if (_boCol != null)
+            {
+                BOLoader.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
+                return _boCol;
+            }
+
+            Type type = _relDef.RelatedObjectClassType;
+            Type collectionItemType= type;
+              //Check that the type can be created and raise appropriate error 
+            try
+            {
+                Activator.CreateInstance(type, true);
+            }
+            catch (Exception ex)
+            {
+                throw new UnknownTypeNameException(String.Format(
+                                                       "An error occurred while attempting to load a related " +
+                                                       "business object collection, with the type given as '{0}'. " +
+                                                       "Check that the given type exists and has been correctly " +
+                                                       "defined in the relationship and class definitions for the classes " +
+                                                       "involved.", type), ex);
+            }
+            //if (!(type == collectionItemType || type.IsSubclassOf(collectionItemType)))
+            //{
+            //    throw new HabaneroArgumentException(String.Format(
+            //                                            "An error occurred while attempting to load a related " +
+            //                                            "business object collection of type '{0}' into a " +
+            //                                            "collection of the specified generic type('{1}').",
+            //                                            type, typeof(TBusinessObject)));
+            //}
+            IBusinessObjectCollection boCol;
+                boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection(type, this);
+                // _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
+            
 
             if (_relDef.KeepReferenceToRelatedObject)
             {

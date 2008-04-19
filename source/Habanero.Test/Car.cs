@@ -87,7 +87,7 @@ namespace Habanero.Test
             RelPropDef lRelPropDef = new RelPropDef(propDef, "ContactPersonID");
             relKeyDef.Add(lRelPropDef);
 
-            RelationshipDef relDef = new SingleRelationshipDef("Owner", typeof (ContactPerson), relKeyDef, false);
+            RelationshipDef relDef = new SingleRelationshipDef("Owner", typeof(ContactPerson), relKeyDef, false, DeleteParentAction.Prevent);
 
             relDefCol.Add(relDef);
 
@@ -103,7 +103,7 @@ namespace Habanero.Test
             lRelPropDef = new RelPropDef(propDef, "PK1Prop2");
             relKeyDef.Add(lRelPropDef);
 
-            relDef = new SingleRelationshipDef("Driver", typeof (ContactPersonCompositeKey), relKeyDef, true);
+            relDef = new SingleRelationshipDef("Driver", typeof(ContactPersonCompositeKey), relKeyDef, true, DeleteParentAction.Prevent);
 
 
             relDefCol.Add(relDef);
@@ -115,7 +115,7 @@ namespace Habanero.Test
             lRelPropDef = new RelPropDef(propDef, "CarID");
             relKeyDef.Add(lRelPropDef);
 
-            relDef = new SingleRelationshipDef("Engine", typeof (Engine), relKeyDef, false);
+            relDef = new SingleRelationshipDef("Engine", typeof(Engine), relKeyDef, false, DeleteParentAction.Prevent);
 
             relDefCol.Add(relDef);
             return relDefCol;

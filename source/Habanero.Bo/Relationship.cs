@@ -60,5 +60,39 @@ namespace Habanero.BO
         {
             get { return _relDef; }
         }
+
+        ///<summary>
+        /// Returns the appropriate delete action when the parent is deleted.
+        /// i.e. delete related objects, dereference related objects, prevent deletion.
+        ///</summary>
+        public DeleteParentAction DeleteParentAction
+        {
+            get { return _relDef.DeleteParentAction; }
+        }
+
+        /// <summary>
+        /// Returns the set of business objects that relate to this one
+        /// through the specific relationship
+        /// </summary>
+        /// <returns>Returns a collection of business objects</returns>
+        public virtual IBusinessObjectCollection GetRelatedBusinessObjectCol()
+        {
+            return GetRelatedBusinessObjectColInternal();
+        }
+
+        /// <summary>
+        /// Returns the set of business objects that relate to this one
+        /// through the specific relationship
+        /// </summary>
+        /// <returns>Returns a collection of business objects</returns>
+        public virtual BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectCol<TBusinessObject>()
+            where TBusinessObject : BusinessObject
+        {
+            IBusinessObjectCollection boCol = GetRelatedBusinessObjectColInternal<TBusinessObject>();
+            return (BusinessObjectCollection<TBusinessObject>)boCol;
+        }
+
+        protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>() where TBusinessObject : BusinessObject;
+        protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal();
     }
 }

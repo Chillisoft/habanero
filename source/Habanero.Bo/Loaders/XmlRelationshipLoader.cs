@@ -98,7 +98,7 @@ namespace Habanero.BO.Loaders
             if (_type == "single")
             {
 				return _defClassFactory.CreateSingleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
-					_relKeyDef, _keepReferenceToRelatedObject);
+					_relKeyDef, _keepReferenceToRelatedObject, _deleteParentAction);
 				//return new SingleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
 				//    _relKeyDef, _keepReferenceToRelatedObject);				//return
 				//    new SingleRelationshipDef(_name, _relatedClassType, _relKeyDef,

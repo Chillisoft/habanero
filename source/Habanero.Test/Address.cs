@@ -87,7 +87,7 @@ namespace Habanero.Test
             RelPropDef relPropDef = new RelPropDef(propDef, "ContactPersonID");
             relKeyDef.Add(relPropDef);
 
-            RelationshipDef relDef = new SingleRelationshipDef("ContactPerson", typeof (ContactPerson), relKeyDef, false);
+            RelationshipDef relDef = new SingleRelationshipDef("ContactPerson", typeof(ContactPerson), relKeyDef, false, DeleteParentAction.Prevent);
 
             relDefCol.Add(relDef);
             

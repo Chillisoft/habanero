@@ -458,6 +458,37 @@ namespace Habanero.Test.BO
             Assert.IsFalse(contactPersonTestBO.State.IsNew);
         }
 
+        [Test]
+        public void Test3LayerDeleteRelated()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            Address address;
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            OrganisationTestBO.LoadDefaultClassDef();
+
+            OrganisationTestBO org = new OrganisationTestBO();
+            contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
+            org.Save();
+            contactPersonTestBO.Save();
+            org.Delete();
+
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(org);
+            //---------------Execute Test ----------------------
+
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            AssertBOStateIsValidAfterDelete(org);
+            AssertBOStateIsValidAfterDelete(contactPersonTestBO);
+            AssertBOStateIsValidAfterDelete(address);
+
+            AssertBusinessObjectNotInDatabase(org);
+            AssertBusinessObjectNotInDatabase(contactPersonTestBO);
+            AssertBusinessObjectNotInDatabase(address);
+
+        }
+
 
 
         private void AssertBusinessObjectNotInDatabase(BusinessObject bo)

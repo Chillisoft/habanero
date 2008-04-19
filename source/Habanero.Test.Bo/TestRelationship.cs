@@ -51,7 +51,7 @@ namespace Habanero.Test.BO
             RelPropDef lRelPropDef = new RelPropDef(propDef, "MockBOID");
             mRelKeyDef.Add(lRelPropDef);
 
-            mRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, false);
+            mRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, false, DeleteParentAction.Prevent);
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCreateRelationshipHoldRelRef()
         {
-            RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, true);
+            RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, true, DeleteParentAction.Prevent);
             SingleRelationship rel = (SingleRelationship)lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
             Assert.AreEqual(lRelationshipDef.RelationshipName, rel.RelationshipName);
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);
@@ -114,7 +114,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestGetRelatedObject()
         {
-            RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, true);
+            RelationshipDef lRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, true, DeleteParentAction.Prevent);
             SingleRelationship rel = (SingleRelationship)lRelationshipDef.CreateRelationship(mMockBo, mMockBo.PropCol);
             Assert.AreEqual(lRelationshipDef.RelationshipName, rel.RelationshipName);
             Assert.IsTrue(mMockBo.GetPropertyValue("MockBOProp1") == null);

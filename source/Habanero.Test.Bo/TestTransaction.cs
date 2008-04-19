@@ -190,7 +190,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(expectedDeleteContactPerson, statements[1].Statement.ToString().Substring(0, expectedDeleteContactPerson.Length));
         }
 
-        [Test,Ignore]
+        [Test, Ignore]
         public void TestDelete3LevelsDeep()
         {
             //---------------Set up test pack-------------------

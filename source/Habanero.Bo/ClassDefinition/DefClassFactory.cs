@@ -85,11 +85,11 @@ namespace Habanero.BO.ClassDefinition
 
 		public SingleRelationshipDef CreateSingleRelationshipDef(string relationshipName, string relatedAssemblyName,
 		                                                         string relatedClassName, RelKeyDef relKeyDef,
-		                                                         bool keepReferenceToRelatedObject)
+                                                                 bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction)
 		{
 			return
 				new SingleRelationshipDef(relationshipName, relatedAssemblyName, relatedClassName, relKeyDef,
-				                          keepReferenceToRelatedObject);
+				                          keepReferenceToRelatedObject, deleteParentAction);
 		}
 
 		public MultipleRelationshipDef CreateMultipleRelationshipDef(string relationshipName, string relatedAssemblyName,

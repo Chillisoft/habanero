@@ -48,7 +48,7 @@ namespace Habanero.Test.BO.ClassDefinition
             RelPropDef lRelPropDef = new RelPropDef(propDef, "MockBOID");
             mRelKeyDef.Add(lRelPropDef);
 
-            mRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, false);
+            mRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, false, DeleteParentAction.Prevent);
             //DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetConnectionString();
         }
 
@@ -64,7 +64,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [ExpectedException(typeof(HabaneroArgumentException))]
         public void TestCreateRelationshipWithNonBOType()
         {
-            RelationshipDef relDef = new SingleRelationshipDef("Relation1", typeof(String), mRelKeyDef, false);
+            RelationshipDef relDef = new SingleRelationshipDef("Relation1", typeof(String), mRelKeyDef, false, DeleteParentAction.Prevent);
         }
 
         [Test]
@@ -126,7 +126,8 @@ namespace Habanero.Test.BO.ClassDefinition
 
         private class RelationshipDefInheritor : RelationshipDef
         {
-            public RelationshipDefInheritor() : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true)
+            public RelationshipDefInheritor()
+                : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
             {}
 
             public override Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol)

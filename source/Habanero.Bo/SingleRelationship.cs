@@ -58,21 +58,19 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the related object using the database connection provided
+        /// Returns the related object 
         /// </summary>
-        /// <param name="connection">A database connection</param>
         /// <returns>Returns the related business object</returns>
         public BusinessObject GetRelatedObject(IDatabaseConnection connection)
         {
-        	return GetRelatedObject<BusinessObject>(connection);
+        	return GetRelatedObject<BusinessObject>();
         }
 
         /// <summary>
-        /// Returns the related object using the database connection provided
+        /// Returns the related object 
         /// </summary>
-        /// <param name="connection">A database connection</param>
         /// <returns>Returns the related business object</returns>
-        public T GetRelatedObject<T>(IDatabaseConnection connection)
+        public T GetRelatedObject<T>()
 			where T: BusinessObject
         {
             IExpression newRelationshipExpression = _relKey.RelationshipExpression();
@@ -85,7 +83,6 @@ namespace Habanero.BO
                     //log.Debug("HasRelationship returned true, loading object.") ;
                     BusinessObject busObj =
                         (BusinessObject)Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
-                    busObj.SetDatabaseConnection(connection);
 
                     busObj = BOLoader.Instance.GetBusinessObject(busObj, newRelationshipExpression);
                     if (_relDef.KeepReferenceToRelatedObject)
@@ -139,6 +136,21 @@ namespace Habanero.BO
         public void ClearCache()
         {
             _relatedBo = null;
+        }
+
+
+        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
+        {
+            BusinessObjectCollection<TBusinessObject> col = new BusinessObjectCollection<TBusinessObject>();
+            col.Add(this.GetRelatedObject<TBusinessObject>());
+            return col;
+        }
+
+        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
+        {
+            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>();
+            col.Add(this.GetRelatedObject<BusinessObject>());
+            return col;
         }
     }
 

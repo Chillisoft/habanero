@@ -159,5 +159,28 @@ namespace Habanero.Test.BO.Loaders
 					</relationship>",
                 itsPropDefs);
         }
+
+        [Test]
+        public void TestDeleteActionDefaultMultiple()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Execute Test ----------------------
+            MultipleRelationshipDef relDef = (MultipleRelationshipDef)itsLoader.LoadRelationship(multipleRelationshipString, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DeleteParentAction.Prevent, relDef.DeleteParentAction);
+        }
+
+        [Test]
+        public void TestDeleteActionDefaultSingle()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Execute Test ----------------------
+            SingleRelationshipDef relDef = (SingleRelationshipDef)itsLoader.LoadRelationship(singleRelationshipString, itsPropDefs);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DeleteParentAction.Prevent, relDef.DeleteParentAction);
+        }
+
     }
 }

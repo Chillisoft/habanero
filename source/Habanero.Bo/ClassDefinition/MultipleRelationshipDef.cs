@@ -44,7 +44,6 @@ namespace Habanero.BO.ClassDefinition
         protected string _orderBy;
        // protected int _minNoOfRelatedObjects;
        // protected int _maxNoOfRelatedObjects;
-        protected DeleteParentAction _deleteParentAction;
 
 		#region Constructors
 
@@ -68,16 +67,13 @@ namespace Habanero.BO.ClassDefinition
             //				IExpression searchCriteria, 
                                        string orderBy,
                                        DeleteParentAction deleteParentAction)
-            : base(relationshipName,
-                                                                                     relatedObjectClassType, relKeyDef,
-                                                                                     keepReferenceToRelatedObject)
+            : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
-
             _orderBy = orderBy;
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             // _maxNoOfRelatedObjects = maxNoOfRelatedObjects;
-            _deleteParentAction = deleteParentAction;
+
         }
 
     	/// <summary>
@@ -98,14 +94,13 @@ namespace Habanero.BO.ClassDefinition
     	                               string relatedObjectClassName, RelKeyDef relKeyDef,
     	                               bool keepReferenceToRelatedObject, string orderBy,
     	                              DeleteParentAction deleteParentAction)
-    		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject)
+    		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
 		{
-			ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
-			
-			_orderBy = orderBy;
+            ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
+    	    _orderBy = orderBy;
 			//_minNoOfRelatedObjects = minNoOfRelatedObjects;
 			//_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
-			_deleteParentAction = deleteParentAction;
+
 		}
 
 		#endregion Constructors
@@ -142,17 +137,7 @@ namespace Habanero.BO.ClassDefinition
         //    protected set { _maxNoOfRelatedObjects = value; }
         //}
 
-        /// <summary>
-        /// Provides specific instructions with regards to deleting a parent
-        /// object.  See the DeleteParentAction enumeration for more detail.
-        /// </summary>
-        public DeleteParentAction DeleteParentAction
-        {
-			get { return _deleteParentAction; }
-			protected set { _deleteParentAction = value; }
-		}
-
-		#endregion Properties
+        #endregion Properties
 
 		/// <summary>
 		/// Overrides abstract method of parent to facilitate creation of 

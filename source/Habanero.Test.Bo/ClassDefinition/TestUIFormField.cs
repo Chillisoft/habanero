@@ -88,7 +88,7 @@ namespace Habanero.Test.BO.ClassDefinition
             RelKeyDef relKeyDef = new RelKeyDef();
             RelPropDef relPropDef = new RelPropDef(classDef.PropDefcol["TestProperty"], "TestProperty2");
             relKeyDef.Add(relPropDef);
-            SingleRelationshipDef def = new SingleRelationshipDef("TestRel", classDef2.AssemblyName, classDef2.ClassName, relKeyDef, false);
+            SingleRelationshipDef def = new SingleRelationshipDef("TestRel", classDef2.AssemblyName, classDef2.ClassName, relKeyDef, false, DeleteParentAction.Prevent);
             classDef.RelationshipDefCol.Add(def);
 
             UIFormField uiFormField;
