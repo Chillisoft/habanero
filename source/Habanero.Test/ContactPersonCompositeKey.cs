@@ -31,6 +31,9 @@ namespace Habanero.Test
     /// </summary>
     public class ContactPersonCompositeKey : BusinessObject
     {
+        private const string PK1_PROP1_NAME = "PK1Prop1";
+        private const string PK1_PROP2_NAME = "PK1Prop2";
+
         #region Constructors
 
         public ContactPersonCompositeKey() : base()
@@ -70,13 +73,13 @@ namespace Habanero.Test
             KeyDefCol keysCol = new KeyDefCol();
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = false;
-            primaryKey.Add(lPropDefCol["PK1Prop1"]);
-            primaryKey.Add(lPropDefCol["PK1Prop2"]);
+            primaryKey.Add(lPropDefCol[PK1_PROP1_NAME]);
+            primaryKey.Add(lPropDefCol[PK1_PROP2_NAME]);
 
             RelationshipDefCol relDefs = CreateRelationshipDefCol(lPropDefCol);
             ClassDef lClassDef =
                 new ClassDef(typeof (ContactPersonCompositeKey), primaryKey, lPropDefCol, keysCol, relDefs);
-            lClassDef.HasObjectID = false;
+            
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
@@ -88,12 +91,12 @@ namespace Habanero.Test
 
             //Define Driver Relationships
             RelKeyDef relKeyDef = new RelKeyDef();
-            PropDef propDef = lPropDefCol["PK1Prop1"];
+            PropDef propDef = lPropDefCol[PK1_PROP1_NAME];
 
             RelPropDef lRelPropDef = new RelPropDef(propDef, "DriverFK1");
             relKeyDef.Add(lRelPropDef);
 
-            propDef = lPropDefCol["PK1Prop2"];
+            propDef = lPropDefCol[PK1_PROP2_NAME];
 
             lRelPropDef = new RelPropDef(propDef, "DriverFK2");
             relKeyDef.Add(lRelPropDef);
@@ -132,15 +135,24 @@ namespace Habanero.Test
             propDef = new PropDef("VersionNumber", typeof(int), PropReadWriteRule.ReadWrite, 1);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("PK1Prop1", typeof(string), PropReadWriteRule.ReadWrite, "PK1_Prop1", null);
+            propDef = new PropDef(PK1_PROP1_NAME, typeof(string), PropReadWriteRule.ReadWrite, "PK1_Prop1", null);
             lPropDefCol.Add(propDef);
 
-            propDef = new PropDef("PK1Prop2", typeof(string), PropReadWriteRule.ReadWrite, "PK1_Prop2", null);
+            propDef = new PropDef(PK1_PROP2_NAME, typeof(string), PropReadWriteRule.ReadWrite, "PK1_Prop2", null);
             lPropDefCol.Add(propDef);
 
             return lPropDefCol;
         }
-
+        public string PK1Prop1
+        {
+            get { return GetPropertyValueString(PK1_PROP1_NAME); }
+            set { SetPropertyValue(PK1_PROP1_NAME, value); }
+        }
+        public string PK1Prop2
+        {
+            get { return GetPropertyValueString(PK1_PROP2_NAME); }
+            set { SetPropertyValue(PK1_PROP2_NAME, value); }
+        }
         /// <summary>
         /// returns the ContactPerson identified by id.
         /// </summary>
@@ -170,8 +182,8 @@ namespace Habanero.Test
         {
             return Relationships.GetRelatedCollection("Driver");
             //			return Car.LoadBusinessObjCol("DriverFK1 = " + 
-            //					this.GetPropertyValueString("PK1Prop1") +
-            //					" AND DriverFK2 = " + this.GetPropertyValueString("PK1Prop2"),"");
+            //					this.GetPropertyValueString(PK1_PROP1_NAME) +
+            //					" AND DriverFK2 = " + this.GetPropertyValueString(PK1_PROP2_NAME),"");
         }
 
         #endregion //Relationships

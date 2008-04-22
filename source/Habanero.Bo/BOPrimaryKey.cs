@@ -66,14 +66,6 @@ namespace Habanero.BO
             }
         }
 
-
-        //		internal bool IsObjectNew
-        //		{
-        //			get{return _isObjectNew;}
-        //			set{_isObjectNew = value;}
-        //		}
-
-
         /// <summary>
         /// Returns the object's ID
         /// </summary>
@@ -82,7 +74,7 @@ namespace Habanero.BO
         {
             if (IsObjectNew && (_newObjectID != Guid.Empty))
             {
-                return "ID=" + _newObjectID.ToString();
+                return "ID=" + _newObjectID;
             }
             else if (!IsObjectNew)
             {
@@ -112,18 +104,18 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         internal virtual string GetOrigObjectID()
         {
-            if (_newObjectID != Guid.Empty)
-            {
-                return "ID=" + _newObjectID.ToString();
-            }
-            else if (IsDirty)
-            {
-                return PersistedDatabaseWhereClause(null);
-            }
-            else
+            if (this.IsObjectNew && _newObjectID == Guid.Empty)
             {
                 return "";
             }
+
+            if (this.IsObjectNew )
+            {
+                return "ID=" + _newObjectID;
+            }
+
+            return PersistedDatabaseWhereClause(null);
+
         }
 
         /// <summary>
@@ -141,7 +133,7 @@ namespace Habanero.BO
         /// changed.
         /// </summary>
         /// <returns>Returns true if duplicates must be checked</returns>
-        internal override bool MustCheckKey()
+        internal override bool IsDirtyOrNew()
         {
             // if the properties have not been edited then ignore them since
             // they could not now cause a duplicate.

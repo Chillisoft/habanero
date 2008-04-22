@@ -38,10 +38,11 @@ namespace Habanero.BO
             }
             ISqlStatementCollection sql = transactionDB.GetSql();
             if (sql == null) return;
-            foreach (ISqlStatement statement in sql)
-            {
-                ExecuteSql(statement);
-            }
+            DatabaseConnection.CurrentConnection.ExecuteSql(sql, _dbTransaction);
+            //foreach (ISqlStatement statement in sql)
+            //{
+            //    ExecuteSql(statement);
+            //}
             base.ExecuteTransactionToDataSource(transaction);
         }
 
@@ -135,9 +136,10 @@ namespace Habanero.BO
         /// appropriate Transactional Business Object
         ///</summary>
         ///<param name="bo"></param>
-        public void AddBusinessObject(BusinessObject bo)
+        public override void AddBusinessObject(BusinessObject bo)
         {
             this.AddTransaction(new TransactionalBusinessObjectDB(bo));
         }
     }
+
 }

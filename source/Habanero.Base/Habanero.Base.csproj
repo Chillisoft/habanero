@@ -91,8 +91,6 @@
     <Compile Include="HabaneroApp.cs" />
     <Compile Include="IApplicationVersionUpgrader.cs" />
     <Compile Include="ISupportsAutoIncrementingField.cs" />
-    <Compile Include="ITransactional.cs" />
-    <Compile Include="ITransactionCommitter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -171,9 +169,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ITextFileLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ITransaction.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="NullCrypter.cs" />

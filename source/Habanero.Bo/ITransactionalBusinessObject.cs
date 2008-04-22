@@ -38,5 +38,24 @@ namespace Habanero.BO
         /// for any invalid values</param>
         /// <returns>Returns true if all are valid</returns>
         bool IsValid(out string invalidReason);
+
+        /// <summary>
+        /// Indicates whether there is a duplicate of this object in the data store based on
+        /// an alternate identifier.
+        /// eg. for a database this will select from the table to find an object
+        /// that matches this object's alternate key. In this case this object would be
+        /// a duplicate.
+        /// </summary>
+        /// <param name="errMsg">The description of the duplicate</param>
+        /// <returns>Whether a duplicate of this object exists in the data store (based on the alternate key)</returns>
+        bool HasDuplicateIdentifier(out string errMsg);
+
+        ///<summary>
+        /// Executes any custom code required by the business object before it is persisted to the database.
+        /// This has the additionl capability of creating or updating other business objects and adding these
+        /// to the transaction committer.
+        ///</summary>
+        ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
+        void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter);
     }
 }

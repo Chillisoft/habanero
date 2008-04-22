@@ -216,7 +216,7 @@
     <Compile Include="TestSingleRelationship.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestTransaction.cs" />
+    <Compile Include="TestTransactionCommitterHelper.cs" />
     <Compile Include="TestUnrefRelationshipDef.cs" />
   </ItemGroup>
   <ItemGroup>

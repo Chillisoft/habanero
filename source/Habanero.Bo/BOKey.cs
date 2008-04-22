@@ -208,7 +208,7 @@ namespace Habanero.BO
         /// of the BOProperties is null.
         /// </summary>
         /// <returns>Returns true if duplicates need to be checked for</returns>
-        internal virtual bool MustCheckKey()
+        internal virtual bool IsDirtyOrNew()
         {
             // if the properties have not been edited then ignore them since
             // they could not now cause a duplicate.

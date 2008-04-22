@@ -23,9 +23,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Security.Principal;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 using Habanero.BO.SqlGeneration;
@@ -43,7 +41,7 @@ namespace Habanero.BO
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
     /// </summary>
-    public class BusinessObject : ITransaction
+    public class BusinessObject 
     {
 
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
@@ -128,7 +126,7 @@ namespace Habanero.BO
                 }
             }
 
-            AddToLoadedBusinessObjectCol(this);
+            AddToLoadedObjectsCollection();
         }
 
         /// <summary>
@@ -155,7 +153,7 @@ namespace Habanero.BO
                 //If the item is not found then throw the appropriate exception
                 throw (new BusinessObjectNotFoundException());
             }
-            AddToLoadedBusinessObjectCol(this);
+            AddToLoadedObjectsCollection();
         }
 
         /// <summary>
@@ -234,12 +232,6 @@ namespace Habanero.BO
             else
             {
                 _connection = DefaultDatabaseConnection();
-                //if (_connection == null)
-                //{
-                //    throw new ArgumentException("The DefaultDatabaseConnection returned a null reference. " +
-                //                                "Please ensure that the overridden DefaultDatabaseConnection " +
-                //                                "returns a connection object.");
-                //}
             }
         }
 
@@ -305,20 +297,6 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Adds a weak reference so that the object will be cleaned up if no 
-        /// other objects in the system access it and if the garbage collector 
-        /// runs
-        /// </summary>
-        /// <param name="myBusinessObject">The business object</param>
-        /// TODO ERIC - "will be cleaned" or "will not"?
-        private static void AddToLoadedBusinessObjectCol(BusinessObject myBusinessObject)
-        {
-
-            AllLoaded().Add(myBusinessObject.ID.GetObjectId(),
-                                                 new WeakReference(myBusinessObject));
-        }
-
-        /// <summary>
         /// Returns a Hashtable containing the loaded business objects
         /// </summary>
         /// <returns></returns>
@@ -369,15 +347,6 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the ID as a string
-        /// </summary>
-        /// <returns>Returns a string</returns>
-        string ITransaction.StrID()
-        {
-            return ID.ToString();
-        }
-
-        /// <summary>
         /// Sets the concurrency control object
         /// </summary>
         /// <param name="concurrencyControl">The concurrency control</param>
@@ -418,11 +387,12 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns the class definition
+        /// Returns or sets the class definition. Setting the classdef is not recommended
         /// </summary>
         public ClassDef ClassDef
         {
             get { return _classDef; }
+            set { _classDef = value; }
         }
 
         /// <summary>
@@ -802,36 +772,6 @@ namespace Habanero.BO
             prop.Value = propValue;
         }
 
-        ///// <summary>
-        ///// Returns the property collection
-        ///// </summary>
-        ///// <returns>Returns a BOPropCol object</returns>
-        //internal BOPropCol GetBOPropCol()
-        //{
-        //    return _boPropCol;
-        //}
-
-        ///// <summary>
-        ///// Returns the property having the name specified
-        ///// </summary>
-        ///// <param name="propName">The property name</param>
-        ///// <returns>Returns a BOProp object</returns>
-        ///// <exception cref="InvalidPropertyNameException">Thrown if no
-        ///// property exists by the name specified</exception>
-        //protected internal BOProp GetBOProp(string propName)
-        //{
-        //    BOProp prop = _boPropCol[propName];
-        //    if (prop == null)
-        //    {
-        //        throw new InvalidPropertyNameException("The property '" + propName + 
-        //            "' for the class '" + ClassName + "' has not been declared " +
-        //            "in the class definitions.  Add the property to the class " +
-        //            "definitions and add the property to the class, or check that " +
-        //            "spelling and capitalisation are correct.");
-        //    }
-        //    return prop;
-        //}
-
         /// <summary>
         /// Indicates whether all of the property values are valid
         /// </summary>
@@ -943,20 +883,16 @@ namespace Habanero.BO
         protected internal virtual void AfterLoad()
         {
         }
-        [Obsolete]
-		private bool NeedsPersisting()
-		{
-			return !(State.IsDeleted && State.IsNew) && (State.IsDirty || State.IsNew);
-		}
+
 
         /// <summary>
         /// Commits to the database any changes made to the object
         /// </summary>
         public void Save()
         {
-			Transaction transaction = new Transaction(_connection);
-			transaction.AddTransactionObject(this);
-			transaction.CommitTransaction();
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(this);
+            committer.CommitTransaction();
         }
 
         /// <summary>
@@ -968,29 +904,35 @@ namespace Habanero.BO
             if (State.IsDeleted)
             {
                 SetStateAsPermanentlyDeleted();
-                RemoveFromLoadedObjectsCollection();
+                RemoveFromAllLoaded();
                 FireDeleted();
             }
             else
             {
+                RemoveFromAllLoaded();
+                StorePersistedPropertyValues();
                 SetStateAsUpdated();
+
                 AddToLoadedObjectsCollection();
+
                 FireSaved();
             }
             ReleaseWriteLocks();
         }
 
+        private void StorePersistedPropertyValues()
+        {
+            _boPropCol.BackupPropertyValues();
+        }
+
+
         private void AddToLoadedObjectsCollection()
         {
             if (!AllLoaded().ContainsKey(ID.GetObjectId()))
             {
-                AddToLoadedBusinessObjectCol(this);
+                AllLoaded().Add(this.ID.GetObjectId(),
+                                                     new WeakReference(this));
             }
-        }
-
-        private void RemoveFromLoadedObjectsCollection()
-        {
-            AllLoaded().Remove(this.ID.ToString());
         }
 
         private void SetStateAsUpdated()
@@ -1013,53 +955,28 @@ namespace Habanero.BO
             State.IsEditing = false;
         }
 
-        /// <summary>
-        /// Steps to carry out before the Save() command is run. You can add objects to the current
-        /// transaction using this method, such as a database number generator.  No validity checks are 
-        /// made to the BusinessObject after this step, so be careful not to invalidate the object.
-        /// </summary>
-        /// <param name="transactionCommitter">The current transaction committer - any objects added to this will
-        /// be committed in the same transaction as this one.</param>
-        protected internal virtual void BeforeSave(ITransactionCommitter transactionCommitter)
+        ///<summary>
+        /// Executes any custom code required by the business object before it is persisted to the database.
+        /// This has the additionl capability of creating or updating other business objects and adding these
+        /// to the transaction committer.
+        /// <remarks> Recursive call to UpdateObjectBeforePersisting will not be done i.e. it is the bo developers responsibility to implement</remarks>
+        ///</summary>
+        ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
+        protected internal virtual void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
         {
         }
 
-        /// <summary>
-        /// Steps to carry out after the Save() command is run
-        /// </summary>
-        protected virtual void AfterSave()
-        {
-        }
+        //TODO: put this back with a test
+        ///// <summary>
+        ///// Steps to carry out after the Save() command is run
+        ///// </summary>
+        //protected virtual void AfterSave()
+        //{
+        //}
 
-        /// <summary>
-        /// Updates the business object collection with the new primary key
-        /// if the object's primary key has been changed/edited
-        /// </summary>
-        protected void UpdateBusinessObjectBaseCol()
+        private void RemoveFromAllLoaded()
         {
-            //No need to do anything if the object does not have an ID.
-            if (!_classDef.HasObjectID)
-            {
-                //If the primary key has not changed then do nothing.
-                if (_primaryKey.IsDirty)
-                {
-                    //If there was an id before then
-                    if (_primaryKey.GetOrigObjectID().Length > 0)
-                    {
-                        //If the ID was not a temp objectId then remove it from the collection
-                        if (!State.IsNew)
-                        {
-                            AllLoaded().Remove(_primaryKey.GetOrigObjectID());
-                        }
-                        //If the object with the new ID does not exist in the collection then 
-                        // add it.
-                        if (!AllLoaded().ContainsKey(this.ID.GetObjectId()))
-                        {
-                            AddToLoadedBusinessObjectCol(this);
-                        }
-                    }
-                }
-            }
+            if (_primaryKey != null) AllLoaded().Remove(_primaryKey.GetOrigObjectID());
         }
 
         /// <summary>
@@ -1131,18 +1048,6 @@ namespace Habanero.BO
             {
                 this.Deleted(this, new BOEventArgs(this));
             }
-        }
-
-        /// <summary>
-        /// Checks a number of rules, including concurrency, duplicates and
-        /// duplicate primary keys
-        /// </summary>
-        protected virtual void CheckPersistRules()
-        {
-            CheckConcurrencyBeforePersisting();
-            CheckForDuplicatePrimaryKey();
-            CheckForDuplicates();
-        	CheckForPreventDelete();
         }
 
         /// <summary>
@@ -1246,210 +1151,8 @@ namespace Habanero.BO
 
         #endregion //Concurrency
 
-        #region Check Duplicates
 
-        /// <summary>
-        /// Checks for duplicates, throwing an exception if found
-        /// </summary>
-        /// <exception cref="BusObjDuplicateConcurrencyControlException">Thrown
-        /// if duplicates are found</exception>
-        protected void CheckForDuplicates()
-        {
-            if (_keysCol == null)
-            {
-                return;
-            }
-
-            if (!State.IsDeleted)
-            {
-                foreach (BOKey lBOKey in _keysCol)
-                {
-                    if (lBOKey.MustCheckKey())
-                    {
-                        SqlStatement checkDuplicateSql =
-                            new SqlStatement(DatabaseConnection.CurrentConnection);
-                        checkDuplicateSql.Statement.Append(this.GetSelectSql());
-                        
-                        // Special case where child and parent have same ID name causes ambiguous field name
-                        string idWhereClause = WhereClause(checkDuplicateSql);
-                        string id = StringUtilities.GetLeftSection(idWhereClause, " ");
-                        if (StringUtilities.CountOccurrences(checkDuplicateSql.ToString(), id) >= 3)
-                        {
-                            idWhereClause = idWhereClause.Insert(idWhereClause.IndexOf(id),
-                                            _classDef.TableName + ".");
-                        }
-
-                        string whereClause = " ( NOT (" + idWhereClause + ")) AND " +
-                            GetCheckForDuplicateWhereClause(lBOKey, checkDuplicateSql);
-                        checkDuplicateSql.AppendCriteria(whereClause);
-                        //string whereClause = " WHERE ( NOT " + WhereClause() +
-                        //	") AND " + GetCheckForDuplicateWhereClause(lBOKey);
-
-                        using (IDataReader dr = this._connection.LoadDataReader(checkDuplicateSql))
-                        {
-                            //_classDef.SelectSql + whereClause)) {  //)  DatabaseConnection.CurrentConnection.LoadDataReader
-                            try
-                            {
-                                if (dr != null && dr.Read()) //Database object with these criteria already exists
-                                {
-                                    log.Error(String.Format("For key: {6}. Duplicate record error occurred for: " +
-                                            "Class: {0}, Username: {1}, Machinename: {2}, " +
-                                            "Time: {3}, Sql: {4}, Object: {5}",
-                                            ClassName, WindowsIdentity.GetCurrent().Name, Environment.MachineName,
-                                            DateTime.Now, whereClause, this, lBOKey.KeyDef.KeyNameForDisplay));
-                                    
-                                    string keyNameLead = "";
-                                    if (lBOKey.KeyDef.KeyNameForDisplay != null && lBOKey.KeyDef.KeyNameForDisplay.Length > 0)
-                                    {
-                                        keyNameLead = lBOKey.KeyDef.KeyNameForDisplay + ": ";
-                                    }
-
-                                    if (lBOKey.KeyDef.Message != null)
-                                    {
-                                        throw new BusObjDuplicateConcurrencyControlException(
-                                            keyNameLead + lBOKey.KeyDef.Message);
-                                    }
-
-                                    string propNames = "";
-                                    foreach (BOProp prop in lBOKey.GetBOPropCol())
-                                    {
-                                        if (propNames.Length > 0) propNames += ", ";
-                                        propNames += prop.PropertyName;
-                                    }
-                                    if (lBOKey.Count == 1)
-                                    {
-                                        throw new BusObjDuplicateConcurrencyControlException(
-                                            keyNameLead + "A record already exists with that value for " +
-                                            propNames + ".");
-                                    }
-                                    else
-                                    {
-                                        throw new BusObjDuplicateConcurrencyControlException(
-                                            keyNameLead + "A record already exists with that combination " +
-                                            "of values for: " + propNames + ".");
-                                    }
-                                }
-                            }
-                            finally
-                            {
-                                if (dr != null && !(dr.IsClosed))
-                                {
-                                    dr.Close();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Checks for duplicate primary keys, throwing an exception if
-        /// found
-        /// </summary>
-        /// <exception cref="BusObjDuplicateConcurrencyControlException">Thrown
-        /// if duplicates are found</exception>
-        protected void CheckForDuplicatePrimaryKey()
-        {
-            //Only check if this does not have an object ID since an object id
-            // is guaranteed to be unique
-            if (!_classDef.HasObjectID && !State.IsDeleted)
-            {
-                //Only check if the primaryKey is 
-                if (_primaryKey.MustCheckKey())
-                {
-                    SqlStatement checkSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-                    checkSql.Statement.Append(this.GetSelectSql());
-                    string whereClause = " WHERE " + _primaryKey.DatabaseWhereClause(checkSql);
-                    checkSql.Statement.Append(whereClause);
-
-                    using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(checkSql))
-                    {
-                        //_classDef.SelectSql + whereClause)) {
-                        try
-                        {
-                            if (dr.Read()) //Database object with these criteria already exists
-                            {
-                                log.Error(String.Format("Duplicate record error occurred on primary key for: " +
-                                            "Class: {0}, Username: {1}, Machinename: {2}, " +
-                                            "Time: {3}, Sql: {4}, Object: {5}",
-                                            ClassName, WindowsIdentity.GetCurrent().Name, Environment.MachineName,
-                                            DateTime.Now, whereClause, this));
-                                
-                                string propNames = "";
-                                foreach (BOProp prop in _primaryKey.GetBOPropCol())
-                                {
-                                    if (propNames.Length > 0) propNames += ", ";
-                                    propNames += prop.PropertyName;
-                                }
-                                if (_primaryKey.Count == 1)
-                                {
-                                    throw new BusObjDuplicateConcurrencyControlException(
-                                        "A record already exists with that value for " +
-                                        propNames + ".");
-                                }
-                                else
-                                {
-                                    throw new BusObjDuplicateConcurrencyControlException(
-                                        "A record already exists with that combination " +
-                                        "of values for: " + propNames + ".");
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            if (dr != null && !(dr.IsClosed))
-                            {
-                                dr.Close();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Creates a "where" clause used to check for duplicate keys
-        /// </summary>
-        /// <param name="lBOKey">The business object key</param>
-        /// <param name="sql">The sql statement used to generate and track
-        /// parameters</param>
-        /// <returns>Returns a string</returns>
-        private static string GetCheckForDuplicateWhereClause(BOKey lBOKey, SqlStatement sql)
-        {
-            if (lBOKey == null)
-            {
-                throw new InvalidKeyException("An error occurred because a " +
-                    "BOKey argument was null.");
-            }
-            return lBOKey.DatabaseWhereClause(sql);
-		}
-
-		#endregion //Check Duplicates
-
-    	#region Check Deletion
-
-    	protected void CheckForPreventDelete()
-    	{
-			//Only check if this businessobject is being deleted
-			if (State.IsDeleted)
-			{
-				string reason;
-				if (!CheckCanDelete(out reason))
-				{
-					throw new BusinessObjectReferentialIntegrityException(reason);
-				}
-			}
-    	}
-
-    	private bool CheckCanDelete(out string reason)
-    	{
-    		return DeleteHelper.CheckCanDelete(this, out reason);
-    	}
-
-    	#endregion //Check Deletion
-
-		#region Sql Statements
+    	#region Sql Statements
 
 		/// <summary>
         /// Parses the parameter sql information into the given search
@@ -1499,26 +1202,6 @@ namespace Habanero.BO
         protected internal  virtual string SelectSqlStatement(SqlStatement selectSql)
         {
             string statement = SelectSqlWithNoSearchClauseIncludingWhere();
-            //string statement = SelectSqlWithNoSearchClause();
-            //if (statement.IndexOf(" WHERE ") == -1)
-            //{
-            //    statement += " WHERE ";
-            //}
-            //else
-            //{
-            //    statement += " AND ";
-            //}
-
-            ////			ClassDef currentClassDef = this.ClassDef ;
-            ////			while (currentClassDef.IsUsingClassTableInheritance()) {
-            ////				foreach (DictionaryEntry entry in currentClassDef.SuperClassClassDef.PrimaryKeyDef) {
-            ////					PropDef def = (PropDef) entry.Value;
-            ////					statement += currentClassDef.SuperClassClassDef.TableName + "." + def.FieldName;
-            ////					statement += " = " + currentClassDef.TableName + "." + def.FieldName;
-            ////					statement += " AND ";
-            ////				}
-            ////				currentClassDef = currentClassDef.SuperClassClassDef ;
-            ////			}
             statement += WhereClause(selectSql);
             return statement;
         }
@@ -1554,70 +1237,6 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Returns a set of sql statements needed to persist the data changes
-        /// to the database
-        /// </summary>
-        /// <returns>Returns a collection of sql statements</returns>
-        ISqlStatementCollection ITransaction.GetPersistSql()
-        {
-            return this.GetPersistSql();
-        }
-  
-        [Obsolete]
-        protected internal ISqlStatementCollection GetPersistSql()
-        {
-            if (State.IsNew && !(State.IsDeleted))
-            {
-                return GetInsertSql();
-            }
-            else if (!(State.IsDeleted))
-            {
-                return GetUpdateSql();
-            }
-            else if (State.IsDeleted && !(State.IsNew))
-            {
-                return GetDeleteSql();
-            }
-            else
-            {
-                throw new HabaneroApplicationException("A serious error has occurred " +
-                    "since a business object is in an invalid state.");
-                //return null;
-            }
-        }
-        [Obsolete]
-        /// <summary>
-        /// Builds a "delete" sql statement list for this object
-        /// </summary>
-        /// <returns>Returns a collection of sql statements</returns>
-        protected internal SqlStatementCollection GetDeleteSql()
-        {
-            DeleteStatementGenerator generator = new DeleteStatementGenerator(this, _connection);
-            return generator.Generate();
-        }
-
-        [Obsolete]
-		/// <summary>
-        /// Returns an "insert" sql statement list for inserting this object
-        /// </summary>
-        /// <returns>Returns a collection of sql statements</returns>
-        protected internal SqlStatementCollection GetInsertSql()
-        {
-            InsertStatementGenerator gen = new InsertStatementGenerator(this, _connection);
-            return gen.Generate();
-        }
-        [Obsolete]
-        /// <summary>
-        /// Returns an "update" sql statement list for updating this object
-        /// </summary>
-        /// <returns>Returns a collection of sql statements</returns>
-        protected internal SqlStatementCollection GetUpdateSql()
-        {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(this, _connection);
-            return gen.Generate();
-        }
-
-        /// <summary>
         /// Returns a "select" sql statement string that is used to load this
         /// object from the database
         /// </summary>
@@ -1627,7 +1246,7 @@ namespace Habanero.BO
         {
             return new SelectStatementGenerator(this, this._connection).Generate(limit);
         }
-
+        
         /// <summary>
         /// Returns a "select" sql statement string that is used to load this
         /// object from the database
@@ -1639,145 +1258,6 @@ namespace Habanero.BO
         }
 
         #endregion //Sql Statements
-
-        #region Implement ITransaction
-		
-		/// <summary>
-		/// Returns the transaction ranking
-		/// </summary>
-		/// <returns>Returns zero</returns>
-		/// TODO ERIC - what is a transaction ranking? some kind of priority
-		/// scheme?
-		int ITransaction.TransactionRanking()
-		{
-			return 0;
-		}
-
-		/// <summary>
-		/// Notifies this ITransaction object that it has been added to the 
-		/// specified Transaction object
-		/// </summary>
-		bool ITransaction.AddingToTransaction(ITransactionCommitter transaction)
-        {
-			return true;
-        }
-
-    	private void CascadeIfDeleting(ITransactionCommitter transaction)
-    	{
-    		if (State.IsDeleted && !(State.IsNew))
-    		{
-    			foreach (Relationship relationship in _relationshipCol)
-    			{
-    				MultipleRelationship multipleRelationship = relationship as MultipleRelationship;
-    				if (multipleRelationship != null)
-    				{
-    					IBusinessObjectCollection boCol;
-    					boCol = multipleRelationship.GetRelatedBusinessObjectCol();
-    					foreach (BusinessObject businessObject in boCol)
-    					{
-							businessObject.Delete();
-
-    						transaction.AddTransactionObject(businessObject);
-    					}
-    				}
-    			}
-    		}
-    	}
-
-    	//TODO!!! This stuff needs to have a better solution - database operations 
-		//performed in after apply edit, should be in the
-		// same transaction as the applyedit.  Look at Transaction for more.
-		/// <summary>
-		/// Carries out additional steps before committing changes to the
-		/// database
-		/// </summary>
-		void ITransaction.BeforeCommit(ITransactionCommitter transactionCommitter)
-		{
-			if (NeedsPersisting())
-			{
-				string reasonNotSaved = "";
-                //string customRuleErrors = "";
-			    bool isvalid;
-                BeforeSave(transactionCommitter);
-                if (State.IsDeleted)
-                {
-                    isvalid = true;
-                }
-                else
-                {
-                    isvalid = IsValid(out reasonNotSaved);
-                    //isvalid = CheckCustomRules(out customRuleErrors) && isvalid;
-                }
-			    if (isvalid)
-				{
-				    CheckPersistRules();
-                    CascadeIfDeleting(transactionCommitter);
-					UpdatedConcurrencyControlProperties();
-				}
-				else
-				{
-				    string errors = String.Format("Errors occurred for the '{0}' identified as '{1}':", ClassDef.DisplayName, this);
-                    errors = AppendErrors(errors,reasonNotSaved);
-                    //errors = AppendErrors(errors,customRuleErrors);
-                    //string errors = this.ToString() + Environment.NewLine;
-                    //errors += reasonNotSaved;
-                    //if (!String.IsNullOrEmpty(errors)) errors += Environment.NewLine;
-                    //errors += customRuleErrors;
-                    throw new BusObjectInAnInvalidStateException(errors);
-				}
-			}
-		}
-
-        private static string AppendErrors(string errors, string appendError)
-        {
-            return StringUtilities.AppendMessage(errors, appendError);
-        }
-
-
-        /// <summary>
-		/// Carries out additional steps after committing changes to the
-		/// database
-		/// </summary>
-		void ITransaction.AfterCommit()
-		{
-			if (NeedsPersisting())
-			{
-				if (_transactionLog != null)
-				{
-					_transactionLog.RecordTransactionLog(this, WindowsIdentity.GetCurrent().Name);
-				}
-				UpdateBusinessObjectBaseCol();
-				_boPropCol.BackupPropertyValues();
-			}
-		}
-
-       /// <summary>
-        /// Carries out additional steps once the transaction has been committed
-        /// to the database
-        /// </summary>
-        void ITransaction.TransactionCommitted()
-        {
-            this.UpdateStateAsPersisted();
-			this.AfterSave();
-        }
-		
-        /// <summary>
-        /// Cancels the edit
-        /// </summary>
-        void ITransaction.TransactionCancelEdits()
-        {
-            this.Restore();
-        }
-
-        /// <summary>
-        /// Rolls back the transactions. Does nothing in this implementation.
-        /// </summary>
-        void ITransaction.TransactionRolledBack()
-        {
-            //Do nothing
-        }
-
-        #endregion //ITransaction
 
     }
 }

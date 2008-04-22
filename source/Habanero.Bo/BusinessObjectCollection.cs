@@ -924,22 +924,24 @@ namespace Habanero.BO
         /// </summary>
         public virtual void SaveAll()
         {
-            Transaction transaction = new Transaction(DatabaseConnection.CurrentConnection);
-            SaveAllInTransaction(transaction);
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+
+           // Transaction transaction = new Transaction(DatabaseConnection.CurrentConnection);
+            SaveAllInTransaction(committer);
 		}
 
-        protected virtual void SaveAllInTransaction(ITransactionCommitter transaction)
+        protected virtual void SaveAllInTransaction(TransactionCommitter transaction)
         {
             foreach (TBusinessObject bo in this)
             {
                 if (bo.State.IsDirty || bo.State.IsNew)
                 {
-                    transaction.AddTransactionObject(bo);
+                    transaction.AddBusinessObject(bo);
                 }
             }
             foreach (TBusinessObject bo in this._createdBusinessObjects)
             {
-                transaction.AddTransactionObject(bo);
+                transaction.AddBusinessObject(bo);
             }
             transaction.CommitTransaction();
             _createdBusinessObjects.Clear();
@@ -1120,11 +1122,17 @@ namespace Habanero.BO
         public virtual TBusinessObject CreateBusinessObject()
         {
             TBusinessObject newBO = (TBusinessObject) Activator.CreateInstance(typeof(TBusinessObject));
-            newBO.Saved += delegate(object sender, BOEventArgs e)
+            EventHandler<BOEventArgs> savedEventHandler = null;
+            savedEventHandler = delegate(object sender, BOEventArgs e)
                                {
-                                   _createdBusinessObjects.Remove((TBusinessObject)e.BusinessObject);
-                                   Add((TBusinessObject)e.BusinessObject);
+                                   if (_createdBusinessObjects.Remove((TBusinessObject)e.BusinessObject))
+                                   {
+                                       Add((TBusinessObject) e.BusinessObject);
+                                       e.BusinessObject.Saved -= savedEventHandler;
+                                   }
+                                   
                                };
+            newBO.Saved += savedEventHandler;
             _createdBusinessObjects.Add(newBO);
             return newBO;
         }

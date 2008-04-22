@@ -50,12 +50,14 @@ namespace Habanero.BO
         /// </summary>
         public override void SaveAll()
         {
-            Transaction transaction = new Transaction(DatabaseConnection.CurrentConnection);
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+
+            
             foreach (TBusinessObject bo in _removedBusinessObjects)
             {
-                transaction.AddTransactionObject(bo);
+                committer.AddBusinessObject(bo);
             }
-            SaveAllInTransaction(transaction);
+            SaveAllInTransaction(committer);
             _removedBusinessObjects.Clear();
         }
 

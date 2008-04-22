@@ -55,7 +55,19 @@ namespace Habanero.Test
             set { SetPropertyValue("CombinedParts", value); }
         }
 
-        protected internal override void BeforeSave(ITransactionCommitter transactionCommiter)
+        //protected internal override void BeforeSave(ITransactionCommitter transactionCommiter)
+        //{
+        //    CombinedParts = FirstPart + SecondPart;
+        //}
+
+        ///<summary>
+        /// Executes any custom code required by the business object before it is persisted to the database.
+        /// This has the additionl capability of creating or updating other business objects and adding these
+        /// to the transaction committer.
+        /// <remarks> Recursive call to UpdateObjectBeforePersisting will not be done i.e. it is the bo developers responsibility to implement</remarks>
+        ///</summary>
+        ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
+        protected internal override void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
         {
             CombinedParts = FirstPart + SecondPart;
         }

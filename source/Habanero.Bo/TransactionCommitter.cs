@@ -54,13 +54,49 @@ namespace Habanero.BO
         private void Begin()
         {
             ValidateTransactionCanBePersisted();
+            UpdateObjectBeforePersisting();
             BeginDataSource();
         }
+
+        private  void UpdateObjectBeforePersisting()
+        {
+            foreach (ITransactionalBusinessObject transaction in _originalTransactions.ToArray())
+            {
+                transaction.UpdateObjectBeforePersisting(this);
+            }
+        }
+
         /// <summary>
         /// Validates each Itransactional object in the collection and builds up a
         /// list of errors of error messages.
         /// </summary>
         private void ValidateTransactionCanBePersisted()
+        {
+            CheckObjectsAreValid();
+            ValidateObjectsCanBeDeleted();
+            CheckForDuplicateObjects();
+        }
+
+        private void CheckForDuplicateObjects()
+        {
+            string allMessages = "";
+            foreach (ITransactionalBusinessObject transaction in _originalTransactions)
+            {
+                string errMsg;
+                if (transaction.HasDuplicateIdentifier(out errMsg))
+                {
+                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(allMessages))
+            {
+                throw new BusObjDuplicateConcurrencyControlException(allMessages);
+            }
+        }
+
+
+        private void CheckObjectsAreValid()
         {
             string allMessages = "";
             foreach (ITransactionalBusinessObject transaction in _originalTransactions)
@@ -76,6 +112,11 @@ namespace Habanero.BO
             {
                 throw new BusObjectInAnInvalidStateException(allMessages);
             }
+        }
+
+        private void ValidateObjectsCanBeDeleted()
+        {
+            string allMessages = "";
             foreach (ITransactionalBusinessObject transaction in _originalTransactions)
             {
                 if (!transaction.IsDeleted) continue;
@@ -91,6 +132,7 @@ namespace Habanero.BO
                 throw new BusinessObjectReferentialIntegrityException(allMessages);
             }
         }
+
         /// <summary>
         /// Begins the transaction on the appropriate databasource.
         /// </summary>
@@ -161,6 +203,17 @@ namespace Habanero.BO
         protected virtual void ExecuteTransactionToDataSource(ITransactionalBusinessObject transaction)
         {
             _executedTransactions.Add(transaction);
+        }
+
+        ///<summary>
+        /// Add an object of type business object to the transaction.
+        /// The DBTransactionCommiter wraps this Business Object in the
+        /// appropriate Transactional Business Object
+        ///</summary>
+        ///<param name="bo"></param>
+        public virtual void AddBusinessObject(BusinessObject bo)
+        {
+            this.AddTransaction(new TransactionalBusinessObject(bo));
         }
     }
 }

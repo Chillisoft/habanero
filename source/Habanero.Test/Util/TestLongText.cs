@@ -141,7 +141,7 @@ namespace Habanero.Test.Util
             stringBuilder.Append('*', 2500);
             string value = stringBuilder.ToString();
             bo.SetPropertyValue("TestProp", value);
-            ISqlStatementCollection sqlCol = bo.GetPersistSql();
+            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo).GetSql();
             ISqlStatement sqlStatement = sqlCol[0];
             IList parameters = sqlStatement.Parameters;
             IDbDataParameter longTextParam = (IDbDataParameter) parameters[1];

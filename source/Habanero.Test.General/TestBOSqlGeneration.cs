@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -33,7 +34,7 @@ namespace Habanero.Test.General
         {
             this.SetupDBConnection();
             shape = new Shape();
-            insertSql = shape.GetInsertSql();
+            insertSql = new InsertStatementGenerator(shape, DatabaseConnection.CurrentConnection).Generate();
         }
 
         [Test]

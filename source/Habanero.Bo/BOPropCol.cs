@@ -43,7 +43,7 @@ namespace Habanero.BO
         /// Adds a property to the collection
         /// </summary>
         /// <param name="prop">The property to add</param>
-        internal void Add(BOProp prop)
+        public void Add(BOProp prop)
         {
             if (Contains(prop.PropertyName.ToUpper()))
             {
@@ -54,6 +54,8 @@ namespace Habanero.BO
             }
             _boProps.Add(prop.PropertyName.ToUpper(), prop);
         }
+
+
 
         /// <summary>
         /// Copies the properties from another collection into this one

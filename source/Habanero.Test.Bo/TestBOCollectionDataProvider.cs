@@ -68,6 +68,7 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetupTest()
         {
+            TransactionCommitterStub committer = new TransactionCommitterStub();
 			itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
 			itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
             itsCollection = new BusinessObjectCollection<BusinessObject>(itsClassDef);
@@ -80,7 +81,9 @@ namespace Habanero.Test.BO
             itsBo2.SetPropertyValue("TestProp2", "s2");
             itsCollection.Add(itsBo2);
         	SetupSaveExpectation();
-            itsBo1.Save();
+            committer.AddBusinessObject(itsBo1);
+            committer.CommitTransaction();
+            //itsBo1.Save();
             //itsBo1.Save();
             itsProvider = CreateDataSetProvider(itsCollection);
             BOMapper mapper = new BOMapper(itsCollection.SampleBo);
@@ -98,14 +101,14 @@ namespace Habanero.Test.BO
 
 		protected void SetupSaveExpectation()
 		{
-			itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-				DatabaseConnection.CurrentConnection.GetConnection());
-			itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-				DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                DatabaseConnection.CurrentConnection.GetConnection());
-			itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql",
-				1, new object[] { null, null });
+//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+//                DatabaseConnection.CurrentConnection.GetConnection());
+//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+//                DatabaseConnection.CurrentConnection.GetConnection());
+//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+//    DatabaseConnection.CurrentConnection.GetConnection());
+//            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+//DatabaseConnection.CurrentConnection.GetConnection());
 		}
 
         [Test]

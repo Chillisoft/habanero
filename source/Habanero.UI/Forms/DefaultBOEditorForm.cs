@@ -200,8 +200,8 @@ namespace Habanero.UI.Forms
                 {
                     return;
                 }
-                Transaction transaction = CreateSaveTransaction();
-                transaction.CommitTransaction();
+                TransactionCommitter committer = CreateSaveTransaction();
+                committer.CommitTransaction();
 
                 //TODO: this is TERRIBLE!
                 if (_boPanel.Controls[0] is TabControl)
@@ -242,11 +242,12 @@ namespace Habanero.UI.Forms
         /// specifying which object to update
         /// </summary>
         /// <returns>Returns the transaction object</returns>
-        protected virtual Transaction CreateSaveTransaction()
+        protected virtual TransactionCommitter CreateSaveTransaction()
         {
-            Transaction saveTransaction = new Transaction(BOLoader.Instance.GetDatabaseConnection(_bo));
-            saveTransaction.AddTransactionObject(_bo);
-            return saveTransaction;
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(_bo);
+
+            return committer;
         }
 
         /// <summary>

@@ -175,8 +175,11 @@ namespace Habanero.Test.BO
 			//bo.SetPropertyValue("TestProp", "Hello") ;
 			//bo.Save() ;
 
+
             bo.SetPropertyValue("TestProp", "Goodbye");
-            bo.Save();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            committer.AddBusinessObject(bo);
+            committer.CommitTransaction();
             bo.Restore();
             Assert.AreEqual("Goodbye", bo.GetPropertyValueString("TestProp"));
         }
@@ -201,24 +204,27 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = BeforeSaveBo.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            Expect.Call(itsConnection.GetConnection())
-                .Return(DatabaseConnection.CurrentConnection.GetConnection())
-                .Repeat.Times(2);
-            Expect.Call(itsConnection.ExecuteSql(null, null))
-                .IgnoreArguments()
-                .Return(1)
-                .Repeat.Times(1);
-            mock.ReplayAll();
+            //MockRepository mock = new MockRepository();
+            //IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            //Expect.Call(itsConnection.GetConnection())
+            //    .Return(DatabaseConnection.CurrentConnection.GetConnection())
+            //    .Repeat.Times(2);
+            //Expect.Call(itsConnection.ExecuteSql(null, null))
+            //    .IgnoreArguments()
+            //    .Return(1)
+            //    .Repeat.Times(1);
+            //mock.ReplayAll();
 
-            BeforeSaveBo bo = (BeforeSaveBo)classDef.CreateNewBusinessObject(itsConnection);
+            BeforeSaveBo bo = (BeforeSaveBo)classDef.CreateNewBusinessObject();
             bo.FirstPart = "foo";
             bo.SecondPart = "bar";
             Assert.AreEqual("", bo.CombinedParts);
-            bo.Save();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            committer.AddBusinessObject(bo);
+            committer.CommitTransaction();
+            //bo.Save();
             Assert.AreEqual("foobar", bo.CombinedParts);
-            mock.VerifyAll();
+            //mock.VerifyAll();
         }
 
         [Test, ExpectedException(typeof(BusObjDeleteException))]

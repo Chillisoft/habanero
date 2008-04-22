@@ -341,9 +341,6 @@
     <Compile Include="SqlGeneration\SelectStatementGenerator.cs" />
     <Compile Include="SqlGeneration\UpdateStatementGenerator.cs" />
     <Compile Include="SupportsAutoIncrementingFieldBO.cs" />
-    <Compile Include="Transaction.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TransactionalBusinessObject.cs" />
     <Compile Include="TransactionalBusinessObjectDB.cs" />
     <Compile Include="TransactionCommitterDB.cs" />

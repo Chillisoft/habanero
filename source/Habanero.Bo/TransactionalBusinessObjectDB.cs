@@ -46,7 +46,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetInsertSql()
         {
-            InsertStatementGenerator gen = new InsertStatementGenerator(_businessObject, _businessObject.GetDatabaseConnection());
+            InsertStatementGenerator gen = new InsertStatementGenerator(BusinessObject, BusinessObject.GetDatabaseConnection());
             return gen.Generate();
         }
         /// <summary>
@@ -55,7 +55,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetDeleteSql()
         {
-            DeleteStatementGenerator generator = new DeleteStatementGenerator(_businessObject, _businessObject.GetDatabaseConnection());
+            DeleteStatementGenerator generator = new DeleteStatementGenerator(BusinessObject, BusinessObject.GetDatabaseConnection());
             return generator.Generate();
         }
         /// <summary>
@@ -64,7 +64,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetUpdateSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(_businessObject, _businessObject.GetDatabaseConnection());
+            UpdateStatementGenerator gen = new UpdateStatementGenerator(BusinessObject, BusinessObject.GetDatabaseConnection());
             return gen.Generate();
         }
     }

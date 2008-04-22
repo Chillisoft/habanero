@@ -58,7 +58,7 @@ namespace Habanero.BO
         /// Constructor to initialise a new property
         /// </summary>
         /// <param name="propDef">The property definition</param>
-        internal BOProp(PropDef propDef)
+        public BOProp(PropDef propDef)
         {
             _propDef = propDef;
             _displayName = propDef.DisplayName;
@@ -473,6 +473,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// This property returns the 
         /// Returns a string containing the database field name and the 
         /// persisted value, in the format of:<br/>
         /// "[fieldname] = '[value]'" (eg. "children = '2'")<br/>
@@ -517,7 +518,14 @@ namespace Habanero.BO
         {
             if (_currentValue == null)
             {
-                return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
+                if (sql == null)
+                {
+                    return DatabaseFieldName + " = '" + PropertyValueString + "'";
+                }
+                else
+                {
+                    return SqlFormattingHelper.FormatFieldName(DatabaseFieldName, sql.Connection) + " is NULL ";
+                }
             }
             else
             {

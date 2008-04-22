@@ -77,7 +77,7 @@ namespace Habanero.BO.ClassDefinition
         //private string _SelectSql = "";
         private string _tableName = "";
         private string _displayName = "";
-        private bool _hasObjectID = true;
+
         private PrimaryKeyDef _primaryKeyDef;
         private PropDefCol _propDefCol;
         private KeyDefCol _keysCol;
@@ -424,7 +424,7 @@ namespace Habanero.BO.ClassDefinition
         public PrimaryKeyDef PrimaryKeyDef
         {
             get { return _primaryKeyDef; }
-            protected set { _primaryKeyDef = value; }
+            protected set { _primaryKeyDef = value;  }
         }
 
         /// <summary>
@@ -433,8 +433,12 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public bool HasObjectID
         {
-            get { return _hasObjectID; }
-            set { _hasObjectID = value; }
+            get
+            {
+                if (_primaryKeyDef == null) return true;
+                return _primaryKeyDef.IsObjectID;
+            }
+
         }
 
         /// <summary>

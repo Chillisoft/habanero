@@ -22,7 +22,9 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.SqlGeneration;
 using Habanero.DB;
+using Habanero.Test.BO;
 using NMock;
 using NUnit.Framework;
 
@@ -169,25 +171,28 @@ namespace Habanero.Test.General
         {
             IMock connectionControl = new DynamicMock(typeof (IDatabaseConnection));
             IDatabaseConnection connection = (IDatabaseConnection) connectionControl.MockInstance;
-            connectionControl.ExpectAndReturn("LoadDataReader", null, new object[] {null});
-            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-			connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-			connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-			connectionControl.ExpectAndReturn("ExecuteSql", 3, new object[] { null, null });
+            //connectionControl.ExpectAndReturn("LoadDataReader", null, new object[] {null});
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
+            //connectionControl.ExpectAndReturn("ExecuteSql", 3, new object[] { null, null });
 
             FilledCircle myCircle = new FilledCircle();
             myCircle.SetDatabaseConnection(connection);
-            myCircle.Save();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            committer.AddBusinessObject(myCircle);
+            committer.CommitTransaction();
+            //myCircle.Save();
             myCircle.SetPropertyValue("Colour", 4);
 
-            SqlStatementCollection myUpdateSql = myCircle.GetUpdateSql();
+            SqlStatementCollection myUpdateSql = new UpdateStatementGenerator(myCircle, DatabaseConnection.CurrentConnection).Generate();
             Assert.AreEqual(1, myUpdateSql.Count);
             connectionControl.Verify();
         }

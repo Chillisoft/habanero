@@ -207,7 +207,7 @@ namespace Habanero.BO
         /// return false, since the objectID is guaranteed to be unique.
         /// </summary>
         /// <returns>Returns false</returns>
-        internal override bool MustCheckKey()
+        internal override bool IsDirtyOrNew()
         {
             return false;
         }

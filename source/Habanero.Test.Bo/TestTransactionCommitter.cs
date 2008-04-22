@@ -19,7 +19,9 @@ namespace Habanero.Test.BO
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
             CleanStubDatabaseTransactionTable();
+            ContactPersonTestBO.DeleteAllContactPeople();
         }
+
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -27,12 +29,13 @@ namespace Habanero.Test.BO
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
         }
+
         [TearDown]
         public void TearDownTest()
         {
             //runs every time any testmethod is complete
-        
         }
+
         [Test]
         public void TestAddTransactionsToATransactionCommiter()
         {
@@ -46,6 +49,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(2, committerDB.OriginalTransactions.Count);
         }
+
         [Test]
         public void TestCommitAddedTransactions()
         {
@@ -63,8 +67,7 @@ namespace Habanero.Test.BO
         }
 
 
-
-        [Test,ExpectedException(typeof (NotImplementedException))]
+        [Test, ExpectedException(typeof (NotImplementedException))]
         public void TestRaisesException_onError()
         {
             //---------------Set up test pack-------------------
@@ -91,11 +94,11 @@ namespace Habanero.Test.BO
             {
                 committerDB.CommitTransaction();
             }
-            //---------------Test Result -----------------------
-            catch(NotImplementedException )
+                //---------------Test Result -----------------------
+            catch (NotImplementedException)
             {
                 Assert.IsFalse(transactional1.Committed);
-                Assert.IsFalse(transactional2.Committed);               
+                Assert.IsFalse(transactional2.Committed);
             }
         }
 
@@ -157,9 +160,9 @@ namespace Habanero.Test.BO
             try
             {
                 committerDB.CommitTransaction();
-            } catch (NotImplementedException)
+            }
+            catch (NotImplementedException)
             {
-                
             }
             //---------------Test Result -----------------------
             Assert.IsFalse(transactional1.Committed);
@@ -192,7 +195,7 @@ namespace Habanero.Test.BO
 
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
-            
+
             //---------------Test Result -----------------------
             AssertBOStateIsValidAfterInsert_Updated(mockBo);
             BOLoader.Instance.Refresh(mockBo);
@@ -237,6 +240,7 @@ namespace Habanero.Test.BO
             BOLoader.Instance.Refresh(mockBo);
             Assert.AreEqual(mockBOProp1, mockBo.MockBOProp1);
         }
+
         [Test]
         public void TestPersistSimpleBO_Delete()
         {
@@ -271,11 +275,10 @@ namespace Habanero.Test.BO
             AssertMockBONotInDatabase(mockBo.MockBOID);
         }
 
-        [Test,ExpectedException(typeof(BusObjectInAnInvalidStateException))]
+        [Test, ExpectedException(typeof (BusObjectInAnInvalidStateException))]
         public void TestPersistSimpleBO_Insert_InvalidData()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
@@ -291,11 +294,11 @@ namespace Habanero.Test.BO
             //    BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + contactPersonTestBO.MockBOID.ToString("B") + "'");
             //Assert.AreSame(contactPersonTestBO, savedMockBO);
         }
+
         [Test]
         public void TestPersistSimpleBO_Delete_InvalidData()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             contactPersonTestBO.Surname = null;
@@ -314,7 +317,6 @@ namespace Habanero.Test.BO
         public void TestPersistSimpleBO_FailingCustomRules()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
             MockBOWithCustomRule mockBO = new MockBOWithCustomRule();
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
             committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBO));
@@ -325,16 +327,16 @@ namespace Habanero.Test.BO
                 committerDB.CommitTransaction();
             }
             catch (BusObjectInAnInvalidStateException ex)
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             {
                 Assert.IsTrue(ex.Message.Contains(_customRuleErrorMessage));
             }
         }
+
         [Test]
         public void TestMessageTwoPersistSimpleBO_Failing()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
             MockBOWithCustomRule mockBO = new MockBOWithCustomRule();
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
             committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBO));
@@ -350,11 +352,10 @@ namespace Habanero.Test.BO
                 committerDB.CommitTransaction();
             }
             catch (BusObjectInAnInvalidStateException ex)
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             {
                 Assert.IsTrue(ex.Message.Contains(_customRuleErrorMessage));
                 Assert.IsTrue(ex.Message.Contains("Surname"));
-
             }
         }
 
@@ -378,26 +379,28 @@ namespace Habanero.Test.BO
         }
 
 
-        [Test, ExpectedException(typeof(BusinessObjectReferentialIntegrityException))]
+        [Test, ExpectedException(typeof (BusinessObjectReferentialIntegrityException))]
         public void TestPreventDelete()
         {
             //---------------Set up test pack-------------------
             Address address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
             contactPersonTestBO.Delete();
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
             committerDB.AddBusinessObject(contactPersonTestBO);
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
             //---------------Test Result -----------------------
-
         }
+
         [Test]
         public void TestNotPreventDelete_ForNonDeleted()
         {
             //---------------Set up test pack-------------------
             Address address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
             contactPersonTestBO.FirstName = Guid.NewGuid().ToString();
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
             committerDB.AddBusinessObject(contactPersonTestBO);
@@ -412,11 +415,12 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             Address address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
             contactPersonTestBO.Delete();
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
             committerDB.AddBusinessObject(contactPersonTestBO);
-            
+
             //---------------Execute Test ----------------------
             committerDB.CommitTransaction();
 
@@ -433,12 +437,13 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             Address address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
             contactPersonTestBO.Delete();
             TransactionCommitterDB committerDB = new TransactionCommitterDB();
             committerDB.AddBusinessObject(contactPersonTestBO);
             committerDB.AddTransaction(new StubDatabaseFailureTransaction());
-            
+
             //---------------Execute Test ----------------------
             try
             {
@@ -462,9 +467,9 @@ namespace Habanero.Test.BO
         public void Test3LayerDeleteRelated()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
             Address address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
             OrganisationTestBO.LoadDefaultClassDef();
 
             OrganisationTestBO org = new OrganisationTestBO();
@@ -486,26 +491,171 @@ namespace Habanero.Test.BO
             AssertBusinessObjectNotInDatabase(org);
             AssertBusinessObjectNotInDatabase(contactPersonTestBO);
             AssertBusinessObjectNotInDatabase(address);
-
         }
 
+        [Test]
+        public void TestCheckForDuplicatePrimaryKeys()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
+            DoTestCheckForDuplicateObjects();
+        }
 
+        private void DoTestCheckForDuplicateObjects()
+        {
+            ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
+            ContactPersonTestBO duplicateContactPerson = new ContactPersonTestBO();
+            duplicateContactPerson.ContactPersonID = Guid.NewGuid();
+            duplicateContactPerson.Surname = contactPersonCompositeKey.Surname;
+            duplicateContactPerson.FirstName = contactPersonCompositeKey.FirstName;
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(duplicateContactPerson);
+            //---------------Execute Test ----------------------
+            try
+            {
+                committer.CommitTransaction();
+                Assert.Fail();
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjDuplicateConcurrencyControlException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("Surname"));
+                Assert.IsTrue(ex.Message.Contains("FirstName"));
+            }
+            finally
+            {
+                //---------------Tear Down--------------------------
+                contactPersonCompositeKey.Delete();
+                contactPersonCompositeKey.Save();
+                if (!duplicateContactPerson.State.IsNew)
+                {
+                    duplicateContactPerson.Delete();
+                    duplicateContactPerson.Save();
+                }
+            }
+        }
 
-        private void AssertBusinessObjectNotInDatabase(BusinessObject bo)
+        [Test]
+        public void TestCheckForDuplicateAlternateKey()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithCompositeAlternateKey();
+            DoTestCheckForDuplicateObjects();
+        }
+
+        [Test]
+        public void TestCompositePrimaryUpdatesOrigObjectIDAfterSaving()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
+            ContactPersonTestBO contactPersonCompositeKey = GetUnsavedContactPersonCompositeKey();
+            string oldID = contactPersonCompositeKey.ID.GetObjectId();
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(contactPersonCompositeKey);
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            BOPrimaryKey objectID = contactPersonCompositeKey.ID;
+            Assert.AreEqual(objectID.GetOrigObjectID(), objectID.GetObjectId());
+            Assert.IsNotNull(ContactPersonTestBO.AllLoaded()[objectID.GetOrigObjectID()]);
+            Assert.IsFalse(ContactPersonTestBO.AllLoaded().ContainsKey(oldID));
+        }
+
+        [Test]
+        public void TestStorePersistedValue_BOProp()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString();
+            cp.Save();
+            cp.Surname = Guid.NewGuid().ToString();
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(cp);
+
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(cp.Surname, cp.Props["Surname"].PersistedPropertyValueString);
+        }
+        
+        [Test]
+        public void TestChangeCompositePrimaryKey()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
+            ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
+            string oldID = contactPersonCompositeKey.ID.GetObjectId();
+            Assert.IsNotNull(ContactPersonTestBO.AllLoaded()[oldID]);
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(contactPersonCompositeKey);
+            contactPersonCompositeKey.FirstName = "newName";
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
+            Assert.IsFalse(ContactPersonTestBO.AllLoaded().ContainsKey(oldID));
+            Assert.IsNotNull(ContactPersonTestBO.AllLoaded()[contactPersonCompositeKey.ID.GetObjectId()]);
+            //---------------Tear Down--------------------------
+            contactPersonCompositeKey.Delete();
+            contactPersonCompositeKey.Save();
+        }
+
+        [Test]
+        public void TestAddBusinessObjectToTransactionInBeforeSave()
+        {
+            //---------------Set up test pack-------------------
+
+            MockBOWithBeforeSave mockBo = new MockBOWithBeforeSave();
+            //Add this to the commiter
+            //Execute 
+            //Check that MockBOWithBeforeSave and its beforesave object are commited to database
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            committer.AddTransaction(new TransactionalBusinessObject(mockBo));
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, committer.OriginalTransactions.Count);
+        }
+
+        #region CustomAsserts
+
+        private static void AssertBusinessObjectNotInDatabase(BusinessObject bo)
         {
             BusinessObject missingBO =
-                BOLoader.Instance.GetBusinessObject(bo.GetType(),bo.ID.ToString());
+                BOLoader.Instance.GetBusinessObject(bo.GetType(), bo.ID.ToString());
             Assert.IsNull(missingBO);
         }
 
-        private void AssertBusinessObjectInDatabase(BusinessObject bo)
+        private static void AssertBusinessObjectInDatabase(BusinessObject bo)
         {
             BusinessObject loadedBO =
                 BOLoader.Instance.GetBusinessObject(bo.GetType(), bo.ID.ToString());
             Assert.IsNotNull(loadedBO);
         }
 
+        #endregion
+
         #region HelperMethods
+
+        private static ContactPersonTestBO GetSavedContactPersonCompositeKey()
+        {
+            ContactPersonTestBO contactPersonCompositeKey = GetUnsavedContactPersonCompositeKey();
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(contactPersonCompositeKey);
+            committer.CommitTransaction();
+            return contactPersonCompositeKey;
+        }
+
+        private static ContactPersonTestBO GetUnsavedContactPersonCompositeKey()
+        {
+            ContactPersonTestBO contactPersonCompositeKey = new ContactPersonTestBO();
+            contactPersonCompositeKey.ContactPersonID = Guid.NewGuid();
+            contactPersonCompositeKey.Surname = "Somebody";
+            contactPersonCompositeKey.FirstName = "Else";
+            return contactPersonCompositeKey;
+        }
 
         private static MockBO CreateSavedMockBO()
         {
@@ -536,7 +686,6 @@ namespace Habanero.Test.BO
             Assert.IsTrue(mockBo.State.IsValid);
         }
 
-
         internal class MockBOWithCustomRule : MockBO
         {
             /// <summary>
@@ -551,323 +700,22 @@ namespace Habanero.Test.BO
                 return false;
             }
         }
+
         #endregion
     }
 
-
-    #region StubObjectsForTesting
-
-    internal class StubDatabaseTransactionMultiple : TransactionalBusinessObjectDB
-    {
-        public StubDatabaseTransactionMultiple() : base(null)
-        {
-        }
-
-        ///<summary>
-        /// Execute
-        ///</summary>
-        protected internal override ISqlStatementCollection GetSql()
-        {
-            ISqlStatementCollection col = new SqlStatementCollection();
-            col.Add(new SqlStatement(DatabaseConnection.CurrentConnection, "insert into stubdatabasetransaction values('1', 'test')"));
-            col.Add(new SqlStatement(DatabaseConnection.CurrentConnection, "insert into stubdatabasetransaction values('2', 'test')"));
-            return col;
-        }
-
-        ///<summary>
-        ///</summary>
-        public override void UpdateStateAsCommitted()
-        {
-            
-        }
-
-        /// <summary>
-        /// Whether the business object's state is deleted
-        /// </summary>
-        public override bool IsDeleted
-        {
-            get { return false; }
-        }
-
-        ///<summary>
-        ///</summary>
-        ///<param name="invalidReason"></param>
-        ///<returns></returns>
-        public override bool IsValid(out string invalidReason)
-        {
-            invalidReason = "";
-            return true;
-        }
-    }
-
-    internal class StubDatabaseFailureTransaction: TransactionalBusinessObjectDB
-    {
-        private bool _committed;
-
-        internal StubDatabaseFailureTransaction() : base(null)
-        {
-            _committed = false;
-        }
-
-        ///<summary>
-        /// Execute
-        ///</summary>
-        protected internal override ISqlStatementCollection GetSql()
-        {
-            throw new NotImplementedException();
-        }
-
-        ///<summary>
-        ///</summary>
-        public override void UpdateStateAsCommitted()
-        {
-            _committed = true;
-        }
-
-        ///<summary>
-        ///</summary>
-        ///<param name="invalidReason"></param>
-        ///<returns></returns>
-        public override bool IsValid(out string invalidReason)
-        {
-            invalidReason = "";
-            return true;
-        }
-
-        public bool Committed
-        {
-            get { return _committed; }
-        }
-
-        /// <summary>
-        /// Whether the business object's state is deleted
-        /// </summary>
-        public override bool IsDeleted
-        {
-            get { return false; }
-        }
-    }
-
-    internal class StubDatabaseTransaction : TransactionalBusinessObjectDB
-    {
-        private bool _committed;
-
-        internal StubDatabaseTransaction()
-            : base(null)
-        {
-        }
-        ///<summary>
-        /// Execute
-        ///</summary>
-        protected internal override ISqlStatementCollection GetSql()
-        {
-            return new SqlStatementCollection(
-                new SqlStatement(DatabaseConnection.CurrentConnection, "insert into stubdatabasetransaction values('1', 'test')"));
-        }
-
-        ///<summary>
-        ///</summary>
-        public override void UpdateStateAsCommitted()
-        {
-            _committed = true;
-        }
-
-        /// <summary>
-        /// Whether the business object's state is deleted
-        /// </summary>
-        public override bool IsDeleted
-        {
-            get { return false; }
-        }
-
-        ///<summary>
-        ///</summary>
-        ///<param name="invalidReason"></param>
-        ///<returns></returns>
-        public override bool IsValid(out string invalidReason)
-        {
-            invalidReason = "";
-            return true;
-        }
-
-
-        public bool Committed
-        {
-            get { return _committed; }
-        }
-    }
-
-    internal class StubFailingTransaction : TransactionalBusinessObjectDB
-    {
-        private bool _committed;
-
-        internal StubFailingTransaction() : base(null)
-        {
-            _committed = false;
-        }
-
-        protected internal override ISqlStatementCollection GetSql()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        /// <summary>
-        /// Whether the business object's state is deleted
-        /// </summary>
-        public override bool IsDeleted
-        {
-            get { return false; }
-        }
-
-        ///<summary>
-        ///</summary>
-        public override void UpdateStateAsCommitted()
-        {
-            _committed = true;
-        }
-
-        ///<summary>
-        ///</summary>
-        ///<param name="invalidReason"></param>
-        ///<returns></returns>
-        public override bool IsValid(out string invalidReason)
-        {
-            invalidReason = "";
-            return true;
-        }
-
-        public bool Committed
-        {
-            get { return _committed; }
-        }
-    }
-    internal class StubSuccessfullTransaction : ITransactionalBusinessObject
-    {
-        private bool _committed;
-
-        public StubSuccessfullTransaction() 
-        {
-            _committed = false;
-        }
-
-        public ISqlStatementCollection GetSql()
-        {
-            return null;
-        }
-
-        ///<summary>
-        /// Returns the business object that this objects decorates.
-        ///</summary>
-        public BusinessObject BusinessObject
-        {
-            get { return null; }
-        }
-
-        /// <summary>
-        /// Whether the business object's state is deleted
-        /// </summary>
-        public bool IsDeleted
-        {
-            get { return false; }
-        }
-
-        /// <summary>
-        /// Whether the business object's state is new
-        /// </summary>
-        /// <returns></returns>
-        public bool IsNew()
-        {
-            return true;
-        }
-
-        ///<summary>
-        ///</summary>
-        public  void UpdateStateAsCommitted()
-        {
-            _committed = true;
-        }
-
-        ///<summary>
-        ///</summary>
-        ///<param name="invalidReason"></param>
-        ///<returns></returns>
-        public bool IsValid(out string invalidReason)
-        {
-            invalidReason = "";
-            return true;
-        }
-
-        public bool Committed
-        {
-            get { return _committed; }
-        }
-    }
-
-
-    internal class TransactionCommitterStubDB : TransactionCommitterDB
+    internal class MockBOWithBeforeSave:MockBO
     {
         /// <summary>
-        /// Begins the transaction on the appropriate databasource.
+        /// Steps to carry out before the Save() command is run. You can add objects to the current
+        /// transaction using this method, such as a database number generator.  No validity checks are 
+        /// made to the BusinessObject after this step, so be careful not to invalidate the object.
         /// </summary>
-        protected override void BeginDataSource()
+        /// <param name="transactionCommitter">The current transaction committer - any objects added to this will
+        /// be committed in the same transaction as this one.</param>
+        protected internal override void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
         {
-
-        }
-
-        protected override void ExecuteTransactionToDataSource(ITransactionalBusinessObject transaction)
-        {
-            TransactionalBusinessObjectDB transactionDB = (TransactionalBusinessObjectDB) transaction;
-            transactionDB.GetSql();
-        }
-
-        /// <summary>
-        /// Commits all the successfully executed statements to the datasource.
-        /// 2'nd phase of a 2 phase database commit.
-        /// </summary>
-        protected override void CommitToDatasource()
-        {
-
-        }
-
-        /// <summary>
-        /// In the event of any errors occuring during executing statements to the datasource 
-        /// <see cref="TransactionCommitter.ExecuteTransactionToDataSource"/> or during committing to the datasource
-        /// <see cref="TransactionCommitter.CommitToDatasource"/>
-        /// </summary>
-        protected override void TryRollback()
-        {
+            transactionCommitter.AddTransaction(new StubSuccessfullTransaction());
         }
     }
-    public class TransactionCommitterStub:TransactionCommitter
-    {
-        /// <summary>
-        /// Begins the transaction on the appropriate databasource.
-        /// </summary>
-        protected override void BeginDataSource()
-        {
-            
-        }
-
-        /// <summary>
-        /// Commits all the successfully executed statements to the datasource.
-        /// 2'nd phase of a 2 phase database commit.
-        /// </summary>
-        protected override void CommitToDatasource()
-        {
-
-        }
-
-        /// <summary>
-        /// In the event of any errors occuring during executing statements to the datasource 
-        /// <see cref="TransactionCommitter.ExecuteTransactionToDataSource"/> or during committing to the datasource
-        /// <see cref="TransactionCommitter.CommitToDatasource"/>
-        /// </summary>
-        protected override void TryRollback()
-        {
-        }
-    }
-
-    #endregion
-
 }

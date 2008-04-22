@@ -35,14 +35,6 @@ namespace Habanero.Test
     {
         public MyBO() {}
 
-        //public MyBO(ClassDef def) : base(def)
-        //{
-        //}
-
-        //public MyBO(ClassDef def, IDatabaseConnection conn) : base(def, conn)
-        //{
-        //}
-
         public MyBO(IDatabaseConnection conn) : base(conn){}
 
         protected override ClassDef ConstructClassDef()

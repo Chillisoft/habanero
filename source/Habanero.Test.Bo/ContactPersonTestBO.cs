@@ -50,6 +50,7 @@ namespace Habanero.Test.BO
 				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
 					<property  name=""ContactPersonID"" type=""Guid"" />
 					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
@@ -89,6 +90,50 @@ namespace Habanero.Test.BO
 					<primaryKey isObjectID=""false"" >
 						<prop name=""ContactPersonID"" />
                         <prop name=""Surname"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithCompositeAlternateKey()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property name=""FirstName"" />
+                    <key name=""AlternateKey"">
+                        <prop name=""Surname"" />
+                        <prop name=""FirstName"" />
+                    </key>
+                    <primaryKey >
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithCompositePrimaryKeyNameSurname()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property name=""FirstName"" />
+                    <primaryKey isObjectID=""false""  >
+                        <prop name=""Surname"" />
+                        <prop name=""FirstName"" />
 					</primaryKey>
 			    </class>
 			");
@@ -168,6 +213,7 @@ namespace Habanero.Test.BO
         public Guid ContactPersonID
         {
             get { return (Guid)GetPropertyValue("ContactPersonID"); }
+            set { this.SetPropertyValue("ContactPersonID", value); }
         }
 
         public string Surname

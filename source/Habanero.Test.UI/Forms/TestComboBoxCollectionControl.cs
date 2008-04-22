@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Test.BO;
 using Habanero.UI.Forms;
 using NMock;
 using NUnit.Framework;
@@ -59,18 +60,22 @@ namespace Habanero.Test.UI.Forms
             IDatabaseConnection databaseConnectionMock =
                 (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
 
-            SetupSaveExpectation();
-            SetupSaveExpectation();
+           // SetupSaveExpectation();
+           // SetupSaveExpectation();
 
             MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
             bo1.SetPropertyValue("TestProp", "abc");
             bo1.SetPropertyValue("TestProp2", "def");
-            bo1.Save();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            committer.AddBusinessObject(bo1);
+            //bo1.Save();
 
             MyBO bo2 = (MyBO) itsClassDef.CreateNewBusinessObject(databaseConnectionMock);
             bo2.SetPropertyValue("TestProp", "ghi");
             bo2.SetPropertyValue("TestProp2", "jkl");
-            bo2.Save();
+           //bo2.Save();
+            committer.AddBusinessObject(bo2);
+            committer.CommitTransaction();
 
             itsCollection = new BusinessObjectCollection<BusinessObject>(itsClassDef);
             itsCollection.Add(bo1);
@@ -89,18 +94,18 @@ namespace Habanero.Test.UI.Forms
                                                              DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+            //itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+            //                                                 DatabaseConnection.CurrentConnection.GetConnection());
+            //itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
         }
 
         private void SetupSaveExpectationGetConnectionTwice()
         {
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] { null, null });
+            //itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+             //                                                DatabaseConnection.CurrentConnection.GetConnection());
+            //itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] { null, null });
         }
 
         [TearDown]

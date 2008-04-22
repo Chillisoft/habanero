@@ -180,6 +180,7 @@ namespace Habanero.Test.General
         [Test]
         public void TestDatabaseReadWrite()
         {
+            Shape.ClearLoadedBusinessObjectBaseCol();
             // Test inserting & selecting
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";

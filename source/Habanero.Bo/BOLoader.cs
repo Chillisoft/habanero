@@ -354,6 +354,7 @@ namespace Habanero.BO
             }
             else
             {
+                col[0].AfterLoad();
                 return col[0];
             }
         }
@@ -405,7 +406,8 @@ namespace Habanero.BO
                     //Apply concurrency Control Strategy to the Business Object
                     if (refreshIfReqNotCurrent)
                     {
-                        loadedBusinessObject.CheckConcurrencyOnGettingObjectFromObjectManager();
+                        Instance.Refresh(loadedBusinessObject);
+                        //loadedBusinessObject.CheckConcurrencyOnGettingObjectFromObjectManager();
                     }
                     return loadedBusinessObject;
                 }
@@ -622,6 +624,14 @@ namespace Habanero.BO
         public void SetDatabaseConnection(BusinessObject bo, IDatabaseConnection connection)
         {
             bo.SetDatabaseConnection(connection);
+        }
+
+        /// <summary>
+        /// Clears all the loaded business objects from the collection of loaded business objects
+        /// </summary>
+        public void ClearLoadedBusinessObjects()
+        {
+            BusinessObject.ClearLoadedBusinessObjectBaseCol();
         }
 
 

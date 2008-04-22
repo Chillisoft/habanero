@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.BO;
+using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 
 namespace Habanero.Test.General
@@ -42,9 +43,10 @@ namespace Habanero.Test.General
             _filledCircle.SetPropertyValue("Radius", 10);
             _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            _insertSql = _filledCircle.GetInsertSql();
-            _updateSql = _filledCircle.GetUpdateSql();
-            _deleteSql = _filledCircle.GetDeleteSql();
+            _insertSql =
+                new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
@@ -59,9 +61,10 @@ namespace Habanero.Test.General
             _filledCircle.SetPropertyValue("Radius", 10);
             _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            _insertSql = _filledCircle.GetInsertSql();
-            _updateSql = _filledCircle.GetUpdateSql();
-            _deleteSql = _filledCircle.GetDeleteSql();
+            _insertSql =
+                new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
@@ -76,9 +79,10 @@ namespace Habanero.Test.General
             _filledCircle.SetPropertyValue("Radius", 10);
             _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            _insertSql = _filledCircle.GetInsertSql();
-            _updateSql = _filledCircle.GetUpdateSql();
-            _deleteSql = _filledCircle.GetDeleteSql();
+            _insertSql =
+                new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
@@ -93,9 +97,10 @@ namespace Habanero.Test.General
             _filledCircle.SetPropertyValue("Radius", 10);
             _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            _insertSql = _filledCircle.GetInsertSql();
-            _updateSql = _filledCircle.GetUpdateSql();
-            _deleteSql = _filledCircle.GetDeleteSql();
+            _insertSql =
+                new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
             _selectSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
