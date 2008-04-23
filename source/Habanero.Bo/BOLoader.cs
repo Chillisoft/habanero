@@ -69,13 +69,14 @@ namespace Habanero.BO
         /// higher up the chain return the bool
         internal virtual bool Refresh(BusinessObject obj, IExpression searchExpression)
         {
+            bool result;
             using (IDataReader dr = Instance.LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
             {
                 try
                 {
                     if (dr.Read())
                     {
-                        return LoadProperties(obj, dr);
+                        result = LoadProperties(obj, dr);
                     }
                     else
                     {
@@ -93,6 +94,11 @@ namespace Habanero.BO
                     }
                 }
             }
+            if (result)
+            {
+                obj.AfterLoad();
+            }
+            return result;
         }
 
         /// <summary>
