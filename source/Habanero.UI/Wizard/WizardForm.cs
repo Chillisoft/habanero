@@ -53,7 +53,7 @@ namespace Habanero.UI.Wizard
             InitializeComponent();
 
             _wizardController = controller;
-            WizardControl.WizardController = _wizardController;
+            //WizardControl.WizardController = _wizardController;
             DialogResult = DialogResult.Cancel;
         }
 
@@ -111,6 +111,14 @@ namespace Habanero.UI.Wizard
             {
                 form.Show();
                 return true;
+            }
+        }
+
+        private void WizardForm_Shown(object sender, EventArgs e)
+        {
+            if (WizardControl.WizardController == null)
+            {
+                WizardControl.WizardController = _wizardController;
             }
         }
     }

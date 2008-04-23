@@ -39,7 +39,7 @@ namespace Habanero.UI.Wizard
             }
             base.Dispose(disposing);
         }
-
+                
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -69,13 +69,13 @@ namespace Habanero.UI.Wizard
             this.Controls.Add(this._uxWizardControl);
             this.Name = "WizardForm";
             this.Text = "WizardForm";
+            this.Shown += new System.EventHandler(this.WizardForm_Shown);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private WizardControl _uxWizardControl = new WizardControl( );
-
+        private WizardControl _uxWizardControl = new WizardControl();
     }
 }
