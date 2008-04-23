@@ -97,7 +97,7 @@ namespace Habanero.BO
                                                         type, typeof(TBusinessObject)));
             }
             IBusinessObjectCollection boCol;
-                boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
+            boCol = BOLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
                    // _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
 
             if (_relDef.KeepReferenceToRelatedObject)
@@ -116,7 +116,6 @@ namespace Habanero.BO
             }
 
             Type type = _relDef.RelatedObjectClassType;
-            Type collectionItemType= type;
               //Check that the type can be created and raise appropriate error 
             try
             {
@@ -131,18 +130,7 @@ namespace Habanero.BO
                                                        "defined in the relationship and class definitions for the classes " +
                                                        "involved.", type), ex);
             }
-            //if (!(type == collectionItemType || type.IsSubclassOf(collectionItemType)))
-            //{
-            //    throw new HabaneroArgumentException(String.Format(
-            //                                            "An error occurred while attempting to load a related " +
-            //                                            "business object collection of type '{0}' into a " +
-            //                                            "collection of the specified generic type('{1}').",
-            //                                            type, typeof(TBusinessObject)));
-            //}
-            IBusinessObjectCollection boCol;
-                boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection(type, this);
-                // _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
-            
+            IBusinessObjectCollection boCol = BOLoader.GetRelatedBusinessObjectCollection(type, this);
 
             if (_relDef.KeepReferenceToRelatedObject)
             {

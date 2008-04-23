@@ -265,11 +265,11 @@ namespace Habanero.Test.BO
         /// </remarks>
         /// <param name="id">The object primary Key</param>
         /// <returns>The loaded business object</returns>
-        /// <exception cref="TestRelatedBusinessObjectCollection.BO.BusObjDeleteConcurrencyControlException">
+        /// <exception cref="BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
         public static ContactPersonTestBO GetContactPerson(BOPrimaryKey id)
         {
-            ContactPersonTestBO myContactPersonTestBOTestBO = (ContactPersonTestBO)BOLoader.Instance.GetLoadedBusinessObject(id);
+            ContactPersonTestBO myContactPersonTestBOTestBO = (ContactPersonTestBO)BOLoader.GetLoadedBusinessObject(id);
             if (myContactPersonTestBOTestBO == null)
             {
                 myContactPersonTestBOTestBO = new ContactPersonTestBO(id);
@@ -317,7 +317,7 @@ namespace Habanero.Test.BO
 
         public static ContactPersonTestBO CreateContactPersonWithOneAddress_CascadeDelete(out Address address)
         {
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
+            LoadClassDefWithAddressesRelationship_DeleteRelated();
             ContactPersonTestBO contactPersonTestBO = CreateSavedContactPersonNoAddresses();
             address = contactPersonTestBO.Addresses.CreateBusinessObject();
             address.Save();
@@ -326,7 +326,7 @@ namespace Habanero.Test.BO
         }
         public static ContactPersonTestBO CreateContactPersonWithOneAddress_PreventDelete(out Address address)
         {
-            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_PreventDelete();
+            LoadClassDefWithAddressesRelationship_PreventDelete();
             ContactPersonTestBO contactPersonTestBO = CreateSavedContactPersonNoAddresses();
             address = contactPersonTestBO.Addresses.CreateBusinessObject();
             address.Save();

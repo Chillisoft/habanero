@@ -19,9 +19,10 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
-using log4net;
+//using log4net;
 
 namespace Habanero.BO
 {
@@ -31,9 +32,10 @@ namespace Habanero.BO
     /// </summary>
     public class SingleRelationship : Relationship
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
+        //TODO: Implement logging private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
         private BusinessObject _relatedBo;
         private string _storedRelationshipExpression;
+        private IBusinessObjectCollection _boCol;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -148,9 +150,38 @@ namespace Habanero.BO
 
         protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
         {
-            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>();
-            col.Add(this.GetRelatedObject<BusinessObject>());
-            return col;
+            if (_boCol != null)
+            {
+                BOLoader.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, "", "");
+                return _boCol;
+            }
+
+            Type type = _relDef.RelatedObjectClassType;
+            //Check that the type can be created and raise appropriate error 
+            try
+            {
+                Activator.CreateInstance(type, true);
+            }
+            catch (Exception ex)
+            {
+                throw new UnknownTypeNameException(String.Format(
+                                                       "An error occurred while attempting to load a related " +
+                                                       "business object collection, with the type given as '{0}'. " +
+                                                       "Check that the given type exists and has been correctly " +
+                                                       "defined in the relationship and class definitions for the classes " +
+                                                       "involved.", type), ex);
+            }
+            ClassDef classDef = ClassDef.ClassDefs[type];
+
+            IBusinessObjectCollection boCol = BOLoader.Instance.GetBusinessObjectCol(classDef, _relKey.RelationshipExpression(), "");
+
+            //IBusinessObjectCollection boCol = BOLoader.GetRelatedBusinessObjectCollection(type, this);
+
+            if (_relDef.KeepReferenceToRelatedObject)
+            {
+                _boCol = boCol;
+            }
+            return boCol;
         }
     }
 

@@ -206,8 +206,6 @@ namespace Habanero.BO
         ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
         public void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
         {
-           // if (this.BusinessObject == null) return;
-
             this.BusinessObject.UpdateObjectBeforePersisting(transactionCommitter);
         }
     }

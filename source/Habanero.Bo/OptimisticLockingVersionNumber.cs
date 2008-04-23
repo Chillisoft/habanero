@@ -98,7 +98,7 @@ namespace Habanero.BO
             if (!busObj.State.IsNew) //you cannot have concurrency control issues on a new object 
                 // all you can have is duplicate data issues.
             {
-                using (IDataReader dr = BOLoader.Instance.LoadDataReader(busObj, busObj.GetDatabaseConnection(), null))
+                using (IDataReader dr = BOLoader.LoadDataReader(busObj, busObj.GetDatabaseConnection(), null))
                 {
                     try
                     {

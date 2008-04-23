@@ -37,7 +37,9 @@ namespace Habanero.BO
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOLoader");
 
-        private BOLoader() {}
+        private BOLoader()
+        {
+        }
 
         /// <summary>
         /// Provides an instance of the loader which can be used to call
@@ -69,28 +71,19 @@ namespace Habanero.BO
         internal virtual bool Refresh(BusinessObject obj, IExpression searchExpression)
         {
             bool result;
-            using (IDataReader dr = Instance.LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
+            using (IDataReader dr = LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
             {
-                try
+                if (dr.Read())
                 {
-                    if (dr.Read())
-                    {
-                        result = LoadProperties(obj, dr);
-                    }
-                    else
-                    {
-                        throw new BusinessObjectNotFoundException(
-                            "A serious error has occured please contact your system administrator" +
-                            "There are no records in the database for the Class: " + obj.ClassDef.ClassName +
-                            " identified by " + obj.ID + " \n" + obj.SelectSqlStatement(null) + " \n" + obj.GetDatabaseConnection().ErrorSafeConnectString());
-                    }
+                    result = LoadProperties(obj, dr);
                 }
-                finally
+                else
                 {
-                    if (dr != null & !(dr.IsClosed))
-                    {
-                        dr.Close();
-                    }
+                    throw new BusinessObjectNotFoundException(
+                        "A serious error has occured please contact your system administrator" +
+                        "There are no records in the database for the Class: " + obj.ClassDef.ClassName +
+                        " identified by " + obj.ID + " \n" + obj.SelectSqlStatement(null) + " \n" +
+                        obj.GetDatabaseConnection().ErrorSafeConnectString());
                 }
             }
             if (result)
@@ -103,10 +96,11 @@ namespace Habanero.BO
         /// <summary>
         /// Loads the business object properties
         /// </summary>
+        /// <param name="obj">business object being filled from the data record<</param>
         /// <param name="dr">An IDataRecord object</param>
         /// <returns>Returns true if loaded successfully</returns>
         /// TODO ERIC - where does datarecord come from?
-        internal bool LoadProperties(BusinessObject obj, IDataRecord dr)
+        internal static bool LoadProperties(BusinessObject obj, IDataRecord dr)
         {
             //TODO_ERR: check that dr open valid etc.
             int i = 0;
@@ -128,6 +122,7 @@ namespace Habanero.BO
         /// Returns a new object loaded from the data reader or one from the 
         /// object manager that is refreshed with data from the data reader
         /// </summary>
+        /// <param name="obj">business object being filled from the data record</param>
         /// <param name="dr">A data reader pointing at a valid record</param>
         /// <returns>A valid business object for the data in the 
         /// data reader</returns>
@@ -145,7 +140,7 @@ namespace Habanero.BO
             PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
             if (primaryKeyDef == null)
             {
-                primaryKeyDef = (PrimaryKeyDef)obj.ID.KeyDef;
+                primaryKeyDef = (PrimaryKeyDef) obj.ID.KeyDef;
             }
 
             foreach (PropDef propDef in primaryKeyDef)
@@ -155,7 +150,7 @@ namespace Habanero.BO
                 propCol.Add(prop);
                 //obj.PrimaryKey = (BOPrimaryKey)obj.ClassDef.PrimaryKeyDef.CreateBOKey(obj.Props);
             }
-            BOPrimaryKey primaryKey = (BOPrimaryKey)primaryKeyDef.CreateBOKey(propCol);
+            BOPrimaryKey primaryKey = (BOPrimaryKey) primaryKeyDef.CreateBOKey(propCol);
             BusinessObject tempBusObj = GetLoadedBusinessObject(primaryKey.GetObjectId(), false);
             //BusinessObject lTempBusObj =
             //    BOLoader.Instance.GetLoadedBusinessObject(primaryKey.GetObjectId(), false);
@@ -167,10 +162,11 @@ namespace Habanero.BO
             if (tempBusObj != null && boType != tempBusObjType &&
                 !boType.IsSubclassOf(tempBusObjType) && !tempBusObjType.IsSubclassOf(boType))
             {
-                throw new Exception(String.Format("There are two objects of differing types with the same primary key. " + 
-                    "The object type for the object being loaded is '{0}', where the object type found in " +
-                    "the loaded objects with the same primary key is '{1}'. The shared primary key is '{2}'.",
-                    boType.Name, tempBusObjType.Name, primaryKey.GetObjectId()));
+                throw new Exception(
+                    String.Format("There are two objects of differing types with the same primary key. " +
+                                  "The object type for the object being loaded is '{0}', where the object type found in " +
+                                  "the loaded objects with the same primary key is '{1}'. The shared primary key is '{2}'.",
+                                  boType.Name, tempBusObjType.Name, primaryKey.GetObjectId()));
             }
             bool isReplacingSuperClassObject = false;
             if (tempBusObj != null && boType.IsSubclassOf(tempBusObjType))
@@ -179,7 +175,8 @@ namespace Habanero.BO
             }
             if (tempBusObj == null || isReplacingSuperClassObject)
             {
-                tempBusObj = classDef.CreateNewBusinessObject(obj.GetDatabaseConnection()); //InstantiateBusinessObject();
+                tempBusObj = classDef.CreateNewBusinessObject(obj.GetDatabaseConnection());
+                    //InstantiateBusinessObject();
                 LoadFromDataReader(tempBusObj, dr);
                 try
                 {
@@ -192,7 +189,7 @@ namespace Habanero.BO
                 catch (Exception ex)
                 {
                     throw new Exception("The object with id " +
-                                                       tempBusObj.ID.GetObjectId(), ex);
+                                        tempBusObj.ID.GetObjectId(), ex);
                 }
             }
             else if (tempBusObjType.IsSubclassOf(boType))
@@ -215,12 +212,14 @@ namespace Habanero.BO
                     LoadProperties(tempBusObj, dr);
                 }
             }
+            tempBusObj.AfterLoad();
             return tempBusObj;
         }
 
         /// <summary>
         /// Loads a business object that meets the specified search criteria
         /// </summary>
+        /// <param name="obj">business object being filled from the data record<</param>
         /// <param name="searchExpression">The search expression</param>
         /// <returns>Returns a business object, or null if none is found that
         /// meets the criteria</returns>
@@ -282,7 +281,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="businessObject">The business object to be loaded</param>
         /// <param name="dr">The IDataRecord object</param>
-        internal void LoadFromDataReader(BusinessObject businessObject, IDataRecord dr)
+        internal static void LoadFromDataReader(BusinessObject businessObject, IDataRecord dr)
         {
             LoadProperties(businessObject, dr);
         }
@@ -297,7 +296,7 @@ namespace Habanero.BO
         /// <param name="criteria">The search criteria</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
-        public T GetBusinessObject<T>(string criteria) where T: BusinessObject
+        public T GetBusinessObject<T>(string criteria) where T : BusinessObject
         {
             return GetBusinessObject<T>(null, criteria);
         }
@@ -331,7 +330,7 @@ namespace Habanero.BO
         }
 
         //TODO:Peter - make a better load that doesn't use a bo col.
-        private static T GetBusinessObject<T>(ClassDef classDef, string criteria) where T: BusinessObject
+        private static T GetBusinessObject<T>(ClassDef classDef, string criteria) where T : BusinessObject
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>(classDef);
             if (classDef == null)
@@ -368,7 +367,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        internal BusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
+        internal static BusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
         {
             return GetLoadedBusinessObject(id.GetObjectId());
         }
@@ -378,7 +377,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-		internal BusinessObject GetLoadedBusinessObject(string id)
+        internal static BusinessObject GetLoadedBusinessObject(string id)
         {
             return GetLoadedBusinessObject(id, true);
         }
@@ -391,7 +390,7 @@ namespace Habanero.BO
         /// <param name="refreshIfReqNotCurrent">Whether to check for
         /// object concurrency at the time of loading</param>
         /// <returns>Returns a business object</returns>
-		internal BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
+        internal static BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
         {
             //If the object is already in loaded then refresh it and return it if required.
             if (BusinessObject.AllLoaded().ContainsKey(id))
@@ -402,7 +401,7 @@ namespace Habanero.BO
                 if (weakRef.IsAlive && weakRef.Target != null)
                 {
                     BusinessObject loadedBusinessObject;
-                    loadedBusinessObject = (BusinessObject)weakRef.Target;
+                    loadedBusinessObject = (BusinessObject) weakRef.Target;
                     //Apply concurrency Control Strategy to the Business Object
                     if (refreshIfReqNotCurrent)
                     {
@@ -430,8 +429,8 @@ namespace Habanero.BO
         /// <param name="searchCriteria">The search criteria</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, string orderByClause) 
-            where T:BusinessObject
+        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, string orderByClause)
+            where T : BusinessObject
         {
             return GetBusinessObjectCollection<T>(null, searchCriteria, orderByClause);
         }
@@ -457,35 +456,37 @@ namespace Habanero.BO
         /// <param name="searchCriteria">The search criteria</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCol(ClassDef classDef, string searchCriteria, string orderByClause)
+        public IBusinessObjectCollection GetBusinessObjectCol(ClassDef classDef, string searchCriteria,
+                                                              string orderByClause)
         {
             return GetBusinessObjectCollection(classDef, null, searchCriteria, orderByClause);
         }
 
-		/// <summary>
-		/// Returns a business object collection with objects that meet the
-		/// given search expression, ordered as specified
-		/// </summary>
-		/// <param name="searchExpression">The search expression</param>
-		/// <param name="orderByClause">The order-by clause</param>
-		/// <returns>Returns a business object collection</returns>
-		public BusinessObjectCollection<T> GetBusinessObjectCol<T>(IExpression searchExpression, string orderByClause)
-			where T: BusinessObject
-		{
+        /// <summary>
+        /// Returns a business object collection with objects that meet the
+        /// given search expression, ordered as specified
+        /// </summary>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <returns>Returns a business object collection</returns>
+        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(IExpression searchExpression, string orderByClause)
+            where T : BusinessObject
+        {
             return GetBusinessObjectCollection<T>(searchExpression, null, orderByClause);
-		}
+        }
 
         /// <summary>
-		/// Returns a business object collection with objects that meet the
-		/// given search expression, ordered as specified
-		/// </summary>
-		/// <param name="boType">The type of the business objects to be loaded</param>
-		/// <param name="searchExpression">The search expression</param>
-		/// <param name="orderByClause">The order-by clause</param>
-		/// <returns>Returns a business object collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCol(Type boType, IExpression searchExpression, string orderByClause)
-		{
-			return GetBusinessObjectCol(ClassDef.ClassDefs[boType], searchExpression, orderByClause);
+        /// Returns a business object collection with objects that meet the
+        /// given search expression, ordered as specified
+        /// </summary>
+        /// <param name="boType">The type of the business objects to be loaded</param>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <returns>Returns a business object collection</returns>
+        public IBusinessObjectCollection GetBusinessObjectCol(Type boType, IExpression searchExpression,
+                                                              string orderByClause)
+        {
+            return GetBusinessObjectCol(ClassDef.ClassDefs[boType], searchExpression, orderByClause);
         }
 
         /// <summary>
@@ -496,31 +497,39 @@ namespace Habanero.BO
         /// <param name="searchExpression">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCol(ClassDef classDef, IExpression searchExpression, string orderByClause)
+        public IBusinessObjectCollection GetBusinessObjectCol(ClassDef classDef, IExpression searchExpression,
+                                                              string orderByClause)
         {
             return GetBusinessObjectCollection(classDef, searchExpression, null, orderByClause);
         }
 
-        private static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(IExpression searchExpression, string searchCriteria, string orderByClause)
-            where T: BusinessObject
+        private static BusinessObjectCollection<T> GetBusinessObjectCollection<T>(IExpression searchExpression,
+                                                                                  string searchCriteria,
+                                                                                  string orderByClause)
+            where T : BusinessObject
         {
             BusinessObjectCollection<T> businessObjectCollection = new BusinessObjectCollection<T>();
             LoadBusinessObjectCollection(searchExpression, businessObjectCollection, orderByClause, searchCriteria);
             return businessObjectCollection;
         }
 
-        internal static void LoadBusinessObjectCollection(IExpression searchExpression, IBusinessObjectCollection businessObjectCollection, string orderByClause, string searchCriteria)
+        internal static void LoadBusinessObjectCollection(IExpression searchExpression,
+                                                          IBusinessObjectCollection businessObjectCollection,
+                                                          string orderByClause, string searchCriteria)
         {
             if (searchExpression != null)
             {
                 businessObjectCollection.Load(searchExpression, orderByClause);
-            } else
+            }
+            else
             {
                 businessObjectCollection.Load(searchCriteria, orderByClause);
             }
         }
 
-        private static IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef, IExpression searchExpression, string searchCriteria, string orderByClause)
+        private static IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef,
+                                                                             IExpression searchExpression,
+                                                                             string searchCriteria, string orderByClause)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             IBusinessObjectCollection businessObjectCollection = CreateBusinessObjectCollection(classDef);
@@ -528,19 +537,23 @@ namespace Habanero.BO
             return businessObjectCollection;
         }
 
-        internal IBusinessObjectCollection GetRelatedBusinessObjectCollection<T>(MultipleRelationship relationship)
+        internal static IBusinessObjectCollection GetRelatedBusinessObjectCollection<T>(
+            MultipleRelationship relationship)
             where T : BusinessObject
         {
             IBusinessObjectCollection businessObjectCollection = new RelatedBusinessObjectCollection<T>(relationship);
-            LoadBusinessObjectCollection(relationship._relKey.RelationshipExpression(), businessObjectCollection, relationship.OrderBy, "");
+            LoadBusinessObjectCollection(relationship._relKey.RelationshipExpression(), businessObjectCollection,
+                                         relationship.OrderBy, "");
             return businessObjectCollection;
         }
 
-        internal IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type boType, MultipleRelationship relationship)
+        internal static IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type boType,
+                                                                                     MultipleRelationship relationship)
         {
             IBusinessObjectCollection businessObjectCollection =
                 CreateRelatedBusinessObjectCollection(boType, relationship);
-            LoadBusinessObjectCollection(relationship._relKey.RelationshipExpression(), businessObjectCollection, relationship.OrderBy, "");
+            LoadBusinessObjectCollection(relationship._relKey.RelationshipExpression(), businessObjectCollection,
+                                         relationship.OrderBy, "");
             return businessObjectCollection;
         }
 
@@ -555,9 +568,9 @@ namespace Habanero.BO
             {
                 return null;
             }
-            Type type = typeof(BusinessObjectCollection<>);
+            Type type = typeof (BusinessObjectCollection<>);
             type = type.MakeGenericType(classDef.ClassType);
-            return (IBusinessObjectCollection)Activator.CreateInstance(type, classDef);
+            return (IBusinessObjectCollection) Activator.CreateInstance(type, classDef);
         }
 
         ///<summary>
@@ -566,26 +579,26 @@ namespace Habanero.BO
         /// <param name="boType">The type of BO to make a generic collection of</param>
         /// <param name="relationship">The multiple relationship this collection is for</param>
         ///<returns> A BusinessObjectCollection of the correct type. </returns>
-        private static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType, MultipleRelationship relationship)
+        private static IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType,
+                                                                                       Relationship relationship)
         {
-
-            Type type = typeof(RelatedBusinessObjectCollection<>);
+            Type type = typeof (RelatedBusinessObjectCollection<>);
             type = type.MakeGenericType(boType);
-            return (IBusinessObjectCollection)Activator.CreateInstance(type, relationship);
+            return (IBusinessObjectCollection) Activator.CreateInstance(type, relationship);
         }
-
-        
 
         #endregion //Business Object Collection Methods
 
         /// <summary>
         /// Loads an IDataReader object using the database connection provided
         /// </summary>
+        /// <param name="obj"></param>
         /// <param name="connection">The database connection</param>
         /// <param name="searchExpression">The search expression used to
         /// locate the business object to be read</param>
         /// <returns>Returns an IDataReader object</returns>
-        internal IDataReader LoadDataReader(BusinessObject obj, IDatabaseConnection connection, IExpression searchExpression)
+        internal static IDataReader LoadDataReader(BusinessObject obj, IDatabaseConnection connection,
+                                            IExpression searchExpression)
         {
             SqlStatement selectSql = new SqlStatement(connection);
             if (searchExpression == null)
@@ -634,7 +647,6 @@ namespace Habanero.BO
             BusinessObject.ClearLoadedBusinessObjectBaseCol();
         }
 
-
         #region Load By ID Methods
 
         #region Generic Methods
@@ -646,8 +658,8 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
-        public T GetBusinessObjectByID<T>(Guid id) 
-            where T: BusinessObject
+        public T GetBusinessObjectByID<T>(Guid id)
+            where T : BusinessObject
         {
             return GetBusinessObjectByID<T>(id.ToString("B"));
         }
@@ -659,8 +671,8 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
-        public T GetBusinessObjectByID<T>(int id) 
-            where T: BusinessObject
+        public T GetBusinessObjectByID<T>(int id)
+            where T : BusinessObject
         {
             return GetBusinessObjectByID<T>(id.ToString());
         }
@@ -672,8 +684,8 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
-        public T GetBusinessObjectByID<T>(string id) 
-            where T: BusinessObject
+        public T GetBusinessObjectByID<T>(string id)
+            where T : BusinessObject
         {
             return GetBusinessObjectByID<T>(null, id);
         }
@@ -686,7 +698,7 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObjectByID<T>(BOPrimaryKey primaryKey)
-            where T: BusinessObject
+            where T : BusinessObject
         {
             return GetBusinessObjectByID<T>(null, primaryKey);
         }
@@ -807,12 +819,12 @@ namespace Habanero.BO
 
         #region Private Methods
 
-        private static T GetBusinessObjectByID<T>(ClassDef classDef, string id) 
-            where T: BusinessObject
+        private static T GetBusinessObjectByID<T>(ClassDef classDef, string id)
+            where T : BusinessObject
         {
             if (classDef == null)
             {
-                classDef = ClassDef.ClassDefs[typeof(T)];
+                classDef = ClassDef.ClassDefs[typeof (T)];
                 if (classDef == null)
                 {
                     return null;
@@ -822,33 +834,33 @@ namespace Habanero.BO
             if (primaryKeyDef.Count > 1)
             {
                 throw new InvalidPropertyException("A business object cannot be loaded " +
-                   "with a single ID when there are multiple properties making up " +
-                   "the primary key.");
+                                                   "with a single ID when there are multiple properties making up " +
+                                                   "the primary key.");
             }
             string criteria = string.Format("{0}='{1}'", primaryKeyDef.KeyName, id);
             return GetBusinessObject<T>(classDef, criteria);
-        }        
-        
+        }
+
         private static T GetBusinessObjectByID<T>(ClassDef classDef, BOPrimaryKey primaryKey)
-            where T: BusinessObject
+            where T : BusinessObject
         {
             if (classDef == null)
             {
-                classDef = ClassDef.ClassDefs[typeof(T)];
+                classDef = ClassDef.ClassDefs[typeof (T)];
             }
             string criteria = "";
             foreach (BOProp boProp in primaryKey.GetBOPropCol().Values)
             {
                 if (criteria.Length > 0) criteria += " AND ";
                 string propValue = boProp.Value.ToString();
-                if (boProp.PropertyType == typeof(Guid))
+                if (boProp.PropertyType == typeof (Guid))
                 {
-                    propValue = ((Guid)boProp.Value).ToString("B");
+                    propValue = ((Guid) boProp.Value).ToString("B");
                 }
                 criteria += String.Format("{0}='{1}'", boProp.DatabaseFieldName, propValue);
             }
 
-            return GetBusinessObject<T>(classDef,criteria);
+            return GetBusinessObject<T>(classDef, criteria);
         }
 
         #endregion //Private Methods

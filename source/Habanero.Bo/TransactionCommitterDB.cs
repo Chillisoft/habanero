@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
@@ -10,7 +9,7 @@ namespace Habanero.BO
     /// <summary>
     /// This class manages and commits a collection of ITransactions to a database using SQL.
     /// </summary>
-    public class TransactionCommitterDB :TransactionCommitter
+    public class TransactionCommitterDB : TransactionCommitter
     {
         private IDbTransaction _dbTransaction;
         private IDbConnection _dbConnection;
@@ -35,6 +34,7 @@ namespace Habanero.BO
             if (transaction.IsDeleted)
             {
                 DeleteRelatedChildren(transaction);
+                DereferenceRelatedChildren(transaction);
             }
             ISqlStatementCollection sql = transactionDB.GetSql();
             if (sql == null) return;
@@ -44,6 +44,31 @@ namespace Habanero.BO
             //    ExecuteSql(statement);
             //}
             base.ExecuteTransactionToDataSource(transaction);
+        }
+
+        private void DereferenceRelatedChildren(ITransactionalBusinessObject transaction)
+        {
+            foreach (Relationship relationship in transaction.BusinessObject.Relationships)
+            {
+                if (MustDereferenceRelatedObjects(relationship))
+                {
+                    IBusinessObjectCollection col = relationship.GetRelatedBusinessObjectCol();
+                    for (int i = col.Count - 1; i >= 0; i--)
+                    {
+                        BusinessObject bo = col[i];
+                        foreach (RelPropDef relPropDef in relationship.RelationshipDef.RelKeyDef)
+                        {
+                            bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
+                        }
+                        ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
+                    }
+                }
+            }
+        }
+
+        private static bool MustDereferenceRelatedObjects(Relationship relationship)
+        {
+            return relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated;
         }
 
         private void DeleteRelatedChildren(ITransactionalBusinessObject transaction)
@@ -68,18 +93,6 @@ namespace Habanero.BO
             return relationship.DeleteParentAction == DeleteParentAction.DeleteRelated;
         }
 
-        /// <summary>
-        /// Executes one sql statement against the transaction.
-        /// </summary>
-        /// <param name="sql"></param>
-        private void ExecuteSql(ISqlStatement sql)
-        {
-            if (sql == null) return;
-            IDbCommand command = _dbConnection.CreateCommand();
-            command.Transaction = _dbTransaction;
-            sql.SetupCommand(command);
-            command.ExecuteNonQuery();
-        }
 
         /// <summary>
         /// Commits all the successfully executed statements to the datasource.
@@ -90,7 +103,8 @@ namespace Habanero.BO
             try
             {
                 _dbTransaction.Commit();
-            } catch (Exception )
+            }
+            catch (Exception)
             {
                 //TODO:log
                 TryRollback();
@@ -112,11 +126,11 @@ namespace Habanero.BO
         /// </summary>
         protected override void TryRollback()
         {
-
             try
             {
                 if (_dbTransaction != null) _dbTransaction.Rollback();
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 //TODO: log
                 throw;
@@ -141,5 +155,4 @@ namespace Habanero.BO
             this.AddTransaction(new TransactionalBusinessObjectDB(bo));
         }
     }
-
 }

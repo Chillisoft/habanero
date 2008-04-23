@@ -29,7 +29,7 @@ namespace Habanero.Test
     {
         #region Constructors
 
-        public Car() : base()
+        public Car()
         {
         }
 
@@ -41,7 +41,7 @@ namespace Habanero.Test
         {
         }
 
-        protected static ClassDef GetClassDef()
+        protected internal static ClassDef GetClassDef()
         {
             if (!ClassDef.IsDefined(typeof (Car)))
             {
@@ -115,7 +115,7 @@ namespace Habanero.Test
             lRelPropDef = new RelPropDef(propDef, "CarID");
             relKeyDef.Add(lRelPropDef);
 
-            relDef = new SingleRelationshipDef("Engine", typeof(Engine), relKeyDef, false, DeleteParentAction.Prevent);
+            relDef = new SingleRelationshipDef("Engine", typeof(Engine), relKeyDef, false, DeleteParentAction.DereferenceRelated);
 
             relDefCol.Add(relDef);
             return relDefCol;
@@ -130,11 +130,9 @@ namespace Habanero.Test
 
             lPropDefCol.Add("OwnerId", typeof (Guid), PropReadWriteRule.WriteOnce, "OWNER_ID", null);
 
-            propDef = lPropDefCol.Add("CarID", typeof (Guid), PropReadWriteRule.WriteOnce, "CAR_ID", null);
-            propDef =
-                lPropDefCol.Add("DriverFK1", typeof (String), PropReadWriteRule.WriteOnce, "Driver_FK1", null);
-            propDef =
-                lPropDefCol.Add("DriverFK2", typeof (String), PropReadWriteRule.WriteOnce, "Driver_FK2", null);
+            lPropDefCol.Add("CarID", typeof (Guid), PropReadWriteRule.WriteOnce, "CAR_ID", null);
+            lPropDefCol.Add("DriverFK1", typeof (String), PropReadWriteRule.WriteOnce, "Driver_FK1", null);
+            lPropDefCol.Add("DriverFK2", typeof (String), PropReadWriteRule.WriteOnce, "Driver_FK2", null);
 
             return lPropDefCol;
         }
@@ -151,7 +149,7 @@ namespace Habanero.Test
         ///  if the object has been deleted already</exception>
         public static Car GetCar(BOPrimaryKey id)
         {
-            Car myCar = (Car)BOLoader.Instance.GetLoadedBusinessObject(id);
+            Car myCar = (Car)BOLoader.GetLoadedBusinessObject(id);
             if (myCar == null)
             {
                 myCar = new Car(id);

@@ -1,5 +1,4 @@
 using System;
-using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -118,17 +117,6 @@ namespace Habanero.Test.BO
             AssertTransactionsInTableAre(1);
         }
 
-        private static void AssertTransactionsInTableAre(int expected)
-        {
-            SqlStatement statement =
-                new SqlStatement(DatabaseConnection.CurrentConnection, "select * from stubdatabasetransaction");
-            Assert.AreEqual(expected, DatabaseConnection.CurrentConnection.LoadDataTable(statement, "", "").Rows.Count);
-        }
-
-        private static void CleanStubDatabaseTransactionTable()
-        {
-            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from stubdatabasetransaction");
-        }
 
         public void TestDatabaseTransaction_SuccessTwoTransactions()
         {
@@ -395,6 +383,50 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestPreventDelete_ThreeLevels()
+        {
+            //---------------Set up test pack-------------------
+            Address address;
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
+            OrganisationTestBO.LoadDefaultClassDef();
+
+            OrganisationTestBO org = new OrganisationTestBO();
+            contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
+            org.Save();
+            contactPersonTestBO.Save();
+            org.Delete();
+
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(org);
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                committer.CommitTransaction();
+                Assert.Fail();
+            }
+                //---------------Test Result -----------------------
+            catch (BusinessObjectReferentialIntegrityException ex)
+            {
+                Assert.IsTrue(
+                    ex.Message.Contains("There are 1 objects related through the 'ContactPeople.Addresses' relationship"));
+            }
+            finally
+            {
+                CleanupObjectFromDatabase(address);
+                CleanupObjectFromDatabase(contactPersonTestBO);
+                CleanupObjectFromDatabase(org);
+            }
+        }
+
+        private void CleanupObjectFromDatabase(BusinessObject bo)
+        {
+            bo.Delete();
+            bo.Save();
+        }
+
+        [Test]
         public void TestNotPreventDelete_ForNonDeleted()
         {
             //---------------Set up test pack-------------------
@@ -578,7 +610,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(cp.Surname, cp.Props["Surname"].PersistedPropertyValueString);
         }
-        
+
         [Test]
         public void TestChangeCompositePrimaryKey()
         {
@@ -619,6 +651,42 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, committer.OriginalTransactions.Count);
         }
 
+        [Test]
+        public void TestDereferenceRelatedObjects()
+        {
+            //The Car has a single relationship to engine. The car->engine relationship is marked 
+            // as a dereference related relationship.
+            Car.DeleteAllCars();
+            Engine.DeleteAllEngines();
+            //---------------Set up test pack-------------------
+            
+            Car car = new Car();
+            car.SetPropertyValue("CarRegNo", "NP32459");
+            car.Save();
+
+            Engine engine = new Engine();
+
+            engine.SetPropertyValue("EngineNo", "NO111");
+            string carIDProp = "CarID";
+            engine.SetPropertyValue(carIDProp, car.GetPropertyValue(carIDProp));
+            engine.Save();
+            //Verify test pack - i.e. that engine saved correctly
+            BOLoader.Instance.Refresh(engine);
+            Assert.AreSame(engine.GetCar(), car);
+
+            //---------------Execute Test ----------------------
+            car.Delete();
+            car.Save();
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(engine.GetPropertyValue(carIDProp));
+            Assert.IsNull( engine.GetCar());
+            //---------------Test TearDown -----------------------
+
+            Car.DeleteAllCars();
+            Engine.DeleteAllEngines();
+        }
+
         #region CustomAsserts
 
         private static void AssertBusinessObjectNotInDatabase(BusinessObject bo)
@@ -635,9 +703,21 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(loadedBO);
         }
 
+        private static void AssertTransactionsInTableAre(int expected)
+        {
+            SqlStatement statement =
+                new SqlStatement(DatabaseConnection.CurrentConnection, "select * from stubdatabasetransaction");
+            Assert.AreEqual(expected, DatabaseConnection.CurrentConnection.LoadDataTable(statement, "", "").Rows.Count);
+        }
+
         #endregion
 
         #region HelperMethods
+
+        private static void CleanStubDatabaseTransactionTable()
+        {
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from stubdatabasetransaction");
+        }
 
         private static ContactPersonTestBO GetSavedContactPersonCompositeKey()
         {
@@ -704,7 +784,7 @@ namespace Habanero.Test.BO
         #endregion
     }
 
-    internal class MockBOWithBeforeSave:MockBO
+    internal class MockBOWithBeforeSave : MockBO
     {
         /// <summary>
         /// Steps to carry out before the Save() command is run. You can add objects to the current

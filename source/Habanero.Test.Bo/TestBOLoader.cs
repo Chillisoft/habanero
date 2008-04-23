@@ -73,7 +73,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("FirstName = aa");
+            BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("FirstName = aa");
         }
 
         [Test]
@@ -157,8 +157,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonCompositeKey.LoadClassDefs();
 
-            ContactPersonCompositeKey cp2 =
-                BOLoader.Instance.GetBusinessObjectByID<ContactPersonCompositeKey>("someIDvalue");
+            BOLoader.Instance.GetBusinessObjectByID<ContactPersonCompositeKey>("someIDvalue");
         }
 
         [Test]
@@ -198,6 +197,40 @@ namespace Habanero.Test.BO
 
             BOLoader.Instance.Refresh(cp);
 
+            Assert.IsTrue(cp.AfterLoadCalled);
+        }
+
+        public void TestBoLoaderCallsAfterLoad_LoadingCollection()
+        {
+            ClassDef.ClassDefs.Clear();
+            //--------SetUp testpack --------------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //----Execute Test---------------------------------
+            BusinessObjectCollection<ContactPersonTestBO> col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aa", "Surname");
+            //----Test Result----------------------------------
+            Assert.AreEqual(2, col.Count);
+            ContactPersonTestBO bo = col[0];
+            Assert.IsTrue(bo.AfterLoadCalled);
+        }
+
+        [Test]
+        public void TestBoLoaderCallsAfterLoad_ViaSearchCriteria()
+        {
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            Assert.IsFalse(cp.AfterLoadCalled);
+            cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc AND FirstName = aa");
+            Assert.IsTrue(cp.AfterLoadCalled);
+        }
+
+        public void TestBoLoaderCallsAfterLoad_CompositePrimaryKey()
+        {
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKey();
+            ContactPersonTestBO cpTemp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
+            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.PrimaryKey);
             Assert.IsTrue(cp.AfterLoadCalled);
         }
     }

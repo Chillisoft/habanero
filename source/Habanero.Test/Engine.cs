@@ -39,7 +39,7 @@ namespace Habanero.Test
         {
         }
 
-        protected static ClassDef GetClassDef()
+        protected internal static ClassDef GetClassDef()
         {
             if (!ClassDef.IsDefined(typeof (Engine)))
             {
@@ -101,7 +101,7 @@ namespace Habanero.Test
 
             propDef =
                 lPropDefCol.Add("EngineID", typeof (Guid), PropReadWriteRule.WriteOnce, "Engine_ID", null);
-            propDef = lPropDefCol.Add("CarID", typeof (Guid), PropReadWriteRule.WriteOnce, "CAR_ID", null);
+            propDef = lPropDefCol.Add("CarID", typeof(Guid), PropReadWriteRule.ReadWrite, "CAR_ID", null);
 
             return lPropDefCol;
         }
@@ -118,7 +118,7 @@ namespace Habanero.Test
         ///  if the object has been deleted already</exception>
         public static Engine GetEngine(BOPrimaryKey id)
         {
-            Engine myEngine = (Engine)BOLoader.Instance.GetLoadedBusinessObject(id);
+            Engine myEngine = (Engine)BOLoader.GetLoadedBusinessObject(id);
             if (myEngine == null)
             {
                 myEngine = new Engine(id);

@@ -214,7 +214,7 @@ namespace Habanero.Test
         ///  if the object has been deleted already</exception>
         public static ContactPerson GetContactPerson(BOPrimaryKey id)
         {
-            ContactPerson myContactPerson = (ContactPerson) BOLoader.Instance.GetLoadedBusinessObject(id);
+            ContactPerson myContactPerson = (ContactPerson) BOLoader.GetLoadedBusinessObject(id);
             if (myContactPerson == null)
             {
                 myContactPerson = new ContactPerson(id);
@@ -236,7 +236,7 @@ namespace Habanero.Test
         public static ContactPerson GetContactPerson(IExpression searchExpression)
         {
             ContactPerson myContactPerson =
-                (ContactPerson)BOLoader.Instance.GetLoadedBusinessObject(searchExpression.ExpressionString());
+                (ContactPerson)BOLoader.GetLoadedBusinessObject(searchExpression.ExpressionString());
 
             if (myContactPerson == null)
             {
