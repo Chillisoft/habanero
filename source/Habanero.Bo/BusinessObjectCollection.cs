@@ -168,6 +168,7 @@ namespace Habanero.BO
         /// <param name="bo">The business object to add</param>
         public new void Add(TBusinessObject bo)
         {
+            if (bo == null) throw new ArgumentNullException("bo");
             base.Add(bo);
             _lookupTable.Add(bo.ID.ToString(), bo);
             bo.Deleted += BusinessObjectDeletedHandler;

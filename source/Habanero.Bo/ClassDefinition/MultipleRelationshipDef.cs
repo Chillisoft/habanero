@@ -41,7 +41,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class MultipleRelationshipDef : RelationshipDef
     {
-        protected string _orderBy;
+
        // protected int _minNoOfRelatedObjects;
        // protected int _maxNoOfRelatedObjects;
 

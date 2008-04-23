@@ -114,7 +114,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestOrderItemRemove()
         {
-            OrderItem car = OrderItem.AddOrder1Car();
+            OrderItem.AddOrder1Car();
             OrderItem chair = OrderItem.AddOrder2Chair();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
@@ -144,10 +144,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestOrderItemChangeItemAndFind()
         {
+            BOLoader.Instance.ClearLoadedBusinessObjects();
             OrderItem.ClearLoadedBusinessObjectBaseCol();
             OrderItem.ClearTable();
             OrderItem car = OrderItem.AddOrder1Car();
-            OrderItem chair = OrderItem.AddOrder2Chair();
+            OrderItem.AddOrder2Chair();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
 

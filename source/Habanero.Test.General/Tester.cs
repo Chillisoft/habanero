@@ -772,7 +772,7 @@ namespace Habanero.Test.General
         ///  if the object has been deleted already</exception>
         public static TransactionLog GetTransactionLog(BOPrimaryKey id)
         {
-            TransactionLog myTransactionLog = (TransactionLog)BOLoader.GetLoadedBusinessObject(id);
+            TransactionLog myTransactionLog = (TransactionLog)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myTransactionLog == null)
             {
                 myTransactionLog = new TransactionLog(id);
@@ -830,9 +830,9 @@ namespace Habanero.Test.General
                 {
                     while (dr.Read())
                     {
-                        BOLoader.LoadProperties(lTransactionLog, dr);
+                        BOLoader.Instance.LoadProperties(lTransactionLog, dr);
                         TransactionLog lTempPerson2;
-                        lTempPerson2 = (TransactionLog)BOLoader.GetLoadedBusinessObject(lTransactionLog.GetObjectNewID());
+                        lTempPerson2 = (TransactionLog)BOLoader.Instance.GetLoadedBusinessObject(lTransactionLog.GetObjectNewID());
                         if (lTempPerson2 == null)
                         {
                             bOCol.Add(lTransactionLog);

@@ -14,17 +14,17 @@ namespace Habanero.BO
     {
         //private BusinessObject _parentBusinessObject;
         //private readonly string _relationshipName;
-        private readonly MultipleRelationship _multipleRelationship;
+        private readonly Relationship _relationship;
         private readonly List<TBusinessObject> _removedBusinessObjects = new List<TBusinessObject>();
 
         ///<summary>
         /// The related business object is constructed with the parent Business object of this 
         /// relationship as well the relationship name.
         ///</summary>
-        ///<param name="multipleRelationship"></param>
-        public RelatedBusinessObjectCollection(MultipleRelationship multipleRelationship)
+        ///<param name="relationship"></param>
+        public RelatedBusinessObjectCollection(Relationship relationship)
         {
-            _multipleRelationship = multipleRelationship;
+            _relationship = relationship;
         }
 
         /// <summary>
@@ -71,10 +71,10 @@ namespace Habanero.BO
             //TODO: Think about this we are trying to solve the problem that you can set
             // the properties of an object but the related object is only loaded based on its persisted values.
             TBusinessObject bo = base.CreateBusinessObject();
-            foreach (RelPropDef relPropDef in _multipleRelationship.RelationshipDef.RelKeyDef)
+            foreach (RelPropDef relPropDef in _relationship.RelationshipDef.RelKeyDef)
             {
                 bo.SetPropertyValue(relPropDef.RelatedClassPropName,
-                                    _multipleRelationship.OwningBO.GetPropertyValue(relPropDef.OwnerPropertyName));
+                                    _relationship.OwningBO.GetPropertyValue(relPropDef.OwnerPropertyName));
                 
             }
             return bo;

@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -29,6 +31,7 @@ namespace Habanero.BO
         protected RelationshipDef _relDef;
         protected readonly BusinessObject _owningBo;
         protected internal RelKey _relKey;
+        protected IBusinessObjectCollection _boCol;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -70,6 +73,23 @@ namespace Habanero.BO
             get { return _relDef.DeleteParentAction; }
         }
 
+        ///<summary>
+        /// 
+        ///</summary>
+        public string OrderBy
+        {
+            get { return _relDef.OrderBy; }
+        }
+
+        ///<summary>
+        /// Returns the business object that owns this relationship e.g. Invoice has many lines
+        /// the owning BO would be invoice.
+        ///</summary>
+        public BusinessObject OwningBO
+        {
+            get { return _owningBo; }
+        }
+
         /// <summary>
         /// Returns the set of business objects that relate to this one
         /// through the specific relationship
@@ -93,6 +113,37 @@ namespace Habanero.BO
         }
 
         protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>() where TBusinessObject : BusinessObject;
-        protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal();
+
+        protected virtual IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
+        {
+            if (_boCol != null)
+            {
+                BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
+                return _boCol;
+            }
+
+            Type type = _relDef.RelatedObjectClassType;
+            //Check that the type can be created and raise appropriate error 
+            try
+            {
+                Activator.CreateInstance(type, true);
+            }
+            catch (Exception ex)
+            {
+                throw new UnknownTypeNameException(String.Format(
+                                                       "An error occurred while attempting to load a related " +
+                                                       "business object collection, with the type given as '{0}'. " +
+                                                       "Check that the given type exists and has been correctly " +
+                                                       "defined in the relationship and class definitions for the classes " +
+                                                       "involved.", type), ex);
+            }
+            IBusinessObjectCollection boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection(type, this);
+
+            if (_relDef.KeepReferenceToRelatedObject)
+            {
+                _boCol = boCol;
+            }
+            return boCol;
+        }
     }
 }

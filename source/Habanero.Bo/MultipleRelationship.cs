@@ -29,7 +29,6 @@ namespace Habanero.BO
     /// </summary>
     public class MultipleRelationship : Relationship
     {
-		internal IBusinessObjectCollection _boCol;
         //private BusinessObjectCollection<BusinessObject> _boCol;
 
         /// <summary>
@@ -46,28 +45,11 @@ namespace Habanero.BO
         {
         }
 
-        ///<summary>
-        /// Returns the business object that owns this relationship e.g. Invoice has many lines
-        /// the owning BO would be invoice.
-        ///</summary>
-        public BusinessObject OwningBO
-        {
-            get { return _owningBo; }
-        }
-
-        ///<summary>
-        /// 
-        ///</summary>
-        public string OrderBy
-        {
-            get { return ((MultipleRelationshipDef) _relDef).OrderBy; }
-        }
-
         protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>() 
         {
             if(_boCol != null)
             {
-                BOLoader.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
+                BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
                 return _boCol;
             }
 
@@ -97,40 +79,7 @@ namespace Habanero.BO
                                                         type, typeof(TBusinessObject)));
             }
             IBusinessObjectCollection boCol;
-            boCol = BOLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
-                   // _relKey.RelationshipExpression(), ((MultipleRelationshipDef) _relDef).OrderBy);
-
-            if (_relDef.KeepReferenceToRelatedObject)
-            {
-                _boCol = boCol;
-            }
-            return boCol;
-        }
-
-        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
-        {
-            if (_boCol != null)
-            {
-                BOLoader.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
-                return _boCol;
-            }
-
-            Type type = _relDef.RelatedObjectClassType;
-              //Check that the type can be created and raise appropriate error 
-            try
-            {
-                Activator.CreateInstance(type, true);
-            }
-            catch (Exception ex)
-            {
-                throw new UnknownTypeNameException(String.Format(
-                                                       "An error occurred while attempting to load a related " +
-                                                       "business object collection, with the type given as '{0}'. " +
-                                                       "Check that the given type exists and has been correctly " +
-                                                       "defined in the relationship and class definitions for the classes " +
-                                                       "involved.", type), ex);
-            }
-            IBusinessObjectCollection boCol = BOLoader.GetRelatedBusinessObjectCollection(type, this);
+            boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
 
             if (_relDef.KeepReferenceToRelatedObject)
             {

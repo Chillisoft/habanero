@@ -118,7 +118,7 @@ namespace Habanero.Test
         ///  if the object has been deleted already</exception>
         public static Address GetCar(BOPrimaryKey id)
         {
-            Address myAddress = (Address)BOLoader.GetLoadedBusinessObject(id);
+            Address myAddress = (Address)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myAddress == null)
             {
                 myAddress = new Address(id);

@@ -35,6 +35,7 @@ namespace Habanero.BO.ClassDefinition
 		private string _relationshipName;
 		private bool _keepReferenceToRelatedObject;
         private DeleteParentAction _deleteParentAction;
+        protected string _orderBy;
 
 		#region Constructors
 
@@ -47,6 +48,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="keepReferenceToRelatedObject">Whether to keep a
         /// reference to the related object.  Could be false for memory-
         /// intensive applications.</param>
+		/// <param name="deleteParentAction">The required action when the parent is deleted e.g. Dereference related, delete related, prevent delete</param>
 		public RelationshipDef(string relationshipName,
 							   Type relatedObjectClassType,
 							   RelKeyDef relKeyDef,
@@ -57,6 +59,17 @@ namespace Habanero.BO.ClassDefinition
 
 		}
 
+        /// <summary>
+        /// Constructor to create a new relationship definition
+        /// </summary>
+        /// <param name="relationshipName">A name for the relationship</param>
+        /// <param name="relatedObjectAssemblyName">The assembly that the related object is in</param>
+        /// <param name="relatedObjectClassName">The class type of the related object</param>
+        /// <param name="relKeyDef">The related key definition</param>
+        ///<param name="keepReferenceToRelatedObject">Whether to keep a
+        /// reference to the related object.  Could be false for memory-
+        /// intensive applications.</param>
+        ///<param name="deleteParentAction">The required action when the parent is deleted e.g. Dereference related, delete related, prevent delete</param>
 		public RelationshipDef(string relationshipName,
 								string relatedObjectAssemblyName,
 								string relatedObjectClassName,
@@ -77,11 +90,8 @@ namespace Habanero.BO.ClassDefinition
 								bool keepReferenceToRelatedObject,
                                 DeleteParentAction deleteParentAction)
 		{
-            //ArgumentValidationHelper.CheckArgumentNotNull(relatedObjectClassType, "relatedObjectClassType");
             ArgumentValidationHelper.CheckArgumentNotNull(relKeyDef, "relKeyDef");
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
-			//ArgumentValidationHelper.CheckArgumentIsSubType(relatedObjectClassType, "relatedObjectClassType",
-			//                                                typeof (BusinessObject));
 
 			if (relatedObjectClassType != null) 
 				MyRelatedObjectClassType = relatedObjectClassType;
@@ -198,6 +208,15 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _deleteParentAction; }
             protected set { _deleteParentAction = value; }
+        }
+
+        ///<summary>
+        /// The order by clause that the related object will be sorted by.
+        /// In the case of a single relationship this will return a null string
+        ///</summary>
+        public string OrderBy
+        {
+            get { return _orderBy; }
         }
 
         #endregion Type Initialisation

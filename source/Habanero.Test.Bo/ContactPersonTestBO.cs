@@ -269,7 +269,7 @@ namespace Habanero.Test.BO
         ///  if the object has been deleted already</exception>
         public static ContactPersonTestBO GetContactPerson(BOPrimaryKey id)
         {
-            ContactPersonTestBO myContactPersonTestBOTestBO = (ContactPersonTestBO)BOLoader.GetLoadedBusinessObject(id);
+            ContactPersonTestBO myContactPersonTestBOTestBO = (ContactPersonTestBO)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myContactPersonTestBOTestBO == null)
             {
                 myContactPersonTestBOTestBO = new ContactPersonTestBO(id);

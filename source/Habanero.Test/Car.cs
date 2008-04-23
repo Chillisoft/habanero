@@ -149,7 +149,7 @@ namespace Habanero.Test
         ///  if the object has been deleted already</exception>
         public static Car GetCar(BOPrimaryKey id)
         {
-            Car myCar = (Car)BOLoader.GetLoadedBusinessObject(id);
+            Car myCar = (Car)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myCar == null)
             {
                 myCar = new Car(id);
