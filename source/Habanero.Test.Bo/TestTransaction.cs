@@ -105,7 +105,7 @@ namespace Habanero.Test.BO
             {
                 transact.CommitTransaction();
             }
-            catch (Exception ex) //todo:check type of error?
+            catch (Exception) //todo:check type of error?
             {
                 errorRaised = true;
             }
@@ -125,10 +125,10 @@ namespace Habanero.Test.BO
             errorRaised = false;
             try
             {
-                ContactPersonTestBO myContact_3 = ContactPersonTestBO.GetContactPerson(myContact_1.ID);
+                ContactPersonTestBO.GetContactPerson(myContact_1.ID);
             }
             //Expect this error since the object should not have been persisted to the DB.
-            catch (BusinessObjectNotFoundException ex)
+            catch (BusinessObjectNotFoundException)
             {
                 errorRaised = true;
             }
