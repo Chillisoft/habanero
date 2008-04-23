@@ -845,7 +845,7 @@ namespace Habanero.Test.General
                 }
                 finally
                 {
-                    if (dr != null & !(dr.IsClosed))
+                    if (dr != null && !(dr.IsClosed))
                     {
                         dr.Close();
                     }

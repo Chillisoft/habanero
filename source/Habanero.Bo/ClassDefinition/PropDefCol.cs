@@ -144,18 +144,18 @@ namespace Habanero.BO.ClassDefinition
 			}
 		}
 
-		/// <summary>
-		/// Indicates if the specified property definition exists
-		/// in the collection.
-		/// </summary>
-		/// <param name="propDef">The Property definition to search for</param>
-		/// <returns>Returns true if found, false if not</returns>
-		protected bool Contains(PropDef propDef)
-		{
-			return (_propDefs.ContainsKey(propDef.PropertyName.ToUpper()));
-		}
+        /// <summary>
+        /// Indicates if the specified property definition exists
+        /// in the collection.
+        /// </summary>
+        /// <param name="propDef">The Property definition to search for</param>
+        /// <returns>Returns true if found, false if not</returns>
+        public bool Contains(PropDef propDef)
+        {
+            return (_propDefs.ContainsValue(propDef));
+        }
 
-		/// <summary>
+        /// <summary>
 		/// Indicates if a property definition with the given key exists
 		/// in the collection.
 		/// </summary>

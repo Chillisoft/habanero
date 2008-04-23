@@ -184,8 +184,9 @@ namespace Habanero.BO.ClassDefinition
                         throw new InvalidXmlDefinitionException(String.Format(
                             "The class definition for the super class with the type " +
                             "'{0}' was not found.  Check that the class definition " +
-                            "exists or that spelling and capitalisation are correct."
-                            ,_assemblyName + "." + _className));
+                            "exists or that spelling and capitalisation are correct. " + 
+                            "There are {1} class definitions currently loaded."
+                            ,_assemblyName + "." + _className, ClassDef.ClassDefs.Count));
                     }
 				}
 				return _superClassClassDef;

@@ -148,6 +148,7 @@ namespace Habanero.UI.Wizard
                 pnlWizardStep.Controls.Clear();
                 stepControl.Dock = DockStyle.Fill;
                 pnlWizardStep.Controls.Add(stepControl);
+                stepControl.Focus();
                 step.InitialiseStep();
             } else {
                 throw new WizardStepException("IWizardStep of type " + step.GetType().FullName + " is not a Control");

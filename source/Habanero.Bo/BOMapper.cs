@@ -82,7 +82,7 @@ namespace Habanero.BO
         /// <returns>Returns the interface mapper</returns>
         public UIDef GetUIDef(string uiDefName)
         {
-            return _businessObject.ClassDef.UIDefCol[uiDefName];
+            return _businessObject.ClassDef.GetUIDef(uiDefName);
         }
 
         /// <summary>
@@ -192,16 +192,19 @@ namespace Habanero.BO
             PropDef propDef = classDef.GetPropDef(propertyName, false);
 
             if (propDef != null && propDef.LookupList != null) {
-                if (propDef.LookupList is DatabaseLookupList) 
+                if (propDef.LookupList is DatabaseLookupList)
                 {
-                    return ((DatabaseLookupList) propDef.LookupList).ClassDef;
-                } else if (propDef.LookupList is BusinessObjectLookupList) 
+                    DatabaseLookupList databaseLookupList = (DatabaseLookupList) propDef.LookupList;
+                    return databaseLookupList.ClassDef;
+                }
+                else if (propDef.LookupList is BusinessObjectLookupList) 
                 {
-                    Type lookupListType = null;
                     BusinessObjectLookupList businessObjectLookupList = (BusinessObjectLookupList) propDef.LookupList;
-                    TypeLoader.LoadClassType(ref lookupListType, businessObjectLookupList.AssemblyName,
-                                             businessObjectLookupList.ClassName, "Class", "Lookup List");
-                    return ClassDef.ClassDefs[lookupListType];
+                    return businessObjectLookupList.LookupBoClassDef;
+                    //Type lookupListType = null;
+                    //TypeLoader.LoadClassType(ref lookupListType, businessObjectLookupList.AssemblyName,
+                    //                         businessObjectLookupList.ClassName, "Class", "Lookup List");
+                    //return ClassDef.ClassDefs[lookupListType];
                 }
             }
             return null;

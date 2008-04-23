@@ -53,6 +53,7 @@ namespace Habanero.UI.Grid
         private string _uiName;
         private bool _compulsoryColumnsBold;
         private Dictionary<int, string> _dateColumnIndices;
+        private int _lastDataError;
         
         public event EventHandler CollectionChanged;
         public event EventHandler FilterUpdated;
@@ -70,9 +71,13 @@ namespace Habanero.UI.Grid
 
             _dateColumnIndices = new Dictionary<int, string>();
             CellFormatting += CellFormattingHandler;
+            DataError += DataErrorHandler;
         }
 
-    	/// <summary>
+        
+
+
+        /// <summary>
         /// Sets the business object collection displayed in the grid.  This
         /// collection must be pre-loaded using the collection's Load() command.
         /// </summary>
@@ -127,7 +132,7 @@ namespace Habanero.UI.Grid
             _dataSetProvider.ObjectInitialiser = _objectInitialiser;
             _uiName = uiName;
             ClassDef classDef = collection.ClassDef;
-            UIDef uiDef = classDef.UIDefCol[uiName];
+            UIDef uiDef = classDef.GetUIDef(uiName);
             UIGrid grid = uiDef.UIGrid;
             _dataTable = _dataSetProvider.GetDataTable(grid);
             _dataTable.TableName = "Table";
@@ -191,7 +196,12 @@ namespace Habanero.UI.Grid
                 {
                     col = (DataGridViewColumn)Activator.CreateInstance(gridColumn.GridControlType);
                 }
-                col.Width = (int)(dataColumn.ExtendedProperties["Width"]);
+                int width = (int)(dataColumn.ExtendedProperties["Width"]);
+                col.Width = width;
+                if (width == 0)
+                {
+                    col.Visible = false;
+                }
                 col.ReadOnly = !gridColumn.Editable;
                 col.HeaderText = dataColumn.Caption;
                 col.Name = dataColumn.ColumnName;
@@ -232,6 +242,14 @@ namespace Habanero.UI.Grid
             this.AutoGenerateColumns = false;
             this.DataSource = _dataTableDefaultView;
             //this.DataSource = _dataTable;
+            foreach (DataGridViewColumn dataGridViewColumn in this.Columns)
+            {
+                if (!dataGridViewColumn.Visible)
+                {
+                    dataGridViewColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                    dataGridViewColumn.Resizable = DataGridViewTriState.False;
+                }
+            }
             SetSorting(grid);
             FireCollectionChanged();
         }
@@ -356,7 +374,10 @@ namespace Habanero.UI.Grid
         {
             _collection.Add(bo);
             int row = GetRowOfBusinessObject(bo);
-            this.SetSelectedRowCore(row, true);
+            if (row != -1)
+            {
+                this.SetSelectedRowCore(row, true);
+            }
         }
 
         /// <summary>
@@ -540,6 +561,21 @@ namespace Habanero.UI.Grid
             else
             {
                 _dataTableDefaultView.Sort = columnName + " DESC";
+            }
+        }
+
+        private void DataErrorHandler(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            DataGridViewColumn dataGridViewColumn = Columns[e.ColumnIndex];
+            e.ThrowException = false;
+            string dataErrorDescription = e.Exception.Message + " Row:" + e.RowIndex + " Column:" + e.ColumnIndex;
+            int dataErrorHashCode = dataErrorDescription.GetHashCode();
+            if (_lastDataError != dataErrorHashCode)
+            {
+                _lastDataError = dataErrorHashCode;
+                GlobalRegistry.UIExceptionNotifier.Notify(e.Exception,
+                      String.Format("Error with data in Grid at row {0} and column '{1}'. The context of the error was '{2}'.",
+                      e.RowIndex, dataGridViewColumn.HeaderText, StringUtilities.DelimitPascalCase(e.Context.ToString(), " ")), "Grid data error");
             }
         }
 

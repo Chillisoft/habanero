@@ -322,10 +322,9 @@ namespace Habanero.BO
                     string relationshipName = parts[i];
                     string previousFullTableName = fullTableName;
                     fullTableName += relationshipName;
-                    RelationshipDef relationshipDef;
-                    if (classDef.RelationshipDefCol.Contains(relationshipName))
+                    RelationshipDef relationshipDef = classDef.GetRelationship(relationshipName);
+                    if (relationshipDef != null)
                     {
-                        relationshipDef = classDef.RelationshipDefCol[relationshipName];
                         if (relationshipDef.RelatedObjectClassDef == null)
                         {
                             throw new SqlStatementException(String.Format(

@@ -92,7 +92,7 @@ namespace Habanero.WebGUI
             _dataSetProvider.ObjectInitialiser = _objectInitialiser;
             _uiName = uiName;
             ClassDef classDef = collection.ClassDef;
-            UIDef uiDef = classDef.UIDefCol[uiName];
+            UIDef uiDef = classDef.GetUIDef(uiName);
             UIGrid grid = uiDef.UIGrid;
             _dataTable = _dataSetProvider.GetDataTable(grid);
             _dataTable.TableName = "Table";

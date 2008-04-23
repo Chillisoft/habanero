@@ -39,7 +39,7 @@ namespace Habanero.UI.Wizard
             }
             base.Dispose(disposing);
         }
-
+                
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -75,7 +75,6 @@ namespace Habanero.UI.Wizard
 
         #endregion
 
-        private WizardControl _uxWizardControl = new WizardControl( );
-
+        private WizardControl _uxWizardControl = new WizardControl();
     }
 }

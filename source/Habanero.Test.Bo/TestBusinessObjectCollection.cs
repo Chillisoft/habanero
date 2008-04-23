@@ -80,6 +80,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual("SELECT TOP 10 MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statement.Statement.ToString());
         }
 
+        [Test, Ignore("This needs to be fixed some time")]
+        public void TestCreateLoadSqlStatement_BlankCriteriaPropertyValue()
+        {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            MyBO bo1 = new MyBO();
+            string criteria = "TestProp = ''";
+            IExpression expression = Expression.CreateExpression(criteria);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+            Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+                "FROM `MyBO` " +
+                "WHERE (`MyBO`.`TestProp` = ?Param0)",
+                statement.Statement.ToString());
+        }
+
+
         #region Test Related Object Properties in Criteria
 
         [Test, ExpectedException(typeof(SqlStatementException),

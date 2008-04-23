@@ -26,22 +26,60 @@ namespace Habanero.Test.Util
     [TestFixture]
     public class TestHabaneroStringBuilder
     {
+        #region Test RemoveQuotedSections
+
         [Test]
-        public void TestRemoveQuotedSections()
+        public void TestRemoveQuotedSections_SingleQuotes()
         {
-            HabaneroStringBuilder s = new HabaneroStringBuilder("A quoted 'test' is needed to test this functionality");
+            HabaneroStringBuilder s = new HabaneroStringBuilder(
+                "A quoted 'test' is needed to test this functionality");
             s.RemoveQuotedSections();
             Assert.AreEqual("A quoted  is needed to test this functionality", s.ToString());
-            s = new HabaneroStringBuilder("A quoted \"test\" is needed to test this functionality");
+        }
+
+        [Test]
+        public void TestRemoveQuotedSections_DoubleQuotes()
+        {
+            HabaneroStringBuilder s = new HabaneroStringBuilder(
+                "A quoted \"test\" is needed to test this functionality");
             s.RemoveQuotedSections();
             Assert.AreEqual("A quoted  is needed to test this functionality", s.ToString());
-            s = new HabaneroStringBuilder("A quoted \"test\" is needed to 'test' this functionality");
+        }
+
+        [Test]
+        public void TestRemoveQuotedSections_MixedQuotes()
+        {
+            HabaneroStringBuilder s = new HabaneroStringBuilder(
+                "A quoted \"test\" is needed to 'test' this functionality");
             s.RemoveQuotedSections();
             Assert.AreEqual("A quoted  is needed to  this functionality", s.ToString());
-            s = new HabaneroStringBuilder("Name = 'Peter'");
+        }
+
+        [Test]
+        public void TestRemoveQuotedSections_SimpleCriteria()
+        {
+            HabaneroStringBuilder s = new HabaneroStringBuilder("Name = 'Peter'");
             s.RemoveQuotedSections();
             Assert.AreEqual("Name = ", s.ToString());
         }
+
+        [Test, Ignore("This needs to be fixed some time.")]
+        public void TestRemoveQuotedSections_EmptyQuotes()
+        {
+            HabaneroStringBuilder s = new HabaneroStringBuilder("testProp = ''");
+            s.RemoveQuotedSections();
+            Assert.AreEqual("testProp = ", s.ToString());
+        }
+
+        [Test]
+        public void TestRemoveQuotedSections_QuotedQuotes()
+        {
+            HabaneroStringBuilder s = new HabaneroStringBuilder("Description = 'Mark''s Car'");
+            s.RemoveQuotedSections();
+            Assert.AreEqual("Description = ", s.ToString());
+        }
+
+        #endregion //Test RemoveQuotedSections
 
         [Test]
         public void TestPutBackQuotedSections()

@@ -60,8 +60,15 @@ namespace Habanero.UI.Forms
         {
             _lookupTypeClassDef = lookupTypeClassDef;
             _comboBox = comboBox;
-            _objectCreator = new DefaultBOCreator(_lookupTypeClassDef);
-            _objectEditor = new DefaultBOEditor();
+            if (_lookupTypeClassDef != null)
+            {
+                _objectCreator = new DefaultBOCreator(_lookupTypeClassDef);
+                _objectEditor = new DefaultBOEditor();
+            } else
+            {
+                _objectCreator = null;
+                _objectEditor = null;
+            }
             _objectInitialiser = null; 
         }
         
@@ -109,8 +116,10 @@ namespace Habanero.UI.Forms
         /// </summary>
         public virtual void SetupRightClickBehaviour()
         {
-            if (_lookupTypeClassDef != null && _lookupTypeClassDef.UIDefCol.Contains(GetUiDefName()) &&
-                _lookupTypeClassDef.UIDefCol[GetUiDefName()].UIForm != null)
+            if (_lookupTypeClassDef == null) return;
+            UIDef uiDef = _lookupTypeClassDef.GetUIDef(GetUiDefName());
+            if (_lookupTypeClassDef != null && uiDef != null &&
+                uiDef.UIForm != null)
             {
                 ToolTip toolTip = new ToolTip();
                 toolTip.SetToolTip(_comboBox, "Right click to add a new entry.");
@@ -133,6 +142,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         public virtual void DisableRightClickBehaviour()
         {
+            if (_lookupTypeClassDef == null) return;
             ToolTip toolTip = new ToolTip();
             toolTip.SetToolTip(_comboBox, "");
             _comboBox.MouseUp -= ComboBoxMouseUpHandler;
@@ -183,7 +193,8 @@ namespace Habanero.UI.Forms
                 {
                     newBo = _lookupTypeClassDef.CreateNewBusinessObject();
                     BoPanelControl boCtl = new BoPanelControl(newBo, GetUiDefName());
-                    UIForm uiForm = _lookupTypeClassDef.UIDefCol[GetUiDefName()].UIForm;
+                    UIDef uiDef = _lookupTypeClassDef.GetUIDef(GetUiDefName());
+                    UIForm uiForm = uiDef.UIForm;
                     boCtl.Height = uiForm.Height;
                     boCtl.Width = uiForm.Width;
                     OKCancelDialog dialog =

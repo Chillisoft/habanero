@@ -86,19 +86,21 @@ namespace Habanero.UI.Forms
         private Form CreateDialog()
         {
             _form = new Form();
-
+            _form.Padding = new Padding(5,5,5,5);
             ButtonControl buttons = new ButtonControl();
             Button cancelButton = buttons.AddButton("Cancel", new EventHandler(CancelButtonClickHandler));
             Button okButton = buttons.AddButton("OK", new EventHandler(OKButtonClickHandler));
 
-            _form.Width = Math.Max( _controlToNest.Width, okButton.Width * 2 + 30);
-            _form.Height = _controlToNest.Height + buttons.Height + 40;
-            GridLayoutManager manager = new GridLayoutManager(_form);
-            manager.SetGridSize(2, 1);
-            manager.FixAllRowsBasedOnContents();
-
-            manager.AddControl(_controlToNest);
-            manager.AddControl(buttons);
+            ResizeForm(buttons, okButton);
+            BorderLayoutManager borderLayoutManager = new BorderLayoutManager(_form);
+            borderLayoutManager.BorderSize = 5;
+            //GridLayoutManager manager = new GridLayoutManager(_form);
+            //manager.SetGridSize(2, 1);
+            //manager.FixAllRowsBasedOnContents();
+            //manager.AddControl(_controlToNest);
+            //manager.AddControl(buttons);
+            borderLayoutManager.AddControl(_controlToNest, BorderLayoutManager.Position.Centre);
+            borderLayoutManager.AddControl(buttons, BorderLayoutManager.Position.South);
 
             _form.Text = _title;
             if (_position.X != 0 && _position.Y != 0)
@@ -113,8 +115,33 @@ namespace Habanero.UI.Forms
             _form.AcceptButton = okButton;
             okButton.NotifyDefault(true);
             _form.CancelButton = cancelButton;
+            bool formResizing = false;
+            EventHandler resizeEventHandler = delegate(object sender, EventArgs e)
+            {
+                if (!formResizing)
+                {
+                    formResizing = true;
+                    ResizeForm(buttons, okButton);
+                    formResizing = false;
+                }
+            };
+            EventHandler formCloseEventHandler = null;
+            formCloseEventHandler = delegate(object sender, EventArgs e)
+            {
+                _controlToNest.Resize -= resizeEventHandler;
+                _form.Closed -= formCloseEventHandler;
+            };
+            _controlToNest.Resize += resizeEventHandler;
+            _form.Closed += formCloseEventHandler;
             return _form;
         }
+
+        private void ResizeForm(ButtonControl buttons, Button okButton)
+        {
+            _form.Width = Math.Max(_controlToNest.Width, okButton.Width * 2 + 30) + 8 + 10;
+            _form.Height = _controlToNest.Height + buttons.Height + 40 + 10;
+        }
+
 
         /// <summary>
         /// Handles the event of the Cancel button being pressed, which

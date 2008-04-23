@@ -20,8 +20,9 @@
 
 using System;
 using System.Windows.Forms;
-using Habanero.Base;
 using Habanero.BO;
+using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using log4net;
 
@@ -103,8 +104,9 @@ namespace Habanero.UI.Forms
 
             _comboBoxMapper.SetCollection(_collection, true);
 
-            PanelFactory panelFactory =
-                new PanelFactory(_collection.ClassDef.CreateNewBusinessObject(), _collection.ClassDef.UIDefCol[uiName].UIForm);
+            UIDef uiDef = _collection.ClassDef.GetUIDef(uiName);
+		    PanelFactory panelFactory =
+                new PanelFactory(_collection.ClassDef.CreateNewBusinessObject(), uiDef.UIForm);
             _panelFactoryInfo = panelFactory.CreatePanel();
             _panelFactoryInfo.Panel.Enabled = false;
 

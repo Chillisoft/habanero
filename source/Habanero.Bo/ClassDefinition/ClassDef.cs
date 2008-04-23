@@ -861,6 +861,29 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// Searches the UI definition collection and returns 
+        /// the UI definition found under the UI with the name specified.
+        /// </summary>
+        /// <param name="uiDefName">The UI name in question</param>
+        /// <returns>Returns the UI definition if found, or null if not found</returns>
+        public UIDef GetUIDef(string uiDefName)
+        {
+            ClassDef currentClassDef = this;
+            while (currentClassDef != null)
+            {
+                if (currentClassDef.UIDefCol.Contains(uiDefName))
+                {
+                    return currentClassDef.UIDefCol[uiDefName];
+                }
+                else
+                {
+                    currentClassDef = currentClassDef.SuperClassClassDef;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Searches the property definition collection and returns the 
         /// property definition for the property with the name provided.
         /// </summary>
@@ -984,5 +1007,7 @@ namespace Habanero.BO.ClassDefinition
            
             return newClassDef;
         }
+
+        
     }
 }

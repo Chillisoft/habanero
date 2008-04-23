@@ -192,16 +192,22 @@ namespace Habanero.BO
         /// </summary>
         ~BusinessObject()
         {
-            if (this.ID != null) AllLoaded().Remove(this.ID.ToString());
-            if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
+            try
             {
-                if (AllLoaded().ContainsKey(_primaryKey.GetOrigObjectID()))
+                if (this.ID != null) AllLoaded().Remove(this.ID.ToString());
+                if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
                 {
-                    AllLoaded().Remove(_primaryKey.GetOrigObjectID());
+                    if (AllLoaded().ContainsKey(_primaryKey.GetOrigObjectID()))
+                    {
+                        AllLoaded().Remove(_primaryKey.GetOrigObjectID());
+                    }
                 }
+                ReleaseWriteLocks();
+                ReleaseReadLocks();
+            } catch(Exception ex)
+            {
+                log.Error("Error disposing BusinessObject.", ex);
             }
-            ReleaseWriteLocks();
-            ReleaseReadLocks();
         }
 
         private void Initialise(IDatabaseConnection conn, ClassDef def)
@@ -599,12 +605,29 @@ namespace Habanero.BO
                 {
                     BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
                     ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
-                    BusinessObject businessObject = BOLoader.Instance.GetBusinessObjectByID(classDef, myGuid);
+                    BOLoader boLoader = BOLoader.Instance;
+                    BusinessObject businessObject = boLoader.GetBusinessObjectByID(classDef, myGuid);
                     if (businessObject != null)
                     {
                         return businessObject.ToString();
                     }
+                    PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
+                    if (primaryKeyDef.IsObjectID)
+                    {
+                        BOPropCol boPropCol = classDef.createBOPropertyCol(true);
+                        BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
+                        if (boPrimaryKey != null)
+                        {
+                            boPrimaryKey[0].Value = myGuid;
+                            businessObject = boLoader.GetLoadedBusinessObject(boPrimaryKey);
+                        }
+                        if (businessObject != null)
+                        {
+                            return businessObject;
+                        }
+                    }
                 }
+                
                 return myGuid;
             }
             else if (ClassDef.GetPropDef(propName).HasLookupList())
@@ -1163,9 +1186,25 @@ namespace Habanero.BO
         {
             foreach (BOProp prop in _boPropCol)
             {
-                PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(prop.PropDef, _classDef);
+                PropDef propDef = prop.PropDef;
+                ClassDefinition.ClassDef classDef = GetCorrespondingClassDef(propDef, _classDef);
+                PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef, classDef);
                 searchExpression.SetParameterSqlInfo(propDefParameterSQLInfo);
             }
+        }
+
+        private static ClassDef GetCorrespondingClassDef(PropDef propDef, ClassDef classDef)
+        {
+            ClassDefinition.ClassDef currentClassDef = classDef;
+            while(!currentClassDef.PropDefcol.Contains(propDef))
+            {
+                currentClassDef = currentClassDef.SuperClassClassDef;
+                if (currentClassDef == null)
+                {
+                    return null;
+                }
+            }
+            return currentClassDef;
         }
 
         /// <summary>

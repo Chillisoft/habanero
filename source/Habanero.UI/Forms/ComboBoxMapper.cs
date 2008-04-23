@@ -82,7 +82,6 @@ namespace Habanero.UI.Forms
             set { _comboBoxRightClickController = value; }
         }
 
-
         protected override void OnBusinessObjectChanged()
         {
             if (_comboBoxRightClickController == null && _businessObject != null)
