@@ -453,25 +453,45 @@ namespace Habanero.UI.Grid
             }
         }
 
+        protected internal virtual void SetSelectedBusinessObject(BusinessObject bo)
+        {
+            ClearSelection();
+            if (bo == null)
+            {
+                if (this.CurrentRow == null) return;
+                this.SetSelectedRowCore(this.CurrentRow.Index, false);
+                this.CurrentCell = null;
+                return;
+            }
+            int i = 0;
+            string boID = bo.ID.ToString();
+            foreach (DataRowView dataRowView in _dataTableDefaultView)
+            {
+                if ((string)dataRowView.Row["ID"] == boID)
+                {
+                    this.SetSelectedRowCore(i, true);
+                    this.SetCurrentCellAddressCore(1, i, true, false, false);
+                    break;
+                }
+                i++;
+            }
+            if (CurrentRow != null && !CurrentRow.Displayed)
+            {
+                FirstDisplayedScrollingRowIndex = Rows.IndexOf(CurrentRow);
+            }
+        }
+
+
         /// <summary>
         /// Returns the currently selected business object
         /// </summary>
         /// <returns>Returns the business object</returns>
-        protected virtual BusinessObject GetSelectedBusinessObject()
+        protected internal virtual BusinessObject GetSelectedBusinessObject()
         {
             if (this.CurrentCell == null) return null;
             if (!this.CurrentCell.Selected) return null;
             int rownum = this.CurrentCell.RowIndex;
-            int i = 0;
-            foreach (DataRowView dataRowView in _dataTableDefaultView)
-            {
-                
-                if (i++ == rownum)
-                {
-                    return this._dataSetProvider.Find((string) dataRowView.Row["ID"]);
-                }
-            }
-            return null;
+            return GetBusinessObjectAtRow(rownum);
         }
 
         /// <summary>

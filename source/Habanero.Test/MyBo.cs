@@ -272,14 +272,14 @@ namespace Habanero.Test
 						<grid>
 							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
 							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
-							<column heading=""Test Boolean"" property=""TestBoolean"" type=""DataGridViewCheckBoxColumn"" />
+							<column heading=""Test Boolean"" property=""TestDateTime"" type=""DataGridDateTimeBoxColumn"" />
 						</grid>
 						<form>
 							<tab name=""Tab1"">
 								<columnLayout>
 									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
 									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
-									<field label=""Test Boolean"" property=""TestBoolean"" type=""CheckBox"" mapperType=""CheckBoxMapper"" />
+									<field label=""Test Boolean"" property=""TestDateTime"" type=""DateTimePicker"" mapperType=""DateTimePickerMapper"" />
 								</columnLayout>
 							</tab>
 						</form>

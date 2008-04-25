@@ -33,64 +33,119 @@ namespace Habanero.Test.UI.Grid
     [TestFixture]
     public class TestReadOnlyGrid
     {
-        private Form frm;
-        private ReadOnlyGrid grid;
-        private BusinessObject bo1;
-        private BusinessObject bo2;
-        private DataTable itsDataSource;
+        private Form _form;
+        private ReadOnlyGrid _grid;
+        private BusinessObject _bo1;
+        private BusinessObject _bo2;
+        private DataTable _dataSource;
 
         [SetUp]
         public void SetupFixture()
         {
-            grid = new ReadOnlyGrid();
-            grid.Name = "GridControl";
+            _grid = new ReadOnlyGrid();
+            _grid.Name = "GridControl";
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithNoLookup();
             BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-            bo1 = new MyBO();
-            bo1.SetPropertyValue("TestProp", "Value1");
-            bo1.SetPropertyValue("TestProp2", "Value2");
-            bo2 = new MyBO();
-            bo2.SetPropertyValue("TestProp", "2Value1");
-            bo2.SetPropertyValue("TestProp2", "2Value2");
-            col.Add(bo1);
-            col.Add(bo2);
-            grid.SetCollection(col);
-            frm = new Form();
-            grid.Dock = DockStyle.Fill;
-            frm.Controls.Add(grid);
-            frm.Show();
-            itsDataSource = grid.DataTable;
+            _bo1 = new MyBO();
+            _bo1.SetPropertyValue("TestProp", "Value1");
+            _bo1.SetPropertyValue("TestProp2", "Value2");
+            _bo2 = new MyBO();
+            _bo2.SetPropertyValue("TestProp", "2Value1");
+            _bo2.SetPropertyValue("TestProp2", "2Value2");
+            col.Add(_bo1);
+            col.Add(_bo2);
+            _grid.SetCollection(col);
+            _form = new Form();
+            _grid.Dock = DockStyle.Fill;
+            _form.Controls.Add(_grid);
+            _form.Show();
+            _dataSource = _grid.DataTable;
         }
 
         [TearDown]
         public void TearDown()
         {
-            frm.Close();
-            frm.Dispose();
+            _form.Close();
+            _form.Dispose();
+        }
+
+        #region Test Selection
+
+
+        [Test]
+        public void TestGetSelectedBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            BusinessObject selectedBo = _grid.SelectedBusinessObject;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Value1", selectedBo.Props["TestProp"].Value);
+            Assert.AreEqual("Value2", selectedBo.Props["TestProp2"].Value);
+            Assert.AreSame(_bo1, selectedBo);
+            Assert.AreEqual(0, _grid.CurrentRow.Index);
         }
 
         [Test]
-        public void TestSelectedBusinessObject()
+        public void TestSetSelectedBusinessObject()
         {
-            grid.SelectedBusinessObject = bo2;
-            BusinessObject selectedBo = grid.SelectedBusinessObject;
-            Assert.AreEqual("2Value1", selectedBo.Props["TestProp"].Value);
-            Assert.AreEqual("2Value2", selectedBo.Props["TestProp2"].Value);
-            Assert.AreSame(bo2, selectedBo);
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            _grid.SelectedBusinessObject = _bo1;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(_bo1, _grid.SelectedBusinessObject);
         }
+
+        [Test]
+        public void TestSetSelectedBusinessObject_ToNull()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Execute Test ----------------------
+            _grid.SelectedBusinessObject = _bo1;
+            _grid.SelectedBusinessObject = null;
+
+            //---------------Test Result -----------------------
+            Assert.IsNull(_grid.SelectedBusinessObject);
+            Assert.IsNull(_grid.CurrentRow);
+        }
+
+        [Test]
+        public void TestReadOnlyGridFiringItemSelected()
+        {
+            //---------------Set up test pack-------------------
+            bool gridItemSelected = false;
+            _grid.SelectedBusinessObject = null;
+            _grid.AddItemSelectedDelegate(delegate
+            {
+                gridItemSelected = true;
+            });
+
+            //---------------Execute Test ----------------------
+            _grid.SelectedBusinessObject = _bo1;
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(gridItemSelected);
+        }
+
+
+        #endregion //Test Selection
+
 
         [Test]
         public void TestRowIsRefreshed()
         {
-            bo2.SetPropertyValue("TestProp", "UpdatedValue");
-            Assert.AreEqual("UpdatedValue", itsDataSource.Rows[1][1]);
+            _bo2.SetPropertyValue("TestProp", "UpdatedValue");
+            Assert.AreEqual("UpdatedValue", _dataSource.Rows[1][1]);
         }
 
         [Test]
         public void TestGetCollectionClone()
         {
-            IBusinessObjectCollection cloneCol = grid.GetCollectionClone();
+            IBusinessObjectCollection cloneCol = _grid.GetCollectionClone();
             Assert.AreEqual(cloneCol.Count,2 );
         }
 
@@ -101,46 +156,51 @@ namespace Habanero.Test.UI.Grid
         [Test]
         public void TestSortColumnAttributeDefault()
         {
-            Assert.IsNull(grid.SortedColumn);
-            Assert.AreEqual(SortOrder.None, grid.SortOrder);
+            Assert.IsNull(_grid.SortedColumn);
+            Assert.AreEqual(SortOrder.None, _grid.SortOrder);
         }
 
         [Test]
         public void TestSortColumnAttributeSuccess()
         {
-            grid.SetCollection(grid.GetCollection(), "Success1");
-            Assert.AreEqual("TestProp", grid.SortedColumn.Name);
-            Assert.AreEqual(SortOrder.Ascending, grid.SortOrder);
+            _grid.SetCollection(_grid.GetCollection(), "Success1");
+            Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
+            Assert.AreEqual(SortOrder.Ascending, _grid.SortOrder);
 
-            grid.SetCollection(grid.GetCollection(), "Success2");
-            Assert.AreEqual("TestProp", grid.SortedColumn.Name);
-            Assert.AreEqual(SortOrder.Ascending, grid.SortOrder);
+            _grid.SetCollection(_grid.GetCollection(), "Success2");
+            Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
+            Assert.AreEqual(SortOrder.Ascending, _grid.SortOrder);
 
-            grid.SetCollection(grid.GetCollection(), "Success3");
-            Assert.AreEqual("TestProp", grid.SortedColumn.Name);
-            Assert.AreEqual(SortOrder.Descending, grid.SortOrder);
+            _grid.SetCollection(_grid.GetCollection(), "Success3");
+            Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
+            Assert.AreEqual(SortOrder.Descending, _grid.SortOrder);
 
-            grid.SetCollection(grid.GetCollection(), "Success4");
-            Assert.AreEqual("TestProp", grid.SortedColumn.Name);
-            Assert.AreEqual(SortOrder.Descending, grid.SortOrder);
+            _grid.SetCollection(_grid.GetCollection(), "Success4");
+            Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
+            Assert.AreEqual(SortOrder.Descending, _grid.SortOrder);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestSortColumnAttributeExceptionColumnName()
         {
-            grid.SetCollection(grid.GetCollection(), "Error1");
+            _grid.SetCollection(_grid.GetCollection(), "Error1");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestSortColumnAttributeExceptionColumnNameAndOrder()
         {
-            grid.SetCollection(grid.GetCollection(), "Error2");
+            _grid.SetCollection(_grid.GetCollection(), "Error2");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestSortColumnAttributeExceptionOrder()
         {
-            grid.SetCollection(grid.GetCollection(), "Error3");
+            _grid.SetCollection(_grid.GetCollection(), "Error3");
         }
+
+
+        
+
+        
     }
 }

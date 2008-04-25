@@ -1,21 +1,22 @@
 using System;
-using System.Threading;
+using System.Collections.Generic;
+using System.Text;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.WebGUI;
+using Habanero.UI.Grid;
 using NUnit.Framework;
 
-namespace Habanero.Test.WebGUI
+namespace Habanero.Test.UI.Grid
 {
     [TestFixture]
     public class TestReadonlyGridWithButtons
     {
-        private bool _gridItemSelected;
+        
         [SetUp]
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
-           
+
         }
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -24,10 +25,10 @@ namespace Habanero.Test.WebGUI
             // are executed then it will still only be called once.
         }
         [TearDown]
-        public  void TearDownTest()
+        public void TearDownTest()
         {
             //runs every time any testmethod is complete
-            
+
         }
 
         #region Utility Methods
@@ -35,7 +36,7 @@ namespace Habanero.Test.WebGUI
         private static ReadOnlyGridWithButtons SetupGridWithCollection(out BusinessObjectCollection<MyBO> col)
         {
             ClassDef.ClassDefs.Clear();
-            MyBO.LoadWebGuiClassDef();
+            MyBO.LoadDefaultClassDef();
             ReadOnlyGridWithButtons grid = new ReadOnlyGridWithButtons();
             grid.CreateControl();
             MyBO bo = new MyBO();
@@ -50,7 +51,7 @@ namespace Habanero.Test.WebGUI
 
         #endregion //Utility Methods
 
-        [Test, Ignore("Read only grid is not doing setSelected")]
+        [Test]//, Ignore("Read only grid is not doing setSelected")]
         public void TestSetSelectedBusinessObject()
         {
             //---------------Set up test pack-------------------
@@ -65,7 +66,7 @@ namespace Habanero.Test.WebGUI
             Assert.AreEqual(bo, grid.SelectedBusinessObject);
         }
 
-        [Test, Ignore("Read only grid is not doing setSelected")]
+        [Test]//, Ignore("Read only grid is not doing setSelected")]
         public void TestSetSelectedBusinessObject_ToNull()
         {
             //---------------Set up test pack-------------------
@@ -82,7 +83,7 @@ namespace Habanero.Test.WebGUI
             Assert.IsNull(grid.Grid.CurrentRow);
         }
 
-        [Test, Ignore("Read only grid is not firing ItemSelected")]
+        [Test]//, Ignore("Read only grid is not firing ItemSelected")]
         public void TestReadOnlyGridFiringItemSelected()
         {
             //---------------Set up test pack-------------------
@@ -102,6 +103,6 @@ namespace Habanero.Test.WebGUI
             //---------------Test Result -----------------------
             Assert.IsTrue(gridItemSelected);
         }
-
+        
     }
 }

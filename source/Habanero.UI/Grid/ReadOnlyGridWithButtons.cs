@@ -48,30 +48,20 @@ namespace Habanero.UI.Grid
     /// </summary>
     public class ReadOnlyGridWithButtons : UserControl
     {
-        /// <summary>
-        /// Sets the business object delegate
-        /// </summary>
-        /// <param name="bo">The business object</param>
-        public delegate void SetBusinessObjectDelegate(BusinessObject bo);
-
         private static ILog log = LogManager.GetLogger("Habanero.UI.Grid.ReadOnlyGridWithButtons");
         public event EventHandler ItemSelected;
 
         private ReadOnlyGrid _grid;
         private ReadOnlyGridButtonControl _buttons;
-        private DelayedMethodCall _itemSelectedMethodCaller;
-
-        private int _oldRowNumber = -1;
+        private GridSelectionController _gridSelectionController;
         
-        private List<SetBusinessObjectDelegate> _itemSelectedDelegates;
-		private IBusinessObjectCollection _collection;
+        private IBusinessObjectCollection _collection;
 
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
         public ReadOnlyGridWithButtons()
         {
-            _itemSelectedMethodCaller = new DelayedMethodCall(500, this);
             BorderLayoutManager manager = new BorderLayoutManager(this);
             _grid = new ReadOnlyGrid();
             _grid.Name = "GridControl";
@@ -79,60 +69,39 @@ namespace Habanero.UI.Grid
             _buttons = new ReadOnlyGridButtonControl(_grid);
             _buttons.Name = "ButtonControl";
             manager.AddControl(_buttons, BorderLayoutManager.Position.South);
+                        
+            _gridSelectionController = new GridSelectionController(_grid);
+            _gridSelectionController.DelayedItemSelected = DelayedItemSelected;
 
-            _grid.CurrentCellChanged += new EventHandler(CurrentCellChangedHandler);
-            _grid.CollectionChanged += new EventHandler(CollectionChangedHandler);
-            _grid.FilterUpdated += new EventHandler(GridFilterUpdatedHandler);
-            _itemSelectedDelegates = new List<SetBusinessObjectDelegate>();
             this.Buttons.ObjectEditor = new DefaultBOEditor();
             //this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.ClassDef);
         }
 
+        #region Public Interface to Selection methods.
+
         /// <summary>
-        /// Handles the event of the grid filter being updated
+        /// Gets or sets the single selected business object (null if none are selected)
+        /// denoted by where the current selected cell is
         /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void GridFilterUpdatedHandler(object sender, EventArgs e)
+        public BusinessObject SelectedBusinessObject
         {
-            _oldRowNumber = -1;
-            FireItemSelectedIfCurrentRowChanged();
+            get { return _gridSelectionController.SelectedBusinessObject; }
+            set { _gridSelectionController.SelectedBusinessObject = value; }
         }
 
         /// <summary>
-        /// Handles the event of the data provider being updated
+        /// Reselects the current row and creates a new item selected event
+        /// if the current row has changed
         /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void CollectionChangedHandler(object sender, EventArgs e)
+        public void ReselectSelectedRow()
         {
-            _oldRowNumber = -1;
-            FireItemSelectedIfCurrentRowChanged();
-        }
+            //this.Grid.SelectedBusinessObject = null;
+            //_oldRowNumber = -1;
+            //FireItemSelectedIfCurrentRowChanged();
 
-        /// <summary>
-        /// Handles the event of the current cell being changed
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void CurrentCellChangedHandler(object sender, EventArgs e)
-        {
-            FireItemSelectedIfCurrentRowChanged();
-        }
-
-        /// <summary>
-        /// Creates an item selected event if the current row has changed
-        /// </summary>
-        private void FireItemSelectedIfCurrentRowChanged()
-        {
-            if (_grid.CurrentCell != null)
-            {
-                if (_oldRowNumber != _grid.CurrentCell.RowIndex)
-                {
-                    _oldRowNumber = _grid.CurrentCell.RowIndex;
-                    FireItemSelected();
-                }
-            }
+            // TODO Check how this method is used because the above code wouldn't have done the right thing ( - Mark ).
+            // TODO Check if this line below correctly repaces the above code or fulfills the objectives of the method ( - Mark ).
+            _gridSelectionController.Reselect();
         }
 
         /// <summary>
@@ -141,24 +110,10 @@ namespace Habanero.UI.Grid
         /// <param name="boDelegate">The delegate to add</param>
         public void AddItemSelectedDelegate(SetBusinessObjectDelegate boDelegate)
         {
-            _itemSelectedDelegates.Add(boDelegate);
+            _gridSelectionController.AddItemSelectedDelegate(boDelegate);
         }
 
-        /// <summary>
-        /// Calls the item selected handler for each of the selected item's
-        /// delegates
-        /// </summary>
-        private void FireItemSelected()
-        {
-            if (this.SelectedBusinessObject != null)
-            {
-                foreach (SetBusinessObjectDelegate selectedDelegate in _itemSelectedDelegates)
-                {
-                    selectedDelegate((BusinessObject)this.SelectedBusinessObject);
-                }
-            }
-            _itemSelectedMethodCaller.Call(new VoidMethodWithSender(DelayedItemSelected));
-        }
+        #endregion //Public Interface to Selection methods.
 
         /// <summary>
         /// Creates a new item selected event
@@ -234,36 +189,16 @@ namespace Habanero.UI.Grid
         }
 
         /// <summary>
-        /// Gets or sets the single selected business object (null if none are selected)
-        /// denoted by where the current selected cell is
-        /// </summary>
-        public BusinessObject SelectedBusinessObject
-        {
-            get { return this.Grid.SelectedBusinessObject; }
-            set { this.Grid.SelectedBusinessObject = value; }
-        }
-
-        /// <summary>
-        /// Reselects the current row and creates a new item selected event
-        /// if the current row has changed
-        /// </summary>
-        public void ReselectSelectedRow()
-        {
-            this.Grid.SelectedBusinessObject = null;
-            _oldRowNumber = -1;
-            FireItemSelectedIfCurrentRowChanged();
-        }
-
-        /// <summary>
         /// Removes the specified business object from the list
         /// </summary>
         /// <param name="objectToRemove">The business object to remove</param>
         public void RemoveBusinessObject(BusinessObject objectToRemove)
         {
-            this.Grid.RemoveBusinessObject( objectToRemove);
+            this.Grid.RemoveBusinessObject(objectToRemove);
             if (this.Grid.HasBusinessObjects)
             {
-                FireItemSelected();
+                _gridSelectionController.RefreshSelection();
+                //FireItemSelected();
             }
         }
 

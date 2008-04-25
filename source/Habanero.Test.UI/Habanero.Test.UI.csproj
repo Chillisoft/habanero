@@ -87,7 +87,9 @@
     <Compile Include="Grid\TestEditableGrid.cs" />
     <Compile Include="Grid\TestFilterControl.cs" />
     <Compile Include="Grid\TestFilterInputBoxCollection.cs" />
+    <Compile Include="Grid\TestGridSelectionController.cs" />
     <Compile Include="Grid\TestReadOnlyGrid.cs" />
+    <Compile Include="Grid\TestReadOnlyGridWithButtons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />
     <Compile Include="Wizard\TestWizardController.cs" />

@@ -170,6 +170,7 @@
     </Compile>
     <Compile Include="Grid\FilterControlEventArgs.cs" />
     <Compile Include="Grid\FilterInputBoxCollection.cs" />
+    <Compile Include="Grid\GridSelectionController.cs" />
     <Compile Include="Grid\ReadOnlyGrid.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -36,6 +36,7 @@ namespace Habanero.UI.Grid
     public class ReadOnlyGrid : GridBase, IReadOnlyGrid
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Grid.ReadOnlyGrid");
+        private GridSelectionController _gridSelectionController;
 
         public event RowDoubleClickedHandler RowDoubleClicked;
 
@@ -50,7 +51,46 @@ namespace Habanero.UI.Grid
             AllowUserToAddRows = false;
             AllowUserToDeleteRows = false;
             SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            _gridSelectionController = new GridSelectionController(this);
         }
+
+        #region Public Interface to Selection methods.
+
+        /// <summary>
+        /// Gets or sets the single selected business object (null if none are selected)
+        /// denoted by where the current selected cell is
+        /// </summary>
+        public BusinessObject SelectedBusinessObject
+        {
+            get { return _gridSelectionController.SelectedBusinessObject; }
+            set { _gridSelectionController.SelectedBusinessObject = value; }
+        }
+
+        /// <summary>
+        /// Reselects the current row and creates a new item selected event
+        /// if the current row has changed
+        /// </summary>
+        public void ReselectSelectedRow()
+        {
+            //this.Grid.SelectedBusinessObject = null;
+            //_oldRowNumber = -1;
+            //FireItemSelectedIfCurrentRowChanged();
+
+            // TODO Check how this method is used because the above code wouldn't have done the right thing ( - Mark ).
+            // TODO Check if this line below correctly repaces the above code or fulfills the objectives of the method ( - Mark ).
+            _gridSelectionController.Reselect();
+        }
+
+        /// <summary>
+        /// Adds another delegate to those of the selected item
+        /// </summary>
+        /// <param name="boDelegate">The delegate to add</param>
+        public void AddItemSelectedDelegate(SetBusinessObjectDelegate boDelegate)
+        {
+            _gridSelectionController.AddItemSelectedDelegate(boDelegate);
+        }
+
+        #endregion //Public Interface to Selection methods.
 
         /// <summary>
         /// Handles the event of a double-click
@@ -78,39 +118,6 @@ namespace Habanero.UI.Grid
             {
                 column.ReadOnly = true;
             }
-        }
-
-        /// <summary>
-        /// Gets and sets the selected business object in the grid
-        /// </summary>
-        public BusinessObject SelectedBusinessObject
-        {
-            set
-            {
-                ClearSelection();
-                if (value == null)
-                {
-                    if (this.CurrentRow == null) return;
-                    this.SetSelectedRowCore(this.CurrentRow.Index, false);
-                    return;
-                }
-                int i = 0;
-                foreach (DataRowView dataRowView in _dataTableDefaultView)
-                {
-                    if ((string) dataRowView.Row["ID"] == value.ID.ToString())
-                    {
-                        this.SetSelectedRowCore(i, true);
-                        this.SetCurrentCellAddressCore(1, i, true, false, false);
-                        break;
-                    }
-                    i++;
-                }
-                if (CurrentRow != null && !CurrentRow.Displayed)
-                {
-                    FirstDisplayedScrollingRowIndex = Rows.IndexOf(CurrentRow);
-                }
-            }
-            get { return this.GetSelectedBusinessObject(); }
         }
 
         /// <summary>
