@@ -31,10 +31,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Gizmox.WebGUI.Common, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Gizmox.WebGUI.Common.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Brett\Gizmox.WebGUI\Gizmox.WebGUI.SDK.Sources.6.0.1_NET20\Gizmox.WebGUI.Assemblies\bin\2.0\Gizmox.WebGUI.Common.dll</HintPath>
     </Reference>
     <Reference Include="Gizmox.WebGUI.Forms, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=c508b41386c60f1d, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\Gizmox.WebGUI.Forms.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Brett\Gizmox.WebGUI\Gizmox.WebGUI.SDK.Sources.6.0.1_NET20\Gizmox.WebGUI.Forms\bin\Debug\Gizmox.WebGUI.Forms.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
@@ -72,6 +74,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GridLayoutManager.cs" />
+    <Compile Include="HabaneroAppWeb.cs" />
     <Compile Include="IControlMapper.cs" />
     <Compile Include="IReadOnlyGrid.cs" />
     <Compile Include="IUISettings.cs" />
@@ -90,6 +93,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TextBoxMapper.cs" />
+    <Compile Include="UISettings.cs" />
     <Compile Include="Wizard\IWizardController.cs" />
     <Compile Include="Wizard\IWizardStep.cs" />
     <Compile Include="Wizard\MessageWizardStep.cs">
@@ -153,6 +157,10 @@
     <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
       <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
       <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.DB</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>

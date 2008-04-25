@@ -17,12 +17,16 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using Habanero.BO;
 using Habanero.DB;
 
 namespace Habanero.Test
 {
     public class TestUsingDatabase : ArchitectureTest
     {
+        protected static List<BusinessObject> _objectsToDelete = new List<BusinessObject>();
+
         public void SetupDBConnection()
         {
             if (DatabaseConnection.CurrentConnection != null &&
@@ -56,6 +60,60 @@ namespace Habanero.Test
                 DatabaseConnection.CurrentConnection.ConnectionString = connStr;
                 DatabaseConnection.CurrentConnection.GetConnection();
             }
+        }
+
+        public static void DeleteObjects()
+        {
+            DeleteObjects(null);
+        }
+
+        public static void DeleteObjects(List<BusinessObject> objectsToDelete)
+        {
+            if (objectsToDelete == null)
+            {
+                objectsToDelete = _objectsToDelete;
+            }
+            int count = objectsToDelete.Count;
+            Dictionary<BusinessObject, int> failureHistory = new Dictionary<BusinessObject, int>();
+            while (objectsToDelete.Count > 0)
+            {
+                BusinessObject thisBo = objectsToDelete[objectsToDelete.Count - 1];
+                try
+                {
+                    if (!thisBo.State.IsNew)
+                    {
+                        thisBo.Restore();
+                        thisBo.Delete();
+                        thisBo.Save();
+                    }
+                    objectsToDelete.Remove(thisBo);
+                }
+                catch
+                {
+                    int failureCount = 0;
+                    if (failureHistory.ContainsKey(thisBo))
+                    {
+                        failureCount = failureHistory[thisBo]++;
+                    }
+                    else
+                    {
+                        failureHistory.Add(thisBo, failureCount + 1);
+                    }
+                    objectsToDelete.Remove(thisBo);
+                    if (failureCount <= count)
+                    {
+                        objectsToDelete.Insert(0, thisBo);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+        protected static void AddObjectToDelete(BusinessObject bo)
+        {
+            _objectsToDelete.Add(bo);
         }
     }
 }

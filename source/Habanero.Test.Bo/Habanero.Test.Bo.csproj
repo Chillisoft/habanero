@@ -154,6 +154,7 @@
     <Compile Include="CriteriaManager\TestSqlCriteriaCreator.cs" />
     <Compile Include="OrganisationTestBO.cs" />
     <Compile Include="SqlGeneration\StatementGeneratorTestHelper.cs" />
+    <Compile Include="TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
     <Compile Include="TestTransactionCommitter.cs" />
     <Compile Include="TestMultipleRelationship.cs" />
     <Compile Include="TestRelatedBusinessObjectCollection.cs" />

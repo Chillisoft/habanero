@@ -1,6 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Security.Principal;
 using Habanero.Base;
 using Habanero.BO.SqlGeneration;
 using Habanero.DB;
+using Habanero.Util;
+using log4net;
 
 namespace Habanero.BO
 {
@@ -12,6 +18,7 @@ namespace Habanero.BO
     public class TransactionalBusinessObjectDB
         : TransactionalBusinessObject
     {
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionalBusinessObjectDB");
         ///<summary>
         ///</summary>
         ///<param name="businessObject"></param>
@@ -66,6 +73,83 @@ namespace Habanero.BO
         {
             UpdateStatementGenerator gen = new UpdateStatementGenerator(BusinessObject, BusinessObject.GetDatabaseConnection());
             return gen.Generate();
+        }
+
+        private bool HasDuplicateObjectInDatabase(BOKey boKey, ISqlStatement checkDuplicateSql, out string errMsg)
+        {
+            errMsg = "";
+            using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(checkDuplicateSql))
+            {
+                if (dr.Read()) //Database object with these criteria already exists
+                {
+                      log.Error(String.Format("Duplicate record error occurred on primary key for: " +
+                                                                       "Class: {0}, Username: {1}, Machinename: {2}, " +
+                                                                       "Time: {3}, Sql: {4}, Object: {5}",
+                                                                       this.BusinessObject.ClassName, WindowsIdentity.GetCurrent().Name, Environment.MachineName,
+                                                                       DateTime.Now, boKey, this));
+                           
+
+                    string classDisplayName = this.BusinessObject.ClassDef.DisplayName;
+
+                    errMsg = GetDuplicateObjectErrMsg(boKey, classDisplayName);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        protected internal override bool HasDuplicateIdentifier(out string errMsg)
+        {
+            errMsg = "";
+            //if (this.BusinessObject == null) return false;
+            if (this.BusinessObject.GetBOKeyCol() == null) return false;
+            if (this.BusinessObject.State.IsDeleted) return false;
+
+            List<BOKey> allKeys = new List<BOKey>();
+            if (this.BusinessObject.PrimaryKey != null) allKeys.Add(this.BusinessObject.PrimaryKey);
+            foreach (BOKey key in this.BusinessObject.GetBOKeyCol())
+            {
+                allKeys.Add(key);
+            }
+            foreach (BOKey boKey in allKeys)
+            {
+                if (!boKey.IsDirtyOrNew()) continue;
+                if (boKey is BOPrimaryKey && (this.BusinessObject.ClassDef.HasObjectID)) continue;
+
+                SqlStatement checkDuplicateSql =
+                    new SqlStatement(DatabaseConnection.CurrentConnection);
+                checkDuplicateSql.Statement.Append(this.BusinessObject.GetSelectSql());
+
+                // Special case where super class and subclass have same ID name causes ambiguous field name
+                string idWhereClause = this.BusinessObject.WhereClause(checkDuplicateSql);
+                string id = StringUtilities.GetLeftSection(idWhereClause, " ");
+                if (StringUtilities.CountOccurrences(checkDuplicateSql.ToString(), id) >= 3)
+                {
+                    idWhereClause = idWhereClause.Insert(idWhereClause.IndexOf(id),
+                                                         this.BusinessObject.ClassDef.TableName + ".");
+                }
+
+                string whereClause = "";
+                if (!(boKey is BOPrimaryKey))
+                {
+                    whereClause += " ( NOT (" + idWhereClause + ")) AND ";
+                }
+                whereClause += GetCheckForDuplicateWhereClause(boKey, checkDuplicateSql);
+                checkDuplicateSql.AppendCriteria(whereClause);
+
+                if (HasDuplicateObjectInDatabase(boKey, checkDuplicateSql, out errMsg)) return true;
+            }
+            return false;
+        }
+
+        private static string GetCheckForDuplicateWhereClause(BOKey lBOKey, SqlStatement sql)
+        {
+            if (lBOKey == null)
+            {
+                throw new InvalidKeyException("An error occurred because a " +
+                                              "BOKey argument was null.");
+            }
+            return lBOKey.DatabaseWhereClause(sql);
         }
     }
 }

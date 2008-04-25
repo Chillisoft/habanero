@@ -236,13 +236,20 @@ namespace Habanero.Test.BO
             bo.Delete();
         }
 
-        [Test, Ignore("This fails with the JetBrains testing framework because MessageMatch.Contains doesn't seem to be supported by Resharper 2.5"), 
-            ExpectedException(typeof(BusObjDeleteException),
-                ExpectedMessage = "You cannot delete the 'MyBoNotEditableDeletable', as the IsDeleted is set to false for the object",
-                MatchType = MessageMatch.Contains)]
+        [Test]
         public void TestCannotDelete_IsDeletable_False_ExpectMessage()
         {
-            TestCannotDelete_IsDeletable_False();
+            try
+            {
+                TestCannotDelete_IsDeletable_False();
+                Assert.Fail();
+            }
+            catch (BusObjDeleteException ex)
+            {
+                Assert.IsTrue(
+                    ex.Message.Contains(
+                        "You cannot delete the 'MyBoNotEditableDeletable', as the IsDeleted is set to false for the object"));
+            }
         }
 
         [Test, ExpectedException(typeof(BusObjEditableException))]
@@ -254,13 +261,20 @@ namespace Habanero.Test.BO
             bo.TestProp = "new";
         }
 
-        [Test, Ignore("This fails with the JetBrains testing framework because MessageMatch.Contains doesn't seem to be supported by Resharper 2.5"), 
-            ExpectedException(typeof(BusObjEditableException),
-                ExpectedMessage = "You cannot Edit the 'MyBoNotEditableDeletable', as the IsEditable is set to false for the object",
-                MatchType = MessageMatch.Contains)]
+        [Test]
         public void TestCannotEdit_IsEditable_False_ExpectMessage()
         {
-            TestCannotEdit_IsEditable_False();
+            try
+            {
+                TestCannotEdit_IsEditable_False();
+                Assert.Fail();
+            }
+            catch (BusObjEditableException ex)
+            {
+                Assert.IsTrue(
+                    ex.Message.Contains(
+                        "You cannot Edit the 'MyBoNotEditableDeletable', as the IsEditable is set to false for the object"));
+            }
         }
 
         [Test]

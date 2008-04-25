@@ -85,7 +85,7 @@ namespace Habanero.Test
             mPropMachineLastUpdated = _boPropCol["MachineLastUpdated"];
             mPropVersionNumber = _boPropCol["VersionNumber"];
 
-            SetConcurrencyControl(new OptimisticLockingVersionNumber(mPropDateLastUpdated,
+            SetConcurrencyControl(new OptimisticLockingVersionNumberDB(this,mPropDateLastUpdated,
                                                                      mPropUserLastUpdated, mPropMachineLastUpdated,
                                                                      mPropVersionNumber));
             SetTransactionLog(new TransactionLogTable("TransactionLog",

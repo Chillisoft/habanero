@@ -111,9 +111,18 @@ namespace Habanero.WebGUI
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddButtonClickHandler(object sender, EventArgs e)
         {
-            BusinessObject newBO = _readOnlyGrid.BusinessObjectCollection.CreateBusinessObject();
+            BusinessObject newBO;
+            if (this._objectCreator == null)
+            {
+                newBO = _readOnlyGrid.BusinessObjectCollection.CreateBusinessObject();
+            } else
+            {
+                newBO = (BusinessObject) this._objectCreator.CreateObject();
+            }
+
             _objectEditor.EditObject(newBO, _readOnlyGrid.UIName);
-//            CheckCreatorExists();
+            
+//           CheckCreatorExists();
 //            BusinessObject newObject = (BusinessObject)_objectCreator.CreateObject(_objectEditor, _objectInitialiser, _readOnlyGrid.UIName);
 //            if (newObject != null)
 //            {

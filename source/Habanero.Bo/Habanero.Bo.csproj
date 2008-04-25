@@ -292,7 +292,7 @@
     <Compile Include="ObjectFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OptimisticLockingVersionNumber.cs">
+    <Compile Include="OptimisticLockingVersionNumberDB.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PropRuleBase.cs">

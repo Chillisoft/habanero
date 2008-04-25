@@ -29,7 +29,7 @@ using Habanero.BO.CriteriaManager;
 using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 using Habanero.Util;
-using log4net;
+//using log4net;
 
 namespace Habanero.BO
 {
@@ -44,7 +44,7 @@ namespace Habanero.BO
     public class BusinessObject 
     {
 
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
+        //private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         public event EventHandler<BOEventArgs> Updated;
         public event EventHandler<BOEventArgs> Saved;
@@ -192,15 +192,12 @@ namespace Habanero.BO
         /// </summary>
         ~BusinessObject()
         {
-            try
+            if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
+            if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
             {
-                if (this.ID != null) AllLoaded().Remove(this.ID.ToString());
-                if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
+                if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
                 {
-                    if (AllLoaded().ContainsKey(_primaryKey.GetOrigObjectID()))
-                    {
-                        AllLoaded().Remove(_primaryKey.GetOrigObjectID());
-                    }
+                    AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
                 }
                 ReleaseWriteLocks();
                 ReleaseReadLocks();
@@ -208,6 +205,8 @@ namespace Habanero.BO
             {
                 log.Error("Error disposing BusinessObject.", ex);
             }
+            ReleaseWriteLocks();
+            //ReleaseReadLocks();
         }
 
         private void Initialise(IDatabaseConnection conn, ClassDef def)
@@ -306,7 +305,7 @@ namespace Habanero.BO
         /// Returns a Hashtable containing the loaded business objects
         /// </summary>
         /// <returns></returns>
-        internal static Dictionary<string, WeakReference> AllLoaded()
+        internal static Dictionary<string, WeakReference> AllLoadedBusinessObjects()
         {
             return _allLoadedBusinessObjects;
         }
@@ -951,9 +950,9 @@ namespace Habanero.BO
 
         private void AddToLoadedObjectsCollection()
         {
-            if (!AllLoaded().ContainsKey(ID.GetObjectId()))
+            if (!AllLoadedBusinessObjects().ContainsKey(ID.GetObjectId()))
             {
-                AllLoaded().Add(this.ID.GetObjectId(),
+                AllLoadedBusinessObjects().Add(this.ID.GetObjectId(),
                                                      new WeakReference(this));
             }
         }
@@ -999,7 +998,7 @@ namespace Habanero.BO
 
         private void RemoveFromAllLoaded()
         {
-            if (_primaryKey != null) AllLoaded().Remove(_primaryKey.GetOrigObjectID());
+            if (_primaryKey != null) AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
         }
 
         /// <summary>
@@ -1092,23 +1091,13 @@ namespace Habanero.BO
         /// <summary>
         /// Checks concurrency before persisting to the database
         /// </summary>
-        protected virtual void CheckConcurrencyBeforePersisting()
+        protected internal virtual void CheckConcurrencyBeforePersisting()
         {
             if (!(_concurrencyControl == null))
             {
-                _concurrencyControl.CheckConcurrencyBeforePersisting(this);
+                _concurrencyControl.CheckConcurrencyBeforePersisting();
             }
-        }
-
-        /// <summary>
-        /// Checks concurrency before getting an object from the object manager
-        /// </summary>
-        protected internal virtual void CheckConcurrencyOnGettingObjectFromObjectManager()
-        {
-            if (!(_concurrencyControl == null))
-            {
-                _concurrencyControl.CheckConcurrencyOnGettingObjectFromObjectManager(this);
-            }
+            this.UpdatedConcurrencyControlProperties();
         }
 
         /// <summary>
@@ -1118,7 +1107,7 @@ namespace Habanero.BO
         {
             if (!(_concurrencyControl == null))
             {
-                _concurrencyControl.CheckConcurrencyBeforeBeginEditing(this);
+                _concurrencyControl.CheckConcurrencyBeforeBeginEditing();
             }
         }
 
@@ -1134,17 +1123,6 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Releases read locks
-        /// </summary>
-        protected virtual void ReleaseReadLocks()
-        {
-            if (!(_concurrencyControl == null))
-            {
-                _concurrencyControl.ReleaseReadLocks();
-            }
-        }
-
-        /// <summary>
         /// Releases write locks
         /// </summary>
         protected virtual void ReleaseWriteLocks()
@@ -1155,25 +1133,7 @@ namespace Habanero.BO
             }
         }
 
-        ///// <summary>
-        ///// Increments the synchronisation version number
-        ///// </summary>
-        //public void IncrementVersionNumber()
-        //{
-        //    if (this.ClassDef.SupportsSynchronising && this.GetBOPropCol().Contains("SyncVersionNumber"))
-        //    {
-        //        BOProp syncVersionNoProp = this.GetBOProp("SyncVersionNumber");
-        //        syncVersionNoProp.PropertyValue = (int)syncVersionNoProp.PropertyValue + 1;
-        //    }
-        //    else
-        //    {
-        //        throw new NotSupportedException("The Business Object of type " + this.GetType() +
-        //                                        " does not support version number synchronising.");
-        //    }
-        //}
-
         #endregion //Concurrency
-
 
     	#region Sql Statements
 
@@ -1298,5 +1258,14 @@ namespace Habanero.BO
 
         #endregion //Sql Statements
 
+        ///<summary>
+        ///</summary>
+        protected internal virtual void UpdateAsTransactionRolledBack()
+        {
+            if (!(_concurrencyControl == null))
+            {
+                _concurrencyControl.UpdateAsTransactionRolledBack();
+            }
+        }
     }
 }

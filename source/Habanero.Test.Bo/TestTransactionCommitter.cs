@@ -420,7 +420,7 @@ namespace Habanero.Test.BO
             }
         }
 
-        private void CleanupObjectFromDatabase(BusinessObject bo)
+        private static void CleanupObjectFromDatabase(BusinessObject bo)
         {
             bo.Delete();
             bo.Save();
@@ -490,9 +490,45 @@ namespace Habanero.Test.BO
             AssertBusinessObjectInDatabase(address);
 
             Assert.IsTrue(address.State.IsDeleted);
-            Assert.IsTrue(contactPersonTestBO.State.IsDeleted);
+            Assert.IsTrue(address.State.IsEditing);
             Assert.IsFalse(address.State.IsNew);
+            Assert.IsTrue(contactPersonTestBO.State.IsDeleted);
+            Assert.IsTrue(contactPersonTestBO.State.IsEditing);
             Assert.IsFalse(contactPersonTestBO.State.IsNew);
+        }
+
+        [Test]
+        public void TestDeleteRelatedWithFailure_CancelEditsOnParent()
+        {
+            //---------------Set up test pack-------------------
+            Address address;
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            contactPersonTestBO.Delete();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            committerDB.AddBusinessObject(contactPersonTestBO);
+            committerDB.AddTransaction(new StubDatabaseFailureTransaction());
+
+            try
+            {
+                committerDB.CommitTransaction();
+                Assert.Fail();
+            }
+            catch (NotImplementedException)
+            {
+            }
+
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.Restore();
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(contactPersonTestBO.State.IsEditing);
+            Assert.IsFalse(contactPersonTestBO.State.IsDeleted);
+
+            Assert.Ignore("This test is being ignored due to the fact that we do not have a philosophy for compositional parents deleting their children etc");
+            Assert.IsFalse(address.State.IsEditing);
+            Assert.IsFalse(address.State.IsDeleted);
+
         }
 
         [Test]
@@ -533,7 +569,7 @@ namespace Habanero.Test.BO
             DoTestCheckForDuplicateObjects();
         }
 
-        private void DoTestCheckForDuplicateObjects()
+        private static void DoTestCheckForDuplicateObjects()
         {
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
             ContactPersonTestBO duplicateContactPerson = new ContactPersonTestBO();
@@ -589,8 +625,8 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             BOPrimaryKey objectID = contactPersonCompositeKey.ID;
             Assert.AreEqual(objectID.GetOrigObjectID(), objectID.GetObjectId());
-            Assert.IsNotNull(ContactPersonTestBO.AllLoaded()[objectID.GetOrigObjectID()]);
-            Assert.IsFalse(ContactPersonTestBO.AllLoaded().ContainsKey(oldID));
+            Assert.IsNotNull(ContactPersonTestBO.AllLoadedBusinessObjects()[objectID.GetOrigObjectID()]);
+            Assert.IsFalse(ContactPersonTestBO.AllLoadedBusinessObjects().ContainsKey(oldID));
         }
 
         [Test]
@@ -618,7 +654,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
             string oldID = contactPersonCompositeKey.ID.GetObjectId();
-            Assert.IsNotNull(ContactPersonTestBO.AllLoaded()[oldID]);
+            Assert.IsNotNull(ContactPersonTestBO.AllLoadedBusinessObjects()[oldID]);
             TransactionCommitterDB committer = new TransactionCommitterDB();
             committer.AddBusinessObject(contactPersonCompositeKey);
             contactPersonCompositeKey.FirstName = "newName";
@@ -626,8 +662,8 @@ namespace Habanero.Test.BO
             committer.CommitTransaction();
             //---------------Test Result -----------------------
             AssertBOStateIsValidAfterInsert_Updated(contactPersonCompositeKey);
-            Assert.IsFalse(ContactPersonTestBO.AllLoaded().ContainsKey(oldID));
-            Assert.IsNotNull(ContactPersonTestBO.AllLoaded()[contactPersonCompositeKey.ID.GetObjectId()]);
+            Assert.IsFalse(ContactPersonTestBO.AllLoadedBusinessObjects().ContainsKey(oldID));
+            Assert.IsNotNull(ContactPersonTestBO.AllLoadedBusinessObjects()[contactPersonCompositeKey.ID.GetObjectId()]);
             //---------------Tear Down--------------------------
             contactPersonCompositeKey.Delete();
             contactPersonCompositeKey.Save();
@@ -639,18 +675,33 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
 
             MockBOWithBeforeSave mockBo = new MockBOWithBeforeSave();
-            //Add this to the commiter
-            //Execute 
-            //Check that MockBOWithBeforeSave and its beforesave object are commited to database
             TransactionCommitterStub committer = new TransactionCommitterStub();
-            committer.AddTransaction(new TransactionalBusinessObject(mockBo));
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            committer.AddTransaction(trnBusObj);
             //---------------Execute Test ----------------------
-            committer.CommitTransaction();
+
+                committer.CommitTransaction();
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, committer.OriginalTransactions.Count);
         }
 
+        [Test]
+        public void TestBeforeSave_ExecutedBeforeValidation()
+        {
+            //---------------Set up test pack-------------------
+
+            MockBOWithBeforeSaveUpdatesCompulsoryField mockBo = new MockBOWithBeforeSaveUpdatesCompulsoryField();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            committer.AddTransaction(trnBusObj);
+            //---------------Execute Test ----------------------
+            committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            //Business object will throw an exception if executed in the incorrect order.
+            Assert.AreEqual(1, committer.OriginalTransactions.Count);
+        }
         [Test]
         public void TestDereferenceRelatedObjects()
         {
@@ -685,6 +736,33 @@ namespace Habanero.Test.BO
 
             Car.DeleteAllCars();
             Engine.DeleteAllEngines();
+        }
+
+        //Rollback failure must reset concurrency version number.
+        [Test]
+        public void TestRollBack_OnError()
+        {
+            //---------------Set up test pack-------------------
+            //Create object in DB
+            MockBoWithRollBack mockBo = new MockBoWithRollBack();
+            StubDatabaseFailureTransaction trnFail = new StubDatabaseFailureTransaction();
+            TransactionCommitterStubDB trnCommitter = new TransactionCommitterStubDB();
+            trnCommitter.AddBusinessObject(mockBo);
+            trnCommitter.AddTransaction(trnFail);
+            Assert.IsFalse(mockBo.RollBackExecuted);
+            //---------------Execute Test ----------------------
+            try
+            {
+                trnCommitter.CommitTransaction();
+                Assert.Fail();
+            }
+            //---------------Test Result -----------------------
+            //Raise Exception that the object has been edited since 
+            // the user last edited.
+            catch (NotImplementedException )
+            {
+                Assert.IsTrue(mockBo.RollBackExecuted);                
+            }
         }
 
         #region CustomAsserts
@@ -784,6 +862,75 @@ namespace Habanero.Test.BO
         #endregion
     }
 
+    internal class TransactionalBusinessObjectStub
+        : TransactionalBusinessObject
+    {
+        public TransactionalBusinessObjectStub(BusinessObject businessObject) : base(businessObject)
+        {
+        }
+
+        protected internal override bool HasDuplicateIdentifier(out string errMsg)
+        {
+            errMsg = "";
+            return false;
+        }
+    }
+
+    #region MockBOs
+    internal class MockBoWithRollBack : MockBO
+    {
+        private bool _rollBackExecuted = false;
+
+        public bool RollBackExecuted
+        {
+            get { return _rollBackExecuted; }
+        }
+
+        protected internal override void UpdateAsTransactionRolledBack()
+        {
+            base.UpdateAsTransactionRolledBack();
+            _rollBackExecuted = true;
+        }
+    }
+    internal class MockBOWithBeforeSaveUpdatesCompulsoryField : MockBO
+    {
+        private bool _updateBeforePersistingExecuted = false;
+
+        public MockBOWithBeforeSaveUpdatesCompulsoryField()
+        {
+            _updateBeforePersistingExecuted = false;
+        }
+
+        /// <summary>
+        /// Override this method in subclasses of BusinessObject to check custom rules for that
+        /// class.  The default implementation returns true and sets customRuleErrors to the empty string.
+        /// </summary>
+        /// <param name="customRuleErrors">The error string to display</param>
+        /// <returns>true if no custom rule errors are encountered.</returns>
+        protected override bool CheckCustomRules(out string customRuleErrors)
+        {
+            customRuleErrors = "";
+            if (!_updateBeforePersistingExecuted)
+            {
+                customRuleErrors = "UpdateBeforePersisting not executed";
+                return false;
+            }
+            return true;
+        }
+
+        ///<summary>
+        /// Executes any custom code required by the business object before it is persisted to the database.
+        /// This has the additionl capability of creating or updating other business objects and adding these
+        /// to the transaction committer.
+        /// <remarks> Recursive call to UpdateObjectBeforePersisting will not be done i.e. it is the bo developers responsibility to implement</remarks>
+        ///</summary>
+        ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
+        protected internal override void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
+        {
+            _updateBeforePersistingExecuted = true;
+        }
+    }
+
     internal class MockBOWithBeforeSave : MockBO
     {
         /// <summary>
@@ -798,4 +945,7 @@ namespace Habanero.Test.BO
             transactionCommitter.AddTransaction(new StubSuccessfullTransaction());
         }
     }
+
+    #endregion
+
 }

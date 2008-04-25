@@ -32,13 +32,13 @@ namespace Habanero.BO.SqlGeneration
     /// </summary>
     public class InsertStatementGenerator
     {
-        private BusinessObject _bo;
+        private readonly BusinessObject _bo;
         private StringBuilder _dbFieldList;
         private StringBuilder _dbValueList;
         private ParameterNameGenerator _gen;
         private SqlStatement _insertSql;
         private SqlStatementCollection _statementCollection;
-        private IDatabaseConnection _connection;
+        private readonly IDatabaseConnection _connection;
         private bool _firstField;
         private ClassDef _currentClassDef;
 
@@ -138,12 +138,12 @@ namespace Habanero.BO.SqlGeneration
 
             if (classDef.IsUsingSingleTableInheritance() || classDefWithSTI != null)
             {
-                string discriminator;
+                string discriminator = null;
                 if (classDef.SuperClassDef != null)
                 {
                     discriminator = classDef.SuperClassDef.Discriminator;
                 }
-                else
+                else if (classDefWithSTI != null)
                 {
                     discriminator = classDefWithSTI.SuperClassDef.Discriminator;
                 }
@@ -166,7 +166,7 @@ namespace Habanero.BO.SqlGeneration
         }
 
         /// <summary>
-        /// Initialises the sql statement
+        /// Initialises the sql statement with a autoincrementing object
         /// </summary>
         private void InitialiseStatement(string tableName, ISupportsAutoIncrementingField supportsAutoIncrementingField)
         {

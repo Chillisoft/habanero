@@ -198,7 +198,6 @@ namespace Habanero.WebGUI
             _dataTableDefaultView = _dataTable.DefaultView;
             this.AutoGenerateColumns = false;
             this.DataSource = _dataTableDefaultView;
-            //this.DataSource = _dataTable;
             SetSorting(grid);
             FireCollectionChanged();
         }

@@ -38,7 +38,6 @@ namespace Habanero.Test.General
         private BOPrimaryKey updateContactPersonID;
         private int dbInterval = 1;
         private ContactPerson mContactPersonUpdateConcurrency;
-        private ContactPerson mContactPersonDeleteConcurrency;
         private ContactPerson mContactPBeginEditsConcurrency;
         private ContactPerson mCotanctPTestRefreshFromObjMan;
         private ContactPerson mContactPDeleted;
@@ -57,9 +56,7 @@ namespace Habanero.Test.General
             mContactPersonUpdateConcurrency.Surname = "Update Concurrency";
             mContactPersonUpdateConcurrency.Save();
 
-            mContactPersonDeleteConcurrency = new ContactPerson();
-            mContactPersonDeleteConcurrency.Surname = "Delete Concurrency";
-            mContactPersonDeleteConcurrency.Save();
+
 
             mContactPBeginEditsConcurrency = new ContactPerson();
             mContactPBeginEditsConcurrency.Surname = "BeginEdits Concurrency";
@@ -200,7 +197,7 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        [ExpectedException(typeof (BusinessObjectNotFoundException))]
+        [ExpectedException(typeof(BusObjDeleteConcurrencyControlException))]
         public void TestDeleteContactPerson()
         {
             ContactPerson mySecondContactPerson = ContactPerson.GetContactPerson(mContactPDeleted.ID);
@@ -238,10 +235,13 @@ namespace Habanero.Test.General
         {
             ContactPerson myContact = new ContactPerson();
             BOPrimaryKey id = myContact.ID;
+#pragma warning disable RedundantAssignment
             myContact = null; // clear the person s.t. the GC can collect
+#pragma warning restore RedundantAssignment
+
             GC.Collect(); //Force the GC to collect
             //waitForDB(); // wait to give GC time to collect
-            Dictionary<string, WeakReference> boCol = BusinessObject.AllLoaded();
+            Dictionary<string, WeakReference> boCol = BusinessObject.AllLoadedBusinessObjects();
             Assert.IsFalse(boCol.ContainsKey(id.ToString()), "Object has not been removed from the dictionary");
         }
 
@@ -294,65 +294,33 @@ namespace Habanero.Test.General
 
         //TODO-Peter - check with Brett exactly what this should be doing - it's failing now
         // but I can't see how it could pass.
-        //		[Test]
-        //		[ExpectedException(typeof (BusObjOptimisticConcurrencyControlException))]
-        //		public void TestOptimisticConcurrencyControl() {
-        //			ContactPerson myContact = mContactPersonUpdateConcurrency;
-        //			//Ensure that we have two physical instances of the same logical contact person
-        ////			ContactPerson.ClearBusinessObjectBaseCol();//Ensure that a fresh object is loaded from DB
-        //			ContactPerson myContact2 = ContactPerson.GetContactPerson(myContact.ID);
-        //
-        //			myContact.Surname = "New Surname"; //edit first object
-        //			myContact2.Surname = "New Surname2"; //edit second object
-        //			Assert.IsFalse(object.ReferenceEquals(myContact, myContact2));
-        //			myContact.Save(); //save first
-        //			waitForDB();
-        //			myContact2.Save(); //save second
-        //		}
-        //
         [Test]
-            public void TestMultipleUpdates()
+        [ExpectedException(typeof(BusObjOptimisticConcurrencyControlException))]
+        public void TestOptimisticConcurrencyControl()
+        {
+            ContactPerson myContact = mContactPersonUpdateConcurrency;
+            //Ensure that we have two physical instances of the same logical contact person
+            //			ContactPerson.ClearBusinessObjectBaseCol();//Ensure that a fresh object is loaded from DB
+            ContactPerson myContact2 = ContactPerson.GetContactPerson(myContact.ID);
+
+            myContact.Surname = "New Surname"; //edit first object
+            myContact2.Surname = "New Surname2"; //edit second object
+            Assert.IsFalse(object.ReferenceEquals(myContact, myContact2));
+            myContact.Save(); //save first
+            myContact2.Save(); //save second
+        }
+        
+        [Test]
+            public void TestMultipleUpdates_NoConcurrencyErrors()
         {
             mContactPersonUpdateConcurrency.Surname = "New Surname";
             mContactPersonUpdateConcurrency.Save();
-            //waitForDB();
             mContactPersonUpdateConcurrency.Surname = "New Surname 2";
             mContactPersonUpdateConcurrency.Save();
-            //waitForDB();
             mContactPersonUpdateConcurrency.Surname = "New Surname 3";
         }
 
-        //TODO: concurrency control is disabled - to implement again
-        [Test]
-        [ExpectedException(typeof (BusObjDeleteConcurrencyControlException)), Ignore]
-            public void TestDeleteObjectPriorToUpdatesConcurrencyControl()
-        {
-            ContactPerson myContact2 = ContactPerson.GetContactPerson(mContactPersonDeleteConcurrency.ID);
-            mContactPersonDeleteConcurrency.Delete();
-            myContact2.Surname = "New Surname 2";
-            mContactPersonDeleteConcurrency.Save();
-            //waitForDB();
-            myContact2.Save();
-        }
 
-        //TODO: concurrency control is disabled - to implement again
-        [Test]
-        [ExpectedException(typeof (BusObjBeginEditConcurrencyControlException)), Ignore]
-            public void TestBeginEditsOnADirtyObject()
-        {
-            ContactPerson.ClearContactPersonCol();
-            //load second person from DB.
-            mContactPBeginEditsConcurrency.Surname = "First Update to Surname";
-
-            ContactPerson myContact2 = ContactPerson.GetContactPerson(mContactPBeginEditsConcurrency.ID);
-            Assert.IsTrue(myContact2 != mContactPBeginEditsConcurrency, "two objects are the same");
-            mContactPBeginEditsConcurrency.Surname = "First Update to Surname";
-
-            mContactPBeginEditsConcurrency.Save(); //save first object
-            //Try edit second instance (should raise error)
-            //waitForDB();
-            myContact2.Surname = "Second Update To Surname";
-        }
 
         /// <summary>
         /// Tests to ensure that if the object has been edited in the object manager by 
@@ -489,7 +457,7 @@ namespace Habanero.Test.General
         }
 
         //TODO: Transaction log is not implemented under the new TransactionCommitter design (yet)
-        [Test, Ignore]
+        [Test, Ignore("Removed while implementing transaction committer to be reimplemented")]
         public void TestDirtyXml()
         {
             TransactionLog.DeleteAllTransactionLogs();
@@ -534,7 +502,6 @@ namespace Habanero.Test.General
             //this is possibly some bug with filling the collection.
             for (int i = 0; i <= 2; i++)
             {
-                myTransactionLog = null;
                 myTransactionLog = (TransactionLog) myCol[i];
                 if ((int) myTransactionLog.GetPropertyValue("TransactionSequenceNo") == (maxTransactionNo - 2))
                 {
@@ -555,103 +522,6 @@ namespace Habanero.Test.General
             }
         }
 
-        //[Test]
-        //public void TestTransactionSuccess()
-        //{
-        //    ContactPerson myContact_1 = new ContactPerson();
-        //    //Edit first object and save
-        //    myContact_1.Surname = "My Surname 1";
-        //    //myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
-        //    Transaction transact = new Transaction(DatabaseConnection.CurrentConnection);
-        //    transact.AddTransactionObject(myContact_1);
-
-        //    ContactPerson myContact_2 = new ContactPerson();
-        //    myContact_2.Surname = "My Surname 2";
-
-        //    Assert.IsTrue(myContact_2.IsValid());
-
-        //    transact.AddTransactionObject(myContact_2);
-
-        //    transact.CommitTransaction();
-
-        //    Assert.IsFalse(myContact_2.State.IsDirty);
-        //    Assert.IsFalse(myContact_1.State.IsNew);
-        //    Assert.IsFalse(myContact_1.State.IsDirty);
-        //    Assert.IsFalse(myContact_2.State.IsNew);
-        //    Assert.IsTrue(myContact_2.IsValid());
-
-        //    //Ensure object loaded from DB.
-        //    ContactPerson.ClearContactPersonCol();
-
-        //    ContactPerson myContact_3 = ContactPerson.GetContactPerson(myContact_1.ID);
-
-        //    Assert.AreEqual(myContact_1.ID, myContact_3.ID);
-        //    Assert.AreEqual(myContact_1.Surname, myContact_3.Surname);
-
-        //    ContactPerson myContact_4 = ContactPerson.GetContactPerson(myContact_2.ID);
-
-        //    Assert.AreEqual(myContact_2.ID, myContact_4.ID);
-        //    Assert.AreEqual(myContact_2.Surname, myContact_4.Surname);
-        //}
-
-        //[Test]
-        //public void TestTransactionFail()
-        //{
-        //    ContactPerson myContact_1 = new ContactPerson();
-        //    //Edit first object and save
-        //    myContact_1.Surname = "My Surname 1";
-        //    //myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
-        //    Transaction transact = new Transaction(DatabaseConnection.CurrentConnection);
-        //    transact.AddTransactionObject(myContact_1);
-
-        //    ContactPerson myContact_2 = new ContactPerson();
-        //    myContact_2.Surname = "My Surname 1"; //Should result in a duplicate error when try to persist
-        //    //will result in the commit failing
-        //    Assert.IsTrue(myContact_2.IsValid());
-        //    transact.AddTransactionObject(myContact_2);
-        //    bool errorRaised = false;
-        //    try
-        //    {
-        //        transact.CommitTransaction();
-        //    }
-        //    catch (Exception ex) //todo:check type of error?
-        //    {
-        //        errorRaised = true;
-        //    }
-
-        //    Assert.IsTrue(errorRaised, "Error should have been raised");
-
-        //    Assert.IsTrue(myContact_2.State.IsDirty);
-        //    Assert.IsTrue(myContact_1.State.IsNew);
-        //    Assert.IsTrue(myContact_1.State.IsDirty);
-        //    Assert.IsTrue(myContact_2.State.IsNew);
-        //    Assert.IsTrue(myContact_2.IsValid());
-        //    Assert.IsTrue(myContact_2.IsValid());
-
-
-        //    //Ensure object loaded from DB.
-        //    ContactPerson.ClearContactPersonCol();
-        //    errorRaised = false;
-        //    try
-        //    {
-        //        ContactPerson myContact_3 = ContactPerson.GetContactPerson(myContact_1.ID);
-        //    }
-        //        //Expect this error since the object should not have been persisted to the DB.
-        //    catch (BusinessObjectNotFoundException ex)
-        //    {
-        //        errorRaised = true;
-        //    }
-        //    Assert.IsTrue(errorRaised);
-
-
-        //    //Test canceledits to transaction
-        //    transact.CancelEdits();
-        //    Assert.IsTrue(myContact_1.Surname.Length == 0);
-        //    Assert.IsTrue(myContact_2.Surname.Length == 0);
-        //    Assert.IsFalse(myContact_2.IsValid());
-        //    Assert.IsFalse(myContact_2.IsValid());
-        //}
-
         #region tests
 
         [Test]
@@ -671,7 +541,7 @@ namespace Habanero.Test.General
     {
         #region Constructors
 
-        public TransactionLog() : base()
+        public TransactionLog()
         {
         }
 
@@ -826,28 +696,18 @@ namespace Habanero.Test.General
             BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(lTransactionLog.ClassDef);
             using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(statement, orderByClause))
             {
-                try
+                while (dr.Read())
                 {
-                    while (dr.Read())
+                    BOLoader.Instance.LoadProperties(lTransactionLog, dr);
+                    TransactionLog lTempPerson2;
+                    lTempPerson2 = (TransactionLog)BOLoader.Instance.GetLoadedBusinessObject(lTransactionLog.GetObjectNewID());
+                    if (lTempPerson2 == null)
                     {
-                        BOLoader.Instance.LoadProperties(lTransactionLog, dr);
-                        TransactionLog lTempPerson2;
-                        lTempPerson2 = (TransactionLog)BOLoader.Instance.GetLoadedBusinessObject(lTransactionLog.GetObjectNewID());
-                        if (lTempPerson2 == null)
-                        {
-                            bOCol.Add(lTransactionLog);
-                        }
-                        else
-                        {
-                            bOCol.Add(lTempPerson2);
-                        }
+                        bOCol.Add(lTransactionLog);
                     }
-                }
-                finally
-                {
-                    if (dr != null && !(dr.IsClosed))
+                    else
                     {
-                        dr.Close();
+                        bOCol.Add(lTempPerson2);
                     }
                 }
             }

@@ -632,6 +632,30 @@ namespace Habanero.Test
         //}
 
 
+        public static ClassDef LoadWebGuiClassDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" assembly=""Gizmox.WebGUI.Forms"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" assembly=""Gizmox.WebGUI.Forms"" />
+						</grid>
+					</ui>                 
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
     }
 
     public class MyRelatedBo : BusinessObject

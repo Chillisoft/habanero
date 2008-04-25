@@ -17,10 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-
 namespace Habanero.Base
 {
+
     /// <summary>
     /// An interface to model an object creator
     /// </summary>
@@ -34,7 +33,7 @@ namespace Habanero.Base
         /// used to design the edit form. Setting this to an empty string
         /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returns the object created</returns>
-        Object CreateObject(IObjectEditor editor, string uiDefName);
+        object CreateObject(IObjectEditor editor, string uiDefName);
 
         /// <summary>
         /// Creates an object
@@ -45,6 +44,66 @@ namespace Habanero.Base
         /// used to design the edit form. Setting this to an empty string
         /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returns the object created</returns>
-        Object CreateObject(IObjectEditor editor, IObjectInitialiser initialiser, string uiDefName);
+        object CreateObject(IObjectEditor editor, IObjectInitialiser initialiser, string uiDefName);
+
+        /// <summary>
+        /// Just creates the object, without editing or saving it.
+        /// </summary>
+        /// <returns></returns>
+        object CreateObject();
+
+
+    }
+
+    ///<summary>
+    /// An abstract base class for your own ObjectCreators, created for convenience as it is strongly typed.
+    ///</summary>
+    ///<typeparam name="T">The type of BO this creator creates.</typeparam>
+    public abstract class ObjectCreator<T> : IObjectCreator
+    {
+        #region IObjectCreator Members
+
+        object IObjectCreator.CreateObject(IObjectEditor editor, string uiDefName)
+        {
+            return CreateObject(editor, uiDefName);
+        }
+
+        object IObjectCreator.CreateObject(IObjectEditor editor, IObjectInitialiser initialiser, string uiDefName)
+        {
+            return CreateObject(editor, initialiser, uiDefName);
+        }
+
+        object IObjectCreator.CreateObject()
+        {
+            return CreateObject();
+        }
+
+        #endregion
+        /// <summary>
+        /// Creates an object
+        /// </summary>
+        /// <param name="editor">An object editor</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
+        /// <returns>Returns the object created</returns>
+        public abstract T CreateObject(IObjectEditor editor, string uiDefName);
+
+        /// <summary>
+        /// Creates an object
+        /// </summary>
+        /// <param name="editor">An object editor</param>
+        /// <param name="initialiser">An object initialiser</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
+        /// <returns>Returns the object created</returns>
+        public abstract T CreateObject(IObjectEditor editor, IObjectInitialiser initialiser, string uiDefName);
+
+        /// <summary>
+        /// Just creates the object, without editing or saving it.
+        /// </summary>
+        /// <returns></returns>
+        public abstract T CreateObject();
     }
 }

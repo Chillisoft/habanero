@@ -26,7 +26,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    // TODO: - test Guid methods with Sql Server and other Guid formats
     [TestFixture]
     public class TestBOLoader : TestUsingDatabase
     {
@@ -68,7 +67,7 @@ namespace Habanero.Test.BO
         }
 
         [Test, ExpectedException(typeof(UserException))]
-        public void TestGetBusinessObjectDuplicatesException()
+        public void TestGetBusinessObjectDuplicatesException_IfTryLoadObjectWithCriteriaThatMatchMoreThanOne()
         {
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -200,6 +199,9 @@ namespace Habanero.Test.BO
             Assert.IsTrue(cp.AfterLoadCalled);
         }
 
+
+
+        [Test]
         public void TestBoLoaderCallsAfterLoad_LoadingCollection()
         {
             ClassDef.ClassDefs.Clear();
@@ -224,7 +226,7 @@ namespace Habanero.Test.BO
             cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc AND FirstName = aa");
             Assert.IsTrue(cp.AfterLoadCalled);
         }
-
+        [Test]
         public void TestBoLoaderCallsAfterLoad_CompositePrimaryKey()
         {
             ClassDef.ClassDefs.Clear();
@@ -233,6 +235,146 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.PrimaryKey);
             Assert.IsTrue(cp.AfterLoadCalled);
         }
+        [Test]
+        public void TestBoLoader_LoadBusinessObjectDeletedByAnotherUser()
+        {
+            //-------------Setup Test Pack
+            ContactPersonTestBO cpTemp = GetContactPersonSavedToDBButNotInObjectManager();
+
+            //-------------Execute test ---------------------
+            cpTemp.Delete();
+            cpTemp.Save();
+            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.PrimaryKey);
+            //-------------Test Result ---------------------
+            Assert.IsNull(cp);
+        }
+        [Test]
+        [ExpectedException(typeof(BusObjDeleteConcurrencyControlException))]
+        public void TestBoLoader_RefreshBusinessObjectDeletedByAnotherUser()
+        {
+            //-------------Setup Test Pack
+            ContactPersonTestBO cpTemp = GetContactPersonSavedToDBButNotInObjectManager();
+
+            //-------------Execute test ---------------------
+            cpTemp.Delete();
+            cpTemp.Save();
+            //-------------Execute Test ---------------------
+            try
+            {
+                BOLoader.Instance.Refresh(cpTemp);
+                Assert.Fail();
+            }
+            //-------------Test Result ---------------------
+            catch (BusObjDeleteConcurrencyControlException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("A Error has occured since the object you are trying to refresh has been deleted by another user "));
+                throw;
+            }
+        }
+        [Test]
+        public void TestBOLoader_RefreshObjects_WhenRetrievingFromObjectManager()
+        {
+            //-------------Setup Test Pack
+            //Create and save a person
+            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
+            //Clear the object manager so as to simulate a different user
+            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
+            Assert.AreEqual(0, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            //Get the person from the object manager so as to ensure that they are loaded 
+            // into the object manager.
+            ContactPersonTestBO cpTemp2 =
+                BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
+            //Assert.AreEqual(1, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            //-------------Execute test ---------------------
+            cpTemp.Surname = "New Surname";
+            cpTemp.Save();
+            Assert.AreNotEqual(cpTemp2.Surname, cpTemp.Surname);
+
+            ContactPersonTestBO cpTemp3 =
+                BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
+            //Assert.AreEqual(1, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            //-------------Test Result ---------------------
+            Assert.AreEqual(cpTemp.Surname, cpTemp3.Surname);
+            Assert.AreSame(cpTemp2.Surname, cpTemp3.Surname);
+
+        }
+        [Test, Ignore("From Brett: Verify with peter what is going on here")]
+        public void TestBOLoader_GetObjectFromObjectManager()
+        {
+            //-------------Setup Test Pack
+            //Create and save a person
+            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
+            //Clear the object manager so as to simulate a different user
+            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
+            Assert.AreEqual(0, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            //Get the person from the object manager so as to ensure that they are loaded 
+            // into the object manager.
+            //-------------Execute test --------------------
+            BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
+            Assert.AreEqual(1, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+
+        }
+        [Test, Ignore("From Brett: Verify with peter what is going on here")]
+        public void TestBOLoader_GetObjectFromObjectManager_Twice()
+        {
+            //-------------Setup Test Pack
+            //Create and save a person
+            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
+            //Clear the object manager so as to simulate a different user
+            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
+            Assert.AreEqual(0, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+            //Get the person from the object manager so as to ensure that they are loaded 
+            // into the object manager.
+            //-------------Execute test --------------------
+            BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
+            BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
+            //-------------Test Result ---------------------
+            Assert.AreEqual(1, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
+        }
+
+        [Test]
+        public void TestBOLoader_DoesNotRefreshDirtyObjects_WhenRetrievingFromObjectManager()
+        {
+            //-------------Setup Test Pack
+            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
+
+            //-------------Execute test ---------------------
+            string newSurnameValue = "New Surname";
+            cpTemp.Surname = newSurnameValue;
+            cpTemp.AfterLoadCalled = false;
+            Assert.IsFalse(cpTemp.AfterLoadCalled); 
+            ContactPersonTestBO cpTemp2 =
+                BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
+            //-------------Test Result ---------------------
+            Assert.AreSame(cpTemp2, cpTemp2);
+            Assert.AreEqual(newSurnameValue, cpTemp2.Surname);
+            Assert.IsFalse(cpTemp2.AfterLoadCalled, "After load should not be called for a dirty object being loaded from DB"); 
+        }
+
+        #region HelperMethods
+
+        private static ContactPersonTestBO GetContactPersonSavedToDBButNotInObjectManager()
+        {
+            ContactPersonTestBO cpTemp = CreateSavedContactPerson();
+            //Clear the loaded busiess object so that the we can simulate a user on another machine deleting this object
+            BOLoader.Instance.ClearLoadedBusinessObjects();
+            return cpTemp;
+        }
+
+        private static ContactPersonTestBO CreateSavedContactPerson()
+        {
+            ClassDef.ClassDefs.Clear();
+            BOLoader.Instance.ClearLoadedBusinessObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            //Create a contact person
+            ContactPersonTestBO cpTemp = new ContactPersonTestBO();
+            cpTemp.Surname = Guid.NewGuid().ToString();
+            cpTemp.Save();
+            return cpTemp;
+        }
+
+        #endregion
+
     }
 }
 

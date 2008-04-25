@@ -182,7 +182,7 @@ namespace Habanero.Test.General
         }
 
         [Test]
-        [ExpectedException(typeof (BusinessObjectNotFoundException))]
+        [ExpectedException(typeof(BusObjDeleteConcurrencyControlException))]
         public void TestDeleteContactPerson()
         {
             ContactPersonCompositeKey mySecondContactPerson =

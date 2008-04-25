@@ -77,6 +77,7 @@ namespace Habanero.WebGUI
             manager.AddControl(_buttons, BorderLayoutManager.Position.South);
 
             _grid.CurrentCellChanged += CurrentCellChangedHandler;
+            _grid.SelectionChanged += CurrentCellChangedHandler;
             _grid.CollectionChanged += CollectionChangedHandler;
             _grid.FilterUpdated += GridFilterUpdatedHandler;
             _itemSelectedDelegates = new List<SetBusinessObjectDelegate>();
@@ -160,21 +161,9 @@ namespace Habanero.WebGUI
                     selectedDelegate(this.SelectedBusinessObject);
                 }
             }
-            DelayedItemSelected(this);
-            //_itemSelectedMethodCaller.Call(new VoidMethodWithSender(DelayedItemSelected));
-        }
-
-        /// <summary>
-        /// Creates a new item selected event
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        private void DelayedItemSelected(object sender)
-        {
-
             if (this.ItemSelected != null)
-
             {
-                this.ItemSelected(sender, new EventArgs());
+                this.ItemSelected(this, new EventArgs());
             }
         }
 
@@ -236,7 +225,7 @@ namespace Habanero.WebGUI
             _collection = boCollection;
             this.Grid.SetCollection(boCollection, uiName);
             this.Buttons.ObjectEditor = new DefaultBOEditor();
-            this.Buttons.ObjectCreator = new DefaultBOCreator(_collection.ClassDef);
+          //  this.Buttons.ObjectCreator = new DefaultBOCreator(_collection.ClassDef);
         }
 
         /// <summary>

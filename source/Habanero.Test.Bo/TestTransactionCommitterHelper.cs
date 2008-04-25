@@ -26,7 +26,7 @@ namespace Habanero.Test.BO
 
         ///<summary>
         ///</summary>
-        public override void UpdateStateAsCommitted()
+        protected internal override void UpdateStateAsCommitted()
         {
             _committed = true;
         }
@@ -35,7 +35,7 @@ namespace Habanero.Test.BO
         ///</summary>
         ///<param name="invalidReason"></param>
         ///<returns></returns>
-        public override bool IsValid(out string invalidReason)
+        protected internal override bool IsValid(out string invalidReason)
         {
             invalidReason = "";
             return true;
@@ -49,7 +49,7 @@ namespace Habanero.Test.BO
         /// <summary>
         /// Whether the business object's state is deleted
         /// </summary>
-        public override bool IsDeleted
+        protected internal override bool IsDeleted
         {
             get { return false; }
         }
@@ -81,14 +81,14 @@ namespace Habanero.Test.BO
 
         ///<summary>
         ///</summary>
-        public override void UpdateStateAsCommitted()
+        protected internal override void UpdateStateAsCommitted()
         {
         }
 
         /// <summary>
         /// Whether the business object's state is deleted
         /// </summary>
-        public override bool IsDeleted
+        protected internal override bool IsDeleted
         {
             get { return false; }
         }
@@ -97,7 +97,7 @@ namespace Habanero.Test.BO
         ///</summary>
         ///<param name="invalidReason"></param>
         ///<returns></returns>
-        public override bool IsValid(out string invalidReason)
+        protected internal override bool IsValid(out string invalidReason)
         {
             invalidReason = "";
             return true;
@@ -125,7 +125,7 @@ namespace Habanero.Test.BO
 
         ///<summary>
         ///</summary>
-        public override void UpdateStateAsCommitted()
+        protected internal override void UpdateStateAsCommitted()
         {
             _committed = true;
         }
@@ -133,7 +133,7 @@ namespace Habanero.Test.BO
         /// <summary>
         /// Whether the business object's state is deleted
         /// </summary>
-        public override bool IsDeleted
+        protected internal override bool IsDeleted
         {
             get { return false; }
         }
@@ -142,7 +142,7 @@ namespace Habanero.Test.BO
         ///</summary>
         ///<param name="invalidReason"></param>
         ///<returns></returns>
-        public override bool IsValid(out string invalidReason)
+        protected internal override bool IsValid(out string invalidReason)
         {
             invalidReason = "";
             return true;
@@ -174,14 +174,14 @@ namespace Habanero.Test.BO
         /// <summary>
         /// Whether the business object's state is deleted
         /// </summary>
-        public override bool IsDeleted
+        protected internal override bool IsDeleted
         {
             get { return false; }
         }
 
         ///<summary>
         ///</summary>
-        public override void UpdateStateAsCommitted()
+        protected internal override void UpdateStateAsCommitted()
         {
             _committed = true;
         }
@@ -190,7 +190,7 @@ namespace Habanero.Test.BO
         ///</summary>
         ///<param name="invalidReason"></param>
         ///<returns></returns>
-        public override bool IsValid(out string invalidReason)
+        protected internal override bool IsValid(out string invalidReason)
         {
             invalidReason = "";
             return true;
@@ -202,11 +202,12 @@ namespace Habanero.Test.BO
         }
     }
 
-    internal class StubSuccessfullTransaction : ITransactionalBusinessObject
+    internal class StubSuccessfullTransaction : TransactionalBusinessObject
     {
         private bool _committed;
 
         public StubSuccessfullTransaction()
+            : base(new MockBO())
         {
             _committed = false;
         }
@@ -216,34 +217,18 @@ namespace Habanero.Test.BO
             return null;
         }
 
-        ///<summary>
-        /// Returns the business object that this objects decorates.
-        ///</summary>
-        public BusinessObject BusinessObject
-        {
-            get { return null; }
-        }
 
         /// <summary>
         /// Whether the business object's state is deleted
         /// </summary>
-        public bool IsDeleted
+        protected internal override bool IsDeleted
         {
             get { return false; }
         }
 
-        /// <summary>
-        /// Whether the business object's state is new
-        /// </summary>
-        /// <returns></returns>
-        public bool IsNew()
-        {
-            return true;
-        }
-
         ///<summary>
         ///</summary>
-        public void UpdateStateAsCommitted()
+        protected internal override void UpdateStateAsCommitted()
         {
             _committed = true;
         }
@@ -252,7 +237,7 @@ namespace Habanero.Test.BO
         ///</summary>
         ///<param name="invalidReason"></param>
         ///<returns></returns>
-        public bool IsValid(out string invalidReason)
+        protected internal override bool IsValid(out string invalidReason)
         {
             invalidReason = "";
             return true;
@@ -266,19 +251,12 @@ namespace Habanero.Test.BO
         /// </summary>
         /// <param name="errMsg">The description of the duplicate</param>
         /// <returns>Whether a duplicate of this object exists in the data store (based on the ID/primary key)</returns>
-        public bool HasDuplicateIdentifier(out string errMsg)
+        protected internal override bool HasDuplicateIdentifier(out string errMsg)
         {
             errMsg = "";
             return false;
         }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="transactionCommitter"></param>
-        public void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
-        {
-            
-        }
 
         public bool Committed
         {
@@ -289,34 +267,12 @@ namespace Habanero.Test.BO
 
     internal class TransactionCommitterStubDB : TransactionCommitterDB
     {
-        /// <summary>
-        /// Begins the transaction on the appropriate databasource.
-        /// </summary>
-        protected override void BeginDataSource()
-        {
-        }
 
-        protected override void ExecuteTransactionToDataSource(ITransactionalBusinessObject transaction)
+
+        protected override void ExecuteTransactionToDataSource(TransactionalBusinessObject transaction)
         {
             TransactionalBusinessObjectDB transactionDB = (TransactionalBusinessObjectDB)transaction;
             transactionDB.GetSql();
-        }
-
-        /// <summary>
-        /// Commits all the successfully executed statements to the datasource.
-        /// 2'nd phase of a 2 phase database commit.
-        /// </summary>
-        protected override void CommitToDatasource()
-        {
-        }
-
-        /// <summary>
-        /// In the event of any errors occuring during executing statements to the datasource 
-        /// <see cref="TransactionCommitter.ExecuteTransactionToDataSource"/> or during committing to the datasource
-        /// <see cref="TransactionCommitter.CommitToDatasource"/>
-        /// </summary>
-        protected override void TryRollback()
-        {
         }
     }
 
@@ -335,6 +291,7 @@ namespace Habanero.Test.BO
         /// </summary>
         protected override void CommitToDatasource()
         {
+            _CommittSuccess = true;
         }
 
         /// <summary>

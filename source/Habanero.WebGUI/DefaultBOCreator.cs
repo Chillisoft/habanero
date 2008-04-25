@@ -69,7 +69,7 @@ namespace Habanero.WebGUI
         /// <returns>Returns the business object created</returns>
         public Object CreateObject(IObjectEditor editor, IObjectInitialiser initialiser, string uiDefName)
         {
-            BusinessObject newBo = _classDef.CreateNewBusinessObject();
+            BusinessObject newBo = (BusinessObject) CreateObject();
             if (initialiser != null)
             {
                 initialiser.InitialiseObject(newBo);
@@ -83,5 +83,16 @@ namespace Habanero.WebGUI
                 return null;
             }
         }
+
+
+        /// <summary>
+        /// Just creates the object, without editing or saving it.
+        /// </summary>
+        /// <returns></returns>
+        public object CreateObject()
+        {
+            return _classDef.CreateNewBusinessObject();
+        }
+
     }
 }

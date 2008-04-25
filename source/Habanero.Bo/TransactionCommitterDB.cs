@@ -1,8 +1,10 @@
 using System;
 using System.Data;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using log4net;
 
 namespace Habanero.BO
 {
@@ -13,6 +15,7 @@ namespace Habanero.BO
     {
         private IDbTransaction _dbTransaction;
         private IDbConnection _dbConnection;
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitterDB");
 
         /// <summary>
         /// Begins the transaction on the appropriate databasource.
@@ -28,7 +31,7 @@ namespace Habanero.BO
         /// Tries to execute an individual transaction against the datasource.
         /// 1'st phase of a 2 phase database commit.
         /// </summary>
-        protected override void ExecuteTransactionToDataSource(ITransactionalBusinessObject transaction)
+        protected override void ExecuteTransactionToDataSource(TransactionalBusinessObject transaction)
         {
             TransactionalBusinessObjectDB transactionDB = (TransactionalBusinessObjectDB) transaction;
             if (transaction.IsDeleted)
@@ -46,7 +49,7 @@ namespace Habanero.BO
             base.ExecuteTransactionToDataSource(transaction);
         }
 
-        private void DereferenceRelatedChildren(ITransactionalBusinessObject transaction)
+        private void DereferenceRelatedChildren(TransactionalBusinessObject transaction)
         {
             foreach (Relationship relationship in transaction.BusinessObject.Relationships)
             {
@@ -71,7 +74,7 @@ namespace Habanero.BO
             return relationship.DeleteParentAction == DeleteParentAction.DereferenceRelated;
         }
 
-        private void DeleteRelatedChildren(ITransactionalBusinessObject transaction)
+        private void DeleteRelatedChildren(TransactionalBusinessObject transaction)
         {
             foreach (Relationship relationship in transaction.BusinessObject.Relationships)
             {
@@ -103,10 +106,12 @@ namespace Habanero.BO
             try
             {
                 _dbTransaction.Commit();
+                _CommittSuccess = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO:log
+                log.Error("Error commiting transaction: " + Environment.NewLine +
+                    ExceptionUtilities.GetExceptionString(ex, 4, true));
                 TryRollback();
                 throw;
             }
@@ -130,9 +135,10 @@ namespace Habanero.BO
             {
                 if (_dbTransaction != null) _dbTransaction.Rollback();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: log
+                log.Error("Error rolling back transaction: " + Environment.NewLine +
+                    ExceptionUtilities.GetExceptionString(ex, 4, true));
                 throw;
             }
             finally

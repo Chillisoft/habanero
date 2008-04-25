@@ -72,7 +72,7 @@ namespace Habanero.Test.General
 			ContactPerson.DeleteAllContactPeople();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void TestCascadeDelete()
 		{
 			Assert.AreEqual(2, _person.Addresses.Count);

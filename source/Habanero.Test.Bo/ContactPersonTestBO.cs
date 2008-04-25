@@ -241,6 +241,7 @@ namespace Habanero.Test.BO
         public bool AfterLoadCalled
         {
             get { return _afterLoadCalled; }
+            set { _afterLoadCalled = value; }
         }
 
 

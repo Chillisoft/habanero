@@ -65,10 +65,10 @@ namespace Habanero.BO
         /// </summary>
         public override void AddHandlersForUpdates()
         {
-            _table.TableNewRow += new DataTableNewRowEventHandler(NewRowHandler);
-            _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
-            _table.RowDeleting += new DataRowChangeEventHandler(RowDeletedHandler);
-            _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(BusinessObjectAddedToCollectionHandler);
+            _table.TableNewRow += NewRowHandler;
+            _table.RowChanged += RowChangedHandler;
+            _table.RowDeleting += RowDeletedHandler;
+            _collection.BusinessObjectAdded += BusinessObjectAddedToCollectionHandler;
         }
 
         /// <summary>
@@ -89,9 +89,9 @@ namespace Habanero.BO
         /// </summary>
         public void RemoveHandlersForUpdates()
         {
-            _table.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
-            _table.RowDeleted -= new DataRowChangeEventHandler(RowDeletedHandler);
-            _collection.BusinessObjectAdded -= new EventHandler<BOEventArgs>(BusinessObjectAddedToCollectionHandler);
+            _table.RowChanged -= RowChangedHandler;
+            _table.RowDeleted -= RowDeletedHandler;
+            _collection.BusinessObjectAdded -= BusinessObjectAddedToCollectionHandler;
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         protected void RowDeletedHandler(object sender, DataRowChangeEventArgs e)
         {
-            BusinessObject changedBo = null;
+            BusinessObject changedBo;
             if (e.Row.HasVersion(DataRowVersion.Original))
             {
                 changedBo = _collection.Find(e.Row["ID", DataRowVersion.Original].ToString());
@@ -253,17 +253,12 @@ namespace Habanero.BO
             BusinessObject changedBo = _collection.Find(e.Row["ID"].ToString());
             if (changedBo != null && !_isBeingAdded)
             {
-                BOMapper boMapper = new BOMapper(changedBo);
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
                 {
 					if (uiProperty.PropertyName.IndexOf(".") == -1 && uiProperty.PropertyName.IndexOf("-") == -1)
                     {
                         changedBo.SetPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
-                    } //else if (uiProperty.PropertyName.IndexOf(".") == -1)
-                    //{
-                    //    //Set a reflected property
-                    //    boMapper.SetVirtualPropertyValue(uiProperty.PropertyName, e.Row[uiProperty.PropertyName]);
-                    //}
+                    }
                 }
                 this.AddToRowStates(e.Row, RowState.Edited);
             }
@@ -325,7 +320,7 @@ namespace Habanero.BO
                 _isBeingAdded = false;
                 this.RowChanged(e);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _isBeingAdded = false;
                 throw;
@@ -340,14 +335,14 @@ namespace Habanero.BO
         private void AddNewRowToCollection(BusinessObject newBo)
         {
             //log.Debug("Adding new row to col");
-            _collection.BusinessObjectAdded -= new EventHandler<BOEventArgs>(BusinessObjectAddedToCollectionHandler);
-            _table.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
+            _collection.BusinessObjectAdded -= BusinessObjectAddedToCollectionHandler;
+            _table.RowChanged -= RowChangedHandler;
 
             //log.Debug("Disabled handler, adding obj to col") ;
             _collection.Add(newBo);
             //log.Debug("Done adding obj to col, enabling handler") ;
-            _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
-            _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(BusinessObjectAddedToCollectionHandler);
+            _table.RowChanged += RowChangedHandler;
+            _collection.BusinessObjectAdded += BusinessObjectAddedToCollectionHandler;
             //log.Debug("Done Adding new row to col");
         }
 
@@ -360,8 +355,8 @@ namespace Habanero.BO
         {
             BusinessObject businessObject = e.BusinessObject;
             //log.Debug("BO Added to collection " + e.BusinessObject.ID);
-            _table.RowChanged -= new DataRowChangeEventHandler(RowChangedHandler);
-            DataRow row = _table.NewRow();
+            _table.RowChanged -= RowChangedHandler;
+            _table.NewRow();
             //object[] values = new object[_uiGridProperties.Count + 1];
             //values[0] = businessObject.ID.ToString();
             //int i = 1;
@@ -379,7 +374,7 @@ namespace Habanero.BO
                 _rowIDs.Add(newRow, newRow["ID"]);
             }
             _rowStates.Add(newRow, RowState.Added);
-            _table.RowChanged += new DataRowChangeEventHandler(RowChangedHandler);
+            _table.RowChanged += RowChangedHandler;
 
             //log.Debug("Done adding bo to collection " + e.BusinessObject.ID);
         }

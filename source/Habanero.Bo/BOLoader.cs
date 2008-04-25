@@ -79,8 +79,8 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    throw new BusinessObjectNotFoundException(
-                        "A serious error has occured please contact your system administrator" +
+                    throw new BusObjDeleteConcurrencyControlException(
+                        "A Error has occured since the object you are trying to refresh has been deleted by another user " +
                         "There are no records in the database for the Class: " + obj.ClassDef.ClassName +
                         " identified by " + obj.ID + " \n" + obj.SelectSqlStatement(null) + " \n" +
                         obj.GetDatabaseConnection().ErrorSafeConnectString());
@@ -158,6 +158,16 @@ namespace Habanero.BO
             if (tempBusObj != null)
             {
                 tempBusObjType = tempBusObj.GetType();
+                if (tempBusObj.State.IsDirty)
+                {
+                    log.Debug(
+                        "An attempt was made to load an object already loaded that was in edit mode.  Refresh from database ignored." +
+                        Environment.NewLine +
+                        "BO Type: " + tempBusObjType.Name + Environment.NewLine + " Stack Trace: " +
+                        Environment.StackTrace);
+                    return tempBusObj;
+                }
+
             }
             if (tempBusObj != null && boType != tempBusObjType &&
                 !boType.IsSubclassOf(tempBusObjType) && !tempBusObjType.IsSubclassOf(boType))
@@ -182,9 +192,9 @@ namespace Habanero.BO
                 {
                     if (isReplacingSuperClassObject)
                     {
-                        BusinessObject.AllLoaded().Remove(tempBusObj.ID.GetObjectId());
+                        BusinessObject.AllLoadedBusinessObjects().Remove(tempBusObj.ID.GetObjectId());
                     }
-                    BusinessObject.AllLoaded().Add(tempBusObj.ID.GetObjectId(), new WeakReference(tempBusObj));
+                    BusinessObject.AllLoadedBusinessObjects().Add(tempBusObj.ID.GetObjectId(), new WeakReference(tempBusObj));
                 }
                 catch (Exception ex)
                 {
@@ -199,18 +209,18 @@ namespace Habanero.BO
             }
             else
             {
-                if (tempBusObj.State.IsDirty)
-                {
-                    log.Debug(
-                        "An attempt was made to load an object already loaded that was in edit mode.  Refresh from database ignored." +
-                        Environment.NewLine +
-                        "BO Type: " + tempBusObjType.Name + Environment.NewLine + " Stack Trace: " +
-                        Environment.StackTrace);
-                }
-                else
-                {
+                //if (tempBusObj.State.IsDirty)
+                //{
+                //    log.Debug(
+                //        "An attempt was made to load an object already loaded that was in edit mode.  Refresh from database ignored." +
+                //        Environment.NewLine +
+                //        "BO Type: " + tempBusObjType.Name + Environment.NewLine + " Stack Trace: " +
+                //        Environment.StackTrace);
+                //}
+                //else
+                //{
                     LoadProperties(tempBusObj, dr);
-                }
+                //}
             }
             tempBusObj.AfterLoad();
             return tempBusObj;
@@ -353,8 +363,12 @@ namespace Habanero.BO
             }
             else
             {
-                col[0].AfterLoad();
-                return col[0];
+                T bo = col[0];
+                if (!bo.State.IsEditing)
+                {
+                    bo.AfterLoad();                   
+                }
+                return bo;
             }
         }
 
@@ -393,9 +407,9 @@ namespace Habanero.BO
         internal  BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
         {
             //If the object is already in loaded then refresh it and return it if required.
-            if (BusinessObject.AllLoaded().ContainsKey(id))
+            if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(id))
             {
-                WeakReference weakRef = BusinessObject.AllLoaded()[id];
+                WeakReference weakRef = BusinessObject.AllLoadedBusinessObjects()[id];
                 //If the reference is valid return object else remove object from 
                 // Collection
                 if (weakRef.IsAlive && weakRef.Target != null)
@@ -412,7 +426,7 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    BusinessObject.AllLoaded().Remove(id);
+                    BusinessObject.AllLoadedBusinessObjects().Remove(id);
                 }
             }
             return null;

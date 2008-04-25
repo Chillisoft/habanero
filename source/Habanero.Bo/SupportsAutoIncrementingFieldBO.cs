@@ -22,13 +22,24 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// Implements an auto Incrementing field pattern for a business object. The appropriate property(s) 
+    /// must be set as autoincrementing in the property definition.
+    ///</summary>
     public class SupportsAutoIncrementingFieldBO : ISupportsAutoIncrementingField {
         private readonly BusinessObject _bo;
 
+        ///<summary>
+        ///</summary>
+        ///<param name="bo"></param>
         public SupportsAutoIncrementingFieldBO(BusinessObject bo)
         {
             _bo = bo;
         }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="value">sets the objects autoincremented number from the database</param>
         public void SetAutoIncrementingFieldValue(long value)
         {
             foreach (PropDef def in _bo.ClassDef.PropDefcol) {

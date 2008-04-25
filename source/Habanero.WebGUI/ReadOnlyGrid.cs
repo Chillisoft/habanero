@@ -102,8 +102,9 @@ namespace Habanero.WebGUI
                 {
                     if ((string) dataRowView.Row["ID"] == value.ID.ToString())
                     {
-                        this.SetSelectedRowCore(i, true);
-                        this.SetCurrentCellAddressCore(1, i, true, false, false);
+                        this.SetSelectedCellCore(1, i, true);
+//                        this.SetSelectedRowCore(i, true);
+//                        this.SetCurrentCellAddressCore(1, i, true, false, false);
                         break;
                     }
                     i++;
@@ -112,6 +113,7 @@ namespace Habanero.WebGUI
                 {
                     FirstDisplayedScrollingRowIndex = Rows.IndexOf(CurrentRow);
                 }
+                
             }
             get { return this.GetSelectedBusinessObject(); }
         }

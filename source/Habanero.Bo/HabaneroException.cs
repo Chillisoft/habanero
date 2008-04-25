@@ -710,6 +710,166 @@ namespace Habanero.BO
 
     /// <summary>
     /// Provides an exception to throw when an error has occurred with the
+    /// business object's concurrency control, where another user has
+    /// subsequently edited the record being saved
+    /// </summary>
+    [Serializable]
+    public class BusObjPessimisticConcurrencyControlException : BusObjectConcurrencyControlException, ISerializable
+    {
+        private readonly string mUserNameEdited;
+        private readonly string mMachineNameEdited;
+        private readonly DateTime mDateUpdated;
+        private readonly string mObjectID;
+        private readonly string mClassName;
+
+        /// <summary>
+        /// Constructor to initialise the exception with a set of concurrency
+        /// details
+        /// </summary>
+        /// <param name="className">The class name</param>
+        /// <param name="userName">The user name that locked the record</param>
+        /// <param name="machineName">The machine name that locked the record</param>
+        /// <param name="dateUpdated">The date that the record was locked</param>
+        /// <param name="objectID">The object ID</param>
+        /// <param name="obj">The object whose record was locked</param>
+        public BusObjPessimisticConcurrencyControlException(string className,
+                                                           string userName,
+                                                           string machineName,
+                                                           DateTime dateUpdated,
+                                                           string objectID,
+                                                           BusinessObject obj)
+            :
+                           base("You cannot begin edits on the '" + className +
+                                "', as another user has started edits and therefore locked to this record. \n" +
+                                "UserName: " +
+                                (userName.Length > 0 ? userName : "[Unknown]") +
+                                " \nMachineName: " +
+                                (machineName.Length > 0 ? machineName : "[Unknown]") +
+                                " \nDateUpdated: " +
+                                dateUpdated.ToString("dd MMM yyyy HH:mm:ss:fff") +
+                                " \nObjectID: " + objectID, obj)
+        {
+            mUserNameEdited = (userName.Length > 0 ? userName : "[Unknown]");
+            mMachineNameEdited = (machineName.Length > 0 ? machineName : "[Unknown]");
+            mDateUpdated = dateUpdated;
+            mObjectID = objectID;
+            mobj = obj;
+            mClassName = className;
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception
+        /// </summary>
+        public BusObjPessimisticConcurrencyControlException()
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display
+        /// </summary>
+        /// <param name="message">The error message</param>
+        public BusObjPessimisticConcurrencyControlException(string message)
+            : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display, and the inner exception specified
+        /// </summary>
+        /// <param name="message">The error message</param>
+        /// <param name="inner">The inner exception</param>
+        public BusObjPessimisticConcurrencyControlException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Returns the business object in question
+        /// </summary>
+        public BusinessObject BusinessObject
+        {
+            get { return (BusinessObject)mobj; }
+        }
+
+        /// <summary>
+        /// Returns the machine name that edited the record
+        /// </summary>
+        public string MachineNameEdited
+        {
+            get { return mMachineNameEdited; }
+        }
+
+        /// <summary>
+        /// Returns the user name that edited the record
+        /// </summary>
+        public string UserNameEdited
+        {
+            get { return mUserNameEdited; }
+        }
+
+        /// <summary>
+        /// Returns the object's ID
+        /// </summary>
+        public string ObjectID
+        {
+            get { return mObjectID; }
+        }
+
+        /// <summary>
+        /// Returns the date that the record was edited
+        /// </summary>
+        public DateTime DateTimeEdited
+        {
+            get { return mDateUpdated; }
+        }
+
+        /// <summary>
+        /// Returns the class name
+        /// </summary>
+        public string ClassName
+        {
+            get { return mClassName; }
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with the serialisation info
+        /// and streaming context provided
+        /// </summary>
+        /// <param name="info">The serialisation info</param>
+        /// <param name="context">The streaming context</param>
+        protected BusObjPessimisticConcurrencyControlException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            mUserNameEdited = (string)info.GetValue("UserNameEdited", typeof(string));
+            mMachineNameEdited = (string)info.GetValue("MachineNameEdited", typeof(string));
+            mDateUpdated = (DateTime)info.GetValue("DateUpdated", typeof(DateTime));
+            mObjectID = (string)info.GetValue("ObjectID", typeof(string));
+            mClassName = (string)info.GetValue("_className", typeof(string));
+        }
+
+        /// <summary>
+        /// Gets object data using the specified serialisation info and
+        /// streaming context
+        /// </summary>
+        /// <param name="info">The serialisation info</param>
+        /// <param name="context">The streaming context</param>
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            // Implement type-specific serialization logic and call base serializer.
+            info.AddValue("UserNameEdited", mUserNameEdited);
+            info.AddValue("MachineNameEdited", mMachineNameEdited);
+            info.AddValue("DateUpdated", mDateUpdated);
+            info.AddValue("ObjectID", mObjectID);
+            info.AddValue("_className", mClassName);
+            base.GetObjectData(info, context);
+        }
+    }
+
+    /// <summary>
+    /// Provides an exception to throw when an error has occurred with the
     /// business object's concurrency control, where another user has deleted
     /// the record in question
     /// </summary>
@@ -780,7 +940,7 @@ namespace Habanero.BO
     /// object in the database since it was last loaded by the object manager
     /// </summary>
     [Serializable]
-    public class BusObjBeginEditConcurrencyControlException : BusObjOptimisticConcurrencyControlException
+    public class BusObjBeginEditConcurrencyControlException : BusObjectConcurrencyControlException
     {
         /// <summary>
         /// Constructor to initialise the exception with a set of details
@@ -797,21 +957,17 @@ namespace Habanero.BO
                                                           string machineName,
                                                           DateTime dateUpdated,
                                                           string objectID,
-                                                          BusinessObject obj) :
-                                                              base(
-                                                              className, userName, machineName, dateUpdated, objectID,
-                                                              obj)
-        {
-        }
-
-        /// <summary>
-        /// Constructor to initialise the exception using details held in a
-        /// BusObjOptimisticConcurrencyControlException provided
-        /// </summary>
-        /// <param name="ex">The BusObjOptimisticConcurrencyControlException</param>
-        public BusObjBeginEditConcurrencyControlException(BusObjOptimisticConcurrencyControlException ex) :
-            base(ex.ClassName, ex.UserNameEdited, ex.MachineNameEdited,
-                 ex.DateTimeEdited, ex.ObjectID, ex.BusinessObject)
+                                                          BusinessObject obj)
+            :
+                                                               base("You cannot Edit '" + className +
+                                                                    "', as another user has edited this record. \n" +
+                                                                    "UserName: " +
+                                                                    (userName.Length > 0 ? userName : "[Unknown]") +
+                                                                    " \nMachineName: " +
+                                                                    (machineName.Length > 0 ? machineName : "[Unknown]") +
+                                                                    " \nDateUpdated: " +
+                                                                    dateUpdated.ToString("dd MMM yyyy HH:mm:ss:fff") +
+                                                                    " \nObjectID: " + objectID, obj)
         {
         }
 
@@ -862,7 +1018,7 @@ namespace Habanero.BO
     [Serializable]
     public class EditingException : BusinessObjectException, ISerializable
     {
-        protected object mobj; //TODO move this such that it has type BusObj
+        protected object mobj;
 
         /// <summary>
         /// Constructor to initialise the exception

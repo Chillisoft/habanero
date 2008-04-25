@@ -147,11 +147,15 @@ namespace Habanero.Test.BO
             BOLoader.Instance.ClearLoadedBusinessObjects();
             OrderItem.ClearLoadedBusinessObjectBaseCol();
             OrderItem.ClearTable();
-            OrderItem car = OrderItem.AddOrder1Car();
-            OrderItem.AddOrder2Chair();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
+            Assert.AreEqual(0, col.Count);
 
+            OrderItem car = OrderItem.AddOrder1Car();
+            OrderItem.AddOrder2Chair();
+            col = new BusinessObjectCollection<OrderItem>();
+            col.LoadAll();
+            Assert.AreEqual(2, col.Count);
             BOCollectionReadOnlyDataSetProvider provider = new BOCollectionReadOnlyDataSetProvider(col);
             UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
             DataTable table = provider.GetDataTable(uiGrid);

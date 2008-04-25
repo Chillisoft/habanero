@@ -38,4 +38,16 @@ namespace Habanero.Base
         /// <param name="row">The DataRow object to initialise</param>
         void InitialiseDataRow(DataRow row);
     }
+
+    /// <summary>
+    /// An interface to model an object initialiser
+    /// </summary>
+    public interface IObjectInitialiser<T> : IObjectInitialiser
+    {
+        /// <summary>
+        /// Initialises the given object
+        /// </summary>
+        /// <param name="objToInitialise">The object to initialise</param>
+        void InitialiseObject(T objToInitialise);
+    }
 }

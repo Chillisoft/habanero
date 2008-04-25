@@ -175,39 +175,39 @@ namespace Habanero.Test.UI.Forms
             _dateTimePickerController.ValueChanged -= handleValueChanged;
         }
 
-        [Test, Ignore("The dateTimePicker does not throw any event when the checked property is changed programatically, so this test will never work")]
-        public void TestCheckingCheckboxFiresEvent()
-        {
-            DateTime sampleDate = new DateTime(2002, 02, 02, 02, 02, 02);
-            bool isFired = false;
-            EventHandler handleValueChanged = delegate
-                                                  {
-                                                      isFired = true;
-                                                  };
-            _dateTimePickerController.Value = sampleDate;
-            TestSetNullValueWithCheckbox();
-            _dateTimePickerController.ValueChanged += handleValueChanged;
-            _dateTimePicker.Checked = true;
-            Assert.IsTrue(isFired, "The ValueChanged event should have fired after checking the checkbox.");
-            _dateTimePickerController.ValueChanged -= handleValueChanged;
-        }
+        //[Test, Ignore("The dateTimePicker does not throw any event when the checked property is changed programatically, so this test will never work")]
+        //public void TestCheckingCheckboxFiresEvent()
+        //{
+        //    DateTime sampleDate = new DateTime(2002, 02, 02, 02, 02, 02);
+        //    bool isFired = false;
+        //    EventHandler handleValueChanged = delegate
+        //                                          {
+        //                                              isFired = true;
+        //                                          };
+        //    _dateTimePickerController.Value = sampleDate;
+        //    TestSetNullValueWithCheckbox();
+        //    _dateTimePickerController.ValueChanged += handleValueChanged;
+        //    _dateTimePicker.Checked = true;
+        //    Assert.IsTrue(isFired, "The ValueChanged event should have fired after checking the checkbox.");
+        //    _dateTimePickerController.ValueChanged -= handleValueChanged;
+        //}
 
-        [Test, Ignore("The dateTimePicker does not throw any event when the checked property is changed programatically, so this test will never work")]
-        public void TestUnCheckingCheckboxFiresEvent()
-        {
-            DateTime sampleDate = new DateTime(2002, 02, 02, 02, 02, 02);
-            bool isFired = false;
-            EventHandler handleValueChanged = delegate
-                                                  {
-                                                      isFired = true;
-                                                  };
-            _dateTimePickerController.Value = null;
-            TestSetControllerValueWithCheckbox();
-            _dateTimePickerController.ValueChanged += handleValueChanged;
-            _dateTimePicker.Checked = false;
-            Assert.IsTrue(isFired, "The ValueChanged event should have fired after unchecking the checkbox.");
-            _dateTimePickerController.ValueChanged -= handleValueChanged;
-        }
+        //[Test, Ignore("The dateTimePicker does not throw any event when the checked property is changed programatically, so this test will never work")]
+        //public void TestUnCheckingCheckboxFiresEvent()
+        //{
+        //    DateTime sampleDate = new DateTime(2002, 02, 02, 02, 02, 02);
+        //    bool isFired = false;
+        //    EventHandler handleValueChanged = delegate
+        //                                          {
+        //                                              isFired = true;
+        //                                          };
+        //    _dateTimePickerController.Value = null;
+        //    TestSetControllerValueWithCheckbox();
+        //    _dateTimePickerController.ValueChanged += handleValueChanged;
+        //    _dateTimePicker.Checked = false;
+        //    Assert.IsTrue(isFired, "The ValueChanged event should have fired after unchecking the checkbox.");
+        //    _dateTimePickerController.ValueChanged -= handleValueChanged;
+        //}
 		
         #endregion //Event Tests
 
