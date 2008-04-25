@@ -29,7 +29,7 @@ using Habanero.BO.CriteriaManager;
 using Habanero.BO.SqlGeneration;
 using Habanero.DB;
 using Habanero.Util;
-//using log4net;
+using log4net;
 
 namespace Habanero.BO
 {
@@ -44,7 +44,7 @@ namespace Habanero.BO
     public class BusinessObject 
     {
 
-        //private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         public event EventHandler<BOEventArgs> Updated;
         public event EventHandler<BOEventArgs> Saved;
@@ -194,19 +194,41 @@ namespace Habanero.BO
         {
             if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
             if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
-            {
+            try
+             {
                 if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
-                {
+                if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
+                if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
+                 {
                     AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
-                }
+                    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
+                    {
+                        AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
+                    }
+                 }
                 ReleaseWriteLocks();
-                ReleaseReadLocks();
+//               ReleaseReadLocks();
             } catch(Exception ex)
             {
                 log.Error("Error disposing BusinessObject.", ex);
-            }
+             }
             ReleaseWriteLocks();
-            //ReleaseReadLocks();
+//-            ReleaseReadLocks();
+            //if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
+            //if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
+            //{
+            //    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
+            //    {
+            //        AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
+            //    }
+            //    ReleaseWriteLocks();
+            //    ReleaseReadLocks();
+            //} catch(Exception ex)
+            //{
+            //    log.Error("Error disposing BusinessObject.", ex);
+            //}
+            //ReleaseWriteLocks();
+            ////ReleaseReadLocks();
         }
 
         private void Initialise(IDatabaseConnection conn, ClassDef def)
@@ -1147,7 +1169,7 @@ namespace Habanero.BO
             foreach (BOProp prop in _boPropCol)
             {
                 PropDef propDef = prop.PropDef;
-                ClassDefinition.ClassDef classDef = GetCorrespondingClassDef(propDef, _classDef);
+                ClassDef classDef = GetCorrespondingClassDef(propDef, _classDef);
                 PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef, classDef);
                 searchExpression.SetParameterSqlInfo(propDefParameterSQLInfo);
             }
@@ -1155,7 +1177,7 @@ namespace Habanero.BO
 
         private static ClassDef GetCorrespondingClassDef(PropDef propDef, ClassDef classDef)
         {
-            ClassDefinition.ClassDef currentClassDef = classDef;
+            ClassDef currentClassDef = classDef;
             while(!currentClassDef.PropDefcol.Contains(propDef))
             {
                 currentClassDef = currentClassDef.SuperClassClassDef;
