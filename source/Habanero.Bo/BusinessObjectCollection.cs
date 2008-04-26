@@ -31,7 +31,7 @@ using Habanero.DB;
 
 namespace Habanero.BO
 {
-	//public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);
+    //public delegate void BusinessObjectEventHandler(Object sender, BOEventArgs e);
 
     /// <summary>
     /// Manages a collection of business objects.  This class also serves
@@ -41,9 +41,9 @@ namespace Habanero.BO
     /// class. The business objects contained in this collection must
     /// inherit from BusinessObject.
     /// </summary>
-	public class BusinessObjectCollection<TBusinessObject> 
-        : List<TBusinessObject>, IBusinessObjectCollection  
-		where TBusinessObject : BusinessObject
+    public class BusinessObjectCollection<TBusinessObject>
+        : List<TBusinessObject>, IBusinessObjectCollection
+        where TBusinessObject : BusinessObject
     {
         private ClassDef _boClassDef;
         private IExpression _criteriaExpression;
@@ -69,8 +69,8 @@ namespace Habanero.BO
         /// and the objects in the collection will be determined from the classDef passed in.
         /// </summary>
         /// <param name="classDef">The classdef of the objects to be contained in this collection</param>
-        public BusinessObjectCollection(ClassDef classDef) 
-            :this (classDef, null)
+        public BusinessObjectCollection(ClassDef classDef)
+            : this(classDef, null)
         {
         }
 
@@ -103,24 +103,27 @@ namespace Habanero.BO
                 if (sampleBo == null)
                 {
                     _boClassDef = ClassDef.ClassDefs[typeof (TBusinessObject)];
-                } else
+                }
+                else
                 {
                     _boClassDef = sampleBo.ClassDef;
                 }
-            } else
+            }
+            else
             {
                 _boClassDef = classDef;
             }
             if (sampleBo != null)
             {
                 _sampleBo = sampleBo;
-            } else
+            }
+            else
             {
                 if (_boClassDef == null)
                 {
                     throw new UserException(String.Format("A business object collection is " +
-                        "being created for the type '{0}', but no class definitions have " +
-                        "been loaded for this type.", typeof(TBusinessObject).Name));
+                                                          "being created for the type '{0}', but no class definitions have " +
+                                                          "been loaded for this type.", typeof (TBusinessObject).Name));
                 }
                 _sampleBo = _boClassDef.CreateNewBusinessObject();
             }
@@ -131,7 +134,7 @@ namespace Habanero.BO
         /// Handles the event of a business object being added
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectAdded;
- 
+
         /// <summary>
         /// Handles the event of a business object being removed
         /// </summary>
@@ -147,7 +150,6 @@ namespace Habanero.BO
             {
                 this.BusinessObjectAdded(this, new BOEventArgs(bo));
             }
-
         }
 
         /// <summary>
@@ -169,6 +171,14 @@ namespace Habanero.BO
         public new void Add(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
+            AddInternal(bo);
+            this.FireBusinessObjectAdded(bo);
+        }
+
+        private void AddInternal(TBusinessObject bo)
+        {
+            if (bo == null) throw new ArgumentNullException("bo");
+        
             base.Add(bo);
             _lookupTable.Add(bo.ID.ToString(), bo);
             bo.Deleted += BusinessObjectDeletedHandler;
@@ -176,7 +186,6 @@ namespace Habanero.BO
             {
                 bo.PrimaryKey.Updated += UpdateLookupTable;
             }
-            this.FireBusinessObjectAdded(bo);
         }
 
         /// <summary>
@@ -201,7 +210,7 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectDeletedHandler(object sender, BOEventArgs e)
         {
-            this.Remove((TBusinessObject)e.BusinessObject);
+            this.Remove((TBusinessObject) e.BusinessObject);
         }
 
         /// <summary>
@@ -210,11 +219,11 @@ namespace Habanero.BO
         /// <param name="col">The collection to copy from</param>
         public void Add(BusinessObjectCollection<TBusinessObject> col)
         {
-			Add((List<TBusinessObject>) col);
-			//foreach (TBusinessObject bo in col)
-			//{
-			//    this.Add(bo);
-			//}
+            Add((List<TBusinessObject>) col);
+            //foreach (TBusinessObject bo in col)
+            //{
+            //    this.Add(bo);
+            //}
         }
 
         /// <summary>
@@ -246,23 +255,28 @@ namespace Habanero.BO
         [ReflectionPermission(SecurityAction.Demand)]
         public void Refresh()
         {
+            BusinessObjectCollection<TBusinessObject> oldCol = this.Clone();
             Clear();
             IDatabaseConnection boDatabaseConnection = _sampleBo.GetDatabaseConnection();
-            //Create the SqlStatement for the _sampleBo's database connection
-        	ISqlStatement refreshSql = CreateLoadSqlStatement(_sampleBo, _boClassDef, 
-                _criteriaExpression, _limit, _extraSearchCriteriaLiteral);
-        	using (IDataReader dr = boDatabaseConnection.LoadDataReader(refreshSql, _orderByClause))
+            ISqlStatement refreshSql = CreateLoadSqlStatement(_sampleBo, _boClassDef,
+                                                              _criteriaExpression, _limit, _extraSearchCriteriaLiteral);
+            using (IDataReader dr = boDatabaseConnection.LoadDataReader(refreshSql, _orderByClause))
             {
                 try
                 {
                     TBusinessObject lTempBusObj;
-                    lTempBusObj = (TBusinessObject)_boClassDef.CreateNewBusinessObject(boDatabaseConnection); 
-                    //lTempBusObj = (TBusinessObject)_boClassDef.InstantiateBusinessObject();
-					//lTempBusObj = (BusinessObjectBase)Activator.CreateInstance(_boClassDef.ClassType, true);
-					while (dr.Read())
+                    lTempBusObj = (TBusinessObject) _boClassDef.CreateNewBusinessObject(boDatabaseConnection);
+                    while (dr.Read())
                     {
-                        //Load Business OBject from the data reader
-                        Add((TBusinessObject)BOLoader.Instance.GetBusinessObject(lTempBusObj, dr));
+                        TBusinessObject bo = (TBusinessObject) BOLoader.Instance.GetBusinessObject(lTempBusObj, dr);
+                        if (oldCol.Contains(bo))
+                        {
+                            AddInternal(bo);
+                        }
+                        else
+                        {
+                            Add(bo);
+                        }
                     }
                 }
                 finally
@@ -273,43 +287,47 @@ namespace Habanero.BO
                     }
                 }
             }
-		}
+        }
 
         #region Create Load Statement
 
-    	internal static ISqlStatement CreateLoadSqlStatement(BusinessObject businessObject, ClassDef classDef, IExpression criteriaExpression, int limit, string extraSearchCriteriaLiteral)
-    	{
-    	    IDatabaseConnection boDatabaseConnection = businessObject.GetDatabaseConnection();
-    		ISqlStatement refreshSql = new SqlStatement(boDatabaseConnection);
-			refreshSql.Statement.Append(businessObject.GetSelectSql(limit));
-			if (criteriaExpression != null)
-    		{
-    		    IExpression loadCriteria = criteriaExpression.Clone();
+        internal static ISqlStatement CreateLoadSqlStatement(BusinessObject businessObject, ClassDef classDef,
+                                                             IExpression criteriaExpression, int limit,
+                                                             string extraSearchCriteriaLiteral)
+        {
+            IDatabaseConnection boDatabaseConnection = businessObject.GetDatabaseConnection();
+            ISqlStatement refreshSql = new SqlStatement(boDatabaseConnection);
+            refreshSql.Statement.Append(businessObject.GetSelectSql(limit));
+            if (criteriaExpression != null)
+            {
+                IExpression loadCriteria = criteriaExpression.Clone();
                 DetermineJoins(classDef, boDatabaseConnection, refreshSql, loadCriteria);
-    			refreshSql.AppendWhere();
+                refreshSql.AppendWhere();
                 SqlCriteriaCreator creator = new SqlCriteriaCreator(loadCriteria, classDef, boDatabaseConnection);
-    			creator.AppendCriteriaToStatement(refreshSql);
-    		}
-			if (!String.IsNullOrEmpty(extraSearchCriteriaLiteral))
-    		{
-    			refreshSql.AppendWhere();
-				refreshSql.Statement.Append(extraSearchCriteriaLiteral);
-    		}
+                creator.AppendCriteriaToStatement(refreshSql);
+            }
+            if (!String.IsNullOrEmpty(extraSearchCriteriaLiteral))
+            {
+                refreshSql.AppendWhere();
+                refreshSql.Statement.Append(extraSearchCriteriaLiteral);
+            }
 
             if (limit > 0)
             {
                 string limitClause = boDatabaseConnection.GetLimitClauseForEnd(limit);
                 if (!String.IsNullOrEmpty(limitClause)) refreshSql.Statement.Append(" " + limitClause);
             }
-    		return refreshSql;
-    	}
+            return refreshSql;
+        }
 
-        private static void DetermineJoins(ClassDef classDef, IDatabaseConnection databaseConnection, ISqlStatement sqlStatement, IExpression criteriaExpression)
+        private static void DetermineJoins(ClassDef classDef, IDatabaseConnection databaseConnection,
+                                           ISqlStatement sqlStatement, IExpression criteriaExpression)
         {
             List<Parameter> relationshipParameters = new List<Parameter>();
             AnalyzeExpression(criteriaExpression, ref relationshipParameters);
             List<string> joinedRelationshipTables = new List<string>();
-            Dictionary<string, IParameterSqlInfo> relationshipParameterInformation = new Dictionary<string, IParameterSqlInfo>();
+            Dictionary<string, IParameterSqlInfo> relationshipParameterInformation =
+                new Dictionary<string, IParameterSqlInfo>();
             foreach (Parameter parameter in relationshipParameters)
             {
                 string parameterName = parameter.ParameterName;
@@ -317,7 +335,7 @@ namespace Habanero.BO
                 string propertyName = parts[parts.Length - 1];
                 ClassDef currentClassDef = classDef;
                 string fullTableName = currentClassDef.InheritedTableName;
-                for(int i = 0; i < parts.Length - 1; i++ )
+                for (int i = 0; i < parts.Length - 1; i++)
                 {
                     string relationshipName = parts[i];
                     string previousFullTableName = fullTableName;
@@ -328,27 +346,33 @@ namespace Habanero.BO
                         if (relationshipDef.RelatedObjectClassDef == null)
                         {
                             throw new SqlStatementException(String.Format(
-                                "The relationship '{0}' of the class '{1}' referred to in " +
-                                "the Business Object Collection load criteria in the parameter " +
-                                "'{2}' refers to the class '{3}' from the assembly '{4}'. " +
-                                "This related class is not found in the loaded class definitions.",
-                                relationshipName, currentClassDef.ClassName, parameterName, 
-                                relationshipDef.RelatedObjectClassName, relationshipDef.RelatedObjectAssemblyName));
+                                                                "The relationship '{0}' of the class '{1}' referred to in " +
+                                                                "the Business Object Collection load criteria in the parameter " +
+                                                                "'{2}' refers to the class '{3}' from the assembly '{4}'. " +
+                                                                "This related class is not found in the loaded class definitions.",
+                                                                relationshipName, currentClassDef.ClassName,
+                                                                parameterName,
+                                                                relationshipDef.RelatedObjectClassName,
+                                                                relationshipDef.RelatedObjectAssemblyName));
                         }
                         currentClassDef = relationshipDef.RelatedObjectClassDef;
-                    } else
+                    }
+                    else
                     {
-                        throw new SqlStatementException(String.Format("The relationship '{0}' of the class '{1}'" + 
-                            " referred to in the Business Object Collection load criteria in the parameter '{2}' does not exist.",
-                            relationshipName, currentClassDef.ClassName, parameterName));
+                        throw new SqlStatementException(String.Format("The relationship '{0}' of the class '{1}'" +
+                                                                      " referred to in the Business Object Collection load criteria in the parameter '{2}' does not exist.",
+                                                                      relationshipName, currentClassDef.ClassName,
+                                                                      parameterName));
                     }
                     if (joinedRelationshipTables.Contains(fullTableName))
                     {
                         //Dont add join
-                    } else
+                    }
+                    else
                     {
                         //Add join
-                        string joinTableAs = SqlFormattingHelper.FormatTableName(currentClassDef.InheritedTableName, databaseConnection);
+                        string joinTableAs =
+                            SqlFormattingHelper.FormatTableName(currentClassDef.InheritedTableName, databaseConnection);
                         joinTableAs += " AS ";
                         joinTableAs += SqlFormattingHelper.FormatTableName(fullTableName, databaseConnection);
                         string joinCriteria = "";
@@ -360,7 +384,7 @@ namespace Habanero.BO
                             joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
                                 fullTableName, relPropDef.RelatedClassPropName, databaseConnection);
                         }
-                        sqlStatement.AddJoin("INNER JOIN", joinTableAs, joinCriteria );
+                        sqlStatement.AddJoin("INNER JOIN", joinTableAs, joinCriteria);
                         joinedRelationshipTables.Add(fullTableName);
                     }
                 }
@@ -388,7 +412,8 @@ namespace Habanero.BO
                 Expression expression = criteriaExpression as Expression;
                 GetRelationshipParameters(expression.LeftExpression, ref parameters);
                 GetRelationshipParameters(expression.RightExpression, ref parameters);
-            } else if (criteriaExpression is Parameter)
+            }
+            else if (criteriaExpression is Parameter)
             {
                 GetRelationshipParameters(criteriaExpression, ref parameters);
             }
@@ -398,7 +423,7 @@ namespace Habanero.BO
         {
             if (expression is Parameter)
             {
-                Parameter parameter = (Parameter)expression;
+                Parameter parameter = (Parameter) expression;
                 if (IsRelationshipParameter(parameter))
                 {
                     parameters.Add(parameter);
@@ -424,19 +449,19 @@ namespace Habanero.BO
         /// </summary>
         public void LoadAll()
         {
-			LoadAll("");
+            LoadAll("");
         }
 
-		/// <summary>
-		/// Loads the entire collection for the type of object,
-		/// loaded in the order specified. 
-		/// To load the collection in any order use the LoadAll() method.
-		/// </summary>
-		/// <param name="orderByClause">The order-by clause</param>
-		public void LoadAll(string orderByClause)
-		{
-			Load("", orderByClause);
-		}
+        /// <summary>
+        /// Loads the entire collection for the type of object,
+        /// loaded in the order specified. 
+        /// To load the collection in any order use the LoadAll() method.
+        /// </summary>
+        /// <param name="orderByClause">The order-by clause</param>
+        public void LoadAll(string orderByClause)
+        {
+            Load("", orderByClause);
+        }
 
         /// <summary>
         /// Loads business objects that match the search criteria provided,
@@ -450,22 +475,22 @@ namespace Habanero.BO
         {
             Load(searchCriteria, orderByClause, "");
         }
-		
-		/// <summary>
-		/// Loads business objects that match the search criteria provided in
-		/// an expression, loaded in the order specified
-		/// </summary>
-		/// <param name="searchExpression">The search expression</param>
-		/// <param name="orderByClause">The order-by clause</param>
-		public void Load(IExpression searchExpression, string orderByClause)
-		{
-			Load(searchExpression, orderByClause, "");
-		}
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided in
+        /// an expression, loaded in the order specified
+        /// </summary>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        public void Load(IExpression searchExpression, string orderByClause)
+        {
+            Load(searchExpression, orderByClause, "");
+        }
 
 
         /// <summary>
         /// Loads business objects that match the search criteria provided
-		/// and an extra criteria literal,
+        /// and an extra criteria literal,
         /// loaded in the order specified
         /// </summary>
         /// <param name="searchCriteria">The search criteria</param>
@@ -479,86 +504,88 @@ namespace Habanero.BO
 
         /// <summary>
         /// Loads business objects that match the search criteria provided in
-		/// an expression and an extra criteria literal, 
-		/// loaded in the order specified
+        /// an expression and an extra criteria literal, 
+        /// loaded in the order specified
         /// </summary>
-		/// <param name="searchExpression">The search expression</param>
+        /// <param name="searchExpression">The search expression</param>
         /// <param name="orderByClause">The order-by clause</param>
         /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
         /// TODO ERIC - what is the last one?
-		public void Load(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral)
+        public void Load(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral)
         {
-			LoadWithLimit(searchExpression, orderByClause, extraSearchCriteriaLiteral, -1);
+            LoadWithLimit(searchExpression, orderByClause, extraSearchCriteriaLiteral, -1);
         }
 
-		/// <summary>
-		/// Loads business objects that match the search criteria provided, 
-		/// loaded in the order specified, 
-		/// and limiting the number of objects loaded
-		/// </summary>
-		/// <param name="searchCriteria">The search criteria</param>
-		/// <param name="orderByClause">The order-by clause</param>
-		/// <param name="limit">The limit</param>
-		public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
-		{
-			LoadWithLimit(searchCriteria, orderByClause, "", limit);
-		}
+        /// <summary>
+        /// Loads business objects that match the search criteria provided, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="limit">The limit</param>
+        public void LoadWithLimit(string searchCriteria, string orderByClause, int limit)
+        {
+            LoadWithLimit(searchCriteria, orderByClause, "", limit);
+        }
 
-		/// <summary>
-		/// Loads business objects that match the search criteria provided in
-		/// an expression, loaded in the order specified, 
-		/// and limiting the number of objects loaded
-		/// </summary>
-		/// <param name="searchExpression">The search expression</param>
-		/// <param name="orderByClause">The order-by clause</param>
-		/// <param name="limit">The limit</param>
-		public void LoadWithLimit(IExpression searchExpression, string orderByClause, int limit)
-		{
-			LoadWithLimit(searchExpression, orderByClause, "", limit);
-		}
+        /// <summary>
+        /// Loads business objects that match the search criteria provided in
+        /// an expression, loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="limit">The limit</param>
+        public void LoadWithLimit(IExpression searchExpression, string orderByClause, int limit)
+        {
+            LoadWithLimit(searchExpression, orderByClause, "", limit);
+        }
 
-		/// <summary>
-		/// Loads business objects that match the search criteria provided
-		/// and an extra criteria literal, 
-		/// loaded in the order specified, 
-		/// and limiting the number of objects loaded
-		/// </summary>
-		/// <param name="searchCriteria">The search expression</param>
-		/// <param name="orderByClause">The order-by clause</param>
-		/// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-		/// <param name="limit">The limit</param>
-		public void LoadWithLimit(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral, int limit)
-		{
-			IExpression criteriaExpression = null;
-			if (searchCriteria.Length > 0)
-			{
-				criteriaExpression = Expression.CreateExpression(searchCriteria);
-			}
-			LoadWithLimit(criteriaExpression, orderByClause, extraSearchCriteriaLiteral, limit);
-		}
+        /// <summary>
+        /// Loads business objects that match the search criteria provided
+        /// and an extra criteria literal, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchCriteria">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+        /// <param name="limit">The limit</param>
+        public void LoadWithLimit(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral,
+                                  int limit)
+        {
+            IExpression criteriaExpression = null;
+            if (searchCriteria.Length > 0)
+            {
+                criteriaExpression = Expression.CreateExpression(searchCriteria);
+            }
+            LoadWithLimit(criteriaExpression, orderByClause, extraSearchCriteriaLiteral, limit);
+        }
 
-		/// <summary>
-		/// Loads business objects that match the search criteria provided in
-		/// an expression and an extra criteria literal, 
-		/// loaded in the order specified, 
-		/// and limiting the number of objects loaded
-		/// </summary>
-		/// <param name="searchExpression">The search expression</param>
-		/// <param name="orderByClause">The order-by clause</param>
-		/// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
-		/// <param name="limit">The limit</param>
-		public void LoadWithLimit(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral, int limit)
-		{
-			_criteriaExpression = searchExpression;
-			_orderByClause = orderByClause;
-			_extraSearchCriteriaLiteral = extraSearchCriteriaLiteral;
-			_limit = limit;
-			Refresh();
-		}
+        /// <summary>
+        /// Loads business objects that match the search criteria provided in
+        /// an expression and an extra criteria literal, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+        /// <param name="limit">The limit</param>
+        public void LoadWithLimit(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral,
+                                  int limit)
+        {
+            _criteriaExpression = searchExpression;
+            _orderByClause = orderByClause;
+            _extraSearchCriteriaLiteral = extraSearchCriteriaLiteral;
+            _limit = limit;
+            Refresh();
+        }
 
-		#endregion
+        #endregion
 
-		///// <summary>
+        ///// <summary>
         ///// Returns the business object at the index position specified
         ///// </summary>
         ///// <param name="index">The index position</param>
@@ -597,11 +624,11 @@ namespace Habanero.BO
         /// <param name="bo">The business object to remove</param>
         public new virtual bool Remove(TBusinessObject bo)
         {
-			bool removed = base.Remove(bo);
+            bool removed = base.Remove(bo);
             _lookupTable.Remove(bo.ID.ToString());
-        	bo.Deleted -= BusinessObjectDeletedHandler;
+            bo.Deleted -= BusinessObjectDeletedHandler;
             this.FireBusinessObjectRemoved(bo);
-        	return removed;
+            return removed;
         }
 
         ///// <summary>
@@ -686,9 +713,9 @@ namespace Habanero.BO
         {
             if (_lookupTable.ContainsKey(key))
             {
-                TBusinessObject bo = (TBusinessObject)_lookupTable[key];
+                TBusinessObject bo = (TBusinessObject) _lookupTable[key];
                 if (this.Contains(bo))
-                    return (TBusinessObject)_lookupTable[key];
+                    return (TBusinessObject) _lookupTable[key];
                 else return null;
             }
             else
@@ -717,11 +744,12 @@ namespace Habanero.BO
 //            formattedSearchItem.Replace("}", "");
 //            formattedSearchItem.Insert(0, _boClassDef.PrimaryKeyDef.KeyName + "=");
 
-            string formattedSearchItem = string.Format("{0}={1}", _boClassDef.GetPrimaryKeyDef().KeyName, searchTerm.ToString("B"));
+            string formattedSearchItem =
+                string.Format("{0}={1}", _boClassDef.GetPrimaryKeyDef().KeyName, searchTerm.ToString("B"));
 
             if (_lookupTable.ContainsKey(formattedSearchItem))
             {
-                return (TBusinessObject)_lookupTable[formattedSearchItem];
+                return (TBusinessObject) _lookupTable[formattedSearchItem];
             }
             else
             {
@@ -798,7 +826,8 @@ namespace Habanero.BO
         /// <returns>Returns the cloned copy</returns>
         public BusinessObjectCollection<TBusinessObject> Clone()
         {
-            BusinessObjectCollection<TBusinessObject> clonedCol = new BusinessObjectCollection<TBusinessObject>(_boClassDef);
+            BusinessObjectCollection<TBusinessObject> clonedCol =
+                new BusinessObjectCollection<TBusinessObject>(_boClassDef);
             foreach (TBusinessObject businessObjectBase in this)
             {
                 clonedCol.Add(businessObjectBase);
@@ -806,31 +835,32 @@ namespace Habanero.BO
             return clonedCol;
         }
 
-		/// <summary>
-		/// Returns a new collection that is a copy of this collection
-		/// </summary>
-		/// <returns>Returns the cloned copy</returns>
-		public BusinessObjectCollection<DestType> Clone<DestType>()
-			where DestType : BusinessObject
-		{
-			BusinessObjectCollection<DestType> clonedCol = new BusinessObjectCollection<DestType>(_boClassDef);
-			if (!typeof(DestType).IsSubclassOf(typeof(TBusinessObject)) &&
-				!typeof(TBusinessObject).IsSubclassOf(typeof(DestType)) &&
-				!typeof(TBusinessObject).Equals(typeof(DestType)))
-			{
-				throw new InvalidCastException(String.Format("Cannot cast a collection of type '{0}' to " +
-					  "a collection of type '{1}'.", typeof(TBusinessObject).Name, typeof(DestType).Name));
-			}
-			foreach (TBusinessObject businessObject in this)
-			{
-				DestType obj = businessObject as DestType;
-				if (obj != null)
-				{
-					clonedCol.Add(obj);
-				}
-			}
-			return clonedCol;
-		}
+        /// <summary>
+        /// Returns a new collection that is a copy of this collection
+        /// </summary>
+        /// <returns>Returns the cloned copy</returns>
+        public BusinessObjectCollection<DestType> Clone<DestType>()
+            where DestType : BusinessObject
+        {
+            BusinessObjectCollection<DestType> clonedCol = new BusinessObjectCollection<DestType>(_boClassDef);
+            if (!typeof (DestType).IsSubclassOf(typeof (TBusinessObject)) &&
+                !typeof (TBusinessObject).IsSubclassOf(typeof (DestType)) &&
+                !typeof (TBusinessObject).Equals(typeof (DestType)))
+            {
+                throw new InvalidCastException(String.Format("Cannot cast a collection of type '{0}' to " +
+                                                             "a collection of type '{1}'.",
+                                                             typeof (TBusinessObject).Name, typeof (DestType).Name));
+            }
+            foreach (TBusinessObject businessObject in this)
+            {
+                DestType obj = businessObject as DestType;
+                if (obj != null)
+                {
+                    clonedCol.Add(obj);
+                }
+            }
+            return clonedCol;
+        }
 
         /// <summary>
         /// Sorts the collection by the property specified. The second parameter
@@ -862,7 +892,7 @@ namespace Habanero.BO
             }
         }
 
-    	/// <summary>
+        /// <summary>
         /// Returns a list containing all the objects sorted by the property
         /// name and in the order specified
         /// </summary>
@@ -926,9 +956,9 @@ namespace Habanero.BO
         {
             TransactionCommitterDB committer = new TransactionCommitterDB();
 
-           // Transaction transaction = new Transaction(DatabaseConnection.CurrentConnection);
+            // Transaction transaction = new Transaction(DatabaseConnection.CurrentConnection);
             SaveAllInTransaction(committer);
-		}
+        }
 
         protected virtual void SaveAllInTransaction(TransactionCommitter transaction)
         {
@@ -946,6 +976,7 @@ namespace Habanero.BO
             transaction.CommitTransaction();
             _createdBusinessObjects.Clear();
         }
+
         /// <summary>
         /// Restores all the business objects to their last persisted state, that
         /// is their state and values at the time they were last saved to the database
@@ -959,7 +990,7 @@ namespace Habanero.BO
             }
         }
 
-		#region IBusinessObjectCollection Members
+        #region IBusinessObjectCollection Members
 
         // TODO ERIC: are these really necessary? and if so, why aren't all of them copied
         // across from IBusinessObjectCollection?
@@ -974,19 +1005,19 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="key">The orimary key as a string</param>
         /// <returns>Returns the business object if found, or null if not</returns>
-		BusinessObject IBusinessObjectCollection.Find(string key)
-		{
-			return this.Find(key);
-		}
+        BusinessObject IBusinessObjectCollection.Find(string key)
+        {
+            return this.Find(key);
+        }
 
         /// <summary>
         /// Returns a new collection that is a copy of this collection
         /// </summary>
         /// <returns>Returns the cloned copy</returns>
-    	IBusinessObjectCollection IBusinessObjectCollection.Clone()
-    	{
-    		return this.Clone();
-    	}
+        IBusinessObjectCollection IBusinessObjectCollection.Clone()
+        {
+            return this.Clone();
+        }
 
         /// <summary>
         /// Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1"></see>.
@@ -995,22 +1026,22 @@ namespace Habanero.BO
         /// <returns>
         /// The index of item if found in the list; otherwise, -1.
         /// </returns>
-		int IBusinessObjectCollection.IndexOf(BusinessObject item)
-    	{
-			return this.IndexOf((TBusinessObject) item);
-    	}
+        int IBusinessObjectCollection.IndexOf(BusinessObject item)
+        {
+            return this.IndexOf((TBusinessObject) item);
+        }
 
-    	/// <summary>
-		/// Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"></see> at the specified index.
-		/// </summary>
-		/// <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"></see>.</param>
-		/// <param name="index">The zero-based index at which item should be inserted.</param>
-		/// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
-		/// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
-		void IBusinessObjectCollection.Insert(int index, BusinessObject item)
-    	{
-    		this.Insert(index, (TBusinessObject)item);
-    	}
+        /// <summary>
+        /// Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"></see> at the specified index.
+        /// </summary>
+        /// <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"></see>.</param>
+        /// <param name="index">The zero-based index at which item should be inserted.</param>
+        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
+        void IBusinessObjectCollection.Insert(int index, BusinessObject item)
+        {
+            this.Insert(index, (TBusinessObject) item);
+        }
 
         /// <summary>
         /// Gets or sets the element at the specified index.
@@ -1019,11 +1050,11 @@ namespace Habanero.BO
         /// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
         /// <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
         /// <returns>The element at the specified index.</returns>
-		BusinessObject IBusinessObjectCollection.this[int index]
-    	{
-    		get { return base[index]; }
-    		set { base[index] = (TBusinessObject)value; }
-    	}
+        BusinessObject IBusinessObjectCollection.this[int index]
+        {
+            get { return base[index]; }
+            set { base[index] = (TBusinessObject) value; }
+        }
 
         /// <summary>
         /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
@@ -1031,10 +1062,10 @@ namespace Habanero.BO
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
-		void IBusinessObjectCollection.Add(BusinessObject item)
-    	{
-    		this.Add((TBusinessObject) item);
-    	}
+        void IBusinessObjectCollection.Add(BusinessObject item)
+        {
+            this.Add((TBusinessObject) item);
+        }
 
         /// <summary>
         /// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> contains a specific value.
@@ -1044,10 +1075,10 @@ namespace Habanero.BO
         /// </returns>
         /// <param name="item">The object to locate in the 
         /// <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
-		bool IBusinessObjectCollection.Contains(BusinessObject item)
-    	{
-    		return this.Contains((TBusinessObject) item);
-    	}
+        bool IBusinessObjectCollection.Contains(BusinessObject item)
+        {
+            return this.Contains((TBusinessObject) item);
+        }
 
         /// <summary>
         /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"></see> to an <see cref="T:System.Array"></see>, starting at a particular <see cref="T:System.Array"></see> index.
@@ -1061,14 +1092,14 @@ namespace Habanero.BO
         /// the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is 
         /// greater than the available space from arrayIndex to the end of the destination array, or 
         /// Type T cannot be cast automatically to the type of the destination array.</exception>
-		void IBusinessObjectCollection.CopyTo(BusinessObject[] array, int arrayIndex)
-    	{
-    		TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
-			this.CopyTo(thisArray, arrayIndex);
-    		int count = Count;
-			for (int index = 0; index < count; index++)
-				array[arrayIndex + index] = thisArray[arrayIndex + index];
-    	}
+        void IBusinessObjectCollection.CopyTo(BusinessObject[] array, int arrayIndex)
+        {
+            TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
+            this.CopyTo(thisArray, arrayIndex);
+            int count = Count;
+            for (int index = 0; index < count; index++)
+                array[arrayIndex + index] = thisArray[arrayIndex + index];
+        }
 
         /// <summary>
         /// Removes the first occurrence of a specific object from the 
@@ -1082,23 +1113,23 @@ namespace Habanero.BO
         /// This method also returns false if item is not found in the original
         /// <see cref="T:System.Collections.Generic.ICollection`1"></see>.
         /// </returns>
-		bool IBusinessObjectCollection.Remove(BusinessObject item)
-    	{
-    		return this.Remove((TBusinessObject) item);
-    	}
+        bool IBusinessObjectCollection.Remove(BusinessObject item)
+        {
+            return this.Remove((TBusinessObject) item);
+        }
 
-    	///<summary>
-    	///Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.
-    	///</summary>
-    	///
-    	///<returns>
-    	///true if the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only; otherwise, false.
-    	///</returns>
-    	///
-		bool IBusinessObjectCollection.IsReadOnly
-    	{
-			get { return false; }
-    	}
+        ///<summary>
+        ///Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only; otherwise, false.
+        ///</returns>
+        ///
+        bool IBusinessObjectCollection.IsReadOnly
+        {
+            get { return false; }
+        }
 
         /// <summary>
         /// The list of business objects that have been created via this collection (@see CreateBusinessObject) and have not
@@ -1108,8 +1139,6 @@ namespace Habanero.BO
         {
             get { return _createdBusinessObjects; }
         }
-
-
 
         #endregion
 
@@ -1121,19 +1150,25 @@ namespace Habanero.BO
         /// <returns></returns>
         public virtual TBusinessObject CreateBusinessObject()
         {
-            TBusinessObject newBO = (TBusinessObject) Activator.CreateInstance(typeof(TBusinessObject));
+            TBusinessObject newBO = (TBusinessObject) Activator.CreateInstance(typeof (TBusinessObject));
             EventHandler<BOEventArgs> savedEventHandler = null;
             savedEventHandler = delegate(object sender, BOEventArgs e)
-                               {
-                                   if (_createdBusinessObjects.Remove((TBusinessObject)e.BusinessObject))
-                                   {
-                                       Add((TBusinessObject) e.BusinessObject);
-                                       e.BusinessObject.Saved -= savedEventHandler;
-                                   }
-                                   
-                               };
+                                    {
+                                        if (CreatedBusinessObjects.Remove((TBusinessObject) e.BusinessObject))
+                                        {
+                                            Add((TBusinessObject) e.BusinessObject);
+                                            e.BusinessObject.Saved -= savedEventHandler;
+                                        }
+                                    };
+            EventHandler<BOEventArgs> restoredEventHandler = null;
+            restoredEventHandler = delegate(object sender, BOEventArgs e)
+                                       {
+                                           CreatedBusinessObjects.Remove((TBusinessObject) e.BusinessObject);
+                                           e.BusinessObject.Updated -= restoredEventHandler;
+                                       };
+            newBO.Restored += restoredEventHandler;
             newBO.Saved += savedEventHandler;
-            _createdBusinessObjects.Add(newBO);
+            CreatedBusinessObjects.Add(newBO);
             return newBO;
         }
 
@@ -1141,6 +1176,5 @@ namespace Habanero.BO
         {
             return CreateBusinessObject();
         }
-
     }
 }

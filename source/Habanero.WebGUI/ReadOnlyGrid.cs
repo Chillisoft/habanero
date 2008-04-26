@@ -93,7 +93,11 @@ namespace Habanero.WebGUI
                 ClearSelection();
                 if (value == null)
                 {
-                    if (this.CurrentRow == null) return;
+                    try
+                    {
+                        if (this.CurrentRow == null) return;
+                    }
+                    catch (ArgumentOutOfRangeException) { return; }
                     this.SetSelectedRowCore(this.CurrentRow.Index, false);
                     return;
                 }

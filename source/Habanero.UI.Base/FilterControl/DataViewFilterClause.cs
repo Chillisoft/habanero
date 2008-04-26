@@ -19,7 +19,7 @@
 
 using Habanero.Base;
 
-namespace Habanero.UI.Grid
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// A super-class for filter clauses that filter which data to

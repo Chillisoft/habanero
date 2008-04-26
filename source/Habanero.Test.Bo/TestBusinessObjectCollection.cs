@@ -224,7 +224,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, cpCol.CreatedBusinessObjects.Count);
         }
 
-
         [Test]
         public void TestPersistOfCreatedBusinessObject()
         {
@@ -237,6 +236,75 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, cpCol.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }
+
+        [Test] 
+        public void TestRestoreOfACreatedBusinessObject()
+        {
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
+            newCP.Surname = Guid.NewGuid().ToString();
+
+            newCP.Restore();
+            Assert.AreEqual(0, cpCol.Count);
+            Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
+        }
+
+
+
+
+
+        //TODO: From Brett Restore a parent object should remove all created objects on its relationships
+        //  for later when we have these??
+
+        private bool _addedEventFired;
+
+        [Test]
+        public void TestAddedEvent_FiringWhenSavingACreatedBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            _addedEventFired = false; 
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            cpCol.LoadAll();
+            cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
+
+            ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
+            newCP.Surname = Guid.NewGuid().ToString();
+
+
+            //---------------Execute Test ----------------------
+            newCP.Save();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(_addedEventFired);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestAddedEvent_NotFiringWhenRefreshing()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDef();
+            _addedEventFired = false;
+            BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
+            cpCol.LoadAll();
+            ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
+            newCP.Surname = Guid.NewGuid().ToString();
+            newCP.Save();
+
+            cpCol.BusinessObjectAdded += delegate { _addedEventFired = true; };
+
+            //---------------Execute Test ----------------------
+            cpCol.Refresh();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(_addedEventFired);
+            //---------------Tear Down -------------------------          
+        }
+
+
+
+
+
 
 
         public class MyDatabaseConnection : DatabaseConnection

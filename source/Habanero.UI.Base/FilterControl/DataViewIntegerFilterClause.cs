@@ -17,17 +17,17 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.UI.Base;
 
-namespace Habanero.UI.Grid
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Manages a filter clause that filters which data to
-    /// display in a DataView, according to some criteria set on a DateTime column
+    /// display in a DataView, according to some criteria set on an integer column
     /// </summary>
-    public class DataViewDateFilterClause : DataViewFilterClause
+    public class DataViewIntegerFilterClause : DataViewFilterClause
     {
         /// <summary>
         /// Constructor to create a new filter clause
@@ -36,7 +36,7 @@ namespace Habanero.UI.Grid
         /// filtering</param>
         /// <param name="clauseOperator">The clause operator</param>
         /// <param name="filterValue">The filter value to compare to</param>
-        internal DataViewDateFilterClause(string filterColumn, FilterClauseOperator clauseOperator, DateTime filterValue)
+        internal DataViewIntegerFilterClause(string filterColumn, FilterClauseOperator clauseOperator, int filterValue)
             : base(filterColumn, clauseOperator, filterValue)
         {
             if (_clauseOperator == FilterClauseOperator.OpLike)
@@ -52,7 +52,7 @@ namespace Habanero.UI.Grid
         /// <returns>Returns a string</returns>
         protected override string CreateValueClause()
         {
-            return "#" + ((DateTime)_filterValue).ToString("dd MMM yyyy HH:mm:ss") + "#";
+            return _filterValue.ToString();
         }
     }
 }

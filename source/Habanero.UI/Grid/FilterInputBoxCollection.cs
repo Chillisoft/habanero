@@ -56,8 +56,8 @@ namespace Habanero.UI.Grid
     public class FilterInputBoxCollection
     {
         private readonly IFilterClauseFactory _clauseFactory;
-        private IList _filterUIs;
-        private IList _controls;
+        private readonly IList _filterUIs;
+        private readonly IList _controls;
         private int _filterWidth;
         private bool _isAutomaticUpdate = true;
 
@@ -102,8 +102,8 @@ namespace Habanero.UI.Grid
             TextBox tb = ControlFactory.CreateTextBox();
             tb.Width = _filterWidth;
             _filterUIs.Add(new FilterUIString(_clauseFactory, columnName, tb));
-            tb.KeyPress += new KeyPressEventHandler(FilterControlKeyPressedHandler);
-            tb.TextChanged += new EventHandler(FilterControlValueChangedHandler);
+            tb.KeyPress += FilterControlKeyPressedHandler;
+            tb.TextChanged += FilterControlValueChangedHandler;
             FireFilterClauseChanged(tb);
             _controls.Add(tb);
             return tb;

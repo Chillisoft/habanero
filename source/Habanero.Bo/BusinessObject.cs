@@ -49,6 +49,7 @@ namespace Habanero.BO
         public event EventHandler<BOEventArgs> Updated;
         public event EventHandler<BOEventArgs> Saved;
         public event EventHandler<BOEventArgs> Deleted;
+        public event EventHandler<BOEventArgs> Restored;
 
         #region Fields
 
@@ -1035,7 +1036,10 @@ namespace Habanero.BO
             State.IsDirty = false;
             ReleaseWriteLocks();
             FireUpdatedEvent();
+            FireRestoredEvent();
         }
+
+
 
         /// <summary>
         /// Marks the business object for deleting.  Calling Save() will
@@ -1061,9 +1065,6 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// Calls the Updated() method
-        /// </summary>
         private void FireUpdatedEvent()
         {
             if (this.Updated != null)
@@ -1071,10 +1072,13 @@ namespace Habanero.BO
                 this.Updated(this, new BOEventArgs(this));
             }
         }
-
-        /// <summary>
-        /// Fires the Saved event.
-        /// </summary>
+        private void FireRestoredEvent()
+        {
+            if (this.Restored != null)
+            {
+                this.Restored(this, new BOEventArgs(this));
+            }
+        }
         private void FireSaved()
         {
             if (this.Saved != null)
@@ -1083,9 +1087,6 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// Calls the Deleted() handler
-        /// </summary>
         private void FireDeleted()
         {
             if (this.Deleted != null)

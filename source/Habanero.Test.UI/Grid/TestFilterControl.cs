@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.UI.Base;
 using Habanero.UI.Forms;
 using Habanero.UI.Grid;
 using NUnit.Framework;
@@ -71,7 +72,7 @@ namespace Habanero.Test.UI.Grid
         {
             itsIsFilterClauseChanged = false;
             filterControl.SetAutomaticUpdate(true);
-            filterControl.FilterClauseChanged += new EventHandler<FilterControlEventArgs>(FilterClauseChangedHandler);
+            filterControl.FilterClauseChanged += FilterClauseChangedHandler;
             TextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
             Assert.IsTrue(itsIsFilterClauseChanged, "Adding a new control should make the filter clause change");
             itsIsFilterClauseChanged = false;
@@ -116,7 +117,7 @@ namespace Habanero.Test.UI.Grid
             options.Add("1");
             options.Add("2");
             itsIsFilterClauseChanged = false;
-            filterControl.FilterClauseChanged += new EventHandler<FilterControlEventArgs>(FilterClauseChangedHandler);
+            filterControl.FilterClauseChanged += FilterClauseChangedHandler;
             ComboBox cb = filterControl.AddStringFilterComboBox("Test:", "TestColumn", options, true);
             Assert.IsTrue(itsIsFilterClauseChanged, "Adding a new control should make the filter clause change");
             itsIsFilterClauseChanged = false;
@@ -141,8 +142,8 @@ namespace Habanero.Test.UI.Grid
         public void TestAddStringFilterDateTimeEditor()
         {
             DateTime testDate = DateTime.Now;
-            DateTimePicker dtp1 = filterControl.AddStringFilterDateTimeEditor("test:", "testcolumn", testDate, true);
-            DateTimePicker dtp2 = filterControl.AddStringFilterDateTimeEditor("test:", "testcolumn", testDate, false);
+            filterControl.AddStringFilterDateTimeEditor("test:", "testcolumn", testDate, true);
+            filterControl.AddStringFilterDateTimeEditor("test:", "testcolumn", testDate, false);
             IFilterClause clause1 =
                 itsFilterClauseFactory.CreateStringFilterClause("testcolumn", FilterClauseOperator.OpGreaterThanOrEqualTo, testDate.ToString("yyyy/MM/dd"));
             IFilterClause clause2 =

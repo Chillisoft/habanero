@@ -19,10 +19,10 @@
 
 using System.Data;
 using Habanero.Base;
-using Habanero.UI.Grid;
+using Habanero.UI.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Grid
+namespace Habanero.Test.UI.Base
 {
     /// <summary>
     /// Summary description for TestDataViewFilterClauseBuilderWithStrings.

@@ -82,8 +82,6 @@
     <Compile Include="Forms\TestReadOnlyGridButtonControl.cs" />
     <Compile Include="Forms\TestTextBoxMapper.cs" />
     <Compile Include="Forms\TestTreeViewTableEditor.cs" />
-    <Compile Include="Grid\TestDataViewFilterClauseFactory.cs" />
-    <Compile Include="Grid\TestDataViewFilterClauseFactoryWithStrings.cs" />
     <Compile Include="Grid\TestEditableGrid.cs" />
     <Compile Include="Grid\TestFilterControl.cs" />
     <Compile Include="Grid\TestFilterInputBoxCollection.cs" />
@@ -116,9 +114,17 @@
       <Project>{F30A2151-F894-44E4-8F71-492B8C245745}</Project>
       <Name>Habanero.Test.General</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.UI.Base\Habanero.Test.UI.Base.csproj">
+      <Project>{12A701DA-DAF5-4709-942E-17F1EFA381D8}</Project>
+      <Name>Habanero.Test.UI.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
       <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
       <Name>Habanero.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
+      <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
+      <Name>Habanero.UI.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.UI\Habanero.UI.csproj">
       <Project>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</Project>

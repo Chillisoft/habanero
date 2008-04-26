@@ -152,13 +152,6 @@
     <Compile Include="Base\ControlCollection.cs" />
     <Compile Include="Grid\DataGridViewDateTimeColumn.cs" />
     <Compile Include="Grid\DataGridViewNumericUpDownColumn.cs" />
-    <Compile Include="Grid\DataViewCompositeFilterClause.cs" />
-    <Compile Include="Grid\DataViewDateFilterClause.cs" />
-    <Compile Include="Grid\DataViewFilterClause.cs" />
-    <Compile Include="Grid\DataViewFilterClauseFactory.cs" />
-    <Compile Include="Grid\DataViewIntegerFilterClause.cs" />
-    <Compile Include="Grid\DataViewNullFilterClause.cs" />
-    <Compile Include="Grid\DataViewStringFilterClause.cs" />
     <Compile Include="Grid\EditableGrid.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -286,6 +279,10 @@
     <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
       <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
       <Name>Habanero.DB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
+      <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
+      <Name>Habanero.UI.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>

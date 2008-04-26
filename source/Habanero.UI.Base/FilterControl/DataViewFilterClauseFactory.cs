@@ -20,7 +20,8 @@
 using System;
 using Habanero.Base;
 
-namespace Habanero.UI.Grid
+
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Creates filter clauses that determine which rows of data are displayed
@@ -66,7 +67,7 @@ namespace Habanero.UI.Grid
         /// <param name="filterValue">The filter value to be compared to</param>
         /// <returns>Returns the new filter clause object</returns>
         public IFilterClause CreateDateFilterClause(string filterColumn, FilterClauseOperator clauseOperator,
-                                                       DateTime filterValue)
+                                                    DateTime filterValue)
         {
             //BusinessObject b = new BusinessObject();
             //b.Props["test"].PropertyValueString

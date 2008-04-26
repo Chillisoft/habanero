@@ -19,10 +19,10 @@
 
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.UI.Grid;
+using Habanero.UI.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Grid
+namespace Habanero.Test.UI.Base
 {
     /// <summary>
     /// Summary description for TestDataviewFilterClauseBuilder.
@@ -71,9 +71,8 @@ namespace Habanero.Test.UI.Grid
         }
 
         [
-            Test,
-            ExpectedException(typeof (HabaneroArgumentException),
-                "The argument 'clauseOperator' is not valid. Operator Like is not supported for non string operands")]
+            Test, ExpectedException(typeof (HabaneroArgumentException), ExpectedMessage = 
+                                                                        "The argument 'clauseOperator' is not valid. Operator Like is not supported for non string operands")]
         public void TestLikeWithNonString()
         {
             itsFilterClauseFactory.CreateIntegerFilterClause("TestColumn", FilterClauseOperator.OpLike, 11);

@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.UI.Base;
 using Habanero.UI.Forms;
 using Habanero.UI.Grid;
 using NUnit.Framework;
@@ -132,13 +133,13 @@ namespace Habanero.Test.UI.Grid
             testTextBox.Text = "testvalue";
 
             DateTime testTime = DateTime.Now;
-            DateTimePicker testDateTimePicker = filterInputBoxCol.AddStringFilterDateTimeEditor("test1", testTime, true);
+            filterInputBoxCol.AddStringFilterDateTimeEditor("test1", testTime, true);
 
-            CheckBox testCheckBox = filterInputBoxCol.AddBooleanFilterCheckBox("test2", "textbox", true);
+            filterInputBoxCol.AddBooleanFilterCheckBox("test2", "textbox", true);
             
             ArrayList testOptions = new ArrayList();
             testOptions.Add("testoption1");
-            ComboBox testComboBox1 = filterInputBoxCol.AddStringFilterComboBox("test3", testOptions, true);
+            filterInputBoxCol.AddStringFilterComboBox("test3", testOptions, true);
             ComboBox testComboBox2 = filterInputBoxCol.AddStringFilterComboBox("test4", testOptions, true);
             testComboBox2.SelectedItem = "testoption1";
 
