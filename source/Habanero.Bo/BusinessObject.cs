@@ -64,7 +64,7 @@ namespace Habanero.BO
         protected BOPrimaryKey _primaryKey;
         protected IRelationshipCol _relationshipCol;
         private IConcurrencyControl _concurrencyControl;
-        private ITransactionLog _transactionLog;
+        private ITransactional _transactionLog;
         protected IDatabaseConnection _connection;
         //private bool _hasAutoIncrementingField;
         #endregion //Fields
@@ -180,7 +180,9 @@ namespace Habanero.BO
             State.IsDeleted = false;
             State.IsDirty = false;
             State.IsEditing = false;
+#pragma warning disable DoNotCallOverridableMethodsInConstructor
             ConstructFromClassDef(false);
+#pragma warning restore DoNotCallOverridableMethodsInConstructor
             if (!BOLoader.Instance.Load(this, searchExpression))
             {
                 //If the item is not found then throw the appropriate exception
@@ -400,7 +402,7 @@ namespace Habanero.BO
         /// Sets the transaction log to that specified
         /// </summary>
         /// <param name="transactionLog">A transaction log</param>
-        protected void SetTransactionLog(ITransactionLog transactionLog)
+        protected void SetTransactionLog(ITransactional transactionLog)
         {
             _transactionLog = transactionLog;
         }
@@ -518,8 +520,6 @@ namespace Habanero.BO
         /// Sets the object's state into editing mode.  The original state can
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
-        /// TODO: Put rules in begin edit to prevent the editing of this property.
-        /// How to test
         /// </summary>
         private void BeginEdit()
         {
@@ -530,8 +530,6 @@ namespace Habanero.BO
         /// Sets the object's state into editing mode.  The original state can
         /// be restored with Restore() and changes can be committed to the
         /// database by calling Save().
-        /// TODO: Put rules in begin edit to prevent the editing of this property.
-        /// How to test
         /// </summary>
         private void BeginEdit(bool delete)
         {
@@ -551,8 +549,6 @@ namespace Habanero.BO
         /// </summary>
         /// <exception cref="EditingException">Thrown if editing is taking
         /// place</exception>
-        /// TODO ERIC - this method can probably be combined
-        /// back into BeginEdit()
         private void CheckNotEditing()
         {
             if (State.IsEditing)
@@ -1009,9 +1005,16 @@ namespace Habanero.BO
         ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
         protected internal virtual void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
         {
+            //SetTransactionLog(CreateNewTransactionalLogObject());
+            if (_transactionLog != null)
+            {
+                //_transactionLog.UpdateObjectBeforePersisting(transactionCommitter);
+                transactionCommitter.AddTransaction(_transactionLog);
+
+            }
         }
 
-        //TODO: put this back with a test
+        //TODO: put this back with a test if required
         ///// <summary>
         ///// Steps to carry out after the Save() command is run
         ///// </summary>

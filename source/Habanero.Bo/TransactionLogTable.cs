@@ -19,6 +19,7 @@
 
 using System;
 using System.Security.Principal;
+using Habanero.Base;
 using Habanero.DB;
 
 namespace Habanero.BO
@@ -30,8 +31,9 @@ namespace Habanero.BO
     /// Database Field name and the dirty XML field (shows the previously persisted state
     ///    and newly persisted state of the field.
     /// </summary>
-    public class TransactionLogTable : ITransactionLog
+    public class TransactionLogTable : ITransactionLog, ITransactionalDB
     {
+        private readonly BusinessObject _buObjToLog;
         private readonly string _transactionLogTable;
         private readonly string _dateTimeUpdatedFieldName;
         private readonly string _windowsUserFieldName;
@@ -41,9 +43,21 @@ namespace Habanero.BO
         private readonly string _crudActionFieldName;
         private readonly string _dirtyXmlFieldName;
 
+        ///<summary>
+        /// Constructs the new transactionlogTable with default table name and logging fields.
+        ///</summary>
+        ///<param name="busObjToLog"></param>
+        public TransactionLogTable(BusinessObject busObjToLog)
+            : this(busObjToLog, "transactionLog", "DateTimeUpdated",
+                "WindowsUser", "LogonUser", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
+        {
+
+        }
+
         /// <summary>
         /// Constructor to initialise a new log table
         /// </summary>
+        /// <param name="buObjToLog">the business object for which the transaction log is being created</param>
         /// <param name="transactionLogTable">The log table name</param>
         /// <param name="dateTimeUpdatedFieldName">Time updated field name</param>
         /// <param name="windowsUserFieldName">Windows user field name</param>
@@ -52,11 +66,12 @@ namespace Habanero.BO
         /// <param name="businessObjectTypeNameFieldName">BO type field name</param>
         /// <param name="crudActionFieldName">Crud action field name</param>
         /// <param name="dirtyXMLFieldName">Dirty xml field name</param>
-        public TransactionLogTable(string transactionLogTable, string dateTimeUpdatedFieldName,
+        public TransactionLogTable(BusinessObject buObjToLog, string transactionLogTable, string dateTimeUpdatedFieldName,
                                    string windowsUserFieldName, string logonUserFieldName, string machineUpdateName,
                                    string businessObjectTypeNameFieldName, string crudActionFieldName,
                                    string dirtyXMLFieldName)
         {
+            _buObjToLog = buObjToLog;
             this._transactionLogTable = transactionLogTable;
             this._dateTimeUpdatedFieldName = dateTimeUpdatedFieldName;
             this._windowsUserFieldName = windowsUserFieldName;
@@ -67,34 +82,35 @@ namespace Habanero.BO
             this._dirtyXmlFieldName = dirtyXMLFieldName;
         }
 
-        /// <summary>
-        /// Record a transaction log for the specified business object
-        /// </summary>
-        /// <param name="busObj">The business object</param>
-        /// <param name="logonUserName">The name of the user who carried 
-        /// out the changes</param>
-        public void RecordTransactionLog(BusinessObject busObj, string logonUserName)
-        {
-            //TODO: Peter - make this proper parametrized Sql
-            SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection);
-            string sql = "INSERT INTO " + this._transactionLogTable + " (" +
-                         this._dateTimeUpdatedFieldName + ", " +
-                         this._logonUserFieldName + ", " +
-                         this._windowsUserFieldName + ", " +
-                         this._machineUpdateName + ", " +
-                         this._businessObjectTypeNameFieldName + ", " +
-                         this._crudActionFieldName + ", " +
-                         this._dirtyXmlFieldName + ") VALUES ( '" +
-                         DatabaseUtil.FormatDatabaseDateTime(DateTime.Now) + "', '" +
-                         logonUserName + "', '" +
-                         WindowsIdentity.GetCurrent().Name + "', '" +
-                         Environment.MachineName + "', '" +
-                         busObj.ClassName + "', '" +
-                         GetCrudAction(busObj) + "', '" +
-                         busObj.DirtyXML + "' )";
-            tranSql.Statement.Append(sql);
-            DatabaseConnection.CurrentConnection.ExecuteSql(new SqlStatementCollection(tranSql));
-        }
+        ///// <summary>
+        ///// Record a transaction log for the specified business object
+        ///// </summary>
+        ///// <param name="busObj">The business object</param>
+        ///// <param name="logonUserName">The name of the user who carried 
+        ///// out the changes</param>
+        //public void RecordTransactionLog(BusinessObject busObj, string logonUserName)
+        //{
+        //    //TODO: Peter - make this proper parametrized Sql
+        //    SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection);
+        //    string sql = "INSERT INTO " + this._transactionLogTable + " (" +
+        //                 this._dateTimeUpdatedFieldName + ", " +
+        //                 this._logonUserFieldName + ", " +
+        //                 this._windowsUserFieldName + ", " +
+        //                 this._machineUpdateName + ", " +
+        //                 this._businessObjectTypeNameFieldName + ", " +
+        //                 this._crudActionFieldName + ", " +
+        //                 this._dirtyXmlFieldName + ") VALUES ( '" +
+        //                 DatabaseUtil.FormatDatabaseDateTime(DateTime.Now) + "', '" +
+        //                 logonUserName + "', '" +
+        //                 WindowsIdentity.GetCurrent().Name + "', '" +
+        //                 Environment.MachineName + "', '" +
+        //                 busObj.ClassName + "', '" +
+        //                 GetCrudAction(busObj) + "', '" +
+        //                 busObj.DirtyXML + "' )";
+        //    tranSql.Statement.Append(sql);
+        //    SqlStatementCollection sqlStatements = new SqlStatementCollection(tranSql);
+        //    DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatements);
+        //}
 
         /// <summary>
         /// Returns the status of the business object specified, such as
@@ -120,6 +136,54 @@ namespace Habanero.BO
             {
                 return "Unknown";
             }
+        }
+
+        ///<summary>
+        /// Returns the appropriate sql statement collection depending on the state of the object.
+        /// E.g. Update SQL, InsertSQL or DeleteSQL.
+        ///</summary>
+        public ISqlStatementCollection GetSql()
+        {
+            SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection);
+            string sql = "INSERT INTO " + this._transactionLogTable + " (" +
+                         this._dateTimeUpdatedFieldName + ", " +
+                         this._logonUserFieldName + ", " +
+                         this._windowsUserFieldName + ", " +
+                         this._machineUpdateName + ", " +
+                         this._businessObjectTypeNameFieldName + ", " +
+                         this._crudActionFieldName + ", " +
+                         this._dirtyXmlFieldName + ") VALUES ( '" +
+                         DatabaseUtil.FormatDatabaseDateTime(DateTime.Now) + "', '" +
+                         GetLogonUserName() + "', '" +
+                         WindowsIdentity.GetCurrent().Name + "', '" +
+                         Environment.MachineName + "', '" +
+                         _buObjToLog.ClassName + "', '" +
+                         GetCrudAction(_buObjToLog) + "', '" +
+                         _buObjToLog.DirtyXML + "' )";
+            tranSql.Statement.Append(sql);
+            SqlStatementCollection sqlStatements = new SqlStatementCollection(tranSql);
+            return sqlStatements;
+        }
+
+        private string GetLogonUserName()
+        {
+            return "";
+        }
+
+
+        ///<summary>
+        /// Updates the business object as committed
+        ///</summary>
+        public void UpdateStateAsCommitted()
+        {
+        }
+
+
+        ///<summary>
+        /// updates the object as rolled back
+        ///</summary>
+        public void UpdateAsRolledBack()
+        {
         }
     }
 }

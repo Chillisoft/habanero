@@ -168,9 +168,7 @@ namespace Habanero.Test.BO
                 Assert.Fail();
             }
             //---------------Test Result -----------------------
-            //Raise Exception that the object has been edited since 
-            // the user last edited.
-            catch (NotImplementedException ex)
+            catch (NotImplementedException)
             {
                 Assert.AreEqual(versionNumber, contactPerson.VersionNumber);
             }

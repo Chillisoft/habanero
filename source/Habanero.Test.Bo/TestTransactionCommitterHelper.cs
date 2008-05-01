@@ -19,14 +19,14 @@ namespace Habanero.Test.BO
         ///<summary>
         /// Execute
         ///</summary>
-        protected internal override ISqlStatementCollection GetSql()
+        public override ISqlStatementCollection GetSql()
         {
             throw new NotImplementedException();
         }
 
         ///<summary>
         ///</summary>
-        protected internal override void UpdateStateAsCommitted()
+        public override void UpdateStateAsCommitted()
         {
             _committed = true;
         }
@@ -67,7 +67,7 @@ namespace Habanero.Test.BO
         ///<summary>
         /// Execute
         ///</summary>
-        protected internal override ISqlStatementCollection GetSql()
+        public override ISqlStatementCollection GetSql()
         {
             ISqlStatementCollection col = new SqlStatementCollection();
             col.Add(
@@ -81,7 +81,7 @@ namespace Habanero.Test.BO
 
         ///<summary>
         ///</summary>
-        protected internal override void UpdateStateAsCommitted()
+        public override void UpdateStateAsCommitted()
         {
         }
 
@@ -116,7 +116,7 @@ namespace Habanero.Test.BO
         ///<summary>
         /// Execute
         ///</summary>
-        protected internal override ISqlStatementCollection GetSql()
+        public override ISqlStatementCollection GetSql()
         {
             return new SqlStatementCollection(
                 new SqlStatement(DatabaseConnection.CurrentConnection,
@@ -125,7 +125,7 @@ namespace Habanero.Test.BO
 
         ///<summary>
         ///</summary>
-        protected internal override void UpdateStateAsCommitted()
+        public override void UpdateStateAsCommitted()
         {
             _committed = true;
         }
@@ -165,7 +165,7 @@ namespace Habanero.Test.BO
             _committed = false;
         }
 
-        protected internal override ISqlStatementCollection GetSql()
+        public override ISqlStatementCollection GetSql()
         {
             throw new NotImplementedException();
         }
@@ -181,7 +181,7 @@ namespace Habanero.Test.BO
 
         ///<summary>
         ///</summary>
-        protected internal override void UpdateStateAsCommitted()
+        public override void UpdateStateAsCommitted()
         {
             _committed = true;
         }
@@ -228,7 +228,7 @@ namespace Habanero.Test.BO
 
         ///<summary>
         ///</summary>
-        protected internal override void UpdateStateAsCommitted()
+        public override void UpdateStateAsCommitted()
         {
             _committed = true;
         }
@@ -262,6 +262,7 @@ namespace Habanero.Test.BO
         {
             get { return _committed; }
         }
+
     }
 
 
@@ -269,7 +270,7 @@ namespace Habanero.Test.BO
     {
 
 
-        protected override void ExecuteTransactionToDataSource(TransactionalBusinessObject transaction)
+        protected override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             TransactionalBusinessObjectDB transactionDB = (TransactionalBusinessObjectDB)transaction;
             transactionDB.GetSql();

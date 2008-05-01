@@ -39,7 +39,7 @@ namespace Habanero.Test
 
         #region Constructors
 
-        public ContactPerson() : base()
+        public ContactPerson()
         {
             SetPropertyValue("PK3Prop", this.ID.GetObjectId());
         }
@@ -88,14 +88,14 @@ namespace Habanero.Test
             SetConcurrencyControl(new OptimisticLockingVersionNumberDB(this,mPropDateLastUpdated,
                                                                      mPropUserLastUpdated, mPropMachineLastUpdated,
                                                                      mPropVersionNumber));
-            SetTransactionLog(new TransactionLogTable("TransactionLog",
-                                                      "DateTimeUpdated",
-                                                      "WindowsUser",
-                                                      "LogonUser",
-                                                      "MachineName",
-                                                      "BusinessObjectTypeName",
-                                                      "CRUDAction",
-                                                      "DirtyXML"));
+            //SetTransactionLog(new TransactionLogTable("TransactionLog",
+            //                                          "DateTimeUpdated",
+            //                                          "WindowsUser",
+            //                                          "LogonUser",
+            //                                          "MachineName",
+            //                                          "BusinessObjectTypeName",
+            //                                          "CRUDAction",
+            //                                          "DirtyXML"));
         }
 
         private static ClassDef CreateClassDef()
@@ -196,7 +196,7 @@ namespace Habanero.Test
             propDef = new PropDef("PK3Prop", typeof (string), PropReadWriteRule.WriteNew, "PK3_Prop", null);
             lPropDefCol.Add(propDef);
 
-            propDef = lPropDefCol.Add("ContactPersonID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
+            lPropDefCol.Add("ContactPersonID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
 
             return lPropDefCol;
         }

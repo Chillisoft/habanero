@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 using log4net;
 
@@ -13,9 +12,11 @@ namespace Habanero.BO
     /// </summary>
     public abstract class TransactionCommitter   
     {
-        private readonly List<TransactionalBusinessObject> _originalTransactions = new List<TransactionalBusinessObject>();
+        private readonly List<ITransactional> _originalTransactions = new List<ITransactional>();
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitter");
-        protected List<TransactionalBusinessObject> _executedTransactions = new List<TransactionalBusinessObject>();
+
+        protected List<ITransactional> _executedTransactions = new List<ITransactional>();
+
         protected bool _CommittSuccess = false;
 
         ///<summary>
@@ -23,13 +24,21 @@ namespace Habanero.BO
         ///</summary>
         public TransactionCommitter()
         {
-            _executedTransactions = new List<TransactionalBusinessObject>();
+            _executedTransactions = new List<ITransactional>();
+        }
+        /// <summary>
+        /// A List of all the transactions that where actually committed to the data source. This will include any updates required
+        /// as a result of concurrency control, transaction logging, or deleting or dereferrencing children.
+        /// </summary>
+        internal List<ITransactional> ExecutedTransactions
+        {
+            get { return _executedTransactions; }
         }
 
         ///<summary>
-        /// Returns a list of transactions that will be committed.
+        /// Returns a list of transactions that will be committed. (i.e. the list that the user origionally added.
         ///</summary>
-        internal List<TransactionalBusinessObject> OriginalTransactions
+        internal List<ITransactional> OriginalTransactions
         {
             get { return _originalTransactions; }
         }
@@ -45,10 +54,10 @@ namespace Habanero.BO
 
         /// 
         ///<summary>
-        /// This method adds an TransactionalBusinessObject to the list of transactions.
+        /// This method adds an ITransactional to the list of transactions.
         ///</summary>
         ///<param name="transaction"></param>
-        internal void AddTransaction(TransactionalBusinessObject transaction)
+        protected internal void AddTransaction(ITransactional transaction)
         {
             _originalTransactions.Add(transaction);
         }
@@ -77,9 +86,13 @@ namespace Habanero.BO
 
         private  void UpdateObjectBeforePersisting()
         {
-            foreach (TransactionalBusinessObject transaction in _originalTransactions.ToArray())
+            foreach (ITransactional transaction in _originalTransactions.ToArray())
             {
-                transaction.UpdateObjectBeforePersisting(this);
+                if (transaction is TransactionalBusinessObject)
+                {
+                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                    trnBusObj.UpdateObjectBeforePersisting(this);
+                }
             }
         }
 
@@ -98,21 +111,30 @@ namespace Habanero.BO
         private void CheckForOptimisticConcurrencyErrors()
         {
             
-            foreach (TransactionalBusinessObject transaction in _originalTransactions)
+            foreach (ITransactional transaction in _originalTransactions)
             {
-                transaction.CheckForConcurrencyErrors();
+                if (transaction is TransactionalBusinessObject)
+                {
+                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                    trnBusObj.CheckForConcurrencyErrors();
+                }
             }
         }
 
         private void CheckForDuplicateObjects()
         {
             string allMessages = "";
-            foreach (TransactionalBusinessObject transaction in _originalTransactions)
+            foreach (ITransactional transaction in _originalTransactions)
             {
                 string errMsg;
-                if (transaction.HasDuplicateIdentifier(out errMsg))
+                if (transaction is TransactionalBusinessObject)
                 {
-                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+
+                    if (trnBusObj.HasDuplicateIdentifier(out errMsg))
+                    {
+                        allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                    }
                 }
             }
 
@@ -126,12 +148,17 @@ namespace Habanero.BO
         private void CheckObjectsAreValid()
         {
             string allMessages = "";
-            foreach (TransactionalBusinessObject transaction in _originalTransactions)
+            foreach (ITransactional transaction in _originalTransactions)
             {
                 string errMsg;
-                if (!transaction.IsValid(out errMsg))
+                if (transaction is TransactionalBusinessObject)
                 {
-                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+
+                    if (!trnBusObj.IsValid(out errMsg))
+                    {
+                        allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                    }
                 }
             }
 
@@ -144,14 +171,21 @@ namespace Habanero.BO
         private void ValidateObjectsCanBeDeleted()
         {
             string allMessages = "";
-            foreach (TransactionalBusinessObject transaction in _originalTransactions)
+            foreach (ITransactional transaction in _originalTransactions)
             {
-                if (!transaction.IsDeleted) continue;
-
-                string errMsg;
-                if (!DeleteHelper.CheckCanDelete(transaction.BusinessObject, out errMsg))
+                if (transaction is TransactionalBusinessObject)
                 {
-                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+
+                    if (!trnBusObj.IsDeleted) continue;
+
+                    string errMsg;
+
+                    if (!trnBusObj.CheckCanDelete(out errMsg))
+                    {
+                        allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
+                    }
+
                 }
             }
             if (!string.IsNullOrEmpty(allMessages))
@@ -172,7 +206,7 @@ namespace Habanero.BO
         {
             try
             {
-                foreach (TransactionalBusinessObject transaction in _originalTransactions)
+                foreach (ITransactional transaction in _originalTransactions)
                 {
                     ExecuteTransactionToDataSource(transaction);
                 }
@@ -198,7 +232,7 @@ namespace Habanero.BO
             CommitToDatasource();
             if (_CommittSuccess)
             {
-                UpdateTransactionsCommited();
+                UpdateTransactionsAsCommited();
             }else
             {
                 UpdateTransactionsAsRolledBack();
@@ -207,11 +241,11 @@ namespace Habanero.BO
 
         private void UpdateTransactionsAsRolledBack()
         {
-            foreach (TransactionalBusinessObject transaction in _originalTransactions)
+            foreach (ITransactional transaction in _originalTransactions)
             {
                 transaction.UpdateAsRolledBack();
             }
-            foreach (TransactionalBusinessObject transaction in _executedTransactions)
+            foreach (ITransactional transaction in _executedTransactions)
             {
                 transaction.UpdateAsRolledBack();
             }
@@ -226,9 +260,9 @@ namespace Habanero.BO
         /// <summary>
         /// Marks all the ITransactional objects as committed.
         /// </summary>
-        private void UpdateTransactionsCommited()
+        private void UpdateTransactionsAsCommited()
         {
-            foreach (TransactionalBusinessObject transaction in _executedTransactions)
+            foreach (ITransactional transaction in _executedTransactions)
             {
                 transaction.UpdateStateAsCommitted();
             }
@@ -245,7 +279,7 @@ namespace Habanero.BO
         ///// Tries to execute an individual transaction against the datasource.
         ///// 1'st phase of a 2 phase database commit.
         ///// </summary>
-        protected virtual void ExecuteTransactionToDataSource(TransactionalBusinessObject transaction)
+        protected virtual void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             _executedTransactions.Add(transaction);
         }

@@ -16,7 +16,7 @@ namespace Habanero.BO
     /// for multiple business objects.
     ///</summary>
     public class TransactionalBusinessObjectDB
-        : TransactionalBusinessObject
+        : TransactionalBusinessObject, ITransactionalDB
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionalBusinessObjectDB");
         ///<summary>
@@ -29,7 +29,7 @@ namespace Habanero.BO
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        protected internal virtual ISqlStatementCollection GetSql()
+        public virtual ISqlStatementCollection GetSql()
         {
             if (IsNewAndDeleted()) return null;
 
@@ -91,13 +91,19 @@ namespace Habanero.BO
 
                     string classDisplayName = this.BusinessObject.ClassDef.DisplayName;
 
-                    errMsg = GetDuplicateObjectErrMsg(boKey, classDisplayName);
+                    errMsg = this.GetDuplicateObjectErrMsg(boKey, classDisplayName);
                     return true;
                 }
             }
             return false;
         }
 
+        ///<summary>
+        /// returns true if there is already an object in the database with the same primary identifier (primary key)
+        ///  or with the same alternate identifier (alternate key)
+        ///</summary>
+        ///<param name="errMsg"></param>
+        ///<returns></returns>
         protected internal override bool HasDuplicateIdentifier(out string errMsg)
         {
             errMsg = "";

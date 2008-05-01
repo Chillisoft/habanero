@@ -31,21 +31,23 @@ namespace Habanero.BO
         /// Tries to execute an individual transaction against the datasource.
         /// 1'st phase of a 2 phase database commit.
         /// </summary>
-        protected override void ExecuteTransactionToDataSource(TransactionalBusinessObject transaction)
+        protected override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
-            TransactionalBusinessObjectDB transactionDB = (TransactionalBusinessObjectDB) transaction;
-            if (transaction.IsDeleted)
+            ITransactionalDB transactionDB = (ITransactionalDB)transaction;
+
+            if (transaction is TransactionalBusinessObjectDB)
             {
-                DeleteRelatedChildren(transaction);
-                DereferenceRelatedChildren(transaction);
+                TransactionalBusinessObjectDB transactionBusObjDB = (TransactionalBusinessObjectDB) transaction;
+                if (transactionBusObjDB.IsDeleted)
+                {
+                    DeleteRelatedChildren(transactionBusObjDB);
+                    DereferenceRelatedChildren(transactionBusObjDB);
+                }
             }
+
             ISqlStatementCollection sql = transactionDB.GetSql();
             if (sql == null) return;
             DatabaseConnection.CurrentConnection.ExecuteSql(sql, _dbTransaction);
-            //foreach (ISqlStatement statement in sql)
-            //{
-            //    ExecuteSql(statement);
-            //}
             base.ExecuteTransactionToDataSource(transaction);
         }
 

@@ -129,42 +129,6 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Checks that the specified flag value matches the value specified,
-        /// and throws an exception if it does not
-        /// </summary>
-        /// <param name="objFlag">The flag to check. See the States
-        /// enumeration for more detail.</param>
-        /// <param name="bValue">The value the flag should hold</param>
-        private void CheckBOFlagValue(States objFlag, bool bValue)
-        {
-            if (GetBOFlagValue(objFlag) != bValue)
-            {
-                CheckBOFlagValue(objFlag, bValue, "The " + this.GetType().Name +
-                                              " object is " + (bValue ? "not " : "") + objFlag.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Checks that the specified flag value matches the value specified,
-        /// and throws an exception if it does not, using the exception message
-        /// provided
-        /// </summary>
-        /// <param name="objFlag">The flag to check. See the States
-        /// enumeration for more detail.</param>
-        /// <param name="bValue">The value the flag should hold</param>
-        /// <param name="errorMessage">The error message to display if the flag
-        /// value is not as expected</param>
-        private void CheckBOFlagValue(States objFlag,
-                                        bool bValue,
-                                        string errorMessage)
-        {
-            if (GetBOFlagValue(objFlag) != bValue)
-            {
-                throw (new Exception(errorMessage));
-            }
-        }
-
-        /// <summary>
         /// Sets the flag value as specified
         /// </summary>
         /// <param name="flag">The flag value to set. See the States

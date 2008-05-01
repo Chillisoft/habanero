@@ -31,11 +31,12 @@ namespace Habanero.BO
     /// </summary>
     public interface ITransactionLog
     {
-        /// <summary>
-        /// Record a transaction log for the business object
-        /// </summary>
-        /// <param name="busObj">The business object the transaction log is 
-        /// being recorded for</param>
-        void RecordTransactionLog(BusinessObject busObj, string logonUserName);
+    //    /// <summary>
+    //    /// Record a transaction log for the business object
+    //    /// </summary>
+    //    /// <param name="busObj">The business object the transaction log is 
+    //    /// being recorded for</param>
+    //    /// <param name="logonUserName">The user who made the changes to the business object that is being logged</param>
+    //    void RecordTransactionLog(BusinessObject busObj, string logonUserName);
     }
 }

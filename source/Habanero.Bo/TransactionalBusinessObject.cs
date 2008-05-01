@@ -7,7 +7,7 @@ namespace Habanero.BO
     /// This class along with the TransactionCommiter implement transactional and persistence 
     /// strategies for the business object
     ///</summary>
-    public  class TransactionalBusinessObject
+    public  class TransactionalBusinessObject : ITransactional
     {
         private readonly BusinessObject _businessObject;
 
@@ -58,7 +58,7 @@ namespace Habanero.BO
         ///<summary>
         /// Updates the business object as committed
         ///</summary>
-        protected internal virtual void UpdateStateAsCommitted()
+        public virtual void UpdateStateAsCommitted()
         {
             _businessObject.UpdateStateAsPersisted();
         }
@@ -74,7 +74,12 @@ namespace Habanero.BO
             return _businessObject.IsValid(out invalidReason);
         }
 
-        protected static string GetDuplicateObjectErrMsg(BOKey boKey, string classDisplayName)
+        ///<summary>
+        ///</summary>
+        ///<param name="boKey"></param>
+        ///<param name="classDisplayName"></param>
+        ///<returns></returns>
+        protected internal string GetDuplicateObjectErrMsg(BOKey boKey, string classDisplayName)
         {
             string errMsg;
             string propNames = "";
@@ -109,15 +114,30 @@ namespace Habanero.BO
             this.BusinessObject.CheckConcurrencyBeforePersisting();
         }
 
+        ///<summary>
+        /// returns true if there is already an object in the database with the same primary identifier (primary key)
+        ///  or with the same alternate identifier (alternate key)
+        ///</summary>
+        ///<param name="errMsg"></param>
+        ///<returns></returns>
         protected internal virtual bool HasDuplicateIdentifier(out string errMsg)
         {
             errMsg = "";
             return false;
         }
 
-        protected internal virtual void UpdateAsRolledBack()
+        ///<summary>
+        /// updates the object as rolled back
+        ///</summary>
+        public virtual void UpdateAsRolledBack()
         {
             this.BusinessObject.UpdateAsTransactionRolledBack();
+        }
+
+        protected internal bool CheckCanDelete(out string errMsg)
+        {
+            return DeleteHelper.CheckCanDelete(this.BusinessObject, out errMsg);
+
         }
     }
 }

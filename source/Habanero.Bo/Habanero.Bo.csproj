@@ -121,7 +121,8 @@
     <Compile Include="DeleteHelper.cs" />
     <Compile Include="IBusinessObjectCollection.cs" />
     <Compile Include="IDataSetProvider.cs" />
-    <Compile Include="ITransactionalBusinessObject.cs" />
+    <Compile Include="ITransactional.cs" />
+    <Compile Include="ITransactionalDB.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

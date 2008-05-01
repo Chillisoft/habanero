@@ -305,7 +305,7 @@ namespace Habanero.Test.General
 
             myContact.Surname = "New Surname"; //edit first object
             myContact2.Surname = "New Surname2"; //edit second object
-            Assert.IsFalse(object.ReferenceEquals(myContact, myContact2));
+            Assert.IsFalse(ReferenceEquals(myContact, myContact2));
             myContact.Save(); //save first
             myContact2.Save(); //save second
         }
@@ -456,71 +456,7 @@ namespace Habanero.Test.General
             myContact_2.Save(); //Should raise an errors
         }
 
-        //TODO: Transaction log is not implemented under the new TransactionCommitter design (yet)
-        [Test, Ignore("Removed while implementing transaction committer to be reimplemented")]
-        public void TestDirtyXml()
-        {
-            TransactionLog.DeleteAllTransactionLogs();
 
-            ContactPerson myContact_1 = new ContactPerson();
-            //Edit first object and save
-            myContact_1.Surname = "My Surname 1";
-            //myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
-            myContact_1.Save(); //
-
-            myContact_1.Surname = "My Surname New";
-
-            Assert.AreEqual(
-                "<ContactPerson ID=" + myContact_1.ID +
-                "><Properties><Surname><PreviousValue>My Surname 1</PreviousValue><NewValue>My Surname New</NewValue></Surname><ContactPerson>",
-                myContact_1.DirtyXML);
-
-            myContact_1.Save();
-
-            myContact_1.Delete();
-            myContact_1.Save();
-
-            BusinessObjectCollection<BusinessObject> myCol = TransactionLog.LoadBusinessObjCol("", "TransactionSequenceNo");
-            Assert.AreEqual(myCol.Count, 3);
-
-            TransactionLog myTransactionLog;
-            int maxTransactionNo = 0;
-            //TODO: hack until loading collections works better.
-
-            //Get max transaction number
-            for (int i = 0; i <= 2; i++)
-            {
-                myTransactionLog = (TransactionLog) myCol[i];
-                if (maxTransactionNo < (int) myTransactionLog.GetPropertyValue("TransactionSequenceNo"))
-                {
-                    maxTransactionNo = (int) myTransactionLog.GetPropertyValue("TransactionSequenceNo");
-                }
-            }
-            //Get latest transaction
-            //TODO: this does not work at all the same transaction object is returned
-            // each time regardless of whether i get item 0, 1 or 2.
-            //this is possibly some bug with filling the collection.
-            for (int i = 0; i <= 2; i++)
-            {
-                myTransactionLog = (TransactionLog) myCol[i];
-                if ((int) myTransactionLog.GetPropertyValue("TransactionSequenceNo") == (maxTransactionNo - 2))
-                {
-                    Assert.AreEqual("Created", myTransactionLog.GetPropertyValue("CRUDAction"));
-                }
-                else if ((int) myTransactionLog.GetPropertyValue("TransactionSequenceNo") == (maxTransactionNo - 1))
-                {
-                    Assert.AreEqual("Updated", myTransactionLog.GetPropertyValue("CRUDAction"));
-                }
-                else if ((int) myTransactionLog.GetPropertyValue("TransactionSequenceNo") == (maxTransactionNo))
-                {
-                    Assert.AreEqual("Deleted", myTransactionLog.GetPropertyValue("CRUDAction"));
-                }
-                else
-                {
-                    Assert.AreEqual("", "1"); //force failure
-                }
-            }
-        }
 
         #region tests
 
@@ -573,18 +509,18 @@ namespace Habanero.Test.General
             return _classDef;
         }
 
-        protected override void ConstructFromClassDef(bool newObject)
-        {
-            base.ConstructFromClassDef(newObject);
-            SetTransactionLog(new TransactionLogTable("TransactionLog",
-                                                      "DateTimeUpdated",
-                                                      "WindowsUser",
-                                                      "LogonUser",
-                                                      "MachineName",
-                                                      "BusinessObjectTypeName",
-                                                      "CRUDAction",
-                                                      "DirtyXML"));
-        }
+        //protected override void ConstructFromClassDef(bool newObject)
+        //{
+        //    base.ConstructFromClassDef(newObject);
+        //    //SetTransactionLog(new TransactionLogTable("TransactionLog",
+        //    //                                          "DateTimeUpdated",
+        //    //                                          "WindowsUser",
+        //    //                                          "LogonUser",
+        //    //                                          "MachineName",
+        //    //                                          "BusinessObjectTypeName",
+        //    //                                          "CRUDAction",
+        //    //                                          "DirtyXML"));
+        //}
 
         private static ClassDef CreateClassDef()
         {
