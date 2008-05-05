@@ -15,6 +15,7 @@ namespace Habanero.Test.BO
         {
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
+            BOLoader.Instance.ClearLoadedBusinessObjects();
         }
 
         [TestFixtureSetUp]
