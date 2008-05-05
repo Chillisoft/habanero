@@ -411,7 +411,7 @@ namespace Habanero.WebGUI
             catch (IndexOutOfRangeException)
             {
                 //Hack: throws index outa range every now and then investigate
-                return;
+                return null;
             }
             if (!this.CurrentCell.Selected) return null;
             int rownum = this.CurrentCell.RowIndex;
