@@ -146,7 +146,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test,Ignore("This is causing some wierd intertest issue")]
+        [Test]
         public void TestAcceptance_LockNumberGenerator_ClearsAfter15Minutes()
         {
             //---------------Set up test pack-------------------
@@ -159,7 +159,7 @@ namespace Habanero.Test.BO
             numGen.SetSequenceNumber(0);
             //get the next number for invoice number
             int num = numGen.NextNumber();
-            Assert.AreEqual(1, num);
+            Assert.AreEqual(1, num,"The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.
             UpdateDatabaseLockAsExpired(15);
             BOLoader.Instance.ClearLoadedBusinessObjects();
@@ -173,7 +173,7 @@ namespace Habanero.Test.BO
             Assert.AreNotSame(numGen, numGen2);
             //should not get locking error
             //assert nextnumber = 1
-            Assert.AreEqual(1, num);
+            Assert.AreEqual(1, num, "The second generated number should be 1");
             //---------------Tear Down -------------------------          
         }
 
