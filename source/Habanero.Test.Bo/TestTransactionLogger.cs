@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -13,8 +14,7 @@ namespace Habanero.Test.BO
         public  void SetupTest()
         {
             //Runs every time that any testmethod is executed
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTransactionLogging.LoadDefaultClassDef();
+
         }
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -22,6 +22,8 @@ namespace Habanero.Test.BO
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
             base.SetupDBConnection();
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTransactionLogging.LoadDefaultClassDef();
         }
         [TearDown]
         public  void TearDownTest()
@@ -198,7 +200,6 @@ namespace Habanero.Test.BO
         {
             SetTransactionLog(new TransactionLogTable(this));
         }
-
 
         public static ClassDef LoadDefaultClassDef()
         {

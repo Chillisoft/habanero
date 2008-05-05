@@ -404,7 +404,15 @@ namespace Habanero.WebGUI
         /// <returns>Returns the business object</returns>
         protected virtual BusinessObject GetSelectedBusinessObject()
         {
-            if (this.CurrentCell == null) return null;
+            try
+            {
+                if (this.CurrentCell == null) return null;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                //Hack: throws index outa range every now and then investigate
+                return;
+            }
             if (!this.CurrentCell.Selected) return null;
             int rownum = this.CurrentCell.RowIndex;
             int i = 0;

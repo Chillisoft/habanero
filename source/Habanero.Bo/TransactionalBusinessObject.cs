@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 
 namespace Habanero.BO
 {
@@ -79,7 +80,7 @@ namespace Habanero.BO
         ///<param name="boKey"></param>
         ///<param name="classDisplayName"></param>
         ///<returns></returns>
-        protected internal string GetDuplicateObjectErrMsg(BOKey boKey, string classDisplayName)
+        protected internal static string GetDuplicateObjectErrMsg(BOKey boKey, string classDisplayName)
         {
             string errMsg;
             string propNames = "";

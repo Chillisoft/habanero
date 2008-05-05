@@ -36,9 +36,9 @@ namespace Habanero.Test.BO
     public class TestDatabaseLookupList : TestUsingDatabase
     {
         private readonly string Sql = "select MyBoID, TestProp from tbMyBo";
-        Guid g1 = Guid.NewGuid();
-        Guid g2 = Guid.NewGuid();
-        Guid g3 = Guid.NewGuid();
+        readonly Guid g1 = Guid.NewGuid();
+        readonly Guid g2 = Guid.NewGuid();
+        readonly Guid g3 = Guid.NewGuid();
         DataTable dt;
         Mock dbConnMock;
         IDatabaseConnection conn;

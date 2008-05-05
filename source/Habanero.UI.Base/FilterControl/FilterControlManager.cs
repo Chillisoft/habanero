@@ -7,7 +7,7 @@ namespace Habanero.UI.Base
     {
         private readonly IControlFactory _controlFactory;
         private readonly IFilterClauseFactory _clauseFactory;
-        private List<FilterUI> _filterControls = new List<FilterUI>();
+        private readonly List<FilterUI> _filterControls = new List<FilterUI>();
 
         public FilterControlManager(IControlFactory controlFactory)
         {

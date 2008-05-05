@@ -174,7 +174,7 @@ namespace Habanero.Test.Util
             base.SetupDBOracleConnection();
             BusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
-            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo).GetSql();
+            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo).GetPersistSql();
             ISqlStatement sqlStatement = sqlCol[0];
             IList parameters = sqlStatement.Parameters;
             IDbDataParameter byteStringParam = (IDbDataParameter)parameters[1];

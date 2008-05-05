@@ -45,7 +45,7 @@ namespace Habanero.BO
                 }
             }
 
-            ISqlStatementCollection sql = transactionDB.GetSql();
+            ISqlStatementCollection sql = transactionDB.GetPersistSql();
             if (sql == null) return;
             DatabaseConnection.CurrentConnection.ExecuteSql(sql, _dbTransaction);
             base.ExecuteTransactionToDataSource(transaction);

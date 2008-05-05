@@ -17,7 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-namespace Habanero.BO
+namespace Habanero.Base
 {
     /// <summary>
     /// An interface to model optimistic or pessimistic concurrency
@@ -84,7 +84,7 @@ namespace Habanero.BO
         /// appropriate properties before the object is persisted to the 
         /// datasource.
         /// </summary>
-        void UpdatePropertiesWithLatestConcurrencyInfo();
+        void UpdatePropertiesWithLatestConcurrencyInfoBeforePersisting();
 
         ///// <summary>
         ///// If your concurrency control strategy involves read locks, then 

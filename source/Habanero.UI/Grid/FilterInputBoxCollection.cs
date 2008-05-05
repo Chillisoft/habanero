@@ -108,19 +108,6 @@ namespace Habanero.UI.Grid
             _controls.Add(tb);
             return tb;
         }
-
-        /// <summary>
-        /// Handles the event where the value in a filter TextBox has changed
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private void FilterTextBoxValueChangedHandler(object sender, EventArgs e)
-        {
-            if (_isAutomaticUpdate)
-            {
-                FireFilterClauseChanged(sender);
-            }
-        }
         
         /// <summary>
         /// Handles the event where a key has been pressed in a filter control
@@ -192,8 +179,8 @@ namespace Habanero.UI.Grid
             ComboBox cb = ControlFactory.CreateComboBox();
             cb.Width = _filterWidth;
             _filterUIs.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options, strictMatch));
-            cb.SelectedIndexChanged += new EventHandler(FilterControlValueChangedHandler);
-            cb.TextChanged += new EventHandler(FilterControlValueChangedHandler);
+            cb.SelectedIndexChanged += FilterControlValueChangedHandler;
+            cb.TextChanged += FilterControlValueChangedHandler;
             FireFilterClauseChanged(cb);
             _controls.Add(cb);
             return cb;
@@ -216,7 +203,7 @@ namespace Habanero.UI.Grid
             CheckBox cb = ControlFactory.CreateCheckBox();
             cb.Width = _filterWidth;
             _filterUIs.Add(new FilterUICheckBox(_clauseFactory, columnName, cb, text, isChecked));
-            cb.CheckedChanged += new EventHandler(FilterControlValueChangedHandler);
+            cb.CheckedChanged += FilterControlValueChangedHandler;
             FireFilterClauseChanged(cb);
             _controls.Add(cb);
             return cb;
@@ -255,7 +242,7 @@ namespace Habanero.UI.Grid
             dte.Width = _filterWidth;
 
             _filterUIs.Add(new FilterUIDateString(_clauseFactory, columnName, dte, filterGreaterThan));
-            dte.ValueChanged += new EventHandler(FilterControlValueChangedHandler);
+            dte.ValueChanged += FilterControlValueChangedHandler;
             FireFilterClauseChanged(dte);
             _controls.Add(dte);
             return dte;
@@ -321,7 +308,7 @@ namespace Habanero.UI.Grid
             else
             {
                 _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator, ignoreTime));
-                dte.ValueChanged += new EventHandler(FilterControlValueChangedHandler);
+                dte.ValueChanged += FilterControlValueChangedHandler;
             }
             FireFilterClauseChanged(dte);
             _controls.Add(dte);
@@ -376,8 +363,8 @@ namespace Habanero.UI.Grid
         {
             cb.Width = _filterWidth;
             _filterUIs.Add(new FilterUIDateRangeString(_clauseFactory, columnName, cb, includeStartDate, includeEndDate));
-            cb.SelectedIndexChanged += new EventHandler(FilterControlValueChangedHandler);
-            cb.TextChanged += new EventHandler(FilterControlValueChangedHandler);
+            cb.SelectedIndexChanged += FilterControlValueChangedHandler;
+            cb.TextChanged += FilterControlValueChangedHandler;
             FireFilterClauseChanged(cb);
             _controls.Add(cb);
             return cb;
@@ -532,8 +519,8 @@ namespace Habanero.UI.Grid
 
             public override IFilterClause GetFilterClause()
             {
-                if (_dateTimePicker.Value != null)
-                {
+                //if (_dateTimePicker.Value != null)
+                //{
                     FilterClauseOperator op;
                     if (_filterGreaterThan)
                     {
@@ -545,13 +532,13 @@ namespace Habanero.UI.Grid
                     }
                     return
                         _clauseFactory.CreateStringFilterClause(_columnName, op,
-                                                                ((DateTime)_dateTimePicker.Value).ToString(
+                                                                _dateTimePicker.Value.ToString(
                                                                     "yyyy/MM/dd"));
-                }
-                else
-                {
-                    return _clauseFactory.CreateNullFilterClause();
-                }
+                //}
+                //else
+                //{
+                //    return _clauseFactory.CreateNullFilterClause();
+                //}
             }
         }
 
@@ -576,8 +563,8 @@ namespace Habanero.UI.Grid
 
             public override IFilterClause GetFilterClause()
             {
-                if (_dateTimePicker.Value != null)
-                {
+                //if (_dateTimePicker.Value != null)
+                //{
                     DateTime date = _dateTimePicker.Value;
                     if (_ignoreTime)
                     {
@@ -596,11 +583,11 @@ namespace Habanero.UI.Grid
                     {
                         return _clauseFactory.CreateDateFilterClause(_columnName, _filterClauseOperator, date);
                     }
-                }
-                else
-                {
-                    return _clauseFactory.CreateNullFilterClause();
-                }
+                //}
+                //else
+                //{
+                //    return _clauseFactory.CreateNullFilterClause();
+                //}
             }
         }
 
@@ -767,8 +754,8 @@ namespace Habanero.UI.Grid
 
             public override IFilterClause GetFilterClause()
             {
-                if (_checkBox.Checked != null)
-                {
+                //if (_checkBox.CheckState != null)
+                //{
                     if (_checkBox.Checked)
                     {
                         return
@@ -781,11 +768,11 @@ namespace Habanero.UI.Grid
                             _clauseFactory.CreateStringFilterClause(_columnName,
                                                                     FilterClauseOperator.OpEquals, "false");
                     }
-                }
-                else
-                {
-                    return _clauseFactory.CreateNullFilterClause();
-                }
+                //}
+                //else
+                //{
+                //    return _clauseFactory.CreateNullFilterClause();
+                //}
             }
         }
     }

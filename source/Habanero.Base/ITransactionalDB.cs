@@ -1,6 +1,6 @@
 using Habanero.Base;
 
-namespace Habanero.BO
+namespace Habanero.Base
 {
     ///<summary>
     /// Interface that is to be implemented for transactional object that are being updated
@@ -12,6 +12,6 @@ namespace Habanero.BO
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        ISqlStatementCollection GetSql();
+        ISqlStatementCollection GetPersistSql();
     }
 }

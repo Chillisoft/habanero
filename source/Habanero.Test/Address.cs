@@ -28,7 +28,7 @@ namespace Habanero.Test
     {
         #region Constructors
 
-        public Address() : base()
+        public Address()
         {
         }
 

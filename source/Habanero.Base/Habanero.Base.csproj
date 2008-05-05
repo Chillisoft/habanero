@@ -90,7 +90,11 @@
     <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
     <Compile Include="HabaneroApp.cs" />
     <Compile Include="IApplicationVersionUpgrader.cs" />
+    <Compile Include="IConcurrencyControl.cs" />
     <Compile Include="ISupportsAutoIncrementingField.cs" />
+    <Compile Include="ITransactional.cs" />
+    <Compile Include="ITransactionalDB.cs" />
+    <Compile Include="ITransactionLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

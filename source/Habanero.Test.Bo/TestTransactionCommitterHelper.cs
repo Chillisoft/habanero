@@ -19,7 +19,7 @@ namespace Habanero.Test.BO
         ///<summary>
         /// Execute
         ///</summary>
-        public override ISqlStatementCollection GetSql()
+        public override ISqlStatementCollection GetPersistSql()
         {
             throw new NotImplementedException();
         }
@@ -67,7 +67,7 @@ namespace Habanero.Test.BO
         ///<summary>
         /// Execute
         ///</summary>
-        public override ISqlStatementCollection GetSql()
+        public override ISqlStatementCollection GetPersistSql()
         {
             ISqlStatementCollection col = new SqlStatementCollection();
             col.Add(
@@ -116,7 +116,7 @@ namespace Habanero.Test.BO
         ///<summary>
         /// Execute
         ///</summary>
-        public override ISqlStatementCollection GetSql()
+        public override ISqlStatementCollection GetPersistSql()
         {
             return new SqlStatementCollection(
                 new SqlStatement(DatabaseConnection.CurrentConnection,
@@ -165,7 +165,7 @@ namespace Habanero.Test.BO
             _committed = false;
         }
 
-        public override ISqlStatementCollection GetSql()
+        public override ISqlStatementCollection GetPersistSql()
         {
             throw new NotImplementedException();
         }
@@ -273,7 +273,7 @@ namespace Habanero.Test.BO
         protected override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
             TransactionalBusinessObjectDB transactionDB = (TransactionalBusinessObjectDB)transaction;
-            transactionDB.GetSql();
+            transactionDB.GetPersistSql();
         }
     }
 

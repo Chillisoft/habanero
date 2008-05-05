@@ -25,7 +25,7 @@ namespace Habanero.Test
     public class Circle : Shape
     {
 
-        public static ClassDef GetClassDef()
+        public new static ClassDef GetClassDef()
         {
             if (!ClassDef.IsDefined(typeof (Circle)))
             {
@@ -49,7 +49,7 @@ namespace Habanero.Test
             PropDef propDef =
                 new PropDef("Radius", typeof (int), PropReadWriteRule.ReadWrite, "Radius", null);
             lPropDefCol.Add(propDef);
-            propDef = lPropDefCol.Add("CircleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
+            lPropDefCol.Add("CircleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["CircleID"]);

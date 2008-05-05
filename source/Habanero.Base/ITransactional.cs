@@ -1,4 +1,4 @@
-namespace Habanero.BO
+namespace Habanero.Base
 {
     ///<summary>
     ///</summary>

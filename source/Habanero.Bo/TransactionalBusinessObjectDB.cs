@@ -29,7 +29,7 @@ namespace Habanero.BO
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        public virtual ISqlStatementCollection GetSql()
+        public virtual ISqlStatementCollection GetPersistSql()
         {
             if (IsNewAndDeleted()) return null;
 
@@ -91,7 +91,7 @@ namespace Habanero.BO
 
                     string classDisplayName = this.BusinessObject.ClassDef.DisplayName;
 
-                    errMsg = this.GetDuplicateObjectErrMsg(boKey, classDisplayName);
+                    errMsg = GetDuplicateObjectErrMsg(boKey, classDisplayName);
                     return true;
                 }
             }

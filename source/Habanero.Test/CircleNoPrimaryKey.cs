@@ -24,7 +24,7 @@ namespace Habanero.Test
     public class CircleNoPrimaryKey : Shape
     {
 
-        public static ClassDef GetClassDef()
+        public new static ClassDef GetClassDef()
         {
             if (!ClassDef.IsDefined(typeof(CircleNoPrimaryKey)))
             {

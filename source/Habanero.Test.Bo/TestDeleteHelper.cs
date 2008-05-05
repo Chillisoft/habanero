@@ -145,30 +145,29 @@ namespace Habanero.Test.BO
 			IBusinessObjectCollection children4;
 			IBusinessObjectCollection children5;
 			IBusinessObjectCollection children6;
-			IBusinessObjectCollection children7;
-			TestBO1 testBO1;
+		    TestBO1 testBO1;
 			testBO1 = new TestBO1();
 			testBO1.MyBoID = "1";
 			children2 = AddRelatedObjects<TestBO2>(testBO1, "MyBO2", 3);
 			children3 = AddRelatedObjects<TestBO3>((TestBO)children2[0], "MyBO3", 2);
 			children4 = AddRelatedObjects<TestBO4>((TestBO)children3[0], "MyBO4", 1);
-			children5 = AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyPreventBO5", 1);
-			children3 = AddRelatedObjects<TestBO3>((TestBO)children2[0], "MyPreventBO3", 1);
-			children3 = AddRelatedObjects<TestBO3>((TestBO)children2[1], "MyBO3", 2);
-			children3 = AddRelatedObjects<TestBO3>((TestBO)children2[1], "MyPreventBO3", 4);
-			children3 = AddRelatedObjects<TestBO3>((TestBO)children2[2], "MyPreventBO3", 2);
+			AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyPreventBO5", 1);
+			AddRelatedObjects<TestBO3>((TestBO)children2[0], "MyPreventBO3", 1);
+			AddRelatedObjects<TestBO3>((TestBO)children2[1], "MyBO3", 2);
+			AddRelatedObjects<TestBO3>((TestBO)children2[1], "MyPreventBO3", 4);
+			AddRelatedObjects<TestBO3>((TestBO)children2[2], "MyPreventBO3", 2);
 			children3 = AddRelatedObjects<TestBO3>((TestBO)children2[2], "MyBO3", 3);
 			children4 = AddRelatedObjects<TestBO4>((TestBO)children3[0], "MyBO4", 2);
-			children5 = AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyPreventBO5", 1);
+			AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyPreventBO5", 1);
 			children4 = AddRelatedObjects<TestBO4>((TestBO)children3[1], "MyBO4", 2);
 			children5 = AddRelatedObjects<TestBO5>((TestBO)children4[1], "MyBO5", 2);
 			children6 = AddRelatedObjects<TestBO6>((TestBO)children5[1], "MyBO6", 2);
-			children7 = AddRelatedObjects<TestBO7>((TestBO)children6[1], "MyBO7", 2);
-			children7 = AddRelatedObjects<TestBO7>((TestBO)children6[1], "MyPreventBO7", 1);
-			children5 = AddRelatedObjects<TestBO5>((TestBO)children4[1], "MyPreventBO5", 3);
+			AddRelatedObjects<TestBO7>((TestBO)children6[1], "MyBO7", 2);
+			AddRelatedObjects<TestBO7>((TestBO)children6[1], "MyPreventBO7", 1);
+			AddRelatedObjects<TestBO5>((TestBO)children4[1], "MyPreventBO5", 3);
 			children4 = AddRelatedObjects<TestBO4>((TestBO)children3[2], "MyBO4", 4);
-			children5 = AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyBO5", 2);
-			children5 = AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyPreventBO5", 4);
+			AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyBO5", 2);
+			AddRelatedObjects<TestBO5>((TestBO)children4[0], "MyPreventBO5", 4);
 
 			return testBO1;
 		}
@@ -269,7 +268,7 @@ namespace Habanero.Test.BO
 
 	public abstract class TestBO : BusinessObject
 	{
-		private MockRepository _mock;
+		private readonly MockRepository _mock;
 
 		public TestBO()
 		{

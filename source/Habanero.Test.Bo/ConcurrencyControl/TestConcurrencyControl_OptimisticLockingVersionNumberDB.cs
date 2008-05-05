@@ -1,6 +1,7 @@
 using System;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.ConcurrencyControl;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
 
@@ -74,9 +75,9 @@ namespace Habanero.Test.BO
                 duplicateContactPerson.FirstName = Guid.NewGuid().ToString();
                 Assert.Fail();
             }    
-            //---------------Test Result -----------------------
-            //Raise Exception that the object has been edited since 
-            // the user last edited.
+                //---------------Test Result -----------------------
+                //Raise Exception that the object has been edited since 
+                // the user last edited.
             catch(BusObjBeginEditConcurrencyControlException ex)
             {
                 Assert.IsTrue(ex.Message.Contains("You cannot Edit 'ContactPersonOptimisticLockingVersionNumberDB', as another user has edited this record"));
@@ -110,9 +111,9 @@ namespace Habanero.Test.BO
                 duplicateContactPerson.Save();
                 Assert.Fail();
             }
-            //---------------Test Result -----------------------
-            //Raise Exception that the object has been edited since 
-            // the user last edited.
+                //---------------Test Result -----------------------
+                //Raise Exception that the object has been edited since 
+                // the user last edited.
             catch (BusObjOptimisticConcurrencyControlException ex)
             {
                 Assert.IsTrue(ex.Message.Contains("You cannot save the changes to 'ContactPersonOptimisticLockingVersionNumberDB', as another user has edited this record"));
@@ -124,7 +125,7 @@ namespace Habanero.Test.BO
         {
             //----------SETUP TEST PACK--------------------------
             ContactPersonOptimisticLockingVersionNumberDB contactPersonDeleteConcurrency 
-                    = CreateSavedCntactPersonOptimisticLockingVersionNumberDB();
+                = CreateSavedCntactPersonOptimisticLockingVersionNumberDB();
             //Clear object manager
             ContactPersonOptimisticLockingVersionNumberDB.ClearLoadedBusinessObjectBaseCol();
             //Load second object from DB            
@@ -139,7 +140,7 @@ namespace Habanero.Test.BO
                 contactPerson2.Save();
                 Assert.Fail();
             }
-            //--------Check Result --------------------------------
+                //--------Check Result --------------------------------
             catch (BusObjDeleteConcurrencyControlException ex)
             {
                 Assert.IsTrue(ex.Message.Contains("You cannot save the changes to 'ContactPersonOptimisticLockingVersionNumberDB', as another user has deleted the record"));
@@ -167,7 +168,7 @@ namespace Habanero.Test.BO
                 trnCommitter.CommitTransaction();
                 Assert.Fail();
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (NotImplementedException)
             {
                 Assert.AreEqual(versionNumber, contactPerson.VersionNumber);
@@ -185,17 +186,25 @@ namespace Habanero.Test.BO
         }
     }
 
-    internal class ContactPersonOptimisticLockingVersionNumberDB : BusinessObject
+    public class ContactPersonOptimisticLockingVersionNumberDB : BusinessObject
     {
         public ContactPersonOptimisticLockingVersionNumberDB()
         {
+            //BOProp propDateLocked = _boPropCol["DateTimeLocked"];
+            //BOProp propUserLocked = _boPropCol["UserLocked"];
+            //BOProp propMachineLocked = _boPropCol["MachineLocked"];
+            //BOProp propOperatingSystemUserLocked = _boPropCol["OperatingSystemUserLocked"];
+            //BOProp propLocked = _boPropCol["Locked"];
+            //SetConcurrencyControl(new PessimisticLockingDB(this,propDateLocked,
+            //                                                           propUserLocked, propMachineLocked,
+            //                                                           propOperatingSystemUserLocked,propLocked));
             BOProp propDateLastUpdated = _boPropCol["DateLastUpdated"];
             BOProp propUserLastUpdated = _boPropCol["UserLastUpdated"];
             BOProp propMachineLastUpdated = _boPropCol["MachineLastUpdated"];
             BOProp propVersionNumber = _boPropCol["VersionNumber"];
-            SetConcurrencyControl(new OptimisticLockingVersionNumberDB(this,propDateLastUpdated,
-                                                         propUserLastUpdated, propMachineLastUpdated,
-                                                         propVersionNumber));
+            SetConcurrencyControl(new OptimisticLockingVersionNumberDB(this, propDateLastUpdated,
+                                                                       propUserLastUpdated, propMachineLastUpdated,
+                                                                       propVersionNumber));
         }
         public static ClassDef LoadDefaultClassDef()
         {
@@ -236,11 +245,6 @@ namespace Habanero.Test.BO
             set { SetPropertyValue("FirstName", value); }
         }
 
-        public DateTime? DateOfBirth
-        {
-            get { return (DateTime?)GetPropertyValue("DateOfBirth"); }
-            set { SetPropertyValue("DateOfBirth", value); }
-        }
         public int VersionNumber
         {
             get { return (int)GetPropertyValue("VersionNumber"); }

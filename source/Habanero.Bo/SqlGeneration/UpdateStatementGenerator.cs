@@ -29,8 +29,8 @@ namespace Habanero.BO.SqlGeneration
     /// </summary>
     public class UpdateStatementGenerator
     {
-        private BusinessObject _bo;
-        private IDatabaseConnection _connection;
+        private readonly BusinessObject _bo;
+        private readonly IDatabaseConnection _connection;
         private SqlStatementCollection _statementCollection;
         private SqlStatement _updateSql;
 
@@ -128,7 +128,7 @@ namespace Habanero.BO.SqlGeneration
         /// Builds a collection of properties to include in the update,
         /// depending on the inheritance type
         /// </summary>
-        private BOPropCol GetPropsToInclude(ClassDef currentClassDef)
+        private static BOPropCol GetPropsToInclude(ClassDef currentClassDef)
         {
             BOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 

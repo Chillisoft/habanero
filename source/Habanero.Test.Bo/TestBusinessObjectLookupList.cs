@@ -198,15 +198,15 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestSortInvalidProperty()
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "", "invalidprop");
+            new BusinessObjectLookupList("Habanero.Test.BO",
+                                         "ContactPersonTestBO", "", "invalidprop");
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestSortInvalidDirection()
         {
-            BusinessObjectLookupList source = new BusinessObjectLookupList("Habanero.Test.BO",
-                "ContactPersonTestBO", "", "surname invalidorder");
+            new BusinessObjectLookupList("Habanero.Test.BO",
+                                         "ContactPersonTestBO", "", "surname invalidorder");
         }
 
         //  This test is excluded because the sort attribute is checked in the middle of

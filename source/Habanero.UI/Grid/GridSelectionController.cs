@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Text;
 using Habanero.BO;
 using Habanero.Util;
 
@@ -20,9 +18,9 @@ namespace Habanero.UI.Grid
     {
 
         private readonly GridBase _grid;
-        private DelayedMethodCall _itemSelectedMethodCaller;
+        private readonly DelayedMethodCall _itemSelectedMethodCaller;
         private VoidMethodWithSender _delayedItemSelectedMethod;
-        private List<SetBusinessObjectDelegate> _itemSelectedDelegates;
+        private readonly List<SetBusinessObjectDelegate> _itemSelectedDelegates;
         //private int _oldRowNumber = -1;
         private BusinessObject _currentBusinessObject;
 		
@@ -34,9 +32,9 @@ namespace Habanero.UI.Grid
         {
             _itemSelectedMethodCaller = new DelayedMethodCall(500, this);
             _grid = grid;
-            _grid.CurrentCellChanged += new EventHandler(CurrentCellChangedHandler);
-            _grid.CollectionChanged += new EventHandler(CollectionChangedHandler);
-            _grid.FilterUpdated += new EventHandler(GridFilterUpdatedHandler);
+            _grid.CurrentCellChanged += CurrentCellChangedHandler;
+            _grid.CollectionChanged += CollectionChangedHandler;
+            _grid.FilterUpdated += GridFilterUpdatedHandler;
             _itemSelectedDelegates = new List<SetBusinessObjectDelegate>();
         }
         

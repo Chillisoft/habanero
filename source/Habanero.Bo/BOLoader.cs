@@ -209,18 +209,7 @@ namespace Habanero.BO
             }
             else
             {
-                //if (tempBusObj.State.IsDirty)
-                //{
-                //    log.Debug(
-                //        "An attempt was made to load an object already loaded that was in edit mode.  Refresh from database ignored." +
-                //        Environment.NewLine +
-                //        "BO Type: " + tempBusObjType.Name + Environment.NewLine + " Stack Trace: " +
-                //        Environment.StackTrace);
-                //}
-                //else
-                //{
-                    LoadProperties(tempBusObj, dr);
-                //}
+                LoadProperties(tempBusObj, dr);
             }
             tempBusObj.AfterLoad();
             return tempBusObj;

@@ -21,8 +21,9 @@ using System;
 using System.Data;
 using System.Security;
 using System.Security.Principal;
+using Habanero.Base;
 
-namespace Habanero.BO
+namespace Habanero.BO.ConcurrencyControl
 {
     /// <summary>
     /// Provides functionality to check if another user or process has 
@@ -33,7 +34,7 @@ namespace Habanero.BO
     /// To use this class effectively, the update properties method 
     /// must be called before the database is updated (i.e. in  
     /// <see cref="BusinessObject.Save"/> ) 
-    /// <see cref= "OptimisticLockingVersionNumberDB.UpdatePropertiesWithLatestConcurrencyInfo"/>)
+    /// <see cref= "UpdatePropertiesWithLatestConcurrencyInfoBeforePersisting"/>)
     /// This class implements the followign concurrency control philosophy.
     /// Every time a non dirty object is retrieved from the database the 
     /// </summary>
@@ -100,7 +101,7 @@ namespace Habanero.BO
         /// Throws an exception if the object has been edited by another
         /// process/user, as determined by a version number.
         /// The object is persisted by calling 
-        /// <see cref= "OptimisticLockingVersionNumberDB.UpdatePropertiesWithLatestConcurrencyInfo"/>.
+        /// <see cref= "UpdatePropertiesWithLatestConcurrencyInfoBeforePersisting"/>.
         /// </summary>
         /// <exception cref="BusObjDeleteConcurrencyControlException">Thrown if 
         /// the object has been deleted by another process/user</exception>
@@ -179,32 +180,13 @@ namespace Habanero.BO
             CheckConcurrencyControl(VerificationStage.BeforeBeginEdit);
         }
 
-        ///// <summary>
-        ///// Checks concurrency when retrieving an object from the object
-        ///// manager, in order to ensure that up-to-date information is
-        ///// displayed to the user.  If there have been changes to the object
-        ///// in the database, then the object manager simply reloads the
-        ///// updated copy.
-        ///// </summary>
-        //public void CheckConcurrencyOnGettingObjectFromObjectManager()
-        //{
-        //    try
-        //    {
-        //        CheckConcurrencyBeforePersisting();
-        //    }
-        //    catch (BusObjectConcurrencyControlException)
-        //    {
-        //        BOLoader.Instance.Refresh(_busObj);
-        //    }
-        //}
-
         /// <summary>
         /// Updates the version number, machine name, username and time edited.
         /// The version number is used to determine whether there is a 
         /// concurrency conflict, and the other properties are used for 
         /// reporting of concurrency conflicts if they occur.
         /// </summary>
-        public void UpdatePropertiesWithLatestConcurrencyInfo()
+        public void UpdatePropertiesWithLatestConcurrencyInfoBeforePersisting()
         {
             _dateLastUpdated.Value = DateTime.Now;
 
@@ -255,13 +237,6 @@ namespace Habanero.BO
             {
             }
         }
-
-        ///// <summary>
-        ///// Does nothing since optimistic locking is used and no locks are applied
-        ///// </summary>
-        //public void ReleaseReadLocks()
-        //{
-        //}
 
         /// <summary>
         /// Does nothing since optimistic locking is used and no locks are applied

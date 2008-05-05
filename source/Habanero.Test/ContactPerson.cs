@@ -21,6 +21,7 @@
 using System;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.ConcurrencyControl;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 

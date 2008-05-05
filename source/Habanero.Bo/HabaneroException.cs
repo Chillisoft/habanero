@@ -718,7 +718,7 @@ namespace Habanero.BO
     {
         private readonly string mUserNameEdited;
         private readonly string mMachineNameEdited;
-        private readonly DateTime mDateUpdated;
+        private readonly DateTime? mDateUpdated;
         private readonly string mObjectID;
         private readonly string mClassName;
 
@@ -820,7 +820,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the date that the record was edited
         /// </summary>
-        public DateTime DateTimeEdited
+        public DateTime? DateTimeEdited
         {
             get { return mDateUpdated; }
         }

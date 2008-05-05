@@ -142,7 +142,7 @@ namespace Habanero.BO
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        public ISqlStatementCollection GetSql()
+        public ISqlStatementCollection GetPersistSql()
         {
             SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             string sql = "INSERT INTO " + this._transactionLogTable + " (" +

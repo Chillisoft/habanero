@@ -121,10 +121,9 @@
     <Compile Include="DeleteHelper.cs" />
     <Compile Include="IBusinessObjectCollection.cs" />
     <Compile Include="IDataSetProvider.cs" />
-    <Compile Include="ITransactional.cs" />
-    <Compile Include="ITransactionalDB.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
+    <Compile Include="ConcurrencyControl\PessimisticLockingDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -245,16 +244,10 @@
     <Compile Include="DatabaseLookupList.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IConcurrencyControl.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="InvalidRelationshipAccessException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IRelationshipCol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ITransactionLog.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Loaders\DtdLoader.cs" />
@@ -293,7 +286,7 @@
     <Compile Include="ObjectFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OptimisticLockingVersionNumberDB.cs">
+    <Compile Include="ConcurrencyControl\OptimisticLockingVersionNumberDB.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PropRuleBase.cs">

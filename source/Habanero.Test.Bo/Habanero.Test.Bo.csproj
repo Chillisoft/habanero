@@ -152,9 +152,14 @@
     <Compile Include="Comparer\TestComparers.cs" />
     <Compile Include="ContactPersonTestBO.cs" />
     <Compile Include="CriteriaManager\TestSqlCriteriaCreator.cs" />
+    <Compile Include="INumberGenerator.cs" />
+    <Compile Include="NumberGenerator.cs" />
+    <Compile Include="NumberGeneratorPessimisticLocking.cs" />
     <Compile Include="OrganisationTestBO.cs" />
     <Compile Include="SqlGeneration\StatementGeneratorTestHelper.cs" />
-    <Compile Include="TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
+    <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
+    <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
+    <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestTransactionCommitter.cs" />
     <Compile Include="TestMultipleRelationship.cs" />
     <Compile Include="TestRelatedBusinessObjectCollection.cs" />

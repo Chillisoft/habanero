@@ -53,15 +53,6 @@ namespace Habanero.DB
         private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = 30;
 
-        ///// <summary>
-        ///// A class constructor that creates a new connection to a
-        ///// SqlServer database.
-        ///// </summary>
-        ///// TODO ERIC - hmm? only SqlServer?
-        //static DatabaseConnection()
-        //{
-        //    new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection");
-        //}
 
         /// <summary>
         /// Constructor that initialises a new set of null connections
@@ -390,7 +381,7 @@ namespace Habanero.DB
         /// output to the log.</exception>        
         public IDataReader LoadDataReader(string selectSql) {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
-            IDbConnection con = null;
+            IDbConnection con;
             try
             {
                 con = GetOpenConnectionForReading();
@@ -425,7 +416,7 @@ namespace Habanero.DB
                 throw new DatabaseConnectionException("The sql statement object " +
                     "that has been passed to LoadDataReader() is null.");
             }
-            IDbConnection con = null;
+            IDbConnection con;
             try
             {
                 con = GetOpenConnectionForReading();
@@ -440,14 +431,14 @@ namespace Habanero.DB
             {
                 log.Error("Error reading from database : " + Environment.NewLine +
                           ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + selectSql.ToString());
+                log.Error("Sql: " + selectSql);
                 //				if (con != null && con.State != ConnectionState.Closed) 
                 //				{
                 //					con.Close();
                 //				}
                 Console.Out.WriteLine("Error reading from database : " + Environment.NewLine +
                                       ExceptionUtilities.GetExceptionString(ex, 10, true));
-                Console.Out.WriteLine("Sql: " + selectSql.ToString());
+                Console.Out.WriteLine("Sql: " + selectSql);
                 throw new DatabaseReadException(
                     "There was an error reading the database. Please contact your system administrator.",
                     "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
@@ -459,7 +450,7 @@ namespace Habanero.DB
         /// parameters, using the provided connection
         /// </summary>
         /// <param name="sql">A valid sql statement (typically "insert",
-        /// "update" or "delete"). Note that this assumes that the
+        /// "update" or "delete"). Note_ that this assumes that the
         /// sqlCommand is not a stored procedure.</param>
         /// <returns>Returns the number of rows affected</returns>
         /// <future>
@@ -493,7 +484,7 @@ namespace Habanero.DB
         /// and executed as separate transactions.
         /// </summary>
         /// <param name="sql">A valid sql statement (typically "insert",
-        /// "update" or "delete") as a string. Note that this assumes that the
+        /// "update" or "delete") as a string. Note_ that this assumes that the
         /// sqlCommand is not a stored procedure.</param>
         /// <param name="transaction">A valid transaction object in which the 
         /// sql must be executed, or null</param>
@@ -541,13 +532,13 @@ namespace Habanero.DB
             {
                 log.Error("Error writing to database : " + Environment.NewLine +
                           ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + sql.ToString());
+                log.Error("Sql: " + sql);
                 Console.WriteLine("Error writing to database : " + Environment.NewLine +
                                   ExceptionUtilities.GetExceptionString(ex, 10, true));
                 Console.WriteLine("Connect string: " + this.ErrorSafeConnectString());
                 throw new DatabaseWriteException(
                     "There was an error writing to the database. Please contact your system administrator.",
-                    "The command executeNonQuery could not be completed.", ex, sql.ToString(), ErrorSafeConnectString());
+                    "The command executeNonQuery could not be completed.", ex, sql, ErrorSafeConnectString());
             }
             finally
             {
@@ -572,7 +563,7 @@ namespace Habanero.DB
         /// and executed as separate transactions.
         /// </summary>
         /// <param name="sql">A valid sql statement object (typically "insert",
-        /// "update" or "delete"). Note that this assumes that the
+        /// "update" or "delete"). Note_ that this assumes that the
         /// sqlCommand is not a stored procedure.</param>
         /// <param name="transaction">A valid transaction object in which the 
         /// sql must be executed, or null</param>
@@ -726,7 +717,7 @@ namespace Habanero.DB
         public DataTable LoadDataTable(ISqlStatement selectSql, string strSearchCriteria, string strOrderByCriteria)
         {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
-            IDbConnection con = null;
+            IDbConnection con;
             try
             {
                 con = GetOpenConnectionForReading();
@@ -757,7 +748,7 @@ namespace Habanero.DB
             catch (Exception ex)
             {
                 log.Error("Error in LoadDataTable:" + Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 8, true));
-                log.Error("Sql string: " + selectSql.ToString());
+                log.Error("Sql string: " + selectSql);
                 //				if (con != null && con.State != ConnectionState.Closed) {
                 //					con.Close();
                 //				}
@@ -770,7 +761,7 @@ namespace Habanero.DB
         /// <summary>
         /// Gets the value of the last auto-incrementing number.  This called after doing an insert statement so that
         /// the inserted auto-number can be retrieved.  The table name, current IDbTransaction and IDbCommand are passed
-        /// in so that they can be used if necessary.  Note, this must be overridden in subclasses to include support
+        /// in so that they can be used if necessary.  Note_, this must be overridden in subclasses to include support
         /// for this feature in different databases - otherwise a NotImplementedException will be thrown.
         /// </summary>
         /// <param name="tableName">The name of the table inserted into</param>

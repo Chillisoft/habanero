@@ -63,8 +63,8 @@ namespace Habanero.UI.Grid
         /// </summary>
         protected GridBase()
         {
-            _setCollection = new SetCollectionDelegate(SetCollectionInSTAThread);
-            _setSortColumn = new SetSortColumnDelegate(SetSortColumnInSTAThread);
+            _setCollection = SetCollectionInSTAThread;
+            _setSortColumn = SetSortColumnInSTAThread;
             _compulsoryColumnsBold = false;
 			
             DataSourceChanged += Grid_DataSourceChanged;

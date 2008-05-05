@@ -44,7 +44,7 @@ namespace Habanero.Test.BO
         [
             Test,
                 ExpectedException(typeof (RelationshipNotFoundException),
-                    "The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO"
+                    ExpectedMessage ="The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO"
                     )]
         public void TestMissingRelationshipErrorMessageSingle()
         {
@@ -55,7 +55,7 @@ namespace Habanero.Test.BO
         [
             Test,
                 ExpectedException(typeof (RelationshipNotFoundException),
-                    "The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO"
+                    ExpectedMessage = "The relationship WrongRelationshipName was not found on a BusinessObject of type Habanero.Test.MyBO"
                     )]
         public void TestMissingRelationshipErrorMessageMultiple()
         {
@@ -66,7 +66,7 @@ namespace Habanero.Test.BO
         [
             Test,
                 ExpectedException(typeof (InvalidRelationshipAccessException),
-                    "The 'single' relationship MyRelationship was accessed as a 'multiple' relationship (using GetRelatedCollection())."
+                    ExpectedMessage = "The 'single' relationship MyRelationship was accessed as a 'multiple' relationship (using GetRelatedCollection())."
                     )]
         public void TestInvalidRelationshipAccessSingle()
         {
@@ -77,7 +77,7 @@ namespace Habanero.Test.BO
         [
             Test,
                 ExpectedException(typeof (InvalidRelationshipAccessException),
-                    "The 'multiple' relationship MyMultipleRelationship was accessed as a 'single' relationship (using GetRelatedObject())."
+                    ExpectedMessage="The 'multiple' relationship MyMultipleRelationship was accessed as a 'single' relationship (using GetRelatedObject())."
                     )]
         public void TestInvalidRelationshipAccessMultiple()
         {
@@ -98,7 +98,7 @@ namespace Habanero.Test.BO
         [
             Test,
                 ExpectedException(typeof (InvalidRelationshipAccessException),
-                    "SetRelatedObject() was passed a relationship (MyMultipleRelationship) that is of type 'multiple' when it expects a 'single' relationship"
+                    ExpectedMessage="SetRelatedObject() was passed a relationship (MyMultipleRelationship) that is of type 'multiple' when it expects a 'single' relationship"
                     )]
         public void TestSetRelatedBusinessObjectWithWrongRelationshipType()
         {

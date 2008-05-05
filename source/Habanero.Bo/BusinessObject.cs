@@ -63,7 +63,7 @@ namespace Habanero.BO
         protected BOKeyCol _keysCol;
         protected BOPrimaryKey _primaryKey;
         protected IRelationshipCol _relationshipCol;
-        private IConcurrencyControl _concurrencyControl;
+        protected IConcurrencyControl _concurrencyControl;
         private ITransactional _transactionLog;
         protected IDatabaseConnection _connection;
         //private bool _hasAutoIncrementingField;
@@ -359,6 +359,14 @@ namespace Habanero.BO
             {
                 if (_primaryKey == null)
                 {
+                    if (this.ClassDef == null)
+                    {
+                        throw new NullReferenceException(String.Format(
+                            "An error occurred while retrieving the class definitions for " +
+                            "'{0}'. Check that the class exists in that " +
+                            "namespace and assembly and that there are corresponding " +
+                            "class definitions for this class.", GetType()));
+                    }
                     PrimaryKeyDef primaryKeyDef = this.ClassDef.GetPrimaryKeyDef();
                     if (primaryKeyDef != null)
                     {
@@ -553,7 +561,7 @@ namespace Habanero.BO
         {
             if (State.IsEditing)
             {
-                throw new EditingException(ClassName, WhereClause(null), this);
+                throw new EditingException(ClassName, ID.ToString(), this);
             }
         }
 
@@ -1005,12 +1013,9 @@ namespace Habanero.BO
         ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
         protected internal virtual void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
         {
-            //SetTransactionLog(CreateNewTransactionalLogObject());
             if (_transactionLog != null)
             {
-                //_transactionLog.UpdateObjectBeforePersisting(transactionCommitter);
                 transactionCommitter.AddTransaction(_transactionLog);
-
             }
         }
 
@@ -1123,7 +1128,7 @@ namespace Habanero.BO
             {
                 _concurrencyControl.CheckConcurrencyBeforePersisting();
             }
-            this.UpdatedConcurrencyControlProperties();
+            this.UpdatedConcurrencyControlPropertiesBeforePersisting();
         }
 
         /// <summary>
@@ -1140,11 +1145,11 @@ namespace Habanero.BO
         /// <summary>
         /// Updates the concurrency control properties
         /// </summary>
-        protected virtual void UpdatedConcurrencyControlProperties()
+        protected virtual void UpdatedConcurrencyControlPropertiesBeforePersisting()
         {
             if (!(_concurrencyControl == null))
             {
-                _concurrencyControl.UpdatePropertiesWithLatestConcurrencyInfo();
+                _concurrencyControl.UpdatePropertiesWithLatestConcurrencyInfoBeforePersisting();
             }
         }
 
