@@ -46,7 +46,12 @@
     <Compile Include="IChilliControl.cs" />
     <Compile Include="IControlFactory.cs" />
     <Compile Include="FilterControl\IFilterControl.cs" />
+    <Compile Include="IListBox.cs" />
+    <Compile Include="IListBoxObjectCollection.cs" />
+    <Compile Include="IMultiSelector.cs" />
     <Compile Include="ITextBox.cs" />
+    <Compile Include="MultiSelectorManager.cs" />
+    <Compile Include="MultiSelectorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,5 +13,15 @@ namespace Habanero.UI.Win
         {
             return new TextBoxWin(this);
         }
+
+        public IListBox CreateListBox()
+        {
+            return new ListBoxWin(this);
+        }
+
+        public IMultiSelector<T> CreateMultiSelector<T>()
+        {
+            return new MultiSelectorWin<T>(this);
+        }
     }
 }

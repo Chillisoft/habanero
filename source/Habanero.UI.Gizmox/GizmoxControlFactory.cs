@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Gizmox
@@ -12,6 +14,16 @@ namespace Habanero.UI.Gizmox
         public ITextBox CreateTextBox()
         {
             return new TextBoxGiz(this);
+        }
+
+        public IListBox CreateListBox()
+        {
+            return new ListBoxGiz(this);
+        }
+
+        public IMultiSelector<T> CreateMultiSelector<T>()
+        {
+            return new MultiSelectorGiz<T>(this);
         }
     }
 }

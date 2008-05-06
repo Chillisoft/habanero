@@ -36,10 +36,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Gizmox.WebGUI.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Habanero\trunk\bin\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -48,6 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GizmoxControlFactory.cs" />
+    <Compile Include="ListBoxGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListBoxGiz.Designer.cs">
+      <DependentUpon>ListBoxGiz.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MultiSelectorGiz.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextBoxGiz.cs">
       <SubType>Component</SubType>

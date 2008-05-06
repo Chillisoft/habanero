@@ -30,7 +30,6 @@ namespace Habanero.UI.Win
             public IFilterClause GetFilterClause()
             {
                 return _filterControlManager.GetFilterClause();
-
             }
 
             ICollection IFilterControl.Controls
