@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Habanero.UI.Base
 {
+    public enum MultiSelectorButton
+    {
+        Select
+    }
     public interface IMultiSelector<T> 
     {
         List<T> Options { set; }
@@ -16,5 +20,6 @@ namespace Habanero.UI.Base
         List<T> Selections { set; }
 
         IListBox SelectionsListBox { get; }
+        IButton GetButton(MultiSelectorButton button);
     }
 }

@@ -19,11 +19,10 @@
 
 
 using System.Collections.Generic;
-using System.Reflection;
 using System.Windows.Forms;
+using Habanero.UI.Base;
 using Habanero.UI.Gizmox;
 using Habanero.UI.Win;
-using Habanero.UI.Base;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -53,7 +52,6 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-
         #region Test Options List
 
         [Test]
@@ -81,7 +79,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count);
- 
+
             //---------------Tear Down -------------------------          
         }
 
@@ -99,7 +97,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
             List<TestT> twoOptions = CreateListWithTwoOptions();
-            
+
             //---------------Execute Test ----------------------
             _selector.Options = twoOptions;
 
@@ -132,10 +130,10 @@ namespace Habanero.Test.UI.Base
             _selector.Options = CreateListWithTwoOptions();
 
             //---------------Execute Test ----------------------
-               _selector.Model.RemoveOption(_selector.Model.OptionsView[0]);
-               
+            _selector.Model.RemoveOption(_selector.Model.OptionsView[0]);
+
             //---------------Test Result -----------------------
-               Assert.AreEqual(1, _selector.AvailableOptionsListBox.Items.Count);
+            Assert.AreEqual(1, _selector.AvailableOptionsListBox.Items.Count);
             //---------------Tear Down -------------------------          
         }
 
@@ -169,9 +167,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-
         #endregion Test Options List
-
 
         #region Test selections List
 
@@ -219,7 +215,7 @@ namespace Habanero.Test.UI.Base
             _selector.Selections = twoOptions;
 
             //---------------Execute Test ----------------------
-           _selector.Selections = new List<TestT>();
+            _selector.Selections = new List<TestT>();
             //---------------Test Result -----------------------
             Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count);
             Assert.AreEqual(0, _selector.SelectionsListBox.Items.Count);
@@ -227,71 +223,112 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        #endregion
+
+        #region Test Selecting and Deselecting
+
+        [Test]
+        public void TestSelectingItemUpdatesListboxes()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+            _selector.Options = CreateListWithTwoOptions();
+
+            //---------------Execute Test ----------------------
+            _selector.Model.Select(_selector.Model.OptionsView[0]);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, _selector.AvailableOptionsListBox.Items.Count);
+            Assert.AreEqual(1, _selector.SelectionsListBox.Items.Count);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestDeselectingItemUpdatesListboxes()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+            _selector.Options = CreateListWithTwoOptions();
+            _selector.Model.Select(_selector.Model.OptionsView[0]);
+
+            //---------------Execute Test ----------------------
+            _selector.Model.Deselect(_selector.Model.OptionsView[0]);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count);
+            Assert.AreEqual(0, _selector.SelectionsListBox.Items.Count);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestSelectAllUpdatesListboxes()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+            _selector.Options = CreateListWithTwoOptions();
+
+            //---------------Execute Test ----------------------
+            _selector.Model.SelectAll();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, _selector.AvailableOptionsListBox.Items.Count);
+            Assert.AreEqual(2, _selector.SelectionsListBox.Items.Count);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestDeselectAllUpdatesListboxes()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+            _selector.Options = CreateListWithTwoOptions();
+            _selector.Model.SelectAll();
+
+            //---------------Execute Test ----------------------
+            _selector.Model.DeselectAll();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, _selector.AvailableOptionsListBox.Items.Count);
+            Assert.AreEqual(0, _selector.SelectionsListBox.Items.Count);
+            //---------------Tear Down -------------------------          
+        }
 
         #endregion
 
-        //#region Test Selecting and Deselecting
+        #region Test Buttons
 
-        ///// <summary>
-        ///// Tests that selecting an item in the model updates the selector.
-        ///// </summary>
-        //[Test]
-        //public void TestSelect() {
-        //  //  _selector.ModelInstance.Select(_selector.ModelInstance.OptionsView[0]);
-        //    Assert.AreEqual(1, _availableOptionsListBox.Items.Count);
-        //    Assert.AreEqual(1, _selectionsListBox.Items.Count);
-        //  //  Assert.AreSame(_selector.ModelInstance.OptionsView[0], _selectionsListBox.SelectedItem);
-        //}
-		
-        ///// <summary>
-        ///// Tests that deselecting in the model updates the selector.
-        ///// </summary>
-        //[Test]
-        //public void TestDeselect() {
-        //   // _selector.ModelInstance.Select(_selector.ModelInstance.OptionsView[0]);
-        //  //  _selector.ModelInstance.Deselect(_selector.ModelInstance.OptionsView[0]);
-        //    Assert.AreEqual(2, _availableOptionsListBox.Items.Count);
-        //    Assert.AreEqual(0, _selectionsListBox.Items.Count);
-        //   // Assert.AreSame(_selector.ModelInstance.OptionsView[0], _availableOptionsListBox.SelectedItem);
-        //}
+        [Test]
+        public void TestSelectButton()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+            _selector.Options = CreateListWithTwoOptions();
+            _selector.AvailableOptionsListBox.SelectedIndex = 0;
 
-        ///// <summary>
-        ///// Tests that selectall in the model updates the selector.
-        ///// </summary>
-        //[Test]
-        //public void TestSelectAll() {
-        //  //  _selector.ModelInstance.SelectAll();
-        //    Assert.AreEqual(0, _availableOptionsListBox.Items.Count);
-        //    Assert.AreEqual(2, _selectionsListBox.Items.Count);
-        //}
+            //---------------Execute Test ----------------------
+            _selector.GetButton(MultiSelectorButton.Select).PerformClick();
 
-        ///// <summary>
-        ///// Tests that deselectall in the model updates the selector.
-        ///// </summary>
-        //[Test]
-        //public void TestDeselectAll()
-        //{
-        //   // _selector.ModelInstance.SelectAll();
-        //   // _selector.ModelInstance.DeselectAll();
-        //    Assert.AreEqual(2, _availableOptionsListBox.Items.Count);
-        //    Assert.AreEqual(0, _selectionsListBox.Items.Count);
-        //}
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, _selector.AvailableOptionsListBox.Items.Count);
+            Assert.AreEqual(1, _selector.SelectionsListBox.Items.Count);
+            //---------------Tear Down -------------------------          
+        }
 
-        //#endregion Test Selecting and Deselecting
+        [Test]
+        public void TestSelectButtonStateAtSet()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
 
-        //#region Test Buttons
+            //---------------Execute Test ----------------------
+            _selector.Options = CreateListWithTwoOptions();
+            
+            //---------------Test Result -----------------------
+            Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Select).Enabled);
+            //---------------Tear Down -------------------------          
+        }
 
-        ///// <summary>
-        ///// Tests that the Select button selects the current item
-        ///// </summary>
-        //[Test]
-        //public void TestSelectButton() {
-        //    _availableOptionsListBox.SelectedIndex = 0;
-        //    GetButton("SelectButton").PerformClick();
-        //    Assert.AreEqual(1, _availableOptionsListBox.Items.Count);
-        //   // Assert.AreSame(_selector.ModelInstance.OptionsView[0], _selectionsListBox.Items[0]);
-        //    Assert.AreEqual(1, _selectionsListBox.Items.Count);
-        //}
+        #endregion
 
         ///// <summary>
         ///// Tests that the Select button is enabled or disabled according to the list
@@ -301,7 +338,7 @@ namespace Habanero.Test.UI.Base
         //    Button selectButton = GetButton("SelectButton");
         //    TestButtonEnabling(selectButton, _availableOptionsListBox);
         //}
-		
+
         ///// <summary>
         ///// Test selecting multiple items at once
         ///// </summary>
@@ -315,7 +352,7 @@ namespace Habanero.Test.UI.Base
         //    Assert.AreEqual(2, _selectionsListBox.Items.Count);
 
         //}
-		
+
         ///// <summary>
         ///// Tests that the button is disabled when nothing is selected
         ///// </summary>
@@ -403,7 +440,7 @@ namespace Habanero.Test.UI.Base
         //    Assert.AreEqual(0, _selectionsListBox.Items.Count);
         //    Assert.IsFalse(deselectAllButton.Enabled);            
         //}
-		
+
         //private void TestButtonEnabling(Button selectButton, ListBox correspondingListBox)
         //{
         //    string buttonCaption = selectButton.Name;
@@ -417,16 +454,16 @@ namespace Habanero.Test.UI.Base
         //    Assert.IsFalse(selectButton.Enabled, buttonCaption + " should be disabled after the selected item is cleared.");
         //}
 
-        private Button GetButton(string name) {
-           // FieldInfo itsButtonInfo = typeof(MultiSelector<TestT>).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
-           // return (Button) itsButtonInfo.GetValue(_selector);
+        private Button GetButton(string name)
+        {
+            // FieldInfo itsButtonInfo = typeof(MultiSelector<TestT>).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
+            // return (Button) itsButtonInfo.GetValue(_selector);
             return new Button();
         }
 
 
-        private class TestT{}
-
+        private class TestT
+        {
+        }
     }
-
-    
 }

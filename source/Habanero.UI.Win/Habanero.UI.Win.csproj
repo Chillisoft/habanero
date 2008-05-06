@@ -35,6 +35,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ButtonWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FilterControlWin.cs">
       <SubType>Component</SubType>
     </Compile>

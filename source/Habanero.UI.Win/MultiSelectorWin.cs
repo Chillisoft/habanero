@@ -38,5 +38,10 @@ namespace Habanero.UI.Win
         {
             get { return _manager.SelectionsListBox; }
         }
+
+        public IButton GetButton(MultiSelectorButton button)
+        {
+            return _manager.GetButton(button);
+        }
     }
 }

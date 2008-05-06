@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -22,6 +23,11 @@ namespace Habanero.UI.Win
         public IMultiSelector<T> CreateMultiSelector<T>()
         {
             return new MultiSelectorWin<T>(this);
+        }
+
+        public IButton CreateButton()
+        {
+            return new ButtonWin();
         }
     }
 }

@@ -38,5 +38,10 @@ namespace Habanero.UI.Gizmox
         {
             get { return _manager.SelectionsListBox; }
         }
+
+        public IButton GetButton(MultiSelectorButton button)
+        {
+            return _manager.GetButton(button);
+        }
     }
 }

@@ -43,6 +43,7 @@
     <Compile Include="FilterControl\DataViewNullFilterClause.cs" />
     <Compile Include="FilterControl\DataViewStringFilterClause.cs" />
     <Compile Include="FilterControl\FilterControlManager.cs" />
+    <Compile Include="IButton.cs" />
     <Compile Include="IChilliControl.cs" />
     <Compile Include="IControlFactory.cs" />
     <Compile Include="FilterControl\IFilterControl.cs" />

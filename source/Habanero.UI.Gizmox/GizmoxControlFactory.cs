@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Gizmox
@@ -24,6 +25,11 @@ namespace Habanero.UI.Gizmox
         public IMultiSelector<T> CreateMultiSelector<T>()
         {
             return new MultiSelectorGiz<T>(this);
+        }
+
+        public IButton CreateButton()
+        {
+            return new ButtonGiz();
         }
     }
 }

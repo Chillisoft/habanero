@@ -10,5 +10,6 @@ namespace Habanero.UI.Base
         ITextBox CreateTextBox();
         IListBox CreateListBox();
         IMultiSelector<T> CreateMultiSelector<T>();
+        IButton CreateButton();
     }
 }
