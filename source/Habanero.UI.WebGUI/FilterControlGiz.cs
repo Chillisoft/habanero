@@ -7,7 +7,7 @@ using Habanero.UI.Base;
 
 #endregion
 
-namespace Habanero.UI.Gizmox
+namespace Habanero.UI.WebGUI
 {
     //TODO: move to flowlayoutmanager???  investigate this.
     public class FilterControlGiz : FlowLayoutPanel, IFilterControl

@@ -7,8 +7,8 @@
     <ProjectGuid>{04E4FF45-6C20-46EB-A9AD-2B04895F6218}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Habanero.UI.Gizmox</RootNamespace>
-    <AssemblyName>Habanero.UI.Gizmox</AssemblyName>
+    <RootNamespace>Habanero.UI.WebGUI</RootNamespace>
+    <AssemblyName>Habanero.UI.WebGUI</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,14 +38,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComboBoxGiz.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ComboBoxGiz.Designer.cs">
-      <DependentUpon>ComboBoxGiz.cs</DependentUpon>
     </Compile>
     <Compile Include="ButtonGiz.cs">
       <SubType>Component</SubType>
@@ -55,11 +53,11 @@
     <Compile Include="ListBoxGiz.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ListBoxGiz.Designer.cs">
-      <DependentUpon>ListBoxGiz.cs</DependentUpon>
-    </Compile>
     <Compile Include="MultiSelectorGiz.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MultiSelectorGiz.Designer.cs">
+      <DependentUpon>MultiSelectorGiz.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextBoxGiz.cs">
@@ -80,9 +78,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FilterControlGiz.resx">
+    <EmbeddedResource Include="MultiSelectorGiz.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>FilterControlGiz.cs</DependentUpon>
+      <DependentUpon>MultiSelectorGiz.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

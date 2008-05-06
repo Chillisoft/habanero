@@ -1,20 +1,20 @@
 using System;
 using System.Collections;
-using System.Collections.ObjectModel;
-using System.Windows.Forms;
+using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.Win
+namespace Habanero.UI.WebGUI
 {
-    public partial class ListBoxWin : ListBox,IListBox
+    public class ListBoxGiz : ListBox, IListBox
     {
-        private readonly ListBoxSelectedObjectCollectionWin _selectedObjectCollection;
-        private readonly ListBoxObjectCollectionWin _objectCollection;
+        private readonly ListBoxSelectedObjectCollectionGiz _selectedObjectCollection;
+        private readonly ListBoxObjectCollectionGiz _objectCollection;
 
-        public ListBoxWin()
+        public ListBoxGiz()
         {
-            _objectCollection = new ListBoxObjectCollectionWin(base.Items);
-            _selectedObjectCollection = new ListBoxSelectedObjectCollectionWin(base.SelectedItems);
+            _objectCollection = new ListBoxObjectCollectionGiz(base.Items);
+            _selectedObjectCollection = new ListBoxSelectedObjectCollectionGiz(base.SelectedItems);
+        
            
         }
 
@@ -33,18 +33,17 @@ namespace Habanero.UI.Win
                 return _selectedObjectCollection;
             }
         }
-
         public new ListBoxSelectionMode SelectionMode
         {
-            get { return (ListBoxSelectionMode)Enum.Parse(typeof(ListBoxSelectionMode), base.SelectionMode.ToString()); }
-            set { base.SelectionMode = (SelectionMode)Enum.Parse(typeof(SelectionMode), value.ToString()); }
+            get { return (ListBoxSelectionMode) Enum.Parse(typeof(ListBoxSelectionMode), base.SelectionMode.ToString()); }
+            set { base.SelectionMode = (SelectionMode) Enum.Parse(typeof (SelectionMode), value.ToString()); }
         }
 
-        internal class ListBoxObjectCollectionWin : IListBoxObjectCollection
+        private class ListBoxObjectCollectionGiz : IListBoxObjectCollection
         {
             private readonly ObjectCollection _items;
 
-            public ListBoxObjectCollectionWin(ObjectCollection items)
+            public ListBoxObjectCollectionGiz(ObjectCollection items)
             {
                 this._items = items;
             }
@@ -69,11 +68,10 @@ namespace Habanero.UI.Win
                 _items.Clear();
             }
         }
-
-        private class ListBoxSelectedObjectCollectionWin : IListBoxSelectedObjectCollection
+        private class ListBoxSelectedObjectCollectionGiz : IListBoxSelectedObjectCollection
         {
             private readonly SelectedObjectCollection _items;
-            public ListBoxSelectedObjectCollectionWin(SelectedObjectCollection items)
+            public ListBoxSelectedObjectCollectionGiz(SelectedObjectCollection items)
             {
                 this._items = items;
             }
@@ -98,4 +96,5 @@ namespace Habanero.UI.Win
         }
     }
 
+    
 }

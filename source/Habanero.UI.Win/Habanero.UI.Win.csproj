@@ -56,6 +56,9 @@
     <Compile Include="MultiSelectorWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="MultiSelectorWin.Designer.cs">
+      <DependentUpon>MultiSelectorWin.cs</DependentUpon>
+    </Compile>
     <Compile Include="TextBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>

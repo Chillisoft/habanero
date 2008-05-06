@@ -1,25 +1,18 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Habanero.UI.Base
 {
     public class MultiSelectorManager<T>
 
     {
-        private readonly IControlFactory _controlFactory;
-        private readonly IListBox _availableOptionsListBox;
+        private readonly IMultiSelector<T> _multiSelector;
         private readonly MultiSelectorModel<T> _model;
-        private readonly IListBox _selectionsListBox;
 
-        private readonly Dictionary<MultiSelectorButton, IButton> _buttons;
+        //TODO: add double click behaviour
 
-
-        public MultiSelectorManager(IControlFactory controlFactory)
+        public MultiSelectorManager(IMultiSelector<T> multiSelector)
         {
-            _controlFactory = controlFactory;
-            _availableOptionsListBox = _controlFactory.CreateListBox();
-            _selectionsListBox = _controlFactory.CreateListBox();
+            _multiSelector = multiSelector;
             _model = new MultiSelectorModel<T>();
             _model.OptionAdded +=
                 delegate(object sender, MultiSelectorModel<T>.ModelEventArgs<T> e) { AvailableOptionsListBox.Items.Add(e.Item); };
@@ -39,27 +32,32 @@ namespace Habanero.UI.Base
             _model.Deselected += delegate(object sender, MultiSelectorModel<T>.ModelEventArgs<T> e)
                                      {
                                          AvailableOptionsListBox.Items.Add(e.Item);
-                                         SelectionsListBox.Items.Remove(e.Item);      
+                                         SelectionsListBox.Items.Remove(e.Item);
                                      };
 
-            _buttons = new Dictionary<MultiSelectorButton, IButton>();
-            IButton selectButton = _controlFactory.CreateButton();
-            selectButton.Click += delegate(object sender, EventArgs e)
-            {
-                //List<T> items = new List<T>();
-                //foreach (T item in AvailableOptionsListBox.SelectedItems) items.Add(item);
-                _model.Select((T)AvailableOptionsListBox.SelectedItem);
-            };
-            _buttons.Add(MultiSelectorButton.Select, selectButton);
+            IButton selectButton = GetButton(MultiSelectorButton.Select);
+            selectButton.Click += delegate
+                                      {
+                                          List<T> items = new List<T>();
+                                          foreach (T item in AvailableOptionsListBox.SelectedItems) items.Add(item);
+                                          _model.Select(items);
+                                      };
 
-            AvailableOptionsListBox.SelectedIndexChanged += delegate
-            {
-                selectButton.Enabled = (AvailableOptionsListBox.SelectedIndex != -1);
-            };
+            IButton deselectButton = GetButton(MultiSelectorButton.Deselect);
+            deselectButton.Click += delegate
+                                        {
+                                            List<T> items = new List<T>();
+                                            foreach (T item in SelectionsListBox.SelectedItems) items.Add(item);
+                                            _model.Deselect(items);
+                                        };
 
+            IButton selectAllButton = GetButton(MultiSelectorButton.SelectAll);
+            selectAllButton.Click += delegate { _model.SelectAll(); };
 
-
+            IButton deselectAllButton = GetButton(MultiSelectorButton.DeselectAll);
+            deselectAllButton.Click += delegate { _model.DeselectAll(); };
         }
+
 
         private void UpdateListBoxes()
         {
@@ -74,13 +72,12 @@ namespace Habanero.UI.Base
 
         public List<T> Options
         {
-            set { _model.Options = value;
-                _buttons[MultiSelectorButton.Select].Enabled = false; }
+            set { _model.Options = value; }
         }
 
-        public IListBox AvailableOptionsListBox
+        private IListBox AvailableOptionsListBox
         {
-            get { return _availableOptionsListBox; }
+            get { return _multiSelector.AvailableOptionsListBox; }
         }
 
         public MultiSelectorModel<T> Model
@@ -93,14 +90,14 @@ namespace Habanero.UI.Base
             set { _model.Selections = value; }
         }
 
-        public IListBox SelectionsListBox
+        private IListBox SelectionsListBox
         {
-            get { return _selectionsListBox; }
+            get { return _multiSelector.SelectionsListBox; }
         }
 
-        public IButton GetButton(MultiSelectorButton button)
+        private IButton GetButton(MultiSelectorButton buttonType)
         {
-            return _buttons[button];
+            return _multiSelector.GetButton(buttonType);
         }
     }
 }

@@ -1,7 +1,7 @@
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.Gizmox
+namespace Habanero.UI.WebGUI
 {
     public class GizmoxControlFactory : IControlFactory
     {
@@ -25,7 +25,7 @@ namespace Habanero.UI.Gizmox
 
         public IMultiSelector<T> CreateMultiSelector<T>()
         {
-            return new MultiSelectorGiz<T>(this);
+            return new MultiSelectorGiz<T>();
         }
 
         public IButton CreateButton()

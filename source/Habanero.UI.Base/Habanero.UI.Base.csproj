@@ -51,6 +51,7 @@
     <Compile Include="FilterControl\IFilterControl.cs" />
     <Compile Include="IListBox.cs" />
     <Compile Include="IListBoxObjectCollection.cs" />
+    <Compile Include="IListBoxSelectedObjectCollection.cs" />
     <Compile Include="IMultiSelector.cs" />
     <Compile Include="ITextBox.cs" />
     <Compile Include="MultiSelectorManager.cs" />

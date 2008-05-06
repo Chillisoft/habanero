@@ -7,7 +7,10 @@ namespace Habanero.UI.Base
 {
     public enum MultiSelectorButton
     {
-        Select
+        Select,
+        Deselect,
+        SelectAll,
+        DeselectAll
     }
     public interface IMultiSelector<T> 
     {
@@ -16,10 +19,8 @@ namespace Habanero.UI.Base
         IListBox AvailableOptionsListBox { get; }
 
         MultiSelectorModel<T> Model { get; }
-
         List<T> Selections { set; }
-
         IListBox SelectionsListBox { get; }
-        IButton GetButton(MultiSelectorButton button);
+        IButton GetButton(MultiSelectorButton buttonType);
     }
 }

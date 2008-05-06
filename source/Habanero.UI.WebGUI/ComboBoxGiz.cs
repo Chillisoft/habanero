@@ -1,14 +1,10 @@
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.Gizmox
+namespace Habanero.UI.WebGUI
 {
-    public partial class ComboBoxGiz : ComboBox, IComboBox
+    public class ComboBoxGiz : ComboBox, IComboBox
     {
-        public ComboBoxGiz()
-        {
-            InitializeComponent();
-        }
         public new IComboBoxObjectCollection Items
         {
             get

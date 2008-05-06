@@ -1,38 +1,37 @@
+#region Using
+
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+
+using Gizmox.WebGUI.Common;
+using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.Win
+#endregion
+
+namespace Habanero.UI.WebGUI
 {
-    public partial class MultiSelectorWin<T> : UserControl, IMultiSelector<T>
+    public partial class MultiSelectorGiz<T> : UserControl, IMultiSelector<T>
     {
-       
+
         private readonly MultiSelectorManager<T> _manager;
 
-        public MultiSelectorWin()
+        public MultiSelectorGiz()
         {
             InitializeComponent();
             _manager = new MultiSelectorManager<T>(this);
-            AvailableOptionsListBox.SelectedIndexChanged += delegate
-            {
-                GetButton(MultiSelectorButton.Select).Enabled = (AvailableOptionsListBox.SelectedIndex != -1);
-            };
 
-            SelectionsListBox.SelectedIndexChanged += delegate
-            {
-                GetButton(MultiSelectorButton.Deselect).Enabled = (SelectionsListBox.SelectedIndex != -1);
-            };
         }
 
         public List<T> Options
         {
-            set
-            {
-                _manager.Options = value;
-                GetButton(MultiSelectorButton.Select).Enabled = false;
-            }
+            set { _manager.Options = value; }
         }
+
         public IListBox AvailableOptionsListBox
         {
             get { return _availableOptionsListbox; }
@@ -45,12 +44,9 @@ namespace Habanero.UI.Win
 
         public List<T> Selections
         {
-            set
-            {
-                _manager.Selections = value;
-                GetButton(MultiSelectorButton.Deselect).Enabled = false;
-            }
+            set { _manager.Selections = value; }
         }
+
         public IListBox SelectionsListBox
         {
             get { return _selectionsListbox; }

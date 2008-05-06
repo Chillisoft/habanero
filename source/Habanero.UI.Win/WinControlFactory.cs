@@ -27,7 +27,7 @@ namespace Habanero.UI.Win
 
         public IMultiSelector<T> CreateMultiSelector<T>()
         {
-            return new MultiSelectorWin<T>(this);
+            return new MultiSelectorWin<T>();
         }
 
         public IButton CreateButton()
