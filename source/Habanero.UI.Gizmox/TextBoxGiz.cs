@@ -5,12 +5,12 @@ namespace Habanero.UI.Gizmox
 {
     public class TextBoxGiz : TextBox, ITextBox
     {
-        private readonly IControlFactory _controlFactory;
+        //private readonly IControlFactory _controlFactory;
 
-        public TextBoxGiz(IControlFactory controlFactory)
-        {
-            this._controlFactory = controlFactory;
-        }
+        //public TextBoxGiz()
+        //{
+        //    //this._controlFactory = controlFactory;
+        //}
 
         //private readonly TextBoxManager _manager = new TextBoxManager();
 

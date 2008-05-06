@@ -36,5 +36,15 @@ namespace Habanero.UI.Win
             {
                 get { return this.Controls; }
             }
+
+        public IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch)
+        {
+            IComboBox comboBox = _filterControlManager.AddStringFilterComboBox(labelText, columnName, options, strictMatch);
+            Label lbl = new Label();
+            lbl.Text = labelText;
+            this.Controls.Add(lbl);
+            this.Controls.Add((Control)comboBox);
+            return comboBox;
+        }
     }
 }

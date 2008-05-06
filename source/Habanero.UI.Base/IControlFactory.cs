@@ -8,6 +8,7 @@ namespace Habanero.UI.Base
     {
         IFilterControl CreateFilterControl();
         ITextBox CreateTextBox();
+        IComboBox CreateComboBox();
         IListBox CreateListBox();
         IMultiSelector<T> CreateMultiSelector<T>();
         IButton CreateButton();

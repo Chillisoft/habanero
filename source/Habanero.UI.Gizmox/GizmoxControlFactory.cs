@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
@@ -14,12 +12,15 @@ namespace Habanero.UI.Gizmox
 
         public ITextBox CreateTextBox()
         {
-            return new TextBoxGiz(this);
+            return new TextBoxGiz();
         }
-
+        public IComboBox CreateComboBox()
+        {
+            return new ComboBoxGiz();
+        }
         public IListBox CreateListBox()
         {
-            return new ListBoxGiz(this);
+            return new ListBoxGiz();
         }
 
         public IMultiSelector<T> CreateMultiSelector<T>()

@@ -19,7 +19,7 @@
 
 
 using System.Collections.Generic;
-using System.Windows.Forms;
+using Habanero.UI.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Gizmox;
 using Habanero.UI.Win;
@@ -454,12 +454,11 @@ namespace Habanero.Test.UI.Base
         //    Assert.IsFalse(selectButton.Enabled, buttonCaption + " should be disabled after the selected item is cleared.");
         //}
 
-        private Button GetButton(string name)
-        {
-            // FieldInfo itsButtonInfo = typeof(MultiSelector<TestT>).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
-            // return (Button) itsButtonInfo.GetValue(_selector);
-            return new Button();
-        }
+        //private Button GetButton(string name) {
+        //   // FieldInfo itsButtonInfo = typeof(MultiSelector<TestT>).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
+        //   // return (Button) itsButtonInfo.GetValue(_selector);
+        //    return new Button();
+        //}
 
 
         private class TestT

@@ -10,14 +10,13 @@ using Habanero.UI.Base;
 namespace Habanero.UI.Gizmox
 {
     //TODO: move to flowlayoutmanager???  investigate this.
-    public partial class FilterControlGiz : FlowLayoutPanel, IFilterControl
+    public class FilterControlGiz : FlowLayoutPanel, IFilterControl
     {
         private readonly FilterControlManager _filterControlManager;
         
         public FilterControlGiz(IControlFactory controlFactory)
         {
             _filterControlManager = new FilterControlManager(controlFactory);
-
             this.Height = 40;
         }
 
@@ -30,18 +29,22 @@ namespace Habanero.UI.Gizmox
             return textBox;
         }
 
+        public IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch)
+        {
+            IComboBox comboBox =  _filterControlManager.AddStringFilterComboBox(labelText, columnName, options, strictMatch);
+            this.Controls.Add(new Label(labelText));
+            this.Controls.Add((Control)comboBox);
+            return comboBox;
+        }
+
         public IFilterClause GetFilterClause()
         {
             return _filterControlManager.GetFilterClause();
-
         }
 
         ICollection IFilterControl.Controls
         {
             get { return this.Controls; }
         }
-
-
-
     }
 }

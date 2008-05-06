@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 
@@ -45,6 +47,20 @@ namespace Habanero.UI.Base
             return textBox;
         }
 
+        public IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch)
+        {
+
+            IComboBox cb = _controlFactory.CreateComboBox();
+            ////cb.Width = _filterWidth;
+            _filterControls.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options, strictMatch));
+
+
+            ////cb.SelectedIndexChanged += FilterControlValueChangedHandler;
+            ////cb.TextChanged += FilterControlValueChangedHandler;
+            ////FireFilterClauseChanged(cb);
+            return cb;
+        }
+
 
         /// <summary>
         /// A super-class for user interface elements that provide filter clauses
@@ -61,6 +77,7 @@ namespace Habanero.UI.Base
             /// <param name="columnName">The column name</param>
             protected FilterUI(IFilterClauseFactory clauseFactory, string columnName)
             {
+                if (clauseFactory == null) throw new ArgumentNullException("clauseFactory");
                 _columnName = columnName;
                 _clauseFactory = clauseFactory;
             }
@@ -92,6 +109,47 @@ namespace Habanero.UI.Base
                     return
                         _clauseFactory.CreateStringFilterClause(_columnName, FilterClauseOperator.OpLike,
                                                                 _textBox.Text);
+                }
+                else
+                {
+                    return _clauseFactory.CreateNullFilterClause();
+                }
+            }
+        }
+        /// <summary>
+        /// Manages a ComboBox from which the user can select a string option
+        /// on which values are filtered
+        /// </summary>
+        private class FilterUIStringOptions : FilterUI
+        {
+            private readonly IComboBox _comboBox;
+            private readonly bool _strictMatch;
+
+            public FilterUIStringOptions(IFilterClauseFactory clauseFactory, string columnName, IComboBox comboBox,
+                                         ICollection options, bool strictMatch)
+                : base(clauseFactory, columnName)
+            {
+                if (comboBox == null) throw new ArgumentNullException("comboBox");
+                if (options == null) throw new ArgumentNullException("options");
+                _comboBox = comboBox;
+                _comboBox.Items.Add("");
+                foreach (string optionString in options)
+                {
+                    _comboBox.Items.Add(optionString);
+                }
+                _strictMatch = strictMatch;
+            }
+
+            public override IFilterClause GetFilterClause()
+            {
+                if (_comboBox.SelectedIndex != -1 && _comboBox.SelectedItem.ToString().Length > 0)
+                {
+                    FilterClauseOperator op;
+                    if (_strictMatch) op = FilterClauseOperator.OpEquals;
+                    else op = FilterClauseOperator.OpLike;
+                    return
+                        _clauseFactory.CreateStringFilterClause(_columnName, op,
+                                                                _comboBox.SelectedItem.ToString());
                 }
                 else
                 {

@@ -35,6 +35,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComboBoxWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComboBoxWin.Designer.cs">
+      <DependentUpon>ComboBoxWin.cs</DependentUpon>
+    </Compile>
     <Compile Include="ButtonWin.cs">
       <SubType>Component</SubType>
     </Compile>

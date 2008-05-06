@@ -12,12 +12,17 @@ namespace Habanero.UI.Win
 
         public ITextBox CreateTextBox()
         {
-            return new TextBoxWin(this);
+            return new TextBoxWin();
+        }
+
+        public IComboBox CreateComboBox()
+        {
+            return new ComboBoxWin();
         }
 
         public IListBox CreateListBox()
         {
-            return new ListBoxWin(this);
+            return new ListBoxWin();
         }
 
         public IMultiSelector<T> CreateMultiSelector<T>()

@@ -1,34 +1,28 @@
-using System.Collections.ObjectModel;
-using System.Windows.Forms;
+using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.Win
+namespace Habanero.UI.Gizmox
 {
-    public partial class ListBoxWin : ListBox,IListBox
+    public partial class ComboBoxGiz : ComboBox, IComboBox
     {
-        //private readonly IControlFactory _controlFactory;
-
-        //public ListBoxWin()
-        //{
-        //    //this._controlFactory = controlFactory;
-            
-        //}
-
-
-        public new IListBoxObjectCollection Items
+        public ComboBoxGiz()
+        {
+            InitializeComponent();
+        }
+        public new IComboBoxObjectCollection Items
         {
             get
             {
-                ListBoxObjectCollectionWin objectCollection = new ListBoxObjectCollectionWin(base.Items);
+                IComboBoxObjectCollection objectCollection = new ComboBoxObjectCollectionGiz(base.Items);
                 return objectCollection;
             }
         }
 
-        internal class ListBoxObjectCollectionWin : IListBoxObjectCollection
+        internal class ComboBoxObjectCollectionGiz : IComboBoxObjectCollection
         {
             private readonly ObjectCollection _items;
 
-            public ListBoxObjectCollectionWin(ObjectCollection items)
+            public ComboBoxObjectCollectionGiz(ObjectCollection items)
             {
                 this._items = items;
             }
@@ -54,5 +48,4 @@ namespace Habanero.UI.Win
             }
         }
     }
-
 }

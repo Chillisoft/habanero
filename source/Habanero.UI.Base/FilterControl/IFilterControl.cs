@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Habanero.Base;
 
 namespace Habanero.UI.Base
@@ -10,5 +9,6 @@ namespace Habanero.UI.Base
         IFilterClause GetFilterClause();
 
         ICollection Controls { get; }
+        IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch);
     }
 }

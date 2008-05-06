@@ -45,6 +45,8 @@
     <Compile Include="FilterControl\FilterControlManager.cs" />
     <Compile Include="IButton.cs" />
     <Compile Include="IChilliControl.cs" />
+    <Compile Include="IComboBox.cs" />
+    <Compile Include="IComboBoxObjectCollection.cs" />
     <Compile Include="IControlFactory.cs" />
     <Compile Include="FilterControl\IFilterControl.cs" />
     <Compile Include="IListBox.cs" />

@@ -6,12 +6,12 @@ namespace Habanero.UI.Gizmox
 {
     public partial class ListBoxGiz : ListBox, IListBox
     {
-        private readonly IControlFactory _controlFactory;
+        //private readonly IControlFactory _controlFactory;
 
-        public ListBoxGiz(IControlFactory controlFactory)
-        {
-            this._controlFactory = controlFactory;
-        }
+        //public ListBoxGiz()
+        //{
+        //    //this._controlFactory = controlFactory;
+        //}
 
 
         public new IListBoxObjectCollection Items

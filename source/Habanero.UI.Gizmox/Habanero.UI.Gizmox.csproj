@@ -38,11 +38,15 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComboBoxGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComboBoxGiz.Designer.cs">
+      <DependentUpon>ComboBoxGiz.cs</DependentUpon>
+    </Compile>
     <Compile Include="ButtonGiz.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -64,9 +68,6 @@
     <Compile Include="FilterControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FilterControlGiz.Designer.cs">
-      <DependentUpon>FilterControlGiz.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
@@ -76,10 +77,6 @@
     <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
       <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
       <Name>Habanero.UI.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Habanero.WebGUI\Habanero.WebGUI.csproj">
-      <Project>{F57E69D0-524A-4A49-B0C9-7754FF58DDF8}</Project>
-      <Name>Habanero.WebGUI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -55,8 +55,8 @@ namespace Habanero.UI.Grid
     /// </summary>
     public class FilterControl : UserControl
     {
-        private FilterInputBoxCollection _filterInputBoxCollection;
-        private FlowLayoutManager _layoutManager;
+        private readonly FilterInputBoxCollection _filterInputBoxCollection;
+        private readonly FlowLayoutManager _layoutManager;
         
         //public event EventHandler FilterClauseChanged;
 
@@ -75,7 +75,7 @@ namespace Habanero.UI.Grid
         {
             _layoutManager = new FlowLayoutManager(this);
             _filterInputBoxCollection = new FilterInputBoxCollection(clauseFactory);
-            _filterInputBoxCollection.FilterClauseChanged += new EventHandler(FilterControlValueChangedHandler);
+            _filterInputBoxCollection.FilterClauseChanged += FilterControlValueChangedHandler;
             this.Height = new TextBox().Height + 10;
         }
 

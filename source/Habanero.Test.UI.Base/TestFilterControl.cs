@@ -1,3 +1,4 @@
+using System.Collections;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Gizmox;
@@ -28,6 +29,9 @@ namespace Habanero.Test.UI.Base
             //runs every time any testmethod is complete
         }
 
+        #region TextBoxFilter
+
+        #region TestAddTextBox
 
         [Test]
         public void TestAddTextBoxGizmox()
@@ -55,6 +59,9 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        #endregion
+
+        #region TestAddStringFilterTextBox
 
         [Test]
         public void TestAddStringFilterTextBoxWinForms()
@@ -81,6 +88,9 @@ namespace Habanero.Test.UI.Base
 
             //---------------Tear Down -------------------------          
         }
+
+        #endregion
+
 
         [Test]
         public void TestGetTextBoxFilterClauseWinForms()
@@ -177,6 +187,242 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        #endregion
+
+        //------------------------COMBO BOX----------------------------------------------------------
+
+        #region ComboBoxFilter
+
+        [Test]
+        public void TestAddComboBoxGizmox()
+        {
+            TestAddComboBox(new GizmoxControlFactory());
+        }
+
+        [Test]
+        public void TestAddComboBoxWinForms()
+        {
+            TestAddComboBox(new WinControlFactory());
+        }
+
+        public void TestAddComboBox(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            //IFilterClause nullClause = new DataViewNullFilterClause();
+            IFilterControl filterControl = factory.CreateFilterControl();
+            //---------------Execute Test ----------------------
+            IComboBox cb = filterControl.AddStringFilterComboBox("t", "TestColumn", new ArrayList(), true);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(cb);
+
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestAddStringFilterComboBoxGiz()
+        {
+            TestAddStringFilterComboBox(new GizmoxControlFactory());
+        }
+        [Test]
+        public void TestAddStringFilterComboBoxWinForms()
+        {
+            TestAddStringFilterComboBox(new WinControlFactory());
+        }
+        public void TestAddStringFilterComboBox(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterClause nullClause = new DataViewNullFilterClause();
+            IFilterControl filterControl = factory.CreateFilterControl();
+            //---------------Execute Test ----------------------
+            filterControl.AddStringFilterComboBox("Test:", "TestColumn", new ArrayList(), true);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(nullClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestGetComboBoxAddSelectedItemsGiz()
+        {
+            TestGetComboBoxAddSelectedItems(new GizmoxControlFactory());
+        }
+        public void TestGetComboBoxAddSelectedItemsWin()
+        {
+            TestGetComboBoxAddSelectedItems(new WinControlFactory());
+        }
+        public void TestGetComboBoxAddSelectedItems(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = factory.CreateFilterControl();
+            IList options = new ArrayList();
+            options.Add("1");
+            options.Add("2");
+            //---------------Execute Test ----------------------
+            IComboBox comboBox = filterControl.AddStringFilterComboBox("Test:", "TestColumn", options, true);
+            //---------------Test Result -----------------------
+            int numOfItemsInCollection = 2;
+            int numItemsExpectedInComboBox = numOfItemsInCollection + 1;//one extra for the null selected item
+            Assert.AreEqual(numItemsExpectedInComboBox, comboBox.Items.Count);
+        }
+
+        [Test]
+        public void TestSelectItemWinForms()
+        {
+            TestSelectItem(new WinControlFactory());
+        }
+        [Test]
+        public void TestSelectItemGiz()
+        {
+            TestSelectItem(new GizmoxControlFactory());
+        }
+
+        public void TestSelectItem(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = factory.CreateFilterControl();
+            IList options = new ArrayList();
+            options.Add("1");
+            options.Add("2");
+            IComboBox comboBox = filterControl.AddStringFilterComboBox("Test:", "TestColumn", options, true);
+            //---------------Execute Test ----------------------
+            comboBox.SelectedIndex = 1;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("1", comboBox.SelectedItem.ToString());
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestGetComboBoxFilterClauseWinForms()
+        {
+            TestGetComboBoxFilterClause(new WinControlFactory());
+        }
+
+        [Test]
+        public void TestGetComboBoxFilterClauseGiz()
+        {
+            TestGetComboBoxFilterClause(new GizmoxControlFactory());
+        }
+
+        public void TestGetComboBoxFilterClause(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            IFilterControl filterControl = factory.CreateFilterControl();
+            IComboBox comboBox = GetFilterComboBox_2Items(filterControl);
+
+            //---------------Execute Test ----------------------
+            comboBox.SelectedIndex = 1;
+            string filterClauseString = filterControl.GetFilterClause().GetFilterClauseString();
+
+            //---------------Test Result -----------------------
+            IFilterClause clause =
+                filterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "1");
+            Assert.AreEqual(clause.GetFilterClauseString(), filterClauseString);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestGetComboBoxFilterClauseNoSelectionWinForms()
+        {
+            TestGetComboBoxFilterClauseNoSelection(new WinControlFactory());
+        }
+        [Test]
+        public void TestGetComboBoxFilterClauseNoSelectionGiz()
+        {
+            TestGetComboBoxFilterClauseNoSelection(new GizmoxControlFactory());
+        }
+
+        public void TestGetComboBoxFilterClauseNoSelection(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            IFilterControl filterControl = factory.CreateFilterControl();
+            IComboBox comboBox = GetFilterComboBox_2Items(filterControl);
+            //---------------Execute Test ----------------------
+            comboBox.SelectedIndex = -1;
+            string filterClauseString = filterControl.GetFilterClause().GetFilterClauseString();
+            //---------------Test Result -----------------------
+            IFilterClause clause = filterClauseFactory.CreateNullFilterClause();
+            Assert.AreEqual(clause.GetFilterClauseString(), filterClauseString);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestGetComboBoxFilterClause_SelectDeselectWinForms()
+        {
+            TestGetComboBoxFilterClause_SelectDeselect(new WinControlFactory());
+        }
+        [Test]
+        public void TestGetComboBoxFilterClause_SelectDeselectGiz()
+        {
+            TestGetComboBoxFilterClause_SelectDeselect(new GizmoxControlFactory());
+        }
+
+        public void TestGetComboBoxFilterClause_SelectDeselect(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            IFilterControl filterControl = factory.CreateFilterControl();
+            IComboBox comboBox = GetFilterComboBox_2Items(filterControl);
+            //---------------Execute Test ----------------------
+            comboBox.SelectedIndex = 1;
+            comboBox.SelectedIndex = -1;
+            string filterClauseString = filterControl.GetFilterClause().GetFilterClauseString();
+            //---------------Test Result -----------------------
+            IFilterClause nullClause = filterClauseFactory.CreateNullFilterClause();
+            Assert.AreEqual(nullClause.GetFilterClauseString(), filterClauseString);
+            //---------------Tear Down -------------------------          
+        }
+
+        #endregion
+
+        [Test]
+        public void TestMultipleFiltersWinForms()
+        {
+            MultipleFilters(new WinControlFactory());
+        }
+        [Test]
+        public void TestMultipleFiltersGiz()
+        {
+            MultipleFilters(new GizmoxControlFactory());
+        }
+
+        public void MultipleFilters(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            IFilterControl filterControl = factory.CreateFilterControl();
+            ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
+            tb.Text = "testvalue";
+            IFilterClause clause =
+                filterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
+
+            ITextBox tb2 = filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
+            tb2.Text = "testvalue2";
+            //---------------Execute Test ----------------------
+
+            string filterClause = filterControl.GetFilterClause().GetFilterClauseString();
+            //---------------Test Result -----------------------
+            IFilterClause clause2 =
+                filterClauseFactory.CreateStringFilterClause("TestColumn2", FilterClauseOperator.OpLike, "testvalue2");
+
+            IFilterClause compositeClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause, FilterClauseCompositeOperator.OpAnd, clause2);
+            
+            Assert.AreEqual(compositeClause.GetFilterClauseString(),
+                            filterClause);
+            //---------------Tear Down ------------------------- 
+        }
+
+        private static IComboBox GetFilterComboBox_2Items(IFilterControl filterControl)
+        {
+            IList options = new ArrayList();
+            options.Add("1");
+            options.Add("2");
+            return filterControl.AddStringFilterComboBox("Test:", "TestColumn", options, true);
+        }
 
 //
 //        [Test]
@@ -197,30 +443,6 @@ namespace Habanero.Test.UI.Base
 //            itsIsFilterClauseChanged = true;
 //        }
 //
-//        [Test]
-//        public void TestAddStringFilterComboBox()
-//        {
-//            IList options = new ArrayList();
-//            options.Add("1");
-//            options.Add("2");
-//            ComboBox cb = filterControl.AddStringFilterComboBox("t", "TestColumn", options, true);
-//            cb.SelectedIndex = 1;
-//            cb.SelectAll();
-//            IFilterClause clause =
-//                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "1");
-//            Assert.AreEqual(clause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
-//            cb.SelectedIndex = -1;
-//            Assert.AreEqual(nullClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
-//
-//            cb = filterControl.AddStringFilterComboBox("t", "TestColumn", options, false);
-//            cb.SelectedIndex = 1;
-//            cb.SelectAll();
-//            clause =
-//                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "1");
-//            Assert.AreEqual(clause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
-//            cb.SelectedIndex = -1;
-//            Assert.AreEqual(nullClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
-//        }
 //
 //        [Test]
 //        public void TestAddStringFilterComboBoxTextChanged()
@@ -343,4 +565,5 @@ namespace Habanero.Test.UI.Base
 
 //
     }
+
 }
