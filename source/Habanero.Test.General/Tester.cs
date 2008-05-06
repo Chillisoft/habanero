@@ -292,15 +292,14 @@ namespace Habanero.Test.General
             Assert.IsFalse(myContact.State.IsNew, "BO is still IsNew after being saved.");
         }
 
-        //TODO-Peter - check with Brett exactly what this should be doing - it's failing now
-        // but I can't see how it could pass.
         [Test]
         [ExpectedException(typeof(BusObjOptimisticConcurrencyControlException))]
         public void TestOptimisticConcurrencyControl()
         {
             ContactPerson myContact = mContactPersonUpdateConcurrency;
             //Ensure that we have two physical instances of the same logical contact person
-            //			ContactPerson.ClearBusinessObjectBaseCol();//Ensure that a fresh object is loaded from DB
+            
+           BOLoader.Instance.ClearLoadedBusinessObjects();//Ensure that a fresh object is loaded from DB
             ContactPerson myContact2 = ContactPerson.GetContactPerson(myContact.ID);
 
             myContact.Surname = "New Surname"; //edit first object
