@@ -39,7 +39,7 @@ namespace Habanero.Test
 
         #region Constructors
 
-        public ContactPerson() : base()
+        public ContactPerson()
         {
             SetPropertyValue("PK3Prop", this.ID.GetObjectId());
         }
@@ -195,7 +195,7 @@ namespace Habanero.Test
             propDef = new PropDef("PK3Prop", typeof (string), PropReadWriteRule.WriteNew, "PK3_Prop", null);
             lPropDefCol.Add(propDef);
 
-            propDef = lPropDefCol.Add("ContactPersonID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
+            lPropDefCol.Add("ContactPersonID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
 
             return lPropDefCol;
         }

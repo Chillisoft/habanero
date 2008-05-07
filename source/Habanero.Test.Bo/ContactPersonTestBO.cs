@@ -34,6 +34,7 @@ namespace Habanero.Test.BO
             Business
         }
 
+        private bool _WasAfterLoadCalled ;
         public ContactPersonTestBO() { }
 
         internal ContactPersonTestBO(BOPrimaryKey id) : base(id) { }
@@ -165,6 +166,12 @@ namespace Habanero.Test.BO
             get { return (RelatedBusinessObjectCollection<Address>)this.Relationships.GetRelatedCollection<Address>("Addresses"); }
         }
 
+        public bool WasAfterLoadCalled
+        {
+            get { return _WasAfterLoadCalled; }
+            set { _WasAfterLoadCalled = value; }
+        }
+
         #endregion //Properties
 
         public override string ToString()
@@ -180,7 +187,7 @@ namespace Habanero.Test.BO
         /// </remarks>
         /// <param name="id">The object primary Key</param>
         /// <returns>The loaded business object</returns>
-        /// <exception cref="TestRelatedBusinessObjectCollection.BO.BusObjDeleteConcurrencyControlException">
+        /// <exception cref="BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
         public static ContactPersonTestBO GetContactPerson(BOPrimaryKey id)
         {
@@ -217,6 +224,11 @@ namespace Habanero.Test.BO
                 }
             }
             ClassDef.ClassDefs.Clear();
+        }
+        protected internal override void AfterLoad()
+        {
+            WasAfterLoadCalled = true;
+            base.AfterLoad();
         }
     }
 }

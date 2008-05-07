@@ -69,13 +69,14 @@ namespace Habanero.BO
         /// higher up the chain return the bool
         internal virtual bool Refresh(BusinessObject obj, IExpression searchExpression)
         {
+            bool result;
             using (IDataReader dr = Instance.LoadDataReader(obj, obj.GetDatabaseConnection(), searchExpression))
             {
                 try
                 {
                     if (dr.Read())
                     {
-                        return LoadProperties(obj, dr);
+                        result = LoadProperties(obj, dr);
                     }
                     else
                     {
@@ -87,12 +88,17 @@ namespace Habanero.BO
                 }
                 finally
                 {
-                    if (dr != null & !(dr.IsClosed))
+                    if (dr != null && !(dr.IsClosed))
                     {
                         dr.Close();
                     }
                 }
             }
+            if (result)
+            {
+                obj.AfterLoad();
+            }
+            return result;
         }
 
         /// <summary>
@@ -123,6 +129,7 @@ namespace Habanero.BO
         /// Returns a new object loaded from the data reader or one from the 
         /// object manager that is refreshed with data from the data reader
         /// </summary>
+        /// <param name="obj"></param>
         /// <param name="dr">A data reader pointing at a valid record</param>
         /// <returns>A valid business object for the data in the 
         /// data reader</returns>
@@ -210,12 +217,14 @@ namespace Habanero.BO
                     LoadProperties(tempBusObj, dr);
                 }
             }
+            tempBusObj.AfterLoad();
             return tempBusObj;
         }
 
         /// <summary>
         /// Loads a business object that meets the specified search criteria
         /// </summary>
+        /// <param name="obj"></param>
         /// <param name="searchExpression">The search expression</param>
         /// <returns>Returns a business object, or null if none is found that
         /// meets the criteria</returns>
@@ -349,7 +358,9 @@ namespace Habanero.BO
             }
             else
             {
-                return col[0];
+                T bo = col[0];
+                bo.AfterLoad();
+                return bo;
             }
         }
 
