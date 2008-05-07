@@ -384,7 +384,7 @@ namespace Habanero.BO
                             joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
                                 fullTableName, relPropDef.RelatedClassPropName, databaseConnection);
                         }
-                        sqlStatement.AddJoin("INNER JOIN", joinTableAs, joinCriteria);
+                        sqlStatement.AddJoin("LEFT JOIN", joinTableAs, joinCriteria);
                         joinedRelationshipTables.Add(fullTableName);
                     }
                 }

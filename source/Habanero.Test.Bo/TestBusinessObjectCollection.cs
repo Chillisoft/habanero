@@ -141,7 +141,7 @@ namespace Habanero.Test.BO
             IExpression expression = Expression.CreateExpression(criteria);
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
             Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
-                "FROM (`MyBO`) INNER JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
+                "FROM (`MyBO`) LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
                 "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationship`.`MyRelatedTestProp` = ?Param1)",
                 statement.Statement.ToString());
@@ -158,9 +158,9 @@ namespace Habanero.Test.BO
             IExpression expression = Expression.CreateExpression(criteria);
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
             Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
-                "FROM ((`MyBO`) INNER JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
+                "FROM ((`MyBO`) LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID`) " +
-                "INNER JOIN `MyBO` AS `MyBOMyRelationshipMyRelationshipToMyBo` " +
+                "LEFT JOIN `MyBO` AS `MyBOMyRelationshipMyRelationshipToMyBo` " +
                 "ON `MyBOMyRelationship`.`MyBoID` = `MyBOMyRelationshipMyRelationshipToMyBo`.`MyBoID` " +
                 "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationshipMyRelationshipToMyBo`.`TestProp2` = ?Param1)",
                 statement.Statement.ToString());
@@ -177,7 +177,7 @@ namespace Habanero.Test.BO
             IExpression expression = Expression.CreateExpression(criteria);
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
             Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
-                "FROM (`MyBO`) INNER JOIN `MyBO` AS `MyBOMyRelationship` " +
+                "FROM (`MyBO`) LEFT JOIN `MyBO` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
                 "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationship`.`MyRelatedTestProp` = ?Param1)",
                 statement.Statement.ToString());
@@ -194,7 +194,7 @@ namespace Habanero.Test.BO
             IExpression expression = Expression.CreateExpression(criteria);
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
             Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
-                "FROM (`MyBO`) INNER JOIN `MyBO` AS `MyBOMyRelationship` " +
+                "FROM (`MyBO`) LEFT JOIN `MyBO` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
                 "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationship`.`TestProp` = ?Param1)",
                 statement.Statement.ToString());
