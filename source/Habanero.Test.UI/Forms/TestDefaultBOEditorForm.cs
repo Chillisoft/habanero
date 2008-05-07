@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 
+using System;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -36,10 +37,10 @@ namespace Habanero.Test.UI.Forms
     [TestFixture]
     public class TestDefaultBOEditorForm : TestUsingDatabase
     {
-        private ClassDef itsClassDefMyBo;
-        private BusinessObject itsBo;
-        private DefaultBOEditorForm itsEditor;
-        private Mock itsDatabaseConnectionMockControl;
+        private ClassDef _classDefMyBo;
+        private BusinessObject _bo;
+        private DefaultBOEditorForm _defaultBOEditorForm;
+        private Mock _databaseConnectionMockControl;
 
         [TestFixtureSetUp]
         public void SetupFixture()
@@ -47,25 +48,40 @@ namespace Habanero.Test.UI.Forms
             GlobalRegistry.UIExceptionNotifier = new ConsoleExceptionNotifier();
             this.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
-            itsClassDefMyBo = MyBO.LoadClassDefWithNoLookup();
+            _classDefMyBo = MyBO.LoadClassDefWithNoLookup();
         }
 
         [SetUp]
         public void SetupTest()
         {
-            itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
-            IDatabaseConnection conn = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
-            itsBo = itsClassDefMyBo.CreateNewBusinessObject(conn);
-            itsEditor = new DefaultBOEditorForm(itsBo);
+            _databaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
+            IDatabaseConnection conn = (IDatabaseConnection) _databaseConnectionMockControl.MockInstance;
+            _bo = _classDefMyBo.CreateNewBusinessObject(conn);
+            _defaultBOEditorForm = new DefaultBOEditorForm(_bo);
         }
+
+        #region Utility Methods
+
+        private void PrepareMockForSave()
+        {
+            _databaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                           DatabaseConnection.CurrentConnection.GetConnection());
+            _databaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                           DatabaseConnection.CurrentConnection.GetConnection());
+            _databaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                           DatabaseConnection.CurrentConnection.GetConnection());
+            _databaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] { null, null });
+        }
+
+        #endregion //Utility Methods
 
         [Test]
         public void TestLayout()
         {
-            Assert.AreEqual(2, itsEditor.Controls.Count);
-            Control boCtl = itsEditor.Controls[0];
+            Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
+            Control boCtl = _defaultBOEditorForm.Controls[0];
             Assert.AreEqual(4, boCtl.Controls.Count);
-            Control buttonControl = itsEditor.Controls[1];
+            Control buttonControl = _defaultBOEditorForm.Controls[1];
             Assert.AreSame(typeof (ButtonControl), buttonControl.GetType());
             Assert.AreEqual(2, buttonControl.Controls.Count);
         }
@@ -73,35 +89,35 @@ namespace Habanero.Test.UI.Forms
         [Test]
         public void TestSuccessfulEdit()
         {
-            itsEditor.Show();
-            itsBo.SetPropertyValue("TestProp", "TestValue");
-            itsBo.SetPropertyValue("TestProp2", "TestValue2");
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                             DatabaseConnection.CurrentConnection.GetConnection());
-            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
-            itsEditor.Buttons.ClickButton("OK");
-            Assert.IsFalse(itsEditor.Visible);
-            Assert.AreEqual(DialogResult.OK, itsEditor.DialogResult);
-            Assert.AreEqual("TestValue", itsBo.GetPropertyValue("TestProp"));
-            itsEditor.Dispose();
+            //Setup
+            _defaultBOEditorForm.Show();
+            _bo.SetPropertyValue("TestProp", "TestValue");
+            _bo.SetPropertyValue("TestProp2", "TestValue2");
+            PrepareMockForSave();
+            //Fixture
+            _defaultBOEditorForm.Buttons.ClickButton("OK");
+            //Assert
+            Assert.IsFalse(_defaultBOEditorForm.Visible);
+            Assert.AreEqual(DialogResult.OK, _defaultBOEditorForm.DialogResult);
+            Assert.AreEqual("TestValue", _bo.GetPropertyValue("TestProp"));
+            Assert.IsNull(_defaultBOEditorForm._panelFactoryInfo.ControlMappers.BusinessObject);
+            //TearDown
+            _defaultBOEditorForm.Dispose();
         }
 
         [Test]
         public void TestUnsuccessfulEdit()
         {
-            itsEditor.Show();
-            itsBo.SetPropertyValue("TestProp", "TestValue");
-            itsBo.SetPropertyValue("TestProp2", "TestValue2");
-            itsEditor.Buttons.ClickButton("Cancel");
-            Assert.IsFalse(itsEditor.Visible);
-            Assert.AreEqual(DialogResult.Cancel, itsEditor.DialogResult);
-            object propertyValue = itsBo.GetPropertyValue("TestProp");
+            _defaultBOEditorForm.Show();
+            _bo.SetPropertyValue("TestProp", "TestValue");
+            _bo.SetPropertyValue("TestProp2", "TestValue2");
+            _defaultBOEditorForm.Buttons.ClickButton("Cancel");
+            Assert.IsFalse(_defaultBOEditorForm.Visible);
+            Assert.AreEqual(DialogResult.Cancel, _defaultBOEditorForm.DialogResult);
+            object propertyValue = _bo.GetPropertyValue("TestProp");
             Assert.AreEqual(null, propertyValue, propertyValue != null ? propertyValue.ToString() : null);
-            itsEditor.Dispose();
+            _defaultBOEditorForm.Dispose();
         }
+        
     }
 }

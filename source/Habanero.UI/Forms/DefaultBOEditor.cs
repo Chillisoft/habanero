@@ -56,14 +56,9 @@ namespace Habanero.UI.Forms
         {
             BusinessObject bo = (BusinessObject) obj;
             DefaultBOEditorForm form = CreateEditorForm(bo, uiDefName);
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            bool ok = form.ShowDialog() == DialogResult.OK;
+            form.Dispose();
+            return ok;
         }
 
         /// <summary>

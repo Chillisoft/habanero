@@ -46,7 +46,19 @@ namespace Habanero.UI.Forms
         private ButtonControl _buttons;
         protected BusinessObject _bo;
         private Panel _boPanel;
-        protected PanelFactoryInfo _panelFactoryInfo;
+        protected internal PanelFactoryInfo _panelFactoryInfo;
+
+        /// <summary>
+        /// Constructor to initialise a new form with a panel containing the
+        /// business object to edit and "OK" and "Cancel" buttons at the
+        /// bottom, with attached event handlers.
+        /// The default UI Definition is used.
+        /// </summary>
+        /// <param name="bo">The business object to represent</param>
+        public DefaultBOEditorForm(BusinessObject bo)
+            : this(bo, "")
+        {
+        }
 
         /// <summary>
         /// Constructor to initialise a new form with a panel containing the
@@ -55,7 +67,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="bo">The business object to edit</param>
         /// <param name="uiDefName">The uiDefName</param>
-        public DefaultBOEditorForm(BusinessObject bo, string uiDefName)
+        public DefaultBOEditorForm(BusinessObject bo, string uiDefName) : this()
         {
             _bo = bo;
             _uiDefName = uiDefName;
@@ -106,20 +118,40 @@ namespace Habanero.UI.Forms
             AcceptButton = okbutton;
             CancelButton = cancelButton;
 
-            this.Text = def.Title;
+            Text = def.Title;
             SetupFormSize(def);
-            this.MinimizeBox = false;
-            this.MaximizeBox = false;
-            this.ControlBox = false;
+            MinimizeBox = false;
+            MaximizeBox = false;
+            ControlBox = false;
 
             CreateLayout();
         }
 
-        private void DefaultBOEditorForm_Load(object sender, EventArgs e)
+        private DefaultBOEditorForm()
         {
-            if (_panelFactoryInfo.ControlMappers.BusinessObject == null && _bo != null)
+            InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // DefaultBOEditorForm
+            // 
+            this.ClientSize = new System.Drawing.Size(292, 266);
+            this.Name = "DefaultBOEditorForm";
+            this.VisibleChanged += new System.EventHandler(this.DefaultBOEditorForm_VisibleChanged);
+            this.ResumeLayout(false);
+        }
+
+        private void DefaultBOEditorForm_VisibleChanged(object sender, EventArgs e)
+        {
+            if (Visible)
             {
-                _panelFactoryInfo.ControlMappers.BusinessObject = _bo;
+                if (_panelFactoryInfo.ControlMappers.BusinessObject == null && _bo != null)
+                {
+                    _panelFactoryInfo.ControlMappers.BusinessObject = _bo;
+                }
             }
         }
 
@@ -143,15 +175,7 @@ namespace Habanero.UI.Forms
             this.Width = width;
         }
 
-        /// <summary>
-        /// Constructor as before, but sets the uiDefName to an empty string,
-        /// which uses the ui definition without a specified name attribute
-        /// </summary>
-        /// <param name="bo">The business object to represent</param>
-        public DefaultBOEditorForm(BusinessObject bo)
-            : this(bo, "")
-        {
-        }
+        
 
         /// <summary>
         /// Returns the panel object being managed
@@ -268,18 +292,9 @@ namespace Habanero.UI.Forms
             get { return _buttons; }
         }
 
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
-            // 
-            // DefaultBOEditorForm
-            // 
-            this.ClientSize = new Size(292, 266);
-            this.Name = "DefaultBOEditorForm";
-            this.Load += new EventHandler(this.DefaultBOEditorForm_Load);
-            this.ResumeLayout(false);
+        
 
-        }
+        
 
         
     }

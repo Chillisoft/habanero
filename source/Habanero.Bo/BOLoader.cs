@@ -406,7 +406,7 @@ namespace Habanero.BO
                     BusinessObject loadedBusinessObject;
                     loadedBusinessObject = (BusinessObject) weakRef.Target;
                     //Apply concurrency Control Strategy to the Business Object
-                    if (refreshIfReqNotCurrent)
+                    if (refreshIfReqNotCurrent && !loadedBusinessObject.State.IsNew)
                     {
                         Instance.Refresh(loadedBusinessObject);
                         //loadedBusinessObject.CheckConcurrencyOnGettingObjectFromObjectManager();

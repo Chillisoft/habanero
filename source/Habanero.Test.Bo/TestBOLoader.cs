@@ -351,6 +351,28 @@ namespace Habanero.Test.BO
             Assert.IsFalse(cpTemp2.AfterLoadCalled, "After load should not be called for a dirty object being loaded from DB"); 
         }
 
+        [Test]
+        public void TestGetLoadedBusinessObject()
+        {
+            //Setup
+            ContactPersonTestBO contactPersonTestBO = CreateSavedContactPerson();
+            //Fixture
+            BusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPersonTestBO.PrimaryKey);
+            //Assert
+            Assert.AreSame(contactPersonTestBO, businessObject);
+        }
+
+        [Test]
+        public void TestGetLoadedBusinessObject_DoesNotRefreshNewBo()
+        {
+            //Setup
+            ContactPerson contactPerson = new ContactPerson();
+            //Fixture
+            BusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPerson.PrimaryKey);
+            //Assert
+            Assert.AreSame(contactPerson, businessObject);
+        }
+
         #region HelperMethods
 
         private static ContactPersonTestBO GetContactPersonSavedToDBButNotInObjectManager()
