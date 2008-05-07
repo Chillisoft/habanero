@@ -630,6 +630,13 @@ namespace Habanero.BO
             bo.SetDatabaseConnection(connection);
         }
 
+        /// <summary>
+        /// Clears all the loaded business objects from the collection of loaded business objects
+        /// </summary>
+        public void ClearLoadedBusinessObjects()
+        {
+            BusinessObject.ClearLoadedBusinessObjectBaseCol();
+        }
 
         #region Load By ID Methods
 
