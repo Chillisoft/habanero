@@ -714,6 +714,28 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
+        public static ClassDef LoadClassDefWithRelationshipBackToMyBo()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" />
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" />
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationshipToMyBo"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+					</relationship>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadClassDefWithSingleTableInheritance()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

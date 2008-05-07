@@ -340,7 +340,7 @@ namespace Habanero.BO
                     string relationshipName = parts[i];
                     string previousFullTableName = fullTableName;
                     fullTableName += relationshipName;
-                    RelationshipDef relationshipDef = classDef.GetRelationship(relationshipName);
+                    RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
                     if (relationshipDef != null)
                     {
                         if (relationshipDef.RelatedObjectClassDef == null)

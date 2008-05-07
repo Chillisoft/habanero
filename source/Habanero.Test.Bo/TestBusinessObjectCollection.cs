@@ -148,6 +148,25 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestCreateLoadSqlStatement_SubRelatedObjectProperties()
+        {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDefWithRelationshipBackToMyBo();
+            MyBO bo1 = new MyBO();
+            string criteria = "TestProp = 'Test' and MyRelationship.MyRelationshipToMyBo.TestProp2 = 'TestValue'";
+            IExpression expression = Expression.CreateExpression(criteria);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+            Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+                "FROM ((`MyBO`) INNER JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
+                "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID`) " +
+                "INNER JOIN `MyBO` AS `MyBOMyRelationshipMyRelationshipToMyBo` " +
+                "ON `MyBOMyRelationship`.`MyBoID` = `MyBOMyRelationshipMyRelationshipToMyBo`.`MyBoID` " +
+                "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationshipMyRelationshipToMyBo`.`TestProp2` = ?Param1)",
+                statement.Statement.ToString());
+        }
+
+        [Test]
         public void TestCreateLoadSqlStatement_RelatedSingleInheritedObject()
         {
             ClassDef.ClassDefs.Clear();
