@@ -226,7 +226,7 @@ namespace Habanero.Test.BO
 
         }
 
-        [Test]
+        [Test, Ignore("Causes issues when run through Resharper runner")]
         public void Test_WhenCleansUpObjectClearsItsLock()
         {
             //---------------Set up test pack-------------------
@@ -248,7 +248,7 @@ namespace Habanero.Test.BO
         }
         private static void waitForGC()
         {
-            Thread.Sleep(3);
+            Thread.Sleep(100);
         }
         [Test]
         public void Test_IfThisThreadLocksAndTimesOutBeforePersistingThenThrowErrorWhenPersisting()

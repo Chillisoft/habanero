@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -51,6 +53,78 @@ namespace Habanero.Test.BO
         {
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             Assert.AreSame(ClassDef.ClassDefs[typeof(MyBO)], col.ClassDef);
+        }
+
+        [Test]
+        public void TestAddMethod()
+        {
+            //Setup
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO myBO = new MyBO();
+            //Fixture
+            col.Add(myBO);
+            //Assert
+            Assert.AreEqual(1, col.Count, "One object should be in the collection");
+            Assert.AreEqual(myBO, col[0], "Added object should be in the collection");
+        }
+
+        [Test]
+        public void TestAddMethod_WithParamArray()
+        {
+            //Setup
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO myBO = new MyBO();
+            MyBO myBO2 = new MyBO();
+            MyBO myBO3 = new MyBO();
+            //Fixture
+            col.Add(myBO, myBO2, myBO3);
+            //Assert
+            Assert.AreEqual(3, col.Count, "Three objects should be in the collection");
+            Assert.AreEqual(myBO, col[0], "Added object should be in the collection");
+            Assert.AreEqual(myBO2, col[1], "Added object should be in the collection");
+            Assert.AreEqual(myBO3, col[2], "Added object should be in the collection");
+        }
+
+        [Test]
+        public void TestAddMethod_WithEnumerable_List()
+        {
+            //Setup
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO myBO = new MyBO();
+            MyBO myBO2 = new MyBO();
+            MyBO myBO3 = new MyBO();
+            List<MyBO> list = new List<MyBO>();
+            list.Add(myBO);
+            list.Add(myBO2);
+            list.Add(myBO3);
+            //Fixture
+            col.Add(list);
+            //Assert
+            Assert.AreEqual(3, col.Count, "Three objects should be in the collection");
+            Assert.AreEqual(myBO, col[0], "Added object should be in the collection");
+            Assert.AreEqual(myBO2, col[1], "Added object should be in the collection");
+            Assert.AreEqual(myBO3, col[2], "Added object should be in the collection");
+        }
+
+        [Test]
+        public void TestAddMethod_WithEnumerable_Collection()
+        {
+            //Setup
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO myBO = new MyBO();
+            MyBO myBO2 = new MyBO();
+            MyBO myBO3 = new MyBO();
+            Collection<MyBO> collection = new Collection<MyBO>();
+            collection.Add(myBO);
+            collection.Add(myBO2);
+            collection.Add(myBO3);
+            //Fixture
+            col.Add(collection);
+            //Assert
+            Assert.AreEqual(3, col.Count, "Three objects should be in the collection");
+            Assert.AreEqual(myBO, col[0], "Added object should be in the collection");
+            Assert.AreEqual(myBO2, col[1], "Added object should be in the collection");
+            Assert.AreEqual(myBO3, col[2], "Added object should be in the collection");
         }
 
         [Test]

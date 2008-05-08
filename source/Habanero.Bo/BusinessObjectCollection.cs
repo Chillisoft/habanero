@@ -227,15 +227,24 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Adds the businessobjects from col into this collecction
+        /// Adds the business objects from col into this collection
         /// </summary>
         /// <param name="col"></param>
-        public void Add(List<TBusinessObject> col)
+        public void Add(IEnumerable<TBusinessObject> col)
         {
             foreach (TBusinessObject bo in col)
             {
                 this.Add(bo);
             }
+        }
+
+        ///<summary>
+        /// Adds the specified business objects to this collection
+        ///</summary>
+        ///<param name="businessObjects">A parameter array of business objects to add to the collection</param>
+        public void Add(params TBusinessObject[] businessObjects)
+        {
+            Add(new List<TBusinessObject>(businessObjects));
         }
 
         ///// <summary>
@@ -1176,5 +1185,7 @@ namespace Habanero.BO
         {
             return CreateBusinessObject();
         }
+
+        
     }
 }
