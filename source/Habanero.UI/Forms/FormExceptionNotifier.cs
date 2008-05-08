@@ -42,10 +42,18 @@ namespace Habanero.UI.Forms
             //new ExceptionNotifyForm(ex, furtherMessage, title).ShowDialog();
             if (ex is UserException)
             {
-                MessageBox.Show(ex.Message);
+                string message = ex.Message;
+                if (!String.IsNullOrEmpty(furtherMessage))
+                {
+                    furtherMessage = furtherMessage.TrimEnd('.', ':');
+                    message = furtherMessage + ":" + Environment.NewLine + message;
+                }
+                MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else {
-                new CollapsibleExceptionNotifyForm(ex, furtherMessage, title).ShowDialog();
+            else
+            {
+                CollapsibleExceptionNotifyForm form = new CollapsibleExceptionNotifyForm(ex, furtherMessage, title);
+                form.ShowDialog();
             }
         }
 
