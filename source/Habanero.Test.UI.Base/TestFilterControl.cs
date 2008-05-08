@@ -164,16 +164,16 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestLabelAndTextBoxAreOnPanelWinForms()
         {
-            TestLabelAndTextBoxAreOnPanel(new WinControlFactory());
+            TestLabelAndTextBoxAreOnPanel(new WinControlFactory(), 2);
         }
 
         [Test]
         public void TestLabelAndTextBoxAreOnPanelGiz()
         {
-            TestLabelAndTextBoxAreOnPanel(new GizmoxControlFactory());
+            TestLabelAndTextBoxAreOnPanel(new GizmoxControlFactory(), 4);
         }
 
-        public void TestLabelAndTextBoxAreOnPanel(IControlFactory factory)
+        public void TestLabelAndTextBoxAreOnPanel(IControlFactory factory, int controlCount)
         {
             //---------------Set up test pack-------------------
             IFilterControl filterControl = factory.CreateFilterControl();
@@ -182,7 +182,7 @@ namespace Habanero.Test.UI.Base
             ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(2, filterControl.Controls.Count);
+            Assert.AreEqual(controlCount, filterControl.Controls.Count);
             Assert.Contains(tb, filterControl.Controls);
             //---------------Tear Down -------------------------          
         }

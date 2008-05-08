@@ -50,7 +50,7 @@ namespace Habanero.Test.WebGUI
 
         #endregion //Utility Methods
 
-        [Test, Ignore("Read only grid is not doing setSelected")]
+        [Test]
         public void TestSetSelectedBusinessObject()
         {
             //---------------Set up test pack-------------------
@@ -65,7 +65,7 @@ namespace Habanero.Test.WebGUI
             Assert.AreEqual(bo, grid.SelectedBusinessObject);
         }
 
-        [Test, Ignore("Read only grid is not doing setSelected")]
+        [Test]
         public void TestSetSelectedBusinessObject_ToNull()
         {
             //---------------Set up test pack-------------------

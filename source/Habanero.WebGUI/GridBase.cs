@@ -404,22 +404,31 @@ namespace Habanero.WebGUI
         /// <returns>Returns the business object</returns>
         protected virtual BusinessObject GetSelectedBusinessObject()
         {
+            int rownum = -1;
             try
             {
-                if (this.CurrentCell == null) return null;
+                for (int i = 0; i < this.Rows.Count; i++)
+                    if (this.Rows[i].Selected) rownum = i;
+                    //if (this.CurrentCell == null) return null;
             }
             catch (IndexOutOfRangeException)
             {
-                //Hack: throws index outa range every now and then investigate
+                //Hack: throws index outa range every now and then
                 return null;
             }
-            if (!this.CurrentCell.Selected) return null;
-            int rownum = this.CurrentCell.RowIndex;
-            int i = 0;
+            catch (ArgumentOutOfRangeException)
+            {
+                //Hack: throws index outa range every now and then
+                return null;
+            }
+            //if (!this.CurrentCell.Selected) return null;
+            //int rownum = this.CurrentCell.RowIndex;
+            if (rownum < 0) return null;
+            int j = 0;
             foreach (DataRowView dataRowView in _dataTableDefaultView)
             {
                 
-                if (i++ == rownum)
+                if (j++ == rownum)
                 {
                     return this._dataSetProvider.Find((string) dataRowView.Row["ID"]);
                 }

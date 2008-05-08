@@ -98,7 +98,8 @@ namespace Habanero.WebGUI
                         if (this.CurrentRow == null) return;
                     }
                     catch (ArgumentOutOfRangeException) { return; }
-                    this.SetSelectedRowCore(this.CurrentRow.Index, false);
+                    //this.SetSelectedRowCore(this.CurrentRow.Index, false);
+                    this.Rows[this.CurrentRow.Index].Selected = false;
                     return;
                 }
                 int i = 0;
@@ -106,8 +107,9 @@ namespace Habanero.WebGUI
                 {
                     if ((string) dataRowView.Row["ID"] == value.ID.ToString())
                     {
-                        this.SetSelectedCellCore(1, i, true);
-                        
+                        //this.SetSelectedCellCore(1, i, true);
+
+                        this.Rows[i].Selected = true;
 //                        this.SetSelectedRowCore(i, true);
 //                        this.SetCurrentCellAddressCore(1, i, true, false, false);
                         break;

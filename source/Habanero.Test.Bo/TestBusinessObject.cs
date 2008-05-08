@@ -102,6 +102,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
         }
 
+        //todo: change this test to use an object with a non-guid id since this test makes no sense otherwise
         [Test]
         public void TestBOLookupListWithString()
         {
@@ -113,7 +114,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
             BusinessObject bo = classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "abc");
-            Assert.AreEqual(cp.ID.ToString(), bo.GetPropertyValue("TestProp2"));
+            Assert.AreEqual(cp.ContactPersonID.ToString(), bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
         }
 

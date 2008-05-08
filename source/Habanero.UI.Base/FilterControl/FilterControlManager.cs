@@ -87,6 +87,9 @@ namespace Habanero.UI.Base
             /// </summary>
             /// <returns>Returns the filter clause</returns>
             public abstract IFilterClause GetFilterClause();
+
+            public abstract void Clear();
+       
         }
 
         /// <summary>
@@ -115,6 +118,11 @@ namespace Habanero.UI.Base
                     return _clauseFactory.CreateNullFilterClause();
                 }
             }
+
+            public override void Clear()
+            {
+                _textBox.Text = "";
+            }
         }
         /// <summary>
         /// Manages a ComboBox from which the user can select a string option
@@ -133,9 +141,9 @@ namespace Habanero.UI.Base
                 if (options == null) throw new ArgumentNullException("options");
                 _comboBox = comboBox;
                 _comboBox.Items.Add("");
-                foreach (string optionString in options)
+                foreach (object option in options)
                 {
-                    _comboBox.Items.Add(optionString);
+                    _comboBox.Items.Add(option);
                 }
                 _strictMatch = strictMatch;
             }
@@ -155,6 +163,19 @@ namespace Habanero.UI.Base
                 {
                     return _clauseFactory.CreateNullFilterClause();
                 }
+            }
+
+            public override void Clear()
+            {
+                _comboBox.SelectedIndex = -1;
+            }
+        }
+
+        public void ClearFilters()
+        {
+            foreach (FilterUI filterUI in _filterControls)
+            {
+                filterUI.Clear();
             }
         }
     }

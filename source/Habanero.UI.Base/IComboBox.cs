@@ -7,5 +7,7 @@ namespace Habanero.UI.Base
         int SelectedIndex { get; set; }
 
         object SelectedItem { get; }
+
+        int Height { get; set; }
     }
 }

@@ -769,11 +769,15 @@ namespace Habanero.BO
                     newPropValue = ((BusinessObject)newPropValue)._primaryKey.GetGuid();
                 else newPropValue = ((BusinessObject)newPropValue).ID[0].Value.ToString();
             } else if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList()) {
+
                 Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
                 if (lookupList.ContainsKey((string)newPropValue))
                     newPropValue = lookupList[(string)newPropValue];
-                if (newPropValue is BusinessObject) {
-                    newPropValue = ((BusinessObject) (newPropValue)).ID.ToString();
+                if (newPropValue is BusinessObject)
+                {
+                   if (prop.PropertyType == typeof(Guid))
+                    newPropValue = ((BusinessObject)newPropValue)._primaryKey.GetGuid();
+                else newPropValue = ((BusinessObject)newPropValue).ID[0].Value.ToString();
                 }
             }
             // If the property will be changed by this set then
@@ -791,6 +795,8 @@ namespace Habanero.BO
                 FireUpdatedEvent();
             }
         }
+
+
 
         internal static bool PropValueHasChanged(object propValue, object newPropValue)
         {
