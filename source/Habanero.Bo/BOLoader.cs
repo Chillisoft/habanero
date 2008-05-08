@@ -16,7 +16,7 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
-
+#pragma warning disable MemberCouldBeMadeStatic
 using System;
 using System.Data;
 using System.Security.Permissions;
@@ -328,8 +328,8 @@ namespace Habanero.BO
             return GetBusinessObject<BusinessObject>(classDef, criteria);
         }
 
-        //TODO:Peter - make a better load that doesn't use a bo col.
         private  T GetBusinessObject<T>(ClassDef classDef, string criteria) where T : BusinessObject
+
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>(classDef);
             if (classDef == null)

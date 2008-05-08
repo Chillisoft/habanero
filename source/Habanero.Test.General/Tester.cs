@@ -36,7 +36,6 @@ namespace Habanero.Test.General
     {
         private BOPrimaryKey deleteContactPersonID;
         private BOPrimaryKey updateContactPersonID;
-        private int dbInterval = 1;
         private ContactPerson mContactPersonUpdateConcurrency;
         private ContactPerson mContactPBeginEditsConcurrency;
         private ContactPerson mCotanctPTestRefreshFromObjMan;
@@ -68,7 +67,6 @@ namespace Habanero.Test.General
 
             CreateDeletedPersonTestPack();
             CreateSaveContactPersonTestPack();
-            //waitForDB();
             //Ensure that a fresh object is loaded from DB
             ContactPerson.ClearContactPersonCol();
         }
@@ -91,7 +89,6 @@ namespace Habanero.Test.General
             myContact.Surname = "Vincent2";
 
             myContact.Save(); //save the object to the DB
-            //waitForDB();
             myContact.Delete();
             myContact.Save();
 
@@ -117,9 +114,7 @@ namespace Habanero.Test.General
             deleteContactPersonID = myContact.ID;
         }
 
-//		private void waitForDB() {
-//			Thread.Sleep(dbInterval);
-//		}
+
 
         [Test]
         public void TestUpdateExistingContactPerson()
@@ -240,7 +235,6 @@ namespace Habanero.Test.General
 #pragma warning restore RedundantAssignment
 
             GC.Collect(); //Force the GC to collect
-            //waitForDB(); // wait to give GC time to collect
             Dictionary<string, WeakReference> boCol = BusinessObject.AllLoadedBusinessObjects();
             Assert.IsFalse(boCol.ContainsKey(id.ToString()), "Object has not been removed from the dictionary");
         }
@@ -367,8 +361,7 @@ namespace Habanero.Test.General
             myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1");
             myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2");
             myContact_1.Save(); //
-            //get the second new object from the object manager
-            //waitForDB();
+            //get the second new object from the object manager;
             ContactPerson myContact_2 = new ContactPerson();
             //set this new object to have the same 
             // data as the already saved object
@@ -394,8 +387,7 @@ namespace Habanero.Test.General
             myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1");
             myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2");
             myContact_1.Save(); //
-            //get the second new object from the object manager
-            //waitForDB();
+            //get the second new object from the object manager);
             ContactPerson myContact_2 = new ContactPerson();
             myContact_2.SetPropertyValue("PK2Prop1", "PK2Prop1Value1  Two");
             myContact_2.Surname = "My Surname two";
@@ -424,7 +416,6 @@ namespace Habanero.Test.General
             myContact_1.SetPropertyValue("PK3Prop", "PK3PropValue1");
             myContact_1.Save(); //
             //get the second new object from the object manager
-            //waitForDB();
             ContactPerson myContact_2 = new ContactPerson();
             //set this new object to have the same 
             // data as the already saved object
@@ -445,7 +436,6 @@ namespace Habanero.Test.General
             myContact_1.SetPropertyValue("PK3Prop", null); // set the previous value to null
             myContact_1.Save(); //
             //get the second new object from the object manager
-            //waitForDB();
             ContactPerson myContact_2 = new ContactPerson();
             //set this new object to have the same 
             // data as the already saved object

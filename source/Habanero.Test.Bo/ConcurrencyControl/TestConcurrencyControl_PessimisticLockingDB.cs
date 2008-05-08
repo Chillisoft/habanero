@@ -1,6 +1,7 @@
 using System;
 using System.Security;
 using System.Security.Principal;
+using System.Threading;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -38,7 +39,7 @@ namespace Habanero.Test.BO
         public void Test_Locking_InCheckConcurrencyControlBeforeBeginEditing()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             //---------------Execute Test ----------------------
             //execute CheckConcurrencyControl Begin Edit.
             IConcurrencyControl concurrCntrl = cp.concurrencyControl();
@@ -60,7 +61,7 @@ namespace Habanero.Test.BO
         public void Test_ThrowErrorIfCheckConcurrencyBeforeEditingTwice()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             //---------------Execute Test ----------------------
             IConcurrencyControl concurrCntrl = cp.concurrencyControl();
             concurrCntrl.CheckConcurrencyBeforeBeginEditing();
@@ -80,7 +81,7 @@ namespace Habanero.Test.BO
         public void Test_ThrowErrorIfObjectDeletedPriorToBeginEdits()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             //---------------Execute Test ----------------------
             ContactPerson.DeleteAllContactPeople();
             try
@@ -100,7 +101,7 @@ namespace Habanero.Test.BO
         public void Test_ThrowErrorIfSecondInstanceOfContactPersonBeginEdit()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             BOLoader.Instance.ClearLoadedBusinessObjects();
             ContactPersonPessimisticLockingDB cp2 = BOLoader.Instance.GetBusinessObjectByID<ContactPersonPessimisticLockingDB>(cp.ID);
             //---------------Execute Test ----------------------
@@ -123,7 +124,7 @@ namespace Habanero.Test.BO
         public void Test_SurnameNotUpdatedToDBWhenUpdatingLockingProps()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             string surname = cp.Surname;
             //---------------Execute Test ----------------------
            
@@ -136,7 +137,7 @@ namespace Habanero.Test.BO
         public void Test_UnLocking_WhenReleaseWriteLocksIsCalled()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             IConcurrencyControl concurrCntrl = cp.concurrencyControl();
             //Create Lock
             concurrCntrl.CheckConcurrencyBeforeBeginEditing();
@@ -153,7 +154,7 @@ namespace Habanero.Test.BO
         public void Test_UnLocking_WhenCancelEditsCalled()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             IConcurrencyControl concurrCntrl = cp.concurrencyControl();
             //Create Lock
             concurrCntrl.CheckConcurrencyBeforeBeginEditing();
@@ -169,7 +170,7 @@ namespace Habanero.Test.BO
         public void Test_NotLockedIfLockDurationExceeded()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             IConcurrencyControl concurrCntrl = cp.concurrencyControl();
             //Create Lock
             concurrCntrl.CheckConcurrencyBeforeBeginEditing();
@@ -187,7 +188,7 @@ namespace Habanero.Test.BO
         public void Test_EditContactPersonTwiceDoesNotCauseProblems()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             //---------------Execute Test ----------------------
 
             cp.Surname = Guid.NewGuid().ToString();
@@ -200,7 +201,7 @@ namespace Habanero.Test.BO
         public void Test_WhenContactPersonsavedReleaseLocks()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             //---------------Execute Test ----------------------
 
             cp.Surname = Guid.NewGuid().ToString();
@@ -214,7 +215,7 @@ namespace Habanero.Test.BO
         public void Test_MultipleSavesNoProblem()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             //---------------Execute Test ----------------------
 
             cp.Surname = Guid.NewGuid().ToString();
@@ -224,16 +225,36 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
 
         }
-        [Test, Ignore("Ask Peter how to make garbage collector clean up")]
+
+        [Test]
         public void Test_WhenCleansUpObjectClearsItsLock()
         {
-        }
+            //---------------Set up test pack-------------------
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            BOPrimaryKey id = cp.ID;
+            //---------------Execute Test ----------------------
 
+            cp.Surname = Guid.NewGuid().ToString();
+#pragma warning disable RedundantAssignment
+            cp = null;//so that garbage collector can work
+#pragma warning restore RedundantAssignment
+            GC.Collect(); //Force the GC to collect
+            waitForGC();
+            //---------------Test Result -----------------------
+            BOLoader.Instance.ClearLoadedBusinessObjects();
+            ContactPersonPessimisticLockingDB cp2 =
+                BOLoader.Instance.GetBusinessObjectByID<ContactPersonPessimisticLockingDB>(id);
+            AssertIsNotLocked(cp2);
+        }
+        private static void waitForGC()
+        {
+            Thread.Sleep(3);
+        }
         [Test]
         public void Test_IfThisThreadLocksAndTimesOutBeforePersistingThenThrowErrorWhenPersisting()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessLocking();
+            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             cp.Surname = Guid.NewGuid().ToString();
             BOProp propDateTimeLocked = cp.Props["DateTimeLocked"];
             int lockDuration = 15;
@@ -271,7 +292,7 @@ namespace Habanero.Test.BO
         {
             Assert.IsFalse(Convert.ToBoolean(cp.BoPropLocked.Value));
         }
-        private static ContactPersonPessimisticLockingDB CreateSavedContactPersonPessLocking()
+        private static ContactPersonPessimisticLockingDB CreateSavedContactPersonPessimisticLocking()
         {
             ContactPersonPessimisticLockingDB.LoadDefaultClassDef();
             ContactPersonPessimisticLockingDB cp = new ContactPersonPessimisticLockingDB();
