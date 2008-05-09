@@ -54,7 +54,8 @@ namespace Habanero.UI.Grid
         private bool _compulsoryColumnsBold;
         private Dictionary<int, string> _dateColumnIndices;
         private int _lastDataError;
-        
+        private IFilterClause _currentFilterClause;
+
         public event EventHandler CollectionChanged;
         public event EventHandler FilterUpdated;
 
@@ -251,6 +252,10 @@ namespace Habanero.UI.Grid
                 }
             }
             SetSorting(grid);
+            if (_currentFilterClause != null)
+            {
+                ApplyFilter(_currentFilterClause);
+            }
             FireCollectionChanged();
         }
 
@@ -430,10 +435,12 @@ namespace Habanero.UI.Grid
         /// <param name="filterClause">The filter clause</param>
         public void ApplyFilter(IFilterClause filterClause)
         {
-            if (filterClause != null)
+            _currentFilterClause = filterClause;
+            if (_currentFilterClause != null)
             {
-                _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
-            } else
+                _dataTableDefaultView.RowFilter = _currentFilterClause.GetFilterClauseString();
+            }
+            else
             {
                 _dataTableDefaultView.RowFilter = null;
             }

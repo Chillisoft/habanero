@@ -102,12 +102,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.WebGUI", "Haban
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.UI.WebGUI", "Habanero.Test.UI.WebGUI\Habanero.Test.UI.WebGUI.csproj", "{C75FB6D9-FE8E-4CF3-BA53-74257DE643AD}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -182,10 +176,6 @@ Global
 		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04E4FF45-6C20-46EB-A9AD-2B04895F6218}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C75FB6D9-FE8E-4CF3-BA53-74257DE643AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C75FB6D9-FE8E-4CF3-BA53-74257DE643AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C75FB6D9-FE8E-4CF3-BA53-74257DE643AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C75FB6D9-FE8E-4CF3-BA53-74257DE643AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
