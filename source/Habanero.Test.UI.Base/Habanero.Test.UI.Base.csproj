@@ -53,6 +53,9 @@
     <Compile Include="TestDataViewFilterClauseFactoryWithStrings.cs" />
     <Compile Include="TestFilterControl.cs" />
     <Compile Include="TestFilterControlCheckBox.cs" />
+    <Compile Include="TestGridBase.cs">
+    </Compile>
+    <Compile Include="TestLabel.cs" />
     <Compile Include="TestListBox.cs" />
     <Compile Include="TestMultiSelector.cs" />
     <Compile Include="TestMultiSelectorModel.cs" />

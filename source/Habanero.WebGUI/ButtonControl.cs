@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
+using Habanero.UI.WebGUI;
 
 #endregion
 
@@ -60,17 +61,17 @@ namespace Habanero.WebGUI
             int maxButtonWidth = 0;
             foreach (Button btn in _buttons)
             {
-                Label lbl = new Label();
+                LabelGiz lbl = new LabelGiz();
                 lbl.Text = btn.Text;
-                if (lbl.PreferredSize.Width + 10 > maxButtonWidth)
+                if (lbl.PreferredWidth + 10 > maxButtonWidth)
                 {
-                    maxButtonWidth = lbl.PreferredSize.Width + 10;
+                    maxButtonWidth = lbl.PreferredWidth + 10;
                 }
             }
-            if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 16)
-            {
-                maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 16;
-            }
+            //if (maxButtonWidth < Screen.PrimaryScreen.Bounds.Width / 16)
+            //{
+            //    maxButtonWidth = Screen.PrimaryScreen.Bounds.Width / 16;
+            //}
             foreach (Button btn in _buttons)
             {
                 btn.Width = maxButtonWidth;

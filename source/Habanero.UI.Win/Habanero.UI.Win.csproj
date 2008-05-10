@@ -50,6 +50,12 @@
     <Compile Include="FilterControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GridBaseWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LabelWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ListBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -73,6 +79,10 @@
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
       <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
       <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
       <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>

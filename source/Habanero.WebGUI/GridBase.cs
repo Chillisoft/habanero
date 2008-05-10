@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 #pragma warning disable RedundantThisQualifier
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,7 +48,7 @@ namespace Habanero.WebGUI
         protected DataView _dataTableDefaultView;
         private string _uiName;
         private bool _compulsoryColumnsBold;
-        private Dictionary<int, string> _dateColumnIndices;
+        private readonly Dictionary<int, string> _dateColumnIndices;
         
         public event EventHandler CollectionChanged;
         public event EventHandler FilterUpdated;
@@ -94,11 +93,12 @@ namespace Habanero.WebGUI
             _uiName = uiName;
             ClassDef classDef = collection.ClassDef;
             UIDef uiDef = classDef.GetUIDef(uiName);
-            UIGrid grid = uiDef.UIGrid;
-            _dataTable = _dataSetProvider.GetDataTable(grid);
+            UIGrid uiGrid = uiDef.UIGrid;
+            _dataTable = _dataSetProvider.GetDataTable(uiGrid);
             _dataTable.TableName = "Table";
             _dateColumnIndices.Clear();
 
+            //this.Clear();
             Columns.Clear();
 
             DataGridViewColumn col = new DataGridViewTextBoxColumn(); // DataGridViewTextBoxColumn();
@@ -115,7 +115,7 @@ namespace Habanero.WebGUI
             this.Columns.Add(col);
 
             int colNum = 1;
-            foreach (UIGridColumn gridColumn in grid)
+            foreach (UIGridColumn gridColumn in uiGrid)
             {
                 dataColumn = _dataTable.Columns[colNum];
                 PropDef propDef = null;
@@ -173,24 +173,17 @@ namespace Habanero.WebGUI
                     Font newFont = new Font(DefaultCellStyle.Font, FontStyle.Bold);
                     col.HeaderCell.Style.Font = newFont;
                 }
-
-                //if (propDef != null && propDef.PropertyType == typeof(DateTime)
-                //    && gridColumn.GridControlType != typeof(DataGridViewDateTimeColumn))
+                //if (propDef != null && propDef.PropertyName != gridColumn.GetHeading(classDef))
                 //{
-                //    _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
+                //    foreach (BusinessObject bo in _collection)
+                //    {
+                //        BOProp boProp = bo.Props[propDef.PropertyName];
+                //        if (!boProp.HasDisplayName())
+                //        {
+                //            boProp.DisplayName = gridColumn.GetHeading(classDef);
+                //        }
+                //    }
                 //}
-
-                if (propDef != null && propDef.PropertyName != gridColumn.GetHeading(classDef))
-                {
-                    foreach (BusinessObject bo in _collection)
-                    {
-                        BOProp boProp = bo.Props[propDef.PropertyName];
-                        if (!boProp.HasDisplayName())
-                        {
-                            boProp.DisplayName = gridColumn.GetHeading(classDef);
-                        }
-                    }
-                }
 
                 Columns.Add(col);
                 colNum++;
@@ -199,7 +192,7 @@ namespace Habanero.WebGUI
             _dataTableDefaultView = _dataTable.DefaultView;
             this.AutoGenerateColumns = false;
             this.DataSource = _dataTableDefaultView;
-            SetSorting(grid);
+            SetSorting(uiGrid);
             FireCollectionChanged();
         }
 

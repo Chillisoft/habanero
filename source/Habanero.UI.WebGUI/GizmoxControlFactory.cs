@@ -37,5 +37,10 @@ namespace Habanero.UI.WebGUI
         {
             return new CheckBoxGiz();
         }
+
+        public ILabel CreateLabel()
+        {
+            return new LabelGiz();
+        }
     }
 }

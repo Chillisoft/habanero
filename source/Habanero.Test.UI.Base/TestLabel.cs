@@ -9,12 +9,12 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Base
 {
 
-    public abstract class TestListBox
+    public abstract class TestLabel
     {
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]
-        public class TestListBoxWin : TestListBox
+        public class TestLabelWin : TestLabel
         {
             protected override IControlFactory GetControlFactory()
             {
@@ -23,42 +23,47 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestListBoxGiz : TestListBox
+        public class TestLabelGiz : TestLabel
         {
             protected override IControlFactory GetControlFactory()
             {
                 return new GizmoxControlFactory();
             }
+
+            [Test]
+            public void TestPreferredSize()
+            {
+                //---------------Set up test pack-------------------
+                ILabel myLabel = GetControlFactory().CreateLabel();
+                string labelText = "sometext";
+                myLabel.Text = labelText;
+
+                //---------------Execute Test ----------------------
+                int preferredWidth = myLabel.PreferredWidth;
+                //---------------Test Result -----------------------
+
+                Assert.AreEqual(labelText.Length * 8, preferredWidth);
+                //---------------Tear Down -------------------------          
+            }
         }
 
         [Test]
-        public void TestCreateListBox()
+        public void TestCreateLabel()
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IListBox myListBox = GetControlFactory().CreateListBox();
+            ILabel myLabel = GetControlFactory().CreateLabel();
 
             //---------------Test Result -----------------------
-            Assert.IsNotNull(myListBox);
+            Assert.IsNotNull(myLabel);
 
             //---------------Tear Down -------------------------   
         }
 
-        public void TestListBoxItems()
-        {
-            //---------------Set up test pack-------------------
-            IListBox myListBox = GetControlFactory().CreateListBox();
-
-            //---------------Execute Test ----------------------
-            myListBox.Items.Add("testitem");
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, myListBox.Items.Count);
-            //---------------Tear Down -------------------------   
-        }
+   
 
 
-      
-        
+
+
     }
 }

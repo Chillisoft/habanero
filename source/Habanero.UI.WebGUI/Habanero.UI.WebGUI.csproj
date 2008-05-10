@@ -9,6 +9,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Habanero.UI.WebGUI</RootNamespace>
     <AssemblyName>Habanero.UI.WebGUI</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,6 +55,12 @@
     </Compile>
     <Compile Include="GizmoxControlFactory.cs">
     </Compile>
+    <Compile Include="GridBaseGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LabelGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ListBoxGiz.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -75,6 +83,10 @@
       <Project>{D04BB138-C144-4406-9A41-17192E7D44BF}</Project>
       <Name>Habanero.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
       <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
       <Name>Habanero.UI.Base</Name>
@@ -85,6 +97,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>MultiSelectorGiz.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

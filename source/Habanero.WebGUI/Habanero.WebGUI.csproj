@@ -162,6 +162,14 @@
       <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
       <Name>Habanero.DB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
+      <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
+      <Name>Habanero.UI.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI.WebGUI\Habanero.UI.WebGUI.csproj">
+      <Project>{04E4FF45-6C20-46EB-A9AD-2B04895F6218}</Project>
+      <Name>Habanero.UI.WebGUI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
       <Name>Habanero.Util</Name>

@@ -134,8 +134,8 @@ namespace Habanero.UI.Grid
             _uiName = uiName;
             ClassDef classDef = collection.ClassDef;
             UIDef uiDef = classDef.GetUIDef(uiName);
-            UIGrid grid = uiDef.UIGrid;
-            _dataTable = _dataSetProvider.GetDataTable(grid);
+            UIGrid uiGrid = uiDef.UIGrid;
+            _dataTable = _dataSetProvider.GetDataTable(uiGrid);
             _dataTable.TableName = "Table";
             _dateColumnIndices.Clear();
 
@@ -153,7 +153,7 @@ namespace Habanero.UI.Grid
             col.DataPropertyName = dataColumn.ColumnName;
             this.Columns.Add(col);
             int colNum = 1;
-            foreach (UIGridColumn gridColumn in grid)
+            foreach (UIGridColumn gridColumn in uiGrid)
             {
                 dataColumn = _dataTable.Columns[colNum];
                 PropDef propDef = null;
@@ -223,17 +223,17 @@ namespace Habanero.UI.Grid
                     _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
                 }
 
-                if (propDef != null && propDef.PropertyName != gridColumn.GetHeading(classDef))
-                {
-                    foreach (BusinessObject bo in _collection)
-                    {
-                        BOProp boProp = bo.Props[propDef.PropertyName];
-                        if (!boProp.HasDisplayName())
-                        {
-                            boProp.DisplayName = gridColumn.GetHeading(classDef);
-                        }
-                    }
-                }
+                //if (propDef != null && propDef.PropertyName != gridColumn.GetHeading(classDef))
+                //{
+                //    foreach (BusinessObject bo in _collection)
+                //    {
+                //        BOProp boProp = bo.Props[propDef.PropertyName];
+                //        if (!boProp.HasDisplayName())
+                //        {
+                //            boProp.DisplayName = gridColumn.GetHeading(classDef);
+                //        }
+                //    }
+                //}
 
                 Columns.Add(col);
                 colNum++;
@@ -251,7 +251,7 @@ namespace Habanero.UI.Grid
                     dataGridViewColumn.Resizable = DataGridViewTriState.False;
                 }
             }
-            SetSorting(grid);
+            SetSorting(uiGrid);
             if (_currentFilterClause != null)
             {
                 ApplyFilter(_currentFilterClause);

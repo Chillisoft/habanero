@@ -31,12 +31,13 @@ namespace Habanero.UI.Base
     /// </summary>
     public class FlowLayoutManager : LayoutManager
     {
-        private ControlCollection _controls;
-        private IList _newLinePositions;
+        //todo brett change to a List<IControl> when porting
+        private readonly ControlCollection _controls;
+        private readonly IList _newLinePositions;
         private Alignments _alignment;
         private Point _currentPos;
         private bool _isFlowDown = false;
-        private IList _gluePositions;
+        private readonly IList _gluePositions;
 
         /// <summary>
         /// An enumeration that indicates whether a control should be
@@ -45,8 +46,17 @@ namespace Habanero.UI.Base
         /// </summary>
         public enum Alignments
         {
+            ///<summary>
+            /// Left alighn the controls
+            ///</summary>
             Left = 0,
+            ///<summary>
+            /// Right align the controls
+            ///</summary>
             Right = 1,
+            /// <summary>
+            /// Centre the controls
+            /// </summary>
             Centre = 2
         }
 
@@ -70,21 +80,9 @@ namespace Habanero.UI.Base
         {
             _controls.Add(ctl);
             RefreshControlPositions();
-            ctl.VisibleChanged += new EventHandler(ControlVisibleChangedHandler);
-            ctl.Resize += new EventHandler(ControlResizedHandler);
-            //if (_alignment == Alignments.Right)
-            //{
-            //    this.ManagedControl.Controls.Clear();
-            //    for (int i = _controls.Count - 1; i >= 0; i--)
-            //    {
-            //        Control control = _controls[i];
-            //        this.ManagedControl.Controls.Add(control);
-            //    }
-            //}
-            //else
-            //{
+            ctl.VisibleChanged += ControlVisibleChangedHandler;
+            ctl.Resize += ControlResizedHandler;
             this.ManagedControl.Controls.Add(ctl);
-            //}
             return ctl;
         }
 
@@ -262,7 +260,9 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Edits the current alignment setting
+        /// Edits the current alignment setting.  If the controls are right aligned, the first added control
+        /// will show at the rightmost point.
+        /// <see cref="Alignments"/>
         /// </summary>
         public Alignments Alignment
         {
@@ -274,39 +274,40 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Edits the flow-down setting
+        /// Changes the manager to flow down mode, which makes the controls flow vertically instead of 
+        /// horizontally.
         /// </summary>
-        /// TODO ERIC - what is this?
         public bool FlowDown
         {
             set { _isFlowDown = value; }
         }
 
         /// <summary>
-        /// Inserts a new line
+        /// Inserts a new line.  This is like a line break or carraige return for controls. The next control
+        /// will start at the control's margin (depending on alignment).
         /// </summary>
-        /// TODO ERIC - what is this?
         public void NewLine()
         {
             _newLinePositions.Add(this._controls.Count);
         }
 
         /// <summary>
-        /// Adds "glue" to the current position, which fills the space
-        /// between components
+        /// Adds glue that connects two controls together.  For example, if you've just added a label
+        /// and want to ensure the textbox you're adding next is always next to the label, add glue
+        /// between adding the label and adding the textbox.  In this way, if you resize the control such that
+        /// the textbox doesn't fit on the line, both the label and the textbox will move to the next line together.
         /// </summary>
-        /// TODO ERIC - double-check these comments
         public void AddGlue()
         {
             _gluePositions.Add(this._controls.Count);
         }
 
         /// <summary>
-        /// Indicates if the position specified has been "glued"
+        /// Checks for glue at a position (a position being a point between two controls.  
+        /// <see cref="AddGlue"/>
         /// </summary>
-        /// <param name="pos">The position in question</param>
-        /// <returns>Returns true if "glued", false if not</returns>
-        /// TODO ERIC - review comments
+        /// <param name="pos">The position to check for glue</param>
+        /// <returns></returns>
         private bool IsGlueAtPosition(int pos)
         {
             foreach (int gluePosition in _gluePositions)

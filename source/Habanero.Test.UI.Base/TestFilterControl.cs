@@ -170,7 +170,7 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestLabelAndTextBoxAreOnPanelGiz()
         {
-            TestLabelAndTextBoxAreOnPanel(new GizmoxControlFactory(), 4);
+            TestLabelAndTextBoxAreOnPanel(new GizmoxControlFactory(), 3);
         }
 
         public void TestLabelAndTextBoxAreOnPanel(IControlFactory factory, int controlCount)
