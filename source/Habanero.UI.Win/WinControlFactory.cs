@@ -34,5 +34,10 @@ namespace Habanero.UI.Win
         {
             return new ButtonWin();
         }
+
+        public ICheckBox CreateCheckBox()
+        {
+            return new CheckBoxWin();
+        }
     }
 }

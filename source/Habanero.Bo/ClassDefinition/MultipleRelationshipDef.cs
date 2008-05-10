@@ -34,6 +34,8 @@ namespace Habanero.BO.ClassDefinition
         DereferenceRelated = 2,
         /// <summary>Prevent deletion of parent if it has related objects</summary>
         Prevent = 3,
+        /// <summary>Don't perform any delete related activities on the businessobjects in this relationship</summary>
+        DoNothing = 4
     }
 
     /// <summary>

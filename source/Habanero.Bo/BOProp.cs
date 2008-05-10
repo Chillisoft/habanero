@@ -167,12 +167,25 @@ namespace Habanero.BO
                     {
                         propValue = Enum.Parse(this.PropertyType, (string)propValue);
                     }
+                    else if (this.PropertyType == typeof(string))
+                    {
+                        if (propValue is Guid)
+                        {
+                            propValue = ((Guid) propValue).ToString("B");
+                        }
+                        else
+                        {
+                            propValue = propValue.ToString();
+                        }
+                    }
                     else
                     {
-                        try {
+                        try
+                        {
                             propValue = Convert.ChangeType(propValue, this.PropertyType);
                         }
-                        catch (InvalidCastException) {
+                        catch (InvalidCastException)
+                        {
                             log.Error(
                                 string.Format("Problem in InitialiseProp(): Can't convert value of type {0} to {1}",
                                               propValue.GetType().FullName, this.PropertyType.FullName));

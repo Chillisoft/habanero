@@ -103,6 +103,7 @@ namespace Habanero.Test
             propDefCol.Add("AddressLine2", typeof(String), PropReadWriteRule.ReadWrite, null);
             propDefCol.Add("AddressLine3", typeof(String), PropReadWriteRule.ReadWrite, null);
             propDefCol.Add("AddressLine4", typeof(String), PropReadWriteRule.ReadWrite, null);
+            propDefCol.Add("OrganisationID", typeof (Guid), PropReadWriteRule.ReadWrite, null);
             return propDefCol;
         }
 
@@ -173,6 +174,12 @@ namespace Habanero.Test
         public ContactPerson ContactPerson
         {
             get { return this.Relationships.GetRelatedObject<ContactPerson>("ContactPerson"); }
+        }
+
+        public Guid? OrganisationID
+        {
+            get { return (Guid?) this.GetPropertyValue("OrganisationID"); }
+            set { this.SetPropertyValue("OrganisationID", value); }
         }
 
         #endregion //Properties

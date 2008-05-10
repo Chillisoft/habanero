@@ -24,7 +24,6 @@ using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Forms;
-using Habanero.Util;
 using log4net;
 
 namespace Habanero.UI.Grid
@@ -51,9 +50,9 @@ namespace Habanero.UI.Grid
         private static ILog log = LogManager.GetLogger("Habanero.UI.Grid.ReadOnlyGridWithButtons");
         public event EventHandler ItemSelected;
 
-        private ReadOnlyGrid _grid;
-        private ReadOnlyGridButtonControl _buttons;
-        private GridSelectionController _gridSelectionController;
+        private readonly ReadOnlyGrid _grid;
+        private readonly ReadOnlyGridButtonControl _buttons;
+        private readonly GridSelectionController _gridSelectionController;
         
         private IBusinessObjectCollection _collection;
 

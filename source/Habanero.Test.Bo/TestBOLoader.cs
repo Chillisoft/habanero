@@ -298,7 +298,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(cpTemp2.Surname, cpTemp3.Surname);
 
         }
-        [Test, Ignore("From Brett: Verify with peter what is going on here")]
+        [Test]
         public void TestBOLoader_GetObjectFromObjectManager()
         {
             //-------------Setup Test Pack
@@ -314,7 +314,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, ContactPersonTestBO.AllLoadedBusinessObjects().Count);
 
         }
-        [Test, Ignore("From Brett: Verify with peter what is going on here")]
+        [Test]
         public void TestBOLoader_GetObjectFromObjectManager_Twice()
         {
             //-------------Setup Test Pack

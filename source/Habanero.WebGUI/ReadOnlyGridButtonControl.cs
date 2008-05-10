@@ -142,11 +142,11 @@ namespace Habanero.WebGUI
             IList boCol = _readOnlyGrid.SelectedBusinessObjects;
             if (boCol.Count > 0)
             {
-                if (ConfirmDeletion && MessageBox.Show("Are you sure you want to delete the selected row(s)?",
-                    "Delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
-                {
-                    return;
-                }
+                //if (ConfirmDeletion && MessageBox.Show("Are you sure you want to delete the selected row(s)?",
+                //    "Delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+                //{
+                //    return;
+                //}
 
                 while (boCol.Count > 0)
                 {
@@ -165,7 +165,8 @@ namespace Habanero.WebGUI
                         return;
                     }
                 }
-                _readOnlyGrid.SelectedBusinessObject = _readOnlyGrid.SelectedBusinessObject;
+                _readOnlyGrid.SelectedBusinessObject = null;
+               // _readOnlyGrid.SelectedBusinessObject = _readOnlyGrid.SelectedBusinessObject;
             }
         }
 

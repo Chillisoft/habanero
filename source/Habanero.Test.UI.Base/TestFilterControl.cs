@@ -189,9 +189,9 @@ namespace Habanero.Test.UI.Base
 
         #endregion
 
-        //------------------------COMBO BOX----------------------------------------------------------
 
         #region ComboBoxFilter
+        //------------------------COMBO BOX----------------------------------------------------------
 
         [Test]
         public void TestAddComboBoxGizmox()
@@ -459,18 +459,7 @@ namespace Habanero.Test.UI.Base
 //            Assert.IsTrue(itsIsFilterClauseChanged, "Changing the selected item should make the filter clause change");
 //        }
 //
-//        [Test]
-//        public void TestAddBooleanFilterCheckBox()
-//        {
-//            CheckBox cb = filterControl.AddStringFilterCheckBox("Test?", "TestColumn", true);
-//            IFilterClause clause =
-//                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "true");
-//            Assert.AreEqual(clause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
-//            cb.Checked = false;
-//            clause =
-//                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "false");
-//            Assert.AreEqual(clause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
-//        }
+
 //
 //        [Test]
 //        public void TestAddStringFilterDateTimeEditor()
@@ -544,26 +533,8 @@ namespace Habanero.Test.UI.Base
 //            Assert.AreEqual(2, testDRComboBox2.OptionsToDisplay.Count);
 //        }
 //
-//        [Test]
-//        public void TestMultipleFilters()
-//        {
-//            TextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
-//            tb.Text = "testvalue";
-//            IFilterClause clause =
-//                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
-//
-//            TextBox tb2 = filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
-//            tb2.Text = "testvalue2";
-//            IFilterClause clause2 =
-//                itsFilterClauseFactory.CreateStringFilterClause("TestColumn2", FilterClauseOperator.OpLike, "testvalue2");
-//
-//            IFilterClause compositeClause =
-//                itsFilterClauseFactory.CreateCompositeFilterClause(clause, FilterClauseCompositeOperator.OpAnd, clause2);
-//            Assert.AreEqual(compositeClause.GetFilterClauseString(),
-//                            filterControl.GetFilterClause().GetFilterClauseString());
-//        }
-
 //
     }
+
 
 }

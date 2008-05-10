@@ -44,6 +44,7 @@
     <Compile Include="FilterControl\DataViewStringFilterClause.cs" />
     <Compile Include="FilterControl\FilterControlManager.cs" />
     <Compile Include="IButton.cs" />
+    <Compile Include="ICheckBox.cs" />
     <Compile Include="IChilliControl.cs" />
     <Compile Include="IComboBox.cs" />
     <Compile Include="IComboBoxObjectCollection.cs" />

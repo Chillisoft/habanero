@@ -49,6 +49,40 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestRefreshCollectionDoesNotRefreshDirtyOject()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.DeleteAllContactPeople();
+            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            
+            ContactPersonTestBO cp1 = CreateContactPersonTestBO();
+            ContactPersonTestBO cp2 = CreateContactPersonTestBO();
+            ContactPersonTestBO cp3 = CreateContactPersonTestBO();
+
+            col.LoadAll();
+            string newSurname = Guid.NewGuid().ToString();
+            //---------------Execute Test ----------------------
+            cp1.Surname = newSurname;
+            col.Refresh();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, col.Count);
+            Assert.AreEqual(newSurname, cp1.Surname);
+            Assert.IsTrue(cp1.State.IsDirty);
+            //---------------Tear Down -------------------------          
+        }
+
+        private static ContactPersonTestBO CreateContactPersonTestBO()
+        {
+            ContactPersonTestBO bo = new ContactPersonTestBO();
+            string newSurname = Guid.NewGuid().ToString();
+            bo.Surname = newSurname;
+            bo.Save();
+            return bo;
+        }
+
+        [Test]
         public void TestInstantiate()
         {
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();

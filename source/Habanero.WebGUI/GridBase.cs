@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 #pragma warning disable RedundantThisQualifier
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -443,11 +444,21 @@ namespace Habanero.WebGUI
         protected virtual BusinessObjectCollection<BusinessObject> GetSelectedBusinessObjects()
         {
             BusinessObjectCollection<BusinessObject> busObjects = new BusinessObjectCollection<BusinessObject>(_collection.ClassDef);
-            foreach (DataGridViewRow row in this.SelectedRows)
+            foreach (DataGridViewRow row in this.GetSelectedRows())
             {
                 busObjects.Add(this._dataSetProvider.Find((string) row.Cells["ID"].Value));
             }
             return busObjects;
+        }
+
+        private List<DataGridViewRow> GetSelectedRows()
+        {
+            List<DataGridViewRow> selectedRows = new List<DataGridViewRow>();
+            foreach (DataGridViewRow row in this.Rows)
+            {
+                if (row.Selected) selectedRows.Add(row);
+            }
+            return selectedRows;
         }
 
         /// <summary>

@@ -98,6 +98,7 @@ namespace Habanero.BO
         public virtual IBusinessObjectCollection GetRelatedBusinessObjectCol()
         {
             return GetRelatedBusinessObjectColInternal();
+            
         }
 
         /// <summary>
@@ -145,5 +146,7 @@ namespace Habanero.BO
             }
             return boCol;
         }
+
+
     }
 }

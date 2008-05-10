@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckBoxGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ComboBoxGiz.cs">
       <SubType>Component</SubType>
     </Compile>

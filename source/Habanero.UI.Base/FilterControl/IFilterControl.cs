@@ -10,5 +10,6 @@ namespace Habanero.UI.Base
 
         ICollection Controls { get; }
         IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch);
+        ICheckBox AddStringFilterCheckBox(string labelText, string propertyName, bool defaultValue);
     }
 }

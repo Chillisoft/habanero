@@ -99,13 +99,13 @@ namespace Habanero.BO
         /// <param name="obj">business object being filled from the data record<</param>
         /// <param name="dr">An IDataRecord object</param>
         /// <returns>Returns true if loaded successfully</returns>
-        /// TODO ERIC - where does datarecord come from?
-        internal  bool LoadProperties(BusinessObject obj, IDataRecord dr)
+        internal bool LoadProperties(BusinessObject obj, IDataRecord dr)
         {
             //TODO_ERR: check that dr open valid etc.
             int i = 0;
             foreach (BOProp prop in obj.Props.SortedValues)
             {
+                if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
                 try
                 {
                     prop.InitialiseProp(dr[i++]);
@@ -186,6 +186,7 @@ namespace Habanero.BO
             if (tempBusObj == null || isReplacingSuperClassObject)
             {
                 tempBusObj = classDef.CreateNewBusinessObject(obj.GetDatabaseConnection());
+                BusinessObject.AllLoadedBusinessObjects().Remove(tempBusObj.ID.GetObjectId());
                     //InstantiateBusinessObject();
                 LoadFromDataReader(tempBusObj, dr);
                 try
@@ -517,16 +518,16 @@ namespace Habanero.BO
         }
 
         internal  void LoadBusinessObjectCollection(IExpression searchExpression,
-                                                          IBusinessObjectCollection businessObjectCollection,
-                                                          string orderByClause, string searchCriteria)
+                                                    IBusinessObjectCollection businessObjectCollection,
+                                                    string orderByClause, string searchCriteria)
         {
-            if (searchExpression != null)
+           if (searchExpression != null)
             {
-                businessObjectCollection.Load(searchExpression, orderByClause);
+                businessObjectCollection.Load( searchExpression, orderByClause);
             }
             else
             {
-                businessObjectCollection.Load(searchCriteria, orderByClause);
+                businessObjectCollection.Load( searchCriteria, orderByClause);
             }
         }
 

@@ -6,7 +6,7 @@
 	relatedAssembly	NMTOKEN #REQUIRED
 	keepReference ( true | false ) "true"
 	orderBy CDATA ""
-	deleteAction ( DeleteRelated | DereferenceRelated | Prevent ) "Prevent"
+	deleteAction ( DeleteRelated | DereferenceRelated | Prevent | DoNothing ) "Prevent"
 >
 		<!ELEMENT relatedProperty EMPTY>
     <!ATTLIST relatedProperty

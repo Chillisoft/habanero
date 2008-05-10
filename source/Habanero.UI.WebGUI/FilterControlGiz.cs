@@ -60,6 +60,16 @@ namespace Habanero.UI.WebGUI
             return comboBox;
         }
 
+        public ICheckBox AddStringFilterCheckBox(string labelText, string propertyName, bool defaultValue)
+        {
+            ICheckBox checkBox = _filterControlManager.AddStringFilterCheckBox(labelText, propertyName, defaultValue);
+            //checkBox.Height = new TextBox().Height;
+            this.Controls.Add(new Label(labelText));
+            this.Controls.Add((Control)checkBox);
+            return checkBox;
+
+        }
+
         public IFilterClause GetFilterClause()
         {
             return _filterControlManager.GetFilterClause();

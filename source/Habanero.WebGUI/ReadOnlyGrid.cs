@@ -90,37 +90,26 @@ namespace Habanero.WebGUI
         {
             set
             {
-                ClearSelection();
+                for (int i = 0; i < this.Rows.Count; i++)
+                    this.Rows[i].Selected = false;
                 if (value == null)
                 {
-                    try
-                    {
-                        if (this.CurrentRow == null) return;
-                    }
-                    catch (ArgumentOutOfRangeException) { return; }
-                    //this.SetSelectedRowCore(this.CurrentRow.Index, false);
-                    this.Rows[this.CurrentRow.Index].Selected = false;
                     return;
                 }
-                int i = 0;
+                int j = 0;
                 foreach (DataRowView dataRowView in _dataTableDefaultView)
                 {
                     if ((string) dataRowView.Row["ID"] == value.ID.ToString())
                     {
-                        //this.SetSelectedCellCore(1, i, true);
-
-                        this.Rows[i].Selected = true;
-//                        this.SetSelectedRowCore(i, true);
-//                        this.SetCurrentCellAddressCore(1, i, true, false, false);
+                        this.Rows[j].Selected = true;
                         break;
-                    }
-                    i++;
+                    } 
+                    j++;
                 }
                 if (CurrentRow != null && !CurrentRow.Displayed)
                 {
                     FirstDisplayedScrollingRowIndex = Rows.IndexOf(CurrentRow);
                 }
-                
             }
             get { return this.GetSelectedBusinessObject(); }
         }

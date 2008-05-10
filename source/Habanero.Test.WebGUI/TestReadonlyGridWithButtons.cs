@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.WebGUI;
@@ -10,7 +8,6 @@ namespace Habanero.Test.WebGUI
     [TestFixture]
     public class TestReadonlyGridWithButtons
     {
-        private bool _gridItemSelected;
         [SetUp]
         public void SetupTest()
         {

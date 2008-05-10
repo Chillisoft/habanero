@@ -46,5 +46,15 @@ namespace Habanero.UI.Win
             this.Controls.Add((Control)comboBox);
             return comboBox;
         }
+
+        public ICheckBox AddStringFilterCheckBox(string labelText, string propertyName, bool defaultValue)
+        {
+            ICheckBox checkBox = _filterControlManager.AddStringFilterCheckBox(labelText, propertyName, defaultValue);
+            Label lbl = new Label();
+            lbl.Text = labelText;
+            this.Controls.Add(lbl);
+            this.Controls.Add((Control)checkBox);
+            return checkBox;
+        }
     }
 }

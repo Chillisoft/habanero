@@ -32,5 +32,10 @@ namespace Habanero.UI.WebGUI
         {
             return new ButtonGiz();
         }
+
+        public ICheckBox CreateCheckBox()
+        {
+            return new CheckBoxGiz();
+        }
     }
 }

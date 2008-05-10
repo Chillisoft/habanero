@@ -61,6 +61,30 @@ namespace Habanero.UI.Base
             return cb;
         }
 
+        /// <summary>
+        /// Adds a CheckBox filter that displays only rows whose boolean value
+        /// matches the on-off state of the CheckBox. The column of data must
+        /// have "true" or "false" as its values (boolean database fields are
+        /// usually converted to true/false string values by the Habanero
+        /// object manager).
+        /// </summary>
+        /// <param name="labelText">The text label to appear next to the CheckBox</param>
+        /// <param name="propertyName">The column of data on which to do the
+        /// filtering</param>
+        /// <param name="isChecked">Whether the CheckBox is checked</param>
+        /// <returns>Returns the new CheckBox added</returns>
+        public ICheckBox AddStringFilterCheckBox(string labelText, string propertyName, bool isChecked)
+        {
+            ICheckBox cb = _controlFactory.CreateCheckBox();
+            ////cb.Width = _filterWidth;
+            //_filterControls.Add(new FilterUIStringOptions(_clauseFactory, propertyName, cb, isChecked));
+            //cb.Width = _controlFactory.CreateTextBox().Width; ;
+            //_filterControls.Add(new FilterUICheckBox(_clauseFactory, propertyName, cb, labelText, isChecked));
+            //cb.CheckedChanged += FilterControlValueChangedHandler;
+            //FireFilterClauseChanged(cb);
+            //_controls.Add(cb);
+            return cb;
+        }
 
         /// <summary>
         /// A super-class for user interface elements that provide filter clauses
@@ -124,6 +148,7 @@ namespace Habanero.UI.Base
                 _textBox.Text = "";
             }
         }
+
         /// <summary>
         /// Manages a ComboBox from which the user can select a string option
         /// on which values are filtered

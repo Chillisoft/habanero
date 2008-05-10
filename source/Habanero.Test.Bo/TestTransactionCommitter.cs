@@ -465,6 +465,31 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestDeleteDoNothing()
+        {
+            //---------------Set up test pack-------------------
+            Address address;
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
+            contactPersonTestBO.Delete();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            committerDB.AddBusinessObject(contactPersonTestBO);
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                committerDB.CommitTransaction();
+                Assert.Fail("Delete should fail as there is referential integrity and the delete action is 'Do Nothing'");
+            }
+            catch (DatabaseWriteException ex)
+            {
+                StringAssert.Contains("There was an error writing to the database", ex.Message);
+            } 
+            //---------------Test Result -----------------------
+
+        }
+
+        [Test]
         public void TestDeleteRelatedWithFailureAfter()
         {
             //---------------Set up test pack-------------------
@@ -531,6 +556,31 @@ namespace Habanero.Test.BO
 
         }
 
+        // it can happen that a child is in teh transaction, deleted before the parent.  In this case
+        // the search for child objects of the parent can possibly deadlock as the search is happening
+        // outside the delete transaction.
+        [Test]
+        public void TestSearchForChildrenToDeleteWithChildDeletedInTransaction()
+        {
+            //---------------Set up test pack-------------------
+            Address address;
+            ContactPersonTestBO contactPersonTestBO =
+              ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+
+            //---------------Execute Test ----------------------
+            address.Delete();
+            contactPersonTestBO.Delete();
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(address);
+            committer.AddBusinessObject(contactPersonTestBO);
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+
+            AssertBOStateIsValidAfterDelete(address);
+            AssertBOStateIsValidAfterDelete(contactPersonTestBO);
+            //---------------Tear Down -------------------------          
+        }
+
         [Test]
         public void Test3LayerDeleteRelated()
         {
@@ -544,6 +594,38 @@ namespace Habanero.Test.BO
             contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
             org.Save();
             contactPersonTestBO.Save();
+            org.Delete();
+
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            committer.AddBusinessObject(org);
+            //---------------Execute Test ----------------------
+
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            AssertBOStateIsValidAfterDelete(org);
+            AssertBOStateIsValidAfterDelete(contactPersonTestBO);
+            AssertBOStateIsValidAfterDelete(address);
+
+            AssertBusinessObjectNotInDatabase(org);
+            AssertBusinessObjectNotInDatabase(contactPersonTestBO);
+            AssertBusinessObjectNotInDatabase(address);
+        }
+
+        [Test]
+        public void Test3LayerDeleteRelated_WithDeletedObjectChildAndGrandchild()
+        {
+            //---------------Set up test pack-------------------
+            Address address;
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            OrganisationTestBO.LoadDefaultClassDef_WithRelationShipToAddress();
+
+            OrganisationTestBO org = new OrganisationTestBO();
+            contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
+            org.Save();
+            contactPersonTestBO.Save();
+            address.OrganisationID = org.OrganisationID;
+            address.Save();
             org.Delete();
 
             TransactionCommitterDB committer = new TransactionCommitterDB();

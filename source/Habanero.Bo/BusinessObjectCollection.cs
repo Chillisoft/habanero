@@ -126,6 +126,7 @@ namespace Habanero.BO
                                                           "been loaded for this type.", typeof (TBusinessObject).Name));
                 }
                 _sampleBo = _boClassDef.CreateNewBusinessObject();
+                BusinessObject.AllLoadedBusinessObjects().Remove(_sampleBo.ID.GetObjectId());
             }
             _lookupTable = new Hashtable();
         }
@@ -273,11 +274,9 @@ namespace Habanero.BO
             {
                 try
                 {
-                    TBusinessObject lTempBusObj;
-                    lTempBusObj = (TBusinessObject) _boClassDef.CreateNewBusinessObject(boDatabaseConnection);
                     while (dr.Read())
                     {
-                        TBusinessObject bo = (TBusinessObject) BOLoader.Instance.GetBusinessObject(lTempBusObj, dr);
+                        TBusinessObject bo = (TBusinessObject)BOLoader.Instance.GetBusinessObject(_sampleBo, dr);
                         if (oldCol.Contains(bo))
                         {
                             AddInternal(bo);

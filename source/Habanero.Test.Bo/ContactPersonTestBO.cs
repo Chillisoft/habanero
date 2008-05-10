@@ -208,6 +208,31 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+        public static ClassDef LoadClassDefWithAddressesRelationship_DeleteDoNothing()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""DoNothing"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+        
+
         #region Properties
 
         public Guid ContactPersonID
@@ -319,20 +344,28 @@ namespace Habanero.Test.BO
         public static ContactPersonTestBO CreateContactPersonWithOneAddress_CascadeDelete(out Address address)
         {
             LoadClassDefWithAddressesRelationship_DeleteRelated();
-            ContactPersonTestBO contactPersonTestBO = CreateSavedContactPersonNoAddresses();
-            address = contactPersonTestBO.Addresses.CreateBusinessObject();
-            address.Save();
-            Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
-            return contactPersonTestBO;
+            return CreateContactPerson(out address);
         }
         public static ContactPersonTestBO CreateContactPersonWithOneAddress_PreventDelete(out Address address)
         {
             LoadClassDefWithAddressesRelationship_PreventDelete();
+            return CreateContactPerson(out address);
+        }
+
+        private static ContactPersonTestBO CreateContactPerson(out Address address)
+        {
             ContactPersonTestBO contactPersonTestBO = CreateSavedContactPersonNoAddresses();
             address = contactPersonTestBO.Addresses.CreateBusinessObject();
             address.Save();
             Assert.AreEqual(1, contactPersonTestBO.Addresses.Count);
             return contactPersonTestBO;
+
+        }
+
+        public static ContactPersonTestBO CreateContactPersonWithOneAddress_DeleteDoNothing(out Address address)
+        {
+            LoadClassDefWithAddressesRelationship_DeleteDoNothing();
+            return CreateContactPerson(out address);
         }
     }
 }
