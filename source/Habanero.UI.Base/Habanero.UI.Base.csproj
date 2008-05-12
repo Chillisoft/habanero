@@ -45,6 +45,7 @@
     <Compile Include="FilterControl\DataViewNullFilterClause.cs" />
     <Compile Include="FilterControl\DataViewStringFilterClause.cs" />
     <Compile Include="FilterControl\FilterControlManager.cs" />
+    <Compile Include="Grid\IDataGridViewColumn.cs" />
     <Compile Include="Grid\IDataGridViewSelectedRowCollection.cs" />
     <Compile Include="IDateTimePicker.cs" />
     <Compile Include="FlowLayoutManager.cs" />

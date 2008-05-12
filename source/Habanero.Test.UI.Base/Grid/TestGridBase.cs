@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -107,6 +109,35 @@ namespace Habanero.Test.UI.Base
 
         }
 
+        [Test, Ignore("Need to get this working once the code for Adding columns has been implemented.")]
+        public void TestSetCollectionOnGrid_NoOfColumns_None()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            //---------------Execute Test ----------------------
+            gridBase.SetCollection(col);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, gridBase.Columns.Count);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test, Ignore("Need to get this working once a Factory that can create 'IDataGridViewColumn's has been made.")]
+        public void TestSetCollectionOnGrid_NoOfColumns_Specific()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            //---------------Execute Test ----------------------
+            //gridBase.AddColumn();
+            gridBase.SetCollection(col);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, gridBase.Columns.Count);
+            //---------------Tear Down -------------------------
+        }
+
         [Test]
         public void Test_SelectedBusinessObject_FirstRowIsSelected()
         {
@@ -131,11 +162,25 @@ namespace Habanero.Test.UI.Base
             IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
             MyBO boToSelect = col[1];
             //---------------Execute Test ----------------------
-            
+
             gridBase.SelectedBusinessObject = boToSelect;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(boToSelect, gridBase.SelectedBusinessObject);
+        }
+
+        [Test]
+        public void TestGetSelectedBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            MyBO boToSelect = col[1];
+            gridBase.SelectedBusinessObject = boToSelect;
+            //---------------Execute Test ----------------------
+            BusinessObject selectedBusinessObject = gridBase.SelectedBusinessObject;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(boToSelect, selectedBusinessObject);
         }
 
         [Test]
@@ -220,12 +265,81 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(null, gridBase.SelectedBusinessObject);
         }
 
+        [Test]
+        public void TestCollectionChanged()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            bool hasCollectionChangedFired = false;
+            gridBase.CollectionChanged += delegate(object sender, EventArgs e)
+            {
+                hasCollectionChangedFired = true;
+            };
+            //---------------Execute Test ----------------------
+            gridBase.SetCollection(col);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(hasCollectionChangedFired, "CollectionChanged event should have fired.");
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestGetCollection()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection collection = gridBase.GetCollection();
+            //---------------Test Result -----------------------
+            Assert.AreSame(col,collection);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestGetBusinessObjectAtRow()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            //---------------Execute Test ----------------------
+            BusinessObject businessObject2 = gridBase.GetBusinessObjectAtRow(2);
+            BusinessObject businessObject3 = gridBase.GetBusinessObjectAtRow(3);
+            //---------------Test Result -----------------------
+            Assert.AreSame(col[2], businessObject2);
+            Assert.AreSame(col[3], businessObject3);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test, Ignore("This will need to work after the implementation of the dataTable behind the grid is improved.")]
+        public void TestSetSortColumn()
+        {
+            //---------------Set up test pack-------------------
+
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            //---------------Execute Test ----------------------
+            gridBase.SetSortColumn("TestProp", true, true);
+            //---------------Test Result -----------------------
+            Assert.AreSame(col[3], gridBase.GetBusinessObjectAtRow(1), "The object with testprop = 'a' should be at row 1");
+            Assert.AreSame(col[0], gridBase.GetBusinessObjectAtRow(2), "The object with testprop = 'b' should be at row 2");
+            Assert.AreSame(col[2], gridBase.GetBusinessObjectAtRow(3), "The object with testprop = 'c' should be at row 3");
+            Assert.AreSame(col[1], gridBase.GetBusinessObjectAtRow(4), "The object with testprop = 'd' should be at row 4");
+            //---------------Tear Down -------------------------
+        }
+        #region Utility Methods 
+
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
         {
             MyBO cp = new MyBO();
+            cp.TestProp = "b";
             MyBO cp2 = new MyBO();
+            cp2.TestProp = "d";
             MyBO cp3 = new MyBO();
+            cp3.TestProp = "c";
             MyBO cp4 = new MyBO();
+            cp4.TestProp = "a";
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             col.Add(cp, cp2, cp3, cp4);
             return col;
@@ -240,6 +354,7 @@ namespace Habanero.Test.UI.Base
             return gridBase;
         }
 
+
         internal class GridBaseGizStub : GridBaseGiz
         {
         }
@@ -247,6 +362,8 @@ namespace Habanero.Test.UI.Base
         internal class GridBaseWinStub : GridBaseWin
         {
         }
+
+        #endregion
     }
 
 

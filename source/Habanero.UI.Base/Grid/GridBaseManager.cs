@@ -13,6 +13,7 @@ namespace Habanero.UI.Base
         //private BOCollectionDataSetProvider _dataSetProvider;
         //private DataView _dataTableDefaultView;
         private IBusinessObjectCollection _boCol;
+        public event EventHandler CollectionChanged;
 
         public GridBaseManager(IGridBase gridBase)
         {
@@ -76,24 +77,217 @@ namespace Habanero.UI.Base
             }
         }
 
+        /// <summary>
+        /// Sets the grid's collection to the one specified
+        /// </summary>
+        /// <param name="col">The collection to display in the grid</param>
         public void SetCollection(IBusinessObjectCollection col)
+        {
+            SetCollection(col, "default");
+        }
+
+        /// <summary>
+        /// Sets the grid's collection to the one specified
+        /// </summary>
+        /// <param name="col">The collection to display in the grid</param>
+        /// <param name="uiName">The name of the uidef to use</param>
+        public void SetCollection(IBusinessObjectCollection col, string uiName)
         {
             _boCol = col;
             //_dataSetProvider = new BOCollectionReadOnlyDataSetProvider(col);
-            //ClassDef classDef = col.ClassDef;
-            //UIDef uiDef = classDef.GetUIDef("default");
+            //_dataSetProvider.ObjectInitialiser = _objectInitialiser;
+            //_uiName = uiName;
+            //ClassDef classDef = collection.ClassDef;
+            //UIDef uiDef = classDef.GetUIDef(uiName);
             //UIGrid uiGrid = uiDef.UIGrid;
             //DataTable dataTable = _dataSetProvider.GetDataTable(uiGrid);
+
+
             //_dataTableDefaultView = dataTable.DefaultView;
             _gridBase.AllowUserToAddRows = false;
             //_gridBase.DataSource = dataTable;
+            IDataGridViewColumnCollection columns = _gridBase.Columns;
             _gridBase.DataSource = col;
+            //_gridBase.Columns.Clear();
+            //SetupColumns(columns);
             if (_gridBase.Rows.Count > 0)
             {
                 SelectedBusinessObject = null;
                 _gridBase.Rows[0].Selected = true;
             }
- 
+            FireCollectionChanged();
+        }
+
+        private void SetupColumns(IDataGridViewColumnCollection columns)
+        {
+            foreach (IDataGridViewColumn column in columns)
+            {
+                AddColumn(column);
+            }
+        }
+
+        public void AddColumn(IDataGridViewColumn column)
+        {
+            _gridBase.Columns.Add(column);
+        }
+
+        /// <summary>
+        /// Sets the grid's collection to the one specified, but using the
+        /// STA thread
+        /// </summary>
+        /// <param name="collection">The collection to display in the grid</param>
+        /// <param name="uiName">The name of the uidef to use</param>
+        /// TODO: Refactor
+        private void SetCollectionInSTAThread(IBusinessObjectCollection collection, string uiName)
+        {
+            ////_collection = collection;
+            ////_dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
+            //_dataSetProvider.ObjectInitialiser = _objectInitialiser;
+            //_uiName = uiName;
+            //ClassDef classDef = collection.ClassDef;
+            //UIDef uiDef = classDef.GetUIDef(uiName);
+            //UIGrid uiGrid = uiDef.UIGrid;
+            //_dataTable = _dataSetProvider.GetDataTable(uiGrid);
+            //_dataTable.TableName = "Table";
+            //_dateColumnIndices.Clear();
+
+            //this.Columns.Clear();
+
+            //DataGridViewColumn col = new DataGridViewTextBoxColumn(); // DataGridViewTextBoxColumn();
+            ////col.Visible = false;
+            //col.Width = 0;
+
+            //col.Visible = false;
+            //col.ReadOnly = true;
+            //DataColumn dataColumn = _dataTable.Columns[0];
+            //col.HeaderText = dataColumn.Caption;
+            //col.Name = dataColumn.ColumnName;
+            //col.DataPropertyName = dataColumn.ColumnName;
+            //this.Columns.Add(col);
+            //int colNum = 1;
+            //foreach (UIGridColumn gridColumn in uiGrid)
+            //{
+            //    dataColumn = _dataTable.Columns[colNum];
+            //    PropDef propDef = null;
+            //    if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
+            //    {
+            //        propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
+            //    }
+            //    if (gridColumn.GridControlType == typeof(DataGridViewComboBoxColumn))
+            //    {
+            //        DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();
+            //        ILookupList source =
+            //            (ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
+            //        if (source != null)
+            //        {
+            //            DataTable table = new DataTable();
+            //            table.Columns.Add("id");
+            //            table.Columns.Add("str");
+
+            //            table.LoadDataRow(new object[] { "", "" }, true);
+            //            foreach (KeyValuePair<string, object> pair in source.GetLookupList())
+            //            {
+            //                table.LoadDataRow(new object[] { pair.Value, pair.Key }, true);
+            //            }
+            //            comboBoxCol.DataSource = table;
+            //            comboBoxCol.ValueMember = "str";
+            //            comboBoxCol.DisplayMember = "str";
+            //        }
+            //        comboBoxCol.DataPropertyName = dataColumn.ColumnName;
+            //        col = comboBoxCol;
+            //    }
+            //    else if (gridColumn.GridControlType == typeof(DataGridViewCheckBoxColumn))
+            //    {
+            //        DataGridViewCheckBoxColumn checkBoxCol = new DataGridViewCheckBoxColumn();
+            //        col = checkBoxCol;
+            //    }
+            //    else if (gridColumn.GridControlType == typeof(DataGridViewDateTimeColumn))
+            //    {
+            //        DataGridViewDateTimeColumn dateTimeCol = new DataGridViewDateTimeColumn();
+            //        col = dateTimeCol;
+            //        _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
+            //    }
+            //    else
+            //    {
+            //        col = (DataGridViewColumn)Activator.CreateInstance(gridColumn.GridControlType);
+            //    }
+            //    int width = (int)(dataColumn.ExtendedProperties["Width"]);
+            //    col.Width = width;
+            //    if (width == 0)
+            //    {
+            //        col.Visible = false;
+            //    }
+            //    col.ReadOnly = !gridColumn.Editable;
+            //    col.HeaderText = dataColumn.Caption;
+            //    col.Name = dataColumn.ColumnName;
+            //    col.DataPropertyName = dataColumn.ColumnName;
+            //    //col.MappingName = dataColumn.ColumnName;
+            //    col.SortMode = DataGridViewColumnSortMode.Automatic;
+
+            //    SetAlignment(col, gridColumn);
+            //    if (CompulsoryColumnsBold && propDef != null && propDef.Compulsory)
+            //    {
+            //        Font newFont = new Font(DefaultCellStyle.Font, FontStyle.Bold);
+            //        col.HeaderCell.Style.Font = newFont;
+            //    }
+
+            //    if (propDef != null && propDef.PropertyType == typeof(DateTime)
+            //        && gridColumn.GridControlType != typeof(DataGridViewDateTimeColumn))
+            //    {
+            //        _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
+            //    }
+
+            //    //if (propDef != null && propDef.PropertyName != gridColumn.GetHeading(classDef))
+            //    //{
+            //    //    foreach (BusinessObject bo in _collection)
+            //    //    {
+            //    //        BOProp boProp = bo.Props[propDef.PropertyName];
+            //    //        if (!boProp.HasDisplayName())
+            //    //        {
+            //    //            boProp.DisplayName = gridColumn.GetHeading(classDef);
+            //    //        }
+            //    //    }
+            //    //}
+
+            //    Columns.Add(col);
+            //    colNum++;
+            //}
+
+            //_dataTableDefaultView = _dataTable.DefaultView;
+            //this.AutoGenerateColumns = false;
+            //this.DataSource = _dataTableDefaultView;
+            ////this.DataSource = _dataTable;
+            //foreach (DataGridViewColumn dataGridViewColumn in this.Columns)
+            //{
+            //    if (!dataGridViewColumn.Visible)
+            //    {
+            //        dataGridViewColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            //        dataGridViewColumn.Resizable = DataGridViewTriState.False;
+            //    }
+            //}
+            //SetSorting(uiGrid);
+            //if (_currentFilterClause != null)
+            //{
+            //    ApplyFilter(_currentFilterClause);
+            //}
+            //FireCollectionChanged();
+        }
+
+        private void FireCollectionChanged()
+        {
+            if (this.CollectionChanged != null)
+            {
+                this.CollectionChanged(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Returns the business object collection being displayed in the grid
+        /// </summary>
+        /// <returns>Returns a business collection</returns>
+        public IBusinessObjectCollection GetCollection()
+        {
+            return _boCol;
         }
 
         /// <summary>
@@ -102,9 +296,8 @@ namespace Habanero.UI.Base
         /// <param name="row">The row number in question</param>
         /// <returns>Returns the busines object at that row, or null
         /// if none is found</returns>
-        private BusinessObject GetBusinessObjectAtRow(int row)
+        public BusinessObject GetBusinessObjectAtRow(int row)
         {
-
             return _boCol[row];
             //int i = 0; 
             //foreach (DataRowView dataRowView in _dataTableDefaultView)
@@ -120,6 +313,21 @@ namespace Habanero.UI.Base
         public void Clear()
         {
             SetCollection(null);
+        }
+
+        /// <summary>
+        /// Sets the sort column and indicates whether
+        /// it should be sorted in ascending or descending order
+        /// </summary>
+        /// <param name="columnName">The column number to set</param>
+        /// <param name="isBoProperty">Whether the property is a business
+        /// object property</param>
+        /// <param name="ascending">Whether sorting should be done in ascending
+        /// order ("false" sets it to descending order)</param>
+        public void SetSortColumn(string columnName, bool isBoProperty, bool ascending)
+        {
+            _boCol.Sort(columnName, isBoProperty, ascending);
+            SetCollection(_boCol);
         }
     }
 }

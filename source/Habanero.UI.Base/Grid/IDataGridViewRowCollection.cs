@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Habanero.UI.Base
 {
     public interface IDataGridViewRowCollection
