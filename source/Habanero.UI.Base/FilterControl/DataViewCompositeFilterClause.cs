@@ -19,7 +19,7 @@
 
 using Habanero.Base;
 
-namespace Habanero.UI
+namespace Habanero.UI.Base.FilterControl
 {
     /// <summary>
     /// Manages a composite filter clause, which is composed of individual

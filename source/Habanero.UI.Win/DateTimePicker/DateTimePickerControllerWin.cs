@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
-using Habanero.UI.Base;
-using Habanero.UI.Win;
 using Habanero.UI.Win.Util;
 
 namespace Habanero.UI.Win

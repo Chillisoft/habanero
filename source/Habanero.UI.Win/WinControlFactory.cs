@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using Habanero.UI;
+using Habanero.UI.Base;
+using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.Win
 {

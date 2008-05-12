@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.UI.Base.LayoutManagers;
 
-namespace Habanero.UI.FilterControl
+namespace Habanero.UI.Base.FilterControl
 {
     public class FilterControlManager
     {

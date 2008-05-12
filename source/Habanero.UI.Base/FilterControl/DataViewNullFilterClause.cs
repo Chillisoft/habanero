@@ -19,7 +19,7 @@
 
 using Habanero.Base;
 
-namespace Habanero.UI
+namespace Habanero.UI.Base.FilterControl
 {
     /// <summary>
     /// Manages a null filter clause, which carries out no filtering of data

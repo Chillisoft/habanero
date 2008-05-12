@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Habanero.UI
+namespace Habanero.UI.Base
 {
     public enum ListBoxSelectionMode
     {

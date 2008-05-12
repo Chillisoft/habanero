@@ -5,7 +5,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI;
 
-namespace Habanero.UI
+namespace Habanero.UI.Base
 {
     public class GridBaseManager
     {

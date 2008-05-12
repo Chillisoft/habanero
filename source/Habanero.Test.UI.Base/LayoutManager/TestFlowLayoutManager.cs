@@ -17,7 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using Habanero.UI;
+using Habanero.UI.Base;
 using Habanero.UI.Base.LayoutManagers;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;

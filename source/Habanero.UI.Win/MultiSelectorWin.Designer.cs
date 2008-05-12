@@ -69,7 +69,7 @@ namespace Habanero.UI.Win
             this._availableOptionsListbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this._availableOptionsListbox.Location = new System.Drawing.Point(3, 16);
             this._availableOptionsListbox.Name = "_availableOptionsListbox";
-            this._availableOptionsListbox.SelectionMode = Habanero.UI.ListBoxSelectionMode.MultiExtended;
+            this._availableOptionsListbox.SelectionMode = Habanero.UI.Base.ListBoxSelectionMode.MultiExtended;
             this._availableOptionsListbox.Size = new System.Drawing.Size(194, 342);
             this._availableOptionsListbox.TabIndex = 0;
             // 
@@ -92,7 +92,7 @@ namespace Habanero.UI.Win
             this._selectionsListbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this._selectionsListbox.Location = new System.Drawing.Point(3, 16);
             this._selectionsListbox.Name = "_selectionsListbox";
-            this._selectionsListbox.SelectionMode = Habanero.UI.ListBoxSelectionMode.MultiExtended;
+            this._selectionsListbox.SelectionMode = Habanero.UI.Base.ListBoxSelectionMode.MultiExtended;
             this._selectionsListbox.Size = new System.Drawing.Size(194, 342);
             this._selectionsListbox.TabIndex = 0;
             // 

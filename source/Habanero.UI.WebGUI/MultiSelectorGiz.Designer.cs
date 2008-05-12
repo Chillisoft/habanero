@@ -1,6 +1,6 @@
 
 
-using Habanero.UI;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
@@ -63,7 +63,7 @@ namespace Habanero.UI.WebGUI
             this._availableOptionsListbox.DragTargets = new Gizmox.WebGUI.Forms.Component[0];
             this._availableOptionsListbox.Location = new System.Drawing.Point(3, 16);
             this._availableOptionsListbox.Name = "_availableOptionsListbox";
-            this._availableOptionsListbox.SelectionMode = Habanero.UI.ListBoxSelectionMode.MultiExtended;
+            this._availableOptionsListbox.SelectionMode = Habanero.UI.Base.ListBoxSelectionMode.MultiExtended;
             this._availableOptionsListbox.Size = new System.Drawing.Size(194, 342);
             this._availableOptionsListbox.TabIndex = 0;
             // 
@@ -88,7 +88,7 @@ namespace Habanero.UI.WebGUI
             this._selectionsListbox.DragTargets = new Gizmox.WebGUI.Forms.Component[0];
             this._selectionsListbox.Location = new System.Drawing.Point(3, 16);
             this._selectionsListbox.Name = "_selectionsListbox";
-            this._selectionsListbox.SelectionMode = Habanero.UI.ListBoxSelectionMode.MultiExtended;
+            this._selectionsListbox.SelectionMode = Habanero.UI.Base.ListBoxSelectionMode.MultiExtended;
             this._selectionsListbox.Size = new System.Drawing.Size(194, 342);
             this._selectionsListbox.TabIndex = 0;
             // 

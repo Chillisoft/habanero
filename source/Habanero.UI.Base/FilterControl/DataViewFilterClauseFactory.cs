@@ -21,7 +21,7 @@ using System;
 using Habanero.Base;
 
 
-namespace Habanero.UI
+namespace Habanero.UI.Base.FilterControl
 {
     /// <summary>
     /// Creates filter clauses that determine which rows of data are displayed

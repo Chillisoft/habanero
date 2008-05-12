@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Habanero.UI
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// The model for the multiselector control. The type of the items in 

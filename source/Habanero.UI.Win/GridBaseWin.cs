@@ -1,12 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Windows.Forms;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
-using Habanero.UI;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {

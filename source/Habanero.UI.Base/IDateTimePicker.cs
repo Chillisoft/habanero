@@ -1,6 +1,6 @@
 using System;
 
-namespace Habanero.UI
+namespace Habanero.UI.Base
 {
     public interface IDateTimePicker : IChilliControl
     {

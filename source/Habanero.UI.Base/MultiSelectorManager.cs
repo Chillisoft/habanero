@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Habanero.UI
+namespace Habanero.UI.Base
 {
     public class MultiSelectorManager<T>
 

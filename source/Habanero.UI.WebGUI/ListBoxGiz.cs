@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
-using Habanero.UI;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {

@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
-using Habanero.UI;
+using Habanero.UI.Base;
+using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base.LayoutManagers;
-using Habanero.UI.FilterControl;
 
 namespace Habanero.UI.Win
 {

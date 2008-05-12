@@ -17,13 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Data;
-using System.Windows.Forms;
-using Habanero.Base.Exceptions;
-using Habanero.BO;
-using Habanero.BO.ClassDefinition;
-//using Habanero.UI.Grid;
 using NUnit.Framework;
+//using Habanero.UI.Grid;
 
 namespace Habanero.Test.UI.Grid
 {

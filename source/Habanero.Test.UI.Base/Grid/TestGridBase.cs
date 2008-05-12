@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI;
+using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;

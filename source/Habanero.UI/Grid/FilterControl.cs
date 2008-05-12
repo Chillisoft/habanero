@@ -65,7 +65,7 @@ namespace Habanero.UI.Grid
         /// <summary>
         /// Default constructor - uses the DataViewFilterClauseFactory as the filer clause factory.
         /// </summary>
-        public FilterControl() : this(new DataViewFilterClauseFactory()) {}
+        public FilterControl() : this(new Habanero.UI.Base.FilterControl.DataViewFilterClauseFactory()) { }
 
         /// <summary>
         /// Constructor to initialise a new filter control

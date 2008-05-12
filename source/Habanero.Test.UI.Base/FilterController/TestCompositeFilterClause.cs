@@ -1,5 +1,5 @@
 using Habanero.Base;
-using Habanero.UI;
+using Habanero.UI.Base.FilterControl;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController

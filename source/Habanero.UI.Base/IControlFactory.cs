@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.UI.Base.FilterControl;
 
-namespace Habanero.UI
+namespace Habanero.UI.Base
 {
     public interface IControlFactory
     {
