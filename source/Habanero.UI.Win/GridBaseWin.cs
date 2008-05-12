@@ -13,6 +13,11 @@ namespace Habanero.UI.Win
     {
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
 
+        public void Clear()
+        {
+            _mngr.Clear();
+        }
+
         private readonly GridBaseManager _mngr;
 
         public GridBaseWin()
@@ -32,17 +37,28 @@ namespace Habanero.UI.Win
         public void SetCollection(IBusinessObjectCollection col)
         {
             _mngr.SetCollection(col);
-            //base.Rows[0].Selected = true;
         }
 
         public new IDataGridViewRowCollection Rows
         {
-            get { return new DataGridViewRowCollectionWin(base.Rows); }
+            get
+            {
+                
+                return new DataGridViewRowCollectionWin(base.Rows);
+            }
+        }
+
+        public new IDataGridViewSelectedRowCollection SelectedRows
+        {
+            get { return new DataGridViewSelectedRowCollectionWin(base.SelectedRows); }
         }
 
         public new IDataGridViewColumnCollection Columns
         {
-            get { return new DataGridViewColumnCollectionWin(base.Columns); }
+            get
+            {
+                return new DataGridViewColumnCollectionWin(base.Columns);
+            }
         }
 
         public BusinessObject SelectedBusinessObject
@@ -51,17 +67,26 @@ namespace Habanero.UI.Win
             set { _mngr.SelectedBusinessObject = value; }
         }
 
+        public IList<BusinessObject> SelectedBusinessObjects
+        {
+            get
+            {
+                //DataGridViewRow row = new DataGridViewRow();
+                //row.DataBoundItem
+                 return _mngr.SelectedBusinessObjects;
+            }
+        }
+
+        //IList IGridBase.SelectedRows
+        //{
+        //    get { return base.SelectedRows; }
+        //}
+
         IList IChilliControl.Controls
         {
             get { return this.Controls; }
         }
-        //List<IChilliControl> IChilliControl.Controls
-        //{
-        //    get
-        //    {
-        //        return new List<IChilliControl>();
-        //    }
-        //}
+
         private class DataGridViewRowCollectionWin : IDataGridViewRowCollection
         {
             private readonly DataGridViewRowCollection _rows;
@@ -79,6 +104,7 @@ namespace Habanero.UI.Win
 
             public IDataGridViewRow this[int index]
             {
+
                 get { return new DataGridViewRowWin(_rows[index]); }
             }
         }
@@ -114,6 +140,45 @@ namespace Habanero.UI.Win
                 get { return _dataGridViewRow.Selected; }
                 set { _dataGridViewRow.Selected = value; }
             }
+            public object DataBoundItem
+            {
+                get { return _dataGridViewRow.DataBoundItem; }
+            }
+        }
+
+        private class DataGridViewSelectedRowCollectionWin : IDataGridViewSelectedRowCollection
+        {
+            private readonly DataGridViewSelectedRowCollection _selectedRows;
+
+            public DataGridViewSelectedRowCollectionWin(DataGridViewSelectedRowCollection selectedRows)
+            {
+                _selectedRows = selectedRows;
+            }
+            public int Count
+            {
+                get { return _selectedRows.Count; }
+            }
+
+            public IDataGridViewRow this[int index]
+            {
+                get { return new DataGridViewRowWin(_selectedRows[index]); }
+            }
+            ///<summary>
+            ///Returns an enumerator that iterates through a collection.
+            ///</summary>
+            ///
+            ///<returns>
+            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+            ///</returns>
+            ///<filterpriority>2</filterpriority>
+            public IEnumerator GetEnumerator()
+            {
+                foreach (DataGridViewRow row in _selectedRows)
+                {
+                    yield return new DataGridViewRowWin( row);
+                }
+            }
         }
     }
+
 }

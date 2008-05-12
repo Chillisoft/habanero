@@ -114,7 +114,7 @@ namespace Habanero.Test.UI.Grid
         //}
 
         //[Test]
-        //public void TestReadOnlyGridFiringItemSelected()
+        //public void TestGridFiringItemSelected()
         //{
         //    //---------------Set up test pack-------------------
         //    bool gridItemSelected = false;

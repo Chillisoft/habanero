@@ -14,6 +14,11 @@ namespace Habanero.UI.WebGUI
     {
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
 
+        public void Clear()
+        {
+            _mngr.Clear();
+        }
+
 
         private readonly GridBaseManager _mngr;
 
@@ -56,6 +61,21 @@ namespace Habanero.UI.WebGUI
         }
         }
 
+        public IList<BusinessObject> SelectedBusinessObjects
+        {
+            get
+            {
+                return _mngr.SelectedBusinessObjects;
+            }
+        }
+        IList IChilliControl.Controls
+        {
+            get { return this.Controls; }
+        }
+        public new IDataGridViewSelectedRowCollection SelectedRows
+        {
+            get { return new DataGridViewSelectedRowCollectionGiz(base.SelectedRows); }
+        }
         private class DataGridViewRowCollectionGiz : IDataGridViewRowCollection
         {
             private readonly DataGridViewRowCollection _rows;
@@ -107,18 +127,47 @@ namespace Habanero.UI.WebGUI
                 get { return _dataGridViewRow.Selected; }
                 set { _dataGridViewRow.Selected = value; }
             }
+
+            public object DataBoundItem
+            {
+                get { return _dataGridViewRow.DataBoundItem; }
+            }
         }
-        IList IChilliControl.Controls
+        private class DataGridViewSelectedRowCollectionGiz : IDataGridViewSelectedRowCollection
         {
-            get { return this.Controls; }
+            private readonly DataGridViewSelectedRowCollection _selectedRows;
+
+            public DataGridViewSelectedRowCollectionGiz(DataGridViewSelectedRowCollection selectedRows)
+            {
+                _selectedRows = selectedRows;
+            }
+
+            public int Count
+            {
+                get {return _selectedRows.Count; }
+            }
+
+            public IDataGridViewRow this[int index]
+            {
+                get { return new DataGridViewRowGiz(_selectedRows[index]); }
+            }
+
+            ///<summary>
+            ///Returns an enumerator that iterates through a collection.
+            ///</summary>
+            ///
+            ///<returns>
+            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+            ///</returns>
+            ///<filterpriority>2</filterpriority>
+            public IEnumerator GetEnumerator()
+            {
+                foreach (DataGridViewRow row in _selectedRows)
+                {
+                    yield return new DataGridViewRowGiz(row);
+                }
+            }
         }
-        //List<IChilliControl> IChilliControl.Controls
-        //{
-        //    get
-        //    {
-        //        return new List<IChilliControl>();
-        //    }
-        //}
     }
 
 }

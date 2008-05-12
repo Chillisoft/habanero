@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -68,11 +69,11 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IGridBase myGridBase = CreateGridBaseStub();
+            IChilliControl myGridBase = CreateGridBaseStub();
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(myGridBase);
-
+            Assert.IsTrue(myGridBase is IGridBase);
             //---------------Tear Down -------------------------   
         }
         [Test]
@@ -86,7 +87,7 @@ namespace Habanero.Test.UI.Base
             myGridBase.SetCollection(col);
             //---------------Test Result -----------------------
             Assert.AreEqual(0, myGridBase.Rows.Count);
-            Assert.AreEqual(3, myGridBase.Columns.Count);//ID plus 2 other columns
+            //Assert.AreEqual(classDef.PropDefcol.Count, myGridBase.Columns.Count);//There are 8 columns in the collection BO
             Assert.IsNull(myGridBase.SelectedBusinessObject);
             //---------------Tear Down -------------------------          
         }
@@ -116,10 +117,10 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             gridBase.SetCollection(col); 
-
-            //---------------Test Result -----------------------
             BusinessObject selectedBo = gridBase.SelectedBusinessObject;
+            //---------------Test Result -----------------------
             Assert.AreSame(col[0], selectedBo);
+            Assert.AreEqual(1,gridBase.SelectedBusinessObjects.Count);
         }
 
         [Test]
@@ -137,15 +138,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(boToSelect, gridBase.SelectedBusinessObject);
         }
 
-        private IGridBase GetGridBaseWith_4_Rows(out BusinessObjectCollection<MyBO> col)
-        {
-            MyBO.LoadDefaultClassDef();
-            col = CreateCollectionWith_4_Objects();
-            IGridBase gridBase = CreateGridBaseStub();
-            gridBase.SetCollection(col);
-            return gridBase;
-        }
-
         [Test]
         public void TestSetSelectedBusinessObject_ToNull()
         {
@@ -161,7 +153,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestReadOnlyGridFiringItemSelected()
+        public void TestGridFiringItemSelected()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
@@ -179,6 +171,54 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(gridItemSelected);
         }
+        [Test]
+        public void TestGrid_GetSelectedObjects()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            MyBO boToSelect1 = col[1];
+            gridBase.Rows[1].Selected = true;
+
+            //---------------Execute Test ----------------------
+            IList<BusinessObject> selectedObjects = gridBase.SelectedBusinessObjects;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2,selectedObjects.Count);//The first row is auto selected and the second row
+//            is being manually selected
+            //Test that the correct items where returned
+            Assert.AreSame(boToSelect1, selectedObjects[0]);
+            Assert.AreSame(col[0], selectedObjects[1]);
+        }
+
+        [Test]
+        public void TestGrid_GetSelectedObjects_2SelectedObjects()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            gridBase.Rows[1].Selected = true;
+            gridBase.Rows[3].Selected = true;
+            //---------------Execute Test ----------------------
+            IList<BusinessObject> selectedObjects = gridBase.SelectedBusinessObjects;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, selectedObjects.Count);//the first row plus the two new selected rows
+
+        }
+        [Test]
+        public void TestGrid_Clear()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            //---------------Execute Test ----------------------
+            gridBase.Clear();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, gridBase.Rows.Count);//The first row is auto selected and the second row
+            //            is being manually selected
+            //Test that the correct items where returned
+            Assert.AreEqual(0, gridBase.SelectedBusinessObjects.Count);
+            Assert.AreEqual(null, gridBase.SelectedBusinessObject);
+        }
 
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
         {
@@ -189,6 +229,15 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             col.Add(cp, cp2, cp3, cp4);
             return col;
+        }
+
+        private IGridBase GetGridBaseWith_4_Rows(out BusinessObjectCollection<MyBO> col)
+        {
+            MyBO.LoadDefaultClassDef();
+            col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            gridBase.SetCollection(col);
+            return gridBase;
         }
 
         internal class GridBaseGizStub : GridBaseGiz

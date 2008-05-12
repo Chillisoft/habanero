@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -17,8 +19,13 @@ namespace Habanero.UI.Base
 
         BusinessObject SelectedBusinessObject { get; set; }
 
+        IList<BusinessObject> SelectedBusinessObjects { get; }
+
+        IDataGridViewSelectedRowCollection SelectedRows { get; }
+
         event EventHandler<BOEventArgs> BusinessObjectSelected;
         event EventHandler SelectionChanged;
 
+        void Clear();
     }
 }

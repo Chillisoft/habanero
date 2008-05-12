@@ -45,9 +45,10 @@
     <Compile Include="FilterControl\DataViewNullFilterClause.cs" />
     <Compile Include="FilterControl\DataViewStringFilterClause.cs" />
     <Compile Include="FilterControl\FilterControlManager.cs" />
+    <Compile Include="Grid\IDataGridViewSelectedRowCollection.cs" />
     <Compile Include="IDateTimePicker.cs" />
     <Compile Include="FlowLayoutManager.cs" />
-    <Compile Include="GridBaseManager.cs" />
+    <Compile Include="Grid\GridBaseManager.cs" />
     <Compile Include="IButton.cs" />
     <Compile Include="ICheckBox.cs" />
     <Compile Include="IChilliControl.cs" />
@@ -55,10 +56,10 @@
     <Compile Include="IComboBoxObjectCollection.cs" />
     <Compile Include="IControlFactory.cs" />
     <Compile Include="FilterControl\IFilterControl.cs" />
-    <Compile Include="IDataGridViewColumnCollection.cs" />
-    <Compile Include="IDataGridViewRow.cs" />
-    <Compile Include="IDataGridViewRowCollection.cs" />
-    <Compile Include="IGridBase.cs" />
+    <Compile Include="Grid\IDataGridViewColumnCollection.cs" />
+    <Compile Include="Grid\IDataGridViewRow.cs" />
+    <Compile Include="Grid\IDataGridViewRowCollection.cs" />
+    <Compile Include="Grid\IGridBase.cs" />
     <Compile Include="ILabel.cs" />
     <Compile Include="IListBox.cs" />
     <Compile Include="IListBoxObjectCollection.cs" />
