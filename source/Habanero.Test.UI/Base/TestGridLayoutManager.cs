@@ -58,9 +58,9 @@ namespace Habanero.Test.UI.Base
         {
             Control ctl1 = new Control();
             manager.AddControl(ctl1);
-            Assert.AreSame(ctl1, ((ControlCollection) manager.Rows[0])[0],
+            Assert.AreSame(ctl1, ((Habanero.UI.ControlCollection)manager.Rows[0])[0],
                            "Control at position zero of row zero should be same as one first added");
-            Assert.AreSame(ctl1, ((ControlCollection) manager.Columns[0])[0],
+            Assert.AreSame(ctl1, ((Habanero.UI.ControlCollection)manager.Columns[0])[0],
                            "Control at position zero of column zero should be same as one first added");
         }
 
@@ -73,13 +73,13 @@ namespace Habanero.Test.UI.Base
             manager.AddControl(ctl1);
             Control ctl2 = new Control();
             manager.AddControl(ctl2);
-            Assert.AreSame(ctl1, ((ControlCollection) manager.Rows[0])[2],
+            Assert.AreSame(ctl1, ((Habanero.UI.ControlCollection)manager.Rows[0])[2],
                            "Control at position 2 of row 0 should be third control added.");
-            Assert.AreSame(ctl2, ((ControlCollection) manager.Rows[1])[0],
+            Assert.AreSame(ctl2, ((Habanero.UI.ControlCollection)manager.Rows[1])[0],
                            "Control at pos 0 of row 1 should be fourth control added.");
-            Assert.AreSame(ctl1, ((ControlCollection) manager.Columns[2])[0],
+            Assert.AreSame(ctl1, ((Habanero.UI.ControlCollection)manager.Columns[2])[0],
                            "Control at pos 0 of col 2 should be third control added.");
-            Assert.AreSame(ctl2, ((ControlCollection) manager.Columns[0])[1],
+            Assert.AreSame(ctl2, ((Habanero.UI.ControlCollection)manager.Columns[0])[1],
                            "Control as pos 1 of col 0 should be fourth control added.");
         }
 

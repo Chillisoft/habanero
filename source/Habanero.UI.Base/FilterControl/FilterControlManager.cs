@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI.Base.FilterControl
 {
     public class FilterControlManager
     {
         private readonly IControlFactory _controlFactory;
         private readonly IFilterClauseFactory _clauseFactory;
         private readonly List<FilterUI> _filterControls = new List<FilterUI>();
-
-        public FilterControlManager(IControlFactory controlFactory)
+        private readonly LayoutManager _flowLayoutManager;
+        public FilterControlManager(IControlFactory controlFactory, LayoutManager flowLayoutManager )
         {
             _controlFactory = controlFactory;
+            _flowLayoutManager = flowLayoutManager;
             _clauseFactory = new DataViewFilterClauseFactory();
         }
 
@@ -41,8 +42,11 @@ namespace Habanero.UI.Base
 
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
-
+            ILabel label = _controlFactory.CreateLabel(labelText);
             ITextBox textBox = _controlFactory.CreateTextBox();
+            _flowLayoutManager.AddControl(label);
+            _flowLayoutManager.AddGlue();
+            _flowLayoutManager.AddControl(textBox);
             _filterControls.Add(new FilterUIString(_clauseFactory, propertyName, textBox));
             return textBox;
         }
@@ -52,6 +56,10 @@ namespace Habanero.UI.Base
 
             IComboBox cb = _controlFactory.CreateComboBox();
             ////cb.Width = _filterWidth;
+            ILabel label = _controlFactory.CreateLabel(labelText);
+            _flowLayoutManager.AddControl(label);
+            _flowLayoutManager.AddGlue();
+            _flowLayoutManager.AddControl(cb);
             _filterControls.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options, strictMatch));
 
 
@@ -73,17 +81,80 @@ namespace Habanero.UI.Base
         /// filtering</param>
         /// <param name="isChecked">Whether the CheckBox is checked</param>
         /// <returns>Returns the new CheckBox added</returns>
-        public ICheckBox AddStringFilterCheckBox(string labelText, string propertyName, bool isChecked)
+        public ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool isChecked)
         {
             ICheckBox cb = _controlFactory.CreateCheckBox();
             ////cb.Width = _filterWidth;
             //_filterControls.Add(new FilterUIStringOptions(_clauseFactory, propertyName, cb, isChecked));
             //cb.Width = _controlFactory.CreateTextBox().Width; ;
-            //_filterControls.Add(new FilterUICheckBox(_clauseFactory, propertyName, cb, labelText, isChecked));
+            _flowLayoutManager.AddControl(cb);
+            _filterControls.Add(new FilterUICheckBox(_clauseFactory, propertyName, cb, labelText, isChecked));
             //cb.CheckedChanged += FilterControlValueChangedHandler;
             //FireFilterClauseChanged(cb);
-            //_controls.Add(cb);
             return cb;
+        }
+
+        /// <summary>
+        /// Adds a date-time picker that filters a date column on the date
+        /// chosen by the user.  The given operator compares the chosen date
+        /// with the date shown in the given column name.
+        /// </summary>
+        /// <param name="columnName">The name of the date-time column to be 
+        /// filtered on</param>
+        /// <param name="defaultDate">The default date or null</param>
+        /// <param name="filterClauseOperator">The operator used to compare
+        /// with the date chosen by the user.  The chosen date is on the
+        /// right side of the equation.</param>
+        /// <param name="ignoreTime">Sets all times produced by the DateTimePicker
+        /// to 12am before comparing dates</param>
+        /// <param name="nullable">Must the date time picker be nullable</param>
+        /// <returns>Returns the new DateTimePicker object added</returns>
+        public IDateTimePicker AddDateFilterDateTimePicker(string columnName, DateTime defaultDate, FilterClauseOperator filterClauseOperator, bool ignoreTime, bool nullable)
+        {
+            IDateTimePicker dtPicker = _controlFactory.CreateDateTimePicker();
+            _filterControls.Add(new FilterUIDate(_clauseFactory, columnName, dtPicker, filterClauseOperator, ignoreTime));
+            dtPicker.Value = defaultDate;
+            return dtPicker;
+            //if (defaultDate == null)
+            //{
+            //    dte = (IDateTimePicker)ControlFactory.CreateDateTimePicker();
+            //}
+            //else
+            //{
+            //    dte = (IDateTimePicker)ControlFactory.CreateDateTimePicker((DateTime)defaultDate);
+            //}
+            //dte.Width = _filterWidth;
+            //if (nullable)
+            //{
+            //    DateTimePickerController dateTimePickerController = new DateTimePickerController(dte);
+            //    _filterUIs.Add(new FilterUIDateNullable(_clauseFactory, columnName, dateTimePickerController, filterClauseOperator, ignoreTime));
+            //    dateTimePickerController.ValueChanged += delegate(object sender, EventArgs e)
+            //                                                 {
+            //                                                     FilterControlValueChangedHandler(dte, e);
+            //                                                 };
+            //}
+            //else
+            //{
+            //    _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator, ignoreTime));
+            //    dte.ValueChanged += FilterControlValueChangedHandler;
+            //}
+            //FireFilterClauseChanged(dte);
+            //_controls.Add(dte);
+            //return dte;
+        }
+
+
+
+        /// <summary>
+        /// Clears all the filters on the filter control (sets to null where it can or to the
+        /// default value where null cannot be set (e.g. checkBox)
+        /// </summary>
+        public void ClearFilters()
+        {
+            foreach (FilterUI filterUI in _filterControls)
+            {
+                filterUI.Clear();
+            }
         }
 
         /// <summary>
@@ -196,11 +267,92 @@ namespace Habanero.UI.Base
             }
         }
 
-        public void ClearFilters()
+        /// <summary>
+        /// Manages a CheckBox which the user can select to filter boolean
+        /// values
+        /// </summary>
+        private class FilterUICheckBox : FilterUI
         {
-            foreach (FilterUI filterUI in _filterControls)
+            private readonly ICheckBox _checkBox;
+            private readonly bool _isChecked;
+
+            public FilterUICheckBox(IFilterClauseFactory clauseFactory, string columnName, ICheckBox checkBox,
+                                    string text, bool isChecked)
+                : base(clauseFactory, columnName)
             {
-                filterUI.Clear();
+                _checkBox = checkBox;
+                _isChecked = isChecked;
+                _checkBox.Checked = isChecked;
+                _checkBox.Text = text;
+            }
+
+            public override IFilterClause GetFilterClause()
+            {
+                if (_checkBox.Checked)
+                {
+                    return
+                        _clauseFactory.CreateStringFilterClause(_columnName,
+                                                                FilterClauseOperator.OpEquals, "true");
+                }
+                else
+                {
+                    return
+                        _clauseFactory.CreateStringFilterClause(_columnName,
+                                                                FilterClauseOperator.OpEquals, "false");
+                }
+            }
+
+            public override void Clear()
+            {
+                //Reset the check box to its default value
+                _checkBox.Checked = _isChecked;
+            }
+ 
+        }
+        /// <summary>
+        /// Provides a filter clause from a given DateTime Picker, using the
+        /// column name and filter clause operator provided
+        /// </summary>
+        private class FilterUIDate : FilterUI
+        {
+            private readonly IDateTimePicker _dateTimePicker;
+            private readonly FilterClauseOperator _filterClauseOperator;
+            private readonly bool _ignoreTime;
+
+            public FilterUIDate(IFilterClauseFactory clauseFactory, string columnName, IDateTimePicker dtp,
+                                      FilterClauseOperator op, bool ignoreTime)
+                : base(clauseFactory, columnName)
+            {
+                _dateTimePicker = dtp;
+                _filterClauseOperator = op;
+                _ignoreTime = ignoreTime;
+            }
+
+            public override IFilterClause GetFilterClause()
+            {
+                DateTime date = _dateTimePicker.Value;
+                if (_ignoreTime)
+                {
+                    date = date.Date;
+                }
+                if (_filterClauseOperator == FilterClauseOperator.OpLike)
+                {
+                    IFilterClause startClause = _clauseFactory.CreateDateFilterClause(
+                        _columnName, FilterClauseOperator.OpGreaterThanOrEqualTo, date);
+                    IFilterClause endClause = _clauseFactory.CreateDateFilterClause(
+                        _columnName, FilterClauseOperator.OpLessThan, date.AddDays(1));
+                    return _clauseFactory.CreateCompositeFilterClause(
+                        startClause, FilterClauseCompositeOperator.OpAnd, endClause);
+                }
+                else
+                {
+                    return _clauseFactory.CreateDateFilterClause(_columnName, _filterClauseOperator, date);
+                }
+            }
+
+            public override void Clear()
+            {
+                throw new NotImplementedException();
             }
         }
     }

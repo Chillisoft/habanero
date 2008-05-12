@@ -3,7 +3,7 @@ using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
-    public interface IGridBase
+    public interface IGridBase:IChilliControl
     {
         void SetCollection(IBusinessObjectCollection col);
 

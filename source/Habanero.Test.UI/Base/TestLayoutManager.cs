@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Windows.Forms;
-using Habanero.UI.Base;
+using Habanero.UI;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -82,6 +82,7 @@ namespace Habanero.Test.UI.Base
             {
                 mRefreshed = true;
             }
+
         }
     }
 }

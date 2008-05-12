@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using Gizmox.WebGUI.Forms;
 using Habanero.BO;
@@ -106,6 +108,17 @@ namespace Habanero.UI.WebGUI
                 set { _dataGridViewRow.Selected = value; }
             }
         }
+        IList IChilliControl.Controls
+        {
+            get { return this.Controls; }
+        }
+        //List<IChilliControl> IChilliControl.Controls
+        //{
+        //    get
+        //    {
+        //        return new List<IChilliControl>();
+        //    }
+        //}
     }
 
 }

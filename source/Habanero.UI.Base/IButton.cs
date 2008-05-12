@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Habanero.UI.Base
 {
-    public interface IButton
+    public interface IButton:IChilliControl
     {
         void PerformClick();
 

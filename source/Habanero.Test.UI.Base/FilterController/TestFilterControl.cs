@@ -5,7 +5,7 @@ using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Base
+namespace Habanero.Test.UI.Base.FilterController
 {
     [TestFixture]
     public class TestFilterControl
@@ -535,6 +535,4 @@ namespace Habanero.Test.UI.Base
 //
 //
     }
-
-
 }

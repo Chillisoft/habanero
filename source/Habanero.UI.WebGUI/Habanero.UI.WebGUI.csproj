@@ -53,6 +53,12 @@
     <Compile Include="ButtonGiz.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ControlGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DateTimePickerGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GizmoxControlFactory.cs">
     </Compile>
     <Compile Include="GridBaseGiz.cs">
@@ -69,6 +75,9 @@
     </Compile>
     <Compile Include="MultiSelectorGiz.Designer.cs">
       <DependentUpon>MultiSelectorGiz.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelGiz.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextBoxGiz.cs">

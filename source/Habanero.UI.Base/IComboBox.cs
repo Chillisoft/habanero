@@ -1,7 +1,7 @@
 
 namespace Habanero.UI.Base
 {
-    public interface IComboBox
+    public interface IComboBox:IChilliControl
     {
         IComboBoxObjectCollection Items { get; }
         int SelectedIndex { get; set; }

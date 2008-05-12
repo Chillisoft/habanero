@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using Habanero.BO;
@@ -49,7 +51,17 @@ namespace Habanero.UI.Win
             set { _mngr.SelectedBusinessObject = value; }
         }
 
-
+        IList IChilliControl.Controls
+        {
+            get { return this.Controls; }
+        }
+        //List<IChilliControl> IChilliControl.Controls
+        //{
+        //    get
+        //    {
+        //        return new List<IChilliControl>();
+        //    }
+        //}
         private class DataGridViewRowCollectionWin : IDataGridViewRowCollection
         {
             private readonly DataGridViewRowCollection _rows;

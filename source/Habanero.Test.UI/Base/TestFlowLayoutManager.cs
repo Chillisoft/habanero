@@ -18,10 +18,10 @@
 //---------------------------------------------------------------------------------
 
 using System.Windows.Forms;
-using Habanero.UI.Base;
+using Habanero.UI;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Base
+namespace Habanero.Test.UI
 {
     [TestFixture]
     public class TestFlowLayoutManager
@@ -40,7 +40,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestControl()
+        public void TestManagedControl()
         {
             Assert.AreSame(managedControl, manager.ManagedControl);
         }
@@ -368,7 +368,7 @@ namespace Habanero.Test.UI.Base
                             "ctl2 should move to next line by itself (since ctl and ctl2 can't fit on one line.");
             Assert.AreEqual(20, ctl2.Top, "ctl2 should be in row 2");
         }
-        
+
         [Test]
         public void TestRightAlignedTabOrdering()
         {
@@ -377,10 +377,10 @@ namespace Habanero.Test.UI.Base
             manager.AddControl(ctl1);
             Control ctl2 = CreateControl(20, 20);
             manager.AddControl(ctl2);
-            //Assert.AreEqual(0, ctl2.TabIndex);
+            Assert.AreEqual(0, ctl2.TabIndex);
             Assert.AreEqual(1, ctl1.TabIndex);
         }
-        
+
         [Test]
         public void TestRightAlignedTabOrderingMultipleRows()
         {

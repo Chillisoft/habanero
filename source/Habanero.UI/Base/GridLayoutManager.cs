@@ -28,9 +28,9 @@ namespace Habanero.UI.Base
     /// Manages the layout of controls in a user interface by assigning
     /// them to positions in a grid with rows and columns
     /// </summary>
-    public class GridLayoutManager : LayoutManager
+    public class GridLayoutManager : UI.LayoutManager
     {
-        private ControlCollection _controls;
+        private UI.ControlCollection _controls;
         private Hashtable _controlInfoTable;
         private Point _currentPos;
         private int[] _columnWidths;
@@ -45,7 +45,7 @@ namespace Habanero.UI.Base
         /// <param name="managedControl">The control to manage</param>
         public GridLayoutManager(Control managedControl) : base(managedControl)
         {
-            _controls = new ControlCollection();
+            _controls = new UI.ControlCollection();
             _controlInfoTable = new Hashtable();
             this.SetGridSize(2, 2);
         }
@@ -99,7 +99,7 @@ namespace Habanero.UI.Base
                 IList rows = new ArrayList();
                 for (int i = 0; i < RowCount; i++)
                 {
-                    ControlCollection row = new ControlCollection();
+                    UI.ControlCollection row = new UI.ControlCollection();
                     for (int j = 0; j < ColumnCount; j++)
                     {
                         if ((i*ColumnCount + j) < this._controls.Count)
@@ -127,7 +127,7 @@ namespace Habanero.UI.Base
                 IList cols = new ArrayList();
                 for (int i = 0; i < ColumnCount; i++)
                 {
-                    ControlCollection col = new ControlCollection();
+                    UI.ControlCollection col = new UI.ControlCollection();
                     for (int j = 0; j < RowCount; j++)
                     {
                         if ((ColumnCount*j + i) < this._controls.Count)

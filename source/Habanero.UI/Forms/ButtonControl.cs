@@ -29,7 +29,7 @@ namespace Habanero.UI.Forms
     public class ButtonControl : UserControl
     {
         private FlowLayoutManager _layoutManager;
-        private Base.ControlCollection _buttons;
+        private UI.ControlCollection _buttons;
 
         /// <summary>
         /// Constructor to initialise a new button controller.  Sets up a new
@@ -39,7 +39,7 @@ namespace Habanero.UI.Forms
         {
             _layoutManager = new FlowLayoutManager(this);
             _layoutManager.Alignment = FlowLayoutManager.Alignments.Right;
-            _buttons = new Base.ControlCollection();
+            _buttons = new UI.ControlCollection();
             Button sample = ControlFactory.CreateButton("Sample");
             this.Height = sample.Height + 10;
         }

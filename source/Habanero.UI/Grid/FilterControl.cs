@@ -154,6 +154,7 @@ namespace Habanero.UI.Grid
         /// the given date should be accepted, or false if all dates below or
         /// equal should be accepted</param>
         /// <returns>Returns the new DateTimePicker added</returns>
+        [Obsolete]
         public DateTimePicker AddStringFilterDateTimeEditor(string label, string columnName, object defaultValue,
                                                             bool filterGreaterThan)
         {

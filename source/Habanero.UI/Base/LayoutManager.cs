@@ -28,7 +28,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public abstract class LayoutManager : MarshalByRefObject
     {
-        private Control _managedControl;
+        private readonly Control _managedControl;
         private int _borderSize = 5;
         private int _gapSize = 2;
 
@@ -39,7 +39,7 @@ namespace Habanero.UI.Base
         public LayoutManager(Control managedControl)
         {
             _managedControl = managedControl;
-            _managedControl.Resize += new EventHandler(this.ManagedControlResizeHandler);
+            _managedControl.Resize += this.ManagedControlResizeHandler;
         }
 
         /// <summary>

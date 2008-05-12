@@ -25,9 +25,9 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Manages a layout with multiple columns
     /// </summary>
-    public class ColumnLayoutManager : LayoutManager
+    public class ColumnLayoutManager : UI.LayoutManager
     {
-        private ControlCollection _controls;
+        private UI.ControlCollection _controls;
         private int _numCols;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Habanero.UI.Base
         /// <param name="managedControl">The control to manage</param>
         public ColumnLayoutManager(Control managedControl) : base(managedControl)
         {
-            _controls = new ControlCollection();
+            _controls = new UI.ControlCollection();
             _numCols = 1;
         }
 

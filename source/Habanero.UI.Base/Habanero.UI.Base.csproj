@@ -32,9 +32,11 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlCollection.cs" />
     <Compile Include="FilterControl\DataViewCompositeFilterClause.cs" />
     <Compile Include="FilterControl\DataViewDateFilterClause.cs" />
     <Compile Include="FilterControl\DataViewFilterClause.cs" />
@@ -43,6 +45,8 @@
     <Compile Include="FilterControl\DataViewNullFilterClause.cs" />
     <Compile Include="FilterControl\DataViewStringFilterClause.cs" />
     <Compile Include="FilterControl\FilterControlManager.cs" />
+    <Compile Include="IDateTimePicker.cs" />
+    <Compile Include="FlowLayoutManager.cs" />
     <Compile Include="GridBaseManager.cs" />
     <Compile Include="IButton.cs" />
     <Compile Include="ICheckBox.cs" />
@@ -61,6 +65,7 @@
     <Compile Include="IListBoxSelectedObjectCollection.cs" />
     <Compile Include="IMultiSelector.cs" />
     <Compile Include="ITextBox.cs" />
+    <Compile Include="LayoutManager.cs" />
     <Compile Include="MultiSelectorManager.cs" />
     <Compile Include="MultiSelectorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

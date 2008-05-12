@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
@@ -40,7 +42,25 @@ namespace Habanero.UI.WebGUI
 
         public ILabel CreateLabel()
         {
-            return new LabelGiz();
+            return CreateLabel("");
+        }
+
+        public ILabel CreateLabel(string labelText)
+        {
+            LabelGiz label = new LabelGiz(labelText);
+            label.Width = label.Text.Length * 8;
+            label.Height = 15;
+            return label;
+        }
+
+        public IDateTimePicker CreateDateTimePicker()
+        {
+            return new DateTimePickerGiz();
+        }
+
+        public IChilliControl CreateControl()
+        {
+            return new ControlGiz();
         }
     }
 }

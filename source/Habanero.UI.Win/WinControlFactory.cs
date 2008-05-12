@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 
@@ -43,6 +45,23 @@ namespace Habanero.UI.Win
         public ILabel CreateLabel()
         {
             return new LabelWin();
+        }
+
+        public ILabel CreateLabel(string labelText)
+        {
+            ILabel label = CreateLabel();
+            label.Text = labelText;
+            return label;
+        }
+
+        public IDateTimePicker CreateDateTimePicker()
+        {
+            return new  DateTimePickerWin();
+        }
+
+        public IChilliControl CreateControl()
+        {
+            return new ControlWin();
         }
     }
 }

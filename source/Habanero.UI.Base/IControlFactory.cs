@@ -14,5 +14,8 @@ namespace Habanero.UI.Base
         IButton CreateButton();
         ICheckBox CreateCheckBox();
         ILabel CreateLabel();
+        IChilliControl CreateControl();
+        ILabel CreateLabel(string labelText);
+        IDateTimePicker CreateDateTimePicker();
     }
 }

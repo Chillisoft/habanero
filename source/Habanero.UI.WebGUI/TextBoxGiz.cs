@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
@@ -14,9 +16,16 @@ namespace Habanero.UI.WebGUI
 
         //private readonly TextBoxManager _manager = new TextBoxManager();
 
-        //IList<IChilliControl> IControl.ChilliControls
+        IList IChilliControl.Controls
+        {
+            get { return this.Controls; }
+        }
+        //List<IChilliControl> IChilliControl.Controls
         //{
-        //    get { return _tb.ChilliControls; }
+        //    get
+        //    {
+        //        return new List<IChilliControl>();
+        //    }
         //}
     }
 }

@@ -48,17 +48,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FilterController\TestCompositeFilterClause.cs" />
+    <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
+    <Compile Include="FilterController\TestFilterControlDate.cs" />
+    <Compile Include="Grid\TestReadOnlyGrid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestDataViewFilterClauseFactory.cs" />
-    <Compile Include="TestDataViewFilterClauseFactoryWithStrings.cs" />
-    <Compile Include="TestFilterControl.cs" />
-    <Compile Include="TestFilterControlCheckBox.cs" />
-    <Compile Include="TestGridBase.cs">
+    <Compile Include="TestControlCollection.cs" />
+    <Compile Include="FilterController\TestDataViewFilterClauseFactory.cs" />
+    <Compile Include="FilterController\TestDataViewFilterClauseFactoryWithStrings.cs" />
+    <Compile Include="FilterController\TestFilterControl.cs" />
+    <Compile Include="FilterController\TestFilterControlCheckBox.cs" />
+    <Compile Include="LayoutManager\TestFlowLayoutManager.cs" />
+    <Compile Include="Grid\TestGridBase.cs">
     </Compile>
     <Compile Include="TestLabel.cs" />
+    <Compile Include="LayoutManager\TestLayoutManager.cs" />
     <Compile Include="TestListBox.cs" />
-    <Compile Include="TestMultiSelector.cs" />
-    <Compile Include="TestMultiSelectorModel.cs" />
+    <Compile Include="MultiSelector\TestMultiSelector.cs" />
+    <Compile Include="MultiSelector\TestMultiSelectorModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">

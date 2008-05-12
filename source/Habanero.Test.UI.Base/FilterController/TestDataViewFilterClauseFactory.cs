@@ -78,47 +78,7 @@ namespace Habanero.Test.UI.Base
             itsFilterClauseFactory.CreateIntegerFilterClause("TestColumn", FilterClauseOperator.OpLike, 11);
         }
 
-        [Test]
-        public void TestCompositeWithAnd()
-        {
-            IFilterClause stringFilterClause =
-                itsFilterClauseFactory.CreateStringFilterClause("TestColumnString", FilterClauseOperator.OpEquals,
-                                                                "testvalue");
-            IFilterClause intFilterClause =
-                itsFilterClauseFactory.CreateIntegerFilterClause("TestColumnInt", FilterClauseOperator.OpEquals, 12);
-            IFilterClause compositeClause =
-                itsFilterClauseFactory.CreateCompositeFilterClause(stringFilterClause,
-                                                                   FilterClauseCompositeOperator.OpAnd, intFilterClause);
-            Assert.AreEqual("(TestColumnString = 'testvalue') and (TestColumnInt = 12)",
-                            compositeClause.GetFilterClauseString());
-        }
 
-        [Test]
-        public void TestCompositeWithOr()
-        {
-            IFilterClause stringFilterClause =
-                itsFilterClauseFactory.CreateStringFilterClause("TestColumnString", FilterClauseOperator.OpEquals,
-                                                                "testvalue");
-            IFilterClause intFilterClause =
-                itsFilterClauseFactory.CreateIntegerFilterClause("TestColumnInt", FilterClauseOperator.OpEquals, 12);
-            IFilterClause compositeClause =
-                itsFilterClauseFactory.CreateCompositeFilterClause(stringFilterClause,
-                                                                   FilterClauseCompositeOperator.OpOr, intFilterClause);
-            Assert.AreEqual("(TestColumnString = 'testvalue') or (TestColumnInt = 12)",
-                            compositeClause.GetFilterClauseString());
-        }
-
-        [Test]
-        public void TestCompositeWithNullClauses()
-        {
-            IFilterClause nullFilterClause = itsFilterClauseFactory.CreateNullFilterClause();
-            IFilterClause intFilterClause =
-                itsFilterClauseFactory.CreateIntegerFilterClause("TestColumnInt", FilterClauseOperator.OpEquals, 12);
-            IFilterClause compositeClause =
-                itsFilterClauseFactory.CreateCompositeFilterClause(nullFilterClause, FilterClauseCompositeOperator.OpOr,
-                                                                   intFilterClause);
-            Assert.AreEqual("TestColumnInt = 12", compositeClause.GetFilterClauseString());
-        }
 
         [Test]
         public void TestEqualsWithSingleQuote()

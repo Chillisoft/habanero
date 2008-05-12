@@ -32,7 +32,7 @@ namespace Habanero.UI.Base
     /// layout manager allows the controls to be added in any order and
     /// still be positioned correctly.
     /// </summary>
-    public class BorderLayoutManager : LayoutManager
+    public class BorderLayoutManager : UI.LayoutManager
     {
         /// <summary>
         /// An enumeration to specify different layout positions that can
@@ -40,15 +40,25 @@ namespace Habanero.UI.Base
         /// </summary>
         public enum Position
         {
+            ///<summary>
+            ///</summary>
             Centre = 0,
+            ///<summary>
+            ///</summary>
             East = 1,
+            ///<summary>
+            ///</summary>
             West = 2,
+            ///<summary>
+            ///</summary>
             North = 3,
+            ///<summary>
+            ///</summary>
             South = 4
         }
 
-        private ControlCollection _controls;
-        private bool[] _splitters;
+        private readonly UI.ControlCollection _controls;
+        private readonly bool[] _splitters;
 
         /// <summary>
         /// Constructor to initalise a new layout manager
@@ -58,7 +68,7 @@ namespace Habanero.UI.Base
         /// managing)</param>
         public BorderLayoutManager(Control managedControl) : base(managedControl)
         {
-            _controls = new ControlCollection();
+            _controls = new UI.ControlCollection();
             _splitters = new bool[5];
             for (int i = 0; i < 5; i++)
             {

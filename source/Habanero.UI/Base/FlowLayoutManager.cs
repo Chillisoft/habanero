@@ -31,7 +31,6 @@ namespace Habanero.UI.Base
     /// </summary>
     public class FlowLayoutManager : LayoutManager
     {
-        //todo brett change to a List<IControl> when porting
         private readonly ControlCollection _controls;
         private readonly IList _newLinePositions;
         private Alignments _alignment;

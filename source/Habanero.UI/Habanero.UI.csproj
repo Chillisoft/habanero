@@ -58,6 +58,7 @@
     <Compile Include="Base\IControlMapper.cs" />
     <Compile Include="Base\IUISettings.cs" />
     <Compile Include="Base\UISettings.cs" />
+    <Compile Include="FlowLayoutManager.cs" />
     <Compile Include="Forms\BoPanelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -167,7 +168,6 @@
     <Compile Include="Grid\ReadOnlyGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Base\FlowLayoutManager.cs" />
     <Compile Include="Base\IFormControl.cs" />
     <Compile Include="Grid\GridBase.cs">
       <SubType>Component</SubType>
@@ -176,7 +176,6 @@
     <Compile Include="Grid\IEditableGrid.cs" />
     <Compile Include="Grid\IGridWithButtons.cs" />
     <Compile Include="Grid\IReadOnlyGrid.cs" />
-    <Compile Include="Base\LayoutManager.cs" />
     <Compile Include="Grid\NumericUpDownCell.cs" />
     <Compile Include="Grid\NumericUpDownEditingControl.cs">
       <SubType>Component</SubType>
@@ -184,6 +183,7 @@
     <Compile Include="Grid\ReadOnlyGridWithButtons.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="LayoutManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ControlsHelper.cs" />
     <Compile Include="Util\DateTimePickerUtil.cs" />

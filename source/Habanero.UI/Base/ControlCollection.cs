@@ -21,7 +21,7 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// Manages a collection of controls

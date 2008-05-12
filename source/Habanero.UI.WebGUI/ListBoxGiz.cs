@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
@@ -38,6 +39,18 @@ namespace Habanero.UI.WebGUI
             get { return (ListBoxSelectionMode) Enum.Parse(typeof(ListBoxSelectionMode), base.SelectionMode.ToString()); }
             set { base.SelectionMode = (SelectionMode) Enum.Parse(typeof (SelectionMode), value.ToString()); }
         }
+
+        IList IChilliControl.Controls
+        {
+            get { return this.Controls; }
+        }
+        //List<IChilliControl> IChilliControl.Controls
+        //{
+        //    get
+        //    {
+        //        return new List<IChilliControl>();
+        //    }
+        //}
 
         private class ListBoxObjectCollectionGiz : IListBoxObjectCollection
         {

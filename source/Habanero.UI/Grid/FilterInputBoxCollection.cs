@@ -702,7 +702,7 @@ namespace Habanero.UI.Grid
         private class FilterUIStringOptions : FilterUI
         {
             private readonly ComboBox _comboBox;
-            private bool _strictMatch;
+            private readonly bool _strictMatch;
 
             public FilterUIStringOptions(IFilterClauseFactory clauseFactory, string columnName, ComboBox comboBox,
                                          ICollection options, bool strictMatch)
