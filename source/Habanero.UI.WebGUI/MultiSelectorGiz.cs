@@ -9,7 +9,7 @@ using System.Text;
 
 using Gizmox.WebGUI.Common;
 using Gizmox.WebGUI.Forms;
-using Habanero.UI.Base;
+using Habanero.UI;
 
 #endregion
 

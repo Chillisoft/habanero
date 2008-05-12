@@ -1,5 +1,5 @@
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     public interface IComboBox:IChilliControl
     {

@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// Provides a store of application-wide user interface settings

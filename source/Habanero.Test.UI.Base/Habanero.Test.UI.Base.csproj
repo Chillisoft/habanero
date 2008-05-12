@@ -61,6 +61,7 @@
     <Compile Include="LayoutManager\TestFlowLayoutManager.cs" />
     <Compile Include="Grid\TestGridBase.cs">
     </Compile>
+    <Compile Include="TestDateTimePickerController.cs" />
     <Compile Include="TestLabel.cs" />
     <Compile Include="LayoutManager\TestLayoutManager.cs" />
     <Compile Include="TestListBox.cs" />

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Habanero.Base;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     public interface IFilterControl : IChilliControl
     {

@@ -25,7 +25,7 @@ using Habanero.Base.Exceptions;
 using Habanero.UI.Forms;
 using Noogen.WinForms;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// Produces a range of user interface objects as requested

@@ -1,10 +1,10 @@
 using System.Collections;
 using Gizmox.WebGUI.Forms;
-using Habanero.UI.Base;
+using Habanero.UI;
 
 namespace Habanero.UI.WebGUI
 {
-    internal class DateTimePickerGiz : DateTimePicker, IDateTimePicker
+    public class DateTimePickerGiz : DateTimePicker, IDateTimePicker
     {
         IList IChilliControl.Controls
         {

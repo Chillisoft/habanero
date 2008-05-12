@@ -1,6 +1,6 @@
 using System;
 using Habanero.Base;
-using Habanero.UI.Base;
+using Habanero.UI;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;

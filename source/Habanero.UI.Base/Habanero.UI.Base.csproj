@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlCollection.cs" />
+    <Compile Include="DateTimePicker\DateTimePickerController.cs" />
     <Compile Include="FilterControl\DataViewCompositeFilterClause.cs" />
     <Compile Include="FilterControl\DataViewDateFilterClause.cs" />
     <Compile Include="FilterControl\DataViewFilterClause.cs" />
@@ -48,7 +49,7 @@
     <Compile Include="Grid\IDataGridViewColumn.cs" />
     <Compile Include="Grid\IDataGridViewSelectedRowCollection.cs" />
     <Compile Include="IDateTimePicker.cs" />
-    <Compile Include="FlowLayoutManager.cs" />
+    <Compile Include="LayoutManagers\FlowLayoutManager.cs" />
     <Compile Include="Grid\GridBaseManager.cs" />
     <Compile Include="IButton.cs" />
     <Compile Include="ICheckBox.cs" />
@@ -67,7 +68,7 @@
     <Compile Include="IListBoxSelectedObjectCollection.cs" />
     <Compile Include="IMultiSelector.cs" />
     <Compile Include="ITextBox.cs" />
-    <Compile Include="LayoutManager.cs" />
+    <Compile Include="LayoutManagers\LayoutManager.cs" />
     <Compile Include="MultiSelectorManager.cs" />
     <Compile Include="MultiSelectorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,6 +89,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

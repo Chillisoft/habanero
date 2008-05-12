@@ -19,7 +19,7 @@
 
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.UI.Base;
+using Habanero.UI;
 
 namespace Habanero.Test
 {

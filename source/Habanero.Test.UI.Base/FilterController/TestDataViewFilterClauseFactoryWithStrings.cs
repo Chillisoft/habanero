@@ -19,7 +19,7 @@
 
 using System.Data;
 using Habanero.Base;
-using Habanero.UI.Base;
+using Habanero.UI;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base

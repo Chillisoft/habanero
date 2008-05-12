@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Habanero.UI.Base;
+using Habanero.UI;
 
 namespace Habanero.UI.Win
 {

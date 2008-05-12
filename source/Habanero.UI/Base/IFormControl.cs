@@ -19,7 +19,7 @@
 
 using System.Windows.Forms;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// An interface to model an interface control for a form

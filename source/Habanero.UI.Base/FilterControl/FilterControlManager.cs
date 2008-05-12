@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.UI.Base.LayoutManagers;
 
-namespace Habanero.UI.Base.FilterControl
+namespace Habanero.UI.FilterControl
 {
     public class FilterControlManager
     {

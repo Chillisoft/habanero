@@ -19,7 +19,7 @@
 
 using Habanero.BO;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// An interface for controls that manage business objects

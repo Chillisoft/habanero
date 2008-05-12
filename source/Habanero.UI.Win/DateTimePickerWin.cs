@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Windows.Forms;
-using Habanero.UI.Base;
+using Habanero.UI;
 
 namespace Habanero.UI.Win
 {
-    internal class DateTimePickerWin : DateTimePicker, IDateTimePicker
+    public class DateTimePickerWin : DateTimePicker, IDateTimePicker
     {
         IList IChilliControl.Controls
         {

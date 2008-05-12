@@ -22,7 +22,7 @@ using System;
 using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
+using Habanero.UI;
 using Habanero.UI.Forms;
 using NMock;
 using NUnit.Framework;

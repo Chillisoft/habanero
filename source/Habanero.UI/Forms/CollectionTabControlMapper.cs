@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.BO;
-using Habanero.UI.Base;
+using Habanero.UI;
 using Habanero.UI.Util;
 
 namespace Habanero.UI.Forms

@@ -19,7 +19,7 @@
 
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.UI.Base;
+using Habanero.UI;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base

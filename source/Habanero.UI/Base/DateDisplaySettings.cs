@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// Stores date display settings that define how dates should

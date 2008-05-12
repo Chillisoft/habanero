@@ -20,7 +20,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// Manages a layout with multiple columns

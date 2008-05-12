@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     public interface IListBoxSelectedObjectCollection : IEnumerable
     {

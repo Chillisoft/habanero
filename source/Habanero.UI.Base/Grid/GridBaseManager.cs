@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
+using Habanero.UI;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     public class GridBaseManager
     {

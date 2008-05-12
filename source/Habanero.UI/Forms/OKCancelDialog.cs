@@ -21,7 +21,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Habanero.UI.Base;
+using Habanero.UI;
 
 namespace Habanero.UI.Forms
 {

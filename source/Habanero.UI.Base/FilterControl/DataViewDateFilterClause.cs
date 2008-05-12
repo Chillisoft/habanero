@@ -20,9 +20,9 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.UI.Base;
+using Habanero.UI;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// Manages a filter clause that filters which data to

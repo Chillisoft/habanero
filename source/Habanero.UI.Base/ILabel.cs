@@ -1,4 +1,4 @@
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     public interface ILabel:IChilliControl
     {

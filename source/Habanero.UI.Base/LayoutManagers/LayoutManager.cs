@@ -19,7 +19,7 @@
 
 using System;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI.Base.LayoutManagers
 {
     /// <summary>
     /// A super-class for layout managers that dictate how and where controls

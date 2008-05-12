@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.BO;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     public interface IGridBase: IChilliControl
     {

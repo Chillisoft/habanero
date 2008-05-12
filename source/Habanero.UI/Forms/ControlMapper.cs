@@ -26,7 +26,7 @@ using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
+using Habanero.UI;
 using Habanero.Util;
 using Habanero.Util.File;
 using log4net;

@@ -20,7 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-using Habanero.UI.Base;
+using Habanero.UI;
 using Habanero.UI.Forms;
 
 namespace Habanero.UI.Util

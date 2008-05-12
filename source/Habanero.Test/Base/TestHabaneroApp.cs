@@ -20,7 +20,7 @@
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.DB;
-using Habanero.UI.Base;
+using Habanero.UI;
 using Habanero.UI.Forms;
 using Habanero.Util;
 using NUnit.Framework;

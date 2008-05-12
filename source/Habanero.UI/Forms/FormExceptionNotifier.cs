@@ -22,7 +22,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.UI.Base;
+using Habanero.UI;
 
 namespace Habanero.UI.Forms
 {

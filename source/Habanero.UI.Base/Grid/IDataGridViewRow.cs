@@ -1,6 +1,6 @@
 using Habanero.BO;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     public interface IDataGridViewRow
     {

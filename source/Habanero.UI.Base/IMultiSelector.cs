@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     public enum MultiSelectorButton
     {

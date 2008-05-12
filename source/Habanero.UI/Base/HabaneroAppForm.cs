@@ -26,7 +26,7 @@ using Habanero.DB;
 using Habanero.UI.Forms;
 //using Habanero.UI.Misc;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// Provides a template for a standard Habanero application, including

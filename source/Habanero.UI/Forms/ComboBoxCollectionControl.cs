@@ -23,7 +23,7 @@ using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
+using Habanero.UI;
 using log4net;
 
 namespace Habanero.UI.Forms

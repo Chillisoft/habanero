@@ -21,7 +21,7 @@
 using System.Windows.Forms;
 using Habanero.BO;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// An interface to model a mapper that wraps a control in

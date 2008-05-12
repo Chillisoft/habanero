@@ -5,7 +5,7 @@ using System.Data;
 using Gizmox.WebGUI.Forms;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
+using Habanero.UI;
 
 namespace Habanero.UI.WebGUI
 {

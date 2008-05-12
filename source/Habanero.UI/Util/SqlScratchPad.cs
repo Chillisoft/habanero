@@ -23,7 +23,7 @@ using System.Data;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.DB;
-using Habanero.UI.Base;
+using Habanero.UI;
 using Habanero.UI.Forms;
 
 namespace Habanero.UI.Util

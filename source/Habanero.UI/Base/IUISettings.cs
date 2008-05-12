@@ -20,7 +20,7 @@
 
 using System;
 
-namespace Habanero.UI.Base
+namespace Habanero.UI
 {
     /// <summary>
     /// Assign a method to this delegate that returns a boolean

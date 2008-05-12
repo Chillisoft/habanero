@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using Habanero.UI.Base;
+using Habanero.UI;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base

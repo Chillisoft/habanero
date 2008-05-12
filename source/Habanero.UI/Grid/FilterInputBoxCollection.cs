@@ -23,7 +23,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
-using Habanero.UI.Base;
 using Habanero.UI.Forms;
 
 namespace Habanero.UI.Grid
