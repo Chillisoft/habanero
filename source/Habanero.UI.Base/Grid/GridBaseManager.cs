@@ -18,7 +18,7 @@ namespace Habanero.UI.Base
         public GridBaseManager(IGridBase gridBase)
         {
             _gridBase = gridBase;
-
+            _gridBase.AutoGenerateColumns = false;
         }
 
         public BusinessObject SelectedBusinessObject
@@ -83,16 +83,12 @@ namespace Habanero.UI.Base
         /// <param name="col">The collection to display in the grid</param>
         public void SetCollection(IBusinessObjectCollection col)
         {
-            SetCollection(col, "default");
-        }
-
-        /// <summary>
-        /// Sets the grid's collection to the one specified
-        /// </summary>
-        /// <param name="col">The collection to display in the grid</param>
-        /// <param name="uiName">The name of the uidef to use</param>
-        public void SetCollection(IBusinessObjectCollection col, string uiName)
-        {
+            if (_gridBase.Columns.Count <= 0 )
+            {
+                throw new GridBaseSetUpException(
+                    "You cannot call SetCollection if the grid's columns have not been set up");
+                
+            }
             _boCol = col;
             //_dataSetProvider = new BOCollectionReadOnlyDataSetProvider(col);
             //_dataSetProvider.ObjectInitialiser = _objectInitialiser;
@@ -117,19 +113,18 @@ namespace Habanero.UI.Base
             }
             FireCollectionChanged();
         }
+        //private void SetupColumns(IDataGridViewColumnCollection columns)
+        //{
+        //    foreach (IDataGridViewColumn column in columns)
+        //    {
+        //        AddColumn(column);
+        //    }
+        //}
 
-        private void SetupColumns(IDataGridViewColumnCollection columns)
-        {
-            foreach (IDataGridViewColumn column in columns)
-            {
-                AddColumn(column);
-            }
-        }
-
-        public void AddColumn(IDataGridViewColumn column)
-        {
-            _gridBase.Columns.Add(column);
-        }
+        //public int AddColumn(IDataGridViewColumn column)
+        //{
+        //    return _gridBase.Columns.Add(column, "");
+        //}
 
         /// <summary>
         /// Sets the grid's collection to the one specified, but using the
@@ -138,8 +133,8 @@ namespace Habanero.UI.Base
         /// <param name="collection">The collection to display in the grid</param>
         /// <param name="uiName">The name of the uidef to use</param>
         /// TODO: Refactor
-        private void SetCollectionInSTAThread(IBusinessObjectCollection collection, string uiName)
-        {
+        //private void SetCollectionInSTAThread(IBusinessObjectCollection collection, string uiName)
+        //{
             ////_collection = collection;
             ////_dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
             //_dataSetProvider.ObjectInitialiser = _objectInitialiser;
@@ -271,7 +266,7 @@ namespace Habanero.UI.Base
             //    ApplyFilter(_currentFilterClause);
             //}
             //FireCollectionChanged();
-        }
+        //}
 
         private void FireCollectionChanged()
         {
@@ -328,6 +323,14 @@ namespace Habanero.UI.Base
         {
             _boCol.Sort(columnName, isBoProperty, ascending);
             SetCollection(_boCol);
+        }
+
+
+    }
+    public class GridBaseSetUpException : Exception
+    {
+        public GridBaseSetUpException(string message):base(message)
+        {
         }
     }
 }

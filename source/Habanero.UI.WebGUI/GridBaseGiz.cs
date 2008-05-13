@@ -53,6 +53,7 @@ namespace Habanero.UI.WebGUI
         /// <returns>Returns a business collection</returns>
         public IBusinessObjectCollection GetCollection()
         {
+
             return _mngr.GetCollection();
         }
 
@@ -119,15 +120,25 @@ namespace Habanero.UI.WebGUI
             _mngr.SetSortColumn(columnName, isBoProperty, ascending);
         }
 
-        public void AddColumn(IDataGridViewColumn column)
-        {
-            _mngr.AddColumn(column);
-        }
+        //public void AddColumn(IDataGridViewColumn column)
+        //{
+        //    _mngr.AddColumn(column);
+        //}
 
         public new IDataGridViewSelectedRowCollection SelectedRows
         {
             get { return new DataGridViewSelectedRowCollectionGiz(base.SelectedRows); }
         }
+
+        public new IDataGridViewRow CurrentRow
+        {
+            get
+            {
+                if (base.CurrentRow == null) return null;
+                return new DataGridViewRowGiz(base.CurrentRow);
+            }
+        }
+
         private class DataGridViewRowCollectionGiz : IDataGridViewRowCollection
         {
             private readonly DataGridViewRowCollection _rows;
@@ -186,11 +197,21 @@ namespace Habanero.UI.WebGUI
                 _columns.Clear();
             }
 
-            public void Add(IDataGridViewColumn dataGridViewColumn)
+            public int Add(string columnName, string headerText)
             {
-                DataGridViewColumnGiz dataGridViewColumnGiz = dataGridViewColumn as DataGridViewColumnGiz;
-                _columns.Add(dataGridViewColumnGiz.DataGridViewColumn);
+                return _columns.Add(columnName, headerText);
             }
+
+            //public void Add(string columnName)
+            //{
+            //    throw new NotImplementedException();
+            //}
+
+            //public void Add(IDataGridViewColumn dataGridViewColumn)
+            //{
+            //    DataGridViewColumnGiz dataGridViewColumnGiz = dataGridViewColumn as DataGridViewColumnGiz;
+            //    _columns.Add(dataGridViewColumnGiz.DataGridViewColumn);
+            //}
 
             #endregion
 

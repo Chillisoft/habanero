@@ -6,6 +6,7 @@ namespace Habanero.UI.Base
     {
         int Count { get; }
         void Clear();
-        void Add(IDataGridViewColumn dataGridViewColumn);
+        //void Add(IDataGridViewColumn dataGridViewColumn);
+        int Add(string columnName, string headerText);
     }
 }

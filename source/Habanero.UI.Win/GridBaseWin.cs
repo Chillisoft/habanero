@@ -81,6 +81,14 @@ namespace Habanero.UI.Win
             get { return new DataGridViewSelectedRowCollectionWin(base.SelectedRows); }
         }
 
+        public new IDataGridViewRow CurrentRow
+        {
+            get
+            {
+                if (base.CurrentRow == null) return null;
+                return new DataGridViewRowWin(base.CurrentRow);
+            }
+        }
         public new IDataGridViewColumnCollection Columns
         {
             get
@@ -129,10 +137,10 @@ namespace Habanero.UI.Win
             _mngr.SetSortColumn(columnName, isBoProperty, ascending);
         }
 
-        public void AddColumn(IDataGridViewColumn column)
-        {
-            _mngr.AddColumn(column);
-        }
+        //public void AddColumn(IDataGridViewColumn column)
+        //{
+        //    _mngr.AddColumn(column);
+        //}
 
         private class DataGridViewRowCollectionWin : IDataGridViewRowCollection
         {
@@ -192,12 +200,15 @@ namespace Habanero.UI.Win
             {
                 _columns.Clear();
             }
-
-            public void Add(IDataGridViewColumn dataGridViewColumn)
+            public int Add(string columnName, string headerText)
             {
-                DataGridViewColumnWin dataGridViewColumnWin = dataGridViewColumn as DataGridViewColumnWin;
-                _columns.Add(dataGridViewColumnWin.DataGridViewColumn);
+                return _columns.Add(columnName, headerText);
             }
+            //public void Add(IDataGridViewColumn dataGridViewColumn)
+            //{
+            //    DataGridViewColumnWin dataGridViewColumnWin = dataGridViewColumn as DataGridViewColumnWin;
+            //    _columns.Add(dataGridViewColumnWin.DataGridViewColumn);
+            //}
 
             #endregion
 

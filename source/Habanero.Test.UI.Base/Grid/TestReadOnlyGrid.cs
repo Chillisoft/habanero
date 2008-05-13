@@ -68,74 +68,11 @@ namespace Habanero.Test.UI.Grid
         //#region Test Selection
 
 
-        //[Test]
-        //public void TestGetSelectedBusinessObject()
-        //{
-        //    //---------------Set up test pack-------------------
-
-        //    //---------------Execute Test ----------------------
-        //    BusinessObject selectedBo = _grid.SelectedBusinessObject;
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual("Value1", selectedBo.Props["TestProp"].Value);
-        //    Assert.AreEqual("Value2", selectedBo.Props["TestProp2"].Value);
-        //    Assert.AreSame(_bo1, selectedBo);
-        //    Assert.AreEqual(0, _grid.CurrentRow.Index);
-        //}
-
-        //[Test]
-        //public void TestSetSelectedBusinessObject()
-        //{
-        //    //---------------Set up test pack-------------------
-
-        //    //---------------Execute Test ----------------------
-        //    _grid.SelectedBusinessObject = _bo1;
-
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(_bo1, _grid.SelectedBusinessObject);
-        //}
-
-        //[Test]
-        //public void TestSetSelectedBusinessObject_ToNull()
-        //{
-        //    //---------------Set up test pack-------------------
-            
-        //    //---------------Execute Test ----------------------
-        //    _grid.SelectedBusinessObject = _bo1;
-        //    _grid.SelectedBusinessObject = null;
-
-        //    //---------------Test Result -----------------------
-        //    Assert.IsNull(_grid.SelectedBusinessObject);
-        //    Assert.IsNull(_grid.CurrentRow);
-        //}
-
-        //[Test]
-        //public void TestGridFiringItemSelected()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    bool gridItemSelected = false;
-        //    _grid.SelectedBusinessObject = null;
-        //    _grid.AddItemSelectedDelegate(delegate
-        //    {
-        //        gridItemSelected = true;
-        //    });
-
-        //    //---------------Execute Test ----------------------
-        //    _grid.SelectedBusinessObject = _bo1;
-
-        //    //---------------Test Result -----------------------
-        //    Assert.IsTrue(gridItemSelected);
-        //}
-
 
         //#endregion //Test Selection
 
 
-        //[Test]
-        //public void TestRowIsRefreshed()
-        //{
-        //    _bo2.SetPropertyValue("TestProp", "UpdatedValue");
-        //    Assert.AreEqual("UpdatedValue", _dataSource.Rows[1][1]);
-        //}
+
 
         //[Test]
         //public void TestGetCollectionClone()

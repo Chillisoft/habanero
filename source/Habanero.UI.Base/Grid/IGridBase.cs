@@ -31,6 +31,10 @@ namespace Habanero.UI.Base
 
         IDataGridViewSelectedRowCollection SelectedRows { get; }
 
+        bool AutoGenerateColumns { get; set; }
+
+        IDataGridViewRow CurrentRow { get; }
+
         event EventHandler<BOEventArgs> BusinessObjectSelected;
         event EventHandler SelectionChanged;
         event EventHandler CollectionChanged;
@@ -64,7 +68,5 @@ namespace Habanero.UI.Base
         /// <param name="ascending">Whether sorting should be done in ascending
         /// order ("false" sets it to descending order)</param>
         void SetSortColumn(string columnName, bool isBoProperty, bool ascending);
-
-        void AddColumn(IDataGridViewColumn column);
     }
 }
