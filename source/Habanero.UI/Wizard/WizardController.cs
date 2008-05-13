@@ -162,14 +162,19 @@ namespace Habanero.UI.Wizard
             get { return _wizardSteps.Count; }
         }
 
-
         /// <summary>
         /// Returns the step that the Wizard is currently on.
         /// </summary>
         /// <returns></returns>
         public virtual IWizardStep GetCurrentStep()
         {
-            return _wizardSteps[_currentStep];
+            if (_currentStep == -1)
+            {
+                return null;
+            } else
+            {
+                return _wizardSteps[_currentStep];
+            }
         }
     }
 }

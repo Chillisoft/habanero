@@ -27,117 +27,122 @@ namespace Habanero.Test.UI.Wizard
     [TestFixture]
     public class TestWizardController
     {
-        private WizardController controller;
-        private MockRepository mock = new MockRepository();
-        private IWizardStep step1;
-
+        private WizardController _wizardController;
+        private MockRepository _mock = new MockRepository();
+        private IWizardStep _step1;
 
         [SetUp]
         public void SetupTest()
         {
-            controller = new WizardController();
-            step1 = this.mock.CreateMock<IWizardStep>();
-            controller.AddStep(step1);
+            _wizardController = new WizardController();
+            _step1 = _mock.CreateMock<IWizardStep>();
+            _wizardController.AddStep(_step1);
         }
 
         [TearDown]
         public void TearDown()
-    {
+        {
 
-    }
+        }
 
         [Test]
         public void TestConstructor()
         {
-            controller = new WizardController();
-            Assert.That(controller.StepCount == 0);
+            _wizardController = new WizardController();
+            Assert.That(_wizardController.StepCount == 0);
         }
 
         [Test]
         public void TestAddStep()
         {
-            Assert.AreEqual(1, controller.StepCount);
+            Assert.AreEqual(1, _wizardController.StepCount);
         }
 
         [Test]
         public void TestGetNextStep()
         {
-            Assert.AreSame(this.step1, controller.GetNextStep());
+            Assert.AreSame(this._step1, _wizardController.GetNextStep());
         }
 
         [Test, ExpectedException(typeof (WizardStepException), ExpectedMessage = "Invalid Wizard Step: 1")]
         public void TestGetNextStepError()
         {
-            controller.GetNextStep();
-            controller.GetNextStep();
+            _wizardController.GetNextStep();
+            _wizardController.GetNextStep();
         }
 
         [Test]
         public void TestGetPreviousStep()
         {
-            IWizardStep step2 = mock.CreateMock<IWizardStep>();
-            controller.AddStep(step2);
-            controller.GetNextStep();
-            controller.GetNextStep();
-            Assert.AreSame(step1,controller.GetPreviousStep());
+            IWizardStep step2 = _mock.CreateMock<IWizardStep>();
+            _wizardController.AddStep(step2);
+            _wizardController.GetNextStep();
+            _wizardController.GetNextStep();
+            Assert.AreSame(_step1,_wizardController.GetPreviousStep());
         }
 
         [Test, ExpectedException(typeof(WizardStepException), ExpectedMessage = "Invalid Wizard Step: -1")]
         public void TestGetPreviousStepError()
         {
-            controller.GetNextStep();
-            controller.GetPreviousStep();
+            _wizardController.GetNextStep();
+            _wizardController.GetPreviousStep();
         }
 
         [Test]
         public void TestGetFirstStep()
         {
-            Assert.AreSame(step1, controller.GetFirstStep());
+            Assert.AreSame(_step1, _wizardController.GetFirstStep());
         }
 
         [Test]
         public void TestIsLastStep()
         {
-            controller.GetNextStep();
-            Assert.IsTrue(controller.IsLastStep());
+            _wizardController.GetNextStep();
+            Assert.IsTrue(_wizardController.IsLastStep());
         }
 
         [Test]
         public void TestIsFirstStep()
         {
-            controller.GetNextStep();
-            Assert.IsTrue(controller.IsFirstStep());
+            _wizardController.GetNextStep();
+            Assert.IsTrue(_wizardController.IsFirstStep());
         }
 
         [Test, ExpectedException(typeof(WizardStepException), ExpectedMessage = "Invalid call to Finish(), not at last step")]
         public void TestFinishError()
         {
-            controller.Finish();
+            _wizardController.Finish();
         }
 
         [Test]
         public void TestFinish()
         {
-            controller.GetNextStep();
-            controller.Finish();
+            _wizardController.GetNextStep();
+            _wizardController.Finish();
         }
 
         [Test]
         public void TestCanMoveOn()
         {
             string message;
-            controller.GetNextStep();
-            Expect.Call(step1.CanMoveOn(out message)).Return(true);
-            mock.ReplayAll();
-            Assert.IsTrue(controller.CanMoveOn(out message));
-            mock.VerifyAll();
+            _wizardController.GetNextStep();
+            Expect.Call(_step1.CanMoveOn(out message)).Return(true);
+            _mock.ReplayAll();
+            Assert.IsTrue(_wizardController.CanMoveOn(out message));
+            _mock.VerifyAll();
         }
 
         [Test]
         public void TestGetCurrentStep()
         {
-            controller.GetNextStep();
-            Assert.AreSame(step1,controller.GetCurrentStep());
+            _wizardController.GetNextStep();
+            Assert.AreSame(_step1, _wizardController.GetCurrentStep());
+        }
+
+        [Test]
+        public void TestGetCurrentStep_BeforeFirstStepCalled()
+        {
+            Assert.AreSame(null, _wizardController.GetCurrentStep());
         }
     }
 }
