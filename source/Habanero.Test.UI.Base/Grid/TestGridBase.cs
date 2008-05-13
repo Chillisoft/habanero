@@ -48,7 +48,7 @@ namespace Habanero.Test.UI.Base
                 return gridBase;
             }
 
-            [Test, Ignore("to be fixed")]
+            [Test, Ignore("Need to implement interfaces for DataGridViewCell etc not sure if worth it for ths test only if we implemente these interfaces later then make this test work")]
             public void TestRowIsRefreshed()
             {
                 //---------------Set up test pack-------------------
@@ -130,10 +130,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------    
         }
 
-        private static void SetupGridColumnsForMyBo(IGridBase gridBase)
-        {
-            gridBase.Columns.Add("TestProp", "TestProp");
-        }
 
 
         [Test]
@@ -405,7 +401,17 @@ namespace Habanero.Test.UI.Base
                            "The object with testprop = 'd' should be at row 4");
             //---------------Tear Down -------------------------
         }
-
+        [Test, Ignore("Peter what is this when is it used must we implement")]
+        public void TestGetCollectionClone()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            //---------------Execute Test ----------------------
+            ///To be implemented IBusinessObjectCollection cloneCol = gridBase.GetCollectionClone();
+            //---------------Test Result -----------------------
+            ////Assert.AreEqual( 4,cloneCol.Count);
+        }
         #region Utility Methods 
 
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
@@ -434,6 +440,10 @@ namespace Habanero.Test.UI.Base
         }
 
 
+        private static void SetupGridColumnsForMyBo(IGridBase gridBase)
+        {
+            gridBase.Columns.Add("TestProp", "TestProp");
+        }
         internal class GridBaseGizStub : GridBaseGiz
         {
         }

@@ -52,10 +52,11 @@ namespace Habanero.WebGUI
         /// <param name="readOnlyGrid">The read-only grid</param>
         public ReadOnlyGridButtonControl(IReadOnlyGrid readOnlyGrid)
         {
-            _deleteButton = AddButton("Delete", DeleteButtonClickHandler);
-            _deleteButton.Visible = false;
+
             AddButton("Add", AddButtonClickHandler);
             AddButton("Edit", EditButtonClickHandler);
+            _deleteButton = AddButton("Delete", DeleteButtonClickHandler);
+            _deleteButton.Visible = false;
             _readOnlyGrid = readOnlyGrid;
             //_doubleClickedDelegate = new RowDoubleClickedHandler(RowDoubleClickedHandler);
             //this._readOnlyGrid.RowDoubleClicked += _doubleClickedDelegate;
@@ -222,22 +223,22 @@ namespace Habanero.WebGUI
             set { _objectInitialiser = value; }
         }
 
-        /// <summary>
-        /// Checks that the object creator has been defined and throws
-        /// an exception if not
-        /// </summary>
-        private void CheckCreatorExists()
-        {
-            if (_objectCreator == null)
-            {
-                throw new NullReferenceException("There was an attempt to create " +
-                                                 "a new business object when the object creator has not been " +
-                                                 "set.  When the ReadOnlyGridWithButtons is instantiated, " +
-                                                 "either use the single-parameter constructor that assigns a " +
-                                                 "default creator or create a customised object creator and " +
-                                                 "assign that through the appropriate constructor.");
-            }
-        }
+        ///// <summary>
+        ///// Checks that the object creator has been defined and throws
+        ///// an exception if not
+        ///// </summary>
+        //private void CheckCreatorExists()
+        //{
+        //    if (_objectCreator == null)
+        //    {
+        //        throw new NullReferenceException("There was an attempt to create " +
+        //                                         "a new business object when the object creator has not been " +
+        //                                         "set.  When the ReadOnlyGridWithButtons is instantiated, " +
+        //                                         "either use the single-parameter constructor that assigns a " +
+        //                                         "default creator or create a customised object creator and " +
+        //                                         "assign that through the appropriate constructor.");
+        //    }
+        //}
 
         /// <summary>
         /// Checks that the object editor has been defined and throws

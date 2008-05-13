@@ -57,6 +57,26 @@ namespace Habanero.UI.Win
             return new  DateTimePickerWin();
         }
 
+        public IReadOnlyGrid CreateReadOnlyGrid()
+        {
+            return new ReadOnlyGridWin();
+        }
+
+        public IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons()
+        {
+            return  new ReadOnlyGridWithButtonsWin();
+        }
+
+        public IButtonGroupControl CreateButtonGroupControl()
+        {
+            return new ButtonGroupControlWin(this);
+        }
+
+        public IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public IChilliControl CreateControl()
         {
             return new ControlWin();

@@ -35,7 +35,7 @@ namespace Habanero.UI.Grid
     /// </summary>
     public class ReadOnlyGrid : GridBase, IReadOnlyGrid
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Grid.ReadOnlyGrid");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Grid.Grid");
         private GridSelectionController _gridSelectionController;
 
         public event RowDoubleClickedHandler RowDoubleClicked;
@@ -123,7 +123,6 @@ namespace Habanero.UI.Grid
         /// <summary>
         /// Returns a list of the business objects currently selected
         /// </summary>
-        // TODO Eric: why is this an IList instead of IBusinessObjectCollection?
         public IList SelectedBusinessObjects
         {
             get { return this.GetSelectedBusinessObjects(); }

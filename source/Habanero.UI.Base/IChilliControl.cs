@@ -24,5 +24,9 @@ namespace Habanero.UI.Base
         int Top { get; set; }
 
         int Right { get; }
+
+        string Text { get; set; }
+        string Name { get; set; }
+        bool Enabled { get; set; }
     }
 }

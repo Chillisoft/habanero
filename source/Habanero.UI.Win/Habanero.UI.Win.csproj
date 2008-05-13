@@ -35,6 +35,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ButtonGroupControlWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CheckBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -75,6 +78,12 @@
     </Compile>
     <Compile Include="MultiSelectorWin.Designer.cs">
       <DependentUpon>MultiSelectorWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReadOnlyGridWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ReadOnlyGridWithButtonsWin.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="TextBoxWin.cs">
       <SubType>Component</SubType>

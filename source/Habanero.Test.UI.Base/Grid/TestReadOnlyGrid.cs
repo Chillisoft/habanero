@@ -17,8 +17,12 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.UI.Base;
+using Habanero.UI.WebGUI;
+using Habanero.UI.Win;
 using NUnit.Framework;
-//using Habanero.UI.Grid;
 
 namespace Habanero.Test.UI.Grid
 {
@@ -26,61 +30,112 @@ namespace Habanero.Test.UI.Grid
     /// Summary description for TestReadOnlyGrid.
     /// </summary>
     [TestFixture]
-    public class TestReadOnlyGrid
+    public abstract class TestReadOnlyGrid
     {
-        //private Form _form;
-        //private ReadOnlyGrid _grid;
-        //private BusinessObject _bo1;
-        //private BusinessObject _bo2;
-        //private DataTable _dataSource;
+        [SetUp]
+        public void SetupTest()
+        {
+            ClassDef.ClassDefs.Clear();
+        }
 
-        //[SetUp]
-        //public void SetupFixture()
-        //{
-        //    _grid = new ReadOnlyGrid();
-        //    _grid.Name = "GridControl";
-        //    ClassDef.ClassDefs.Clear();
-        //    ClassDef classDef = MyBO.LoadClassDefWithNoLookup();
-        //    BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-        //    _bo1 = new MyBO();
-        //    _bo1.SetPropertyValue("TestProp", "Value1");
-        //    _bo1.SetPropertyValue("TestProp2", "Value2");
-        //    _bo2 = new MyBO();
-        //    _bo2.SetPropertyValue("TestProp", "2Value1");
-        //    _bo2.SetPropertyValue("TestProp2", "2Value2");
-        //    col.Add(_bo1);
-        //    col.Add(_bo2);
-        //    _grid.SetCollection(col);
-        //    _form = new Form();
-        //    _grid.Dock = DockStyle.Fill;
-        //    _form.Controls.Add(_grid);
-        //    _form.Show();
-        //    _dataSource = _grid.DataTable;
-        //}
+        [TestFixtureSetUp]
+        public void TestFixtureSetup()
+        {
+            //Code that is executed before any test is run in this class. If multiple tests
+            // are executed then it will still only be called once.
+        }
 
-        //[TearDown]
-        //public void TearDown()
-        //{
-        //    _form.Close();
-        //    _form.Dispose();
-        //}
+        [TearDown]
+        public void TearDownTest()
+        {
+        }
 
-        //#region Test Selection
+        protected abstract IControlFactory GetControlFactory();
+        protected abstract void AddControlToForm(IChilliControl cntrl);
 
 
+        [TestFixture]
+        public class TestReadOnlyGridWin : TestReadOnlyGrid
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new WinControlFactory();
+            }
+            protected override void AddControlToForm(IChilliControl cntrl)
+            {
+                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+                frm.Controls.Add((System.Windows.Forms.Control)cntrl);
+            }
+            [Test]
+            public void TestCreateGridBaseWin()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Execute Test ----------------------
+                IChilliControl grid = GetControlFactory().CreateReadOnlyGrid();
+                ReadOnlyGridWin readOnlyGrid = (ReadOnlyGridWin)grid;
+                ////---------------Test Result -----------------------
+                Assert.IsTrue(readOnlyGrid.ReadOnly);
+                Assert.IsFalse(readOnlyGrid.AllowUserToAddRows);
+                Assert.IsFalse(readOnlyGrid.AllowUserToDeleteRows);
+                Assert.IsTrue(readOnlyGrid.SelectionMode == System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect);
+                //---------------Tear Down -------------------------   
+            }
+        }
+        [TestFixture]
+        public class TestReadOnlyGridGiz : TestReadOnlyGrid
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new GizmoxControlFactory();
+            }
+            [Test]
+            protected override void AddControlToForm(IChilliControl cntrl)
+            {
+                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
+                frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
+            }
+            public void TestCreateGridBaseGiz()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Execute Test ----------------------
+                IChilliControl grid = GetControlFactory().CreateReadOnlyGrid();
+                ReadOnlyGridGiz readOnlyGrid = (ReadOnlyGridGiz)grid;
+                ////---------------Test Result -----------------------
+                Assert.IsTrue(readOnlyGrid.ReadOnly);
+                Assert.IsFalse(readOnlyGrid.AllowUserToAddRows);
+                Assert.IsFalse(readOnlyGrid.AllowUserToDeleteRows);
+                Assert.IsTrue(readOnlyGrid.SelectionMode == Gizmox.WebGUI.Forms.DataGridViewSelectionMode.FullRowSelect);
+                //---------------Tear Down -------------------------   
+            }
+        }
 
-        //#endregion //Test Selection
+        [Test]
+        public void TestCreateGridBase()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Execute Test ----------------------
+            IChilliControl grid = GetControlFactory().CreateReadOnlyGrid();
 
+            ////---------------Test Result -----------------------
+            Assert.IsNotNull(grid);
+            Assert.IsTrue(grid is IReadOnlyGrid);
+        }
 
-
-
-        //[Test]
-        //public void TestGetCollectionClone()
-        //{
-        //    IBusinessObjectCollection cloneCol = _grid.GetCollectionClone();
-        //    Assert.AreEqual(cloneCol.Count,2 );
-        //}
-
+        [Test]
+        public void TestSetCollectionOnGrid_NoOfRows()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGrid readOnlyGrid = GetControlFactory().CreateReadOnlyGrid();
+            AddControlToForm(readOnlyGrid);
+            SetupGridColumnsForMyBo(readOnlyGrid);
+            //---------------Execute Test ----------------------
+            readOnlyGrid.SetCollection(col);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, readOnlyGrid.Rows.Count);
+            //---------------Tear Down -------------------------    
+        }
         ///// <summary>
         ///// The following few tests monitor the sorting done in Gridbase based
         ///// on the "sortColumn" attribute and apply equally to EditableGrid
@@ -131,8 +186,26 @@ namespace Habanero.Test.UI.Grid
         //}
 
 
-        
+        private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
+        {
+            MyBO cp = new MyBO();
+            cp.TestProp = "b";
+            MyBO cp2 = new MyBO();
+            cp2.TestProp = "d";
+            MyBO cp3 = new MyBO();
+            cp3.TestProp = "c";
+            MyBO cp4 = new MyBO();
+            cp4.TestProp = "a";
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            col.Add(cp, cp2, cp3, cp4);
+            return col;
+        }
 
+        private static void SetupGridColumnsForMyBo(IReadOnlyGrid readOnlyGrid)
+        {
+            readOnlyGrid.Columns.Add("TestProp", "TestProp");
+        }
         
     }
+
 }

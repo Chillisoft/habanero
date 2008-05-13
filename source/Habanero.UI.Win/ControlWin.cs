@@ -4,7 +4,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
-    internal class ControlWin : Control, IChilliControl
+    public class ControlWin : Control, IChilliControl
     {
         IList IChilliControl.Controls
         {

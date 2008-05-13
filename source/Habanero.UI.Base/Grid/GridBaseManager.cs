@@ -77,6 +77,8 @@ namespace Habanero.UI.Base
             }
         }
 
+
+
         /// <summary>
         /// Sets the grid's collection to the one specified
         /// </summary>
@@ -98,11 +100,11 @@ namespace Habanero.UI.Base
             //UIGrid uiGrid = uiDef.UIGrid;
             //DataTable dataTable = _dataSetProvider.GetDataTable(uiGrid);
 
-
+            _gridBase.AutoGenerateColumns = true;
             //_dataTableDefaultView = dataTable.DefaultView;
             _gridBase.AllowUserToAddRows = false;
             //_gridBase.DataSource = dataTable;
-            IDataGridViewColumnCollection columns = _gridBase.Columns;
+
             _gridBase.DataSource = col;
             //_gridBase.Columns.Clear();
             //SetupColumns(columns);

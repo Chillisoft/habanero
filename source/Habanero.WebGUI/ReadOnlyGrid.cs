@@ -34,7 +34,7 @@ namespace Habanero.WebGUI
     /// </summary>
     public class ReadOnlyGrid : GridBase, IReadOnlyGrid
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Grid.ReadOnlyGrid");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Grid.Grid");
 
         //public event RowDoubleClickedHandler RowDoubleClicked;
 

@@ -8,7 +8,7 @@ using Habanero.UI.Base;
 namespace Habanero.UI.WebGUI
 {
 
-    public class GridBaseGiz : DataGridView, IGridBase
+    public abstract class GridBaseGiz : DataGridView, IGridBase
     {
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
         public event EventHandler CollectionChanged;

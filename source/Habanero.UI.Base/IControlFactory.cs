@@ -18,5 +18,9 @@ namespace Habanero.UI.Base
         IChilliControl CreateControl();
         ILabel CreateLabel(string labelText);
         IDateTimePicker CreateDateTimePicker();
+        IReadOnlyGrid CreateReadOnlyGrid();
+        IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons();
+        IButtonGroupControl CreateButtonGroupControl();
+        IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl();
     }
 }

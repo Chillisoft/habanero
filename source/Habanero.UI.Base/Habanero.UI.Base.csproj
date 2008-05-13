@@ -48,7 +48,11 @@
     <Compile Include="FilterControl\FilterControlManager.cs" />
     <Compile Include="Grid\IDataGridViewColumn.cs" />
     <Compile Include="Grid\IDataGridViewSelectedRowCollection.cs" />
+    <Compile Include="Grid\IReadOnlyGrid.cs" />
+    <Compile Include="IButtonGroupControl.cs" />
     <Compile Include="IDateTimePicker.cs" />
+    <Compile Include="Grid\IReadOnlyGridWithButtons.cs" />
+    <Compile Include="IReadOnlyGridButtonsControl.cs" />
     <Compile Include="LayoutManagers\FlowLayoutManager.cs" />
     <Compile Include="Grid\GridBaseManager.cs" />
     <Compile Include="IButton.cs" />

@@ -56,9 +56,43 @@ namespace Habanero.UI.WebGUI
             return new DateTimePickerGiz();
         }
 
+        public IReadOnlyGrid CreateReadOnlyGrid()
+        {
+            return new ReadOnlyGridGiz();
+        }
+
+        public IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons()
+        {
+            return new ReadOnlyGridWithButtonsGiz();
+        }
+
+        public IButtonGroupControl CreateButtonGroupControl()
+        {
+            return new ButtonGroupControlGiz(this);
+        }
+
+        public IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl()
+        {
+            return new ReadOnlyGridButtonsControlGiz(this);
+        }
+
         public IChilliControl CreateControl()
         {
             return new ControlGiz();
+        }
+    }
+
+    public class ReadOnlyGridButtonsControlGiz :ButtonGroupControlGiz, IReadOnlyGridButtonsControl
+    {
+        private readonly IButton _deleteButton;
+
+        public ReadOnlyGridButtonsControlGiz(IControlFactory controlFactory) : base(controlFactory)
+        {
+            AddButton("Add");
+            AddButton("Edit");
+            _deleteButton = AddButton("Delete");
+            _deleteButton.Visible = false;
+
         }
     }
 }
