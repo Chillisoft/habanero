@@ -38,7 +38,7 @@ namespace Habanero.UI.Win
             get { return (ListBoxSelectionMode)Enum.Parse(typeof(ListBoxSelectionMode), base.SelectionMode.ToString()); }
             set { base.SelectionMode = (SelectionMode)Enum.Parse(typeof(SelectionMode), value.ToString()); }
         }
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }

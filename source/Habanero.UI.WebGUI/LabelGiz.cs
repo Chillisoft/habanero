@@ -20,15 +20,15 @@ namespace Habanero.UI.WebGUI
         {
             get { return this.Text.Length * WIDTH_FACTOR; }
         }
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }
-        //List<IChilliControl> IChilliControl.Controls
+        //List<IControlChilli> IControlChilli.Controls
         //{
         //    get
         //    {
-        //        return new List<IChilliControl>();
+        //        return new List<IControlChilli>();
         //    }
         //}
     }

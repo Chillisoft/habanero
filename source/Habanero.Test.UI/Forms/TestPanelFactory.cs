@@ -19,16 +19,17 @@
 
 
 using System.Windows.Forms;
+using Habanero.UI;
 using Habanero.UI.Forms;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Forms
+namespace Habanero.Test.UI
 {
     /// <summary>
     /// Summary description for TestPanelFactory.
     /// </summary>
     [TestFixture]
-    public class TestPanelFactory
+    public  class TestPanelFactory
     {
         [Test]
         public void TestOnePropertyForm()

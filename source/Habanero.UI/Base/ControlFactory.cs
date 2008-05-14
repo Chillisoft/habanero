@@ -30,7 +30,7 @@ namespace Habanero.UI
     /// <summary>
     /// Produces a range of user interface objects as requested
     /// </summary>
-    public class ControlFactory
+    public class ControlFactory : IControlFactoryold
     {
         /// <summary>
         /// A constructor to initialise an instance of the factory
@@ -193,12 +193,6 @@ namespace Habanero.UI
                 if (controlType == typeof (ComboBox))
                 {
                     ctl = CreateComboBox();
-//					NComboBox cbx = new Noogen.WinForms.NComboBox() ;
-//					cbx.DisableEntryNotInList = true;
-//					cbx.AutoComplete = true;
-//					cbx.CharacterCasing = CharacterCasing.Normal;
-//					cbx.ShowDropDownDuringInput = true;
-//					ctl = cbx;
                 }
                 else
                 {
@@ -219,8 +213,6 @@ namespace Habanero.UI
             if (ctl.GetType() == typeof (DateTimePicker))
             {
                 DateTimePicker editor = (DateTimePicker) ctl;
-                //editor..Appearance.BackColorDisabled = Color.Beige;
-                //editor.Appearance.ForeColorDisabled = Color.Black;
             }
             return ctl;
         }

@@ -27,7 +27,7 @@ namespace Habanero.UI.Base.LayoutManagers
     /// </summary>
     public abstract class LayoutManager : MarshalByRefObject
     {
-        private readonly IChilliControl _managedControl;
+        private readonly IControlChilli _managedControl;
         private int _borderSize = 5;
         private int _gapSize = 2;
 
@@ -35,7 +35,7 @@ namespace Habanero.UI.Base.LayoutManagers
         /// Constructor to initialise a new layout manager
         /// </summary>
         /// <param name="managedControl">The control to manage</param>
-        public LayoutManager(IChilliControl managedControl)
+        public LayoutManager(IControlChilli managedControl)
         {
             _managedControl = managedControl;
             _managedControl.Resize += this.ManagedControlResizeHandler;
@@ -44,7 +44,7 @@ namespace Habanero.UI.Base.LayoutManagers
         /// <summary>
         /// Returns the managed control
         /// </summary>
-        public IChilliControl ManagedControl
+        public IControlChilli ManagedControl
         {
             get { return _managedControl; }
         }
@@ -91,7 +91,7 @@ namespace Habanero.UI.Base.LayoutManagers
         /// </summary>
         protected abstract void RefreshControlPositions();
 
-        public abstract IChilliControl AddControl(IChilliControl label);
+        public abstract IControlChilli AddControl(IControlChilli label);
 
         public abstract void AddGlue();
     }

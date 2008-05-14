@@ -1,0 +1,136 @@
+//---------------------------------------------------------------------------------
+// Copyright (C) 2007 Chillisoft Solutions
+// 
+// This file is part of the Habanero framework.
+// 
+//     Habanero is a free framework: you can redistribute it and/or modify
+//     it under the terms of the GNU Lesser General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     The Habanero framework is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU Lesser General Public License for more details.
+// 
+//     You should have received a copy of the GNU Lesser General Public License
+//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+//---------------------------------------------------------------------------------
+using Habanero.UI.Base;
+
+namespace Habanero.UI.Base
+{
+    /// <summary>
+    /// Manages the panel object for a user interface. This is a class that stores the information
+    /// regarding a panel that is being created by the panel factory e.g panel height. 
+    /// i.e. the panel factory creates this
+    ///    class which describes and contains the panel created by the factory.
+    /// </summary>
+    public class PanelFactoryInfo : IPanelFactoryInfo
+    {
+        private readonly IPanel _panel;
+        private readonly IControlMapperCollection _mappers;
+        private readonly IControlChilli _firstControlToFocus;
+        private int _preferredHeight;
+        private int _preferredWidth;
+        //private IDictionary<string, EditableGrid> _formGrids;
+        private IToolTip _toolTip;
+
+        /// <summary>
+        /// Constructor to initialise a new instance of the class
+        /// </summary>
+        /// <param name="panel">The panel object being managed</param>
+        /// <param name="mappers">The control mappers collection</param>
+        /// <param name="firstControlToFocus">The first control to focus on</param>
+        public PanelFactoryInfo(IPanel panel, IControlMapperCollection mappers, IControlChilli firstControlToFocus)
+        {
+            _panel = panel;
+            _mappers = mappers;
+            _firstControlToFocus = firstControlToFocus;
+            //_formGrids = new Dictionary<string, EditableGrid>();
+        }
+
+        /// <summary>
+        /// A constructor as before, but with only the panel specified
+        /// </summary>
+        public PanelFactoryInfo(IPanel panel)
+            : this(panel, new ControlMapperCollection(), null)
+        {
+        }
+
+        /// <summary>
+        /// Returns the panel object
+        /// </summary>
+        public IPanel Panel
+        {
+            get { return _panel; }
+        }
+
+        /// <summary>
+        /// Returns the collection of control mappers
+        /// </summary>
+        public IControlMapperCollection ControlMappers
+        {
+            get { return _mappers; }
+        }
+
+        ///// <summary>
+        ///// Returns the form grid by the name specified
+        ///// </summary>
+        ///// <param name="gridName">The grid name</param>
+        ///// <returns>Returns the grid object if a grid by that name is
+        ///// found</returns>
+        //public EditableGrid GetFormGrid(string gridName)
+        //{
+        //    return _formGrids[gridName];
+        //}
+
+        ///// <summary>
+        ///// Gets and sets the form grids
+        ///// </summary>
+        //public IDictionary<string, EditableGrid> FormGrids
+        //{
+        //    get
+        //    {
+        //        return _formGrids;
+        //    }
+        //    set
+        //    {
+        //        _formGrids = value;
+        //    }
+
+        //}
+
+        /// <summary>
+        /// Gets and sets the preferred height setting
+        /// </summary>
+        public int PreferredHeight
+        {
+            get { return _preferredHeight; }
+            set { _preferredHeight = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the preferred width setting
+        /// </summary>
+        public int PreferredWidth
+        {
+            get { return _preferredWidth; }
+            set { _preferredWidth = value; }
+        }
+
+        /// <summary>
+        /// Returns the first control to focus on in the user interface
+        /// </summary>
+        public IControlChilli FirstControlToFocus
+        {
+            get { return _firstControlToFocus; }
+        }
+
+        public IToolTip ToolTip
+        {
+            get { return _toolTip; }
+            set { _toolTip = value; }
+        }
+    }
+}

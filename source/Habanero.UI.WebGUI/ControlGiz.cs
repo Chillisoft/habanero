@@ -4,9 +4,9 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    public class ControlGiz : Control, IChilliControl
+    public class ControlGiz : Control, IControlChilli
     {
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }

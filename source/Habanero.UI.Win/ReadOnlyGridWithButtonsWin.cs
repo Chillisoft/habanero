@@ -16,7 +16,17 @@ namespace Habanero.UI.Win
             set { throw new System.NotImplementedException(); }
         }
 
-        public void SetCollection(IBusinessObjectCollection col)
+        /// <summary>
+        /// Returns the button control held. This property can be used
+        /// to access a range of functionality for the button control
+        /// (eg. myGridWithButtons.Buttons.AddButton(...)).
+        /// </summary>
+        public IReadOnlyGridButtonsControl Buttons
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public void SetCollection(IBusinessObjectCollection boCollection)
         {
             throw new System.NotImplementedException();
         }

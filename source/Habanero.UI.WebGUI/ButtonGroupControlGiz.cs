@@ -34,7 +34,7 @@ namespace Habanero.UI.WebGUI
         {
             get { return (IButton) this.Controls[buttonName]; }
         }
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -39,6 +43,20 @@
   <ItemGroup>
     <Compile Include="LayoutManagers\BorderLayoutManager.cs" />
     <Compile Include="ControlCollection.cs" />
+    <Compile Include="ControlMappers\CheckBoxMapper.cs" />
+    <Compile Include="ControlMappers\ComboBoxMapper.cs" />
+    <Compile Include="ControlMappers\ControlMapper.cs" />
+    <Compile Include="ControlMappers\ControlMapperCollection.cs" />
+    <Compile Include="DefaultBOEditor.cs" />
+    <Compile Include="Grid\DateDisplaySettings.cs" />
+    <Compile Include="ControlMappers\LookupComboBoxMapper.cs" />
+    <Compile Include="ControlMappers\TextBoxMapper.cs" />
+    <Compile Include="DefaultBOCreator.cs" />
+    <Compile Include="ControlInterfaces\IDockStyle.cs" />
+    <Compile Include="ControlInterfaces\IFormChilli.cs" />
+    <Compile Include="ControlInterfaces\IGroupBox.cs" />
+    <Compile Include="ControlInterfaces\IListView.cs" />
+    <Compile Include="ControlInterfaces\INumericUpDown.cs" />
     <Compile Include="DateTimePicker\DateTimePickerController.cs" />
     <Compile Include="FilterControl\DataViewCompositeFilterClause.cs" />
     <Compile Include="FilterControl\DataViewDateFilterClause.cs" />
@@ -51,16 +69,31 @@
     <Compile Include="Grid\IDataGridViewColumn.cs" />
     <Compile Include="Grid\IDataGridViewSelectedRowCollection.cs" />
     <Compile Include="Grid\IReadOnlyGrid.cs" />
-    <Compile Include="IButtonGroupControl.cs" />
-    <Compile Include="IDateTimePicker.cs" />
+    <Compile Include="ControlInterfaces\IButtonGroupControl.cs" />
+    <Compile Include="ControlMappers\IControlMapperCollection.cs" />
+    <Compile Include="ControlMappers\IControlMapper.cs" />
+    <Compile Include="ControlInterfaces\IDateTimePicker.cs" />
     <Compile Include="Grid\IReadOnlyGridWithButtons.cs" />
-    <Compile Include="IReadOnlyGridButtonsControl.cs" />
+    <Compile Include="Grid\IReadOnlyGridButtonsControl.cs" />
+    <Compile Include="IDefaultBOEditorForm.cs" />
+    <Compile Include="ControlInterfaces\IPanel.cs" />
+    <Compile Include="PanelFactory.cs" />
+    <Compile Include="PanelFactory\IPanelFactory.cs" />
+    <Compile Include="PanelFactory\IPanelFactoryInfo.cs" />
+    <Compile Include="ControlInterfaces\IProgressBar.cs" />
+    <Compile Include="ControlInterfaces\IRadioButton.cs" />
+    <Compile Include="ControlInterfaces\ISplitter.cs" />
+    <Compile Include="ControlInterfaces\ITabControl.cs" />
+    <Compile Include="ControlInterfaces\ITabPage.cs" />
+    <Compile Include="ControlInterfaces\ITabPageCollection.cs" />
+    <Compile Include="ControlInterfaces\IToolTip.cs" />
+    <Compile Include="ControlInterfaces\ITreeView.cs" />
     <Compile Include="LayoutManagers\FlowLayoutManager.cs" />
     <Compile Include="Grid\GridBaseManager.cs" />
-    <Compile Include="IButton.cs" />
-    <Compile Include="ICheckBox.cs" />
-    <Compile Include="IChilliControl.cs" />
-    <Compile Include="IComboBox.cs" />
+    <Compile Include="ControlInterfaces\IButton.cs" />
+    <Compile Include="ControlInterfaces\ICheckBox.cs" />
+    <Compile Include="ControlInterfaces\IControlChilli.cs" />
+    <Compile Include="ControlInterfaces\IComboBox.cs" />
     <Compile Include="IComboBoxObjectCollection.cs" />
     <Compile Include="IControlFactory.cs" />
     <Compile Include="FilterControl\IFilterControl.cs" />
@@ -68,16 +101,16 @@
     <Compile Include="Grid\IDataGridViewRow.cs" />
     <Compile Include="Grid\IDataGridViewRowCollection.cs" />
     <Compile Include="Grid\IGridBase.cs" />
-    <Compile Include="ILabel.cs" />
-    <Compile Include="IListBox.cs" />
+    <Compile Include="ControlInterfaces\ILabel.cs" />
+    <Compile Include="ControlInterfaces\IListBox.cs" />
     <Compile Include="IListBoxObjectCollection.cs" />
     <Compile Include="IListBoxSelectedObjectCollection.cs" />
-    <Compile Include="IMultiSelector.cs" />
-    <Compile Include="IPanel.cs" />
-    <Compile Include="ITextBox.cs" />
+    <Compile Include="ControlInterfaces\IMultiSelector.cs" />
+    <Compile Include="ControlInterfaces\ITextBox.cs" />
     <Compile Include="LayoutManagers\LayoutManager.cs" />
     <Compile Include="MultiSelectorManager.cs" />
     <Compile Include="MultiSelectorModel.cs" />
+    <Compile Include="PanelFactory\PanelFactoryInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

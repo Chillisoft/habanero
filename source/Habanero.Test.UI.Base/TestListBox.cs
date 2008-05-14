@@ -15,7 +15,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new WinControlFactory();
+                return new ControlFactoryWin();
             }
         }
 
@@ -24,7 +24,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new GizmoxControlFactory();
+                return new ControlFactoryGizmox();
             }
         }
 

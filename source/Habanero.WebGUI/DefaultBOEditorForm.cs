@@ -203,28 +203,6 @@ namespace Habanero.WebGUI
                 TransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
 
-                ///Removed Form Grids stuff
-                //if (_boPanel.Controls[0] is TabControl)
-                //{
-                //    //Console.Out.WriteLine("tabcontrol found.");
-                //    TabControl tabControl = (TabControl) _boPanel.Controls[0];
-                //    foreach (TabPage page in tabControl.TabPages)
-                //    {
-                //        foreach (Panel panel in page.Controls)
-                //        {
-                //            foreach (Control control in panel.Controls)
-                //            {
-                //                //Console.Out.WriteLine(control.GetType().Name);
-                //                if (control is EditableGrid)
-                //                {
-                //                    //Console.Out.WriteLine("EditableGrid found.");
-                //                    ((EditableGrid)control).SaveChanges();
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-
                 DialogResult = DialogResult.OK;
                 Close();
                 _panelFactoryInfo.ControlMappers.BusinessObject = null;

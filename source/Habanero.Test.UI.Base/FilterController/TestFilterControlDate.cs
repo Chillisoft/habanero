@@ -99,12 +99,12 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestAddDatePickerWinForms()
         {
-            TestAddDatePicker(new WinControlFactory());
+            TestAddDatePicker(new ControlFactoryWin());
         }
         [Test]
         public void TestAddDatePickerGiz()
         {
-            TestAddDatePicker(new GizmoxControlFactory());
+            TestAddDatePicker(new ControlFactoryGizmox());
         }
 
         public void TestAddDatePicker(IControlFactory factory)
@@ -114,7 +114,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IFilterControl filterControl = factory.CreateFilterControl();
 
             //---------------Execute Test ----------------------
-            IChilliControl dtPicker = filterControl.AddDateFilterDateTimePicker("test:", "testcolumn", testDate,FilterClauseOperator.OpGreaterThan,true, true);
+            IControlChilli dtPicker = filterControl.AddDateFilterDateTimePicker("test:", "testcolumn", testDate,FilterClauseOperator.OpGreaterThan,true, true);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(dtPicker);
@@ -123,12 +123,12 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestAddDateFilterDateTimePickerGiz()
         {
-            TestAddDateFilterDateTimePicker(new GizmoxControlFactory());
+            TestAddDateFilterDateTimePicker(new ControlFactoryGizmox());
         }
         [Test]
         public void TestAddDateFilterDateTimePickerWinForms()
         {
-            TestAddDateFilterDateTimePicker(new WinControlFactory());
+            TestAddDateFilterDateTimePicker(new ControlFactoryWin());
         }
         public void TestAddDateFilterDateTimePicker(IControlFactory factory)
         {

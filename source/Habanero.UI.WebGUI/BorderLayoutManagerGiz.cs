@@ -9,16 +9,16 @@ namespace Habanero.UI.WebGUI
 {
     public class BorderLayoutManagerGiz : BorderLayoutManager
     {
-        private readonly IChilliControl[] _controls;
+        private readonly IControlChilli[] _controls;
         private readonly bool[] _splitters;
 
-        public BorderLayoutManagerGiz(IChilliControl managedControl) : base(managedControl)
+        public BorderLayoutManagerGiz(IControlChilli managedControl) : base(managedControl)
         {
-            _controls = new IChilliControl[5];
+            _controls = new IControlChilli[5];
             _splitters = new bool[5];
         }
 
-        protected override void SetupDockOfControl(IChilliControl control, Position pos)
+        protected override void SetupDockOfControl(IControlChilli control, Position pos)
         {
             Control ctl = (Control)control;
             switch (pos)
@@ -42,12 +42,12 @@ namespace Habanero.UI.WebGUI
             }
         }
 
-        public override IChilliControl AddControl(IChilliControl control, Position pos, bool includeSplitter)
+        public override IControlChilli AddControl(IControlChilli control, Position pos, bool includeSplitter)
         {
             SetupDockOfControl(control, pos);
             _controls[(int)pos] = control;
             this.ManagedControl.Controls.Clear();
-            foreach (IChilliControl chilliControl in _controls)
+            foreach (IControlChilli chilliControl in _controls)
             {
                 if (chilliControl != null)
                 {

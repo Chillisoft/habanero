@@ -4,17 +4,17 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
-    public class ControlWin : Control, IChilliControl
+    public class ControlWin : Control, IControlChilli
     {
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }
-        //List<IChilliControl> IChilliControl.Controls
+        //List<IControlChilli> IControlChilli.Controls
         //{
         //    get
         //    {
-        //        return new List<IChilliControl>();
+        //        return new List<IControlChilli>();
         //    }
         //}
     }

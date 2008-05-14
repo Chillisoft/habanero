@@ -45,6 +45,7 @@ namespace Habanero.WebGUI
             if (isBold)
             {
                 lbl.Font = new Font(lbl.Font, FontStyle.Bold);
+
             }
            // lbl.Width = lbl.PreferredSize.Width;
             if (isBold)
@@ -179,12 +180,6 @@ namespace Habanero.WebGUI
                 if (controlType == typeof (ComboBox))
                 {
                     ctl = CreateComboBox();
-//					NComboBox cbx = new Noogen.WinForms.NComboBox() ;
-//					cbx.DisableEntryNotInList = true;
-//					cbx.AutoComplete = true;
-//					cbx.CharacterCasing = CharacterCasing.Normal;
-//					cbx.ShowDropDownDuringInput = true;
-//					ctl = cbx;
                 } else if (controlType == typeof(CheckBox))
                 {
                     ctl = CreateCheckBox();
@@ -207,9 +202,7 @@ namespace Habanero.WebGUI
             }
             if (ctl.GetType() == typeof (DateTimePicker))
             {
-                //DateTimePicker editor = (DateTimePicker) ctl;
-                //editor..Appearance.BackColorDisabled = Color.Beige;
-                //editor.Appearance.ForeColorDisabled = Color.Black;
+                //TODO_Port: DateTimePicker editor = (DateTimePicker) ctl;
             }
             return ctl;
         }

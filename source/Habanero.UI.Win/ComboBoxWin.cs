@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Windows.Forms;
+using Habanero.BO;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -38,6 +39,12 @@ namespace Habanero.UI.Win
                 get { return _items.Count; }
             }
 
+            public string Label
+            {
+                get { throw new System.NotImplementedException(); }
+                set { throw new System.NotImplementedException(); }
+            }
+
             public void Remove(object item)
             {
                 _items.Remove(item);
@@ -47,16 +54,21 @@ namespace Habanero.UI.Win
             {
                 _items.Clear();
             }
+
+            public void SetCollection(BusinessObjectCollection<BusinessObject> collection)
+            {
+                throw new System.NotImplementedException();
+            }
         }
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }
-        //List<IChilliControl> IChilliControl.Controls
+        //List<IControlChilli> IControlChilli.Controls
         //{
         //    get
         //    {
-        //        return new List<IChilliControl>();
+        //        return new List<IControlChilli>();
         //    }
         //}
     }

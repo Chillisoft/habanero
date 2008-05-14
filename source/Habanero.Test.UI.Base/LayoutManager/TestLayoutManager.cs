@@ -29,7 +29,7 @@ namespace Habanero.Test.UI.Base
     public abstract class TestLayoutManager
     {
         private MockLayoutManager manager;
-        private IChilliControl managedControl;
+        private IControlChilli managedControl;
 
         protected abstract IControlFactory GetControlFactory();
 
@@ -38,7 +38,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new WinControlFactory();
+                return new ControlFactoryWin();
             }
         }
 
@@ -47,7 +47,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new GizmoxControlFactory();
+                return new ControlFactoryGizmox();
             }
         }
         [SetUp]
@@ -95,7 +95,7 @@ namespace Habanero.Test.UI.Base
                 get { return mRefreshed; }
             }
 
-            public MockLayoutManager(IChilliControl managedControl) : base(managedControl)
+            public MockLayoutManager(IControlChilli managedControl) : base(managedControl)
             {
             }
 
@@ -104,7 +104,7 @@ namespace Habanero.Test.UI.Base
                 mRefreshed = true;
             }
 
-            public override IChilliControl AddControl(IChilliControl control)
+            public override IControlChilli AddControl(IControlChilli control)
             {
                 throw new System.NotImplementedException();
             }

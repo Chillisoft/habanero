@@ -44,18 +44,18 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new WinControlFactory();
+                return new ControlFactoryWin();
             }
 
             [Test]
             public void TestSplitter()
             {
                 //---------------Set up test pack-------------------
-                IChilliControl managedControl = GetControlFactory().CreateControl();
+                IControlChilli managedControl = GetControlFactory().CreateControl();
                 managedControl.Width = _STD_MANAGEDCONTROL_WIDTH;
                 managedControl.Height = _STD_MANAGEDCONTROL_HEIGHT;
-                IChilliControl ctlEast = CreateControl(20, 20);
-                IChilliControl ctlCentre = CreateControl(1, 1);
+                IControlChilli ctlEast = CreateControl(20, 20);
+                IControlChilli ctlCentre = CreateControl(1, 1);
                 BorderLayoutManager manager = GetControlFactory().CreateBorderLayoutManager(managedControl);
                 //---------------Execute Test ----------------------
                 manager.AddControl(ctlEast, BorderLayoutManager.Position.East, true);
@@ -73,7 +73,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new GizmoxControlFactory();
+                return new ControlFactoryGizmox();
             }
             [Test,Ignore("Needs to be implemented.")]
             public void TestSplitterIsIgnoredForGizmox(){}
@@ -89,8 +89,8 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = GetControlFactory().CreateControl();
-            IChilliControl ctl = GetControlFactory().CreateTextBox();
+            IControlChilli managedControl = GetControlFactory().CreateControl();
+            IControlChilli ctl = GetControlFactory().CreateTextBox();
             BorderLayoutManager manager = GetControlFactory().CreateBorderLayoutManager(managedControl);
             //---------------Execute Test ----------------------
             manager.AddControl(ctl);
@@ -102,10 +102,10 @@ namespace Habanero.Test.UI.Base
         public void TestAddControlWithPosition()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = GetControlFactory().CreateControl();
+            IControlChilli managedControl = GetControlFactory().CreateControl();
             managedControl.Width = _STD_MANAGEDCONTROL_WIDTH;
             managedControl.Height = _STD_MANAGEDCONTROL_HEIGHT;
-            IChilliControl ctl = GetControlFactory().CreatePanel();
+            IControlChilli ctl = GetControlFactory().CreatePanel();
             BorderLayoutManager manager = GetControlFactory().CreateBorderLayoutManager(managedControl);
             //---------------Execute Test ----------------------
             manager.AddControl(ctl, BorderLayoutManager.Position.Centre);
@@ -119,12 +119,12 @@ namespace Habanero.Test.UI.Base
         public void TestAddTwoControls()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = GetControlFactory().CreateControl();
+            IControlChilli managedControl = GetControlFactory().CreateControl();
             managedControl.Width = _STD_MANAGEDCONTROL_WIDTH;
             managedControl.Height = _STD_MANAGEDCONTROL_HEIGHT;
-            IChilliControl ctl1 = GetControlFactory().CreatePanel();
+            IControlChilli ctl1 = GetControlFactory().CreatePanel();
             ctl1.Height = 20;
-            IChilliControl ctl2 = GetControlFactory().CreatePanel();
+            IControlChilli ctl2 = GetControlFactory().CreatePanel();
             ctl2.Height = 10;
             BorderLayoutManager manager = GetControlFactory().CreateBorderLayoutManager(managedControl);
             //---------------Execute Test ----------------------
@@ -140,12 +140,12 @@ namespace Habanero.Test.UI.Base
         public void TestAddTwoControlsInWrongOrder()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = GetControlFactory().CreateControl();
+            IControlChilli managedControl = GetControlFactory().CreateControl();
             managedControl.Width = _STD_MANAGEDCONTROL_WIDTH;
             managedControl.Height = _STD_MANAGEDCONTROL_HEIGHT;
-            IChilliControl ctl1 = GetControlFactory().CreatePanel();
+            IControlChilli ctl1 = GetControlFactory().CreatePanel();
             ctl1.Height = 20;
-            IChilliControl ctl2 = GetControlFactory().CreatePanel();
+            IControlChilli ctl2 = GetControlFactory().CreatePanel();
             ctl2.Height = 10;
             BorderLayoutManager manager = GetControlFactory().CreateBorderLayoutManager(managedControl);
             //---------------Execute Test ----------------------
@@ -164,15 +164,15 @@ namespace Habanero.Test.UI.Base
         public void TestOrders()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = GetControlFactory().CreateControl();
+            IControlChilli managedControl = GetControlFactory().CreateControl();
             managedControl.Width = _STD_MANAGEDCONTROL_WIDTH;
             managedControl.Height = _STD_MANAGEDCONTROL_HEIGHT;
             BorderLayoutManager manager = GetControlFactory().CreateBorderLayoutManager(managedControl);
-            IChilliControl ctlEast = CreateControl(30, 50);
-            IChilliControl ctlNorth = CreateControl(20, 20);
-            IChilliControl ctlSouth = CreateControl(50, 50);
-            IChilliControl ctlCentre = CreateControl(1, 1);
-            IChilliControl ctlWest = CreateControl(10, 10);
+            IControlChilli ctlEast = CreateControl(30, 50);
+            IControlChilli ctlNorth = CreateControl(20, 20);
+            IControlChilli ctlSouth = CreateControl(50, 50);
+            IControlChilli ctlCentre = CreateControl(1, 1);
+            IControlChilli ctlWest = CreateControl(10, 10);
             //---------------Execute Test ----------------------
             manager.AddControl(ctlEast, BorderLayoutManager.Position.East);
             manager.AddControl(ctlNorth, BorderLayoutManager.Position.North);
@@ -194,9 +194,9 @@ namespace Habanero.Test.UI.Base
 
 
 
-        private IChilliControl CreateControl(int width, int height)
+        private IControlChilli CreateControl(int width, int height)
         {
-            IChilliControl ctl = GetControlFactory().CreatePanel();
+            IControlChilli ctl = GetControlFactory().CreatePanel();
             ctl.Height = height;
             ctl.Width = width;
             return ctl;
@@ -205,23 +205,23 @@ namespace Habanero.Test.UI.Base
         
 
 
-        //public IChilliControl CreateManagedControl()
+        //public IControlChilli CreateManagedControl()
         //{
-        //    IChilliControl managedControl = GetControlFactory().CreateControl();
+        //    IControlChilli managedControl = GetControlFactory().CreateControl();
         //    managedControl.Width = _STD_MANAGEDCONTROL_WIDTH;
         //    managedControl.Height = _STD_MANAGEDCONTROL_HEIGHT;
         //    return managedControl;
         //}
 
-        //public IChilliControl CreateControl(int width, int height)
+        //public IControlChilli CreateControl(int width, int height)
         //{
-        //    IChilliControl ctl = GetControlFactory().CreateControl();
+        //    IControlChilli ctl = GetControlFactory().CreateControl();
         //    ctl.Width = width;
         //    ctl.Height = height;
         //    return ctl;
         //}
 
-        //private IChilliControl CreateStandardControl()
+        //private IControlChilli CreateStandardControl()
         //{
         //    return CreateControl(_STD_CONTROL_WIDTH, _STD_CONTROL_HEIGHT);
         //}

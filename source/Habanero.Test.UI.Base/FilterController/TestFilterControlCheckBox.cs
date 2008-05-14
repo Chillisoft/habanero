@@ -32,13 +32,13 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestAddCheckBoxGizmox()
         {
-            TestAddCheckBox(new GizmoxControlFactory());
+            TestAddCheckBox(new ControlFactoryGizmox());
         }
 
         [Test]
         public void TestAddCheckBoxWinForms()
         {
-            TestAddCheckBox(new WinControlFactory());
+            TestAddCheckBox(new ControlFactoryWin());
         }
 
         public void TestAddCheckBox(IControlFactory factory)
@@ -48,7 +48,7 @@ namespace Habanero.Test.UI.Base
             IFilterControl filterControl = factory.CreateFilterControl();
             //---------------Execute Test ----------------------
             string labelName = "aa";
-            IChilliControl cb = filterControl.AddBooleanFilterCheckBox(labelName, "", true);
+            IControlChilli cb = filterControl.AddBooleanFilterCheckBox(labelName, "", true);
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(cb);
@@ -62,12 +62,12 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestAddStringFilterCheckBoxGiz()
         {
-            TestAddStringFilterCheckBox(new GizmoxControlFactory());
+            TestAddStringFilterCheckBox(new ControlFactoryGizmox());
         }
         [Test]
         public void TestAddStringFilterCheckBoxWinForms()
         {
-            TestAddStringFilterCheckBox(new WinControlFactory());
+            TestAddStringFilterCheckBox(new ControlFactoryWin());
         }
         public void TestAddStringFilterCheckBox(IControlFactory factory)
         {
@@ -87,13 +87,13 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestGetCheckBoxFilterClauseWinForms()
         {
-            TestGetCheckBoxFilterClause(new WinControlFactory());
+            TestGetCheckBoxFilterClause(new ControlFactoryWin());
         }
 
         [Test]
         public void TestGetCheckBoxFilterClauseGiz()
         {
-            TestGetCheckBoxFilterClause(new GizmoxControlFactory());
+            TestGetCheckBoxFilterClause(new ControlFactoryGizmox());
         }
 
         public void TestGetCheckBoxFilterClause(IControlFactory factory)
@@ -118,13 +118,13 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestTwoCheckBoxFilterWinForms()
         {
-            TestTwoCheckBoxFilter(new WinControlFactory());
+            TestTwoCheckBoxFilter(new ControlFactoryWin());
         }
 
         [Test]
         public void TestTwoCheckBoxFilterGiz()
         {
-            TestTwoCheckBoxFilter(new GizmoxControlFactory());
+            TestTwoCheckBoxFilter(new ControlFactoryGizmox());
         }
 
         public void TestTwoCheckBoxFilter(IControlFactory factory)
@@ -152,13 +152,13 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestOnlyCheckBoxAreOnPanelWinForms()
         {
-            TestOnlyCheckBoxAreOnPanel(new WinControlFactory(), 1);//only check box
+            TestOnlyCheckBoxAreOnPanel(new ControlFactoryWin(), 1);//only check box
         }
 
         [Test]
         public void TestOnlyCheckBoxAreOnPanelGiz()
         {
-            TestOnlyCheckBoxAreOnPanel(new GizmoxControlFactory(), 2);//buttons panel plus check box
+            TestOnlyCheckBoxAreOnPanel(new ControlFactoryGizmox(), 2);//buttons panel plus check box
         }
 
         public void TestOnlyCheckBoxAreOnPanel(IControlFactory factory, int controlCount)

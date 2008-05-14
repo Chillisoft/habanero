@@ -32,7 +32,7 @@ namespace Habanero.UI.Base.LayoutManagers
     public class FlowLayoutManager : LayoutManager
     {
 
-        private readonly List<IChilliControl> _controls;
+        private readonly List<IControlChilli> _controls;
         private readonly IList _newLinePositions;
         private Alignments _alignment;
         private Point _currentPos;
@@ -65,9 +65,9 @@ namespace Habanero.UI.Base.LayoutManagers
         /// Constructor to initialise a new manager
         /// </summary>
         /// <param name="managedControl">The control to manage e.g. a Panel</param>
-        public FlowLayoutManager(IChilliControl managedControl) : base(managedControl)
+        public FlowLayoutManager(IControlChilli managedControl) : base(managedControl)
         {
-            _controls = new List<IChilliControl>();
+            _controls = new List<IControlChilli>();
             _newLinePositions = new ArrayList(3);
             _gluePositions = new ArrayList(5);
         }
@@ -77,7 +77,7 @@ namespace Habanero.UI.Base.LayoutManagers
         /// </summary>
         /// <param name="ctl">The control to add</param>
         /// <returns>Returns the control once it has been added</returns>
-        public override IChilliControl AddControl(IChilliControl ctl)
+        public override IControlChilli AddControl(IControlChilli ctl)
         {
             _controls.Add(ctl);
             RefreshControlPositions();
@@ -93,7 +93,7 @@ namespace Habanero.UI.Base.LayoutManagers
         ///// Removes the specified control from the layout
         ///// </summary>
         ///// <param name="ctl">The control to remove</param>
-        //public void RemoveControl(IChilliControl ctl)
+        //public void RemoveControl(IControlChilli ctl)
         //{
         //    _controls.Remove(ctl);
         //    this.ManagedControl.Controls.Remove(ctl);
@@ -133,7 +133,7 @@ namespace Habanero.UI.Base.LayoutManagers
             IList controlsInRow = new ArrayList();
             for (int i = 0; i < this._controls.Count; i++)
             {
-                IChilliControl ctl = GetControl(i);
+                IControlChilli ctl = GetControl(i);
                 if (currentLine < _newLinePositions.Count && (int) _newLinePositions[currentLine] == i)
                 {
                     MoveCurrentPosToStartOfNextRow(currentRowHeight);
@@ -203,7 +203,7 @@ namespace Habanero.UI.Base.LayoutManagers
                    this.ManagedControl.Width;
         }
 
-        private IChilliControl GetPreviousControl(int currentPos)
+        private IControlChilli GetPreviousControl(int currentPos)
         {
             return this._controls[currentPos - 1];
         }
@@ -212,14 +212,14 @@ namespace Habanero.UI.Base.LayoutManagers
         {
             for (int ctlCount = 0; ctlCount < controlsInRow.Count; ctlCount++)
             {
-                IChilliControl controlInRow = (IChilliControl)controlsInRow[controlsInRow.Count - 1 - ctlCount];
+                IControlChilli controlInRow = (IControlChilli)controlsInRow[controlsInRow.Count - 1 - ctlCount];
                 {
                     controlInRow.TabIndex = rowStart + ctlCount;
                 }
             }
         }
 
-        private IChilliControl GetControl(int position)
+        private IControlChilli GetControl(int position)
         {
             return this._controls[position];
         }
@@ -248,7 +248,7 @@ namespace Habanero.UI.Base.LayoutManagers
         /// Calculates the control's position in the user interface
         /// </summary>
         /// <param name="ctl">The control in question</param>
-        private void CalculateControlPosition(IChilliControl ctl)
+        private void CalculateControlPosition(IControlChilli ctl)
         {
             if (_alignment == Alignments.Right)
             {
@@ -281,7 +281,7 @@ namespace Habanero.UI.Base.LayoutManagers
         /// <param name="ctl">The control in question</param>
         /// <returns>Returns true if the item doesn't fit, false if it 
         /// does</returns>
-        private bool ControlDoesNotFitOnCurrentRow(IChilliControl ctl)
+        private bool ControlDoesNotFitOnCurrentRow(IControlChilli ctl)
         {
             return (_currentPos.X + ctl.Width >= ManagedControl.Width - BorderSize);
         }

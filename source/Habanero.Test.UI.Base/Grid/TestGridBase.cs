@@ -37,7 +37,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new WinControlFactory();
+                return new ControlFactoryWin();
             }
 
             protected override IGridBase CreateGridBaseStub()
@@ -73,7 +73,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new GizmoxControlFactory();
+                return new ControlFactoryGizmox();
             }
 
             protected override IGridBase CreateGridBaseStub()
@@ -90,7 +90,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IChilliControl myGridBase = CreateGridBaseStub();
+            IControlChilli myGridBase = CreateGridBaseStub();
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(myGridBase);

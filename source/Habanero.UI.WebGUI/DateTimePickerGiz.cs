@@ -6,7 +6,7 @@ namespace Habanero.UI.WebGUI
 {
     public class DateTimePickerGiz : DateTimePicker, IDateTimePicker
     {
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return base.Controls; }
         }

@@ -42,7 +42,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new WinControlFactory();
+                return new ControlFactoryWin();
             }
         }
 
@@ -51,7 +51,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new GizmoxControlFactory();
+                return new ControlFactoryGizmox();
             }
         }
 
@@ -65,7 +65,7 @@ namespace Habanero.Test.UI.Base
         public void TestManagedControl()
         {            
             //---------------Set up test pack-------------------
-            IChilliControl  managedControl = GetControlFactory().CreateControl();
+            IControlChilli  managedControl = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
             FlowLayoutManager manager = new FlowLayoutManager(managedControl);
             //---------------Test Result -----------------------
@@ -77,10 +77,10 @@ namespace Habanero.Test.UI.Base
         public void TestAddControl()
         {
             //---------------Set up test pack-------------------
-            IChilliControl  managedControl = CreateManagedControl();
+            IControlChilli  managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
-            IChilliControl  ctlToAdd = CreateStandardControl();
+            IControlChilli  ctlToAdd = CreateStandardControl();
             manager.AddControl(ctlToAdd);
             //---------------Test Result -----------------------
             Assert.AreEqual(stdFirstPosLeft(), ctlToAdd.Left, "Added control's Left prop should be 5 because of the default border.");
@@ -89,7 +89,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(_STD_CONTROL_HEIGHT, ctlToAdd.Height, "Added control's Height prop should be set.");
         }
 
-        private IChilliControl CreateStandardControl()
+        private IControlChilli CreateStandardControl()
         {
             return CreateControl(_STD_CONTROL_WIDTH, _STD_CONTROL_HEIGHT);
         }
@@ -98,11 +98,11 @@ namespace Habanero.Test.UI.Base
         public void TestAddTwoControls()
         {
             //---------------Set up test pack-------------------
-            IChilliControl  managedControl = CreateManagedControl();
+            IControlChilli  managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
             manager.AddControl(CreateStandardControl());
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             manager.AddControl(ctl2);
             //---------------Test Result -----------------------
             Assert.AreEqual( _STD_BORDER + _STD_GAP + _STD_CONTROL_WIDTH, ctl2.Left, "Left should equal Border + First control's width + spacing");
@@ -113,12 +113,12 @@ namespace Habanero.Test.UI.Base
         public void TestAddTwoControlsWithWrap()
         {
             //---------------Set up test pack-------------------
-            IChilliControl  managedControl = CreateManagedControl();
+            IControlChilli  managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
             managedControl.Width = 30;
             manager.AddControl(CreateStandardControl());
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             manager.AddControl(ctl2);
             //---------------Test Result -----------------------
             Assert.AreEqual(_STD_BORDER, ctl2.Left, "Should wrap to the next line because it's right is outside the area.");
@@ -129,14 +129,14 @@ namespace Habanero.Test.UI.Base
         public void TestAddThreeControlsOfDifferentHeightWithWrap()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-            IChilliControl ctl2 = CreateControl(10, 20);
+            IControlChilli ctl2 = CreateControl(10, 20);
             //---------------Execute Test ----------------------
             managedControl.Width = 40;
             manager.AddControl(CreateStandardControl());
             manager.AddControl(ctl2);
-            IChilliControl ctl = CreateStandardControl();
+            IControlChilli ctl = CreateStandardControl();
             manager.AddControl(ctl);
             //---------------Test Result -----------------------
             Assert.AreEqual(_STD_BORDER, ctl.Left, "Should wrap to next line because it doesn't fit on first line.");
@@ -147,11 +147,11 @@ namespace Habanero.Test.UI.Base
         public void TestResizeWhenNothingHappens()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
-            IChilliControl ctl1 = CreateStandardControl();
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl1 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             manager.AddControl(ctl1);
             manager.AddControl(ctl2);
             manager.ManagedControl.Height = 50;
@@ -166,11 +166,11 @@ namespace Habanero.Test.UI.Base
         public void TestResizeWhenPositionsShouldChange()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
-            IChilliControl ctl1 = CreateStandardControl();
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl1 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             manager.AddControl(ctl1);
             manager.AddControl(ctl2);
             manager.ManagedControl.Width = 30;
@@ -185,10 +185,10 @@ namespace Habanero.Test.UI.Base
         public void TestBorderSize()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
-            IChilliControl ctl1 = CreateStandardControl();
+            IControlChilli ctl1 = CreateStandardControl();
             manager.BorderSize = 10;
             manager.AddControl(ctl1);
             //---------------Test Result -----------------------
@@ -200,11 +200,11 @@ namespace Habanero.Test.UI.Base
         public void TestRefreshOnBorderSizeChange()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
-            IChilliControl ctl1 = CreateStandardControl();
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl1 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             manager.ManagedControl.Width = 40;
             manager.AddControl(ctl1);
             manager.AddControl(ctl2);
@@ -218,12 +218,12 @@ namespace Habanero.Test.UI.Base
         public void TestGapSize()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
             manager.GapSize = 2;
             manager.AddControl(CreateStandardControl());
-            IChilliControl ctl = CreateStandardControl();
+            IControlChilli ctl = CreateStandardControl();
             manager.AddControl(ctl);
             //---------------Test Result -----------------------
             Assert.AreEqual(manager.GapSize + _STD_CONTROL_WIDTH + _STD_BORDER, ctl.Left, "Left of ctl should be bordersize + 10 + gapsize.");
@@ -233,13 +233,13 @@ namespace Habanero.Test.UI.Base
         public void TestRefreshOnGapSizeChange()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
             manager.ManagedControl.Width = 100;
             manager.BorderSize = 0;
             manager.AddControl(CreateControl(80, 20));
-            IChilliControl ctl = CreateControl(50, 20);
+            IControlChilli ctl = CreateControl(50, 20);
             manager.AddControl(ctl);
             manager.GapSize = 2;
             //---------------Test Result -----------------------
@@ -250,14 +250,14 @@ namespace Habanero.Test.UI.Base
         public void TestOnlyVisibleControlsIncluded()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
             manager.AddControl(CreateStandardControl());
-            IChilliControl ctl1 = CreateStandardControl();
+            IControlChilli ctl1 = CreateStandardControl();
             ctl1.Visible = false;
             manager.AddControl(ctl1);
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             manager.AddControl(ctl2);
             //---------------Test Result -----------------------
             Assert.AreEqual(StdSecondPosLeft(), ctl2.Left, "Second Control should be ignored because it is invisible.");
@@ -267,12 +267,12 @@ namespace Habanero.Test.UI.Base
         public void TestRefreshOnControlVisibilityChanged_ChangeControlToNotVisibleControlToRightShiftLeft()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             manager.AddControl(CreateStandardControl());
-            IChilliControl ctl1 = CreateStandardControl();
+            IControlChilli ctl1 = CreateStandardControl();
             manager.AddControl(ctl1);
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             manager.AddControl(ctl2);
             //---------------Execute Test ----------------------
 
@@ -286,13 +286,13 @@ namespace Habanero.Test.UI.Base
         public void TestRefreshOnControlSizeChanged()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             //---------------Execute Test ----------------------
             manager.AddControl(CreateStandardControl());
-            IChilliControl ctl1 = CreateStandardControl();
+            IControlChilli ctl1 = CreateStandardControl();
             manager.AddControl(ctl1);
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             manager.AddControl(ctl2);
             ctl1.Width = 20;
             //---------------Test Result -----------------------
@@ -303,12 +303,12 @@ namespace Habanero.Test.UI.Base
         public void TestRightAlignRows()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             int managedControlWidth = 60;
             manager.ManagedControl.Width = managedControlWidth;
-            IChilliControl ctl = CreateStandardControl();
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Right;
             manager.AddControl(ctl);
@@ -322,12 +322,12 @@ namespace Habanero.Test.UI.Base
         public void TestRightAlignRowsWithWrap()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             int ManagedControlWidth = 30;
             manager.ManagedControl.Width = ManagedControlWidth;
-            IChilliControl ctl = CreateStandardControl();
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Right;
             manager.AddControl(ctl);
@@ -341,11 +341,11 @@ namespace Habanero.Test.UI.Base
         public void Test_ChangeToRightAlignChangeShouldLayout()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             int managedControlWidth = 60;
             manager.ManagedControl.Width = managedControlWidth;
-            IChilliControl ctl = CreateStandardControl();
+            IControlChilli ctl = CreateStandardControl();
             manager.AddControl(ctl);
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Right;
@@ -357,9 +357,9 @@ namespace Habanero.Test.UI.Base
         public void TestCentreAlignRowOneControl()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-            IChilliControl ctl = CreateStandardControl();
+            IControlChilli ctl = CreateStandardControl();
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Centre;
             manager.AddControl(ctl);
@@ -371,10 +371,10 @@ namespace Habanero.Test.UI.Base
         public void TestCentreAlignRowTwoControls()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
-            IChilliControl ctl1 = CreateStandardControl();
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl1 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Centre;
             manager.AddControl(ctl1);
@@ -390,12 +390,12 @@ namespace Habanero.Test.UI.Base
         public void TestCentreAlignRowTwoRows()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             int controlWidth = 20;
             int managedControlWidth = 40;
-            IChilliControl ctl = CreateControl(controlWidth, 10);
-            IChilliControl ctl2 = CreateControl(controlWidth, 10);
+            IControlChilli ctl = CreateControl(controlWidth, 10);
+            IControlChilli ctl2 = CreateControl(controlWidth, 10);
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Centre;
             manager.ManagedControl.Width = managedControlWidth;
@@ -411,12 +411,12 @@ namespace Habanero.Test.UI.Base
         public void TestCentreAlignRowWithInvisibleControls()
         {
             //---------------Set up test pack-------------------
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
             int controlWidth = 20;
             int managedControlWidth = 100;
-            IChilliControl ctl = CreateControl(controlWidth, 10);
-            IChilliControl ctl2 = CreateControl(controlWidth, 10);
+            IControlChilli ctl = CreateControl(controlWidth, 10);
+            IControlChilli ctl2 = CreateControl(controlWidth, 10);
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Centre;
             manager.ManagedControl.Width = managedControlWidth;
@@ -432,8 +432,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             FlowLayoutManager manager = CreateFlowLayoutManager();
-            IChilliControl ctl = CreateControl(20, 10);
-            IChilliControl ctl2 = CreateControl(20, 10);
+            IControlChilli ctl = CreateControl(20, 10);
+            IControlChilli ctl2 = CreateControl(20, 10);
             //---------------Execute Test ----------------------
             manager.AddControl(ctl);
             manager.NewLine();
@@ -448,8 +448,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             FlowLayoutManager manager = CreateFlowLayoutManager();
-            IChilliControl ctl1 = CreateControl(35, 10);
-            IChilliControl ctl2 = CreateControl(35, 10);
+            IControlChilli ctl1 = CreateControl(35, 10);
+            IControlChilli ctl2 = CreateControl(35, 10);
             //---------------Execute Test ----------------------
             manager.AddControl(CreateControl(40, 10));
             manager.AddControl(ctl1);
@@ -469,7 +469,7 @@ namespace Habanero.Test.UI.Base
             FlowLayoutManager manager = CreateFlowLayoutManager();
             //---------------Execute Test ----------------------
             manager.AddControl(CreateControl(40, 10));
-            IChilliControl gluedCtl = CreateControl(35, 10);
+            IControlChilli gluedCtl = CreateControl(35, 10);
             manager.AddControl(gluedCtl);
             manager.AddGlue();
             manager.ManagedControl.Width = 50;
@@ -484,10 +484,10 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             FlowLayoutManager manager = CreateFlowLayoutManager();
             //---------------Execute Test ----------------------
-            IChilliControl ctl = CreateControl(30, 10);
+            IControlChilli ctl = CreateControl(30, 10);
             manager.AddControl(ctl);
             manager.AddGlue();
-            IChilliControl ctl2 = CreateControl(90, 10);
+            IControlChilli ctl2 = CreateControl(90, 10);
             manager.AddControl(ctl2);
 
             //---------------Test Result -----------------------
@@ -503,8 +503,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             FlowLayoutManager manager = CreateFlowLayoutManager();
-            IChilliControl ctl = CreateControl(30, 10);
-            IChilliControl ctl2 = CreateControl(50, 10);
+            IControlChilli ctl = CreateControl(30, 10);
+            IControlChilli ctl2 = CreateControl(50, 10);
             //---------------Execute Test ----------------------
             manager.AddControl(CreateControl(50, 10));
             ctl.Visible = false;
@@ -533,9 +533,9 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             FlowLayoutManager manager = CreateFlowLayoutManager();
-            IChilliControl ctl1 = CreateControl(30, 10);
-            IChilliControl ctl2 = CreateControl(50, 10);
-            IChilliControl ctl3 = CreateControl(50, 10);
+            IControlChilli ctl1 = CreateControl(30, 10);
+            IControlChilli ctl2 = CreateControl(50, 10);
+            IControlChilli ctl3 = CreateControl(50, 10);
             //---------------Execute Test ----------------------
             manager.AddControl(ctl1);
             manager.AddControl(ctl2);
@@ -559,9 +559,9 @@ namespace Habanero.Test.UI.Base
             FlowLayoutManager manager = CreateFlowLayoutManager();
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Right;
-            IChilliControl ctl1 = CreateControl(20, 20);
+            IControlChilli ctl1 = CreateControl(20, 20);
             manager.AddControl(ctl1);
-            IChilliControl ctl2 = CreateControl(20, 20);
+            IControlChilli ctl2 = CreateControl(20, 20);
             manager.AddControl(ctl2);
             //---------------Test Result -----------------------
             Assert.AreEqual(0, ctl2.TabIndex);
@@ -573,9 +573,9 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             FlowLayoutManager manager = CreateFlowLayoutManager();
-            IChilliControl ctl1 = CreateControl(50, 20);
-            IChilliControl ctl2 = CreateControl(20, 20);
-            IChilliControl ctl3 = CreateControl(50, 20);            
+            IControlChilli ctl1 = CreateControl(50, 20);
+            IControlChilli ctl2 = CreateControl(20, 20);
+            IControlChilli ctl3 = CreateControl(50, 20);            
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Right;
 
@@ -593,8 +593,8 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             FlowLayoutManager manager = CreateFlowLayoutManager();
-            IChilliControl ctl1 = CreateStandardControl();
-            IChilliControl ctl2 = CreateStandardControl();
+            IControlChilli ctl1 = CreateStandardControl();
+            IControlChilli ctl2 = CreateStandardControl();
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Left;
             manager.AddControl(ctl1);
@@ -611,10 +611,10 @@ namespace Habanero.Test.UI.Base
             FlowLayoutManager manager = CreateFlowLayoutManager();
             //---------------Execute Test ----------------------
             manager.Alignment = FlowLayoutManager.Alignments.Left;
-            IChilliControl ctl1 = CreateControl(50, 20);
+            IControlChilli ctl1 = CreateControl(50, 20);
             manager.AddControl(ctl1);
             manager.AddControl(CreateControl(20, 20));
-            IChilliControl ctl3 = CreateControl(50, 20);
+            IControlChilli ctl3 = CreateControl(50, 20);
             manager.AddControl(ctl3);
             //---------------Test Result -----------------------
             Assert.AreEqual(1, ctl1.TabIndex);
@@ -645,7 +645,7 @@ namespace Habanero.Test.UI.Base
         }
         private FlowLayoutManager CreateFlowLayoutManager()
         {
-            IChilliControl managedControl = CreateManagedControl();
+            IControlChilli managedControl = CreateManagedControl();
             return CreateFlowLayoutManager(managedControl);
         }
         private static int stdFirstPosLeft()
@@ -653,24 +653,24 @@ namespace Habanero.Test.UI.Base
             return _DEFAULT_BORDER;
         }
 
-        public IChilliControl  CreateControl(int width, int height)
+        public IControlChilli  CreateControl(int width, int height)
         {
-            IChilliControl  ctl = GetControlFactory().CreateControl();
+            IControlChilli  ctl = GetControlFactory().CreateControl();
             ctl.Width = width;
             ctl.Height = height;
             return ctl;
         }
 
-        private static FlowLayoutManager CreateFlowLayoutManager(IChilliControl managedControl)
+        private static FlowLayoutManager CreateFlowLayoutManager(IControlChilli managedControl)
         {
             FlowLayoutManager manager = new FlowLayoutManager(managedControl);
             manager.GapSize = _STD_GAP;
             return manager;
         }
 
-        private IChilliControl CreateManagedControl()
+        private IControlChilli CreateManagedControl()
         {
-            IChilliControl managedControl = GetControlFactory().CreateControl();
+            IControlChilli managedControl = GetControlFactory().CreateControl();
             managedControl.Width = _STD_ManagedControl_Width;
             managedControl.Height = _STD_ManagedControl_Height;
             return managedControl;

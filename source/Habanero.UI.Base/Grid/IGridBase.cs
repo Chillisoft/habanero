@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
-    public interface IGridBase: IChilliControl
+    public interface IGridBase: IControlChilli
     {
         /// <summary>
         /// Sets the business object collection displayed in the grid.  This

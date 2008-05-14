@@ -1,5 +1,6 @@
 using System.Collections;
 using Gizmox.WebGUI.Forms;
+using Habanero.BO;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
@@ -18,6 +19,7 @@ namespace Habanero.UI.WebGUI
         internal class ComboBoxObjectCollectionGiz : IComboBoxObjectCollection
         {
             private readonly ObjectCollection _items;
+            private string _label;
 
             public ComboBoxObjectCollectionGiz(ObjectCollection items)
             {
@@ -34,6 +36,12 @@ namespace Habanero.UI.WebGUI
                 get { return _items.Count; }
             }
 
+            public string Label
+            {
+                get { return _label; }
+                set { _label = value; }
+            }
+
             public void Remove(object item)
             {
                 _items.Remove(item);
@@ -43,16 +51,21 @@ namespace Habanero.UI.WebGUI
             {
                 _items.Clear();
             }
+
+            public void SetCollection(BusinessObjectCollection<BusinessObject> collection)
+            {
+                throw new System.NotImplementedException();
+            }
         }
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }
-        //List<IChilliControl> IChilliControl.Controls
+        //List<IControlChilli> IControlChilli.Controls
         //{
         //    get
         //    {
-        //        return new List<IChilliControl>();
+        //        return new List<IControlChilli>();
         //    }
         //}
     }

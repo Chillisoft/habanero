@@ -9,7 +9,7 @@ namespace Habanero.UI.Base
         //private readonly IControlFactory _controlFactory;
 
         private IControlFactory _controlFactory;
-        //private IChilliControl _nullValueCover;
+        //private IControlChilli _nullValueCover;
 
         
         public DateTimePickerController(IControlFactory controlFactory)

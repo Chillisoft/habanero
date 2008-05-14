@@ -47,14 +47,14 @@ namespace Habanero.Test.UI.Base
         }
 
         protected abstract IControlFactory GetControlFactory();
-        protected abstract void AddControlToForm(IChilliControl cntrl);
+        protected abstract void AddControlToForm(IControlChilli cntrl);
 
         //[TestFixture]
         //public class TestButtonControlWin : TestButtonControl
         //{
         //    protected override IControlFactory GetControlFactory()
         //    {
-        //        return new WinControlFactory();
+        //        return new ControlFactoryWin();
         //    }
         //    //protected override IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons()
         //    //{
@@ -95,10 +95,10 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new GizmoxControlFactory();
+                return new ControlFactoryGizmox();
             }
 
-            protected override void AddControlToForm(IChilliControl cntrl)
+            protected override void AddControlToForm(IControlChilli cntrl)
             {
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control) cntrl);
@@ -128,7 +128,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
-            IChilliControl buttons = GetControlFactory().CreateButtonGroupControl();
+            IControlChilli buttons = GetControlFactory().CreateButtonGroupControl();
             ////---------------Test Result -----------------------
             Assert.IsNotNull(buttons);
             Assert.IsTrue(buttons is IButtonGroupControl);

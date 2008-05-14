@@ -32,7 +32,7 @@ namespace Habanero.UI.Win
             return _filterControlManager.GetFilterClause();
         }
 
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }

@@ -142,7 +142,7 @@ namespace Habanero.UI.WebGUI
             get { return _filterButton; }
         }
 
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }

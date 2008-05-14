@@ -90,7 +90,7 @@ namespace Habanero.UI.WebGUI
                 return _mngr.SelectedBusinessObjects;
             }
         }
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }

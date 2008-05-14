@@ -61,7 +61,7 @@ namespace Habanero.UI.Base.LayoutManagers
             South = 4
         }
 
-        private readonly IChilliControl[] _controls;
+        private readonly IControlChilli[] _controls;
         private readonly bool[] _splitters;
 
         /// <summary>
@@ -70,10 +70,10 @@ namespace Habanero.UI.Base.LayoutManagers
         /// <param name="managedControl">The control to manage (eg. use "this"
         /// if you create the manager inside a form class that you will be
         /// managing)</param>
-        public BorderLayoutManager(IChilliControl managedControl)
+        public BorderLayoutManager(IControlChilli managedControl)
             : base(managedControl)
         {
-            _controls = new IChilliControl[5];
+            _controls = new IControlChilli[5];
             _splitters = new bool[5];
         }
 
@@ -82,26 +82,26 @@ namespace Habanero.UI.Base.LayoutManagers
             throw new NotImplementedException();
         }
 
-        public override IChilliControl AddControl(IChilliControl control)
+        public override IControlChilli AddControl(IControlChilli control)
         {
             this.ManagedControl.Controls.Add(control);
             return control;
         }
 
-        public IChilliControl AddControl(IChilliControl control, Position pos)
+        public IControlChilli AddControl(IControlChilli control, Position pos)
         {
             AddControl(control,pos,false);
             return control;
         }
 
-        public abstract IChilliControl AddControl(IChilliControl control, Position pos, bool includeSplitter);
-        protected abstract void SetupDockOfControl(IChilliControl control, Position pos);
+        public abstract IControlChilli AddControl(IControlChilli control, Position pos, bool includeSplitter);
+        protected abstract void SetupDockOfControl(IControlChilli control, Position pos);
 
         public override void AddGlue()
         {
             throw new NotImplementedException();
         }
-        //public IChilliControl AddControl(IChilliControl ctl, Position pos, bool includeSplitter)
+        //public IControlChilli AddControl(IControlChilli ctl, Position pos, bool includeSplitter)
         //{
         //    ctl.Dock = _controlFactory.GetDockStyle(pos);
         //        this.ManagedControl.Controls.Add(ctl);

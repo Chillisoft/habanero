@@ -4,7 +4,7 @@ using Habanero.Base;
 
 namespace Habanero.UI.Base.FilterControl
 {
-    public interface IFilterControl : IChilliControl
+    public interface IFilterControl : IControlChilli
     {
         /// <summary>
         /// Adds a TextBox filter in which users can specify text that

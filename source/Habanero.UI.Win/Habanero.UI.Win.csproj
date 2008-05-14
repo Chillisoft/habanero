@@ -93,7 +93,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Util\ControlsHelper.cs" />
-    <Compile Include="WinControlFactory.cs">
+    <Compile Include="ControlFactoryWin.cs">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

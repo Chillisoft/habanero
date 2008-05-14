@@ -59,6 +59,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Base\IBusinessObjectControl.cs" />
+    <Compile Include="Base\IControlFactoryold.cs" />
     <Compile Include="Base\IControlMapper.cs" />
     <Compile Include="Base\IUISettings.cs" />
     <Compile Include="Base\UISettings.cs" />

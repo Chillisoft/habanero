@@ -37,13 +37,13 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestAddTextBoxGizmox()
         {
-            TestAddTextBox(new GizmoxControlFactory());
+            TestAddTextBox(new ControlFactoryGizmox());
         }
 
         [Test]
         public void TestAddTestBoxWinForms()
         {
-            TestAddTextBox(new WinControlFactory());
+            TestAddTextBox(new ControlFactoryWin());
         }
 
         public void TestAddTextBox(IControlFactory factory)
@@ -67,13 +67,13 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestAddStringFilterTextBoxWinForms()
         {
-            TestAddStringFilterTextBox(new WinControlFactory());
+            TestAddStringFilterTextBox(new ControlFactoryWin());
         }
 
         [Test]
         public void TestAddStringFilterTextBoxGiz()
         {
-            TestAddStringFilterTextBox(new GizmoxControlFactory());
+            TestAddStringFilterTextBox(new ControlFactoryGizmox());
         }
 
         public void TestAddStringFilterTextBox(IControlFactory factory)
@@ -96,13 +96,13 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestGetTextBoxFilterClauseWinForms()
         {
-            TestGetTextBoxFilterClause(new WinControlFactory());
+            TestGetTextBoxFilterClause(new ControlFactoryWin());
         }
 
         [Test]
         public void TestGetTextBoxFilterClauseGiz()
         {
-            TestGetTextBoxFilterClause(new GizmoxControlFactory());
+            TestGetTextBoxFilterClause(new ControlFactoryGizmox());
         }
 
         public void TestGetTextBoxFilterClause(IControlFactory factory)
@@ -127,13 +127,13 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestTwoStringTextBoxFilterWinForms()
         {
-            TestTwoStringTextBoxFilter(new WinControlFactory());
+            TestTwoStringTextBoxFilter(new ControlFactoryWin());
         }
 
         [Test]
         public void TestTwoStringTextBoxFilterGiz()
         {
-            TestTwoStringTextBoxFilter(new GizmoxControlFactory());
+            TestTwoStringTextBoxFilter(new ControlFactoryGizmox());
         }
 
         public void TestTwoStringTextBoxFilter(IControlFactory factory)
@@ -165,13 +165,13 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestLabelAndTextBoxAreOnPanelWinForms()
         {
-            TestLabelAndTextBoxAreOnPanel(new WinControlFactory(), 2);
+            TestLabelAndTextBoxAreOnPanel(new ControlFactoryWin(), 2);
         }
 
         [Test]
         public void TestLabelAndTextBoxAreOnPanelGiz()
         {
-            TestLabelAndTextBoxAreOnPanel(new GizmoxControlFactory(), 3);
+            TestLabelAndTextBoxAreOnPanel(new ControlFactoryGizmox(), 3);
         }
 
         public void TestLabelAndTextBoxAreOnPanel(IControlFactory factory, int controlCount)
@@ -197,13 +197,13 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestAddComboBoxGizmox()
         {
-            TestAddComboBox(new GizmoxControlFactory());
+            TestAddComboBox(new ControlFactoryGizmox());
         }
 
         [Test]
         public void TestAddComboBoxWinForms()
         {
-            TestAddComboBox(new WinControlFactory());
+            TestAddComboBox(new ControlFactoryWin());
         }
 
         public void TestAddComboBox(IControlFactory factory)
@@ -224,12 +224,12 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestAddStringFilterComboBoxGiz()
         {
-            TestAddStringFilterComboBox(new GizmoxControlFactory());
+            TestAddStringFilterComboBox(new ControlFactoryGizmox());
         }
         [Test]
         public void TestAddStringFilterComboBoxWinForms()
         {
-            TestAddStringFilterComboBox(new WinControlFactory());
+            TestAddStringFilterComboBox(new ControlFactoryWin());
         }
         public void TestAddStringFilterComboBox(IControlFactory factory)
         {
@@ -247,11 +247,11 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestGetComboBoxAddSelectedItemsGiz()
         {
-            TestGetComboBoxAddSelectedItems(new GizmoxControlFactory());
+            TestGetComboBoxAddSelectedItems(new ControlFactoryGizmox());
         }
         public void TestGetComboBoxAddSelectedItemsWin()
         {
-            TestGetComboBoxAddSelectedItems(new WinControlFactory());
+            TestGetComboBoxAddSelectedItems(new ControlFactoryWin());
         }
         public void TestGetComboBoxAddSelectedItems(IControlFactory factory)
         {
@@ -271,12 +271,12 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestSelectItemWinForms()
         {
-            TestSelectItem(new WinControlFactory());
+            TestSelectItem(new ControlFactoryWin());
         }
         [Test]
         public void TestSelectItemGiz()
         {
-            TestSelectItem(new GizmoxControlFactory());
+            TestSelectItem(new ControlFactoryGizmox());
         }
 
         public void TestSelectItem(IControlFactory factory)
@@ -296,13 +296,13 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestGetComboBoxFilterClauseWinForms()
         {
-            TestGetComboBoxFilterClause(new WinControlFactory());
+            TestGetComboBoxFilterClause(new ControlFactoryWin());
         }
 
         [Test]
         public void TestGetComboBoxFilterClauseGiz()
         {
-            TestGetComboBoxFilterClause(new GizmoxControlFactory());
+            TestGetComboBoxFilterClause(new ControlFactoryGizmox());
         }
 
         public void TestGetComboBoxFilterClause(IControlFactory factory)
@@ -327,12 +327,12 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestGetComboBoxFilterClauseNoSelectionWinForms()
         {
-            TestGetComboBoxFilterClauseNoSelection(new WinControlFactory());
+            TestGetComboBoxFilterClauseNoSelection(new ControlFactoryWin());
         }
         [Test]
         public void TestGetComboBoxFilterClauseNoSelectionGiz()
         {
-            TestGetComboBoxFilterClauseNoSelection(new GizmoxControlFactory());
+            TestGetComboBoxFilterClauseNoSelection(new ControlFactoryGizmox());
         }
 
         public void TestGetComboBoxFilterClauseNoSelection(IControlFactory factory)
@@ -353,12 +353,12 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestGetComboBoxFilterClause_SelectDeselectWinForms()
         {
-            TestGetComboBoxFilterClause_SelectDeselect(new WinControlFactory());
+            TestGetComboBoxFilterClause_SelectDeselect(new ControlFactoryWin());
         }
         [Test]
         public void TestGetComboBoxFilterClause_SelectDeselectGiz()
         {
-            TestGetComboBoxFilterClause_SelectDeselect(new GizmoxControlFactory());
+            TestGetComboBoxFilterClause_SelectDeselect(new ControlFactoryGizmox());
         }
 
         public void TestGetComboBoxFilterClause_SelectDeselect(IControlFactory factory)
@@ -382,12 +382,12 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestMultipleFiltersWinForms()
         {
-            MultipleFilters(new WinControlFactory());
+            MultipleFilters(new ControlFactoryWin());
         }
         [Test]
         public void TestMultipleFiltersGiz()
         {
-            MultipleFilters(new GizmoxControlFactory());
+            MultipleFilters(new ControlFactoryGizmox());
         }
 
         public void MultipleFilters(IControlFactory factory)

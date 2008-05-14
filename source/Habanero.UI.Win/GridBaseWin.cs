@@ -118,7 +118,7 @@ namespace Habanero.UI.Win
         //    get { return base.SelectedRows; }
         //}
 
-        IList IChilliControl.Controls
+        IList IControlChilli.Controls
         {
             get { return this.Controls; }
         }

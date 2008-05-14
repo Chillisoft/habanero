@@ -34,7 +34,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new WinControlFactory();
+                return new ControlFactoryWin();
             }
         }
 
@@ -43,14 +43,14 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new GizmoxControlFactory();
+                return new ControlFactoryGizmox();
             }
         }
         [Test]
         public void TestAddControl()
         {
             ControlCollection col = new ControlCollection();
-            IChilliControl ctl = GetControlFactory().CreateControl();
+            IControlChilli ctl = GetControlFactory().CreateControl();
             col.Add(ctl);
             Assert.AreSame(ctl, col[0], "Control added should be the same object.");
         }

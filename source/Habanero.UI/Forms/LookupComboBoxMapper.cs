@@ -73,44 +73,11 @@ namespace Habanero.UI.Forms
         private void ValueChangedHandler(object sender, EventArgs e)
         {
             //log.Debug("ValueChanged in LookupComboBoxMapper") ;
-            if (_businessObject != null && _comboBox.SelectedIndex != -1)
-            {
-                string selectedOption = (string) _comboBox.SelectedItem;
-                Object newValue = null;
-                if (selectedOption != null && selectedOption.Length > 0)
-                {
-                    newValue = _collection[selectedOption];
-                }
-                else
-                {
-                    newValue = null;
-                }
-                if (newValue != null)
-                {
-                    object propertyValue = GetPropertyValue();
-                    if (newValue.Equals(Guid.Empty))
-                    {
-                        if (propertyValue != null)
-                        {
-                            SetPropertyValue(null);
-                            //_businessObject.SetPropertyValue(_propertyName, null);
-                        }
-                    }
-                    else if (propertyValue == null ||
-                             !newValue.Equals(propertyValue))
-                    {
-                        SetPropertyValue(newValue);
-                        //_businessObject.SetPropertyValue(_propertyName, newValue);
-                    }
-                }
-                else
-                {
-                    SetPropertyValue(null);
-                    //_businessObject.SetPropertyValue(_propertyName, null);
-                }
-            }
+            ApplyChangesToBusinessObject();
             //log.Debug("ValueChanged in LookupComboBoxMapper complete") ;
         }
+
+
 
         /// <summary>
         /// Updates the interface when the value has been changed in the
@@ -320,6 +287,45 @@ namespace Habanero.UI.Forms
                         "attribute must hold either 'true' or 'false'.");
                 }
                 _allowRightClick = Convert.ToBoolean(rightClickEnabled);
+            }
+        }
+        private void ApplyChangesToBusinessObject()
+        {
+            if (_businessObject != null && _comboBox.SelectedIndex != -1)
+            {
+                string selectedOption = (string)_comboBox.SelectedItem;
+                Object newValue = null;
+                if (selectedOption != null && selectedOption.Length > 0)
+                {
+                    newValue = _collection[selectedOption];
+                }
+                else
+                {
+                    newValue = null;
+                }
+                if (newValue != null)
+                {
+                    object propertyValue = GetPropertyValue();
+                    if (newValue.Equals(Guid.Empty))
+                    {
+                        if (propertyValue != null)
+                        {
+                            SetPropertyValue(null);
+                            //_businessObject.SetPropertyValue(_propertyName, null);
+                        }
+                    }
+                    else if (propertyValue == null ||
+                             !newValue.Equals(propertyValue))
+                    {
+                        SetPropertyValue(newValue);
+                        //_businessObject.SetPropertyValue(_propertyName, newValue);
+                    }
+                }
+                else
+                {
+                    SetPropertyValue(null);
+                    //_businessObject.SetPropertyValue(_propertyName, null);
+                }
             }
         }
     }
