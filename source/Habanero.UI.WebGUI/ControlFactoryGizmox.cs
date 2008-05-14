@@ -383,6 +383,20 @@ namespace Habanero.UI.WebGUI
         {
             return new TabControlGiz();
         }
+
+        /// <summary>
+        /// Creates a multi line textbox, setting the scrollbars to vertical
+        /// </summary>
+        /// <param name="numLines"></param>
+        public ITextBox CreateTextBoxMultiLine(int numLines)
+        {
+            TextBoxGiz tb = (TextBoxGiz)CreateTextBox();
+            tb.Multiline = true;
+            tb.AcceptsReturn = true;
+            tb.Height = tb.Height * numLines;
+            tb.ScrollBars = ScrollBars.Vertical;
+            return tb;
+        }
     }
 
     public class ToolTipGiz :ToolTip, IToolTip

@@ -24,6 +24,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.Base.LayoutManagers;
 using log4net;
 
 namespace Habanero.UI.Base
@@ -46,6 +47,7 @@ namespace Habanero.UI.Base
         /// the ui form definition is from an unnamed ui definition
         /// </summary>
         /// <param name="bo">The business object to be represented</param>
+        /// <param name="controlFactory">the control factory used to create controls</param>
         public PanelFactory(BusinessObject bo, IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
@@ -58,6 +60,9 @@ namespace Habanero.UI.Base
         /// A constructor to initialise a new instance, with a UIForm object 
         /// specified
         /// </summary>
+        /// <param name="bo">The business object to be represented</param>
+        /// <param name="uiForm"></param>
+        /// <param name="controlFactory">the control factory used to create controls</param>
         public PanelFactory(BusinessObject bo, UIForm uiForm, IControlFactory controlFactory)
         {
             _uiForm = uiForm;
@@ -112,10 +117,11 @@ namespace Habanero.UI.Base
                     {
                         formGrids.Add(keyValuePair);
                     }*/
-
-                    //TODO_Port_Generalise Dock style. onePanelInfo.Panel.Dock = DockStyle.Fill;
+                    //onePanelInfo.Panel.Dock = DockStyle.Fill;
                     ITabPage page = _controlFactory.createTabPage(formTab.Name);
-                    page.Controls.Add(onePanelInfo.Panel);
+                    BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(page);
+
+                    manager.AddControl(onePanelInfo.Panel,BorderLayoutManager.Position.Centre);
                     tabControl.TabPages.Add(page);
                 }
                 factoryInfo = new PanelFactoryInfo(mainPanel, controlMappers, _firstControl);
@@ -142,7 +148,6 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="uiFormTab">The UIFormTab object</param>
         /// <returns>Returns the object containing the new panel</returns>
-        /// TODO ERIC - this is a very long method!
         private IPanelFactoryInfo CreateOnePanel(UIFormTab uiFormTab)
         {
             //if (uiFormTab.UIFormGrid != null)
@@ -162,7 +167,7 @@ namespace Habanero.UI.Base
                     rowCount = uiFormColumn.Count;
                 }
             }
-            //TODO_Port_Need layout managers:manager.SetGridSize(rowCount, colCount*2);
+            //TODO_Port_Need layout managers: manager.SetGridSize(rowCount, colCount*2);
             for (int col = 0; col < colCount; col++)
             {
                 //TODO_Port_Need layout managers:manager.FixColumnBasedOnContents(col*2);
@@ -216,20 +221,14 @@ namespace Habanero.UI.Base
                         } else if (propDef.PropertyType == typeof(string) && propDef.KeepValuePrivate)
                         {
                             ctl = _controlFactory.CreatePasswordTextBox();
-                        }
-                    }
-
-                    bool editable = CheckIfEditable(field, ctl);
-
-                    if (ctl is ITextBox)
-                    {
-                        if (field.GetParameterValue("numLines") != null)
+                        } else if (field.GetParameterValue("numLines") != null)
                         {
                             int numLines;
                             try
                             {
                                 numLines = Convert.ToInt32(field.GetParameterValue("numLines"));
-                            } catch (Exception)
+                            }
+                            catch (Exception)
                             {
                                 throw new InvalidXmlDefinitionException("An error " +
                                                                         "occurred while reading the 'numLines' parameter " +
@@ -238,13 +237,17 @@ namespace Habanero.UI.Base
                             }
                             if (numLines > 1)
                             {
-                                ITextBox tb = (ITextBox)ctl;
-                                tb.Multiline = true;
-                                tb.AcceptsReturn = true;
-                                tb.Height = tb.Height*numLines;
-                                //TODO_Port tb.ScrollBars = ScrollBars.Vertical;
+                                ctl = _controlFactory.CreateTextBoxMultiLine(numLines);
+
                             }
                         }
+                    }
+
+                    bool editable = CheckIfEditable(field, ctl);
+
+                    if (ctl is ITextBox)
+                    {
+                        
                         if (field.GetParameterValue("isEmail") != null)
                         {
                             string isEmailValue = (string)field.GetParameterValue("isEmail");

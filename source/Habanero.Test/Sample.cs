@@ -344,6 +344,42 @@ namespace Habanero.Test
         }
 
 
+                /// <summary>
+        /// Summary description for SampleUserInterfaceMapper.
+        /// </summary>
+        public class SampleUserInterfaceMapperGiz
+        {
+            public UIDef GetUIDef()
+            {
+                return new UIDef("default", GetUIFormProperties(), GetUIGridProperties());
+            }
+            public UIForm GetUIFormProperties()
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                UIFormColumn col = new UIFormColumn(100);
+                Hashtable propertyAttributes = new Hashtable();
+                propertyAttributes.Add("numLines", 3);
+                col.Add(
+                    new UIFormField("Text:", "SampleText",  "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", false, null,
+                                       propertyAttributes, null));
+                tab.Add(col);
+                def.Add(tab);
+                return def;
+            }
+
+            public UIGrid GetUIGridProperties()
+            {
+                UIGrid col = new UIGrid();
+                col.Add(
+                    new UIGridColumn("Text:", "SampleText",  typeof (DataGridTextBoxColumn), true, 100,
+                                       UIGridColumn.PropAlignment.left, null));
+                return col;
+            }
+        }
+
         public decimal SampleMoney
         {
             get { return (decimal) this.GetPropertyValue("SampleMoney"); }

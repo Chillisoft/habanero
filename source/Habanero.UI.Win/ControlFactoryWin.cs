@@ -1,4 +1,6 @@
 using System;
+using System.Drawing;
+using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
@@ -36,7 +38,7 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new object of the type requested</returns>
         public IControlChilli CreateControl(Type controlType)
         {
-            throw new NotImplementedException();
+            return (IControlChilli) Activator.CreateInstance(controlType);
         }
 
         /// <summary>
@@ -155,6 +157,20 @@ namespace Habanero.UI.Win
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Creates a multi line textbox, setting the scrollbars to vertical
+        /// </summary>
+        /// <param name="numLines"></param>
+        public ITextBox CreateTextBoxMultiLine(int numLines)
+        {
+            TextBoxWin tb = (TextBoxWin)CreateTextBox();
+            tb.Multiline = true;
+            tb.AcceptsReturn = true;
+            tb.Height = tb.Height * numLines;
+            tb.ScrollBars = ScrollBars.Vertical;
+            return tb;
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();
@@ -215,6 +231,13 @@ namespace Habanero.UI.Win
             label.Text = labelText;
             return label;
         }
+        public ILabel CreateLabel(string labelText, bool isBold)
+        {
+            ILabel label = CreateLabel();
+            label.Text = labelText;
+            label.Font = new Font(label.Font, FontStyle.Bold);
+            return label;
+        }
 
         public IDateTimePicker CreateDateTimePicker()
         {
@@ -253,7 +276,7 @@ namespace Habanero.UI.Win
 
         public IPanel CreatePanel(IControlFactory controlFactory)
         {
-            throw new System.NotImplementedException();
+            return new PanelWin();
         }
 
         /// <summary>
@@ -271,10 +294,7 @@ namespace Habanero.UI.Win
             throw new System.NotImplementedException();
         }
 
-        public ILabel CreateLabel(string labelText, bool isBold)
-        {
-            throw new System.NotImplementedException();
-        }
+       
 
         public ITextBox CreatePasswordTextBox()
         {
@@ -283,7 +303,7 @@ namespace Habanero.UI.Win
 
         public IToolTip CreateToolTip()
         {
-            throw new System.NotImplementedException();
+            return new ToolTipWin();
         }
 
         public IControlChilli CreateControl()

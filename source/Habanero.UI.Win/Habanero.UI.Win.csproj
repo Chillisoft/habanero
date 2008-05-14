@@ -92,6 +92,9 @@
     <Compile Include="TextBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ToolTipWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Util\ControlsHelper.cs" />
     <Compile Include="ControlFactoryWin.cs">
     </Compile>

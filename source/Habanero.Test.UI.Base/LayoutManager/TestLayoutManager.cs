@@ -108,11 +108,6 @@ namespace Habanero.Test.UI.Base
             {
                 throw new System.NotImplementedException();
             }
-
-            public override void AddGlue()
-            {
-                throw new System.NotImplementedException();
-            }
         }
     }
 }

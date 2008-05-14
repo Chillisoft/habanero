@@ -19,7 +19,7 @@
 
 using System;
 
-namespace Habanero.UI.Base.LayoutManagers
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// A super-class for layout managers that dictate how and where controls
@@ -93,6 +93,6 @@ namespace Habanero.UI.Base.LayoutManagers
 
         public abstract IControlChilli AddControl(IControlChilli label);
 
-        public abstract void AddGlue();
+  
     }
 }

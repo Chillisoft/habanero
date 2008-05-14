@@ -327,7 +327,7 @@ namespace Habanero.UI.Base.LayoutManagers
         /// This must be called immediatly after adding the label. The next control to be added will be the control the
         /// label is glued to.
         /// </summary>
-        public override void AddGlue()
+        public void AddGlue()
         {
             _gluePositions.Add(this._controls.Count);
         }

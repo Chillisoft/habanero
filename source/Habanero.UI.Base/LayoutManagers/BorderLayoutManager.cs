@@ -97,10 +97,7 @@ namespace Habanero.UI.Base.LayoutManagers
         public abstract IControlChilli AddControl(IControlChilli control, Position pos, bool includeSplitter);
         protected abstract void SetupDockOfControl(IControlChilli control, Position pos);
 
-        public override void AddGlue()
-        {
-            throw new NotImplementedException();
-        }
+ 
         //public IControlChilli AddControl(IControlChilli ctl, Position pos, bool includeSplitter)
         //{
         //    ctl.Dock = _controlFactory.GetDockStyle(pos);

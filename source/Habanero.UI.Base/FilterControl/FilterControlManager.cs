@@ -11,8 +11,8 @@ namespace Habanero.UI.Base.FilterControl
         private readonly IControlFactory _controlFactory;
         private readonly IFilterClauseFactory _clauseFactory;
         private readonly List<FilterUI> _filterControls = new List<FilterUI>();
-        private readonly LayoutManager _flowLayoutManager;
-        public FilterControlManager(IControlFactory controlFactory, LayoutManager flowLayoutManager )
+        private readonly FlowLayoutManager _flowLayoutManager;
+        public FilterControlManager(IControlFactory controlFactory, FlowLayoutManager flowLayoutManager )
         {
             _controlFactory = controlFactory;
             _flowLayoutManager = flowLayoutManager;

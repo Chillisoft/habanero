@@ -174,5 +174,10 @@ namespace Habanero.UI.Base
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName);
 
         ITabControl CreateTabControl();
+        /// <summary>
+        /// Creates a multi line textbox, setting the scrollbars to vertical
+        /// </summary>
+        /// <param name="numLines"></param>
+        ITextBox CreateTextBoxMultiLine(int numLines);
     }
 }

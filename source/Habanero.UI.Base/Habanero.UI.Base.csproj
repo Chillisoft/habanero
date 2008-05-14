@@ -77,7 +77,8 @@
     <Compile Include="Grid\IReadOnlyGridButtonsControl.cs" />
     <Compile Include="IDefaultBOEditorForm.cs" />
     <Compile Include="ControlInterfaces\IPanel.cs" />
-    <Compile Include="PanelFactory.cs" />
+    <Compile Include="LayoutManagers\GridLayoutManager.cs" />
+    <Compile Include="PanelFactory\PanelFactory.cs" />
     <Compile Include="PanelFactory\IPanelFactory.cs" />
     <Compile Include="PanelFactory\IPanelFactoryInfo.cs" />
     <Compile Include="ControlInterfaces\IProgressBar.cs" />
