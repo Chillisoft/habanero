@@ -233,9 +233,20 @@ namespace Habanero.UI.Win
         }
         public ILabel CreateLabel(string labelText, bool isBold)
         {
-            ILabel label = CreateLabel();
+            LabelWin label = (LabelWin) CreateLabel();
             label.Text = labelText;
-            label.Font = new Font(label.Font, FontStyle.Bold);
+            label.FlatStyle = FlatStyle.System;
+            if (isBold)
+            {
+                label.Font = new Font(label.Font, FontStyle.Bold);
+            }
+            label.Width = label.PreferredWidth;
+            if (isBold)
+            {
+                label.Width += 10;
+            }
+            label.TextAlign = ContentAlignment.MiddleLeft;
+            label.TabStop = false;
             return label;
         }
 

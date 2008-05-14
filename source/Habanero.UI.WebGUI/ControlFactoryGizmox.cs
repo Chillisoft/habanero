@@ -181,8 +181,11 @@ namespace Habanero.UI.WebGUI
 
         public IControlChilli CreateControl()
         {
-            return new ControlGiz();
+            ControlGiz cntrl = new ControlGiz();
+            cntrl.Height = 10;
+            return cntrl;
         }
+
         /// <summary>
         /// Creates a new empty TreeView
         /// </summary>

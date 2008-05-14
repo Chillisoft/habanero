@@ -16,6 +16,7 @@ namespace Habanero.Test.UI.Base
         //    {
         //        return new Habanero.UI.Win.ControlFactoryWin();
         //    }
+
         //}
 
         [TestFixture]
@@ -40,7 +41,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Tear Down -------------------------          
             }
             [Test]
-            public void TestLabel_PreferredSize()
+            public void TestLabel_PreferredWidth()
             {
                 //---------------Set up test pack-------------------
                 ILabel myLabel = GetControlFactory().CreateLabel();
@@ -54,6 +55,7 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(labelText.Length*8, preferredWidth);
                 //---------------Tear Down -------------------------          
             }
+
             [Test]
             public void TestCreateControl_ViaType_CreateCombo()
             {

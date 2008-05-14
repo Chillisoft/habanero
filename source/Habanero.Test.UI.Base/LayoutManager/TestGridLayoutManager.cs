@@ -17,8 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Windows.Forms;
-using Habanero.UI;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
@@ -28,10 +26,11 @@ namespace Habanero.Test.UI.Base
 {
     public abstract class TestGridLayoutManager
     {
-        private Control ctl;
+        private IControlChilli _ctl;
         private GridLayoutManager manager;
 
         protected abstract IControlFactory GetControlFactory();
+
         [TestFixture]
         public class TestGridLayoutManagerWin : TestGridLayoutManager
         {
@@ -49,311 +48,460 @@ namespace Habanero.Test.UI.Base
                 return new ControlFactoryGizmox();
             }
         }
-//        [SetUp]
-//        public void Setup()
-//        {
-//            ctl = new Control();
-//            ctl.Width = 74;
-//            ctl.Height = 72;
-//            manager = new GridLayoutManager(ctl);
-//            manager.SetGridSize(2, 3);
-//            manager.GapSize = 2;
-//        }
+
+        [SetUp]
+        public void Setup()
+        {
+            SetupControlAndGridLayout();
+        }
+
+        private void SetupControlAndGridLayout()
+        {
+            _ctl = GetControlFactory().CreateControl();
+            _ctl.Width = 74;
+            _ctl.Height = 72;
+            manager = new GridLayoutManager(_ctl, GetControlFactory());
+            manager.SetGridSize(2, 3);
+            manager.GapSize = 2;
+        }
+
+        [Test]
+        public void TestAddNullControl()
+        {
+            manager.AddControl(null);
+        }
+
+        [Test]
+        public void TestControl()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            //---------------Execute Test ----------------------
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(_ctl, manager.ManagedControl, "ManagedControl should return same object.");
+        }
+
+        [Test]
+        public void TestSetupUpGridSize()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            //---------------Execute Test ----------------------
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, manager.Rows.Count, "count of rows should be two after setting grid size");
+            Assert.AreEqual(3, manager.Columns.Count, "count of cols should be 3 after setting grid size");
+        }
+
+        [Test]
+        public void TestAddControl()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            //---------------Test Result -----------------------
+            Assert.AreSame(ctl1, ((ControlCollection) manager.Rows[0])[0],
+                           "Control at position zero of row zero should be same as one first added");
+            Assert.AreSame(ctl1, ((ControlCollection) manager.Columns[0])[0],
+                           "Control at position zero of column zero should be same as one first added");
+        }
+
+        [Test]
+        public void TestAddMultipleControls()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(GetControlFactory().CreateControl());
+            manager.AddControl(GetControlFactory().CreateControl());
+            manager.AddControl(ctl1);
+            manager.AddControl(ctl2);
+            //---------------Test Result -----------------------
+            Assert.AreSame(ctl1, ((ControlCollection) manager.Rows[0])[2],
+                           "Control at position 2 of row 0 should be third control added.");
+            Assert.AreSame(ctl2, ((ControlCollection) manager.Rows[1])[0],
+                           "Control at pos 0 of row 1 should be fourth control added.");
+            Assert.AreSame(ctl1, ((ControlCollection) manager.Columns[2])[0],
+                           "Control at pos 0 of col 2 should be third control added.");
+            Assert.AreSame(ctl2, ((ControlCollection) manager.Columns[0])[1],
+                           "Control as pos 1 of col 0 should be fourth control added.");
+        }
+
+        [Test]
+        public void TestOneControl()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, ctl1.Left, "Left of control should be 5 due to default border.");
+            Assert.AreEqual(5, ctl1.Top, "Top of control should be 5 due to default border");
+            Assert.AreEqual(20, ctl1.Width, "Width of control should be 20 (parent control width - (2*border) - (2*gap)");
+            Assert.AreEqual(30, ctl1.Height,
+                            "Height of control should be 30 (parent control height - (2*border) - (1*gap)");
+        }
+
+        [Test]
+        public void TestTwoControlPos()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(GetControlFactory().CreateControl());
+            manager.AddControl(ctl1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(27, ctl1.Left, "Left of control should be 27 : border + 1 control width + gap.");
+        }
+
+        [Test]
+        public void TestTwoControlPosDifferentWidth()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            manager.ManagedControl.Width = 104;
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(30, ctl1.Width,
+                            "Width of control should be 30 (parent control width - (2*border) - (2*gap) / 3");
+        }
+
+        [Test]
+        public void TestControlPosDifferentHeight()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            manager.ManagedControl.Height = 42;
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(15, ctl1.Height,
+                            "Height of control should be 15 (parent control height - (2*border) - (gap)) / 2");
+        }
+
+        [Test]
+        public void TestDifferentGridSize()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            manager.SetGridSize(3, 2);
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(19, ctl1.Height, "Height of control should depend on number of rows in grid.");
+            Assert.AreEqual(31, ctl1.Width, "Width of control should depend on number of cols in grid.");
+        }
+
+        [Test]
+        public void TestSecondRowPos()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(GetControlFactory().CreateControl());
+            manager.AddControl(GetControlFactory().CreateControl());
+            manager.AddControl(GetControlFactory().CreateControl());
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(37, ctl1.Top,
+                            "Control should be in second row.  Top should be 37 : border + 1 control height + gap.");
+            Assert.AreEqual(5, ctl1.Left, "Control should be in second row.  Left should be borderSize.");
+        }
+
+        [Test]
+        public void TestFixedColumnWithSize()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.FixColumn(1, 30);
+            manager.AddControl(ctl1);
+            manager.AddControl(ctl2);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(30, ctl2.Width, "Column is fixed at 30.");
+            Assert.AreEqual(15, ctl1.Width, "Fixed column should change the size of the other columns.");
+        }
+
+        [Test]
+        public void TestFixedRowWithSize()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.FixRow(1, 20);
+            manager.AddControl(ctl1);
+            manager.AddControl(GetControlFactory().CreateControl());
+            manager.AddControl(GetControlFactory().CreateControl());
+            manager.AddControl(ctl2);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(20, ctl2.Height, "Row is Fixed at 20");
+            Assert.AreEqual(40, ctl1.Height, "Fixed row should change the size of other rows");
+        }
+
+        [Test]
+        public void TestGapSize()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.GapSize = 3;
+            manager.AddControl(ctl1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(19, ctl1.Width, "Gap size should affect size of controls.");
+        }
+
+        [Test]
+        public void TestSetGapSizeAfterControls()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            manager.GapSize = 3;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(19, ctl1.Width, "Setting Gap size should refresh controls.");
+        }
+
+        [Test]
+        public void TestBorderSize()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.BorderSize = 8;
+            manager.AddControl(ctl1);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(18, ctl1.Width, "Border size should affect size of controls.");
+        }
+
+        [Test]
+        public void TestSetBorderSizeAfterControls()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            manager.BorderSize = 8;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(18, ctl1.Width, "Setting border size should refresh controls.");
+        }
+
+        [Test]
+        public void TestResizeRefreshesControls()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            _ctl.Width = 104;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(30, ctl1.Width, "Changing size of managed control should cause refresh.");
+        }
+
+        [Test]
+        public void TestFixColumnRefreshesControls()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(GetControlFactory().CreateControl());
+            manager.AddControl(ctl1);
+            manager.FixColumn(1, 25);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(25, ctl1.Width, "FixColumn should cause refresh.");
+        }
+
+        [Test]
+        public void TestFixRowRefreshesControls()
+        {
+            //---------------Set up test pack-------------------
+            SetupControlAndGridLayout();
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            manager.AddControl(ctl1);
+            manager.FixRow(0, 10);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(10, ctl1.Height, "FixRow should cause refresh.");
+        }
+
+        [Test]
+        public void TestFixColumnBasedOnContents()
+        {
+            //----------------------Setup ------------------------------
+            ILabel myLabel = GetControlFactory().CreateLabel("test", false);
+            manager.FixColumnBasedOnContents(0);
+            ILabel myLongLabel = GetControlFactory().CreateLabel("This is a long label", false);
+            //--------------------- verify setup -----------------------
+            Assert.AreEqual(myLabel.PreferredWidth, myLabel.Width);
+            Assert.AreEqual(myLongLabel.PreferredWidth, myLongLabel.Width);
+
+            //--------------------- Execute Tests-----------------------
+            manager.AddControl(myLabel);
+            manager.AddControl(null);
+            manager.AddControl(null);
+            manager.AddControl(myLongLabel);
+            //--------------------- Verify results-----------------------
+            Assert.AreEqual(myLongLabel.PreferredWidth, myLabel.Width,
+                            "Width of column should be preferred width (or width) of largest control");
+        }
+
 //
-//        [Test]
-//        public void TestControl()
-//        {
-//            Assert.AreSame(ctl, manager.ManagedControl, "ManagedControl should return same object.");
-//        }
-//
-//        [Test]
-//        public void TestSetGridSize()
-//        {
-//            Assert.AreEqual(2, manager.Rows.Count, "count of rows should be two after setting grid size");
-//            Assert.AreEqual(3, manager.Columns.Count, "count of cols should be 3 after setting grid size");
-//        }
-//
-//        [Test]
-//        public void TestAddControl()
-//        {
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Assert.AreSame(ctl1, ((Habanero.UI.ControlCollection)manager.Rows[0])[0],
-//                           "Control at position zero of row zero should be same as one first added");
-//            Assert.AreSame(ctl1, ((Habanero.UI.ControlCollection)manager.Columns[0])[0],
-//                           "Control at position zero of column zero should be same as one first added");
-//        }
-//
-//        [Test]
-//        public void TestAddControls()
-//        {
-//            manager.AddControl(new Control());
-//            manager.AddControl(new Control());
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Control ctl2 = new Control();
-//            manager.AddControl(ctl2);
-//            Assert.AreSame(ctl1, ((Habanero.UI.ControlCollection)manager.Rows[0])[2],
-//                           "Control at position 2 of row 0 should be third control added.");
-//            Assert.AreSame(ctl2, ((Habanero.UI.ControlCollection)manager.Rows[1])[0],
-//                           "Control at pos 0 of row 1 should be fourth control added.");
-//            Assert.AreSame(ctl1, ((Habanero.UI.ControlCollection)manager.Columns[2])[0],
-//                           "Control at pos 0 of col 2 should be third control added.");
-//            Assert.AreSame(ctl2, ((Habanero.UI.ControlCollection)manager.Columns[0])[1],
-//                           "Control as pos 1 of col 0 should be fourth control added.");
-//        }
-//
-//        [Test]
-//        public void TestOneControl()
-//        {
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Assert.AreEqual(5, ctl1.Left, "Left of control should be 5 due to default border.");
-//            Assert.AreEqual(5, ctl1.Top, "Top of control should be 5 due to default border");
-//            Assert.AreEqual(20, ctl1.Width, "Width of control should be 20 (parent control width - (2*border) - (2*gap)");
-//            Assert.AreEqual(30, ctl1.Height,
-//                            "Height of control should be 30 (parent control height - (2*border) - (1*gap)");
-//        }
-//
-//        [Test]
-//        public void TestTwoControlPos()
-//        {
-//            manager.AddControl(new Control());
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Assert.AreEqual(27, ctl1.Left, "Left of control should be 27 : border + 1 control width + gap.");
-//        }
-//
-//        [Test]
-//        public void TestTwoControlPosDifferentWidth()
-//        {
-//            manager.ManagedControl.Width = 104;
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Assert.AreEqual(30, ctl1.Width,
-//                            "Width of control should be 30 (parent control width - (2*border) - (2*gap) / 3");
-//        }
-//
-//        [Test]
-//        public void TestControlPosDifferentHeight()
-//        {
-//            manager.ManagedControl.Height = 42;
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Assert.AreEqual(15, ctl1.Height,
-//                            "Height of control should be 15 (parent control height - (2*border) - (gap)) / 2");
-//        }
-//
-//        [Test]
-//        public void TestDifferentGridSize()
-//        {
-//            manager.SetGridSize(3, 2);
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Assert.AreEqual(19, ctl1.Height, "Height of control should depend on number of rows in grid.");
-//            Assert.AreEqual(31, ctl1.Width, "Width of control should depend on number of cols in grid.");
-//        }
-//
-//        [Test]
-//        public void TestSecondRowPos()
-//        {
-//            manager.AddControl(new Control());
-//            manager.AddControl(new Control());
-//            manager.AddControl(new Control());
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Assert.AreEqual(37, ctl1.Top,
-//                            "Control should be in second row.  Top should be 37 : border + 1 control height + gap.");
-//            Assert.AreEqual(5, ctl1.Left, "Control should be in second row.  Left should be borderSize.");
-//        }
-//
-//        [Test]
-//        public void TestFixedColumnWithSize()
-//        {
-//            manager.FixColumn(1, 30);
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Control ctl2 = new Control();
-//            manager.AddControl(ctl2);
-//            Assert.AreEqual(30, ctl2.Width, "Column is fixed at 30.");
-//            Assert.AreEqual(15, ctl1.Width, "Fixed column should change the size of the other columns.");
-//        }
-//
-//        [Test]
-//        public void TestFixedRowWithSize()
-//        {
-//            manager.FixRow(1, 20);
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            manager.AddControl(new Control());
-//            manager.AddControl(new Control());
-//            Control ctl2 = new Control();
-//            manager.AddControl(ctl2);
-//            Assert.AreEqual(20, ctl2.Height, "Row is Fixed at 20");
-//            Assert.AreEqual(40, ctl1.Height, "Fixed row should change the size of other rows");
-//        }
-//
-//        [Test]
-//        public void TestGapSize()
-//        {
-//            manager.GapSize = 3;
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Assert.AreEqual(19, ctl1.Width, "Gap size should affect size of controls.");
-//        }
-//
-//        [Test]
-//        public void TestSetGapSizeAfterControls()
-//        {
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            manager.GapSize = 3;
-//            Assert.AreEqual(19, ctl1.Width, "Setting Gap size should refresh controls.");
-//        }
-//
-//        [Test]
-//        public void TestBorderSize()
-//        {
-//            manager.BorderSize = 8;
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            Assert.AreEqual(18, ctl1.Width, "Border size should affect size of controls.");
-//        }
-//
-//        [Test]
-//        public void TestSetBorderSizeAfterControls()
-//        {
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            manager.BorderSize = 8;
-//            Assert.AreEqual(18, ctl1.Width, "Setting border size should refresh controls.");
-//        }
-//
-//        [Test]
-//        public void TestResizeRefreshesControls()
-//        {
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            ctl.Width = 104;
-//            Assert.AreEqual(30, ctl1.Width, "Changing size of managed control should cause refresh.");
-//        }
-//
-//        [Test]
-//        public void TestFixColumnRefreshesControls()
-//        {
-//            manager.AddControl(new Control());
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            manager.FixColumn(1, 25);
-//            Assert.AreEqual(25, ctl1.Width, "FixColumn should cause refresh.");
-//        }
-//
-//        [Test]
-//        public void TestFixRowRefreshesControls()
-//        {
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1);
-//            manager.FixRow(0, 10);
-//            Assert.AreEqual(10, ctl1.Height, "FixRow should cause refresh.");
-//        }
-//
-//        [Test]
-//        public void TestFixColumnBasedOnContents()
-//        {
-//            Label myLabel = ControlFactory.CreateLabel("test", false);
-//            manager.FixColumnBasedOnContents(0);
-//            manager.AddControl(myLabel);
-//            Assert.AreEqual(myLabel.PreferredWidth, myLabel.Width,
-//                            "Width of column should be preferred width of largest control");
-//            Label myLongLabel = ControlFactory.CreateLabel("This is a long label", false);
-//            manager.AddControl(null);
-//            manager.AddControl(null);
-//            manager.AddControl(myLongLabel);
-//            Assert.AreEqual(myLongLabel.PreferredWidth, myLongLabel.Width,
-//                            "Width of column should be preferred width (or width) of largest control");
-//            Assert.AreEqual(myLongLabel.PreferredWidth, myLabel.Width,
-//                            "Width of column should be preferred width (or width) of largest control");
-//        }
-//
-//        [Test]
-//        public void TestFixRowsBasedOnContents()
-//        {
-//            Control ctl1 = new Control();
-//            ctl1.Height = 10;
-//            Control ctl2 = new Control();
-//            ctl2.Height = 15;
-//            manager.FixAllRowsBasedOnContents();
-//            manager.AddControl(ctl1);
-//            manager.AddControl(null);
-//            manager.AddControl(null);
-//            manager.AddControl(null);
-//            manager.AddControl(ctl2);
-//            Assert.AreEqual(10, ctl1.Height, "Height should remain the same if we FixRowsBasedOnContents");
-//            Assert.AreEqual(15, ctl2.Height, "Height should remain the same if we FixRowsBasedOnContents");
-//        }
-//
-//        [Test]
-//        public void TestAddNullControl()
-//        {
-//            manager.AddControl(null);
-//        }
-//
-//        [Test]
-//        public void TestColumnSpan()
-//        {
-//            Control ctl1 = new Control();
-//            ctl1.Height = 30;
-//            Control ctl2 = new Control();
-//            manager.AddControl(ctl1, 1, 2);
-//            manager.AddControl(ctl2);
-//            Assert.AreEqual(5, ctl1.Left);
-//            Assert.AreEqual(42, ctl1.Width);
-//            Assert.AreEqual(49, ctl2.Left);
-//            Assert.AreEqual(20, ctl2.Width);
-//        }
-//
-//        [Test]
-//        public void TestColumnSpan2()
-//        {
-//            Control ctl1 = new Control();
-//            ctl1.Height = 30;
-//            Control ctl2 = new Control();
-//            manager.AddControl(ctl1);
-//            manager.AddControl(ctl2, 1, 2);
-//            Assert.AreEqual(5, ctl1.Left);
-//            Assert.AreEqual(20, ctl1.Width);
-//            Assert.AreEqual(27, ctl2.Left);
-//            Assert.AreEqual(42, ctl2.Width);
-//        }
-//
-//        [Test]
-//        public void TestColumnSpan3()
-//        {
-//            Control ctl1 = new Control();
-//            ctl1.Height = 30;
-//            manager.AddControl(ctl1, 1, 3);
-//            Assert.AreEqual(5, ctl1.Left);
-//            Assert.AreEqual(64, ctl1.Width);
-//        }
-//
-//        [Test]
-//        public void TestRowSpan()
-//        {
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1, 2, 1);
-//            Assert.AreEqual(5, ctl1.Top);
-//            Assert.AreEqual(62, ctl1.Height);
-//        }
-//
-//        [Test]
-//        public void TestRowAndColumnSpan()
-//        {
-//            Control ctl1 = new Control();
-//            manager.AddControl(ctl1, 2, 3);
-//            Assert.AreEqual(5, ctl1.Top);
-//            Assert.AreEqual(62, ctl1.Height);
-//            Assert.AreEqual(5, ctl1.Left);
-//            Assert.AreEqual(64, ctl1.Width);
-//        }
+        [Test]
+        public void TestFixRowsBasedOnContents_DoesNotChangeControlsHeights()
+        {
+            //----------------------Setup ------------------------------
+            int control1Height = 10;
+            IControlChilli ctl1 = CreateControl(10);
+            int control2Height = 15;
+            IControlChilli ctl2 = CreateControl(control2Height);
+            //--------------------- verify setup -----------------------
+            Assert.AreEqual(control1Height, ctl1.Height);
+            Assert.AreEqual(control2Height, ctl2.Height);
+
+            //--------------------- Execute Tests-----------------------
+            manager.FixAllRowsBasedOnContents();
+            manager.AddControl(ctl1);
+            manager.AddControl(null);
+            manager.AddControl(null);
+            manager.AddControl(null);
+            manager.AddControl(ctl2);
+            //--------------------- Verify results-----------------------
+            Assert.AreEqual(control1Height, ctl1.Height, "Height should remain the same if we FixRowsBasedOnContents");
+            Assert.AreEqual(control2Height, ctl2.Height, "Height should remain the same if we FixRowsBasedOnContents");
+        }
+
+
+
+        [Test]
+        public void TestColumnSpan()
+        {
+            //----------------------Setup ------------------------------
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            ctl1.Height = 30;
+            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            //--------------------- Execute Tests-----------------------
+            manager.AddControl(ctl1, 1, 2);
+            manager.AddControl(ctl2);
+            //--------------------- Verify results-----------------------
+            Assert.AreEqual(5, ctl1.Left);
+            Assert.AreEqual(42, ctl1.Width);
+            Assert.AreEqual(49, ctl2.Left);
+            Assert.AreEqual(20, ctl2.Width);
+        }
+
+        [Test]
+        public void TestColumnSpan2()
+        {
+            //----------------------Setup ------------------------------
+            IControlChilli ctl1 = GetControlFactory().CreateControl();
+            ctl1.Height = 30;
+            IControlChilli ctl2 = GetControlFactory().CreateControl();
+            //--------------------- Execute Tests-----------------------
+            manager.AddControl(ctl1);
+            manager.AddControl(ctl2, 1, 2);
+            //--------------------- Verify results-----------------------
+            Assert.AreEqual(5, ctl1.Left);
+            Assert.AreEqual(20, ctl1.Width);
+            Assert.AreEqual(27, ctl2.Left);
+            Assert.AreEqual(42, ctl2.Width);
+        }
+
+        [Test]
+        public void TestColumnSpan3()
+        {
+            //----------------------Setup ------------------------------
+
+            int control1Height = 30;
+            int controlInitialWidth = 10;
+            int controlInitialLeft = -5;
+            IControlChilli ctl1 = CreateControl(control1Height, controlInitialWidth, controlInitialLeft);
+            //--------------------- verify setup -----------------------
+            AssertControlsDimensions(control1Height, controlInitialWidth, controlInitialLeft, ctl1);
+            //--------------------- Execute Tests-----------------------
+
+            manager.AddControl(ctl1, 1, 3);
+            //--------------------- Verify results-----------------------
+            int borderWidth = 5;
+            Assert.AreEqual(borderWidth, ctl1.Left);
+            Assert.AreEqual(64, ctl1.Width);
+        }
+
+        [Test]
+        public void TestRowSpan()
+        {
+            IControlChilli ctl1 = CreateControl(10, 11, -5);
+
+            manager.AddControl(ctl1, 2, 1);
+
+            Assert.AreEqual(5, ctl1.Top);
+            Assert.AreEqual(62, ctl1.Height);
+        }
+        private static void AssertControlsDimensions(int height, int width, int left, IControlChilli control)
+        {
+            Assert.AreEqual(width, control.Width, "width is not correct");
+            Assert.AreEqual(left, control.Left, "left is not correct");
+            Assert.AreEqual(height, control.Height, "Height is not correct");
+        }
+
+        [Test]
+        public void TestRowAndColumnSpan()
+        {
+            IControlChilli ctl1 = CreateControl(10, 11, -5,-5);
+
+            manager.AddControl(ctl1, 2, 3);
+
+            Assert.AreEqual(5, ctl1.Top);
+            Assert.AreEqual(62, ctl1.Height);
+            Assert.AreEqual(5, ctl1.Left);
+            Assert.AreEqual(64, ctl1.Width);
+        }
+
+        private IControlChilli CreateControl(int height)
+        {
+            return CreateControl(height, 10);
+        }
+
+        private IControlChilli CreateControl(int height, int width)
+        {
+            return CreateControl(height, width, 0);
+        }
+
+        private IControlChilli CreateControl(int height, int width, int left)
+        {
+            return CreateControl(height, width, left, -5);
+        }
+
+        private IControlChilli CreateControl(int height, int width, int left, int top)
+        {
+            IControlChilli control = GetControlFactory().CreateControl();
+            control.Height = height;
+            control.Width = width;
+            control.Left = left;
+            control.Top = top;
+            return control;
+        }
     }
 }
