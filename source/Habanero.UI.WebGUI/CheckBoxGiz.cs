@@ -6,20 +6,9 @@ namespace Habanero.UI.WebGUI
 {
     public class CheckBoxGiz : CheckBox, ICheckBox
     {
-        //ICollection IControlChilli.Controls
-        //{
-        //    get { return this.Controls; }
-        //}
-        //List<IControlChilli> IControlChilli.Controls
-        //{
-        //    get
-        //    {
-        //        return new List<IControlChilli>();
-        //    }
-        //}
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get {return base.Controls; }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
     }
 }

@@ -90,9 +90,9 @@ namespace Habanero.UI.WebGUI
                 return _mngr.SelectedBusinessObjects;
             }
         }
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
 
         /// <summary>
@@ -313,5 +313,4 @@ namespace Habanero.UI.WebGUI
             }
         }
     }
-
 }

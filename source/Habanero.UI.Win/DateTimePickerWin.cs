@@ -6,9 +6,9 @@ namespace Habanero.UI.Win
 {
     public class DateTimePickerWin : DateTimePicker, IDateTimePicker
     {
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return base.Controls; }
+            get { return new ControlCollectionWin(base.Controls); }
         }
     }
 }

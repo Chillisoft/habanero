@@ -58,7 +58,6 @@ namespace Habanero.UI.Base
         /// <param name="controlFactory">the factory that this panel will use to create any controls on it</param>
         IPanel CreatePanel(string name,IControlFactory controlFactory);
 
-        ITabPage createTabPage(string name);
         ///// <summary>
         ///// Creates a label
         ///// </summary>

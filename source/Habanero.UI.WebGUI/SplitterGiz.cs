@@ -7,9 +7,9 @@ namespace Habanero.UI.WebGUI
 {
     public class SplitterGiz : Splitter, ISplitter
     {
-        public IList Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { throw new NotImplementedException(); }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
     }
 }

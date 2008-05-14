@@ -6,9 +6,9 @@ namespace Habanero.UI.WebGUI
 {
     class PanelGiz:Panel, IPanel
     {
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
 
         public IDockStyle Dock

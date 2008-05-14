@@ -4,14 +4,14 @@ using System.Drawing;
 
 namespace Habanero.UI.Base
 {
-    public interface IControlChilli
+    public interface IControlChilli 
     {
         event EventHandler Resize;
         event EventHandler VisibleChanged;
 
         int Width { get; set; }
 
-        IList Controls { get; }
+        IControlCollection Controls { get; }
 
         bool Visible { get; set; }
 

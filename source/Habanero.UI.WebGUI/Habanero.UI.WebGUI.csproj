@@ -61,6 +61,7 @@
     <Compile Include="ButtonGiz.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ControlCollectionGiz.cs" />
     <Compile Include="ControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>

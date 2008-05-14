@@ -95,7 +95,7 @@ namespace Habanero.UI.WebGUI
 
         public BorderLayoutManager CreateBorderLayoutManager(IControlChilli control)
         {
-            return new BorderLayoutManagerGiz(control);
+            return new BorderLayoutManagerGiz(control, this);
         }
 
         public IPanel CreatePanel()
@@ -142,10 +142,7 @@ namespace Habanero.UI.WebGUI
             pnl.Name = name;
             return pnl;
         }
-        public ITabPage createTabPage(string name)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public ILabel CreateLabel(string labelText, bool isBold)
         {
@@ -341,7 +338,8 @@ namespace Habanero.UI.WebGUI
         /// <returns>Returns a new TabPage object</returns>
         public  ITabPage CreateTabPage(string title)
         {
-            TabPageGiz page = new TabPageGiz(title);
+            TabPageGiz page = new TabPageGiz();
+            page.Text = title;
             return page;
         }
 

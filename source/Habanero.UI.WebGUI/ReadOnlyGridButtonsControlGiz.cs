@@ -49,5 +49,9 @@ namespace Habanero.UI.WebGUI
                 this.EditClicked(this, new EventArgs());
             }
         }
+        IControlCollection IControlChilli.Controls
+        {
+            get { return new ControlCollectionGiz(base.Controls); }
+        }
     }
 }

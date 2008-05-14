@@ -131,7 +131,7 @@ namespace Habanero.Test.BO.SqlGeneration
         //    {
         //        if (!ClassDef.IsDefined(typeof(ContactPersonCompositeKey)))
         //        {
-        //            return CreateClassDef();
+        //            return CreateClassDefWin();
         //        }
         //        else
         //        {

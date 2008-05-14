@@ -67,7 +67,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IControlChilli  managedControl = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            FlowLayoutManager manager = new FlowLayoutManager(managedControl);
+            FlowLayoutManager manager = new FlowLayoutManager(managedControl, null);
             //---------------Test Result -----------------------
             Assert.AreSame(managedControl, manager.ManagedControl);
             //---------------Tear Down -------------------------    
@@ -663,7 +663,7 @@ namespace Habanero.Test.UI.Base
 
         private static FlowLayoutManager CreateFlowLayoutManager(IControlChilli managedControl)
         {
-            FlowLayoutManager manager = new FlowLayoutManager(managedControl);
+            FlowLayoutManager manager = new FlowLayoutManager(managedControl, null);
             manager.GapSize = _STD_GAP;
             return manager;
         }

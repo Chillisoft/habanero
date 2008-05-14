@@ -171,7 +171,8 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(controlCount, filterControl.Controls.Count);
-            Assert.Contains(checkBox, filterControl.Controls);
+            //TODO_Port: Assert.Contains(checkBox, filterControl.Controls);
+            Assert.IsTrue(filterControl.Controls.Contains(checkBox));
             //---------------Tear Down -------------------------          
         }
         #endregion

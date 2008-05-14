@@ -51,6 +51,7 @@
     <Compile Include="ButtonWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ControlCollectionWin.cs" />
     <Compile Include="ControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -97,6 +98,7 @@
     </Compile>
     <Compile Include="Util\ControlsHelper.cs" />
     <Compile Include="ControlFactoryWin.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

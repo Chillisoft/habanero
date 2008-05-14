@@ -39,17 +39,10 @@ namespace Habanero.UI.WebGUI
             set { base.SelectionMode = (SelectionMode) Enum.Parse(typeof (SelectionMode), value.ToString()); }
         }
 
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
-        //List<IControlChilli> IControlChilli.Controls
-        //{
-        //    get
-        //    {
-        //        return new List<IControlChilli>();
-        //    }
-        //}
 
         private class ListBoxObjectCollectionGiz : IListBoxObjectCollection
         {

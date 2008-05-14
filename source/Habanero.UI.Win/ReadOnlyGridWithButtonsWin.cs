@@ -30,5 +30,9 @@ namespace Habanero.UI.Win
         {
             throw new System.NotImplementedException();
         }
+        IControlCollection IControlChilli.Controls
+        {
+            get { return new ControlCollectionWin(base.Controls); }
+        }
     }
 }

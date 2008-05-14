@@ -6,25 +6,10 @@ namespace Habanero.UI.WebGUI
 {
     public class TextBoxGiz : TextBox, ITextBox
     {
-        //private readonly IControlFactory _controlFactory;
-
-        //public TextBoxGiz()
-        //{
-        //    //this._controlFactory = controlFactory;
-        //}
-
-        //private readonly TextBoxManager _manager = new TextBoxManager();
-
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
-        //List<IControlChilli> IControlChilli.Controls
-        //{
-        //    get
-        //    {
-        //        return new List<IControlChilli>();
-        //    }
-        //}
+
     }
 }

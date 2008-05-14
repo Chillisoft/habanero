@@ -7,9 +7,9 @@ namespace Habanero.UI.WebGUI
 {
     public class NumericUpDownGiz :NumericUpDown, INumericUpDown
     {
-        public IList Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { throw new NotImplementedException(); }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
 
         public void Select(int i, object length)

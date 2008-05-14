@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.UI.Base;
@@ -60,16 +59,9 @@ namespace Habanero.UI.Win
                 throw new System.NotImplementedException();
             }
         }
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionWin(base.Controls); }
         }
-        //List<IControlChilli> IControlChilli.Controls
-        //{
-        //    get
-        //    {
-        //        return new List<IControlChilli>();
-        //    }
-        //}
     }
 }

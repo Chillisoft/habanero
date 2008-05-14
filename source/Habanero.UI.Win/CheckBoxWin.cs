@@ -6,16 +6,9 @@ namespace Habanero.UI.Win
 {
     internal class CheckBoxWin : CheckBox, ICheckBox
     {
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionWin(base.Controls); }
         }
-        //List<IControlChilli> IControlChilli.Controls
-        //{
-        //    get
-        //    {
-        //        return new List<IControlChilli>();
-        //    }
-        //}
     }
 }

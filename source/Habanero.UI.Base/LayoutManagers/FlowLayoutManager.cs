@@ -65,7 +65,8 @@ namespace Habanero.UI.Base.LayoutManagers
         /// Constructor to initialise a new manager
         /// </summary>
         /// <param name="managedControl">The control to manage e.g. a Panel</param>
-        public FlowLayoutManager(IControlChilli managedControl) : base(managedControl)
+        public FlowLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
+            : base(managedControl, controlFactory)
         {
             _controls = new List<IControlChilli>();
             _newLinePositions = new ArrayList(3);

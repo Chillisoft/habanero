@@ -38,9 +38,9 @@ namespace Habanero.UI.Win
             get { return (ListBoxSelectionMode)Enum.Parse(typeof(ListBoxSelectionMode), base.SelectionMode.ToString()); }
             set { base.SelectionMode = (SelectionMode)Enum.Parse(typeof(SelectionMode), value.ToString()); }
         }
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionWin(base.Controls); }
         }
 
         internal class ListBoxObjectCollectionWin : IListBoxObjectCollection

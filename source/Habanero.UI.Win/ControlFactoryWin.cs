@@ -107,7 +107,7 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new Splitter object</returns>
         public ISplitter CreateSplitter()
         {
-            throw new NotImplementedException();
+            return new SplitterWin();
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace Habanero.UI.Win
 
         public BorderLayoutManager CreateBorderLayoutManager(IControlChilli control)
         {
-            return new BorderLayoutManagerWin(control);
+            return new BorderLayoutManagerWin(control, this);
         }
 
         public IPanel CreatePanel()
@@ -320,6 +320,14 @@ namespace Habanero.UI.Win
         public IControlChilli CreateControl()
         {
             return new ControlWin();
+        }
+    }
+
+    internal class SplitterWin : Splitter, ISplitter
+    {
+        IControlCollection IControlChilli.Controls
+        {
+            get { return new ControlCollectionWin(this.Controls); }
         }
     }
 }

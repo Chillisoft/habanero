@@ -52,7 +52,7 @@ namespace Habanero.Test
         {
             if (!ClassDef.IsDefined(typeof (Sample)))
             {
-                return CreateClassDef();
+                return CreateClassDefWin();
             }
             else
             {
@@ -66,6 +66,15 @@ namespace Habanero.Test
             return _classDef;
         }
 
+        public static ClassDef CreateClassDefWin()
+        {
+            ClassDef lClassDef = CreateClassDef();
+            lClassDef.UIDefCol.Add(new SampleUserInterfaceMapper().GetUIDef()); 
+            ClassDef.ClassDefs.Add(lClassDef);
+
+            return lClassDef;
+        }
+
         private static ClassDef CreateClassDef()
         {
             PropDef propDef;
@@ -76,15 +85,15 @@ namespace Habanero.Test
                 new PropDef("SampleText2", typeof(String), PropReadWriteRule.ReadWrite, "SampleText2", null));
             lPropDefCol.Add(
                 new PropDef("SampleTextPrivate", typeof(String), PropReadWriteRule.ReadWrite, "SampleTextPrivate", null,
-                false, false, int.MaxValue, null, null, true));
+                            false, false, int.MaxValue, null, null, true));
             lPropDefCol.Add(
                 new PropDef("SampleTextDescribed", typeof(String), PropReadWriteRule.ReadWrite, "SampleTextDescribed", null,
-                false, false, int.MaxValue, null, "This is a sample text property that has a description.", false));
+                            false, false, int.MaxValue, null, "This is a sample text property that has a description.", false));
             lPropDefCol.Add(
-				new PropDef("SampleDate", typeof(DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
-			lPropDefCol.Add(
-				new PropDef("SampleDateNullable", typeof(DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
-			lPropDefCol.Add(
+                new PropDef("SampleDate", typeof(DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
+            lPropDefCol.Add(
+                new PropDef("SampleDateNullable", typeof(DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
+            lPropDefCol.Add(
                 new PropDef("SampleBoolean", typeof (Boolean), PropReadWriteRule.ReadWrite, "SampleBoolean", null));
             lPropDefCol.Add(
                 new PropDef("SampleLookupID", typeof (Guid), PropReadWriteRule.ReadWrite, "SampleLookupID", null));
@@ -99,8 +108,8 @@ namespace Habanero.Test
             itsLookupCollection.Add("Test3", new Guid("{F45DE850-C693-44d8-AC39-8CEE5435B21A}"));
             propDef.LookupList = new SimpleLookupList(itsLookupCollection);
             lPropDefCol.Add(propDef);
-                lPropDefCol.Add(new PropDef("SampleLookup3ID", typeof (String), PropReadWriteRule.ReadWrite, "SampleLookup3ID",
-                                            null));
+            lPropDefCol.Add(new PropDef("SampleLookup3ID", typeof (String), PropReadWriteRule.ReadWrite, "SampleLookup3ID",
+                                        null));
             PropDef def = new PropDef("SampleID", typeof (Guid), PropReadWriteRule.WriteOnce, null);
             lPropDefCol.Add(def);
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
@@ -108,8 +117,13 @@ namespace Habanero.Test
             primaryKey.Add(lPropDefCol["SampleID"]);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
-            ClassDef lClassDef = new ClassDef(typeof (Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
-            lClassDef.UIDefCol.Add(new SampleUserInterfaceMapper().GetUIDef()); 
+            return new ClassDef(typeof (Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
+        }
+
+        public static ClassDef CreateClassDefGiz()
+        {
+            ClassDef lClassDef = CreateClassDef();
+            lClassDef.UIDefCol.Add(new SampleUserInterfaceMapperGiz().GetUIDef());
             ClassDef.ClassDefs.Add(lClassDef);
 
             return lClassDef;
@@ -344,7 +358,7 @@ namespace Habanero.Test
         }
 
 
-                /// <summary>
+        /// <summary>
         /// Summary description for SampleUserInterfaceMapper.
         /// </summary>
         public class SampleUserInterfaceMapperGiz
@@ -377,6 +391,142 @@ namespace Habanero.Test
                     new UIGridColumn("Text:", "SampleText",  typeof (DataGridTextBoxColumn), true, 100,
                                        UIGridColumn.PropAlignment.left, null));
                 return col;
+            }
+
+
+            public static UIForm SampleUserInterfaceMapper3Props()
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                UIFormColumn col = new UIFormColumn(100);
+                col.Add(new UIFormField("Text:", "SampleText", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, new Hashtable(), null));
+                col.Add(
+                    new UIFormField("Date:", "SampleDate", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null,
+                                       new Hashtable(), null));
+                col.Add(
+                    new UIFormField("Text2:", "SampleText2", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, new Hashtable(), null));
+                tab.Add(col);
+                def.Add(tab);
+                return def;
+            }
+
+            public static UIForm SampleUserInterfaceMapperPrivatePropOnly()
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                def.Add(tab);
+                UIFormColumn col = new UIFormColumn(100);
+                tab.Add(col);
+                col.Add(new UIFormField("Private Text:", "SampleTextPrivate", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, new Hashtable(), null));
+                return def;
+            }
+
+            public static UIForm SampleUserInterfaceMapperDescribedPropOnly(string toolTipText)
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                def.Add(tab);
+                UIFormColumn col = new UIFormColumn(100);
+                tab.Add(col);
+                col.Add(new UIFormField("Described Text:", "SampleTextDescribed", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, toolTipText, new Hashtable(), null));
+                return def;
+            }
+
+            public static UIForm SampleUserInterfaceMapper2Cols()
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                UIFormColumn col1 = new UIFormColumn(100);
+                UIFormColumn col2 = new UIFormColumn(150);
+                col1.Add(
+                    new UIFormField("Text:", "SampleText", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, new Hashtable(), null));
+                col1.Add(
+                    new UIFormField("Date:", "SampleDate", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null,
+                                       new Hashtable(), null));
+                col2.Add(
+                    new UIFormField("Text2:", "SampleText2", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, new Hashtable(), null));
+                tab.Add(col1);
+                tab.Add(col2);
+                def.Add(tab);
+                return def;
+            }
+
+
+            public static UIForm SampleUserInterfaceMapper2Tabs()
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab1 = new UIFormTab("mytab1");
+                UIFormTab tab2 = new UIFormTab("mytab2");
+                UIFormColumn col1 = new UIFormColumn(100);
+                UIFormColumn col2 = new UIFormColumn(150);
+                col1.Add(
+                    new UIFormField("Text:", "SampleText", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, new Hashtable(), null));
+                col1.Add(
+                    new UIFormField("Date:", "SampleDate", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null,
+                                       new Hashtable(), null));
+                col2.Add(
+                    new UIFormField("Text2:", "SampleText2", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, new Hashtable(), null));
+                tab1.Add(col1);
+                tab2.Add(col2);
+                def.Add(tab1);
+                def.Add(tab2);
+                return def;
+            }
+
+            public static UIForm SampleUserInterfaceMapperColSpanning()
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                UIFormColumn col = new UIFormColumn(100);
+                Hashtable propertyAttributes = new Hashtable();
+                propertyAttributes.Add("numLines", 3);
+                propertyAttributes.Add("colSpan", 2);
+                col.Add(
+                    new UIFormField("Text:", "SampleText", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", false, null, propertyAttributes, null));
+                col.Add(
+                    new UIFormField("Text2:", "SampleText2", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", false, null, new Hashtable(), null));
+                tab.Add(col);
+                UIFormColumn col2 = new UIFormColumn(100);
+                col2.Add(
+                    new UIFormField("Text2:", "SampleText2", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", false, null, new Hashtable(), null));
+                tab.Add(col2);
+                def.Add(tab);
+                return def;
+            }
+
+            public static UIForm SampleUserInterfaceMapperRowSpanning()
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                UIFormColumn col = new UIFormColumn(100);
+                Hashtable propertyAttributes = new Hashtable();
+                propertyAttributes.Add("numLines", 3);
+                propertyAttributes.Add("rowSpan", 2);
+                col.Add(
+                    new UIFormField("Text:", "SampleText", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", false, null, propertyAttributes, null));
+                tab.Add(col);
+                UIFormColumn col2 = new UIFormColumn(100);
+                col2.Add(
+                    new UIFormField("Text2:", "SampleText2", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", false, null, new Hashtable(), null));
+                col2.Add(
+                    new UIFormField("Text2:", "SampleText2", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", false, null, new Hashtable(), null));
+                tab.Add(col2);
+                def.Add(tab);
+                return def;
             }
         }
 

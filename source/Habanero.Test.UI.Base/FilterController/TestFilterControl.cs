@@ -184,7 +184,8 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Test Result -----------------------
             Assert.AreEqual(controlCount, filterControl.Controls.Count);
-            Assert.Contains(tb, filterControl.Controls);
+            //TODO_Peter what to do Assert.Contains(tb, filterControl.Controls);
+            Assert.IsTrue(filterControl.Controls.Contains(tb));
             //---------------Tear Down -------------------------          
         }
 

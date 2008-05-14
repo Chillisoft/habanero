@@ -7,10 +7,11 @@ namespace Habanero.UI.WebGUI
 {
     public class TabControlGiz : TabControl, ITabControl
     {
-        public new IList Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { throw new NotImplementedException(); }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
+       
         //TODO: Convert dockstyles between Giz windows etc
         public new IDockStyle Dock
         {
@@ -20,7 +21,32 @@ namespace Habanero.UI.WebGUI
 
         public new ITabPageCollection TabPages
         {
-            get { throw new NotImplementedException(); }
+            get { return new TabPageCollectionGiz(base.TabPages); }
+        }
+    }
+
+    internal class TabPageCollectionGiz : ITabPageCollection
+    {
+        private readonly TabPageCollection _tabPages;
+
+        public TabPageCollectionGiz(TabPageCollection tabPages)
+        {
+            _tabPages = tabPages;
+        }
+
+        public int Add(ITabPage page)
+        {
+            return _tabPages.Add((TabPage) page);
+        }
+
+        public IControlChilli this[int i]
+        {
+            get { return (IControlChilli) _tabPages[i]; }
+        }
+
+        public int Count
+        {
+            get { return _tabPages.Count; }
         }
     }
 }

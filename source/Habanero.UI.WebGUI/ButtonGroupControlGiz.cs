@@ -12,7 +12,7 @@ namespace Habanero.UI.WebGUI
         private readonly FlowLayoutManager _layoutManager;
         public ButtonGroupControlGiz(IControlFactory controlFactory)
         {
-            _layoutManager = new FlowLayoutManager(this);
+            _layoutManager = new FlowLayoutManager(this, controlFactory);
             _layoutManager.Alignment = FlowLayoutManager.Alignments.Right;
             _controlFactory = controlFactory;
             IButton sampleBtn = _controlFactory.CreateButton();
@@ -34,9 +34,9 @@ namespace Habanero.UI.WebGUI
         {
             get { return (IButton) this.Controls[buttonName]; }
         }
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
 
         public void SetDefaultButton(string buttonName)

@@ -7,15 +7,14 @@ namespace Habanero.UI.WebGUI
 {
     internal class TabPageGiz : TabPage, ITabPage
     {
-        public TabPageGiz(string title)
+        public TabPageGiz()
         {
-            
+   
 
         }
-
-        public IList Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { throw new NotImplementedException(); }
+            get { return new ControlCollectionGiz(base.Controls); }
         }
     }
 }

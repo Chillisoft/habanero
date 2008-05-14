@@ -46,20 +46,20 @@ namespace Habanero.Test.UI.Base
                 return new ControlFactoryGizmox();
             }
         }
-        [Test]
-        public void TestAddControl()
-        {
-            ControlCollection col = new ControlCollection();
-            IControlChilli ctl = GetControlFactory().CreateControl();
-            col.Add(ctl);
-            Assert.AreSame(ctl, col[0], "Control added should be the same object.");
-        }
+        //[Test]
+        //public void TestAddControl()
+        //{
+        //    IControlCollection col = new ControlCollectionChilli();
+        //    IControlChilli ctl = GetControlFactory().CreateControl();
+        //    col.Add(ctl);
+        //    Assert.AreSame(ctl, col[0], "Control added should be the same object.");
+        //}
 
-        [Test]
-        public void TestAddNull()
-        {
-            ControlCollection col = new ControlCollection();
-            col.Add(null);
-        }
+        //[Test]
+        //public void TestAddNull()
+        //{
+        //    IControlCollection col = new ControlCollectionChilli();
+        //    col.Add(null);
+        //}
     }
 }

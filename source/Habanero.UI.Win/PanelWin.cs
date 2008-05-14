@@ -6,9 +6,9 @@ namespace Habanero.UI.Win
 {
     internal class PanelWin : Panel, IPanel
     {
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionWin(base.Controls); }
         }
 
         public IDockStyle Dock

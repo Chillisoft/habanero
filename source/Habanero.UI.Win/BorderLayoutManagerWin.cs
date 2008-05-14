@@ -13,8 +13,8 @@ namespace Habanero.UI.Win
         private readonly IControlChilli[] _controls;
         private readonly bool[] _splitters;
         private Control _ctl;
-        public BorderLayoutManagerWin(IControlChilli managedControl)
-            : base(managedControl)
+        public BorderLayoutManagerWin(IControlChilli managedControl, IControlFactory controlFactory)
+            : base(managedControl, controlFactory)
         {
             _controls = new IControlChilli[5];
             _splitters = new bool[5];
@@ -57,13 +57,13 @@ namespace Habanero.UI.Win
                 {
                     if (_splitters[i])
                     {
-                        Splitter splt = new Splitter();
+                        ISplitter splt = _controlFactory.CreateSplitter();
                         Color newBackColor =
                             Color.FromArgb(Math.Min(splt.BackColor.R - 30, 255), Math.Min(splt.BackColor.G - 30, 255),
                                            Math.Min(splt.BackColor.B - 30, 255));
                         splt.BackColor = newBackColor;
 
-                        splt.Dock = ((Control)_controls[i]).Dock;
+                        //TODO: port  splt.Dock = ((Control)_controls[i]).Dock;
                         ManagedControl.Controls.Add(splt);
                     }
                     this.ManagedControl.Controls.Add(chilliControl);

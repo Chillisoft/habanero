@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IControlCollection.cs" />
     <Compile Include="LayoutManagers\BorderLayoutManager.cs" />
-    <Compile Include="ControlCollection.cs" />
     <Compile Include="ControlMappers\CheckBoxMapper.cs" />
     <Compile Include="ControlMappers\ComboBoxMapper.cs" />
     <Compile Include="ControlMappers\ControlMapper.cs" />

@@ -36,8 +36,6 @@ namespace Habanero.UI.Base.LayoutManagers
     /// </summary>
     public abstract class BorderLayoutManager : LayoutManager
     {
-        private readonly IControlFactory _controlFactory;
-
         /// <summary>
         /// An enumeration to specify different layout positions that can
         /// be assigned
@@ -70,8 +68,8 @@ namespace Habanero.UI.Base.LayoutManagers
         /// <param name="managedControl">The control to manage (eg. use "this"
         /// if you create the manager inside a form class that you will be
         /// managing)</param>
-        public BorderLayoutManager(IControlChilli managedControl)
-            : base(managedControl)
+        public BorderLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
+            : base(managedControl, controlFactory)
         {
             _controls = new IControlChilli[5];
             _splitters = new bool[5];

@@ -15,7 +15,7 @@ namespace Habanero.UI.Win
 
         public FilterControlWin(IControlFactory controlFactory)
         {
-            FlowLayoutManager flowLayoutManager = new FlowLayoutManager(this);
+            FlowLayoutManager flowLayoutManager = new FlowLayoutManager(this, controlFactory);
             _filterControlManager = new FilterControlManager(controlFactory, flowLayoutManager);
 
             this.Height = 40;
@@ -32,9 +32,9 @@ namespace Habanero.UI.Win
             return _filterControlManager.GetFilterClause();
         }
 
-        IList IControlChilli.Controls
+        IControlCollection IControlChilli.Controls
         {
-            get { return this.Controls; }
+            get { return new ControlCollectionWin(base.Controls); }
         }
 
         public IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options,

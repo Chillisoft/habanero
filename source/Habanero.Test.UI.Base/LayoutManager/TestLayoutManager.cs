@@ -95,7 +95,7 @@ namespace Habanero.Test.UI.Base
                 get { return mRefreshed; }
             }
 
-            public MockLayoutManager(IControlChilli managedControl) : base(managedControl)
+            public MockLayoutManager(IControlChilli managedControl) : base(managedControl, null)
             {
             }
 

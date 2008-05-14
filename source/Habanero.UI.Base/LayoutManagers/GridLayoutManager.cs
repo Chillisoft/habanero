@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Habanero.UI.Base
@@ -29,8 +30,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public class GridLayoutManager : LayoutManager
     {
-        private readonly IControlFactory _controlFactory;
-        private ControlCollection _controls;
+        private List<IControlChilli> _controls;
         private Hashtable _controlInfoTable;
         private Point _currentPos;
         private int[] _columnWidths;
@@ -43,10 +43,10 @@ namespace Habanero.UI.Base
         /// Constructor to initialise a new grid layout
         /// </summary>
         /// <param name="managedControl">The control to manage</param>
-        public GridLayoutManager(IControlChilli managedControl, IControlFactory controlFactory) : base(managedControl)
+        public GridLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
+            : base(managedControl, controlFactory)
         {
-            _controlFactory = controlFactory;
-            _controls = new ControlCollection();
+            _controls = new List<IControlChilli>();
             _controlInfoTable = new Hashtable();
             this.SetGridSize(2, 2);
         }
@@ -100,7 +100,7 @@ namespace Habanero.UI.Base
                 IList rows = new ArrayList();
                 for (int i = 0; i < RowCount; i++)
                 {
-                    ControlCollection row = new ControlCollection();
+                    IList<IControlChilli> row = new List<IControlChilli>();
                     for (int j = 0; j < ColumnCount; j++)
                     {
                         if ((i*ColumnCount + j) < this._controls.Count)
@@ -128,7 +128,7 @@ namespace Habanero.UI.Base
                 IList cols = new ArrayList();
                 for (int i = 0; i < ColumnCount; i++)
                 {
-                    ControlCollection col = new ControlCollection();
+                    IList<IControlChilli> col = new List<IControlChilli>();
                     for (int j = 0; j < RowCount; j++)
                     {
                         if ((ColumnCount*j + i) < this._controls.Count)
@@ -262,12 +262,15 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Calculates the average column height
+        /// Calculates the average column width
         /// </summary>
-        /// <returns>Returns the average column height</returns>
+        /// <returns>Returns the average column width</returns>
         private int CalcColumnWidth()
         {
-            return (ManagedControl.Width - GetFixedWidthIncludingGaps())/GetNumVariableColumns();
+
+            return GetNumVariableColumns() == 0 ? 
+                    ManagedControl.Width - GetFixedWidthIncludingGaps() : 
+                    (ManagedControl.Width - GetFixedWidthIncludingGaps()) / GetNumVariableColumns();
         }
 
         /// <summary>

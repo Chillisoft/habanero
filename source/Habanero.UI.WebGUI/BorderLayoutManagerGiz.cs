@@ -12,7 +12,7 @@ namespace Habanero.UI.WebGUI
         private readonly IControlChilli[] _controls;
         private readonly bool[] _splitters;
 
-        public BorderLayoutManagerGiz(IControlChilli managedControl) : base(managedControl)
+        public BorderLayoutManagerGiz(IControlChilli managedControl, IControlFactory controlFactory) : base(managedControl, controlFactory)
         {
             _controls = new IControlChilli[5];
             _splitters = new bool[5];

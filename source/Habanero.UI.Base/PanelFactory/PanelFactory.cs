@@ -104,8 +104,8 @@ namespace Habanero.UI.Base
                 ControlMapperCollection controlMappers = new ControlMapperCollection();
                 //IDictionary<string, EditableGrid> formGrids = new Dictionary<string, EditableGrid>();
                 ITabControl tabControl = _controlFactory.CreateTabControl();
-                //TODO_Port  tabControl.Dock = DockStyle.Fill;
-                mainPanel.Controls.Add(tabControl);
+                BorderLayoutManager mainPanelManager = _controlFactory.CreateBorderLayoutManager(mainPanel);
+                mainPanelManager.AddControl(tabControl, BorderLayoutManager.Position.Centre);
                 foreach (UIFormTab formTab in _uiForm)
                 {
                     IPanelFactoryInfo onePanelInfo = CreateOnePanel(formTab);
@@ -113,19 +113,13 @@ namespace Habanero.UI.Base
                     {
                         controlMappers.Add(controlMapper);
                     }
-/*TODO_Port removed by peter                    foreach (KeyValuePair<string, EditableGrid> keyValuePair in onePanelInfo.FormGrids)
-                    {
-                        formGrids.Add(keyValuePair);
-                    }*/
-                    //onePanelInfo.Panel.Dock = DockStyle.Fill;
-                    ITabPage page = _controlFactory.createTabPage(formTab.Name);
+                    ITabPage page = _controlFactory.CreateTabPage(formTab.Name);
                     BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(page);
 
-                    manager.AddControl(onePanelInfo.Panel,BorderLayoutManager.Position.Centre);
+                    manager.AddControl(onePanelInfo.Panel, BorderLayoutManager.Position.Centre);
                     tabControl.TabPages.Add(page);
                 }
                 factoryInfo = new PanelFactoryInfo(mainPanel, controlMappers, _firstControl);
-                //TODO_Port removed by peter factoryInfo.FormGrids = formGrids;
             }
             else
             {
@@ -150,13 +144,9 @@ namespace Habanero.UI.Base
         /// <returns>Returns the object containing the new panel</returns>
         private IPanelFactoryInfo CreateOnePanel(UIFormTab uiFormTab)
         {
-            //if (uiFormTab.UIFormGrid != null)
-            //{
-            //    return CreatePanelWithGrid(uiFormTab.UIFormGrid);
-            //}
             IPanel panel = _controlFactory.CreatePanel(_controlFactory);
             IToolTip toolTip = _controlFactory.CreateToolTip();
-            //TODO_Port_Need layout managers: GridLayoutManager manager = new GridLayoutManager(panel);
+            GridLayoutManager manager = new GridLayoutManager(panel, _controlFactory);
             int rowCount = 0;
             int colCount = 0;
             colCount += uiFormTab.Count;
@@ -167,10 +157,10 @@ namespace Habanero.UI.Base
                     rowCount = uiFormColumn.Count;
                 }
             }
-            //TODO_Port_Need layout managers: manager.SetGridSize(rowCount, colCount*2);
+            manager.SetGridSize(rowCount, colCount*2);
             for (int col = 0; col < colCount; col++)
             {
-                //TODO_Port_Need layout managers:manager.FixColumnBasedOnContents(col*2);
+                manager.FixColumnBasedOnContents(col*2);
             }
 
             ControlMapperCollection controlMappers = new ControlMapperCollection();
@@ -178,10 +168,10 @@ namespace Habanero.UI.Base
             ITextBox temptb = _controlFactory.CreateTextBox();
             for (int row = 0; row < rowCount; row++)
             {
-                //TODO_Port_Need layout managers:manager.FixRow(row, temptb.Height);
+                manager.FixRow(row, temptb.Height);
             }
-            //manager.FixAllRowsBasedOnContents();
-            //TODO_Port_Need layout managers:GridLayoutManager.ControlInfo[,] controls = new GridLayoutManager.ControlInfo[rowCount,colCount*2];
+            manager.FixAllRowsBasedOnContents();
+            GridLayoutManager.ControlInfo[,] controls = new GridLayoutManager.ControlInfo[rowCount,colCount*2];
             int currentColumn = 0;
             foreach (UIFormColumn uiFormColumn in uiFormTab)
             {
@@ -211,17 +201,19 @@ namespace Habanero.UI.Base
                     }
 
                     ILabel labelControl = _controlFactory.CreateLabel(labelCaption, isCompulsory);
-                    //TODO_Port controls[currentRow, currentColumn + 0] = new GridLayoutManager.ControlInfo(labelControl);
+                    controls[currentRow, currentColumn + 0] = new GridLayoutManager.ControlInfo(labelControl);
                     IControlChilli ctl = _controlFactory.CreateControl(field.ControlType);
                     if (ctl is ITextBox && propDef != null)
                     {
                         if (propDef.PropertyType == typeof (bool))
                         {
                             ctl = _controlFactory.CreateCheckBox();
-                        } else if (propDef.PropertyType == typeof(string) && propDef.KeepValuePrivate)
+                        }
+                        else if (propDef.PropertyType == typeof (string) && propDef.KeepValuePrivate)
                         {
                             ctl = _controlFactory.CreatePasswordTextBox();
-                        } else if (field.GetParameterValue("numLines") != null)
+                        }
+                        else if (field.GetParameterValue("numLines") != null)
                         {
                             int numLines;
                             try
@@ -238,7 +230,6 @@ namespace Habanero.UI.Base
                             if (numLines > 1)
                             {
                                 ctl = _controlFactory.CreateTextBoxMultiLine(numLines);
-
                             }
                         }
                     }
@@ -247,10 +238,9 @@ namespace Habanero.UI.Base
 
                     if (ctl is ITextBox)
                     {
-                        
                         if (field.GetParameterValue("isEmail") != null)
                         {
-                            string isEmailValue = (string)field.GetParameterValue("isEmail");
+                            string isEmailValue = (string) field.GetParameterValue("isEmail");
                             if (isEmailValue != "true" && isEmailValue != "false")
                             {
                                 throw new InvalidXmlDefinitionException("An error " +
@@ -268,19 +258,20 @@ namespace Habanero.UI.Base
                     }
                     if (ctl is IDateTimePicker)
                     {
-                        IDateTimePicker editor = (IDateTimePicker)ctl;
+                        IDateTimePicker editor = (IDateTimePicker) ctl;
                         editor.Enter += DateTimePickerEnterHandler;
                     }
                     if (ctl is INumericUpDown)
                     {
-                        INumericUpDown upDown = (INumericUpDown)ctl;
+                        INumericUpDown upDown = (INumericUpDown) ctl;
                         upDown.Enter += UpDownEnterHandler;
                     }
 
                     CheckGeneralParameters(field, ctl);
 
                     ControlMapper ctlMapper =
-                        ControlMapper.Create(field.MapperTypeName, field.MapperAssembly, ctl, field.PropertyName, !editable);
+                        ControlMapper.Create(field.MapperTypeName, field.MapperAssembly, ctl, field.PropertyName,
+                                             !editable);
                     ctlMapper.SetPropertyAttributes(field.Parameters);
                     controlMappers.Add(ctlMapper);
                     ctlMapper.BusinessObject = _currentBusinessObject;
@@ -319,9 +310,9 @@ namespace Habanero.UI.Base
                     }
                     if (rowSpan == 1)
                     {
-                        //TODO_Port manager.FixRow(currentRow, ctl.Height);
+                        manager.FixRow(currentRow, ctl.Height);
                     }
-                    //TODO_Port controls[currentRow, currentColumn + 1] = new GridLayoutManager.ControlInfo(ctl, rowSpan, colSpan);
+                    controls[currentRow, currentColumn + 1] = new GridLayoutManager.ControlInfo(ctl, rowSpan, colSpan);
                     currentRow++;
                     string toolTipText = field.GetToolTipText(classDef);
                     if (!String.IsNullOrEmpty(toolTipText))
@@ -336,27 +327,27 @@ namespace Habanero.UI.Base
             {
                 for (int j = 0; j < colCount*2; j++)
                 {
-                    //TODO_Port if (controls[i, j] == null)
-                    //TODO_Port {
-                    //TODO_Port     manager.AddControl(null);
-                    //TODO_Port }
-                    //TODO_Port else
-                    //TODO_Port {
-                    //TODO_Port     manager.AddControl(controls[i, j].Control, controls[i, j].ColumnSpan, controls[i, j].RowSpan);
-                    //TODO_Port     controls[i, j].Control.TabIndex = rowCount*j + i;
-                    //TODO_Port }
+                    if (controls[i, j] == null)
+                    {
+                        manager.AddControl(null);
+                    }
+                    else
+                    {
+                        manager.AddControl(controls[i, j].Control, controls[i, j].ColumnSpan, controls[i, j].RowSpan);
+                        controls[i, j].Control.TabIndex = rowCount*j + i;
+                    }
                 }
             }
             for (int col = 0; col < colCount; col++)
             {
                 if (uiFormTab[col].Width > -1)
                 {
-                    //TODO_Port manager.FixColumn(col*2 + 1, uiFormTab[col].Width - manager.GetFixedColumnWidth(col*2));
+                    manager.FixColumn(col*2 + 1, uiFormTab[col].Width - manager.GetFixedColumnWidth(col*2));
                 }
             }
-            // TODO: Should this not be the PanelFactoryInfo Preferred Height and Width?
-            //TODO_Port panel.Height = manager.GetFixedHeightIncludingGaps();
-            //TODO_Port panel.Width = manager.GetFixedWidthIncludingGaps();
+           
+            panel.Height = manager.GetFixedHeightIncludingGaps();
+            panel.Width = manager.GetFixedWidthIncludingGaps();
             IPanelFactoryInfo panelFactoryInfo = new PanelFactoryInfo(panel, controlMappers, _firstControl);
             panelFactoryInfo.ToolTip = toolTip;
             return panelFactoryInfo;
@@ -691,7 +682,7 @@ namespace Habanero.UI.Base
         //                        Dictionary<string, object> list = lookupList.GetLookupList(true);
         //                        LookupComboBoxMapper mapper = (LookupComboBoxMapper) panel.ControlMappers[targetProperty];
         //                        mapper.SetLookupList(list);
-                                
+
         //                        lookupList.Criteria = oldCriteria;
         //                        if (targetComboBox.Items.Count == 1)
         //                        {
