@@ -1,5 +1,6 @@
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
+using Habanero.UI.Base.LayoutManagers;
 
 namespace Habanero.UI.Win
 {
@@ -57,6 +58,15 @@ namespace Habanero.UI.Win
             return new  DateTimePickerWin();
         }
 
+        public BorderLayoutManager CreateBorderLayoutManager(IChilliControl control)
+        {
+            return new BorderLayoutManagerWin(control);
+        }
+
+        public IPanel CreatePanel()
+        {
+            return new PanelWin();
+        }
         public IReadOnlyGrid CreateReadOnlyGrid()
         {
             return new ReadOnlyGridWin();
@@ -66,6 +76,7 @@ namespace Habanero.UI.Win
         {
             return  new ReadOnlyGridWithButtonsWin();
         }
+
 
         public IButtonGroupControl CreateButtonGroupControl()
         {

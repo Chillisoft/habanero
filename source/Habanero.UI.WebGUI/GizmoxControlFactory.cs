@@ -1,5 +1,10 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
+using Habanero.UI.Base.LayoutManagers;
 
 namespace Habanero.UI.WebGUI
 {
@@ -56,6 +61,15 @@ namespace Habanero.UI.WebGUI
             return new DateTimePickerGiz();
         }
 
+        public BorderLayoutManager CreateBorderLayoutManager(IChilliControl control)
+        {
+            return new BorderLayoutManagerGiz(control);
+        }
+
+        public IPanel CreatePanel()
+        {
+            return new PanelGiz();
+        }
         public IReadOnlyGrid CreateReadOnlyGrid()
         {
             return new ReadOnlyGridGiz();
@@ -80,6 +94,7 @@ namespace Habanero.UI.WebGUI
         {
             return new ControlGiz();
         }
+
     }
 
     public class ReadOnlyGridButtonsControlGiz :ButtonGroupControlGiz, IReadOnlyGridButtonsControl

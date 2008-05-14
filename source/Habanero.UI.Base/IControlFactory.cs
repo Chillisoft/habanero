@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.UI.Base.FilterControl;
+using Habanero.UI.Base.LayoutManagers;
 
 namespace Habanero.UI.Base
 {
@@ -18,6 +19,8 @@ namespace Habanero.UI.Base
         IChilliControl CreateControl();
         ILabel CreateLabel(string labelText);
         IDateTimePicker CreateDateTimePicker();
+        BorderLayoutManager CreateBorderLayoutManager(IChilliControl control);
+        IPanel CreatePanel();
         IReadOnlyGrid CreateReadOnlyGrid();
         IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons();
         IButtonGroupControl CreateButtonGroupControl();

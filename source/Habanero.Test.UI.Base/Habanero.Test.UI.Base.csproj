@@ -53,6 +53,7 @@
     <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
     <Compile Include="FilterController\TestFilterControlDate.cs" />
     <Compile Include="Grid\TestReadOnlyGrid.cs" />
+    <Compile Include="LayoutManager\TestBorderLayoutManager.cs" />
     <Compile Include="Grid\TestReadOnlyGridButtonControl.cs" />
     <Compile Include="Grid\TestReadOnlyGridWithButtons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

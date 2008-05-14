@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BorderLayoutManagerGiz.cs" />
     <Compile Include="ButtonGroupControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>

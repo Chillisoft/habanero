@@ -1,10 +1,10 @@
 using System.Collections;
-using Gizmox.WebGUI.Forms;
+using System.Windows.Forms;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.WebGUI
+namespace Habanero.UI.Win
 {
-    class PanelGiz:Panel, IPanel
+    internal class PanelWin : Panel, IPanel
     {
         IList IChilliControl.Controls
         {

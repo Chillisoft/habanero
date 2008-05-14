@@ -42,13 +42,6 @@ namespace Habanero.UI.Win
         {
             get { return this.Controls; }
         }
-        //List<IChilliControl> IChilliControl.Controls
-        //{
-        //    get
-        //    {
-        //        return new List<IChilliControl>();
-        //    }
-        //}
 
         internal class ListBoxObjectCollectionWin : IListBoxObjectCollection
         {

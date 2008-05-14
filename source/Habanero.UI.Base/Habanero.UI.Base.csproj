@@ -33,9 +33,11 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LayoutManagers\BorderLayoutManager.cs" />
     <Compile Include="ControlCollection.cs" />
     <Compile Include="DateTimePicker\DateTimePickerController.cs" />
     <Compile Include="FilterControl\DataViewCompositeFilterClause.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="IListBoxObjectCollection.cs" />
     <Compile Include="IListBoxSelectedObjectCollection.cs" />
     <Compile Include="IMultiSelector.cs" />
+    <Compile Include="IPanel.cs" />
     <Compile Include="ITextBox.cs" />
     <Compile Include="LayoutManagers\LayoutManager.cs" />
     <Compile Include="MultiSelectorManager.cs" />

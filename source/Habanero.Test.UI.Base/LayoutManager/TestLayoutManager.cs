@@ -104,7 +104,7 @@ namespace Habanero.Test.UI.Base
                 mRefreshed = true;
             }
 
-            public override IChilliControl AddControl(IChilliControl label)
+            public override IChilliControl AddControl(IChilliControl control)
             {
                 throw new System.NotImplementedException();
             }
