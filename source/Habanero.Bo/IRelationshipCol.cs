@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using Habanero.Base;
 
 namespace Habanero.BO
 {
@@ -52,7 +53,7 @@ namespace Habanero.BO
 		/// the relationship specified is a multiple relationship, when a
 		/// single one was expected</exception>
 		T GetRelatedObject<T>(string relationshipName) 
-			where T: BusinessObject;
+			where T : BusinessObject;
 
         /// <summary>
         /// Returns a collection of business objects that are connected to
@@ -85,7 +86,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="relationshipName">The name of the relationship</param>
         /// <param name="parentObject">The object to relate to</param>
-        void SetRelatedObject(string relationshipName, BusinessObject parentObject);
+        void SetRelatedObject(string relationshipName, IBusinessObject parentObject);
 
         /// <summary>
         /// Searches the relationship col for the relationship with the given name

@@ -374,10 +374,10 @@ namespace Habanero.UI.WebGUI
         /// <param name="uiDefName">The name of the set of ui definitions
         /// used to design the edit form. Setting this to an empty string
         /// will use a ui definition with no name attribute specified.</param>
-        /// <returns>Returns a DefaultBOEditorForm object</returns>
+        /// <returns>Returns a DefaultBOEditorFormGiz object</returns>
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName)
         {
-            return new DefaultBOEditorForm(bo, uiDefName);
+            return new DefaultBOEditorFormGiz(bo, uiDefName, this);
         }
 
         public ITabControl CreateTabControl()

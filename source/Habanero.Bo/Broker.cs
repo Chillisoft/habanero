@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -45,7 +46,7 @@ namespace Habanero.BO
         /// <param name="id">The ID as a Guid</param>
         /// <param name="classDef">The class definition</param>
         /// <returns>Returns a business object or null if not found</returns>
-        public static BusinessObject GetBusinessObjectWithGuid(Guid id, ClassDef classDef)
+        public static IBusinessObject GetBusinessObjectWithGuid(Guid id, ClassDef classDef)
         {
             PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
             if (!primaryKeyDef.IsObjectID)

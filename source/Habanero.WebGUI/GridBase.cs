@@ -312,7 +312,7 @@ namespace Habanero.WebGUI
         /// Adds a business object to the collection being represented
         /// </summary>
         /// <param name="bo">The business object</param>
-        public void AddBusinessObject(BusinessObject bo)
+        public void AddBusinessObject(IBusinessObject bo)
         {
             _collection.Add(bo);
             int row = GetRowOfBusinessObject(bo);
@@ -460,7 +460,7 @@ namespace Habanero.WebGUI
         /// </summary>
         /// <param name="bo">The business object in question</param>
         /// <returns>Returns the row number if found, or -1 if not found</returns>
-        public virtual int GetRowOfBusinessObject(BusinessObject bo)
+        public virtual int GetRowOfBusinessObject(IBusinessObject bo)
         {
             int rownum = 0;
 
@@ -481,7 +481,7 @@ namespace Habanero.WebGUI
         /// <param name="row">The row number in question</param>
         /// <returns>Returns the busines object at that row, or null
         /// if none is found</returns>
-        public BusinessObject GetBusinessObjectAtRow(int row)
+        public IBusinessObject GetBusinessObjectAtRow(int row)
         {
             int i = 0;
             foreach (DataRowView dataRowView in _dataTableDefaultView)

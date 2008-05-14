@@ -133,7 +133,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestFind()
         {
-            BusinessObject bo = ((BOCollectionEditableDataSetProvider) itsProvider).Find(0);
+            IBusinessObject bo = ((BOCollectionEditableDataSetProvider) itsProvider).Find(0);
             Assert.AreEqual(itsCollection[0], bo);
 
             MyBO unlistedBO = new MyBO();

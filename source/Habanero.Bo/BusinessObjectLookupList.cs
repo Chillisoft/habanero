@@ -364,7 +364,7 @@ namespace Habanero.BO
             if (String.IsNullOrEmpty(_sort))
             {
                 SortedStringCollection valueList = new SortedStringCollection();
-                foreach (BusinessObject bo in col)
+                foreach (IBusinessObject bo in col)
                 {
                     valueList.Add(bo.ToString());
                 }
@@ -373,7 +373,7 @@ namespace Habanero.BO
             else
             {
                 ArrayList valueList = new ArrayList();
-                foreach (BusinessObject bo in col)
+                foreach (IBusinessObject bo in col)
                 {
                     valueList.Add(bo.ToString());
                 }

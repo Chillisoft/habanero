@@ -29,7 +29,7 @@ namespace Habanero.UI.Forms
     /// execute the corresponding supplied delegate.
     ///</summary>
     public class DelegatedObjectInitialiser<T> : IObjectInitialiser
-        where T: BusinessObject
+        where T : BusinessObject
     {
         /// <summary>
         /// A delegate that contains the same parameters as the InitialiseObject method.

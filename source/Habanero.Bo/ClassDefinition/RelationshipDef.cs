@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util.File;
 
@@ -228,6 +229,6 @@ namespace Habanero.BO.ClassDefinition
         /// manage this relationship</param>
         /// <param name="lBOPropCol">The collection of properties</param>
         /// <returns>The new relationship object created</returns>
-        public abstract Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol);
+        public abstract Relationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol);
     }
 }

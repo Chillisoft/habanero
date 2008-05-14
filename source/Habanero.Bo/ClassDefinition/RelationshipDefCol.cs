@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -119,7 +120,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="bo">The business object that will manage these
         /// relationships</param>
         /// <returns>Returns the new collection created</returns>
-        public RelationshipCol CreateRelationshipCol(BOPropCol lBoPropCol, BusinessObject bo)
+        public RelationshipCol CreateRelationshipCol(BOPropCol lBoPropCol, IBusinessObject bo)
         {
             RelationshipCol lRelationshipCol = new RelationshipCol(bo);
             ;

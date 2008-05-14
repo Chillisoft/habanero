@@ -26,7 +26,7 @@ namespace Habanero.BO.Comparer
     /// Compares timespan properties
     /// </summary>
     /// TODO ERIC - no error checking to make sure property is a timespan
-    public class TimeSpanComparer<T> : IComparer<T> where T: BusinessObject
+    public class TimeSpanComparer<T> : IComparer<T> where T : BusinessObject
     {
         private readonly string _propName;
 

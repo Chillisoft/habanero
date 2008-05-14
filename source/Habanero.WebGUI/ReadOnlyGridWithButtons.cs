@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.WebGUI
@@ -40,7 +41,7 @@ namespace Habanero.WebGUI
     /// grid, access the standard functionality through the Grid and
     /// Buttons properties (eg. myGridWithButtons.Buttons.AddButton(...)).
     /// You can assign a non-default object editor or creator for the buttons,
-    /// using *.Buttons.ObjectEditor and *.Buttons.ObjectCreator.
+    /// using *.Buttons.BusinessObjectEditor and *.Buttons.BusinessObjectCreator.
     /// </summary>
     public class ReadOnlyGridWithButtons : UserControl
     {
@@ -48,7 +49,7 @@ namespace Habanero.WebGUI
         /// Sets the business object delegate
         /// </summary>
         /// <param name="bo">The business object</param>
-        public delegate void SetBusinessObjectDelegate(BusinessObject bo);
+        public delegate void SetBusinessObjectDelegate(IBusinessObject bo);
 
         //private static ILog log = LogManager.GetLogger("Habanero.UI.Grid.ReadOnlyGridWithButtons");
         public event EventHandler ItemSelected;
@@ -81,8 +82,8 @@ namespace Habanero.WebGUI
             _grid.CollectionChanged += CollectionChangedHandler;
             _grid.FilterUpdated += GridFilterUpdatedHandler;
             _itemSelectedDelegates = new List<SetBusinessObjectDelegate>();
-            this.Buttons.ObjectEditor = new DefaultBOEditor();
-            //this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.ClassDef);
+            this.Buttons.BusinessObjectEditor = new DefaultBOEditor();
+            //this.Buttons.BusinessObjectCreator = new DefaultBOCreator(_provider.ClassDef);
         }
 
         /// <summary>
@@ -224,8 +225,8 @@ namespace Habanero.WebGUI
         {
             _collection = boCollection;
             this.Grid.SetCollection(boCollection, uiName);
-            this.Buttons.ObjectEditor = new DefaultBOEditor();
-          //  this.Buttons.ObjectCreator = new DefaultBOCreator(_collection.ClassDef);
+            this.Buttons.BusinessObjectEditor = new DefaultBOEditor();
+          //  this.Buttons.BusinessObjectCreator = new DefaultBOCreator(_collection.ClassDef);
         }
 
         /// <summary>
@@ -253,7 +254,7 @@ namespace Habanero.WebGUI
         /// Removes the specified business object from the list
         /// </summary>
         /// <param name="objectToRemove">The business object to remove</param>
-        public void RemoveBusinessObject(BusinessObject objectToRemove)
+        public void RemoveBusinessObject(IBusinessObject objectToRemove)
         {
             this.Grid.RemoveBusinessObject( objectToRemove);
             if (this.Grid.HasBusinessObjects)
@@ -266,7 +267,7 @@ namespace Habanero.WebGUI
         /// Adds the specified business object to the list
         /// </summary>
         /// <param name="objectToAdd">The business object to add</param>
-        public void AddBusinessObject(BusinessObject objectToAdd)
+        public void AddBusinessObject(IBusinessObject objectToAdd)
         {
             this.Grid.AddBusinessObject(objectToAdd);
         }

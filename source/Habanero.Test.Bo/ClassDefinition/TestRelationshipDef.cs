@@ -130,7 +130,7 @@ namespace Habanero.Test.BO.ClassDefinition
                 : base("rel", typeof(MyRelatedBo), new RelKeyDef(), true, DeleteParentAction.Prevent)
             {}
 
-            public override Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol)
+            public override Relationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
             {
                 return new SingleRelationship(null, null, null);
             }

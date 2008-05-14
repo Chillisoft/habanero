@@ -40,8 +40,8 @@ namespace Habanero.UI.Forms
     {
         private readonly IReadOnlyGrid _readOnlyGrid;
 
-        private IObjectEditor _objectEditor;
-        private IObjectCreator _objectCreator;
+        private IBusinessObjectEditor _businessObjectEditor;
+        private IBusinessObjectCreator _BusinessObjectCreator;
         private IObjectInitialiser _objectInitialiser;
         private RowDoubleClickedHandler _doubleClickedDelegate;
         private Button _deleteButton;
@@ -82,7 +82,7 @@ namespace Habanero.UI.Forms
             if (e.BusinessObject != null)
             {
                 CheckEditorExists();
-                _objectEditor.EditObject(e.BusinessObject, _readOnlyGrid.UIName);
+                _businessObjectEditor.EditObject(e.BusinessObject, _readOnlyGrid.UIName);
             }
         }
 
@@ -93,12 +93,12 @@ namespace Habanero.UI.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void EditButtonClickHandler(object sender, EventArgs e)
         {
-            BusinessObject selectedBo = _readOnlyGrid.SelectedBusinessObject;
+            IBusinessObject selectedBo = _readOnlyGrid.SelectedBusinessObject;
             if (selectedBo != null)
             {
                 CheckEditorExists();
                 //if
-                _objectEditor.EditObject(selectedBo, _readOnlyGrid.UIName);
+                _businessObjectEditor.EditObject(selectedBo, _readOnlyGrid.UIName);
                 //				{
                 //					_readOnlyGrid.RefreshRow(selectedBo) ;
                 //				}
@@ -113,9 +113,10 @@ namespace Habanero.UI.Forms
         private void AddButtonClickHandler(object sender, EventArgs e)
         {
             CheckCreatorExists();
-            BusinessObject newObject = (BusinessObject)_objectCreator.CreateObject(this._objectEditor, _objectInitialiser, _readOnlyGrid.UIName);
-            if (newObject != null)
-            {
+            BusinessObject newObject = (BusinessObject) _BusinessObjectCreator.CreateBusinessObject();
+            if (_objectInitialiser != null) _objectInitialiser.InitialiseObject(newObject);
+            if (BusinessObjectEditor.EditObject(newObject, _readOnlyGrid.UIName)) {
+      
                 _readOnlyGrid.SelectedBusinessObject = null;
                 _readOnlyGrid.AddBusinessObject(newObject);
                 _readOnlyGrid.SelectedBusinessObject = newObject;
@@ -140,7 +141,7 @@ namespace Habanero.UI.Forms
 
                 while (boCol.Count > 0)
                 {
-                    BusinessObject bo = (BusinessObject) boCol[0];
+                    IBusinessObject bo = (BusinessObject) boCol[0];
                     bo.Delete();
                     try
                     {
@@ -185,20 +186,20 @@ namespace Habanero.UI.Forms
         /// Gets and sets the object editor, which is the control used to edit
         /// the selected business object
         /// </summary>
-        public IObjectEditor ObjectEditor
+        public IBusinessObjectEditor BusinessObjectEditor
         {
-            get { return _objectEditor; }
-            set { _objectEditor = value; }
+            get { return _businessObjectEditor; }
+            set { _businessObjectEditor = value; }
         }
 
         /// <summary>
         /// Gets and sets the object creator, which is the control used to create
         /// a new business object
         /// </summary>
-        public IObjectCreator ObjectCreator
+        public IBusinessObjectCreator BusinessObjectCreator
         {
-            get { return _objectCreator; }
-            set { _objectCreator = value; }
+            get { return _BusinessObjectCreator; }
+            set { _BusinessObjectCreator = value; }
         }
 
         /// <summary>
@@ -217,7 +218,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         private void CheckCreatorExists()
         {
-            if (_objectCreator == null)
+            if (_BusinessObjectCreator == null)
             {
                 throw new NullReferenceException("There was an attempt to create " +
                                                  "a new business object when the object creator has not been " +
@@ -234,7 +235,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         private void CheckEditorExists()
         {
-            if (_objectEditor == null)
+            if (_businessObjectEditor == null)
             {
                 throw new NullReferenceException("There was an attempt to edit " +
                                                  "a business object when the object editor has not been " +

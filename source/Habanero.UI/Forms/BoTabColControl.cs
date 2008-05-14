@@ -19,6 +19,7 @@
 
 
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI;
 
@@ -87,7 +88,7 @@ namespace Habanero.UI.Forms
         /// <param name="tabPage">The tab page</param>
         /// <returns>Returns the business object, or null if not available
         /// </returns>
-        public BusinessObject GetBo(TabPage tabPage)
+        public IBusinessObject GetBo(TabPage tabPage)
         {
             return _collectionTabControlMapper.GetBo(tabPage);
         }

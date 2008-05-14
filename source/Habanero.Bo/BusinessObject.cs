@@ -41,7 +41,7 @@ namespace Habanero.BO
     /// Provides a super-class for business objects. This class contains all
     /// the common functionality used by business objects.
     /// </summary>
-    public class BusinessObject 
+    public class BusinessObject : IBusinessObject
     {
 
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
@@ -610,7 +610,7 @@ namespace Habanero.BO
                 {
 
                     if (pair.Value == null) continue;
-                    if (pair.Value is BusinessObject)
+                    if (pair.Value is IBusinessObject)
                     {
                         BusinessObject bo = (BusinessObject)pair.Value;
                         if (bo._primaryKey.GetGuid().Equals(myGuid))
@@ -632,7 +632,7 @@ namespace Habanero.BO
                     BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
                     ClassDef classDef = businessObjectLookupList.LookupBoClassDef;
                     BOLoader boLoader = BOLoader.Instance;
-                    BusinessObject businessObject = boLoader.GetBusinessObjectByID(classDef, myGuid);
+                    IBusinessObject businessObject = boLoader.GetBusinessObjectByID(classDef, myGuid);
                     if (businessObject != null)
                     {
                         return businessObject.ToString();
@@ -671,7 +671,7 @@ namespace Habanero.BO
                     {
                         return pair.Key;
                     }
-                    else if (pair.Value is BusinessObject)
+                    else if (pair.Value is IBusinessObject)
                     {
                         BusinessObject bo = (BusinessObject)pair.Value;
                         if (String.Compare(bo.ID.ToString(), GetPropertyValueString(propName)) == 0)
@@ -741,7 +741,7 @@ namespace Habanero.BO
                         if (this.ClassDef.GetPropDef(propName).HasLookupList()) {
                             Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
                             newPropValue = lookupList[(string)newPropValue];
-                            if (newPropValue is BusinessObject) {
+                            if (newPropValue is IBusinessObject) {
                                 newPropValue = ((BusinessObject) (newPropValue))._primaryKey.GetGuid();
                             }
                         }
@@ -763,7 +763,7 @@ namespace Habanero.BO
                     newPropValue = Activator.CreateInstance(prop.PropertyType, new object[] {newPropValue, false});
                 }
             }
-            if (newPropValue is BusinessObject)
+            if (newPropValue is IBusinessObject)
             {
                 if (prop.PropertyType == typeof(Guid))
                     newPropValue = ((BusinessObject)newPropValue)._primaryKey.GetGuid();
@@ -773,7 +773,7 @@ namespace Habanero.BO
                 Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
                 if (lookupList.ContainsKey((string)newPropValue))
                     newPropValue = lookupList[(string)newPropValue];
-                if (newPropValue is BusinessObject)
+                if (newPropValue is IBusinessObject)
                 {
                    if (prop.PropertyType == typeof(Guid))
                     newPropValue = ((BusinessObject)newPropValue)._primaryKey.GetGuid();

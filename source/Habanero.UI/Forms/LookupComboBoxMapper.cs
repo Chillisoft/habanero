@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -115,7 +116,7 @@ namespace Habanero.UI.Forms
                 foreach (KeyValuePair<string, object> pair in _collection)
                 {
                     if (pair.Value == null) continue;
-                    if (pair.Value is BusinessObject)
+                    if (pair.Value is IBusinessObject)
                     {
                         BusinessObject pairValueBo = (BusinessObject)pair.Value;
                         if (pairValueBo.ClassDef.GetPrimaryKeyDef().IsObjectID

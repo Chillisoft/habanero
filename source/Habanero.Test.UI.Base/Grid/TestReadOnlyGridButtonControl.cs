@@ -94,7 +94,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(grid is IReadOnlyGridButtonsControl);
         }
 
-        [Test, Ignore("Peter please review, we cannot get this to work. Test in ButtonControl")]
+        [Test]
         public void TestCreateReadOnlyGridButtonControl_TestButtonsAdded()
         {
             //---------------Set up test pack-------------------

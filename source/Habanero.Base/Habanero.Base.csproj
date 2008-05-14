@@ -94,6 +94,8 @@
     <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
     <Compile Include="HabaneroApp.cs" />
     <Compile Include="IApplicationVersionUpgrader.cs" />
+    <Compile Include="IBusinessObject.cs" />
+    <Compile Include="IBusinessObjectDeletor.cs" />
     <Compile Include="IConcurrencyControl.cs" />
     <Compile Include="ISupportsAutoIncrementingField.cs" />
     <Compile Include="ITransactional.cs" />
@@ -155,10 +157,10 @@
     <Compile Include="INumberGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IObjectCreator.cs">
+    <Compile Include="IBusinessObjectCreator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IObjectEditor.cs">
+    <Compile Include="IBusinessObjectEditor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IObjectInitialiser.cs">

@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using log4net;
 
@@ -31,7 +32,7 @@ namespace Habanero.BO
     public class RelationshipCol : IRelationshipCol
     {
       //  private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipCol");
-        private BusinessObject _bo;
+        private IBusinessObject _bo;
         private Dictionary<string, Relationship> _relationships;
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace Habanero.BO
         /// business object that owns the relationships
         /// </summary>
         /// <param name="bo">The business object</param>
-        public RelationshipCol(BusinessObject bo)
+        public RelationshipCol(IBusinessObject bo)
         {
             _bo = bo;
             _relationships = new Dictionary<string, Relationship>();
@@ -178,7 +179,7 @@ namespace Habanero.BO
         /// the relationship specified is a single relationship, when a
         /// multiple one was expected</exception>
         public BusinessObjectCollection<T> GetRelatedCollection<T>(string relationshipName)
-			where T: BusinessObject
+			where T : BusinessObject
 		{
     	    MultipleRelationship multipleRelationship = GetMultipleRelationship(relationshipName);
     	    return multipleRelationship.GetRelatedBusinessObjectCol<T>();
@@ -206,7 +207,7 @@ namespace Habanero.BO
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship named is a multiple relationship instead of a
         /// single one</exception>
-        public void SetRelatedObject(string relationshipName, BusinessObject relatedObject)
+        public void SetRelatedObject(string relationshipName, IBusinessObject relatedObject)
         {
             Relationship relationship = this[relationshipName];
             if (relationship is MultipleRelationship)

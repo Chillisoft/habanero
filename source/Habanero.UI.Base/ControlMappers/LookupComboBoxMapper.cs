@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 
@@ -101,7 +102,7 @@ namespace Habanero.UI.Base
                 foreach (KeyValuePair<string, object> pair in _collection)
                 {
                     if (pair.Value == null) continue;
-                    if (pair.Value is BusinessObject)
+                    if (pair.Value is IBusinessObject)
                     {
                         BusinessObject pairValueBo = (BusinessObject)pair.Value;
                         if (pairValueBo.ClassDef.PrimaryKeyDef.IsObjectID

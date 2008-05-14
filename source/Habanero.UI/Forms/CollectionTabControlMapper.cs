@@ -204,7 +204,7 @@ namespace Habanero.UI.Forms
 
             if (_pageBoTable.ContainsKey(tabPage))
             {
-                return (BusinessObject) _pageBoTable[tabPage];
+                return _pageBoTable[tabPage];
             }
             else
             {

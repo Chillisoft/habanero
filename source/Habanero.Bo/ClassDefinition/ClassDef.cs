@@ -586,7 +586,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="bo">The business object that owns this collection</param>
         /// <returns>Returns the new collection or null if no relationship 
         /// definition collection exists</returns>
-        public RelationshipCol CreateRelationshipCol(BOPropCol propCol, BusinessObject bo)
+        public RelationshipCol CreateRelationshipCol(BOPropCol propCol, IBusinessObject bo)
         {
             if (_relationshipDefCol == null)
             {

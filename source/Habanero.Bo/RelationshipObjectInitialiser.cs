@@ -32,7 +32,7 @@ namespace Habanero.BO
         private readonly string _correspondingRelationshipName;
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipObjectInitialiser");
         private readonly RelationshipDef _relationship;
-        private readonly BusinessObject _parentObject;
+        private readonly IBusinessObject _parentObject;
 
         /// <summary>
         /// Constructor for a new initialiser
@@ -42,7 +42,7 @@ namespace Habanero.BO
         /// <param name="correspondingRelationshipName">The corresponding
         /// relationship name</param>
         /// TODO ERIC - corresponding?
-        public RelationshipObjectInitialiser(BusinessObject parentObject, RelationshipDef relationship,
+        public RelationshipObjectInitialiser(IBusinessObject parentObject, RelationshipDef relationship,
                                              string correspondingRelationshipName)
         {
             _parentObject = parentObject;

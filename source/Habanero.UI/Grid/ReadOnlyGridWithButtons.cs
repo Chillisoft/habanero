@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI;
 using Habanero.UI.Forms;
@@ -43,7 +44,7 @@ namespace Habanero.UI.Grid
     /// grid, access the standard functionality through the Grid and
     /// Buttons properties (eg. myGridWithButtons.Buttons.AddButton(...)).
     /// You can assign a non-default object editor or creator for the buttons,
-    /// using *.Buttons.ObjectEditor and *.Buttons.ObjectCreator.
+    /// using *.Buttons.BusinessObjectEditor and *.Buttons.BusinessObjectCreator.
     /// </summary>
     public class ReadOnlyGridWithButtons : UserControl
     {
@@ -72,8 +73,8 @@ namespace Habanero.UI.Grid
             _gridSelectionController = new GridSelectionController(_grid);
             _gridSelectionController.DelayedItemSelected = DelayedItemSelected;
 
-            this.Buttons.ObjectEditor = new DefaultBOEditor();
-            //this.Buttons.ObjectCreator = new DefaultBOCreator(_provider.ClassDef);
+            this.Buttons.BusinessObjectEditor = new DefaultBOEditor();
+            //this.Buttons.BusinessObjectCreator = new DefaultBOCreator(_provider.ClassDef);
         }
 
         #region Public Interface to Selection methods.
@@ -183,15 +184,15 @@ namespace Habanero.UI.Grid
         {
             _collection = boCollection;
             this.Grid.SetCollection(boCollection, uiName);
-            this.Buttons.ObjectEditor = new DefaultBOEditor();
-            this.Buttons.ObjectCreator = new DefaultBOCreator(_collection.ClassDef);
+            this.Buttons.BusinessObjectEditor = new DefaultBOEditor();
+            this.Buttons.BusinessObjectCreator = new DefaultBOCreator(_collection.ClassDef);
         }
 
         /// <summary>
         /// Removes the specified business object from the list
         /// </summary>
         /// <param name="objectToRemove">The business object to remove</param>
-        public void RemoveBusinessObject(BusinessObject objectToRemove)
+        public void RemoveBusinessObject(IBusinessObject objectToRemove)
         {
             this.Grid.RemoveBusinessObject(objectToRemove);
             if (this.Grid.HasBusinessObjects)
@@ -205,7 +206,7 @@ namespace Habanero.UI.Grid
         /// Adds the specified business object to the list
         /// </summary>
         /// <param name="objectToAdd">The business object to add</param>
-        public void AddBusinessObject(BusinessObject objectToAdd)
+        public void AddBusinessObject(IBusinessObject objectToAdd)
         {
             this.Grid.AddBusinessObject(objectToAdd);
         }

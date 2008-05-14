@@ -33,7 +33,7 @@ namespace Habanero.UI.Forms
     /// of editing a new business object or if you need to specify a
     /// different editing form to use to edit the object.
     /// </summary>
-    public class DefaultBOEditor : IObjectEditor
+    public class DefaultBOEditor : IBusinessObjectEditor
     {
         /// <summary>
         /// Default constructor
@@ -52,7 +52,7 @@ namespace Habanero.UI.Forms
         /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returs true if the user chose to save the edits or
         /// false if the user cancelled the edits</returns>
-        public bool EditObject(Object obj, string uiDefName)
+        public bool EditObject(IBusinessObject obj, string uiDefName)
         {
             BusinessObject bo = (BusinessObject) obj;
             DefaultBOEditorForm form = CreateEditorForm(bo, uiDefName);

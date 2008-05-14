@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -135,7 +136,7 @@ namespace Habanero.Test.BO.ClassDefinition
 				</class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
-            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
             Assert.AreSame(typeof (MyBO), bo.GetType());
             bo.SetPropertyValue("TestProp", "TestValue");
             Assert.AreEqual("TestValue", bo.GetPropertyValue("TestProp"));

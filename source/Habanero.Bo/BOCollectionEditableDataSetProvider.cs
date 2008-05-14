@@ -171,7 +171,7 @@ namespace Habanero.BO
         {
             if (_rowStates[e.Row] != null)
             {
-                BusinessObject changedBo;
+                IBusinessObject changedBo;
                 if ((RowState) _rowStates[e.Row] == RowState.Edited)
                 {
                     changedBo = _collection.Find(e.Row["ID"].ToString());
@@ -206,7 +206,7 @@ namespace Habanero.BO
         {
             if (_rowStates[e.Row] != null)
             {
-                BusinessObject changedBo;
+                IBusinessObject changedBo;
                 try
                 {
                     if ((RowState) _rowStates[e.Row] != RowState.Deleted)
@@ -250,7 +250,7 @@ namespace Habanero.BO
         private void RowChanged(DataRowChangeEventArgs e)
         {
             //log.Debug("Row Changed " + e.Row["ID"]);
-            BusinessObject changedBo = _collection.Find(e.Row["ID"].ToString());
+            IBusinessObject changedBo = _collection.Find(e.Row["ID"].ToString());
             if (changedBo != null && !_isBeingAdded)
             {
                 foreach (UIGridColumn uiProperty in _uiGridProperties)
@@ -332,7 +332,7 @@ namespace Habanero.BO
         /// object
         /// </summary>
         /// <param name="newBo">The new business object</param>
-        private void AddNewRowToCollection(BusinessObject newBo)
+        private void AddNewRowToCollection(IBusinessObject newBo)
         {
             //log.Debug("Adding new row to col");
             _collection.BusinessObjectAdded -= BusinessObjectAddedToCollectionHandler;

@@ -23,10 +23,10 @@ using Habanero.Base;
 namespace Habanero.UI.Forms
 {
     ///<summary>
-    /// An implememtation of the IObjectEditor interface where the EditObject method
+    /// An implememtation of the IBusinessObjectEditor interface where the EditObject method
     /// executes the supplied delegate.
     ///</summary>
-    public class DelegatedObjectEditor: IObjectEditor
+    public class DelegatedObjectEditor: IBusinessObjectEditor
     {
         /// <summary>
         /// A delegate that contains the same parameters as the EditObject method.
@@ -37,7 +37,7 @@ namespace Habanero.UI.Forms
         /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returs true if edited successfully of false if the edits
         /// were cancelled</returns>
-        public delegate bool EditObjectDelegate(object obj, string uiDefName);
+        public delegate bool EditObjectDelegate(IBusinessObject obj, string uiDefName);
 
         private EditObjectDelegate _editObjectDelegate;
         
@@ -60,7 +60,7 @@ namespace Habanero.UI.Forms
         /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returs true if edited successfully of false if the edits
         /// were cancelled</returns>
-        public bool EditObject(object obj, string uiDefName)
+        public bool EditObject(IBusinessObject obj, string uiDefName)
         {
             if (_editObjectDelegate != null)
             {

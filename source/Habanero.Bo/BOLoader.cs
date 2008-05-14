@@ -310,7 +310,7 @@ namespace Habanero.BO
         /// <param name="criteria">The search criteria</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
-        public BusinessObject GetBusinessObject(Type boType, string criteria)
+        public IBusinessObject GetBusinessObject(Type boType, string criteria)
         {
             return GetBusinessObject(ClassDef.ClassDefs[boType], criteria);
         }
@@ -324,7 +324,7 @@ namespace Habanero.BO
         /// <param name="criteria">The search criteria</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
-        public BusinessObject GetBusinessObject(ClassDef classDef, string criteria)
+        public IBusinessObject GetBusinessObject(ClassDef classDef, string criteria)
         {
             return GetBusinessObject<BusinessObject>(classDef, criteria);
         }
@@ -371,7 +371,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        internal  BusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
+        internal  IBusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
         {
             return GetLoadedBusinessObject(id.GetObjectId());
         }
@@ -381,7 +381,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        internal  BusinessObject GetLoadedBusinessObject(string id)
+        internal  IBusinessObject GetLoadedBusinessObject(string id)
         {
             return GetLoadedBusinessObject(id, true);
         }
@@ -719,7 +719,7 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
-        public BusinessObject GetBusinessObjectByID(Type boType, Guid id)
+        public IBusinessObject GetBusinessObjectByID(Type boType, Guid id)
         {
             return GetBusinessObjectByID(boType, id.ToString("B"));
         }
@@ -732,7 +732,7 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
-        public BusinessObject GetBusinessObjectByID(Type boType, int id)
+        public IBusinessObject GetBusinessObjectByID(Type boType, int id)
         {
             return GetBusinessObjectByID(boType, id.ToString());
         }
@@ -745,7 +745,7 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
-        public BusinessObject GetBusinessObjectByID(Type boType, string id)
+        public IBusinessObject GetBusinessObjectByID(Type boType, string id)
         {
             return GetBusinessObjectByID<BusinessObject>(ClassDef.ClassDefs[boType], id);
         }
@@ -758,7 +758,7 @@ namespace Habanero.BO
         /// <param name="primaryKey">The primary key object that contains the specific search values</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
-        public BusinessObject GetBusinessObjectByID(Type boType, BOPrimaryKey primaryKey)
+        public IBusinessObject GetBusinessObjectByID(Type boType, BOPrimaryKey primaryKey)
         {
             return GetBusinessObjectByID<BusinessObject>(ClassDef.ClassDefs[boType], primaryKey);
         }
@@ -775,7 +775,7 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
-        public BusinessObject GetBusinessObjectByID(ClassDef classDef, Guid id)
+        public IBusinessObject GetBusinessObjectByID(ClassDef classDef, Guid id)
         {
             return GetBusinessObjectByID(classDef, id.ToString("B"));
         }
@@ -788,7 +788,7 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
-        public BusinessObject GetBusinessObjectByID(ClassDef classDef, int id)
+        public IBusinessObject GetBusinessObjectByID(ClassDef classDef, int id)
         {
             return GetBusinessObjectByID(classDef, id.ToString());
         }
@@ -801,7 +801,7 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
-        public BusinessObject GetBusinessObjectByID(ClassDef classDef, string id)
+        public IBusinessObject GetBusinessObjectByID(ClassDef classDef, string id)
         {
             return GetBusinessObjectByID<BusinessObject>(classDef, id);
         }
@@ -814,7 +814,7 @@ namespace Habanero.BO
         /// <param name="primaryKey">The primary key object that contains the specific search values</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
-        public BusinessObject GetBusinessObjectByID(ClassDef classDef, BOPrimaryKey primaryKey)
+        public IBusinessObject GetBusinessObjectByID(ClassDef classDef, BOPrimaryKey primaryKey)
         {
             return GetBusinessObjectByID<BusinessObject>(classDef, primaryKey);
         }

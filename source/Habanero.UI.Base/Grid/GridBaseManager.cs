@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -38,7 +39,7 @@ namespace Habanero.UI.Base
                 }
                 if (value == null) return;
                 int j = 0;
-                foreach (BusinessObject businessObject in _boCol)
+                foreach (IBusinessObject businessObject in _boCol)
                 {
                     if (businessObject == value)
                     {

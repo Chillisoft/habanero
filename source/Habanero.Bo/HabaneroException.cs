@@ -20,6 +20,7 @@
 using System;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -578,7 +579,7 @@ namespace Habanero.BO
                                                            string machineName,
                                                            DateTime dateUpdated,
                                                            string objectID,
-                                                           BusinessObject obj) :
+                                                           IBusinessObject obj) :
                                                                base("You cannot save the changes to '" + className +
                                                                     "', as another user has edited this record. \n" +
                                                                     "UserName: " +
@@ -626,7 +627,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the business object in question
         /// </summary>
-        public BusinessObject BusinessObject
+        public IBusinessObject BusinessObject
         {
             get { return (BusinessObject) mobj; }
         }
@@ -737,7 +738,7 @@ namespace Habanero.BO
                                                            string machineName,
                                                            DateTime dateUpdated,
                                                            string objectID,
-                                                           BusinessObject obj)
+                                                           IBusinessObject obj)
             :
                            base("You cannot begin edits on the '" + className +
                                 "', as another user has started edits and therefore locked to this record. \n" +
@@ -788,7 +789,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the business object in question
         /// </summary>
-        public BusinessObject BusinessObject
+        public IBusinessObject BusinessObject
         {
             get { return (BusinessObject)mobj; }
         }
@@ -957,7 +958,7 @@ namespace Habanero.BO
                                                           string machineName,
                                                           DateTime dateUpdated,
                                                           string objectID,
-                                                          BusinessObject obj)
+                                                          IBusinessObject obj)
             :
                                                                base("You cannot Edit '" + className +
                                                                     "', as another user has edited this record. \n" +

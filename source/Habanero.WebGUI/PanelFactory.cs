@@ -637,7 +637,7 @@ namespace Habanero.WebGUI
         /// target property
         /// </summary>
         private static void AddTriggerForAssignProperty(Control sourceControl,
-            Control targetControl, Trigger trigger, BusinessObject bo)
+            Control targetControl, Trigger trigger, IBusinessObject bo)
         {
             Control relevantControl = sourceControl;
             if (targetControl != null) relevantControl = targetControl;
@@ -656,7 +656,7 @@ namespace Habanero.WebGUI
         /// Adds a new trigger that executes a named method on the BO of the
         /// form when the control's value changes
         /// </summary>
-        private static void AddTriggerForExecute(Control control, Trigger trigger, BusinessObject bo)
+        private static void AddTriggerForExecute(Control control, Trigger trigger, IBusinessObject bo)
         {
             control.TextChanged +=
                 delegate

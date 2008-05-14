@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -420,7 +421,7 @@ namespace Habanero.Test.BO
             }
         }
 
-        private static void CleanupObjectFromDatabase(BusinessObject bo)
+        private static void CleanupObjectFromDatabase(IBusinessObject bo)
         {
             bo.Delete();
             bo.Save();
@@ -851,14 +852,14 @@ namespace Habanero.Test.BO
 
         private static void AssertBusinessObjectNotInDatabase(BusinessObject bo)
         {
-            BusinessObject missingBO =
+            IBusinessObject missingBO =
                 BOLoader.Instance.GetBusinessObject(bo.GetType(), bo.ID.ToString());
             Assert.IsNull(missingBO);
         }
 
         private static void AssertBusinessObjectInDatabase(BusinessObject bo)
         {
-            BusinessObject loadedBO =
+            IBusinessObject loadedBO =
                 BOLoader.Instance.GetBusinessObject(bo.GetType(), bo.ID.ToString());
             Assert.IsNotNull(loadedBO);
         }

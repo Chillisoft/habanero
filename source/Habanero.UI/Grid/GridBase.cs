@@ -375,7 +375,7 @@ namespace Habanero.UI.Grid
         /// Adds a business object to the collection being represented
         /// </summary>
         /// <param name="bo">The business object</param>
-        public void AddBusinessObject(BusinessObject bo)
+        public void AddBusinessObject(IBusinessObject bo)
         {
             _collection.Add(bo);
             int row = GetRowOfBusinessObject(bo);
@@ -521,7 +521,7 @@ namespace Habanero.UI.Grid
         /// </summary>
         /// <param name="bo">The business object in question</param>
         /// <returns>Returns the row number if found, or -1 if not found</returns>
-        public virtual int GetRowOfBusinessObject(BusinessObject bo)
+        public virtual int GetRowOfBusinessObject(IBusinessObject bo)
         {
             int rownum = 0;
 

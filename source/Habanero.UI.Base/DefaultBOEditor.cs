@@ -6,7 +6,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using log4net;
 
-namespace Habanero.UI.WebGUI
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Provides an editing facility for a business object.
@@ -16,7 +16,7 @@ namespace Habanero.UI.WebGUI
     /// of editing a new business object or if you need to specify a
     /// different editing form to use to edit the object.
     /// </summary>
-    public class DefaultBOEditor : IObjectEditor
+    public class DefaultBOEditor : IBusinessObjectEditor
     {
         private readonly IControlFactory _controlFactory;
 
@@ -35,20 +35,13 @@ namespace Habanero.UI.WebGUI
         /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returs true if the user chose to save the edits or
         /// false if the user cancelled the edits</returns>
-        public bool EditObject(Object obj, string uiDefName)
+        public bool EditObject(IBusinessObject obj, string uiDefName)
         {
             BusinessObject bo = (BusinessObject)obj;
             IDefaultBOEditorForm form = CreateEditorForm(bo, uiDefName);
-            //TODO_Port Enums //if (form.ShowDialog() == DialogResult.OK)
-            //{
-            //    return true;
-            //}
-            //else
-            //{
-            //    return false;
-            //}
-            return true;
+            return form.ShowDialog();
         }
+
 
         /// <summary>
         /// Creates a form in which a business object can be edited
@@ -63,5 +56,4 @@ namespace Habanero.UI.WebGUI
             return _controlFactory.CreateBOEditorForm(bo, uiDefName);
         }
     }
-
 }

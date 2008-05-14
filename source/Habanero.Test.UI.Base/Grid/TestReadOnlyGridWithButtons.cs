@@ -1,3 +1,5 @@
+using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -7,7 +9,7 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Grid
 {
     [TestFixture]
-    public abstract class TestReadonlyGridWithButtons
+    public abstract class TestReadonlyGridWithButtons : TestUsingDatabase
     {
         [SetUp]
         public void SetupTest()
@@ -18,6 +20,7 @@ namespace Habanero.Test.UI.Grid
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
+            base.SetupDBConnection();
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
         }
@@ -142,174 +145,362 @@ namespace Habanero.Test.UI.Grid
         }
 
         [Test]
+        public void TestInitialisingObjectCreator()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            SetupGridColumnsForMyBo(readOnlyGridWithButtons.Grid);
+           
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.SetCollection(col);
+
+            //---------------Test Result -----------------------
+
+            Assert.IsNotNull(readOnlyGridWithButtons.BusinessObjectCreator);
+            Assert.IsTrue(readOnlyGridWithButtons.BusinessObjectCreator is DefaultBOCreator);
+            Assert.IsTrue(((DefaultBOCreator)readOnlyGridWithButtons.BusinessObjectCreator).CreateBusinessObject() is MyBO);
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
+        public void TestInitialisingObjectEditor()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            SetupGridColumnsForMyBo(readOnlyGridWithButtons.Grid);
+
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.SetCollection(col);
+            //---------------Test Result -----------------------
+
+            Assert.IsNotNull(readOnlyGridWithButtons.BusinessObjectEditor);
+            Assert.IsTrue(readOnlyGridWithButtons.BusinessObjectEditor is DefaultBOEditor);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestInitialisingObjectDeletor()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            SetupGridColumnsForMyBo(readOnlyGridWithButtons.Grid);
+
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.SetCollection(col);
+            //---------------Test Result -----------------------
+
+            Assert.IsNotNull(readOnlyGridWithButtons.BusinessObjectDeletor);
+            Assert.IsTrue(readOnlyGridWithButtons.BusinessObjectDeletor is DefaultBODeletor);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void Test_EditButtonClick_NoSelectedBusinessObject()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
             IReadOnlyGridWithButtons grid = GetGridWith_4_Rows(out col);
             grid.SelectedBusinessObject = null;
+            ObjectEditorStub objectEditor = new ObjectEditorStub();
+            grid.BusinessObjectEditor = objectEditor;
 
             //---------------Execute Test ----------------------
             grid.Buttons["Edit"].PerformClick();
             //---------------Test Result -----------------------
 
+            Assert.IsFalse(objectEditor.HasBeenCalled);
+
         }
 
-        //[Test]
-        //public void TestEditButtonClickSuccessfulEdit()
-        //{
-        //    //itsGridMock.ExpectAndReturn("SelectedBusinessObject", bo, new object[] {});
-        //    //itsGridMock.ExpectAndReturn("UIName", "default", new object[] { });
-        //    //itsObjectEditorMock.ExpectAndReturn("EditObject", true, new object[] { bo, "default" });
-        //    ////itsGridMock.Expect("RefreshRow", new object[] { bo }) ;
-        //    //itsButtons.ObjectEditor = itsEditor;
+        [Test]
+        public void TestEditButtonClick()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridWithButtons grid = GetGridWith_4_Rows(out col);
+            grid.SelectedBusinessObject = col[2];
+            ObjectEditorStub objectEditor = new ObjectEditorStub();
+            grid.BusinessObjectEditor = objectEditor;
 
-        //    //itsButtons.ClickButton("Edit");
-        //    //itsObjectEditorMock.Verify();
-        //    //itsGridMock.Verify();
-        //}
+            //---------------Asserting Preconditions------------
+            Assert.IsFalse(objectEditor.HasBeenCalled); 
+            
+            //---------------Execute Test ----------------------
+            grid.Buttons["Edit"].PerformClick();
 
-        //[Test]
-        //public void TestEditButtonClickUnsuccessfulEdit()
-        //{
-        //    //itsGridMock.ExpectAndReturn("SelectedBusinessObject", bo, new object[] {});
-        //    //itsGridMock.ExpectAndReturn("UIName", "default", new object[] { });
-        //    //itsObjectEditorMock.ExpectAndReturn("EditObject", false, new object[] { bo, "default" });
-        //    ////itsGridMock.ExpectNoCall("RefreshRow", new Type[] {typeof(object)});
-        //    //itsButtons.ObjectEditor = itsEditor;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(objectEditor.HasBeenCalled);
+            Assert.AreSame(col[2], objectEditor.Bo);
+            Assert.AreSame("default", objectEditor.DefName);
+        }
 
-        //    //itsButtons.ClickButton("Edit");
-        //    //itsObjectEditorMock.Verify();
-        //    //itsGridMock.Verify();
-        //}
+        [Test, Ignore("No support for uidef setting on grid yet.")]
+        public void TestEditButtonClickUsingAlternateUIDef()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            SetupGridColumnsForMyBo(readOnlyGridWithButtons.Grid);
 
-        //[Test]
-        //public void TestEditButtonClickNothingSelected()
-        //{
-        //    //itsGridMock.ExpectAndReturn("SelectedBusinessObject", null, new object[] {});
-        //    //itsObjectEditorMock.ExpectNoCall("EditObject", new Type[] {typeof (object), typeof(string)});
-        //    ////itsGridMock.ExpectNoCall("RefreshRow", new Type[] {typeof(object)});
-        //    //itsButtons.ObjectEditor = itsEditor;
+            //TODO: SET GRID's UIDEF : how?
+            readOnlyGridWithButtons.SetCollection(col);
+            readOnlyGridWithButtons.SelectedBusinessObject = col[2];
+            ObjectEditorStub objectEditor = new ObjectEditorStub();
+            readOnlyGridWithButtons.BusinessObjectEditor = objectEditor;
 
-        //    //itsButtons.ClickButton("Edit");
-        //    //itsObjectEditorMock.Verify();
-        //    //itsGridMock.Verify();
-        //}
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.Buttons["Edit"].PerformClick();
 
-        //[Test]
-        //public void TestAddButtonClickSuccessfulAdd()
-        //{
-        //    //itsGridMock.ExpectAndReturn("UIName", "default", new object[]{} );
-        //    //itsObjectCreatorMock.ExpectAndReturn("CreateObject", bo, new object[] {itsEditor, null, "default"});
-        //    //itsGridMock.Expect("AddBusinessObject", new object[] {bo});
-        //    //itsButtons.ObjectCreator = itsCreator;
-        //    //itsButtons.ObjectEditor = itsEditor;
-
-        //    //itsButtons.ClickButton("Add");
-        //    //itsObjectCreatorMock.Verify();
-        //    //itsGridMock.Verify();
-        //}
-
-        //[Test]
-        //public void TestAddButtonClickUnsuccessfulAdd()
-        //{
-        //    //itsGridMock.ExpectAndReturn("UIName", "default", new object[] { });
-        //    //itsObjectCreatorMock.ExpectAndReturn("CreateObject", null, new object[] {itsEditor, null, "default"});
-        //    //itsGridMock.ExpectNoCall("AddBusinessObject", new Type[] {typeof (object)});
-        //    //itsButtons.ObjectCreator = itsCreator;
-        //    //itsButtons.ObjectEditor = itsEditor;
-
-        //    //itsButtons.ClickButton("Add");
-        //    //itsObjectCreatorMock.Verify();
-        //    //itsGridMock.Verify();
-        //}
-
-        //[Test]
-        //public void TestDeletionProperties()
-        //{
-        //    //Assert.IsFalse(itsButtons.ShowDefaultDeleteButton);
-        //    //itsButtons.ShowDefaultDeleteButton = true;
-        //    //Assert.IsTrue(itsButtons.ShowDefaultDeleteButton);
-
-        //    //Assert.IsTrue(itsButtons.ConfirmDeletion);
-        //    //itsButtons.ConfirmDeletion = false;
-        //    //Assert.IsFalse(itsButtons.ConfirmDeletion);
-        //}
-
-        //// These two tests both write to the database.  If there is a way
-        ////   to mock these without writing then please change it, but I
-        ////   couldn't see how to mock a BO or a connection successfully
-        //[Test]
-        //public void TestDeleteButtonClickSuccessfulDelete()
-        //{
-        //    //ContactPerson bo = new ContactPerson();
-        //    //bo.Surname = "please delete me.";
-        //    //bo.Save();
-        //    //itsContactPersonID = bo.ContactPersonID.Value;
-
-        //    //BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
-        //    //boCol.Add(bo);
-
-        //    //itsGridMock.ExpectAndReturn("SelectedBusinessObjects", boCol);
-        //    //itsGridMock.ExpectAndReturn("SelectedBusinessObject", bo);
-        //    //itsGridMock.ExpectAndReturn("SelectedBusinessObject", bo);
-
-        //    //itsButtons.ShowDefaultDeleteButton = true;
-        //    //itsButtons.ConfirmDeletion = false;
-        //    //itsButtons.ClickButton("Delete");
-        //    //itsGridMock.Verify();
-
-        //    //ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(itsContactPersonID);
-        //    //Assert.IsNull(contactPerson);
-        //}
-
-        //[Test]
-        //public void TestDeleteButtonClickUnsuccessfulDelete()
-        //{
-        //    //ContactPerson person = new ContactPerson();
-        //    //person.Surname = "please delete me";
-        //    //person.Save();
-        //    //itsContactPersonID = person.ContactPersonID.Value;
-        //    //person.AddPreventDeleteRelationship();
-
-        //    //Address address = new Address();
-        //    //address.ContactPersonID = itsContactPersonID;
-        //    //address.Save();
-        //    //itsAddressID = address.AddressID;
-
-        //    //BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
-        //    //boCol.Add(person);
-
-        //    //itsGridMock.ExpectAndReturn("SelectedBusinessObjects", boCol);
-        //    //itsExceptionNotifierMock.Expect("Notify", new IsAnything(), new IsAnything(), new IsAnything());
-        //    //itsGridMock.ExpectNoCall("SelectedBusinessObject");
-
-        //    //itsButtons.ShowDefaultDeleteButton = true;
-        //    //itsButtons.ConfirmDeletion = false;
-        //    //itsButtons.ClickButton("Delete");
-        //    //itsGridMock.Verify();
-
-        //    //ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(itsContactPersonID);
-        //    //Assert.IsNotNull(contactPerson);
-        //}
-
-        //[Test]
-        //public void TestDeleteButtonClickNothingSelected()
-        //{
-        //    //itsGridMock.ExpectAndReturn("SelectedBusinessObjects", new BusinessObjectCollection<MyBO>());
-        //    //itsGridMock.ExpectNoCall("SelectedBusinessObject");
-
-        //    //itsButtons.ShowDefaultDeleteButton = true;
-        //    //itsButtons.ConfirmDeletion = false;
-        //    //itsButtons.ClickButton("Delete");
-        //    //itsGridMock.Verify();
-        //}
+            //---------------Test Result -----------------------
+            Assert.AreSame("differentuidef", objectEditor.DefName);
+        }
+        //TODO: same test as above for add (TestAddButtonClickUsingAlternateUIDef)
+        //TODO: successful edit button click should update the values in the grid on Windows.Forms
 
 
+        [Test]
+        public void TestAddButtonClick()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridWithButtons grid = GetGridWith_4_Rows(out col);
+            ObjectEditorStub objectEditor = new ObjectEditorStub();
+            grid.BusinessObjectEditor = objectEditor;
+            ObjectCreatorStub objectCreator = new ObjectCreatorStub();
+            grid.BusinessObjectCreator = objectCreator;
+            //---------------Asserting Preconditions------------
+            Assert.IsFalse(objectCreator.HasBeenCalled);
+            Assert.IsFalse(objectEditor.HasBeenCalled);
+
+            //---------------Execute Test ----------------------
+            grid.Buttons["Add"].PerformClick();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(objectCreator.HasBeenCalled);
+            Assert.IsTrue(objectEditor.HasBeenCalled);
+            Assert.AreSame(objectCreator.MyBO, objectEditor.Bo);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestDeleteButton()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridWithButtons grid = GetGridWith_4_Rows(out col);
+            grid.Buttons.ShowDefaultDeleteButton = true;
+            grid.SelectedBusinessObject = col[2];
+            ObjectDeletorStub objectDeletor = new ObjectDeletorStub();
+            grid.BusinessObjectDeletor = objectDeletor;
+            //---------------Execute Test ----------------------
+            grid.Buttons["Delete"].PerformClick();
+            //---------------Test Result -----------------------
+
+            Assert.IsTrue(objectDeletor.HasBeenCalled);
+            Assert.AreSame(col[2], objectDeletor.Bo);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestDeleteButtonWithNothingSelected()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IReadOnlyGridWithButtons grid = GetGridWith_4_Rows(out col);
+            grid.Buttons.ShowDefaultDeleteButton = true;
+            grid.SelectedBusinessObject = null;
+            ObjectDeletorStub objectDeletor = new ObjectDeletorStub();
+            grid.BusinessObjectDeletor = objectDeletor;
+            //---------------Execute Test ----------------------
+            grid.Buttons["Delete"].PerformClick();
+            //---------------Test Result -----------------------
+
+            Assert.IsFalse(objectDeletor.HasBeenCalled);
+ 
+            //---------------Tear Down -------------------------          
+        }
+
+        // These two tests both write to the database.  If there is a way
+        //   to mock these without writing then please change it, but I
+        //   couldn't see how to mock a BO or a connection successfully
+        [Test]
+        public void TestAcceptance_DeleteButtonClickSuccessfulDelete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPerson bo = new ContactPerson();
+            bo.Surname = "please delete me.";
+            bo.Save();
+            BOPrimaryKey contactPersonPK = bo.ID;
+
+            BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
+            boCol.Add(bo);
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            readOnlyGridWithButtons.Grid.Columns.Add("Surname", "Surname");
+            readOnlyGridWithButtons.SetCollection(boCol);
+            readOnlyGridWithButtons.SelectedBusinessObject = bo;
+            readOnlyGridWithButtons.Buttons.ShowDefaultDeleteButton = true;
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.Buttons["Delete"].PerformClick();
+            //---------------Test Result -----------------------
+
+            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(contactPersonPK);
+            Assert.IsNull(contactPerson);
+        }
+
+        [Test]
+        public void TestAcceptance_DeleteButtonClickUnsuccessfulDelete()
+        {
+            ContactPerson person = new ContactPerson();
+            person.Surname = "please delete me";
+            person.Save();
+            BOPrimaryKey contactPersonPK = person.ID;
+            person.AddPreventDeleteRelationship();
+
+            Address address = person.Addresses.CreateBusinessObject();
+            address.Save();
+
+            BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
+            boCol.Add(person);
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            readOnlyGridWithButtons.Grid.Columns.Add("Surname", "Surname");
+            readOnlyGridWithButtons.SetCollection(boCol);
+            readOnlyGridWithButtons.SelectedBusinessObject = person;
+            readOnlyGridWithButtons.Buttons.ShowDefaultDeleteButton = true;
+            ExceptionNotifierStub exceptionNotifier = new ExceptionNotifierStub();
+            GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
+
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.Buttons["Delete"].PerformClick();
+            //---------------Test Result -----------------------
+
+            Assert.IsTrue(exceptionNotifier.Notified);
+            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(contactPersonPK);
+            Assert.IsNotNull(contactPerson);
+
+        }
+
+        #region stubs
 
 
+        public class ExceptionNotifierStub : IExceptionNotifier
+        {
+            private bool _notified;
+
+            public void Notify(Exception ex, string furtherMessage, string title)
+            {
+                _notified = true;
+            }
+
+            public bool Notified
+            {
+                get { return _notified; }
+            }
+        }
+
+        internal class ObjectCreatorStub : IBusinessObjectCreator
+        {
+            private bool _hasBeenCalled;
+            private MyBO _myBO;
+
+            /// <summary>
+            /// Just creates the object, without editing or saving it.
+            /// </summary>
+            /// <returns></returns>
+            public IBusinessObject CreateBusinessObject()
+            {
+                _myBO = new MyBO();
+                _hasBeenCalled = true;
+                return _myBO;
+            }
+
+            public bool HasBeenCalled
+            {
+                get { return _hasBeenCalled; }
+            }
+
+
+            public MyBO MyBO
+            {
+                get { return _myBO; }
+            }
+        }
+
+        internal class ObjectEditorStub : IBusinessObjectEditor
+        {
+            private IBusinessObject _bo;
+            private string _defName;
+            private bool _hasBeenCalled;
+
+            /// <summary>
+            /// Edits the given object
+            /// </summary>
+            /// <param name="obj">The object to edit</param>
+            /// <param name="uiDefName">The name of the set of ui definitions
+            /// used to design the edit form. Setting this to an empty string
+            /// will use a ui definition with no name attribute specified.</param>
+            /// <returns>Returs true if edited successfully of false if the edits
+            /// were cancelled</returns>
+            public bool EditObject(IBusinessObject obj, string uiDefName)
+            {
+                _bo = obj;
+                _defName = uiDefName;
+                _hasBeenCalled = true;
+                return true;
+            }
+
+
+            public IBusinessObject Bo
+            {
+                get { return _bo; }
+            }
+
+            public string DefName
+            {
+                get { return _defName; }
+            }
+
+            public bool HasBeenCalled
+            {
+                get { return _hasBeenCalled; }
+            }
+        }
+
+        public class ObjectDeletorStub : IBusinessObjectDeletor
+        {
+            private bool _hasBeenCalled;
+            private IBusinessObject _bo;
+
+            public bool HasBeenCalled
+            {
+                get { return _hasBeenCalled; }
+            }
+
+            public IBusinessObject Bo
+            {
+                get { return _bo; }
+            }
+
+            public void DeleteBusinessObject(IBusinessObject businessObject)
+            {
+                _bo = businessObject;
+                _hasBeenCalled = true;
+            }
+        }
+        #endregion
 
         #region Utility Methods
+
+       
+
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
         {
             MyBO cp = new MyBO();
@@ -341,6 +532,9 @@ namespace Habanero.Test.UI.Grid
         }
 
         #endregion //Utility Methods
+  
     }
 
+
+    
 }

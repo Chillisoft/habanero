@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ namespace Habanero.Test.General
         private ClassDef shapeClassDef;
         private ClassDef circleClassDef;
         private ClassDef circleNoPrimaryKeyClassDef;
-        private BusinessObject objShape;
+        private IBusinessObject objShape;
         private BusinessObject objCircle;
         private BusinessObject objCircleNoPrimaryKey;
 

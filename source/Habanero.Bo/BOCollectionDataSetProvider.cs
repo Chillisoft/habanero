@@ -136,7 +136,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="rowNum">The row number</param>
         /// <returns>Returns a business object</returns>
-        public BusinessObject Find(int rowNum)
+        public IBusinessObject Find(int rowNum)
         {
             return _collection.Find(this._table.Rows[rowNum]["ID"].ToString());
         }

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -29,7 +30,7 @@ namespace Habanero.BO
     public abstract class Relationship
     {
         protected RelationshipDef _relDef;
-        protected readonly BusinessObject _owningBo;
+        protected readonly IBusinessObject _owningBo;
         protected internal RelKey _relKey;
         protected IBusinessObjectCollection _boCol;
 
@@ -41,7 +42,7 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public Relationship(BusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        public Relationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
         {
             _relDef = lRelDef;
             _owningBo = owningBo;
@@ -85,7 +86,7 @@ namespace Habanero.BO
         /// Returns the business object that owns this relationship e.g. Invoice has many lines
         /// the owning BO would be invoice.
         ///</summary>
-        public BusinessObject OwningBO
+        public IBusinessObject OwningBO
         {
             get { return _owningBo; }
         }

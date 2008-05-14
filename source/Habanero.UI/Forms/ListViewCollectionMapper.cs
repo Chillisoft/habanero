@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Forms
@@ -59,7 +60,7 @@ namespace Habanero.UI.Forms
         /// Returns the currently selected business object in the ListView
         /// or null if none is selected
         /// </summary>
-        public BusinessObject SelectedBusinessObject
+        public IBusinessObject SelectedBusinessObject
         {
             get {
                 if (_listView.SelectedItems.Count == 1)
@@ -117,7 +118,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         /// <param name="bo">The business object to represent</param>
         /// <returns>Returns a new ListViewItem</returns>
-        private ListViewItem CreateListViewItem(BusinessObject bo) {
+        private ListViewItem CreateListViewItem(IBusinessObject bo) {
             ListViewItem boItem = new ListViewItem(bo.ToString());
             boItem.Tag = bo;
             _listItemsHash.Add(bo, boItem);
@@ -135,7 +136,7 @@ namespace Habanero.UI.Forms
             listView.Clear();
             _listItemsHash.Clear();
             listView.MultiSelect = true;
-            foreach (BusinessObject bo in collection) {
+            foreach (IBusinessObject bo in collection) {
                 listView.Items.Add(CreateListViewItem(bo));
                
             }

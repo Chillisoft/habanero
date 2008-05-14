@@ -40,7 +40,7 @@ namespace Habanero.Test.BO
         protected DataTable itsTable;
         protected BusinessObject itsBo1;
         protected BusinessObject itsBo2;
-        protected BusinessObject itsRelatedBo;
+        protected IBusinessObject itsRelatedBo;
         protected IDataSetProvider itsProvider;
 
         protected Mock itsDatabaseConnectionMockControl;

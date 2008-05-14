@@ -1,3 +1,4 @@
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -17,7 +18,7 @@ namespace Habanero.UI.Base
     /// grid, access the standard functionality through the Grid and
     /// Buttons properties (eg. myGridWithButtons.Buttons.AddButton(...)).
     /// You can assign a non-default object editor or creator for the buttons,
-    /// using *.Buttons.ObjectEditor and *.Buttons.ObjectCreator.
+    /// using *.Buttons.BusinessObjectEditor and *.Buttons.BusinessObjectCreator.
     /// </summary>
     public interface IReadOnlyGridWithButtons : IControlChilli
     {
@@ -35,6 +36,12 @@ namespace Habanero.UI.Base
         /// (eg. myGridWithButtons.Buttons.AddButton(...)).
         /// </summary>
         IReadOnlyGridButtonsControl Buttons { get; }
+
+        IBusinessObjectEditor BusinessObjectEditor { get; set; }
+
+        IBusinessObjectCreator BusinessObjectCreator { get; set; }
+
+        IBusinessObjectDeletor BusinessObjectDeletor { get; set; }
 
         /// <summary>
         /// Sets the business object collection to display.  Loading of

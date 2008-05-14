@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 using log4net;
 
@@ -144,7 +145,7 @@ namespace Habanero.UI.Grid
         /// Removes the specified business object
         /// </summary>
         /// <param name="businessObject">The business object to remove</param>
-        public void RemoveBusinessObject(BusinessObject businessObject)
+        public void RemoveBusinessObject(IBusinessObject businessObject)
         {
             _collection.Remove(businessObject);
         }

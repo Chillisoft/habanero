@@ -86,7 +86,7 @@
     <Compile Include="TabPageGiz.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ToBeGeneralised\DefaultBOEditorForm.cs">
+    <Compile Include="DefaultBOEditorFormGiz.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ControlFactoryGizmox.cs">

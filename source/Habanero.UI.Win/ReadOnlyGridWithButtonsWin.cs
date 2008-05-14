@@ -1,3 +1,4 @@
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 
@@ -5,6 +6,10 @@ namespace Habanero.UI.Win
 {
     public class ReadOnlyGridWithButtonsWin : ControlWin, IReadOnlyGridWithButtons
     {
+        private IBusinessObjectEditor _BusinessObjectEditor;
+        private IBusinessObjectCreator _BusinessObjectCreator;
+        private IBusinessObjectDeletor _businessObjectDeletor;
+
         public IReadOnlyGrid Grid
         {
             get { return null; }
@@ -25,6 +30,25 @@ namespace Habanero.UI.Win
         {
             get { throw new System.NotImplementedException(); }
         }
+
+        public IBusinessObjectEditor BusinessObjectEditor
+        {
+            get { return _BusinessObjectEditor; }
+            set { _BusinessObjectEditor = value; }
+        }
+
+        public IBusinessObjectCreator BusinessObjectCreator
+        {
+            get { return _BusinessObjectCreator; }
+            set { _BusinessObjectCreator = value; }
+        }
+
+        public IBusinessObjectDeletor BusinessObjectDeletor
+        {
+            get { return _businessObjectDeletor; }
+            set { _businessObjectDeletor = value; }
+        }
+
 
         public void SetCollection(IBusinessObjectCollection boCollection)
         {

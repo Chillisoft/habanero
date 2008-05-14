@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -357,7 +358,7 @@ namespace Habanero.Test.BO
             //Setup
             ContactPersonTestBO contactPersonTestBO = CreateSavedContactPerson();
             //Fixture
-            BusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPersonTestBO.PrimaryKey);
+            IBusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPersonTestBO.PrimaryKey);
             //Assert
             Assert.AreSame(contactPersonTestBO, businessObject);
         }
@@ -368,7 +369,7 @@ namespace Habanero.Test.BO
             //Setup
             ContactPerson contactPerson = new ContactPerson();
             //Fixture
-            BusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPerson.PrimaryKey);
+            IBusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPerson.PrimaryKey);
             //Assert
             Assert.AreSame(contactPerson, businessObject);
         }

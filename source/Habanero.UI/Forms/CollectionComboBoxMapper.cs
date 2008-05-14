@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI;
 
@@ -79,7 +80,7 @@ namespace Habanero.UI.Forms
             _comboBoxRightClickController.NewObjectCreated += NewComboBoxObjectCreated;
         }
 
-        private void NewComboBoxObjectCreated(BusinessObject businessObject)
+        private void NewComboBoxObjectCreated(IBusinessObject businessObject)
         {
             _collection.Add(businessObject);
             _comboBox.SelectedItem = businessObject;
@@ -168,7 +169,7 @@ namespace Habanero.UI.Forms
             {
                 cbx.Items.Add("");
             }
-            foreach (BusinessObject businessObjectBase in col)
+            foreach (IBusinessObject businessObjectBase in col)
             {
                 lbl.Text = businessObjectBase.ToString();
                 if (lbl.PreferredWidth > width)

@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 
@@ -94,7 +95,7 @@ namespace Habanero.BO
         /// <returns>
 		/// The index of item if found in the list; otherwise, -1.
 		/// </returns>
-		int IndexOf(BusinessObject item);
+		int IndexOf(IBusinessObject item);
 
 		/// <summary>
 		/// Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"></see> at the specified index.
@@ -103,7 +104,7 @@ namespace Habanero.BO
 		/// <param name="index">The zero-based index at which item should be inserted.</param>
 		/// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
 		/// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
-		void Insert(int index, BusinessObject item);
+		void Insert(int index, IBusinessObject item);
 
 		/// <summary>
 		/// Gets or sets the element at the specified index.
@@ -120,7 +121,7 @@ namespace Habanero.BO
 		/// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
 		/// <exception cref="T:System.NotSupportedException">
 		/// The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
-		void Add(BusinessObject item);
+		void Add(IBusinessObject item);
 
 		/// <summary>
 		/// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> contains a specific value.
@@ -130,7 +131,7 @@ namespace Habanero.BO
 		/// </returns>
 		/// <param name="item">The object to locate in the 
 		/// <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
-		bool Contains(BusinessObject item);
+		bool Contains(IBusinessObject item);
 
 		/// <summary>
 		/// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"></see> to an <see cref="T:System.Array"></see>, starting at a particular <see cref="T:System.Array"></see> index.
@@ -158,7 +159,7 @@ namespace Habanero.BO
         /// This method also returns false if item is not found in the original
         /// <see cref="T:System.Collections.Generic.ICollection`1"></see>.
         /// </returns>
-        bool Remove(BusinessObject item);
+        bool Remove(IBusinessObject item);
 
 		/// <summary>
 		/// Clears the collection
@@ -219,6 +220,6 @@ namespace Habanero.BO
         /// be added to the actual bo collection.
         /// </summary>
         /// <returns></returns>
-        BusinessObject CreateBusinessObject();
+        IBusinessObject CreateBusinessObject();
 	}
 }

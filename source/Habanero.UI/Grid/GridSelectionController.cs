@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.Util;
 
@@ -9,7 +10,7 @@ namespace Habanero.UI.Grid
     /// Delegate for setting the business object
     /// </summary>
     /// <param name="bo">The business object</param>
-    public delegate void SetBusinessObjectDelegate(BusinessObject bo);
+    public delegate void SetBusinessObjectDelegate(IBusinessObject bo);
 
     ///<summary>
     /// Controls the ability of the grid to keep track of it's currently selected Business Object
@@ -22,7 +23,7 @@ namespace Habanero.UI.Grid
         private VoidMethodWithSender _delayedItemSelectedMethod;
         private readonly List<SetBusinessObjectDelegate> _itemSelectedDelegates;
         //private int _oldRowNumber = -1;
-        private BusinessObject _currentBusinessObject;
+        private IBusinessObject _currentBusinessObject;
 		
         ///<summary>
         /// Initialises this GridSelectionController for the specified GridBase
@@ -97,7 +98,7 @@ namespace Habanero.UI.Grid
         /// </summary>
         private void FireItemSelected()
         {
-            BusinessObject businessObject = SelectedBusinessObject;
+            IBusinessObject businessObject = SelectedBusinessObject;
             _currentBusinessObject = businessObject;
             if (businessObject != null)
             {
@@ -156,7 +157,7 @@ namespace Habanero.UI.Grid
             //{
             //    rowIndex = _grid.CurrentCell.RowIndex;
             //}
-            BusinessObject businessObject = SelectedBusinessObject;
+            IBusinessObject businessObject = SelectedBusinessObject;
             //if (_oldRowNumber != rowIndex)
             if (businessObject != _currentBusinessObject)
             {

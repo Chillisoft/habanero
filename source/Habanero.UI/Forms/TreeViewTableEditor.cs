@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Grid;
@@ -140,7 +141,7 @@ namespace Habanero.UI.Forms
         {
             if (e.Node.Tag != null)
             {
-                BusinessObject sampleBo = (BusinessObject) e.Node.Tag;
+                IBusinessObject sampleBo = (BusinessObject) e.Node.Tag;
 				IBusinessObjectCollection collectionForNode;
                 try
                 {
@@ -204,7 +205,7 @@ namespace Habanero.UI.Forms
             /// </summary>
             /// <param name="sampleBo">A sample business object</param>
             /// <returns>Returns the business object collection</returns>
-			IBusinessObjectCollection GetCollection(BusinessObject sampleBo);
+			IBusinessObjectCollection GetCollection(IBusinessObject sampleBo);
         }
 
         /// <summary>
@@ -229,7 +230,7 @@ namespace Habanero.UI.Forms
             /// </summary>
             /// <param name="sampleBo">A sample business object</param>
             /// <returns>Returns the business object collection</returns>
-			public IBusinessObjectCollection GetCollection(BusinessObject sampleBo)
+			public IBusinessObjectCollection GetCollection(IBusinessObject sampleBo)
             {
                 return BOLoader.Instance.GetBusinessObjectCol(sampleBo.GetType(), "", "");
             }

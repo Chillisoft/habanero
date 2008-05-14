@@ -1,6 +1,6 @@
 namespace Habanero.UI.Base
 {
-    public interface IFormChilli
+    public interface IFormChilli : IControlChilli
     {
     }
 }

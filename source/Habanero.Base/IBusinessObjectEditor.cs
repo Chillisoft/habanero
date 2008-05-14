@@ -25,7 +25,7 @@ namespace Habanero.Base
     /// <summary>
     /// An interface to model an object editor
     /// </summary>
-    public interface IObjectEditor
+    public interface IBusinessObjectEditor
     {
         /// <summary>
         /// Edits the given object
@@ -36,13 +36,13 @@ namespace Habanero.Base
         /// will use a ui definition with no name attribute specified.</param>
         /// <returns>Returs true if edited successfully of false if the edits
         /// were cancelled</returns>
-        bool EditObject(object obj, string uiDefName);
+        bool EditObject(IBusinessObject obj, string uiDefName);
     }
 
     /// <summary>
     /// An interface to model an object editor
     /// </summary>
-    public interface IObjectEditor<T> : IObjectEditor
+    public interface IBusinessObjectEditor<T> : IBusinessObjectEditor
     {
         /// <summary>
         /// Edits the given object

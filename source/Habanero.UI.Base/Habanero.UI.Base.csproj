@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultBODeletor.cs" />
     <Compile Include="IControlCollection.cs" />
     <Compile Include="LayoutManagers\BorderLayoutManager.cs" />
     <Compile Include="ControlMappers\CheckBoxMapper.cs" />

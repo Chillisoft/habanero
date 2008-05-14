@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.WebGUI
@@ -42,7 +43,7 @@ namespace Habanero.WebGUI
         /// Adds a business object to the collection being represented
         /// </summary>
         /// <param name="bo">The business object to add</param>
-        void AddBusinessObject(BusinessObject bo);
+        void AddBusinessObject(IBusinessObject bo);
 
         /// <summary>
         /// The event of a row being double-clicked

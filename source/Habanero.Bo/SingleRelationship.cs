@@ -33,7 +33,7 @@ namespace Habanero.BO
     public class SingleRelationship : Relationship
     {
         //TODO: Implement logging private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
-        private BusinessObject _relatedBo;
+        private IBusinessObject _relatedBo;
         private string _storedRelationshipExpression;
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        public SingleRelationship(BusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
+        public SingleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {
         }
@@ -62,7 +62,7 @@ namespace Habanero.BO
         /// Returns the related object 
         /// </summary>
         /// <returns>Returns the related business object</returns>
-        public BusinessObject GetRelatedObject(IDatabaseConnection connection)
+        public IBusinessObject GetRelatedObject(IDatabaseConnection connection)
         {
         	return GetRelatedObject<BusinessObject>();
         }
@@ -72,7 +72,7 @@ namespace Habanero.BO
         /// </summary>
         /// <returns>Returns the related business object</returns>
         public T GetRelatedObject<T>()
-			where T: BusinessObject
+			where T : BusinessObject
         {
             IExpression newRelationshipExpression = _relKey.RelationshipExpression();
             if (_relatedBo == null ||
@@ -112,7 +112,7 @@ namespace Habanero.BO
         /// Sets the related object to that provided
         /// </summary>
         /// <param name="relatedObject">The object to relate to</param>
-        public void SetRelatedObject(BusinessObject relatedObject)
+        public void SetRelatedObject(IBusinessObject relatedObject)
         {
             _relatedBo = relatedObject;
             foreach (RelProp relProp in _relKey)

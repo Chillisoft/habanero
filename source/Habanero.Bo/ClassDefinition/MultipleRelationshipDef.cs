@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
@@ -149,7 +150,7 @@ namespace Habanero.BO.ClassDefinition
 		/// this relationship</param>
 		/// <param name="lBOPropCol">The collection of properties</param>
 		/// <returns>Returns the new relationship that has been created</returns>
-		public override Relationship CreateRelationship(BusinessObject owningBo, BOPropCol lBOPropCol)
+		public override Relationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
 		{
 			return new MultipleRelationship(owningBo, this, lBOPropCol);
 		}

@@ -1034,7 +1034,7 @@ namespace Habanero.BO
         /// <returns>
         /// The index of item if found in the list; otherwise, -1.
         /// </returns>
-        int IBusinessObjectCollection.IndexOf(BusinessObject item)
+        int IBusinessObjectCollection.IndexOf(IBusinessObject item)
         {
             return this.IndexOf((TBusinessObject) item);
         }
@@ -1046,7 +1046,7 @@ namespace Habanero.BO
         /// <param name="index">The zero-based index at which item should be inserted.</param>
         /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
-        void IBusinessObjectCollection.Insert(int index, BusinessObject item)
+        void IBusinessObjectCollection.Insert(int index, IBusinessObject item)
         {
             this.Insert(index, (TBusinessObject) item);
         }
@@ -1070,7 +1070,7 @@ namespace Habanero.BO
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
-        void IBusinessObjectCollection.Add(BusinessObject item)
+        void IBusinessObjectCollection.Add(IBusinessObject item)
         {
             this.Add((TBusinessObject) item);
         }
@@ -1083,7 +1083,7 @@ namespace Habanero.BO
         /// </returns>
         /// <param name="item">The object to locate in the 
         /// <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
-        bool IBusinessObjectCollection.Contains(BusinessObject item)
+        bool IBusinessObjectCollection.Contains(IBusinessObject item)
         {
             return this.Contains((TBusinessObject) item);
         }
@@ -1121,7 +1121,7 @@ namespace Habanero.BO
         /// This method also returns false if item is not found in the original
         /// <see cref="T:System.Collections.Generic.ICollection`1"></see>.
         /// </returns>
-        bool IBusinessObjectCollection.Remove(BusinessObject item)
+        bool IBusinessObjectCollection.Remove(IBusinessObject item)
         {
             return this.Remove((TBusinessObject) item);
         }
@@ -1180,7 +1180,7 @@ namespace Habanero.BO
             return newBO;
         }
 
-        BusinessObject IBusinessObjectCollection.CreateBusinessObject()
+        IBusinessObject IBusinessObjectCollection.CreateBusinessObject()
         {
             return CreateBusinessObject();
         }

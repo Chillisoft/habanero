@@ -18,14 +18,15 @@ namespace Habanero.UI.WebGUI
 
         public ReadOnlyGridButtonsControlGiz(IControlFactory controlFactory) : base(controlFactory)
         {
-            IButton addButton = AddButton("Add", FireAddButtonClicked);
-            addButton.Visible = true;
+            _deleteButton = AddButton("Delete", FireDeleteButtonClicked);
+            _deleteButton.Visible = false;
+           
 
             IButton editButton = AddButton("Edit", FireEditButtonClicked);
             editButton.Visible = true;
-
-            _deleteButton = AddButton("Delete", FireDeleteButtonClicked);
-            _deleteButton.Visible = false;
+            IButton addButton = AddButton("Add", FireAddButtonClicked);
+            addButton.Visible = true;
+            
         }
 
         void FireDeleteButtonClicked(object sender, EventArgs e)

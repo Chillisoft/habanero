@@ -20,6 +20,7 @@
 
 using System.Collections;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Grid
@@ -108,7 +109,7 @@ namespace Habanero.UI.Grid
         /// <summary>
         /// Returns the selected business object
         /// </summary>
-        public BusinessObject SelectedBusinessObject
+        public IBusinessObject SelectedBusinessObject
         {
             get { return this.GetSelectedBusinessObject(); }
         }

@@ -6,6 +6,7 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.Base.LayoutManagers;
 using log4net;
 
 namespace Habanero.UI.WebGUI
@@ -18,12 +19,13 @@ namespace Habanero.UI.WebGUI
     /// need to also implement a new version of the editor (see
     /// DefaultBOEditor for more information).
     /// </summary>
-    public class DefaultBOEditorForm : Form, IFormChilli, IDefaultBOEditorForm
+    public class DefaultBOEditorFormGiz : Form, IDefaultBOEditorForm
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.DefaultBOEditorForm");
+        private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.DefaultBOEditorFormGiz");
         private readonly string _uiDefName;
         private readonly IButtonGroupControl _buttons;
         protected BusinessObject _bo;
+        private readonly IControlFactory _controlFactory;
         private readonly IPanel _boPanel;
         protected IPanelFactoryInfo _panelFactoryInfo;
 
@@ -34,9 +36,11 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         /// <param name="bo">The business object to edit</param>
         /// <param name="uiDefName">The uiDefName</param>
-        public DefaultBOEditorForm(BusinessObject bo, string uiDefName)
+        /// <param name="controlFactory"></param>
+        public DefaultBOEditorFormGiz(BusinessObject bo, string uiDefName, IControlFactory controlFactory)
         {
             _bo = bo;
+            _controlFactory = controlFactory;
             _uiDefName = uiDefName;
 
             BOMapper mapper = new BOMapper(bo);
@@ -123,15 +127,15 @@ namespace Habanero.UI.WebGUI
             Width = width;
         }
 
-        /// <summary>
-        /// Constructor as before, but sets the uiDefName to an empty string,
-        /// which uses the ui definition without a specified name attribute
-        /// </summary>
-        /// <param name="bo">The business object to represent</param>
-        public DefaultBOEditorForm(BusinessObject bo)
-            : this(bo, "")
-        {
-        }
+        ///// <summary>
+        ///// Constructor as before, but sets the uiDefName to an empty string,
+        ///// which uses the ui definition without a specified name attribute
+        ///// </summary>
+        ///// <param name="bo">The business object to represent</param>
+        //public DefaultBOEditorFormGiz(BusinessObject bo)
+        //    : this(bo, "", null)
+        //{
+        //}
 
         /// <summary>
         /// Returns the panel object being managed
@@ -146,11 +150,9 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         protected virtual void CreateLayout()
         {
-            //TODO_Port: Find port for this
-            //IBorderLayoutManager borderLayoutManager;
-            //borderLayoutManager = new BorderLayoutManager(this);
-            //borderLayoutManager.AddControl(BoPanel, BorderLayoutManager.Position.Centre);
-            //borderLayoutManager.AddControl(Buttons, BorderLayoutManager.Position.South);
+            BorderLayoutManager borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
+            borderLayoutManager.AddControl(BoPanel, BorderLayoutManager.Position.Centre);
+            borderLayoutManager.AddControl(Buttons, BorderLayoutManager.Position.South);
         }
 
         /// <summary>
@@ -234,6 +236,27 @@ namespace Habanero.UI.WebGUI
         public IButtonGroupControl Buttons
         {
             get { return _buttons; }
+        }
+
+        IControlCollection IControlChilli.Controls
+        {
+            get { return new ControlCollectionGiz(this.Controls); }
+        }
+
+        /// <summary>
+        /// Pops the form up in a modal dialog.  If the BO is successfully edited and saved, returns true
+        /// else returns false.
+        /// </summary>
+        /// <returns>True if the edit was a success, false if not</returns>
+         bool IDefaultBOEditorForm.ShowDialog() {
+            if (this.ShowDialog() == DialogResult.OK)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

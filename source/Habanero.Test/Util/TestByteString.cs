@@ -154,7 +154,7 @@ namespace Habanero.Test.Util
         [Test]
         public void TestPropertyValue()
         {
-            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", new ByteString("test"));
             Assert.AreSame(typeof(ByteString), bo.GetPropertyValue("TestProp").GetType());
         }
@@ -162,7 +162,7 @@ namespace Habanero.Test.Util
         [Test]
         public void TestSetPropertyValueWithString()
         {
-            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             Assert.AreSame(typeof(ByteString), bo.GetPropertyValue("TestProp").GetType());
             Assert.AreEqual("test", bo.GetPropertyValue("TestProp").ToString());

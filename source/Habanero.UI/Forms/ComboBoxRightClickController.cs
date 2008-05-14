@@ -46,10 +46,10 @@ namespace Habanero.UI.Forms
         private ClassDef _lookupTypeClassDef;
         private ComboBox _comboBox;
         private string _uiDefName;
-        private IObjectCreator _objectCreator;
-        private IObjectEditor _objectEditor;
+        private IBusinessObjectCreator _BusinessObjectCreator;
+        private IBusinessObjectEditor _BusinessObjectEditor;
         private IObjectInitialiser _objectInitialiser;
-        
+
         ///<summary>
         /// Creates a new combo box right-click controller, which pops up a screen for the user 
         /// to create a new item to add to the combo box list.
@@ -62,16 +62,17 @@ namespace Habanero.UI.Forms
             _comboBox = comboBox;
             if (_lookupTypeClassDef != null)
             {
-                _objectCreator = new DefaultBOCreator(_lookupTypeClassDef);
-                _objectEditor = new DefaultBOEditor();
-            } else
-            {
-                _objectCreator = null;
-                _objectEditor = null;
+                _BusinessObjectCreator = new DefaultBOCreator(_lookupTypeClassDef);
+                _BusinessObjectEditor = new DefaultBOEditor();
             }
-            _objectInitialiser = null; 
+            else
+            {
+                _BusinessObjectCreator = null;
+                _BusinessObjectEditor = null;
+            }
+            _objectInitialiser = null;
         }
-        
+
         ///<summary>
         /// The name of the UI Definition to use for the pop-up form
         ///</summary>
@@ -80,23 +81,23 @@ namespace Habanero.UI.Forms
             get { return _uiDefName; }
             set { _uiDefName = value; }
         }
-        
+
         ///<summary>
         /// The Object Creator that will be used to create a new object for this combo box
         ///</summary>
-        public IObjectCreator ObjectCreator
+        public IBusinessObjectCreator BusinessObjectCreator
         {
-            get { return _objectCreator; }
-            set { _objectCreator = value; }
+            get { return _BusinessObjectCreator; }
+            set { _BusinessObjectCreator = value; }
         }
 
         ///<summary>
         /// The Object Editor that will be used to edit the newly created object
         ///</summary>
-        public IObjectEditor ObjectEditor
+        public IBusinessObjectEditor BusinessObjectEditor
         {
-            get { return _objectEditor; }
-            set { _objectEditor = value; }
+            get { return _BusinessObjectEditor; }
+            set { _BusinessObjectEditor = value; }
         }
 
         /// <summary>
@@ -184,10 +185,12 @@ namespace Habanero.UI.Forms
         {
             try
             {
-                if (_objectCreator != null && _objectEditor != null)
+                if (_BusinessObjectCreator != null && _BusinessObjectEditor != null)
                 {
-                    newBo = (BusinessObject)_objectCreator.CreateObject(_objectEditor, _objectInitialiser, GetUiDefName());
-                    return newBo != null;
+                    //  newBo = (BusinessObject)_BusinessObjectCreator.CreateBusinessObject(_BusinessObjectEditor, _objectInitialiser, GetUiDefName());
+                    newBo = (BusinessObject) _BusinessObjectCreator.CreateBusinessObject();
+                    if (_objectInitialiser != null) _objectInitialiser.InitialiseObject(newBo);
+                    return (_BusinessObjectEditor.EditObject(newBo, GetUiDefName()));
                 }
                 else
                 {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -143,7 +144,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             gridBase.SetCollection(col);
-            BusinessObject selectedBo = gridBase.SelectedBusinessObject;
+            IBusinessObject selectedBo = gridBase.SelectedBusinessObject;
             //---------------Test Result -----------------------
             Assert.AreSame(col[0], selectedBo);
             Assert.AreEqual(1, gridBase.SelectedBusinessObjects.Count);
@@ -174,7 +175,7 @@ namespace Habanero.Test.UI.Base
             MyBO boToSelect = col[1];
             gridBase.SelectedBusinessObject = boToSelect;
             //---------------Execute Test ----------------------
-            BusinessObject selectedBusinessObject = gridBase.SelectedBusinessObject;
+            IBusinessObject selectedBusinessObject = gridBase.SelectedBusinessObject;
             //---------------Test Result -----------------------
             Assert.AreEqual(boToSelect, selectedBusinessObject);
         }
@@ -312,8 +313,8 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> col;
             IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
             //---------------Execute Test ----------------------
-            BusinessObject businessObject2 = gridBase.GetBusinessObjectAtRow(2);
-            BusinessObject businessObject3 = gridBase.GetBusinessObjectAtRow(3);
+            IBusinessObject businessObject2 = gridBase.GetBusinessObjectAtRow(2);
+            IBusinessObject businessObject3 = gridBase.GetBusinessObjectAtRow(3);
             //---------------Test Result -----------------------
             Assert.AreSame(col[2], businessObject2);
             Assert.AreSame(col[3], businessObject3);

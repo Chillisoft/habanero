@@ -188,7 +188,7 @@ namespace Habanero.Test.UI.Forms
         public void TestCancelButton()
         {
             itsControl.CollectionComboBox.SelectedIndex = 1;
-            BusinessObject selectedBo = itsControl.SelectedBusinessObject;
+            IBusinessObject selectedBo = itsControl.SelectedBusinessObject;
             selectedBo.SetPropertyValue("TestProp", "xyz");
             itsControl.Buttons.ClickButton("Cancel");
             Assert.AreEqual("abc", selectedBo.GetPropertyValue("TestProp"));

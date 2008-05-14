@@ -31,7 +31,7 @@ namespace Habanero.UI.Forms
     /// from this class if you need to carry out additional steps at the time
     /// of creating a new business object.
     /// </summary>
-    public class DefaultBOCreator : IObjectCreator
+    public class DefaultBOCreator : IBusinessObjectCreator
     {
         private readonly ClassDef _classDef;
 
@@ -45,50 +45,50 @@ namespace Habanero.UI.Forms
             _classDef = classDef;
         }
 
-        /// <summary>
-        /// Creates a business object
-        /// </summary>
-        /// <param name="editor">An object editor</param>
-        /// <param name="uiDefName">The name of the set of ui definitions
-        /// used to design the edit form. Setting this to an empty string
-        /// will use a ui definition with no name attribute specified.</param>
-        /// <returns>Returns the business object created</returns>
-        public Object CreateObject(IObjectEditor editor, string uiDefName)
-        {
-            return this.CreateObject(editor, null, uiDefName);
-        }
+        ///// <summary>
+        ///// Creates a business object
+        ///// </summary>
+        ///// <param name="editor">An object editor</param>
+        ///// <param name="uiDefName">The name of the set of ui definitions
+        ///// used to design the edit form. Setting this to an empty string
+        ///// will use a ui definition with no name attribute specified.</param>
+        ///// <returns>Returns the business object created</returns>
+        //public Object CreateBusinessObject(IBusinessObjectEditor editor, string uiDefName)
+        //{
+        //    return this.CreateBusinessObject(editor, null, uiDefName);
+        //}
 
-        /// <summary>
-        /// Creates a business object
-        /// </summary>
-        /// <param name="editor">An object editor</param>
-        /// <param name="initialiser">An object initialiser</param>
-        /// <param name="uiDefName">The name of the set of ui definitions
-        /// used to design the edit form. Setting this to an empty string
-        /// will use a ui definition with no name attribute specified.</param>
-        /// <returns>Returns the business object created</returns>
-        public Object CreateObject(IObjectEditor editor, IObjectInitialiser initialiser, string uiDefName)
-        {
-            BusinessObject newBo = (BusinessObject) CreateObject();
-            if (initialiser != null)
-            {
-                initialiser.InitialiseObject(newBo);
-            }
-            if (editor.EditObject(newBo, uiDefName))
-            {
-                return newBo;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        ///// <summary>
+        ///// Creates a business object
+        ///// </summary>
+        ///// <param name="editor">An object editor</param>
+        ///// <param name="initialiser">An object initialiser</param>
+        ///// <param name="uiDefName">The name of the set of ui definitions
+        ///// used to design the edit form. Setting this to an empty string
+        ///// will use a ui definition with no name attribute specified.</param>
+        ///// <returns>Returns the business object created</returns>
+        //public Object CreateBusinessObject(IBusinessObjectEditor editor, IObjectInitialiser initialiser, string uiDefName)
+        //{
+        //    IBusinessObject newBo = (BusinessObject) CreateBusinessObject();
+        //    if (initialiser != null)
+        //    {
+        //        initialiser.InitialiseObject(newBo);
+        //    }
+        //    if (editor.EditObject(newBo, uiDefName))
+        //    {
+        //        return newBo;
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
 
         /// <summary>
         /// Just creates the object, without editing or saving it.
         /// </summary>
         /// <returns></returns>
-        public object CreateObject()
+        public IBusinessObject CreateBusinessObject()
         {
             return _classDef.CreateNewBusinessObject();
         }

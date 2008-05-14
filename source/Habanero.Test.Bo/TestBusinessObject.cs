@@ -233,7 +233,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBoNotEditableDeletable.LoadDefaultClassDef();
-            BusinessObject bo = classDef.CreateNewBusinessObject();
+            IBusinessObject bo = classDef.CreateNewBusinessObject();
             bo.Delete();
         }
 

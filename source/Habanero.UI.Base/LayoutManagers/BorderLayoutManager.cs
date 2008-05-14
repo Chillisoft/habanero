@@ -77,7 +77,7 @@ namespace Habanero.UI.Base.LayoutManagers
 
         protected override void RefreshControlPositions()
         {
-            throw new NotImplementedException();
+           
         }
 
         public override IControlChilli AddControl(IControlChilli control)
