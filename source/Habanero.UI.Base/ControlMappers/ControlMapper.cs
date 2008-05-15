@@ -198,7 +198,7 @@ namespace Habanero.UI.Base
         /// does not return the exact business object being shown in the
         /// control, but rather the broader business object shown in the
         /// form.  Where the business object has been amended or
-        /// altered, the ValueUpdated() method is automatically called here to 
+        /// altered, the UpdateControlValueFromBo() method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
         public BusinessObject BusinessObject
@@ -206,12 +206,12 @@ namespace Habanero.UI.Base
             get { return _businessObject; }
             set
             {
-                //RemoveCurrentBOPropHandlers();
+                //TODO PORT FOR WIN: RemoveCurrentBOPropHandlers();
                 _businessObject = value;
                 OnBusinessObjectChanged();
                 UpdateIsEditable();
-                ValueUpdated();
-                //AddCurrentBOPropHandlers();
+                UpdateControlValueFromBo();
+                //TODO PORT FOR WIN: AddCurrentBOPropHandlers();
             }
         }
 
@@ -324,14 +324,13 @@ namespace Habanero.UI.Base
         ///// <param name="e">Attached arguments regarding the event</param>
         //private void BOPropValueUpdatedHandler(object sender, EventArgs e)
         //{
-        //    ValueUpdated();
+        //    UpdateControlValueFromBo();
         //}
 
         /// <summary>
         /// Updates the value in the control from its business object.
         /// </summary>
-        /// TODO: Change the name of this method to something descriptive.
-        internal protected abstract void ValueUpdated();
+        internal protected abstract void UpdateControlValueFromBo();
 
         //Brett Moved to interface protected internal abstract void ApplyChangesToBusinessObject();
 

@@ -21,7 +21,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Controls access to the business object being represented
         /// by the control.  Where the business object has been amended or
-        /// altered, the ValueUpdated() method is automatically called here to 
+        /// altered, the UpdateControlValueFromBo() method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
         BusinessObject BusinessObject { get; set; }

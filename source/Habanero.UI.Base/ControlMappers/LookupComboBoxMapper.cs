@@ -70,7 +70,7 @@ namespace Habanero.UI.Base
         /// Updates the interface when the value has been changed in the
         /// object being represented
         /// </summary>
-        protected internal override void ValueUpdated()
+        protected internal override void UpdateControlValueFromBo()
         {
             if (_collection == null)
             {

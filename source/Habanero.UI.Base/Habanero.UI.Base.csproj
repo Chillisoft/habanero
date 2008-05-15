@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
     <Compile Include="DefaultBODeletor.cs" />
     <Compile Include="Grid\IDataGridView.cs" />
     <Compile Include="Grid\IDataGridViewCell.cs" />

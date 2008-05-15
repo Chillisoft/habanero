@@ -45,7 +45,7 @@ namespace Habanero.UI.Base
         /// Updates the appearance of the object when the value of the
         /// property has changed internally
         /// </summary>
-        protected internal override void ValueUpdated()
+        protected internal override void UpdateControlValueFromBo()
         {
             object propValue = GetPropertyValue();
             bool newValue;

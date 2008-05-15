@@ -10,5 +10,11 @@ namespace Habanero.UI.WebGUI
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
+
+        public bool ShowUpDown
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
     }
 }

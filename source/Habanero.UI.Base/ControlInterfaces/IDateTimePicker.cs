@@ -6,7 +6,9 @@ namespace Habanero.UI.Base
     {
         DateTime Value { get; set; }
 
-        string CustomFormat { get; }
+        string CustomFormat { get; set; }
+
+        bool ShowUpDown { get; set; }
 
         event EventHandler Enter;
     }

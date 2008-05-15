@@ -29,7 +29,7 @@ namespace Habanero.UI.Win
 		{
 			_dateTimePicker = dateTimePicker;
 			_dateTimePicker.KeyDown += DateTimePicker_KeyDown;
-			DateTimePickerUtil.AddValueChangedHandler(_dateTimePicker, DateTimePicker_ValueChanged);
+			DateTimePickerUtilWinTemp.AddValueChangedHandler(_dateTimePicker, DateTimePicker_ValueChanged);
 			_dateTimePicker.MouseUp += DateTimePicker_MouseUp;
 			_dateTimePicker.GotFocus += DateTimePicker_GotFocus;
 			_dateTimePicker.LostFocus += DateTimePicker_LostFocus;
@@ -48,7 +48,7 @@ namespace Habanero.UI.Win
         ~DateTimePickerControllerWin()
         {
             _dateTimePicker.KeyDown -= DateTimePicker_KeyDown;
-            DateTimePickerUtil.RemoveValueChangedHandler(_dateTimePicker, DateTimePicker_ValueChanged);
+            DateTimePickerUtilWinTemp.RemoveValueChangedHandler(_dateTimePicker, DateTimePicker_ValueChanged);
             _dateTimePicker.MouseUp -= DateTimePicker_MouseUp;
             _dateTimePicker.GotFocus -= DateTimePicker_GotFocus;
             _dateTimePicker.LostFocus -= DateTimePicker_LostFocus;
@@ -143,7 +143,7 @@ namespace Habanero.UI.Win
             {
                 if (!IsNull())
                 {
-                    return (DateTime) DateTimePickerUtil.GetValue(_dateTimePicker);
+                    return (DateTime) DateTimePickerUtilWinTemp.GetValue(_dateTimePicker);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace Habanero.UI.Win
                 if (Value == value) return;
                 if (value != null)
                 {
-                    DateTimePickerUtil.SetValue(_dateTimePicker, (DateTime) value);
+                    DateTimePickerUtilWinTemp.SetValue(_dateTimePicker, (DateTime) value);
                     ApplyValueFormat();
                 }
                 else

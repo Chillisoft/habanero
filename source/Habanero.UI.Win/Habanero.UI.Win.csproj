@@ -59,7 +59,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DateTimePicker\DateTimePickerControllerWin.cs" />
-    <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
+    <Compile Include="DateTimePicker\DateTimePickerUtilWinTemp.cs" />
     <Compile Include="FilterControlWin.cs">
       <SubType>Component</SubType>
     </Compile>

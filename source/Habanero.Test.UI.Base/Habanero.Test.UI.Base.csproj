@@ -72,6 +72,7 @@
     <Compile Include="Grid\TestReadOnlyGridButtonControl.cs" />
     <Compile Include="Grid\TestReadOnlyGridWithButtons.cs" />
     <Compile Include="LayoutManager\TestGridLayoutManager.cs" />
+    <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
     <Compile Include="Mappers\TestControlMapper.cs" />
     <Compile Include="Mappers\TestMapperBase.cs" />

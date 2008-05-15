@@ -27,7 +27,7 @@ namespace Habanero.UI.Win
     /// <summary>
     /// Gets and sets date-time values in any given date-time picker
     /// </summary>
-    public class DateTimePickerUtil
+    public class DateTimePickerUtilWinTemp
     {
         /// <summary>
         /// Gets a date-time value from the provided picker
@@ -38,10 +38,10 @@ namespace Habanero.UI.Win
         {
             PropertyInfo propInfo =
                 dateTimePicker.GetType().GetProperty("Value", BindingFlags.Instance | BindingFlags.Public);
-            object val = propInfo.GetValue(dateTimePicker, new object[] { });
+            object val = propInfo.GetValue(dateTimePicker, new object[] {});
             if (val != null)
             {
-                return (DateTime)val;
+                return (DateTime) val;
             }
             else
             {
@@ -58,7 +58,7 @@ namespace Habanero.UI.Win
         {
             PropertyInfo propInfo =
                 dateTimePicker.GetType().GetProperty("Value", BindingFlags.Instance | BindingFlags.Public);
-            propInfo.SetValue(dateTimePicker, date, new object[] { });
+            propInfo.SetValue(dateTimePicker, date, new object[] {});
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Habanero.UI.Win
             }
             PropertyInfo propInfo =
                 dateTimePicker.GetType().GetProperty("Value", BindingFlags.Instance | BindingFlags.Public);
-            propInfo.SetValue(dateTimePicker, dateValue, new object[] { });
+            propInfo.SetValue(dateTimePicker, dateValue, new object[] {});
         }
 
         /// <summary>
@@ -94,15 +94,15 @@ namespace Habanero.UI.Win
         {
             if (dateValue is DateTime)
             {
-                SetValue(dateTimePicker, (DateTime)dateValue);
+                SetValue(dateTimePicker, (DateTime) dateValue);
             }
             else if (dateValue is string)
             {
-                SetValue(dateTimePicker, (string)dateValue);
+                SetValue(dateTimePicker, (string) dateValue);
             }
             else if (dateValue == null)
             {
-                SetValue(dateTimePicker, (string)dateValue);
+                SetValue(dateTimePicker, (string) dateValue);
             }
             else
             {
@@ -124,9 +124,9 @@ namespace Habanero.UI.Win
                     dateTimePicker.GetType().GetProperty("FormatString", BindingFlags.Instance | BindingFlags.Public);
                 propInfo.SetValue(dateTimePicker, customFormat, new object[] { });
             }
-            else if (dateTimePicker is System.Windows.Forms.DateTimePicker)
+            else if (dateTimePicker is DateTimePicker)
             {
-                System.Windows.Forms.DateTimePicker picker = (System.Windows.Forms.DateTimePicker)dateTimePicker;
+                DateTimePicker picker = (DateTimePicker)dateTimePicker;
                 picker.Format = DateTimePickerFormat.Custom;
                 picker.CustomFormat = customFormat;
             }
@@ -144,9 +144,9 @@ namespace Habanero.UI.Win
                     dateTimePicker.GetType().GetProperty("FormatString", BindingFlags.Instance | BindingFlags.Public);
                 propInfo.SetValue(dateTimePicker, "hh:mm:ss", new object[] { });
             }
-            else if (dateTimePicker is System.Windows.Forms.DateTimePicker)
+            else if (dateTimePicker is DateTimePicker)
             {
-                System.Windows.Forms.DateTimePicker picker = (System.Windows.Forms.DateTimePicker)dateTimePicker;
+                DateTimePicker picker = (DateTimePicker)dateTimePicker;
                 picker.Format = DateTimePickerFormat.Time;
             }
         }
@@ -158,33 +158,34 @@ namespace Habanero.UI.Win
         /// <param name="showUpDown">Specifies if the Up/Down control must be shown or not</param>
         public static void SetShowUpDown(Control dateTimePicker, bool showUpDown)
         {
-            if (dateTimePicker is System.Windows.Forms.DateTimePicker)
+            if (dateTimePicker is DateTimePicker)
             {
-                System.Windows.Forms.DateTimePicker picker = (System.Windows.Forms.DateTimePicker)dateTimePicker;
+                DateTimePicker picker = (DateTimePicker)dateTimePicker;
                 picker.ShowUpDown = showUpDown;
             }
         }
 
         ///<summary>
-        /// Adds a ValueChanged handler for the date-time picker
-        ///</summary>
-        ///<param name="dateTimePicker">The date-time picker</param>
-        ///<param name="eventHandler">The Handler to add</param>
-        public static void AddValueChangedHandler(Control dateTimePicker, EventHandler eventHandler)
-        {
-            EventInfo valueChangedEventInfo = dateTimePicker.GetType().GetEvent("ValueChanged");
-            valueChangedEventInfo.AddEventHandler(dateTimePicker, eventHandler);
-        }
+		/// Adds a ValueChanged handler for the date-time picker
+		///</summary>
+		///<param name="dateTimePicker">The date-time picker</param>
+		///<param name="eventHandler">The Handler to add</param>
+		public static void AddValueChangedHandler(Control dateTimePicker, EventHandler eventHandler)
+		{
+			EventInfo valueChangedEventInfo = dateTimePicker.GetType().GetEvent("ValueChanged");
+			valueChangedEventInfo.AddEventHandler(dateTimePicker, eventHandler);
+		}
 
-        ///<summary>
-        /// Removes a ValueChanged handler for the date-time picker
-        ///</summary>
-        ///<param name="dateTimePicker">The date-time picker</param>
-        ///<param name="eventHandler">The Handler to remove</param>
-        public static void RemoveValueChangedHandler(Control dateTimePicker, EventHandler eventHandler)
-        {
-            EventInfo valueChangedEventInfo = dateTimePicker.GetType().GetEvent("ValueChanged");
-            valueChangedEventInfo.RemoveEventHandler(dateTimePicker, eventHandler);
-        }
+		///<summary>
+		/// Removes a ValueChanged handler for the date-time picker
+		///</summary>
+		///<param name="dateTimePicker">The date-time picker</param>
+		///<param name="eventHandler">The Handler to remove</param>
+		public static void RemoveValueChangedHandler(Control dateTimePicker, EventHandler eventHandler)
+		{
+			EventInfo valueChangedEventInfo = dateTimePicker.GetType().GetEvent("ValueChanged");
+			valueChangedEventInfo.RemoveEventHandler(dateTimePicker, eventHandler);
+		}
+
     }
 }
