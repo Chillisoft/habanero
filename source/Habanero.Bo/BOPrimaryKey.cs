@@ -53,7 +53,7 @@ namespace Habanero.BO
             //If the Business object is not new then you cannot set the objectID
             if (!IsObjectNew)
             {
-                throw new InvalidObjectIdException("The property for objectID cannot be null.");
+                throw new InvalidObjectIdException("The objectID cannot be set for an object that is not new.");
             }
             //If the object id is not already set then set it.
             if (_newObjectID == Guid.Empty)
@@ -62,7 +62,7 @@ namespace Habanero.BO
             }
             else if (_newObjectID != id)
             {
-                throw new InvalidObjectIdException("The property for objectID cannot be null.");
+                throw new InvalidObjectIdException("The ObjectId has already been set for this object.");
             }
         }
 
@@ -168,7 +168,11 @@ namespace Habanero.BO
         /// <returns>Returns a Guid</returns>
         public Guid GetGuid()
         {
-            return new Guid(this.GetObjectId().Substring(3, 38));
+            string objectId = this.GetObjectId();
+            objectId = objectId.TrimEnd('\'','}');
+            string guidString = objectId.Substring(objectId.Length - 36);
+            Guid guid = new Guid(guidString);
+            return guid;
         }
 
         /// <summary>

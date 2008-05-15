@@ -137,7 +137,7 @@ namespace Habanero.Test.BO
 			itsRelatedClassDef = MyRelatedBo.LoadClassDef();
 			MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
 			MyRelatedBo relatedBo = (MyRelatedBo)itsRelatedClassDef.CreateNewBusinessObject();
-			Guid myRelatedBoGuid = new Guid(relatedBo.ID.GetObjectId().Substring(3, 38));
+			Guid myRelatedBoGuid = relatedBo.ID.GetGuid();
 			bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
 			relatedBo.SetPropertyValue("MyRelatedTestProp", "MyValue");
 			BOMapper mapper = new BOMapper(bo1);

@@ -103,7 +103,7 @@ namespace Habanero.BO
                 }
                 else if ((Guid) ObjectIDProp.Value != id)
                 {
-                    throw new InvalidObjectIdException("The property for objectID cannot be null.");
+                    throw new InvalidObjectIdException("The ObjectId has already been set for this object.");
                 }
             }
             else
@@ -129,6 +129,27 @@ namespace Habanero.BO
         {
             return GetObjectId();
         }
+
+        /// <summary>
+        /// Returns an empty string
+        /// </summary>
+        /// <returns>Returns an empty string</returns>
+        internal override string GetOrigObjectID()
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// Indicates whether to check for duplicates. This will always
+        /// return false, since the objectID is guaranteed to be unique.
+        /// </summary>
+        /// <returns>Returns false</returns>
+        internal override bool IsDirtyOrNew()
+        {
+            return false;
+        }
+
+        #region Operator Overloads
 
         /// <summary>
         /// Indicates if a BOObjectID has the same value as a given Guid
@@ -174,6 +195,10 @@ namespace Habanero.BO
             return !(lhs == rhs);
         }
 
+        #endregion //Operator Overloads
+
+        #region Object method overloads
+
         /// <summary>
         /// Indicates if a specified BOObjectID has the same value as this one
         /// </summary>
@@ -202,23 +227,7 @@ namespace Habanero.BO
             return this.GetObjectId().GetHashCode();
         }
 
-        /// <summary>
-        /// Indicates whether to check for duplicates. This will always
-        /// return false, since the objectID is guaranteed to be unique.
-        /// </summary>
-        /// <returns>Returns false</returns>
-        internal override bool IsDirtyOrNew()
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// Returns an empty string
-        /// </summary>
-        /// <returns>Returns an empty string</returns>
-        internal override string GetOrigObjectID()
-        {
-            return "";
-        }
+        #endregion //Object method overloads
+                
     }
 }
