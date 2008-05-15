@@ -30,6 +30,6 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.4.0.*")]
+[assembly: AssemblyFileVersion("1.4.0.*")]
 [assembly: InternalsVisibleTo("Habanero.Test.WebGUI, PublicKeyToken=dc59c2bdcf195d0f, PublicKey=0024000004800000940000000602000000240000525341310004000001000100a784d663ca0c58daa206b43434c198d45db0b9a26d95ceafba0878fb517de3a178706478fdbd4916c9061548109ae9e10f4a79599e1e0776f577ab47e06ac73cae8945f8dc1ef8554da1a27ef8f9f2fb371a607b763663af3a8206de02f48f928d9aa40d1241493880af498d5038b86584fb984a6cadd15b3e4c1e86309448bd")]

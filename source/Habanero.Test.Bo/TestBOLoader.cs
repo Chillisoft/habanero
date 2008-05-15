@@ -335,7 +335,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestBOLoader_DoesNotRefreshDirtyObjects_WhenRetrievingFromObjectManager()
         {
-            //-------------Setup Test Pack
+            //-------------Setup Test Pack ------------------
             ContactPersonTestBO cpTemp = CreateSavedContactPerson();
 
             //-------------Execute test ---------------------
@@ -345,7 +345,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(cpTemp.AfterLoadCalled); 
             ContactPersonTestBO cpTemp2 =
                 BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(cpTemp.ContactPersonID);
-            //-------------Test Result ---------------------
+            //-------------Test Result ----------------------
             Assert.AreSame(cpTemp2, cpTemp2);
             Assert.AreEqual(newSurnameValue, cpTemp2.Surname);
             Assert.IsFalse(cpTemp2.AfterLoadCalled, "After load should not be called for a dirty object being loaded from DB"); 
@@ -354,22 +354,22 @@ namespace Habanero.Test.BO
         [Test]
         public void TestGetLoadedBusinessObject()
         {
-            //Setup
+            //-------------Setup Test Pack ------------------
             ContactPersonTestBO contactPersonTestBO = CreateSavedContactPerson();
-            //Fixture
+            //-------------Execute test ---------------------
             BusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPersonTestBO.PrimaryKey);
-            //Assert
+            //-------------Test Result ----------------------
             Assert.AreSame(contactPersonTestBO, businessObject);
         }
 
         [Test]
         public void TestGetLoadedBusinessObject_DoesNotRefreshNewBo()
         {
-            //Setup
+            //-------------Setup Test Pack ------------------
             ContactPerson contactPerson = new ContactPerson();
-            //Fixture
+            //-------------Execute test ---------------------
             BusinessObject businessObject = BOLoader.Instance.GetLoadedBusinessObject(contactPerson.PrimaryKey);
-            //Assert
+            //-------------Test Result ----------------------
             Assert.AreSame(contactPerson, businessObject);
         }
 

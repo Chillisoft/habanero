@@ -57,7 +57,7 @@ namespace Habanero.Test.UI.Forms
             ClassDef itsRelatedClassDef = MyRelatedBo.LoadClassDef();
             itsMyBo = (MyBO) itsClassDef.CreateNewBusinessObject(connection);
             MyRelatedBo relatedBo = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
-            Guid myRelatedBoGuid = new Guid(relatedBo.ID.GetObjectId().Substring(3, 38));
+            Guid myRelatedBoGuid = relatedBo.ID.GetGuid();
             itsMyBo.SetPropertyValue("RelatedID", myRelatedBoGuid);
             relatedBo.SetPropertyValue("MyRelatedTestProp", propValue);
             itsMyBo.Relationships = mockRelCol;

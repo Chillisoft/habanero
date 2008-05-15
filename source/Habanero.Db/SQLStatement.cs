@@ -32,6 +32,8 @@ namespace Habanero.DB
     /// </summary>
     public class SqlStatement : ISqlStatement
     {
+        private const string SELECT_CLAUSE_TOKEN = "SELECT ";
+        private const string DISTINCT_CLAUSE_TOKEN = " DISTINCT ";
         private const string FROM_CLAUSE_TOKEN = " FROM ";
         private const string JOIN_ON_TOKEN = " ON ";
         private const string WHERE_CLAUSE_TOKEN = " WHERE ";
@@ -244,10 +246,27 @@ namespace Habanero.DB
             {
                 posWhere = _statement.Length;
             }
-            string joinClause = " " + joinType.Trim().ToUpper() + " " + SqlFormattingHelper.FormatTableName(joinTable, _connection) +
+            joinType = joinType.Trim().ToUpper();
+            string joinClause = " " + joinType + " " + SqlFormattingHelper.FormatTableName(joinTable, _connection) +
                 JOIN_ON_TOKEN + joinCriteria;
             _statement.Insert(posWhere, ")" + joinClause);
             _statement.Insert(posFrom + FROM_CLAUSE_TOKEN.Length, "(");
+            if (joinType != "INNER JOIN")
+            {
+                AddDistinct();
+            }
+        }
+
+        private void AddDistinct()
+        {
+            int pos = FindStatementClauseToken(DISTINCT_CLAUSE_TOKEN);
+            if (pos != -1) return;
+            pos = FindStatementClauseToken(SELECT_CLAUSE_TOKEN);
+            if (pos == -1)
+            {
+                return;
+            }
+            _statement.Insert(pos + SELECT_CLAUSE_TOKEN.Length, DISTINCT_CLAUSE_TOKEN.Trim() + " ");
         }
 
         /// <summary>

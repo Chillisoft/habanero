@@ -220,68 +220,178 @@ namespace Habanero.Test.General
         //    Assert.AreEqual("SELECT * FROM FilledCircle, Circle, Shape WHERE Circle.CircleID = FilledCircle.CircleID AND Shape.ShapeID = Circle.ShapeID", FilledCircle.GetClassDef().SelectSql);
         //}
 
-        //TODO: Would like to separate these tests out later, but needs a structure
-        // change and I'm out of time right now.
-        [Test]
-        public void TestDatabaseReadWrite()
+        #region Utility Methods
+
+        private static Shape CreateSavedShape()
         {
-            // Test inserting & selecting
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";
             shape.Save();
+            return shape;
+        }
 
-            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
-            shapes.LoadAll();
-            Assert.AreEqual(1, shapes.Count);
-
-            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
-            circles.LoadAll();
-            Assert.AreEqual(0, circles.Count);
-
-            BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles = new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
-            filledCircles.LoadAll();
-            Assert.AreEqual(0, filledCircles.Count);
-
+        private static CircleNoPrimaryKey CreateSavedCircle()
+        {
             CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
             circle.Radius = 5;
             circle.ShapeName = "Circle";
             circle.Save();
+            return circle;
+        }
 
-            shapes.LoadAll();
-            Assert.AreEqual(2, shapes.Count);
-            Assert.AreEqual("MyShape", shapes[0].ShapeName);
-            Assert.AreEqual("Circle", shapes[1].ShapeName);
-
-            circles.LoadAll();
-            Assert.AreEqual(1, circles.Count);
-            Assert.AreEqual(circles[0].ShapeID, shapes[1].ShapeID);
-            Assert.AreEqual(5, circles[0].Radius);
-            Assert.AreEqual("Circle", circles[0].ShapeName);
-
+        private static FilledCircleInheritsCircleNoPK CreateSavedFilledCircle()
+        {
             FilledCircleInheritsCircleNoPK filledCircle = new FilledCircleInheritsCircleNoPK();
             filledCircle.Colour = 3;
             filledCircle.Radius = 7;
             filledCircle.ShapeName = "FilledCircle";
             filledCircle.Save();
+            return filledCircle;
+        }
 
+        #endregion //Utility Methods
+
+        [Test]
+        public void TestLoadCreatedShapes_ShapeOnly()
+        {
+            //-------------Setup Test Pack ------------------
+            Shape shape = CreateSavedShape();
+
+            //-------------Execute test ---------------------
+            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
             shapes.LoadAll();
+            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
+            circles.LoadAll();
+            BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles =
+                new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
+            filledCircles.LoadAll();
+
+            //-------------Test Result ----------------------
+            Assert.AreEqual(1, shapes.Count);
+            Assert.AreEqual(0, circles.Count);
+            Assert.AreEqual(0, filledCircles.Count);
+        }
+
+        [Test]
+        public void TestLoadCreatedShapes_ShapeAndCircleOnly()
+        {
+            //-------------Setup Test Pack ------------------
+            Shape shape = CreateSavedShape();
+            CircleNoPrimaryKey circle = CreateSavedCircle();
+
+            //-------------Execute test ---------------------
+            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
+            shapes.LoadAll();
+            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
+            circles.LoadAll();
+            BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles = new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
+            filledCircles.LoadAll();
+
+            //-------------Test Result ----------------------
+            Assert.AreEqual(2, shapes.Count);
+            Assert.AreEqual("MyShape", shapes[0].ShapeName);
+            Assert.AreEqual("Circle", shapes[1].ShapeName);
+
+            Assert.AreEqual(1, circles.Count);
+            Assert.AreEqual(circles[0].ShapeID, shapes[1].ShapeID);
+            Assert.AreEqual(5, circles[0].Radius);
+            Assert.AreEqual("Circle", circles[0].ShapeName);
+
+            Assert.AreEqual(0, filledCircles.Count);
+        }
+
+        [Test]
+        public void TestLoadCreatedShapes_ShapeAndCircleAndFilledCircle()
+        {
+            //-------------Setup Test Pack ------------------
+            Shape shape = CreateSavedShape();
+            CircleNoPrimaryKey circle = CreateSavedCircle();
+            FilledCircleInheritsCircleNoPK filledCircle = CreateSavedFilledCircle();
+
+            //-------------Execute test ---------------------
+            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
+            shapes.LoadAll();
+            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
+            circles.LoadAll();
+            BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles = new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
+            filledCircles.LoadAll();
+
+            //-------------Test Result ----------------------
             Assert.AreEqual(3, shapes.Count);
             Assert.AreEqual("MyShape", shapes[0].ShapeName);
             Assert.AreEqual("Circle", shapes[1].ShapeName);
             Assert.AreEqual("FilledCircle", shapes[2].ShapeName);
 
-            circles.LoadAll();
             Assert.AreEqual(2, circles.Count);
             Assert.AreEqual(circles[1].ShapeID, shapes[2].ShapeID);
             Assert.AreEqual(7, circles[1].Radius);
             Assert.AreEqual("FilledCircle", circles[1].ShapeName);
 
-            filledCircles.LoadAll();
             Assert.AreEqual(1, filledCircles.Count);
             Assert.AreEqual(filledCircles[0].ShapeID, shapes[2].ShapeID);
             Assert.AreEqual(7, filledCircles[0].Radius);
             Assert.AreEqual("FilledCircle", filledCircles[0].ShapeName);
             Assert.AreEqual(3, filledCircles[0].Colour);
+        }
+
+        [Test]
+        public void TestLoadUpdatedShapes()
+        {
+            //-------------Setup Test Pack ------------------
+            Shape shape = CreateSavedShape();
+            CircleNoPrimaryKey circle = CreateSavedCircle();
+            FilledCircleInheritsCircleNoPK filledCircle = CreateSavedFilledCircle();
+            shape.ShapeName = "MyShapeChanged";
+            shape.Save();
+            circle.ShapeName = "CircleChanged";
+            circle.Radius = 10;
+            circle.Save();
+            filledCircle.ShapeName = "FilledCircleChanged";
+            filledCircle.Radius = 12;
+            filledCircle.Colour = 4;
+            filledCircle.Save();
+
+            //-------------Execute test ---------------------
+            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
+            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
+            BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles = new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
+            shapes.LoadAll();
+            circles.LoadAll();
+            filledCircles.LoadAll();
+
+            //-------------Test Result ----------------------
+            Assert.AreEqual("MyShapeChanged", shapes[0].ShapeName);
+            Assert.AreEqual("CircleChanged", shapes[1].ShapeName);
+            Assert.AreEqual("FilledCircleChanged", shapes[2].ShapeName);
+            
+            Assert.AreEqual(10, circles[0].Radius);
+            Assert.AreEqual(12, circles[1].Radius);
+            Assert.AreEqual("CircleChanged", circles[0].ShapeName);
+            Assert.AreEqual("FilledCircleChanged", circles[1].ShapeName);
+            
+            Assert.AreEqual(4, filledCircles[0].Colour);
+            Assert.AreEqual(12, filledCircles[0].Radius);
+            Assert.AreEqual("FilledCircleChanged", filledCircles[0].ShapeName);
+        }
+
+        [Test]
+        public void TestLoadThenUpdateThenLoadAgain()
+        {
+            //-------------Setup Test Pack ------------------
+            Shape shape = CreateSavedShape();
+            CircleNoPrimaryKey circle = CreateSavedCircle();
+            FilledCircleInheritsCircleNoPK filledCircle = CreateSavedFilledCircle();
+            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
+            //shapes.LoadAll();
+            //Assert.AreEqual(3, shapes.Count);
+            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
+            circles.LoadAll();
+            Assert.AreEqual(2, circles.Count);
+            BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles =
+                new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
+            //filledCircles.LoadAll();
+            //Assert.AreEqual(1, filledCircles.Count);
+            //-------------Execute test ---------------------
 
             // Test updating
             shape.ShapeName = "MyShapeChanged";
@@ -299,58 +409,76 @@ namespace Habanero.Test.General
             Assert.AreEqual("CircleChanged", shapes[1].ShapeName);
             Assert.AreEqual("FilledCircleChanged", shapes[2].ShapeName);
             circles.LoadAll();
+            filledCircles.LoadAll();
             Assert.AreEqual(10, circles[0].Radius);
             Assert.AreEqual(12, circles[1].Radius);
             Assert.AreEqual("CircleChanged", circles[0].ShapeName);
             Assert.AreEqual("FilledCircleChanged", circles[1].ShapeName);
-            filledCircles.LoadAll();
             Assert.AreEqual(4, filledCircles[0].Colour);
             Assert.AreEqual(12, filledCircles[0].Radius);
             Assert.AreEqual("FilledCircleChanged", filledCircles[0].ShapeName);
+        }
 
-            // Test deleting
+        [Test]
+        public void TestDeleteShapes()
+        {
+            //-------------Setup Test Pack ------------------
+            Shape shape = CreateSavedShape();
+            CircleNoPrimaryKey circle = CreateSavedCircle();
+            FilledCircleInheritsCircleNoPK filledCircle = CreateSavedFilledCircle();
+            //-------------Execute test ---------------------
             shape.Delete();
             shape.Save();
             circle.Delete();
             circle.Save();
             filledCircle.Delete();
             filledCircle.Save();
-
+            //-------------Test Result ----------------------
+            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
+            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
+            BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles = new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
             shapes.LoadAll();
-            Assert.AreEqual(0, shapes.Count);
             circles.LoadAll();
-            Assert.AreEqual(0, circles.Count);
             filledCircles.LoadAll();
+            Assert.AreEqual(0, shapes.Count);
+            Assert.AreEqual(0, circles.Count);
             Assert.AreEqual(0, filledCircles.Count);
         }
 
         // Provided in case the above test fails and the rows remain in the database
-        [TestFixtureTearDown]
+        [TearDown]
         public void TearDown()
         {
-            Shape shape = BOLoader.Instance.GetBusinessObject<Shape>(
-                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'");
-            if (shape != null)
+            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
+            shapes.LoadAll();
+            foreach (Shape shape in shapes)
             {
                 shape.Delete();
-                shape.Save();
             }
+            shapes.SaveAll();
+            //Shape shape = BOLoader.Instance.GetBusinessObject<Shape>(
+            //    "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'");
+            //if (shape != null)
+            //{
+            //    shape.Delete();
+            //    shape.Save();
+            //}
 
-            CircleNoPrimaryKey circle = BOLoader.Instance.GetBusinessObject<CircleNoPrimaryKey>(
-                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'");
-            if (circle != null)
-            {
-                circle.Delete();
-                circle.Save();
-            }
+            //CircleNoPrimaryKey circle = BOLoader.Instance.GetBusinessObject<CircleNoPrimaryKey>(
+            //    "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'");
+            //if (circle != null)
+            //{
+            //    circle.Delete();
+            //    circle.Save();
+            //}
 
-            FilledCircleInheritsCircleNoPK filledCircle = BOLoader.Instance.GetBusinessObject<FilledCircleInheritsCircleNoPK>(
-                "ShapeName = 'FilledCircle' OR ShapeName = 'FilledCircleChanged'");
-            if (filledCircle != null)
-            {
-                filledCircle.Delete();
-                filledCircle.Save();
-            }
+            //FilledCircleInheritsCircleNoPK filledCircle = BOLoader.Instance.GetBusinessObject<FilledCircleInheritsCircleNoPK>(
+            //    "ShapeName = 'FilledCircle' OR ShapeName = 'FilledCircleChanged'");
+            //if (filledCircle != null)
+            //{
+            //    filledCircle.Delete();
+            //    filledCircle.Save();
+            //}
         }
     }
 }
