@@ -52,11 +52,9 @@ namespace Habanero.UI.Base
                 return;
             }
 
-            DataView dataView = GetDataTable(col);
-
+            _gridBase.DataSource = GetDataTable(col);
 
             _gridBase.AllowUserToAddRows = false;
-            _gridBase.DataSource = dataView;
 
             if (_gridBase.Rows.Count > 0)
             {
@@ -71,9 +69,7 @@ namespace Habanero.UI.Base
             _dataSetProvider = new BOCollectionReadOnlyDataSetProvider(col);
             ClassDef classDef = _boCol.ClassDef;
             UIDef uiDef = classDef.GetUIDef(_uiDefName);
-            UIGrid uiGrid = uiDef.UIGrid;
-            DataTable dataTable = _dataSetProvider.GetDataTable(uiGrid);
-            //return dataTable;
+            DataTable dataTable = _dataSetProvider.GetDataTable(uiDef.UIGrid);
             _dataTableDefaultView = dataTable.DefaultView;
             return this._dataTableDefaultView;
         }
@@ -308,7 +304,6 @@ namespace Habanero.UI.Base
         /// if none is found</returns>
         public BusinessObject GetBusinessObjectAtRow(int row)
         {
-            //return _boCol[row];
             int i = 0;
             foreach (DataRowView dataRowView in _dataTableDefaultView)
             {

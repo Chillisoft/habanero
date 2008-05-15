@@ -48,7 +48,26 @@ namespace Habanero.Test.UI.Base
                 frm.Controls.Add(gridBase);
                 return gridBase;
             }
+            //TODO: To be implemented in Win
+            [Test, Ignore("To be implemented in win")]
+            public void Test_RowShowingBusinessObjectsValues()
+            {
+                //---------------Set up test pack-------------------
+                MyBO.LoadDefaultClassDef();
+                BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+                IGridBase gridBase = CreateGridBaseStub();
+                SetupGridColumnsForMyBo(gridBase);
+                string propName = "TestProp";
+                int rowIndex = 1;
+                //---------------Execute Test ----------------------
+                gridBase.SetCollection(col);
 
+                //---------------Test Result -----------------------
+                MyBO selectedBo = (MyBO)gridBase.GetBusinessObjectAtRow(rowIndex);
+                IDataGridViewRow row = gridBase.Rows[rowIndex];
+                IDataGridViewCell cell = row.Cells[propName];
+                Assert.AreEqual(selectedBo.TestProp, cell.Value);
+            }
             [Test]
             public void TestRowIsRefreshed()
             {
@@ -125,7 +144,6 @@ namespace Habanero.Test.UI.Base
                 Gizmox.WebGUI.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
                 return row.Cells[propName];
             }
-            //TODO: To be implemented in Win
             [Test]
             public void Test_RowShowingBusinessObjectsValues()
             {
@@ -144,6 +162,25 @@ namespace Habanero.Test.UI.Base
                 IDataGridViewRow row = gridBase.Rows[rowIndex];
                 IDataGridViewCell cell = row.Cells[propName];
                 Assert.AreEqual(selectedBo.TestProp, cell.Value);
+            }
+            [Test]
+            public void Test_DeleteObjectInGridThenSetCollectionCausesInfiniteLoop_InGiz()
+            {
+                //---------------Set up test pack-------------------
+                MyBO.LoadDefaultClassDef();
+                BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+                IGridBase gridBase = CreateGridBaseStub();
+                SetupGridColumnsForMyBo(gridBase);
+                gridBase.SetCollection(col);
+                string propName = "TestProp";
+                //---------------Execute Test ----------------------
+                MyBO bo = col[1];
+                gridBase.SelectedBusinessObject = bo;
+                col.Remove(bo);
+                gridBase.SetSortColumn(propName,true);
+                col = CreateCollectionWith_4_Objects();
+                gridBase.SetCollection(col);
+                //---------------Test Result -----------------------
             }
         }
 
@@ -209,33 +246,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, gridBase.SelectedBusinessObjects.Count);
         }
 
-
-
-        //            BusinessObjectCollection<MyBO> col;
-        //    IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
-        //    string propName = "TestProp";
-        //    int rowIndex = 1;
-        //    MyBO bo = col[rowIndex];
-
-        //    //---------------verify preconditions---------------
-        //    Gizmox.WebGUI.Forms.DataGridViewCell cell = GetCell(rowIndex, propName, gridBase);
-        //    Assert.AreEqual(bo.GetPropertyValue(propName), cell.Value);
-
-        //    //---------------Execute Test ----------------------
-        //    bo.SetPropertyValue(propName, "UpdatedValue");
-
-        //    //---------------Test Result -----------------------
-        //    //gridBase.SelectedBusinessObject = bo;
-
-        //    cell = GetCell(rowIndex, propName, gridBase);
-        //    Assert.AreEqual("UpdatedValue", cell.Value);
-        //}
-        //private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName, IGridBase gridBase)
-        //{
-        //    Gizmox.WebGUI.Forms.DataGridView dgv = (Gizmox.WebGUI.Forms.DataGridView)gridBase;
-        //    Gizmox.WebGUI.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
-        //    return row.Cells[propName];
-        //}
         [Test]
         public void TestSetSelectedBusinessObject()
         {
