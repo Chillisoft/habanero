@@ -17,6 +17,7 @@ namespace Habanero.UI.Base
 
         private IBusinessObjectCollection _boCol;
         private readonly string _uiDefName;
+        private DataView _dataTableDefaultView;
 
         public event EventHandler CollectionChanged;
 
@@ -73,7 +74,8 @@ namespace Habanero.UI.Base
             UIGrid uiGrid = uiDef.UIGrid;
             DataTable dataTable = _dataSetProvider.GetDataTable(uiGrid);
             //return dataTable;
-            return dataTable.DefaultView;
+            _dataTableDefaultView = dataTable.DefaultView;
+            return this._dataTableDefaultView;
         }
 
         public BusinessObject SelectedBusinessObject
@@ -306,16 +308,16 @@ namespace Habanero.UI.Base
         /// if none is found</returns>
         public BusinessObject GetBusinessObjectAtRow(int row)
         {
-            return _boCol[row];
-            //int i = 0; 
-            //foreach (DataRowView dataRowView in _dataTableDefaultView)
-            //{
-            //    if (i++ == row)
-            //    {
-            //        return this._dataSetProvider.Find((string)dataRowView.Row["ID"]);
-            //    }
-            //}
-            //return null;
+            //return _boCol[row];
+            int i = 0;
+            foreach (DataRowView dataRowView in _dataTableDefaultView)
+            {
+                if (i++ == row)
+                {
+                    return this._dataSetProvider.Find((string)dataRowView.Row["ID"]);
+                }
+            }
+            return null;
         }
 
         public void Clear()

@@ -328,7 +328,7 @@ namespace Habanero.Test.UI.Grid
  
             //---------------Tear Down -------------------------          
         }
-
+        //TODO:
         // These two tests both write to the database.  If there is a way
         //   to mock these without writing then please change it, but I
         //   couldn't see how to mock a BO or a connection successfully
@@ -355,7 +355,7 @@ namespace Habanero.Test.UI.Grid
             ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(contactPersonPK);
             Assert.IsNull(contactPerson);
         }
-
+        //TODO:
         [Test, Ignore("Ignore to be sorted out by brett")]
         public void TestAcceptance_DeleteButtonClickUnsuccessfulDelete()
         {

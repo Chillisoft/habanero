@@ -198,7 +198,9 @@ namespace Habanero.UI.WebGUI
 
             public int Add(string columnName, string headerText)
             {
-                return _columns.Add(columnName, headerText);
+                int addedColumn = _columns.Add(columnName, headerText);
+                _columns[addedColumn].DataPropertyName = columnName;
+                return addedColumn;
             }
 
             //public void Add(string columnName)

@@ -49,7 +49,7 @@ namespace Habanero.Test.UI.Base
                 return gridBase;
             }
 
-            [Test, Ignore("Not sure why this is no longer working cell value always null")]
+            [Test]
             public void TestRowIsRefreshed()
             {
                 //---------------Set up test pack-------------------
@@ -60,7 +60,7 @@ namespace Habanero.Test.UI.Base
                 //---------------Execute Test ----------------------
                 string propName = "TestProp";
                 bo.SetPropertyValue(propName, "UpdatedValue");
-                
+
                 //---------------Test Result -----------------------
                 gridBase.SelectedBusinessObject = bo;
                 //System.Windows.Forms.DataGridViewRow row = (System.Windows.Forms.DataGridViewRow) gridBase.Rows[0];
@@ -68,9 +68,11 @@ namespace Habanero.Test.UI.Base
                 System.Windows.Forms.DataGridViewCell cell = GetCell(0, propName, gridBase);
                 Assert.AreEqual("UpdatedValue", cell.Value);
             }
-            private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName, IGridBase gridBase)
+
+            private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
+                                                                         IGridBase gridBase)
             {
-                System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView)gridBase;
+                System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView) gridBase;
                 System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
                 return row.Cells[propName];
             }
@@ -91,7 +93,8 @@ namespace Habanero.Test.UI.Base
                 frm.Controls.Add(gridBase);
                 return gridBase;
             }
-            [Test, Ignore("Not sure why this is no longer working cell value always null")]
+
+            [Test]
             public void TestRowIsRefreshed()
             {
                 //---------------Set up test pack-------------------
@@ -100,7 +103,7 @@ namespace Habanero.Test.UI.Base
                 string propName = "TestProp";
                 int rowIndex = 1;
                 MyBO bo = col[rowIndex];
-  
+
                 //---------------verify preconditions---------------
                 Gizmox.WebGUI.Forms.DataGridViewCell cell = GetCell(rowIndex, propName, gridBase);
                 Assert.AreEqual(bo.GetPropertyValue(propName), cell.Value);
@@ -114,13 +117,34 @@ namespace Habanero.Test.UI.Base
                 cell = GetCell(rowIndex, propName, gridBase);
                 Assert.AreEqual("UpdatedValue", cell.Value);
             }
-            private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName, IGridBase gridBase)
+
+            private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
+                                                                        IGridBase gridBase)
             {
-                Gizmox.WebGUI.Forms.DataGridView dgv = (Gizmox.WebGUI.Forms.DataGridView)gridBase;
+                Gizmox.WebGUI.Forms.DataGridView dgv = (Gizmox.WebGUI.Forms.DataGridView) gridBase;
                 Gizmox.WebGUI.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
                 return row.Cells[propName];
             }
+            //TODO: To be implemented in Win
+            [Test]
+            public void Test_RowShowingBusinessObjectsValues()
+            {
+                //---------------Set up test pack-------------------
+                MyBO.LoadDefaultClassDef();
+                BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+                IGridBase gridBase = CreateGridBaseStub();
+                SetupGridColumnsForMyBo(gridBase);
+                string propName = "TestProp";
+                int rowIndex = 1;
+                //---------------Execute Test ----------------------
+                gridBase.SetCollection(col);
 
+                //---------------Test Result -----------------------
+                MyBO selectedBo = (MyBO)gridBase.GetBusinessObjectAtRow(rowIndex);
+                IDataGridViewRow row = gridBase.Rows[rowIndex];
+                IDataGridViewCell cell = row.Cells[propName];
+                Assert.AreEqual(selectedBo.TestProp, cell.Value);
+            }
         }
 
         [Test]
@@ -168,8 +192,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------    
         }
 
-
-
         [Test]
         public void Test_SelectedBusinessObject_FirstRowIsSelected()
         {
@@ -187,6 +209,33 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, gridBase.SelectedBusinessObjects.Count);
         }
 
+
+
+        //            BusinessObjectCollection<MyBO> col;
+        //    IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+        //    string propName = "TestProp";
+        //    int rowIndex = 1;
+        //    MyBO bo = col[rowIndex];
+
+        //    //---------------verify preconditions---------------
+        //    Gizmox.WebGUI.Forms.DataGridViewCell cell = GetCell(rowIndex, propName, gridBase);
+        //    Assert.AreEqual(bo.GetPropertyValue(propName), cell.Value);
+
+        //    //---------------Execute Test ----------------------
+        //    bo.SetPropertyValue(propName, "UpdatedValue");
+
+        //    //---------------Test Result -----------------------
+        //    //gridBase.SelectedBusinessObject = bo;
+
+        //    cell = GetCell(rowIndex, propName, gridBase);
+        //    Assert.AreEqual("UpdatedValue", cell.Value);
+        //}
+        //private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName, IGridBase gridBase)
+        //{
+        //    Gizmox.WebGUI.Forms.DataGridView dgv = (Gizmox.WebGUI.Forms.DataGridView)gridBase;
+        //    Gizmox.WebGUI.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
+        //    return row.Cells[propName];
+        //}
         [Test]
         public void TestSetSelectedBusinessObject()
         {
@@ -244,7 +293,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsNull(gridBase.SelectedBusinessObject);
             Assert.IsNull(gridBase.CurrentRow);
-                //The current row is never set see ignored test TestSelectedBusinessObject_SetsCurrentRow
+            //The current row is never set see ignored test TestSelectedBusinessObject_SetsCurrentRow
         }
 
         [Test]
@@ -451,6 +500,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(5, gridBase.Rows.Count);
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestRemoveItemFromCollectionRemovesItemFromGrid()
         {
@@ -468,26 +518,36 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(3, gridBase.Rows.Count);
             //---------------Tear Down -------------------------          
         }
-        [Test, Ignore("This will need to work after the implementation of the dataTable behind the grid is improved.")]
+
+        [Test]
         public void TestSetSortColumn()
         {
             //---------------Set up test pack-------------------
 
             BusinessObjectCollection<MyBO> col;
             IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            MyBO bo_b = col[0];
+            MyBO bo_d = col[1];
+            MyBO bo_c = col[2];
+            MyBO bo_a = col[3];
+            //---------------Verify PreConditions --------------
+            Assert.AreEqual("b", bo_b.TestProp);
+            Assert.AreEqual("d", bo_d.TestProp);
+            Assert.AreEqual("c", bo_c.TestProp);
+            Assert.AreEqual("a", bo_a.TestProp);
+            Assert.AreEqual(bo_b, gridBase.GetBusinessObjectAtRow(0));
+            Assert.AreEqual(bo_d, gridBase.GetBusinessObjectAtRow(1));
+            Assert.AreEqual(bo_c, gridBase.GetBusinessObjectAtRow(2));
+            Assert.AreEqual(bo_a, gridBase.GetBusinessObjectAtRow(3));
             //---------------Execute Test ----------------------
             gridBase.SetSortColumn("TestProp", true);
             //---------------Test Result -----------------------
-            Assert.AreSame(col[3], gridBase.GetBusinessObjectAtRow(1),
-                           "The object with testprop = 'a' should be at row 1");
-            Assert.AreSame(col[0], gridBase.GetBusinessObjectAtRow(2),
-                           "The object with testprop = 'b' should be at row 2");
-            Assert.AreSame(col[2], gridBase.GetBusinessObjectAtRow(3),
-                           "The object with testprop = 'c' should be at row 3");
-            Assert.AreSame(col[1], gridBase.GetBusinessObjectAtRow(4),
-                           "The object with testprop = 'd' should be at row 4");
-            //---------------Tear Down -------------------------
+            Assert.AreEqual(bo_a, gridBase.GetBusinessObjectAtRow(0));
+            Assert.AreEqual(bo_b, gridBase.GetBusinessObjectAtRow(1));
+            Assert.AreEqual(bo_c, gridBase.GetBusinessObjectAtRow(2));
+            Assert.AreEqual(bo_d, gridBase.GetBusinessObjectAtRow(3));
         }
+
         [Test, Ignore("Peter what is this when is it used must we implement")]
         public void TestGetCollectionClone()
         {
@@ -499,6 +559,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             ////Assert.AreEqual( 4,cloneCol.Count);
         }
+
         #region Utility Methods 
 
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
@@ -532,6 +593,7 @@ namespace Habanero.Test.UI.Base
             gridBase.Columns.Add("ID", "ID");
             gridBase.Columns.Add("TestProp", "TestProp");
         }
+
         internal class GridBaseGizStub : GridBaseGiz
         {
         }
