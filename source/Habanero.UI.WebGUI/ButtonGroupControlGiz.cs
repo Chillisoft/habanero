@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Base.LayoutManagers;
 
 namespace Habanero.UI.WebGUI
 {

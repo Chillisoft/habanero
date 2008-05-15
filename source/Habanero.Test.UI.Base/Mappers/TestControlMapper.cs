@@ -127,7 +127,7 @@ namespace Habanero.Test.UI.Base
         public void TestCreateMapper()
         {
             ITextBox b = GetControlFactory().CreateTextBox();
-            ControlMapper mapper = ControlMapper.Create("TextBoxMapper", "", b, "Test", false);
+            IControlMapper mapper = ControlMapper.Create("TextBoxMapper", "", b, "Test", false, GetControlFactory());
             Assert.AreSame(typeof (TextBoxMapper), mapper.GetType());
             Assert.AreSame(b, mapper.Control);
         }
@@ -136,7 +136,7 @@ namespace Habanero.Test.UI.Base
         public void TestCreateMapperWithAssembly()
         {
             ITextBox b = GetControlFactory().CreateTextBox();
-            ControlMapper mapper = ControlMapper.Create("Habanero.UI.Base.TextBoxMapper", "Habanero.UI.Base", b, "Test", false);
+            IControlMapper mapper = ControlMapper.Create("Habanero.UI.Base.TextBoxMapper", "Habanero.UI.Base", b, "Test", false, GetControlFactory());
             Assert.AreSame(typeof(TextBoxMapper), mapper.GetType());
             Assert.AreSame(b, mapper.Control);
         }

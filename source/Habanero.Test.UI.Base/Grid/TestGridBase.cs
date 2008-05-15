@@ -4,6 +4,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.Base.FilterControl;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
@@ -86,6 +87,27 @@ namespace Habanero.Test.UI.Base
                 //System.Windows.Forms.DataGridViewCell cell = row.Cells[propName];
                 System.Windows.Forms.DataGridViewCell cell = GetCell(0, propName, gridBase);
                 Assert.AreEqual("UpdatedValue", cell.Value);
+            }
+
+            [Test]
+            public void TestApplyFilterFiresFilterUpdatedEvent()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                GridBaseWin gridBase = (GridBaseWin) GetGridBaseWith_4_Rows(out col);
+                string filterString = col[2].ID.ToString().Substring(5, 30);
+                IFilterClauseFactory factory = new DataViewFilterClauseFactory();
+                IFilterClause filterClause = factory.CreateStringFilterClause("ID", FilterClauseOperator.OpLike, filterString);
+                bool filterUpdatedFired = false;
+                gridBase.FilterUpdated += delegate { filterUpdatedFired = true; };
+                //---------------Execute Test ----------------------
+
+                gridBase.ApplyFilter(filterClause);
+                //---------------Test Result -----------------------
+
+                Assert.IsTrue(filterUpdatedFired);
+               
+                //---------------Tear Down -------------------------
             }
 
             private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
@@ -558,17 +580,49 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(bo_d, gridBase.GetBusinessObjectAtRow(3));
         }
 
-        [Test, Ignore("Peter what is this when is it used must we implement")]
-        public void TestGetCollectionClone()
+        [Test]
+        public void TestApplyFilter()
         {
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> col;
             IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            string filterString = col[2].ID.ToString().Substring(5, 30);
+            IFilterClauseFactory factory = new DataViewFilterClauseFactory();
+            IFilterClause filterClause =factory.CreateStringFilterClause("ID", FilterClauseOperator.OpLike, filterString);
             //---------------Execute Test ----------------------
-            ///To be implemented IBusinessObjectCollection cloneCol = gridBase.GetCollectionClone();
+
+            gridBase.ApplyFilter(filterClause);
             //---------------Test Result -----------------------
-            ////Assert.AreEqual( 4,cloneCol.Count);
+
+            Assert.AreEqual(1, gridBase.Rows.Count);
+            Assert.AreSame(col[2], gridBase.GetBusinessObjectAtRow(0));
+            //---------------Tear Down -------------------------
         }
+
+
+        [Test]
+        public void TestClearFilter()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            string filterString = col[2].ID.ToString().Substring(5, 30);
+            IFilterClauseFactory factory = new DataViewFilterClauseFactory();
+            IFilterClause filterClause = factory.CreateStringFilterClause("ID", FilterClauseOperator.OpLike, filterString);
+            gridBase.ApplyFilter(filterClause);
+
+            //---------------Verify PreConditions --------------
+            Assert.AreEqual(1, gridBase.Rows.Count);
+
+            //---------------Execute Test ----------------------
+            gridBase.ApplyFilter(null);
+
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(4, gridBase.Rows.Count);
+            //---------------Tear Down -------------------------
+        }
+
 
         #region Utility Methods 
 
@@ -618,5 +672,10 @@ namespace Habanero.Test.UI.Base
 
     internal class DataGridViewColumnStub : IDataGridViewColumn
     {
+        public bool Visible
+        {
+            get { return false; }
+            set {  }
+        }
     }
 }

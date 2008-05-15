@@ -24,7 +24,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Base.LayoutManagers;
 using log4net;
 
 namespace Habanero.UI.Base
@@ -269,10 +268,10 @@ namespace Habanero.UI.Base
 
                     CheckGeneralParameters(field, ctl);
 
-                    ControlMapper ctlMapper =
+                    IControlMapper ctlMapper =
                         ControlMapper.Create(field.MapperTypeName, field.MapperAssembly, ctl, field.PropertyName,
-                                             !editable);
-                    ctlMapper.SetPropertyAttributes(field.Parameters);
+                                             !editable, _controlFactory);
+                    //TODO PORT: ctlMapper.SetPropertyAttributes(field.Parameters);
                     controlMappers.Add(ctlMapper);
                     ctlMapper.BusinessObject = _currentBusinessObject;
 

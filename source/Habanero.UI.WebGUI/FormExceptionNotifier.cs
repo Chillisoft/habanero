@@ -22,8 +22,9 @@ using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.UI.Base;
 
-namespace Habanero.WebGUI
+namespace Habanero.UI.WebGUI
 {
     /// <summary>
     /// Provides a form that displays an exception to the user
@@ -38,84 +39,21 @@ namespace Habanero.WebGUI
         /// <param name="title">The title</param>
         public void Notify(Exception ex, string furtherMessage, string title)
         {
-            //new ExceptionNotifyForm(ex, furtherMessage, title).ShowDialog();
             new CollapsibleExceptionNotifyForm(ex, furtherMessage, title).ShowDialog();
         }
-
-/*
-        /// <summary>
-        /// Provides a form to display the exception message using two tabs,
-        /// one for the basic message and one for the detailed error information
-        /// </summary>
-        private class ExceptionNotifyForm : Form
-        {
-            /// <summary>
-            /// Constructor to initialise the form
-            /// </summary>
-            /// <param name="ex">The exception</param>
-            /// <param name="furtherMessage">Extra error messages</param>
-            /// <param name="title">The title</param>
-            public ExceptionNotifyForm(Exception ex, string furtherMessage, string title)
-            {
-                TabControl tabControl = new TabControl();
-                ButtonControl buttons = new ButtonControl();
-                buttons.AddButton("OK", new EventHandler(OKButtonClickHandler));
-
-                BorderLayoutManager manager = new BorderLayoutManager(this);
-                manager.AddControl(tabControl, BorderLayoutManager.Position.Centre);
-                manager.AddControl(buttons, BorderLayoutManager.Position.South);
-
-                TabPage messageTabPage = ControlFactory.CreateTabPage("Message");
-                Label messageLabel = ControlFactory.CreateLabel(furtherMessage, false);
-                TextBox messageTextBox = ControlFactory.CreateTextBox();
-                messageTextBox.Text = ex.Message;
-                messageTextBox.Multiline = true;
-                messageTextBox.ScrollBars = ScrollBars.Both;
-                BorderLayoutManager messageTabPageManager = new BorderLayoutManager(messageTabPage);
-                messageTabPageManager.AddControl(messageLabel, BorderLayoutManager.Position.North);
-                messageTabPageManager.AddControl(messageTextBox, BorderLayoutManager.Position.Centre);
-
-                TabPage detailsTabPage = ControlFactory.CreateTabPage("Details");
-                Label detailsLabel = ControlFactory.CreateLabel("Below are further details for the error.", false);
-                TextBox detailsTextBox = ControlFactory.CreateTextBox();
-                detailsTextBox.Text = ExceptionUtilities.GetExceptionString(ex, 0, true);
-                detailsTextBox.Multiline = true;
-                detailsTextBox.ScrollBars = ScrollBars.Both;
-                BorderLayoutManager detailsTabPageManager = new BorderLayoutManager(detailsTabPage);
-                detailsTabPageManager.AddControl(detailsLabel, BorderLayoutManager.Position.North);
-                detailsTabPageManager.AddControl(detailsTextBox, BorderLayoutManager.Position.Centre);
-
-                tabControl.TabPages.Add(messageTabPage);
-                tabControl.TabPages.Add(detailsTabPage);
-
-                this.Text = title;
-            }
-
-            /// <summary>
-            /// Handles the event of the OK button being pressed on the
-            /// exception form, which closes the form
-            /// </summary>
-            /// <param name="sender">The object that notified of the event</param>
-            /// <param name="e">Attached arguments regarding the event</param>
-            private void OKButtonClickHandler(object sender, EventArgs e)
-            {
-                this.Close();
-            }
-        }
-*/
 
         /// <summary>
         /// Provides a form to display the exception message, using a "More Detail"
         /// button that collapses or uncollapses the error detail panel
         /// </summary>
-        private class CollapsibleExceptionNotifyForm : Form
+        private class CollapsibleExceptionNotifyForm : Form, IControlChilli
         {
             private Exception _exception;
-            private Panel _summary;
-            private Panel _fullDetail;
-            private Button _moreDetailButton;
-            private TextBox _errorDetails;
-            private CheckBox _showStackTrace;
+            private PanelGiz _summary;
+            private PanelGiz _fullDetail;
+            private IButton _moreDetailButton;
+            private TextBoxGiz _errorDetails;
+            private CheckBoxGiz _showStackTrace;
             private const int SUMMARY_HEIGHT = 150;
             private const int FULL_DETAIL_HEIGHT = 300;
             private const int BUTTONS_HEIGHT = 50;
@@ -127,26 +65,26 @@ namespace Habanero.WebGUI
             {
                 _exception = ex;
 
-                _summary = new Panel();
+                _summary = new PanelGiz();
                 _summary.Text = title;
                 _summary.Height = SUMMARY_HEIGHT;
-                TextBox messageTextBox = GetSimpleMessage(ex.Message);
-                Label messageLabel = GetErrorLabel(furtherMessage);
-                BorderLayoutManager summaryManager = new BorderLayoutManager(_summary);
+                ITextBox messageTextBox = GetSimpleMessage(ex.Message);
+                ILabel messageLabel = GetErrorLabel(furtherMessage);
+                BorderLayoutManager summaryManager = new BorderLayoutManagerGiz(_summary, GlobalUIRegistry.ControlFactory);
                 summaryManager.AddControl(messageLabel, BorderLayoutManager.Position.North);
                 summaryManager.AddControl(messageTextBox, BorderLayoutManager.Position.Centre);
 
-                ButtonControl buttonsOK = new ButtonControl();
-                ButtonControl buttonsDetail = new ButtonControl();
+                IButtonGroupControl buttonsOK = new ButtonGroupControlGiz(GlobalUIRegistry.ControlFactory);
+                IButtonGroupControl buttonsDetail = new ButtonGroupControlGiz(GlobalUIRegistry.ControlFactory);
                 buttonsOK.AddButton("&OK", OKButtonClickHandler);
-                _moreDetailButton = buttonsDetail.AddButton("&More Detail �", MoreDetailClickHandler);
+                _moreDetailButton = buttonsDetail.AddButton("More Detail...", MoreDetailClickHandler);
                 buttonsOK.Height = BUTTONS_HEIGHT;
                 buttonsDetail.Height = BUTTONS_HEIGHT;
                 buttonsDetail.Width = _moreDetailButton.Width + 9;
 
                 SetFullDetailsPanel();
 
-                BorderLayoutManager manager = new BorderLayoutManager(this);
+                BorderLayoutManager manager = new BorderLayoutManagerGiz(this, GlobalUIRegistry.ControlFactory);
                 manager.AddControl(_summary, BorderLayoutManager.Position.North);
                 manager.AddControl(buttonsDetail, BorderLayoutManager.Position.West);
                 manager.AddControl(buttonsOK, BorderLayoutManager.Position.East);
@@ -164,9 +102,9 @@ namespace Habanero.WebGUI
             /// <summary>
             /// Creates the red error label that appears at the top
             /// </summary>
-            private static Label GetErrorLabel(string message)
+            private static ILabel GetErrorLabel(string message)
             {
-                Label messageLabel = ControlFactory.CreateLabel(" " + message, true);
+                ILabel messageLabel = GlobalUIRegistry.ControlFactory.CreateLabel(" " + message, true);
                 messageLabel.TextAlign = ContentAlignment.BottomLeft;
                 messageLabel.BackColor = Color.Red;
                 messageLabel.ForeColor = Color.White;
@@ -178,9 +116,9 @@ namespace Habanero.WebGUI
             /// <summary>
             /// Creates the text box that shows the error summary at the top
             /// </summary>
-            private static TextBox GetSimpleMessage(string message)
+            private static ITextBox GetSimpleMessage(string message)
             {
-                TextBox messageTextBox = ControlFactory.CreateTextBox();
+                TextBoxGiz messageTextBox = new TextBoxGiz();
                 messageTextBox.Text = message;
                 messageTextBox.Multiline = true;
                 messageTextBox.ScrollBars = ScrollBars.Both;
@@ -194,18 +132,18 @@ namespace Habanero.WebGUI
             /// </summary>
             private void SetFullDetailsPanel()
             {
-                _fullDetail = new Panel();
+                _fullDetail = new PanelGiz();
                 _fullDetail.Text = "Error Detail";
                 _fullDetail.Height = FULL_DETAIL_HEIGHT;
                 _fullDetail.Visible = false;
-                _errorDetails = ControlFactory.CreateTextBox();
+                _errorDetails = new TextBoxGiz();
                 _errorDetails.Text = ExceptionUtilities.GetExceptionString(_exception, 0, false);
                 _errorDetails.Multiline = true;
                 _errorDetails.ScrollBars = ScrollBars.Both;
-                _showStackTrace = new CheckBox();
+                _showStackTrace = new CheckBoxGiz();
                 _showStackTrace.Text = "&Show stack trace";
                 _showStackTrace.CheckedChanged += ShowStackTraceClicked;
-                BorderLayoutManager detailsManager = new BorderLayoutManager(_fullDetail);
+                BorderLayoutManager detailsManager = new BorderLayoutManagerGiz(_fullDetail, GlobalUIRegistry.ControlFactory);
                 detailsManager.AddControl(_errorDetails, BorderLayoutManager.Position.Centre);
                 detailsManager.AddControl(_showStackTrace, BorderLayoutManager.Position.South);
             }
@@ -268,6 +206,14 @@ namespace Habanero.WebGUI
                     _fullDetail.Height = 0;
                 }
             }
+
+
+            IControlCollection IControlChilli.Controls
+            {
+                get { return new ControlCollectionGiz(base.Controls); }
+            }
+
+            
         }
     }
 }

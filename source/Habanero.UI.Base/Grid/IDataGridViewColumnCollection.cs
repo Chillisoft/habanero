@@ -8,5 +8,8 @@ namespace Habanero.UI.Base
         void Clear();
         //void Add(IDataGridViewColumn dataGridViewColumn);
         int Add(string columnName, string headerText);
+
+        IDataGridViewColumn this[int index] { get;}
+        IDataGridViewColumn this[string name] { get;}
     }
 }

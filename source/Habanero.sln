@@ -72,12 +72,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.WebGUI", "Habanero
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.WebGUI", "Habanero.Test.WebGUI\Habanero.Test.WebGUI.csproj", "{E4F3136D-456B-437C-A96D-F1A14211AF51}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.UI.Base", "Habanero.UI.Base\Habanero.UI.Base.csproj", "{18828910-F528-48F5-B56D-7C1658D0987A}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -156,10 +150,6 @@ Global
 		{F57E69D0-524A-4A49-B0C9-7754FF58DDF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F57E69D0-524A-4A49-B0C9-7754FF58DDF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F57E69D0-524A-4A49-B0C9-7754FF58DDF8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4F3136D-456B-437C-A96D-F1A14211AF51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4F3136D-456B-437C-A96D-F1A14211AF51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4F3136D-456B-437C-A96D-F1A14211AF51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4F3136D-456B-437C-A96D-F1A14211AF51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{18828910-F528-48F5-B56D-7C1658D0987A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18828910-F528-48F5-B56D-7C1658D0987A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18828910-F528-48F5-B56D-7C1658D0987A}.Release|Any CPU.ActiveCfg = Release|Any CPU

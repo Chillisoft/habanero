@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 
@@ -119,6 +120,17 @@ namespace Habanero.UI.WebGUI
             _mngr.SetSortColumn(columnName, ascending);
         }
 
+        /// <summary>
+        /// Applies a filter clause to the data table and updates the filter.
+        /// The filter allows you to determine which objects to display using
+        /// some criteria.
+        /// </summary>
+        /// <param name="filterClause">The filter clause</param>
+        public void ApplyFilter(IFilterClause filterClause)
+        {
+            _mngr.ApplyFilter(filterClause);
+        }
+
         //public void AddColumn(IDataGridViewColumn column)
         //{
         //    _mngr.AddColumn(column);
@@ -172,6 +184,12 @@ namespace Habanero.UI.WebGUI
             {
                 get { return _dataGridViewColumn; }
             }
+
+            public bool Visible
+            {
+                get { return _dataGridViewColumn.Visible; }
+                set { _dataGridViewColumn.Visible = value; }
+            }
         }
 
         private class DataGridViewColumnCollectionGiz : IDataGridViewColumnCollection
@@ -198,10 +216,21 @@ namespace Habanero.UI.WebGUI
 
             public int Add(string columnName, string headerText)
             {
-                int addedColumn = _columns.Add(columnName, headerText);
-                _columns[addedColumn].DataPropertyName = columnName;
-                return addedColumn;
+                int colnum = _columns.Add(columnName, headerText);
+                _columns[colnum].DataPropertyName = columnName;
+                return colnum;
             }
+
+            public IDataGridViewColumn this[int index]
+            {
+                get { return new DataGridViewColumnGiz(_columns[index]); }
+            }
+
+            public IDataGridViewColumn this[string name]
+            {
+                get { return new DataGridViewColumnGiz(_columns[name]); }
+            }
+
 
             //public void Add(string columnName)
             //{

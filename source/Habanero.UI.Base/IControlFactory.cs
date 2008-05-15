@@ -1,7 +1,7 @@
 using System;
 using Habanero.BO;
 using Habanero.UI.Base.FilterControl;
-using Habanero.UI.Base.LayoutManagers;
+using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {

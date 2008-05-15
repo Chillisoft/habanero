@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
-using Habanero.UI.Base.LayoutManagers;
 
 namespace Habanero.UI.Win
 {

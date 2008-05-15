@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Habanero.UI.Base;
-using Habanero.UI.Base.LayoutManagers;
 
 namespace Habanero.UI.Win
 {

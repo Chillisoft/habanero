@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
@@ -62,10 +63,20 @@ namespace Habanero.UI.Base
         /// it should be sorted in ascending or descending order
         /// </summary>
         /// <param name="columnName">The column number to set</param>
-        /// <param name="isBoProperty">Whether the property is a business
         /// object property</param>
         /// <param name="ascending">Whether sorting should be done in ascending
         /// order ("false" sets it to descending order)</param>
         void SetSortColumn(string columnName, bool ascending);
+
+        /// <summary>
+        /// Applies a filter clause to the data table and updates the filter.
+        /// The filter allows you to determine which objects to display using
+        /// some criteria.
+        /// </summary>
+        /// <param name="filterClause">The filter clause</param>
+        void ApplyFilter(IFilterClause filterClause);
+
+        int ItemsPerPage { get; set; }
+        int CurrentPage { get; set; }
     }
 }

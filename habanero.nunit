@@ -6,6 +6,6 @@
     <assembly path="bin\Habanero.Test.dll" />
     <assembly path="bin\Habanero.Test.General.dll" />
     <assembly path="bin\Habanero.Test.UI.dll" />
-    <assembly path="bin\Habanero.Test.WebGUI.dll" />
+    <assembly path="bin\Habanero.Test.UI.Base.dll" />
   </Config>
 </NUnitProject>

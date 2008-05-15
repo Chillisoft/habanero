@@ -18,30 +18,25 @@
 //---------------------------------------------------------------------------------
 
 
-namespace Habanero.WebGUI
+namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Stores date display settings that define how dates should
-    /// be displayed to users in various user interfaces
+    /// Provides a store of application-wide user interface settings
     /// </summary>
-    public class DateDisplaySettings
+    public class UISettings : IUISettings
     {
-        private string _gridDateFormat;
+        private PermitComboBoxRightClickDelegate _permitComboBoxRightClick;
 
         /// <summary>
-        /// Gets and sets the .Net style date format string that
-        /// determines how a date is displayed in a grid.
-        /// Set this value to null to use the short
-        /// date format of the underlying user's environment.
-        /// The format for this string is the same as that of
-        /// DateTime.ToString(), including shortcuts such as
-        /// "d" which use the short date format of the culture
-        /// on the user's machine.
+        /// Indicates whether the user has permission to right-click
+        /// on the given ComboBox that represents the given
+        /// BusinessObject type.  This applies to all ComboBoxes in the
+        /// application that are mapped using a Habanero ComboBoxMapper.
         /// </summary>
-        public string GridDateFormat
+        public PermitComboBoxRightClickDelegate PermitComboBoxRightClick
         {
-            get { return _gridDateFormat; }
-            set { _gridDateFormat = value; }
+            get { return _permitComboBoxRightClick; }
+            set { _permitComboBoxRightClick = value; }
         }
     }
 }

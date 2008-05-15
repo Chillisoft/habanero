@@ -18,33 +18,44 @@
 //---------------------------------------------------------------------------------
 
 
-using Gizmox.WebGUI.Forms;
-using Habanero.BO;
 
-namespace Habanero.WebGUI
+namespace Habanero.UI.Base
 {
     /// <summary>
-    /// An interface to model a mapper that wraps a control in
-    /// order to display information related to a business object 
+    /// Maintains an application-wide store of UI-related
+    /// settings
     /// </summary>
-    public interface IControlMapper
+    public class GlobalUIRegistry
     {
-        /// <summary>
-        /// Returns the control being mapped
-        /// </summary>
-        Control Control { get; }
+        private static IUISettings _uiSettings;
+        private static DateDisplaySettings _dateDisplaySettings;
+        private static IControlFactory _controlFactory;
 
         /// <summary>
-        /// Returns the name of the property being edited in the control
+        /// Gets and sets the store of general user interface settings
         /// </summary>
-        string PropertyName { get; }
+        public static IUISettings UISettings
+        {
+            get { return _uiSettings; }
+            set { _uiSettings = value; }
+        }
 
         /// <summary>
-        /// Controls access to the business object being represented
-        /// by the control.  Where the business object has been amended or
-        /// altered, the ValueUpdated() method is automatically called here to 
-        /// implement the changes in the control itself.
+        /// Gets and sets the store of date display settings
         /// </summary>
-        BusinessObject BusinessObject { get; set; }
+        public static DateDisplaySettings DateDisplaySettings
+        {
+            get { return _dateDisplaySettings; }
+            set { _dateDisplaySettings = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the control factory to use in the application
+        /// </summary>
+        public static IControlFactory ControlFactory
+        {
+            get { return _controlFactory; }
+            set { _controlFactory = value;}
+        }
     }
 }

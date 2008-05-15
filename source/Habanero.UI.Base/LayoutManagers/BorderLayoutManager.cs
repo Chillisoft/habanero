@@ -21,9 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Habanero.UI.Base;
-using Habanero.UI.Base.LayoutManagers;
 
-namespace Habanero.UI.Base.LayoutManagers
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// Manages the layout of controls in a user interface by having

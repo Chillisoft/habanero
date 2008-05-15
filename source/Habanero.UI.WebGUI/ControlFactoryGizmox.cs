@@ -6,7 +6,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
-using Habanero.UI.Base.LayoutManagers;
 
 namespace Habanero.UI.WebGUI
 {

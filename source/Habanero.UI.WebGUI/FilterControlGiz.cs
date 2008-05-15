@@ -6,7 +6,6 @@ using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
-using Habanero.UI.Base.LayoutManagers;
 #endregion
 
 namespace Habanero.UI.WebGUI

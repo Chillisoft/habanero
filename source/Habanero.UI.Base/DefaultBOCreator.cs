@@ -33,6 +33,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public class DefaultBOCreator : IBusinessObjectCreator
     {
+        private readonly IBusinessObjectCollection _boCol;
         private readonly ClassDef _classDef;
 
         /// <summary>
@@ -45,45 +46,16 @@ namespace Habanero.UI.Base
             _classDef = classDef;
         }
 
-        ///// <summary>
-        ///// Creates a business object
-        ///// </summary>
-        ///// <param name="editor">An object editor</param>
-        ///// <param name="uiDefName">The name of the set of ui definitions
-        ///// used to design the edit form. Setting this to an empty string
-        ///// will use a ui definition with no name attribute specified.</param>
-        ///// <returns>Returns the business object created</returns>
-        //public Object CreateBusinessObject(IBusinessObjectEditor editor, string uiDefName)
-        //{
-        //    return CreateBusinessObject(editor, null, uiDefName);
-        //}
-
-        ///// <summary>
-        ///// Creates a business object
-        ///// </summary>
-        ///// <param name="editor">An object editor</param>
-        ///// <param name="initialiser">An object initialiser</param>
-        ///// <param name="uiDefName">The name of the set of ui definitions
-        ///// used to design the edit form. Setting this to an empty string
-        ///// will use a ui definition with no name attribute specified.</param>
-        ///// <returns>Returns the business object created</returns>
-        //public Object CreateBusinessObject(IBusinessObjectEditor editor, IObjectInitialiser initialiser, string uiDefName)
-        //{
-        //    IBusinessObject newBo = (BusinessObject) CreateBusinessObject();
-        //    if (initialiser != null)
-        //    {
-        //        initialiser.InitialiseObject(newBo);
-        //    }
-        //    if (editor.EditObject(newBo, uiDefName))
-        //    {
-        //        return newBo;
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
-
+        /// <summary>
+        /// Constructor to initialise a new object creator
+        /// </summary> 
+        /// 
+        /// <param name="boCol">The collection this BO will be created as part of 
+        /// (it will be added to the collection proper when it is saved)</param>
+        public DefaultBOCreator(IBusinessObjectCollection boCol)
+        {
+            _boCol = boCol;
+        }
 
         /// <summary>
         /// Just creates the object, without editing or saving it.
@@ -91,7 +63,14 @@ namespace Habanero.UI.Base
         /// <returns></returns>
         public IBusinessObject CreateBusinessObject()
         {
-            return _classDef.CreateNewBusinessObject();
+            if (_boCol != null)
+            {
+                return _boCol.CreateBusinessObject();
+            }
+            else
+            {
+                return _classDef.CreateNewBusinessObject();
+            }
         }
 
     }

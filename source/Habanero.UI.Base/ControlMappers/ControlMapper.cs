@@ -266,12 +266,13 @@ namespace Habanero.UI.Base
             }
             _isEditable = !_isReadOnly && _businessObject != null
                           && (_businessObject.Props.Contains(_propertyName) || virtualPropertySetExists);
-            if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsObjectID &&
-                _businessObject.ID.Contains(_propertyName) &&
-                !_businessObject.State.IsNew)
-            {
-                _isEditable = false;
-            }
+            //TODO: make this support single-table-inheritance.
+            //if (_isEditable && _businessObject.ClassDef.PrimaryKeyDef.IsObjectID &&
+            //    _businessObject.ID.Contains(_propertyName) &&
+            //    !_businessObject.State.IsNew)
+            //{
+            //    _isEditable = false;
+            //}
             if (_isEditable && !virtualPropertySetExists)
             {
                 if (_businessObject.ClassDef.PropDefColIncludingInheritance.Contains(_propertyName))
@@ -351,7 +352,7 @@ namespace Habanero.UI.Base
         /// <exception cref="UnknownTypeNameException">An exception is
         /// thrown if the mapperTypeName does not provide a type that is
         /// a subclass of the ControlMapper class.</exception>
-        public static ControlMapper Create(string mapperTypeName, string mapperAssembly, IControlChilli ctl, string propertyName, bool isReadOnly)
+        public static IControlMapper Create(string mapperTypeName, string mapperAssembly, IControlChilli ctl, string propertyName, bool isReadOnly, IControlFactory controlFactory)
         {
             if (mapperTypeName == "TextBoxMapper" && !(ctl is ITextBox)) // TODO && !(ctl is PasswordTextBox))
             {
@@ -377,12 +378,24 @@ namespace Habanero.UI.Base
             } else {
                 mapperType = TypeLoader.LoadType(mapperAssembly, mapperTypeName);
             }
-            ControlMapper controlMapper;
-            if (mapperType != null && mapperType.IsSubclassOf(typeof (ControlMapper)))
+            IControlMapper controlMapper;
+            if (mapperType != null && mapperType.FindInterfaces(delegate (Type type, Object filterCriteria) { return type == typeof(IControlMapper); }, "").Length > 0)
             {
-                controlMapper =
-                    (ControlMapper)
-                    Activator.CreateInstance(mapperType, new object[] {ctl, propertyName, isReadOnly});
+                try
+                {
+                    controlMapper =
+                        (IControlMapper)
+                        Activator.CreateInstance(mapperType, new object[] {ctl, propertyName, isReadOnly});
+                } 
+                    //TODO - lookupcomboboxmapper has a slightly different constructor- perhaps all control mappers
+                    // should have a constructor that takes an IcontrolFactory ?
+                catch (MissingMethodException )
+                {
+                    controlMapper =
+                        (IControlMapper)
+                        Activator.CreateInstance(mapperType, new object[] { ctl, propertyName, isReadOnly, controlFactory });
+                }
+
             }
             else
             {

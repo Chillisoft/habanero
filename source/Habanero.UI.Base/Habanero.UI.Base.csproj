@@ -42,11 +42,14 @@
   <ItemGroup>
     <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
     <Compile Include="DefaultBODeletor.cs" />
+    <Compile Include="GlobalUIRegistry.cs" />
     <Compile Include="Grid\IDataGridView.cs" />
     <Compile Include="Grid\IDataGridViewCell.cs" />
     <Compile Include="Grid\IDataGridViewCellCollection.cs" />
     <Compile Include="Grid\IDataGridViewRow.cs" />
+    <Compile Include="HabaneroAppUI.cs" />
     <Compile Include="IControlCollection.cs" />
+    <Compile Include="IUISettings.cs" />
     <Compile Include="LayoutManagers\BorderLayoutManager.cs" />
     <Compile Include="ControlMappers\CheckBoxMapper.cs" />
     <Compile Include="ControlMappers\ComboBoxMapper.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="MultiSelectorModel.cs" />
     <Compile Include="PanelFactory\PanelFactoryInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UISettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
@@ -146,4 +150,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)PostBuild.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

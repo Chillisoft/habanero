@@ -5,7 +5,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    internal class TabPageGiz : TabPage, ITabPage
+    public class TabPageGiz : TabPage, ITabPage
     {
         public TabPageGiz()
         {

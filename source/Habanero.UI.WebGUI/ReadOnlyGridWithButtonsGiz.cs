@@ -2,7 +2,6 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
-using Habanero.UI.Base.LayoutManagers;
 
 namespace Habanero.UI.WebGUI
 {
@@ -48,8 +47,10 @@ namespace Habanero.UI.WebGUI
         private void Buttons_DeleteClicked(object sender, EventArgs e)
         {
             IBusinessObject selectedBo = SelectedBusinessObject;
+
             if (selectedBo != null)
             {
+                _grid.SelectedBusinessObject = null;
                 try
                 {
                     _businessObjectDeletor.DeleteBusinessObject(selectedBo);
@@ -135,7 +136,7 @@ namespace Habanero.UI.WebGUI
         {
             _grid.SetCollection(boCollection);
             this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
-            this.BusinessObjectCreator = new DefaultBOCreator(boCollection.ClassDef);
+            this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
             this.BusinessObjectDeletor = new DefaultBODeletor();
         }
     }

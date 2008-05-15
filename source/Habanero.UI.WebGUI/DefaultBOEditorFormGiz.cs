@@ -6,7 +6,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.Base.LayoutManagers;
 using log4net;
 
 namespace Habanero.UI.WebGUI

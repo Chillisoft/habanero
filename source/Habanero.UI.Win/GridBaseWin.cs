@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 
@@ -11,6 +12,7 @@ namespace Habanero.UI.Win
     {
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
         public event EventHandler CollectionChanged;
+        public event EventHandler FilterUpdated;
 
         public void Clear()
         {
@@ -123,6 +125,22 @@ namespace Habanero.UI.Win
             get { return new ControlCollectionWin(base.Controls); }
         }
 
+        #region IGridBase Members
+
+        int IGridBase.ItemsPerPage
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        int IGridBase.CurrentPage
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        #endregion
+
         /// <summary>
         /// Sets the sort column and indicates whether
         /// it should be sorted in ascending or descending order
@@ -134,6 +152,30 @@ namespace Habanero.UI.Win
         public void SetSortColumn(string columnName, bool ascending)
         {
             _mngr.SetSortColumn(columnName,  ascending);
+        }
+
+        /// <summary>
+        /// Applies a filter clause to the data table and updates the filter.
+        /// The filter allows you to determine which objects to display using
+        /// some criteria.
+        /// </summary>
+        /// <param name="filterClause">The filter clause</param>
+        public void ApplyFilter(IFilterClause filterClause)
+        {
+            _mngr.ApplyFilter(filterClause);
+            FireFilterUpdated();
+        }
+
+        /// <summary>
+        /// Calls the FilterUpdated() method, passing this instance as the
+        /// sender
+        /// </summary>
+        private void FireFilterUpdated()
+        {
+            if (this.FilterUpdated != null)
+            {
+                this.FilterUpdated(this, new EventArgs());
+            }
         }
 
         //public void AddColumn(IDataGridViewColumn column)
@@ -176,6 +218,11 @@ namespace Habanero.UI.Win
             {
                 get { return _dataGridViewColumn; }
             }
+            public bool Visible
+            {
+                get { return _dataGridViewColumn.Visible; }
+                set { _dataGridViewColumn.Visible = value; }
+            }
         }
 
         private class DataGridViewColumnCollectionWin : IDataGridViewColumnCollection
@@ -205,6 +252,17 @@ namespace Habanero.UI.Win
                 _columns[addedColumn].DataPropertyName = columnName;
                 return addedColumn;
             }
+
+            public IDataGridViewColumn this[int index]
+            {
+                get { return new DataGridViewColumnWin(_columns[index]); }
+            }
+
+            public IDataGridViewColumn this[string name]
+            {
+                get { return new DataGridViewColumnWin(_columns[name]); }
+            }
+
             //public void Add(IDataGridViewColumn dataGridViewColumn)
             //{
             //    DataGridViewColumnWin dataGridViewColumnWin = dataGridViewColumn as DataGridViewColumnWin;

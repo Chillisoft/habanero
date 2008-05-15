@@ -26,6 +26,7 @@ namespace Habanero.UI.Base
             _gridBase = gridBase;
             _uiDefName = uiDefName;
             _gridBase.AutoGenerateColumns = false;
+            
         }
 
         public GridBaseManager(IGridBase gridBase) : this(gridBase, "default")
@@ -51,6 +52,7 @@ namespace Habanero.UI.Base
                 FireCollectionChanged();
                 return;
             }
+            col.BusinessObjectRemoved += delegate { SelectedBusinessObject = null; };
 
             _gridBase.DataSource = GetDataTable(col);
 
@@ -341,6 +343,25 @@ namespace Habanero.UI.Base
                     ((DataView) _gridBase.DataSource).Sort = columnName + " DESC";
                 }
             }
+        }
+
+        /// <summary>
+        /// Applies a filter clause to the data table and updates the filter.
+        /// The filter allows you to determine which objects to display using
+        /// some criteria.
+        /// </summary>
+        /// <param name="filterClause">The filter clause</param>
+        public void ApplyFilter(IFilterClause filterClause)
+        {
+            if (filterClause != null)
+            {
+                _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();
+            }
+            else
+            {
+                _dataTableDefaultView.RowFilter = null;
+            }
+           
         }
     }
 

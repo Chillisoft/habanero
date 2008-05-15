@@ -10,7 +10,8 @@
     <RootNamespace>Habanero.WebGUI</RootNamespace>
     <AssemblyName>Habanero.WebGUI</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,51 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BorderLayoutManager.cs" />
-    <Compile Include="ButtonControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ButtonControl.Designer.cs">
-      <DependentUpon>ButtonControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CheckBoxMapper.cs" />
-    <Compile Include="ComboBoxMapper.cs" />
-    <Compile Include="ControlFactory.cs" />
-    <Compile Include="ControlMapper.cs" />
-    <Compile Include="ControlMapperCollection.cs" />
-    <Compile Include="DateDisplaySettings.cs" />
-    <Compile Include="DefaultBOCreator.cs" />
-    <Compile Include="DefaultBOEditor.cs" />
-    <Compile Include="DefaultBOEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FlowLayoutManager.cs" />
-    <Compile Include="FormExceptionNotifier.cs" />
-    <Compile Include="GlobalUIRegistry.cs" />
-    <Compile Include="GridBase.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GridLayoutManager.cs" />
-    <Compile Include="HabaneroAppWeb.cs" />
-    <Compile Include="IControlMapper.cs" />
-    <Compile Include="IReadOnlyGrid.cs" />
-    <Compile Include="IUISettings.cs" />
-    <Compile Include="LayoutManager.cs" />
-    <Compile Include="LookupComboBoxMapper.cs" />
-    <Compile Include="PanelFactory.cs" />
-    <Compile Include="PanelFactoryInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadOnlyGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ReadOnlyGridButtonControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ReadOnlyGridWithButtons.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TextBoxMapper.cs" />
-    <Compile Include="UISettings.cs" />
     <Compile Include="Wizard\IWizardController.cs" />
     <Compile Include="Wizard\IWizardStep.cs" />
     <Compile Include="Wizard\MessageWizardStep.cs">
@@ -124,18 +81,6 @@
     <Compile Include="Wizard\WizardStepException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ButtonControl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ButtonControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DefaultBOEditorForm.resx">
-      <DependentUpon>DefaultBOEditorForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ReadOnlyGridWithButtons.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ReadOnlyGridWithButtons.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Wizard\MessageWizardStep.resx">
       <DependentUpon>MessageWizardStep.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -174,9 +119,6 @@
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
       <Name>Habanero.Util</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="key.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
