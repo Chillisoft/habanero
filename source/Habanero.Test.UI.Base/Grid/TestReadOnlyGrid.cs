@@ -29,7 +29,6 @@ namespace Habanero.Test.UI.Grid
     /// <summary>
     /// Summary description for TestReadOnlyGrid.
     /// </summary>
-    [TestFixture]
     public abstract class TestReadOnlyGrid
     {
         [SetUp]

@@ -28,7 +28,6 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// Summary description for TestTextBoxMapper.
     /// </summary>
-    [TestFixture]
     public abstract class TestTextBoxMapper : TestMapperBase
     {
 

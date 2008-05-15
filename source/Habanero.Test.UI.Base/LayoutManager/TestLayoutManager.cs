@@ -24,7 +24,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
+  
     public abstract class TestLayoutManager
     {
         private MockLayoutManager manager;

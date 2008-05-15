@@ -6,7 +6,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
     public abstract class TestControlMapperCollection 
     {
         protected abstract IControlFactory GetControlFactory();

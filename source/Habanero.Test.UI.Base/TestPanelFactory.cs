@@ -26,7 +26,6 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// Summary description for TestPanelFactory.
     /// </summary>
-    [TestFixture]
     public abstract class TestPanelFactory
     {
         protected abstract IControlFactory GetControlFactory();

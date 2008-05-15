@@ -27,7 +27,6 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// Summary description for TestControlMapper.
     /// </summary>
-    [TestFixture]
     public abstract class TestControlMapper : TestUsingDatabase
     {
 

@@ -24,7 +24,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
+
     public abstract class TestFlowLayoutManager
     {
         private const int _STD_ManagedControl_Width = 100;

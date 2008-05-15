@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Grid
 {
-    [TestFixture]
     public abstract class TestReadonlyGridWithButtons : TestUsingDatabase
     {
         [SetUp]

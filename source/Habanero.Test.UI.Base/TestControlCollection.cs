@@ -24,13 +24,12 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
     public abstract class TestControlCollection
     {
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]
-        public class TestListBoxWin : TestListBox
+        public class TestControlCollectionWin : TestControlCollection
         {
             protected override IControlFactory GetControlFactory()
             {
@@ -39,7 +38,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestListBoxGiz : TestListBox
+        public class TestControlCollectionGiz : TestControlCollection
         {
             protected override IControlFactory GetControlFactory()
             {

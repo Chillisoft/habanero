@@ -26,7 +26,6 @@ namespace Habanero.Test.UI.Base
     /// <summary>
     /// Summary description for TestCheckBoxMapper.
     /// </summary>
-    [TestFixture]
     public abstract class TestCheckBoxMapper : TestMapperBase
     {
         protected abstract IControlFactory GetControlFactory();
