@@ -30,7 +30,7 @@ namespace Habanero.UI
     /// <summary>
     /// Produces a range of user interface objects as requested
     /// </summary>
-    public class ControlFactory : IControlFactoryold
+    public class ControlFactory
     {
         /// <summary>
         /// A constructor to initialise an instance of the factory

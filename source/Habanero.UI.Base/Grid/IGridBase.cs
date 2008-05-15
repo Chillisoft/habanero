@@ -66,6 +66,6 @@ namespace Habanero.UI.Base
         /// object property</param>
         /// <param name="ascending">Whether sorting should be done in ascending
         /// order ("false" sets it to descending order)</param>
-        void SetSortColumn(string columnName, bool isBoProperty, bool ascending);
+        void SetSortColumn(string columnName, bool ascending);
     }
 }

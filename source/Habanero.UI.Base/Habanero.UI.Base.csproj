@@ -37,11 +37,14 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultBODeletor.cs" />
+    <Compile Include="Grid\IDataGridView.cs" />
+    <Compile Include="Grid\IDataGridViewCell.cs" />
+    <Compile Include="Grid\IDataGridViewCellCollection.cs" />
+    <Compile Include="Grid\IDataGridViewRow.cs" />
     <Compile Include="IControlCollection.cs" />
     <Compile Include="LayoutManagers\BorderLayoutManager.cs" />
     <Compile Include="ControlMappers\CheckBoxMapper.cs" />
@@ -100,7 +103,6 @@
     <Compile Include="IControlFactory.cs" />
     <Compile Include="FilterControl\IFilterControl.cs" />
     <Compile Include="Grid\IDataGridViewColumnCollection.cs" />
-    <Compile Include="Grid\IDataGridViewRow.cs" />
     <Compile Include="Grid\IDataGridViewRowCollection.cs" />
     <Compile Include="Grid\IGridBase.cs" />
     <Compile Include="ControlInterfaces\ILabel.cs" />

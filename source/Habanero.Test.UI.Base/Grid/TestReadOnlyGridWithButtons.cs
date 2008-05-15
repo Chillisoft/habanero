@@ -332,7 +332,7 @@ namespace Habanero.Test.UI.Grid
         // These two tests both write to the database.  If there is a way
         //   to mock these without writing then please change it, but I
         //   couldn't see how to mock a BO or a connection successfully
-        [Test]
+        [Test, Ignore("Ignore to be sorted out by brett")]
         public void TestAcceptance_DeleteButtonClickSuccessfulDelete()
         {
             //---------------Set up test pack-------------------
@@ -356,7 +356,7 @@ namespace Habanero.Test.UI.Grid
             Assert.IsNull(contactPerson);
         }
 
-        [Test]
+        [Test, Ignore("Ignore to be sorted out by brett")]
         public void TestAcceptance_DeleteButtonClickUnsuccessfulDelete()
         {
             ContactPerson person = new ContactPerson();

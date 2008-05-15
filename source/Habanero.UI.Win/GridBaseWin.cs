@@ -128,13 +128,12 @@ namespace Habanero.UI.Win
         /// it should be sorted in ascending or descending order
         /// </summary>
         /// <param name="columnName">The column number to set</param>
-        /// <param name="isBoProperty">Whether the property is a business
         /// object property</param>
         /// <param name="ascending">Whether sorting should be done in ascending
         /// order ("false" sets it to descending order)</param>
-        public void SetSortColumn(string columnName, bool isBoProperty, bool ascending)
+        public void SetSortColumn(string columnName, bool ascending)
         {
-            _mngr.SetSortColumn(columnName, isBoProperty, ascending);
+            _mngr.SetSortColumn(columnName,  ascending);
         }
 
         //public void AddColumn(IDataGridViewColumn column)
@@ -269,6 +268,20 @@ namespace Habanero.UI.Win
                 get { return _dataGridViewRow.Selected; }
                 set { _dataGridViewRow.Selected = value; }
             }
+
+            public int Index
+            {
+                get { return _dataGridViewRow.Index; }
+            }
+
+            /// <summary>Gets the collection of cells that populate the row.</summary>
+            /// <returns>A <see cref="IDataGridViewCellCollection"></see> that contains all of the cells in the row.</returns>
+            /// <filterpriority>1</filterpriority>
+            public IDataGridViewCellCollection Cells
+            {
+                get { throw new NotImplementedException(); }
+            }
+
             public object DataBoundItem
             {
                 get { return _dataGridViewRow.DataBoundItem; }

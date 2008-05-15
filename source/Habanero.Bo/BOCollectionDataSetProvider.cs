@@ -44,7 +44,7 @@ namespace Habanero.BO
         {
             this._collection = collection;
         }
-
+ 
         /// <summary>
         /// Returns a data table with the UIGridDef provided
         /// </summary>
