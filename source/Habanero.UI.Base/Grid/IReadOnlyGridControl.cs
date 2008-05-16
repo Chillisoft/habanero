@@ -1,6 +1,7 @@
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.Base
 {
@@ -21,7 +22,7 @@ namespace Habanero.UI.Base
     /// You can assign a non-default object editor or creator for the buttons,
     /// using *.Buttons.BusinessObjectEditor and *.Buttons.BusinessObjectCreator.
     /// </summary>
-    public interface IReadOnlyGridWithButtons : IControlChilli
+    public interface IReadOnlyGridControl : IControlChilli
     {
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
@@ -51,6 +52,8 @@ namespace Habanero.UI.Base
         string UiDefName { get; }
 
         ClassDef ClassDef { get; }
+
+        IFilterControl FilterControl { get; }
 
         /// <summary>
         /// Sets the business object collection to display.  Loading of

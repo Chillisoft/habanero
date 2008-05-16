@@ -4,10 +4,11 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.WebGUI
 {
-    public class ReadOnlyGridWithButtonsGiz : ControlGiz, IReadOnlyGridWithButtons
+    public class ReadOnlyGridControlGiz : ControlGiz, IReadOnlyGridControl
     {
         private readonly IControlFactory _controlFactory;
         private readonly ReadOnlyGridGiz _grid;
@@ -18,6 +19,7 @@ namespace Habanero.UI.WebGUI
         private string _uiDefName = "";
         private ClassDef _classDef;
         private bool _initialised;
+        private IFilterControl _filterControl;
         //private readonly GridSelectionController _gridSelectionController;
 
         //private IBusinessObjectCollection _collection;
@@ -25,22 +27,31 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
-        public ReadOnlyGridWithButtonsGiz(IControlFactory controlfactory)
+        public ReadOnlyGridControlGiz(IControlFactory controlfactory)
         {
             if (controlfactory == null) throw new ArgumentNullException("controlfactory");
 
             _controlFactory = controlfactory;
-            BorderLayoutManager layoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
+            BorderLayoutManager borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
             _grid = new ReadOnlyGridGiz();
             _grid.Name = "GridControl";
-            layoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+            borderLayoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
 
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();
             _buttons.AddClicked += Buttons_AddClicked;
             _buttons.EditClicked += Buttons_EditClicked;
             _buttons.DeleteClicked += Buttons_DeleteClicked;
             _buttons.Name = "ButtonControl";
-            layoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
+            borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
+
+            _filterControl = new FilterControlGiz(controlfactory);
+            borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
+
+            _filterControl.Filter += delegate
+            {
+                this.Grid.CurrentPage = 1;
+                this.Grid.ApplyFilter(_filterControl.GetFilterClause());
+            };
         }
 
         /// <summary>
@@ -327,6 +338,11 @@ namespace Habanero.UI.WebGUI
         public ClassDef ClassDef
         {
             get { return _classDef; }
+        }
+
+        public IFilterControl FilterControl
+        {
+            get { return _filterControl; }
         }
 
 

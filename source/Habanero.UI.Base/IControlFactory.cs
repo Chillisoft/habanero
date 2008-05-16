@@ -42,7 +42,7 @@ namespace Habanero.UI.Base
         BorderLayoutManager CreateBorderLayoutManager(IControlChilli control);
         IPanel CreatePanel();
         IReadOnlyGrid CreateReadOnlyGrid();
-        IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons(IControlFactory controlfactory);
+        IReadOnlyGridControl CreateReadOnlyGridControl(IControlFactory controlfactory);
         IButtonGroupControl CreateButtonGroupControl();
         IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl();
         /// <summary>
@@ -180,5 +180,6 @@ namespace Habanero.UI.Base
         ITextBox CreateTextBoxMultiLine(int numLines);
 
         IDataGridViewColumn CreateDataGridViewColumn();
+        IWizardControl CreateWizardControl(IWizardController wizardController);
     }
 }

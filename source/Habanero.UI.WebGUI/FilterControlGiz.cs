@@ -17,6 +17,16 @@ namespace Habanero.UI.WebGUI
 
         public event EventHandler Filter;
 
+        /// <summary>
+        ///Applies the filter that has been captured.
+        ///This allows an external control e.g. another button click to be used as the event that causes the filter to fire.
+        ///Typically used when the filter controls are being set manually
+        /// </summary>
+        public void ApplyFilter()
+        {
+            FireFilterEvent();
+        }
+
         public FilterControlGiz(IControlFactory controlFactory)
         {
             FlowLayoutManager flowLayoutManager = new FlowLayoutManager(this, controlFactory);

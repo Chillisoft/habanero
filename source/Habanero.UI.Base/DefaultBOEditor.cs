@@ -11,7 +11,7 @@ namespace Habanero.UI.Base
     /// <summary>
     /// Provides an editing facility for a business object.
     /// The default editor is used by facilities
-    /// like ReadOnlyGridWithButtons to edit business objects.  Inherit
+    /// like readOnlyGridControl to edit business objects.  Inherit
     /// from this class if you need to carry out additional steps at the time
     /// of editing a new business object or if you need to specify a
     /// different editing form to use to edit the object.

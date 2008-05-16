@@ -81,7 +81,7 @@
     <Compile Include="ControlMappers\IControlMapperCollection.cs" />
     <Compile Include="ControlMappers\IControlMapper.cs" />
     <Compile Include="ControlInterfaces\IDateTimePicker.cs" />
-    <Compile Include="Grid\IReadOnlyGridWithButtons.cs" />
+    <Compile Include="Grid\IReadOnlyGridControl.cs" />
     <Compile Include="Grid\IReadOnlyGridButtonsControl.cs" />
     <Compile Include="IDefaultBOEditorForm.cs" />
     <Compile Include="ControlInterfaces\IPanel.cs" />
@@ -121,6 +121,11 @@
     <Compile Include="PanelFactory\PanelFactoryInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\UISettings.cs" />
+    <Compile Include="Wizard\IWizardControl.cs" />
+    <Compile Include="Wizard\IWizardController.cs" />
+    <Compile Include="Wizard\IWizardStep.cs" />
+    <Compile Include="Wizard\WizardController.cs" />
+    <Compile Include="Wizard\WizardStepException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">

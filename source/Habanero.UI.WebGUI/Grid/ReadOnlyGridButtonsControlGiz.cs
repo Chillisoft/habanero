@@ -21,7 +21,6 @@ namespace Habanero.UI.WebGUI
             _deleteButton = AddButton("Delete", FireDeleteButtonClicked);
             _deleteButton.Visible = false;
            
-
             IButton editButton = AddButton("Edit", FireEditButtonClicked);
             editButton.Visible = true;
             IButton addButton = AddButton("Add", FireAddButtonClicked);

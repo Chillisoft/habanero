@@ -13,7 +13,7 @@ namespace Habanero.UI.WebGUI
     /// <summary>
     /// Provides a form to edit a business object.  This form is initiated
     /// by UI.Application.DefaultBOEditor and UI.Application.DefaultBOCreator
-    /// and is used by facilities like ReadOnlyGridWithButtons.
+    /// and is used by facilities like readOnlyGridControl.
     /// If you need to implement a different version of this form, you will 
     /// need to also implement a new version of the editor (see
     /// DefaultBOEditor for more information).

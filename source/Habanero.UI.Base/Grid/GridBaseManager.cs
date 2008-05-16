@@ -53,6 +53,9 @@ namespace Habanero.UI.Base
                 FireCollectionChanged();
                 return;
             }
+            //Hack: this is to overcome abug in Gizmox where the grid was freezing after delete
+            // but should not cause a problem with win
+            
             col.BusinessObjectRemoved += delegate { SelectedBusinessObject = null; };
 
             _gridBase.DataSource = GetDataTable();

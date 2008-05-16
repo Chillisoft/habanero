@@ -7,8 +7,10 @@ using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.Win
 {
-    public class FilterControlWin : FlowLayoutPanel, IFilterControl
+    public class FilterControlWin : Panel, IFilterControl
     {
+
+        public event EventHandler Filter;
         private readonly FilterControlManager _filterControlManager;
         //private readonly FlowLayoutManager _flowLayoutManager;
 
@@ -75,6 +77,17 @@ namespace Habanero.UI.Win
             //return picker;
             IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName, defaultValue, filterClauseOperator, ignoreTime, nullable);
             return dtPicker;
+        }
+
+
+        /// <summary>
+        ///Applies the filter that has been captured.
+        ///This allows an external control e.g. another button click to be used as the event that causes the filter to fire.
+        ///Typically used when the filter controls are being set manually
+        /// </summary>
+        public void ApplyFilter()
+        {
+            throw new NotImplementedException("not implemented on win");
         }
     }
 }

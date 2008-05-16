@@ -175,6 +175,11 @@ namespace Habanero.UI.Win
             throw new NotImplementedException();
         }
 
+        public IWizardControl CreateWizardControl(IWizardController wizardController)
+        {
+            throw new NotImplementedException();
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();
@@ -274,9 +279,9 @@ namespace Habanero.UI.Win
             return new ReadOnlyGridWin();
         }
 
-        public IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons(IControlFactory controlfactory)
+        public IReadOnlyGridControl CreateReadOnlyGridControl(IControlFactory controlfactory)
         {
-            return  new ReadOnlyGridWithButtonsWin();
+            return  new ReadOnlyGridControlWin();
         }
 
         public IButtonGroupControl CreateButtonGroupControl()

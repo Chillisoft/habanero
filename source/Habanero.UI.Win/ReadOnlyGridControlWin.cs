@@ -2,15 +2,17 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.Win
 {
-    public class ReadOnlyGridWithButtonsWin : ControlWin, IReadOnlyGridWithButtons
+    public class ReadOnlyGridControlWin : ControlWin, IReadOnlyGridControl
     {
         private IBusinessObjectEditor _BusinessObjectEditor;
         private IBusinessObjectCreator _BusinessObjectCreator;
         private IBusinessObjectDeletor _businessObjectDeletor;
         private ClassDef _classDef;
+        private IFilterControl _filterControl;
 
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
@@ -67,6 +69,11 @@ namespace Habanero.UI.Win
         public ClassDef ClassDef
         {
             get { return _classDef; }
+        }
+
+        public IFilterControl FilterControl
+        {
+            get { return _filterControl; }
         }
 
 

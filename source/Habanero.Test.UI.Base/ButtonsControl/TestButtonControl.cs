@@ -55,12 +55,12 @@ namespace Habanero.Test.UI.Base
         //    {
         //        return new ControlFactoryWin();
         //    }
-        //    //protected override IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons()
+        //    //protected override IReadOnlyGridControl CreateReadOnlyGridControl()
         //    //{
-        //    //    ReadOnlyGridWithButtonsWin readOnlyGridWithButtonsWin = new ReadOnlyGridWithButtonsWin();
+        //    //    ReadOnlyGridControlWin readOnlyGridControlWin = new ReadOnlyGridControlWin();
         //    //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-        //    //    frm.Controls.Add(readOnlyGridWithButtonsWin);
-        //    //    return readOnlyGridWithButtonsWin;
+        //    //    frm.Controls.Add(readOnlyGridControlWin);
+        //    //    return readOnlyGridControlWin;
         //    //}
         //[Test]
         //public void TestSetDefaultButton_WinOnly()

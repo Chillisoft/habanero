@@ -87,7 +87,7 @@
     <Compile Include="ReadOnlyGridWin.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ReadOnlyGridWithButtonsWin.cs">
+    <Compile Include="ReadOnlyGridControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TextBoxWin.cs">

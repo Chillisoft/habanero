@@ -70,7 +70,7 @@
     <Compile Include="Grid\TestReadOnlyGrid.cs" />
     <Compile Include="LayoutManager\TestBorderLayoutManager.cs" />
     <Compile Include="Grid\TestReadOnlyGridButtonControl.cs" />
-    <Compile Include="Grid\TestReadOnlyGridWithButtons.cs" />
+    <Compile Include="Grid\TestReadOnlyGridControl.cs" />
     <Compile Include="LayoutManager\TestGridLayoutManager.cs" />
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
@@ -97,6 +97,9 @@
     <Compile Include="MultiSelector\TestMultiSelector.cs" />
     <Compile Include="MultiSelector\TestMultiSelectorModel.cs" />
     <Compile Include="TestPanelFactory.cs" />
+    <Compile Include="Wizard\TestWizardControl.cs" />
+    <Compile Include="Wizard\TestWizardController.cs" />
+    <Compile Include="Wizard\TestWizardForm.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">

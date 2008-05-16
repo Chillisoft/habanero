@@ -57,5 +57,16 @@ namespace Habanero.UI.Base.FilterControl
         /// <param name="nullable">Must the date time picker be nullable</param>
         /// <returns>Returns the new DateTimePicker added</returns>
         IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool ignoreTime, bool nullable);
+        /// <summary>
+        /// The event that is fired with the filter is ready so that another control e.g. a grid can be filtered.
+        /// </summary>
+        event EventHandler Filter;
+
+        /// <summary>
+        ///Applies the filter that has been captured.
+        ///This allows an external control e.g. another button click to be used as the event that causes the filter to fire.
+        ///Typically used when the filter controls are being set manually
+        /// </summary>
+        void ApplyFilter();
     }
 }

@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Habanero.Test.UI.Grid
 {
     [TestFixture]
-    public class TestReadonlyGridWithButtons
+    public class TestReadonlyGridControl
     {
         
         [SetUp]

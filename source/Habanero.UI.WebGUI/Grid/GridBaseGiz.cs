@@ -8,7 +8,6 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-
     public abstract class GridBaseGiz : DataGridView, IGridBase
     {
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
@@ -27,25 +26,21 @@ namespace Habanero.UI.WebGUI
             _mngr = new GridBaseManager(this);
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
             _mngr.CollectionChanged += delegate { FireCollectionChanged(); };
-
         }
 
-        
 
         private void FireBusinessObjectSelected()
         {
-                if (this.BusinessObjectSelected != null)
-                {
-                    this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
-                }
-
+            if (this.BusinessObjectSelected != null)
+            {
+                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
+            }
         }
 
 
         public void SetCollection(IBusinessObjectCollection col)
         {
             _mngr.SetCollection(col);
-
         }
 
         /// <summary>
@@ -54,7 +49,6 @@ namespace Habanero.UI.WebGUI
         /// <returns>Returns a business collection</returns>
         public IBusinessObjectCollection GetCollection()
         {
-
             return _mngr.GetCollection();
         }
 
@@ -79,18 +73,18 @@ namespace Habanero.UI.WebGUI
         public BusinessObject SelectedBusinessObject
         {
             get { return _mngr.SelectedBusinessObject; }
-            set { _mngr.SelectedBusinessObject = value;
-            this.FireBusinessObjectSelected();
-        }
+            set
+            {
+                _mngr.SelectedBusinessObject = value;
+                this.FireBusinessObjectSelected();
+            }
         }
 
         public IList<BusinessObject> SelectedBusinessObjects
         {
-            get
-            {
-                return _mngr.SelectedBusinessObjects;
-            }
+            get { return _mngr.SelectedBusinessObjects; }
         }
+
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
@@ -300,11 +294,13 @@ namespace Habanero.UI.WebGUI
                 _columns[colnum].DataPropertyName = columnName;
                 return colnum;
             }
+
             public void Add(IDataGridViewColumn dataGridViewColumn)
             {
-                DataGridViewColumnGiz col = (DataGridViewColumnGiz)dataGridViewColumn;
+                DataGridViewColumnGiz col = (DataGridViewColumnGiz) dataGridViewColumn;
                 _columns.Add(col.DataGridViewColumn);
             }
+
             public IDataGridViewColumn this[int index]
             {
                 get { return new DataGridViewColumnGiz(_columns[index]); }
@@ -392,6 +388,7 @@ namespace Habanero.UI.WebGUI
                 get { return _dataGridViewRow.DataBoundItem; }
             }
         }
+
         private class DataGridViewCellCollectionGiz : IDataGridViewCellCollection
         {
             private readonly DataGridViewCellCollection _cells;
@@ -525,7 +522,7 @@ namespace Habanero.UI.WebGUI
 
             public int Count
             {
-                get {return _selectedRows.Count; }
+                get { return _selectedRows.Count; }
             }
 
             public IDataGridViewRow this[int index]

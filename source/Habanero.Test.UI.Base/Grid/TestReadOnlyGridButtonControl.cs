@@ -51,7 +51,7 @@ namespace Habanero.Test.UI.Base
         }
         protected abstract void AddControlToForm(IControlChilli cntrl);
         protected abstract IControlFactory GetControlFactory();
-        //protected abstract IGridBase CreateReadOnlyGridWithButtons();
+        //protected abstract IGridBase CreateReadOnlyGridControl();
 
         //[TestFixture]
         //public class TestReadOnlyGridButtonControlWin : TestReadOnlyGridButtonControl
@@ -129,8 +129,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result ----------------------
 
             IReadOnlyGridButtonsControl readOnlyGridButtonsControl = (IReadOnlyGridButtonsControl)grid;
-            //AddControlToForm(readOnlyGridButtonsControl);
-            //TODO: peter cant figure out why if I add these to the form as above then get failure else OK
             Assert.AreEqual(3, readOnlyGridButtonsControl.Controls.Count);
 
             //Delete Not Visible and Text Correct
@@ -157,7 +155,6 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridButtonsControl readOnlyGridButtonsControl = GetControlFactory().CreateReadOnlyGridButtonsControl();
-            //AddControlToForm(readOnlyGridButtonsControl);            //TODO: peter cant figure out why if I add these to the form as above then get failure else OK
 
             IButton btn = readOnlyGridButtonsControl["Delete"];
             //--------------verify Test pack -------------------
@@ -173,7 +170,6 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridButtonsControl readOnlyGridButtonsControl = GetControlFactory().CreateReadOnlyGridButtonsControl();
-            //AddControlToForm(readOnlyGridButtonsControl);            //TODO: peter cant figure out why if I add these to the form as above then get failure else OK
 
             IButton btn = readOnlyGridButtonsControl["Delete"];
             readOnlyGridButtonsControl.ShowDefaultDeleteButton = true;
@@ -233,6 +229,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result ----------------------
             Assert.IsTrue(editClicked);
         }
+
     }
 
 }

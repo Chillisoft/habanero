@@ -27,7 +27,7 @@ namespace Habanero.UI.Base
 {
     /// <summary>
     /// Creates business objects.  The default creator is used by facilities
-    /// like ReadOnlyGridWithButtons to create new business objects.  Inherit
+    /// like readOnlyGridControl to create new business objects.  Inherit
     /// from this class if you need to carry out additional steps at the time
     /// of creating a new business object.
     /// </summary>

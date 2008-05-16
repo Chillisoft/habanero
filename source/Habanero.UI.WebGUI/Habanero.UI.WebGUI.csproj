@@ -94,7 +94,7 @@
     </Compile>
     <Compile Include="ControlFactoryGizmox.cs">
     </Compile>
-    <Compile Include="GridBaseGiz.cs">
+    <Compile Include="Grid\GridBaseGiz.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="LabelGiz.cs">
@@ -113,13 +113,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadOnlyGridButtonsControlGiz.cs">
+    <Compile Include="Grid\ReadOnlyGridButtonsControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ReadOnlyGridGiz.cs">
+    <Compile Include="Grid\ReadOnlyGridGiz.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ReadOnlyGridWithButtonsGiz.cs">
+    <Compile Include="Grid\ReadOnlyGridControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TextBoxGiz.cs">
@@ -131,8 +131,30 @@
     <Compile Include="ToBeGeneralised\TabControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ToolTipGiz.cs" />
     <Compile Include="TreeViewGiz.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardControlGiz.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardFormGiz.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Wizard\WizardFormGiz.designer.cs">
+      <DependentUpon>WizardFormGiz.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\MessageWizardStepGiz.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\MessageWizardStepGiz.designer.cs">
+      <DependentUpon>MessageWizardStepGiz.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepGiz.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\NullWizardStepGiz.designer.cs">
+      <DependentUpon>NullWizardStepGiz.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +183,14 @@
     <EmbeddedResource Include="MultiSelectorGiz.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MultiSelectorGiz.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\WizardFormGiz.resx">
+      <DependentUpon>WizardFormGiz.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\MessageWizardStepGiz.resx">
+      <DependentUpon>MessageWizardStepGiz.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

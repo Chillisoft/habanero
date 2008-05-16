@@ -11,7 +11,6 @@ namespace Habanero.UI.WebGUI
 {
     public class ControlFactoryGizmox : IControlFactory
     {
-
         public IFilterControl CreateFilterControl()
         {
             return new FilterControlGiz(this);
@@ -21,10 +20,12 @@ namespace Habanero.UI.WebGUI
         {
             return new TextBoxGiz();
         }
+
         public IComboBox CreateComboBox()
         {
             ComboBoxGiz comboBox = new ComboBoxGiz();
-            comboBox.Height = CreateTextBox().Height; // set the combobox to the default height of a text box on this machine.
+            comboBox.Height = CreateTextBox().Height;
+                // set the combobox to the default height of a text box on this machine.
             return comboBox;
         }
 
@@ -53,7 +54,7 @@ namespace Habanero.UI.WebGUI
             IButton btn = CreateButton();
             btn.Text = text;
             btn.Name = text;
-            ((Button)btn).FlatStyle = FlatStyle.Standard;
+            ((Button) btn).FlatStyle = FlatStyle.Standard;
             btn.Width = CreateLabel(text, false).PreferredWidth + 20;
             return btn;
         }
@@ -81,7 +82,7 @@ namespace Habanero.UI.WebGUI
         public ILabel CreateLabel(string labelText)
         {
             LabelGiz label = new LabelGiz(labelText);
-            label.Width = label.Text.Length * 8;
+            label.Width = label.Text.Length*8;
             label.Height = 15;
             label.TabStop = false;
             return label;
@@ -108,9 +109,9 @@ namespace Habanero.UI.WebGUI
         }
 
 
-        public IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons(IControlFactory controlfactory)
+        public IReadOnlyGridControl CreateReadOnlyGridControl(IControlFactory controlfactory)
         {
-            return new ReadOnlyGridWithButtonsGiz(controlfactory);
+            return new ReadOnlyGridControlGiz(controlfactory);
         }
 
         public IButtonGroupControl CreateButtonGroupControl()
@@ -193,6 +194,7 @@ namespace Habanero.UI.WebGUI
             tv.Name = name;
             return tv;
         }
+
         /// <summary>
         /// Creates a new control of the type specified.
         /// </summary>
@@ -202,20 +204,20 @@ namespace Habanero.UI.WebGUI
         public IControlChilli CreateControl(Type controlType)
         {
             IControlChilli ctl;
-            if (controlType.IsSubclassOf(typeof(Control)))
+            if (controlType.IsSubclassOf(typeof (Control)))
             {
-                if (controlType == typeof(ComboBox))return CreateComboBox();
-                if (controlType == typeof(CheckBox))return CreateCheckBox();
-                if (controlType == typeof(TextBox))return CreateTextBox();
-                if (controlType == typeof(ListBox)) return CreateListBox();
-                if (controlType == typeof(DateTimePicker)) return CreateDateTimePicker();
+                if (controlType == typeof (ComboBox)) return CreateComboBox();
+                if (controlType == typeof (CheckBox)) return CreateCheckBox();
+                if (controlType == typeof (TextBox)) return CreateTextBox();
+                if (controlType == typeof (ListBox)) return CreateListBox();
+                if (controlType == typeof (DateTimePicker)) return CreateDateTimePicker();
 
-                ctl = (IControlChilli)Activator.CreateInstance(controlType);
+                ctl = (IControlChilli) Activator.CreateInstance(controlType);
                 PropertyInfo infoFlatStyle =
                     ctl.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
                 if (infoFlatStyle != null)
                 {
-                    infoFlatStyle.SetValue(ctl, FlatStyle.Standard, new object[] { });
+                    infoFlatStyle.SetValue(ctl, FlatStyle.Standard, new object[] {});
                 }
             }
             else
@@ -225,9 +227,6 @@ namespace Habanero.UI.WebGUI
             }
             return ctl;
         }
-
-
-
 
 
         /// <summary>
@@ -288,17 +287,19 @@ namespace Habanero.UI.WebGUI
         {
             return CreateCheckBox(false);
         }
+
         /// <summary>
         /// Creates a new CheckBox with a specified initial checked state
         /// </summary>
         /// <param name="defaultValue">Whether the initial box is ticked</param>
         /// <returns>Returns a new CheckBox object</returns>
-        public  ICheckBox CreateCheckBox(bool defaultValue)
+        public ICheckBox CreateCheckBox(bool defaultValue)
         {
             CheckBoxGiz cbx = new CheckBoxGiz();
             cbx.Checked = defaultValue;
             cbx.FlatStyle = FlatStyle.Standard;
-            cbx.Height = CreateTextBox().Height; // set the combobox to the default height of a text box on this machine.
+            cbx.Height = CreateTextBox().Height;
+                // set the combobox to the default height of a text box on this machine.
             cbx.Width = cbx.Height;
             cbx.BackColor = SystemColors.Control;
 
@@ -309,7 +310,7 @@ namespace Habanero.UI.WebGUI
         /// Creates a new progress bar
         /// </summary>
         /// <returns>Returns a new ProgressBar object</returns>
-        public  IProgressBar CreateProgressBar()
+        public IProgressBar CreateProgressBar()
         {
             ProgressBarGiz bar = new ProgressBarGiz();
             return bar;
@@ -320,7 +321,7 @@ namespace Habanero.UI.WebGUI
         /// docked controls
         /// </summary>
         /// <returns>Returns a new Splitter object</returns>
-        public  ISplitter CreateSplitter()
+        public ISplitter CreateSplitter()
         {
             SplitterGiz splitter = new SplitterGiz();
             Color newBackColor =
@@ -335,7 +336,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         /// <param name="title">The page title to appear in the tab</param>
         /// <returns>Returns a new TabPage object</returns>
-        public  ITabPage CreateTabPage(string title)
+        public ITabPage CreateTabPage(string title)
         {
             TabPageGiz page = new TabPageGiz();
             page.Text = title;
@@ -347,7 +348,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         /// <param name="text">The text to appear next to the radio button</param>
         /// <returns>Returns a new RadioButton object</returns>
-        public  IRadioButton CreateRadioButton(string text)
+        public IRadioButton CreateRadioButton(string text)
         {
             RadioButtonGiz rButton = new RadioButtonGiz();
             rButton.Text = text;
@@ -361,7 +362,7 @@ namespace Habanero.UI.WebGUI
         /// Creates a new GroupBox
         /// </summary>
         /// <returns>Returns the new GroupBox</returns>
-        public  IGroupBox CreateGroupBox()
+        public IGroupBox CreateGroupBox()
         {
             return new GroupBoxGiz();
         }
@@ -390,10 +391,10 @@ namespace Habanero.UI.WebGUI
         /// <param name="numLines"></param>
         public ITextBox CreateTextBoxMultiLine(int numLines)
         {
-            TextBoxGiz tb = (TextBoxGiz)CreateTextBox();
+            TextBoxGiz tb = (TextBoxGiz) CreateTextBox();
             tb.Multiline = true;
             tb.AcceptsReturn = true;
-            tb.Height = tb.Height * numLines;
+            tb.Height = tb.Height*numLines;
             tb.ScrollBars = ScrollBars.Vertical;
             return tb;
         }
@@ -403,18 +404,10 @@ namespace Habanero.UI.WebGUI
             DataGridViewColumnGiz col = new DataGridViewColumnGiz();
             return col;
         }
-    }
 
-    public class ToolTipGiz :ToolTip, IToolTip
-    {
-        public void SetToolTip(IControlChilli control, string toolTipText)
+        public IWizardControl CreateWizardControl(IWizardController wizardController)
         {
-            base.SetToolTip((Control)control,toolTipText);
-        }
-
-        public string GetToolTip(IControlChilli controlChilli)
-        {
-            return base.GetToolTip((Control) controlChilli);
+            return new WizardControlGiz(wizardController, this);
         }
     }
 }

@@ -33,6 +33,6 @@ namespace Habanero.UI.Base
 
         Color BackColor { get; set; }
         bool TabStop { get; set; }
-
+        Size Size { get; set; }
     }
 }
