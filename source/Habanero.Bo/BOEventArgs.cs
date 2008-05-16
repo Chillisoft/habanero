@@ -26,7 +26,7 @@ namespace Habanero.BO
     /// </summary>
     public class BOEventArgs : EventArgs
     {
-        private BusinessObject _bo;
+        private readonly BusinessObject _bo;
 
         /// <summary>
         /// Constructor to initialise a new set of arguments
@@ -41,6 +41,32 @@ namespace Habanero.BO
         /// Returns the business object related to the event
         /// </summary>
         public BusinessObject BusinessObject
+        {
+            get { return _bo; }
+        }
+    }
+
+
+    /// <summary>
+    /// Provides arguments to attach for an event involving business objects
+    /// </summary>
+    public class BOEventArgs<TBusinessObject> : EventArgs where TBusinessObject : BusinessObject
+    {
+        private readonly TBusinessObject _bo;
+
+        /// <summary>
+        /// Constructor to initialise a new set of arguments
+        /// </summary>
+        /// <param name="bo">The related business object</param>
+        public BOEventArgs(TBusinessObject bo)
+        {
+            _bo = bo;
+        }
+
+        /// <summary>
+        /// Returns the business object related to the event
+        /// </summary>
+        public TBusinessObject BusinessObject
         {
             get { return _bo; }
         }

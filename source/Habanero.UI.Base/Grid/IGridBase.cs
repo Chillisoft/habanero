@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Habanero.Base;
 using Habanero.BO;
 
@@ -24,7 +25,7 @@ namespace Habanero.UI.Base
         bool AllowUserToAddRows { get; set; }
 
         object DataSource { get; set; }
-
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         BusinessObject SelectedBusinessObject { get; set; }
 
         IList<BusinessObject> SelectedBusinessObjects { get; }

@@ -40,21 +40,6 @@ namespace Habanero.Test.UI.Base
                 Assert.IsFalse(cbx.Checked);
                 //---------------Tear Down -------------------------          
             }
-            [Test]
-            public void TestLabel_PreferredWidth()
-            {
-                //---------------Set up test pack-------------------
-                ILabel myLabel = GetControlFactory().CreateLabel();
-                string labelText = "sometext";
-                myLabel.Text = labelText;
-
-                //---------------Execute Test ----------------------
-                int preferredWidth = myLabel.PreferredWidth;
-                //---------------Test Result -----------------------
-
-                Assert.AreEqual(labelText.Length*8, preferredWidth);
-                //---------------Tear Down -------------------------          
-            }
 
             [Test]
             public void TestCreateControl_ViaType_CreateCombo()

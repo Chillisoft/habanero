@@ -15,7 +15,7 @@ namespace Habanero.UI.WebGUI
         {
         }
 
-        private const int WIDTH_FACTOR = 8;
+        private const int WIDTH_FACTOR = 6;
         public int PreferredWidth
         {
             get { return this.Text.Length * WIDTH_FACTOR; }

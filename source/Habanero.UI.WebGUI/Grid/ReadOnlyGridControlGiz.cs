@@ -27,11 +27,11 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
-        public ReadOnlyGridControlGiz(IControlFactory controlfactory)
+        public ReadOnlyGridControlGiz()
         {
-            if (controlfactory == null) throw new ArgumentNullException("controlfactory");
+      
 
-            _controlFactory = controlfactory;
+            _controlFactory = new ControlFactoryGizmox();
             BorderLayoutManager borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
             _grid = new ReadOnlyGridGiz();
             _grid.Name = "GridControl";
@@ -44,7 +44,7 @@ namespace Habanero.UI.WebGUI
             _buttons.Name = "ButtonControl";
             borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
 
-            _filterControl = new FilterControlGiz(controlfactory);
+            _filterControl = new FilterControlGiz(_controlFactory);
             borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
 
             _filterControl.Filter += delegate

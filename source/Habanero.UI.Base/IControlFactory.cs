@@ -42,7 +42,7 @@ namespace Habanero.UI.Base
         BorderLayoutManager CreateBorderLayoutManager(IControlChilli control);
         IPanel CreatePanel();
         IReadOnlyGrid CreateReadOnlyGrid();
-        IReadOnlyGridControl CreateReadOnlyGridControl(IControlFactory controlfactory);
+        IReadOnlyGridControl CreateReadOnlyGridControl();
         IButtonGroupControl CreateButtonGroupControl();
         IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl();
         /// <summary>

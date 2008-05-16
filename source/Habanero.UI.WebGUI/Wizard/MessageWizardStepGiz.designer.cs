@@ -20,7 +20,7 @@
 
 using Gizmox.WebGUI.Forms;
 
-namespace Habanero.WebGUI.Wizard
+namespace Habanero.UI.WebGUI.Wizard
 {
     partial class MessageWizardStepGiz
     {

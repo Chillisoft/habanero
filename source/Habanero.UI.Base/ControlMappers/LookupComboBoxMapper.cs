@@ -215,21 +215,28 @@ namespace Habanero.UI.Base
         /// <param name="col">The items used to populate the list</param>
         public override void SetLookupList(Dictionary<string, object> col)
         {
-            int width = _comboBox.Width;
-            ILabel lbl = _controlFactory.CreateLabel("", false);
+            //int width = _comboBox.Width;
+            int chars = 0;
+            //ILabel lbl = _controlFactory.CreateLabel("", false);
             _collection = col;
             _comboBox.Items.Clear();
             _comboBox.Items.Add("");
             foreach (KeyValuePair<string, object> pair in _collection)
             {
-                lbl.Text = pair.Key;
-                if (lbl.PreferredWidth > width)
+                //lbl.Text = pair.Key;
+                //if (lbl.PreferredWidth > width)
+                //{
+                //    width = lbl.PreferredWidth;
+                //}
+                if (pair.Key.Length > chars)
                 {
-                    width = lbl.PreferredWidth;
+                    chars = pair.Key.Length;
                 }
                 _comboBox.Items.Add(pair.Key);
             }
-            _comboBox.DropDownWidth = width;
+            //TODO: the dropdownwidth must be set for windows to a more sensible number based on pixels.
+           // _comboBox.DropDownWidth = 25;
+            _comboBox.DropDownWidth = chars;
         }
 
 

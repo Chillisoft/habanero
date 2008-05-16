@@ -39,7 +39,7 @@ namespace Habanero.Test.UI.Base
                 int preferredWidth = myLabel.PreferredWidth;
                 //---------------Test Result -----------------------
 
-                Assert.AreEqual(labelText.Length * 8, preferredWidth);
+                Assert.AreEqual(labelText.Length * 6, preferredWidth);
                 //---------------Tear Down -------------------------          
             }
         }

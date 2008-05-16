@@ -279,7 +279,7 @@ namespace Habanero.UI.Win
             return new ReadOnlyGridWin();
         }
 
-        public IReadOnlyGridControl CreateReadOnlyGridControl(IControlFactory controlfactory)
+        public IReadOnlyGridControl CreateReadOnlyGridControl()
         {
             return  new ReadOnlyGridControlWin();
         }

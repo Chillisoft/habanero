@@ -72,7 +72,7 @@ namespace Habanero.Test.UI.Grid
             protected override IReadOnlyGridControl CreatereadOnlyGridControl()
             {
                 ReadOnlyGridControlGiz readOnlyGridControlGiz =
-                    new ReadOnlyGridControlGiz(GetControlFactory());
+                    new ReadOnlyGridControlGiz();
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add(readOnlyGridControlGiz);
                 return readOnlyGridControlGiz;

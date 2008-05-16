@@ -11,6 +11,7 @@ namespace Habanero.UI.WebGUI
 {
     public class ControlFactoryGizmox : IControlFactory
     {
+        public const int TEXTBOX_HEIGHT = 20;
         public IFilterControl CreateFilterControl()
         {
             return new FilterControlGiz(this);
@@ -18,14 +19,15 @@ namespace Habanero.UI.WebGUI
 
         public ITextBox CreateTextBox()
         {
-            return new TextBoxGiz();
+            TextBoxGiz tb = new TextBoxGiz();
+            tb.Height = TEXTBOX_HEIGHT;
+            return tb;
         }
 
         public IComboBox CreateComboBox()
         {
             ComboBoxGiz comboBox = new ComboBoxGiz();
-            comboBox.Height = CreateTextBox().Height;
-                // set the combobox to the default height of a text box on this machine.
+            comboBox.Height = TEXTBOX_HEIGHT; 
             return comboBox;
         }
 
@@ -82,7 +84,7 @@ namespace Habanero.UI.WebGUI
         public ILabel CreateLabel(string labelText)
         {
             LabelGiz label = new LabelGiz(labelText);
-            label.Width = label.Text.Length*8;
+            label.Width = label.PreferredWidth;
             label.Height = 15;
             label.TabStop = false;
             return label;
@@ -109,9 +111,9 @@ namespace Habanero.UI.WebGUI
         }
 
 
-        public IReadOnlyGridControl CreateReadOnlyGridControl(IControlFactory controlfactory)
+        public IReadOnlyGridControl CreateReadOnlyGridControl()
         {
-            return new ReadOnlyGridControlGiz(controlfactory);
+            return new ReadOnlyGridControlGiz();
         }
 
         public IButtonGroupControl CreateButtonGroupControl()
