@@ -178,5 +178,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="numLines"></param>
         ITextBox CreateTextBoxMultiLine(int numLines);
+
+        IDataGridViewColumn CreateDataGridViewColumn();
     }
 }

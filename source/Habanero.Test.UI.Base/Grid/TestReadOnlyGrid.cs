@@ -118,6 +118,13 @@ namespace Habanero.Test.UI.Grid
             ////---------------Test Result -----------------------
             Assert.IsNotNull(grid);
             Assert.IsTrue(grid is IReadOnlyGrid);
+            IReadOnlyGrid readOnlyGrid = (IReadOnlyGrid) grid;
+            readOnlyGrid.ReadOnly = true;
+            readOnlyGrid.AllowUserToAddRows = false;
+            readOnlyGrid.AllowUserToDeleteRows = false;
+            //Need interfact to test selectionMode not sure if worth it.
+            //see when implementing for windows. 
+            //  readOnlyGrid.SelectionMode = Gizmox.WebGUI.Forms.DataGridViewSelectionMode.FullRowSelect;
         }
 
         [Test]

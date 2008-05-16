@@ -1,5 +1,6 @@
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
@@ -23,6 +24,10 @@ namespace Habanero.UI.Base
     public interface IReadOnlyGridWithButtons : IControlChilli
     {
         /// <summary>
+        /// initiliase the grid to the with the 'default' UIdef.
+        /// </summary>
+        void Initialise(ClassDef classDef);
+        /// <summary>
         /// Returns the grid object held. This property can be used to
         /// access a range of functionality for the grid
         /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
@@ -43,6 +48,10 @@ namespace Habanero.UI.Base
 
         IBusinessObjectDeletor BusinessObjectDeletor { get; set; }
 
+        string UiDefName { get; }
+
+        ClassDef ClassDef { get; }
+
         /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
@@ -52,5 +61,7 @@ namespace Habanero.UI.Base
         /// <param name="boCollection">The new business object collection
         /// to be shown in the grid</param>
         void SetCollection(IBusinessObjectCollection boCollection);
+
+        void Initialise(ClassDef def, string uiDefName);
     }
 }

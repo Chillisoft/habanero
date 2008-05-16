@@ -113,6 +113,15 @@ namespace Habanero.Test
 								</columnLayout>
 							</tab>
 						</form>
+					</ui> 
+					<ui name=""AlternateNoGrid"">
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
 					</ui>                    
 				</class>
 			");

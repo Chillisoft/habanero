@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
     <Compile Include="DefaultBODeletor.cs" />
-    <Compile Include="Grid\IReadOnlyGridControl.cs" />
+    <Compile Include="Grid\IDataGridViewColumn.cs" />
     <Compile Include="Util\GlobalUIRegistry.cs" />
     <Compile Include="Grid\IDataGridView.cs" />
     <Compile Include="Grid\IDataGridViewCell.cs" />
@@ -75,7 +75,6 @@
     <Compile Include="FilterControl\DataViewNullFilterClause.cs" />
     <Compile Include="FilterControl\DataViewStringFilterClause.cs" />
     <Compile Include="FilterControl\FilterControlManager.cs" />
-    <Compile Include="Grid\IDataGridViewColumn.cs" />
     <Compile Include="Grid\IDataGridViewSelectedRowCollection.cs" />
     <Compile Include="Grid\IReadOnlyGrid.cs" />
     <Compile Include="ControlInterfaces\IButtonGroupControl.cs" />

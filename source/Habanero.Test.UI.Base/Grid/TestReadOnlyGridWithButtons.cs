@@ -2,6 +2,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using NUnit.Framework;
@@ -10,6 +11,9 @@ namespace Habanero.Test.UI.Grid
 {
     public abstract class TestReadonlyGridWithButtons : TestUsingDatabase
     {
+        //TODO: Move dataView Logic out of GridBase
+
+        //TODO: successful edit button click should update the values in the grid on Windows.Forms
         [SetUp]
         public void SetupTest()
         {
@@ -29,6 +33,7 @@ namespace Habanero.Test.UI.Grid
         {
         }
 
+        protected abstract void AddControlToForm(IControlChilli control);
         protected abstract IControlFactory GetControlFactory();
         protected abstract IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons();
 
@@ -50,33 +55,41 @@ namespace Habanero.Test.UI.Grid
         [TestFixture]
         public class TestReadonlyGridWithButtonsGiz : TestReadonlyGridWithButtons
         {
+            protected override void AddControlToForm(IControlChilli control)
+            {
+                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
+                frm.Controls.Add((Gizmox.WebGUI.Forms.Control) control);
+            }
+
             protected override IControlFactory GetControlFactory()
             {
                 return new ControlFactoryGizmox();
             }
+
             protected override IReadOnlyGridWithButtons CreateReadOnlyGridWithButtons()
             {
-                ReadOnlyGridWithButtonsGiz readOnlyGridWithButtonsGiz = new ReadOnlyGridWithButtonsGiz(GetControlFactory());
+                ReadOnlyGridWithButtonsGiz readOnlyGridWithButtonsGiz =
+                    new ReadOnlyGridWithButtonsGiz(GetControlFactory());
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add(readOnlyGridWithButtonsGiz);
                 return readOnlyGridWithButtonsGiz;
             }
         }
 
-        //TODO:
         // These two tests both write to the database.  If there is a way
         //   to mock these without writing then please change it, but I
         //   couldn't see how to mock a BO or a connection successfully
-        [Test, Ignore("Ignore to be sorted out by brett")]
+        [Test]
         public void TestAcceptance_DeleteButtonClickSuccessfulDelete()
         {
             //---------------Set up test pack-------------------
-            ContactPerson bo = new ContactPerson();
+            ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            ContactPersonTestBO bo = new ContactPersonTestBO();
             bo.Surname = "please delete me.";
             bo.Save();
             BOPrimaryKey contactPersonPK = bo.ID;
 
-            BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
+            BusinessObjectCollection<ContactPersonTestBO> boCol = new BusinessObjectCollection<ContactPersonTestBO>();
             boCol.Add(bo);
             IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
             readOnlyGridWithButtons.Grid.Columns.Add("Surname", "Surname");
@@ -87,24 +100,25 @@ namespace Habanero.Test.UI.Grid
             readOnlyGridWithButtons.Buttons["Delete"].PerformClick();
             //---------------Test Result -----------------------
 
-            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(contactPersonPK);
+            ContactPersonTestBO contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(contactPersonPK);
             Assert.IsNull(contactPerson);
         }
-        //TODO:
-        [Test, Ignore("Ignore to be sorted out by brett")]
+
+        [Test]
         public void TestAcceptance_DeleteButtonClickUnsuccessfulDelete()
         {
             //---------------Set up test pack-------------------
-            ContactPerson person = new ContactPerson();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_PreventDelete_WithUIDef();
+            ContactPersonTestBO person = new ContactPersonTestBO();
             person.Surname = "please delete me";
+            person.FirstName = "fjdal;fjasdf";
             person.Save();
             BOPrimaryKey contactPersonPK = person.ID;
-            person.AddPreventDeleteRelationship();
 
             Address address = person.Addresses.CreateBusinessObject();
             address.Save();
 
-            BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
+            BusinessObjectCollection<ContactPersonTestBO> boCol = new BusinessObjectCollection<ContactPersonTestBO>();
             boCol.Add(person);
             IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
             readOnlyGridWithButtons.Grid.Columns.Add("Surname", "Surname");
@@ -119,10 +133,10 @@ namespace Habanero.Test.UI.Grid
             //---------------Test Result -----------------------
 
             Assert.IsTrue(exceptionNotifier.Notified);
-            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(contactPersonPK);
+            ContactPersonTestBO contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(contactPersonPK);
             Assert.IsNotNull(contactPerson);
-
         }
+
         [Test]
         public void TestCreateReadOnlyGridWithButtons()
         {
@@ -136,35 +150,237 @@ namespace Habanero.Test.UI.Grid
             IReadOnlyGridWithButtons readOnlyGrid = (IReadOnlyGridWithButtons) grid;
             Assert.IsNotNull(readOnlyGrid.Grid);
             Assert.IsNotNull(readOnlyGrid.Buttons);
+            Assert.AreEqual("", readOnlyGrid.UiDefName);
+            Assert.IsNull(readOnlyGrid.ClassDef);
+            Assert.IsTrue(readOnlyGrid.Grid.ReadOnly);
         }
 
-        //[Test]
-        //public void Test()
-        //{
-        //    //---------------Set up test pack-------------------
-            
-        //    //---------------Execute Test ----------------------
-
-        //    //---------------Test Result -----------------------
-
-        //    //---------------Tear Down -------------------------          
-        //}
-
         [Test]
-        public void TestReadOnlyGridWithButtons_WithColumns()
+        public void TestReadOnlyGridWithButtons_AddColumn_AsString()
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            //CreateCollectionWith_4_Objects();
             IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
-            
-            //---------------Execute Test ----------------------
             IReadOnlyGrid readOnlyGrid = readOnlyGridWithButtons.Grid;
+
+            //---------------Execute Test ----------------------
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
             ////---------------Test Result -----------------------
             Assert.AreEqual(1, readOnlyGrid.Columns.Count);
         }
 
+        //[Test]
+        //public void TestReadOnlyGridWithButtons_AddColumn_Object()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    MyBO.LoadDefaultClassDef();
+        //    IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+        //    IReadOnlyGrid readOnlyGrid = readOnlyGridWithButtons.Grid;
+
+        //    //---------------Execute Test ----------------------
+        //    IDataGridViewColumn col = GetControlFactory().CreateDataGridViewColumn();
+        //    readOnlyGrid.Columns.Add(col);
+        //    ////---------------Test Result -----------------------
+        //    Assert.AreEqual(1, readOnlyGrid.Columns.Count);
+        //}
+
+        [Test]
+        public void TestInitGrid_DefaultUIDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IReadOnlyGridWithButtons grid = CreateReadOnlyGridWithButtons();
+            UIDef uiDef = classDef.UIDefCol["default"];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
+            Assert.AreEqual("", grid.UiDefName);
+            Assert.IsNull(grid.ClassDef);
+            //---------------Execute Test ----------------------
+            grid.Initialise(classDef);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("default", grid.UiDefName);
+            Assert.AreEqual(classDef, grid.ClassDef);
+            Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
+                            "There should be 1 ID column and 2 defined columns in the defaultDef");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestInitGrid_DefaultUIDef_VerifyColumnsSetupCorrectly()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IReadOnlyGridWithButtons grid = CreateReadOnlyGridWithButtons();
+            UIDef uiDef = classDef.UIDefCol["default"];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
+            UIGridColumn columnDef1 = uiGridDef[0];
+            Assert.AreEqual("TestProp", columnDef1.PropertyName);
+            UIGridColumn columnDef2 = uiGridDef[1];
+            Assert.AreEqual("TestProp2", columnDef2.PropertyName);
+            //---------------Execute Test ----------------------
+            grid.Initialise(classDef);
+
+            //---------------Test Result -----------------------
+            IDataGridViewColumn idColumn = grid.Grid.Columns[0];
+            AssertVerifyIDFieldSetUpCorrectly(idColumn);
+
+            IDataGridViewColumn dataColumn1 = grid.Grid.Columns[1];
+            AssertThatDataColumnSetupCorrectly(classDef, columnDef1, dataColumn1);
+
+            IDataGridViewColumn dataColumn2 = grid.Grid.Columns[2];
+            AssertThatDataColumnSetupCorrectly(classDef, columnDef2, dataColumn2);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestInitGrid_WithNonDefaultUIDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            string alternateUIDefName = "Alternate";
+            IReadOnlyGridWithButtons grid = CreateReadOnlyGridWithButtons();
+            UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(1, uiGridDef.Count, "1 defined column in the alternateUIDef");
+            //---------------Execute Test ----------------------
+            grid.Initialise(classDef, alternateUIDefName);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(alternateUIDefName, grid.UiDefName);
+            Assert.AreEqual(classDef, grid.ClassDef);
+            Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
+                            "There should be 1 ID column and 1 defined column in the alternateUIDef");
+            //---------------Tear Down -------------------------          
+        }
+
+        //Note: this can be changed to allow the grid to reinitialise everything if initialise called a second time.
+        // this may be necessary e.g. to use the same grid but swap out uidefs etc.
+        public void TestInitGrid_Twice_Fail()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridWithButtons grid = CreateReadOnlyGridWithButtons();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            //---------------Assert Preconditions---------------
+            //---------------Execute Test ----------------------
+            grid.Initialise(classDef);
+            try
+            {
+                grid.Initialise(classDef);
+                Assert.Fail("You should not be able to call initialise twice on a grid");
+            }
+                //---------------Test Result -----------------------
+            catch (GridBaseSetUpException ex)
+            {
+                StringAssert.Contains("You cannot initialise the grid more than once", ex.Message);
+            }
+        }
+
+        [Test]
+        public void TestInitGrid_WithInvalidUIDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IReadOnlyGridWithButtons grid = CreateReadOnlyGridWithButtons();
+            //---------------Execute Test ----------------------
+            try
+            {
+                grid.Initialise(classDef, "NonExistantUIDef");
+                Assert.Fail("Should raise an error if the class def does not the UIDef");
+                //---------------Test Result -----------------------
+            }
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains(" does not contain a definition for UIDef ", ex.Message);
+            }
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestInitGrid_With_NoGridDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            IReadOnlyGridWithButtons grid = CreateReadOnlyGridWithButtons();
+            //---------------Execute Test ----------------------
+            try
+            {
+                grid.Initialise(classDef, "AlternateNoGrid");
+                Assert.Fail("Should raise an error if the class def does not the GridDef");
+                //---------------Test Result -----------------------
+            }
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains(
+                    " does not contain a grid definition for UIDef AlternateNoGrid for the class def ", ex.Message);
+            }
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_AddInvalidColumn()
+        {
+            //This cannot be enforced since it is the grids underlying behaviour
+        }
+
+        [Test]
+        public void TestSetCollection_IncorrectClassDef()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
+            frm.Controls.Add((Gizmox.WebGUI.Forms.Control)readOnlyGridWithButtons);
+
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.Initialise(Sample.CreateClassDefGiz());
+            try
+            {
+                readOnlyGridWithButtons.SetCollection(col);
+                Assert.Fail("You cannot call set collection for a collection that has a different class def than is initialised");
+                ////---------------Test Result -----------------------
+            } catch (ArgumentException ex)
+            {
+                StringAssert.Contains("You cannot call set collection for a collection that has a different class def than is initialised", ex.Message);
+            }
+        }
+
+        [Test]
+        public void TestSetCollection_InitialisesGridIfNotPreviouslyInitialised()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.SetCollection(col);
+            ////---------------Test Result -----------------------
+            Assert.AreEqual("default", readOnlyGridWithButtons.UiDefName);
+            Assert.AreEqual(col.ClassDef, readOnlyGridWithButtons.ClassDef);
+        }
+        [Test]
+        public void TestSetCollection_NotInitialiseGrid_IfPreviouslyInitialised()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef =  MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            string alternateUIDefName = "Alternate";
+            IReadOnlyGridWithButtons grid = CreateReadOnlyGridWithButtons();
+
+            grid.Initialise(classDef, alternateUIDefName);
+            //---------------Execute Test ----------------------
+            grid.SetCollection(col);
+            ////---------------Test Result -----------------------
+            Assert.AreEqual(alternateUIDefName, grid.UiDefName);
+            
+        }
         [Test]
         public void TestSetCollection_NumberOfRows()
         {
@@ -173,7 +389,7 @@ namespace Habanero.Test.UI.Grid
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
             Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-            frm.Controls.Add((Gizmox.WebGUI.Forms.Control)readOnlyGridWithButtons);
+            frm.Controls.Add((Gizmox.WebGUI.Forms.Control) readOnlyGridWithButtons);
             IReadOnlyGrid readOnlyGrid = readOnlyGridWithButtons.Grid;
 
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
@@ -182,6 +398,7 @@ namespace Habanero.Test.UI.Grid
             ////---------------Test Result -----------------------
             Assert.AreEqual(4, readOnlyGrid.Rows.Count);
         }
+
         [Test]
         public void TestSetSelectedBusinessObject()
         {
@@ -190,7 +407,7 @@ namespace Habanero.Test.UI.Grid
             IReadOnlyGridWithButtons readOnlyGridWithButtons = GetGridWith_4_Rows(out col);
             BusinessObject bo = col[0];
             Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-            frm.Controls.Add((Gizmox.WebGUI.Forms.Control)readOnlyGridWithButtons);
+            frm.Controls.Add((Gizmox.WebGUI.Forms.Control) readOnlyGridWithButtons);
             //---------------Execute Test ----------------------
             readOnlyGridWithButtons.SelectedBusinessObject = bo;
 
@@ -223,7 +440,7 @@ namespace Habanero.Test.UI.Grid
             BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
             IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
             SetupGridColumnsForMyBo(readOnlyGridWithButtons.Grid);
-           
+
             //---------------Execute Test ----------------------
             readOnlyGridWithButtons.SetCollection(col);
 
@@ -231,7 +448,8 @@ namespace Habanero.Test.UI.Grid
 
             Assert.IsNotNull(readOnlyGridWithButtons.BusinessObjectCreator);
             Assert.IsTrue(readOnlyGridWithButtons.BusinessObjectCreator is DefaultBOCreator);
-            Assert.IsTrue(((DefaultBOCreator)readOnlyGridWithButtons.BusinessObjectCreator).CreateBusinessObject() is MyBO);
+            Assert.IsTrue(
+                ((DefaultBOCreator) readOnlyGridWithButtons.BusinessObjectCreator).CreateBusinessObject() is MyBO);
             //---------------Tear Down -------------------------          
         }
 
@@ -289,7 +507,6 @@ namespace Habanero.Test.UI.Grid
             //---------------Test Result -----------------------
 
             Assert.IsFalse(objectEditor.HasBeenCalled);
-
         }
 
         [Test]
@@ -303,8 +520,8 @@ namespace Habanero.Test.UI.Grid
             grid.BusinessObjectEditor = objectEditor;
 
             //---------------Asserting Preconditions------------
-            Assert.IsFalse(objectEditor.HasBeenCalled); 
-            
+            Assert.IsFalse(objectEditor.HasBeenCalled);
+
             //---------------Execute Test ----------------------
             grid.Buttons["Edit"].PerformClick();
 
@@ -314,16 +531,17 @@ namespace Habanero.Test.UI.Grid
             Assert.AreSame("default", objectEditor.DefName);
         }
 
-        [Test, Ignore("No support for uidef setting on grid yet.")]
+        [Test]
         public void TestEditButtonClickUsingAlternateUIDef()
         {
             //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            string alternateUIDefName = "Alternate";
             BusinessObjectCollection<MyBO> col;
             col = CreateCollectionWith_4_Objects();
             IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
-            SetupGridColumnsForMyBo(readOnlyGridWithButtons.Grid);
+            readOnlyGridWithButtons.Initialise(classDef, alternateUIDefName);
 
-            //TODO: SET GRID's UIDEF : how?
             readOnlyGridWithButtons.SetCollection(col);
             readOnlyGridWithButtons.SelectedBusinessObject = col[2];
             ObjectEditorStub objectEditor = new ObjectEditorStub();
@@ -333,10 +551,32 @@ namespace Habanero.Test.UI.Grid
             readOnlyGridWithButtons.Buttons["Edit"].PerformClick();
 
             //---------------Test Result -----------------------
-            Assert.AreSame("differentuidef", objectEditor.DefName);
+            Assert.AreSame(alternateUIDefName, objectEditor.DefName);
         }
-        //TODO: same test as above for add (TestAddButtonClickUsingAlternateUIDef)
-        //TODO: successful edit button click should update the values in the grid on Windows.Forms
+        [Test]
+        public void TestAddButtonClickUsingAlternateUIDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            string alternateUIDefName = "Alternate";
+            BusinessObjectCollection<MyBO> col;
+            col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            readOnlyGridWithButtons.Initialise(classDef, alternateUIDefName);
+
+            readOnlyGridWithButtons.SetCollection(col);
+            readOnlyGridWithButtons.SelectedBusinessObject = col[2];
+            ObjectEditorStub objectEditor = new ObjectEditorStub();
+            readOnlyGridWithButtons.BusinessObjectEditor = objectEditor;
+
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.Buttons["Add"].PerformClick();
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(alternateUIDefName, objectEditor.DefName);
+        }
+
+
 
 
         [Test]
@@ -396,13 +636,11 @@ namespace Habanero.Test.UI.Grid
             //---------------Test Result -----------------------
 
             Assert.IsFalse(objectDeletor.HasBeenCalled);
- 
+
             //---------------Tear Down -------------------------          
         }
- 
 
         #region stubs
-
 
         public class ExceptionNotifierStub : IExceptionNotifier
         {
@@ -508,11 +746,44 @@ namespace Habanero.Test.UI.Grid
                 _hasBeenCalled = true;
             }
         }
+
         #endregion
 
         #region Utility Methods
 
-       
+        private static void AssertThatDataColumnSetupCorrectly(ClassDef classDef, UIGridColumn columnDef1,
+                                                               IDataGridViewColumn dataColumn1)
+        {
+            Assert.AreEqual(columnDef1.PropertyName, dataColumn1.DataPropertyName); //Test Prop
+            Assert.AreEqual(columnDef1.PropertyName, dataColumn1.Name);
+            Assert.AreEqual(columnDef1.GetHeading(), dataColumn1.HeaderText);
+            Assert.IsTrue(dataColumn1.Visible);
+            Assert.IsTrue(dataColumn1.ReadOnly);
+            Assert.AreEqual(columnDef1.Width, dataColumn1.Width);
+            PropDef propDef = GetPropDef(classDef, columnDef1);
+            Assert.AreEqual(propDef.PropertyType, dataColumn1.ValueType);
+        }
+
+        private static PropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
+        {
+            PropDef propDef = null;
+            if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
+            {
+                propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
+            }
+            return propDef;
+        }
+
+        private static void AssertVerifyIDFieldSetUpCorrectly(IDataGridViewColumn column)
+        {
+            string idPropertyName = "ID";
+            Assert.AreEqual(idPropertyName, column.Name);
+            Assert.AreEqual(idPropertyName, column.HeaderText);
+            Assert.AreEqual(idPropertyName, column.DataPropertyName);
+            Assert.IsTrue(column.ReadOnly);
+            Assert.IsFalse(column.Visible);
+            Assert.AreEqual(typeof (string), column.ValueType);
+        }
 
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
         {
@@ -545,9 +816,5 @@ namespace Habanero.Test.UI.Grid
         }
 
         #endregion //Utility Methods
-  
     }
-
-
-    
 }

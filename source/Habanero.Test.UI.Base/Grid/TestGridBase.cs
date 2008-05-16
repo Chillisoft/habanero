@@ -702,10 +702,95 @@ namespace Habanero.Test.UI.Base
 
     internal class DataGridViewColumnStub : IDataGridViewColumn
     {
+        private string _dataPropertyName;
+        private string _headerText;
+        private string _name;
+        private bool _readOnly;
+        private string _toolTipText;
+        private Type _valueType;
+        private int _width;
+
+        /// <summary>Gets or sets the name of the data source property or database column to which the <see cref="IDataGridViewColumn"></see> is bound.</summary>
+        /// <returns>The name of the property or database column associated with the <see cref="IDataGridViewColumn"></see>.</returns>
+        /// <filterpriority>1</filterpriority>
+        //Editor(
+        //    "Gizmox.WebGUI.Forms.Design.DataGridViewColumnDataPropertyNameEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+        //    , typeof (UITypeEditor)), Gizmox.WebGUI.Forms.SRDescription("DataGridView_ColumnDataPropertyNameDescr"),
+        //DefaultValue(""),
+        //TypeConverter(
+        //    "IForms.Design.DataMemberFieldConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+        //    ), Browsable(true)]
+        public string DataPropertyName
+        {
+            get { return _dataPropertyName; }
+            set { _dataPropertyName = value; }
+        }
+
+        /// <summary>Gets or sets the caption text on the column's header cell.</summary>
+        /// <returns>A <see cref="T:System.String"></see> with the desired text. The default is an empty string ("").</returns>
+        /// <filterpriority>1</filterpriority>
+        public string HeaderText
+        {
+            get { return _headerText; }
+            set { _headerText = value; }
+        }
+
+        /// <summary>Gets or sets the name of the column.</summary>
+        /// <returns>A <see cref="T:System.String"></see> that contains the name of the column. The default is an empty string ("").</returns>
+        /// <filterpriority>1</filterpriority>
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+
+        /// <summary>Gets or sets a value indicating whether the user can edit the column's cells.</summary>
+        /// <returns>true if the user cannot edit the column's cells; otherwise, false.</returns>
+        /// <exception cref="T:System.InvalidOperationException">This property is set to false for a column that is bound to a read-only data source. </exception>
+        /// <filterpriority>1</filterpriority>
+        public bool ReadOnly
+        {
+            get { return _readOnly; }
+            set { _readOnly = value; }
+        }
+
+        /// <summary>Gets or sets the text used for ToolTips.</summary>
+        /// <returns>The text to display as a ToolTip for the column.</returns>
+        /// <filterpriority>1</filterpriority>
+        public string ToolTipText
+        {
+            get { return _toolTipText; }
+            set { _toolTipText = value; }
+        }
+
+        /// <summary>Gets or sets the data type of the values in the column's cells.</summary>
+        /// <returns>A <see cref="T:System.Type"></see> that describes the run-time class of the values stored in the column's cells.</returns>
+        /// <filterpriority>1</filterpriority>
+        public Type ValueType
+        {
+            get { return _valueType; }
+            set { _valueType = value; }
+        }
+
+        /// <summary>Gets or sets the current width of the column.</summary>
+        /// <returns>The width, in pixels, of the column. The default is 100.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The specified value when setting this property is greater than 65536.</exception>
+        /// <filterpriority>1</filterpriority>
+        public int Width
+        {
+            get { return _width; }
+            set { _width = value; }
+        }
+
         public bool Visible
         {
             get { return false; }
             set {  }
+        }
+
+        public object DataGridViewColumn
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

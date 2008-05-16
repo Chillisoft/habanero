@@ -1,5 +1,6 @@
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
@@ -9,6 +10,15 @@ namespace Habanero.UI.Win
         private IBusinessObjectEditor _BusinessObjectEditor;
         private IBusinessObjectCreator _BusinessObjectCreator;
         private IBusinessObjectDeletor _businessObjectDeletor;
+        private ClassDef _classDef;
+
+        /// <summary>
+        /// initiliase the grid to the with the 'default' UIdef.
+        /// </summary>
+        public void Initialise(ClassDef classDef)
+        {
+            throw new System.NotImplementedException();
+        }
 
         public IReadOnlyGrid Grid
         {
@@ -49,11 +59,27 @@ namespace Habanero.UI.Win
             set { _businessObjectDeletor = value; }
         }
 
+        public string UiDefName
+        {
+            get { return ""; }
+        }
+
+        public ClassDef ClassDef
+        {
+            get { return _classDef; }
+        }
+
 
         public void SetCollection(IBusinessObjectCollection boCollection)
         {
             throw new System.NotImplementedException();
         }
+
+        public void Initialise(ClassDef def, string uiDefName)
+        {
+            throw new System.NotImplementedException();
+        }
+
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }

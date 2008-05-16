@@ -83,9 +83,8 @@ namespace Habanero.UI.Base
         /// The current page of the grid where the grid implements pagination.
         /// </summary>
         int CurrentPage { get; set; }
-        /// <summary>
-        /// initiliase the grid to the with the 'default' UIdef.
-        /// </summary>
-        void Initialise();
+
+        bool ReadOnly { get; set; }
+        bool AllowUserToDeleteRows { get; set; }
     }
 }

@@ -26,7 +26,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
-    class ContactPersonTestBO: BusinessObject
+    public class ContactPersonTestBO: BusinessObject
     {
         private bool _afterLoadCalled;
 
@@ -60,6 +60,41 @@ namespace Habanero.Test.BO
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
+        public static ClassDef LoadDefaultClassDefWithUIDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Surname"" property=""Surname"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""FirstName"" property=""FirstName"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Surname"" property=""Surname"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""First Name"" property=""FirstName"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        
 
         public static ClassDef LoadClassDefWithSurnameAsPrimaryKey()
         {
@@ -208,6 +243,44 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+
+        public static ClassDef LoadClassDefWithAddressesRelationship_PreventDelete_WithUIDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""Prevent"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""Surname"" property=""Surname"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""FirstName"" property=""FirstName"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Surname"" property=""Surname"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""First Name"" property=""FirstName"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadClassDefWithAddressesRelationship_DeleteDoNothing()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

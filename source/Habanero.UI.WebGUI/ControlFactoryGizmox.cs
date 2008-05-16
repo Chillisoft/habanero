@@ -397,6 +397,12 @@ namespace Habanero.UI.WebGUI
             tb.ScrollBars = ScrollBars.Vertical;
             return tb;
         }
+
+        public IDataGridViewColumn CreateDataGridViewColumn()
+        {
+            DataGridViewColumnGiz col = new DataGridViewColumnGiz();
+            return col;
+        }
     }
 
     public class ToolTipGiz :ToolTip, IToolTip

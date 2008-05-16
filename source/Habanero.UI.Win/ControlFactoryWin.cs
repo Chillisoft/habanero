@@ -170,6 +170,11 @@ namespace Habanero.UI.Win
             return tb;
         }
 
+        public IDataGridViewColumn CreateDataGridViewColumn()
+        {
+            throw new NotImplementedException();
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();
