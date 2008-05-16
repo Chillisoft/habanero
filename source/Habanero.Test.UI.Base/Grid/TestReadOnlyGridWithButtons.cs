@@ -63,6 +63,66 @@ namespace Habanero.Test.UI.Grid
             }
         }
 
+        //TODO:
+        // These two tests both write to the database.  If there is a way
+        //   to mock these without writing then please change it, but I
+        //   couldn't see how to mock a BO or a connection successfully
+        [Test, Ignore("Ignore to be sorted out by brett")]
+        public void TestAcceptance_DeleteButtonClickSuccessfulDelete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPerson bo = new ContactPerson();
+            bo.Surname = "please delete me.";
+            bo.Save();
+            BOPrimaryKey contactPersonPK = bo.ID;
+
+            BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
+            boCol.Add(bo);
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            readOnlyGridWithButtons.Grid.Columns.Add("Surname", "Surname");
+            readOnlyGridWithButtons.SetCollection(boCol);
+            readOnlyGridWithButtons.SelectedBusinessObject = bo;
+            readOnlyGridWithButtons.Buttons.ShowDefaultDeleteButton = true;
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.Buttons["Delete"].PerformClick();
+            //---------------Test Result -----------------------
+
+            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(contactPersonPK);
+            Assert.IsNull(contactPerson);
+        }
+        //TODO:
+        [Test, Ignore("Ignore to be sorted out by brett")]
+        public void TestAcceptance_DeleteButtonClickUnsuccessfulDelete()
+        {
+            //---------------Set up test pack-------------------
+            ContactPerson person = new ContactPerson();
+            person.Surname = "please delete me";
+            person.Save();
+            BOPrimaryKey contactPersonPK = person.ID;
+            person.AddPreventDeleteRelationship();
+
+            Address address = person.Addresses.CreateBusinessObject();
+            address.Save();
+
+            BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
+            boCol.Add(person);
+            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
+            readOnlyGridWithButtons.Grid.Columns.Add("Surname", "Surname");
+            readOnlyGridWithButtons.SetCollection(boCol);
+            readOnlyGridWithButtons.SelectedBusinessObject = person;
+            readOnlyGridWithButtons.Buttons.ShowDefaultDeleteButton = true;
+            ExceptionNotifierStub exceptionNotifier = new ExceptionNotifierStub();
+            GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
+
+            //---------------Execute Test ----------------------
+            readOnlyGridWithButtons.Buttons["Delete"].PerformClick();
+            //---------------Test Result -----------------------
+
+            Assert.IsTrue(exceptionNotifier.Notified);
+            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(contactPersonPK);
+            Assert.IsNotNull(contactPerson);
+
+        }
         [Test]
         public void TestCreateReadOnlyGridWithButtons()
         {
@@ -77,6 +137,18 @@ namespace Habanero.Test.UI.Grid
             Assert.IsNotNull(readOnlyGrid.Grid);
             Assert.IsNotNull(readOnlyGrid.Buttons);
         }
+
+        //[Test]
+        //public void Test()
+        //{
+        //    //---------------Set up test pack-------------------
+            
+        //    //---------------Execute Test ----------------------
+
+        //    //---------------Test Result -----------------------
+
+        //    //---------------Tear Down -------------------------          
+        //}
 
         [Test]
         public void TestReadOnlyGridWithButtons_WithColumns()
@@ -327,65 +399,7 @@ namespace Habanero.Test.UI.Grid
  
             //---------------Tear Down -------------------------          
         }
-        //TODO:
-        // These two tests both write to the database.  If there is a way
-        //   to mock these without writing then please change it, but I
-        //   couldn't see how to mock a BO or a connection successfully
-        [Test, Ignore("Ignore to be sorted out by brett")]
-        public void TestAcceptance_DeleteButtonClickSuccessfulDelete()
-        {
-            //---------------Set up test pack-------------------
-            ContactPerson bo = new ContactPerson();
-            bo.Surname = "please delete me.";
-            bo.Save();
-            BOPrimaryKey contactPersonPK = bo.ID;
-
-            BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
-            boCol.Add(bo);
-            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
-            readOnlyGridWithButtons.Grid.Columns.Add("Surname", "Surname");
-            readOnlyGridWithButtons.SetCollection(boCol);
-            readOnlyGridWithButtons.SelectedBusinessObject = bo;
-            readOnlyGridWithButtons.Buttons.ShowDefaultDeleteButton = true;
-            //---------------Execute Test ----------------------
-            readOnlyGridWithButtons.Buttons["Delete"].PerformClick();
-            //---------------Test Result -----------------------
-
-            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(contactPersonPK);
-            Assert.IsNull(contactPerson);
-        }
-        //TODO:
-        [Test, Ignore("Ignore to be sorted out by brett")]
-        public void TestAcceptance_DeleteButtonClickUnsuccessfulDelete()
-        {
-            ContactPerson person = new ContactPerson();
-            person.Surname = "please delete me";
-            person.Save();
-            BOPrimaryKey contactPersonPK = person.ID;
-            person.AddPreventDeleteRelationship();
-
-            Address address = person.Addresses.CreateBusinessObject();
-            address.Save();
-
-            BusinessObjectCollection<ContactPerson> boCol = new BusinessObjectCollection<ContactPerson>();
-            boCol.Add(person);
-            IReadOnlyGridWithButtons readOnlyGridWithButtons = CreateReadOnlyGridWithButtons();
-            readOnlyGridWithButtons.Grid.Columns.Add("Surname", "Surname");
-            readOnlyGridWithButtons.SetCollection(boCol);
-            readOnlyGridWithButtons.SelectedBusinessObject = person;
-            readOnlyGridWithButtons.Buttons.ShowDefaultDeleteButton = true;
-            ExceptionNotifierStub exceptionNotifier = new ExceptionNotifierStub();
-            GlobalRegistry.UIExceptionNotifier = exceptionNotifier;
-
-            //---------------Execute Test ----------------------
-            readOnlyGridWithButtons.Buttons["Delete"].PerformClick();
-            //---------------Test Result -----------------------
-
-            Assert.IsTrue(exceptionNotifier.Notified);
-            ContactPerson contactPerson = BOLoader.Instance.GetBusinessObjectByID<ContactPerson>(contactPersonPK);
-            Assert.IsNotNull(contactPerson);
-
-        }
+ 
 
         #region stubs
 

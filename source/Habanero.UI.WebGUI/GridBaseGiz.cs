@@ -131,6 +131,14 @@ namespace Habanero.UI.WebGUI
             _mngr.ApplyFilter(filterClause);
         }
 
+        /// <summary>
+        /// initiliase the grid to the with the 'default' UIdef.
+        /// </summary>
+        public void Initialise()
+        {
+            throw new NotImplementedException();
+        }
+
         //public void AddColumn(IDataGridViewColumn column)
         //{
         //    _mngr.AddColumn(column);

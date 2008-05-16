@@ -42,14 +42,15 @@
   <ItemGroup>
     <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
     <Compile Include="DefaultBODeletor.cs" />
-    <Compile Include="GlobalUIRegistry.cs" />
+    <Compile Include="Grid\IReadOnlyGridControl.cs" />
+    <Compile Include="Util\GlobalUIRegistry.cs" />
     <Compile Include="Grid\IDataGridView.cs" />
     <Compile Include="Grid\IDataGridViewCell.cs" />
     <Compile Include="Grid\IDataGridViewCellCollection.cs" />
     <Compile Include="Grid\IDataGridViewRow.cs" />
-    <Compile Include="HabaneroAppUI.cs" />
-    <Compile Include="IControlCollection.cs" />
-    <Compile Include="IUISettings.cs" />
+    <Compile Include="Util\HabaneroAppUI.cs" />
+    <Compile Include="ControlInterfaces\IControlCollection.cs" />
+    <Compile Include="Util\IUISettings.cs" />
     <Compile Include="LayoutManagers\BorderLayoutManager.cs" />
     <Compile Include="ControlMappers\CheckBoxMapper.cs" />
     <Compile Include="ControlMappers\ComboBoxMapper.cs" />
@@ -103,7 +104,7 @@
     <Compile Include="ControlInterfaces\ICheckBox.cs" />
     <Compile Include="ControlInterfaces\IControlChilli.cs" />
     <Compile Include="ControlInterfaces\IComboBox.cs" />
-    <Compile Include="IComboBoxObjectCollection.cs" />
+    <Compile Include="ControlInterfaces\IComboBoxObjectCollection.cs" />
     <Compile Include="IControlFactory.cs" />
     <Compile Include="FilterControl\IFilterControl.cs" />
     <Compile Include="Grid\IDataGridViewColumnCollection.cs" />
@@ -111,8 +112,8 @@
     <Compile Include="Grid\IGridBase.cs" />
     <Compile Include="ControlInterfaces\ILabel.cs" />
     <Compile Include="ControlInterfaces\IListBox.cs" />
-    <Compile Include="IListBoxObjectCollection.cs" />
-    <Compile Include="IListBoxSelectedObjectCollection.cs" />
+    <Compile Include="ControlInterfaces\IListBoxObjectCollection.cs" />
+    <Compile Include="ControlInterfaces\IListBoxSelectedObjectCollection.cs" />
     <Compile Include="ControlInterfaces\IMultiSelector.cs" />
     <Compile Include="ControlInterfaces\ITextBox.cs" />
     <Compile Include="LayoutManagers\LayoutManager.cs" />
@@ -120,7 +121,7 @@
     <Compile Include="MultiSelectorModel.cs" />
     <Compile Include="PanelFactory\PanelFactoryInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UISettings.cs" />
+    <Compile Include="Util\UISettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
@@ -138,9 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

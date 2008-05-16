@@ -4,6 +4,7 @@ using System.Data;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Microsoft.SqlServer.Server;
 
 namespace Habanero.UI.Base
 {
@@ -54,7 +55,7 @@ namespace Habanero.UI.Base
             }
             col.BusinessObjectRemoved += delegate { SelectedBusinessObject = null; };
 
-            _gridBase.DataSource = GetDataTable(col);
+            _gridBase.DataSource = GetDataTable();
 
             _gridBase.AllowUserToAddRows = false;
 
@@ -66,11 +67,14 @@ namespace Habanero.UI.Base
             FireCollectionChanged();
         }
 
-        private DataView GetDataTable(IBusinessObjectCollection col)
+        private DataView GetDataTable()
         {
-            _dataSetProvider = new BOCollectionReadOnlyDataSetProvider(col);
+            _dataSetProvider = new BOCollectionReadOnlyDataSetProvider(this._boCol);
             ClassDef classDef = _boCol.ClassDef;
             UIDef uiDef = classDef.GetUIDef(_uiDefName);
+            if (uiDef == null) { throw new ArgumentException(
+                        String.Format("You cannot Get the data for the grid {0} since the uiDef {1} cannot be found for the classDef {2}",
+                        this._gridBase.Name,_uiDefName,classDef.ClassName));}
             DataTable dataTable = _dataSetProvider.GetDataTable(uiDef.UIGrid);
             _dataTableDefaultView = dataTable.DefaultView;
             return this._dataTableDefaultView;

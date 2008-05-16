@@ -75,8 +75,17 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="filterClause">The filter clause</param>
         void ApplyFilter(IFilterClause filterClause);
-
+        /// <summary>
+        /// The number of items per page used when the grid implements pagination.
+        /// </summary>
         int ItemsPerPage { get; set; }
+        /// <summary>
+        /// The current page of the grid where the grid implements pagination.
+        /// </summary>
         int CurrentPage { get; set; }
+        /// <summary>
+        /// initiliase the grid to the with the 'default' UIdef.
+        /// </summary>
+        void Initialise();
     }
 }

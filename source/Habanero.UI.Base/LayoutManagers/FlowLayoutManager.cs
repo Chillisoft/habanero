@@ -132,10 +132,10 @@ namespace Habanero.UI.Base
             int currentRowHeight = 0;
             int currentLine = 0;
             IList controlsInRow = new ArrayList();
-            for (int i = 0; i < this._controls.Count; i++)
+            for (int controlNumber = 0; controlNumber < this._controls.Count; controlNumber++)
             {
-                IControlChilli ctl = GetControl(i);
-                if (currentLine < _newLinePositions.Count && (int) _newLinePositions[currentLine] == i)
+                IControlChilli ctl = GetControl(controlNumber);
+                if (IsControlOnANewLine(controlNumber, currentLine))
                 {
                     MoveCurrentPosToStartOfNextRow(currentRowHeight);
                     currentLine++;
@@ -144,35 +144,29 @@ namespace Habanero.UI.Base
                 {
                     if (ControlDoesNotFitOnCurrentRow(ctl))
                     {
-                        if (IsGluedToAnotherControl(i))
+                        if (IsGluedToAnotherControl(controlNumber))
                         {
-                            if (PreviousControlVisible(i) && BothControlsFitOnALine(i))
-                            {
-                                //Get the previous control as this is the one that this control is glued to
-                                //E.g. a label and this needs to get moved to the new line.
-                                i--;
-                                ctl = GetControl(i);
-                            }
+                            GetGluedControlToMoveToNewLineIfPossible(ref controlNumber, ref ctl);
                         }
                         if (_alignment == Alignments.Centre)
                         {
-                            ShiftControlsRightForCentering(rowStart, i - 1);
+                            ShiftControlsRightForCentering(rowStart, controlNumber - 1);
                         }
                         MoveCurrentPosToStartOfNextRow(currentRowHeight);
-                        currentRowHeight = InitialiseNewRow(i, out rowStart, controlsInRow);
+                        currentRowHeight = InitialiseNewRow(controlNumber, out rowStart, controlsInRow);
                     }
                     controlsInRow.Add(ctl);
-                    CalculateControlPosition(ctl);
+                    SetControlPosition(ctl);
                     _currentPos.X += ctl.Width + GapSize;
                     if (ctl.Height > currentRowHeight)
                     {
                         currentRowHeight = ctl.Height;
                     }
-                    lastVisible = i;
+                    lastVisible = controlNumber;
                 }
                 if (_alignment == Alignments.Centre)
                 {
-                    if ((i == this._controls.Count - 1) && (lastVisible >= rowStart))
+                    if ((controlNumber == this._controls.Count - 1) && (lastVisible >= rowStart))
                     {
                         ShiftControlsRightForCentering(rowStart, lastVisible);
                     }
@@ -182,6 +176,22 @@ namespace Habanero.UI.Base
             {
                 SetUpTabIndexForAlignmentRight(rowStart, controlsInRow);
             }
+        }
+
+        private void GetGluedControlToMoveToNewLineIfPossible(ref int controlNumber, ref IControlChilli ctl)
+        {
+            if (PreviousControlVisible(controlNumber) && BothControlsFitOnALine(controlNumber))
+            {
+                //Get the previous control as this is the one that this control is glued to
+                //E.g. a label and this needs to get moved to the new line.
+                controlNumber--;
+                ctl = GetControl(controlNumber);
+            }
+        }
+
+        private bool IsControlOnANewLine(int i, int currentLine)
+        {
+            return currentLine < _newLinePositions.Count && (int) _newLinePositions[currentLine] == i;
         }
 
         private static int InitialiseNewRow(int i, out int rowStart, IList controlsInRow)
@@ -249,7 +259,7 @@ namespace Habanero.UI.Base
         /// Calculates the control's position in the user interface
         /// </summary>
         /// <param name="ctl">The control in question</param>
-        private void CalculateControlPosition(IControlChilli ctl)
+        private void SetControlPosition(IControlChilli ctl)
         {
             if (_alignment == Alignments.Right)
             {

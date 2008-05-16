@@ -169,6 +169,23 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(btn.Visible);
         }
         [Test]
+        public void Test_NotShowDefaultDeleteButton_MakesTheDeleteButton_NotVisible()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridButtonsControl readOnlyGridButtonsControl = GetControlFactory().CreateReadOnlyGridButtonsControl();
+            //AddControlToForm(readOnlyGridButtonsControl);            //TODO: peter cant figure out why if I add these to the form as above then get failure else OK
+
+            IButton btn = readOnlyGridButtonsControl["Delete"];
+            readOnlyGridButtonsControl.ShowDefaultDeleteButton = true;
+            //--------------verify PreConditions -------------------
+            Assert.IsTrue(btn.Visible);
+
+            //---------------Execute Test ----------------------
+            readOnlyGridButtonsControl.ShowDefaultDeleteButton = false;
+            //---------------Verify Result ----------------------
+            Assert.IsFalse(btn.Visible);
+        }
+        [Test]
         public void TestDeleteButtonClick()
         {
             //---------------Set up test pack-------------------

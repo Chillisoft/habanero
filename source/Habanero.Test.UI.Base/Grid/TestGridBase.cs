@@ -51,7 +51,7 @@ namespace Habanero.Test.UI.Base
             }
             //TODO: To be implemented in Win
             [Test, Ignore("To be implemented in win")]
-            public void Test_RowShowingBusinessObjectsValues()
+            public void TestWin_RowShowingBusinessObjectsValues()
             {
                 //---------------Set up test pack-------------------
                 MyBO.LoadDefaultClassDef();
@@ -70,7 +70,7 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(selectedBo.TestProp, cell.Value);
             }
             [Test]
-            public void TestRowIsRefreshed()
+            public void TestWinRowIsRefreshed()
             {
                 //---------------Set up test pack-------------------
                 BusinessObjectCollection<MyBO> col;
@@ -90,7 +90,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestApplyFilterFiresFilterUpdatedEvent()
+            public void TestWinApplyFilterFiresFilterUpdatedEvent()
             {
                 //---------------Set up test pack-------------------
                 BusinessObjectCollection<MyBO> col;
@@ -135,8 +135,10 @@ namespace Habanero.Test.UI.Base
                 return gridBase;
             }
 
+
+
             [Test]
-            public void TestRowIsRefreshed()
+            public void TestGizRowIsRefreshed()
             {
                 //---------------Set up test pack-------------------
                 BusinessObjectCollection<MyBO> col;
@@ -167,7 +169,7 @@ namespace Habanero.Test.UI.Base
                 return row.Cells[propName];
             }
             [Test]
-            public void Test_RowShowingBusinessObjectsValues()
+            public void TestGiz_RowShowingBusinessObjectsValues()
             {
                 //---------------Set up test pack-------------------
                 MyBO.LoadDefaultClassDef();
@@ -185,25 +187,26 @@ namespace Habanero.Test.UI.Base
                 IDataGridViewCell cell = row.Cells[propName];
                 Assert.AreEqual(selectedBo.TestProp, cell.Value);
             }
-            [Test]
-            public void Test_DeleteObjectInGridThenSetCollectionCausesInfiniteLoop_InGiz()
-            {
-                //---------------Set up test pack-------------------
-                MyBO.LoadDefaultClassDef();
-                BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
-                IGridBase gridBase = CreateGridBaseStub();
-                SetupGridColumnsForMyBo(gridBase);
-                gridBase.SetCollection(col);
-                string propName = "TestProp";
-                //---------------Execute Test ----------------------
-                MyBO bo = col[1];
-                gridBase.SelectedBusinessObject = bo;
-                col.Remove(bo);
-                gridBase.SetSortColumn(propName,true);
-                col = CreateCollectionWith_4_Objects();
-                gridBase.SetCollection(col);
-                //---------------Test Result -----------------------
-            }
+            //Cannot Duplicate in grid
+            //[Test]
+            //public void Test_DeleteObjectInGridThenSetCollectionCausesInfiniteLoop_InGiz()
+            //{
+            //    //---------------Set up test pack-------------------
+            //    MyBO.LoadDefaultClassDef();
+            //    BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            //    IGridBase gridBase = CreateGridBaseStub();
+            //    SetupGridColumnsForMyBo(gridBase);
+            //    gridBase.SetCollection(col);
+            //    string propName = "TestProp";
+            //    //---------------Execute Test ----------------------
+            //    MyBO bo = col[1];
+            //    gridBase.SelectedBusinessObject = bo;
+            //    col.Remove(bo);
+            //    gridBase.SetSortColumn(propName,true);
+            //    col = CreateCollectionWith_4_Objects();
+            //    gridBase.SetCollection(col);
+            //    //---------------Test Result -----------------------
+            //}
         }
 
         [Test]
@@ -552,6 +555,28 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestEditItemFromCollectionUpdatesItemInGrid()
+        {
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> col;
+            IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+            string propName = "TestProp";
+            int rowIndex = 1;
+            MyBO bo = col[rowIndex];
+            gridBase.SetCollection(col);
+            MyBO selectedBo = (MyBO)gridBase.GetBusinessObjectAtRow(rowIndex);
+            IDataGridViewCell cell = GetCell(rowIndex, gridBase, propName);
+            //---------------Verify precondition----------------
+            Assert.AreEqual(selectedBo.TestProp, cell.Value);
+            //---------------Execute Test ----------------------
+            string newPropValue = "NewValue";
+            bo.SetPropertyValue(propName, newPropValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newPropValue, cell.Value);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void TestSetSortColumn()
         {
             //---------------Set up test pack-------------------
@@ -623,7 +648,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------
         }
 
-
         #region Utility Methods 
 
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
@@ -639,6 +663,12 @@ namespace Habanero.Test.UI.Base
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             col.Add(cp, cp2, cp3, cp4);
             return col;
+        }
+
+        private static IDataGridViewCell GetCell(int rowIndex, IGridBase gridBase, string propName)
+        {
+            IDataGridViewRow row = gridBase.Rows[rowIndex];
+            return row.Cells[propName];
         }
 
         private IGridBase GetGridBaseWith_4_Rows(out BusinessObjectCollection<MyBO> col)
