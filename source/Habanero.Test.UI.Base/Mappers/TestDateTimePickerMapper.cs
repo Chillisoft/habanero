@@ -118,7 +118,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             string propertyName = "SampleDateProperty";
-            DateTimePickerMapper dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName);
+            DateTimePickerMapper dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName, false);
 
             //---------------Verify Result -----------------------
             Assert.AreEqual(dateTimePicker, dtpMapper.DateTimePicker);
@@ -158,7 +158,7 @@ namespace Habanero.Test.UI.Base.Mappers
         {
             IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
             string propertyName = "SampleDate";
-            dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName);
+            dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName, false);
             return dateTimePicker;
         }
     }

@@ -8,8 +8,8 @@ namespace Habanero.UI.Base
         private readonly IDateTimePicker _picker;
 
 
-        public DateTimePickerMapper(IDateTimePicker picker, string propertyName)
-            : base(picker, propertyName, false)
+        public DateTimePickerMapper(IDateTimePicker picker, string propertyName, bool isReadOnly)
+            : base(picker, propertyName, isReadOnly)
         {
             _picker = picker;
             _propertyName = propertyName;
