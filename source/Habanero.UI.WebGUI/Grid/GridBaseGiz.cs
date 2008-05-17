@@ -12,7 +12,11 @@ namespace Habanero.UI.WebGUI
     {
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
         public event EventHandler CollectionChanged;
-
+        /// <summary>
+        /// Handles the event of the currently selected business object being edited.
+        /// This is used only for internal testing
+        /// </summary>
+        public event EventHandler<BOEventArgs> BusinessObjectEdited;
         public void Clear()
         {
             _mngr.Clear();
@@ -125,18 +129,18 @@ namespace Habanero.UI.WebGUI
             _mngr.ApplyFilter(filterClause);
         }
 
-        /// <summary>
-        /// initiliase the grid to the with the 'default' UIdef.
-        /// </summary>
-        public void Initialise()
+        public void SelectedBusinessObjectEdited(BusinessObject bo)
         {
-            throw new NotImplementedException();
+            FireSelectedBusinessObjectEdited(bo);
         }
 
-        //public void AddColumn(IDataGridViewColumn column)
-        //{
-        //    _mngr.AddColumn(column);
-        //}
+        private void FireSelectedBusinessObjectEdited(BusinessObject bo)
+        {
+            if (this.BusinessObjectEdited != null)
+            {
+                this.BusinessObjectEdited(this, new BOEventArgs(bo));
+            }
+        }
 
         public new IDataGridViewSelectedRowCollection SelectedRows
         {
@@ -373,6 +377,11 @@ namespace Habanero.UI.WebGUI
             public int Index
             {
                 get { return _dataGridViewRow.Index; }
+            }
+
+            public bool SetValues(params object[] values)
+            {
+                return this._dataGridViewRow.SetValues(values);
             }
 
             /// <summary>Gets the collection of cells that populate the row.</summary>

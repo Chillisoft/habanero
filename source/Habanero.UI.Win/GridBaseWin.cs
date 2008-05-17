@@ -139,6 +139,17 @@ namespace Habanero.UI.Win
             set { throw new NotImplementedException(); }
         }
 
+        public void SelectedBusinessObjectEdited(BusinessObject bo)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Handles the event of the currently selected business object being edited.
+        /// This is used only for internal testing
+        /// </summary>
+        public event EventHandler<BOEventArgs> BusinessObjectEdited;
+
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
         /// </summary>
@@ -414,6 +425,11 @@ namespace Habanero.UI.Win
             public int Index
             {
                 get { return _dataGridViewRow.Index; }
+            }
+
+            public bool SetValues(params object[] values)
+            {
+                return this._dataGridViewRow.SetValues(values);
             }
 
             /// <summary>Gets the collection of cells that populate the row.</summary>

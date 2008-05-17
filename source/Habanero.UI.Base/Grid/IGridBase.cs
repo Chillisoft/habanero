@@ -87,5 +87,12 @@ namespace Habanero.UI.Base
 
         bool ReadOnly { get; set; }
         bool AllowUserToDeleteRows { get; set; }
+        void SelectedBusinessObjectEdited(BusinessObject bo);
+
+        /// <summary>
+        /// Handles the event of the currently selected business object being edited.
+        /// This is used only for internal testing
+        /// </summary>
+        event EventHandler<BOEventArgs> BusinessObjectEdited;
     }
 }

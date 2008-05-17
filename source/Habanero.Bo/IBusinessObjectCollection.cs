@@ -41,6 +41,11 @@ namespace Habanero.BO
 		/// </summary>
 		event EventHandler<BOEventArgs> BusinessObjectRemoved;
 
+        ///// <summary>
+        ///// Handles the event of any business object in this collection being edited
+        ///// </summary>
+        //event EventHandler<BOEventArgs> BusinessObjectEdited;
+
 		/// <summary>
 		/// Returns the class definition of the collection
 		/// </summary>

@@ -10,6 +10,8 @@ namespace Habanero.UI.Base
 {
     public class GridBaseManager
     {
+
+
         private readonly IGridBase _gridBase;
 
         private BOCollectionDataSetProvider _dataSetProvider;
@@ -27,7 +29,6 @@ namespace Habanero.UI.Base
             _gridBase = gridBase;
             _uiDefName = uiDefName;
             _gridBase.AutoGenerateColumns = false;
-            
         }
 
         public GridBaseManager(IGridBase gridBase) : this(gridBase, "default")
@@ -55,7 +56,7 @@ namespace Habanero.UI.Base
             }
             //Hack: this is to overcome abug in Gizmox where the grid was freezing after delete
             // but should not cause a problem with win
-            
+
             col.BusinessObjectRemoved += delegate { SelectedBusinessObject = null; };
 
             _gridBase.DataSource = GetDataTable();
@@ -70,14 +71,18 @@ namespace Habanero.UI.Base
             FireCollectionChanged();
         }
 
-        private DataView GetDataTable()
+        protected DataView GetDataTable()
         {
             _dataSetProvider = new BOCollectionReadOnlyDataSetProvider(this._boCol);
             ClassDef classDef = _boCol.ClassDef;
             UIDef uiDef = classDef.GetUIDef(_uiDefName);
-            if (uiDef == null) { throw new ArgumentException(
-                        String.Format("You cannot Get the data for the grid {0} since the uiDef {1} cannot be found for the classDef {2}",
-                        this._gridBase.Name,_uiDefName,classDef.ClassName));}
+            if (uiDef == null)
+            {
+                throw new ArgumentException(
+                    String.Format(
+                        "You cannot Get the data for the grid {0} since the uiDef {1} cannot be found for the classDef {2}",
+                        this._gridBase.Name, _uiDefName, classDef.ClassName));
+            }
             DataTable dataTable = _dataSetProvider.GetDataTable(uiDef.UIGrid);
             _dataTableDefaultView = dataTable.DefaultView;
             return this._dataTableDefaultView;
@@ -95,35 +100,60 @@ namespace Habanero.UI.Base
             }
             set
             {
+                RemovePreviouslySelectedBusinessObjectsEventHandler();
+
                 IDataGridViewRowCollection gridRows = _gridBase.Rows;
-                for (int i = 0; i < gridRows.Count; i++)
-                {
-                    IDataGridViewRow row = gridRows[i];
-                    row.Selected = false;
-                }
+                ClearAllSelectedRows(gridRows);
                 if (value == null) return;
                 int j = 0;
-                //TODO this will blow when filtering and sorting are implemented see below
-                //Write tests and fix
-                foreach (IBusinessObject businessObject in _boCol)
+                foreach (DataRowView dataRowView in _dataTableDefaultView)
                 {
-                    if (businessObject == value)
+                    if ((string) dataRowView.Row["ID"] == value.ID.ToString())
                     {
+                        
+                        BusinessObject bo = value;
+                        bo.Updated += bo_Updated;
+
                         gridRows[j].Selected = true;
                         break;
                     }
                     j++;
                 }
-                //foreach (DataRowView dataRowView in _dataTableDefaultView)
-                //{
-                //    if ((string)dataRowView.Row["ID"] == value.ID.ToString())
-                //    {
-                //        gridRows[j].Selected = true;
-                //        break;
-                //    }
-                //    j++;
-                //}
             }
+        }
+
+        private void RemovePreviouslySelectedBusinessObjectsEventHandler()
+        {
+            if (SelectedBusinessObject != null)
+            {
+                SelectedBusinessObject.Updated -= bo_Updated;
+            }
+        }
+
+        void bo_Updated(object sender, BOEventArgs e)
+        {
+            SelectedBusinessObject = e.BusinessObject;
+            IDataGridViewRow row = this._gridBase.Rows[0];
+            row.SetValues(1, 1);
+            FireBusinessObjectEdited(e.BusinessObject);
+        }
+
+        private static void ClearAllSelectedRows(IDataGridViewRowCollection gridRows)
+        {
+            for (int i = 0; i < gridRows.Count; i++)
+            {
+                IDataGridViewRow row = gridRows[i];
+                row.Selected = false;
+            }
+        }
+
+        /// <summary>
+        /// Calls the BusinessObjectAdded() handler
+        /// </summary>
+        /// <param name="bo">The business object added</param>
+        private void FireBusinessObjectEdited(BusinessObject bo)
+        {
+            _gridBase.SelectedBusinessObjectEdited(bo);
         }
 
         public IList<BusinessObject> SelectedBusinessObjects
@@ -142,152 +172,6 @@ namespace Habanero.UI.Base
             }
         }
 
-
-        //private void SetupColumns(IDataGridViewColumnCollection columns)
-        //{
-        //    foreach (IDataGridViewColumn column in columns)
-        //    {
-        //        AddColumn(column);
-        //    }
-        //}
-
-        //public int AddColumn(IDataGridViewColumn column)
-        //{
-        //    return _gridBase.Columns.Add(column, "");
-        //}
-
-        ///// <summary>
-        ///// Sets the grid's collection to the one specified, but using the
-        ///// STA thread
-        ///// </summary>
-        ///// <param name="collection">The collection to display in the grid</param>
-        ///// <param name="uiName">The name of the uidef to use</param>
-        /// TODO: Refactor
-        //private void SetCollectionInSTAThread(IBusinessObjectCollection collection, string uiName)
-        //{
-        ////_collection = collection;
-        ////_dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
-        //_dataSetProvider.ObjectInitialiser = _objectInitialiser;
-        //_uiName = uiName;
-        //ClassDef classDef = collection.ClassDef;
-        //UIDef uiDef = classDef.GetUIDef(uiName);
-        //UIGrid uiGrid = uiDef.UIGrid;
-        //_dataTable = _dataSetProvider.GetDataTable(uiGrid);
-        //_dataTable.TableName = "Table";
-        //_dateColumnIndices.Clear();
-        //this.Columns.Clear();
-        //DataGridViewColumn col = new DataGridViewTextBoxColumn(); // DataGridViewTextBoxColumn();
-        ////col.Visible = false;
-        //col.Width = 0;
-        //col.Visible = false;
-        //col.ReadOnly = true;
-        //DataColumn dataColumn = _dataTable.Columns[0];
-        //col.HeaderText = dataColumn.Caption;
-        //col.Name = dataColumn.ColumnName;
-        //col.DataPropertyName = dataColumn.ColumnName;
-        //this.Columns.Add(col);
-        //int colNum = 1;
-        //foreach (UIGridColumn gridColumn in uiGrid)
-        //{
-        //    dataColumn = _dataTable.Columns[colNum];
-        //    PropDef propDef = null;
-        //    if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
-        //    {
-        //        propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
-        //    }
-        //    if (gridColumn.GridControlType == typeof(DataGridViewComboBoxColumn))
-        //    {
-        //        DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();
-        //        ILookupList source =
-        //            (ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
-        //        if (source != null)
-        //        {
-        //            DataTable table = new DataTable();
-        //            table.Columns.Add("id");
-        //            table.Columns.Add("str");
-        //            table.LoadDataRow(new object[] { "", "" }, true);
-        //            foreach (KeyValuePair<string, object> pair in source.GetLookupList())
-        //            {
-        //                table.LoadDataRow(new object[] { pair.Value, pair.Key }, true);
-        //            }
-        //            comboBoxCol.DataSource = table;
-        //            comboBoxCol.ValueMember = "str";
-        //            comboBoxCol.DisplayMember = "str";
-        //        }
-        //        comboBoxCol.DataPropertyName = dataColumn.ColumnName;
-        //        col = comboBoxCol;
-        //    }
-        //    else if (gridColumn.GridControlType == typeof(DataGridViewCheckBoxColumn))
-        //    {
-        //        DataGridViewCheckBoxColumn checkBoxCol = new DataGridViewCheckBoxColumn();
-        //        col = checkBoxCol;
-        //    }
-        //    else if (gridColumn.GridControlType == typeof(DataGridViewDateTimeColumn))
-        //    {
-        //        DataGridViewDateTimeColumn dateTimeCol = new DataGridViewDateTimeColumn();
-        //        col = dateTimeCol;
-        //        _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
-        //    }
-        //    else
-        //    {
-        //        col = (DataGridViewColumn)Activator.CreateInstance(gridColumn.GridControlType);
-        //    }
-        //    int width = (int)(dataColumn.ExtendedProperties["Width"]);
-        //    col.Width = width;
-        //    if (width == 0)
-        //    {
-        //        col.Visible = false;
-        //    }
-        //    col.ReadOnly = !gridColumn.Editable;
-        //    col.HeaderText = dataColumn.Caption;
-        //    col.Name = dataColumn.ColumnName;
-        //    col.DataPropertyName = dataColumn.ColumnName;
-        //    //col.MappingName = dataColumn.ColumnName;
-        //    col.SortMode = DataGridViewColumnSortMode.Automatic;
-        //    SetAlignment(col, gridColumn);
-        //    if (CompulsoryColumnsBold && propDef != null && propDef.Compulsory)
-        //    {
-        //        Font newFont = new Font(DefaultCellStyle.Font, FontStyle.Bold);
-        //        col.HeaderCell.Style.Font = newFont;
-        //    }
-        //    if (propDef != null && propDef.PropertyType == typeof(DateTime)
-        //        && gridColumn.GridControlType != typeof(DataGridViewDateTimeColumn))
-        //    {
-        //        _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
-        //    }
-        //    //if (propDef != null && propDef.PropertyName != gridColumn.GetHeading(classDef))
-        //    //{
-        //    //    foreach (BusinessObject bo in _collection)
-        //    //    {
-        //    //        BOProp boProp = bo.Props[propDef.PropertyName];
-        //    //        if (!boProp.HasDisplayName())
-        //    //        {
-        //    //            boProp.DisplayName = gridColumn.GetHeading(classDef);
-        //    //        }
-        //    //    }
-        //    //}
-        //    Columns.Add(col);
-        //    colNum++;
-        //}
-        //_dataTableDefaultView = _dataTable.DefaultView;
-        //this.AutoGenerateColumns = false;
-        //this.DataSource = _dataTableDefaultView;
-        ////this.DataSource = _dataTable;
-        //foreach (DataGridViewColumn dataGridViewColumn in this.Columns)
-        //{
-        //    if (!dataGridViewColumn.Visible)
-        //    {
-        //        dataGridViewColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-        //        dataGridViewColumn.Resizable = DataGridViewTriState.False;
-        //    }
-        //}
-        //SetSorting(uiGrid);
-        //if (_currentFilterClause != null)
-        //{
-        //    ApplyFilter(_currentFilterClause);
-        //}
-        //FireCollectionChanged();
-        //}
         private void FireCollectionChanged()
         {
             if (this.CollectionChanged != null)
@@ -318,7 +202,7 @@ namespace Habanero.UI.Base
             {
                 if (i++ == row)
                 {
-                    return this._dataSetProvider.Find((string)dataRowView.Row["ID"]);
+                    return this._dataSetProvider.Find((string) dataRowView.Row["ID"]);
                 }
             }
             return null;
@@ -368,7 +252,6 @@ namespace Habanero.UI.Base
             {
                 _dataTableDefaultView.RowFilter = null;
             }
-           
         }
     }
 

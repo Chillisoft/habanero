@@ -141,6 +141,11 @@ namespace Habanero.BO
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectRemoved;
 
+        ///// <summary>
+        ///// Handles the event of any business object in this collection being edited
+        ///// </summary>
+        //public event EventHandler<BOEventArgs> BusinessObjectEdited;
+
         /// <summary>
         /// Calls the BusinessObjectAdded() handler
         /// </summary>
@@ -164,6 +169,18 @@ namespace Habanero.BO
                 this.BusinessObjectRemoved(this, new BOEventArgs(bo));
             }
         }
+
+        ///// <summary>
+        ///// Calls the BusinessObjectRemoved() handler
+        ///// </summary>
+        ///// <param name="bo">The business object removed</param>
+        //public void FireBusinessObjectEdited(TBusinessObject bo)
+        //{
+        //    if (this.BusinessObjectEdited != null)
+        //    {
+        //        this.BusinessObjectEdited(this, new BOEventArgs(bo));
+        //    }
+        //}
 
         /// <summary>
         /// Adds a business object to the collection

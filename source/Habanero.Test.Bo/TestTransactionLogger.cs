@@ -85,7 +85,7 @@ namespace Habanero.Test.BO
             //Assert.AreEqual(WindowsIdentity.GetCurrent().Name, trLog.WindowsUser);
             Assert.AreEqual(Environment.MachineName, trLog.MachineUpdatedName);
             //Assert.GreaterOrEqual(trLog.DateTimeUpdated, DateTime.Now.AddMinutes(-1));
-            Assert.LessOrEqual(trLog.DateTimeUpdated, DateTime.Now);
+            Assert.LessOrEqual(trLog.DateTimeUpdated, DateTime.Now.AddSeconds(1));
 
             //---------------Tear Down -------------------------          
         }
