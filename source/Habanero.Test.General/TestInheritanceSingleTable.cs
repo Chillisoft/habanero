@@ -33,9 +33,8 @@ namespace Habanero.Test.General
         public void SetupFixture()
         {
             SetupTestWithoutPrimaryKey();
+
         }
-
-
 
         protected override void SetupInheritanceSpecifics()
         {
@@ -222,6 +221,32 @@ namespace Habanero.Test.General
             //---------------Tear Down -------------------------
         }
 
+
+        [Test]
+        public void TestLoadingRelatedObjectWithSingleTableInheritance()
+        {
+            //---------------Set up test pack-------------------
+           // ClassDef.ClassDefs.Clear();
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle; delete from circle; delete from shape");
+            MyBO.LoadClassDefWithShape_SingleTableInheritance_Relationship();
+
+            MyBO bo = new MyBO();
+                        CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+            circle.Radius = 5;
+            circle.ShapeName = "MyShape";
+            circle.Save();
+            bo.SetPropertyValue("ShapeID", circle.ShapeID);
+            bo.Save();
+
+            BOLoader.Instance.ClearLoadedBusinessObjects();
+            //---------------Execute Test ----------------------
+
+            bo = BOLoader.Instance.GetBusinessObjectByID<MyBO>(bo.MyBoID);
+            Shape shape = bo.Shape;
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(CircleNoPrimaryKey), shape.GetType());
+            //---------------Tear Down -------------------------
+        }
 
 
         // Provided in case the above test fails and the rows remain in the database

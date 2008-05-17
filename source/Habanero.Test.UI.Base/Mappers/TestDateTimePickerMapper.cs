@@ -25,7 +25,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Set up test pack-------------------
                 Sample sampleBusinessObject = new Sample();
                 sampleBusinessObject.SampleDate = DateTime.Today;
-                DateTimPickerMapper dtpMapper;
+                DateTimePickerMapper dtpMapper;
                 IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
                 dtpMapper.BusinessObject = sampleBusinessObject;
 
@@ -46,7 +46,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 Sample sampleBusinessObject = new Sample();
                 DateTime origionalDate = new DateTime(2000, 1, 1);
                 sampleBusinessObject.SampleDate = origionalDate;
-                DateTimPickerMapper dtpMapper;
+                DateTimePickerMapper dtpMapper;
                 IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
                 dtpMapper.BusinessObject = sampleBusinessObject;
                 //---------------Verify Preconditions -------------------
@@ -74,7 +74,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Set up test pack-------------------
                 Sample sampleBusinessObject = new Sample();
                 sampleBusinessObject.SampleDate = DateTime.Today;
-                DateTimPickerMapper dtpMapper;
+                DateTimePickerMapper dtpMapper;
                 IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
                 dtpMapper.BusinessObject = sampleBusinessObject;
 
@@ -95,7 +95,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 Sample sampleBusinessObject = new Sample();
                 DateTime origionalDate = new DateTime(2000, 1, 1);
                 sampleBusinessObject.SampleDate = origionalDate;
-                DateTimPickerMapper dtpMapper;
+                DateTimePickerMapper dtpMapper;
                 IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
                 dtpMapper.BusinessObject = sampleBusinessObject;
                 //---------------Verify Preconditions -------------------
@@ -118,7 +118,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             string propertyName = "SampleDateProperty";
-            DateTimPickerMapper dtpMapper = new DateTimPickerMapper(dateTimePicker, propertyName);
+            DateTimePickerMapper dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName);
 
             //---------------Verify Result -----------------------
             Assert.AreEqual(dateTimePicker, dtpMapper.DateTimePicker);
@@ -133,7 +133,7 @@ namespace Habanero.Test.UI.Base.Mappers
             Sample sampleBusinessObject = new Sample();
             DateTime origionalDate = new DateTime(2000, 1, 1);
             sampleBusinessObject.SampleDate = origionalDate;
-            DateTimPickerMapper dtpMapper;
+            DateTimePickerMapper dtpMapper;
             IDateTimePicker dateTimePicker = GetDateTimePicker(out dtpMapper);
             //---------------Verify test pack-------------------
             Assert.AreEqual(DateTime.Today, dateTimePicker.Value.Date);
@@ -154,77 +154,12 @@ namespace Habanero.Test.UI.Base.Mappers
         //TODO: Fix readonly compulsory field for control mappper base class
 
 
-        private IDateTimePicker GetDateTimePicker(out DateTimPickerMapper dtpMapper)
+        private IDateTimePicker GetDateTimePicker(out DateTimePickerMapper dtpMapper)
         {
             IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
             string propertyName = "SampleDate";
-            dtpMapper = new DateTimPickerMapper(dateTimePicker, propertyName);
+            dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName);
             return dateTimePicker;
         }
-    }
-
-
-    internal class DateTimPickerMapper : ControlMapper
-    {
-        private readonly IDateTimePicker _picker;
-
-
-        public DateTimPickerMapper(IDateTimePicker picker, string propertyName):base(picker,propertyName, false)
-        {
-            _picker = picker;
-            _propertyName = propertyName;
-        }
-
-        public IDateTimePicker DateTimePicker
-        {
-            get { return _picker; }
-        }
-
-        public override void ApplyChangesToBusinessObject()
-        {
-            object newValue = GetValueOfDateTimePicker();
-            SetPropertyValue(newValue);
-        }
-        /// <summary>
-        /// Returns the value currently held by the picker
-        /// </summary>
-        /// <returns>Returns the value held</returns>
-        private object GetValueOfDateTimePicker()
-        {
-            return DateTimePickerUtil.GetValue(_picker);
-        }
-        /// <summary>
-        /// Updates the value in the control from its business object.
-        /// </summary>
-        protected override void UpdateControlValueFromBo()
-        {
-            //object propValue = GetPropertyValue();
-            //if (propValue == null || propValue == DBNull.Value)
-            //{
-            //    _dateTimePicker.Text = "";
-            //}
-            //else
-            //{
-            //    SetValueOfDateTimePicker(Convert.ToDateTime(propValue));
-            //}
-            _picker.Value = Convert.ToDateTime(_businessObject.GetPropertyValue(_propertyName));
-        }
-
-        ///// <summary>
-        ///// Returns the property value of the business object being mapped
-        ///// </summary>
-        ///// <returns>Returns the property value in appropriate object form</returns>
-        //protected virtual object GetPropertyValue()
-        //{
-        //    if (_businessObject != null)
-        //    {
-        //        BOMapper boMapper = new BOMapper(_businessObject);
-        //        return boMapper.GetPropertyValueToDisplay(_propertyName);
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
     }
 }

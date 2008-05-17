@@ -73,7 +73,19 @@ namespace Habanero.Test
             {
                 return this.Relationships.GetRelatedCollection<MyRelatedBo>("MyMultipleRelationship");
             }
-        } 
+        }
+
+        public virtual Shape Shape
+        {
+            get
+            {
+                return Relationships.GetRelatedObject<Shape>("Shape");
+            }
+            set
+            {
+                Relationships.SetRelatedObject("Shape", value);
+            }
+        }
 
         public static ClassDef LoadDefaultClassDef()
         {
@@ -631,6 +643,27 @@ namespace Habanero.Test
 
 			");
 			ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithShape_SingleTableInheritance_Relationship()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""ShapeID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<relationship name=""Shape"" type=""single"" relatedClass=""Shape"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""ShapeID"" relatedProperty=""ShapeID"" />
+					</relationship>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
                

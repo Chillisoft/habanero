@@ -212,6 +212,9 @@ namespace Habanero.BO
             {
                 LoadProperties(tempBusObj, dr);
             }
+
+
+
             tempBusObj.AfterLoad();
             return tempBusObj;
         }
@@ -228,12 +231,16 @@ namespace Habanero.BO
         {
             IDatabaseConnection databaseConnection = obj.GetDatabaseConnection();
             BusinessObject lTempBusObj = obj.ClassDef.CreateNewBusinessObject(databaseConnection);
+            BusinessObject returnBO = null;
             IDataReader dr = LoadDataReader(lTempBusObj, databaseConnection, searchExpression);
+            string discriminatorFieldValue = "";
+            bool isBaseOfSingleTableInheritanceHierarchy = false;
             try
             {
                 if (dr.Read())
                 {
-                    return GetBusinessObject(obj, dr);
+                    returnBO = GetBusinessObject(obj, dr);
+                    isBaseOfSingleTableInheritanceHierarchy = IsBaseOfSingleTableInheritanceHierarchy(dr, returnBO, isBaseOfSingleTableInheritanceHierarchy, ref discriminatorFieldValue);
                 }
             }
             finally
@@ -243,7 +250,42 @@ namespace Habanero.BO
                     dr.Close();
                 }
             }
-            return null;
+
+            if (returnBO == null) return null;
+
+            if (isBaseOfSingleTableInheritanceHierarchy)
+            {
+                returnBO = LoadChildBusinessObject(searchExpression, returnBO, discriminatorFieldValue);
+            }
+            return returnBO;
+        }
+
+        private BusinessObject LoadChildBusinessObject(IExpression searchExpression, BusinessObject returnBO, string discriminatorFieldValue)
+        {
+            foreach (ClassDef def in returnBO.ClassDef.ImmediateChildren)
+            {
+                if (def.ClassName == discriminatorFieldValue)
+                {
+                    BusinessObject subClassbo = def.CreateNewBusinessObject();
+                    returnBO = GetBusinessObject(subClassbo, searchExpression);
+                    break;
+                }
+            }
+            return returnBO;
+        }
+
+        private bool IsBaseOfSingleTableInheritanceHierarchy(IDataReader dr, BusinessObject returnBO, bool isBaseOfSingleTableInheritanceHierarchy, ref string discriminatorField)
+        {
+            foreach (ClassDef immediateChild in returnBO.ClassDef.ImmediateChildren)
+            {
+                if (immediateChild.IsUsingSingleTableInheritance())
+                {
+                    isBaseOfSingleTableInheritanceHierarchy = true;
+                    discriminatorField = Convert.ToString(dr[immediateChild.SuperClassDef.Discriminator]);
+                    break;
+                }
+            }
+            return isBaseOfSingleTableInheritanceHierarchy;
         }
 
         /// <summary>

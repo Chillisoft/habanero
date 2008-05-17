@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using Habanero.Base;
@@ -62,7 +63,6 @@ namespace Habanero.BO.SqlGeneration
         {
         }
 
-       
 
         /// <summary>
         /// This is a recursive method used to add any child classes onto the where
@@ -73,10 +73,10 @@ namespace Habanero.BO.SqlGeneration
         private string GetDiscriminatorClause(ClassDef classDef, string discriminator)
         {
             string where = "";
-            
+
             where += string.Format("{0} = '{1}'",
-                SqlFormattingHelper.FormatFieldName(discriminator, _connection), classDef.ClassName);
-            
+                                   SqlFormattingHelper.FormatFieldName(discriminator, _connection), classDef.ClassName);
+
             foreach (ClassDef def in classDef.ImmediateChildren)
             {
                 where += " OR ";
@@ -133,11 +133,11 @@ namespace Habanero.BO.SqlGeneration
         /// given by the user.  For ClassTableInheritance only.
         /// </summary>
         private string GetParentKeyMatchWhereClause(ClassDef currentClassDef)
-		{
+        {
             ClassDef origClassDef = currentClassDef;
 
             while (currentClassDef.SuperClassClassDef.SuperClassClassDef != null &&
-                currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
+                   currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
             {
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
@@ -149,33 +149,33 @@ namespace Habanero.BO.SqlGeneration
             {
                 where += SqlFormattingHelper.FormatTableAndFieldName(
                     currentClassDef.SuperClassClassDef.TableName, def.DatabaseFieldName, _connection);
-                    
+
                 PrimaryKeyDef parentID = currentClassDef.SuperClassClassDef.PrimaryKeyDef;
                 if (parentIDCopyFieldName == null ||
                     parentIDCopyFieldName == "")
                 {
                     where += " = " +
-                        SqlFormattingHelper.FormatTableAndFieldName(
-                            origClassDef.TableName, def.DatabaseFieldName, _connection);
+                             SqlFormattingHelper.FormatTableAndFieldName(
+                                 origClassDef.TableName, def.DatabaseFieldName, _connection);
                 }
                 else
                 {
                     if (parentID.Count > 1)
                     {
                         throw new InvalidXmlDefinitionException("For a super class definition " +
-                            "using class table inheritance, the ID attribute can only refer to a " +
-                            "parent with a single primary key.  Leaving out the attribute will " +
-                            "allow composite primary keys where the child's copies have the same " +
-                            "field name as the parent.");
+                                                                "using class table inheritance, the ID attribute can only refer to a " +
+                                                                "parent with a single primary key.  Leaving out the attribute will " +
+                                                                "allow composite primary keys where the child's copies have the same " +
+                                                                "field name as the parent.");
                     }
                     where += " = " +
-                        SqlFormattingHelper.FormatTableAndFieldName(
-                            origClassDef.TableName, parentIDCopyFieldName, _connection);
+                             SqlFormattingHelper.FormatTableAndFieldName(
+                                 origClassDef.TableName, parentIDCopyFieldName, _connection);
                 }
                 where += " AND ";
             }
             return where;
-		}
+        }
 
         /// <summary>
         /// Generates a sql statement to read the business
@@ -225,7 +225,7 @@ namespace Habanero.BO.SqlGeneration
             statement += " FROM " + SqlFormattingHelper.FormatTableName(tableClassDef.TableName, _connection);
             return statement;
         }
-     
+
         private string AddLimitClauseToStatement(int limit, string statement)
         {
             if (limit > 0)
@@ -242,7 +242,9 @@ namespace Habanero.BO.SqlGeneration
 
             while (currentClassDef.IsUsingClassTableInheritance())
             {
-                statement += ", " + SqlFormattingHelper.FormatTableName(currentClassDef.SuperClassClassDef.InheritedTableName, _connection);
+                statement += ", " +
+                             SqlFormattingHelper.FormatTableName(currentClassDef.SuperClassClassDef.InheritedTableName,
+                                                                 _connection);
                 whereClause += GetParentKeyMatchWhereClause(currentClassDef);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
@@ -262,22 +264,21 @@ namespace Habanero.BO.SqlGeneration
         private string AddDiscriminatorToWhereClause(string where)
         {
 //TODO Eric - because of the class structure, this doesn't use parameterised SQL
-           
-                if (_bo.ClassDef.SuperClassDef.Discriminator == null)
-                {
-                    throw new InvalidXmlDefinitionException("A super class has been defined " +
-                                                            "using Single Table Inheritance, but no discriminator column has been set.");
-                }
-                string discriminatorClause = GetDiscriminatorClause(_bo.ClassDef, _bo.ClassDef.SuperClassDef.Discriminator);
-                if (StringUtilities.CountOccurrences(discriminatorClause, " OR ") > 0)
-                {
-                    discriminatorClause = "(" + discriminatorClause + ")";
-                }
-                where += discriminatorClause + " AND ";
-           
+
+            if (_bo.ClassDef.SuperClassDef.Discriminator == null)
+            {
+                throw new InvalidXmlDefinitionException("A super class has been defined " +
+                                                        "using Single Table Inheritance, but no discriminator column has been set.");
+            }
+            string discriminatorClause = GetDiscriminatorClause(_bo.ClassDef, _bo.ClassDef.SuperClassDef.Discriminator);
+            if (StringUtilities.CountOccurrences(discriminatorClause, " OR ") > 0)
+            {
+                discriminatorClause = "(" + discriminatorClause + ")";
+            }
+            where += discriminatorClause + " AND ";
+
             return where;
         }
-
 
         private string AddBOPropNamesToStatement(IList<ClassDef> classDefs, string statement)
         {
@@ -289,7 +290,39 @@ namespace Habanero.BO.SqlGeneration
                 statement += SqlFormattingHelper.FormatTableAndFieldName(tableName, prop.DatabaseFieldName, _connection);
                 statement += ", ";
             }
+
+            statement = AddDiscriminatorFieldIfBaseOfSingleTableInheritance(classDefs, statement);
+
+
             statement = statement.Remove(statement.Length - 2, 2);
+            return statement;
+        }
+
+        private string AddDiscriminatorFieldIfBaseOfSingleTableInheritance(IList<ClassDef> classDefs, string statement)
+        {
+            string discriminatorFieldName = "";
+            bool isBaseOfSingleTableInheritanceHierarchy = false;
+            foreach (ClassDef immediateChild in classDefs[0].ImmediateChildren)
+            {
+                if (immediateChild.IsUsingSingleTableInheritance())
+                {
+                    isBaseOfSingleTableInheritanceHierarchy = true;
+                    discriminatorFieldName = immediateChild.SuperClassDef.Discriminator;
+                    break;
+                }
+            }
+
+            if (isBaseOfSingleTableInheritanceHierarchy)
+            {
+                string discriminatorFieldString =
+                    SqlFormattingHelper.FormatTableAndFieldName(classDefs[0].GetBaseClassOfSingleTableHierarchy().TableName, discriminatorFieldName,
+                                                                _connection);
+                if (!statement.Contains(discriminatorFieldString))
+                {
+                    statement += discriminatorFieldString;
+                    statement += ", ";
+                }
+            }
             return statement;
         }
     }
