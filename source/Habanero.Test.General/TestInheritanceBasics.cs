@@ -101,5 +101,6 @@ namespace Habanero.Test.General
             Assert.AreEqual(objCircleNoPrimaryKey.ID, parent.ID);
             Assert.AreEqual(objCircleNoPrimaryKey.GetPropertyValue("ShapeID"), parent.GetPropertyValue("ShapeID"));
         }
+
     }
 }

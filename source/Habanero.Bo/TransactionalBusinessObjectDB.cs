@@ -124,7 +124,9 @@ namespace Habanero.BO
 
                 SqlStatement checkDuplicateSql =
                     new SqlStatement(DatabaseConnection.CurrentConnection);
-                checkDuplicateSql.Statement.Append(this.BusinessObject.GetSelectSql());
+                SelectStatementGenerator generator =
+                    new SelectStatementGenerator(this.BusinessObject, this.BusinessObject.GetDatabaseConnection());
+                checkDuplicateSql.Statement.Append(generator.GenerateDuplicateSelect());
 
                 // Special case where super class and subclass have same ID name causes ambiguous field name
                 string idWhereClause = this.BusinessObject.WhereClause(checkDuplicateSql);

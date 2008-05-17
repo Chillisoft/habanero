@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 
@@ -91,5 +92,6 @@ namespace Habanero.Test
         {
             get { return ShapeName; }
         }
+
     }
 }

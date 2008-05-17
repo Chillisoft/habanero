@@ -105,6 +105,8 @@ namespace Habanero.Test.General
             _selectSql.Statement.Append(_filledCircle.SelectSqlStatement(_selectSql));
         }
 
+
+
         protected abstract void SetupInheritanceSpecifics();
         protected abstract void SetStrID();
     }

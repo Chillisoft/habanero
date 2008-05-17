@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -514,6 +515,44 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreNotEqual(classDef1, "bob");
         }
 
+
+        [Test]
+        public void TestGetAllClassDefsInHierarchy()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef =
+    new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
+            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef =
+                new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.SingleTableInheritance);
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
+            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
+
+            //---------------Execute Test ----------------------
+
+            IList<ClassDef> classDefs = FilledCircleNoPrimaryKey.GetClassDef().GetAllClassDefsInHierarchy();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, classDefs.Count);
+            Assert.AreSame(FilledCircleNoPrimaryKey.GetClassDef(), classDefs[0]);
+            Assert.AreSame(CircleNoPrimaryKey.GetClassDef(), classDefs[1]);
+            Assert.AreSame(Shape.GetClassDef(), classDefs[2]);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestGetBaseClassOfSingleTableHierarchy()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
+            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.SingleTableInheritance);
+            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
+            //---------------Execute Test ----------------------
+
+            ClassDef baseClass = FilledCircleNoPrimaryKey.GetClassDef().GetBaseClassOfSingleTableHierarchy();
+            //---------------Test Result -----------------------
+            Assert.AreSame(CircleNoPrimaryKey.GetClassDef(), baseClass);
+            //---------------Tear Down -------------------------
+        }
+    
         public static ClassDef LoadClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

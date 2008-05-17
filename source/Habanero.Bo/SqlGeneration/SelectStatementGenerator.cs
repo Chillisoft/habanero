@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Collections;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -61,78 +62,7 @@ namespace Habanero.BO.SqlGeneration
         {
         }
 
-        /// <summary>
-        /// Generates a sql statement to read the business
-        /// object's properties from the database
-        /// </summary>
-        /// <param name="limit">The max number of items to read from the database. A value of 0 or less 
-        /// indicates no limit.</param>
-        /// <returns>Returns a string</returns>
-        public string Generate(int limit)
-        {
-            IList classDefs = new ArrayList();
-            ClassDef currentClassDef = _classDef;
-            while (currentClassDef != null)
-            {
-                classDefs.Add(currentClassDef);
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
-
-            string statement = "SELECT ";
-            if (limit > 0)
-            {
-                string limitClause = _connection.GetLimitClauseForBeginning(limit);
-                if (!string.IsNullOrEmpty(limitClause)) statement += limitClause + " ";
-            }
-
-            foreach (BOProp prop in _bo.Props.SortedValues)
-            {
-                if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
-                string tableName = GetTableName(prop, classDefs);
-
-                statement += SqlFormattingHelper.FormatTableAndFieldName(tableName, prop.DatabaseFieldName, _connection);
-                statement += ", ";
-            }
-            statement = statement.Remove(statement.Length - 2, 2);
-
-            currentClassDef = _classDef;
-            while (currentClassDef.IsUsingSingleTableInheritance())
-            {
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
-            statement += " FROM " + SqlFormattingHelper.FormatTableName(currentClassDef.TableName, _connection);
-            string where = " WHERE ";
-
-            while (currentClassDef.IsUsingClassTableInheritance())
-            {
-                statement += ", " + SqlFormattingHelper.FormatTableName(currentClassDef.SuperClassClassDef.InheritedTableName, _connection);
-                where += GetParentKeyMatchWhereClause(currentClassDef);
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
-
-            //TODO Eric - because of the class structure, this doesn't use parameterised SQL
-            if (_bo.ClassDef.IsUsingSingleTableInheritance())
-            {
-                if (_bo.ClassDef.SuperClassDef.Discriminator == null)
-                {
-                    throw new InvalidXmlDefinitionException("A super class has been defined " +
-                        "using Single Table Inheritance, but no discriminator column has been set.");
-                }
-                string discriminatorClause = GetDiscriminatorClause(_bo.ClassDef, _bo.ClassDef.SuperClassDef.Discriminator);
-                if (StringUtilities.CountOccurrences(discriminatorClause, " OR ") > 0)
-                {
-                    discriminatorClause = "(" + discriminatorClause + ")";
-                }
-                where += discriminatorClause + " AND ";
-            }
-
-            if (where.Length > 7)
-            {
-                statement += where.Substring(0, where.Length - 5);
-            }
-
-            return statement;
-        }
+       
 
         /// <summary>
         /// This is a recursive method used to add any child classes onto the where
@@ -162,7 +92,7 @@ namespace Habanero.BO.SqlGeneration
         /// <param name="prop">The property</param>
         /// <param name="classDefs">The class definitions</param>
         /// <returns>Returns a string</returns>
-        private string GetTableName(BOProp prop, IList classDefs)
+        private string GetTableName(BOProp prop, IList<ClassDef> classDefs)
         {
             int i = 0;
             bool isSingleTableInheritance = false;
@@ -246,5 +176,121 @@ namespace Habanero.BO.SqlGeneration
             }
             return where;
 		}
+
+        /// <summary>
+        /// Generates a sql statement to read the business
+        /// object's properties from the database
+        /// </summary>
+        /// <param name="limit">The max number of items to read from the database. A value of 0 or less 
+        /// indicates no limit.</param>
+        /// <returns>Returns a string</returns>
+        public string Generate(int limit)
+        {
+            return GenerateWithLimit(limit, true);
+        }
+
+        /// <summary>
+        /// Generatas a sql statement to be used when checking for duplicates. For this purpose no limit is allowed
+        /// and in the case of single table inheritance, no discriminator is added to the where clause as this would
+        /// mean duplicates would not be found between different types within the same single table inheritance hierarchy.
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateDuplicateSelect()
+        {
+            return GenerateWithNoLimit(false);
+        }
+
+        private string GenerateWithLimit(int limit, bool includeDiscriminator)
+        {
+            IList<ClassDef> classDefs = _classDef.GetAllClassDefsInHierarchy();
+            ClassDef tableClassDef = _classDef.GetBaseClassOfSingleTableHierarchy();
+
+            string statement = "SELECT ";
+            statement = AddLimitClauseToStatement(limit, statement);
+            statement = AddBOPropNamesToStatement(classDefs, statement);
+            statement = AddFromToStatement(statement, tableClassDef);
+            statement = AddWhereClauseToStatement(statement, tableClassDef, includeDiscriminator);
+
+            return statement;
+        }
+
+
+        private string GenerateWithNoLimit(bool includeDiscriminator)
+        {
+            return GenerateWithLimit(0, includeDiscriminator);
+        }
+
+        private string AddFromToStatement(string statement, ClassDef tableClassDef)
+        {
+            statement += " FROM " + SqlFormattingHelper.FormatTableName(tableClassDef.TableName, _connection);
+            return statement;
+        }
+     
+        private string AddLimitClauseToStatement(int limit, string statement)
+        {
+            if (limit > 0)
+            {
+                string limitClause = _connection.GetLimitClauseForBeginning(limit);
+                if (!string.IsNullOrEmpty(limitClause)) statement += limitClause + " ";
+            }
+            return statement;
+        }
+
+        private string AddWhereClauseToStatement(string statement, ClassDef currentClassDef, bool includeDiscriminator)
+        {
+            string whereClause = " WHERE ";
+
+            while (currentClassDef.IsUsingClassTableInheritance())
+            {
+                statement += ", " + SqlFormattingHelper.FormatTableName(currentClassDef.SuperClassClassDef.InheritedTableName, _connection);
+                whereClause += GetParentKeyMatchWhereClause(currentClassDef);
+                currentClassDef = currentClassDef.SuperClassClassDef;
+            }
+
+            if (includeDiscriminator && _bo.ClassDef.IsUsingSingleTableInheritance())
+            {
+                whereClause = AddDiscriminatorToWhereClause(whereClause);
+            }
+
+            if (whereClause.Length > 7)
+            {
+                statement += whereClause.Substring(0, whereClause.Length - 5);
+            }
+            return statement;
+        }
+
+        private string AddDiscriminatorToWhereClause(string where)
+        {
+//TODO Eric - because of the class structure, this doesn't use parameterised SQL
+           
+                if (_bo.ClassDef.SuperClassDef.Discriminator == null)
+                {
+                    throw new InvalidXmlDefinitionException("A super class has been defined " +
+                                                            "using Single Table Inheritance, but no discriminator column has been set.");
+                }
+                string discriminatorClause = GetDiscriminatorClause(_bo.ClassDef, _bo.ClassDef.SuperClassDef.Discriminator);
+                if (StringUtilities.CountOccurrences(discriminatorClause, " OR ") > 0)
+                {
+                    discriminatorClause = "(" + discriminatorClause + ")";
+                }
+                where += discriminatorClause + " AND ";
+           
+            return where;
+        }
+
+
+        private string AddBOPropNamesToStatement(IList<ClassDef> classDefs, string statement)
+        {
+            foreach (BOProp prop in _bo.Props.SortedValues)
+            {
+                if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
+                string tableName = GetTableName(prop, classDefs);
+
+                statement += SqlFormattingHelper.FormatTableAndFieldName(tableName, prop.DatabaseFieldName, _connection);
+                statement += ", ";
+            }
+            statement = statement.Remove(statement.Length - 2, 2);
+            return statement;
+        }
     }
 }

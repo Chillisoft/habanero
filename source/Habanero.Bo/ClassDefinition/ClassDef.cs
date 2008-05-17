@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.Loaders;
 using Habanero.Util;
@@ -706,22 +707,6 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// Returns whether this class has an autoincrementing field or not. Checks the propdefs for whether
-        /// one of them is autoincrementing, returning true if this is the case.
-        /// </summary>
-        public bool HasAutoIncrementingField
-        {
-            get
-            {
-                foreach (PropDef def in _propDefCol)
-                {
-                    if (def.AutoIncrementing) return true;
-                }
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Indicates whether ClassTableInheritance is being used. See
         /// the ORMapping enumeration for more detail.
         /// </summary>
@@ -784,6 +769,24 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _typeParameter; }
             set { _typeParameter = value; }
+        }
+
+        /// <summary>
+        /// Creates a list of classdefs in this inheritance hierarchy.  The first item in the list is this classdef,
+        /// followed by the one higher up the hierarchy (ie, this classdef's base or super class), followed by that
+        /// one's base/super class and so on.
+        /// </summary>
+        /// <returns>The list of classdefs in order from lowest to highest in the hierarchy.</returns>
+        public IList<ClassDef> GetAllClassDefsInHierarchy()
+        {
+            IList<ClassDef> classDefs = new List<ClassDef>();
+            ClassDef tempClassDef = this;
+            while (tempClassDef != null)
+            {
+                classDefs.Add(tempClassDef);
+                tempClassDef = tempClassDef.SuperClassClassDef;
+            }
+            return classDefs;
         }
 
         #endregion //Superclasses&inheritance
@@ -1008,6 +1011,30 @@ namespace Habanero.BO.ClassDefinition
             return newClassDef;
         }
 
-        
+        /// <summary>
+        /// Returns whether this class has an autoincrementing field or not. Checks the propdefs for whether
+        /// one of them is autoincrementing, returning true if this is the case.
+        /// </summary>
+        public bool HasAutoIncrementingField
+        {
+            get
+            {
+                foreach (PropDef def in _propDefCol)
+                {
+                    if (def.AutoIncrementing) return true;
+                }
+                return false;
+            }
+        }
+
+        public ClassDef GetBaseClassOfSingleTableHierarchy()
+        {
+            ClassDef currentClassDef = this;
+            while (currentClassDef.IsUsingSingleTableInheritance())
+            {
+                currentClassDef = currentClassDef.SuperClassClassDef;
+            }
+            return currentClassDef;
+        }
     }
 }

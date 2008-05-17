@@ -35,11 +35,6 @@ namespace Habanero.Test.General
             SetupTestWithoutPrimaryKey();
         }
 
-        public static void RunTest()
-        {
-            TestInheritanceSingleTable test = new TestInheritanceSingleTable();
-            test.SetupTestWithoutPrimaryKey();
-        }
 
 
         protected override void SetupInheritanceSpecifics()
@@ -207,25 +202,54 @@ namespace Habanero.Test.General
             Assert.AreEqual(0, circles.Count);
         }
 
+
+        [Test, ExpectedException(typeof(BusObjDuplicateConcurrencyControlException))]
+        public void TestUniqueKeyValidationForSubTypesOfSingleTableInheritanceStructure()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection.ExecuteRawSql("delete from filledcircle; delete from circle; delete from shape");
+            Shape shape = new Shape();
+            shape.ShapeName = "MyShape";
+            shape.Save();
+            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+            circle.Radius = 5;
+            circle.ShapeName = "MyShape";
+
+            //---------------Execute Test ----------------------
+            circle.Save();
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------
+        }
+
+
+
         // Provided in case the above test fails and the rows remain in the database
         [TestFixtureTearDown]
         public void TearDown()
         {
-            Shape shape = BOLoader.Instance.GetBusinessObject<Shape>(
-                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'");
-            if (shape != null)
+            TransactionCommitterDB committer = new TransactionCommitterDB();
+            BusinessObjectCollection<Shape> shapes = BOLoader.Instance.GetBusinessObjectCol<Shape>(
+                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'", "");
+            foreach (Shape shape in shapes)
             {
                 shape.Delete();
-                shape.Save();
+               committer.AddBusinessObject(shape);
+             
             }
+           
+          BusinessObjectCollection<CircleNoPrimaryKey> circles = BOLoader.Instance.GetBusinessObjectCol<CircleNoPrimaryKey>(
+                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'", "");
+          foreach (CircleNoPrimaryKey circle in circles)
 
-            CircleNoPrimaryKey circle = BOLoader.Instance.GetBusinessObject<CircleNoPrimaryKey>(
-                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'");
-            if (circle != null)
             {
                 circle.Delete();
-                circle.Save();
+                committer.AddBusinessObject(circle);
             }
+            committer.CommitTransaction();
         }
+
+
+
     }
 }

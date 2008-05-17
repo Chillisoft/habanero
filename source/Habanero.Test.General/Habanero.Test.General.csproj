@@ -129,7 +129,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestInheritanceHeirarchyClassSingle.cs" />
     <Compile Include="TestInheritanceHeirarchySingleClass.cs" />
     <Compile Include="TestInheritanceClassTableNoID.cs" />
     <Compile Include="TestInheritanceClassTableCopyID.cs" />
