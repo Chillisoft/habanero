@@ -56,6 +56,16 @@ namespace Habanero.UI.WebGUI
             {
                 throw new System.NotImplementedException();
             }
+
+            public object this[int index]
+            {
+                get { return _items[index]; }
+            }
+
+            public bool Contains(object value)
+            {
+               return _items.Contains(value);
+            }
         }
         IControlCollection IControlChilli.Controls
         {

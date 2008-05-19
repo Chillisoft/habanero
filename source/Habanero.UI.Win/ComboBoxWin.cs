@@ -14,16 +14,16 @@ namespace Habanero.UI.Win
         {
             get
             {
-                IComboBoxObjectCollection objectCollection = new ComboBoxObjectCollectionGiz(base.Items);
+                IComboBoxObjectCollection objectCollection = new ComboBoxObjectCollectionWin(base.Items);
                 return objectCollection;
             }
         }
 
-        internal class ComboBoxObjectCollectionGiz : IComboBoxObjectCollection
+        internal class ComboBoxObjectCollectionWin : IComboBoxObjectCollection
         {
             private readonly ObjectCollection _items;
 
-            public ComboBoxObjectCollectionGiz(ObjectCollection items)
+            public ComboBoxObjectCollectionWin(ObjectCollection items)
             {
                 this._items = items;
             }
@@ -58,6 +58,20 @@ namespace Habanero.UI.Win
             {
                 throw new System.NotImplementedException();
             }
+
+            #region IComboBoxObjectCollection Members
+
+            public object this[int index]
+            {
+                get { return _items[index]; }
+            }
+
+            public bool Contains(object value)
+            {
+                return _items.Contains(value);
+            }
+
+            #endregion
         }
         IControlCollection IControlChilli.Controls
         {

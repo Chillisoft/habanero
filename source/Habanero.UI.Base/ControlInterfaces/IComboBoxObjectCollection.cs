@@ -12,5 +12,8 @@ namespace Habanero.UI.Base
         void Remove(object item);
         void Clear();
         void SetCollection(BusinessObjectCollection<BusinessObject> collection);
+
+        object this[int index] { get; }
+        bool Contains(object value);
     }
 }

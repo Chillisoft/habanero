@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ControlInterfaces\IUserControlChilli.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
+    <Compile Include="ControlMappers\ListComboBoxMapper.cs" />
     <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
     <Compile Include="DefaultBODeletor.cs" />
     <Compile Include="Grid\IDataGridViewColumn.cs" />

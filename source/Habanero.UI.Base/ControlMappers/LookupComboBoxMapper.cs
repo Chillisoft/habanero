@@ -33,7 +33,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public class LookupComboBoxMapper : ComboBoxMapper
     {
-        private readonly IControlFactory _controlFactory;
+        //private readonly IControlFactory _controlFactory;
         //private bool _allowRightClick = true;
         //private bool _isRightClickInitialised;
 
@@ -43,11 +43,10 @@ namespace Habanero.UI.Base
         /// <param name="cbx">The ComboBox to map</param>
         /// <param name="propName">The property name</param>
 		/// <param name="isReadOnly">Whether this control is read only</param>
-		/// <param name="controlFactory"></param>
-		public LookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly, IControlFactory controlFactory)
+		public LookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly)
             : base(cbx, propName, isReadOnly)
         {
-            _controlFactory = controlFactory;
+            //_controlFactory = controlFactory;
             _comboBox = cbx;
             ////_comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             //_comboBox.SelectedIndexChanged += ValueChangedHandler;
@@ -236,7 +235,7 @@ namespace Habanero.UI.Base
             }
             //TODO: the dropdownwidth must be set for windows to a more sensible number based on pixels.
            // _comboBox.DropDownWidth = 25;
-            _comboBox.DropDownWidth = chars;
+           // _comboBox.DropDownWidth = chars;
         }
 
 

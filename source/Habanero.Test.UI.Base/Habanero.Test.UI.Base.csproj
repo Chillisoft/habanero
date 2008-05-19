@@ -75,6 +75,7 @@
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
     <Compile Include="Mappers\TestControlMapper.cs" />
+    <Compile Include="Mappers\TestLookupComboBoxMapper.cs" />
     <Compile Include="Mappers\TestMapperBase.cs" />
     <Compile Include="Mappers\TestTextBoxMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="TestListBox.cs" />
     <Compile Include="MultiSelector\TestMultiSelector.cs" />
     <Compile Include="MultiSelector\TestMultiSelectorModel.cs" />
+    <Compile Include="Mappers\TestListComboBoxMapper.cs" />
     <Compile Include="TestPanelFactory.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />
     <Compile Include="Wizard\TestWizardController.cs" />
