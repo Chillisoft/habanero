@@ -1,7 +1,7 @@
 using Habanero.UI.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Base.LayoutManager
+namespace Habanero.Test.UI.Base
 {
     [TestFixture]
     public abstract class TestColumnLayoutManager
@@ -485,25 +485,6 @@ namespace Habanero.Test.UI.Base.LayoutManager
 
             //---------------Tear Down -------------------------          
         }
-
-        //TODO: refresh on change managed controls size
-        [Test]
-        public void TestIfAlreadyHasControls()
-        {
-            //---------------Set up test pack-------------------
-            IControlChilli controlChilli = GetControlFactory().CreatePanel();
-            controlChilli.Controls.Add(GetControlFactory().CreateButton("JJJJ"));
-            //---------------Execute Test ----------------------
-            try
-            {
-                new ColumnLayoutManager(controlChilli, GetControlFactory());
-                Assert.Fail("Should raise an error");
-            }
-            //---------------Test Result -----------------------
-            catch (LayoutManagerException ex)
-            {
-                StringAssert.Contains("You cannot initialise the layout manager with a control that already contains controls",ex.Message);
-            }
-        }
+        
     }
 }

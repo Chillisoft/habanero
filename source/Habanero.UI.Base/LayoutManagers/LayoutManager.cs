@@ -40,6 +40,10 @@ namespace Habanero.UI.Base
         /// <param name="managedControl">The control to manage</param>
         public LayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
         {
+            if (managedControl == null)
+            {
+                throw new LayoutManagerException("You cannot initialise the layout manager with a null control");
+            }
             if (managedControl.Controls.Count > 0)
             {
                 throw new LayoutManagerException("You cannot initialise the layout manager with a control that already contains controls");

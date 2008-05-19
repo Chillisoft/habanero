@@ -33,7 +33,7 @@ namespace Habanero.UI.Base
         /// Constructor to initialise a new layout manager
         /// </summary>
         /// <param name="managedControl">The control to manage</param>
-        /// <param name="controlFactory">the control factory used by the layout manager to create controls</param>
+        /// <param name="controlFactory">The control factory used by the layout manager to create controls</param>
         public ColumnLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {

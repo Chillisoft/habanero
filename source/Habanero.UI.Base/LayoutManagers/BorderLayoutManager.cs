@@ -62,7 +62,7 @@ namespace Habanero.UI.Base
         /// <param name="managedControl">The control to manage (eg. use "this"
         /// if you create the manager inside a form class that you will be
         /// managing)</param>
-        /// <param name="controlFactory">The control factory that will b used to create controls</param>
+        /// <param name="controlFactory">The control factory that will be used to create controls</param>
         public BorderLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {

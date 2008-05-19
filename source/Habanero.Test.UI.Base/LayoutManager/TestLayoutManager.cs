@@ -85,6 +85,42 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(manager.IsRefreshed, "Refresh should happen when control size changes.");
         }
 
+        [Test]
+        public void TestCreate_AlreadyHasControls()
+        {
+            //---------------Set up test pack-------------------
+            IControlChilli controlChilli = GetControlFactory().CreatePanel();
+            controlChilli.Controls.Add(GetControlFactory().CreateControl());
+            //---------------Execute Test ----------------------
+            try
+            {
+                new MockLayoutManager(controlChilli);
+                Assert.Fail("Should raise an error");
+            }
+            //---------------Test Result -----------------------
+            catch (LayoutManagerException ex)
+            {
+                StringAssert.Contains("You cannot initialise the layout manager with a control that already contains controls", ex.Message);
+            }
+        }
+
+        [Test]
+        public void TestCreate_NullControl()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Execute Test ----------------------
+            try
+            {
+                new MockLayoutManager(null);
+                Assert.Fail("Should raise an error");
+            }
+            //---------------Test Result -----------------------
+            catch (LayoutManagerException ex)
+            {
+                StringAssert.Contains("You cannot initialise the layout manager with a null control", ex.Message);
+            }
+        }
+
         private class MockLayoutManager : Habanero.UI.Base.LayoutManager
         {
             private bool mRefreshed;
