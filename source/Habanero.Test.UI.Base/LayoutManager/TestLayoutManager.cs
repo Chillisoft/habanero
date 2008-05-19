@@ -85,7 +85,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(manager.IsRefreshed, "Refresh should happen when control size changes.");
         }
 
-        private class MockLayoutManager : LayoutManager
+        private class MockLayoutManager : Habanero.UI.Base.LayoutManager
         {
             private bool mRefreshed;
 

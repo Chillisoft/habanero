@@ -46,6 +46,7 @@
     <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
     <Compile Include="DefaultBODeletor.cs" />
     <Compile Include="Grid\IDataGridViewColumn.cs" />
+    <Compile Include="LayoutManagers\ColumnLayoutManager.cs" />
     <Compile Include="Util\GlobalUIRegistry.cs" />
     <Compile Include="Grid\IDataGridView.cs" />
     <Compile Include="Grid\IDataGridViewCell.cs" />

@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Runtime.Serialization;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.UI.Base
 {
@@ -38,6 +40,10 @@ namespace Habanero.UI.Base
         /// <param name="managedControl">The control to manage</param>
         public LayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
         {
+            if (managedControl.Controls.Count > 0)
+            {
+                throw new LayoutManagerException("You cannot initialise the layout manager with a control that already contains controls");
+            }
             _managedControl = managedControl;
             _controlFactory = controlFactory;
             _managedControl.Resize += this.ManagedControlResizeHandler;
@@ -96,5 +102,26 @@ namespace Habanero.UI.Base
         public abstract IControlChilli AddControl(IControlChilli label);
 
   
+    }
+    public class LayoutManagerException : HabaneroDeveloperException
+    {
+        public LayoutManagerException(string message)
+            : base(message)
+        {
+        }
+
+        public LayoutManagerException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
+        public LayoutManagerException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+
+        public LayoutManagerException()
+        {
+        }
     }
 }

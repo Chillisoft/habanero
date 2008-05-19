@@ -29,6 +29,7 @@ namespace Habanero.Test.UI.Base
     [TestFixture]
     public class TestColumnLayoutManager
     {
+
         private ColumnLayoutManager manager;
         private Control managedControl;
 

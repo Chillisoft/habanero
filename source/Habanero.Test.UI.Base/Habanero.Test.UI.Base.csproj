@@ -71,6 +71,7 @@
     <Compile Include="LayoutManager\TestBorderLayoutManager.cs" />
     <Compile Include="Grid\TestReadOnlyGridButtonControl.cs" />
     <Compile Include="Grid\TestReadOnlyGridControl.cs" />
+    <Compile Include="LayoutManager\TestColumnLayoutManager.cs" />
     <Compile Include="LayoutManager\TestGridLayoutManager.cs" />
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />

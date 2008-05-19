@@ -17,11 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Habanero.UI.Base;
-
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -58,8 +53,8 @@ namespace Habanero.UI.Base
             South = 4
         }
 
-        private readonly IControlChilli[] _controls;
-        private readonly bool[] _splitters;
+        //private readonly IControlChilli[] _controls;
+        //private readonly bool[] _splitters;
 
         /// <summary>
         /// Constructor to initalise a new layout manager
@@ -67,11 +62,12 @@ namespace Habanero.UI.Base
         /// <param name="managedControl">The control to manage (eg. use "this"
         /// if you create the manager inside a form class that you will be
         /// managing)</param>
+        /// <param name="controlFactory">The control factory that will b used to create controls</param>
         public BorderLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {
-            _controls = new IControlChilli[5];
-            _splitters = new bool[5];
+            //_controls = new IControlChilli[5];
+            //_splitters = new bool[5];
         }
 
         protected override void RefreshControlPositions()
