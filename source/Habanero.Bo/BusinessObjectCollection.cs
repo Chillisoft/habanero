@@ -45,15 +45,14 @@ namespace Habanero.BO
         : List<TBusinessObject>, IBusinessObjectCollection
         where TBusinessObject : BusinessObject
     {
-        private ClassDef _boClassDef;
+        private readonly ClassDef _boClassDef;
         private IExpression _criteriaExpression;
         private string _orderByClause;
-        private BusinessObject _sampleBo;
+        private readonly BusinessObject _sampleBo;
         private string _extraSearchCriteriaLiteral = "";
         private int _limit = -1;
-        private Hashtable _lookupTable;
-        private List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
-        //private ArrayList _list;
+        private readonly Hashtable _lookupTable;
+        private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
 
         /// <summary>
         /// Default constructor. 
