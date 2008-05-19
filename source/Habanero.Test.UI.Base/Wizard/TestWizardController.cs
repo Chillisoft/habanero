@@ -28,7 +28,7 @@ namespace Habanero.Test.UI.Base.Wizard
     public class TestWizardController
     {
         private WizardController _wizardController;
-        private MockRepository _mock = new MockRepository();
+        private readonly MockRepository _mock = new MockRepository();
         private IWizardStep _step1;
 
         [SetUp]

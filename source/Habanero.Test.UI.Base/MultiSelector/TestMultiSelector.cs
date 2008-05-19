@@ -42,8 +42,10 @@ namespace Habanero.Test.UI.Base
                 return new ControlFactoryWin();
             }
 
+            //There are lots of different tests in giz and win because we do not want the event handling
+            //overhead of hitting the server all the time to enable and disable buttons.
             [Test]
-            public void TestSelectButtonStateAtSet()
+            public void Test_Win_SelectButtonStateAtSet()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -57,7 +59,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestSelectButtonStateUponSelection()
+            public void Test_Win_SelectButtonStateUponSelection()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -72,7 +74,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestSelectButtonIsDisabledWhenItemIsDeselected()
+            public void Test_Win_SelectButtonIsDisabledWhenItemIsDeselected()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -81,12 +83,12 @@ namespace Habanero.Test.UI.Base
                 //---------------Execute Test ----------------------
                 _selector.AvailableOptionsListBox.SelectedIndex = -1;
                 //---------------Test Result -----------------------
-                 Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Select).Enabled);
+                Assert.IsFalse(_selector.GetButton(MultiSelectorButton.Select).Enabled);
                 //---------------Tear Down -------------------------          
             }
 
             [Test]
-            public void TestDeselectButtonStateAtSet()
+            public void Test_Win_DeselectButtonStateAtSet()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -101,7 +103,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestDeselectButtonStateUponSelection()
+            public void Test_Win_DeselectButtonStateUponSelection()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -118,7 +120,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestDeselectButtonIsDisabledWhenItemIsDeselected()
+            public void Test_Win_DeselectButtonIsDisabledWhenItemIsDeselected()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -141,9 +143,10 @@ namespace Habanero.Test.UI.Base
             {
                 return new ControlFactoryGizmox();
             }
-
+            //There are lots of different tests in giz because we do not want the event handling
+            //overhead of hitting the server all the time to enable and disable buttons.
             [Test]
-            public void TestSelectButtonStateAtSet()
+            public void TestGiz_SelectButtonStateAtSet()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -157,7 +160,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestSelectButtonStateUponSelection()
+            public void TestGiz_SelectButtonStateUponSelection()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -172,7 +175,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestSelectButtonIsEnabledWhenItemIsDeselected()
+            public void TestGiz_SelectButtonIsEnabledWhenItemIsDeselected()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -186,7 +189,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestClickSelectButtonWithNoItemSelected()
+            public void TestGiz_ClickSelectButtonWithNoItemSelected()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -202,9 +205,8 @@ namespace Habanero.Test.UI.Base
             }
 
 
-
             [Test]
-            public void TestDeselectButtonStateAtSet()
+            public void TestGiz_DeselectButtonStateAtSet()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -219,7 +221,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestDeselectButtonStateUponSelection()
+            public void TestGiz_DeselectButtonStateUponSelection()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -236,7 +238,7 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestDeselectButtonIsDisabledWhenItemIsDeselected()
+            public void TestGiz_DeselectButtonIsDisabledWhenItemIsDeselected()
             {
                 //---------------Set up test pack-------------------
                 IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -250,19 +252,18 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(_selector.GetButton(MultiSelectorButton.Deselect).Enabled);
                 //---------------Tear Down -------------------------          
             }
-
+            //There is a bug in giz that does not allow you to programmattically select 
+            //multiple items in a list
             [Test, Ignore("Problem selecting multiple items from code in gizmox")]
-            public override void TestSelectingMultipleItemsAtOnce()
+            public override void TestSelectingMultipleItemsAtOnce_Click()
             {
-                
             }
-
-                       [Test, Ignore("Problem selecting multiple items from code in gizmox")]
-            public override void TestDeselectingMultipleItemsAtOnce()
+            //There is a bug in giz that does not allow you to programmattically select 
+            //multiple items in a list
+            [Test, Ignore("Problem selecting multiple items from code in gizmox")]
+            public override void TestDeselectingMultipleItemsAtOnce_Click()
             {
-                
             }
-            
         }
 
         #region Test Options List
@@ -286,7 +287,9 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
             List<TestT> twoOptions = CreateListWithTwoOptions();
-
+            //---------------Assert Preconditions -------------
+            Assert.AreEqual(0, _selector.AvailableOptionsListBox.Items.Count);
+            Assert.AreEqual(0, _selector.SelectionsListBox.Items.Count);
             //---------------Execute Test ----------------------
             _selector.Options = twoOptions;
 
@@ -295,7 +298,6 @@ namespace Habanero.Test.UI.Base
 
             //---------------Tear Down -------------------------          
         }
-
 
         [Test]
         public void TestSettingOptionsPopulatesModel()
@@ -390,7 +392,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(2, _selector.SelectionsListBox.Items.Count);
-
+            Assert.AreEqual(_selector.SelectionsListBox.Items.Count, _selector.SelectionsView.Count);
             //---------------Tear Down -------------------------          
         }
 
@@ -476,6 +478,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             AssertAllSelected(_selector);
+            Assert.AreEqual(_selector.SelectionsListBox.Items.Count, _selector.SelectionsView.Count);
             //---------------Tear Down -------------------------          
         }
 
@@ -501,7 +504,7 @@ namespace Habanero.Test.UI.Base
         #region Test Buttons
 
         [Test]
-        public void TestSelectButton()
+        public void TestSelectButton_Click()
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -514,14 +517,38 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(1, _selector.AvailableOptionsListBox.Items.Count);
             Assert.AreEqual(1, _selector.SelectionsListBox.Items.Count);
+            Assert.AreEqual(_selector.SelectionsListBox.Items.Count, _selector.SelectionsView.Count);
             //---------------Tear Down -------------------------          
         }
 
-
-
         //currently this test is not working for gizmox.
         [Test]
-        public virtual void TestSelectingMultipleItemsAtOnce()
+        public virtual void TestSelectingIListBoxItemsCollectionEnumerator()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+            _selector.Options = CreateListWithTwoOptions();
+            ReadOnlyCollection<TestT> options = _selector.Model.OptionsView;
+            IListBox availableOptionsListbox = _selector.AvailableOptionsListBox;
+            availableOptionsListbox.SelectedItems.Add(options[0]);
+            availableOptionsListbox.SelectedItems.Add(options[1]);
+
+            //---------------Execute Test ----------------------
+            _selector.GetButton(MultiSelectorButton.Select).PerformClick();
+
+            //---------------Test Result -----------------------
+            foreach (object o in _selector.SelectionsListBox.Items)
+            {
+                Assert.IsNotNull(o);
+            }
+            //---------------Tear Down -------------------------          
+        }
+
+        //currently this test is not working for gizmox.
+        //There is a bug_ in giz that does not allow you to programmattically select 
+        //multiple items in a list
+        [Test]
+        public virtual void TestSelectingMultipleItemsAtOnce_Click()
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -536,11 +563,12 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             AssertAllSelected(_selector);
+            Assert.AreEqual(_selector.SelectionsListBox.Items.Count, _selector.SelectionsView.Count);
             //---------------Tear Down -------------------------          
         }
 
         [Test]
-        public void TestDeselectButtonUpdatesListboxes()
+        public void TestDeselectButtonUpdatesListboxes_Click()
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -557,8 +585,10 @@ namespace Habanero.Test.UI.Base
         }
 
         //currently this test is not working for gizmox.
+        //There is a bug_ in giz that does not allow you to programmattically select 
+        //multiple items in a list
         [Test]
-        public virtual void TestDeselectingMultipleItemsAtOnce()
+        public virtual void TestDeselectingMultipleItemsAtOnce_Click()
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -576,7 +606,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestSelectAllButton()
+        public void TestSelectAllButton_Click()
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -591,7 +621,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestDeselectAllButton()
+        public void TestDeselectAllButton_click()
         {
             //---------------Set up test pack-------------------
             IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
@@ -604,7 +634,6 @@ namespace Habanero.Test.UI.Base
             AssertNoneSelected(_selector);
             //---------------Tear Down -------------------------          
         }
-        
 
         #endregion
 
@@ -616,7 +645,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(0, _selector.SelectionsListBox.Items.Count);
         }
 
-        private void AssertAllSelected(IMultiSelector<TestT> _selector)
+        private static void AssertAllSelected(IMultiSelector<TestT> _selector)
         {
             Assert.AreEqual(0, _selector.AvailableOptionsListBox.Items.Count);
             Assert.AreEqual(2, _selector.SelectionsListBox.Items.Count);
@@ -624,8 +653,8 @@ namespace Habanero.Test.UI.Base
 
         #endregion
 
-
         #region helper methods
+
         private static List<TestT> CreateListWithTwoOptions()
         {
             List<TestT> options = new List<TestT>();
@@ -633,7 +662,9 @@ namespace Habanero.Test.UI.Base
             options.Add(new TestT());
             return options;
         }
+
         #endregion
+
         private class TestT
         {
         }

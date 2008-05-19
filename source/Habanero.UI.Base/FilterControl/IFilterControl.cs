@@ -68,5 +68,7 @@ namespace Habanero.UI.Base.FilterControl
         ///Typically used when the filter controls are being set manually
         /// </summary>
         void ApplyFilter();
+
+        string HeaderText { get; set;}
     }
 }

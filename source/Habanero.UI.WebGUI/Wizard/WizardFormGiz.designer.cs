@@ -60,8 +60,6 @@ namespace Habanero.UI.WebGUI
             this._uxWizardControl.Size = new System.Drawing.Size(379, 260);
             this._uxWizardControl.TabIndex = 0;
             this._uxWizardControl.WizardController = null;
- //TODO _Port           //this._uxWizardControl.MessagePosted += new WizardControlGiz.MessagePostedDelegate(this._uxWizardControl_MessagePosted);
-//TODO _Port            //this._uxWizardControl.Finished += new WizardControlGiz.FinishedDelegate(this._uxWizardControl_Finished);
             // 
             // WizardForm
             // 

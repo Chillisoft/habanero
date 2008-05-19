@@ -127,7 +127,7 @@ namespace Habanero.UI.Forms
 
         /// <summary>
         /// Adds the business objects in the collection to the ListView. This
-        /// method is used by SetCollection.
+        /// method is used by SetBusinessObjectCollection.
         /// </summary>
         /// <param name="listView">The ListView object to add to</param>
         /// <param name="collection">The business object collection</param>

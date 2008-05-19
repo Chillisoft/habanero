@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
@@ -176,6 +177,16 @@ namespace Habanero.UI.Win
         }
 
         public IWizardControl CreateWizardControl(IWizardController wizardController)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name, PostObjectPersistingDelegate action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo)
         {
             throw new NotImplementedException();
         }

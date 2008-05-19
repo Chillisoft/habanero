@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 
@@ -7,7 +8,12 @@ namespace Habanero.UI.Win
 {
     public partial class MultiSelectorWin<T> : UserControl, IMultiSelector<T>
     {
-       
+
+        IControlCollection IControlChilli.Controls
+        {
+            get { throw new NotImplementedException(); }
+            //TODO _Port: Test and Implememt this
+        }
         private readonly MultiSelectorManager<T> _manager;
 
         public MultiSelectorWin()
@@ -72,6 +78,12 @@ namespace Habanero.UI.Win
                 default:
                     throw new ArgumentOutOfRangeException("buttonType");
             }
+        }
+
+        public ReadOnlyCollection<T> SelectionsView
+        {
+            //TODO Port: Fix and test this for windows.
+            get { return this._manager.SelectionsView; }
         }
     }
 }

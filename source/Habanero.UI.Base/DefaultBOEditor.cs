@@ -1,10 +1,5 @@
-using System;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
-using log4net;
 
 namespace Habanero.UI.Base
 {
@@ -42,6 +37,23 @@ namespace Habanero.UI.Base
             return form.ShowDialog();
         }
 
+        /// <summary>
+        /// Edits the given object
+        /// </summary>
+        /// <param name="obj">The object to edit</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
+        /// <returns>Returs true if edited successfully of false if the edits
+        /// were cancelled</returns>
+        /// <param name="postEditAction">The delete to be executeActionOn After The edit is saved.
+        /// will be the object that the method is called on</param>
+        public bool EditObject(IBusinessObject obj, string uiDefName, PostObjectPersistingDelegate postEditAction)
+        {
+            BusinessObject bo = (BusinessObject)obj;
+            IDefaultBOEditorForm form = CreateEditorForm(bo, uiDefName, postEditAction);
+            return form.ShowDialog();
+        }
 
         /// <summary>
         /// Creates a form in which a business object can be edited
@@ -54,6 +66,11 @@ namespace Habanero.UI.Base
         protected virtual IDefaultBOEditorForm CreateEditorForm(BusinessObject bo, string uiDefName)
         {
             return _controlFactory.CreateBOEditorForm(bo, uiDefName);
+        }
+
+        private IDefaultBOEditorForm CreateEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action)
+        {
+            return _controlFactory.CreateBOEditorForm(bo, uiDefName, action);
         }
     }
 }

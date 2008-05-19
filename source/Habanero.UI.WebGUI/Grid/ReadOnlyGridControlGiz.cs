@@ -19,7 +19,7 @@ namespace Habanero.UI.WebGUI
         private string _uiDefName = "";
         private ClassDef _classDef;
         private bool _initialised;
-        private IFilterControl _filterControl;
+        private readonly IFilterControl _filterControl;
         //private readonly GridSelectionController _gridSelectionController;
 
         //private IBusinessObjectCollection _collection;
@@ -32,26 +32,43 @@ namespace Habanero.UI.WebGUI
       
 
             _controlFactory = new ControlFactoryGizmox();
-            BorderLayoutManager borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
+            _filterControl = new FilterControlGiz(_controlFactory);
             _grid = new ReadOnlyGridGiz();
-            _grid.Name = "GridControl";
-            borderLayoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
-
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();
+
+            InitialiseGrid();
+            InitialiseButtons();
+            InitialiseFilterControl();
+
+            BorderLayoutManager borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
+            borderLayoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
+            borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
+            borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
+
+        }
+
+        private void InitialiseFilterControl()
+        {
+            _filterControl.Filter += delegate
+                             {
+                                 this.Grid.CurrentPage = 1;
+                                 this.Grid.ApplyFilter(_filterControl.GetFilterClause());
+                             };
+        }
+
+        private void InitialiseGrid()
+        {
+            
+            _grid.Name = "GridControl";
+        }
+
+        private void InitialiseButtons()
+        {
+            
             _buttons.AddClicked += Buttons_AddClicked;
             _buttons.EditClicked += Buttons_EditClicked;
             _buttons.DeleteClicked += Buttons_DeleteClicked;
             _buttons.Name = "ButtonControl";
-            borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
-
-            _filterControl = new FilterControlGiz(_controlFactory);
-            borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
-
-            _filterControl.Filter += delegate
-            {
-                this.Grid.CurrentPage = 1;
-                this.Grid.ApplyFilter(_filterControl.GetFilterClause());
-            };
         }
 
         /// <summary>
@@ -153,94 +170,6 @@ namespace Habanero.UI.WebGUI
             return propDef;
         }
 
-        //        this.Columns.Clear();
-
-
-        //int colNum = 1;
-        //foreach (UIGridColumn gridColumn in uiGrid)
-        //{
-        //    dataColumn = _dataTable.Columns[colNum];
-        //    PropDef propDef = null;
-        //    if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
-        //    {
-        //        propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
-        //    }
-        //    if (gridColumn.GridControlType == typeof(DataGridViewComboBoxColumn))
-        //    {
-        //        DataGridViewComboBoxColumn comboBoxCol = new DataGridViewComboBoxColumn();
-        //        ILookupList source =
-        //            (ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
-        //        if (source != null) {
-        //            DataTable table = new DataTable();
-        //            table.Columns.Add("id");
-        //            table.Columns.Add("str");
-
-        //            table.LoadDataRow(new object[] {"", ""}, true);
-        //            foreach (KeyValuePair<string, object> pair in source.GetLookupList()) {
-        //                table.LoadDataRow(new object[] {pair.Value, pair.Key}, true);
-        //            }
-        //            comboBoxCol.DataSource = table;
-        //            comboBoxCol.ValueMember = "str";
-        //            comboBoxCol.DisplayMember = "str";
-        //        }
-        //        comboBoxCol.DataPropertyName = dataColumn.ColumnName;
-        //        col = comboBoxCol;
-        //    }
-        //    else if (gridColumn.GridControlType == typeof(DataGridViewCheckBoxColumn))
-        //    {
-        //        DataGridViewCheckBoxColumn checkBoxCol = new DataGridViewCheckBoxColumn();
-        //        col = checkBoxCol;
-        //    }
-        //    else if (gridColumn.GridControlType == typeof(DataGridViewDateTimeColumn))
-        //    {
-        //        DataGridViewDateTimeColumn dateTimeCol = new DataGridViewDateTimeColumn();
-        //        col = dateTimeCol;
-        //        _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
-        //    }
-        //    else
-        //    {
-        //        col = (DataGridViewColumn)Activator.CreateInstance(gridColumn.GridControlType);
-        //    }
-        //    int width = (int)(dataColumn.ExtendedProperties["Width"]);
-        //    col.Width = width;
-        //    if (width == 0)
-        //    {
-        //        col.Visible = false;
-        //    }
-        //    col.ReadOnly = !gridColumn.Editable;
-        //    col.HeaderText = dataColumn.Caption;
-        //    col.Name = dataColumn.ColumnName;
-        //    col.DataPropertyName = dataColumn.ColumnName;
-        //    //col.MappingName = dataColumn.ColumnName;
-        //    col.SortMode = DataGridViewColumnSortMode.Automatic;
-
-        //    SetAlignment(col, gridColumn);
-        //    if (CompulsoryColumnsBold && propDef != null && propDef.Compulsory)
-        //    {
-        //        Font newFont = new Font(DefaultCellStyle.Font, FontStyle.Bold);
-        //        col.HeaderCell.Style.Font = newFont;
-        //    }
-
-        //    if (propDef != null && propDef.PropertyType == typeof(DateTime)
-        //        && gridColumn.GridControlType != typeof(DataGridViewDateTimeColumn))
-        //    {
-        //        _dateColumnIndices.Add(colNum, (string)gridColumn.GetParameterValue("dateFormat"));
-        //    }
-
-        //    //if (propDef != null && propDef.PropertyName != gridColumn.GetHeading(classDef))
-        //    //{
-        //    //    foreach (BusinessObject bo in _collection)
-        //    //    {
-        //    //        BOProp boProp = bo.Props[propDef.PropertyName];
-        //    //        if (!boProp.HasDisplayName())
-        //    //        {
-        //    //            boProp.DisplayName = gridColumn.GetHeading(classDef);
-        //    //        }
-        //    //    }
-        //    //}
-
-        //    Columns.Add(col);
-        //    colNum++;
 
         private void Buttons_DeleteClicked(object sender, EventArgs e)
         {
@@ -259,19 +188,22 @@ namespace Habanero.UI.WebGUI
                 }
             }
         }
-
+        public delegate void RefreshGridDelegate();
         private void Buttons_EditClicked(object sender, EventArgs e)
         {
             IBusinessObject selectedBo = SelectedBusinessObject;
             if (selectedBo != null)
             {
-                //TODO_Port: CheckEditorExists();
-                _businessObjectEditor.EditObject(selectedBo, _uiDefName);
-                //IBusinessObjectEditor objectEditor = new DefaultBOEditor(_controlFactory);
-                //objectEditor.EditObject(selectedBo, "default");
-                //				{
-                //					_readOnlyGrid.RefreshRow(selectedBo) ;
-                //				}
+                _businessObjectEditor.EditObject(selectedBo, _uiDefName, delegate
+                {
+                    this.Grid.RefreshGrid();
+                });
+                //_businessObjectEditor.EditObject(selectedBo, _uiDefName, this.Grid);
+                ////TODO _Port: CheckEditorExists();
+                //if ()
+                //{
+                //    //TODO _Port: this._grid.RefreshGrid();
+                //}
             }
         }
 
@@ -279,6 +211,7 @@ namespace Habanero.UI.WebGUI
         {
             IBusinessObject newBo = _businessObjectCreator.CreateBusinessObject();
             _businessObjectEditor.EditObject(newBo, _uiDefName);
+            //TODO: Dont see how this was doing anything this._grid.RefreshGrid();
         }
 
 
@@ -359,10 +292,11 @@ namespace Habanero.UI.WebGUI
                         "You cannot call set collection for a collection that has a different class def than is initialised");
                 }
             }
-            _grid.SetCollection(boCollection);
-            this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
-            this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
-            this.BusinessObjectDeletor = new DefaultBODeletor();
+            _grid.SetBusinessObjectCollection(boCollection);
+
+            if (this.BusinessObjectEditor == null ) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
+            if (this.BusinessObjectCreator == null) this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
+            if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
         }
     }
 

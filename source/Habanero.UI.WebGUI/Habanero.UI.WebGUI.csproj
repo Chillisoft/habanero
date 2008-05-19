@@ -125,7 +125,7 @@
     <Compile Include="TextBoxGiz.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FilterControlGiz.cs">
+    <Compile Include="FilterControl\FilterControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ToBeGeneralised\TabControlGiz.cs">
@@ -134,6 +134,9 @@
     <Compile Include="ToolTipGiz.cs" />
     <Compile Include="TreeViewGiz.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControlGiz.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Wizard\WizardControlGiz.cs">
       <SubType>UserControl</SubType>

@@ -1,6 +1,8 @@
+using System.Collections;
+
 namespace Habanero.UI.Base
 {
-    public interface IListBoxObjectCollection
+    public interface IListBoxObjectCollection : IEnumerable
     {
         void Add(object item);
 

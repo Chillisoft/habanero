@@ -37,4 +37,10 @@ namespace Habanero.UI.Base
             
         }
     }
+    public class WizardStepNotInitialised : WizardStepException
+    {
+        public WizardStepNotInitialised(string message) : base(message)
+        {
+        }
+    }
 }

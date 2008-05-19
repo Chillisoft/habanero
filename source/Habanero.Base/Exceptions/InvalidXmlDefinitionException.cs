@@ -27,7 +27,7 @@ namespace Habanero.Base.Exceptions
     /// examined is invalid or not well-formed
     /// </summary>
     [Serializable()]
-    public class InvalidXmlDefinitionException : Exception
+    public class InvalidXmlDefinitionException : HabaneroDeveloperException
     {
         /// <summary>
         /// Constructor to initialise the exception

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlInterfaces\IUserControlChilli.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
     <Compile Include="DefaultBODeletor.cs" />
@@ -114,11 +115,11 @@
     <Compile Include="ControlInterfaces\IListBox.cs" />
     <Compile Include="ControlInterfaces\IListBoxObjectCollection.cs" />
     <Compile Include="ControlInterfaces\IListBoxSelectedObjectCollection.cs" />
-    <Compile Include="ControlInterfaces\IMultiSelector.cs" />
+    <Compile Include="MultiSelector\IMultiSelector.cs" />
     <Compile Include="ControlInterfaces\ITextBox.cs" />
     <Compile Include="LayoutManagers\LayoutManager.cs" />
-    <Compile Include="MultiSelectorManager.cs" />
-    <Compile Include="MultiSelectorModel.cs" />
+    <Compile Include="MultiSelector\MultiSelectorManager.cs" />
+    <Compile Include="MultiSelector\MultiSelectorModel.cs" />
     <Compile Include="PanelFactory\PanelFactoryInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\UISettings.cs" />

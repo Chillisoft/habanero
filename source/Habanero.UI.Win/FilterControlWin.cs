@@ -89,5 +89,11 @@ namespace Habanero.UI.Win
         {
             throw new NotImplementedException("not implemented on win");
         }
+
+        public string HeaderText
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
     }
 }

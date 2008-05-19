@@ -2,14 +2,14 @@
 
 using System;
 using System.Collections.Generic;
-using Gizmox.WebGUI.Forms;
+using System.Collections.ObjectModel;
 using Habanero.UI.Base;
 
 #endregion
 
 namespace Habanero.UI.WebGUI
 {
-    public partial class MultiSelectorGiz<T> : UserControl, IMultiSelector<T>
+    public partial class MultiSelectorGiz<T> : UserControlGiz, IMultiSelector<T>
     {
 
         private readonly MultiSelectorManager<T> _manager;
@@ -62,6 +62,11 @@ namespace Habanero.UI.WebGUI
                 default:
                     throw new ArgumentOutOfRangeException("buttonType");
             }
+        }
+
+        public ReadOnlyCollection<T> SelectionsView
+        {
+            get { return this._manager.SelectionsView; }
         }
     }
 }

@@ -21,7 +21,14 @@ using System;
 
 namespace Habanero.Base
 {
-
+    ///<summary>
+    /// Delegator definition to be used by the Interface IBusinessObjectEditor for 
+    /// running a post save (persist) delegate on the busines object
+    /// This is needed by Webgui where the pop up edit forms are running out of thread to the
+    /// rest of the application.
+    ///</summary>
+    ///<param name="bo"></param>
+    public delegate void PostObjectPersistingDelegate(IBusinessObject bo);
     /// <summary>
     /// An interface to model an object editor
     /// </summary>
@@ -37,6 +44,18 @@ namespace Habanero.Base
         /// <returns>Returs true if edited successfully of false if the edits
         /// were cancelled</returns>
         bool EditObject(IBusinessObject obj, string uiDefName);
+        /// <summary>
+        /// Edits the given object
+        /// </summary>
+        /// <param name="obj">The object to edit</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
+        /// <returns>Returs true if edited successfully of false if the edits
+        /// were cancelled</returns>
+        /// <param name="postEditAction">The delete to be executeActionOn After The edit is saved.
+        /// will be the object that the method is called on</param>
+        bool EditObject(IBusinessObject obj, string uiDefName, PostObjectPersistingDelegate postEditAction);
     }
 
     /// <summary>

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 
+using System;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 
@@ -53,6 +54,8 @@ namespace Habanero.UI.WebGUI
             InitializeComponent();
             WizardControl.WizardController = _wizardController;
             DialogResult = DialogResult.Cancel;
+            this._uxWizardControl.MessagePosted += _uxWizardControl_MessagePosted;
+            this._uxWizardControl.Finished += this._uxWizardControl_Finished;
         }
 
         /// <summary>
@@ -71,13 +74,13 @@ namespace Habanero.UI.WebGUI
             get { return new ControlCollectionGiz(base.Controls); }
         }
 
-        private void _uxWizardControl_Finished()
+        private void _uxWizardControl_Finished(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             Close();
         }
 
-        private void _uxWizardControl_MessagePosted(string message)
+        private static void _uxWizardControl_MessagePosted(string message)
         {
             MessageBox.Show(message);
         }

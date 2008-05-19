@@ -57,6 +57,19 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(4, itsModel.OptionsView.Count);
         }
 
+        [Test]
+        public void TestSetSelectionsNull_NoError()
+        {
+            //---------------Set up test pack-------------------
+            MultiSelectorModel<TestT> model = new MultiSelectorModel<TestT>();
+            //--------------Assert PreConditions----------------            
+            
+            //---------------Execute Test ----------------------
+            model.Selections = null;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0,model.SelectionsView.Count);
+            //---------------Tear Down -------------------------          
+        }
         /// <summary>
         /// Tests that AddOption adds to the option collection.
         /// </summary>

@@ -101,7 +101,6 @@ namespace Habanero.UI.Base
             {
                 IPanel mainPanel = _controlFactory.CreatePanel(_controlFactory);
                 ControlMapperCollection controlMappers = new ControlMapperCollection();
-                //IDictionary<string, EditableGrid> formGrids = new Dictionary<string, EditableGrid>();
                 ITabControl tabControl = _controlFactory.CreateTabControl();
                 BorderLayoutManager mainPanelManager = _controlFactory.CreateBorderLayoutManager(mainPanel);
                 mainPanelManager.AddControl(tabControl, BorderLayoutManager.Position.Centre);
@@ -247,24 +246,27 @@ namespace Habanero.UI.Base
                                                                         "from the class definitions.  The 'value' " +
                                                                         "attribute must hold either 'true' or 'false'.");
                             }
-                            bool isEmail = Convert.ToBoolean(isEmailValue);
-                            if (isEmail)
-                            {
-                                ITextBox tb = (ITextBox) ctl;
-                                tb.DoubleClick += _emailTextBoxDoubleClickedHandler;
-                            }
+
+                            //TODO: Port
+                            //bool isEmail = Convert.ToBoolean(isEmailValue);
+                            //if (isEmail)
+                            //{
+                            //    ITextBox tb = (ITextBox) ctl;
+                            //    tb.DoubleClick += _emailTextBoxDoubleClickedHandler;
+                            //}
                         }
                     }
-                    if (ctl is IDateTimePicker)
-                    {
-                        IDateTimePicker editor = (IDateTimePicker) ctl;
-                        editor.Enter += DateTimePickerEnterHandler;
-                    }
-                    if (ctl is INumericUpDown)
-                    {
-                        INumericUpDown upDown = (INumericUpDown) ctl;
-                        upDown.Enter += UpDownEnterHandler;
-                    }
+                    //TODO: Port
+                    //if (ctl is IDateTimePicker)
+                    //{
+                    //    IDateTimePicker editor = (IDateTimePicker) ctl;
+                    //    editor.Enter += DateTimePickerEnterHandler;
+                    //}
+                    //if (ctl is INumericUpDown)
+                    //{
+                    //    INumericUpDown upDown = (INumericUpDown) ctl;
+                    //    upDown.Enter += UpDownEnterHandler;
+                    //}
                
 
                     CheckGeneralParameters(field, ctl);
@@ -473,7 +475,7 @@ namespace Habanero.UI.Base
         //    //    //log.Debug("Heading: " + property.Heading + ", controlType: " + property.GridControlType.Name);
         //    //}
 
-        //    myGrid.SetCollection(collection);
+        //    myGrid.SetBusinessObjectCollection(collection);
 
         //    myGrid.Dock = DockStyle.Fill;
         //    Panel p = ControlFactory.CreatePanel(formGrid.RelationshipName);

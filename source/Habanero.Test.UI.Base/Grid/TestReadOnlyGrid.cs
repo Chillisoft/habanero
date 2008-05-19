@@ -137,7 +137,7 @@ namespace Habanero.Test.UI.Grid
             AddControlToForm(readOnlyGrid);
             SetupGridColumnsForMyBo(readOnlyGrid);
             //---------------Execute Test ----------------------
-            readOnlyGrid.SetCollection(col);
+            readOnlyGrid.SetBusinessObjectCollection(col);
             //---------------Test Result -----------------------
             Assert.AreEqual(4, readOnlyGrid.Rows.Count);
             //---------------Tear Down -------------------------    
@@ -156,11 +156,11 @@ namespace Habanero.Test.UI.Grid
         //[Test]
         //public void TestSortColumnAttributeSuccess()
         //{
-        //    _grid.SetCollection(_grid.GetCollection(), "Success1");
+        //    _grid.SetBusinessObjectCollection(_grid.GetBusinessObjectCollection(), "Success1");
         //    Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
         //    Assert.AreEqual(SortOrder.Ascending, _grid.SortOrder);
 
-        //    _grid.SetCollection(_grid.GetCollection(), "Success2");
+        //    _grid.SetCollection(_grid.GetBusinessObjectCollection(), "Success2");
         //    Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
         //    Assert.AreEqual(SortOrder.Ascending, _grid.SortOrder);
 

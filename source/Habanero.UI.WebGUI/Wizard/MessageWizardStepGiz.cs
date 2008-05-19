@@ -58,6 +58,15 @@ namespace Habanero.UI.WebGUI.Wizard
         }
 
         /// <summary>
+        /// Verifies whether the user can move back from this step.
+        /// </summary>
+        /// <returns></returns>
+        public bool CanMoveBack()
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Sets the message to be displayed to the user
         /// </summary>
         /// <param name="message">The message to display</param>

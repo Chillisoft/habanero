@@ -6,7 +6,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    internal class WizardControlGiz : UserControl, IWizardControl
+    public class WizardControlGiz : UserControl, IWizardControl
     {
         private IControlChilli _currentControl;
         private readonly IButton _nextButton;
@@ -182,6 +182,10 @@ namespace Habanero.UI.WebGUI
         private void SetPreviousButtonState()
         {
             _previousButton.Enabled = !_wizardController.IsFirstStep();
+            if (_previousButton.Enabled)
+            {
+                _previousButton.Enabled = _wizardController.GetCurrentStep().CanMoveBack();
+            }
         }
         /// <summary>
         /// Calls the finish method on the controller to being the completion process.  If this is successful the Finished event is fired.

@@ -155,6 +155,10 @@ namespace Habanero.Test
 						<prop name=""MyBoID"" />
 					</primaryKey>
 					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
 						<form>
 							<tab name=""Tab1"">
 								<columnLayout>
@@ -164,6 +168,27 @@ namespace Habanero.Test
 							</tab>
 						</form>
 					</ui>
+					<ui name=""Alternate"">
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui> 
+					<ui name=""AlternateNoGrid"">
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>    
 				</class>
 			");
             ClassDef.ClassDefs.Add(itsClassDef);

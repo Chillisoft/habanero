@@ -13,10 +13,60 @@ namespace Habanero.UI.WebGUI
     public class FilterControlGiz : Panel, IFilterControl
     {
         private readonly FilterControlManager _filterControlManager;
-        private readonly Button _filterButton;
-
+        private IButton _filterButton;
+        private IButton _clearButton;
         public event EventHandler Filter;
+        private GroupBoxGiz _gbox;
 
+
+        public FilterControlGiz(IControlFactory controlFactory)
+        {
+            
+            _gbox = new GroupBoxGiz();
+            this.Controls.Add(_gbox);
+            _gbox.Text = "Filter the Grid";
+            _gbox.Dock = DockStyle.Fill;
+            _gbox.Height = 50;
+            FlowLayoutManager flowLayoutManager = new FlowLayoutManager(_gbox, controlFactory);
+            CreateFilterButtons(flowLayoutManager);
+            flowLayoutManager.BorderSize = 20;
+            _filterControlManager = new FilterControlManager(controlFactory, flowLayoutManager);
+            this.Height = 50;
+        }
+
+        private void CreateFilterButtons(LayoutManager flowLayoutManager)
+        {
+            int buttonHeight = 20;
+            int buttonWidth = 45;
+            _filterButton = CreateFilterButton(buttonWidth, buttonHeight);
+
+            _clearButton = CreateClearButton(buttonWidth, buttonHeight);
+
+            flowLayoutManager.AddControl(_filterButton);
+            flowLayoutManager.AddControl(_clearButton);
+        }
+
+        private ButtonGiz CreateClearButton(int buttonWidth, int buttonHeight)
+        {
+            ButtonGiz clearButton = new ButtonGiz();
+            clearButton.Width = buttonWidth;
+            clearButton.Height = buttonHeight;
+            clearButton.Top = _filterButton.Height + 2;
+            clearButton.Text = "Clear";
+            clearButton.Click += delegate { ClearFilters(); };
+            return clearButton;
+        }
+
+        private ButtonGiz CreateFilterButton(int buttonWidth, int buttonHeight)
+        {
+            ButtonGiz filterButton = new ButtonGiz();
+            filterButton.Width = buttonWidth;
+            filterButton.Height = buttonHeight;
+            filterButton.Top = 0;
+            filterButton.Text = "Filter";
+            filterButton.Click += delegate { FireFilterEvent(); };
+            return filterButton;
+        }
         /// <summary>
         ///Applies the filter that has been captured.
         ///This allows an external control e.g. another button click to be used as the event that causes the filter to fire.
@@ -27,64 +77,11 @@ namespace Habanero.UI.WebGUI
             FireFilterEvent();
         }
 
-        public FilterControlGiz(IControlFactory controlFactory)
+        public string HeaderText
         {
-            FlowLayoutManager flowLayoutManager = new FlowLayoutManager(this, controlFactory);
-            _filterControlManager = new FilterControlManager(controlFactory, flowLayoutManager);
-            this.Height = 40;
-
-            int buttonHeight = 18;
-            int buttonWidth = 60;
-            _filterButton = CreateFilterButton(buttonWidth, buttonHeight);
-
-            Button clearButton = CreateClearButton(buttonWidth, buttonHeight);
-
-            PanelGiz panel = CreateButtonPanel(clearButton);
-
-            AddButtonsToPanel(clearButton, _filterButton, panel);
-
-            flowLayoutManager.AddControl(panel);
-            this.Controls.Add(panel);
+            get { return _gbox.Text; }
+            set { _gbox.Text = value; }
         }
-
-        private static void AddButtonsToPanel(Button clearButton, Button filterButton, PanelGiz panel)
-        {
-            panel.Controls.Add(filterButton);
-            panel.Controls.Add(clearButton);
-        }
-
-        private PanelGiz CreateButtonPanel(Button clearButton)
-        {
-            PanelGiz panel = new PanelGiz();
-            panel.BorderWidth = 0;
-            panel.Padding = Padding.Empty;
-            panel.Width = _filterButton.Width + 2;
-            panel.Height = _filterButton.Height + clearButton.Height + 4;
-            return panel;
-        }
-
-        private Button CreateClearButton(int buttonWidth, int buttonHeight)
-        {
-            Button clearButton = new Button();
-            clearButton.Width = buttonWidth;
-            clearButton.Height = buttonHeight;
-            clearButton.Top = _filterButton.Height + 2;
-            clearButton.Text = "Clear";
-            clearButton.Click += delegate { ClearFilters(); };
-            return clearButton;
-        }
-
-        private Button CreateFilterButton(int buttonWidth, int buttonHeight)
-        {
-            Button filterButton = new Button();
-            filterButton.Width = buttonWidth;
-            filterButton.Height = buttonHeight;
-            filterButton.Top = 0;
-            filterButton.Text = "Filter";
-            filterButton.Click += delegate { FireFilterEvent(); };
-            return filterButton;
-        }
-
         private void FireFilterEvent()
         {
             if (Filter != null)
@@ -134,11 +131,6 @@ namespace Habanero.UI.WebGUI
         {
             IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName, defaultValue, filterClauseOperator, ignoreTime, nullable);
             return dtPicker;
-            //_layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
-            //DateTimePicker picker =
-            //    _filterInputBoxCollection.AddDateFilterDateTimePicker(columnName, defaultValue, filterClauseOperator, ignoreTime, nullable);
-            //_layoutManager.AddControl(picker);
-            //return picker;
         }
 
         public IFilterClause GetFilterClause()
@@ -146,11 +138,14 @@ namespace Habanero.UI.WebGUI
             return _filterControlManager.GetFilterClause();
         }
 
-        public Button FilterButton
+        public IButton FilterButton
         {
             get { return _filterButton; }
         }
-
+        public IButton ClearButton
+        {
+            get { return _clearButton; }
+        }
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }

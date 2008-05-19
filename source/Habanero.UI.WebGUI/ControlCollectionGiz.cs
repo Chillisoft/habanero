@@ -4,7 +4,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    internal class ControlCollectionGiz :  IControlCollection
+    public class ControlCollectionGiz :  IControlCollection
     {
         private readonly Control.ControlCollection _col;
 

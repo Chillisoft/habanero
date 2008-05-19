@@ -27,7 +27,7 @@ namespace Habanero.Base.Exceptions
     /// as a string to instantiate, but cannot find the type for that class name
     /// </summary>
     [Serializable()]
-    public class UnknownTypeNameException : Exception
+    public class UnknownTypeNameException : HabaneroDeveloperException
     {
         /// <summary>
         /// Constructor to initialise the exception

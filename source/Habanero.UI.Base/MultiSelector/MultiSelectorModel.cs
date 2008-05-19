@@ -34,12 +34,14 @@ namespace Habanero.UI.Base
             ///</summary>
             ///<param name="item">The item in the model to which the event applies</param>
             public ModelEventArgs(T item)
-                : base()
             {
                 _item = item;
             }
 
-            public T Item { get { return _item; } }
+            public T Item
+            {
+                get { return _item; }
+            }
         }
 
         /// <summary>
@@ -61,14 +63,18 @@ namespace Habanero.UI.Base
             set
             {
                 _options = ShallowCopy(value);
-                for (int i = _selections.Count - 1; i >= 0; i--)
+                if (_selections != null)
                 {
-                    //Remove all selections that dont exist in the options list
-                    if (!_options.Contains(_selections[i]))
+                    for (int i = _selections.Count - 1; i >= 0; i--)
                     {
-                        _selections.RemoveAt(i);
+                        //Remove all selections that dont exist in the options list
+                        if (!_options.Contains(_selections[i]))
+                        {
+                            _selections.RemoveAt(i);
+                        }
                     }
                 }
+
                 FireOptionsChanged();
             }
         }
@@ -81,7 +87,10 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns a view of the Options collection
         /// </summary>
-        public ReadOnlyCollection<T> OptionsView { get { return _options.AsReadOnly(); } }
+        public ReadOnlyCollection<T> OptionsView
+        {
+            get { return _options.AsReadOnly(); }
+        }
 
         /// <summary>
         /// Sets the list of selected items (right hand side list).
@@ -91,6 +100,10 @@ namespace Habanero.UI.Base
             set
             {
                 _selections = value;
+                if (value == null)
+                {
+                    _selections = new List<T>();
+                }
                 _originalSelections = ShallowCopy(_selections);
                 //_originalSelections = .GetRange(0, _selections.Count);
                 FireSelectionsChanged();
@@ -105,28 +118,50 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns a view of the Selections collection
         /// </summary>
-        public ReadOnlyCollection<T> SelectionsView { get { return _selections.AsReadOnly(); } }
+        public ReadOnlyCollection<T> SelectionsView
+        {
+            get
+            {
+                if (_selections == null)
+                {
+                    return null;
+                }
+                return _selections.AsReadOnly();
+            }
+        }
 
 
-        private List<T> OriginalSelections { get { return _originalSelections; } }
+        private List<T> OriginalSelections
+        {
+            get { return _originalSelections; }
+        }
 
         /// <summary>
         /// Returns the list of available options, which is the set 
         /// of Options minus the set of Selections
         /// </summary>
-        public List<T> AvailableOptions { get { return _options.FindAll(delegate(T obj) { return !_selections.Contains(obj); }); } }
+        public List<T> AvailableOptions
+        {
+            get { return _options.FindAll(delegate(T obj) { return !_selections.Contains(obj); }); }
+        }
 
         /// <summary>
         /// Returns the list of added selections (items selected since 
         /// setting the selections)
         /// </summary>
-        public List<T> Added { get { return _selections.FindAll(delegate(T obj) { return !OriginalSelections.Contains(obj); }); } }
+        public List<T> Added
+        {
+            get { return _selections.FindAll(delegate(T obj) { return !OriginalSelections.Contains(obj); }); }
+        }
 
         /// <summary>
         /// Returns the list of removed selections (items deselected 
         /// since setting the selections)
         /// </summary>
-        public List<T> Removed { get { return OriginalSelections.FindAll(delegate(T obj) { return !_selections.Contains(obj); }); } }
+        public List<T> Removed
+        {
+            get { return OriginalSelections.FindAll(delegate(T obj) { return !_selections.Contains(obj); }); }
+        }
 
         /// <summary>
         /// Selects multiple items at the same time.
@@ -231,6 +266,5 @@ namespace Habanero.UI.Base
         {
             return list.FindAll(delegate { return true; });
         }
-
     }
 }

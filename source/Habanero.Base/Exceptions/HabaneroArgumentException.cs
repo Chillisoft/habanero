@@ -26,7 +26,7 @@ namespace Habanero.Base.Exceptions
     /// Provides an exception to throw for an invalid argument
     /// </summary>
     [Serializable()]
-    public class HabaneroArgumentException : Exception
+    public class HabaneroArgumentException : HabaneroDeveloperException
     {
         /// <summary>
         /// Constructor to initialise a new exception

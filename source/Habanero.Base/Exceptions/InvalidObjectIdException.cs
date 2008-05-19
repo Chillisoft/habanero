@@ -27,7 +27,7 @@ namespace Habanero.Base.Exceptions
     /// encountered
     /// </summary>
     [Serializable()]
-    public class InvalidObjectIdException : Exception
+    public class InvalidObjectIdException : HabaneroDeveloperException
     {
         /// <summary>
         /// Constructor to initialise the exception

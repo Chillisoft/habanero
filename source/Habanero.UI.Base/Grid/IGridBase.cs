@@ -16,7 +16,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="col">The collection of business objects to display.  This
         /// collection must be pre-loaded.</param>
-        void SetCollection(IBusinessObjectCollection col);
+        void SetBusinessObjectCollection(IBusinessObjectCollection col);
 
         IDataGridViewRowCollection Rows { get; }
 
@@ -49,7 +49,7 @@ namespace Habanero.UI.Base
         /// Returns the business object collection being displayed in the grid
         /// </summary>
         /// <returns>Returns a business collection</returns>
-        IBusinessObjectCollection GetCollection();
+        IBusinessObjectCollection GetBusinessObjectCollection();
 
         /// <summary>
         /// Returns the business object at the row specified
@@ -94,5 +94,7 @@ namespace Habanero.UI.Base
         /// This is used only for internal testing
         /// </summary>
         event EventHandler<BOEventArgs> BusinessObjectEdited;
+
+        void RefreshGrid();
     }
 }

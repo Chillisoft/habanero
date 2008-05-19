@@ -152,7 +152,7 @@ namespace Habanero.UI.Forms
         /// Set the list of objects in the ComboBox to a specific collection of
         /// business objects.<br/>
         /// NOTE: If you are changing the business object collection,
-        /// use the SetCollection method instead, which will call this method
+        /// use the SetBusinessObjectCollection method instead, which will call this method
         /// automatically.
         /// </summary>
         /// <param name="cbx">The ComboBox being mapped</param>

@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base;
@@ -181,5 +182,7 @@ namespace Habanero.UI.Base
 
         IDataGridViewColumn CreateDataGridViewColumn();
         IWizardControl CreateWizardControl(IWizardController wizardController);
+        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name, PostObjectPersistingDelegate action);
+        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo);
     }
 }

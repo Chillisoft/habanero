@@ -59,6 +59,31 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Tear Down -------------------------          
         }
+        [Test]
+        public void Test_SetFilterHeaderGizmox()
+        {
+            Test_SetFilterHeaderGizmox(new ControlFactoryGizmox());
+        }
+
+        //[Test]
+        //public void Test_SetFilterHeaderGizmoxWinForms()
+        //{
+        //    Test_SetFilterHeaderGizmox(new ControlFactoryWin());
+        //} TODO: Implement for win
+        public void Test_SetFilterHeaderGizmox(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl ctl = factory.CreateFilterControl();
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual("Filter the Grid", ctl.HeaderText);
+            //---------------Execute Test ----------------------
+            ctl.HeaderText = "Filter Assets";
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Filter Assets", ctl.HeaderText);
+
+            //---------------Tear Down -------------------------          
+        }
 
         #endregion
 
@@ -165,27 +190,38 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void TestLabelAndTextBoxAreOnPanelWinForms()
         {
-            TestLabelAndTextBoxAreOnPanel(new ControlFactoryWin(), 2);
-        }
-
-        [Test]
-        public void TestLabelAndTextBoxAreOnPanelGiz()
-        {
-            TestLabelAndTextBoxAreOnPanel(new ControlFactoryGizmox(), 3);
-        }
-
-        public void TestLabelAndTextBoxAreOnPanel(IControlFactory factory, int controlCount)
-        {
             //---------------Set up test pack-------------------
+            IControlFactory factory = new ControlFactoryWin();
             IFilterControl filterControl = factory.CreateFilterControl();
+            //---------------Assert Preconditions --------------
+            Assert.AreEqual(0, filterControl.Controls.Count);
 
             //---------------Execute Test ----------------------
             ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(controlCount, filterControl.Controls.Count);
+            Assert.AreEqual(2, filterControl.Controls.Count);
             //TODO_Peter what to do Assert.Contains(tb, filterControl.Controls);
             Assert.IsTrue(filterControl.Controls.Contains(tb));
+            //---------------Tear Down -------------------------   
+        }
+
+        [Test]
+        public void TestLabelAndTextBoxAreOnPanelGiz()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = new ControlFactoryGizmox();
+            IFilterControl filterControl = factory.CreateFilterControl();
+            //---------------Assert Preconditions --------------
+            Assert.AreEqual(1, filterControl.Controls.Count);
+            IControlChilli gbox = filterControl.Controls[0];
+            Assert.AreEqual(2, gbox.Controls.Count);
+            //---------------Execute Test ----------------------
+            ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(4, gbox.Controls.Count);
+            Assert.IsTrue(gbox.Controls.Contains(tb));
             //---------------Tear Down -------------------------          
         }
 

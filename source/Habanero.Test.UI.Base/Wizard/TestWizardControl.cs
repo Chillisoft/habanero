@@ -63,6 +63,7 @@ namespace Habanero.Test.UI.Base.Wizard
         [SetUp]
         public void SetupTest()
         {
+            _controller.ControlForStep1.AllowMoveOn = true;
             _message = "";
             _wizardControl.Start();
             
@@ -72,24 +73,12 @@ namespace Habanero.Test.UI.Base.Wizard
         public void TearDownTest()
         {
         }
-        //[Test]
-        //public void TestInitialise()
-        //{
-        //    //Setup
-        //    MyWizardController wizardController = new MyWizardController();
-        //    IWizardControl wizardControl = GetControlFactory().CreateWizardControl(_controller);
-        //    //Execute
-        //    wizardControl.i();
-        //    //Assert
-        //    Assert.AreSame(wizardController.ControlForStep1, wizardControl.CurrentControl);
-        //}
-
         [Test]
         public void TestStart()
         {
             //Setup -----------------------------------------------------
             MyWizardController  wizardController = new MyWizardController();
-            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(_controller);
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
             //Execute ---------------------------------------------------
             wizardControl.Start();
             //Assert Results --------------------------------------------
@@ -115,52 +104,68 @@ namespace Habanero.Test.UI.Base.Wizard
         [Test]
         public void TestNext()
         {
+            //Execute ---------------------------------------------------
             _wizardControl.Next();
-            Assert.AreSame(_controller.Control2, _wizardControl.CurrentControl);
+            //Assert Results --------------------------------------------
+            Assert.AreSame(_controller.ControlForStep2, _wizardControl.CurrentControl);
         }
 
         [Test]
         public void TestPrevious()
         {
+            //Setup ----------------------------------------------------
             _wizardControl.Next();
+            //Execute ---------------------------------------------------
             _wizardControl.Previous();
+            //Assert Results --------------------------------------------
             Assert.AreSame(_controller.ControlForStep1, _wizardControl.CurrentControl);
         }
 
         [Test, ExpectedException(typeof(WizardStepException))]
         public void TestNextWithNoNextStep()
         {
+            //Setup ----------------------------------------------------
             _wizardControl.Next();
+            //Execute ---------------------------------------------------
             _wizardControl.Next();
         }
 
         [Test, ExpectedException(typeof(WizardStepException))]
         public void TestPreviousWithNoNextStep()
         {
+            //Execute ---------------------------------------------------
             _wizardControl.Previous();
         }
 
         [Test]
         public void Test_Click_NextButton()
         {
+            //Execute ---------------------------------------------------
             _wizardControl.NextButton.PerformClick();
-            Assert.AreSame(_controller.Control2, _wizardControl.CurrentControl);
+            //Assert Results --------------------------------------------
+            Assert.AreSame(_controller.ControlForStep2, _wizardControl.CurrentControl);
         }
 
         [Test]
         public void Test_ClickPreviousButton()
         {
             _wizardControl.Next();
+            //Execute ---------------------------------------------------
             _wizardControl.PreviousButton.PerformClick();
+            //Assert Results --------------------------------------------
             Assert.AreSame(_controller.ControlForStep1, _wizardControl.CurrentControl);
         }
 
         [Test]
         public void TestNextButtonText()
         {
+            //Execute ---------------------------------------------------
             _wizardControl.Next();
+            //Assert Results --------------------------------------------
             Assert.AreEqual("Finish", _wizardControl.NextButton.Text);
+            //Execute ---------------------------------------------------
             _wizardControl.Previous();
+            //Assert Results --------------------------------------------
             Assert.AreEqual("Next", _wizardControl.NextButton.Text);
         }
 
@@ -173,15 +178,21 @@ namespace Habanero.Test.UI.Base.Wizard
         [Test]
         public void TestPreviousButtonEnabledAfterStart()
         {
+            //--------------setup-----------------
+            this._controller.ControlForStep2.AllowCanMoveBack = true;
+            //---------------Execute-------------
             _wizardControl.Next();
+            //Assert Results --------------------------------------------
             Assert.IsTrue(_wizardControl.PreviousButton.Enabled);
         }
 
         [Test]
-        public void TestPreviousButtonDisabledAtFirstStep()
+        public void TestPreviousButtonDisabled_ReturnToFirstStep()
         {
             _wizardControl.Next();
+            //Execute ---------------------------------------------------
             _wizardControl.Previous();
+            //Assert Results --------------------------------------------
             Assert.IsFalse(_wizardControl.PreviousButton.Enabled);
         }
 
@@ -208,31 +219,94 @@ namespace Habanero.Test.UI.Base.Wizard
         [Test]
         public void TestNextClickAtLastStep()
         {
-            Assert.IsFalse(_controller.FinishCalled);
+            //---------------Set up test pack-------------------
             _wizardControl.Next();
+            //-=----------Assert preconditions ----------------------------
+            Assert.IsFalse(_controller.FinishCalled);
+
+            //Execute ---------------------------------------------------
             _wizardControl.NextButton.PerformClick();
+            //---------------Assert result -----------------------------------
+
             Assert.IsTrue(_controller.FinishCalled);
+        }
+        [Test]
+        public void TestFinishEventPosted()
+        {
+            //---------------Set up test pack-------------------
+            _wizardControl.Next();
+            bool finishEventPosted = false;
+            _wizardControl.Finished += delegate { finishEventPosted = true; };
+            //-=----------Assert preconditions ----------------------------
+            Assert.IsFalse(finishEventPosted);
+            //Execute ---------------------------------------------------
+            _wizardControl.NextButton.PerformClick();
+            //---------------Assert result -----------------------------------
+            Assert.IsTrue(finishEventPosted);
+
+        }
+        [Test]
+        public void TestNextWhen_CanMoveOn_False_TestMessagPostedEventCalled()
+        {
+            //---------------Setup wizard Control -------------------------------
+            _wizardControl.MessagePosted += delegate(string message) { _message = message; };
+            _controller.ControlForStep1.AllowMoveOn = false;
+            //---------------Execute Test ------------------------------------
+            _wizardControl.Next();
+            //---------------Assert result -----------------------------------
+            Assert.AreSame(_controller.ControlForStep1, _wizardControl.CurrentControl);
+            Assert.AreEqual("Sorry, can't move on", _message);
+
         }
 
         [Test]
-        public void TestNextWhen_CanMoveOn_False()
+        public void TestPreviousButtonDisabledIfCanMoveBackFalse()
         {
-            _wizardControl.MessagePosted += delegate(string message) { _message = message; };
-            _controller.ControlForStep1.AllowMoveOn = false;
-            _wizardControl.Next();
-            Assert.AreSame(_controller.ControlForStep1, _wizardControl.CurrentControl);
-            Assert.AreEqual("Sorry, can't move on", _message);
-            _controller.ControlForStep1.AllowMoveOn = true;
+            //---------------Set up test pack-------------------
+            MyWizardController wizardController = new MyWizardController();
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
+            wizardController.ControlForStep2.AllowCanMoveBack = false;
+            wizardControl.Start();
+
+            //---------------Assert Preconditions ----------------------
+            Assert.IsFalse(wizardController.ControlForStep2.CanMoveBack());           
+            //---------------Execute Test ----------------------
+            wizardControl.Next();
+            //---------------Assert result -----------------------
+            Assert.AreSame(wizardControl.CurrentControl, wizardController.ControlForStep2);
+            Assert.IsFalse  (((MyWizardStep)wizardControl.CurrentControl).AllowCanMoveBack);
+            Assert.IsFalse(wizardControl.PreviousButton.Enabled);
         }
 
+        [Test]
+        public void TestPreviousButtonDisabledIfCanMoveBackFalse_FromPreviousTep()
+        {
+            //TODO: setup with 3 steps set step 2 allow move back false
+            //and go next next next previous and then ensure that canMoveBack false
+            //---------------Set up test pack-------------------
+            MyWizardController wizardController = new MyWizardController();
+            wizardController.ForTestingAddWizardStep(new MyWizardStep());
 
- 
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
+            wizardController.ControlForStep2.AllowCanMoveBack = false;
+            wizardControl.Start();
 
+            //---------------Assert Preconditions ----------------------
+            Assert.IsFalse(wizardController.ControlForStep2.CanMoveBack());
+            //---------------Execute Test ----------------------
+            wizardControl.Next();
+            wizardControl.Next();
+            wizardControl.Previous();
+            //---------------Assert result -----------------------
+            Assert.AreSame(wizardControl.CurrentControl, wizardController.ControlForStep2);
+            Assert.IsFalse(((MyWizardStep)wizardControl.CurrentControl).AllowCanMoveBack);
+            Assert.IsFalse(wizardControl.PreviousButton.Enabled);
+        }
         internal class MyWizardController : IWizardController
         {
             public MyWizardStep ControlForStep1 = new MyWizardStep();
             
-            public MyWizardStep Control2 = new MyWizardStep();
+            public MyWizardStep ControlForStep2 = new MyWizardStep();
             public bool FinishCalled = false;
             private readonly List<IWizardStep> _wizardSteps;
             private int _currentStep = -1;
@@ -240,9 +314,9 @@ namespace Habanero.Test.UI.Base.Wizard
             {
                 _wizardSteps = new List<IWizardStep>();
                 ControlForStep1.Name = "ControlForStep1";
-                Control2.Name = "Control2";
+                ControlForStep2.Name = "ControlForStep2";
                 _wizardSteps.Add(ControlForStep1);
-                _wizardSteps.Add(Control2);
+                _wizardSteps.Add(ControlForStep2);
      
             }
 
@@ -299,11 +373,24 @@ namespace Habanero.Test.UI.Base.Wizard
             {
                 return _wizardSteps[_currentStep];
             }
+
+            public void ForTestingAddWizardStep(IWizardStep step)
+            {
+                _wizardSteps.Add(step);
+            }
         }
 
         internal class MyWizardStep : Gizmox.WebGUI.Forms.Control, IWizardStep
         {
             private bool _allowMoveOn = true;
+
+            private bool _allowCanMoveBack = true;
+
+            public bool AllowCanMoveBack
+            {
+                get { return _allowCanMoveBack; }
+                set { _allowCanMoveBack = value; }
+            }
 
             #region IWizardStep Members
 
@@ -315,6 +402,15 @@ namespace Habanero.Test.UI.Base.Wizard
                message = "";
                if (!AllowMoveOn) message = "Sorry, can't move on";
                 return AllowMoveOn;
+            }
+
+            /// <summary>
+            /// Verifies whether the user can move back from this step.
+            /// </summary>
+            /// <returns></returns>
+            public bool CanMoveBack()
+            {
+                return AllowCanMoveBack;
             }
 
             #endregion

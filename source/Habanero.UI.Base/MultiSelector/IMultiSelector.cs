@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Habanero.UI.Base
 {
@@ -9,7 +10,7 @@ namespace Habanero.UI.Base
         SelectAll,
         DeselectAll
     }
-    public interface IMultiSelector<T> 
+    public interface IMultiSelector<T> :IControlChilli
     {
         List<T> Options { set; }
 
@@ -19,5 +20,6 @@ namespace Habanero.UI.Base
         List<T> Selections { set; }
         IListBox SelectionsListBox { get; }
         IButton GetButton(MultiSelectorButton buttonType);
+        ReadOnlyCollection<T> SelectionsView { get;}
     }
 }

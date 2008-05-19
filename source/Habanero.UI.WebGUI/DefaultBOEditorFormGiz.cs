@@ -20,6 +20,7 @@ namespace Habanero.UI.WebGUI
     /// </summary>
     public class DefaultBOEditorFormGiz : Form, IDefaultBOEditorForm
     {
+        private readonly PostObjectPersistingDelegate _action;
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.DefaultBOEditorFormGiz");
         private readonly string _uiDefName;
         private readonly IButtonGroupControl _buttons;
@@ -27,6 +28,12 @@ namespace Habanero.UI.WebGUI
         private readonly IControlFactory _controlFactory;
         private readonly IPanel _boPanel;
         protected IPanelFactoryInfo _panelFactoryInfo;
+
+        public DefaultBOEditorFormGiz(BusinessObject bo, string name, IControlFactory controlFactory, PostObjectPersistingDelegate action):this(bo, name, controlFactory)
+        {
+            _action = action;
+            
+        }
 
         /// <summary>
         /// Constructor to initialise a new form with a panel containing the
@@ -85,8 +92,8 @@ namespace Habanero.UI.WebGUI
             IButton cancelButton = _buttons.AddButton("&Cancel", CancelButtonHandler);
             IButton okbutton = _buttons.AddButton("&OK", OKButtonHandler);
             okbutton.NotifyDefault(true);
-            //TODO_Port out how to do this AcceptButton = okbutton;
-            //TODO_Port out how to do this CancelButton = cancelButton;
+            //TODO _Port out how to do this: AcceptButton = okbutton;
+            //TODO _Port out how to do this: CancelButton = cancelButton;
 
             Text = def.Title;
             SetupFormSize(def);
@@ -207,6 +214,10 @@ namespace Habanero.UI.WebGUI
 
                 DialogResult = DialogResult.OK;
                 Close();
+                if (_action != null)
+                {
+                    _action(this._bo);
+                }
                 _panelFactoryInfo.ControlMappers.BusinessObject = null;
             }
             catch (Exception ex)

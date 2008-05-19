@@ -17,6 +17,12 @@ namespace Habanero.UI.WebGUI
         /// This is used only for internal testing
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectEdited;
+
+        public void RefreshGrid()
+        {
+            _mngr.RefreshGrid();
+        }
+
         public void Clear()
         {
             _mngr.Clear();
@@ -42,18 +48,18 @@ namespace Habanero.UI.WebGUI
         }
 
 
-        public void SetCollection(IBusinessObjectCollection col)
+        public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
-            _mngr.SetCollection(col);
+            _mngr.SetBusinessObjectCollection(col);
         }
 
         /// <summary>
         /// Returns the business object collection being displayed in the grid
         /// </summary>
         /// <returns>Returns a business collection</returns>
-        public IBusinessObjectCollection GetCollection()
+        public IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            return _mngr.GetCollection();
+            return _mngr.GetBusinessObjectCollection();
         }
 
         private void FireCollectionChanged()

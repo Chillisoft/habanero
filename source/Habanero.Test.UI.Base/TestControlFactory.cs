@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -100,6 +101,23 @@ namespace Habanero.Test.UI.Base
                 Assert.IsNotNull(controlChilli);
                 Assert.AreEqual(typeof(Habanero.UI.WebGUI.DateTimePickerGiz), controlChilli.GetType());
                 //---------------Tear Down -------------------------   
+            }
+            [Test]
+            public void TestLoadWithIncorrectControlLibrary_RaisesAppropriateError()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                try
+                {
+                    _factory.CreateControl(typeof (System.Windows.Forms.TextBox));
+                    //---------------Verify Result -----------------------
+                }
+                catch (UnknownTypeNameException ex)
+                {
+                    StringAssert.Contains("The control type name System.Windows.Forms.TextBox does not inherit from Gizmox.WebGUI.Forms.Control", ex.Message);
+                }
+                //The control type name System.Windows.Forms.TextBox does not inherit from Gizmox.WebGUI.Forms.Control
             }
         }
 

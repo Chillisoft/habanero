@@ -62,6 +62,22 @@ namespace Habanero.UI.Forms
         }
 
         /// <summary>
+        /// Edits the given object
+        /// </summary>
+        /// <param name="obj">The object to edit</param>
+        /// <param name="uiDefName">The name of the set of ui definitions
+        /// used to design the edit form. Setting this to an empty string
+        /// will use a ui definition with no name attribute specified.</param>
+        /// <returns>Returs true if edited successfully of false if the edits
+        /// were cancelled</returns>
+        /// <param name="postEditAction">The delete to be executeActionOn After The edit is saved.
+        /// will be the object that the method is called on</param>
+        public bool EditObject(IBusinessObject obj, string uiDefName, PostObjectPersistingDelegate postEditAction)
+        {
+            return EditObject(obj, uiDefName);
+        }
+
+        /// <summary>
         /// Creates a form in which a business object can be edited
         /// </summary>
         /// <param name="bo">The business object to edit</param>

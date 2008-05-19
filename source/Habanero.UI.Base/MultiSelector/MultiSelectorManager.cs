@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Habanero.UI.Base
 {
@@ -93,6 +94,11 @@ namespace Habanero.UI.Base
         private IListBox SelectionsListBox
         {
             get { return _multiSelector.SelectionsListBox; }
+        }
+
+        public ReadOnlyCollection<T> SelectionsView
+        {
+            get { return _model.SelectionsView; }
         }
 
         private IButton GetButton(MultiSelectorButton buttonType)

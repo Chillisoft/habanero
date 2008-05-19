@@ -1,3 +1,5 @@
+using Habanero.UI.Base;
+
 namespace Habanero.UI.Win
 {
     partial class MultiSelectorWin<T>
@@ -6,6 +8,7 @@ namespace Habanero.UI.Win
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
 
         /// <summary> 
         /// Clean up any resources being used.

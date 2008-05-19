@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Reflection;
 using Gizmox.WebGUI.Forms;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
@@ -224,8 +225,9 @@ namespace Habanero.UI.WebGUI
             }
             else
             {
-                throw new UnknownTypeNameException("The control type name " + controlType.Name +
-                                                   " does not inherit from Control.");
+                throw new UnknownTypeNameException(
+                    string.Format(
+                    "The control type name {0} does not inherit from {1}.", controlType.FullName, typeof(Control)));
             }
             return ctl;
         }
@@ -381,6 +383,15 @@ namespace Habanero.UI.WebGUI
         {
             return new DefaultBOEditorFormGiz(bo, uiDefName, this);
         }
+        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action)
+        {
+            return new DefaultBOEditorFormGiz(bo, uiDefName, this, action);
+        }
+
+        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo)
+        {
+            return new DefaultBOEditorFormGiz(bo, "default", this);
+        }
 
         public ITabControl CreateTabControl()
         {
@@ -411,5 +422,7 @@ namespace Habanero.UI.WebGUI
         {
             return new WizardControlGiz(wizardController, this);
         }
+
+
     }
 }

@@ -47,7 +47,6 @@ namespace Habanero.UI.Base
             _panel = panel;
             _mappers = mappers;
             _firstControlToFocus = firstControlToFocus;
-            //_formGrids = new Dictionary<string, EditableGrid>();
         }
 
         /// <summary>
@@ -73,33 +72,6 @@ namespace Habanero.UI.Base
         {
             get { return _mappers; }
         }
-
-        ///// <summary>
-        ///// Returns the form grid by the name specified
-        ///// </summary>
-        ///// <param name="gridName">The grid name</param>
-        ///// <returns>Returns the grid object if a grid by that name is
-        ///// found</returns>
-        //public EditableGrid GetFormGrid(string gridName)
-        //{
-        //    return _formGrids[gridName];
-        //}
-
-        ///// <summary>
-        ///// Gets and sets the form grids
-        ///// </summary>
-        //public IDictionary<string, EditableGrid> FormGrids
-        //{
-        //    get
-        //    {
-        //        return _formGrids;
-        //    }
-        //    set
-        //    {
-        //        _formGrids = value;
-        //    }
-
-        //}
 
         /// <summary>
         /// Gets and sets the preferred height setting

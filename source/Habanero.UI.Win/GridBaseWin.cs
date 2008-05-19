@@ -36,18 +36,18 @@ namespace Habanero.UI.Win
             }
         }
 
-        public void SetCollection(IBusinessObjectCollection col)
+        public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
-            _mngr.SetCollection(col);
+            _mngr.SetBusinessObjectCollection(col);
         }
 
         /// <summary>
         /// Returns the business object collection being displayed in the grid
         /// </summary>
         /// <returns>Returns a business collection</returns>
-        public IBusinessObjectCollection GetCollection()
+        public IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            return _mngr.GetCollection();
+            return _mngr.GetBusinessObjectCollection();
         }
 
         /// <summary>
@@ -149,6 +149,11 @@ namespace Habanero.UI.Win
         /// This is used only for internal testing
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectEdited;
+
+        public void RefreshGrid()
+        {
+            _mngr.RefreshGrid();
+        }
 
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.

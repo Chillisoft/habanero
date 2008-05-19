@@ -135,7 +135,7 @@
 ////			TreeViewTableEditor.ITableDataSource tableDataSource = (TreeViewTableEditor.ITableDataSource)mockControlTableDataSource.MockInstance;
 ////
 ////			itsTreeViewTableEditor.TableDataSource = tableDataSource;
-////			mockControlTableDataSource.ExpectAndReturn("GetCollection", col, new object[] {itsSampleMyBo});
+////			mockControlTableDataSource.ExpectAndReturn("GetBusinessObjectCollection", col, new object[] {itsSampleMyBo});
 ////			treeViewTester.SelectNode(new int[] {0, 0});
 ////
 ////			Assert.IsNotNull(itsGridControlTester["DataSource"], "Datasource of grid should be set once the node is set.");

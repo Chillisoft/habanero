@@ -16,5 +16,8 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns>True if the edit was a success, false if not</returns>
         bool ShowDialog();
+
+        void Show();
+        void Dispose();
     }
 }

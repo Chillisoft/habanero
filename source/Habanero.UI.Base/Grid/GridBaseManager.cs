@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Microsoft.SqlServer.Server;
 
 namespace Habanero.UI.Base
 {
@@ -15,8 +15,6 @@ namespace Habanero.UI.Base
         private readonly IGridBase _gridBase;
 
         private BOCollectionDataSetProvider _dataSetProvider;
-
-        //private DataView _dataTableDefaultView;
 
         private IBusinessObjectCollection _boCol;
         private readonly string _uiDefName;
@@ -39,12 +37,12 @@ namespace Habanero.UI.Base
         /// Sets the grid's collection to the one specified
         /// </summary>
         /// <param name="col">The collection to display in the grid</param>
-        public void SetCollection(IBusinessObjectCollection col)
+        public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
             if (_gridBase.Columns.Count <= 0)
             {
                 throw new GridBaseSetUpException(
-                    "You cannot call SetCollection if the grid's columns have not been set up");
+                    "You cannot call SetBusinessObjectCollection if the grid's columns have not been set up");
             }
             _boCol = col;
             if (_boCol == null)
@@ -56,7 +54,6 @@ namespace Habanero.UI.Base
             }
             //Hack: this is to overcome abug in Gizmox where the grid was freezing after delete
             // but should not cause a problem with win
-
             col.BusinessObjectRemoved += delegate { SelectedBusinessObject = null; };
 
             _gridBase.DataSource = GetDataTable();
@@ -100,8 +97,12 @@ namespace Habanero.UI.Base
             }
             set
             {
-                RemovePreviouslySelectedBusinessObjectsEventHandler();
-
+                //TODO_Port: RemovePreviouslySelectedBusinessObjectsEventHandler();
+                if (_boCol == null && value != null)
+                {
+                    throw new GridBaseInitialiseException(
+                        "You cannot call SelectedBusinessObject if the collection is not set");
+                }
                 IDataGridViewRowCollection gridRows = _gridBase.Rows;
                 ClearAllSelectedRows(gridRows);
                 if (value == null) return;
@@ -110,10 +111,6 @@ namespace Habanero.UI.Base
                 {
                     if ((string) dataRowView.Row["ID"] == value.ID.ToString())
                     {
-                        
-                        BusinessObject bo = value;
-                        bo.Updated += bo_Updated;
-
                         gridRows[j].Selected = true;
                         break;
                     }
@@ -122,21 +119,14 @@ namespace Habanero.UI.Base
             }
         }
 
-        private void RemovePreviouslySelectedBusinessObjectsEventHandler()
-        {
-            if (SelectedBusinessObject != null)
-            {
-                SelectedBusinessObject.Updated -= bo_Updated;
-            }
-        }
-
-        void bo_Updated(object sender, BOEventArgs e)
-        {
-            SelectedBusinessObject = e.BusinessObject;
-            IDataGridViewRow row = this._gridBase.Rows[0];
-            row.SetValues(1, 1);
-            FireBusinessObjectEdited(e.BusinessObject);
-        }
+        //TODO_Port:
+        //private void RemovePreviouslySelectedBusinessObjectsEventHandler()
+        //{
+        //    if (SelectedBusinessObject != null)
+        //    {
+        //        SelectedBusinessObject.Updated -= bo_Updated;
+        //    }
+        //}
 
         private static void ClearAllSelectedRows(IDataGridViewRowCollection gridRows)
         {
@@ -147,14 +137,14 @@ namespace Habanero.UI.Base
             }
         }
 
-        /// <summary>
-        /// Calls the BusinessObjectAdded() handler
-        /// </summary>
-        /// <param name="bo">The business object added</param>
-        private void FireBusinessObjectEdited(BusinessObject bo)
-        {
-            _gridBase.SelectedBusinessObjectEdited(bo);
-        }
+        ///// <summary>
+        ///// Calls the BusinessObjectAdded() handler
+        ///// </summary>
+        ///// <param name="bo">The business object added</param>
+        //private void FireBusinessObjectEdited(BusinessObject bo)
+        //{
+        //    _gridBase.SelectedBusinessObjectEdited(bo);
+        //}
 
         public IList<BusinessObject> SelectedBusinessObjects
         {
@@ -184,7 +174,7 @@ namespace Habanero.UI.Base
         /// Returns the business object collection being displayed in the grid
         /// </summary>
         /// <returns>Returns a business collection</returns>
-        public IBusinessObjectCollection GetCollection()
+        public IBusinessObjectCollection GetBusinessObjectCollection()
         {
             return _boCol;
         }
@@ -210,7 +200,7 @@ namespace Habanero.UI.Base
 
         public void Clear()
         {
-            SetCollection(null);
+            SetBusinessObjectCollection(null);
         }
 
         /// <summary>
@@ -253,11 +243,31 @@ namespace Habanero.UI.Base
                 _dataTableDefaultView.RowFilter = null;
             }
         }
+
+        public void RefreshGrid()
+        {
+            IBusinessObjectCollection col = this._gridBase.GetBusinessObjectCollection();
+            BusinessObject bo = this._gridBase.SelectedBusinessObject;
+            SetBusinessObjectCollection(null);
+            SetBusinessObjectCollection(col);
+            SelectedBusinessObject = bo;
+        }
     }
 
     public class GridBaseSetUpException : Exception
     {
         public GridBaseSetUpException(string message) : base(message)
+        {
+        }
+    }
+    public class GridDeveloperException : HabaneroDeveloperException
+    { }
+
+
+    public class GridBaseInitialiseException : Exception
+    {
+        public GridBaseInitialiseException(string message)
+            : base(message)
         {
         }
     }

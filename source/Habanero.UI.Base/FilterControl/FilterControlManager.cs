@@ -19,11 +19,11 @@ namespace Habanero.UI.Base.FilterControl
             _clauseFactory = new DataViewFilterClauseFactory();
         }
 
-        public ITextBox AddTextBox()
-        {
-            ITextBox tb = _controlFactory.CreateTextBox();
-            return tb;
-        }
+        //public ITextBox AddTextBox()
+        //{
+        //    ITextBox tb = _controlFactory.CreateTextBox();
+        //    return tb;
+        //}
 
         public IFilterClause GetFilterClause()
         {
@@ -56,14 +56,13 @@ namespace Habanero.UI.Base.FilterControl
         {
 
             IComboBox cb = _controlFactory.CreateComboBox();
-            ////cb.Width = _filterWidth;
             ILabel label = _controlFactory.CreateLabel(labelText);
             _flowLayoutManager.AddControl(label);
             _flowLayoutManager.AddGlue();
             _flowLayoutManager.AddControl(cb);
             _filterControls.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options, strictMatch));
 
-
+            //TODO: Port for windows
             ////cb.SelectedIndexChanged += FilterControlValueChangedHandler;
             ////cb.TextChanged += FilterControlValueChangedHandler;
             ////FireFilterClauseChanged(cb);
@@ -85,11 +84,9 @@ namespace Habanero.UI.Base.FilterControl
         public ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool isChecked)
         {
             ICheckBox cb = _controlFactory.CreateCheckBox();
-            ////cb.Width = _filterWidth;
-            //_filterControls.Add(new FilterUIStringOptions(_clauseFactory, propertyName, cb, isChecked));
-            //cb.Width = _controlFactory.CreateTextBox().Width; ;
             _flowLayoutManager.AddControl(cb);
             _filterControls.Add(new FilterUICheckBox(_clauseFactory, propertyName, cb, labelText, isChecked));
+            //TODO: Port for windows
             //cb.CheckedChanged += FilterControlValueChangedHandler;
             //FireFilterClauseChanged(cb);
             return cb;
@@ -139,6 +136,7 @@ namespace Habanero.UI.Base.FilterControl
             //    _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator, ignoreTime));
             //    dte.ValueChanged += FilterControlValueChangedHandler;
             //}
+            //TODO: Port for windows
             //FireFilterClauseChanged(dte);
             //_controls.Add(dte);
             //return dte;

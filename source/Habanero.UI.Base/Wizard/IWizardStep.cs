@@ -38,5 +38,11 @@ namespace Habanero.UI.Base
         /// <param name="message">Error message should moving on be disallowed. This message will be displayed to the user by the WizardControl.</param>
         /// <returns></returns>
         bool CanMoveOn(out String message);
+
+        /// <summary>
+        /// Verifies whether the user can move back from this step.
+        /// </summary>
+        /// <returns></returns>
+        bool CanMoveBack();
     }
 }

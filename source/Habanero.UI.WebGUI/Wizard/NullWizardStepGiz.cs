@@ -61,5 +61,14 @@ namespace Habanero.UI.WebGUI
             message = "";
             return true;
         }
+
+        /// <summary>
+        /// Verifies whether the user can move back from this step.
+        /// </summary>
+        /// <returns></returns>
+        public bool CanMoveBack()
+        {
+            return true;
+        }
     }
 }

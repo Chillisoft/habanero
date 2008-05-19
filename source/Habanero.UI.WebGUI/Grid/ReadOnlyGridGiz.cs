@@ -12,5 +12,6 @@ namespace Habanero.UI.WebGUI
             this.AllowUserToDeleteRows = false;
             this.SelectionMode = Gizmox.WebGUI.Forms.DataGridViewSelectionMode.FullRowSelect;
         }
+
     }
 }
