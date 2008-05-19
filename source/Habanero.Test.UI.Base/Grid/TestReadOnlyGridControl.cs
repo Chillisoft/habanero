@@ -144,7 +144,7 @@ namespace Habanero.Test.UI.Grid
             boCol.Add(bo);
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
             readOnlyGridControl.Grid.Columns.Add("Surname", "Surname");
-            readOnlyGridControl.SetCollection(boCol);
+            readOnlyGridControl.SetBusinessObjectCollection(boCol);
             readOnlyGridControl.SelectedBusinessObject = bo;
             readOnlyGridControl.Buttons.ShowDefaultDeleteButton = true;
             //---------------Execute Test ----------------------
@@ -174,7 +174,7 @@ namespace Habanero.Test.UI.Grid
             boCol.Add(person);
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
             readOnlyGridControl.Grid.Columns.Add("Surname", "Surname");
-            readOnlyGridControl.SetCollection(boCol);
+            readOnlyGridControl.SetBusinessObjectCollection(boCol);
             readOnlyGridControl.SelectedBusinessObject = person;
             readOnlyGridControl.Buttons.ShowDefaultDeleteButton = true;
             ExceptionNotifierStub exceptionNotifier = new ExceptionNotifierStub();
@@ -417,7 +417,7 @@ namespace Habanero.Test.UI.Grid
             readOnlyGridControl.Initialise(Sample.CreateClassDefGiz());
             try
             {
-                readOnlyGridControl.SetCollection(col);
+                readOnlyGridControl.SetBusinessObjectCollection(col);
                 Assert.Fail(
                     "You cannot call set collection for a collection that has a different class def than is initialised");
                 ////---------------Test Result -----------------------
@@ -439,7 +439,7 @@ namespace Habanero.Test.UI.Grid
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
 
             //---------------Execute Test ----------------------
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             ////---------------Test Result -----------------------
             Assert.AreEqual("default", readOnlyGridControl.UiDefName);
             Assert.AreEqual(col.ClassDef, readOnlyGridControl.ClassDef);
@@ -459,7 +459,7 @@ namespace Habanero.Test.UI.Grid
 
             grid.Initialise(classDef, alternateUIDefName);
             //---------------Execute Test ----------------------
-            grid.SetCollection(col);
+            grid.SetBusinessObjectCollection(col);
             ////---------------Test Result -----------------------
             Assert.AreEqual(alternateUIDefName, grid.UiDefName);
         }
@@ -477,7 +477,7 @@ namespace Habanero.Test.UI.Grid
 
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
             //---------------Execute Test ----------------------
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             ////---------------Test Result -----------------------
             Assert.AreEqual(4, readOnlyGrid.Rows.Count);
         }
@@ -497,7 +497,7 @@ namespace Habanero.Test.UI.Grid
             Assert.IsNull(readOnlyGridControl.BusinessObjectCreator);
             Assert.IsNull(readOnlyGridControl.BusinessObjectDeletor);
             //---------------Execute Test ----------------------
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             ////---------------Test Result -----------------------
             Assert.IsTrue(readOnlyGridControl.BusinessObjectEditor is DefaultBOEditor);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is DefaultBOCreator);
@@ -522,7 +522,7 @@ namespace Habanero.Test.UI.Grid
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is ObjectCreatorStub);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectDeletor is ObjectDeletorStub);
             //---------------Execute Test ----------------------
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             ////---------------Test Result -----------------------
             Assert.IsTrue(readOnlyGridControl.BusinessObjectEditor is ObjectEditorStub);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is ObjectCreatorStub);
@@ -571,7 +571,7 @@ namespace Habanero.Test.UI.Grid
             SetupGridColumnsForMyBo(readOnlyGridControl.Grid);
 
             //---------------Execute Test ----------------------
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
 
             //---------------Test Result -----------------------
 
@@ -593,7 +593,7 @@ namespace Habanero.Test.UI.Grid
             SetupGridColumnsForMyBo(readOnlyGridControl.Grid);
 
             //---------------Execute Test ----------------------
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             //---------------Test Result -----------------------
 
             Assert.IsNotNull(readOnlyGridControl.BusinessObjectEditor);
@@ -612,7 +612,7 @@ namespace Habanero.Test.UI.Grid
             SetupGridColumnsForMyBo(readOnlyGridControl.Grid);
 
             //---------------Execute Test ----------------------
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             //---------------Test Result -----------------------
 
             Assert.IsNotNull(readOnlyGridControl.BusinessObjectDeletor);
@@ -670,7 +670,7 @@ namespace Habanero.Test.UI.Grid
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
             readOnlyGridControl.Initialise(classDef);
 
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             readOnlyGridControl.SelectedBusinessObject = col[2];
 
             //---------------Execute Test ----------------------
@@ -704,7 +704,7 @@ namespace Habanero.Test.UI.Grid
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
             readOnlyGridControl.Initialise(classDef, alternateUIDefName);
 
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             readOnlyGridControl.SelectedBusinessObject = col[2];
             ObjectEditorStub objectEditor = new ObjectEditorStub();
             readOnlyGridControl.BusinessObjectEditor = objectEditor;
@@ -727,7 +727,7 @@ namespace Habanero.Test.UI.Grid
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
             readOnlyGridControl.Initialise(classDef, alternateUIDefName);
 
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             readOnlyGridControl.SelectedBusinessObject = col[2];
             ObjectEditorStub objectEditor = new ObjectEditorStub();
             readOnlyGridControl.BusinessObjectEditor = objectEditor;
@@ -983,7 +983,7 @@ namespace Habanero.Test.UI.Grid
             col = CreateCollectionWith_4_Objects();
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
             SetupGridColumnsForMyBo(readOnlyGridControl.Grid);
-            readOnlyGridControl.SetCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
             return readOnlyGridControl;
         }
 

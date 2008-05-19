@@ -8,7 +8,7 @@ using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.WebGUI
 {
-    public class ReadOnlyGridControlGiz : ControlGiz, IReadOnlyGridControl
+    public class ReadOnlyGridControlGiz : ControlGiz, IReadOnlyGridControl, System.ComponentModel.ISupportInitialize
     {
         private readonly IControlFactory _controlFactory;
         private readonly ReadOnlyGridGiz _grid;
@@ -279,7 +279,7 @@ namespace Habanero.UI.WebGUI
         }
 
 
-        public void SetCollection(IBusinessObjectCollection boCollection)
+        public void SetBusinessObjectCollection(IBusinessObjectCollection boCollection)
         {
             if (_classDef == null)
             {
@@ -297,6 +297,24 @@ namespace Habanero.UI.WebGUI
             if (this.BusinessObjectEditor == null ) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
             if (this.BusinessObjectCreator == null) this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
             if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
+        }
+
+        ///<summary>
+        ///Signals the object that initialization is starting.
+        ///</summary>
+        ///
+        public void BeginInit()
+        {
+            ((System.ComponentModel.ISupportInitialize)this.Grid).BeginInit();
+        }
+
+        ///<summary>
+        ///Signals the object that initialization is complete.
+        ///</summary>
+        ///
+        public void EndInit()
+        {
+            ((System.ComponentModel.ISupportInitialize)this.Grid).EndInit();
         }
     }
 

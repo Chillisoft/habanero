@@ -205,17 +205,6 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = BeforeSaveBo.LoadDefaultClassDef();
-            //MockRepository mock = new MockRepository();
-            //IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
-            //Expect.Call(itsConnection.GetConnection())
-            //    .Return(DatabaseConnection.CurrentConnection.GetConnection())
-            //    .Repeat.Times(2);
-            //Expect.Call(itsConnection.ExecuteSql(null, null))
-            //    .IgnoreArguments()
-            //    .Return(1)
-            //    .Repeat.Times(1);
-            //mock.ReplayAll();
-
             BeforeSaveBo bo = (BeforeSaveBo)classDef.CreateNewBusinessObject();
             bo.FirstPart = "foo";
             bo.SecondPart = "bar";
@@ -228,6 +217,53 @@ namespace Habanero.Test.BO
             //mock.VerifyAll();
         }
 
+        [Test]
+        public void TestSave_WithAfterSaveImplemented()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = AfterSaveBO.LoadDefaultClassDef();
+
+            AfterSaveBO bo = (AfterSaveBO)classDef.CreateNewBusinessObject();
+            bo.FirstPart = "foo";
+            bo.SecondPart = "bar";
+
+            //--------------Assert PreConditions----------------     
+            Assert.AreEqual("", bo.CombinedParts);
+
+            //---------------Execute Test ----------------------
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            committer.AddBusinessObject(bo);
+            committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("foobar", bo.CombinedParts);
+        }
+        [Test]
+        public void TestDeleteObjce_WithAfterSaveImplemented()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = AfterSaveBO.LoadDefaultClassDef();
+
+            AfterSaveBO bo = (AfterSaveBO)classDef.CreateNewBusinessObject();
+            bo.FirstPart = "foo";
+            bo.SecondPart = "bar";
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            committer.AddBusinessObject(bo);
+            committer.CommitTransaction();
+            //--------------Assert PreConditions----------------     
+            Assert.AreEqual("foobar", bo.CombinedParts);
+
+            //---------------Execute Test ----------------------
+            bo.Delete();
+            committer = new TransactionCommitterStub();
+            committer.AddBusinessObject(bo);
+            committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("deleted", bo.CombinedParts);
+        }
         [Test, ExpectedException(typeof(BusObjDeleteException))]
         public void TestCannotDelete_IsDeletable_False()
         {

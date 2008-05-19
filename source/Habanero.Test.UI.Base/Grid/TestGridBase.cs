@@ -314,7 +314,7 @@ namespace Habanero.Test.UI.Base
             //    MyBO bo = col[1];
             //    gridBase.SelectedBusinessObject = bo;
             //    col.Remove(bo);
-            //    gridBase.SetSortColumn(propName,true);
+            //    gridBase.Sort(propName,true);
             //    col = CreateCollectionWith_4_Objects();
             //    gridBase.SetBusinessObjectCollection(col);
             //    //---------------Test Result -----------------------
@@ -709,7 +709,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(bo_c, gridBase.GetBusinessObjectAtRow(2));
             Assert.AreEqual(bo_a, gridBase.GetBusinessObjectAtRow(3));
             //---------------Execute Test ----------------------
-            gridBase.SetSortColumn("TestProp", true);
+            gridBase.Sort("TestProp", true);
             //---------------Test Result -----------------------
             Assert.AreEqual(bo_a, gridBase.GetBusinessObjectAtRow(0));
             Assert.AreEqual(bo_b, gridBase.GetBusinessObjectAtRow(1));

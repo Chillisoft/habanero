@@ -39,7 +39,7 @@ namespace Habanero.UI.Grid
     /// instantiate a new BusinessObjectCollection and load the collection
     /// from the database using the Load() command.  After instantiating this
     /// grid with the parameterless constructor, pass the collection with
-    /// SetCollection().<br/>
+    /// SetBusinessObjectCollection().<br/>
     /// To have further control of particular aspects of the buttons or
     /// grid, access the standard functionality through the Grid and
     /// Buttons properties (eg. myGridWithButtons.Buttons.AddButton(...)).

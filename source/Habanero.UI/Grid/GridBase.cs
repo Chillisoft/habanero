@@ -577,7 +577,7 @@ namespace Habanero.UI.Grid
 
         /// <summary>
         /// Sets the sort column as before, but using a STA thread.  This
-        /// method is called by SetSortColumn().
+        /// method is called by Sort().
         /// </summary>
         private void SetSortColumnInSTAThread(string columnName, bool isAscending)
         {

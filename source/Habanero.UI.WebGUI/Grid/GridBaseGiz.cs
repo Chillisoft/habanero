@@ -119,7 +119,7 @@ namespace Habanero.UI.WebGUI
         /// object property</param>
         /// <param name="ascending">Whether sorting should be done in ascending
         /// order ("false" sets it to descending order)</param>
-        public void SetSortColumn(string columnName, bool ascending)
+        public void Sort(string columnName, bool ascending)
         {
             _mngr.SetSortColumn(columnName, ascending);
         }

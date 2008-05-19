@@ -63,7 +63,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="boCollection">The new business object collection
         /// to be shown in the grid</param>
-        void SetCollection(IBusinessObjectCollection boCollection);
+        void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
 
         void Initialise(ClassDef def, string uiDefName);
     }

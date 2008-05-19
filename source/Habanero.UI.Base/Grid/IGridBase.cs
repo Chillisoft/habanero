@@ -67,7 +67,7 @@ namespace Habanero.UI.Base
         /// object property</param>
         /// <param name="ascending">Whether sorting should be done in ascending
         /// order ("false" sets it to descending order)</param>
-        void SetSortColumn(string columnName, bool ascending);
+        void Sort(string columnName, bool ascending);
 
         /// <summary>
         /// Applies a filter clause to the data table and updates the filter.

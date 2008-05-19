@@ -57,7 +57,7 @@ namespace Habanero.UI.WebGUI
             this._uxWizardControl.Dock = DockStyle.Fill;
             this._uxWizardControl.Location = new System.Drawing.Point(0, 0);
             this._uxWizardControl.Name = "_uxWizardControl";
-            this._uxWizardControl.Size = new System.Drawing.Size(379, 260);
+            this._uxWizardControl.Size = new System.Drawing.Size(990, 700);
             this._uxWizardControl.TabIndex = 0;
             this._uxWizardControl.WizardController = null;
             // 
@@ -65,7 +65,7 @@ namespace Habanero.UI.WebGUI
             // 
             //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 480);
+            this.ClientSize = new System.Drawing.Size(1200, 900);
             this.Controls.Add(this._uxWizardControl);
             this.Name = "WizardForm";
             this.Text = "WizardForm";

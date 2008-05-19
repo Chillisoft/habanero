@@ -160,15 +160,15 @@ namespace Habanero.Test.UI.Grid
         //    Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
         //    Assert.AreEqual(SortOrder.Ascending, _grid.SortOrder);
 
-        //    _grid.SetCollection(_grid.GetBusinessObjectCollection(), "Success2");
+        //    _grid.SetBusinessObjectCollection(_grid.GetBusinessObjectCollection(), "Success2");
         //    Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
         //    Assert.AreEqual(SortOrder.Ascending, _grid.SortOrder);
 
-        //    _grid.SetCollection(_grid.GetCollection(), "Success3");
+        //    _grid.SetBusinessObjectCollection(_grid.GetCollection(), "Success3");
         //    Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
         //    Assert.AreEqual(SortOrder.Descending, _grid.SortOrder);
 
-        //    _grid.SetCollection(_grid.GetCollection(), "Success4");
+        //    _grid.SetBusinessObjectCollection(_grid.GetCollection(), "Success4");
         //    Assert.AreEqual("TestProp", _grid.SortedColumn.Name);
         //    Assert.AreEqual(SortOrder.Descending, _grid.SortOrder);
         //}
@@ -176,19 +176,19 @@ namespace Habanero.Test.UI.Grid
         //[Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         //public void TestSortColumnAttributeExceptionColumnName()
         //{
-        //    _grid.SetCollection(_grid.GetCollection(), "Error1");
+        //    _grid.SetBusinessObjectCollection(_grid.GetCollection(), "Error1");
         //}
 
         //[Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         //public void TestSortColumnAttributeExceptionColumnNameAndOrder()
         //{
-        //    _grid.SetCollection(_grid.GetCollection(), "Error2");
+        //    _grid.SetBusinessObjectCollection(_grid.GetCollection(), "Error2");
         //}
 
         //[Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         //public void TestSortColumnAttributeExceptionOrder()
         //{
-        //    _grid.SetCollection(_grid.GetCollection(), "Error3");
+        //    _grid.SetBusinessObjectCollection(_grid.GetCollection(), "Error3");
         //}
 
 

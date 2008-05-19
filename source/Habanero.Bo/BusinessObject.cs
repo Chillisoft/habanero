@@ -972,6 +972,7 @@ namespace Habanero.BO
 
                 FireSaved();
             }
+            AfterSave();
             ReleaseWriteLocks();
         }
 
@@ -1160,7 +1161,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Releases write locks
+        /// Releases write locks from the database
         /// </summary>
         protected virtual void ReleaseWriteLocks()
         {
@@ -1296,6 +1297,8 @@ namespace Habanero.BO
         #endregion //Sql Statements
 
         ///<summary>
+        /// Callec by the transaction committer in the case where the transaction failed
+        /// and was rolled back.
         ///</summary>
         protected internal virtual void UpdateAsTransactionRolledBack()
         {
@@ -1303,6 +1306,14 @@ namespace Habanero.BO
             {
                 _concurrencyControl.UpdateAsTransactionRolledBack();
             }
+        }
+        /// <summary>
+        /// Called by the business object when the transaction has been successfully committed
+        /// to the database. Called in cases of insert, delete and update.
+        /// </summary>
+        protected internal virtual void AfterSave()
+        {
+            
         }
     }
 }

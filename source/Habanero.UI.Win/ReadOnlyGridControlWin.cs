@@ -77,7 +77,7 @@ namespace Habanero.UI.Win
         }
 
 
-        public void SetCollection(IBusinessObjectCollection boCollection)
+        public void SetBusinessObjectCollection(IBusinessObjectCollection boCollection)
         {
             throw new System.NotImplementedException();
         }
