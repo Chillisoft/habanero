@@ -96,5 +96,14 @@ namespace Habanero.UI.Base
         event EventHandler<BOEventArgs> BusinessObjectEdited;
 
         void RefreshGrid();
+
+        /// <summary>
+        /// Pages the grid to the row number indicated.  This will not do anything for a non
+        /// paginating grid (like the Windows.Forms DataGridView).
+        /// </summary>
+        /// <param name="rowNum">The row that you wish to show the page of. Eg, if your grid has
+        /// 30 rows in it and is set to 20 rows per page, calling ChangeToPageOfRow with an argument
+        /// of 25 will set the page to page 2 since row 25 is on page 2.</param>
+        void ChangeToPageOfRow(int rowNum);
     }
 }

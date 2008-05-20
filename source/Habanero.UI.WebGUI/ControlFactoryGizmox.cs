@@ -94,7 +94,11 @@ namespace Habanero.UI.WebGUI
 
         public IDateTimePicker CreateDateTimePicker()
         {
-            return new DateTimePickerGiz();
+            DateTimePickerGiz dtp = new DateTimePickerGiz();
+            dtp.Height = TEXTBOX_HEIGHT;
+            dtp.Format = DateTimePickerFormat.Custom;
+            dtp.CustomFormat = "dd MMM yyyy";
+            return dtp;
         }
 
         public BorderLayoutManager CreateBorderLayoutManager(IControlChilli control)

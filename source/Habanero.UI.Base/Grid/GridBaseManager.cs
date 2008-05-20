@@ -106,18 +106,20 @@ namespace Habanero.UI.Base
                 IDataGridViewRowCollection gridRows = _gridBase.Rows;
                 ClearAllSelectedRows(gridRows);
                 if (value == null) return;
-                int j = 0;
+                int rowNum = 0;
                 foreach (DataRowView dataRowView in _dataTableDefaultView)
                 {
                     if ((string) dataRowView.Row["ID"] == value.ID.ToString())
                     {
-                        gridRows[j].Selected = true;
+                        gridRows[rowNum].Selected = true;
+                        _gridBase.ChangeToPageOfRow(rowNum);
                         break;
                     }
-                    j++;
+                    rowNum++;
                 }
             }
         }
+
 
         //TODO_Port:
         //private void RemovePreviouslySelectedBusinessObjectsEventHandler()

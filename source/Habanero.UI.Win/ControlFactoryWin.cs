@@ -104,7 +104,7 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new NumericUpDown object</returns>
         public INumericUpDown CreateNumericUpDownInteger()
         {
-            throw new NotImplementedException();
+            return new NumericUpDownWin();
         }
 
         /// <summary>
@@ -366,14 +366,6 @@ namespace Habanero.UI.Win
         public IControlChilli CreateControl()
         {
             return new ControlWin();
-        }
-    }
-
-    internal class SplitterWin : Splitter, ISplitter
-    {
-        IControlCollection IControlChilli.Controls
-        {
-            get { return new ControlCollectionWin(this.Controls); }
         }
     }
 }

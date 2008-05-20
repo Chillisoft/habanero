@@ -11,23 +11,14 @@ namespace Habanero.UI.WebGUI
     public abstract class GridBaseGiz : DataGridView, IGridBase
     {
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
+
         public event EventHandler CollectionChanged;
+
         /// <summary>
         /// Handles the event of the currently selected business object being edited.
         /// This is used only for internal testing
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectEdited;
-
-        public void RefreshGrid()
-        {
-            _mngr.RefreshGrid();
-        }
-
-        public void Clear()
-        {
-            _mngr.Clear();
-        }
-
 
         private readonly GridBaseManager _mngr;
 
@@ -38,13 +29,36 @@ namespace Habanero.UI.WebGUI
             _mngr.CollectionChanged += delegate { FireCollectionChanged(); };
         }
 
-
         private void FireBusinessObjectSelected()
         {
             if (this.BusinessObjectSelected != null)
             {
                 this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
             }
+        }
+
+        /// <summary>
+        /// Pages the grid to the row number indicated.  This will not do anything for a non
+        /// paginating grid (like the Windows.Forms DataGridView).
+        /// </summary>
+        /// <param name="rowNum">The row that you wish to show the page of. Eg, if your grid has
+        /// 30 rows in it and is set to 20 rows per page, calling ChangeToPageOfRow with an argument
+        /// of 25 will set the page to page 2 since row 25 is on page 2.</param>
+        public void ChangeToPageOfRow(int rowNum)
+        {
+            if (ItemsPerPage > 0)
+                this.CurrentPage = (rowNum / this.ItemsPerPage) + 1;
+            else this.CurrentPage = 1;
+        }
+
+        public void RefreshGrid()
+        {
+            _mngr.RefreshGrid();
+        }
+
+        public void Clear()
+        {
+            _mngr.Clear();
         }
 
 

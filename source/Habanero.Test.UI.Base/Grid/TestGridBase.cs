@@ -319,6 +319,39 @@ namespace Habanero.Test.UI.Base
             //    gridBase.SetBusinessObjectCollection(col);
             //    //---------------Test Result -----------------------
             //}
+
+
+            [Test]
+            public void TestGiz_ChangeToPageOfRowNum()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+                gridBase.ItemsPerPage = 3;
+
+                //---------------Assert preconditions---------------
+                Assert.AreEqual(1, gridBase.CurrentPage);
+                //---------------Execute Test ----------------------
+                gridBase.ChangeToPageOfRow(4);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(2, gridBase.CurrentPage);
+                //---------------Tear Down -------------------------
+            }
+
+            [Test]
+            public void TestGiz_SetSelectedBusinessObjectChangesPage()
+            {
+                //---------------Set up test pack-------------------
+                BusinessObjectCollection<MyBO> col;
+                IGridBase gridBase = GetGridBaseWith_4_Rows(out col);
+                gridBase.ItemsPerPage = 3;
+
+                //---------------Execute Test ----------------------
+                gridBase.SelectedBusinessObject = col[3];
+                //---------------Test Result -----------------------
+                Assert.AreEqual(2, gridBase.CurrentPage);
+                //---------------Tear Down -------------------------
+            }
         }
 
         [Test]
@@ -860,6 +893,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(null, gridBase.SelectedBusinessObject);
             //---------------Tear Down -------------------------
         }
+
         #region Utility Methods 
         private static void AddColumnsForContactPerson(BusinessObjectCollection<ContactPersonTestBO> businessObjectCollection, IGridBase gridBase, string propName)
         {

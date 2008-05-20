@@ -8,7 +8,7 @@ namespace Habanero.UI.Base
 
     public class DefaultBODeletor : IBusinessObjectDeletor
     {
-        public void DeleteBusinessObject(IBusinessObject businessObject)
+        public virtual void DeleteBusinessObject(IBusinessObject businessObject)
         {
             businessObject.Delete();
             businessObject.Save();

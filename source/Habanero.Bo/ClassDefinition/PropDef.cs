@@ -716,11 +716,12 @@ namespace Habanero.BO.ClassDefinition
         {
             if (isNewObject)
             {
-                if (MyDefaultValue != null)
+                object defaultValue = MyDefaultValue;
+                if (defaultValue != null)
                 {
                     //log.Debug("Creating BoProp with default value " + _defaultValue );
                 }
-				return new BOProp(this, MyDefaultValue);
+                return new BOProp(this, defaultValue);
             }
             else
             {

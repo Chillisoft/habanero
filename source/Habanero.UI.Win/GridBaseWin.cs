@@ -156,6 +156,15 @@ namespace Habanero.UI.Win
         }
 
         /// <summary>
+        /// Not supported.  Does nothing.
+        /// </summary>
+        /// <param name="rowNum"></param>
+        public void ChangeToPageOfRow(int rowNum)
+        {
+            
+        }
+
+        /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
         /// </summary>
         public void Initialise()

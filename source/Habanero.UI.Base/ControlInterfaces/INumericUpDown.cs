@@ -8,10 +8,10 @@ namespace Habanero.UI.Base
 
         int DecimalPlaces { get; }
 
-        decimal Minimum { get; }
+        decimal Minimum { get; set; }
 
-        decimal Maximum { get; }
+        decimal Maximum { get; set; }
 
-        void Select(int i, object length);
+        void Select(int i, int length);
     }
 }

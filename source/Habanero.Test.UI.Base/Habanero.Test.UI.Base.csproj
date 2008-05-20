@@ -78,6 +78,7 @@
     <Compile Include="Mappers\TestControlMapper.cs" />
     <Compile Include="Mappers\TestLookupComboBoxMapper.cs" />
     <Compile Include="Mappers\TestMapperBase.cs" />
+    <Compile Include="Mappers\TestNumericUpDownIntegerMapper.cs" />
     <Compile Include="Mappers\TestTextBoxMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestControlCollection.cs" />
