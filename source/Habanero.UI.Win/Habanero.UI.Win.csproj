@@ -56,7 +56,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DateRangeComboBoxWin.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="DateTimePickerWin.cs">
       <SubType>Component</SubType>

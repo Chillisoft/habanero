@@ -17,8 +17,10 @@ namespace Habanero.UI.Base
 
         void SetCollection(BusinessObjectCollection<BusinessObject> collection);
 
-        object this[int index] { get; }
+        object this[int index] { get; set; }
 
         bool Contains(object value);
+
+        int IndexOf(object value);
     }
 }

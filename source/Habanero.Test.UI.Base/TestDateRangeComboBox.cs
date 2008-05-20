@@ -40,13 +40,13 @@ namespace Habanero.Test.UI.Base
         {
             _comboBox = GetControlFactory().CreateDateRangeComboBox();
             _numDefaultOptions = 11;
-            _numAllOptions = Enum.GetNames(typeof(DateRangeOptions)).Length;
+            _numAllOptions = Enum.GetNames(typeof (DateRangeOptions)).Length;
 
             // Use a fixed date as the reference point, rather than DateTime.Now
             _comboBox.UseFixedNowDate = true;
-            }
+        }
 
-        [Test, Ignore()]  //TODO restore
+        [Test, Ignore()]
         public void TestDefaultConstructor()
         {
             Assert.AreEqual(_numDefaultOptions, _comboBox.OptionsToDisplay.Count);

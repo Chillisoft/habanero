@@ -12,6 +12,15 @@ namespace Habanero.UI.WebGUI
         private DateRangeComboBoxManager _manager;
 
         /// <summary>
+        /// Constructor to initialise a new ComboBox with a selection of
+        /// date range options that are suited to a timeless system
+        /// </summary>
+        public DateRangeComboBoxGiz()
+        {
+            _manager = new DateRangeComboBoxManager(this);
+        }
+
+        /// <summary>
         /// Gets and sets whether the date used to calculate date ranges
         /// should be DateTime.Now or a fixed date that is specified.
         /// When false, all date ranges are calculated based on DateTime.Now.

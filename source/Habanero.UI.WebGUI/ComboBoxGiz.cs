@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.BO;
@@ -94,6 +95,7 @@ namespace Habanero.UI.WebGUI
             public object this[int index]
             {
                 get { return _items[index]; }
+                set { throw new NotImplementedException("WebGUI doesn't have a setter"); } //_items[index] = value; }
             }
 
             public bool Contains(object value)
@@ -101,11 +103,14 @@ namespace Habanero.UI.WebGUI
                 return _items.Contains(value);
             }
 
+            public int IndexOf(object value)
+            {
+                return _items.IndexOf(value);
+            }
 
             ///<summary>
             ///Returns an enumerator that iterates through a collection.
             ///</summary>
-            ///
             ///<returns>
             ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
             ///</returns>

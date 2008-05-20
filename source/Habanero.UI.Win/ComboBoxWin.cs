@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Windows.Forms;
 using Habanero.BO;
@@ -90,11 +91,10 @@ namespace Habanero.UI.Win
                 throw new System.NotImplementedException();
             }
 
-            #region IComboBoxObjectCollection Members
-
             public object this[int index]
             {
                 get { return _items[index]; }
+                set { _items[index] = value; }
             }
 
             public bool Contains(object value)
@@ -102,13 +102,14 @@ namespace Habanero.UI.Win
                 return _items.Contains(value);
             }
 
-            #endregion
-
+            public int IndexOf(object value)
+            {
+                return _items.IndexOf(value);
+            }
 
             ///<summary>
             ///Returns an enumerator that iterates through a collection.
             ///</summary>
-            ///
             ///<returns>
             ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
             ///</returns>
@@ -119,6 +120,7 @@ namespace Habanero.UI.Win
             }
 
         }
+
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
