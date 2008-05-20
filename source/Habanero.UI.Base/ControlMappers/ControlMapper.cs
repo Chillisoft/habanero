@@ -363,7 +363,7 @@ namespace Habanero.UI.Base
                 if (ctl is IComboBox) mapperTypeName = "LookupComboBoxMapper";
                 else if (ctl is ICheckBox) mapperTypeName = "CheckBoxMapper";
                 else if (ctl is IDateTimePicker) mapperTypeName = "DateTimePickerMapper";
-                else if (ctl is IListView) mapperTypeName = "ListViewCollectionMapper";
+                else if (ctl is IListView) mapperTypeName = "ListViewCollectionController";
                 else if (ctl is INumericUpDown) mapperTypeName = "NumericUpDownIntegerMapper";
                 else
                 {

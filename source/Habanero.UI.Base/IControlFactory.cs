@@ -202,5 +202,6 @@ namespace Habanero.UI.Base
         IWizardControl CreateWizardControl(IWizardController wizardController);
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name, PostObjectPersistingDelegate action);
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo);
+        IListView CreateListView();
     }
 }

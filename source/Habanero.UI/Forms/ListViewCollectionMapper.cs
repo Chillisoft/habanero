@@ -29,7 +29,7 @@ namespace Habanero.UI.Forms
     /// <summary>
     /// Maps a ListView object in a user interface
     /// </summary>
-    public class ListViewCollectionMapper
+    public class ListViewCollectionMapper 
     {
         private string _uiDefName;
         private ListView _listView;

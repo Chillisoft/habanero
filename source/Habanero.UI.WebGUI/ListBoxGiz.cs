@@ -33,6 +33,7 @@ namespace Habanero.UI.WebGUI
                 return _selectedObjectCollection;
             }
         }
+
         public new ListBoxSelectionMode SelectionMode
         {
             get { return (ListBoxSelectionMode) Enum.Parse(typeof(ListBoxSelectionMode), base.SelectionMode.ToString()); }

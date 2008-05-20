@@ -28,6 +28,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ActiveReports.Chart, Version=5.0.0.117, Culture=neutral, PublicKeyToken=cc4967777c49a3ff" />
+    <Reference Include="ActiveReports.Viewer3, Version=5.0.0.117, Culture=neutral, PublicKeyToken=cc4967777c49a3ff" />
+    <Reference Include="ActiveReports3, Version=5.0.0.117, Culture=neutral, PublicKeyToken=cc4967777c49a3ff" />
     <Reference Include="Gizmox.WebGUI.Common, Version=2.0.5701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Gizmox.WebGUI.Common.dll</HintPath>
@@ -76,6 +79,7 @@
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
     <Compile Include="Mappers\TestControlMapper.cs" />
+    <Compile Include="Mappers\TestListViewCollectionController.cs" />
     <Compile Include="Mappers\TestLookupComboBoxMapper.cs" />
     <Compile Include="Mappers\TestMapperBase.cs" />
     <Compile Include="Mappers\TestNumericUpDownIntegerMapper.cs" />
@@ -100,6 +104,7 @@
     <Compile Include="TestListBox.cs" />
     <Compile Include="MultiSelector\TestMultiSelector.cs" />
     <Compile Include="MultiSelector\TestMultiSelectorModel.cs" />
+    <Compile Include="TestListView.cs" />
     <Compile Include="Mappers\TestListComboBoxMapper.cs" />
     <Compile Include="TestPanelFactory.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />

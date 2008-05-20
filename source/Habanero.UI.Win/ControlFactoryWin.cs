@@ -217,6 +217,11 @@ namespace Habanero.UI.Win
             throw new NotImplementedException();
         }
 
+        public IListView CreateListView()
+        {
+            throw new NotImplementedException();
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();

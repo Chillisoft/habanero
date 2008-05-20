@@ -423,6 +423,11 @@ namespace Habanero.UI.WebGUI
             return new DefaultBOEditorFormGiz(bo, "default", this);
         }
 
+        public IListView CreateListView()
+        {
+            return new ListViewGiz();
+        }
+
         public ITabControl CreateTabControl()
         {
             return new TabControlGiz();

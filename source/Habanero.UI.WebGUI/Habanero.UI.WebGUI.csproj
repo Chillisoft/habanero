@@ -74,6 +74,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="HabaneroAppWebGUI.cs" />
+    <Compile Include="ListViewGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListViewGiz.Designer.cs">
+      <DependentUpon>ListViewGiz.cs</DependentUpon>
+    </Compile>
     <Compile Include="NumericUpDownGiz.cs">
       <SubType>Component</SubType>
     </Compile>
