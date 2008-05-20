@@ -148,7 +148,7 @@ namespace Habanero.UI.WebGUI
                 //The border layout manager clearing panel etc not unit tested
                 _wizardStepPanel.Controls.Clear();
                 BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(_wizardStepPanel, _controlFactory);
-                borderLayoutManager.AddControl(stepControl);
+                borderLayoutManager.AddControl(stepControl, BorderLayoutManager.Position.Centre);
                 step.InitialiseStep();
             }
             else
