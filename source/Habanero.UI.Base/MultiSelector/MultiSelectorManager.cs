@@ -73,6 +73,7 @@ namespace Habanero.UI.Base
 
         public List<T> Options
         {
+            get { return _model.Options; }
             set { _model.Options = value; }
         }
 
@@ -88,6 +89,7 @@ namespace Habanero.UI.Base
 
         public List<T> Selections
         {
+            get { return _model.Selections; }
             set { _model.Selections = value; }
         }
 

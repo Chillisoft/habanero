@@ -18,11 +18,11 @@ namespace Habanero.UI.WebGUI
         {
             InitializeComponent();
             _manager = new MultiSelectorManager<T>(this);
-
         }
 
         public List<T> Options
         {
+            get { return _manager.Options; }
             set { _manager.Options = value; }
         }
 
@@ -38,6 +38,7 @@ namespace Habanero.UI.WebGUI
 
         public List<T> Selections
         {
+            get { return _manager.Selections; }
             set { _manager.Selections = value; }
         }
 

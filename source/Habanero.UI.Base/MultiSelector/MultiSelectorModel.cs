@@ -60,6 +60,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public List<T> Options
         {
+            get { return _options; }
             set
             {
                 _options = ShallowCopy(value);
@@ -97,6 +98,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public List<T> Selections
         {
+            get { return _selections; }
             set
             {
                 _selections = value;

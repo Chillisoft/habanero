@@ -375,6 +375,20 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestOptionsMirrorsModelOptions()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+            _selector.Model.Options = CreateListWithTwoOptions();
+            Assert.AreEqual(_selector.Options, _selector.Model.Options);
+            //---------------Execute Test ----------------------
+            _selector.Options = new List<TestT>();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(_selector.Options, _selector.Model.Options);
+            //---------------Tear Down ------------------------- 
+        }
+
         #endregion Test Options List
 
         #region Test selections List
@@ -428,6 +442,20 @@ namespace Habanero.Test.UI.Base
             AssertNoneSelected(_selector);
 
             //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestSelectionsMirrorsModelSelections()
+        {
+            //---------------Set up test pack-------------------
+            IMultiSelector<TestT> _selector = GetControlFactory().CreateMultiSelector<TestT>();
+            _selector.Model.Selections = CreateListWithTwoOptions();
+            Assert.AreEqual(_selector.Selections, _selector.Model.Selections);
+            //---------------Execute Test ----------------------
+            _selector.Options = new List<TestT>();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(_selector.Selections, _selector.Model.Selections);
+            //---------------Tear Down ------------------------- 
         }
 
         #endregion

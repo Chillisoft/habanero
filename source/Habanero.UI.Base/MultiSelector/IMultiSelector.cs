@@ -12,12 +12,12 @@ namespace Habanero.UI.Base
     }
     public interface IMultiSelector<T> :IControlChilli
     {
-        List<T> Options { set; }
+        List<T> Options { get; set; }
 
         IListBox AvailableOptionsListBox { get; }
 
         MultiSelectorModel<T> Model { get; }
-        List<T> Selections { set; }
+        List<T> Selections { get; set; }
         IListBox SelectionsListBox { get; }
         IButton GetButton(MultiSelectorButton buttonType);
         ReadOnlyCollection<T> SelectionsView { get;}
