@@ -184,6 +184,15 @@ namespace Habanero.UI.Forms
         {
             get { return _boPanel; }
         }
+        
+        ///<summary>
+        /// Returns the Panel Factory Info object which is used to control the 
+        /// mapping of the controls on the panel to the BusinessObject.
+        ///</summary>
+        public PanelFactoryInfo PanelFactoryInfo
+        {
+            get { return _panelFactoryInfo; }
+        }
 
         /// <summary>
         /// Sets up the layout of the panel and buttons
