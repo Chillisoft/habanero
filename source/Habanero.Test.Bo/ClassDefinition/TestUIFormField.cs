@@ -131,7 +131,7 @@ namespace Habanero.Test.BO.ClassDefinition
             field.SetControlType(typeof(ComboBox));
             Assert.AreEqual(typeof(ComboBox), field.ControlType);
 
-            Assert.AreEqual("System.Windows.Forms.ComboBox", field.ControlTypeName);
+            Assert.AreEqual("ComboBox", field.ControlTypeName);
             field.SetControlTypeName("TextBox");
             Assert.AreEqual("TextBox", field.ControlTypeName);
             Assert.AreEqual(typeof(TextBox), field.ControlType);

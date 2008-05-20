@@ -36,6 +36,8 @@ namespace Habanero.BO.ClassDefinition
         private int _width;
         private PropAlignment _alignment;
         private readonly Hashtable _parameters;
+        private string _gridControlTypeName;
+        private string _gridControlAssemblyName;
 
         /// <summary>
         /// An enumeration to specify a horizontal alignment in a grid
@@ -52,22 +54,45 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="heading">The heading</param>
         /// <param name="propertyName">The property name</param>
-        /// <param name="gridControlType">The grid control type</param>
+        /// <param name="gridControlTypeName">The Name of the Grid Control Type</param>
+        /// <param name="gridControlAssembly">The Assembly Name of the Grid Control Type</param>
         /// <param name="editable">Whether the grid is read-only (cannot be
         /// edited directly)</param>
         /// <param name="width">The width</param>
         /// <param name="alignment">The horizontal alignment</param>
-        public UIGridColumn(string heading, string propertyName, Type gridControlType, bool editable, int width,
+        /// /// <param name="parameters">The parameters for the column</param>
+        public UIGridColumn(string heading, string propertyName, String gridControlTypeName, String gridControlAssembly, bool editable, int width,
                             PropAlignment alignment, Hashtable parameters)
         {
             _heading = heading;
             _propertyName = propertyName;
-            _gridControlType = gridControlType;
+            _gridControlTypeName = gridControlTypeName;
+            _gridControlAssemblyName = gridControlAssembly;
             _editable = editable;
             _width = width;
             _alignment = alignment;
             _parameters = parameters;
         }
+
+        /// <summary>
+        /// Constructor to initialise a new definition
+        /// </summary>
+        /// <param name="heading">The heading</param>
+        /// <param name="propertyName">The property name</param>
+        /// <param name="gridControlType">The grid control type.  This cannot be null -
+        /// if you need to supply null type parameters use the constructor that supplies
+        /// specific type and assembly names and set these as null.</param>
+        /// <param name="editable">Whether the grid is read-only (cannot be
+        /// edited directly)</param>
+        /// <param name="width">The width</param>
+        /// <param name="alignment">The horizontal alignment</param>
+        /// <param name="parameters">The parameters for the column</param>
+        public UIGridColumn(string heading, string propertyName, Type gridControlType, bool editable, int width,
+                            PropAlignment alignment, Hashtable parameters)
+            : this(heading, propertyName, gridControlType.Name, gridControlType.Namespace, editable, width, alignment, parameters)
+        {
+        }
+
 
         /// <summary>
         /// Returns the heading
@@ -93,7 +118,12 @@ namespace Habanero.BO.ClassDefinition
         public Type GridControlType
         {
             get { return _gridControlType; }
-            protected set { _gridControlType = value; }
+            set
+            {
+                _gridControlType = value;
+                _gridControlTypeName = _gridControlType.Name;
+                _gridControlAssemblyName = _gridControlType.Namespace;
+            }
         }
 
         /// <summary>
@@ -129,6 +159,23 @@ namespace Habanero.BO.ClassDefinition
         public Hashtable Parameters
         {
             get { return _parameters; }
+        }
+        /// <summary>
+        /// Returns the Name of the Grid Control Type
+        /// </summary>
+        public String GridControlTypeName
+        {
+            get { return _gridControlTypeName; }
+            set { _gridControlTypeName = value; }
+        }
+
+        /// <summary>
+        /// Returns the Assembly Name of the Grid Control Type
+        /// </summary>
+        public String GridControlAssemblyName
+        {
+            get { return _gridControlAssemblyName; }
+            set { _gridControlAssemblyName = value; }
         }
 
         #region Helper Methods

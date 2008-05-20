@@ -140,6 +140,15 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(b, mapper.Control);
         }
 
+        [Test]
+        public void TestCreateMapperWithoutTypeOrAssembly()
+        {
+            ITextBox b = GetControlFactory().CreateTextBox();
+            IControlMapper mapper = ControlMapper.Create(null, null, b, "Test", false, GetControlFactory());
+            Assert.AreSame(typeof(TextBoxMapper), mapper.GetType());
+            Assert.AreSame(b, mapper.Control);
+        }
+
         #endregion //Test Mapper Creation
 
         #region Tests for normal mapper

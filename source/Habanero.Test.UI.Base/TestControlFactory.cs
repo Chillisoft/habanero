@@ -376,6 +376,46 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(Int32.MaxValue, upDown.Maximum);
             //---------------Tear Down -------------------------   
         }
+        
+        [Test]
+        public void TestCreateDefaultControl()
+        {
+            //---------------Set up test pack-------------------
+            String typeName = "";
+            String assemblyName = "";
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IControlChilli control = _factory.CreateControl(typeName, assemblyName);
+            //---------------Verify Result -----------------------
+            Assert.IsTrue(control is ITextBox);
+            //---------------Tear Down -------------------------   
+        }
 
+        [Test]
+        public void TestCreateSpecifiedControlType()
+        {
+            //---------------Set up test pack-------------------
+            String typeName = "TextBox";
+            String assemblyName = "Gizmox.WebGUI.Forms";
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IControlChilli control = _factory.CreateControl(typeName, assemblyName);
+            //---------------Verify Result -----------------------
+            Assert.IsTrue(control is Gizmox.WebGUI.Forms.TextBox);
+            //---------------Tear Down -------------------------   
+        }
+
+        [Test, ExpectedException(typeof(UnknownTypeNameException))]
+        public void TestCreateInvalidControlType()
+        {
+            //---------------Set up test pack-------------------
+            String typeName = "GeewizBox";
+            String assemblyName = "SuperDuper.Components";
+            //---------------Verify test pack-------------------
+            //---------------Execute Test ----------------------
+            IControlChilli control = _factory.CreateControl(typeName, assemblyName);
+            //---------------Verify Result -----------------------
+            //---------------Tear Down -------------------------   
+        }
     }
 }

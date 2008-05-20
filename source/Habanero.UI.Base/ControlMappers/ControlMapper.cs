@@ -352,9 +352,13 @@ namespace Habanero.UI.Base
         /// <exception cref="UnknownTypeNameException">An exception is
         /// thrown if the mapperTypeName does not provide a type that is
         /// a subclass of the ControlMapper class.</exception>
+        /// <param name="controlFactory">The control factory</param>
         public static IControlMapper Create(string mapperTypeName, string mapperAssembly, IControlChilli ctl, string propertyName, bool isReadOnly, IControlFactory controlFactory)
         {
-            if (mapperTypeName == "TextBoxMapper" && !(ctl is ITextBox)) // TODO && !(ctl is PasswordTextBox))
+            if (string.IsNullOrEmpty(mapperTypeName)) mapperTypeName = "TextBoxMapper";
+
+            if (mapperTypeName == "TextBoxMapper" && !(ctl is ITextBox))
+                // TODO && !(ctl is PasswordTextBox))
             {
                 if (ctl is IComboBox) mapperTypeName = "LookupComboBoxMapper";
                 else if (ctl is ICheckBox) mapperTypeName = "CheckBoxMapper";

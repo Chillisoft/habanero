@@ -28,7 +28,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestRemove()
         {
-            UIGridColumn column = new UIGridColumn("heading", null, null, false,
+            UIGridColumn column = new UIGridColumn("heading", null, null, null, false,
                 100, UIGridColumn.PropAlignment.left, null);
             UIGrid uiGrid = new UIGrid();
             uiGrid.Add(column);
@@ -41,9 +41,9 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCopyTo()
         {
-            UIGridColumn column1 = new UIGridColumn("heading", null, null, false,
+            UIGridColumn column1 = new UIGridColumn("heading", null, null, null, false,
                 100, UIGridColumn.PropAlignment.left, null);
-            UIGridColumn column2 = new UIGridColumn("heading", null, null, false,
+            UIGridColumn column2 = new UIGridColumn("heading", null, null, null, false,
                 100, UIGridColumn.PropAlignment.left, null);
             UIGrid uiGrid = new UIGrid();
             uiGrid.Add(column1);

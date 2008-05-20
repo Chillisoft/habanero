@@ -3,7 +3,7 @@
 <!ATTLIST column
 	heading CDATA #IMPLIED
 	property CDATA #REQUIRED
-	type NMTOKEN	"DataGridViewTextBoxColumn"
+	type NMTOKEN	#IMPLIED
 	assembly NMTOKEN #IMPLIED
 	editable ( true | false ) "true"
 	width CDATA "100"

@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Forms;
+using Habanero.Util.File;
 using Noogen.WinForms;
 
 namespace Habanero.UI
@@ -177,6 +178,31 @@ namespace Habanero.UI
             Panel pnl = new Panel();
             pnl.Name = name;
             return pnl;
+        }
+
+        /// <summary>
+        /// Creates a control for the given type and assembly name.
+        /// </summary>
+        /// <param name="typeName">The name of the control type</param>
+        /// <param name="assemblyName">The assembly name of the control type</param>
+        /// <returns>Returns either the control of the specified type or
+        ///          the default type, which is usually TextBox.
+        /// </returns>
+        public static Control CreateControl(string typeName, string assemblyName)
+        {
+            Type controlType = null;
+
+            if (String.IsNullOrEmpty(typeName) || String.IsNullOrEmpty(assemblyName))
+            {
+                controlType = typeof(TextBox);
+            }
+            else
+            {
+                TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
+                                         "field", "field definition");
+            }
+
+            return CreateControl(controlType);
         }
 
         /// <summary>

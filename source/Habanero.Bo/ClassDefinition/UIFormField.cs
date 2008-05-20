@@ -307,7 +307,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (ControlTypeName.EndsWith("CheckBox"))
+                if (ControlTypeName != null && ControlTypeName.EndsWith("CheckBox"))
                 {
                     return "?";
                 }
@@ -347,6 +347,8 @@ namespace Habanero.BO.ClassDefinition
 			{
 				_controlType = value;
 				TypeLoader.ClassTypeInfo(_controlType, out _controlAssembly, out _controlTypeName);
+			    _controlTypeName = _controlType.Name;
+			    _controlAssembly = _controlType.Namespace;
 			}
 		}
                

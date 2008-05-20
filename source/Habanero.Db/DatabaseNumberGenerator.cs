@@ -140,7 +140,7 @@ namespace Habanero.DB
         /// <summary>
         /// Creates a transaction to update the number in the database
         /// </summary>
-        private class NumberUpdate : ITransactional
+        private class NumberUpdate : ITransactionalDB
         {
             private int _newNumber;
             private readonly string _settingName;

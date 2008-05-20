@@ -41,6 +41,14 @@ namespace Habanero.Test.BO.Loaders
         }
 
         [Test]
+        public void TestDefaults()
+        {
+            UIGridColumn uiProp =
+                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" />");
+            Assert.AreEqual(100, uiProp.Width);
+        }
+
+        [Test]
         public void TestSimpleUIProperty()
         {
             UIGridColumn uiProp =
@@ -49,16 +57,24 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("testheading", uiProp.Heading);
             Assert.AreEqual("testpropname", uiProp.PropertyName);
             Assert.AreEqual(40, uiProp.Width);
-            Assert.AreSame(typeof (DataGridViewCheckBoxColumn), uiProp.GridControlType);
         }
 
         [Test]
-        public void TestDefaults()
+        public void TestNoDefaultColumnType()
         {
+            //---------------Set up test pack-------------------
             UIGridColumn uiProp =
-                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" />");
-            Assert.AreSame(typeof (DataGridViewTextBoxColumn), uiProp.GridControlType);
-            Assert.AreEqual(100, uiProp.Width);
+               loader.LoadUIProperty(
+                   @"<column heading=""testheading"" property=""testpropname""   />");
+            //---------------Verify test pack-------------------
+
+            //---------------Execute Test ----------------------
+            //---------------Verify Result -----------------------
+            Assert.IsNull(uiProp.GridControlType);
+            Assert.IsNull(uiProp.GridControlTypeName); 
+            Assert.IsNull(uiProp.GridControlAssemblyName);
+            //---------------Tear Down -------------------------  
+
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
@@ -66,29 +82,15 @@ namespace Habanero.Test.BO.Loaders
         {
             loader.LoadUIProperty(@"<column />");
         }
-
-        [Test]
-        public void TestAssemblyAttributeForSystem()
-        {
-            UIGridColumn uiProp =
-                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" assembly=""System.Windows.Forms"" />");
-            Assert.AreEqual(typeof(DataGridViewTextBoxColumn), uiProp.GridControlType);
-        }
-
-        [Test]
-        public void TestAssemblyAttributeForHabaneroTypes()
-        {
-            UIGridColumn uiProp =
-                loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""DataGridViewNumericUpDownColumn"" />");
-            Assert.AreEqual(typeof(DataGridViewNumericUpDownColumn), uiProp.GridControlType);
-        }
-
+       
         [Test]
         public void TestCustomColumnType()
         {
             UIGridColumn uiProp =
                 loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""MyBO"" assembly=""Habanero.Test"" />");
-            Assert.AreEqual(typeof(MyBO), uiProp.GridControlType);
+            Assert.IsNull(uiProp.GridControlType);
+            Assert.AreEqual("MyBO",uiProp.GridControlTypeName);
+            Assert.AreEqual("Habanero.Test", uiProp.GridControlAssemblyName);
         }
 
         [Test]
@@ -128,17 +130,19 @@ namespace Habanero.Test.BO.Loaders
             loader.LoadUIProperty(@"<column property=""testpropname"" alignment=""123"" />");
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestInvalidAssemblyAttribute()
-        {
-            loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" assembly=""testx"" />");
-        }
+        //-- TODO Create Equivalence of these two in the UI assemblies
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
-        public void TestInvalidColumnType()
-        {
-            loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""testx"" assembly=""System.Windows.Forms"" />");
-        }
+        //[Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        //public void TestInvalidAssemblyAttribute()
+        //{
+        //    loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" assembly=""testx"" />");
+        //}
+
+        //[Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        //public void TestInvalidColumnType()
+        //{
+        //    loader.LoadUIProperty(@"<column heading=""testheading"" property=""testpropname"" type=""testx"" assembly=""System.Windows.Forms"" />");
+        //}
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestInvalidEditableValue()
@@ -189,7 +193,5 @@ namespace Habanero.Test.BO.Loaders
                     <parameter name=""alignment"" value=""right"" />
                 </column>");
         }
-
-        
     }
 }

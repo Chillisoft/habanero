@@ -15,16 +15,19 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns>Returns the new ComboBox object</returns>
         IComboBox CreateComboBox();
+
         IListBox CreateListBox();
         IMultiSelector<T> CreateMultiSelector<T>();
 
         IButton CreateButton();
+
         /// <summary>
         /// Creates a new button
         /// </summary>
         /// <param name="text">The text to appear on the button</param>
         /// <returns>Returns the new Button object</returns>
         IButton CreateButton(string text);
+
         /// <summary>
         /// Creates a new button with an attached event handler to carry out
         /// further instructions if the button is pressed
@@ -46,11 +49,13 @@ namespace Habanero.UI.Base
         IReadOnlyGridControl CreateReadOnlyGridControl();
         IButtonGroupControl CreateButtonGroupControl();
         IReadOnlyGridButtonsControl CreateReadOnlyGridButtonsControl();
+
         /// <summary>
         /// Creates a new panel
         /// </summary>
         /// <returns>Returns a new Panel object</returns>
         IPanel CreatePanel(IControlFactory controlFactory);
+
         /// <summary>
         /// Creates a new panel
         /// </summary>
@@ -66,12 +71,14 @@ namespace Habanero.UI.Base
         ///// <param name="isBold">Whether the text appears in bold lettering</param>
         ///// <returns>Returns the new Label object</returns>
         ILabel CreateLabel(string labelText, bool isBold);
+
         /// <summary>
         /// Creates a new PasswordTextBox that masks the letters as the user
         /// types them
         /// </summary>
         /// <returns>Returns the new PasswordTextBox object</returns>
         ITextBox CreatePasswordTextBox();
+
         IToolTip CreateToolTip();
 
         /// <summary>
@@ -86,6 +93,16 @@ namespace Habanero.UI.Base
         /// <param name="name">The name of the view</param>
         /// <returns>Returns a new TreeView object</returns>
         ITreeView CreateTreeView(string name);
+
+        /// <summary>
+        /// Creates a control for the given type and assembly name.
+        /// </summary>
+        /// <param name="typeName">The name of the control type</param>
+        /// <param name="assemblyName">The assembly name of the control type</param>
+        /// <returns>Returns either the control of the specified type or
+        ///          the default type, which is usually TextBox.
+        /// </returns>
+        IControlChilli CreateControl(String typeName, String assemblyName);
 
         /// <summary>
         /// Creates a new control of the type specified.
@@ -174,6 +191,7 @@ namespace Habanero.UI.Base
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName);
 
         ITabControl CreateTabControl();
+
         /// <summary>
         /// Creates a multi line textbox, setting the scrollbars to vertical
         /// </summary>

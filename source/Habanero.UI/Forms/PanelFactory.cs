@@ -217,7 +217,7 @@ namespace Habanero.UI.Forms
 
                     Label labelControl = ControlFactory.CreateLabel(labelCaption, isCompulsory);
                     controls[currentRow, currentColumn + 0] = new GridLayoutManager.ControlInfo(labelControl);
-                    Control ctl = ControlFactory.CreateControl(field.ControlType);
+                    Control ctl = CreateControl(field);
 
                     if (ctl is TextBox && propDef != null)
                     {
@@ -523,6 +523,22 @@ namespace Habanero.UI.Forms
             PanelFactoryInfo pinfo = new PanelFactoryInfo(p);
             pinfo.FormGrids.Add(formGrid.RelationshipName, myGrid);
             return pinfo;
+        }
+
+        /// <summary>
+        /// Creates the appropriate control for the given field element.
+        /// Preference is given to a specific type over the type and assembly names.
+        /// </summary>
+        private static Control CreateControl(UIFormField field)
+        {
+            if (field.ControlType != null)
+            {
+                return ControlFactory.CreateControl(field.ControlType);
+            }
+            else
+            {
+                return ControlFactory.CreateControl(field.ControlTypeName, field.ControlAssemblyName);
+            }
         }
 
         /// <summary>

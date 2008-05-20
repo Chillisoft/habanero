@@ -40,6 +40,9 @@ namespace Habanero.BO.Loaders
         private int _width;
         private UIGridColumn.PropAlignment _alignment;
         private Hashtable _propertyAttributes;
+        private string  _assemblyName;
+        private string _className;
+
 
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
@@ -84,8 +87,8 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a UIGridProperty object</returns>
         protected override object Create()
         {
-			return _defClassFactory.CreateUIGridProperty(_heading, _propertyName, 
-				_gridControlType, _editable, _width, _alignment, _propertyAttributes);
+			return _defClassFactory.CreateUIGridProperty(_heading, _propertyName,
+                _className ,_assemblyName, _editable, _width, _alignment, _propertyAttributes);
 			//return
 			//    new UIGridProperty(_heading, _propertyName, _gridControlType, _editable, _width,
 			//                       _alignment);
@@ -130,35 +133,37 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadGridControlType()
         {
-            string assemblyName = _reader.GetAttribute("assembly");
-            string className = _reader.GetAttribute("type");
+              _assemblyName = _reader.GetAttribute("assembly");
+              _className = _reader.GetAttribute("type");
 
-            if (assemblyName == null || assemblyName.Length == 0)
-            {
-                if (className == "DataGridViewTextBoxColumn" || className == "DataGridViewCheckBoxColumn" ||
-                    className == "DataGridViewComboBoxColumn")
-                {
-                    assemblyName = "System.Windows.Forms";
-                }
-                else
-                {
-                    assemblyName = "Habanero.UI";
-                    className = "Habanero.UI.Grid." + className;
-                }
-            }
-            //log.Debug("assembly: " + assemblyName + ", class: " + className) ;
-            try
-            {
-                _gridControlType = TypeLoader.LoadType(assemblyName, className);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidXmlDefinitionException(String.Format(
-                    "In a 'column' element, the grid column type could not be loaded, " +
-                    "with the 'type' given as '{0}' and the assembly as '{1}'. " +
-                    "See the documentation for available types.",
-                    className, assemblyName), ex);
-            }
+
+
+            //if (_assemblyName == null || _assemblyName.Length == 0)
+            //{
+            //    if (_className == "DataGridViewTextBoxColumn" || _className == "DataGridViewCheckBoxColumn" ||
+            //        _className == "DataGridViewComboBoxColumn")
+            //    {
+            //        _assemblyName = "System.Windows.Forms";
+            //    }
+            //    else
+            //    {
+            //        _assemblyName = "Habanero.UI";
+            //        _className = "Habanero.UI.Grid." + _className;
+            //    }
+            //}
+            ////log.Debug("assembly: " + _assemblyName + ", class: " + _className) ;
+            //try
+            //{
+            //    _gridControlType = TypeLoader.LoadType(_assemblyName, _className);
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new InvalidXmlDefinitionException(String.Format(
+            //        "In a 'column' element, the grid column type could not be loaded, " +
+            //        "with the 'type' given as '{0}' and the assembly as '{1}'. " +
+            //        "See the documentation for available types.",
+            //        _className, _assemblyName), ex);
+            //}
         }
 
         /// <summary>

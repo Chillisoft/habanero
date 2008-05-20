@@ -5,6 +5,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
+using Habanero.Util.File;
 
 namespace Habanero.UI.Win
 {
@@ -28,6 +29,31 @@ namespace Habanero.UI.Win
         public ITreeView CreateTreeView(string name)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Creates a control for the given type and assembly name.
+        /// </summary>
+        /// <param name="typeName">The name of the control type</param>
+        /// <param name="assemblyName">The assembly name of the control type</param>
+        /// <returns>Returns either the control of the specified type or
+        ///          the default type, which is usually TextBox.
+        /// </returns>
+        public IControlChilli CreateControl(string typeName, string assemblyName)
+        {
+            Type controlType = null;
+
+            if (String.IsNullOrEmpty(typeName) || String.IsNullOrEmpty(assemblyName))
+            {
+                controlType = typeof(TextBox);
+            }
+            else
+            {
+                TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
+                                         "field", "field definition");
+            }
+
+            return CreateControl(controlType);
         }
 
         /// <summary>

@@ -200,7 +200,7 @@ namespace Habanero.UI.Base
 
                     ILabel labelControl = _controlFactory.CreateLabel(labelCaption, isCompulsory);
                     controls[currentRow, currentColumn + 0] = new GridLayoutManager.ControlInfo(labelControl);
-                    IControlChilli ctl = _controlFactory.CreateControl(field.ControlType);
+                    IControlChilli ctl = CreateControl(field, _controlFactory);
                     if (ctl is ITextBox && propDef != null)
                     {
                         if (propDef.PropertyType == typeof (bool))
@@ -448,6 +448,22 @@ namespace Habanero.UI.Base
             {
                 string comm = "mailto:" + tb.Text;
                 Process.Start(comm);
+            }
+        }
+
+        /// <summary>
+        /// Creates the appropriate control for the given field element.
+        /// Preference is given to a specific type over the type and assembly names.
+        /// </summary>
+        private static IControlChilli CreateControl(UIFormField field, IControlFactory factory)
+        {
+            if (field.ControlType != null)
+            {
+                return factory.CreateControl(field.ControlType);
+            }
+            else
+            {
+                return factory.CreateControl(field.ControlTypeName, field.ControlAssemblyName);
             }
         }
 

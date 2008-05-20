@@ -135,13 +135,6 @@ namespace Habanero.BO.Loaders
 			_controlTypeName = _reader.GetAttribute("type");
 			_controlAssembly = _reader.GetAttribute("assembly");
 
-            if (_controlTypeName == "PasswordTextBox" && _controlAssembly == "System.Windows.Forms")
-            {
-                _controlAssembly = "Habanero.UI";
-                _controlTypeName = "Habanero.UI.Forms.PasswordTextBox";
-            }
-            
-
 			//string controlTypeName = _reader.GetAttribute("type");
 			//string controlAssemblyName = _reader.GetAttribute("assembly");
 			//try

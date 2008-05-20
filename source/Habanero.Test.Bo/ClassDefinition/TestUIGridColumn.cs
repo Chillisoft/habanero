@@ -34,7 +34,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Hashtable parameters = new Hashtable();
 
 
-            UIGridColumn column = new UIGridColumn("heading", null, null, true, 100,
+            UIGridColumn column = new UIGridColumn("heading", null, null, null, true, 100,
                                                    UIGridColumn.PropAlignment.left, parameters);
 
             Assert.AreEqual(0, column.Parameters.Count);
@@ -91,6 +91,19 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestSettingControlTypeSetsTypeNames()
+        {
+            UIGridColumn uiGridColumn = new UIGridColumn(null, "TestProperty",
+                "DataGridViewTextBoxColumn", "System.Windows.Forms", false, 100, UIGridColumn.PropAlignment.left, null);
+            Assert.AreEqual("DataGridViewTextBoxColumn", uiGridColumn.GridControlTypeName);
+            Assert.IsNull(uiGridColumn.GridControlType);
+
+            uiGridColumn.GridControlType = typeof (MyBO);
+            Assert.AreEqual("MyBO", uiGridColumn.GridControlTypeName);
+            Assert.AreEqual("Habanero.Test", uiGridColumn.GridControlAssemblyName);
+        }
+
+        [Test]
         public void TestProtectedSets()
         {
             UIGridColumnInheritor column = new UIGridColumnInheritor();
@@ -123,7 +136,7 @@ namespace Habanero.Test.BO.ClassDefinition
         // Grants access to protected fields
         private class UIGridColumnInheritor : UIGridColumn
         {
-            public UIGridColumnInheritor() : base("heading", null, null, true, 100,
+            public UIGridColumnInheritor() : base("heading", null, null, null, true, 100,
                 PropAlignment.left, null)
             {}
 

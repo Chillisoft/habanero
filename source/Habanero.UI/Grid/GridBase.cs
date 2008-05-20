@@ -30,6 +30,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI;
 using Habanero.Util;
+using Habanero.Util.File;
 using log4net;
 
 namespace Habanero.UI.Grid
@@ -155,6 +156,7 @@ namespace Habanero.UI.Grid
             int colNum = 1;
             foreach (UIGridColumn gridColumn in uiGrid)
             {
+                SetGridColumnType(gridColumn);
                 dataColumn = _dataTable.Columns[colNum];
                 PropDef propDef = null;
                 if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
@@ -660,6 +662,48 @@ namespace Habanero.UI.Grid
                 case UIGridColumn.PropAlignment.right:
                     column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Sets the grid column type if it has not been set
+        /// </summary>
+        private static void SetGridColumnType(UIGridColumn gridColumn)
+        {
+            if (gridColumn.GridControlType == null)
+            {
+                if (string.IsNullOrEmpty(gridColumn.GridControlTypeName))
+                {
+                    gridColumn.GridControlTypeName = "DataGridViewTextBoxColumn";
+                }
+
+                if (string.IsNullOrEmpty(gridColumn.GridControlAssemblyName))
+                {
+                    if (gridColumn.GridControlTypeName == "DataGridViewTextBoxColumn" ||
+                        gridColumn.GridControlTypeName == "DataGridViewCheckBoxColumn" ||
+                        gridColumn.GridControlTypeName == "DataGridViewComboBoxColumn")
+                    {
+                        gridColumn.GridControlAssemblyName = "System.Windows.Forms";
+                    }
+                    else
+                    {
+                        gridColumn.GridControlAssemblyName = "Habanero.UI";
+                        gridColumn.GridControlTypeName = "Habanero.UI.Grid." + gridColumn.GridControlTypeName;
+                    }
+                }
+                try
+                {
+                    gridColumn.GridControlType = TypeLoader.LoadType(gridColumn.GridControlAssemblyName,
+                                                                    gridColumn.GridControlTypeName);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidXmlDefinitionException(String.Format(
+                        "An exception occurred while instantiating a grid column, " +
+                        "with the 'type' given as '{0}' and the assembly as '{1}'. " +
+                        "See the documentation for available types.",
+                        gridColumn.GridControlTypeName, gridColumn.GridControlAssemblyName), ex);
+                }
             }
         }
     }
