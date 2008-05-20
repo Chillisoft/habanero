@@ -8,7 +8,9 @@ namespace Habanero.UI.Win
     {
         IControlCollection IControlChilli.Controls
         {
-            get { return new ControlCollectionWin(base.Controls); }
+            get {
+                return new ControlCollectionWin(base.Controls); 
+            }
         }
         //List<IControlChilli> IControlChilli.Controls
         //{

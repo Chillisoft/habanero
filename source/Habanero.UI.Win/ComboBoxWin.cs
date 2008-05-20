@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.UI.Base;
@@ -6,9 +7,13 @@ namespace Habanero.UI.Win
 {
     public partial class ComboBoxWin : ComboBox, IComboBox
     {
+            private ComboBoxManager _manager;
+
+
         public ComboBoxWin()
         {
             InitializeComponent();
+            _manager = new ComboBoxManager(this);
         }
         public new IComboBoxObjectCollection Items
         {
@@ -18,6 +23,32 @@ namespace Habanero.UI.Win
                 return objectCollection;
             }
         }
+
+        object IComboBox.SelectedItem
+        {
+            get
+            {
+                return _manager.GetSelectedItem(this.SelectedItem);
+
+            }
+            set
+            {
+                this.SelectedItem = _manager.GetItemToSelect(value);
+            }
+        }
+
+        object IComboBox.SelectedValue
+        {
+            get
+            {
+                return _manager.GetSelectedValue(this.SelectedItem);
+            }
+            set
+            {
+                SelectedItem = _manager.GetValueToSelect(value);
+            }
+        }
+
 
         internal class ComboBoxObjectCollectionWin : IComboBoxObjectCollection
         {
@@ -72,6 +103,21 @@ namespace Habanero.UI.Win
             }
 
             #endregion
+
+
+            ///<summary>
+            ///Returns an enumerator that iterates through a collection.
+            ///</summary>
+            ///
+            ///<returns>
+            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+            ///</returns>
+            ///<filterpriority>2</filterpriority>
+            public IEnumerator GetEnumerator()
+            {
+                return _items.GetEnumerator();
+            }
+
         }
         IControlCollection IControlChilli.Controls
         {

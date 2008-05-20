@@ -7,12 +7,46 @@ namespace Habanero.UI.WebGUI
 {
     public class ComboBoxGiz : ComboBox, IComboBox
     {
+        private ComboBoxManager _manager;
+
+
+        public ComboBoxGiz()
+        {
+            _manager = new ComboBoxManager(this);
+            
+        }
+
         public new IComboBoxObjectCollection Items
         {
             get
             {
                 IComboBoxObjectCollection objectCollection = new ComboBoxObjectCollectionGiz(base.Items);
                 return objectCollection;
+            }
+        }
+
+        object IComboBox.SelectedItem
+        {
+            get
+            {
+                return _manager.GetSelectedItem(this.SelectedItem);
+        
+            }
+            set
+            {
+                this.SelectedItem = _manager.GetItemToSelect(value);
+            }
+        }
+
+        object IComboBox.SelectedValue
+        {
+            get
+            {
+                return _manager.GetSelectedValue(this.SelectedItem);
+            }
+            set
+            {
+                SelectedItem = _manager.GetValueToSelect(value);
             }
         }
 
@@ -64,9 +98,24 @@ namespace Habanero.UI.WebGUI
 
             public bool Contains(object value)
             {
-               return _items.Contains(value);
+                return _items.Contains(value);
+            }
+
+
+            ///<summary>
+            ///Returns an enumerator that iterates through a collection.
+            ///</summary>
+            ///
+            ///<returns>
+            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+            ///</returns>
+            ///<filterpriority>2</filterpriority>
+            public IEnumerator GetEnumerator()
+            {
+                return _items.GetEnumerator();
             }
         }
+
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }

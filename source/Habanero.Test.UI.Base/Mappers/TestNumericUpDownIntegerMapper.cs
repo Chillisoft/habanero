@@ -9,6 +9,7 @@ namespace Habanero.Test.UI.Base.Mappers
     public abstract class TestNumericUpDownIntegerMapper
     {
         public abstract IControlFactory GetControlFactory();
+        private const string INT_PROP_NAME = "SampleInt";
 
         [TestFixture]
         public class TestNumericUpDownIntegerMapperGiz : TestNumericUpDownIntegerMapper
@@ -34,7 +35,6 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             INumericUpDown numUpDown = GetControlFactory().CreateNumericUpDownInteger();
             //---------------Execute Test ----------------------
-            const string INT_PROP_NAME = "SampleInt";
             NumericUpDownIntegerMapper mapper = new NumericUpDownIntegerMapper(numUpDown, INT_PROP_NAME, false);
 
             //---------------Test Result -----------------------
@@ -46,6 +46,41 @@ namespace Habanero.Test.UI.Base.Mappers
 
             //---------------Tear Down -------------------------
         }
+
+        [Test]
+        public void TestSetBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+            INumericUpDown numUpDown = GetControlFactory().CreateNumericUpDownInteger();
+            NumericUpDownIntegerMapper mapper = new NumericUpDownIntegerMapper(numUpDown, INT_PROP_NAME, false);
+            Sample s = new Sample();
+            s.SampleInt = 100;
+            //---------------Execute Test ----------------------
+            mapper.BusinessObject = s;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(100, numUpDown.Value, "Value is not set.");
+
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestApplyChangesToBO()
+        {
+            //---------------Set up test pack-------------------
+            INumericUpDown numUpDown = GetControlFactory().CreateNumericUpDownInteger();
+            NumericUpDownIntegerMapper mapper = new NumericUpDownIntegerMapper(numUpDown, INT_PROP_NAME, false);
+            Sample s = new Sample();
+            s.SampleInt = 100;
+            mapper.BusinessObject = s;
+            //---------------Execute Test ----------------------
+            numUpDown.Value = 200;
+            mapper.ApplyChangesToBusinessObject();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(200, s.SampleInt, "Value is not set.");
+
+            //---------------Tear Down -------------------------
+        }
+
 
     }
 
@@ -62,7 +97,7 @@ namespace Habanero.Test.UI.Base.Mappers
 
         public override void ApplyChangesToBusinessObject()
         {
-            throw new NotImplementedException();
+            SetPropertyValue(Convert.ToInt32(_numericUpDown.Value));
         }
 
         /// <summary>
@@ -70,7 +105,7 @@ namespace Habanero.Test.UI.Base.Mappers
         /// </summary>
         protected override void UpdateControlValueFromBo()
         {
-            throw new NotImplementedException();
+            _numericUpDown.Value = Convert.ToDecimal(GetPropertyValue());
         }
     }
 }

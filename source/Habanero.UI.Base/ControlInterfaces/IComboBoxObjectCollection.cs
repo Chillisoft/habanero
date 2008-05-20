@@ -1,8 +1,9 @@
+using System.Collections;
 using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
-    public interface IComboBoxObjectCollection
+    public interface IComboBoxObjectCollection : IEnumerable
     {
         void Add(object item);
 

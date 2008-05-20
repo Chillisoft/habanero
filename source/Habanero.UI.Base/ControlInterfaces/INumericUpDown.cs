@@ -12,6 +12,8 @@ namespace Habanero.UI.Base
 
         decimal Maximum { get; set; }
 
+        decimal Value { get; set; }
+
         void Select(int i, int length);
     }
 }

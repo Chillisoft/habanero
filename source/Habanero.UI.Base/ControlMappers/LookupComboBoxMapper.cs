@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -123,6 +124,7 @@ namespace Habanero.UI.Base
                             break;
                         }
                     }
+
                     bool found = false;
                     if (pair.Value != null)
                     {
@@ -170,9 +172,9 @@ namespace Habanero.UI.Base
         private void SetupLookupList()
         {
             if (_businessObject == null)
-            {
+            {   
                 Dictionary<string, object> emptyList = new Dictionary<string, object>();
-                SetLookupList(emptyList);                
+                SetLookupList(emptyList);             
             }
             Dictionary<string, object> col;
             BOMapper mapper = new BOMapper(_businessObject);
@@ -215,28 +217,37 @@ namespace Habanero.UI.Base
         public override void SetLookupList(Dictionary<string, object> col)
         {
             //int width = _comboBox.Width;
-            int chars = 0;
+            //int chars = 0;
             //ILabel lbl = _controlFactory.CreateLabel("", false);
             _collection = col;
+
             _comboBox.Items.Clear();
-            _comboBox.Items.Add("");
+            _comboBox.Items.Add(new ComboPair("", null));
             foreach (KeyValuePair<string, object> pair in _collection)
             {
+
                 //lbl.Text = pair.Key;
                 //if (lbl.PreferredWidth > width)
                 //{
                 //    width = lbl.PreferredWidth;
                 //}
-                if (pair.Key.Length > chars)
-                {
-                    chars = pair.Key.Length;
-                }
-                _comboBox.Items.Add(pair.Key);
+                //if (pair.Key.Length > chars)
+                //{
+                //    chars = pair.Key.Length;
+                //}
+                //_comboBox.Items.Add(pair.Key);
+                _comboBox.Items.Add(new ComboPair(pair.Key, pair.Value));
             }
+            //_comboBox.ValueMember = "Value";
+            //_comboBox.DisplayMember = "Key";
+            //_comboBox.DataSource = table;
             //TODO: the dropdownwidth must be set for windows to a more sensible number based on pixels.
            // _comboBox.DropDownWidth = 25;
            // _comboBox.DropDownWidth = chars;
         }
+
+        
+        
 
 
         protected override object GetPropertyValue()

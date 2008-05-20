@@ -118,8 +118,8 @@ namespace Habanero.Test.UI.Base.Mappers
 
             //---------------Test Result -----------------------
             Assert.AreEqual(4, cmbox.Items.Count);
-            Assert.AreSame(typeof (string), cmbox.Items[0].GetType());
-            Assert.IsTrue(cmbox.Items.Contains(LOOKUP_ITEM_1));
+            //Assert.AreSame(typeof (string), cmbox.Items[0].GetType());
+            //Assert.IsTrue(cmbox.Items.Contains(LOOKUP_ITEM_1));
 
             //---------------Tear Down -------------------------
         }
@@ -137,7 +137,8 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Execute Test ----------------------
             mapper.BusinessObject = s;
             //---------------Test Result -----------------------
-            Assert.AreEqual(LOOKUP_ITEM_1, cmbox.SelectedItem, "Value is not set.");
+            Assert.AreEqual(LOOKUP_ITEM_1, cmbox.SelectedItem, "Item is not set.");
+            Assert.AreEqual(s.SampleLookupID, cmbox.SelectedValue, "Value is not set");
             
             //---------------Tear Down -------------------------
         }
@@ -172,10 +173,11 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Execute Test ----------------------
 
             mapper.BusinessObject = new Sample();
+            cmbox.SelectedIndex = 2;
             //---------------Test Result -----------------------
             Assert.AreEqual(4, cmbox.Items.Count);
-            Assert.AreSame(typeof(string), cmbox.Items[0].GetType());
-            Assert.IsTrue(cmbox.Items.Contains(LOOKUP_ITEM_1));
+            Assert.AreSame(typeof(string), cmbox.SelectedItem.GetType());
+            Assert.AreSame(typeof(Guid), cmbox.SelectedValue.GetType());
             
             //---------------Tear Down -------------------------
         }
@@ -190,7 +192,8 @@ namespace Habanero.Test.UI.Base.Mappers
             LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
             
             Sample sample = new Sample();
-            sample.SetPropertyValue(propName, Sample.BOLookupCollection[LOOKUP_ITEM_2]);
+            Sample sampleToSelect = (Sample) Sample.BOLookupCollection[LOOKUP_ITEM_2];
+            sample.SetPropertyValue(propName, sampleToSelect);
                         
             //---------------Execute Test ----------------------
             mapper.SetLookupList(Sample.BOLookupCollection);
@@ -198,9 +201,9 @@ namespace Habanero.Test.UI.Base.Mappers
             
             //---------------Test Result -----------------------
             Assert.AreEqual(4, cmbox.Items.Count);
-            Assert.AreSame(typeof(string), cmbox.Items[0].GetType());
-            Assert.IsTrue(cmbox.Items.Contains(LOOKUP_ITEM_1));
             Assert.AreEqual(LOOKUP_ITEM_2, cmbox.SelectedItem);
+            Assert.AreSame(sampleToSelect, cmbox.SelectedValue);
+
             //---------------Tear Down -------------------------
         }
 
@@ -212,7 +215,8 @@ namespace Habanero.Test.UI.Base.Mappers
             string propName = "SampleLookup3ID";
             LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
             Sample sample = new Sample();
-            sample.SetPropertyValue(propName, Sample.BOLookupCollection[LOOKUP_ITEM_2]);
+            object sampleToSelect = Sample.BOLookupCollection[LOOKUP_ITEM_2];
+            sample.SetPropertyValue(propName, sampleToSelect);
             
             //---------------Execute Test ----------------------
             mapper.SetLookupList(Sample.BOLookupCollection);
@@ -220,9 +224,8 @@ namespace Habanero.Test.UI.Base.Mappers
 
             //---------------Test Result -----------------------
             Assert.AreEqual(4, cmbox.Items.Count);
-            Assert.AreSame(typeof(string), cmbox.Items[0].GetType());
-            Assert.IsTrue(cmbox.Items.Contains(LOOKUP_ITEM_1));
             Assert.AreEqual(LOOKUP_ITEM_2, cmbox.SelectedItem);
+            Assert.AreSame(sampleToSelect, cmbox.SelectedValue);
 
             //---------------Tear Down -------------------------
         }
