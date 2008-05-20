@@ -66,6 +66,9 @@
     <Compile Include="ControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DateRangeComboBoxGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DateTimePickerGiz.cs">
       <SubType>Component</SubType>
     </Compile>

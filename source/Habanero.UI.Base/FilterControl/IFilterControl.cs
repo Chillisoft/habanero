@@ -52,11 +52,10 @@ namespace Habanero.UI.Base.FilterControl
         /// <param name="filterClauseOperator">The operator used to compare
         /// with the date chosen by the user.  The chosen date is on the
         /// right side of the equation.</param>
-        /// <param name="ignoreTime">Sets all times produced by the DateTimePicker
-        /// to 12am before comparing dates</param>
         /// <param name="nullable">Must the date time picker be nullable</param>
         /// <returns>Returns the new DateTimePicker added</returns>
-        IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool ignoreTime, bool nullable);
+        IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool nullable);
+
         /// <summary>
         /// The event that is fired with the filter is ready so that another control e.g. a grid can be filtered.
         /// </summary>

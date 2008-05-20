@@ -95,22 +95,25 @@ namespace Habanero.UI.Base.FilterControl
         /// <summary>
         /// Adds a date-time picker that filters a date column on the date
         /// chosen by the user.  The given operator compares the chosen date
-        /// with the date shown in the given column name.
+        /// with the date shown in the given column name.  The standard
+        /// DateTimePicker does not support time picking, so any date supplied
+        /// or chosen will have its time values set to zero.
         /// </summary>
         /// <param name="columnName">The name of the date-time column to be 
         /// filtered on</param>
-        /// <param name="defaultDate">The default date or null</param>
+        /// <param name="defaultDate">The default date or null.  The filter clause will
+        /// set all times to zero.</param>
         /// <param name="filterClauseOperator">The operator used to compare
         /// with the date chosen by the user.  The chosen date is on the
         /// right side of the equation.</param>
-        /// <param name="ignoreTime">Sets all times produced by the DateTimePicker
-        /// to 12am before comparing dates</param>
         /// <param name="nullable">Must the date time picker be nullable</param>
         /// <returns>Returns the new DateTimePicker object added</returns>
-        public IDateTimePicker AddDateFilterDateTimePicker(string columnName, DateTime defaultDate, FilterClauseOperator filterClauseOperator, bool ignoreTime, bool nullable)
+        /// <remarks>A future improvement could provide another overload where you can
+        /// supply a timespan argument that is added onto any date taken from the picker.</remarks>
+        public IDateTimePicker AddDateFilterDateTimePicker(string columnName, DateTime defaultDate, FilterClauseOperator filterClauseOperator, bool nullable)
         {
             IDateTimePicker dtPicker = _controlFactory.CreateDateTimePicker();
-            _filterControls.Add(new FilterUIDate(_clauseFactory, columnName, dtPicker, filterClauseOperator, ignoreTime));
+            _filterControls.Add(new FilterUIDate(_clauseFactory, columnName, dtPicker, filterClauseOperator));
             dtPicker.Value = defaultDate;
             return dtPicker;
             //if (defaultDate == null)
@@ -125,7 +128,7 @@ namespace Habanero.UI.Base.FilterControl
             //if (nullable)
             //{
             //    DateTimePickerController dateTimePickerController = new DateTimePickerController(dte);
-            //    _filterUIs.Add(new FilterUIDateNullable(_clauseFactory, columnName, dateTimePickerController, filterClauseOperator, ignoreTime));
+            //    _filterUIs.Add(new FilterUIDateNullable(_clauseFactory, columnName, dateTimePickerController, filterClauseOperator));
             //    dateTimePickerController.ValueChanged += delegate(object sender, EventArgs e)
             //                                                 {
             //                                                     FilterControlValueChangedHandler(dte, e);
@@ -133,7 +136,7 @@ namespace Habanero.UI.Base.FilterControl
             //}
             //else
             //{
-            //    _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator, ignoreTime));
+            //    _filterUIs.Add(new FilterUIDate(_clauseFactory, columnName, dte, filterClauseOperator));
             //    dte.ValueChanged += FilterControlValueChangedHandler;
             //}
             //TODO: Port for windows
@@ -316,24 +319,19 @@ namespace Habanero.UI.Base.FilterControl
         {
             private readonly IDateTimePicker _dateTimePicker;
             private readonly FilterClauseOperator _filterClauseOperator;
-            private readonly bool _ignoreTime;
 
             public FilterUIDate(IFilterClauseFactory clauseFactory, string columnName, IDateTimePicker dtp,
-                                      FilterClauseOperator op, bool ignoreTime)
+                                      FilterClauseOperator op)
                 : base(clauseFactory, columnName)
             {
                 _dateTimePicker = dtp;
                 _filterClauseOperator = op;
-                _ignoreTime = ignoreTime;
             }
 
             public override IFilterClause GetFilterClause()
             {
                 DateTime date = _dateTimePicker.Value;
-                if (_ignoreTime)
-                {
-                    date = date.Date;
-                }
+                date = date.Date;
                 if (_filterClauseOperator == FilterClauseOperator.OpLike)
                 {
                     IFilterClause startClause = _clauseFactory.CreateDateFilterClause(

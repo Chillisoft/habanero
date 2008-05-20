@@ -18,10 +18,8 @@ namespace Habanero.UI.WebGUI
         public event EventHandler Filter;
         private GroupBoxGiz _gbox;
 
-
         public FilterControlGiz(IControlFactory controlFactory)
         {
-            
             _gbox = new GroupBoxGiz();
             this.Controls.Add(_gbox);
             _gbox.Text = "Filter the Grid";
@@ -82,6 +80,7 @@ namespace Habanero.UI.WebGUI
             get { return _gbox.Text; }
             set { _gbox.Text = value; }
         }
+
         private void FireFilterEvent()
         {
             if (Filter != null)
@@ -114,22 +113,23 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Adds a date-time picker that filters a date column on the date
         /// chosen by the user.  The given operator compares the chosen date
-        /// with the date shown in the given column name.
+        /// with the date shown in the given column name.  The standard
+        /// DateTimePicker does not support time picking, so any date supplied
+        /// or chosen will have its time values set to zero.
         /// </summary>
         /// <param name="label">The label to appear before the editor</param>
         /// <param name="propertyName">The column of data on which to do the
         /// filtering</param>
-        /// <param name="defaultValue">The default date or null</param>
+        /// <param name="defaultValue">The default date or null.  The filter clause will
+        /// set all times to zero.</param>
         /// <param name="filterClauseOperator">The operator used to compare
         /// with the date chosen by the user.  The chosen date is on the
         /// right side of the equation.</param>
-        /// <param name="ignoreTime">Sets all times produced by the DateTimePicker
-        /// to 12am before comparing dates</param>
         /// <param name="nullable">Must the date time picker be nullable</param>
         /// <returns>Returns the new DateTimePicker added</returns>
-        public IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool ignoreTime, bool nullable)
+        public IDateTimePicker AddDateFilterDateTimePicker(string label, string propertyName, DateTime defaultValue, FilterClauseOperator filterClauseOperator, bool nullable)
         {
-            IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName, defaultValue, filterClauseOperator, ignoreTime, nullable);
+            IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName, defaultValue, filterClauseOperator, nullable);
             return dtPicker;
         }
 
@@ -142,10 +142,12 @@ namespace Habanero.UI.WebGUI
         {
             get { return _filterButton; }
         }
+
         public IButton ClearButton
         {
             get { return _clearButton; }
         }
+
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }

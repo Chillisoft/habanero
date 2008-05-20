@@ -276,6 +276,15 @@ namespace Habanero.UI.WebGUI
         }
 
         /// <summary>
+        /// Creates a new DateRangeComboBox
+        /// </summary>
+        /// <returns>Returns a new DateRangeComboBox object</returns>
+        public IDateRangeComboBox CreateDateRangeComboBox()
+        {
+            return new DateRangeComboBoxGiz();
+        }
+
+        /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years
         /// </summary>

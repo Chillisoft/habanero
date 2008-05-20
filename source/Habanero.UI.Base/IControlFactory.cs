@@ -120,6 +120,12 @@ namespace Habanero.UI.Base
         IDateTimePicker CreateDateTimePicker(DateTime defaultDate);
 
         /// <summary>
+        /// Creates a new DateRangeComboBox
+        /// </summary>
+        /// <returns>Returns a new DateRangeComboBox object</returns>
+        IDateRangeComboBox CreateDateRangeComboBox();
+
+        /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years
         /// </summary>
