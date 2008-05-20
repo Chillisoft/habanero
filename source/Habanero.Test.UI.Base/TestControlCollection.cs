@@ -28,14 +28,14 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
 
-        [TestFixture]
-        public class TestControlCollectionWin : TestControlCollection
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
-        }
+        //[TestFixture]
+        //public class TestControlCollectionWin : TestControlCollection
+        //{
+        //    protected override IControlFactory GetControlFactory()
+        //    {
+        //        return new ControlFactoryWin();
+        //    }
+        //}
 
         [TestFixture]
         public class TestControlCollectionGiz : TestControlCollection
@@ -45,14 +45,15 @@ namespace Habanero.Test.UI.Base
                 return new ControlFactoryGizmox();
             }
         }
-        //[Test]
-        //public void TestAddControl()
-        //{
-        //    IControlCollection col = new ControlCollectionChilli();
-        //    IControlChilli ctl = GetControlFactory().CreateControl();
-        //    col.Add(ctl);
-        //    Assert.AreSame(ctl, col[0], "Control added should be the same object.");
-        //}
+        [Test]
+        public void TestAddControl()
+        {
+            TextBoxGiz tb = (TextBoxGiz) GetControlFactory().CreateTextBox();
+            IControlCollection col = new ControlCollectionGiz(new Gizmox.WebGUI.Forms.Control.ControlCollection(tb));
+            IControlChilli ctl = GetControlFactory().CreateControl();
+            col.Add(ctl);
+            Assert.AreSame(ctl, col[0], "Control added should be the same object.");
+        }
 
         //[Test]
         //public void TestAddNull()

@@ -12,9 +12,7 @@ namespace Habanero.Test.UI.Grid
     public abstract class TestReadonlyGridControl : TestUsingDatabase
     {
         //TODO: Move dataView Logic out of GridBase
-
-        //TODO: Acceptance test successful edit button click should update the values in the grid on Windows.Forms
-        //BUG: Grid not being updated when you edit the object.
+        //TODO: Tests that if init not called throws sensible errors
         [SetUp]
         public void SetupTest()
         {
@@ -660,24 +658,7 @@ namespace Habanero.Test.UI.Grid
             Assert.AreSame("default", objectEditor.DefName);
         }
 
-        [Test, Ignore("Peter cannot test directly getting a null reference exception posibly due to the non web enviro")]
-        public void TestEditButtonClick_NoObjectEditorSet()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
-            BusinessObjectCollection<MyBO> col;
-            col = CreateCollectionWith_4_Objects();
-            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
-            readOnlyGridControl.Initialise(classDef);
-
-            readOnlyGridControl.SetBusinessObjectCollection(col);
-            readOnlyGridControl.SelectedBusinessObject = col[2];
-
-            //---------------Execute Test ----------------------
-            readOnlyGridControl.Buttons["Edit"].PerformClick();
-
-            //---------------Test Result -----------------------
-        }
+        //TODO: Tests that if init not called throws sensible errors
 
         private ClassDef LoadMyBoDefaultClassDef()
         {
@@ -801,6 +782,76 @@ namespace Habanero.Test.UI.Grid
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestClickAddWhenNoCollectionSet()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            grid.Initialise(new MyBO().ClassDef);
+            //--------------Assert PreConditions----------------            
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                grid.Buttons["Add"].PerformClick();
+                Assert.Fail("Error should b raised");
+            }
+            //---------------Test Result -----------------------
+            catch (GridDeveloperException ex)
+            {
+                StringAssert.Contains("You cannot call add since the grid has not been set up", ex.Message);
+            }
+
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestClickEditWhenNoCollectionSet()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            grid.Initialise(new MyBO().ClassDef);
+
+            //--------------Assert PreConditions----------------            
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                grid.Buttons["Edit"].PerformClick();
+                Assert.Fail("Error should b raised");
+            }
+            //---------------Test Result -----------------------
+            catch (GridDeveloperException ex)
+            {
+                StringAssert.Contains("You cannot call edit since the grid has not been set up", ex.Message);
+            }
+
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestClickDeleteWhenNoCollectionSet()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            grid.Initialise(new MyBO().ClassDef);
+            //--------------Assert PreConditions----------------            
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                grid.Buttons["Delete"].PerformClick();
+                Assert.Fail("Error should b raised");
+            }
+            //---------------Test Result -----------------------
+            catch (GridDeveloperException ex)
+            {
+                StringAssert.Contains("You cannot call delete since the grid has not been set up", ex.Message);
+            }
+
+            //---------------Tear Down -------------------------          
+        }
         #region stubs
 
         public class ExceptionNotifierStub : IExceptionNotifier

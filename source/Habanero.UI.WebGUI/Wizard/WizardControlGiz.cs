@@ -29,23 +29,23 @@ namespace Habanero.UI.WebGUI
             _wizardController = wizardController;
             _controlFactory = controlFactory;
 
+            //TODO: The layout manager code is not NUnit tested 
+            IPanel buttonPanel = controlFactory.CreatePanel();
+            FlowLayoutManager layoutManager = new FlowLayoutManager(buttonPanel, _controlFactory);
+            layoutManager.Alignment= FlowLayoutManager.Alignments.Right;
+
 
             _nextButton = _controlFactory.CreateButton("Next");
             _nextButton.Click += this.uxNextButton_Click;
             _nextButton.Size = new Size(75, 38);
             _nextButton.TabIndex = 1;
+            layoutManager.AddControl(_nextButton);
 
             _previousButton = _controlFactory.CreateButton("Previous");
             _previousButton.Click += this.uxPreviousButton_Click;
             _previousButton.Size = new Size(75, 38);
             _previousButton.TabIndex = 0;
-
-            //The layout manager code is not NUnit tested 
-            IPanel buttonPanel = controlFactory.CreatePanel();
-            FlowLayoutManager layoutManager = new FlowLayoutManager(buttonPanel, _controlFactory);
-            layoutManager.Alignment= FlowLayoutManager.Alignments.Right;
             layoutManager.AddControl(_previousButton);
-            layoutManager.AddControl(_nextButton);
 
             _wizardStepPanel = controlFactory.CreatePanel();
             BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
@@ -145,7 +145,7 @@ namespace Habanero.UI.WebGUI
             if (stepControl != null)
             {
                 _currentControl = stepControl;
-                //The border layout manager clearing panel etc not unit tested
+                //TODO: The border layout manager clearing panel etc not unit tested
                 _wizardStepPanel.Controls.Clear();
                 BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(_wizardStepPanel, _controlFactory);
                 borderLayoutManager.AddControl(stepControl, BorderLayoutManager.Position.Centre);

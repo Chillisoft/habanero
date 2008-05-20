@@ -6,17 +6,6 @@ namespace Habanero.UI.Base
     public interface IWizardControl:IControlChilli
     {
         ///// <summary>
-        ///// A delegate that is used when the wizard is finished.
-        ///// </summary>
-        //public delegate void FinishedDelegate();
-
-        ///// <summary>
-        ///// A delegate that is used when a message is posted.
-        ///// </summary>
-        ///// <param name="message"></param>
-        //public delegate void MessagePostedDelegate(string message);
-
-        ///// <summary>
         ///// Raised when the wizard is complete to notify the containing control or controlling object.
         ///// </summary>
         event EventHandler Finished;

@@ -302,6 +302,39 @@ namespace Habanero.Test.UI.Base.Wizard
             Assert.IsFalse(((MyWizardStep)wizardControl.CurrentControl).AllowCanMoveBack);
             Assert.IsFalse(wizardControl.PreviousButton.Enabled);
         }
+
+        [Test]
+        public void Test_SetStepResizesControl()
+        {
+            //---------------Set up test pack-------------------
+            MyWizardController wizardController = new MyWizardController();
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
+            wizardControl.Start();
+            wizardController.ControlForStep2.Width = 10;
+            //--------------Assert PreConditions----------------            
+            string msg;
+            Assert.IsTrue(wizardController.CanMoveOn(out msg));
+            //---------------Execute Test ----------------------
+            wizardControl.Next();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(wizardControl.Width, wizardController.ControlForStep2.Width);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test, Ignore("The test is visually working but the tests are not picking up a change in width")]
+        public void TestNextPreviousIn_theCorrectOrder()
+        {
+            //---------------Set up test pack-------------------
+            MyWizardController wizardController = new MyWizardController();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
+
+            //---------------Test Result -----------------------
+            Assert.Less(wizardControl.NextButton.Left, wizardControl.PreviousButton.Left);
+            //---------------Tear Down -------------------------          
+        }
         internal class MyWizardController : IWizardController
         {
             public MyWizardStep ControlForStep1 = new MyWizardStep();

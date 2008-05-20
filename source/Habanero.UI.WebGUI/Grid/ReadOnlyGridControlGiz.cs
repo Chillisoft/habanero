@@ -173,6 +173,10 @@ namespace Habanero.UI.WebGUI
 
         private void Buttons_DeleteClicked(object sender, EventArgs e)
         {
+            if (this.Grid.GetBusinessObjectCollection() == null)
+            {
+                throw new GridDeveloperException("You cannot call delete since the grid has not been set up");
+            }
             IBusinessObject selectedBo = SelectedBusinessObject;
 
             if (selectedBo != null)
@@ -191,14 +195,20 @@ namespace Habanero.UI.WebGUI
         public delegate void RefreshGridDelegate();
         private void Buttons_EditClicked(object sender, EventArgs e)
         {
+            if (this.Grid.GetBusinessObjectCollection() == null)
+            {
+                throw new GridDeveloperException("You cannot call edit since the grid has not been set up");
+            }
             IBusinessObject selectedBo = SelectedBusinessObject;
             if (selectedBo != null)
             {
-                _businessObjectEditor.EditObject(selectedBo, _uiDefName, delegate
+                if (_businessObjectEditor != null)
                 {
-                    this.Grid.RefreshGrid();
-                });
-                //_businessObjectEditor.EditObject(selectedBo, _uiDefName, this.Grid);
+                    _businessObjectEditor.EditObject(selectedBo, _uiDefName, delegate
+                                                                                 {
+                                                                                     this.Grid.RefreshGrid();
+                                                                                 });
+                }
                 ////TODO _Port: CheckEditorExists();
                 //if ()
                 //{
@@ -209,9 +219,20 @@ namespace Habanero.UI.WebGUI
 
         private void Buttons_AddClicked(object sender, EventArgs e)
         {
-            IBusinessObject newBo = _businessObjectCreator.CreateBusinessObject();
-            _businessObjectEditor.EditObject(newBo, _uiDefName);
-            //TODO: Dont see how this was doing anything this._grid.RefreshGrid();
+            if (this.Grid.GetBusinessObjectCollection() == null)
+            {
+                throw new GridDeveloperException("You cannot call add since the grid has not been set up");
+            }
+            IBusinessObject newBo = null;
+            if (_businessObjectCreator == null)
+            {
+                throw new GridDeveloperException("You cannot call add as there is no business object creator set up for the grid");
+            }
+            newBo = _businessObjectCreator.CreateBusinessObject();
+            if (_businessObjectEditor != null && newBo != null)
+            {
+                _businessObjectEditor.EditObject(newBo, _uiDefName);
+            }
         }
 
 

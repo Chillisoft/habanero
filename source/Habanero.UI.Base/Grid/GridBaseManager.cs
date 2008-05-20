@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Runtime.Serialization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -258,18 +259,59 @@ namespace Habanero.UI.Base
 
     public class GridBaseSetUpException : Exception
     {
+
+        public GridBaseSetUpException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public GridBaseSetUpException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
         public GridBaseSetUpException(string message) : base(message)
+        {
+        }
+
+        public GridBaseSetUpException()
         {
         }
     }
     public class GridDeveloperException : HabaneroDeveloperException
-    { }
-
-
-    public class GridBaseInitialiseException : Exception
     {
-        public GridBaseInitialiseException(string message)
-            : base(message)
+        public GridDeveloperException(string message) : base(message)
+        {
+        }
+
+        public GridDeveloperException(string message, Exception inner) : base(message, inner)
+        {
+        }
+
+        public GridDeveloperException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public GridDeveloperException()
+        {
+        }
+    }
+
+
+    public class GridBaseInitialiseException : HabaneroDeveloperException
+    {
+
+        public GridBaseInitialiseException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public GridBaseInitialiseException(string message, Exception inner) : base(message, inner)
+        {
+        }
+
+        public GridBaseInitialiseException(string message) : base(message)
+        {
+        }
+
+        public GridBaseInitialiseException()
         {
         }
     }
