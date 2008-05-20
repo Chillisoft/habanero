@@ -369,6 +369,14 @@ namespace Habanero.Test.UI.Base.Wizard
                 get { return _wizardSteps.Count; }
             }
 
+            /// <summary>
+            /// Gets or Sets the Current Step of the Wizard.
+            /// </summary>
+            public int CurrentStep
+            {
+                get { return _currentStep; }
+            }
+
             public IWizardStep GetCurrentStep()
             {
                 return _wizardSteps[_currentStep];

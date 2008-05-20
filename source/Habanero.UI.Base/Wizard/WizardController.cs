@@ -60,10 +60,10 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Gets or Sets the Current Step of the Wizard.
         /// </summary>
-        protected int CurrentStep
+        public int CurrentStep
         {
             get { return _currentStep; }
-            set { _currentStep = value; }
+            protected set { _currentStep = value; }
         }
 
 

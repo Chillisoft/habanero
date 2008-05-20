@@ -75,6 +75,14 @@ namespace Habanero.UI.Base
         int StepCount { get; }
 
         /// <summary>
+        /// Gets or Sets the Current Step of the Wizard.
+        /// </summary>
+        int CurrentStep
+        {
+            get;
+        }
+
+        /// <summary>
         /// Returns the step that the Wizard is currently on.
         /// </summary>
         /// <returns></returns>
