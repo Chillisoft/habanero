@@ -3,6 +3,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -11,11 +12,11 @@ namespace Habanero.Test.BO
     public class TestTransactionLogger : TestUsingDatabase
     {
         [SetUp]
-        public  void SetupTest()
+        public void SetupTest()
         {
             //Runs every time that any testmethod is executed
-
         }
+
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -25,12 +26,14 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTransactionLogging.LoadDefaultClassDef();
         }
+
         [TearDown]
-        public  void TearDownTest()
+        public void TearDownTest()
         {
             //runs every time any testmethod is complete
             //base.TearDownTest();
         }
+
         [Test]
         public void TestTransactionLogtransactionAddedToTransactionCommitter()
         {
@@ -46,7 +49,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             //check if the transaction committer has 2 object
             // check that the one object is the transaction log object.
-            Assert.AreEqual(2,tc.ExecutedTransactions.Count);
+            Assert.AreEqual(2, tc.ExecutedTransactions.Count);
             ITransactional trlogBO = tc.ExecutedTransactions[1];
             Assert.IsTrue(trlogBO is TransactionLogTable);
         }
@@ -73,12 +76,12 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             //Test that a transaction Log was created with
             BusinessObjectCollection<TransactionLogBusObj> colTransactions =
-                    new BusinessObjectCollection<TransactionLogBusObj>();
+                new BusinessObjectCollection<TransactionLogBusObj>();
             colTransactions.LoadAll("TransactionSequenceNo");
 
             //CRUD = Insert and Dirty XML all properties in DirtyXML.
             Assert.IsTrue(colTransactions.Count > 0);
-            TransactionLogBusObj trLog = colTransactions[colTransactions.Count-1];
+            TransactionLogBusObj trLog = colTransactions[colTransactions.Count - 1];
             Assert.AreEqual("Created", trLog.CrudAction);
             Assert.AreEqual(dirtyXML, trLog.DirtyXMLLog);
             Assert.AreEqual("ContactPersonTransactionLogging", trLog.BusinessObjectTypeName);
@@ -89,6 +92,7 @@ namespace Habanero.Test.BO
 
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestAcceptanceTransactionLog_DB_EditContactPerson()
         {
@@ -106,7 +110,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             //Test that a transaction Log was created with
             BusinessObjectCollection<TransactionLogBusObj> colTransactions =
-                    new BusinessObjectCollection<TransactionLogBusObj>();
+                new BusinessObjectCollection<TransactionLogBusObj>();
             colTransactions.LoadAll("TransactionSequenceNo");
 
             //CRUD = Insert and Dirty XML all properties in DirtyXML.
@@ -117,6 +121,7 @@ namespace Habanero.Test.BO
 
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestAcceptanceTransactionLog_DB_DeleteContactPerson()
         {
@@ -133,7 +138,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             //Test that a transaction Log was created with
             BusinessObjectCollection<TransactionLogBusObj> colTransactions =
-                    new BusinessObjectCollection<TransactionLogBusObj>();
+                new BusinessObjectCollection<TransactionLogBusObj>();
             colTransactions.LoadAll("TransactionSequenceNo");
 
             //CRUD = Insert and Dirty XML all properties in DirtyXML.
@@ -145,6 +150,59 @@ namespace Habanero.Test.BO
 
             //---------------Tear Down -------------------------          
         }
+
+
+        private static ContactPersonTransactionLogging CreateUnsavedContactPersonTransactionLoggingAltKey()
+        {
+            ContactPersonTransactionLogging cp = new ContactPersonTransactionLogging();
+            cp.Surname = Guid.NewGuid().ToString();
+            return cp;
+        }
+
+
+        [Test,
+         Ignore(
+             "TransactionCommitter currently does not check for duplicate alternative keys for new business objects in the transaction."
+             )]
+        public void TestAcceptanceTransactionLog_DuplicateAlternativeKeyEntries()
+        {
+            //---------------Cleanup databse ------------------
+            TransactionLogBusObj.DeleteAllTransactionLogsFromDatabase();
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTransactionLogging.LoadClassDef_SurnameAlternateKey();
+            //---------------Set up test pack-------------------
+            ContactPersonTransactionLogging cp1 = CreateUnsavedContactPersonTransactionLogging();
+            string AltSurname = "TestAltKey";
+            cp1.Surname = AltSurname;
+            ContactPersonTransactionLogging cp2 = CreateUnsavedContactPersonTransactionLogging();
+            cp2.Surname = AltSurname;
+
+            //---------------Execute Test ----------------------
+            TransactionCommitterDB tc = new TransactionCommitterDB();
+            tc.AddBusinessObject(cp1);
+            tc.AddBusinessObject(cp2);
+            try
+            {
+                tc.CommitTransaction();
+                Assert.Fail(
+                    "The transaction should not be committed as there are 2 objects in the transaction with the same alternate key");
+            }
+               
+                //---------------Test Result -----------------------
+            catch (BusObjDuplicateConcurrencyControlException ex)
+            {
+            }
+
+                //---------------Tear Down -------------------------   
+            finally
+            {
+                string sql = "DELETE FROM Contact_Person where Surname = '" + AltSurname + "'";
+                DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            }
+        }
+
+
+        //LoadClassDef_SurnameAlternateKey
         [Test]
         public void TestAcceptanceTransactionLog_SaveMultipleTimes()
         {
@@ -176,6 +234,8 @@ namespace Habanero.Test.BO
 
             //---------------Tear Down -------------------------          
         }
+
+
         //Moved from tester class
         [Test]
         public void TestDirtyXml()
@@ -191,9 +251,9 @@ namespace Habanero.Test.BO
                 "<ContactPersonTransactionLogging ID=" + myContact_1.ID +
                 "><Properties><Surname><PreviousValue>My Surname 1</PreviousValue><NewValue>My Surname New</NewValue></Surname><ContactPersonTransactionLogging>",
                 myContact_1.DirtyXML);
-
         }
     }
+
     internal class ContactPersonTransactionLogging : BusinessObject
     {
         public ContactPersonTransactionLogging()
@@ -219,6 +279,7 @@ namespace Habanero.Test.BO
             LoadTransactionLogClassDef();
             return itsClassDef;
         }
+
         private static void LoadTransactionLogClassDef()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -243,17 +304,40 @@ namespace Habanero.Test.BO
             return;
         }
 
+        public static ClassDef LoadClassDef_SurnameAlternateKey()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTransactionLogging"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <key name=""SurnameKey"">
+                      <prop name=""Surname"" />
+                    </key>
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            LoadTransactionLogClassDef();
+            return itsClassDef;
+        }
+
         public Guid ContactPersonID
         {
-            get { return (Guid)GetPropertyValue("ContactPersonID"); }
+            get { return (Guid) GetPropertyValue("ContactPersonID"); }
             set { this.SetPropertyValue("ContactPersonID", value); }
         }
 
         public string Surname
         {
-            get { return (string)GetPropertyValue("Surname"); }
+            get { return (string) GetPropertyValue("Surname"); }
             set { SetPropertyValue("Surname", value); }
         }
+
         public override string ToString()
         {
             return Surname;

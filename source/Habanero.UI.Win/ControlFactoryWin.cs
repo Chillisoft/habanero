@@ -1,7 +1,9 @@
 using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
@@ -64,7 +66,31 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new object of the type requested</returns>
         public IControlChilli CreateControl(Type controlType)
         {
-            return (IControlChilli) Activator.CreateInstance(controlType);
+            IControlChilli ctl;
+            if (controlType.IsSubclassOf(typeof(Control)))
+            {
+                if (controlType == typeof(ComboBox)) return CreateComboBox();
+                if (controlType == typeof(CheckBox)) return CreateCheckBox();
+                if (controlType == typeof(TextBox)) return CreateTextBox();
+                if (controlType == typeof(ListBox)) return CreateListBox();
+                if (controlType == typeof(DateTimePicker)) return CreateDateTimePicker();
+
+                ctl = (IControlChilli)Activator.CreateInstance(controlType);
+                PropertyInfo infoFlatStyle =
+                    ctl.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
+                if (infoFlatStyle != null)
+                {
+                    infoFlatStyle.SetValue(ctl, FlatStyle.Standard, new object[] { });
+                }
+            }
+            else
+            {
+                throw new UnknownTypeNameException(
+                    string.Format(
+                    "The control type name {0} does not inherit from {1}.", controlType.FullName, typeof(Control)));
+            }
+            return ctl;
+           
         }
 
         /// <summary>
@@ -96,16 +122,7 @@ namespace Habanero.UI.Win
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Creates a new numeric up-down control that is formatted with
-        /// two decimal places for monetary use
-        /// </summary>
-        /// <returns>Returns a new NumericUpDown object</returns>
-        public INumericUpDown CreateNumericUpDownMoney()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
         /// zero decimal places for integer use
@@ -113,8 +130,27 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new NumericUpDown object</returns>
         public INumericUpDown CreateNumericUpDownInteger()
         {
-            return new NumericUpDownWin();
+            NumericUpDownWin ctl = new NumericUpDownWin();
+            ctl.DecimalPlaces = 0;
+            ctl.Maximum = Int32.MaxValue;
+            ctl.Minimum = Int32.MinValue;
+            return ctl;
         }
+
+        /// <summary>
+        /// Creates a new numeric up-down control that is formatted with
+        /// two decimal places for Currency use
+        /// </summary>
+        /// <returns></returns>
+        public INumericUpDown CreateNumericUpDownCurrency()
+        {
+            NumericUpDownWin ctl = new NumericUpDownWin();
+            ctl.DecimalPlaces = 2;
+            ctl.Maximum = Int32.MaxValue;
+            ctl.Minimum = Int32.MinValue;
+            return ctl;
+        }
+
 
         /// <summary>
         /// Creates a new CheckBox with a specified initial checked state

@@ -72,7 +72,8 @@
     <Compile Include="DateTimePickerGiz.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FormExceptionNotifier.cs" />
+    <Compile Include="FormExceptionNotifier.cs">
+    </Compile>
     <Compile Include="GroupBoxGiz.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -134,17 +134,17 @@ namespace Habanero.UI.Base
 
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
-        /// two decimal places for monetary use
-        /// </summary>
-        /// <returns>Returns a new NumericUpDown object</returns>
-        INumericUpDown CreateNumericUpDownMoney();
-
-        /// <summary>
-        /// Creates a new numeric up-down control that is formatted with
         /// zero decimal places for integer use
         /// </summary>
         /// <returns>Returns a new NumericUpDown object</returns>
         INumericUpDown CreateNumericUpDownInteger();
+
+        /// <summary>
+        /// Creates a new numeric up-down control that is formatted with
+        /// two decimal places for Currency use
+        /// </summary>
+        /// <returns></returns>
+        INumericUpDown CreateNumericUpDownCurrency();
 
         /// <summary>
         /// Creates a new CheckBox with a specified initial checked state

@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Gizmox.WebGUI.Common.Interfaces;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
@@ -92,8 +93,8 @@ namespace Habanero.UI.WebGUI
             IButton cancelButton = _buttons.AddButton("&Cancel", CancelButtonHandler);
             IButton okbutton = _buttons.AddButton("&OK", OKButtonHandler);
             okbutton.NotifyDefault(true);
-            //TODO _Port out how to do this: AcceptButton = okbutton;
-            //TODO _Port out how to do this: CancelButton = cancelButton;
+            this.AcceptButton = (ButtonGiz)okbutton;
+            this.Load += delegate { FocusOnFirstControl(); };
 
             Text = def.Title;
             SetupFormSize(def);
@@ -103,6 +104,17 @@ namespace Habanero.UI.WebGUI
 
             CreateLayout();
             OnResize(new EventArgs());
+        }
+
+        private void FocusOnFirstControl()
+        {
+            IControlChilli controlToFocus = _panelFactoryInfo.FirstControlToFocus;
+            MethodInfo focusMethod = controlToFocus.GetType().
+                GetMethod("Focus", BindingFlags.Instance | BindingFlags.Public);
+            if (focusMethod != null)
+            {
+                focusMethod.Invoke(controlToFocus, new object[] { });
+            }
         }
 
         //private void DefaultBOEditorForm_Load(object sender, EventArgs e)

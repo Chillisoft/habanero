@@ -68,6 +68,16 @@ namespace Habanero.UI.Base
         /// </summary>
         BusinessObject BusinessObject { get; set; }
 
+        /// <summary>
+        /// Enables or Disables all the controls managed in this control mapper collection.
+        /// </summary>
+        bool ControlsEnabled { set; }
+
+        /// <summary>
+        /// Applies the values of the controls to the business object this collection
+        /// is mapped to.  Similar to calling ApplyChangesToBusinessObject on each mapper
+        /// in this collecction.
+        /// </summary>
         void ApplyChangesToBusinessObject();
     }
 }

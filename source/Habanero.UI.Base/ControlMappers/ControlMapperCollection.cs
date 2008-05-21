@@ -94,7 +94,7 @@ namespace Habanero.UI.Base
         /// <returns>Returns the mapper at the position specified</returns>
         public IControlMapper this[int index]
         {
-            get { return (IControlMapper)_collection[index]; }
+            get { return (IControlMapper) _collection[index]; }
         }
 
         /// <summary>
@@ -147,6 +147,22 @@ namespace Habanero.UI.Base
                 _businessObject = value;
             }
         }
+
+        /// <summary>
+        /// Enables or Disables all the controls managed in this control mapper collection.
+        /// </summary>
+        public bool ControlsEnabled
+        {
+            set
+            {
+                foreach (IControlMapper mapper in _collection)
+                {
+                    mapper.Control.Enabled = value;
+                }
+            }
+        }
+
+
         /// <summary>
         /// Sets the property of the business object that the mapper is mapped to
         /// to the value set in the control.

@@ -137,13 +137,13 @@ namespace Habanero.UI.Base
         [System.ComponentModel.Browsable(false)]
         bool HasChildren { get; }
 
-        /// <summary>Gets or sets the size that is the upper limit that <see cref="M:Gizmox.WebGUI.Forms.Control.GetPreferredSize(System.Drawing.Size)"></see> can specify.</summary>
+        /// <summary>Gets or sets the size that is the upper limit that can specify.</summary>
         /// <returns>An ordered pair of type <see cref="T:System.Drawing.Size"></see> representing the width and height of a rectangle.</returns>
         /// <filterpriority>1</filterpriority>
         [System.ComponentModel.AmbientValue(typeof(Size), "0, 0")]
         Size MaximumSize { get; set; }
 
-        /// <summary>Gets or sets the size that is the lower limit that <see cref="M:Gizmox.WebGUI.Forms.Control.GetPreferredSize(System.Drawing.Size)"></see> can specify.</summary>
+        /// <summary>Gets or sets the size that is the lower limit that can specify.</summary>
         /// <returns>An ordered pair of type <see cref="T:System.Drawing.Size"></see> representing the width and height of a rectangle.</returns>
         /// <filterpriority>1</filterpriority>
         Size MinimumSize { get; set; }

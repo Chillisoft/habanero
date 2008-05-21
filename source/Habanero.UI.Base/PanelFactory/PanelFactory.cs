@@ -351,6 +351,7 @@ namespace Habanero.UI.Base
             panel.Height = manager.GetFixedHeightIncludingGaps();
             panel.Width = manager.GetFixedWidthIncludingGaps();
             IPanelFactoryInfo panelFactoryInfo = new PanelFactoryInfo(panel, controlMappers, _firstControl);
+            
             panelFactoryInfo.ToolTip = toolTip;
             return panelFactoryInfo;
         }
@@ -402,7 +403,7 @@ namespace Habanero.UI.Base
             return editable;
         }
 
-        //TODO_Port: removed by peter
+
         ///// <summary>
         ///// A handler to deal with the case of an entered panel
         ///// </summary>
@@ -502,7 +503,7 @@ namespace Habanero.UI.Base
         //    return pinfo;
         //}
 
-        //TODO_Port : removed all this wird trigger stuff
+        //TODO_Port : removed all trigger stuff
         /// <summary>
         /// Cycles through the fields being displayed and attaches
         /// the triggers to the respective controls

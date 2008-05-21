@@ -231,7 +231,8 @@ namespace Habanero.UI.WebGUI
             newBo = _businessObjectCreator.CreateBusinessObject();
             if (_businessObjectEditor != null && newBo != null)
             {
-                _businessObjectEditor.EditObject(newBo, _uiDefName);
+                _businessObjectEditor.EditObject(newBo, _uiDefName, delegate(IBusinessObject bo) 
+                    { this.Grid.SelectedBusinessObject= (BusinessObject) bo; });
             }
         }
 

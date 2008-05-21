@@ -6,7 +6,7 @@ namespace Habanero.UI.Base
     {
         event EventHandler Enter;
 
-        int DecimalPlaces { get; }
+        int DecimalPlaces { get; set; }
 
         decimal Minimum { get; set; }
 

@@ -299,20 +299,6 @@ namespace Habanero.UI.WebGUI
 
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
-        /// two decimal places for monetary use
-        /// </summary>
-        /// <returns>Returns a new NumericUpDown object</returns>
-        public INumericUpDown CreateNumericUpDownMoney()
-        {
-            NumericUpDownGiz ctl = new NumericUpDownGiz();
-            ctl.DecimalPlaces = 2;
-            ctl.Maximum = Int32.MaxValue;
-            ctl.Minimum = Int32.MinValue;
-            return ctl;
-        }
-
-        /// <summary>
-        /// Creates a new numeric up-down control that is formatted with
         /// zero decimal places for integer use
         /// </summary>
         /// <returns>Returns a new NumericUpDown object</returns>
@@ -325,6 +311,19 @@ namespace Habanero.UI.WebGUI
             return ctl;
         }
 
+        /// <summary>
+        /// Creates a new numeric up-down control that is formatted with
+        /// two decimal places for Currency use
+        /// </summary>
+        /// <returns></returns>
+        public INumericUpDown CreateNumericUpDownCurrency()
+        {
+            NumericUpDownGiz ctl = new NumericUpDownGiz();
+            ctl.DecimalPlaces = 2;
+            ctl.Maximum = Int32.MaxValue;
+            ctl.Minimum = Int32.MinValue;
+            return ctl;
+        }
 
         public ICheckBox CreateCheckBox()
         {

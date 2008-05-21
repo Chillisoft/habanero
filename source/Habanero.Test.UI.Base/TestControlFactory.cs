@@ -355,7 +355,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
-            INumericUpDown upDown = _factory.CreateNumericUpDownMoney();
+            INumericUpDown upDown = _factory.CreateNumericUpDownCurrency();
             //---------------Verify Result -----------------------
             Assert.IsNotNull(upDown);
             Assert.AreEqual(2, upDown.DecimalPlaces);

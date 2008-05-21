@@ -22,6 +22,7 @@ using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
@@ -39,7 +40,14 @@ namespace Habanero.UI.WebGUI
         /// <param name="title">The title</param>
         public void Notify(Exception ex, string furtherMessage, string title)
         {
+            if (ex is UserException || ex is BusinessObjectException)
+            {
+                MessageBox.Show(furtherMessage + Environment.NewLine + ex.Message, title);
+
+            }
+            else {
             new CollapsibleExceptionNotifyForm(ex, furtherMessage, title).ShowDialog();
+            }
         }
 
         /// <summary>
