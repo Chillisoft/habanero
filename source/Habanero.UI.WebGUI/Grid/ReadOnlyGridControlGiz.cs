@@ -69,6 +69,7 @@ namespace Habanero.UI.WebGUI
             _buttons.EditClicked += Buttons_EditClicked;
             _buttons.DeleteClicked += Buttons_DeleteClicked;
             _buttons.Name = "ButtonControl";
+
         }
 
         /// <summary>

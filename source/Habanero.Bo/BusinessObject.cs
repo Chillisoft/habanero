@@ -24,6 +24,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 using Habanero.BO.SqlGeneration;
@@ -740,7 +741,14 @@ namespace Habanero.BO
 					{
                         if (this.ClassDef.GetPropDef(propName).HasLookupList()) {
                             Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
-                            newPropValue = lookupList[(string)newPropValue];
+                            try
+                            {
+                                newPropValue = lookupList[(string)newPropValue];
+                            }
+                            catch (KeyNotFoundException ex)
+                            {
+                                throw new HabaneroApplicationException("You are trying to set the value for a lookup property " + propName + " to '" + newPropValue + "' this value does not exist in the lookup list", ex);
+                            }
                             if (newPropValue is IBusinessObject) {
                                 newPropValue = ((BusinessObject) (newPropValue))._primaryKey.GetGuid();
                             }

@@ -32,6 +32,8 @@ namespace Habanero.UI.WebGUI
 
             InitializeComponent();
 
+            ListView giz = new ListView();
+            
            
         }
 
@@ -54,7 +56,7 @@ namespace Habanero.UI.WebGUI
 
         public IColumnHeaderCollection Columns
         {
-            get { throw new NotImplementedException(); }
+            get { return new IColumnHeaderCollectionGiz(base.Columns); ; }
         }
 
 
@@ -98,6 +100,27 @@ namespace Habanero.UI.WebGUI
             get { throw new NotImplementedException(); }
         }
 
+    }
+
+    internal class IColumnHeaderCollectionGiz : IColumnHeaderCollection
+    {
+        private readonly ListView.ColumnHeaderCollection _columns;
+
+        public IColumnHeaderCollectionGiz(ListView.ColumnHeaderCollection columns)
+        {
+            if (columns == null) throw new ArgumentNullException("columns");
+            _columns = columns;
+        }
+
+
+        /// <summary>
+        /// Gets the count.
+        /// </summary>
+        /// <value></value>
+        public int Count
+        {
+            get { return _columns.Count; }
+        }
     }
 
     internal class ListViewItemCollectionGiz : IListViewItemCollection

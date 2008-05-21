@@ -31,5 +31,17 @@ namespace Habanero.UI.Win
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Adds a new button to the control by the name specified
+        /// </summary>
+        /// <param name="buttonName">The name that the button is created with</param>
+        /// <returns>Returns the Button object created</returns>
+        /// <param name="buttonText">The text to appear on the button</param>
+        /// <param name="clickHandler">The event handler to be triggered on the button click</param>
+        public IButton AddButton(string buttonName, string buttonText, EventHandler clickHandler)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

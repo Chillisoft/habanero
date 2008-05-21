@@ -45,11 +45,29 @@ namespace Habanero.UI.WebGUI
 
         public IButton AddButton(string buttonName, EventHandler clickHandler)
         {
+            //IButton button = this.AddButton(buttonName);
+            ////TODO: Not supported by Gizmox button.UseMnemonic = true;
+            //button.Click += clickHandler;
+            //return button;
+            return AddButton(buttonName, buttonName, clickHandler);
+        }
+
+        /// <summary>
+        /// Adds a new button to the control by the name specified
+        /// </summary>
+        /// <param name="buttonName">The name that the button is created with</param>
+        /// <returns>Returns the Button object created</returns>
+        /// <param name="buttonText">The text to appear on the button</param>
+        /// <param name="clickHandler">The event handler to be triggered on the button click</param>
+        public IButton AddButton(string buttonName, string buttonText, EventHandler clickHandler)
+        {
             IButton button = this.AddButton(buttonName);
-            //TODO: Not supported by Gizmox button.UseMnemonic = true;
+            button.Name = buttonName;
+            button.Text = buttonText;
             button.Click += clickHandler;
             return button;
         }
+
         /// <summary>
         /// A method called by AddButton() to recalculate the size of the
         /// button

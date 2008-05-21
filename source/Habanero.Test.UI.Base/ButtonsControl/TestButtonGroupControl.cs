@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
@@ -25,7 +26,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public abstract class TestButtonControl
+    public abstract class TestButtonGroupControl
     {
         [SetUp]
         public void SetupTest()
@@ -49,7 +50,7 @@ namespace Habanero.Test.UI.Base
         protected abstract void AddControlToForm(IControlChilli cntrl);
 
         //[TestFixture]
-        //public class TestButtonControlWin : TestButtonControl
+        //public class TestButtonControlWin : TestButtonGroupControl
         //{
         //    protected override IControlFactory GetControlFactory()
         //    {
@@ -90,7 +91,7 @@ namespace Habanero.Test.UI.Base
         //}
         //}
         [TestFixture]
-        public class TestButtonControlGiz : TestButtonControl
+        public class TestButtonControlGiz : TestButtonGroupControl
         {
             protected override IControlFactory GetControlFactory()
             {
@@ -151,6 +152,31 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void TestAddButton_TextDifferentThanName()
+        {
+            //---------------Set up test pack-------------------
+            IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
+            //---------------Execute Test ----------------------
+            string buttonText = "Test";
+            string buttonname = "buttonName";
+            bool clicked = false;
+            IButton btnTest = buttons.AddButton(buttonname, buttonText, delegate
+                    {
+                        clicked = true;
+                    });
+
+            btnTest.PerformClick();
+
+            ////---------------Test Result -----------------------
+            Assert.IsNotNull(btnTest);
+            Assert.AreEqual(buttonText, btnTest.Text);
+            Assert.AreEqual(1, buttons.Controls.Count);
+            Assert.AreEqual(buttonname, btnTest.Name);
+
+            Assert.IsTrue(clicked);
+        }
+
+        [Test]
         public void TestButtonsIndexer()
         {
             //---------------Set up test pack-------------------
@@ -174,7 +200,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(btn, buttons.Controls[0]);
         }
 
-        [Test, Ignore("Peter please review, we cannot get this to work") ]
+        [Test, Ignore("Peter please review, we cannot get this to work")]
         public void TestAdd_2Buttons_ControlsMethod()
         {
             //---------------Set up test pack-------------------

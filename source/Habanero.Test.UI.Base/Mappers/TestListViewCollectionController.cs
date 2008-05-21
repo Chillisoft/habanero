@@ -85,7 +85,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear down -------------------------
         }
 
-        [Test, Ignore()] //TODO get working
+        [Test, Ignore("still to be done")]
         public void TestSetCollection_EmptyCollection()
         {
             //---------------Set up test pack-------------------

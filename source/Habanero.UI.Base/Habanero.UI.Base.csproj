@@ -50,7 +50,7 @@
     <Compile Include="ControlInterfaces\IListControl.cs" />
     <Compile Include="ControlInterfaces\IUserControlChilli.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
-    <Compile Include="ControlMappers\IColumnHeaderCollection.cs" />
+    <Compile Include="IColumnHeaderCollection.cs" />
     <Compile Include="ControlMappers\ListViewCollectionController.cs" />
     <Compile Include="ControlMappers\ListComboBoxMapper.cs" />
     <Compile Include="ControlMappers\NumericUpDownCurrencyMapper.cs" />
