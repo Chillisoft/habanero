@@ -24,7 +24,7 @@ namespace Habanero.BO
         {
             _dbConnection = DatabaseConnection.CurrentConnection.GetConnection();
             _dbConnection.Open();
-            _dbTransaction = _dbConnection.BeginTransaction(IsolationLevel.ReadCommitted);
+            _dbTransaction = _dbConnection.BeginTransaction(IsolationLevel.ReadUncommitted);
         }
 
         /// <summary>
