@@ -166,6 +166,7 @@ namespace Habanero.BO.Loaders
         private void DoPostLoadChecks()
         {
             CheckRelationships();
+            CheckKeyDefinitions();
         }
 
         private void CheckRelationships()
@@ -217,6 +218,59 @@ namespace Habanero.BO.Loaders
             
         }
 
+        private void CheckKeyDefinitions()
+        {
+            Dictionary<ClassDef, PropDefCol> loadedFullPropertyLists = new Dictionary<ClassDef, PropDefCol>();
+            foreach (ClassDef classDef in _classDefList)
+            {
+                CheckKeyDefinitions(loadedFullPropertyLists, classDef);
+            }
+        }
+
+        private void CheckKeyDefinitions(Dictionary<ClassDef, PropDefCol> loadedFullPropertyLists, ClassDef classDef)
+        {
+            if (classDef == null) return;
+            PropDefCol allProps;
+            allProps = GetAllClassDefProps(loadedFullPropertyLists, classDef);
+            foreach (KeyDef keyDef in classDef.KeysCol)
+            {
+                PropDefCol propDefCol = new PropDefCol();
+                foreach (PropDef propDef in keyDef)
+                {
+                    propDefCol.Add(propDef);
+                }
+                keyDef.Clear();
+                //Check Key Properties
+                foreach (PropDef propDef in propDefCol)
+                {
+                    string propertyName = propDef.PropertyName;
+                    if (allProps.Contains(propertyName))
+                    {
+                        PropDef keyPropDef = allProps[propertyName];
+                        keyDef.Add(keyPropDef);
+                    }
+                    else 
+                    {
+                        throw new InvalidXmlDefinitionException(String.Format(
+                            "In a 'prop' element for the '{0}' key of " +
+                            "the '{1}' class, the propery '{2}' given in the " +
+                            "'name' attribute does not exist for the class or for any of it's superclasses. " +
+                            "Either add the property definition or check the spelling and " +
+                            "capitalisation of the specified property.",
+                            keyDef.KeyNameForDisplay, classDef.ClassName, propertyName));
+                        //throw new InvalidXmlDefinitionException(
+                        //    String.Format("The property definition '{0}' being named by a " +
+                        //    "'prop' element in a key definition does not exist. The property " +
+                        //    "definition being referred to must have been defined in a " +
+                        //    "'property' element.  Add the property definition or check " +
+                        //    "that the spelling and capitalisation are correct.", propName));
+                    }
+                }
+            }
+
+
+        }
+
         private PropDefCol GetAllClassDefProps(Dictionary<ClassDef, PropDefCol> loadedFullPropertyLists, ClassDef classDef)
         {
             PropDefCol allProps;
@@ -230,7 +284,7 @@ namespace Habanero.BO.Loaders
                 ClassDef currentClassDef = classDef;
                 while (currentClassDef != null)
                 {
-                    foreach (PropDef propDef in classDef.PropDefcol)
+                    foreach (PropDef propDef in currentClassDef.PropDefcol)
                     {
                         if (!allProps.Contains(propDef.PropertyName))
                         {

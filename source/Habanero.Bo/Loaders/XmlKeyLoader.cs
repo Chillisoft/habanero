@@ -173,12 +173,15 @@ namespace Habanero.BO.Loaders
                 }
                 else
                 {
-                    throw new InvalidXmlDefinitionException(
-                        String.Format("The property definition '{0}' being named by a " +
-                        "'prop' element in a key definition does not exist. The property " +
-                        "definition being referred to must have been defined in a " +
-                        "'property' element.  Add the property definition or check " +
-                        "that the spelling and capitalisation are correct.", propName));
+                    PropDef tempKeyPropDef = new PropDef(propName, typeof(string), PropReadWriteRule.ReadWrite, null);
+                    _keyDef.Add(tempKeyPropDef);
+                    //This error was moved to the XmlClassDefsLoader.DoPostLoadChecks method so that it handles inherited properties
+                    //throw new InvalidXmlDefinitionException(
+                    //    String.Format("The property definition '{0}' being named by a " +
+                    //    "'prop' element in a key definition does not exist. The property " +
+                    //    "definition being referred to must have been defined in a " +
+                    //    "'property' element.  Add the property definition or check " +
+                    //    "that the spelling and capitalisation are correct.", propName));
                 }
                 ReadAndIgnoreEndTag();
 
