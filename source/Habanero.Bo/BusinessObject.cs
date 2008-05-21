@@ -994,8 +994,14 @@ namespace Habanero.BO
         {
             if (!AllLoadedBusinessObjects().ContainsKey(ID.GetObjectId()))
             {
-                AllLoadedBusinessObjects().Add(this.ID.GetObjectId(),
-                                                     new WeakReference(this));
+                try
+                {
+                    AllLoadedBusinessObjects().Add(this.ID.GetObjectId(),
+                                                   new WeakReference(this));
+                }catch (IndexOutOfRangeException)
+                {
+                    //Hack some arbitary errro from generic.Dictionary
+                }
             }
         }
 
