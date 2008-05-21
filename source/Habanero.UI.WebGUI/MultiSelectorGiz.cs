@@ -9,6 +9,10 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
+    /// <summary>
+    /// Provides a multiselector control. The type to be displayed in the 
+    /// lists is set by the template type.
+    /// </summary>
     public partial class MultiSelectorGiz<T> : UserControlGiz, IMultiSelector<T>
     {
 
@@ -69,5 +73,12 @@ namespace Habanero.UI.WebGUI
         {
             get { return this._manager.SelectionsView; }
         }
+
+        private void _availableOptionsListbox_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }

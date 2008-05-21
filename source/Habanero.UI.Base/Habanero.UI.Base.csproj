@@ -45,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComboBoxManager.cs" />
+    <Compile Include="ControlInterfaces\Events.cs" />
     <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
+    <Compile Include="ControlInterfaces\IListControl.cs" />
     <Compile Include="ControlInterfaces\IUserControlChilli.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="ControlMappers\IColumnHeaderCollection.cs" />

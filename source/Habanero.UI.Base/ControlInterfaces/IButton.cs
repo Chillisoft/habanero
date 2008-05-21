@@ -9,7 +9,7 @@ namespace Habanero.UI.Base
     {
         void PerformClick();
 
-        event EventHandler Click;
+        //event EventHandler Click;
         void NotifyDefault(bool b);
     }
 }

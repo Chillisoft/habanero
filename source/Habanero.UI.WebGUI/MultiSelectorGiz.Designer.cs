@@ -66,6 +66,7 @@ namespace Habanero.UI.WebGUI
             this._availableOptionsListbox.SelectionMode = Habanero.UI.Base.ListBoxSelectionMode.MultiExtended;
             this._availableOptionsListbox.Size = new System.Drawing.Size(194, 342);
             this._availableOptionsListbox.TabIndex = 0;
+            this._availableOptionsListbox.DoubleClick += new System.EventHandler(this._availableOptionsListbox_DoubleClick);
             // 
             // groupBox2
             // 

@@ -341,8 +341,8 @@ namespace Habanero.UI.WebGUI
             CheckBoxGiz cbx = new CheckBoxGiz();
             cbx.Checked = defaultValue;
             cbx.FlatStyle = FlatStyle.Standard;
-            cbx.Height = CreateTextBox().Height;
-                // set the combobox to the default height of a text box on this machine.
+            cbx.Height = CreateTextBox().Height;// set the CheckBoxGiz to the default height of a text box on this machine.
+            cbx.CheckAlign = ContentAlignment.TopRight;
             cbx.Width = cbx.Height;
             cbx.BackColor = SystemColors.Control;
 

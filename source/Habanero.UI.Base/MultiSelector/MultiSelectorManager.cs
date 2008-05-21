@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -37,12 +38,7 @@ namespace Habanero.UI.Base
                                      };
 
             IButton selectButton = GetButton(MultiSelectorButton.Select);
-            selectButton.Click += delegate
-                                      {
-                                          List<T> items = new List<T>();
-                                          foreach (T item in AvailableOptionsListBox.SelectedItems) items.Add(item);
-                                          _model.Select(items);
-                                      };
+            selectButton.Click += DoSelect;
 
             IButton deselectButton = GetButton(MultiSelectorButton.Deselect);
             deselectButton.Click += delegate
@@ -57,6 +53,15 @@ namespace Habanero.UI.Base
 
             IButton deselectAllButton = GetButton(MultiSelectorButton.DeselectAll);
             deselectAllButton.Click += delegate { _model.DeselectAll(); };
+
+            //SelectionsListBox.DoubleClick += DoSelect;
+        }
+
+        private void DoSelect(object sender, EventArgs e)
+        {
+            List<T> items = new List<T>();
+            foreach (T item in AvailableOptionsListBox.SelectedItems) items.Add(item);
+            _model.Select(items);
         }
 
 
