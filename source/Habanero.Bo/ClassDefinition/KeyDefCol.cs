@@ -108,6 +108,20 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        protected internal KeyDef GetKeyDefAtIndex(int index)
+        {
+            int counter = 0;
+            foreach (KeyDef def in this)
+            {
+                if (counter == index)
+                {
+                    return def;
+                }
+                counter++;
+            }
+            throw new IndexOutOfRangeException();
+        }
+
         /// <summary>
         /// Creates a new collection of business object keys (BOKey)
         /// using the key definitions in this collection.

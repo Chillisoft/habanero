@@ -221,8 +221,8 @@ namespace Habanero.BO.Loaders
                         "property in the related class to which the " + 
                         "relationship will link.");
                 }
-                
-                //This error was moved to where the relationship object is created for a BusinessObject
+
+                //This error was moved to the XmlClassDefsLoader.DoPostLoadChecks method so that it handles inherited properties
                 //if (!_propDefCol.Contains(defName))
                 //{
                 //    throw new InvalidXmlDefinitionException(String.Format(

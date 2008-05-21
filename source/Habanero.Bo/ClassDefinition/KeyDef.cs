@@ -37,6 +37,7 @@ namespace Habanero.BO.ClassDefinition
         private Dictionary<string, PropDef> _propDefs;
         protected bool _ignoreIfNull = false;
         protected string _keyName = "";
+        protected string _keyNameBuilt = "";
         protected string _keyNameForDisplay = "";
         protected string _message;
         protected bool _buildKeyName = true; //this is a flag used to 
@@ -67,8 +68,8 @@ namespace Habanero.BO.ClassDefinition
         public KeyDef(string keyName)
         {
             //TODO_Err check that keyName is valid. Eric: what is a valid keyname?
-            KeyName = keyName;
             _propDefs = new Dictionary<string, PropDef>();
+            KeyName = keyName;
         }
 
 		#endregion Constructors
@@ -94,19 +95,50 @@ namespace Habanero.BO.ClassDefinition
 		/// </summary>
 		public string KeyName
 		{
-			get { return _keyName; }
+			get
+			{
+			    if (_buildKeyName)
+			    {
+			        return _keyNameBuilt;
+			    } else
+			    {
+			        return _keyName;
+			    }
+			}
 			protected internal set
 			{
 				_keyName = value;
 			    KeyNameForDisplay = value;
-				if (_keyName == null || _keyName.Length == 0)
+                if (String.IsNullOrEmpty(_keyName))
 				{
 					_keyName = "";
 				    KeyNameForDisplay = "";
 					_buildKeyName = true;
 				}
+                UpdateKeyNameBuildt();
 			}
 		}
+
+        private void UpdateKeyNameBuildt()
+        {
+            if (_buildKeyName)
+            {
+                List<string> propNames = new List<string>();
+                if (!String.IsNullOrEmpty(_keyName))
+                {
+                    propNames.Add(_keyName);
+                }
+                foreach (KeyValuePair<string, PropDef> propDef in _propDefs)
+                {
+                    propNames.Add(propDef.Value.PropertyName);
+                }
+                string newKeyName = String.Join("_", propNames.ToArray());
+                _keyNameBuilt = newKeyName;
+            } else
+            {
+                _keyNameBuilt = _keyName;
+            }
+        }
 
         /// <summary>
         /// Returns just the key name as given by the user
@@ -172,14 +204,7 @@ namespace Habanero.BO.ClassDefinition
             if (!Contains(propDef))
             {
                 _propDefs.Add(propDef.PropertyName, propDef);
-                if (_buildKeyName)
-                {
-                    if (_keyName.Length > 0)
-                    {
-                        _keyName += "_";
-                    }
-                    _keyName += propDef.PropertyName;
-                }
+                UpdateKeyNameBuildt();
             }
         }
 
@@ -192,6 +217,7 @@ namespace Habanero.BO.ClassDefinition
 			if (Contains(propDef))
 			{
 				_propDefs.Remove(propDef.PropertyName);
+                UpdateKeyNameBuildt();
 			}
 		}
 
@@ -217,6 +243,21 @@ namespace Habanero.BO.ClassDefinition
             return (_propDefs.ContainsKey(propName));
 		}
 
+        /// <summary>
+        /// Returns a count of the number of property definitions held
+        /// in this key definition
+        /// </summary>
+        public int Count
+        {
+            get { return _propDefs.Count; }
+        }
+
+        protected internal void Clear()
+        {
+            _propDefs.Clear();
+            UpdateKeyNameBuildt();
+        }
+
 		#endregion Dictionary Methods
 		
 		/// <summary>
@@ -229,8 +270,6 @@ namespace Habanero.BO.ClassDefinition
         {
             return (_propDefs.Count > 0);
         }
-
-
 
 		/// <summary>
         /// Creates a new business object key (BOKey) using this key
@@ -254,14 +293,6 @@ namespace Habanero.BO.ClassDefinition
 		//    return _propDefs.Values.GetEnumerator();
 		//}
 
-        /// <summary>
-        /// Returns a count of the number of property definitions held
-        /// in this key definition
-        /// </summary>
-        public int Count
-        {
-            get { return _propDefs.Count; }
-        }
 
 		#region IEnumerable<PropDef> Members
 
@@ -280,6 +311,8 @@ namespace Habanero.BO.ClassDefinition
 		}
 
 		#endregion
+
+        
     }
 
 

@@ -78,12 +78,12 @@ namespace Habanero.BO.ClassDefinition
 		/// <summary>
         /// Creates a new RelProp object based on this property definition
         /// </summary>
-        /// <param name="lBoPropCol">The collection of properties</param>
+        /// <param name="boPropCol">The collection of properties</param>
         /// <returns>The newly created RelProp object</returns>
-        protected internal RelProp CreateRelProp(BOPropCol lBoPropCol)
-        {
-            BOProp lBoProp = lBoPropCol[OwnerPropertyName];
-            return new RelProp(this, lBoProp);
-        }
+        protected internal RelProp CreateRelProp(BOPropCol boPropCol)
+		{
+		    BOProp boProp = boPropCol[OwnerPropertyName];
+		    return new RelProp(this, boProp);
+		}
     }
 }

@@ -30,21 +30,21 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlKeyLoader
     {
-        private XmlKeyLoader itsLoader;
-        private PropDefCol itsPropDefs;
+        private XmlKeyLoader _xmlKeyLoader;
+        private PropDefCol _propDefCol;
 
         [SetUp]
         public void SetupTest()
         {
-            itsLoader = new XmlKeyLoader();
-            itsPropDefs = new PropDefCol();
-            itsPropDefs.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
+            _xmlKeyLoader = new XmlKeyLoader();
+            _propDefCol = new PropDefCol();
+            _propDefCol.Add(new PropDef("TestProp", typeof (string), PropReadWriteRule.ReadWrite, null));
         }
 
         [Test]
         public void TestLoadSimpleKey()
         {
-            KeyDef def = itsLoader.LoadKey(@"<key><prop name=""TestProp"" /></key>", itsPropDefs);
+            KeyDef def = _xmlKeyLoader.LoadKey(@"<key><prop name=""TestProp"" /></key>", _propDefCol);
             Assert.AreEqual(1, def.Count);
             Assert.IsFalse(def.IgnoreIfNull);
         }
@@ -52,7 +52,7 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadKeyWithName()
         {
-            KeyDef def = itsLoader.LoadKey(@"<key name=""Key 1""><prop name=""TestProp"" /></key>", itsPropDefs);
+            KeyDef def = _xmlKeyLoader.LoadKey(@"<key name=""Key 1""><prop name=""TestProp"" /></key>", _propDefCol);
             Assert.AreEqual(1, def.Count);
             Assert.AreEqual("Key 1_TestProp", def.KeyName);
             Assert.AreEqual("Key 1", def.KeyNameForDisplay);
@@ -61,10 +61,10 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestLoadKeyWithMultipleProps()
         {
-            itsPropDefs.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
+            _propDefCol.Add(new PropDef("TestProp2", typeof (string), PropReadWriteRule.ReadWrite, null));
             KeyDef def =
-                itsLoader.LoadKey(
-                    @"<key name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>", itsPropDefs);
+                _xmlKeyLoader.LoadKey(
+                    @"<key name=""Key1""><prop name=""TestProp"" /><prop name=""TestProp2"" /></key>", _propDefCol);
             Assert.AreEqual(2, def.Count);
             Assert.AreEqual("Key1_TestProp_TestProp2", def.KeyName);
             Assert.AreEqual("Key1", def.KeyNameForDisplay);
@@ -74,51 +74,56 @@ namespace Habanero.Test.BO.Loaders
         public void TestLoadKeyWithIgnoreNulls()
         {
             KeyDef def =
-                itsLoader.LoadKey(@"<key name=""Key1"" ignoreIfNull=""true""><prop name=""TestProp"" /></key>",
-                                  itsPropDefs);
+                _xmlKeyLoader.LoadKey(@"<key name=""Key1"" ignoreIfNull=""true""><prop name=""TestProp"" /></key>",
+                                  _propDefCol);
             Assert.IsTrue(def.IgnoreIfNull);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException), "An invalid node 'keyDef' was encountered when loading the class definitions.")]
         public void TestLoadKeyWithWrongElementName()
         {
-            itsLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /></keyDef>", itsPropDefs);
+            _xmlKeyLoader.LoadKey(@"<keyDef name=""Key1""><prop name=""TestProp"" /></keyDef>", _propDefCol);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestInvalidIgnoreIfNullValue()
         {
-            itsLoader.LoadKey(@"
+            _xmlKeyLoader.LoadKey(@"
                 <key name=""Key1"" ignoreIfNull=""invalidvalue"">
                     <prop name=""TestProp"" />
-                </key>", itsPropDefs);
+                </key>", _propDefCol);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestPropElementInvalid()
         {
-            itsLoader.LoadKey(@"
+            _xmlKeyLoader.LoadKey(@"
                 <key name=""Key1"">
                     <props name=""TestProp"" />
-                </key>", itsPropDefs);
+                </key>", _propDefCol);
         }
 
         [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
         public void TestPropElementMissingName()
         {
-            itsLoader.LoadKey(@"
+            _xmlKeyLoader.LoadKey(@"
                 <key name=""Key1"">
                     <prop />
-                </key>", itsPropDefs);
+                </key>", _propDefCol);
         }
 
-        [Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        [Test]
         public void TestPropElementForNonExistingProp()
         {
-            itsLoader.LoadKey(@"
+            //This test was changed to not expect an exception anymore because the 
+            // prop could come from an inherited class.
+            KeyDef keyDef = _xmlKeyLoader.LoadKey(@"
                 <key name=""Key1"">
                     <prop name=""doesntexist"" />
-                </key>", itsPropDefs);
+                </key>", _propDefCol);
+            Assert.AreEqual(1, keyDef.Count);
+            Assert.IsFalse(_propDefCol.Contains(keyDef["doesntexist"]), 
+                "A temporary propDef should have been created for this prop. This will be clarified later.");
         }
     }
 }

@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -29,33 +30,55 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestRelPropDef
     {
-        private RelPropDef mRelPropDef;
-        private PropDefCol mPropDefCol;
+        private RelPropDef _relPropDef;
+        private PropDefCol _propDefCol;
 
         [SetUp]
         public void init()
         {
             PropDef propDef = new PropDef("Prop", typeof(string), PropReadWriteRule.ReadWrite, null);
-            mRelPropDef = new RelPropDef(propDef, "PropName");
-            mPropDefCol = new PropDefCol();
-            mPropDefCol.Add(propDef);
+            _relPropDef = new RelPropDef(propDef, "PropName");
+            _propDefCol = new PropDefCol();
+            _propDefCol.Add(propDef);
         }
 
         [Test]
         public void TestCreateRelPropDef()
         {
-            Assert.AreEqual("Prop", mRelPropDef.OwnerPropertyName);
-            Assert.AreEqual("PropName", mRelPropDef.RelatedClassPropName);
+            Assert.AreEqual("Prop", _relPropDef.OwnerPropertyName);
+            Assert.AreEqual("PropName", _relPropDef.RelatedClassPropName);
         }
 
         [Test]
         public void TestCreateRelProp()
         {
-            BOPropCol propCol = mPropDefCol.CreateBOPropertyCol(true);
-            RelProp relProp = mRelPropDef.CreateRelProp(propCol);
+            BOPropCol propCol = _propDefCol.CreateBOPropertyCol(true);
+            RelProp relProp = _relPropDef.CreateRelProp(propCol);
 
             Assert.AreEqual("Prop", relProp.OwnerPropertyName);
             Assert.AreEqual("PropName", relProp.RelatedClassPropName);
+        }
+
+        [Test]
+        public void TestCreateRelProp_PropDoesNotExist()
+        {
+            //-------------Setup Test Pack ------------------
+            BOPropCol propCol = new BOPropCol();
+            Exception exception = null;
+            RelProp relProp = null;
+            //-------------Execute test ---------------------
+            try
+            {
+                relProp = _relPropDef.CreateRelProp(propCol);
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+            //-------------Test Result ----------------------
+            Assert.IsNotNull(exception, "An error should have been thrown because the prop does not exist.");
+            Assert.IsInstanceOfType(typeof(InvalidPropertyNameException), exception);
+            Assert.IsNull(relProp, "The relProp should not have been created.");
         }
 
         [Test, ExpectedException(typeof(HabaneroArgumentException))]

@@ -123,7 +123,6 @@ namespace Habanero.BO.ClassDefinition
         public RelationshipCol CreateRelationshipCol(BOPropCol lBoPropCol, IBusinessObject bo)
         {
             RelationshipCol lRelationshipCol = new RelationshipCol(bo);
-            ;
             foreach (RelationshipDef lRelationshipDef in this)
             {
                 lRelationshipCol.Add(lRelationshipDef.CreateRelationship(bo, lBoPropCol));
