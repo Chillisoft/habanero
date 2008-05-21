@@ -87,7 +87,23 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(_STD_CONTROL_WIDTH, ctlToAdd.Width, "Added control's Width prop should be set.");
             Assert.AreEqual(_STD_CONTROL_HEIGHT, ctlToAdd.Height, "Added control's Height prop should be set.");
         }
-
+        //TODO: This would b cool at moment add a label to left or right to simulate a diff border size when required.
+        //[Test]
+        //public void TestAddControl_VerticalBorderSize_15()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    IControlChilli managedControl = CreateManagedControl();
+        //    FlowLayoutManager manager = CreateFlowLayoutManager(managedControl);
+        //    //---------------Execute Test ----------------------
+        //    IControlChilli ctlToAdd = CreateStandardControl();
+        //    manager
+        //    manager.AddControl(ctlToAdd);
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(stdFirstPosLeft(), ctlToAdd.Left, "Added control's Left prop should be 5 because of the default border.");
+        //    Assert.AreEqual(stdFirstRowTop(), ctlToAdd.Top, "Added control's Top prop should be 5 because of the default border.");
+        //    Assert.AreEqual(_STD_CONTROL_WIDTH, ctlToAdd.Width, "Added control's Width prop should be set.");
+        //    Assert.AreEqual(_STD_CONTROL_HEIGHT, ctlToAdd.Height, "Added control's Height prop should be set.");
+        //}
         private IControlChilli CreateStandardControl()
         {
             return CreateControl(_STD_CONTROL_WIDTH, _STD_CONTROL_HEIGHT);

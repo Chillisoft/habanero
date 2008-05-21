@@ -146,7 +146,8 @@ namespace Habanero.Test.UI.Base.Wizard
             //--------------Assert PreConditions----------------            
             IWizardStep step = wizardController.GetCurrentStep();
             Assert.AreEqual("ControlForStep2", wizardControl.CurrentControl.Name);
-            //Assert.IsTrue(wizardControl.HeadingLabel.Visible);
+            //Assert.IsTrue(wizardControl.HeadingLabel.Visible); //removed the label and am now putting the header on the form
+            // due to problems with giz hiding the some wizard controls that where double clicked
             //Assert.IsTrue(wizardControl.HeadingLabel.Text.Length > 0);
             //Assert.AreEqual(step.HeaderText, wizardControl.HeadingLabel.Text);
             //Assert.AreEqual(wizardControl.Height - wizardControl.NextButton.Height - 62 - wizardControl.HeadingLabel.Height, wizardControl.WizardStepPanel.Height);
