@@ -67,6 +67,14 @@ namespace Habanero.UI.WebGUI.Wizard
         }
 
         /// <summary>
+        /// The text that you want displayed at the top of the wizard control when this step is active.
+        /// </summary>
+        public string HeaderText
+        {
+            get { return ""; }
+        }
+
+        /// <summary>
         /// Sets the message to be displayed to the user
         /// </summary>
         /// <param name="message">The message to display</param>

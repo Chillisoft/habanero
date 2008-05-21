@@ -31,7 +31,8 @@ namespace Habanero.UI.WebGUI
     {
         private readonly IWizardController _wizardController;
         private readonly WizardControlGiz _uxWizardControl;
-        private IControlFactory _controlFactory;
+        private readonly IControlFactory _controlFactory;
+        private string _wizardText;
         ///// <summary>
         ///// Initialises the WizardForm
         ///// </summary>
@@ -51,11 +52,27 @@ namespace Habanero.UI.WebGUI
 
             _controlFactory = controlFactory;
             _uxWizardControl = new WizardControlGiz(controller, _controlFactory);
+            this._uxWizardControl.MessagePosted += _uxWizardControl_MessagePosted;
+            this._uxWizardControl.Finished += this._uxWizardControl_Finished;
+            this._uxWizardControl.StepChanged += this._uxWizardControl_StepChanged;
             InitializeComponent();
             WizardControl.WizardController = _wizardController;
             DialogResult = DialogResult.Cancel;
-            this._uxWizardControl.MessagePosted += _uxWizardControl_MessagePosted;
-            this._uxWizardControl.Finished += this._uxWizardControl_Finished;
+        }
+
+        private void _uxWizardControl_StepChanged(string headingText)
+        {
+            this.Text = this.WizardText + " - " + headingText;
+        }
+
+        public string WizardText
+        {
+            get { return _wizardText; }
+            set
+            {
+                _wizardText = value;
+                Text = _wizardText;
+            }
         }
 
         /// <summary>
@@ -63,10 +80,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public IWizardControl WizardControl
         {
-            get
-            {
-                return _uxWizardControl;
-            }
+            get { return _uxWizardControl; }
         }
 
         IControlCollection IControlChilli.Controls
@@ -107,7 +121,8 @@ namespace Habanero.UI.WebGUI
             return Show(title, wizardController, true, controlFactory);
         }
 
-        private static bool Show(string title, IWizardController wizardController, bool showDialog, IControlFactory controlFactory)
+        private static bool Show(string title, IWizardController wizardController, bool showDialog,
+                                 IControlFactory controlFactory)
         {
             WizardFormGiz form = new WizardFormGiz(wizardController, controlFactory);
             form.Text = title;
@@ -115,7 +130,8 @@ namespace Habanero.UI.WebGUI
             if (showDialog)
             {
                 return form.ShowDialog() == DialogResult.OK;
-            } else
+            }
+            else
             {
                 form.Show();
                 return true;

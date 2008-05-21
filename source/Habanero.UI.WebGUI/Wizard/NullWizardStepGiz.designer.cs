@@ -27,6 +27,14 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        /// <summary>
+        /// The text that you want displayed at the top of the wizard control when this step is active.
+        /// </summary>
+        public string HeaderText
+        {
+            get { return ""; }
+        }
+
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>

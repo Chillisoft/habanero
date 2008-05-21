@@ -34,6 +34,17 @@ namespace Habanero.UI.Base
         /// Gets or sets the WizardController.  Upon setting the controller, the Start() method is called to begin the wizard.
         /// </summary>
         IWizardController WizardController { get; set; }
+        /// <summary>
+        /// The panel that the controls are physically being placed on.
+        /// </summary>
+        IPanel WizardStepPanel
+        {
+            get;
+        }
+        ///// <summary>
+        ///// The label that is displayed at the top of the wizard control for each step.
+        ///// </summary>
+        //ILabel HeadingLabel { get; }
 
         /// <summary>
         /// Attempts to go to the next step in the wizard.  If this is disallowed by the wizard controller a MessagePosted event will be fired.

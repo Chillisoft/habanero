@@ -23,7 +23,9 @@ using System.Collections.Generic;
 namespace Habanero.UI.Base
 {
     /// <summary>
-    /// Defines a simple implmentation of IWizardController. To customise the behaviour of a Wizard inherit from this class and override the applicable methods such as the constructor, GetNextStep(), GetPreviousStep().
+    /// Defines a simple implmentation of IWizardController. 
+    /// To customise the behaviour of a Wizard inherit from this class and override the applicable methods such as the constructor, 
+    /// GetNextStep(), GetPreviousStep().
     /// </summary>
     public class WizardController : IWizardController
     {

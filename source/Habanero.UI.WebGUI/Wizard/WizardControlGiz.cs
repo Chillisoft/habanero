@@ -9,15 +9,28 @@ namespace Habanero.UI.WebGUI
     public class WizardControlGiz : UserControl, IWizardControl
     {
         private IControlChilli _currentControl;
-        private readonly IButton _nextButton;
-        private readonly IButton _previousButton;
+        private IButton _nextButton;
+        private IButton _previousButton;
         private IWizardController _wizardController;
         private readonly IControlFactory _controlFactory;
         private readonly IPanel _wizardStepPanel;
 
         public event EventHandler Finished;
         public event Action<string> MessagePosted;
+        public event Action<string> StepChanged;
 
+        public IPanel WizardStepPanel
+        {
+            get { return _wizardStepPanel; }
+        }
+
+        ///// <summary>
+        ///// The label that is displayed at the top of the wizard control for each step.
+        ///// </summary>
+        //public ILabel HeadingLabel
+        //{
+        //    get { return _headingLabel; }
+        //}
 
         /// <summary>
         /// Initialises the WizardControl with the IWizardController.  No logic is performed other than storing the wizard controller.
@@ -30,10 +43,40 @@ namespace Habanero.UI.WebGUI
             _controlFactory = controlFactory;
 
             //TODO: The layout manager code is not NUnit tested 
+            IPanel buttonPanel = CreateButtonPanel(controlFactory);
+
+            _wizardStepPanel = controlFactory.CreatePanel();
+
+            //IGroupBox headerLabelGroupBox = CreateHeaderLabel(controlFactory);
+
+            BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
+            //borderLayoutManager.AddControl(headerLabelGroupBox, BorderLayoutManager.Position.North);
+            borderLayoutManager.AddControl(_wizardStepPanel, BorderLayoutManager.Position.Centre);
+            borderLayoutManager.AddControl(buttonPanel, BorderLayoutManager.Position.South);
+
+        }
+
+        //private IGroupBox CreateHeaderLabel(IControlFactory controlFactory)
+        //{
+        //    IGroupBox headerLabelGroupBox = controlFactory.CreateGroupBox();
+
+        //    _headingLabel = controlFactory.CreateLabel();
+        //    _headingLabel.Font = new Font(_headingLabel.Font, FontStyle.Bold);
+        //    _headingLabel.Height = 15;
+        //    _headingLabel.Visible = true;
+        //    headerLabelGroupBox.Height = 30;
+        //    FlowLayoutManager flowManager = new FlowLayoutManager(headerLabelGroupBox, controlFactory);
+        //    flowManager.Alignment = FlowLayoutManager.Alignments.Left;
+        //    flowManager.AddControl(_headingLabel);
+
+        //    return headerLabelGroupBox;
+        //}
+
+        private IPanel CreateButtonPanel(IControlFactory controlFactory)
+        {
             IPanel buttonPanel = controlFactory.CreatePanel();
             FlowLayoutManager layoutManager = new FlowLayoutManager(buttonPanel, _controlFactory);
             layoutManager.Alignment= FlowLayoutManager.Alignments.Right;
-
 
             _nextButton = _controlFactory.CreateButton("Next");
             _nextButton.Click += this.uxNextButton_Click;
@@ -46,12 +89,7 @@ namespace Habanero.UI.WebGUI
             _previousButton.Size = new Size(75, 38);
             _previousButton.TabIndex = 0;
             layoutManager.AddControl(_previousButton);
-
-            _wizardStepPanel = controlFactory.CreatePanel();
-            BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
-            borderLayoutManager.AddControl(_wizardStepPanel, BorderLayoutManager.Position.Centre);
-            borderLayoutManager.AddControl(buttonPanel, BorderLayoutManager.Position.South);
-
+            return buttonPanel;
         }
 
         /// <summary>
@@ -145,10 +183,12 @@ namespace Habanero.UI.WebGUI
             if (stepControl != null)
             {
                 _currentControl = stepControl;
+                FireStepChanged(step.HeaderText);
                 //TODO: The border layout manager clearing panel etc not unit tested
                 _wizardStepPanel.Controls.Clear();
                 BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(_wizardStepPanel, _controlFactory);
                 borderLayoutManager.AddControl(stepControl, BorderLayoutManager.Position.Centre);
+
                 step.InitialiseStep();
             }
             else
@@ -208,6 +248,13 @@ namespace Habanero.UI.WebGUI
             if (MessagePosted != null)
             {
                 MessagePosted(message);
+            }
+        }
+        private void FireStepChanged(string message)
+        {
+            if (StepChanged != null)
+            {
+                StepChanged(message);
             }
         }
     }

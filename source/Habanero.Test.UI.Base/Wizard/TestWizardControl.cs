@@ -73,6 +73,30 @@ namespace Habanero.Test.UI.Base.Wizard
         public void TearDownTest()
         {
         }
+
+        [Test]
+        public void TestConstructWizardControl()
+        {
+            //---------------Set up test pack-------------------
+            MyWizardController wizardController = new MyWizardController();
+            //---------------Execute Test ----------------------
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
+            SetWizardControlSize(wizardControl);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(wizardControl.PreviousButton);
+            Assert.IsNotNull(wizardControl.NextButton);
+            Assert.AreEqual(0, wizardControl.PreviousButton.TabIndex);
+            Assert.AreEqual(1, wizardControl.NextButton.TabIndex);
+            Assert.AreEqual(wizardControl.Height - wizardControl.NextButton.Height  - 62, wizardControl.WizardStepPanel.Height);
+            //---------------Tear Down -------------------------          
+        }
+
+        private void SetWizardControlSize(IWizardControl wizardControl)
+        {
+            wizardControl.Width = 310;
+            wizardControl.Height = 412;
+        }
+
         [Test]
         public void TestStart()
         {
@@ -84,9 +108,62 @@ namespace Habanero.Test.UI.Base.Wizard
             //Assert Results --------------------------------------------
             Assert.AreEqual("ControlForStep1", wizardControl.CurrentControl.Name);
             Assert.AreEqual(wizardController.ControlForStep1.Name, wizardControl.CurrentControl.Name);
-            Assert.AreEqual(0, wizardControl.PreviousButton.TabIndex);
-            Assert.AreEqual(0, wizardControl.NextButton.TabIndex);
+
         }
+
+        [Test]
+        public void TestHeaderLabelEnabledWhen_WizardStepTextSet()
+        {
+            //---------------Set up test pack-------------------
+            MyWizardController wizardController = new MyWizardController();
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
+            SetWizardControlSize(wizardControl);
+            wizardControl.Start();
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual("ControlForStep1", wizardControl.CurrentControl.Name);
+            //Assert.IsFalse(wizardControl.HeadingLabel.Visible);
+            Assert.AreEqual(wizardControl.Height - wizardControl.NextButton.Height - 62, wizardControl.WizardStepPanel.Height);
+            //---------------Execute Test ----------------------
+            wizardControl.Next();
+            //---------------Test Result -----------------------
+            IWizardStep step = wizardController.GetCurrentStep();
+            Assert.AreEqual("ControlForStep2", wizardControl.CurrentControl.Name);
+            //Assert.IsTrue(wizardControl.HeadingLabel.Visible);
+            //Assert.IsTrue(wizardControl.HeadingLabel.Text.Length > 0);
+            //Assert.AreEqual(step.HeaderText, wizardControl.HeadingLabel.Text);
+            //Assert.AreEqual(wizardControl.Height - wizardControl.NextButton.Height - 62 - wizardControl.HeadingLabel.Height, wizardControl.WizardStepPanel.Height);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestHeaderLabelDisabledWhen_WizardStepTextSetBackToNull()
+        {
+            //---------------Set up test pack-------------------
+            MyWizardController wizardController = new MyWizardController();
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(wizardController);
+            SetWizardControlSize(wizardControl);
+            wizardControl.Start();
+            wizardControl.Next();
+            //--------------Assert PreConditions----------------            
+            IWizardStep step = wizardController.GetCurrentStep();
+            Assert.AreEqual("ControlForStep2", wizardControl.CurrentControl.Name);
+            //Assert.IsTrue(wizardControl.HeadingLabel.Visible);
+            //Assert.IsTrue(wizardControl.HeadingLabel.Text.Length > 0);
+            //Assert.AreEqual(step.HeaderText, wizardControl.HeadingLabel.Text);
+            //Assert.AreEqual(wizardControl.Height - wizardControl.NextButton.Height - 62 - wizardControl.HeadingLabel.Height, wizardControl.WizardStepPanel.Height);
+
+            //---------------Execute Test ----------------------
+
+            wizardControl.Previous();
+            //---------------Test Result -----------------------
+            step = wizardController.GetCurrentStep();
+            Assert.AreEqual("ControlForStep1", wizardControl.CurrentControl.Name);
+            //Assert.IsFalse(wizardControl.HeadingLabel.Visible);
+            //Assert.IsFalse(wizardControl.HeadingLabel.Text.Length > 0);
+            //Assert.AreEqual(step.HeaderText, wizardControl.HeadingLabel.Text);
+            Assert.AreEqual(wizardControl.Height - wizardControl.NextButton.Height - 62, wizardControl.WizardStepPanel.Height);
+            //---------------Tear Down -------------------------          
+        }
+
         //TODO: Tab indexes are not being set up correctly in Giz with the flow layout manager
         // right alignment
         [Test]
@@ -95,13 +172,14 @@ namespace Habanero.Test.UI.Base.Wizard
             //Setup ----------------------------------------------------
             MyWizardController wizardController = new MyWizardController();
             IWizardControl wizardControl = GetControlFactory().CreateWizardControl(_controller);
+            wizardControl.Width = 300;
             //Execute ---------------------------------------------------
             wizardControl.WizardController = wizardController;
             //Assert Results --------------------------------------------
             Assert.AreEqual("ControlForStep1", wizardControl.CurrentControl.Name);
             Assert.AreEqual(wizardController.ControlForStep1.Name, wizardControl.CurrentControl.Name);
             Assert.AreEqual(0, wizardControl.PreviousButton.TabIndex);
-            Assert.AreEqual(0, wizardControl.NextButton.TabIndex);
+            Assert.AreEqual(1, wizardControl.NextButton.TabIndex);
         }
         [Test]
         public void TestNext()
@@ -341,7 +419,7 @@ namespace Habanero.Test.UI.Base.Wizard
         {
             public MyWizardStep ControlForStep1 = new MyWizardStep();
             
-            public MyWizardStep ControlForStep2 = new MyWizardStep();
+            public MyWizardStep ControlForStep2 = new MyWizardStep("This is wizard step 2");
             public bool FinishCalled = false;
             private readonly List<IWizardStep> _wizardSteps;
             private int _currentStep = -1;
@@ -427,7 +505,22 @@ namespace Habanero.Test.UI.Base.Wizard
         {
             private bool _allowMoveOn = true;
 
+            private readonly string _headerText;
             private bool _allowCanMoveBack = true;
+
+            public string HeaderText
+            {
+                get { return _headerText; }
+            }
+
+            public MyWizardStep() : this("")
+            {
+            }
+
+            public MyWizardStep(string headerText)
+            {
+                _headerText = headerText;
+            }
 
             public bool AllowCanMoveBack
             {
@@ -438,7 +531,8 @@ namespace Habanero.Test.UI.Base.Wizard
             #region IWizardStep Members
 
             public void InitialiseStep()
-            {}
+            {
+            }
 
             public bool CanMoveOn(out string message)
             {

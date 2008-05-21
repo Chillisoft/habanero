@@ -44,5 +44,10 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns></returns>
         bool CanMoveBack();
+
+        /// <summary>
+        /// The text that you want displayed at the top of the wizard control when this step is active.
+        /// </summary>
+        string HeaderText { get; }
     }
 }
