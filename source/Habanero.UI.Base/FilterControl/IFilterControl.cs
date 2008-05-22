@@ -69,5 +69,8 @@ namespace Habanero.UI.Base.FilterControl
         void ApplyFilter();
 
         string HeaderText { get; set;}
+
+
+        void ClearFilters();
     }
 }
