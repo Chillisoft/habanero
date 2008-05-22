@@ -247,7 +247,8 @@ namespace Habanero.Test.UI.Grid
             //grid.filtercontrols.searchbutton.click
             readOnlyGridControl.FilterControl.ApplyFilter();
             //---------------Test Result -----------------------
-            StringAssert.Contains(filterByValue,readOnlyGridControl.FilterControl.GetFilterClause().GetFilterClauseString());
+            StringAssert.Contains(filterByValue,
+                                  readOnlyGridControl.FilterControl.GetFilterClause().GetFilterClauseString());
             //verify that there are 2 people in the grid.
             Assert.AreEqual(2, readOnlyGridControl.Grid.Rows.Count);
             //---------------Tear Down -------------------------          
@@ -267,6 +268,7 @@ namespace Habanero.Test.UI.Grid
             Assert.AreEqual(FilterModes.Filter, readOnlyGridControl.FilterControl.FilterMode);
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void Test_ReadOnlyGrid_SetToSearchSetsToSearchMode()
         {
@@ -282,7 +284,7 @@ namespace Habanero.Test.UI.Grid
             Assert.AreEqual(FilterModes.Search, readOnlyGridControl.FilterControl.FilterMode);
             //---------------Tear Down -------------------------          
         }
-        
+
         private static ContactPersonTestBO CreateContactPersonInDB()
         {
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
@@ -290,6 +292,7 @@ namespace Habanero.Test.UI.Grid
             contactPersonTestBO.Save();
             return contactPersonTestBO;
         }
+
         private static ContactPersonTestBO CreateContactPersonInDB_With_SSSSS_InSurname()
         {
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
@@ -299,7 +302,7 @@ namespace Habanero.Test.UI.Grid
         }
 
         [Test]
-        public void TestCreatereadOnlyGridControl()
+        public void TestCreateReadOnlyGridControl()
         {
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
@@ -538,6 +541,45 @@ namespace Habanero.Test.UI.Grid
             }
         }
 
+        [Test]
+        public void TestSetCollection_Null_ClearsTheGrid()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            AddControlToForm(readOnlyGridControl);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
+            //----------------Assert Preconditions --------------
+
+            Assert.IsTrue(readOnlyGridControl.Grid.Rows.Count > 0, "There should be items in teh grid b4 clearing");
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.SetBusinessObjectCollection(null);
+            //---------------Verify Result ---------------------
+            Assert.AreEqual(0, readOnlyGridControl.Grid.Rows.Count,
+                            "There should be no items in the grid  after setting to null");
+            Assert.IsFalse(readOnlyGridControl.Buttons.Enabled);
+            Assert.IsFalse(readOnlyGridControl.FilterControl.Enabled);
+        }
+        [Test]
+        public void TestSetCollection_NullCol_ThenNonNullEnablesButtons()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            AddControlToForm(readOnlyGridControl);
+            readOnlyGridControl.SetBusinessObjectCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(null);
+            //----------------Assert Preconditions --------------
+            Assert.IsFalse(readOnlyGridControl.Buttons.Enabled);
+            Assert.IsFalse(readOnlyGridControl.FilterControl.Enabled);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.SetBusinessObjectCollection(col);
+            //---------------Verify Result ---------------------
+            Assert.IsTrue(readOnlyGridControl.Buttons.Enabled);
+            Assert.IsTrue(readOnlyGridControl.FilterControl.Enabled);
+        }
         [Test]
         public void TestSetCollection_InitialisesGridIfNotPreviouslyInitialised()
         {

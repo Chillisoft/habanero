@@ -18,34 +18,34 @@
 //---------------------------------------------------------------------------------
 
 
-using System;
-using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
-using Habanero.UI;
+using Habanero.UI.Base;
 
-namespace Habanero.UI.Forms
+namespace Habanero.UI.Base
 {
     /// <summary>
     /// This class provides mapping from a business object collection to a
     /// user interface ComboBox.  This mapper is used at code level when
     /// you are explicitly providing a business object collection.
     /// </summary>
-    public class CollectionComboBoxMapper
+    public class ComboBoxCollectionController
     {
-        private readonly ComboBox _comboBox;
-		private IBusinessObjectCollection _collection;
-        //private MouseEventHandler _mouseClickHandler;
-        private ComboBoxRightClickController _comboBoxRightClickController;
+        private readonly IComboBox _comboBox;
+        private readonly IControlFactory _controlFactory;
+        private IBusinessObjectCollection _collection;
+        //TODO _Port: private ComboBoxRightClickController _comboBoxRightClickController;
 
 
         /// <summary>
         /// Constructor to create a new collection ComboBox mapper object.
         /// </summary>
         /// <param name="comboBox">The ComboBox object to map</param>
-        public CollectionComboBoxMapper(ComboBox comboBox)
+        /// <param name="controlFactory">The control factory used to create controls</param>
+        public ComboBoxCollectionController(IComboBox comboBox, IControlFactory controlFactory)
         {
             _comboBox = comboBox;
+            _controlFactory = controlFactory;
         }
 
         /// <summary>
@@ -59,41 +59,38 @@ namespace Habanero.UI.Forms
         {
             if (_collection != null)
             {
-                _collection.BusinessObjectAdded -= new EventHandler<BOEventArgs>(BusinessObjectAddedHandler);
-                _collection.BusinessObjectRemoved -= new EventHandler<BOEventArgs>(BusinessObjectRemovedHandler);
+                _collection.BusinessObjectAdded -= BusinessObjectAddedHandler;
+                _collection.BusinessObjectRemoved -= BusinessObjectRemovedHandler;
             }
             _collection = collection;
-            SetupComboBoxRightClickController();
+            //TODO _Port: SetupComboBoxRightClickController();
             SetComboBoxCollection(_comboBox, _collection, includeBlank);
-//			_comboBox.Items.Clear();
-//			foreach (BusinessObjectBase businessObjectBase in _collection) {
-//				_comboBox.Items.Add(businessObjectBase);
-//			}
 
-            _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(BusinessObjectAddedHandler);
-            _collection.BusinessObjectRemoved += new EventHandler<BOEventArgs>(BusinessObjectRemovedHandler);
+            _collection.BusinessObjectAdded += BusinessObjectAddedHandler;
+            _collection.BusinessObjectRemoved += BusinessObjectRemovedHandler;
         }
+        //TODO _Port: 
+        //private void SetupComboBoxRightClickController()
+        //{
+        //    _comboBoxRightClickController = new ComboBoxRightClickController(_comboBox, _collection.ClassDef);
+        //    _comboBoxRightClickController.NewObjectCreated += NewComboBoxObjectCreatedHandler;
+        //}
 
-        private void SetupComboBoxRightClickController()
-        {
-            _comboBoxRightClickController = new ComboBoxRightClickController(_comboBox, _collection.ClassDef);
-            _comboBoxRightClickController.NewObjectCreated += NewComboBoxObjectCreated;
-        }
+        //private void NewComboBoxObjectCreatedHandler(IBusinessObject businessObject)
+        //{
+        //    _collection.Add(businessObject);
+        //    _comboBox.SelectedItem = businessObject;
+        //}
 
-        private void NewComboBoxObjectCreated(IBusinessObject businessObject)
-        {
-            _collection.Add(businessObject);
-            _comboBox.SelectedItem = businessObject;
-        }
-
-        ///<summary>
-        /// The controller used to handle the right-click pop-up form behaviour
-        ///</summary>
-        public ComboBoxRightClickController ComboBoxRightClickController
-        {
-            get { return _comboBoxRightClickController; }
-            set { _comboBoxRightClickController = value; }
-        }
+        //TODO _Port:
+        /////<summary>
+        ///// The controller used to handle the right-click pop-up form behaviour
+        /////</summary>
+        //public ComboBoxRightClickController ComboBoxRightClickController
+        //{
+        //    get { return _comboBoxRightClickController; }
+        //    set { _comboBoxRightClickController = value; }
+        //}
 
         /// <summary>
         /// This handler is called when a business object has been removed from
@@ -159,11 +156,11 @@ namespace Habanero.UI.Forms
         /// <param name="col">The business object collection being represented</param>
         /// <param name="includeBlank">Whether to include a blank item at the
         /// top of the list</param>
-		public static void SetComboBoxCollection(ComboBox cbx, IBusinessObjectCollection col, bool includeBlank)
+        public void SetComboBoxCollection(IComboBox cbx, IBusinessObjectCollection col, bool includeBlank)
         {
             int width = cbx.Width;
-            
-            Label lbl = ControlFactory.CreateLabel("", false);
+
+            ILabel lbl = _controlFactory.CreateLabel("", false);
             cbx.Items.Clear();
             if (includeBlank)
             {
@@ -181,16 +178,17 @@ namespace Habanero.UI.Forms
             cbx.DropDownWidth = width;
         }
 
-        /// <summary>
-        /// Sets up a handler so that right-clicking on the ComboBox will
-        /// allow the user to create a new business object using a form that is
-        /// provided.  A tooltip is also added to indicate this possibility to
-        /// the user.
-        /// </summary>
-        public void SetupRightClickBehaviour()
-        {
-            _comboBoxRightClickController.SetupRightClickBehaviour();
-        }
+        //TODO _Port
+        ///// <summary>
+        ///// Sets up a handler so that right-clicking on the ComboBox will
+        ///// allow the user to create a new business object using a form that is
+        ///// provided.  A tooltip is also added to indicate this possibility to
+        ///// the user.
+        ///// </summary>
+        //public void SetupRightClickBehaviour()
+        //{
+        //    _comboBoxRightClickController.SetupRightClickBehaviour();
+        //}
         
     }
 }

@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ButtonsControl\TestButtonGroupControl.cs" />
+    <Compile Include="Controllers\TestComboBoxCollectionController.cs" />
     <Compile Include="FilterController\TestCompositeFilterClause.cs" />
     <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
     <Compile Include="FilterController\TestFilterControlDate.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
     <Compile Include="Mappers\TestControlMapper.cs" />
-    <Compile Include="Mappers\TestListViewCollectionController.cs" />
+    <Compile Include="Controllers\TestListViewCollectionController.cs" />
     <Compile Include="Mappers\TestLookupComboBoxMapper.cs" />
     <Compile Include="Mappers\TestMapperBase.cs" />
     <Compile Include="Mappers\TestNumericUpDownCurrencyMapper.cs" />

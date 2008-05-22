@@ -319,6 +319,13 @@ namespace Habanero.UI.WebGUI
 
         public void SetBusinessObjectCollection(IBusinessObjectCollection boCollection)
         {
+            if (boCollection == null )
+            {
+                _grid.SetBusinessObjectCollection(null);
+                this.Buttons.Enabled = false;
+                this.FilterControl.Enabled = false;
+                return;
+            }
             if (_classDef == null)
             {
                 Initialise(boCollection.ClassDef);
@@ -331,7 +338,8 @@ namespace Habanero.UI.WebGUI
                 }
             }
             _grid.SetBusinessObjectCollection(boCollection);
-
+            this.Buttons.Enabled = true;
+            this.FilterControl.Enabled = true;
             if (this.BusinessObjectEditor == null ) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
             if (this.BusinessObjectCreator == null) this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
             if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
