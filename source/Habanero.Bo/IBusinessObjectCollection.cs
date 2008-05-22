@@ -29,7 +29,7 @@ namespace Habanero.BO
     /// Models a collection of business objects.  This interface has been provided to
     /// circumvent the strong typing of BusinessObjectCollection.
     /// </summary>
-	public interface IBusinessObjectCollection : ICollection, IEnumerable //IList<BusinessObject>
+	public interface IBusinessObjectCollection : ICollection //IList<BusinessObject>
 	{
 		/// <summary>
 		/// Handles the event of a business object being added
@@ -70,7 +70,7 @@ namespace Habanero.BO
 		/// Returns a sample business object held by the collection, which is
 		/// constructed from the class definition
 		/// </summary>
-		BusinessObject SampleBo
+		IBusinessObject SampleBo
 		{
 			get;
 		}
@@ -85,7 +85,7 @@ namespace Habanero.BO
 		/// </summary>
 		/// <param name="key">The orimary key as a string</param>
 		/// <returns>Returns the business object if found, or null if not</returns>
-		BusinessObject Find(string key);
+        IBusinessObject Find(string key);
 
 		/// <summary>
 		/// Returns a new collection that is a copy of this collection
@@ -118,7 +118,7 @@ namespace Habanero.BO
 		/// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
 		/// <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
         /// <returns>The element at the specified index.</returns>
-        BusinessObject this[int index] { get; set; }
+        IBusinessObject this[int index] { get; set; }
 
 		/// <summary>
 		/// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
@@ -150,7 +150,7 @@ namespace Habanero.BO
 		/// the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is 
 		/// greater than the available space from arrayIndex to the end of the destination array, or 
 		/// Type T cannot be cast automatically to the type of the destination array.</exception>
-		void CopyTo(BusinessObject[] array, int arrayIndex);
+		void CopyTo(IBusinessObject[] array, int arrayIndex);
 
 		/// <summary>
 		/// Removes the first occurrence of a specific object from the 
@@ -226,5 +226,92 @@ namespace Habanero.BO
         /// </summary>
         /// <returns></returns>
         IBusinessObject CreateBusinessObject();
+
+
+        /// <summary>
+        /// Loads the entire collection for the type of object.
+        /// </summary>
+        void LoadAll();
+
+        /// <summary>
+        /// Loads the entire collection for the type of object,
+        /// loaded in the order specified. 
+        /// To load the collection in any order use the LoadAll() method.
+        /// </summary>
+        /// <param name="orderByClause">The order-by clause</param>
+        void LoadAll(string orderByClause);
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided
+        /// and an extra criteria literal,
+        /// loaded in the order specified
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+        void Load(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral);
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided in
+        /// an expression and an extra criteria literal, 
+        /// loaded in the order specified
+        /// </summary>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+        void Load(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral);
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="limit">The limit</param>
+        void LoadWithLimit(string searchCriteria, string orderByClause, int limit);
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided in
+        /// an expression, loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="limit">The limit</param>
+        void LoadWithLimit(IExpression searchExpression, string orderByClause, int limit);
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided
+        /// and an extra criteria literal, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchCriteria">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+        /// <param name="limit">The limit</param>
+        void LoadWithLimit(string searchCriteria, string orderByClause, string extraSearchCriteriaLiteral,
+                                  int limit);
+
+        /// <summary>
+        /// Loads business objects that match the search criteria provided in
+        /// an expression and an extra criteria literal, 
+        /// loaded in the order specified, 
+        /// and limiting the number of objects loaded
+        /// </summary>
+        /// <param name="searchExpression">The search expression</param>
+        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="extraSearchCriteriaLiteral">Extra search criteria</param>
+        /// <param name="limit">The limit</param>
+        void LoadWithLimit(IExpression searchExpression, string orderByClause, string extraSearchCriteriaLiteral,
+                                  int limit);
+
+        ///// <summary>
+        ///// Removes the business object at the index position specified
+        ///// </summary>
+        ///// <param name="index">The index position to remove from</param>
+        //new void RemoveAt<TBusinessObject>(int index);
+
 	}
 }

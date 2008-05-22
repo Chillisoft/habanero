@@ -793,7 +793,7 @@ namespace Habanero.BO
         /// Returns a sample business object held by the collection, which is
         /// constructed from the class definition
         /// </summary>
-        public BusinessObject SampleBo
+        public IBusinessObject SampleBo
         {
             get { return _sampleBo; }
         }
@@ -1029,7 +1029,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="key">The orimary key as a string</param>
         /// <returns>Returns the business object if found, or null if not</returns>
-        BusinessObject IBusinessObjectCollection.Find(string key)
+        IBusinessObject IBusinessObjectCollection.Find(string key)
         {
             return this.Find(key);
         }
@@ -1074,7 +1074,7 @@ namespace Habanero.BO
         /// <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
         /// <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
         /// <returns>The element at the specified index.</returns>
-        BusinessObject IBusinessObjectCollection.this[int index]
+        IBusinessObject IBusinessObjectCollection.this[int index]
         {
             get { return base[index]; }
             set { base[index] = (TBusinessObject) value; }
@@ -1116,7 +1116,7 @@ namespace Habanero.BO
         /// the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is 
         /// greater than the available space from arrayIndex to the end of the destination array, or 
         /// Type T cannot be cast automatically to the type of the destination array.</exception>
-        void IBusinessObjectCollection.CopyTo(BusinessObject[] array, int arrayIndex)
+        void IBusinessObjectCollection.CopyTo(IBusinessObject[] array, int arrayIndex)
         {
             TBusinessObject[] thisArray = new TBusinessObject[array.LongLength];
             this.CopyTo(thisArray, arrayIndex);

@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Base.FilterControl;
@@ -36,6 +37,65 @@ namespace Habanero.Test.UI.Base
         public void SetupFixture()
         {
             itsFilterClauseFactory = new DataViewFilterClauseFactory();
+        }
+
+        [Test]
+        public void Test_Search_EqualsWithString()
+        {         
+
+            //---------------Execute Test ----------------------
+            IFilterClause filterClause =
+                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "testvalue");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("TestColumn = 'testvalue'", filterClause.GetFilterClauseString("%",""));
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_Search_EqualsWithInteger()
+        {
+            //---------------Execute Test ----------------------
+            IFilterClause filterClause =
+                itsFilterClauseFactory.CreateIntegerFilterClause("TestColumn", FilterClauseOperator.OpEquals, 12);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("TestColumn = 12", filterClause.GetFilterClauseString("%", ""));
+        }
+        [Test]
+        public void Test_Search_LikeWithString()
+        {
+            IFilterClause filterClause =
+                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpLike, "testvalue");
+            Assert.AreEqual("TestColumn like '%testvalue%'", filterClause.GetFilterClauseString("%", ""));
+        }
+
+        [Test]
+        public void Test_Search_DateEquals()
+        {
+            DateTime filterValue = DateTime.Now.AddDays(-2);
+            //---------------Execute Test ----------------------
+            IFilterClause filterClause =
+                itsFilterClauseFactory.CreateDateFilterClause("TestColumn", FilterClauseOperator.OpEquals, filterValue);
+            //---------------Test Result -----------------------
+            string expectedFilterClause = string.Format("TestColumn = '{0}'", filterValue.ToString("dd MMM yyyy HH:mm:ss"));
+            Assert.AreEqual(expectedFilterClause, filterClause.GetFilterClauseString("%", "'"));
+        }
+
+
+
+
+
+
+
+
+        [Test]
+        public void TestDateEquals()
+        {
+            DateTime filterValue = DateTime.Now.AddDays(-2);
+            //---------------Execute Test ----------------------
+            IFilterClause filterClause =
+                itsFilterClauseFactory.CreateDateFilterClause("TestColumn", FilterClauseOperator.OpEquals, filterValue);
+            //---------------Test Result -----------------------
+            string expectedFilterClause = string.Format("TestColumn = #{0}#", filterValue.ToString("dd MMM yyyy HH:mm:ss"));
+            Assert.AreEqual(expectedFilterClause, filterClause.GetFilterClauseString("%", "#"));
         }
 
         [Test]

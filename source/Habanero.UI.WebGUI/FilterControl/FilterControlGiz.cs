@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
@@ -16,7 +17,8 @@ namespace Habanero.UI.WebGUI
         private IButton _filterButton;
         private IButton _clearButton;
         public event EventHandler Filter;
-        private GroupBoxGiz _gbox;
+        private readonly GroupBoxGiz _gbox;
+        private FilterModes _filterMode; //Note all this should move up to windows need to decide buttons etc on win
 
         public FilterControlGiz(IControlFactory controlFactory)
         {
@@ -31,7 +33,10 @@ namespace Habanero.UI.WebGUI
             _filterControlManager = new FilterControlManager(controlFactory, flowLayoutManager);
             this.Height = 50;
         }
-
+        //public int CountOfFilterControls()
+        //{
+        //    return 
+        //}
         private void CreateFilterButtons(LayoutManager flowLayoutManager)
         {
             int buttonHeight = 20;
@@ -79,6 +84,11 @@ namespace Habanero.UI.WebGUI
         {
             get { return _gbox.Text; }
             set { _gbox.Text = value; }
+        }
+
+        public int CountOfFilters
+        {
+            get { return _filterControlManager.CountOfFilters; }
         }
 
         private void FireFilterEvent()
@@ -135,12 +145,40 @@ namespace Habanero.UI.WebGUI
 
         public IFilterClause GetFilterClause()
         {
+            //if (FilterMode == FilterModes.Search)
+            //{
+            //    return _filterControlManager.GetFilterClause();
+            //}
             return _filterControlManager.GetFilterClause();
         }
 
         public IButton FilterButton
         {
             get { return _filterButton; }
+        }
+
+        public FilterModes FilterMode
+        {
+            get { return _filterMode; }
+            set { _filterMode = value;
+            if (_filterMode == FilterModes.Filter)
+            {
+                _filterButton.Text = "Filter";
+            } else
+            {
+                _filterButton.Text = "Search";
+            }
+        }
+        }
+
+        public IList FilterControls
+        {
+            get { return _filterControlManager.FilterControls; }
+        }
+
+        public IControlChilli GetChildControl(string propertyName)
+        {
+            return this._filterControlManager.GetChildControl(propertyName);
         }
 
         public IButton ClearButton

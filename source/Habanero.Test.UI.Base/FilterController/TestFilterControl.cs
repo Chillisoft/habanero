@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Habanero.Base;
 using Habanero.UI.Base;
@@ -28,6 +29,36 @@ namespace Habanero.Test.UI.Base.FilterController
         public void TearDownTest()
         {
             //runs every time any testmethod is complete
+        }
+
+        [Test]
+        public void Test_GizOnly_SetFilterModeSearchSetsText()
+        {
+            
+            //---------------Set up test pack-------------------
+            IControlFactory factory = new ControlFactoryGizmox();
+            IFilterControl ctl = factory.CreateFilterControl();
+            //---------------Assert Preconditions --------------
+            Assert.AreEqual("Filter", ctl.FilterButton.Text);
+            //---------------Execute Test ----------------------
+            ctl.FilterMode = FilterModes.Search;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Search", ctl.FilterButton.Text);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_GizOnly_SetFilterModeFilerSetsText()
+        {
+            //---------------Set up test pack-------------------
+            IControlFactory factory = new ControlFactoryGizmox();
+            IFilterControl ctl = factory.CreateFilterControl();
+            ctl.FilterMode = FilterModes.Search;
+            //---------------Assert Preconditions --------------
+            Assert.AreEqual("Search", ctl.FilterButton.Text);
+            //---------------Execute Test ----------------------
+            ctl.FilterMode = FilterModes.Filter;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Filter", ctl.FilterButton.Text);        
         }
 
         #region TextBoxFilter
@@ -111,10 +142,125 @@ namespace Habanero.Test.UI.Base.FilterController
             tb.Text = "";
             //---------------Test Result -----------------------
             Assert.AreEqual(nullClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+            Assert.AreEqual(1, filterControl.FilterControls.Count);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestAdd_TwoStringFilterTextBoxWin()
+        {
+            TestAddStringFilterTextBox(new ControlFactoryWin());
+        }
 
+        [Test]
+        public void TestAdd_TwoStringFilterTextBoxGiz()
+        {
+            TestAdd_TwoStringFilterTextBox(new ControlFactoryGizmox());
+        }
+        public void TestAdd_TwoStringFilterTextBox(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = factory.CreateFilterControl();
+            //---------------Execute Test ----------------------
+            filterControl.AddStringFilterTextBox("Test:", "TestColumn");
+            filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, filterControl.FilterControls.Count);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestAdd_TwoStringFilterTextBox_GetControlWin()
+        {
+            TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestAdd_TwoStringFilterTextBox_GetControlGiz()
+        {
+            TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryGizmox());
+        }
+        public void TestAdd_TwoStringFilterTextBox_GetControl(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = factory.CreateFilterControl();
+            ITextBox tbExpected = filterControl.AddStringFilterTextBox("Test:", "TestColumn");
+            filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
+            //---------------Execute Test ----------------------
+            ITextBox tbReturned = (ITextBox) filterControl.GetChildControl("TestColumn");
+            //---------------Test Result -----------------------
+            Assert.AreSame(tbExpected, tbReturned);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestAdd_TwoStringFilterTextBox_Combo_GetControlWin()
+        {
+            TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestAdd_TwoStringFilterTextBox_Combo_GetControlGiz()
+        {
+            TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryGizmox());
+        }
+        public void TestAdd_TwoStringFilterTextBox_Combo_GetControl(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = factory.CreateFilterControl();
+            IComboBox tbExpected = filterControl.AddStringFilterComboBox("Test:", "TestColumn", null, false);
+            filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
+            //---------------Execute Test ----------------------
+            IComboBox tbReturned = (IComboBox)filterControl.GetChildControl("TestColumn");
+            //---------------Test Result -----------------------
+            Assert.AreSame(tbExpected, tbReturned);
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestAdd_TwoStringFilterTextBox_DateTime_GetControlWin()
+        {
+            TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestAdd_TwoStringFilterTextBox_DateTime__GetControlGiz()
+        {
+            TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryGizmox());
+        }
+        public void TestAdd_TwoStringFilterTextBox_DateTime__GetControl(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = factory.CreateFilterControl();
+            IDateTimePicker tbExpected = filterControl.AddDateFilterDateTimePicker("Test:", "TestColumn",DateTime.Now,FilterClauseOperator.OpEquals,false);
+            filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
+            //---------------Execute Test ----------------------
+            IDateTimePicker tbReturned = (IDateTimePicker)filterControl.GetChildControl("TestColumn");
+            //---------------Test Result -----------------------
+            Assert.AreSame(tbExpected, tbReturned);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestAdd_TwoStringFilterTextBox_CheckBox_GetControlWin()
+        {
+            TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestAdd_TwoStringFilterTextBox_CheckBox__GetControlGiz()
+        {
+            TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryGizmox());
+        }
+        public void TestAdd_TwoStringFilterTextBox_CheckBox__GetControl(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterControl filterControl = factory.CreateFilterControl();
+            ICheckBox tbExpected = filterControl.AddBooleanFilterCheckBox("Test:", "TestColumn", false);
+            filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
+            //---------------Execute Test ----------------------
+            ICheckBox tbReturned = (ICheckBox)filterControl.GetChildControl("TestColumn");
+            //---------------Test Result -----------------------
+            Assert.AreSame(tbExpected, tbReturned);
+            //---------------Tear Down -------------------------          
+        }
         #endregion
 
 

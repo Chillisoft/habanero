@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Data;
 using Habanero.Base;
 using Habanero.UI.Base.FilterControl;
@@ -63,6 +64,89 @@ namespace Habanero.Test.UI.Base
                     GetFilterClauseString();
             Assert.AreEqual(2, dv.Count);
         }
+
+        [Test]
+        public void Test_Search_CompositeEqualsWithAnd()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterClause clause1 =
+                filterClauseFactory.CreateStringFilterClause("h a", FilterClauseOperator.OpLike, "Peter");
+            IFilterClause clause2 =
+                filterClauseFactory.CreateStringFilterClause("h a", FilterClauseOperator.OpLike, "Kelly");
+            IFilterClause compositeClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+
+            //---------------Execute Test ----------------------
+
+            string expectedFilterString = compositeClause.GetFilterClauseString("%","'");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("([h a] like '%Peter%') and ([h a] like '%Kelly%')", expectedFilterString);
+        }
+
+        [Test]
+        public void Test_Filter_CompositeEqualsWithAnd()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterClause clause1 =
+                filterClauseFactory.CreateStringFilterClause("h a", FilterClauseOperator.OpLike, "Peter");
+            IFilterClause clause2 =
+                filterClauseFactory.CreateStringFilterClause("h a", FilterClauseOperator.OpLike, "Kelly");
+            IFilterClause compositeClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+
+            //---------------Execute Test ----------------------
+
+            string expectedFilterString = compositeClause.GetFilterClauseString();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("([h a] like '*Peter*') and ([h a] like '*Kelly*')", expectedFilterString);
+        }
+
+        public void Test_Search_CompositeEqualsWithAnd_Date()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterClause clause1 =
+                filterClauseFactory.CreateDateFilterClause("h a", FilterClauseOperator.OpEquals, DateTime.Now);
+            IFilterClause clause2 =
+                filterClauseFactory.CreateDateFilterClause("h a", FilterClauseOperator.OpEquals, DateTime.Now);
+            IFilterClause compositeClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+
+            string expectedDateString = DateTime.Now.ToString("dd MMM yyyy HH:mm:ss");
+            string expectedDateFilterClause = string.Format("([h a] = '{0}') and ([h a] = '{0}')", expectedDateString);
+            //---------------Execute Test ----------------------
+
+            string expectedFilterString = compositeClause.GetFilterClauseString("%", "'");
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(expectedDateFilterClause, expectedFilterString);
+        }
+
+        [Test]
+        public void Test_Filter_CompositeEqualsWithAnd_Date()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterClause clause1 =
+                filterClauseFactory.CreateDateFilterClause("h a", FilterClauseOperator.OpEquals, DateTime.Now);
+            IFilterClause clause2 =
+                filterClauseFactory.CreateDateFilterClause("h a", FilterClauseOperator.OpEquals, DateTime.Now);
+            IFilterClause compositeClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+
+            string expectedDateString = DateTime.Now.ToString("dd MMM yyyy HH:mm:ss");
+            string expectedDateFilterClause = string.Format("([h a] = #{0}#) and ([h a] = #{0}#)", expectedDateString);
+            //---------------Execute Test ----------------------
+
+            string filterString = compositeClause.GetFilterClauseString();
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(expectedDateFilterClause, filterString);
+        }
+
+
 
         [Test]
         public void TestCompositeEqualsWithAnd()

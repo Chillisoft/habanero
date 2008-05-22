@@ -60,7 +60,7 @@ namespace Habanero.BO
                     IBusinessObjectCollection col = relationship.GetRelatedBusinessObjectCol();
                     for (int i = col.Count - 1; i >= 0; i--)
                     {
-                        BusinessObject bo = col[i];
+                        BusinessObject bo = (BusinessObject) col[i];
                         foreach (RelPropDef relPropDef in relationship.RelationshipDef.RelKeyDef)
                         {
                             bo.SetPropertyValue(relPropDef.RelatedClassPropName, null);
@@ -85,7 +85,7 @@ namespace Habanero.BO
                     IBusinessObjectCollection col = relationship.GetRelatedBusinessObjectCol();
                     for (int i = col.Count - 1; i >= 0; i--)
                     {
-                        BusinessObject bo = col[i];
+                        BusinessObject bo = (BusinessObject) col[i];
                         bo.Delete();
                         ExecuteTransactionToDataSource(new TransactionalBusinessObjectDB(bo));
                     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
@@ -12,6 +13,8 @@ namespace Habanero.UI.Win
     {
         public event EventHandler Filter;
         private readonly FilterControlManager _filterControlManager;
+        private FilterModes _filterModes;
+        private FilterModes _filterMode;
         //private readonly FlowLayoutManager _flowLayoutManager;
 
         public FilterControlWin(IControlFactory controlFactory)
@@ -94,6 +97,32 @@ namespace Habanero.UI.Win
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
+        }
+
+        public int CountOfFilters
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public IButton FilterButton
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public FilterModes FilterMode
+        {
+            get { return _filterMode; }
+            set { _filterMode = value; }
+        }
+
+        public IList FilterControls
+        {
+            get {return this._filterControlManager.FilterControls; }
+        }
+
+        public IControlChilli GetChildControl(string propertyName)
+        {
+            return this._filterControlManager.GetChildControl(propertyName);
         }
 
         public void ClearFilters()

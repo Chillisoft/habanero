@@ -126,7 +126,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(DuplicateNameException))]
         public void TestDuplicateColumnNames()
         {
-            BOMapper mapper = new BOMapper(itsCollection.SampleBo);
+            BOMapper mapper = new BOMapper((BusinessObject) itsCollection.SampleBo);
             itsTable = itsProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").GetUIGridProperties());
         }
 

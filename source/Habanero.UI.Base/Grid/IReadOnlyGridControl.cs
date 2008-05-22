@@ -5,6 +5,12 @@ using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.Base
 {
+    public enum FilterModes
+    {
+        Filter,
+        Search
+    }
+
     /// <summary>
     /// Manages a read-only grid with buttons (ie. a grid whose objects are
     /// edited through an editing form rather than directly on the grid).
@@ -28,6 +34,7 @@ namespace Habanero.UI.Base
         /// initiliase the grid to the with the 'default' UIdef.
         /// </summary>
         void Initialise(ClassDef classDef);
+
         /// <summary>
         /// Returns the grid object held. This property can be used to
         /// access a range of functionality for the grid
@@ -36,6 +43,7 @@ namespace Habanero.UI.Base
         IReadOnlyGrid Grid { get; }
 
         BusinessObject SelectedBusinessObject { get; set; }
+
         /// <summary>
         /// Returns the button control held. This property can be used
         /// to access a range of functionality for the button control
@@ -54,6 +62,10 @@ namespace Habanero.UI.Base
         ClassDef ClassDef { get; }
 
         IFilterControl FilterControl { get; }
+
+        bool IsInitialised { get; }
+
+        FilterModes FilterMode { get; set; }
 
         /// <summary>
         /// Sets the business object collection to display.  Loading of

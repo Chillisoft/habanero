@@ -237,6 +237,10 @@ namespace Habanero.UI.Base
         /// <param name="filterClause">The filter clause</param>
         public void ApplyFilter(IFilterClause filterClause)
         {
+            if (_dataTableDefaultView == null)
+            {
+                throw new GridBaseInitialiseException("You cannot apply filters as the collection for the grid has not been set");
+            }
             if (filterClause != null)
             {
                 _dataTableDefaultView.RowFilter = filterClause.GetFilterClauseString();

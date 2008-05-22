@@ -12,6 +12,7 @@ namespace Habanero.UI.Base.FilterControl
         private readonly IFilterClauseFactory _clauseFactory;
         private readonly List<FilterUI> _filterControls = new List<FilterUI>();
         private readonly FlowLayoutManager _flowLayoutManager;
+
         public FilterControlManager(IControlFactory controlFactory, FlowLayoutManager flowLayoutManager )
         {
             _controlFactory = controlFactory;
@@ -19,11 +20,16 @@ namespace Habanero.UI.Base.FilterControl
             _clauseFactory = new DataViewFilterClauseFactory();
         }
 
-        //public ITextBox AddTextBox()
-        //{
-        //    ITextBox tb = _controlFactory.CreateTextBox();
-        //    return tb;
-        //}
+        public int CountOfFilters
+        {
+            get { return _filterControls.Count; }
+        }
+
+        public IList FilterControls
+        {
+            get { return _filterControls; }
+        }
+
 
         public IFilterClause GetFilterClause()
         {
@@ -38,8 +44,12 @@ namespace Habanero.UI.Base.FilterControl
                                                                filterUi.GetFilterClause());
             }
             return clause;
-
         }
+        //public IFilterClause GetFilterClause()
+        //{
+        //    return GetFilterClause("*", "#");
+
+        //}
 
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
@@ -159,6 +169,18 @@ namespace Habanero.UI.Base.FilterControl
             }
         }
 
+        public IControlChilli GetChildControl(string propertyName)
+        {
+            foreach (FilterUI filterUI in this._filterControls)
+            {
+                if (filterUI.PropertyName  == propertyName)
+                {
+                    return filterUI.FilterControl;
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// A super-class for user interface elements that provide filter clauses
         /// </summary>
@@ -179,14 +201,24 @@ namespace Habanero.UI.Base.FilterControl
                 _clauseFactory = clauseFactory;
             }
 
-            /// <summary>
-            /// Returns the filter clause
-            /// </summary>
-            /// <returns>Returns the filter clause</returns>
+            public string PropertyName
+            {
+                get { return _columnName; }
+            }
+
+            public abstract IControlChilli FilterControl
+            { get; }
+
+            ///// <summary>
+            ///// Returns the filter clause
+            ///// </summary>
+            ///// <returns>Returns the filter clause</returns>
             public abstract IFilterClause GetFilterClause();
 
             public abstract void Clear();
-       
+
+            //public abstract IFilterClause GetFilterClause(string stringLikeDelimiter, string dateTimeDelimiter);
+
         }
 
         /// <summary>
@@ -202,6 +234,11 @@ namespace Habanero.UI.Base.FilterControl
                 _textBox = textBox;
             }
 
+            public override IControlChilli FilterControl
+            {
+                get { return _textBox; }
+            }
+
             public override IFilterClause GetFilterClause()
             {
                 if (_textBox.Text.Length > 0)
@@ -215,7 +252,19 @@ namespace Habanero.UI.Base.FilterControl
                     return _clauseFactory.CreateNullFilterClause();
                 }
             }
-
+            //public override IFilterClause GetFilterClause(string stringLikeDelimiter, string dateTimeDelimiter)
+            //{
+            //    if (_textBox.Text.Length > 0)
+            //    {
+            //        return
+            //            _clauseFactory.CreateStringFilterClause(_columnName, FilterClauseOperator.OpLike,
+            //                                                    _textBox.Text);
+            //    }
+            //    else
+            //    {
+            //        return _clauseFactory.CreateNullFilterClause();
+            //    }
+            //}
             public override void Clear()
             {
                 _textBox.Text = "";
@@ -246,6 +295,11 @@ namespace Habanero.UI.Base.FilterControl
                 _strictMatch = strictMatch;
             }
 
+            public override IControlChilli FilterControl
+            {
+                get { return _comboBox; }
+            }
+
             public override IFilterClause GetFilterClause()
             {
                 if (_comboBox.SelectedIndex != -1 && _comboBox.SelectedItem.ToString().Length > 0)
@@ -267,6 +321,8 @@ namespace Habanero.UI.Base.FilterControl
             {
                 _comboBox.SelectedIndex = -1;
             }
+
+
         }
 
         /// <summary>
@@ -286,6 +342,11 @@ namespace Habanero.UI.Base.FilterControl
                 _isChecked = isChecked;
                 _checkBox.Checked = isChecked;
                 _checkBox.Text = text;
+            }
+
+            public override IControlChilli FilterControl
+            {
+                get { return _checkBox; }
             }
 
             public override IFilterClause GetFilterClause()
@@ -309,8 +370,8 @@ namespace Habanero.UI.Base.FilterControl
                 //Reset the check box to its default value
                 _checkBox.Checked = _isChecked;
             }
- 
         }
+
         /// <summary>
         /// Provides a filter clause from a given DateTime Picker, using the
         /// column name and filter clause operator provided
@@ -326,6 +387,11 @@ namespace Habanero.UI.Base.FilterControl
             {
                 _dateTimePicker = dtp;
                 _filterClauseOperator = op;
+            }
+
+            public override IControlChilli FilterControl
+            {
+                get { return _dateTimePicker; }
             }
 
             public override IFilterClause GetFilterClause()

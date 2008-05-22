@@ -46,11 +46,20 @@ namespace Habanero.UI.Base.FilterControl
             }
         }
 
+        ///// <summary>
+        ///// Returns the filter value as a string
+        ///// </summary>
+        ///// <returns>Returns a string</returns>
+        //protected override string CreateValueClause()
+        //{
+        //    return _filterValue.ToString();
+        //}
+
         /// <summary>
-        /// Returns the filter value as a string
+        /// Returns the value part of the clause
         /// </summary>
         /// <returns>Returns a string</returns>
-        protected override string CreateValueClause()
+        protected override string CreateValueClause(string stringLikeDelimiter, string dateTimeDelimiter)
         {
             return _filterValue.ToString();
         }

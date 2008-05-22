@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 
 namespace Habanero.UI.Base.FilterControl
@@ -69,6 +70,15 @@ namespace Habanero.UI.Base.FilterControl
         void ApplyFilter();
 
         string HeaderText { get; set;}
+
+        int CountOfFilters { get; }
+
+        IButton FilterButton { get; }
+
+        FilterModes FilterMode { get; set; }
+
+        IList FilterControls { get; }
+        IControlChilli GetChildControl(string propertyName);
 
 
         void ClearFilters();

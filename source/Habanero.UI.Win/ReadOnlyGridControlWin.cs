@@ -76,6 +76,17 @@ namespace Habanero.UI.Win
             get { return _filterControl; }
         }
 
+        public bool IsInitialised
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public FilterModes FilterMode
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
 
         public void SetBusinessObjectCollection(IBusinessObjectCollection boCollection)
         {

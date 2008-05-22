@@ -47,13 +47,22 @@ namespace Habanero.UI.Base.FilterControl
             }
         }
 
+        ///// <summary>
+        ///// Returns the filter value as a string
+        ///// </summary>
+        ///// <returns>Returns a string</returns>
+        //protected override string CreateValueClause()
+        //{
+        //    return "#" + ((DateTime)_filterValue).ToString("dd MMM yyyy HH:mm:ss") + "#";
+        //}
+
         /// <summary>
-        /// Returns the filter value as a string
+        /// Returns the value part of the clause
         /// </summary>
         /// <returns>Returns a string</returns>
-        protected override string CreateValueClause()
+        protected override string CreateValueClause(string stringLikeDelimiter, string dateTimeDelimiter)
         {
-            return "#" + ((DateTime)_filterValue).ToString("dd MMM yyyy HH:mm:ss") + "#";
+            return dateTimeDelimiter + ((DateTime)_filterValue).ToString("dd MMM yyyy HH:mm:ss") + dateTimeDelimiter;
         }
     }
 }

@@ -51,6 +51,20 @@ namespace Habanero.Test.UI.Grid
         //        frm.Controls.Add(readOnlyGridControlWin);
         //        return readOnlyGridControlWin;
         //    }
+//        [Test]
+//        public void TestWinInitialiseGrid()
+//        {
+//            //---------------Set up test pack-------------------
+//            ReadOnlyGridControlWin readOnlyGridControlGiz =
+//new ReadOnlyGridControlGiz();
+//            //--------------Assert PreConditions----------------            
+//            Assert.IsFalse(readOnlyGridControlGiz.IsInitialised);
+//            //---------------Execute Test ----------------------
+//            readOnlyGridControlGiz.Initialise(ContactPersonTestBO.LoadDefaultClassDefWithUIDef());
+//            //---------------Test Result -----------------------
+//            Assert.IsTrue(readOnlyGridControlGiz.IsInitialised);
+//            //---------------Tear Down -------------------------          
+//        }
         //}
         [TestFixture]
         public class TestreadOnlyGridControlGiz : TestReadonlyGridControl
@@ -76,11 +90,27 @@ namespace Habanero.Test.UI.Grid
                 return readOnlyGridControlGiz;
             }
 
+            [Test]
+            public void TestGizInitialiseGrid()
+            {
+                //---------------Set up test pack-------------------
+                ReadOnlyGridControlGiz readOnlyGridControlGiz =
+                    new ReadOnlyGridControlGiz();
+                //--------------Assert PreConditions----------------    
+                Assert.IsFalse(readOnlyGridControlGiz.IsInitialised);
+                //---------------Execute Test ----------------------
+                readOnlyGridControlGiz.Initialise(MyBO.LoadClassDefWithBoolean());
+                //---------------Test Result -----------------------
+                Assert.IsTrue(readOnlyGridControlGiz.IsInitialised);
+                //---------------Tear Down -------------------------          
+            }
+
             protected override void AddControlToForm(IControlChilli control)
             {
                 AddControlToForm(control, 200);
             }
         }
+
 
         [Test]
         public void TestAcceptance_FilterGrid()
@@ -186,6 +216,86 @@ namespace Habanero.Test.UI.Grid
             ContactPersonTestBO contactPerson =
                 BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(contactPersonPK);
             Assert.IsNotNull(contactPerson);
+        }
+
+        //TODO: Date searchby
+        [Test]
+        public void TestAcceptance_SearchGridSearchesTheGrid()
+        {
+            //---------------Set up test pack-------------------
+            //Clear all contact people from the DB
+            ContactPerson.DeleteAllContactPeople();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            //Create data in the database with the 5 contact people two with Search in surname
+            CreateContactPersonInDB();
+            CreateContactPersonInDB();
+            CreateContactPersonInDB();
+            CreateContactPersonInDB_With_SSSSS_InSurname();
+            CreateContactPersonInDB_With_SSSSS_InSurname();
+            //Create grid setup for search
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            ITextBox txtbox = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Surname", "Surname");
+            readOnlyGridControl.Initialise(classDef);
+            readOnlyGridControl.FilterMode = FilterModes.Search;
+            //--------------Assert PreConditions----------------            
+            //No items in the grid
+            Assert.AreEqual(0, readOnlyGridControl.Grid.Rows.Count);
+            //---------------Execute Test ----------------------
+            //set data in grid to a value that should return 2 people
+            string filterByValue = "SSSSS";
+            txtbox.Text = filterByValue;
+            //grid.filtercontrols.searchbutton.click
+            readOnlyGridControl.FilterControl.ApplyFilter();
+            //---------------Test Result -----------------------
+            StringAssert.Contains(filterByValue,readOnlyGridControl.FilterControl.GetFilterClause().GetFilterClauseString());
+            //verify that there are 2 people in the grid.
+            Assert.AreEqual(2, readOnlyGridControl.Grid.Rows.Count);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_ReadOnlyGridDefaultsToFilter()
+        {
+            //---------------Set up test pack-------------------
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(FilterModes.Filter, readOnlyGridControl.FilterMode);
+            Assert.AreEqual(FilterModes.Filter, readOnlyGridControl.FilterControl.FilterMode);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_ReadOnlyGrid_SetToSearchSetsToSearchMode()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(FilterModes.Filter, readOnlyGridControl.FilterMode);
+            Assert.AreEqual(FilterModes.Filter, readOnlyGridControl.FilterControl.FilterMode);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.FilterMode = FilterModes.Search;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(FilterModes.Search, readOnlyGridControl.FilterMode);
+            Assert.AreEqual(FilterModes.Search, readOnlyGridControl.FilterControl.FilterMode);
+            //---------------Tear Down -------------------------          
+        }
+        
+        private static ContactPersonTestBO CreateContactPersonInDB()
+        {
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            contactPersonTestBO.Surname = Guid.NewGuid().ToString("N");
+            contactPersonTestBO.Save();
+            return contactPersonTestBO;
+        }
+        private static ContactPersonTestBO CreateContactPersonInDB_With_SSSSS_InSurname()
+        {
+            ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
+            contactPersonTestBO.Surname = Guid.NewGuid().ToString("N") + "SSSSS";
+            contactPersonTestBO.Save();
+            return contactPersonTestBO;
         }
 
         [Test]
@@ -479,6 +589,7 @@ namespace Habanero.Test.UI.Grid
             ////---------------Test Result -----------------------
             Assert.AreEqual(4, readOnlyGrid.Rows.Count);
         }
+
         [Test]
         public void TestSetCollection_DefaultEditorsSetUp()
         {
@@ -491,7 +602,7 @@ namespace Habanero.Test.UI.Grid
 
             readOnlyGridControl.Grid.Columns.Add("TestProp", "TestProp");
             //---------------Assert Preconditions ----------------------
-            Assert.IsNull(readOnlyGridControl.BusinessObjectEditor );
+            Assert.IsNull(readOnlyGridControl.BusinessObjectEditor);
             Assert.IsNull(readOnlyGridControl.BusinessObjectCreator);
             Assert.IsNull(readOnlyGridControl.BusinessObjectDeletor);
             //---------------Execute Test ----------------------
@@ -501,6 +612,7 @@ namespace Habanero.Test.UI.Grid
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is DefaultBOCreator);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectDeletor is DefaultBODeletor);
         }
+
         [Test]
         public void TestSetCollection_NonDefaultEditorsNotOverridden()
         {
@@ -526,6 +638,7 @@ namespace Habanero.Test.UI.Grid
             Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is ObjectCreatorStub);
             Assert.IsTrue(readOnlyGridControl.BusinessObjectDeletor is ObjectDeletorStub);
         }
+
         [Test]
         public void TestSetSelectedBusinessObject()
         {
@@ -657,8 +770,6 @@ namespace Habanero.Test.UI.Grid
             Assert.AreSame(col[2], objectEditor.Bo);
             Assert.AreSame("default", objectEditor.DefName);
         }
-
-        //TODO: Tests that if init not called throws sensible errors
 
         private ClassDef LoadMyBoDefaultClassDef()
         {
@@ -797,7 +908,7 @@ namespace Habanero.Test.UI.Grid
                 grid.Buttons["Add"].PerformClick();
                 Assert.Fail("Error should b raised");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (GridDeveloperException ex)
             {
                 StringAssert.Contains("You cannot call add since the grid has not been set up", ex.Message);
@@ -805,6 +916,7 @@ namespace Habanero.Test.UI.Grid
 
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestClickEditWhenNoCollectionSet()
         {
@@ -821,7 +933,7 @@ namespace Habanero.Test.UI.Grid
                 grid.Buttons["Edit"].PerformClick();
                 Assert.Fail("Error should b raised");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (GridDeveloperException ex)
             {
                 StringAssert.Contains("You cannot call edit since the grid has not been set up", ex.Message);
@@ -829,6 +941,7 @@ namespace Habanero.Test.UI.Grid
 
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestClickDeleteWhenNoCollectionSet()
         {
@@ -844,7 +957,7 @@ namespace Habanero.Test.UI.Grid
                 grid.Buttons["Delete"].PerformClick();
                 Assert.Fail("Error should b raised");
             }
-            //---------------Test Result -----------------------
+                //---------------Test Result -----------------------
             catch (GridDeveloperException ex)
             {
                 StringAssert.Contains("You cannot call delete since the grid has not been set up", ex.Message);
@@ -852,6 +965,7 @@ namespace Habanero.Test.UI.Grid
 
             //---------------Tear Down -------------------------          
         }
+
         #region stubs
 
         public class ExceptionNotifierStub : IExceptionNotifier

@@ -70,6 +70,7 @@
     <Compile Include="FilterController\TestCompositeFilterClause.cs" />
     <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
     <Compile Include="FilterController\TestFilterControlDate.cs" />
+    <Compile Include="FilterController\TestFilterInputBoxCollection.cs" />
     <Compile Include="Grid\TestReadOnlyGrid.cs" />
     <Compile Include="LayoutManager\TestBorderLayoutManager.cs" />
     <Compile Include="Grid\TestReadOnlyGridButtonControl.cs" />

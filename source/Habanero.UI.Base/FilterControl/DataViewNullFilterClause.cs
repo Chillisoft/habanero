@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Data;
 using Habanero.Base;
 
 namespace Habanero.UI.Base.FilterControl
@@ -31,6 +32,16 @@ namespace Habanero.UI.Base.FilterControl
         /// </summary>
         /// <returns>Returns a empty string</returns>
         public string GetFilterClauseString()
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// Returns the filter clause as a string. The filter clause is a clause used for filtering
+        /// a ADO.Net <see cref="DataView"/>
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        public string GetFilterClauseString(string stringLikeDelimiter, string dateTimeDelimiter)
         {
             return "";
         }

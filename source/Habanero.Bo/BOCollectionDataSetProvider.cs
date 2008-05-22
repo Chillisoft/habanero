@@ -148,7 +148,7 @@ namespace Habanero.BO
         /// <returns>Returns a business object</returns>
         public BusinessObject Find(string strId)
         {
-            return _collection.Find(strId);
+            return (BusinessObject) _collection.Find(strId);
         }
 
         /// <summary>

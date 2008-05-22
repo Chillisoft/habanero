@@ -123,11 +123,11 @@ namespace Habanero.BO
             BusinessObject changedBo;
             if (e.Row.HasVersion(DataRowVersion.Original))
             {
-                changedBo = _collection.Find(e.Row["ID", DataRowVersion.Original].ToString());
+                changedBo = (BusinessObject) _collection.Find(e.Row["ID", DataRowVersion.Original].ToString());
             }
             else
             {
-                changedBo = _collection.Find(e.Row["ID"].ToString());
+                changedBo = (BusinessObject) _collection.Find(e.Row["ID"].ToString());
             }
             if (changedBo != null)
             {

@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Data;
 using Habanero.Base;
 
 namespace Habanero.UI.Base.FilterControl
@@ -51,14 +52,25 @@ namespace Habanero.UI.Base.FilterControl
         /// <returns>Returns a string</returns>
         public string GetFilterClauseString()
         {
-            return CreateColumnClause() + CreateOperatorClause() + CreateValueClause();
+            return GetFilterClauseString("*", "#");
+        }
+
+        /// <summary>
+        /// Returns the filter clause as a string. The filter clause is a clause used for filtering
+        /// a ADO.Net <see cref="DataView"/>
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        public string GetFilterClauseString(string stringLikeDelimiter, string dateTimeDelimiter)
+        {
+            return CreateColumnClause() + CreateOperatorClause() + CreateValueClause(stringLikeDelimiter, dateTimeDelimiter);
         }
 
         /// <summary>
         /// Returns the value part of the clause
         /// </summary>
         /// <returns>Returns a string</returns>
-        protected abstract string CreateValueClause();
+        protected abstract string CreateValueClause(string stringLikeDelimiter, string dateTimeDelimiter);
+
 
         /// <summary>
         /// Returns the column part of the clause.  If the column contains any
@@ -81,7 +93,7 @@ namespace Habanero.UI.Base.FilterControl
         /// Returns the operator in the clause as a string
         /// </summary>
         /// <returns>Returns a string</returns>
-        /// TODO ERIC - shouldn't this throw an error on default?
+
         private string CreateOperatorClause()
         {
             string opClause;

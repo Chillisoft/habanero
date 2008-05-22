@@ -18,9 +18,8 @@ namespace Habanero.UI.WebGUI
         private IBusinessObjectDeletor _businessObjectDeletor;
         private string _uiDefName = "";
         private ClassDef _classDef;
-        private bool _initialised;
         private readonly IFilterControl _filterControl;
-        //private readonly GridSelectionController _gridSelectionController;
+        private bool _isInitialised = false;
 
         //private IBusinessObjectCollection _collection;
 
@@ -36,7 +35,7 @@ namespace Habanero.UI.WebGUI
             _grid = new ReadOnlyGridGiz();
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();
 
-            InitialiseGrid();
+            //InitialiseGrid();
             InitialiseButtons();
             InitialiseFilterControl();
 
@@ -44,23 +43,33 @@ namespace Habanero.UI.WebGUI
             borderLayoutManager.AddControl(_grid, BorderLayoutManager.Position.Centre);
             borderLayoutManager.AddControl(_buttons, BorderLayoutManager.Position.South);
             borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
+            FilterMode = FilterModes.Filter;
+            _grid.Name = "GridControl";
 
         }
 
         private void InitialiseFilterControl()
         {
-            _filterControl.Filter += delegate
-                             {
-                                 this.Grid.CurrentPage = 1;
-                                 this.Grid.ApplyFilter(_filterControl.GetFilterClause());
-                             };
+            _filterControl.Filter +=_filterControl_OnFilter;
         }
 
-        private void InitialiseGrid()
+        private void _filterControl_OnFilter(object sender, EventArgs e)
         {
-            
-            _grid.Name = "GridControl";
+            this.Grid.CurrentPage = 1;
+            if (FilterMode == FilterModes.Search)
+            {
+                BusinessObjectCollection<BusinessObject> collection = new BusinessObjectCollection<BusinessObject>(this.ClassDef);
+                collection.Load(_filterControl.GetFilterClause().GetFilterClauseString("%","'"),"");
+                SetBusinessObjectCollection(collection);
+            }
+            this.Grid.ApplyFilter(_filterControl.GetFilterClause());
         }
+
+//        private void InitialiseGrid()
+//        {
+//            
+//
+//        }
 
         private void InitialiseButtons()
         {
@@ -82,7 +91,7 @@ namespace Habanero.UI.WebGUI
 
         public void Initialise(ClassDef classDef, string uiDefName)
         {
-            if (_initialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
+            if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
             if (classDef == null) throw new ArgumentNullException("classDef");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
 
@@ -92,7 +101,7 @@ namespace Habanero.UI.WebGUI
 
             UIGrid gridDef = GetGridDef(classDef);
             SetUpGridColumns(gridDef);
-            _initialised = true;
+            _isInitialised = true;
         }
 
         private UIGrid GetGridDef(ClassDef classDef)
@@ -210,11 +219,6 @@ namespace Habanero.UI.WebGUI
                                                                                      this.Grid.RefreshGrid();
                                                                                  });
                 }
-                ////TODO _Port: CheckEditorExists();
-                //if ()
-                //{
-                //    //TODO _Port: this._grid.RefreshGrid();
-                //}
             }
         }
 
@@ -224,7 +228,7 @@ namespace Habanero.UI.WebGUI
             {
                 throw new GridDeveloperException("You cannot call add since the grid has not been set up");
             }
-            IBusinessObject newBo = null;
+            IBusinessObject newBo;
             if (_businessObjectCreator == null)
             {
                 throw new GridDeveloperException("You cannot call add as there is no business object creator set up for the grid");
@@ -299,6 +303,17 @@ namespace Habanero.UI.WebGUI
         public IFilterControl FilterControl
         {
             get { return _filterControl; }
+        }
+
+        public bool IsInitialised
+        {
+            get { return _isInitialised; }
+        }
+
+        public FilterModes FilterMode
+        {
+            get { return this._filterControl.FilterMode; }
+            set { this._filterControl.FilterMode = value; }
         }
 
 

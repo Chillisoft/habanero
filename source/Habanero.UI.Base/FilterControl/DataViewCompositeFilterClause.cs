@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Data;
 using Habanero.Base;
 
 namespace Habanero.UI.Base.FilterControl
@@ -53,31 +54,49 @@ namespace Habanero.UI.Base.FilterControl
         /// <returns>The completed string</returns>
         public string GetFilterClauseString()
         {
-            if (_leftClause.GetFilterClauseString().Length > 0 && _rightClause.GetFilterClauseString().Length > 0)
-            {
-                return GetLeftClause() + GetOperatorClause() + GetRightClause();
-            }
-            else if (_leftClause.GetFilterClauseString().Length > 0)
-            {
-                return _leftClause.GetFilterClauseString();
-            }
-            else if (_rightClause.GetFilterClauseString().Length > 0)
-            {
-                return _rightClause.GetFilterClauseString();
-            }
-            else
-            {
-                return "";
-            }
+            return GetFilterClauseString("*", "#");
         }
 
+        /// <summary>
+        /// Returns the filter clause as a string. The filter clause is a clause used for filtering
+        /// a ADO.Net <see cref="DataView"/>
+        /// </summary>
+        /// <returns>Returns a string</returns>
+        public string GetFilterClauseString(string stringLikeDelimiter, string dateTimeDelimiter)
+        {
+            string leftFilterClauseString = _leftClause.GetFilterClauseString(stringLikeDelimiter, dateTimeDelimiter);
+            string rightFilterClauseString = _rightClause.GetFilterClauseString(stringLikeDelimiter, dateTimeDelimiter);
+
+            if (leftFilterClauseString.Length > 0 && rightFilterClauseString.Length > 0)
+            {
+                return GetLeftClause(stringLikeDelimiter, dateTimeDelimiter) + GetOperatorClause() + GetRightClause(stringLikeDelimiter, dateTimeDelimiter);
+            }
+            if (leftFilterClauseString.Length > 0)
+            {
+                return leftFilterClauseString;
+            }
+            if (rightFilterClauseString.Length > 0)
+            {
+                return rightFilterClauseString;
+            }
+            return "";
+        }
         /// <summary>
         /// Returns the right filter clause surrounded by round brackets
         /// </summary>
         /// <returns>Returns the clause as a string</returns>
-        private string GetRightClause()
+        private string GetRightClause(string stringLikeDelimiter, string dateTimeDelimiter)
         {
-            return "(" + _rightClause.GetFilterClauseString() + ")";
+            return "(" + _rightClause.GetFilterClauseString(stringLikeDelimiter, dateTimeDelimiter) + ")";
+        }
+
+        /// <summary>
+        /// Returns the left filter clause surrounded by round brackets
+        /// </summary>
+        /// <returns>Returns the clause as a string</returns>
+        private string GetLeftClause(string stringLikeDelimiter, string dateTimeDelimiter)
+        {
+            return "(" + _leftClause.GetFilterClauseString(stringLikeDelimiter, dateTimeDelimiter) + ")";
         }
 
         /// <summary>
@@ -95,15 +114,6 @@ namespace Habanero.UI.Base.FilterControl
                 default:
                     return " <unsupported composite operator> ";
             }
-        }
-
-        /// <summary>
-        /// Returns the left filter clause surrounded by round brackets
-        /// </summary>
-        /// <returns>Returns the clause as a string</returns>
-        private string GetLeftClause()
-        {
-            return "(" + _leftClause.GetFilterClauseString() + ")";
         }
     }
 }

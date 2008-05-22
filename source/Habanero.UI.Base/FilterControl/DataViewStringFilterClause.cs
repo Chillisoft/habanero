@@ -40,18 +40,27 @@ namespace Habanero.UI.Base.FilterControl
         {
         }
 
+        ///// <summary>
+        ///// Returns the filter value as a string
+        ///// </summary>
+        ///// <returns>Returns a string</returns>
+        //protected override string CreateValueClause()
+        //{
+
+        //}
+
         /// <summary>
-        /// Returns the filter value as a string
+        /// Returns the value part of the clause
         /// </summary>
         /// <returns>Returns a string</returns>
-        protected override string CreateValueClause()
+        protected override string CreateValueClause(string stringLikeDelimiter, string dateTimeDelimiter)
         {
             string valueClause;
             string finalFilterValue =
-                StringUtilities.ReplaceSingleQuotesWithTwo((string) _filterValue);
+                StringUtilities.ReplaceSingleQuotesWithTwo((string)_filterValue);
             if (_clauseOperator == FilterClauseOperator.OpLike)
             {
-                valueClause = "'*" + finalFilterValue + "*'";
+                valueClause = "'" + stringLikeDelimiter + finalFilterValue + stringLikeDelimiter + "'";
             }
             else
             {

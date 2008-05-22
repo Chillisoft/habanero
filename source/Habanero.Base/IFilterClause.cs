@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System.Data;
+
 namespace Habanero.Base
 {
     /// <summary>
@@ -26,9 +28,21 @@ namespace Habanero.Base
     public interface IFilterClause
     {
         /// <summary>
-        /// Returns the filter clause as a string
+        /// Returns the filter clause as a string. The filter clause is a clause used for filtering
+        /// a ADO.Net <see cref="DataView"/>
         /// </summary>
         /// <returns>Returns a string</returns>
         string GetFilterClauseString();
+       
+
+       /// <summary>
+       /// Returns the filter clause as a string. The filter clause will be delimited with a string like delimiter or a dateTime delimiter as
+        /// appropriate this is to deal with the fact that the ADO.Net <see cref="DataView"/> uses * and # for the like and date delimiter respectively
+        /// but most databases use % and '. NNB when loading a collection these will be interpretted appropriately for the database being loaded.
+       /// </summary>
+       /// <param name="stringLikeDelimiter">The delimiter to use in the case of a like clause e.g. * or %</param>
+       /// <param name="dateTimeDelimiter">The delimiter to use in the case of a date time filter clause e.g. # for dataview</param>
+       ///<returns>Returns a string</returns>
+        string GetFilterClauseString(string stringLikeDelimiter, string dateTimeDelimiter);
     }
 }

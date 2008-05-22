@@ -802,7 +802,7 @@ namespace Habanero.UI.Forms
 
                             if (sourceCol.Count > 0)
                             {
-                                object targetValue = sourceCol[0].Props[targetProperty].Value;
+                                object targetValue = ((BusinessObject)sourceCol[0]).Props[targetProperty].Value;
                                 if (targetValue != null && targetValue != DBNull.Value)
                                 {
                                     string targetCriteria;
