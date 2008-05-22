@@ -167,7 +167,6 @@ namespace Habanero.BO
                         Environment.StackTrace);
                     return tempBusObj;
                 }
-
             }
             if (tempBusObj != null && boType != tempBusObjType &&
                 !boType.IsSubclassOf(tempBusObjType) && !tempBusObjType.IsSubclassOf(boType))
@@ -187,7 +186,7 @@ namespace Habanero.BO
             {
                 tempBusObj = classDef.CreateNewBusinessObject(obj.GetDatabaseConnection());
                 BusinessObject.AllLoadedBusinessObjects().Remove(tempBusObj.ID.GetObjectId());
-                    //InstantiateBusinessObject();
+                //InstantiateBusinessObject();
                 LoadFromDataReader(tempBusObj, dr);
                 try
                 {
@@ -195,7 +194,15 @@ namespace Habanero.BO
                     {
                         BusinessObject.AllLoadedBusinessObjects().Remove(tempBusObj.ID.GetObjectId());
                     }
-                    BusinessObject.AllLoadedBusinessObjects().Add(tempBusObj.ID.GetObjectId(), new WeakReference(tempBusObj));
+                    try
+                    {
+                        BusinessObject.AllLoadedBusinessObjects().Add(tempBusObj.ID.GetObjectId(),
+                                                                      new WeakReference(tempBusObj));
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        //Hack wierd error happening with System.Collections.Generic.Dictionary in the add
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -212,7 +219,6 @@ namespace Habanero.BO
             {
                 LoadProperties(tempBusObj, dr);
             }
-
 
 
             tempBusObj.AfterLoad();
@@ -240,7 +246,9 @@ namespace Habanero.BO
                 if (dr.Read())
                 {
                     returnBO = GetBusinessObject(obj, dr);
-                    isBaseOfSingleTableInheritanceHierarchy = IsBaseOfSingleTableInheritanceHierarchy(dr, returnBO, isBaseOfSingleTableInheritanceHierarchy, ref discriminatorFieldValue);
+                    isBaseOfSingleTableInheritanceHierarchy =
+                        IsBaseOfSingleTableInheritanceHierarchy(dr, returnBO, isBaseOfSingleTableInheritanceHierarchy,
+                                                                ref discriminatorFieldValue);
                 }
             }
             finally
@@ -260,7 +268,8 @@ namespace Habanero.BO
             return returnBO;
         }
 
-        private BusinessObject LoadChildBusinessObject(IExpression searchExpression, BusinessObject returnBO, string discriminatorFieldValue)
+        private BusinessObject LoadChildBusinessObject(IExpression searchExpression, BusinessObject returnBO,
+                                                       string discriminatorFieldValue)
         {
             foreach (ClassDef def in returnBO.ClassDef.ImmediateChildren)
             {
@@ -274,7 +283,9 @@ namespace Habanero.BO
             return returnBO;
         }
 
-        private bool IsBaseOfSingleTableInheritanceHierarchy(IDataReader dr, BusinessObject returnBO, bool isBaseOfSingleTableInheritanceHierarchy, ref string discriminatorField)
+        private bool IsBaseOfSingleTableInheritanceHierarchy(IDataReader dr, BusinessObject returnBO,
+                                                             bool isBaseOfSingleTableInheritanceHierarchy,
+                                                             ref string discriminatorField)
         {
             foreach (ClassDef immediateChild in returnBO.ClassDef.ImmediateChildren)
             {
@@ -323,7 +334,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="businessObject">The business object to be loaded</param>
         /// <param name="dr">The IDataRecord object</param>
-        internal  void LoadFromDataReader(BusinessObject businessObject, IDataRecord dr)
+        internal void LoadFromDataReader(BusinessObject businessObject, IDataRecord dr)
         {
             LoadProperties(businessObject, dr);
         }
@@ -371,7 +382,7 @@ namespace Habanero.BO
             return GetBusinessObject<BusinessObject>(classDef, criteria);
         }
 
-        private  T GetBusinessObject<T>(ClassDef classDef, string criteria) where T : BusinessObject
+        private T GetBusinessObject<T>(ClassDef classDef, string criteria) where T : BusinessObject
 
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>(classDef);
@@ -398,7 +409,7 @@ namespace Habanero.BO
                 T bo = col[0];
                 if (!bo.State.IsEditing)
                 {
-                    bo.AfterLoad();                   
+                    bo.AfterLoad();
                 }
                 return bo;
             }
@@ -413,7 +424,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        internal  IBusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
+        internal IBusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
         {
             return GetLoadedBusinessObject(id.GetObjectId());
         }
@@ -423,7 +434,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        internal  IBusinessObject GetLoadedBusinessObject(string id)
+        internal IBusinessObject GetLoadedBusinessObject(string id)
         {
             return GetLoadedBusinessObject(id, true);
         }
@@ -436,7 +447,7 @@ namespace Habanero.BO
         /// <param name="refreshIfReqNotCurrent">Whether to check for
         /// object concurrency at the time of loading</param>
         /// <returns>Returns a business object</returns>
-        internal  BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
+        internal BusinessObject GetLoadedBusinessObject(string id, bool refreshIfReqNotCurrent)
         {
             //If the object is already in loaded then refresh it and return it if required.
             if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(id))
@@ -549,9 +560,9 @@ namespace Habanero.BO
             return GetBusinessObjectCollection(classDef, searchExpression, null, orderByClause);
         }
 
-        private  BusinessObjectCollection<T> GetBusinessObjectCollection<T>(IExpression searchExpression,
-                                                                                  string searchCriteria,
-                                                                                  string orderByClause)
+        private BusinessObjectCollection<T> GetBusinessObjectCollection<T>(IExpression searchExpression,
+                                                                           string searchCriteria,
+                                                                           string orderByClause)
             where T : BusinessObject
         {
             BusinessObjectCollection<T> businessObjectCollection = new BusinessObjectCollection<T>();
@@ -559,31 +570,32 @@ namespace Habanero.BO
             return businessObjectCollection;
         }
 
-        internal  void LoadBusinessObjectCollection(IExpression searchExpression,
-                                                    IBusinessObjectCollection businessObjectCollection,
-                                                    string orderByClause, string searchCriteria)
+        internal void LoadBusinessObjectCollection(IExpression searchExpression,
+                                                   IBusinessObjectCollection businessObjectCollection,
+                                                   string orderByClause, string searchCriteria)
         {
-           if (searchExpression != null)
+            if (searchExpression != null)
             {
-                businessObjectCollection.Load( searchExpression, orderByClause);
+                businessObjectCollection.Load(searchExpression, orderByClause);
             }
             else
             {
-                businessObjectCollection.Load( searchCriteria, orderByClause);
+                businessObjectCollection.Load(searchCriteria, orderByClause);
             }
         }
 
-        private  IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef,
-                                                                             IExpression searchExpression,
-                                                                             string searchCriteria, string orderByClause)
+        private IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef,
+                                                                      IExpression searchExpression,
+                                                                      string searchCriteria, string orderByClause)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             IBusinessObjectCollection businessObjectCollection = CreateBusinessObjectCollection(classDef);
             LoadBusinessObjectCollection(searchExpression, businessObjectCollection, orderByClause, searchCriteria);
             return businessObjectCollection;
         }
+
         //TODO: Change to use relationship
-        internal  IBusinessObjectCollection GetRelatedBusinessObjectCollection<T>(
+        internal IBusinessObjectCollection GetRelatedBusinessObjectCollection<T>(
             MultipleRelationship relationship)
             where T : BusinessObject
         {
@@ -593,8 +605,8 @@ namespace Habanero.BO
             return businessObjectCollection;
         }
 
-        internal  IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type boType,
-                                                                                     Relationship relationship)
+        internal IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type boType,
+                                                                              Relationship relationship)
         {
             IBusinessObjectCollection businessObjectCollection =
                 CreateRelatedBusinessObjectCollection(boType, relationship);
@@ -608,7 +620,7 @@ namespace Habanero.BO
         ///</summary>
         ///<param name="classDef">The class definition to use in creating the BusinessObjectCollection. </param>
         ///<returns> A BusinessObjectCollection of the correct type. </returns>
-        private  IBusinessObjectCollection CreateBusinessObjectCollection(ClassDef classDef)
+        private IBusinessObjectCollection CreateBusinessObjectCollection(ClassDef classDef)
         {
             if (classDef == null)
             {
@@ -625,8 +637,8 @@ namespace Habanero.BO
         /// <param name="boType">The type of BO to make a generic collection of</param>
         /// <param name="relationship">The multiple relationship this collection is for</param>
         ///<returns> A BusinessObjectCollection of the correct type. </returns>
-        private  IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType,
-                                                                                       Relationship relationship)
+        private IBusinessObjectCollection CreateRelatedBusinessObjectCollection(Type boType,
+                                                                                Relationship relationship)
         {
             Type type = typeof (RelatedBusinessObjectCollection<>);
             type = type.MakeGenericType(boType);
@@ -643,7 +655,7 @@ namespace Habanero.BO
         /// <param name="searchExpression">The search expression used to
         /// locate the business object to be read</param>
         /// <returns>Returns an IDataReader object</returns>
-        internal  IDataReader LoadDataReader(BusinessObject obj, IDatabaseConnection connection,
+        internal IDataReader LoadDataReader(BusinessObject obj, IDatabaseConnection connection,
                                             IExpression searchExpression)
         {
             SqlStatement selectSql = new SqlStatement(connection);
