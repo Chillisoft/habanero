@@ -337,12 +337,18 @@ namespace Habanero.UI.WebGUI
                         "You cannot call set collection for a collection that has a different class def than is initialised");
                 }
             }
+            if (this.BusinessObjectCreator  is DefaultBOCreator )
+            {
+                this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
+            }
+            if (this.BusinessObjectCreator == null) this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
+            if (this.BusinessObjectEditor == null ) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
+            if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
+
             _grid.SetBusinessObjectCollection(boCollection);
+
             this.Buttons.Enabled = true;
             this.FilterControl.Enabled = true;
-            if (this.BusinessObjectEditor == null ) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
-            if (this.BusinessObjectCreator == null) this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
-            if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
         }
 
         ///<summary>

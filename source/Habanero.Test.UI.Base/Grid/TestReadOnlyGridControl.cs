@@ -682,6 +682,58 @@ namespace Habanero.Test.UI.Grid
         }
 
         [Test]
+        public void TestResetCollection_ResetsTheDefaultObjectCreator()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+
+            AddControlToForm(readOnlyGridControl);
+
+            readOnlyGridControl.Grid.Columns.Add("TestProp", "TestProp");
+            readOnlyGridControl.SetBusinessObjectCollection(col);
+
+            IBusinessObjectCreator originalDefaultBoCreator = readOnlyGridControl.BusinessObjectCreator;
+            BusinessObjectCollection<MyBO> col2 = CreateCollectionWith_4_Objects();
+            //---------------Assert Preconditions ----------------------
+            Assert.IsTrue(originalDefaultBoCreator is DefaultBOCreator);
+            Assert.AreNotSame(col,col2);
+            Assert.AreEqual(col, readOnlyGridControl.Grid.GetBusinessObjectCollection());
+            //---------------Execute Test ----------------------
+
+            readOnlyGridControl.SetBusinessObjectCollection(col2);
+            //---------------Test Result -----------------------
+            Assert.AreNotSame(originalDefaultBoCreator, readOnlyGridControl.BusinessObjectCreator);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestSetCollectionToNewCollection_DoesNotChangeNonDefaultObjectCreator()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBoDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+
+            AddControlToForm(readOnlyGridControl);
+
+            readOnlyGridControl.Grid.Columns.Add("TestProp", "TestProp");
+            readOnlyGridControl.BusinessObjectCreator = new ObjectCreatorStub();
+            readOnlyGridControl.SetBusinessObjectCollection(col);
+            IBusinessObjectCreator originalDefaultBoCreator = readOnlyGridControl.BusinessObjectCreator;
+            BusinessObjectCollection<MyBO> col2 = CreateCollectionWith_4_Objects();
+            //---------------Assert Preconditions ----------------------
+            Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is ObjectCreatorStub);
+            //---------------Execute Test ----------------------
+            readOnlyGridControl.SetBusinessObjectCollection(col);
+            readOnlyGridControl.SetBusinessObjectCollection(col2);
+            ////---------------Test Result -----------------------
+            Assert.IsTrue(readOnlyGridControl.BusinessObjectCreator is ObjectCreatorStub);
+            Assert.AreSame(originalDefaultBoCreator, readOnlyGridControl.BusinessObjectCreator);
+        }
+
+        [Test]
         public void TestSetSelectedBusinessObject()
         {
             //---------------Set up test pack-------------------
