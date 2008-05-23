@@ -19,6 +19,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -47,9 +48,8 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="bo">The business object to be represented</param>
         /// <param name="controlFactory">the control factory used to create controls</param>
-        public PanelFactory(BusinessObject bo, IControlFactory controlFactory):this(bo,"default", controlFactory)
+        public PanelFactory(BusinessObject bo, IControlFactory controlFactory) : this(bo, "default", controlFactory)
         {
-
         }
 
         /// <summary>
@@ -78,13 +78,14 @@ namespace Habanero.UI.Base
             UIDef uiDef = mapper.GetUIDef(uiDefName);
             if (uiDef == null)
             {
-                throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName + "' since the classdefs do not contain a uiDef");
+                throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName +
+                                                     "' since the classdefs do not contain a uiDef");
             }
             _uiForm = uiDef.GetUIFormProperties();
             if (_uiForm == null)
             {
-                throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName + "' since the classdefs do not contain a form def");
-
+                throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName +
+                                                     "' since the classdefs do not contain a form def");
             }
             InitialiseFactory(bo);
         }
@@ -116,10 +117,7 @@ namespace Habanero.UI.Base
                 foreach (UIFormTab formTab in _uiForm)
                 {
                     IPanelFactoryInfo onePanelInfo = CreateOnePanel(formTab);
-                    foreach (ControlMapper controlMapper in onePanelInfo.ControlMappers)
-                    {
-                        controlMappers.Add(controlMapper);
-                    }
+                    AddControlMappers(onePanelInfo, controlMappers);
                     ITabPage page = _controlFactory.CreateTabPage(formTab.Name);
                     BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(page);
 
@@ -132,6 +130,37 @@ namespace Habanero.UI.Base
             {
                 factoryInfo = CreateOnePanel(_uiForm[0]);
             }
+            SetFormPreferredHeight(factoryInfo);
+            //TODO_Port AttachTriggers(_uiForm, factoryInfo, _currentBusinessObject);
+            return factoryInfo;
+        }
+
+        /// <summary>
+        /// Creates a numer of panels in  panel to display a business object
+        /// </summary>
+        /// <returns>Returns the object containing the panel</returns>
+        public List<IPanelFactoryInfo> CreateOnePanelPerUIFormTab()
+        {
+            List<IPanelFactoryInfo> panelInfoList = new List<IPanelFactoryInfo>();
+            foreach (UIFormTab formTab in _uiForm)
+            {
+                IPanelFactoryInfo onePanelInfo = CreateOnePanel(formTab);
+                panelInfoList.Add(onePanelInfo);
+            }
+            return panelInfoList;
+        }
+
+
+        private static void AddControlMappers(IPanelFactoryInfo onePanelInfo, ControlMapperCollection controlMappers)
+        {
+            foreach (ControlMapper controlMapper in onePanelInfo.ControlMappers)
+            {
+                controlMappers.Add(controlMapper);
+            }
+        }
+
+        private void SetFormPreferredHeight(IPanelFactoryInfo factoryInfo)
+        {
             if (_uiForm.Height > -1)
             {
                 factoryInfo.PreferredHeight = _uiForm.Height;
@@ -140,8 +169,6 @@ namespace Habanero.UI.Base
             {
                 factoryInfo.PreferredWidth = _uiForm.Width;
             }
-            //TODO_Port AttachTriggers(_uiForm, factoryInfo, _currentBusinessObject);
-            return factoryInfo;
         }
 
         /// <summary>
@@ -171,7 +198,7 @@ namespace Habanero.UI.Base
             }
 
             ControlMapperCollection controlMappers = new ControlMapperCollection();
-
+            controlMappers.BusinessObject = _currentBusinessObject;
             ITextBox temptb = _controlFactory.CreateTextBox();
             for (int row = 0; row < rowCount; row++)
             {
@@ -276,7 +303,7 @@ namespace Habanero.UI.Base
                     //    INumericUpDown upDown = (INumericUpDown) ctl;
                     //    upDown.Enter += UpDownEnterHandler;
                     //}
-               
+
 
                     CheckGeneralParameters(field, ctl);
 
@@ -356,11 +383,12 @@ namespace Habanero.UI.Base
                     manager.FixColumn(col*2 + 1, uiFormTab[col].Width - manager.GetFixedColumnWidth(col*2));
                 }
             }
-           
+
             panel.Height = manager.GetFixedHeightIncludingGaps();
             panel.Width = manager.GetFixedWidthIncludingGaps();
             IPanelFactoryInfo panelFactoryInfo = new PanelFactoryInfo(panel, controlMappers, _firstControl);
-            
+            panelFactoryInfo.MinimumPanelHeight = panel.Height;
+            panelFactoryInfo.MinumumPanelWidth = panel.Width;
             panelFactoryInfo.ToolTip = toolTip;
             return panelFactoryInfo;
         }

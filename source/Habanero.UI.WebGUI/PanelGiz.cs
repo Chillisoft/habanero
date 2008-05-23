@@ -4,7 +4,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    class PanelGiz:Panel, IPanel
+    public class PanelGiz:Panel, IPanel
     {
         IControlCollection IControlChilli.Controls
         {

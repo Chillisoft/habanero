@@ -35,6 +35,8 @@ namespace Habanero.UI.Base
         private int _preferredWidth;
         //private IDictionary<string, EditableGrid> _formGrids;
         private IToolTip _toolTip;
+        private int _minimumPanelHeight;
+        private int _minumumPanelWidth;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -103,6 +105,18 @@ namespace Habanero.UI.Base
         {
             get { return _toolTip; }
             set { _toolTip = value; }
+        }
+
+        public int MinimumPanelHeight
+        {
+            get { return _minimumPanelHeight; }
+            set { _minimumPanelHeight = value; }
+        }
+
+        public int MinumumPanelWidth
+        {
+            get { return _minumumPanelWidth; }
+            set { _minumumPanelWidth = value; }
         }
     }
 }

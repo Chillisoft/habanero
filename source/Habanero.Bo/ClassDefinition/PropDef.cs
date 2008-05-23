@@ -583,7 +583,7 @@ namespace Habanero.BO.ClassDefinition
 		public bool Compulsory
 		{
 			get { return _compulsory; }
-			protected set { _compulsory = value; }
+		    set { _compulsory = value; }
 		}
 
 

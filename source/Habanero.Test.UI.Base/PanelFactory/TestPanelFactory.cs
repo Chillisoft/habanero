@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -137,6 +138,35 @@ namespace Habanero.Test.UI.Base
                 StringAssert.Contains("Parameter name: uiForm", ex.Message);
             }
     
+        }
+
+        [Test]
+        public void TestCreateOnePanelPerUIFormTab()
+        {
+            //---------------Set up test pack-------------------
+            Sample s = new Sample();
+            //--------------Assert PreConditions----------------            
+            //---------------Execute Test ----------------------
+            IPanelFactory factory = new PanelFactory(s, GetControlFactory());
+            IList<IPanelFactoryInfo> panelList = factory.CreateOnePanelPerUIFormTab();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, panelList.Count);
+            //---------------Tear Down -------------------------          
+        }
+        
+        [Test]
+        public void TestCreateOnePanelPerUIFormTab_2Panels()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithTwoUITabs();
+            MyBO myBo = new MyBO();
+            //--------------Assert PreConditions----------------            
+            //---------------Execute Test ----------------------
+            IPanelFactory factory = new PanelFactory(myBo, GetControlFactory());
+            IList<IPanelFactoryInfo> panelList = factory.CreateOnePanelPerUIFormTab();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, panelList.Count);
+            //---------------Tear Down -------------------------          
         }
         [Test]
         public void TestOnePropertyForm()
@@ -355,6 +385,24 @@ namespace Habanero.Test.UI.Base
             int borderSize = 5;
             int gapSize = 2;
             Assert.AreEqual(numLines * textboxHeight + borderSize + gapSize, tb2.Top);
+        }
+
+        [Test]
+        public void TestMinimumPanelSizes()
+        {
+            //---------------Set up test pack-------------------
+            Sample s = new Sample();
+            IPanelFactory factory = new PanelFactory(s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterfaceMapperRowSpanning(), GetControlFactory());
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            IPanelFactoryInfo panelInfo = factory.CreatePanel();
+            IPanel pnl = panelInfo.Panel;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(pnl.Height, panelInfo.MinimumPanelHeight);
+            Assert.AreEqual(pnl.Width, panelInfo.MinumumPanelWidth);
+            //---------------Tear Down -------------------------          
         }
     }
 }

@@ -209,5 +209,7 @@ namespace Habanero.UI.Base
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name, PostObjectPersistingDelegate action);
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo);
         IListView CreateListView();
+
+
     }
 }

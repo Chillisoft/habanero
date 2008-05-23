@@ -28,5 +28,9 @@ namespace Habanero.UI.Base
         IControlChilli FirstControlToFocus { get; }
 
         IToolTip ToolTip { get; set; }
+
+        int MinimumPanelHeight { get; set; }
+
+        int MinumumPanelWidth { get; set; }
     }
 }
