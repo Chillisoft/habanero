@@ -91,7 +91,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //---------------Tear Down -------------------------          
         }
 
-        private void SetWizardControlSize(IWizardControl wizardControl)
+        private static void SetWizardControlSize(IWizardControl wizardControl)
         {
             wizardControl.Width = 310;
             wizardControl.Height = 412;
@@ -126,8 +126,10 @@ namespace Habanero.Test.UI.Base.Wizard
             //---------------Execute Test ----------------------
             wizardControl.Next();
             //---------------Test Result -----------------------
-            IWizardStep step = wizardController.GetCurrentStep();
+            IWizardStep currentStep = wizardController.GetCurrentStep();
             Assert.AreEqual("ControlForStep2", wizardControl.CurrentControl.Name);
+            Assert.AreSame(currentStep, wizardControl.CurrentControl);
+            Assert.IsTrue(((MyWizardStep)currentStep).IsInitialised);
             //Assert.IsTrue(wizardControl.HeadingLabel.Visible);
             //Assert.IsTrue(wizardControl.HeadingLabel.Text.Length > 0);
             //Assert.AreEqual(step.HeaderText, wizardControl.HeadingLabel.Text);
@@ -144,7 +146,7 @@ namespace Habanero.Test.UI.Base.Wizard
             wizardControl.Start();
             wizardControl.Next();
             //--------------Assert PreConditions----------------            
-            IWizardStep step = wizardController.GetCurrentStep();
+            wizardController.GetCurrentStep();
             Assert.AreEqual("ControlForStep2", wizardControl.CurrentControl.Name);
             //Assert.IsTrue(wizardControl.HeadingLabel.Visible); //removed the label and am now putting the header on the form
             // due to problems with giz hiding the some wizard controls that where double clicked
@@ -156,7 +158,7 @@ namespace Habanero.Test.UI.Base.Wizard
 
             wizardControl.Previous();
             //---------------Test Result -----------------------
-            step = wizardController.GetCurrentStep();
+            wizardController.GetCurrentStep();
             Assert.AreEqual("ControlForStep1", wizardControl.CurrentControl.Name);
             //Assert.IsFalse(wizardControl.HeadingLabel.Visible);
             //Assert.IsFalse(wizardControl.HeadingLabel.Text.Length > 0);
@@ -508,6 +510,7 @@ namespace Habanero.Test.UI.Base.Wizard
 
             private readonly string _headerText;
             private bool _allowCanMoveBack = true;
+            private bool _isInitialised;
 
             public string HeaderText
             {
@@ -533,6 +536,7 @@ namespace Habanero.Test.UI.Base.Wizard
 
             public void InitialiseStep()
             {
+                _isInitialised = true;
             }
 
             public bool CanMoveOn(out string message)
@@ -566,6 +570,11 @@ namespace Habanero.Test.UI.Base.Wizard
                     return null;
 
                 }
+            }
+
+            public bool IsInitialised
+            {
+                get { return _isInitialised; }
             }
 
             ///<summary>

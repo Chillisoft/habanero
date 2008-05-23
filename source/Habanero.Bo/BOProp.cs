@@ -453,7 +453,7 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates whether the property value is valid
         /// </summary>
-        internal bool IsValid
+        public bool IsValid
         {
             get { return _isValid; }
         }
@@ -462,7 +462,7 @@ namespace Habanero.BO
         /// Returns a string which indicates why the property value may
         /// be invalid
         /// </summary>
-        internal string InvalidReason
+        public string InvalidReason
         {
             get { return _invalidReason; }
         }

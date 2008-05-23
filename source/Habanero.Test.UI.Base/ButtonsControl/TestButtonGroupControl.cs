@@ -187,7 +187,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(btn, buttons["Test"]);
         }
 
-        [Test, Ignore("Peter please review, we cannot get this to work")]
+        [Test]
         public void TestButtons_ControlsMethod()
         {
             //---------------Set up test pack-------------------
@@ -200,7 +200,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(btn, buttons.Controls[0]);
         }
 
-        [Test, Ignore("Peter please review, we cannot get this to work")]
+        [Test]
         public void TestAdd_2Buttons_ControlsMethod()
         {
             //---------------Set up test pack-------------------

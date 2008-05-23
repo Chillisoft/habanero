@@ -47,12 +47,9 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="bo">The business object to be represented</param>
         /// <param name="controlFactory">the control factory used to create controls</param>
-        public PanelFactory(BusinessObject bo, IControlFactory controlFactory)
+        public PanelFactory(BusinessObject bo, IControlFactory controlFactory):this(bo,"default", controlFactory)
         {
-            _controlFactory = controlFactory;
-            BOMapper mapper = new BOMapper(bo);
-            _uiForm = mapper.GetUIDef().GetUIFormProperties();
-            InitialiseFactory(bo);
+
         }
 
         /// <summary>
@@ -64,6 +61,7 @@ namespace Habanero.UI.Base
         /// <param name="controlFactory">the control factory used to create controls</param>
         public PanelFactory(BusinessObject bo, UIForm uiForm, IControlFactory controlFactory)
         {
+            if (uiForm == null) throw new ArgumentNullException("uiForm");
             _uiForm = uiForm;
             _controlFactory = controlFactory;
             InitialiseFactory(bo);
@@ -76,7 +74,18 @@ namespace Habanero.UI.Base
         {
             _controlFactory = controlFactory;
             BOMapper mapper = new BOMapper(bo);
-            _uiForm = mapper.GetUIDef(uiDefName).GetUIFormProperties();
+
+            UIDef uiDef = mapper.GetUIDef(uiDefName);
+            if (uiDef == null)
+            {
+                throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName + "' since the classdefs do not contain a uiDef");
+            }
+            _uiForm = uiDef.GetUIFormProperties();
+            if (_uiForm == null)
+            {
+                throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName + "' since the classdefs do not contain a form def");
+
+            }
             InitialiseFactory(bo);
         }
 

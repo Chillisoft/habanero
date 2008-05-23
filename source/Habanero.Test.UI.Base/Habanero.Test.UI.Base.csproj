@@ -110,7 +110,7 @@
     <Compile Include="MultiSelector\TestMultiSelectorModel.cs" />
     <Compile Include="TestListView.cs" />
     <Compile Include="Mappers\TestListComboBoxMapper.cs" />
-    <Compile Include="TestPanelFactory.cs" />
+    <Compile Include="PanelFactory\TestPanelFactory.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />
     <Compile Include="Wizard\TestWizardController.cs" />
     <Compile Include="Wizard\TestWizardForm.cs" />

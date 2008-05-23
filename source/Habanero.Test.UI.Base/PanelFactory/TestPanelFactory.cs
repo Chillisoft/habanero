@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using NUnit.Framework;
@@ -69,6 +71,73 @@ namespace Habanero.Test.UI.Base
             }
         }
 
+        [Test]
+        public void TestSetPanelFactoryTo_Bo_DoesNotHaveUIDef_Error()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.GetLoadClassDefsNoUIDef();
+            MyBO bo = new MyBO();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                new PanelFactory(bo, GetControlFactory());
+                Assert.Fail("Should raise an error");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("Cannot create a panel factory for 'MyBO' since the classdefs do not contain a uiDef", ex.Message);
+            }
+        }
+
+        [Test]
+        public void TestSetPanelFactoryTo_Bo_DoesNotHaveFormDef_Error()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.GetLoadClassDefsUIDefNoFormDef();
+            MyBO bo = new MyBO();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+
+            try
+            {
+                new PanelFactory(bo, GetControlFactory());
+                Assert.Fail("Should raise an error");
+            }
+            //---------------Test Result -----------------------
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("Cannot create a panel factory for 'MyBO' since the classdefs do not contain a form def", ex.Message);
+            }
+    
+        }
+        [Test]
+        public void TestSetPanelFactoryTo_Bo_setFormDefNull_Error()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.GetLoadClassDefsUIDefNoFormDef();
+            MyBO bo = new MyBO();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            UIForm frm = null;
+            try
+            {
+                new PanelFactory(bo, frm, GetControlFactory());
+                Assert.Fail("Should raise an error");
+            }
+            //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null.", ex.Message);
+                StringAssert.Contains("Parameter name: uiForm", ex.Message);
+            }
+    
+        }
         [Test]
         public void TestOnePropertyForm()
         {   

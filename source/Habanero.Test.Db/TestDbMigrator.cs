@@ -114,7 +114,8 @@ namespace Habanero.Test.DB
         }
         
 
-        [Test, Ignore("This fails through the resharper tester."), ExpectedException(typeof(ArgumentNullException ))]
+//        [Test, Ignore("This fails through the resharper tester."), ExpectedException(typeof(ArgumentNullException ))]
+        [Test, ExpectedException(typeof(ArgumentNullException ))]
         public void TestGetCurrentVersionFailure() {
             Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
         }
