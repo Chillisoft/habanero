@@ -33,7 +33,11 @@ namespace Habanero.Test.General
     [TestFixture]
     public class TestInheritanceHeirarchySingleTable : TestInheritanceHeirarchyBase
     {
-        [TestFixtureSetUp]
+        private ClassDef _classDefCircleNoPrimaryKey;
+        private ClassDef _classDefShape;
+        private ClassDef _classDefFilledCircleNoPrimaryKey;
+
+        [SetUp]
         public void SetupFixture()
         {
             SetupTestForFilledCircleNoPK();
@@ -41,12 +45,14 @@ namespace Habanero.Test.General
 
         protected override void SetupInheritanceSpecifics()
         {
-            CircleNoPrimaryKey.GetClassDef().SuperClassDef =
-                new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
-            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef =
-                new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.SingleTableInheritance);
-            CircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
-            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef.Discriminator = "ShapeType";
+            ClassDef.ClassDefs.Clear();
+            _classDefShape = Shape.GetClassDef();
+            _classDefCircleNoPrimaryKey = CircleNoPrimaryKey.GetClassDef();
+            _classDefCircleNoPrimaryKey.SuperClassDef = new SuperClassDef(_classDefShape, ORMapping.SingleTableInheritance);
+            _classDefCircleNoPrimaryKey.SuperClassDef.Discriminator = "ShapeType";
+            _classDefFilledCircleNoPrimaryKey = FilledCircleNoPrimaryKey.GetClassDef();
+            _classDefFilledCircleNoPrimaryKey.SuperClassDef = new SuperClassDef(_classDefCircleNoPrimaryKey, ORMapping.SingleTableInheritance);
+            _classDefFilledCircleNoPrimaryKey.SuperClassDef.Discriminator = "ShapeType";
         }
 
         protected override void SetStrID()
@@ -255,7 +261,7 @@ namespace Habanero.Test.General
         }
 
         // Provided in case the above test fails and the rows remain in the database
-        [TestFixtureTearDown]
+        [TearDown]
         public void TearDown()
         {
             Shape shape = BOLoader.Instance.GetBusinessObject<Shape>(
