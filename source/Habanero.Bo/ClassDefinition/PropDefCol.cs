@@ -159,11 +159,11 @@ namespace Habanero.BO.ClassDefinition
 		/// Indicates if a property definition with the given key exists
 		/// in the collection.
 		/// </summary>
-		/// <param name="key">The key to match</param>
+        /// <param name="propertyName">The propertyName to match</param>
 		/// <returns>Returns true if found, false if not</returns>
-		public bool Contains(string key)
+		public bool Contains(string propertyName)
 		{
-			return (_propDefs.ContainsKey(key.ToUpper()));
+            return (_propDefs.ContainsKey(propertyName.ToUpper()));
 		}
 
         /// <summary>

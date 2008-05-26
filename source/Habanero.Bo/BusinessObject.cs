@@ -195,20 +195,21 @@ namespace Habanero.BO
         /// </summary>
         ~BusinessObject()
         {
-            if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
-            if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
             try
-             {
+            {
+                if (this.ClassDef == null) return;
+                if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
+                if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
                 if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
                 if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
                 if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
-                 {
+                {
                     AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
                     if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
                     {
                         AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
                     }
-                 }
+                }
                 ReleaseWriteLocks();
 //               ReleaseReadLocks();
             } catch(Exception ex)

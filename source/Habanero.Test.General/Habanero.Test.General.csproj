@@ -192,6 +192,7 @@
     <Compile Include="TestInheritanceHeirarchySingleTable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestInheritanceOverriding.cs" />
     <Compile Include="TestInheritanceSingleTable.cs">
       <SubType>Code</SubType>
     </Compile>
