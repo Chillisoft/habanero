@@ -47,15 +47,6 @@ namespace Habanero.UI.Base
     public interface IDateRangeComboBox : IComboBox
     {
         /// <summary>
-        /// Gets and sets whether the date used to calculate date ranges
-        /// should be DateTime.Now or a fixed date that is specified.
-        /// When false, all date ranges are calculated based on DateTime.Now.
-        /// Setting this property to true allows you to use an alternative
-        /// fixed date as your "Now" value, using the FixedNow property.
-        /// </summary>
-        bool UseFixedNowDate { get; set; }
-
-        /// <summary>
         /// Gets and sets the list of options to display.  If you intend
         /// to edit individual items in the list, either set the entire
         /// list once you have edited it, or use the Add and Remove methods
@@ -111,8 +102,72 @@ namespace Habanero.UI.Base
         /// </summary>
         int YearStartOffset { get; set; }
 
+        /// <summary>
+        /// Gets and sets whether the date used to calculate date ranges
+        /// should be DateTime.Now or a fixed date that is specified.
+        /// When false, all date ranges are calculated based on DateTime.Now.
+        /// Setting this property to true allows you to use an alternative
+        /// fixed date as your "Now" value, using the FixedNow property.
+        /// </summary>
+        bool UseFixedNowDate { get; set; }
 
-        // string this[int index] { get; set; }
+        /// <summary>
+        /// Gets and sets a fixed date used to calculate date ranges, rather
+        /// than DateTime.Now.  The UseFixedNowDate property must be set to
+        /// true, otherwise this property will be ignored.
+        /// </summary>
+        DateTime FixedNowDate { get; set; }
+
+        /// <summary>
+        /// Populates the ComboBox with all available DateOptions, since
+        /// the default constructor only provides a standardised collection
+        /// </summary>
+        void UseAllDateOptions();
+
+        /// <summary>
+        /// Sets the item in the ComboBox that first appears to the user
+        /// </summary>
+        /// <param name="displayString">The string to display</param>
+        void SetTopComboBoxItem(string displayString);
+
+        /// <summary>
+        /// Returns the display string for the date range option supplied
+        /// </summary>
+        /// <param name="option">The date range enumeration</param>
+        /// <returns>Returns the string if found, otherwise throws an
+        /// ArgumentException</returns>
+        string GetDateRangeString(DateRangeOptions option);
+
+        /// <summary>
+        /// Amends the display string for a given date option
+        /// </summary>
+        /// <param name="option">The date option to amend</param>
+        /// <param name="newDisplayString">The display string to apply</param>
+        void SetDateRangeString(DateRangeOptions option, string newDisplayString);
+
+        /// <summary>
+        /// Removes a date range option from the current list of options available
+        /// </summary>
+        /// <param name="option">The date range option to remove</param>
+        void RemoveDateOption(DateRangeOptions option);
+
+        /// <summary>
+        /// Adds a date range option to the current list of options available
+        /// </summary>
+        /// <param name="option">The date range option to add</param>
+        void AddDateOption(DateRangeOptions option);
+
+        /// <summary>
+        /// Returns the start date for the currently selected date range option,
+        /// or DateTime.MinValue if no valid option is selected
+        /// </summary>
+        DateTime StartDate { get; }
+
+        /// <summary>
+        /// Returns the end date for the currently selected date range option,
+        /// or DateTime.MaxValue if no valid option is selected
+        /// </summary>
+        DateTime EndDate { get; }
     }
 
     /// <summary>

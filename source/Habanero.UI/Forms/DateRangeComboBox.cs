@@ -300,7 +300,7 @@ namespace Habanero.UI.Forms
         /// <param name="option">The date range enumeration</param>
         /// <returns>Returns the string if found, otherwise throws an
         /// ArgumentException</returns>
-        public string GetDateRangeString(DateOptions option)
+        public string   GetDateRangeString(DateOptions option)
         {
             if (_dateRangePairs.ContainsKey(option))
             {

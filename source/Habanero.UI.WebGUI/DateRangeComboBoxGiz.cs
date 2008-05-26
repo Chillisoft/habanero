@@ -7,8 +7,6 @@ namespace Habanero.UI.WebGUI
 {
     public class DateRangeComboBoxGiz : ComboBoxGiz, IDateRangeComboBox
     {
-        private bool _useFixedNowDate;
-        private List<DateRangeOptions> optionsToDisplay;
         private DateRangeComboBoxManager _manager;
 
         /// <summary>
@@ -29,8 +27,19 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public bool UseFixedNowDate
         {
-            get { return _useFixedNowDate; }
-            set { _useFixedNowDate = value; }
+            get { return _manager.UseFixedNowDate; }
+            set { _manager.UseFixedNowDate = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets a fixed date used to calculate date ranges, rather
+        /// than DateTime.Now.  The UseFixedNowDate property must be set to
+        /// true, otherwise this property will be ignored.
+        /// </summary>
+        public DateTime FixedNowDate
+        {
+            get { return _manager.FixedNowDate; }
+            set { _manager.FixedNowDate = value; }
         }
 
         /// <summary>
@@ -42,8 +51,8 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public List<DateRangeOptions> OptionsToDisplay
         {
-            get { return optionsToDisplay; }
-            set { optionsToDisplay = value; }
+            get { return _manager.OptionsToDisplay; }
+            set { _manager.OptionsToDisplay = value; }
         }
 
         /// <summary>
@@ -111,6 +120,83 @@ namespace Habanero.UI.WebGUI
         {
             get { return _manager.YearStartOffset; }
             set { _manager.YearStartOffset = value; }
+        }
+
+
+
+        /// <summary>
+        /// Populates the ComboBox with all available DateOptions, since
+        /// the default constructor only provides a standardised collection
+        /// </summary>
+        public void UseAllDateOptions()
+        {
+            _manager.UseAllDateOptions();
+        }
+
+        /// <summary>
+        /// Sets the item in the ComboBox that first appears to the user
+        /// </summary>
+        /// <param name="displayString">The string to display</param>
+        public void SetTopComboBoxItem(string displayString)
+        {
+            _manager.SetTopComboBoxItem(displayString);
+        }
+
+        /// <summary>
+        /// Returns the display string for the date range option supplied
+        /// </summary>
+        /// <param name="option">The date range enumeration</param>
+        /// <returns>Returns the string if found, otherwise throws an
+        /// ArgumentException</returns>
+        public string GetDateRangeString(DateRangeOptions option)
+        {
+            return _manager.GetDateRangeString(option);
+        }
+
+        /// <summary>
+        /// Amends the display string for a given date option
+        /// </summary>
+        /// <param name="option">The date option to amend</param>
+        /// <param name="newDisplayString">The display string to apply</param>
+        public void SetDateRangeString(DateRangeOptions option, string newDisplayString)
+        {
+            _manager.SetDateRangeString(option, newDisplayString);
+        }
+
+        /// <summary>
+        /// Removes a date range option from the current list of options available
+        /// </summary>
+        /// <param name="option">The date range option to remove</param>
+        public void RemoveDateOption(DateRangeOptions option)
+        {
+            _manager.RemoveDateOption(option);
+        }
+
+        /// <summary>
+        /// Adds a date range option to the current list of options available
+        /// </summary>
+        /// <param name="option">The date range option to add</param>
+        public void AddDateOption(DateRangeOptions option)
+        {
+            _manager.AddDateOption(option);
+        }
+
+        /// <summary>
+        /// Returns the start date for the currently selected date range option,
+        /// or DateTime.MinValue if no valid option is selected
+        /// </summary>
+        public DateTime StartDate
+        {
+            get { return _manager.StartDate; }
+        }
+
+        /// <summary>
+        /// Returns the end date for the currently selected date range option,
+        /// or DateTime.MaxValue if no valid option is selected
+        /// </summary>
+        public DateTime EndDate
+        {
+            get { return _manager.EndDate; }
         }
     }
 }

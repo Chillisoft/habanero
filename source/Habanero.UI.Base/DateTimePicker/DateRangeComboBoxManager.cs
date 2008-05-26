@@ -7,7 +7,7 @@ namespace Habanero.UI.Base
 {
     public class DateRangeComboBoxManager
     {
-        private IComboBox _comboBox;
+        private readonly IComboBox _comboBox;
         private Dictionary<DateRangeOptions, string> _dateRangePairs;
         private List<DateRangeOptions> _optionsToDisplay;
 
@@ -127,7 +127,7 @@ namespace Habanero.UI.Base
         /// <param name="newDisplayString">The display string to apply</param>
         public void SetDateRangeString(DateRangeOptions option, string newDisplayString)
         {
-            if (_dateRangePairs.ContainsKey(option))
+            if (_optionsToDisplay.Contains(option))
             {
                 if (_dateRangePairs.ContainsValue(newDisplayString)
                     && _dateRangePairs[option] != newDisplayString)
@@ -193,18 +193,18 @@ namespace Habanero.UI.Base
             }
         }
 
-        /// <summary>
-        /// Gets and sets whether the date used to calculate date ranges
-        /// should be DateTime.Now or a fixed date that is specified.
-        /// When false, all date ranges are calculated based on DateTime.Now.
-        /// Setting this property to true allows you to use an alternative
-        /// fixed date as your "Now" value, using the FixedNow property.
-        /// </summary>
-        public bool UseFixedNowDate
-        {
-            get { return _useFixedNowDate; }
-            set { _useFixedNowDate = value; }
-        }
+        ///// <summary>
+        ///// Gets and sets whether the date used to calculate date ranges
+        ///// should be DateTime.Now or a fixed date that is specified.
+        ///// When false, all date ranges are calculated based on DateTime.Now.
+        ///// Setting this property to true allows you to use an alternative
+        ///// fixed date as your "Now" value, using the FixedNow property.
+        ///// </summary>
+        //public bool UseFixedNowDate
+        //{
+        //    get { return _useFixedNowDate; }
+        //    set { _useFixedNowDate = value; }
+        //}
 
         /// <summary>
         /// Gets and sets the list of options to display.  If you intend
@@ -216,7 +216,11 @@ namespace Habanero.UI.Base
         public List<DateRangeOptions> OptionsToDisplay
         {
             get { return _optionsToDisplay; }
-            set { _optionsToDisplay = value; }
+            set
+            {
+                _optionsToDisplay = value;
+                BuildComboBoxList();
+            }
         }
 
         /// <summary>
@@ -245,7 +249,15 @@ namespace Habanero.UI.Base
         public TimeSpan MidnightOffset
         {
             get { return _midnightOffset; }
-            set { _midnightOffset = value; }
+            set
+            {
+                if (Math.Abs(value.TotalHours) >= 24)
+                {
+                    throw new ArgumentException("A midnight offset must be " +
+                        "less than 24 hours.");
+                }
+                _midnightOffset = value;
+            }
         }
 
         /// <summary>
@@ -271,7 +283,14 @@ namespace Habanero.UI.Base
         public int MonthStartOffset
         {
             get { return _monthStartOffset; }
-            set { _monthStartOffset = value; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException("Month start offset cannot be negative.");
+                }
+                _monthStartOffset = value;
+            }
         }
 
         /// <summary>
@@ -283,7 +302,237 @@ namespace Habanero.UI.Base
         public int YearStartOffset
         {
             get { return _yearStartOffset; }
-            set { _yearStartOffset = value; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException("Year start offset cannot be negative.");
+                }
+                _yearStartOffset = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets and sets whether the date used to calculate date ranges
+        /// should be DateTime.Now or a fixed date that is specified.
+        /// When false, all date ranges are calculated based on DateTime.Now.
+        /// Setting this property to true allows you to use an alternative
+        /// fixed date as your "Now" value, using the FixedNow property.
+        /// </summary>
+        public bool UseFixedNowDate
+        {
+            get { return _useFixedNowDate; }
+            set { _useFixedNowDate = value; }
+        }
+        /// <summary>
+        /// Gets and sets a fixed date used to calculate date ranges, rather
+        /// than DateTime.Now.  The UseFixedNowDate property must be set to
+        /// true, otherwise this property will be ignored.
+        /// </summary>
+        public DateTime FixedNowDate
+        {
+            get { return _fixedNow; }
+            set { _fixedNow = value; }
+        }
+        /// <summary>
+        /// Returns the start date for the currently selected date range option,
+        /// or DateTime.MinValue if no valid option is selected
+        /// </summary>
+        public DateTime StartDate
+        {
+            get
+            {
+                CalculateDates();
+                return _startDate;
+            }
+        }
+
+        /// <summary>
+        /// Returns the end date for the currently selected date range option,
+        /// or DateTime.MaxValue if no valid option is selected
+        /// </summary>
+        public DateTime EndDate
+        {
+            get
+            {
+                CalculateDates();
+                return _endDate;
+            }
+        }
+
+        /// <summary>
+        /// Calculates the start and end dates based on the currently
+        /// selected ComboBox item
+        /// </summary>
+        private void CalculateDates()
+        {
+            //if (!_dateRangePairs.ContainsValue(this._comboBox.Text))
+            //{
+                _startDate = DateTime.MinValue;
+                _endDate = DateTime.MaxValue;
+                return;
+            //}
+
+            //DateOptions option = DateOptions.Today;
+            //bool found = false;
+            //foreach (KeyValuePair<DateOptions, string> pair in _dateRangePairs)
+            //{
+            //    if (pair.Value == (string)SelectedItem)
+            //    {
+            //        option = pair.Key;
+            //        found = true;
+            //        break;
+            //    }
+            //}
+
+            //if (!found)
+            //{
+            //    _startDate = DateTime.MinValue;
+            //    _endDate = DateTime.MaxValue;
+            //    return;
+            //}
+
+            //switch (option)
+            //{
+            //    case DateOptions.ThisHour:
+            //        {
+            //            _startDate = HourStart(Now);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.PreviousHour:
+            //        {
+            //            _startDate = HourStart(Now).AddHours(-1);
+            //            _endDate = HourStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.Current60Minutes:
+            //        {
+            //            _startDate = Now.AddHours(-1);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.Today:
+            //        {
+            //            _startDate = DayStart(Now);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.Yesterday:
+            //        {
+            //            _startDate = DayStart(Now.AddDays(-1));
+            //            _endDate = DayStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.Current24Hours:
+            //        {
+            //            _startDate = Now.AddDays(-1);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.ThisWeek:
+            //        {
+            //            _startDate = WeekStart(Now);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.PreviousWeek:
+            //        {
+            //            _startDate = WeekStart(Now).AddDays(-7);
+            //            _endDate = WeekStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.Previous7Days:
+            //        {
+            //            _startDate = DayStart(Now).AddDays(-7);
+            //            _endDate = DayStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.ThisMonth:
+            //        {
+            //            _startDate = MonthStart(Now);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.PreviousMonth:
+            //        {
+            //            _startDate = MonthStart(Now).AddMonths(-1);
+            //            _endDate = MonthStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.Previous30Days:
+            //        {
+            //            _startDate = DayStart(Now).AddDays(-30);
+            //            _endDate = DayStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.Previous31Days:
+            //        {
+            //            _startDate = DayStart(Now).AddDays(-31);
+            //            _endDate = DayStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.ThisYear:
+            //        {
+            //            _startDate = YearStart(Now);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.PreviousYear:
+            //        {
+            //            _startDate = YearStart(Now).AddYears(-1);
+            //            _endDate = YearStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.Previous365Days:
+            //        {
+            //            _startDate = DayStart(Now).AddDays(-365);
+            //            _endDate = DayStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.Current2Years:
+            //        {
+            //            _startDate = Now.AddYears(-2);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.Current3Years:
+            //        {
+            //            _startDate = Now.AddYears(-3);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.Current5Years:
+            //        {
+            //            _startDate = Now.AddYears(-5);
+            //            _endDate = Now;
+            //            break;
+            //        }
+            //    case DateOptions.Previous2Years:
+            //        {
+            //            _startDate = YearStart(Now).AddYears(-2);
+            //            _endDate = YearStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.Previous3Years:
+            //        {
+            //            _startDate = YearStart(Now).AddYears(-3);
+            //            _endDate = YearStart(Now);
+            //            break;
+            //        }
+            //    case DateOptions.Previous5Years:
+            //        {
+            //            _startDate = YearStart(Now).AddYears(-5);
+            //            _endDate = YearStart(Now);
+            //            break;
+            //        }
+            //    default:
+            //        {
+            //            _startDate = DateTime.MinValue;
+            //            _endDate = DateTime.MaxValue;
+            //            break;
+            //        }
+            //}
         }
     }
 }

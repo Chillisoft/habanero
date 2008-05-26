@@ -14,7 +14,6 @@ namespace Habanero.UI.WebGUI
         public ComboBoxGiz()
         {
             _manager = new ComboBoxManager(this);
-            
         }
 
         public new IComboBoxObjectCollection Items
@@ -28,27 +27,14 @@ namespace Habanero.UI.WebGUI
 
         object IComboBox.SelectedItem
         {
-            get
-            {
-                return _manager.GetSelectedItem(this.SelectedItem);
-        
-            }
-            set
-            {
-                this.SelectedItem = _manager.GetItemToSelect(value);
-            }
+            get { return _manager.GetSelectedItem(this.SelectedItem); }
+            set { this.SelectedItem = _manager.GetItemToSelect(value); }
         }
 
         object IComboBox.SelectedValue
         {
-            get
-            {
-                return _manager.GetSelectedValue(this.SelectedItem);
-            }
-            set
-            {
-                SelectedItem = _manager.GetValueToSelect(value);
-            }
+            get { return _manager.GetSelectedValue(this.SelectedItem); }
+            set { SelectedItem = _manager.GetValueToSelect(value); }
         }
 
         internal class ComboBoxObjectCollectionGiz : IComboBoxObjectCollection
@@ -95,7 +81,11 @@ namespace Habanero.UI.WebGUI
             public object this[int index]
             {
                 get { return _items[index]; }
-                set { throw new NotImplementedException("WebGUI doesn't have a setter"); } //_items[index] = value; }
+                set
+                {//Hack: due to a bug in webgui.
+                    _items.RemoveAt(index);
+                    _items.Insert(index, value);
+                } 
             }
 
             public bool Contains(object value)
