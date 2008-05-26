@@ -20,11 +20,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
 using log4net;
 
 namespace Habanero.UI.Base
@@ -40,7 +38,7 @@ namespace Habanero.UI.Base
         private readonly UIForm _uiForm;
         private IControlChilli _firstControl;
         private readonly IControlFactory _controlFactory;
-        private EventHandler _emailTextBoxDoubleClickedHandler;
+        //TODO Port:        private EventHandler _emailTextBoxDoubleClickedHandler;
 
         /// <summary>
         /// Constructor to initialise a new PanelFactory object, assuming
@@ -79,13 +77,13 @@ namespace Habanero.UI.Base
             if (uiDef == null)
             {
                 throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName +
-                                                     "' since the classdefs do not contain a uiDef");
+                                                     "' since the classdefs do not contain a uiDef '" + uiDefName + "'");
             }
             _uiForm = uiDef.GetUIFormProperties();
             if (_uiForm == null)
             {
                 throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName +
-                                                     "' since the classdefs do not contain a form def");
+                                                     "' since the classdefs do not contain a form def for uidef '" + uiDefName + "'");
             }
             InitialiseFactory(bo);
         }
@@ -96,7 +94,7 @@ namespace Habanero.UI.Base
         private void InitialiseFactory(BusinessObject bo)
         {
             _currentBusinessObject = bo;
-            _emailTextBoxDoubleClickedHandler = EmailTextBoxDoubleClickedHandler;
+            //TODO Port:            _emailTextBoxDoubleClickedHandler = EmailTextBoxDoubleClickedHandler;
         }
 
         /// <summary>
@@ -145,6 +143,7 @@ namespace Habanero.UI.Base
             foreach (UIFormTab formTab in _uiForm)
             {
                 IPanelFactoryInfo onePanelInfo = CreateOnePanel(formTab);
+                
                 panelInfoList.Add(onePanelInfo);
             }
             return panelInfoList;
@@ -237,6 +236,7 @@ namespace Habanero.UI.Base
                     ILabel labelControl = _controlFactory.CreateLabel(labelCaption, isCompulsory);
                     controls[currentRow, currentColumn + 0] = new GridLayoutManager.ControlInfo(labelControl);
                     IControlChilli ctl = CreateControl(field, _controlFactory);
+
                     if (ctl is ITextBox && propDef != null)
                     {
                         if (propDef.PropertyType == typeof (bool))
@@ -358,7 +358,10 @@ namespace Habanero.UI.Base
                         toolTip.SetToolTip(labelControl, toolTipText);
                         toolTip.SetToolTip(ctl, toolTipText);
                     }
+                    //Hack brett trying to fix prob with dynamic properties
+                    ctl.Width = 100;
                 }
+
                 currentColumn += 2;
             }
             for (int i = 0; i < rowCount; i++)
@@ -390,6 +393,9 @@ namespace Habanero.UI.Base
             panelFactoryInfo.MinimumPanelHeight = panel.Height;
             panelFactoryInfo.MinumumPanelWidth = panel.Width;
             panelFactoryInfo.ToolTip = toolTip;
+            panelFactoryInfo.PanelTabText = uiFormTab.Name;
+            panelFactoryInfo.UIForm = _uiForm;
+            panelFactoryInfo.UiFormTab = uiFormTab;
             return panelFactoryInfo;
         }
 
@@ -451,43 +457,44 @@ namespace Habanero.UI.Base
         //    _firstControl.Focus();
         //}
 
-        /// <summary>
-        /// A handler to deal with the press of an Enter key when the control
-        /// is an up-down object
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private static void UpDownEnterHandler(object sender, EventArgs e)
-        {
-            INumericUpDown upDown = (INumericUpDown) sender;
-            upDown.Select(0, upDown.Text.Length);
-        }
+        //TODO Port:
+        ///// <summary>
+        ///// A handler to deal with the press of an Enter key when the control
+        ///// is an up-down object
+        ///// </summary>
+        ///// <param name="sender">The object that notified of the event</param>
+        ///// <param name="e">Attached arguments regarding the event</param>
+        //private static void UpDownEnterHandler(object sender, EventArgs e)
+        //{
+        //    INumericUpDown upDown = (INumericUpDown) sender;
+        //    upDown.Select(0, upDown.Text.Length);
+        //}
+//TODO Port:
+        ///// <summary>
+        ///// A handler to deal with the press of an Enter key when the control
+        ///// is a date-time picker
+        ///// </summary>
+        ///// <param name="sender">The object that notified of the event</param>
+        ///// <param name="e">Attached arguments regarding the event</param>
+        //private static void DateTimePickerEnterHandler(object sender, EventArgs e)
+        //{
+        //}
 
-        /// <summary>
-        /// A handler to deal with the press of an Enter key when the control
-        /// is a date-time picker
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private static void DateTimePickerEnterHandler(object sender, EventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// A handler to deal with a double-click on an email textbox, which
-        /// causes the default mail client on the user system to be opened
-        /// </summary>
-        /// <param name="sender">The object that notified of the event</param>
-        /// <param name="e">Attached arguments regarding the event</param>
-        private static void EmailTextBoxDoubleClickedHandler(object sender, EventArgs e)
-        {
-            ITextBox tb = (ITextBox) sender;
-            if (tb.Text.IndexOf("@") != -1)
-            {
-                string comm = "mailto:" + tb.Text;
-                Process.Start(comm);
-            }
-        }
+        //TODO Port:        ///// <summary>
+        ///// A handler to deal with a double-click on an email textbox, which
+        ///// causes the default mail client on the user system to be opened
+        ///// </summary>
+        ///// <param name="sender">The object that notified of the event</param>
+        ///// <param name="e">Attached arguments regarding the event</param>
+        //private static void EmailTextBoxDoubleClickedHandler(object sender, EventArgs e)
+        //{
+        //    ITextBox tb = (ITextBox) sender;
+        //    if (tb.Text.IndexOf("@") != -1)
+        //    {
+        //        string comm = "mailto:" + tb.Text;
+        //        Process.Start(comm);
+        //    }
+        //}
 
         /// <summary>
         /// Creates the appropriate control for the given field element.

@@ -16,6 +16,7 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
@@ -37,6 +38,9 @@ namespace Habanero.UI.Base
         private IToolTip _toolTip;
         private int _minimumPanelHeight;
         private int _minumumPanelWidth;
+        private string _panelTabTest;
+        private UIForm _uiForm;
+        private UIFormTab _uiFormTab;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -117,6 +121,24 @@ namespace Habanero.UI.Base
         {
             get { return _minumumPanelWidth; }
             set { _minumumPanelWidth = value; }
+        }
+
+        public string PanelTabText
+        {
+            get { return _panelTabTest; }
+            set { _panelTabTest = value; }
+        }
+
+        public UIForm UIForm
+        {
+            get { return _uiForm; }
+            set { _uiForm = value; }
+        }
+
+        public UIFormTab UiFormTab
+        {
+            get { return _uiFormTab; }
+            set { _uiFormTab = value; }
         }
     }
 }

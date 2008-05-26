@@ -93,6 +93,7 @@ namespace Habanero.BO.ClassDefinition
         		_controlTypeName = controlTypeName;
         		_controlAssembly = controlAssembly;
         	}
+            if (parameters == null) parameters = new Hashtable(0);
             _label = label;
             _propertyName = propertyName;
             _mapperTypeName = mapperTypeName;

@@ -654,6 +654,45 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        public static ClassDef LoadClassDefWithThreeUITabs_UI_Define()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui name=""Define"">
+						<form>
+							<tab name=""Collapse Tab 1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+							<tab name=""Collapse Tab 2"">
+								<columnLayout>
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+		                    <tab name=""Collapse Tab 3"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+
+
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
 
         public static ClassDef LoadClassDefWithBOStringLookup()
         {

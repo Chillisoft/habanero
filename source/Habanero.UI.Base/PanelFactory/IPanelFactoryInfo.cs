@@ -1,3 +1,5 @@
+using Habanero.BO.ClassDefinition;
+
 namespace Habanero.UI.Base
 {
     public interface IPanelFactoryInfo
@@ -32,5 +34,11 @@ namespace Habanero.UI.Base
         int MinimumPanelHeight { get; set; }
 
         int MinumumPanelWidth { get; set; }
+
+        string PanelTabText { get; set; }
+
+        UIForm UIForm { get; set; }
+
+        UIFormTab UiFormTab { get; set; }
     }
 }
