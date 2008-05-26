@@ -342,9 +342,10 @@ namespace Habanero.UI.WebGUI
             cbx.Checked = defaultValue;
             cbx.FlatStyle = FlatStyle.Standard;
             cbx.Height = CreateTextBox().Height;// set the CheckBoxGiz to the default height of a text box on this machine.
-            cbx.CheckAlign = ContentAlignment.TopRight;
+            cbx.CheckAlign = ContentAlignment.MiddleLeft;
             cbx.Width = cbx.Height;
             cbx.BackColor = SystemColors.Control;
+
 
             return cbx;
         }
@@ -437,6 +438,17 @@ namespace Habanero.UI.WebGUI
             return new ListViewGiz();
         }
 
+
+        public IEditableGrid CreateEditableGrid()
+        {
+            return new EditableGridGiz();
+        }
+
+        public IEditableGridControl CreateEditableGridControl()
+        {
+            return new EditableGridControlGiz(this);
+        }
+
         public IFileChooser CreateFileChooser()
         {
             return new FileChooserGiz(this);
@@ -461,12 +473,7 @@ namespace Habanero.UI.WebGUI
             return tb;
         }
 
-        public IDataGridViewColumn CreateDataGridViewColumn()
-        {
-            DataGridViewColumnGiz col = new DataGridViewColumnGiz();
-            return col;
-        }
-
+ 
         public IWizardControl CreateWizardControl(IWizardController wizardController)
         {
             return new WizardControlGiz(wizardController, this);

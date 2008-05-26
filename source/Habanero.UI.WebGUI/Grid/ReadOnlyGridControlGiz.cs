@@ -20,6 +20,7 @@ namespace Habanero.UI.WebGUI
         private ClassDef _classDef;
         private readonly IFilterControl _filterControl;
         private bool _isInitialised = false;
+        private readonly GridInitialiser _gridInitialiser;
 
         //private IBusinessObjectCollection _collection;
 
@@ -34,7 +35,7 @@ namespace Habanero.UI.WebGUI
             _filterControl = new FilterControlGiz(_controlFactory);
             _grid = new ReadOnlyGridGiz();
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();
-
+            _gridInitialiser = new GridInitialiser(this);
             //InitialiseGrid();
             InitialiseButtons();
             InitialiseFilterControl();
@@ -86,7 +87,8 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public void Initialise(ClassDef classDef)
         {
-            this.Initialise(classDef, "default");
+            _gridInitialiser.InitialiseGrid(classDef);
+           
         }
 
         public void Initialise(ClassDef classDef, string uiDefName)
@@ -99,86 +101,14 @@ namespace Habanero.UI.WebGUI
             _classDef = classDef;
             _uiDefName = uiDefName;
 
-            UIGrid gridDef = GetGridDef(classDef);
-            SetUpGridColumns(gridDef);
+            _gridInitialiser.InitialiseGrid(classDef, uiDefName);
+
             _isInitialised = true;
         }
 
-        private UIGrid GetGridDef(ClassDef classDef)
-        {
-            UIDef uiDef = _classDef.GetUIDef(_uiDefName);
-            if (uiDef == null)
-            {
-                throw new ArgumentException(
-                    String.Format(
-                        "You cannot initialise {0} because it does not contain a definition for UIDef {1} for the class def {2}",
-                        this._grid.Name, _uiDefName, classDef.ClassName));
-            }
-            UIGrid gridDef = uiDef.UIGrid;
-            if (gridDef == null)
-            {
-                throw new ArgumentException(
-                    String.Format(
-                        "You cannot initialise {0} does not contain a grid definition for UIDef {1} for the class def {2}",
-                        this._grid.Name, _uiDefName, classDef.ClassName));
-            }
-            return gridDef;
-        }
+        
 
-        private void SetUpGridColumns(UIGrid gridDef)
 
-        {
-            this._grid.Columns.Clear();
-            CreateIDColumn();
-            CreateColumnForUIDef(gridDef);
-        }
-
-        private void CreateIDColumn()
-        {
-            IDataGridViewColumn col = CreateColumn("ID", "ID");
-            col.Width = 0;
-            col.Visible = false;
-            col.ReadOnly = true;
-            col.DataPropertyName = "ID";
-            col.ValueType = typeof (string);
-        }
-
-        private IDataGridViewColumn CreateColumn(string columnName, string columnHeader)
-        {
-            int colIndex = this._grid.Columns.Add(columnName, columnHeader);
-            return this._grid.Columns[colIndex];
-        }
-
-        private void CreateColumnForUIDef(UIGrid gridDef)
-        {
-            foreach (UIGridColumn gridColDef in gridDef)
-            {
-                IDataGridViewColumn col = CreateColumn(gridColDef.PropertyName, gridColDef.GetHeading());
-                col.ReadOnly = true;
-                col.HeaderText = gridColDef.GetHeading();
-                col.Name = gridColDef.PropertyName;
-                col.DataPropertyName = gridColDef.PropertyName;
-                col.Visible = true;
-                col.Width = gridColDef.Width;
-                //TODO_Port: Figure out a generic way of doing setting sort
-                // either by a custom cast or by moving enums to generalised
-                //((DataGridViewColumn)col).SortMode = DataGridViewColumnSortMode.Automatic;
-                PropDef propDef = GetPropDef(gridColDef);
-                if (propDef != null) col.ValueType = propDef.PropertyType;
-                //this._grid.Columns.Add(col);
-
-            }
-        }
-
-        private PropDef GetPropDef(UIGridColumn gridColumn)
-        {
-            PropDef propDef = null;
-            if (_classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
-            {
-                propDef = _classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];
-            }
-            return propDef;
-        }
 
 
         private void Buttons_DeleteClicked(object sender, EventArgs e)
@@ -293,11 +223,13 @@ namespace Habanero.UI.WebGUI
         public string UiDefName
         {
             get { return _uiDefName; }
+            set { _uiDefName = value; }
         }
 
         public ClassDef ClassDef
         {
             get { return _classDef; }
+            set { _classDef = value; }
         }
 
         public IFilterControl FilterControl
@@ -367,14 +299,6 @@ namespace Habanero.UI.WebGUI
         public void EndInit()
         {
             ((System.ComponentModel.ISupportInitialize)this.Grid).EndInit();
-        }
-    }
-
-    public class DataGridViewColumnGiz : DataGridViewColumn, IDataGridViewColumn
-    {
-        public object DataGridViewColumn
-        {
-            get { throw new NotImplementedException(); }
         }
     }
 }

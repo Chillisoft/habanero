@@ -7,7 +7,7 @@ namespace Habanero.UI.WebGUI
     {
         IControlCollection IControlChilli.Controls
         {
-            get { return new ControlCollectionGiz(base.Controls); }
+            get { return new ControlCollectionGiz(base.Controls);             }
         }
     }
 }

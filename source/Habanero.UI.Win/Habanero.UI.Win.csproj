@@ -63,6 +63,12 @@
     </Compile>
     <Compile Include="DateTimePicker\DateTimePickerControllerWin.cs" />
     <Compile Include="DateTimePicker\DateTimePickerUtilWinTemp.cs" />
+    <Compile Include="EditableGridControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EditableGridWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FileChooserWin.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -107,6 +113,9 @@
     </Compile>
     <Compile Include="ToolTipWin.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControlWin.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Util\ControlsHelper.cs" />
     <Compile Include="ControlFactoryWin.cs">

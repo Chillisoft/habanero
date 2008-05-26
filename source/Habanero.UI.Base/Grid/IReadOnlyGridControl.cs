@@ -57,9 +57,9 @@ namespace Habanero.UI.Base
 
         IBusinessObjectDeletor BusinessObjectDeletor { get; set; }
 
-        string UiDefName { get; }
+        string UiDefName { get; set; }
 
-        ClassDef ClassDef { get; }
+        ClassDef ClassDef { get; set; }
 
         IFilterControl FilterControl { get; }
 

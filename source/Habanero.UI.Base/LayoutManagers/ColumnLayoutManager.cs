@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+
 namespace Habanero.UI.Base
 {
     /// <summary>
@@ -28,7 +30,6 @@ namespace Habanero.UI.Base
     public class ColumnLayoutManager : LayoutManager
     {
         private int _columnCount;
-        private IControlChilli _controltmp;
         /// <summary>
         /// Constructor to initialise a new layout manager
         /// </summary>
@@ -69,6 +70,7 @@ namespace Habanero.UI.Base
             int maxControlHeight = 0;
             foreach (IControlChilli control in this.ManagedControl.Controls)
             {
+  
                 if (currentColumn > ColumnCount)
                 {
                     currentColumn = 1;
@@ -94,9 +96,9 @@ namespace Habanero.UI.Base
         /// <returns>Returns the control after it has been added</returns>
         public override IControlChilli AddControl(IControlChilli control)
         {
-            _controltmp = control;
-            this.ManagedControl.Controls.Add(_controltmp);
+            this.ManagedControl.Controls.Add(control);
             RefreshControlPositions();
+            control.Resize += delegate { RefreshControlPositions(); };
             return control;
         }
     }

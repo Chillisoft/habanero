@@ -73,6 +73,12 @@
     <Compile Include="DateTimePickerGiz.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="EditableGridControlGiz.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EditableGridGiz.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FileChooserGiz.cs">
       <SubType>UserControl</SubType>
     </Compile>

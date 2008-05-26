@@ -205,13 +205,14 @@ namespace Habanero.UI.Base
         /// <param name="numLines"></param>
         ITextBox CreateTextBoxMultiLine(int numLines);
 
-        IDataGridViewColumn CreateDataGridViewColumn();
         IWizardControl CreateWizardControl(IWizardController wizardController);
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name, PostObjectPersistingDelegate action);
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo);
         IListView CreateListView();
 
 
+        IEditableGrid CreateEditableGrid();
+        IEditableGridControl CreateEditableGridControl();
         IFileChooser CreateFileChooser();
     }
 

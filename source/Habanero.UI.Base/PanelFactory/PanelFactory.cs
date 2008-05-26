@@ -137,6 +137,7 @@ namespace Habanero.UI.Base
         /// Creates a numer of panels in  panel to display a business object
         /// </summary>
         /// <returns>Returns the object containing the panel</returns>
+        /// TODO: improve tab order (ie make all tabs use one sequence rather than each starting a new sequence)
         public List<IPanelFactoryInfo> CreateOnePanelPerUIFormTab()
         {
             List<IPanelFactoryInfo> panelInfoList = new List<IPanelFactoryInfo>();

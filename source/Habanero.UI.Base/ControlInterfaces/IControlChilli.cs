@@ -160,5 +160,8 @@ namespace Habanero.UI.Base
         ///// <value></value>
         //[System.ComponentModel.DefaultValue(1)]
         //int BorderWidth { get; set; }
+        void SuspendLayout();
+        void ResumeLayout(bool performLayout);
+        void Invalidate();
     }
 }

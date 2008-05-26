@@ -3,7 +3,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
     public abstract class TestColumnLayoutManager
     {
         private const int GAP_SIZE = 2;
@@ -124,7 +123,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(10, control.Height);
             //---------------Tear Down -------------------------          
         }
-
+        [Test]
         public void TestAddControl_LayoutWithOneColumn_ChangeBorderSize()
         {
             //---------------Set up test pack-------------------
@@ -149,7 +148,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(10, control.Height);
             //---------------Tear Down -------------------------          
         }
-
+        [Test]
         public void TestAddTwoControls_LayoutWithOneColumn()
         {
             //---------------Set up test pack-------------------
@@ -231,7 +230,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual((int) expectedControlWidth, control.Width);
             //---------------Tear Down -------------------------          
         }
-
+        [Test]
         public void TestAddControl_ThreeColumns_OneControl()
         {
             //---------------Set up test pack-------------------
@@ -253,7 +252,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(expectedControlWidth, control.Width);
             //---------------Tear Down -------------------------          
         }
-
+        [Test]
         public void TestAddControl_TwoColumns_TwoControl()
         {
             //---------------Set up test pack-------------------
@@ -286,7 +285,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(expectedControlWidth, control2.Width);
             //---------------Tear Down -------------------------          
         }
-
+        [Test]
         public void TestAddControl_TwoColumns_ThreeControl()
         {
             //---------------Set up test pack-------------------
@@ -329,7 +328,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(expectedControlWidth, control3.Width);
             //---------------Tear Down -------------------------          
         }
-
+        [Test]
         public void TestAddControl_TwoColumns_ThreeControl_Control2DiffHeight()
         {
             //---------------Set up test pack-------------------
@@ -374,7 +373,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(expectedControlWidth, control3.Width);
             //---------------Tear Down -------------------------          
         }
-
+        [Test]
         public void TestAddControl_TwoColumns_FiveControl()
         {
             //---------------Set up test pack-------------------
@@ -410,6 +409,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(expectedControlWidth, control5.Width);
             //---------------Tear Down -------------------------          
         }
+        [Test]
         public void TestAddControl_TwoColumns_FiveControl_ResizeManagedControl()
         {
             //---------------Set up test pack-------------------
@@ -484,6 +484,52 @@ namespace Habanero.Test.UI.Base
             }
 
             //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestResizeControlOnManagedControl()
+        {
+            //---------------Set up test pack-------------------
+            IControlChilli managedControl = GetControlFactory().CreatePanel();
+            ColumnLayoutManager columnLayoutManager = new ColumnLayoutManager(managedControl, GetControlFactory());
+            columnLayoutManager.GapSize = 0;
+            columnLayoutManager.BorderSize = 0;
+            IControlChilli createdControl1 = GetControlFactory().CreateControl();
+            IControlChilli createdControl2 = GetControlFactory().CreateControl();
+            //---------------Execute Test ----------------------
+            columnLayoutManager.AddControl(createdControl1);
+            columnLayoutManager.AddControl(createdControl2);
+            createdControl1.Height += 10;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(createdControl1.Height, createdControl2.Top );
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestResizeManagedControl()
+        {
+            //---------------Set up test pack-------------------
+            IControlChilli managedControl = GetControlFactory().CreatePanel();
+            int originalWidth = 400;
+            managedControl.Width = originalWidth;
+            ColumnLayoutManager columnLayoutManager = new ColumnLayoutManager(managedControl, GetControlFactory());
+            columnLayoutManager.GapSize = 0;
+            columnLayoutManager.BorderSize = 0;
+            IControlChilli createdControl1 = GetControlFactory().CreateControl();
+            IControlChilli createdControl2 = GetControlFactory().CreateControl();
+            columnLayoutManager.AddControl(createdControl1);
+            columnLayoutManager.AddControl(createdControl2);
+            //---------------Assert preconditions---------------
+            Assert.AreEqual(originalWidth, createdControl1.Width);
+            Assert.AreEqual(originalWidth, createdControl2.Width);
+            //---------------Execute Test ----------------------
+            int newWidth = 500;
+            managedControl.Width = newWidth;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newWidth, createdControl1.Width);
+            Assert.AreEqual(newWidth, createdControl2.Width);
+
+            //---------------Tear Down -------------------------
         }
         
     }

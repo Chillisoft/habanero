@@ -243,10 +243,7 @@ namespace Habanero.UI.Win
             return tb;
         }
 
-        public IDataGridViewColumn CreateDataGridViewColumn()
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public IWizardControl CreateWizardControl(IWizardController wizardController)
         {
@@ -267,6 +264,18 @@ namespace Habanero.UI.Win
         {
             throw new NotImplementedException();
         }
+
+        public IEditableGrid CreateEditableGrid()
+        {
+            return new EditableGridWin();
+        }
+
+
+        public IEditableGridControl CreateEditableGridControl()
+        {
+            return new EditableGridControlWin(this);
+        }
+
 
         public IFileChooser CreateFileChooser()
         {

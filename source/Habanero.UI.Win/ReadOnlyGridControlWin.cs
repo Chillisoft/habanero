@@ -13,18 +13,34 @@ namespace Habanero.UI.Win
         private IBusinessObjectDeletor _businessObjectDeletor;
         private ClassDef _classDef;
         private IFilterControl _filterControl;
+        private string _uiDefName = "";
+        private readonly ReadOnlyGridWin _grid;
+        private readonly GridInitialiser _gridInitialiser;
+
+
+        public ReadOnlyGridControlWin()
+        {
+            _grid = new ReadOnlyGridWin();
+            _grid.Name = "GridControl";
+            _gridInitialiser = new GridInitialiser(this);
+        }
 
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
         /// </summary>
         public void Initialise(ClassDef classDef)
         {
-            throw new System.NotImplementedException();
+            _gridInitialiser.InitialiseGrid(classDef);
+        }
+
+        public void Initialise(ClassDef classDef, string uiDefName)
+        {
+            _gridInitialiser.InitialiseGrid(classDef, uiDefName);
         }
 
         public IReadOnlyGrid Grid
         {
-            get { return null; }
+            get { return _grid; }
         }
 
         public BusinessObject SelectedBusinessObject
@@ -63,12 +79,14 @@ namespace Habanero.UI.Win
 
         public string UiDefName
         {
-            get { return ""; }
+            get { return _uiDefName; }
+            set { _uiDefName = value; }
         }
 
         public ClassDef ClassDef
         {
             get { return _classDef; }
+            set { _classDef = value; }
         }
 
         public IFilterControl FilterControl
@@ -93,10 +111,7 @@ namespace Habanero.UI.Win
             throw new System.NotImplementedException();
         }
 
-        public void Initialise(ClassDef def, string uiDefName)
-        {
-            throw new System.NotImplementedException();
-        }
+       
 
         IControlCollection IControlChilli.Controls
         {

@@ -53,7 +53,6 @@ namespace Habanero.UI.WebGUI
                     this.ManagedControl.Controls.Add(chilliControl);
                 }
             }
-
             return control;
         }
     }

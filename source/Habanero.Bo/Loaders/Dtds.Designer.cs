@@ -115,7 +115,7 @@ namespace Habanero.BO.Loaders {
         ///&lt;!ATTLIST column
         ///	heading CDATA #IMPLIED
         ///	property CDATA #REQUIRED
-        ///	type NMTOKEN	&quot;DataGridViewTextBoxColumn&quot;
+        ///	type NMTOKEN	#IMPLIED
         ///	assembly NMTOKEN #IMPLIED
         ///	editable ( true | false ) &quot;true&quot;
         ///	width CDATA &quot;100&quot;
@@ -164,9 +164,9 @@ namespace Habanero.BO.Loaders {
         ///&lt;!ATTLIST field
         ///	label CDATA #IMPLIED
         ///	property NMTOKEN #REQUIRED
-        ///	type NMTOKEN	&quot;TextBox&quot;
-        ///	assembly NMTOKEN &quot;System.Windows.Forms&quot;
-        ///	mapperType NMTOKEN &quot;TextBoxMapper&quot;
+        ///	type NMTOKEN #IMPLIED
+        ///	assembly NMTOKEN #IMPLIED
+        ///	mapperType NMTOKEN #IMPLIED
         ///  mapperAssembly NMTOKEN #IMPLIED
         ///  editable ( true | false ) &quot;true&quot;
         ///	toolTipText CDATA #IMPLIED
@@ -310,7 +310,7 @@ namespace Habanero.BO.Loaders {
         ///	relatedAssembly	NMTOKEN #REQUIRED
         ///	keepReference ( true | false ) &quot;true&quot;
         ///	orderBy CDATA &quot;&quot;
-        ///	deleteAction ( DeleteRelated | DereferenceRelated | Prevent ) &quot;Prevent&quot;
+        ///	deleteAction ( DeleteRelated | DereferenceRelated | Prevent | DoNothing ) &quot;Prevent&quot;
         ///&gt;
         ///		&lt;!ELEMENT relatedProperty EMPTY&gt;
         ///    &lt;!ATTLIST relatedProperty

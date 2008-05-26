@@ -197,7 +197,7 @@ namespace Habanero.UI.WebGUI
             }
         }
 
-        public class DataGridViewColumnGiz : IDataGridViewColumn
+        public class DataGridViewColumnGiz : DataGridViewColumn, IDataGridViewColumn
         {
             private readonly DataGridViewColumn _dataGridViewColumn;
 
@@ -290,7 +290,7 @@ namespace Habanero.UI.WebGUI
             }
         }
 
-        private class DataGridViewColumnCollectionGiz : IDataGridViewColumnCollection
+        protected class DataGridViewColumnCollectionGiz : IDataGridViewColumnCollection
         {
             private readonly DataGridViewColumnCollection _columns;
 

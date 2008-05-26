@@ -72,6 +72,8 @@
     <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
     <Compile Include="FilterController\TestFilterControlDate.cs" />
     <Compile Include="FilterController\TestFilterInputBoxCollection.cs" />
+    <Compile Include="Grid\TestEditableGridControl.cs" />
+    <Compile Include="Grid\TestGridInitialiser.cs" />
     <Compile Include="Grid\TestReadOnlyGrid.cs" />
     <Compile Include="LayoutManager\TestBorderLayoutManager.cs" />
     <Compile Include="Grid\TestReadOnlyGridButtonControl.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="TestDateTimePickerController.cs" />
     <Compile Include="TestDefaultBOCreator.cs" />
     <Compile Include="TestDefaultBOEditorForm.cs" />
+    <Compile Include="Grid\TestEditableGrid.cs" />
     <Compile Include="TestFileChooser.cs" />
     <Compile Include="TestGlobalUIRegistry.cs" />
     <Compile Include="TestLabel.cs" />

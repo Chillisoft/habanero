@@ -52,6 +52,10 @@
     <Compile Include="ControlInterfaces\IUserControlChilli.cs" />
     <Compile Include="ControlMappers\ComboBoxCollectionController.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
+    <Compile Include="Grid\EditableGridControlManager.cs" />
+    <Compile Include="Grid\GridInitialiser.cs" />
+    <Compile Include="Grid\IEditableGridControl.cs" />
+    <Compile Include="Grid\IEdtiableGrid.cs" />
     <Compile Include="FileChooserManager.cs" />
     <Compile Include="IColumnHeaderCollection.cs" />
     <Compile Include="ControlMappers\ListViewCollectionController.cs" />

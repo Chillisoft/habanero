@@ -265,8 +265,8 @@ namespace Habanero.UI.Win
             //    ), Browsable(true)]
             public string DataPropertyName
             {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
+                get { return _dataGridViewColumn.DataPropertyName; }
+                set { _dataGridViewColumn.DataPropertyName = value; }
             }
 
             /// <summary>Gets or sets the caption text on the column's header cell.</summary>
@@ -274,8 +274,8 @@ namespace Habanero.UI.Win
             /// <filterpriority>1</filterpriority>
             public string HeaderText
             {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
+                get { return _dataGridViewColumn.HeaderText; }
+                set { _dataGridViewColumn.HeaderText = value; }
             }
 
             /// <summary>Gets or sets the name of the column.</summary>
@@ -283,8 +283,8 @@ namespace Habanero.UI.Win
             /// <filterpriority>1</filterpriority>
             public string Name
             {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
+                get { return _dataGridViewColumn.Name; }
+                set { _dataGridViewColumn.Name = value; }
             }
 
             /// <summary>Gets or sets a value indicating whether the user can edit the column's cells.</summary>
@@ -293,8 +293,8 @@ namespace Habanero.UI.Win
             /// <filterpriority>1</filterpriority>
             public bool ReadOnly
             {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
+                get { return _dataGridViewColumn.ReadOnly; }
+                set { _dataGridViewColumn.ReadOnly = value; }
             }
 
             /// <summary>Gets or sets the text used for ToolTips.</summary>
@@ -302,8 +302,8 @@ namespace Habanero.UI.Win
             /// <filterpriority>1</filterpriority>
             public string ToolTipText
             {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
+                get { return _dataGridViewColumn.ToolTipText; }
+                set { _dataGridViewColumn.ToolTipText = value; }
             }
 
             /// <summary>Gets or sets the data type of the values in the column's cells.</summary>
@@ -311,8 +311,8 @@ namespace Habanero.UI.Win
             /// <filterpriority>1</filterpriority>
             public Type ValueType
             {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
+                get { return _dataGridViewColumn.ValueType; }
+                set { _dataGridViewColumn.ValueType = value; }
             }
 
             /// <summary>Gets or sets the current width of the column.</summary>
@@ -321,8 +321,8 @@ namespace Habanero.UI.Win
             /// <filterpriority>1</filterpriority>
             public int Width
             {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
+                get { return _dataGridViewColumn.Width; }
+                set { _dataGridViewColumn.Width = value; }
             }
 
             public bool Visible
