@@ -63,6 +63,9 @@
     </Compile>
     <Compile Include="DateTimePicker\DateTimePickerControllerWin.cs" />
     <Compile Include="DateTimePicker\DateTimePickerUtilWinTemp.cs" />
+    <Compile Include="FileChooserWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="FilterControlWin.cs">
       <SubType>Component</SubType>
     </Compile>

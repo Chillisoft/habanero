@@ -6,6 +6,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
+using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.Base.FilterControl;
 using Habanero.Util.File;
 
@@ -434,6 +435,11 @@ namespace Habanero.UI.WebGUI
         public IListView CreateListView()
         {
             return new ListViewGiz();
+        }
+
+        public IFileChooser CreateFileChooser()
+        {
+            return new FileChooserGiz(this);
         }
 
         public ITabControl CreateTabControl()

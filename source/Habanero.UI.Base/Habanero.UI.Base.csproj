@@ -47,10 +47,12 @@
     <Compile Include="ComboBoxManager.cs" />
     <Compile Include="ControlInterfaces\Events.cs" />
     <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
+    <Compile Include="ControlInterfaces\IFileChooser.cs" />
     <Compile Include="ControlInterfaces\IListControl.cs" />
     <Compile Include="ControlInterfaces\IUserControlChilli.cs" />
     <Compile Include="ControlMappers\ComboBoxCollectionController.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
+    <Compile Include="FileChooserManager.cs" />
     <Compile Include="IColumnHeaderCollection.cs" />
     <Compile Include="ControlMappers\ListViewCollectionController.cs" />
     <Compile Include="ControlMappers\ListComboBoxMapper.cs" />

@@ -25,7 +25,9 @@ using Habanero.DB;
 namespace Habanero.UI.Forms
 {
     /// <summary>
-    /// Provides a control form listing database settings
+    /// Provides a control form listing database settings.
+    /// The DbConnection control provides an interface where by the user can enter information for a Database Config.
+    /// This form cannot edit an Existing Database Config, but just returns a Database Config for the settings specified in the form.
     /// </summary>
     public class DbConnectionControl : UserControl
     {
@@ -202,6 +204,8 @@ namespace Habanero.UI.Forms
             this.ResumeLayout(false);
         }
 
+        #endregion
+
         /// <summary>
         /// Returns a database configuration with the settings specified
         /// in the control
@@ -214,6 +218,5 @@ namespace Habanero.UI.Forms
                                    PasswordTextBox.Text, PortTextBox.Text);
         }
 
-        #endregion
     }
 }

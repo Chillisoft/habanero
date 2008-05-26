@@ -6,6 +6,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.UI.Base;
+using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.Base.FilterControl;
 using Habanero.Util.File;
 
@@ -267,6 +268,11 @@ namespace Habanero.UI.Win
             throw new NotImplementedException();
         }
 
+        public IFileChooser CreateFileChooser()
+        {
+            return new FileChooserWin(this);
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();
@@ -282,6 +288,10 @@ namespace Habanero.UI.Win
             return new MultiSelectorWin<T>();
         }
 
+        /// <summary>
+        /// Creates a new Button
+        /// </summary>
+        /// <returns>Returns the new Button object</returns>
         public IButton CreateButton()
         {
             return new ButtonWin();
@@ -294,7 +304,9 @@ namespace Habanero.UI.Win
         /// <returns>Returns the new Button object</returns>
         public IButton CreateButton(string text)
         {
-            throw new NotImplementedException();
+            IButton button = CreateButton();
+            button.Text = text;
+            return button;
         }
 
         /// <summary>
@@ -306,7 +318,9 @@ namespace Habanero.UI.Win
         /// <returns>Returns the new Button object</returns>
         public IButton CreateButton(string text, EventHandler clickHandler)
         {
-            throw new NotImplementedException();
+            IButton button = CreateButton(text);
+            button.Click += clickHandler;
+            return button;
         }
 
         public ICheckBox CreateCheckBox()

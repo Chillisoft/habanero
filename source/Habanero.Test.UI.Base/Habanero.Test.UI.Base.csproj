@@ -102,6 +102,7 @@
     <Compile Include="TestDateTimePickerController.cs" />
     <Compile Include="TestDefaultBOCreator.cs" />
     <Compile Include="TestDefaultBOEditorForm.cs" />
+    <Compile Include="TestFileChooser.cs" />
     <Compile Include="TestGlobalUIRegistry.cs" />
     <Compile Include="TestLabel.cs" />
     <Compile Include="LayoutManager\TestLayoutManager.cs" />
