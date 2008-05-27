@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.BO;
 using Habanero.UI;
+using Habanero.UI.Base;
 using Habanero.UI.Util;
 
 namespace Habanero.UI.Forms
@@ -32,7 +33,7 @@ namespace Habanero.UI.Forms
     /// user interface TabControl.  This mapper is used at code level when
     /// you are explicitly providing a business object collection.
     /// </summary>
-    public class CollectionTabControlMapper
+    public class CollectionTabControlMapper 
     {
 
         //private delegate void VoidDelegate();

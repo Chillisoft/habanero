@@ -4,7 +4,7 @@ namespace Habanero.UI.Base
     {
         int Add(ITabPage page);
 
-        IControlChilli this[int i] { get; }
+        ITabPage this[int i] { get; }
 
         int Count { get; }
     }

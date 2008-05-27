@@ -23,6 +23,11 @@ namespace Habanero.UI.WebGUI
         {
             get { return new TabPageCollectionGiz(base.TabPages); }
         }
+
+        public ITabPage SelectedTab
+        {
+            get { return  (ITabPage) TabPages[base.SelectedIndex]; }
+        }
     }
 
     internal class TabPageCollectionGiz : ITabPageCollection
@@ -39,9 +44,9 @@ namespace Habanero.UI.WebGUI
             return _tabPages.Add((TabPage) page);
         }
 
-        public IControlChilli this[int i]
+        public ITabPage this[int i]
         {
-            get { return (IControlChilli) _tabPages[i]; }
+            get { return (ITabPage)_tabPages[i]; }
         }
 
         public int Count

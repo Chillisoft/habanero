@@ -80,6 +80,9 @@
     <Compile Include="Grid\TestReadOnlyGridControl.cs" />
     <Compile Include="LayoutManager\TestColumnLayoutManager.cs" />
     <Compile Include="LayoutManager\TestGridLayoutManager.cs" />
+    <Compile Include="Mappers\TestCollectionTabControlMapper.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
     <Compile Include="Mappers\TestControlMapper.cs" />
@@ -90,6 +93,9 @@
     <Compile Include="Mappers\TestNumericUpDownIntegerMapper.cs" />
     <Compile Include="Mappers\TestTextBoxMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestBoTabColCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TestControlCollection.cs" />
     <Compile Include="FilterController\TestDataViewFilterClauseFactory.cs" />
     <Compile Include="FilterController\TestDataViewFilterClauseFactoryWithStrings.cs" />

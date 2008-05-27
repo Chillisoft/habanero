@@ -1,3 +1,5 @@
+using System;
+
 namespace Habanero.UI.Base
 {
     public interface ITabControl : IControlChilli
@@ -5,5 +7,11 @@ namespace Habanero.UI.Base
         IDockStyle Dock { get; set; }
 
         ITabPageCollection TabPages { get; }
+
+        int SelectedIndex { get; set; }
+
+        ITabPage SelectedTab { get; }
+
+        event EventHandler SelectedIndexChanged;
     }
 }
