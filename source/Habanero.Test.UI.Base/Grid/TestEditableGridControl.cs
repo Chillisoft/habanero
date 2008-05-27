@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
@@ -33,6 +30,7 @@ namespace Habanero.Test.UI.Base.Grid
         }
 
         protected abstract IControlFactory GetControlFactory();
+        protected abstract void AddControlToForm(IControlChilli cntrl);
 
 
 
@@ -52,18 +50,22 @@ namespace Habanero.Test.UI.Base.Grid
             //    return gridBase;
             //}
 
-            private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
-                                                                         IGridBase gridBase)
-            {
-                System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView) gridBase;
-                System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
-                return row.Cells[propName];
-            }
+            //private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
+            //                                                             IGridBase gridBase)
+            //{
+            //    System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView) gridBase;
+            //    System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
+            //    return row.Cells[propName];
+            //}
 
             //protected override void AddControlToForm(IGridBase gridBase)
             //{
             //    throw new NotImplementedException();
             //}
+            protected override void AddControlToForm(IControlChilli cntrl)
+            {
+                throw new System.NotImplementedException();
+            }
         }
 
         [TestFixture]
@@ -88,18 +90,24 @@ namespace Habanero.Test.UI.Base.Grid
             //    frm.Controls.Add((Gizmox.WebGUI.Forms.Control) gridBase);
             //}
 
-            private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
-                                                            IGridBase gridBase)
-            {
-                Gizmox.WebGUI.Forms.DataGridView dgv = (Gizmox.WebGUI.Forms.DataGridView)gridBase;
-                Gizmox.WebGUI.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
-                return row.Cells[propName];
-            }
+            //private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
+            //                                                IGridBase gridBase)
+            //{
+            //    Gizmox.WebGUI.Forms.DataGridView dgv = (Gizmox.WebGUI.Forms.DataGridView)gridBase;
+            //    Gizmox.WebGUI.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
+            //    return row.Cells[propName];
+            //}
 
-            private object GetCellValue(int rowIndex, IGridBase gridBase, string propName)
+            //private object GetCellValue(int rowIndex, IGridBase gridBase, string propName)
+            //{
+            //    Gizmox.WebGUI.Forms.DataGridViewCell cell = GetCell(rowIndex, propName, gridBase);
+            //    return cell.Value;
+            //}
+            [Test]
+            protected override void AddControlToForm(IControlChilli cntrl)
             {
-                Gizmox.WebGUI.Forms.DataGridViewCell cell = GetCell(rowIndex, propName, gridBase);
-                return cell.Value;
+                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
+                frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
             }
 
             
@@ -117,8 +125,6 @@ namespace Habanero.Test.UI.Base.Grid
             Assert.AreSame(grid.Grid, grid.Grid);
             //---------------Tear Down -------------------------
         }
-
-
 
         [Test]
         public void TestInitialise()

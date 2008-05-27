@@ -22,6 +22,11 @@ namespace Habanero.UI.Win
             get { return _grid; }
         }
 
+        IControlCollection IControlChilli.Controls
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
         public void Initialise(ClassDef classDef)
         {
             _editableGridManager.Initialise(classDef);

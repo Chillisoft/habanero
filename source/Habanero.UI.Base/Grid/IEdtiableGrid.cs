@@ -5,14 +5,14 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
-    public interface IEditableGrid
+    public interface IEditableGrid:IGridBase
     {
-        IDataGridViewColumnCollection Columns { get; }
+        //IDataGridViewColumnCollection Columns { get; }
 
-        bool ReadOnly { get; }
+        //bool ReadOnly { get; }
 
-        bool AllowUserToAddRows { get; }
+        //bool AllowUserToAddRows { get; }
 
-        bool AllowUserToDeleteRows { get; }
+        //bool AllowUserToDeleteRows { get; }
     }
 }

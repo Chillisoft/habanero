@@ -87,12 +87,13 @@ namespace Habanero.Test.UI.Grid
             {
                 return new ControlFactoryGizmox();
             }
-            [Test]
+
             protected override void AddControlToForm(IControlChilli cntrl)
             {
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
             }
+            [Test]
             public void TestCreateGridBaseGiz()
             {
                 //---------------Set up test pack-------------------

@@ -319,7 +319,30 @@ namespace Habanero.Test
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
         }
-
+        public static ClassDef LoadClassDefWith_Grid_1TextboxColumn()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+					</ui>
+				</class>
+				
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadClassDefWithDateTime()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

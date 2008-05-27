@@ -749,7 +749,31 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(bo_c, gridBase.GetBusinessObjectAtRow(2));
             Assert.AreEqual(bo_d, gridBase.GetBusinessObjectAtRow(3));
         }
+        //TODO: Peter we need to finalise decisions on enums 
+        //[Test]
+        //public void TestSortColumnAttributeDefault()
+        //{
+        //    Assert.IsNull(_grid.SortedColumn);
+        //    Assert.AreEqual(SortOrder.None, _grid.SortOrder);
+        //}
 
+        //[Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        //public void TestSortColumnAttributeExceptionColumnName()
+        //{
+        //    _grid.SetBusinessObjectCollection(_grid.GetCollection(), "Error1");
+        //}
+
+        //[Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        //public void TestSortColumnAttributeExceptionColumnNameAndOrder()
+        //{
+        //    _grid.SetBusinessObjectCollection(_grid.GetCollection(), "Error2");
+        //}
+
+        //[Test, ExpectedException(typeof(InvalidXmlDefinitionException))]
+        //public void TestSortColumnAttributeExceptionOrder()
+        //{
+        //    _grid.SetBusinessObjectCollection(_grid.GetCollection(), "Error3");
+        //}
         [Test]
         public void TestApplyFilter()
         {

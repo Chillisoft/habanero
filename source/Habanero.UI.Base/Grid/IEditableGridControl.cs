@@ -2,7 +2,7 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
-    public interface IEditableGridControl
+    public interface IEditableGridControl:IControlChilli
     {
         IEditableGrid Grid { get; }
         void Initialise(ClassDef classDef);
