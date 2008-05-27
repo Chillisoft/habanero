@@ -160,7 +160,7 @@ namespace Habanero.Test.UI.Base
                 return row.Cells[propName];
             }
 
-            private object GetCellValue(int rowIndex, IGridBase gridBase, string propName)
+            private static object GetCellValue(int rowIndex, IGridBase gridBase, string propName)
             {
                 Gizmox.WebGUI.Forms.DataGridViewCell cell = GetCell(rowIndex, propName, gridBase);
                 return cell.Value;
