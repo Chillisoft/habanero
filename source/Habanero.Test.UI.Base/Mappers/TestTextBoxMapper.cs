@@ -41,20 +41,22 @@ namespace Habanero.Test.UI.Base
             {
                 return new Habanero.UI.Win.ControlFactoryWin();
             }
-            [Test, Ignore("To be implemented for windows")]
+            [Test]
             public void TestValueWhenUpdatingBOValue()
             {
                 sh.ShapeName = "TestShapeName";
                 mapper.BusinessObject = sh;
                 sh.ShapeName = "TestShapeName2";
+                mapper.ApplyChanges();
                 Assert.AreEqual("TestShapeName2", tb.Text, "Text property of textbox is not working.");
             }
-            [Test, Ignore("To be implemented for windows")]
+            [Test]
             public void TestSettingTextBoxValueUpdatesBO()
             {
                 sh.ShapeName = "TestShapeName";
                 mapper.BusinessObject = sh;
                 tb.Text = "Changed";
+                mapper.ApplyChangesToBusinessObject();
                 Assert.AreEqual("Changed", sh.ShapeName, "BO property value isn't changed when textbox text is changed.");
             }
         }

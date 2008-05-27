@@ -38,7 +38,7 @@ namespace Habanero.Test.UI.Base
                 return new Habanero.UI.Win.ControlFactoryWin();
             }
 
-            [Test, Ignore("To be implemented for windows")]
+            [Test]
             public void TestCheckBox_Value_UpdatedwhenBusinessobjectUpdated()
             {
                 //----------Setup test pack----------------------------
@@ -48,16 +48,18 @@ namespace Habanero.Test.UI.Base
                 Assert.IsFalse(_cb.Checked);
                 //----------Execute test ------------------------------
                 _sampleBusinessObject.SampleBoolean = true;
+                _mapper.ApplyChanges();
                 //----------verify test ------------------------------
                 Assert.IsTrue(_cb.Checked);
             }
 
-            [Test, Ignore("To be implemented for windows")]
+            [Test]
             public void TestSettingCheckBoxCheckedUpdatesBO()
             {
                 _sampleBusinessObject.SampleBoolean = false;
                 _mapper.BusinessObject = _sampleBusinessObject;
                 _cb.Checked = true;
+                _mapper.ApplyChangesToBusinessObject();
                 Assert.IsTrue(_sampleBusinessObject.SampleBoolean);
             }
         }

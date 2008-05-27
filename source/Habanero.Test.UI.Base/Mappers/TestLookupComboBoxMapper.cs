@@ -48,7 +48,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 return new ControlFactoryWin();
             }
 
-            [Test, Ignore("To be implemented for windows")]
+            [Test]
             public void TestChangePropValueUpdatesBusObj()
             {
                 //---------------Set up test pack-------------------
@@ -62,6 +62,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
 
                 s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_2];
+                mapper.ApplyChanges();
                 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(LOOKUP_ITEM_2, cmbox.SelectedItem, "Value is not set after changing bo prop");
@@ -69,7 +70,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Tear Down -------------------------
             }
 
-            [Test, Ignore("To be implemented for windows")]
+            [Test]
             public void TestChangeComboBoxUpdatesBusinessObject()
             {
                 //---------------Set up test pack-------------------
@@ -82,7 +83,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 mapper.BusinessObject = s;
                 //---------------Execute Test ----------------------
                 cmbox.SelectedItem = LOOKUP_ITEM_2;
-
+                mapper.ApplyChangesToBusinessObject();
                 //---------------Test Result -----------------------
                 Assert.AreEqual((Guid)Sample.LookupCollection[LOOKUP_ITEM_2], s.SampleLookupID);
                 //---------------Tear Down -------------------------

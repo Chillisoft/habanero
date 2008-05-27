@@ -19,7 +19,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 return new Habanero.UI.Win.ControlFactoryWin();
   
             }
-            [Test, Ignore("To be ported for win")]
+            [Test]
             public void TestSetBusinessObjectValue_ChangesDateTimePicker_InWin()
             {
                 //---------------Set up test pack-------------------
@@ -34,12 +34,13 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
                 DateTime testDateChangedValue = new DateTime(2000, 1, 1);
                 sampleBusinessObject.SampleDate = testDateChangedValue;
+                dtpMapper.ApplyChanges();
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(sampleBusinessObject.SampleDate, dateTimePicker.Value);
                 //---------------Tear Down -------------------------          
             }
-            [Test, Ignore("To be ported for win")]
+            [Test]
             public void TestUpdateValueInPicker_ChangesValueInBO_ForWin()
             {
                 //---------------Set up test pack-------------------
@@ -54,6 +55,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
                 DateTime newDate = DateTime.Today.AddDays(+3);
                 dateTimePicker.Value = newDate;
+                dtpMapper.ApplyChangesToBusinessObject();
                 //---------------Test Result -----------------------
                 Assert.AreEqual(newDate, sampleBusinessObject.SampleDate);
                 //---------------Tear Down -------------------------          

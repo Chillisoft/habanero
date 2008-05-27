@@ -28,7 +28,7 @@ namespace Habanero.Test.UI.Base
         {
             return new ControlFactoryWin();
         }
-        [Test,Ignore("To be Implemented for windows")]
+        [Test]
         public void TestChangeBusinessObjectUpdatesComboBox()
         {
             //---------------Set up test pack-------------------
@@ -41,12 +41,13 @@ namespace Habanero.Test.UI.Base
             mapper.BusinessObject = s;
             //---------------Execute Test ----------------------
             s.SampleText = "Four";
+            mapper.ApplyChanges();
             //---------------Test Result -----------------------
             Assert.AreEqual("Four", cbx.SelectedItem, "Value is not set.");
             //---------------Tear Down -------------------------
         }
 
-        [Test, Ignore("To be Implemented for windows")]
+        [Test]
         public void TestSetComboBoxUpdatesBO()
         {
             //---------------Set up test pack-------------------
@@ -59,6 +60,7 @@ namespace Habanero.Test.UI.Base
             mapper.BusinessObject = s;
             //---------------Execute Test ----------------------
             cbx.SelectedIndex = 0;
+            mapper.ApplyChangesToBusinessObject();
             //---------------Test Result -----------------------
             Assert.AreEqual(cbx.SelectedItem, s.SampleText, "BO property value isn't changed when control value is changed.");
 

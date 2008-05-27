@@ -157,9 +157,14 @@ namespace Habanero.UI.Base
         /// Updates the interface when the value has been changed in the
         /// object being represented
         /// </summary>
-        protected internal  override void UpdateControlValueFromBo()
+    	protected internal override void UpdateControlValueFromBo()
         {
             _textBox.Text = Convert.ToString(GetPropertyValue());
+        }
+
+        public void ApplyChanges()
+        {
+            UpdateControlValueFromBo();
         }
 
         public override void ApplyChangesToBusinessObject()

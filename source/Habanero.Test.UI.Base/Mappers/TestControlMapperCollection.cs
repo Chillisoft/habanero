@@ -24,7 +24,7 @@ namespace Habanero.Test.UI.Base
                 return new Habanero.UI.Win.ControlFactoryWin();
             }
 
-            [Test, Ignore("To be implemented for win")]
+            [Test]
             public void TestChangeControlValues_ChangesBusinessObjectValues()
             {
                 //---------------Set up test pack-------------------
@@ -38,6 +38,8 @@ namespace Habanero.Test.UI.Base
 
                 //---------------Execute Test ----------------------
                 ChangeValuesInControls(panelInfo);
+                panelInfo.ControlMappers[TEST_PROP_1].ApplyChangesToBusinessObject();
+                panelInfo.ControlMappers[TEST_PROP_2].ApplyChangesToBusinessObject();
                 //---------------Test Result -----------------------
 
                 Assert.AreEqual(CHANGED_VALUE_1, myBO.GetPropertyValue(TEST_PROP_1));

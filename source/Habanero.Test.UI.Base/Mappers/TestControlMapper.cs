@@ -31,6 +31,7 @@ namespace Habanero.Test.UI.Base
     {
 
         protected abstract IControlFactory GetControlFactory();
+
         [TestFixture]
         public class TestControlMapperWin : TestControlMapper
         {
@@ -38,15 +39,17 @@ namespace Habanero.Test.UI.Base
             {
                 return new Habanero.UI.Win.ControlFactoryWin();
             }
-            [Test,Ignore("Port for windows only")]
+
+            [Test]
             public void TestNormalChangeValue()
             {
                 _normalMapper.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtNormal.Text);
                 _shape.ShapeName = "TestShapeName2";
+                _normalMapper.ApplyChanges();
                 Assert.AreEqual("TestShapeName2", _txtNormal.Text);
             }
-            [Test, Ignore("Port for windows only")]
+            [Test]
             public void TestNormalChangeBO()
             {
                 _normalMapper.BusinessObject = _shape;
@@ -56,17 +59,19 @@ namespace Habanero.Test.UI.Base
                 _normalMapper.BusinessObject = shape2;
                 Assert.AreEqual("Different", _txtNormal.Text);
                 shape2.ShapeName = "Different2";
+                _normalMapper.ApplyChanges();
                 Assert.AreEqual("Different2", _txtNormal.Text);
             }
-            [Test, Ignore("Port for windows only")]
+            [Test]
             public void TestReadOnlyChangeValue()
             {
                 _readOnlyMapper.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtReadonly.Text);
                 _shape.ShapeName = "TestShapeName2";
+                _readOnlyMapper.ApplyChanges();
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
-            [Test, Ignore("Port for windows only")]
+            [Test]
             public void TestReadOnlyChangeBO()
             {
                 _readOnlyMapper.BusinessObject = _shape;
@@ -76,6 +81,7 @@ namespace Habanero.Test.UI.Base
                 _readOnlyMapper.BusinessObject = sh2;
                 Assert.AreEqual("Different", _txtReadonly.Text);
                 sh2.ShapeName = "Different2";
+                _readOnlyMapper.ApplyChanges();
                 Assert.AreEqual("Different2", _txtReadonly.Text);
             }
         }

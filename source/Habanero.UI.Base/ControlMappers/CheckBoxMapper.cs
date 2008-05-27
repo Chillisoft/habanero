@@ -89,5 +89,10 @@ namespace Habanero.UI.Base
                 SetPropertyValue(newValue);
             }
         }
+
+        public void ApplyChanges()
+        {
+            UpdateControlValueFromBo();
+        }
     }
 }

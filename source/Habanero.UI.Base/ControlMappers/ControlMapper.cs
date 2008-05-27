@@ -217,6 +217,11 @@ namespace Habanero.UI.Base
 
         public abstract void ApplyChangesToBusinessObject();
 
+        public void ApplyChanges()
+        {
+            UpdateControlValueFromBo();
+        }
+
         protected virtual void OnBusinessObjectChanged() { }
 
         //private void AddCurrentBOPropHandlers()
