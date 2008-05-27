@@ -318,7 +318,23 @@ namespace Habanero.BO.ClassDefinition
 
         #endregion //Helper Methods
 
-		/// <summary>
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
+        {
+            UIFormField otherFormField = obj as UIFormField;
+            //Test 4 null (i.e. other type or null passed in)
+            return otherFormField.PropertyName == this.PropertyName;
+        }
+
+        /// <summary>
 		/// Returns the parameter value for the name provided
 		/// </summary>
 		/// <param name="parameterName">The parameter name</param>

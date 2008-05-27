@@ -59,12 +59,9 @@ namespace Habanero.BO.ClassDefinition
     /// <futureEnhancements>
     /// TODO_Future:
     /// <ul>
-    /// <li>Add abiltiy to do transaction logs.</li>
-    /// <li>Check for duplicates.</li>
+    /// <li>Add abiltiy to do transaction log definition in class defs.</li>
     /// <li>Check for potential duplicates e.g. duplicate email addresses,
     ///  which should warn but not prevent.</li>
-    /// <li>Check for absolute duplicates e.g. not allow duplicate first
-    ///  name surname.</li>
     /// </ul>
     /// </futureEnhancements>
     public class ClassDef
@@ -1027,6 +1024,11 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        ///<summary>
+        /// traverses the inheritance hierachy to find the base class of this type in the case 
+        /// of single table inheritance.
+        ///</summary>
+        ///<returns></returns>
         public ClassDef GetBaseClassOfSingleTableHierarchy()
         {
             ClassDef currentClassDef = this;

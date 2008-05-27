@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
@@ -26,16 +27,17 @@ namespace Habanero.BO.ClassDefinition
     /// <summary>
     /// Manages a collection of user interface definitions
     /// </summary>
-    public class UIDefCol : IEnumerable
+    public class UIDefCol :  IEnumerable<UIDef>
     {
-        private Hashtable _defs;
+        private Dictionary<string, UIDef> _defs;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
         public UIDefCol()
         {
-            _defs = new Hashtable();
+            //_defs = new Hashtable();
+            _defs = new Dictionary<string, UIDef>();
         }
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="def">The UI definition to add</param>
         public void Add(UIDef def)
         {
-            if (_defs.Contains(def.Name))
+            if (Contains(def.Name))
             {
                 throw new InvalidXmlDefinitionException(String.Format(
                                                             "A 'ui' definition with the name '{0}' is being added to " +
@@ -97,7 +99,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (!_defs.Contains(name))
+                if (!Contains(name))
                 {
                     if (name == "default")
                     {
@@ -121,14 +123,7 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-        /// <summary>
-        /// Returns the collection's enumerator
-        /// </summary>
-        /// <returns>Returns an object of type IEnumerator</returns>
-        public IEnumerator GetEnumerator()
-        {
-            return _defs.GetEnumerator();
-        }
+
 
         /// <summary>
         /// Returns a count of the number of ui definitions held
@@ -138,5 +133,68 @@ namespace Habanero.BO.ClassDefinition
         {
             get { return _defs.Count; }
         }
+
+        #region Equals
+
+        //TODO: public override bool Equals(object obj)
+        //{
+        //    //TODO: if (obj == null) return false;
+        //    //TODO: if (obj.GetType() != typeof(UIDefCol)) return false;
+        //    UIDefCol otherUiDefCol = (UIDefCol)obj;
+        //    //TODO: if (this.Count != otherUiDefCol.Count) return false;
+        //    foreach (UIDef def in this)
+        //    {
+        //        //if (!otherUiDefCol.Contains(def.PropertyName)) return false;
+
+        //        otherUiDef = otherUiDefCol[def.Name];
+        //    }
+        //    return true;
+        //}
+
+        #endregion
+
+        ///<summary>
+        /// Clones the uidefcol.  The new ui defCol will have a clone of each UIGrid and UIForm.
+        ///  i.e. this is a deep copy of the uiDefCol
+        ///</summary>
+        ///<returns></returns>
+        public UIDefCol Clone()
+        {
+            UIDefCol newUIDefCol = new UIDefCol();
+            foreach (UIDef def in this)
+            {
+                newUIDefCol.Add(def);
+            }
+            return newUIDefCol;
+        }
+
+
+        #region IEnumerable<UIDef> Members
+        ///<summary>
+        ///Returns an enumerator that iterates through the collection.
+        ///</summary>
+        ///
+        ///<returns>
+        ///A <see cref="T:System.Collections.Generic.IEnumerator`1"></see> that can be used to iterate through the collection.
+        ///</returns>
+        ///<filterpriority>1</filterpriority>
+        IEnumerator<UIDef> IEnumerable<UIDef>.GetEnumerator()
+        {
+            return _defs.Values.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+        /// <summary>
+        /// Returns the collection's enumerator
+        /// </summary>
+        /// <returns>Returns an object of type IEnumerator</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _defs.Values.GetEnumerator();
+        }
+
+        #endregion
     }
 }

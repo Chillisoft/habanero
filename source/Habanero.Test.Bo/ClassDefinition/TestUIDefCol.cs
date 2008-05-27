@@ -19,6 +19,7 @@
 
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.ClassDefinition
@@ -88,6 +89,78 @@ namespace Habanero.Test.BO.ClassDefinition
                 count++;
             }
             Assert.AreEqual(2, count);
+        }
+
+        [Test]
+        public void TestEqualsNull()
+        {
+            UIDefCol uIDefCol1 = new UIDefCol();
+            UIDefCol uIDefCol2 = null;
+            Assert.AreNotEqual(uIDefCol1, uIDefCol2);
+        }
+
+        [Test]
+        public void TestEquals()
+        {
+            //---------------Execute Test ----------------------
+            UIDefCol uIDefCol1 = new UIDefCol();
+            UIDef def = new UIDef("UiDefname", null, null);
+            uIDefCol1.Add(def);
+            UIDefCol uIDefCol2 = new UIDefCol();
+            uIDefCol2.Add(def);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(uIDefCol1, uIDefCol2);
+        }
+        //TODO test where uiDefname is same but uiDefObject is different and children objects are different
+        [Test]
+        public void TestEqualsDifferentType()
+        {
+            UIDefCol uIDefCol1 = new UIDefCol();
+            Assert.AreNotEqual(uIDefCol1, "bob");
+        }
+
+        //TODO:
+        [Test, Ignore("under dev")]
+        public void TestCloneUIDefCol()
+        {
+            //---------------Set up test pack-------------------
+             ClassDef originalClassDef = LoadClassDef();           
+            //---------------Execute Test ----------------------
+            UIDefCol newUIDefCol = originalClassDef.UIDefCol.Clone();
+            //---------------Test Result -----------------------
+
+            Assert.AreNotSame(newUIDefCol, originalClassDef.UIDefCol);
+            Assert.AreEqual(newUIDefCol, originalClassDef.UIDefCol);
+            //---------------Tear Down -------------------------
+        }
+
+
+        public static ClassDef LoadClassDef()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef def =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" />
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" />
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+                    <ui>
+                      <grid>
+                        <column heading=""MyRelatedTestProp"" property=""MyRelatedTestProp"" width=""200"" />
+                      </grid>
+                      <form width=""400"">
+                        <columnLayout width=""350"">
+                          <field label=""MyRelatedTestProp :"" property=""MyRelatedTestProp"" />
+                        </columnLayout>
+                      </form>
+                    </ui>
+				</class>
+			");
+            return def;
         }
     }
 

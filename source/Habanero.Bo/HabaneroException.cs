@@ -21,6 +21,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -235,7 +236,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a property value is invalid
     /// </summary>
     [Serializable]
-    public class InvalidPropertyNameException : BusinessObjectException
+    public class InvalidPropertyNameException : HabaneroApplicationException
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -283,7 +284,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a property value is invalid
     /// </summary>
     [Serializable]
-    public class InvalidPropertyValueException : BusinessObjectException
+    public class InvalidPropertyValueException : HabaneroApplicationException
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -328,7 +329,7 @@ namespace Habanero.BO
     /// Provides an exception to throw when a property is invalid
     /// </summary>
     [Serializable]
-    public class InvalidPropertyException : BusinessObjectException
+    public class InvalidPropertyException : HabaneroApplicationException
     {
         /// <summary>
         /// Constructor to initialise the exception
@@ -373,10 +374,10 @@ namespace Habanero.BO
 
 
     /// <summary>
-    /// Provides an exception to throw when a property is invalid
+    /// Provides an exception to throw when a key is invalid
     /// </summary>
     [Serializable]
-    public class InvalidKeyException : BusinessObjectException
+    public class InvalidKeyException : HabaneroApplicationException
     {
         /// <summary>
         /// Constructor to initialise the exception

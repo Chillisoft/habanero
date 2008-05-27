@@ -186,7 +186,8 @@ namespace Habanero.Test.UI.Base
 
             ILabel lbl = _factory.CreateLabel(labelText, true);
             //---------------Verify Result -----------------------
-            Assert.AreEqual(lbl.PreferredWidth + 10, lbl.Width);
+            //Assert.AreEqual(lbl.PreferredWidth + 10, lbl.Width);
+            Assert.AreEqual(lbl.PreferredWidth + 14, lbl.Width);
             Font expectedFont = new Font(lbl.Font, FontStyle.Bold);
             Assert.AreEqual(expectedFont, lbl.Font);
             //---------------Tear Down -------------------------   

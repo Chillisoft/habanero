@@ -162,11 +162,13 @@ namespace Habanero.UI.WebGUI
             if (isBold)
             {
                 lbl.Font = new Font(lbl.Font, FontStyle.Bold);
+                lbl.Text = labelText + " *";
             }
             lbl.Width = lbl.PreferredWidth;
             if (isBold)
             {
-                lbl.Width += 10;
+                //lbl.Width += 10;
+                lbl.Width += 14;
             }
             lbl.TextAlign = ContentAlignment.MiddleLeft;
             lbl.TabStop = false;
