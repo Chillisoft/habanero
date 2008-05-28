@@ -153,8 +153,10 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "",new Hashtable(),null );
             UIFormField uiFormField2 = null;
-            Assert.AreNotEqual(uiFormField1, uiFormField2);
-            Assert.AreNotEqual(uiFormField2, uiFormField1);
+            Assert.IsFalse(uiFormField1 == uiFormField2);
+            Assert.IsFalse(uiFormField2 == uiFormField1);
+            Assert.IsFalse(uiFormField1.Equals(uiFormField2));
+            //Assert.AreNotEqual(uiFormField2, uiFormField1);
         }
 
         [Test]
@@ -162,21 +164,37 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null);
             UIFormField uiFormField2 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null);
-            Assert.AreEqual(uiFormField1, uiFormField2);
+            Assert.IsTrue(uiFormField1 == uiFormField2);
+            Assert.IsFalse(uiFormField1 != uiFormField2);
+            Assert.IsTrue(uiFormField1.Equals(uiFormField2));
+            //Assert.AreEqual(uiFormField1, uiFormField2);
         }
-        //[Test]
-        //public void Test_NotEquals()
-        //{
-        //    UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null);
-        //    UIFormField uiFormField2 = new UIFormField("L", "L", "G", "", "", "", true, "", new Hashtable(), null);
-        //    Assert.AreNotEqual(uiFormField1, uiFormField2);
-        //}
-        //[Test]
-        //public void TestEqualsDifferentType()
-        //{
-        //    PropDefCol uiFormField1 = new PropDefCol();
-        //    Assert.AreNotEqual(uiFormField1, "bob");
-        //}
+        [Test]
+        public void Test_NotEquals()
+        {
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null);
+            UIFormField uiFormField2 = new UIFormField("L", "L", "G", "", "", "", true, "", new Hashtable(), null);
+            Assert.IsFalse(uiFormField1 == uiFormField2);
+            Assert.IsTrue(uiFormField1 != uiFormField2);
+            Assert.IsFalse(uiFormField1.Equals(uiFormField2));
+            //Assert.AreNotEqual(uiFormField1, uiFormField2);
+        }
+        [Test]
+        public void Test_NotEquals_LabelDiff()
+        {
+            UIFormField uiFormField1 = new UIFormField("L", "L", "", "", "", "", true, "", new Hashtable(), null);
+            UIFormField uiFormField2 = new UIFormField("G", "L", "", "", "", "", true, "", new Hashtable(), null);
+            Assert.IsFalse(uiFormField1.Equals(uiFormField2));
+            Assert.IsFalse(uiFormField1 == uiFormField2);
+            //Assert.AreNotEqual(uiFormField1, uiFormField2);
+        }
+        [Test]
+        public void TestEqualsDifferentType()
+        {
+            PropDefCol uiFormField1 = new PropDefCol();
+
+            Assert.AreNotEqual(uiFormField1, "bob");
+        }
 
         // Grants access to protected fields
         private class UIFormFieldInheritor : UIFormField

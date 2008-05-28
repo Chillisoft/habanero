@@ -151,5 +151,77 @@ namespace Habanero.BO.ClassDefinition
             set { _uiFormGrid = value; }
             get { return _uiFormGrid; }
         }
+
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
+        {
+            UIFormTab otherUiTab = obj as UIFormTab;
+            if (otherUiTab == null) return false;
+
+            if (this.Name != otherUiTab.Name) return false;
+            if (this.Count != otherUiTab.Count) return false;
+            foreach (UIFormColumn col in this)
+            {
+                bool found = false;
+                foreach (UIFormColumn otherFormCol in otherUiTab)
+                {
+                    if (otherFormCol.Equals(col))
+                    {
+                        found = true;
+                    }
+                }
+                if (!found)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool operator ==(UIFormTab a, UIFormTab b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(UIFormTab a, UIFormTab b)
+        {
+            return !(a == b);
+        }
+        ///<summary>
+        /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
+        ///</summary>
+        ///<returns>a new collection that is a shallow copy of this collection</returns>
+        public UIFormTab Clone()
+        {
+            UIFormTab newUIFormTab = new UIFormTab();
+            newUIFormTab.Name = this.Name;
+            foreach (UIFormColumn column in this)
+            {
+                newUIFormTab.Add(column.Clone());
+            }
+            return newUIFormTab;
+        }
+
     }
 }

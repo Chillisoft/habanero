@@ -152,5 +152,96 @@ namespace Habanero.BO.ClassDefinition
             set { _title = value; }
             get { return _title; }
         }
+
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            UIForm otherUiForm = obj as UIForm;
+            if (otherUiForm == null) return false;
+            if ((otherUiForm.Title != this.Title) || (otherUiForm.Width != this.Width) || (otherUiForm.Height != this.Height)) return false;
+
+            if (this.Count != otherUiForm.Count) return false;
+            foreach (UIFormTab tab in this)
+            {
+                bool found = false;
+                foreach (UIFormTab otherTab in otherUiForm)
+                {
+                    if (otherTab.Equals(tab))
+                    {
+                        found = true;
+                    }
+                }
+                if (!found)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        ///<summary>
+        /// overloads the operator == 
+        ///</summary>
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
+        public static bool operator ==(UIForm a, UIForm b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return a.Equals(b);
+        }
+
+        ///<summary>
+        /// overloads the operator != 
+        ///</summary>
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
+        public static bool operator !=(UIForm a, UIForm b)
+        {
+            return !(a == b);
+        }
+
+        ///<summary>
+        /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
+        ///</summary>
+        ///<returns>a new collection that is a shallow copy of this collection</returns>
+        public UIForm Clone()
+        {
+            UIForm newUIForm = new UIForm();
+            newUIForm.Title = this.Title;
+            newUIForm.Height = this.Height;
+            newUIForm.Width = this.Width;
+            foreach (UIFormTab tab in this)
+            {
+                newUIForm.Add(tab.Clone());
+            }
+            return newUIForm;
+        }
     }
 }

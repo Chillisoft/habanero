@@ -136,5 +136,91 @@ namespace Habanero.BO.ClassDefinition
             set { _sortColumn = value; }
         }
 
+
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            UIGrid otherUiGrid = obj as UIGrid;
+            if (otherUiGrid == null) return false;
+            if (otherUiGrid.SortColumn != this.SortColumn) return false;
+
+            if (this.Count != otherUiGrid.Count) return false;
+            foreach (UIGridColumn tab in this)
+            {
+                bool found = false;
+                foreach (UIGridColumn otherTab in otherUiGrid)
+                {
+                    if (otherTab.Equals(tab))
+                    {
+                        found = true;
+                    }
+                }
+                if (!found)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        ///<summary>
+        /// overloads the operator == 
+        ///</summary>
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
+        public static bool operator ==(UIGrid a, UIGrid b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return a.Equals(b);
+        }
+
+        ///<summary>
+        /// overloads the operator != 
+        ///</summary>
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
+        public static bool operator !=(UIGrid a, UIGrid b)
+        {
+            return !(a == b);
+        }
+
+        ///<summary>
+        /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
+        ///</summary>
+        ///<returns>a new collection that is a shallow copy of this collection</returns>
+        public UIGrid Clone()
+        {
+            UIGrid newUIGrid = new UIGrid();
+            newUIGrid.SortColumn = this.SortColumn;
+            foreach (UIGridColumn column in this)
+            {
+                newUIGrid.Add(column.Clone());
+            }
+            return newUIGrid;
+        }
     }
 }

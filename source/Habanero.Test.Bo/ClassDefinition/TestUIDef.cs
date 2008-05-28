@@ -45,6 +45,184 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(uiGrid, uiDef.UIGrid);
         }
 
+
+        [Test]
+        public void TestCloneUIDef()
+        {
+            //---------------Set up test pack-------------------
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            uiFormColumn.Add(field1);
+            uiFormColumn.Add(field2);
+
+            UIFormTab uiFormTab = new UIFormTab("Tab1");
+            uiFormTab.Add(uiFormColumn);
+
+            UIForm uiForm = new UIForm();
+            uiForm.Add(uiFormTab);
+            uiForm.Title = "ddd";
+            uiForm.Height = 1;
+            uiForm.Width = 3;
+
+            UIGridColumn uiGridCol = new UIGridColumn("Head", "Prop", "control", "Assembly", true, 100, UIGridColumn.PropAlignment.centre, null);
+            UIGrid uiGrid = new UIGrid();
+            uiGrid.SortColumn = "Prop";
+            uiGrid.Add(uiGridCol);
+
+            UIDef uiDef = new UIDef("Name", uiForm, uiGrid);
+            //---------------Execute Test ----------------------
+            UIDef clonedDef = uiDef.Clone();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(uiDef == clonedDef);
+            Assert.IsTrue(uiDef.Equals(clonedDef));
+            Assert.AreNotSame(uiDef,clonedDef);
+        }
+
+        [Test]
+        public void Test_NotEqualsNull()
+        {
+            UIDef uiDef = new UIDef("",null, null);
+            UIDef uiDef2 = null;
+            Assert.IsFalse(uiDef.Equals(uiDef2));
+            Assert.IsFalse(uiDef == uiDef2);
+            Assert.IsTrue(uiDef != uiDef2);
+            Assert.AreNotEqual(uiDef, uiDef2);
+        }
+
+        [Test]
+        public void Test_NotEqual_OtherType()
+        {
+            //---------------Set up test pack-------------------
+            UIDef uiDef = new UIDef("", null, null);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+
+            Assert.IsFalse(uiDef.Equals("BNLJ JOLJ"));
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_NotEqual_UIFormDifferent()
+        {
+            //---------------Set up test pack-------------------
+
+            UIForm uiForm = GetUiForm();
+
+            UIDef uiDef = new UIDef("DDD", uiForm, null);
+            UIDef uiDef2 = new UIDef("DDD", null, null);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+
+
+            //---------------Test Result -----------------------
+
+            Assert.IsFalse(uiDef.Equals(uiDef2));
+            Assert.IsFalse(uiDef == uiDef2);
+            Assert.IsTrue(uiDef != uiDef2);
+            //---------------Tear Down -------------------------          
+        }
+
+        private static UIForm GetUiForm()
+        {
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            uiFormColumn.Add(field1);
+            uiFormColumn.Add(field2);
+
+            UIFormTab uiFormTab = new UIFormTab("Tab1");
+            uiFormTab.Add(uiFormColumn);
+
+            UIForm uiForm = new UIForm();
+            uiForm.Add(uiFormTab);
+            uiForm.Title = "ddd";
+            uiForm.Height = 1;
+            uiForm.Width = 3;
+            return uiForm;
+        }
+
+        [Test]
+        public void Test_EqualHasTheSameUIForm()
+        {
+            UIForm uiForm = GetUiForm();
+            UIDef uiDef = new UIDef("DDD", uiForm, null);
+            UIDef uiDef2 = new UIDef("DDD", uiForm, null);
+
+            Assert.IsTrue(uiDef.Equals(uiDef2));
+            Assert.IsTrue(uiDef == uiDef2);
+            Assert.IsFalse(uiDef != uiDef2);
+        }
+
+        [Test]
+        public void Test_EqualHasIdenticalUIForm()
+        {
+            UIForm uiForm = GetUiForm();
+            UIForm uiForm2 = GetUiForm();
+            UIDef uiDef = new UIDef("DDD", uiForm, null);
+            UIDef uiDef2 = new UIDef("DDD", uiForm2, null);
+
+            AssertAreEqual(uiDef, uiDef2);
+        }
+
+        private static void AssertAreEqual(UIDef uiDef, UIDef uiDef2)
+        {
+            Assert.IsTrue(uiDef.Equals(uiDef2));
+            Assert.IsTrue(uiDef == uiDef2);
+            Assert.IsFalse(uiDef != uiDef2);
+        }
+
+        private static void AssertNotEqual(UIDef uiDef, UIDef uiDef2)
+        {
+            Assert.IsFalse(uiDef.Equals(uiDef2));
+            Assert.IsFalse(uiDef == uiDef2);
+            Assert.IsTrue(uiDef != uiDef2);
+        }
+
+        [Test]
+        public void Test_NonEqualHasNonEqualUIForm()
+        {
+            UIForm uiForm = GetUiForm();
+            UIForm uiForm2 = GetUiForm();
+            uiForm2.Title = "DifferentTitle";
+            UIDef uiDef = new UIDef("DDD", uiForm, null);
+            UIDef uiDef2 = new UIDef("DDD", uiForm2, null);
+
+            AssertNotEqual(uiDef, uiDef2);
+        }
+
+
+        [Test]
+        public void Test_NonEqualHasNonEqualUIGrid()
+        {
+            UIGrid uiGrid = new UIGrid();
+            uiGrid.SortColumn = "sort 1";
+            UIGrid uiGrid2 = new UIGrid();
+            uiGrid2.SortColumn = "Sort Another";
+            UIDef uiDef = new UIDef("DDD", null, uiGrid);
+            UIDef uiDef2 = new UIDef("DDD", null, uiGrid2);
+
+            AssertNotEqual(uiDef, uiDef2);
+        }
+
+        [Test]
+        public void Test_NotEqual_DiffName()
+        {
+            UIDef uiDef = new UIDef("DDD", null, null);
+            UIDef uiDef2 = new UIDef("DDD_1", null, null);
+
+            Assert.IsFalse(uiDef.Equals(uiDef2));
+            Assert.IsFalse(uiDef == uiDef2);
+            Assert.IsTrue(uiDef != uiDef2);
+        }
+
+
+
         // Grants access to protected methods
         private class UIDefInheritor : UIDef
         {

@@ -92,15 +92,15 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void TestEqualsNull()
+        public void Test_NotEqualsNull()
         {
             UIDefCol uIDefCol1 = new UIDefCol();
             UIDefCol uIDefCol2 = null;
-            Assert.AreNotEqual(uIDefCol1, uIDefCol2);
+            AssertNotEqual(uIDefCol1, uIDefCol2);
         }
 
         [Test]
-        public void TestEquals()
+        public void TestEquals_SameUIDef()
         {
             //---------------Execute Test ----------------------
             UIDefCol uIDefCol1 = new UIDefCol();
@@ -109,18 +109,59 @@ namespace Habanero.Test.BO.ClassDefinition
             UIDefCol uIDefCol2 = new UIDefCol();
             uIDefCol2.Add(def);
             //---------------Test Result -----------------------
-            Assert.AreEqual(uIDefCol1, uIDefCol2);
+            AssertAreEqual(uIDefCol1, uIDefCol2);
+//            Assert.AreEqual(uIDefCol1, uIDefCol2);
         }
-        //TODO test where uiDefname is same but uiDefObject is different and children objects are different
         [Test]
-        public void TestEqualsDifferentType()
+        public void Test_NotEqualsWrongType()
         {
             UIDefCol uIDefCol1 = new UIDefCol();
-            Assert.AreNotEqual(uIDefCol1, "bob");
+            Assert.IsFalse(uIDefCol1.Equals("FFFF"));
         }
 
-        //TODO:
-        [Test, Ignore("under dev")]
+        [Test]
+        public void Test_NotEqual_DifferentCount()
+        {
+            UIDefCol uIDefCol1 = new UIDefCol();
+            UIDef def = new UIDef("UiDefname", null, null);
+            uIDefCol1.Add(def);
+            UIDefCol uIDefCol2 = new UIDefCol();
+            uIDefCol2.Add(def);
+            UIDef def2 = new UIDef("UiDefname2", null, null);
+            uIDefCol2.Add(def2);
+            AssertNotEqual(uIDefCol1, uIDefCol2);
+        }
+        [Test]
+        public void Test_NotEqual_DifferentDefs()
+        {
+            UIDefCol uIDefCol1 = new UIDefCol();
+            UIDef def = new UIDef("UiDefname", null, null);
+            uIDefCol1.Add(def);
+            UIDefCol uIDefCol2 = new UIDefCol();
+            uIDefCol2.Add(def);
+            UIDef def2 = new UIDef("UiDefname2", null, null);
+            uIDefCol2.Add(def2);
+
+            UIDef def3 = new UIDef("UiDefname3", null, null);
+            uIDefCol1.Add(def3);
+
+            AssertNotEqual(uIDefCol1, uIDefCol2);
+        }
+        private static void AssertAreEqual(UIDefCol uiDefCol, UIDefCol uiDefCol2)
+        {
+            Assert.IsTrue(uiDefCol.Equals(uiDefCol2));
+            Assert.IsTrue(uiDefCol == uiDefCol2);
+            Assert.IsFalse(uiDefCol != uiDefCol2);
+        }
+
+        private static void AssertNotEqual(UIDefCol uiDefCol, UIDefCol uiDefCol2)
+        {
+            Assert.IsFalse(uiDefCol.Equals(uiDefCol2));
+            Assert.IsFalse(uiDefCol == uiDefCol2);
+            Assert.IsTrue(uiDefCol != uiDefCol2);
+        }
+
+        [Test]
         public void TestCloneUIDefCol()
         {
             //---------------Set up test pack-------------------
@@ -130,7 +171,10 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
 
             Assert.AreNotSame(newUIDefCol, originalClassDef.UIDefCol);
-            Assert.AreEqual(newUIDefCol, originalClassDef.UIDefCol);
+            Assert.IsTrue(newUIDefCol.Equals(originalClassDef.UIDefCol));
+            Assert.IsTrue(newUIDefCol == originalClassDef.UIDefCol);
+            Assert.AreEqual(newUIDefCol["default"], originalClassDef.UIDefCol["default"]);
+            Assert.AreNotSame(newUIDefCol["default"], originalClassDef.UIDefCol["default"]);
             //---------------Tear Down -------------------------
         }
 

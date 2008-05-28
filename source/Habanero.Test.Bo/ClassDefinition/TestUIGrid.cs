@@ -63,5 +63,311 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(typeof(object), uiGrid.SyncRoot.GetType());
             Assert.IsFalse(uiGrid.IsSynchronized);
         }
+
+
+        [Test]
+        public void TestCloneUIGrid()
+        {
+            UIGridColumn uiGridCol = new UIGridColumn("Head", "Prop", "control", "Assembly",true,100, UIGridColumn.PropAlignment.centre, null);
+            UIGrid uiGrid = new UIGrid();
+            uiGrid.SortColumn = "Prop";
+            uiGrid.Add(uiGridCol);
+
+            //---------------Execute Test ----------------------
+            UIGrid clonedGrid = uiGrid.Clone();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(uiGrid.Equals(clonedGrid));
+            Assert.IsTrue(uiGrid == clonedGrid);
+            Assert.IsFalse(uiGrid != clonedGrid);
+            Assert.AreEqual(uiGrid[0], clonedGrid[0],
+                              "Should be a deep copy and the columns should be equal but copied");
+            Assert.AreNotSame(uiGrid[0], clonedGrid[0], "Should be a deep copy and the columns should be equal but copied (not same)");
+        }
+
+        [Test]
+        public void Test_NotEqualsNull()
+        {
+            UIGrid uiGrid = new UIGrid();
+            UIGrid uiGrid2 = null;
+            Assert.IsFalse(uiGrid.Equals(uiGrid2));
+            Assert.IsFalse(uiGrid == uiGrid2);
+            Assert.IsTrue(uiGrid != uiGrid2);
+            Assert.AreNotEqual(uiGrid, uiGrid2);
+        }
+
+        [Test]
+        public void Test_NotEqual_OtherType()
+        {
+            //---------------Set up test pack-------------------
+            UIGrid uiGrid = new UIGrid();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            
+            Assert.IsFalse(uiGrid.Equals("BNLJ JOLJ"));
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_EqualHasTheSameGridColumn()
+        {
+            UIGrid uiGrid = new UIGrid();
+            UIGridColumn uiGridColumn = GetUiGridColumn();
+            uiGrid.Add(uiGridColumn);
+
+            UIGrid uiGrid2 = new UIGrid();
+            //UIGridColumn uiGridColumn2 = GetUiGridColumn();
+            uiGrid2.Add(uiGridColumn);
+
+            Assert.IsTrue(uiGrid.Equals(uiGrid2));
+            Assert.IsTrue(uiGrid == uiGrid2);
+            Assert.IsFalse(uiGrid != uiGrid2);
+        }
+
+        [Test]
+        public void Test_NotEqual_HasDifferentNumbersOfColumns()
+        {
+            //---------------Set up test pack-------------------
+            UIGrid uiGrid = new UIGrid();
+            UIGridColumn uiGridColumn = GetUiGridColumn();
+            uiGrid.Add(uiGridColumn);
+            uiGrid.Add(GetUiGridColumn());
+
+            UIGrid uiGrid2 = new UIGrid();
+            uiGrid2.Add(uiGridColumn);
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(2, uiGrid.Count);
+            Assert.AreEqual(1, uiGrid2.Count);
+            //---------------Execute Test ----------------------
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(uiGrid.Equals(uiGrid2));
+            Assert.IsFalse(uiGrid == uiGrid2);
+            Assert.IsTrue(uiGrid != uiGrid2);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_NotEqualHasTheDifferentPropName_GridColumn()
+        {
+            UIGrid uiGrid = new UIGrid();
+            UIGridColumn uiGridColumn = GetUiGridColumn();
+            uiGrid.Add(uiGridColumn);
+
+            UIGrid uiGrid2 = new UIGrid();
+            UIGridColumn uiGridColumn2 = GetUiGridColumn("Diff Prop Name");
+            uiGrid2.Add(uiGridColumn2);
+
+            Assert.IsFalse(uiGrid.Equals(uiGrid2));
+            Assert.IsFalse(uiGrid == uiGrid2);
+            Assert.IsTrue(uiGrid != uiGrid2);
+        }
+
+        [Test]
+        public void Test_EqualHasCopyOfGridColumn()
+        {
+            //---------------Set up test pack-------------------
+            UIGrid uiGrid = new UIGrid();
+            UIGridColumn uiGridColumn = GetUiGridColumn();
+            uiGrid.Add(uiGridColumn);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            UIGrid uiGrid2 = new UIGrid();
+            uiGrid2.Add(uiGridColumn.Clone());
+            //---------------Test Result -----------------------
+            Assert.IsTrue(uiGrid.Equals(uiGrid2));
+            Assert.IsTrue(uiGrid == uiGrid2);
+            Assert.IsFalse(uiGrid != uiGrid2);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_NotEqualSortColumn()
+        {
+            //---------------Set up test pack-------------------
+            UIGrid uiGrid1 = new UIGrid();
+            UIGrid uiGrid2 = new UIGrid();
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            uiGrid1.SortColumn = "col";
+            uiGrid2.SortColumn = "col2";
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(uiGrid1.Equals(uiGrid2));
+            Assert.IsFalse(uiGrid1 == uiGrid2);
+            Assert.IsTrue(uiGrid1 != uiGrid2);
+        }
+
+
+        private static UIGridColumn GetUiGridColumn()
+        {
+            return GetUiGridColumn("");
+        }
+
+        private static UIGridColumn GetUiGridColumn(string columnProperty)
+        {
+            return new UIGridColumn("", columnProperty, "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+        }
+
+        //[Test]
+        //public void Test_NotEqual_DifName()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    UIForm uiForm1 = new UIForm();
+        //    uiForm1.Title = "Form1";
+        //    UIForm uiForm2 = new UIForm();
+        //    uiForm2.Title = "Form2";
+
+        //    //--------------Assert PreConditions----------------            
+
+        //    //---------------Execute Test ----------------------
+        //    bool operatorEquals = uiForm1 == uiForm2;
+        //    bool operatorNotEquals = uiForm1 != uiForm2;
+        //    bool methodEquals = uiForm1.Equals(uiForm2);
+
+        //    //---------------Test Result -----------------------
+        //    Assert.IsFalse(operatorEquals);
+        //    Assert.IsTrue(operatorNotEquals);
+        //    Assert.IsFalse(methodEquals);
+        //    //---------------Tear Down -------------------------          
+        //}
+
+        //[Test]
+        //public void Test_NotEqual_DifWidth()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    UIForm uiForm1 = new UIForm();
+        //    uiForm1.Title = "Form1";
+        //    uiForm1.Width = 100;
+        //    UIForm uiForm2 = new UIForm();
+        //    uiForm2.Title = "Form1";
+        //    uiForm2.Width = 200;
+        //    //--------------Assert PreConditions----------------            
+
+        //    //---------------Execute Test ----------------------
+        //    bool operatorEquals = uiForm1 == uiForm2;
+        //    bool operatorNotEquals = uiForm1 != uiForm2;
+        //    bool methodEquals = uiForm1.Equals(uiForm2);
+
+        //    //---------------Test Result -----------------------
+        //    Assert.IsFalse(operatorEquals);
+        //    Assert.IsTrue(operatorNotEquals);
+        //    Assert.IsFalse(methodEquals);
+        //    //---------------Tear Down -------------------------          
+        //}
+
+        //[Test]
+        //public void Test_NotSameType()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    UIForm uiForm1 = new UIForm();
+        //    //--------------Assert PreConditions----------------            
+
+        //    //---------------Execute Test ----------------------
+        //    bool methodEquals = uiForm1.Equals("fedafds");
+
+        //    //---------------Test Result -----------------------
+        //    Assert.IsFalse(methodEquals);
+        //    //---------------Tear Down -------------------------          
+        //}
+        //[Test]
+        //public void TestEquals_SameTab()
+        //{
+        //    UIFormTab uiFormTab1 = CreateUIFormTab();
+
+        //    UIForm uiForm1 = new UIForm();
+        //    uiForm1.Add(uiFormTab1);
+
+        //    UIForm uiForm2 = new UIForm();
+        //    uiForm2.Add(uiFormTab1);
+
+        //    Assert.IsTrue(uiForm1 == uiForm2);
+        //    Assert.IsFalse(uiForm1 != uiForm2);
+        //    Assert.IsTrue(uiForm1.Equals(uiForm2));
+        //}
+
+        //[Test]
+        //public void Test_NotEqual_DiffFormTabCount()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    UIFormTab uiFormTab1 = CreateUIFormTab();
+
+        //    UIForm uiForm1 = new UIForm();
+        //    uiForm1.Add(uiFormTab1);
+
+        //    UIForm uiForm2 = new UIForm();
+        //    uiForm2.Add(uiFormTab1);
+        //    uiForm2.Add(CreateUIFormTab());
+
+        //    //--------------Assert PreConditions----------------            
+
+        //    //---------------Execute Test ----------------------
+        //    bool operatorEquals = uiForm1 == uiForm2;
+        //    bool operatorNotEquals = uiForm1 != uiForm2;
+        //    bool methodEquals = uiForm1.Equals(uiForm2);
+
+        //    //---------------Test Result -----------------------
+        //    Assert.IsFalse(operatorEquals);
+        //    Assert.IsTrue(operatorNotEquals);
+        //    Assert.IsFalse(methodEquals);
+        //    //---------------Tear Down -------------------------          
+        //}
+
+        //[Test]
+        //public void Test_NotEqual_DiffTabs()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    UIFormTab uiFormTab1 = CreateUIFormTab();
+        //    uiFormTab1.Name = "tab1";
+        //    UIForm uiForm1 = new UIForm();
+        //    uiForm1.Add(uiFormTab1);
+        //    UIFormTab uiFormTab2 = CreateUIFormTab();
+        //    uiFormTab2.Name = "tab2";
+        //    UIForm uiForm2 = new UIForm();
+        //    uiForm2.Add(uiFormTab2);
+
+        //    //--------------Assert PreConditions----------------            
+
+        //    //---------------Execute Test ----------------------
+        //    bool operatorEquals = uiForm1 == uiForm2;
+        //    bool operatorNotEquals = uiForm1 != uiForm2;
+        //    bool methodEquals = uiForm1.Equals(uiForm2);
+
+        //    //---------------Test Result -----------------------
+        //    Assert.IsFalse(operatorEquals);
+        //    Assert.IsTrue(operatorNotEquals);
+        //    Assert.IsFalse(methodEquals);
+        //    //---------------Tear Down -------------------------          
+        //}
+
+        //[Test]
+        //public void Test_Equal_DiffTabs_SameTabName()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    UIFormTab uiFormTab1 = CreateUIFormTab();
+        //    uiFormTab1.Name = "tab1";
+        //    UIForm uiForm1 = new UIForm();
+        //    uiForm1.Add(uiFormTab1);
+        //    UIFormTab uiFormTab2 = CreateUIFormTab();
+        //    uiFormTab2.Name = "tab1";
+        //    UIForm uiForm2 = new UIForm();
+        //    uiForm2.Add(uiFormTab2);
+
+        //    //--------------Assert PreConditions----------------            
+
+        //    //---------------Execute Test ----------------------
+        //    bool operatorEquals = uiForm1 == uiForm2;
+        //    bool operatorNotEquals = uiForm1 != uiForm2;
+        //    bool methodEquals = uiForm1.Equals(uiForm2);
+
+        //    //---------------Test Result -----------------------
+        //    Assert.IsTrue(operatorEquals);
+        //    Assert.IsFalse(operatorNotEquals);
+        //    Assert.IsTrue(methodEquals);
+        //    //---------------Tear Down -------------------------          
+        //}
     }
 }

@@ -133,6 +133,89 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(UIGridColumn.PropAlignment.right, column.Alignment);
         }
 
+        [Test]
+        public void TestCloneGridColumn()
+        {
+            //---------------Set up test pack-------------------
+            UIGridColumn gridColumn = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+
+            //---------------Execute Test ----------------------
+            UIGridColumn clonedGridColumn = gridColumn.Clone();
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(gridColumn.Equals(clonedGridColumn));
+            Assert.IsTrue(gridColumn == clonedGridColumn);
+            Assert.IsFalse(gridColumn != clonedGridColumn);
+        }
+
+        [Test]
+        public void Test_NotEqualsNull()
+        {
+            UIGridColumn uiGridColumn1 = new UIGridColumn("", "", "", "",false,0,UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn uiGridColumn2 = null;
+            Assert.IsFalse(uiGridColumn1 == uiGridColumn2);
+            Assert.IsTrue(uiGridColumn1 != uiGridColumn2);
+            Assert.IsFalse(uiGridColumn1.Equals(uiGridColumn2));
+            Assert.AreNotEqual(uiGridColumn1, uiGridColumn2);
+        }
+
+        [Test]
+        public void Test_NotSameType()
+        {
+            //---------------Set up test pack-------------------
+            UIGridColumn gridColumn = new UIGridColumn("", "", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            bool methodEquals = gridColumn.Equals("fedafds");
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(methodEquals);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_NotEqual_DifName()
+        {
+            //---------------Set up test pack-------------------
+            UIGridColumn gridColumn1 = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn gridColumn2 = new UIGridColumn("pp", "mm", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            bool operatorEquals = gridColumn1 == gridColumn2;
+            bool operatorNotEquals = gridColumn1 != gridColumn2;
+            bool methodEquals = gridColumn1.Equals(gridColumn2);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(operatorEquals);
+            Assert.IsTrue(operatorNotEquals);
+            Assert.IsFalse(methodEquals);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void Test_NotEqual_Heading()
+        {
+            //---------------Set up test pack-------------------
+            UIGridColumn gridColumn1 = new UIGridColumn("pp", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn gridColumn2 = new UIGridColumn("pp1", "pp", "", "", false, 0, UIGridColumn.PropAlignment.centre, null);
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            bool operatorEquals = gridColumn1 == gridColumn2;
+            bool operatorNotEquals = gridColumn1 != gridColumn2;
+            bool methodEquals = gridColumn1.Equals(gridColumn2);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(methodEquals);
+            Assert.IsFalse(operatorEquals);
+            Assert.IsTrue(operatorNotEquals);
+            //---------------Tear Down -------------------------          
+        }
+
         // Grants access to protected fields
         private class UIGridColumnInheritor : UIGridColumn
         {

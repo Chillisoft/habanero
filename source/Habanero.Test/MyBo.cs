@@ -704,7 +704,7 @@ namespace Habanero.Test
 							</tab>
 		                    <tab name=""Collapse Tab 3"">
 								<columnLayout>
-									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""MyBoID"" property=""MyBoID"" type=""TextBox"" mapperType=""TextBoxMapper"" />
 								</columnLayout>
 							</tab>
 						</form>

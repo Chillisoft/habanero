@@ -61,41 +61,127 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsFalse(uiFormColumn.IsSynchronized);
         }
 
-        //TODO:
-        //[Test]
-        //public void TestClonePropDefCol()
-        //{
-        //    ClassDef originalClassDef = LoadClassDef();
-        //    PropDefCol newPropDefCol = originalClassDef.PropDefcol.Clone();
-        //    Assert.AreNotSame(newPropDefCol, originalClassDef.PropDefcol);
-        //    Assert.AreEqual(newPropDefCol, originalClassDef.PropDefcol);
-        //}
+        [Test]
+        public void TestCloneUIFormColumn()
+        {
+            //---------------Set up test pack-------------------
+            UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
+            UIFormField field2 = new UIFormField("label2", "prop2", "control", null, null, null, true, null, null, null);
+            UIFormColumn uiFormColumn = new UIFormColumn();
+            uiFormColumn.Add(field1);
+            uiFormColumn.Add(field2);
 
-        //[Test]
-        //public void TestEqualsNull()
-        //{
-        //    PropDefCol propDefCol1 = new PropDefCol();
-        //    PropDefCol propDefCol2 = null;
-        //    Assert.AreNotEqual(propDefCol1, propDefCol2);
-        //}
+            //---------------Execute Test ----------------------
+            UIFormColumn clonedFormColumn = uiFormColumn.Clone();
 
-        //[Test]
-        //public void TestEquals()
-        //{
-        //    PropDefCol propDefCol1 = new PropDefCol();
-        //    PropDef def = new PropDef("bob", typeof(string), PropReadWriteRule.ReadOnly, null);
-        //    propDefCol1.Add(def);
-        //    PropDefCol propDefCol2 = new PropDefCol();
-        //    propDefCol2.Add(def);
-        //    Assert.AreEqual(propDefCol1, propDefCol2);
-        //}
+            //---------------Test Result -----------------------
+            Assert.IsTrue(uiFormColumn == clonedFormColumn);
 
-        //[Test]
-        //public void TestEqualsDifferentType()
-        //{
-        //    PropDefCol propDefCol1 = new PropDefCol();
-        //    Assert.AreNotEqual(propDefCol1, "bob");
-        //}
+            Assert.IsTrue(uiFormColumn.Equals(clonedFormColumn));
+
+        }
+
+        [Test]
+        public void Test_NotEqualsNull()
+        {
+            UIFormColumn uiFormColumn1 = new UIFormColumn();
+            UIFormColumn uiFormColumn2 = null;
+            Assert.IsFalse(uiFormColumn1 == uiFormColumn2);
+            Assert.IsFalse(uiFormColumn2 == uiFormColumn1);
+            Assert.IsFalse(uiFormColumn1.Equals(uiFormColumn2));
+        }
+
+        [Test]
+        public void TestEquals()
+        {
+            UIFormColumn uiFormColumn1 = new UIFormColumn();
+            UIFormField def = new UIFormField("bob", "bob", "", "", "", "", false, "", null, null);
+            uiFormColumn1.Add(def);
+            UIFormColumn uiFormColumn2 = new UIFormColumn();
+            uiFormColumn2.Add(def);
+            Assert.IsTrue(uiFormColumn1 == uiFormColumn2);
+            Assert.IsTrue(uiFormColumn2 == uiFormColumn1);
+            Assert.IsFalse(uiFormColumn2 != uiFormColumn1);
+            Assert.IsTrue(uiFormColumn1.Equals(uiFormColumn2));
+        }
+        [Test]
+        public void Test_NotEquals_SameFirstItemDiffSecondItem()
+        {
+            UIFormColumn uiFormColumn1 = new UIFormColumn();
+            UIFormField def = new UIFormField("bob", "bob", "", "", "", "", false, "", null, null);
+            uiFormColumn1.Add(def);
+            UIFormColumn uiFormColumn2 = new UIFormColumn();
+            uiFormColumn2.Add(def);
+            UIFormField def2 = new UIFormField("bob1", "bob1", "", "", "", "", false, "", null, null);
+            uiFormColumn2.Add(def2);
+            Assert.IsFalse(uiFormColumn1 == uiFormColumn2);
+            Assert.IsTrue(uiFormColumn1 != uiFormColumn2);
+            Assert.IsFalse(uiFormColumn2 == uiFormColumn1);
+            Assert.IsFalse(uiFormColumn1.Equals(uiFormColumn2));
+
+        }
+
+        [Test]
+        public void Test_NotEqualsDiffFieldCount()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn uiFormColumn1 = new UIFormColumn();
+            UIFormField def = new UIFormField("bob", "bob", "", "", "", "", false, "", null, null);
+            uiFormColumn1.Add(def);
+            UIFormColumn uiFormColumn2 = new UIFormColumn();
+            uiFormColumn2.Add(def);
+            UIFormField def2 = new UIFormField("bob1", "bob1", "", "", "", "", false, "", null, null);
+
+            uiFormColumn1.Add(def);
+            uiFormColumn1.Add(def2);
+            uiFormColumn2.Add(def2);
+            //--------------Assert PreConditions----------------            
+            Assert.AreNotEqual(uiFormColumn1.Count, uiFormColumn2.Count);
+            //---------------Execute Test ----------------------
+            bool operatorEquals = uiFormColumn1 == uiFormColumn2;
+            bool equalsMethod = uiFormColumn1.Equals(uiFormColumn2);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(operatorEquals);
+            Assert.IsFalse(equalsMethod);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_NotEquals()
+        {
+            UIFormColumn uiFormColumn1 = new UIFormColumn();
+            UIFormField def = new UIFormField("bob", "bob", "", "", "", "", false, "", null, null);
+            uiFormColumn1.Add(def);
+            UIFormColumn uiFormColumn2 = new UIFormColumn();
+            UIFormField def2 = new UIFormField("bob1", "bob1", "", "", "", "", false, "", null, null);
+            uiFormColumn2.Add(def2);
+            Assert.IsFalse(uiFormColumn1 == uiFormColumn2);
+            Assert.IsFalse(uiFormColumn2 == uiFormColumn1);
+            Assert.IsFalse(uiFormColumn1.Equals(uiFormColumn2));
+
+        }
+
+        [Test]
+        public void Test_NotEquals_FormColumnWidthDiff()
+        {
+            //---------------Set up test pack-------------------
+            UIFormColumn uiFormColumn1 = new UIFormColumn(10);
+            UIFormColumn uiFormColumn2 = new UIFormColumn(20);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            Assert.IsFalse(uiFormColumn1 == uiFormColumn2);
+            Assert.IsFalse(uiFormColumn2 == uiFormColumn1);
+            Assert.IsFalse(uiFormColumn1.Equals(uiFormColumn2));
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestEqualsDifferentType()
+        {
+            UIFormColumn uiFormColumn1 = new UIFormColumn();
+            Assert.AreNotEqual(uiFormColumn1, "bob");
+        }
 
     }
 

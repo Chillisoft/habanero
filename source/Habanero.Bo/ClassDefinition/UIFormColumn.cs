@@ -29,7 +29,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class UIFormColumn : ICollection
     {
-        private IList _list;
+        private readonly IList _list;
         private int _width;
 
         /// <summary>
@@ -148,5 +148,92 @@ namespace Habanero.BO.ClassDefinition
         //			get { return _name; }
         //			set { _name = value; }
         //		}
+
+        ///<summary>
+        /// Clones the collection.
+        ///</summary>
+        ///<returns>a new collection that is a shallow copy of this collection</returns>
+        public UIFormColumn Clone()
+        {
+            UIFormColumn newPropDefCol = new UIFormColumn();
+            foreach (UIFormField def in this)
+            {
+                newPropDefCol.Add(def);
+            }
+            return newPropDefCol;
+        }
+
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
+        {
+            UIFormColumn otherFormColumn = obj as UIFormColumn;
+            if ((object)otherFormColumn == null)
+            {
+                return false;
+            }
+            if (otherFormColumn.Count != this.Count)
+            {
+                return false;
+            }
+            if  (otherFormColumn.Width != this.Width) return false;
+            foreach (UIFormField field in this)
+            {
+                bool found = false;
+                foreach (UIFormField otherFormField in otherFormColumn)
+                {
+                    if (otherFormField.Equals(field))
+                    {
+                        found = true;
+                    }
+                }
+                if (!found)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
+        public static bool operator ==(UIFormColumn a, UIFormColumn b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return a.Equals(b);
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
+        public static bool operator !=(UIFormColumn a, UIFormColumn b)
+        {
+            return !(a == b);
+        }
+
     }
 }

@@ -24,7 +24,7 @@ namespace Habanero.BO.ClassDefinition
     /// interface, as specified in the class definitions xml file.
     /// This consists of definitions for a grid display and an editing form.
     /// </summary>
-    public class UIDef 
+    public class UIDef
     {
         private string _name;
         private UIForm _uiForm;
@@ -87,6 +87,72 @@ namespace Habanero.BO.ClassDefinition
         public UIGrid GetUIGridProperties()
         {
             return this.UIGrid;
+        }
+
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            UIDef otherUIDef = obj as UIDef;
+            if (otherUIDef == null) return false;
+            if (this.Name != otherUIDef.Name) return false;
+            if (this.UIForm != otherUIDef.UIForm) return false;
+            if (this.UIGrid != otherUIDef.UIGrid) return false;
+            return true;
+        }
+
+        ///<summary>
+        /// overloads the operator == 
+        ///</summary>
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
+        public static bool operator ==(UIDef a, UIDef b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object) a == null) || ((object) b == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return a.Equals(b);
+        }
+
+        ///<summary>
+        /// overloads the operator != 
+        ///</summary>
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
+        public static bool operator !=(UIDef a, UIDef b)
+        {
+            return !(a == b);
+        }
+
+        ///<summary>
+        /// Clones the collection of ui columns this performs a copy of all uicolumns but does not copy the uiFormFields.
+        ///</summary>
+        ///<returns>a new collection that is a shallow copy of this collection</returns>
+        public UIDef Clone()
+        {
+            UIDef newUIForm = new UIDef(this.Name, this.UIForm, this.UIGrid);
+            return newUIForm;
         }
     }
 }
