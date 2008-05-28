@@ -26,7 +26,7 @@ namespace Habanero.BO.ClassDefinition
     /// Manages a collection of property definitions for a user interface
     /// editing form, as specified in the class definitions xml file
     /// </summary>
-    public class UIForm : ICollection
+    public class UIForm : ICollection, IEquatable<UIForm>
     {
         private IList _list;
         private int _width;
@@ -162,35 +162,35 @@ namespace Habanero.BO.ClassDefinition
         ///</returns>
         ///
         ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj == null)
+        //    {
+        //        return false;
+        //    }
 
-            UIForm otherUiForm = obj as UIForm;
-            if (otherUiForm == null) return false;
-            if ((otherUiForm.Title != this.Title) || (otherUiForm.Width != this.Width) || (otherUiForm.Height != this.Height)) return false;
+        //    UIForm otherUiForm = obj as UIForm;
+        //    if (otherUiForm == null) return false;
+        //    if ((otherUiForm.Title != this.Title) || (otherUiForm.Width != this.Width) || (otherUiForm.Height != this.Height)) return false;
 
-            if (this.Count != otherUiForm.Count) return false;
-            foreach (UIFormTab tab in this)
-            {
-                bool found = false;
-                foreach (UIFormTab otherTab in otherUiForm)
-                {
-                    if (otherTab.Equals(tab))
-                    {
-                        found = true;
-                    }
-                }
-                if (!found)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        //    if (this.Count != otherUiForm.Count) return false;
+        //    foreach (UIFormTab tab in this)
+        //    {
+        //        bool found = false;
+        //        foreach (UIFormTab otherTab in otherUiForm)
+        //        {
+        //            if (otherTab.Equals(tab))
+        //            {
+        //                found = true;
+        //            }
+        //        }
+        //        if (!found)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
 
         ///<summary>
         /// overloads the operator == 
@@ -242,6 +242,47 @@ namespace Habanero.BO.ClassDefinition
                 newUIForm.Add(tab.Clone());
             }
             return newUIForm;
+        }
+
+        public bool Equals(UIForm otherUIForm)
+        {
+            if (otherUIForm == null) return false;
+            if (_width != otherUIForm._width) return false;
+            if (_height != otherUIForm._height) return false;
+            if (!Equals(_title, otherUIForm._title)) return false;
+
+            if (this.Count != otherUIForm.Count) return false;
+            foreach (UIFormTab tab in this)
+            {
+                bool found = false;
+                foreach (UIFormTab otherTab in otherUIForm)
+                {
+                    if (otherTab.Equals(tab))
+                    {
+                        found = true;
+                    }
+                }
+                if (!found)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as UIForm);
+        }
+
+        public override int GetHashCode()
+        {
+            int result = _list.GetHashCode();
+            result = 29*result + _width;
+            result = 29*result + _height;
+            result = 29*result + _title.GetHashCode();
+            return result;
         }
     }
 }

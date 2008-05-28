@@ -489,7 +489,20 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(originalClassDef.DisplayName, newClassDef.DisplayName);
         }
 
-       
+        [Test]
+        public void TestUIDefColIsCloned()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef originalClassDef = LoadClassDef();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            ClassDef newClassDef = originalClassDef.Clone();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(originalClassDef.UIDefCol, newClassDef.UIDefCol);
+            Assert.AreNotSame(originalClassDef.UIDefCol, newClassDef.UIDefCol);
+            //---------------Tear Down -------------------------          
+        }
 
 
         [Test]

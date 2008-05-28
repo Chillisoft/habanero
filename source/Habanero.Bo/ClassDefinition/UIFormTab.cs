@@ -26,7 +26,7 @@ namespace Habanero.BO.ClassDefinition
     /// Manages property definitions for a tab in a user interface editing 
     /// form, as specified in the class definitions xml file
     /// </summary>
-    public class UIFormTab : ICollection
+    public class UIFormTab : ICollection, IEquatable<UIFormTab>
     {
         private IList _list;
         private string _name;
@@ -152,40 +152,45 @@ namespace Habanero.BO.ClassDefinition
             get { return _uiFormGrid; }
         }
 
+        /////<summary>
+        /////Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        /////</summary>
+        /////
+        /////<returns>
+        /////true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        /////</returns>
+        /////
+        /////<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        //public override bool Equals(object obj)
+        //{
+        //    UIFormTab otherUiTab = obj as UIFormTab;
+        //    if (otherUiTab == null) return false;
+
+        //    if (this.Name != otherUiTab.Name) return false;
+        //    if (this.Count != otherUiTab.Count) return false;
+        //    foreach (UIFormColumn col in this)
+        //    {
+        //        bool found = false;
+        //        foreach (UIFormColumn otherFormCol in otherUiTab)
+        //        {
+        //            if (otherFormCol.Equals(col))
+        //            {
+        //                found = true;
+        //            }
+        //        }
+        //        if (!found)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
+
         ///<summary>
-        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
         ///</summary>
-        ///
-        ///<returns>
-        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
-        ///</returns>
-        ///
-        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
-        public override bool Equals(object obj)
-        {
-            UIFormTab otherUiTab = obj as UIFormTab;
-            if (otherUiTab == null) return false;
-
-            if (this.Name != otherUiTab.Name) return false;
-            if (this.Count != otherUiTab.Count) return false;
-            foreach (UIFormColumn col in this)
-            {
-                bool found = false;
-                foreach (UIFormColumn otherFormCol in otherUiTab)
-                {
-                    if (otherFormCol.Equals(col))
-                    {
-                        found = true;
-                    }
-                }
-                if (!found)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
         public static bool operator ==(UIFormTab a, UIFormTab b)
         {
             // If both are null, or both are same instance, return true.
@@ -204,6 +209,11 @@ namespace Habanero.BO.ClassDefinition
             return a.Equals(b);
         }
 
+        ///<summary>
+        ///</summary>
+        ///<param name="a"></param>
+        ///<param name="b"></param>
+        ///<returns></returns>
         public static bool operator !=(UIFormTab a, UIFormTab b)
         {
             return !(a == b);
@@ -223,5 +233,43 @@ namespace Habanero.BO.ClassDefinition
             return newUIFormTab;
         }
 
+        public bool Equals(UIFormTab uiFormTab)
+        {
+            if (uiFormTab == null) return false;
+//            if (!Equals(_list, uiFormTab._list)) return false;
+            if (!Equals(_name, uiFormTab._name)) return false;
+            if (!Equals(_uiFormGrid, uiFormTab._uiFormGrid)) return false;
+            if (this.Count != uiFormTab.Count) return false;
+            foreach (UIFormColumn col in this)
+            {
+                bool found = false;
+                foreach (UIFormColumn otherFormCol in uiFormTab)
+                {
+                    if (otherFormCol.Equals(col))
+                    {
+                        found = true;
+                    }
+                }
+                if (!found)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as UIFormTab);
+        }
+
+        public override int GetHashCode()
+        {
+            int result = _list.GetHashCode();
+            result = 29*result + _name.GetHashCode();
+            result = 29*result + (_uiFormGrid != null ? _uiFormGrid.GetHashCode() : 0);
+            return result;
+        }
     }
 }

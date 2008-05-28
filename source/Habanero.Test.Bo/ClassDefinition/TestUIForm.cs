@@ -62,7 +62,7 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void TestCloneUIFormrTab()
+        public void TestCloneUIForm()
         {
             //---------------Set up test pack-------------------
             UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
@@ -79,16 +79,20 @@ namespace Habanero.Test.BO.ClassDefinition
             uiForm.Title = "ddd";
             uiForm.Height = 1;
             uiForm.Width = 3;
+
             //---------------Execute Test ----------------------
             UIForm clonedForm = uiForm.Clone();
 
             //---------------Test Result -----------------------
             Assert.IsTrue(uiForm == clonedForm);
             Assert.IsTrue(uiForm.Equals(clonedForm));
-            Assert.AreEqual(uiForm[0], clonedForm[0],
-                              "Should be a deep copy and the columns should be equal but copied");
+            Assert.AreNotSame(uiForm, clonedForm);
+
             UIFormTab clonedUIFormTab = clonedForm[0];
+            Assert.AreEqual(uiForm[0], clonedUIFormTab,
+                              "Should be a deep copy and the columns should be equal but copied");
             Assert.AreNotSame(uiFormTab, clonedUIFormTab, "Should be a deep copy and the columns should be equal but copied (not same)");
+            //Verif cloned columns
             Assert.AreEqual(uiFormTab[0], clonedUIFormTab[0]);
             Assert.AreNotSame(uiFormTab[0], clonedUIFormTab[0]);
         }

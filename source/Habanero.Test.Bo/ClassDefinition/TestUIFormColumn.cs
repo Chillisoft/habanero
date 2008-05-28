@@ -70,6 +70,7 @@ namespace Habanero.Test.BO.ClassDefinition
             UIFormColumn uiFormColumn = new UIFormColumn();
             uiFormColumn.Add(field1);
             uiFormColumn.Add(field2);
+            uiFormColumn.Width = 44;
 
             //---------------Execute Test ----------------------
             UIFormColumn clonedFormColumn = uiFormColumn.Clone();
@@ -78,6 +79,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(uiFormColumn == clonedFormColumn);
 
             Assert.IsTrue(uiFormColumn.Equals(clonedFormColumn));
+            Assert.AreSame(uiFormColumn[0], clonedFormColumn[0]);
 
         }
 

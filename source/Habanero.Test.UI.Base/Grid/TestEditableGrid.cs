@@ -150,7 +150,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------    
         }
 
-        [Test]
+        [Test, Ignore("Currently working on this")]
         public void TestSetupColumnAsTextBoxType()
         {
 //            ClassDef classDef = MyBO.LoadClassDefWithBoolean();

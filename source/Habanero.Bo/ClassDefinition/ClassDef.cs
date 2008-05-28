@@ -999,9 +999,11 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public ClassDef Clone()
         {
+            PropDefCol propDefClone = this.PropDefcol != null ? this.PropDefcol.Clone() : null;
+            UIDefCol uiDefClone = this.UIDefCol != null ? this.UIDefCol.Clone() : null;
             ClassDef newClassDef = new ClassDef(this.AssemblyName, this.ClassName, this.PrimaryKeyDef,
-                                                this.PropDefcol != null ? this.PropDefcol.Clone() : null, this.KeysCol,
-                                                this.RelationshipDefCol, this.UIDefCol);
+                                                propDefClone, this.KeysCol,
+                                                this.RelationshipDefCol, uiDefClone);
             newClassDef.TableName = this.TableName;
             newClassDef.DisplayName = this.DisplayName;
            

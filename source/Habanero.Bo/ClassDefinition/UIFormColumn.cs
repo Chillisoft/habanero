@@ -156,6 +156,7 @@ namespace Habanero.BO.ClassDefinition
         public UIFormColumn Clone()
         {
             UIFormColumn newPropDefCol = new UIFormColumn();
+            newPropDefCol.Width = this.Width;
             foreach (UIFormField def in this)
             {
                 newPropDefCol.Add(def);
@@ -175,14 +176,9 @@ namespace Habanero.BO.ClassDefinition
         public override bool Equals(object obj)
         {
             UIFormColumn otherFormColumn = obj as UIFormColumn;
-            if ((object)otherFormColumn == null)
-            {
-                return false;
-            }
-            if (otherFormColumn.Count != this.Count)
-            {
-                return false;
-            }
+            if ((object)otherFormColumn == null) return false;
+
+            if (otherFormColumn.Count != this.Count) return false;
             if  (otherFormColumn.Width != this.Width) return false;
             foreach (UIFormField field in this)
             {

@@ -74,7 +74,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
 
         [Test]
-        public void TestCloneUIFormrTab()
+        public void TestCloneUIFormTab()
         {
             //---------------Set up test pack-------------------
             UIFormField field1 = new UIFormField("label1", "prop1", "control", null, null, null, true, null, null, null);
@@ -87,7 +87,7 @@ namespace Habanero.Test.BO.ClassDefinition
             uiFormTab.Add(uiFormColumn);
 
             //---------------Execute Test ----------------------
-            UIFormTab clonedFormTab= uiFormTab.Clone();
+            UIFormTab clonedFormTab = uiFormTab.Clone();
 
             //---------------Test Result -----------------------
             Assert.IsTrue(uiFormTab == clonedFormTab);
