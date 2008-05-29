@@ -51,6 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BorderLayoutManagerGiz.cs" />
+    <Compile Include="BoTabColControlGiz.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ButtonGroupControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>

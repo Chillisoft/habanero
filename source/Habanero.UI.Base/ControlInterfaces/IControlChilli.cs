@@ -163,5 +163,7 @@ namespace Habanero.UI.Base
         void SuspendLayout();
         void ResumeLayout(bool performLayout);
         void Invalidate();
+
+
     }
 }

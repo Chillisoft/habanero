@@ -50,14 +50,12 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ITabControl tabControl = GetControlFactory().CreateTabControl();
             //---------------Execute Test ----------------------
-            BoTabColControl boTabColControl = new BoTabColControl(GetControlFactory());
+            IBoTabColControl boTabColControl = GetControlFactory().CreateBOTabColControl();
             //IBusinessObjectControl busControl = new IBusinessObjectControlGiz();
-
 
             //---------------Test Result -----------------------
             Assert.IsNotNull(boTabColControl.TabControl);
-            Assert.IsNotNull(boTabColControl.CollectionTabCtlMapper);
-            Assert.IsNotNull(boTabColControl.ControlFactory);
+            Assert.IsNotNull(boTabColControl.CollectionTabControlMapper);
             //---------------Tear down -------------------------
         }
 

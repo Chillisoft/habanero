@@ -3,6 +3,15 @@ using System;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// Just stores constants used by both Win and Gizmox wizard controls.
+    /// </summary>
+    public abstract class WizardControl
+    {
+        public const int PADDING = 3;
+    }
+
+
     public interface IWizardControl:IControlChilli
     {
         ///// <summary>

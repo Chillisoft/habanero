@@ -456,6 +456,11 @@ namespace Habanero.UI.WebGUI
             return new FileChooserGiz(this);
         }
 
+        public IBoTabColControl CreateBOTabColControl()
+        {
+            return new BoTabColControlGiz(this);
+        }
+
         public ITabControl CreateTabControl()
         {
             return new TabControlGiz();

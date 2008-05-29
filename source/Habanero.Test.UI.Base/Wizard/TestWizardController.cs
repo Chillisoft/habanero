@@ -132,6 +132,8 @@ namespace Habanero.Test.UI.Base.Wizard
             _mock.VerifyAll();
         }
 
+ 
+
         [Test]
         public void TestGetCurrentStep()
         {

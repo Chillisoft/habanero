@@ -214,6 +214,7 @@ namespace Habanero.UI.Base
         IEditableGrid CreateEditableGrid();
         IEditableGridControl CreateEditableGridControl();
         IFileChooser CreateFileChooser();
+        IBoTabColControl CreateBOTabColControl();
     }
 
     

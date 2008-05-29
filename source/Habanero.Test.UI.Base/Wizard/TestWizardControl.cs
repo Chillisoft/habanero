@@ -313,6 +313,27 @@ namespace Habanero.Test.UI.Base.Wizard
 
             Assert.IsTrue(_controller.FinishCalled);
         }
+
+        [Test]
+        public void TestNextClickAtLastStepCallsCanMoveOn()
+        {
+            //---------------Set up test pack-------------------
+            MyWizardController controller = new MyWizardController();
+            IWizardControl wizardControl = GetControlFactory().CreateWizardControl(controller);// new WizardControl(_controller);
+            controller.ControlForStep1.AllowMoveOn = true;
+            controller.ControlForStep2.AllowMoveOn = false;
+
+            wizardControl.Start();
+            wizardControl.NextButton.PerformClick();
+            //---------------Execute Test ----------------------
+            wizardControl.NextButton.PerformClick();
+            //---------------Test Result -----------------------
+            // Finish should not have been called because CanMoveOn on step two is returning false and should prevent
+            // the wizard from finishing.
+            Assert.IsFalse(controller.FinishCalled);
+            //---------------Tear Down -------------------------
+        }
+
         [Test]
         public void TestFinishEventPosted()
         {
@@ -400,7 +421,7 @@ namespace Habanero.Test.UI.Base.Wizard
             //---------------Execute Test ----------------------
             wizardControl.Next();
             //---------------Test Result -----------------------
-            Assert.AreEqual(wizardControl.Width, wizardController.ControlForStep2.Width);
+            Assert.AreEqual(wizardControl.Width- WizardControl.PADDING*2, wizardController.ControlForStep2.Width);
             //---------------Tear Down -------------------------          
         }
 

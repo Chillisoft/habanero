@@ -19,6 +19,7 @@ namespace Habanero.UI.WebGUI
         public event Action<string> MessagePosted;
         public event Action<string> StepChanged;
 
+
         public IPanel WizardStepPanel
         {
             get { return _wizardStepPanel; }
@@ -46,7 +47,8 @@ namespace Habanero.UI.WebGUI
             IPanel buttonPanel = CreateButtonPanel(controlFactory);
 
             _wizardStepPanel = controlFactory.CreatePanel();
-
+            
+  
             //IGroupBox headerLabelGroupBox = CreateHeaderLabel(controlFactory);
 
             BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(this, _controlFactory);
@@ -141,8 +143,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public void Next()
         {
-            string message;
-            if (_wizardController.CanMoveOn(out message))
+            DoIfCanMoveOn(delegate
             {
                 SetStep(_wizardController.GetNextStep());
                 if (_wizardController.IsLastStep())
@@ -150,11 +151,7 @@ namespace Habanero.UI.WebGUI
                     _nextButton.Text = "Finish";
                 }
                 SetPreviousButtonState();
-            }
-            else
-            {
-                FireMessagePosted(message);
-            }
+            });
         }
 
         /// <summary>
@@ -186,8 +183,13 @@ namespace Habanero.UI.WebGUI
                 FireStepChanged(step.HeaderText);
                 //TODO: The border layout manager clearing panel etc not unit tested
                 _wizardStepPanel.Controls.Clear();
-                BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(_wizardStepPanel, _controlFactory);
-                borderLayoutManager.AddControl(stepControl, BorderLayoutManager.Position.Centre);
+                stepControl.Top = WizardControl.PADDING;
+                stepControl.Left = WizardControl.PADDING;
+                stepControl.Width = _wizardStepPanel.Width - WizardControl.PADDING*2;
+                stepControl.Height = _wizardStepPanel.Height - WizardControl.PADDING*2;
+                _wizardStepPanel.Controls.Add(stepControl);
+                //BorderLayoutManagerGiz borderLayoutManager = new BorderLayoutManagerGiz(_wizardStepPanel, _controlFactory);
+                //borderLayoutManager.AddControl(stepControl, BorderLayoutManager.Position.Centre);
 
                 step.InitialiseStep();
             }
@@ -196,13 +198,30 @@ namespace Habanero.UI.WebGUI
                 throw new WizardStepException("IWizardStep of type " + step.GetType().FullName + " is not a Control");
             }
         }
+
+        private delegate void Operation();
+
+        private void DoIfCanMoveOn(Operation operation)
+        {
+            string message;
+            if (_wizardController.CanMoveOn(out message))
+            {
+                operation();
+            }
+            else
+            {
+                FireMessagePosted(message);
+            }
+        }
+
+
         private void uxNextButton_Click(object sender, EventArgs e)
         {
             try
             {
                 if (_wizardController.IsLastStep())
                 {
-                    Finish();
+                    DoIfCanMoveOn(delegate { Finish(); });
                 }
                 else
                 {
