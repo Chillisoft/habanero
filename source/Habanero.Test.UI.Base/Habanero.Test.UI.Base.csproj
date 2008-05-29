@@ -83,6 +83,7 @@
     <Compile Include="Mappers\TestCollectionTabControlMapper.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Mappers\TestComboBoxCollectionController.cs" />
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
     <Compile Include="Mappers\TestControlMapper.cs" />

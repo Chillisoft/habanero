@@ -145,6 +145,21 @@ namespace Habanero.UI.Base
             }
         }
 
+        public IComboBox Control
+        {
+            get { return _comboBox; }
+        }
+
+        public IControlFactory ControlFactory
+        {
+            get { return _controlFactory; }
+        }
+
+        public IBusinessObjectCollection Collection
+        {
+            get { return _collection; }
+        }
+
         /// <summary>
         /// Set the list of objects in the ComboBox to a specific collection of
         /// business objects.<br/>
