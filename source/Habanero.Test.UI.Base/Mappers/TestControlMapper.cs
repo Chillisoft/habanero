@@ -41,13 +41,65 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
+            public void TestNormalChangeValue_DoesUpdateWithoutCallingUpdate()
+            {
+                ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
+                mapperStub.BusinessObject = _shape;
+                Assert.AreEqual("TestShapeName", _txtNormal.Text);
+                _shape.ShapeName = "TestShapeName2";
+//                _normalMapper.UpdateControlValueFromBusinessObject();
+                Assert.AreEqual("TestShapeName2", _txtNormal.Text);
+            }
+            [Test]
             public void TestNormalChangeValue()
+            {
+                ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
+                mapperStub.BusinessObject = _shape;
+                Assert.AreEqual("TestShapeName", _txtNormal.Text);
+                _shape.ShapeName = "TestShapeName2";
+                //                _normalMapper.UpdateControlValueFromBusinessObject();
+                Assert.AreEqual("TestShapeName2", _txtNormal.Text);
+            }
+
+            [Test, Ignore("To implement RemoveCurrentBOPropHandlers")]
+            public void TestEditsToOrigionalBusinessObjectDoesNotUpdateControlValue()
+            {
+                //---------------Set up test pack-------------------
+                ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
+                mapperStub.BusinessObject = _shape;
+                Assert.AreEqual("TestShapeName", _txtNormal.Text);
+                _shape.ShapeName = "TestShapeName";
+
+                Shape shape2 = new Shape();
+                shape2.ShapeName = "Shape 2 Name";
+
+                _normalMapper.BusinessObject = shape2;
+                //--------------Assert PreConditions----------------            
+                Assert.AreEqual(shape2.ShapeName, _txtNormal.Text);
+
+                //---------------Execute Test ----------------------
+
+                _shape.ShapeName = "New shape 1 name";
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(shape2.ShapeName, _txtNormal.Text);
+
+
+                //---------------Tear Down -------------------------          
+            }
+                            
+            [Test]
+            public void TestNormalChangeBO_DoesUpdateWithoutCallingUpdate()
             {
                 _normalMapper.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtNormal.Text);
-                _shape.ShapeName = "TestShapeName2";
-                _normalMapper.ApplyChanges();
-                Assert.AreEqual("TestShapeName2", _txtNormal.Text);
+                Shape shape2 = new Shape();
+                shape2.ShapeName = "Different";
+                _normalMapper.BusinessObject = shape2;
+                Assert.AreEqual("Different", _txtNormal.Text);
+                shape2.ShapeName = "Different2";
+                //_normalMapper.UpdateControlValueFromBusinessObject();
+                Assert.AreEqual("Different2", _txtNormal.Text);
             }
             [Test]
             public void TestNormalChangeBO()
@@ -59,7 +111,7 @@ namespace Habanero.Test.UI.Base
                 _normalMapper.BusinessObject = shape2;
                 Assert.AreEqual("Different", _txtNormal.Text);
                 shape2.ShapeName = "Different2";
-                _normalMapper.ApplyChanges();
+                _normalMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("Different2", _txtNormal.Text);
             }
             [Test]
@@ -68,7 +120,7 @@ namespace Habanero.Test.UI.Base
                 _readOnlyMapper.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtReadonly.Text);
                 _shape.ShapeName = "TestShapeName2";
-                _readOnlyMapper.ApplyChanges();
+                _readOnlyMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
             [Test]
@@ -81,7 +133,7 @@ namespace Habanero.Test.UI.Base
                 _readOnlyMapper.BusinessObject = sh2;
                 Assert.AreEqual("Different", _txtReadonly.Text);
                 sh2.ShapeName = "Different2";
-                _readOnlyMapper.ApplyChanges();
+                _readOnlyMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("Different2", _txtReadonly.Text);
             }
         }
@@ -94,6 +146,75 @@ namespace Habanero.Test.UI.Base
                 return new Habanero.UI.WebGUI.ControlFactoryGizmox();
             }
 
+            [Test]
+            public void TestNormalChangeValue_DoesNotUpdateWithoutCallingMethod()
+            {
+                ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
+                mapperStub.BusinessObject = _shape;
+                Assert.AreEqual("TestShapeName", _txtNormal.Text);
+                _shape.ShapeName = "TestShapeName2";
+                Assert.AreEqual("TestShapeName", _txtNormal.Text);
+            }
+
+            [Test]
+            public void TestNormalChangeValue()
+            {
+                _normalMapper.BusinessObject = _shape;
+                Assert.AreEqual("TestShapeName", _txtNormal.Text);
+                _shape.ShapeName = "TestShapeName2";
+                _normalMapper.UpdateControlValueFromBusinessObject();
+                Assert.AreEqual("TestShapeName2", _txtNormal.Text);
+            }
+
+
+            [Test]
+            public void TestNormalChangeBO_DoesNotUpdateWithoutCallingMethod()
+            {
+                _normalMapper.BusinessObject = _shape;
+                Assert.AreEqual("TestShapeName", _txtNormal.Text);
+                Shape shape2 = new Shape();
+                shape2.ShapeName = "Different";
+                _normalMapper.BusinessObject = shape2;
+                Assert.AreEqual("Different", _txtNormal.Text);
+                shape2.ShapeName = "Different2";
+                Assert.AreEqual("Different", _txtNormal.Text);
+            }
+            [Test]
+            public void TestNormalChangeBO()
+            {
+                _normalMapper.BusinessObject = _shape;
+                Assert.AreEqual("TestShapeName", _txtNormal.Text);
+                Shape shape2 = new Shape();
+                shape2.ShapeName = "Different";
+                _normalMapper.BusinessObject = shape2;
+                Assert.AreEqual("Different", _txtNormal.Text);
+                shape2.ShapeName = "Different2";
+                _normalMapper.UpdateControlValueFromBusinessObject();
+                Assert.AreEqual("Different2", _txtNormal.Text);
+            }
+            //TODO: All these have to follow pattern above
+            [Test]
+            public void TestReadOnlyChangeValue()
+            {
+                _readOnlyMapper.BusinessObject = _shape;
+                Assert.AreEqual("TestShapeName", _txtReadonly.Text);
+                _shape.ShapeName = "TestShapeName2";
+                _readOnlyMapper.UpdateControlValueFromBusinessObject();
+                Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
+            }
+            [Test]
+            public void TestReadOnlyChangeBO()
+            {
+                _readOnlyMapper.BusinessObject = _shape;
+                Assert.AreEqual("TestShapeName", _txtReadonly.Text);
+                Shape sh2 = new Shape();
+                sh2.ShapeName = "Different";
+                _readOnlyMapper.BusinessObject = sh2;
+                Assert.AreEqual("Different", _txtReadonly.Text);
+                sh2.ShapeName = "Different2";
+                _readOnlyMapper.UpdateControlValueFromBusinessObject();
+                Assert.AreEqual("Different2", _txtReadonly.Text);
+            }
         }
         ITextBox _txtNormal;
         ITextBox _txtReadonly;
@@ -115,11 +236,11 @@ namespace Habanero.Test.UI.Base
         public void Setup()
         {
             _txtReadonly = GetControlFactory().CreateTextBox();
-            _readOnlyMapper = new TextBoxMapper(_txtReadonly, "ShapeName", true);
+            _readOnlyMapper = new TextBoxMapper(_txtReadonly, "ShapeName", true, GetControlFactory());
             _txtReflectedProperty = GetControlFactory().CreateTextBox();
-            _reflectedPropertyMapper = new TextBoxMapper(_txtReflectedProperty, "-ShapeNameGetOnly-", false);
+            _reflectedPropertyMapper = new TextBoxMapper(_txtReflectedProperty, "-ShapeNameGetOnly-", false, GetControlFactory());
             _txtNormal = GetControlFactory().CreateTextBox();
-            _normalMapper = new TextBoxMapper(_txtNormal, "ShapeName", false);
+            _normalMapper = new TextBoxMapper(_txtNormal, "ShapeName", false, GetControlFactory());
             _shape = new Shape();
             _shape.ShapeName = "TestShapeName";
         }
@@ -205,7 +326,7 @@ namespace Habanero.Test.UI.Base
         public void TestReflectedWithSetEnablesControl()
         {
             ITextBox txtReflectedPropertyWithSet = GetControlFactory().CreateTextBox();
-            TextBoxMapper reflectedPropertyWithSetMapper = new TextBoxMapper(txtReflectedPropertyWithSet, "-ShapeName-", false);
+            TextBoxMapper reflectedPropertyWithSetMapper = new TextBoxMapper(txtReflectedPropertyWithSet, "-ShapeName-", false, GetControlFactory());
             Assert.IsFalse(txtReflectedPropertyWithSet.Enabled,
                            "A reflected property control should be disabled before it gets an object");
             reflectedPropertyWithSetMapper.BusinessObject = _shape;
@@ -256,5 +377,24 @@ namespace Habanero.Test.UI.Base
         }
 
         #endregion //Test Null BO
+    }
+
+    internal class ControlMapperStub:ControlMapper
+    {
+
+        public ControlMapperStub(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
+            : base(ctl, propName, isReadOnly, factory)
+        {
+        }
+
+        public override void ApplyChangesToBusinessObject()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void InternalUpdateControlValueFromBo()
+        {
+            this.Control.Text = (string) this.BusinessObject.GetPropertyValue(this.PropertyName);
+        }
     }
 }

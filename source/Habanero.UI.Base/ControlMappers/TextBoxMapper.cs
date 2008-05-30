@@ -40,8 +40,9 @@ namespace Habanero.UI.Base
         /// <param name="tb">The TextBox to map</param>
         /// <param name="propName">The property name</param>
 		/// <param name="isReadOnly">Whether this control is read only</param>
-        public TextBoxMapper(ITextBox tb, string propName, bool isReadOnly)
-			: base(tb, propName, isReadOnly)
+        /// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
+        public TextBoxMapper(ITextBox tb, string propName, bool isReadOnly, IControlFactory factory)
+            : base(tb, propName, isReadOnly, factory)
         {
             _textBox = tb;
             //_textBox.Enabled = false;
@@ -157,14 +158,9 @@ namespace Habanero.UI.Base
         /// Updates the interface when the value has been changed in the
         /// object being represented
         /// </summary>
-    	protected internal override void UpdateControlValueFromBo()
+    	protected  override void InternalUpdateControlValueFromBo()
         {
             _textBox.Text = Convert.ToString(GetPropertyValue());
-        }
-
-        public void ApplyChanges()
-        {
-            UpdateControlValueFromBo();
         }
 
         public override void ApplyChangesToBusinessObject()

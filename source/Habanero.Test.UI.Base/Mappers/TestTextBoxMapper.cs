@@ -47,7 +47,7 @@ namespace Habanero.Test.UI.Base
                 sh.ShapeName = "TestShapeName";
                 mapper.BusinessObject = sh;
                 sh.ShapeName = "TestShapeName2";
-                mapper.ApplyChanges();
+                mapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("TestShapeName2", tb.Text, "Text property of textbox is not working.");
             }
             [Test]
@@ -78,7 +78,7 @@ namespace Habanero.Test.UI.Base
         public void SetupTest()
         {
             tb = GetControlFactory().CreateTextBox();
-            mapper = new TextBoxMapper(tb, "ShapeName", false);
+            mapper = new TextBoxMapper(tb, "ShapeName", false, GetControlFactory());
             sh = new Shape();
         }
 
@@ -137,7 +137,7 @@ namespace Habanero.Test.UI.Base
         public void TestDisplayingRelatedProperty()
         {
             SetupClassDefs("MyValue");
-            mapper = new TextBoxMapper(tb, "MyRelationship.MyRelatedTestProp", true);
+            mapper = new TextBoxMapper(tb, "MyRelationship.MyRelatedTestProp", true, GetControlFactory());
             mapper.BusinessObject = itsMyBo;
             Assert.AreEqual("MyValue", tb.Text);
         }

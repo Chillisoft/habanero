@@ -1,12 +1,7 @@
-using System;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
-
-namespace Habanero.UI.Base
-{
-}
 
 namespace Habanero.Test.UI.Base.Mappers
 {
@@ -39,7 +34,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             INumericUpDown numUpDown = GetControlFactory().CreateNumericUpDownCurrency();
             //---------------Execute Test ----------------------
-            NumericUpDownCurrencyMapper mapper = new NumericUpDownCurrencyMapper(numUpDown, CURRENCY_PROP_NAME, false);
+            NumericUpDownCurrencyMapper mapper = new NumericUpDownCurrencyMapper(numUpDown, CURRENCY_PROP_NAME, false, GetControlFactory());
 
             //---------------Test Result -----------------------
             Assert.AreSame(numUpDown, mapper.Control);
@@ -56,7 +51,7 @@ namespace Habanero.Test.UI.Base.Mappers
         {
             //---------------Set up test pack-------------------
             INumericUpDown numUpDown = GetControlFactory().CreateNumericUpDownCurrency();
-            NumericUpDownCurrencyMapper mapper = new NumericUpDownCurrencyMapper(numUpDown, CURRENCY_PROP_NAME, false);
+            NumericUpDownCurrencyMapper mapper = new NumericUpDownCurrencyMapper(numUpDown, CURRENCY_PROP_NAME, false, GetControlFactory());
             Sample s = new Sample();
             decimal val = 100.5m;
             s.SampleMoney = val;
@@ -73,7 +68,7 @@ namespace Habanero.Test.UI.Base.Mappers
         {
             //---------------Set up test pack-------------------
             INumericUpDown numUpDown = GetControlFactory().CreateNumericUpDownCurrency();
-            NumericUpDownCurrencyMapper mapper = new NumericUpDownCurrencyMapper(numUpDown, CURRENCY_PROP_NAME, false);
+            NumericUpDownCurrencyMapper mapper = new NumericUpDownCurrencyMapper(numUpDown, CURRENCY_PROP_NAME, false, GetControlFactory());
             Sample s = new Sample();
             decimal val = 100.5m;
             s.SampleMoney = val;

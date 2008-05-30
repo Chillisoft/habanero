@@ -24,7 +24,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
     public abstract class TestWizardForm
     {
         protected abstract IControlFactory GetControlFactory();
@@ -38,7 +37,6 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        [TestFixture]
         public class TestWizardFormGiz : TestWizardForm
         {
             protected override IControlFactory GetControlFactory()

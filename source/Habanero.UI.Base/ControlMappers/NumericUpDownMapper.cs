@@ -14,17 +14,19 @@ namespace Habanero.UI.Base
         /// <param name="isReadOnly">Whether the control is read only.
         /// If so, it then becomes disabled.  If not,
         /// handlers are assigned to manage key presses.</param>
-        protected NumericUpDownMapper(IControlChilli ctl, string propName, bool isReadOnly) : base(ctl, propName, isReadOnly)
+        /// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
+        protected NumericUpDownMapper(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
+            : base(ctl, propName, isReadOnly, factory)
         {
             _numericUpDown = (INumericUpDown)ctl;
         }
-
+       
 
 
         /// <summary>
         /// Updates the value in the control from its business object.
         /// </summary>
-        protected internal override void UpdateControlValueFromBo()
+        protected override void InternalUpdateControlValueFromBo()
         {
             _numericUpDown.Value = Convert.ToDecimal(GetPropertyValue());
         }

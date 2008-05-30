@@ -1,6 +1,4 @@
 using System;
-using Habanero.Base;
-using Habanero.BO;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -34,7 +32,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
                 DateTime testDateChangedValue = new DateTime(2000, 1, 1);
                 sampleBusinessObject.SampleDate = testDateChangedValue;
-                dtpMapper.ApplyChanges();
+                dtpMapper.UpdateControlValueFromBusinessObject();
 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(sampleBusinessObject.SampleDate, dateTimePicker.Value);
@@ -120,7 +118,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Verify test pack-------------------
             //---------------Execute Test ----------------------
             string propertyName = "SampleDateProperty";
-            DateTimePickerMapper dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName, false);
+            DateTimePickerMapper dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName, false, GetControlFactory());
 
             //---------------Verify Result -----------------------
             Assert.AreEqual(dateTimePicker, dtpMapper.DateTimePicker);
@@ -160,7 +158,7 @@ namespace Habanero.Test.UI.Base.Mappers
         {
             IDateTimePicker dateTimePicker = GetControlFactory().CreateDateTimePicker();
             string propertyName = "SampleDate";
-            dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName, false);
+            dtpMapper = new DateTimePickerMapper(dateTimePicker, propertyName, false, GetControlFactory());
             return dateTimePicker;
         }
     }

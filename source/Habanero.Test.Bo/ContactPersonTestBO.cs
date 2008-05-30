@@ -77,7 +77,6 @@ namespace Habanero.Test.BO
 					<ui>
 						<grid>
 							<column heading=""Surname"" property=""Surname"" type=""DataGridViewTextBoxColumn"" />
-							<column heading=""FirstName"" property=""FirstName"" type=""DataGridViewComboBoxColumn"" />
 						</grid>
 						<form>
 							<tab name=""Tab1"">
@@ -92,6 +91,36 @@ namespace Habanero.Test.BO
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
+//            XmlClassLoader itsLoader = new XmlClassLoader();
+//            ClassDef itsClassDef =
+//                itsLoader.LoadClass(
+//                    @"
+//				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+//					<property  name=""ContactPersonID"" type=""Guid"" />
+//					<property  name=""Surname"" compulsory=""true"" />
+//                    <property  name=""FirstName"" />
+//					<property  name=""DateOfBirth"" type=""DateTime"" />
+//					<primaryKey>
+//						<prop name=""ContactPersonID"" />
+//					</primaryKey>
+//					<ui>
+//						<grid>
+//							<column heading=""Surname"" property=""Surname"" type=""DataGridViewTextBoxColumn"" />
+//							<column heading=""FirstName"" property=""FirstName"" type=""DataGridViewComboBoxColumn"" />
+//						</grid>
+//						<form>
+//							<tab name=""Tab1"">
+//								<columnLayout>
+//									<field label=""Surname"" property=""Surname"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+//									<field label=""First Name"" property=""FirstName"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+//								</columnLayout>
+//							</tab>
+//						</form>
+//					</ui>
+//			    </class>
+//			");
+//            ClassDef.ClassDefs.Add(itsClassDef);
+//            return itsClassDef;
         }
 
         

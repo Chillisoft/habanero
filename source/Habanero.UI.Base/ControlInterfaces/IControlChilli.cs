@@ -38,14 +38,17 @@ namespace Habanero.UI.Base
         [System.ComponentModel.DefaultValue(true)]
         bool Visible { get; set; }
 
+        /// <summary>
+        /// The order in which tabbing through the form will tab to this control
+        /// </summary>
         int TabIndex { get; set; }
+
         /// <summary>
         /// Gets/Sets the height position
         /// </summary>
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(
             System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-
         int Height { get; set; }
 
         /// <summary>

@@ -7,12 +7,13 @@ using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Grid
+namespace Habanero.Test.UI.Base
 {
     public abstract class TestReadonlyGridControl : TestUsingDatabase
     {
         //TODO: Move dataView Logic out of GridBase
         //TODO: Tests that if init not called throws sensible errors
+        //TODO: Date searchby
         [SetUp]
         public void SetupTest()
         {
@@ -218,7 +219,31 @@ namespace Habanero.Test.UI.Grid
             Assert.IsNotNull(contactPerson);
         }
 
-        //TODO: Date searchby
+        
+        [Test]
+        public void TestFixBug_SearchGridSearchesTheGrid_DoesNotCallFilterOnGridbase()
+        {
+            //FirstName is not in the grid def therefore if the grid calls the filter gridbase filter
+            // the dataview will try to filter with a column that does not exist this will raise an error
+            //---------------Set up test pack-------------------
+            //Clear all contact people from the DB
+            ContactPerson.DeleteAllContactPeople();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+            CreateContactPersonInDB();
+
+            //Create grid setup for search
+            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+            ITextBox txtboxFirstName = readOnlyGridControl.FilterControl.AddStringFilterTextBox("FirstName", "FirstName");
+            readOnlyGridControl.Initialise(classDef);
+            readOnlyGridControl.FilterMode = FilterModes.Search;       
+            //---------------Execute Test ----------------------
+            txtboxFirstName.Text = "FFF";
+            readOnlyGridControl.FilterControl.ApplyFilter();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(true);//No error was thrown by the grid.
+            //---------------Tear Down -------------------------          
+        }
+
         [Test]
         public void TestAcceptance_SearchGridSearchesTheGrid()
         {
@@ -332,24 +357,6 @@ namespace Habanero.Test.UI.Grid
             ////---------------Test Result -----------------------
             Assert.AreEqual(1, readOnlyGrid.Columns.Count);
         }
-
-        [Test, Ignore("Cant get this work not resizing here but doing it on the form.")]
-        public void Test_MakeButtons_Not_Visible()
-        {
-            //---------------Set up test pack-------------------
-            IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
-            IReadOnlyGrid readOnlyGrid = readOnlyGridControl.Grid;
-            int frmHeight = 100;
-            AddControlToForm(readOnlyGridControl, frmHeight);
-
-            //---------------Verify PreConditions --------------
-            Assert.AreEqual(67, readOnlyGrid.Height);
-            //---------------Execute Test ----------------------
-            readOnlyGridControl.Buttons.Visible = false;
-            //---------------Verify Resulst --------------------
-            Assert.AreEqual(95, readOnlyGrid.Height);
-        }
-
 
         //[Test]
         //public void TestInitGrid_DefaultUIDef()

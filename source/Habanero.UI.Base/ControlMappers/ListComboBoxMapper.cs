@@ -5,8 +5,8 @@ namespace Habanero.UI.Base
     public class ListComboBoxMapper : ControlMapper
     {
         private IComboBox _comboBox;
-        public ListComboBoxMapper(IControlChilli ctl, string propName, bool isReadOnly)
-            : base(ctl, propName, isReadOnly)
+        public ListComboBoxMapper(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
+            : base(ctl, propName, isReadOnly, factory)
         {
             _comboBox = (IComboBox)ctl;
         }
@@ -19,7 +19,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Updates the value in the control from its business object.
         /// </summary>
-        protected internal override void UpdateControlValueFromBo()
+        protected  override void InternalUpdateControlValueFromBo()
         {
             _comboBox.SelectedItem = GetPropertyValue();
         }

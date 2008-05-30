@@ -95,7 +95,7 @@ namespace Habanero.Test.UI.Base
         public void SetupTest()
         {
             _cb = GetControlFactory().CreateCheckBox();
-            _mapper = new CheckBoxMapper(_cb, "SampleBoolean", false);
+            _mapper = new CheckBoxMapper(_cb, "SampleBoolean", false, GetControlFactory());
             _sampleBusinessObject = new Sample();
         }
 
@@ -113,7 +113,7 @@ namespace Habanero.Test.UI.Base
         {
             SetupClassDefs(true);
             _cb = GetControlFactory().CreateCheckBox();
-            _mapper = new CheckBoxMapper(_cb, "MyRelationship.MyRelatedTestProp", true);
+            _mapper = new CheckBoxMapper(_cb, "MyRelationship.MyRelatedTestProp", true, GetControlFactory());
             _mapper.BusinessObject = itsMyBo;
             Assert.IsNotNull(_mapper.BusinessObject);
             Assert.AreEqual(true, _cb.Checked);

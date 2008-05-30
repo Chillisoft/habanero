@@ -34,14 +34,14 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IComboBox cbx = GetControlFactory().CreateComboBox();
             string propName = "SampleText";
-            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false);
+            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
             mapper.SetList("One|Two|Three|Four");
             Sample s = new Sample();
             s.SampleText = "Three";
             mapper.BusinessObject = s;
             //---------------Execute Test ----------------------
             s.SampleText = "Four";
-            mapper.ApplyChanges();
+            mapper.UpdateControlValueFromBusinessObject();
             //---------------Test Result -----------------------
             Assert.AreEqual("Four", cbx.SelectedItem, "Value is not set.");
             //---------------Tear Down -------------------------
@@ -53,7 +53,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IComboBox cbx = GetControlFactory().CreateComboBox();
             string propName = "SampleText";
-            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false);
+            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
             mapper.SetList("One|Two|Three|Four");
             Sample s = new Sample();
             s.SampleText = "Three";
@@ -78,7 +78,7 @@ namespace Habanero.Test.UI.Base
             IComboBox cbx = GetControlFactory().CreateComboBox();
             string propName = "propname";
             //---------------Execute Test ----------------------
-            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false);
+            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
 
             //---------------Test Result -----------------------
             Assert.AreSame(cbx, mapper.Control);
@@ -93,7 +93,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IComboBox cbx = GetControlFactory().CreateComboBox();
             string propName = "propname";
-            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false);
+            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
 
             //---------------Execute Test ----------------------
             mapper.SetList("One|Two|Three|Four");
@@ -110,7 +110,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IComboBox cbx = GetControlFactory().CreateComboBox();
             string propName = "SampleText";
-            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false);
+            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
             mapper.SetList("One|Two|Three|Four");
             Sample s = new Sample();
             s.SampleText = "Three";
@@ -128,7 +128,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IComboBox cbx = GetControlFactory().CreateComboBox();
             string propName = "SampleText";
-            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false);
+            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
             mapper.SetList("One|Two|Three|Four");
             Sample s = new Sample();
             s.SampleText = "Three";

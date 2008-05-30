@@ -86,7 +86,8 @@
     <Compile Include="Mappers\TestComboBoxCollectionController.cs" />
     <Compile Include="Mappers\TestDateTimePickerMapper.cs" />
     <Compile Include="Mappers\TestCheckBoxMapper.cs" />
-    <Compile Include="Mappers\TestControlMapper.cs" />
+    <Compile Include="Mappers\TestControlMapper.cs">
+    </Compile>
     <Compile Include="Controllers\TestListViewCollectionController.cs" />
     <Compile Include="Mappers\TestLookupComboBoxMapper.cs" />
     <Compile Include="Mappers\TestMapperBase.cs" />

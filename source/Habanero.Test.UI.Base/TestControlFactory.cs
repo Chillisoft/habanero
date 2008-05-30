@@ -420,5 +420,21 @@ namespace Habanero.Test.UI.Base
             //---------------Verify Result -----------------------
             //---------------Tear Down -------------------------   
         }
+
+        [Test]
+        public void TestCreateControlMapperStrategy()
+        {
+            //---------------Set up test pack-------------------
+            IControlMapperStrategy strategy = _factory.CreateControlMapperStrategy();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------          
+        }
     }
+
+
 }

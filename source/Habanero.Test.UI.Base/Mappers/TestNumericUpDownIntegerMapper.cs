@@ -34,7 +34,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             INumericUpDown numUpDown = GetControlFactory().CreateNumericUpDownInteger();
             //---------------Execute Test ----------------------
-            NumericUpDownIntegerMapper mapper = new NumericUpDownIntegerMapper(numUpDown, INT_PROP_NAME, false);
+            NumericUpDownIntegerMapper mapper = new NumericUpDownIntegerMapper(numUpDown, INT_PROP_NAME, false, GetControlFactory());
 
             //---------------Test Result -----------------------
             Assert.AreSame(numUpDown, mapper.Control);
@@ -51,7 +51,7 @@ namespace Habanero.Test.UI.Base.Mappers
         {
             //---------------Set up test pack-------------------
             INumericUpDown numUpDown = GetControlFactory().CreateNumericUpDownInteger();
-            NumericUpDownIntegerMapper mapper = new NumericUpDownIntegerMapper(numUpDown, INT_PROP_NAME, false);
+            NumericUpDownIntegerMapper mapper = new NumericUpDownIntegerMapper(numUpDown, INT_PROP_NAME, false, GetControlFactory());
             Sample s = new Sample();
             s.SampleInt = 100;
             //---------------Execute Test ----------------------
@@ -67,7 +67,7 @@ namespace Habanero.Test.UI.Base.Mappers
         {
             //---------------Set up test pack-------------------
             INumericUpDown numUpDown = GetControlFactory().CreateNumericUpDownInteger();
-            NumericUpDownIntegerMapper mapper = new NumericUpDownIntegerMapper(numUpDown, INT_PROP_NAME, false);
+            NumericUpDownIntegerMapper mapper = new NumericUpDownIntegerMapper(numUpDown, INT_PROP_NAME, false, GetControlFactory());
             Sample s = new Sample();
             s.SampleInt = 100;
             mapper.BusinessObject = s;

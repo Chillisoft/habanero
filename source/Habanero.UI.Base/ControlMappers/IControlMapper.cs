@@ -26,6 +26,6 @@ namespace Habanero.UI.Base
         /// </summary>
         BusinessObject BusinessObject { get; set; }
         void ApplyChangesToBusinessObject();
-        void ApplyChanges();
+        void UpdateControlValueFromBusinessObject();
     }
 }

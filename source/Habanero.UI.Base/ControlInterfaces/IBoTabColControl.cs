@@ -49,6 +49,7 @@ namespace Habanero.UI.Base
         /// </summary>
         IBusinessObject CurrentBusinessObject { get; set; }
 
+        //TODO: Document
         CollectionTabControlMapper CollectionTabControlMapper { get; }
     }
 }

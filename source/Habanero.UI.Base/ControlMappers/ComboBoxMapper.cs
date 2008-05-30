@@ -40,8 +40,9 @@ namespace Habanero.UI.Base
         /// <param name="comboBox">The ComboBox object to map</param>
         /// <param name="propName">The property name</param>
 		/// <param name="isReadOnly">Whether this control is read only</param>
-		public ComboBoxMapper(IComboBox comboBox, string propName, bool isReadOnly)
-            : base(comboBox, propName, isReadOnly)
+        /// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
+		public ComboBoxMapper(IComboBox comboBox, string propName, bool isReadOnly, IControlFactory factory)
+            : base(comboBox, propName, isReadOnly, factory)
         {
             _comboBox = comboBox;
             _rightClickEnabled = false;

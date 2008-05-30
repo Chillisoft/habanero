@@ -243,7 +243,7 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        [TestFixture]
+
         public class TestDateTimePickerControllerGiz : TestDateTimePickerController
         {
             protected override IControlFactory GetControlFactory()

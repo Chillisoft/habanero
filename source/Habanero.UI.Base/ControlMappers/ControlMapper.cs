@@ -25,10 +25,8 @@ using System.Reflection;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.UI.Base;
 using Habanero.Util;
 using Habanero.Util.File;
-using Habanero.WebGUI;
 using log4net;
 
 namespace Habanero.UI.Base
@@ -43,6 +41,7 @@ namespace Habanero.UI.Base
         protected IControlChilli _control;
         protected string _propertyName;
         protected readonly bool _isReadOnly;
+        private readonly IControlFactory _factory;
         protected bool _isEditable;
         protected BusinessObject _businessObject;
         protected Hashtable _attributes;
@@ -55,11 +54,15 @@ namespace Habanero.UI.Base
         /// <param name="isReadOnly">Whether the control is read only.
         /// If so, it then becomes disabled.  If not,
         /// handlers are assigned to manage key presses.</param>
-        protected ControlMapper(IControlChilli ctl, string propName, bool isReadOnly)
+        /// <param name="factory"></param>
+        protected ControlMapper(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
         {
+            if (ctl == null) throw new ArgumentNullException("ctl");
+            if (factory == null) throw new ArgumentNullException("factory");
             _control = ctl;
             _propertyName = propName;
             _isReadOnly = isReadOnly;
+            _factory = factory;
             //if (!_isReadOnly)
             //{
             //    _control.KeyUp += CtlKeyUpHandler;
@@ -91,7 +94,7 @@ namespace Habanero.UI.Base
         ///// <param name="e">Attached arguments regarding the event</param>
         //private void CtlKeyDownHandler(object sender, KeyEventArgs e)
         //{
-        //    if (e.KeyCode == Keys.Enter)
+        //    if (e.KeyCode == Keys.Enster)
         //    {
         //        e.Handled = true;
         //    }
@@ -210,29 +213,27 @@ namespace Habanero.UI.Base
                 _businessObject = value;
                 OnBusinessObjectChanged();
                 UpdateIsEditable();
-                UpdateControlValueFromBo();
-                //TODO PORT FOR WIN: AddCurrentBOPropHandlers();
+                UpdateControlValueFromBusinessObject();
+                AddCurrentBOPropHandlers();
             }
         }
 
         public abstract void ApplyChangesToBusinessObject();
 
-        public void ApplyChanges()
+        public virtual void UpdateControlValueFromBusinessObject()
         {
-            UpdateControlValueFromBo();
+            InternalUpdateControlValueFromBo();
         }
+
+        protected abstract void InternalUpdateControlValueFromBo();
 
         protected virtual void OnBusinessObjectChanged() { }
 
-        //private void AddCurrentBOPropHandlers()
-        //{
-        //    BOProp boProp = CurrentBOProp();
-        //    if (boProp != null)
-        //    {
-        //        //Add needed handlers
-        //        boProp.Updated += this.BOPropValueUpdatedHandler;
-        //    }
-        //}
+        private void AddCurrentBOPropHandlers()
+        {
+            IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
+            mapperStrategy.AddCurrentBOPropHandlers(this,CurrentBOProp());
+        }
 
         //private void RemoveCurrentBOPropHandlers()
         //{
@@ -244,7 +245,7 @@ namespace Habanero.UI.Base
         //    }
         //}
 
-        protected BOProp CurrentBOProp()
+        public BOProp CurrentBOProp()
         {
             if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
             {
@@ -322,23 +323,17 @@ namespace Habanero.UI.Base
         }
 
 
-        ///// <summary>
-        ///// Handler to carry out changes where the value of a business
-        ///// object property has changed
-        ///// </summary>
-        ///// <param name="sender">The object that notified of the event</param>
-        ///// <param name="e">Attached arguments regarding the event</param>
-        //private void BOPropValueUpdatedHandler(object sender, EventArgs e)
-        //{
-        //    UpdateControlValueFromBo();
-        //}
-
         /// <summary>
-        /// Updates the value in the control from its business object.
+        /// Handler to carry out changes where the value of a business
+        /// object property has changed
         /// </summary>
-        internal protected abstract void UpdateControlValueFromBo();
+        /// <param name="sender">The object that notified of the event</param>
+        /// <param name="e">Attached arguments regarding the event</param>
+        public void BOPropValueUpdatedHandler(object sender, EventArgs e)
+        {
+            UpdateControlValueFromBusinessObject();
+        }
 
-        //Brett Moved to interface protected internal abstract void ApplyChangesToBusinessObject();
 
         /// <summary>
         /// Creates a new control mapper of a specified type.  If no 'mapperType'

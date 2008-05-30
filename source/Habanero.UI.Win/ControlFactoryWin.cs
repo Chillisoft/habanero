@@ -287,6 +287,20 @@ namespace Habanero.UI.Win
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// returns a control mapper strategy for the management of how
+        /// business objects properties and their related controls update each other.
+        /// E.g. A windows strategy might be to update the control value whenever the property 
+        /// is updated.
+        /// An internet strategy might be to update the control value only when the business object
+        /// is loaded.
+        /// </summary>
+        /// <returns></returns>
+        public IControlMapperStrategy CreateControlMapperStrategy()
+        {
+            return new ControlMapperStrategyWin();
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();
@@ -445,5 +459,19 @@ namespace Habanero.UI.Win
         {
             return new ControlWin();
         }
+    }
+
+    public class ControlMapperStrategyWin : IControlMapperStrategy
+    {
+
+        public void AddCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp)
+        {
+            if (boProp != null)
+            {
+//                Add needed handlers
+                boProp.Updated += mapper.BOPropValueUpdatedHandler;
+            }
+        }
+
     }
 }

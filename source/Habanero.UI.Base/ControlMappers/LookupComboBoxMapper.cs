@@ -44,8 +44,9 @@ namespace Habanero.UI.Base
         /// <param name="cbx">The ComboBox to map</param>
         /// <param name="propName">The property name</param>
 		/// <param name="isReadOnly">Whether this control is read only</param>
-		public LookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly)
-            : base(cbx, propName, isReadOnly)
+		/// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
+		public LookupComboBoxMapper(IComboBox cbx, string propName, bool isReadOnly, IControlFactory factory)
+            : base(cbx, propName, isReadOnly, factory)
         {
             //_controlFactory = controlFactory;
             _comboBox = cbx;
@@ -70,7 +71,7 @@ namespace Habanero.UI.Base
         /// Updates the interface when the value has been changed in the
         /// object being represented
         /// </summary>
-        protected internal override void UpdateControlValueFromBo()
+        protected override void InternalUpdateControlValueFromBo()
         {
             if (_collection == null)
             {

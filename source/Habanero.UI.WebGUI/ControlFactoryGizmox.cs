@@ -461,6 +461,20 @@ namespace Habanero.UI.WebGUI
             return new BoTabColControlGiz(this);
         }
 
+        /// <summary>
+        /// returns a control mapper strategy for the management of how
+        /// business objects properties and their related controls update each other.
+        /// E.g. A windows strategy might be to update the control value whenever the property 
+        /// is updated.
+        /// An internet strategy might be to update the control value only when the business object
+        /// is loaded.
+        /// </summary>
+        /// <returns></returns>
+        public IControlMapperStrategy CreateControlMapperStrategy()
+        {
+            return new ControlMapperStrategyGiz();
+        }
+
         public ITabControl CreateTabControl()
         {
             return new TabControlGiz();
@@ -487,5 +501,13 @@ namespace Habanero.UI.WebGUI
         }
 
 
+    }
+
+    internal class ControlMapperStrategyGiz  : IControlMapperStrategy
+    {
+        public void AddCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp)
+        {
+
+        }
     }
 }

@@ -35,8 +35,9 @@ namespace Habanero.UI.Base
         /// <param name="cb">The CheckBox object to be mapped</param>
         /// <param name="propName">A name for the property</param>
         /// <param name="isReadOnly">Whether this control is read only</param>
-        public CheckBoxMapper(ICheckBox cb, string propName, bool isReadOnly) 
-			: base(cb, propName, isReadOnly)
+        /// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
+        public CheckBoxMapper(ICheckBox cb, string propName, bool isReadOnly, IControlFactory factory)
+            : base(cb, propName, isReadOnly, factory)
         {
             _checkBox = cb;
         }
@@ -45,7 +46,7 @@ namespace Habanero.UI.Base
         /// Updates the appearance of the object when the value of the
         /// property has changed internally
         /// </summary>
-        protected internal override void UpdateControlValueFromBo()
+        protected override void InternalUpdateControlValueFromBo()
         {
             object propValue = GetPropertyValue();
             bool newValue;
@@ -92,7 +93,7 @@ namespace Habanero.UI.Base
 
         public void ApplyChanges()
         {
-            UpdateControlValueFromBo();
+            InternalUpdateControlValueFromBo();
         }
     }
 }

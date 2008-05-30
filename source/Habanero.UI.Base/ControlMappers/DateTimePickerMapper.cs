@@ -7,12 +7,18 @@ namespace Habanero.UI.Base
     {
         private readonly IDateTimePicker _picker;
 
-
-        public DateTimePickerMapper(IDateTimePicker picker, string propertyName, bool isReadOnly)
-            : base(picker, propertyName, isReadOnly)
+        /// <summary>
+        /// Constructor to initialise a new instance of the class
+        /// </summary>
+        /// <param name="picker">The datepicker object to map</param>
+        /// <param name="propName">The property name</param>
+        /// <param name="isReadOnly">Whether this control is read only</param>
+        /// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
+        public DateTimePickerMapper(IDateTimePicker picker, string propName, bool isReadOnly, IControlFactory factory)
+            : base(picker, propName, isReadOnly, factory)
         {
             _picker = picker;
-            _propertyName = propertyName;
+            _propertyName = propName;
         }
 
         public IDateTimePicker DateTimePicker
@@ -36,7 +42,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Updates the value in the control from its business object.
         /// </summary>
-        protected internal override void UpdateControlValueFromBo()
+        protected  override void InternalUpdateControlValueFromBo()
         {
             //object propValue = GetPropertyValue();
             //if (propValue == null || propValue == DBNull.Value)

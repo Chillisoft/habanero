@@ -1,5 +1,4 @@
 using System;
-using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -60,17 +59,14 @@ namespace Habanero.UI.WebGUI
             if (FilterMode == FilterModes.Search)
             {
                 BusinessObjectCollection<BusinessObject> collection = new BusinessObjectCollection<BusinessObject>(this.ClassDef);
-                collection.Load(_filterControl.GetFilterClause().GetFilterClauseString("%","'"),"");
+                collection.Load(_filterControl.GetFilterClause().GetFilterClauseString("%", "'"), "");
                 SetBusinessObjectCollection(collection);
             }
-            this.Grid.ApplyFilter(_filterControl.GetFilterClause());
+            else
+            {
+                this.Grid.ApplyFilter(_filterControl.GetFilterClause());
+            }
         }
-
-//        private void InitialiseGrid()
-//        {
-//            
-//
-//        }
 
         private void InitialiseButtons()
         {

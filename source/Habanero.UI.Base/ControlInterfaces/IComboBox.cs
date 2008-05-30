@@ -3,16 +3,16 @@ using System.Data;
 
 namespace Habanero.UI.Base
 {
+    //TODO: Comments
     public interface IComboBox : IControlChilli
     {
         event EventHandler SelectedIndexChanged;
+
         IComboBoxObjectCollection Items { get; }
 
         int SelectedIndex { get; set; }
 
         object SelectedItem { get; set; }
-
-        int Height { get; set; }
 
         int DropDownWidth { get; set; }
 

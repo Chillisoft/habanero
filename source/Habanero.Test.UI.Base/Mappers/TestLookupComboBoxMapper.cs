@@ -26,7 +26,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Set up test pack-------------------
                 IComboBox cmbox = GetControlFactory().CreateComboBox();
                 string propName = "SampleLookupID";
-                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
                 Sample s = new Sample();
                 mapper.SetLookupList(Sample.LookupCollection);
                 s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
@@ -54,7 +54,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Set up test pack-------------------
                 IComboBox cmbox = GetControlFactory().CreateComboBox();
                 string propName = "SampleLookupID";
-                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
                 Sample s = new Sample();
                 mapper.SetLookupList(Sample.LookupCollection);
                 s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
@@ -62,7 +62,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Execute Test ----------------------
 
                 s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_2];
-                mapper.ApplyChanges();
+                mapper.UpdateControlValueFromBusinessObject();
                 
                 //---------------Test Result -----------------------
                 Assert.AreEqual(LOOKUP_ITEM_2, cmbox.SelectedItem, "Value is not set after changing bo prop");
@@ -76,7 +76,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Set up test pack-------------------
                 IComboBox cmbox = GetControlFactory().CreateComboBox();
                 string propName = "SampleLookupID";
-                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
                 Sample s = new Sample();
                 mapper.SetLookupList(Sample.LookupCollection);
                 s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
@@ -97,7 +97,7 @@ namespace Habanero.Test.UI.Base.Mappers
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             //---------------Execute Test ----------------------
             string propName = "SampleLookupID";
-            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
 
             //---------------Test Result -----------------------
             Assert.AreSame(cmbox, mapper.Control);
@@ -112,7 +112,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             string propName = "SampleLookupID";
-            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
             new Sample();
             //---------------Execute Test ----------------------
             mapper.SetLookupList(Sample.LookupCollection);
@@ -131,7 +131,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             string propName = "SampleLookupID";
-            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
             Sample s = new Sample();
             mapper.SetLookupList(Sample.LookupCollection);
             s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
@@ -150,7 +150,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             string propName = "SampleLookupID";
-            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
             Sample s = new Sample();
             mapper.SetLookupList(Sample.LookupCollection);
             s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
@@ -169,7 +169,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             string propName = "SampleLookup2ID";
-            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
       
             //---------------Execute Test ----------------------
 
@@ -190,7 +190,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             string propName = "SampleLookup2ID";
-            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
             
             Sample sample = new Sample();
             Sample sampleToSelect = (Sample) Sample.BOLookupCollection[LOOKUP_ITEM_2];
@@ -214,7 +214,7 @@ namespace Habanero.Test.UI.Base.Mappers
             //---------------Set up test pack-------------------
             IComboBox cmbox = GetControlFactory().CreateComboBox();
             string propName = "SampleLookup3ID";
-            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false);
+            LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
             Sample sample = new Sample();
             object sampleToSelect = Sample.BOLookupCollection[LOOKUP_ITEM_2];
             sample.SetPropertyValue(propName, sampleToSelect);
