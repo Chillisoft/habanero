@@ -17,7 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-
+#pragma warning disable DoNotCallOverridableMethodsInConstructor
 #pragma warning disable RedundantThisQualifier
 using System;
 using System.Collections;
@@ -181,9 +181,8 @@ namespace Habanero.BO
             State.IsDeleted = false;
             State.IsDirty = false;
             State.IsEditing = false;
-#pragma warning disable DoNotCallOverridableMethodsInConstructor
+
             ConstructFromClassDef(false);
-#pragma warning restore DoNotCallOverridableMethodsInConstructor
             if (!BOLoader.Instance.Load(this, searchExpression))
             {
                 //If the item is not found then throw the appropriate exception
