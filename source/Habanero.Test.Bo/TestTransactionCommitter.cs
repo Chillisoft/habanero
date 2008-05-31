@@ -753,11 +753,11 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestAddBusinessObjectToTransactionInBeforeSave()
+        public void TestAddBusinessObjectToTransactionInUpdateBeforePersisting()
         {
             //---------------Set up test pack-------------------
 
-            MockBOWithBeforeSave mockBo = new MockBOWithBeforeSave();
+            MockBOWithUpdateBeforePersisting mockBo = new MockBOWithUpdateBeforePersisting();
             TransactionCommitterStub committer = new TransactionCommitterStub();
             TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
             committer.AddTransaction(trnBusObj);
@@ -768,9 +768,42 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(2, committer.OriginalTransactions.Count);
         }
+        [Test]
+        public void TestAddBusinessObjectToTransactionInUpdateBeforePersisting_2LevelsDeep()
+        {
+            //---------------Set up test pack-------------------
+
+            MockBOWithUpdateBeforePersisting_Level2 mockBo = new MockBOWithUpdateBeforePersisting_Level2();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            committer.AddTransaction(trnBusObj);
+            //---------------Execute Test ----------------------
+
+                committer.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, committer.OriginalTransactions.Count);
+        }
+        [Test]
+        public void TestAddBusinessObjectToTransaction_NotUpdateBeforePersisting_2LevelsDeep()
+        {
+            //---------------Set up test pack-------------------
+
+            MockBOWithUpdateBeforePersisting_Level2 mockBo = new MockBOWithUpdateBeforePersisting_Level2();
+            TransactionCommitterStub committer = new TransactionCommitterStub();
+            TransactionalBusinessObjectStub trnBusObj = new TransactionalBusinessObjectStub(mockBo);
+            //---------------Execute Test ----------------------
+
+            committer.AddTransaction(trnBusObj);
+            
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, committer.OriginalTransactions.Count, 
+                    "There should only be the recently added business object not any of its object that are added in update before persist");
+        }
 
         [Test]
-        public void TestBeforeSave_ExecutedBeforeValidation()
+        public void TestUpdateBeforePersisting_ExecutedBeforeValidation()
         {
             //---------------Set up test pack-------------------
 
@@ -935,7 +968,7 @@ namespace Habanero.Test.BO
             /// </summary>
             /// <param name="customRuleErrors">The error string to display</param>
             /// <returns>true if no custom rule errors are encountered.</returns>
-            protected override bool CheckCustomRules(out string customRuleErrors)
+            protected override bool AreCustomRulesValid(out string customRuleErrors)
             {
                 customRuleErrors = _customRuleErrorMessage;
                 return false;
@@ -990,7 +1023,7 @@ namespace Habanero.Test.BO
         /// </summary>
         /// <param name="customRuleErrors">The error string to display</param>
         /// <returns>true if no custom rule errors are encountered.</returns>
-        protected override bool CheckCustomRules(out string customRuleErrors)
+        protected override bool AreCustomRulesValid(out string customRuleErrors)
         {
             customRuleErrors = "";
             if (!_updateBeforePersistingExecuted)
@@ -1014,7 +1047,7 @@ namespace Habanero.Test.BO
         }
     }
 
-    internal class MockBOWithBeforeSave : MockBO
+    internal class MockBOWithUpdateBeforePersisting : MockBO
     {
         /// <summary>
         /// Steps to carry out before the Save() command is run. You can add objects to the current
@@ -1026,6 +1059,20 @@ namespace Habanero.Test.BO
         protected internal override void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
         {
             transactionCommitter.AddTransaction(new StubSuccessfullTransaction());
+        }
+    }
+    internal class MockBOWithUpdateBeforePersisting_Level2 : MockBO
+    {
+        /// <summary>
+        /// Steps to carry out before the Save() command is run. You can add objects to the current
+        /// transaction using this method, such as a database number generator.  No validity checks are 
+        /// made to the BusinessObject after this step, so be careful not to invalidate the object.
+        /// </summary>
+        /// <param name="transactionCommitter">The current transaction committer - any objects added to this will
+        /// be committed in the same transaction as this one.</param>
+        protected internal override void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
+        {
+            transactionCommitter.AddBusinessObject(new MockBOWithUpdateBeforePersisting());
         }
     }
 

@@ -41,6 +41,7 @@ namespace Habanero.UI.Base
         private string _panelTabTest;
         private UIForm _uiForm;
         private UIFormTab _uiFormTab;
+        private string _uiDefName;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -48,18 +49,19 @@ namespace Habanero.UI.Base
         /// <param name="panel">The panel object being managed</param>
         /// <param name="mappers">The control mappers collection</param>
         /// <param name="firstControlToFocus">The first control to focus on</param>
-        public PanelFactoryInfo(IPanel panel, IControlMapperCollection mappers, IControlChilli firstControlToFocus)
+        public PanelFactoryInfo(IPanel panel, IControlMapperCollection mappers, string uiDefName, IControlChilli firstControlToFocus)
         {
             _panel = panel;
             _mappers = mappers;
             _firstControlToFocus = firstControlToFocus;
+            _uiDefName = uiDefName;
         }
 
         /// <summary>
         /// A constructor as before, but with only the panel specified
         /// </summary>
         public PanelFactoryInfo(IPanel panel)
-            : this(panel, new ControlMapperCollection(), null)
+            : this(panel, new ControlMapperCollection(), null, null)
         {
         }
 
@@ -139,6 +141,11 @@ namespace Habanero.UI.Base
         {
             get { return _uiFormTab; }
             set { _uiFormTab = value; }
+        }
+
+        public string UIDefName
+        {
+            get { return _uiDefName; }
         }
     }
 }

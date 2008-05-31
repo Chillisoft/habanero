@@ -247,8 +247,14 @@ namespace Habanero.UI.WebGUI
                 if (controlType == typeof (TextBox)) return CreateTextBox();
                 if (controlType == typeof (ListBox)) return CreateListBox();
                 if (controlType == typeof (DateTimePicker)) return CreateDateTimePicker();
-
-                ctl = (IControlChilli) Activator.CreateInstance(controlType);
+                try
+                {
+                    ctl = (IControlChilli) Activator.CreateInstance(controlType);
+                } catch (MissingMethodException )
+                {
+                    ctl = (IControlChilli) Activator.CreateInstance(controlType, new object[] {this});
+                    
+                }
                 PropertyInfo infoFlatStyle =
                     ctl.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
                 if (infoFlatStyle != null)

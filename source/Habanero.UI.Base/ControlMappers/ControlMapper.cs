@@ -81,7 +81,7 @@ namespace Habanero.UI.Base
         ///// <param name="e">Attached arguments regarding the event</param>
         //private void CtlKeyPressHandler(object sender, KeyPressEventArgs e)
         //{
-        //    if (e.KeyChar == 0x013)
+        //    if (e.KeyChar == 0x013)//Should be a Keys.Enter
         //    {
         //        e.Handled = true;
         //    }
@@ -94,7 +94,7 @@ namespace Habanero.UI.Base
         ///// <param name="e">Attached arguments regarding the event</param>
         //private void CtlKeyDownHandler(object sender, KeyEventArgs e)
         //{
-        //    if (e.KeyCode == Keys.Enster)
+        //    if (e.KeyCode == Keys.Enter)
         //    {
         //        e.Handled = true;
         //    }

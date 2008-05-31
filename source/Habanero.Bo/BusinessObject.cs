@@ -849,7 +849,7 @@ namespace Habanero.BO
 
             string customRuleErrors;
             bool valid = Props.IsValid(out invalidReason);
-            valid &= CheckCustomRules(out customRuleErrors);
+            valid &= AreCustomRulesValid(out customRuleErrors);
             if (!String.IsNullOrEmpty(customRuleErrors))
             {
                 invalidReason = customRuleErrors + Environment.NewLine + invalidReason;
@@ -1041,14 +1041,6 @@ namespace Habanero.BO
             }
         }
 
-        //TODO: put this back with a test if required
-        ///// <summary>
-        ///// Steps to carry out after the Save() command is run
-        ///// </summary>
-        //protected virtual void AfterSave()
-        //{
-        //}
-
         private void RemoveFromAllLoaded()
         {
             if (_primaryKey != null) AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
@@ -1068,8 +1060,6 @@ namespace Habanero.BO
             FireUpdatedEvent();
             FireRestoredEvent();
         }
-
-
 
         /// <summary>
         /// Marks the business object for deleting.  Calling Save() will
@@ -1131,7 +1121,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="customRuleErrors">The error string to display</param>
         /// <returns>true if no custom rule errors are encountered.</returns>
-        protected virtual bool CheckCustomRules(out string customRuleErrors)
+        protected virtual bool AreCustomRulesValid(out string customRuleErrors)
         {
             customRuleErrors = "";
             return true;

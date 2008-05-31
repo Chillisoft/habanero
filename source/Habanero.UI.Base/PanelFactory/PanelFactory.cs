@@ -38,6 +38,7 @@ namespace Habanero.UI.Base
         private readonly UIForm _uiForm;
         private IControlChilli _firstControl;
         private readonly IControlFactory _controlFactory;
+        private string _uiDefName;
         //TODO Port:        private EventHandler _emailTextBoxDoubleClickedHandler;
 
         /// <summary>
@@ -70,6 +71,7 @@ namespace Habanero.UI.Base
         /// </summary>
         public PanelFactory(BusinessObject bo, string uiDefName, IControlFactory controlFactory)
         {
+            _uiDefName = uiDefName;
             _controlFactory = controlFactory;
             BOMapper mapper = new BOMapper(bo);
 
@@ -122,7 +124,7 @@ namespace Habanero.UI.Base
                     manager.AddControl(onePanelInfo.Panel, BorderLayoutManager.Position.Centre);
                     tabControl.TabPages.Add(page);
                 }
-                factoryInfo = new PanelFactoryInfo(mainPanel, controlMappers, _firstControl);
+                factoryInfo = new PanelFactoryInfo(mainPanel, controlMappers, _uiDefName, _firstControl);
             }
             else
             {
@@ -390,7 +392,7 @@ namespace Habanero.UI.Base
 
             panel.Height = manager.GetFixedHeightIncludingGaps();
             panel.Width = manager.GetFixedWidthIncludingGaps();
-            IPanelFactoryInfo panelFactoryInfo = new PanelFactoryInfo(panel, controlMappers, _firstControl);
+            IPanelFactoryInfo panelFactoryInfo = new PanelFactoryInfo(panel, controlMappers, _uiDefName, _firstControl);
             panelFactoryInfo.MinimumPanelHeight = panel.Height;
             panelFactoryInfo.MinumumPanelWidth = panel.Width;
             panelFactoryInfo.ToolTip = toolTip;

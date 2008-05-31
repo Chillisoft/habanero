@@ -114,7 +114,6 @@ namespace Habanero.Test.UI.Base
             {
                 StringAssert.Contains("Cannot create a panel factory for 'MyBO' since the classdefs do not contain a form def", ex.Message);
             }
-    
         }
         [Test]
         public void TestSetPanelFactoryTo_Bo_setFormDefNull_Error()
@@ -356,6 +355,20 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(tb.Multiline, "Textbox should be multiline if NumLines > 1");
             ITextBox myTb =  GetControlFactory().CreateTextBox();
             Assert.AreEqual(myTb.Height*3, tb.Height);
+        }
+
+        [Test]
+        public void TestUIDefName()
+        {
+            //---------------Set up test pack-------------------
+            Sample s = new Sample();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            IPanelFactoryInfo panelFactoryInfo = new PanelFactory(s, GetControlFactory()).CreatePanel();
+            //---------------Test Result -----------------------
+            Assert.AreEqual("default", panelFactoryInfo.UIDefName);
+            //---------------Tear Down -------------------------          
         }
 
         [Test, Ignore("Row spanning seems a little dodge")]

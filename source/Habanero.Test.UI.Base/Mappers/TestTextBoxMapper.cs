@@ -78,7 +78,7 @@ namespace Habanero.Test.UI.Base
         public void SetupTest()
         {
             tb = GetControlFactory().CreateTextBox();
-            mapper = new TextBoxMapper(tb, "ShapeName", false, GetControlFactory());
+            mapper = new TextBoxMapper(tb,  "ShapeName", false, GetControlFactory());
             sh = new Shape();
         }
 

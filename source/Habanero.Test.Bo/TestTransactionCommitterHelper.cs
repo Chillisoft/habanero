@@ -303,6 +303,13 @@ namespace Habanero.Test.BO
         protected override void TryRollback()
         {
         }
+
+        protected override TransactionalBusinessObject CreateTransactionalBusinessObject(BusinessObject businessObject)
+        {
+            
+                return new TransactionalBusinessObject(businessObject);
+            
+        }
     }
 
 }

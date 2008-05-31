@@ -40,5 +40,7 @@ namespace Habanero.UI.Base
         UIForm UIForm { get; set; }
 
         UIFormTab UiFormTab { get; set; }
+
+        string UIDefName { get; }
     }
 }
