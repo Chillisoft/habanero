@@ -1,3 +1,4 @@
+using System;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
@@ -129,6 +130,74 @@ namespace Habanero.Test.UI.Base.Grid
             Assert.AreEqual(classDef, grid.ClassDef);
             Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
                             "There should be 1 ID column and 1 defined column in the alternateUIDef");
+            //---------------Tear Down -------------------------          
+        }
+
+
+        //Note: this can be changed to allow the grid to reinitialise everything if initialise called a second time.
+        // this may be necessary e.g. to use the same grid but swap out uidefs etc.
+        public void TestInitGrid_Twice_Fail()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            GridInitialiser initialiser = new GridInitialiser(grid);
+            ClassDef classDef = LoadMyBoDefaultClassDef();
+            //---------------Assert Preconditions---------------
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+            try
+            {
+                initialiser.InitialiseGrid(classDef);
+                Assert.Fail("You should not be able to call initialise twice on a grid");
+            }
+            //---------------Test Result -----------------------
+            catch (GridBaseSetUpException ex)
+            {
+                StringAssert.Contains("You cannot initialise the grid more than once", ex.Message);
+            }
+        }
+
+        [Test]
+        public void TestInitGrid_WithInvalidUIDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            GridInitialiser initialiser = new GridInitialiser(grid);
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                initialiser.InitialiseGrid(classDef, "NonExistantUIDef");
+                Assert.Fail("Should raise an error if the class def does not have the UIDef");
+                //---------------Test Result -----------------------
+            }
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains(" does not contain a definition for UIDef ", ex.Message);
+            }
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestInitGrid_With_NoGridDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            GridInitialiser initialiser = new GridInitialiser(grid);
+            //---------------Execute Test ----------------------
+            try
+            {
+                initialiser.InitialiseGrid(classDef, "AlternateNoGrid");
+                Assert.Fail("Should raise an error if the class def does not the GridDef");
+                //---------------Test Result -----------------------
+            }
+            catch (ArgumentException ex)
+            {
+                StringAssert.Contains(
+                    " does not contain a grid definition for UIDef AlternateNoGrid for the class def ", ex.Message);
+            }
             //---------------Tear Down -------------------------          
         }
 

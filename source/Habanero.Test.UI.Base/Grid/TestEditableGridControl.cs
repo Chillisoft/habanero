@@ -136,24 +136,9 @@ namespace Habanero.Test.UI.Base.Grid
             //---------------Execute Test ----------------------
             grid.Initialise(def);
             //---------------Test Result -----------------------
-            Assert.AreEqual(2, grid.Grid.Columns.Count);
+            Assert.AreEqual(3, grid.Grid.Columns.Count);
             //---------------Tear Down -------------------------
         }
 
-        [Test]
-        public void TestInitialiseWithAlternateUIDef()
-        {
-            //---------------Set up test pack-------------------
-            IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
-            MyBO.LoadDefaultClassDef();
-            
-            ClassDef def = ClassDef.ClassDefs[typeof(MyBO)];
-            //---------------Execute Test ----------------------
-            grid.Initialise(def, "Alternate");
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, grid.Grid.Columns.Count);
-            
-            //---------------Tear Down -------------------------
-        }
     }
 }

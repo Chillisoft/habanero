@@ -350,7 +350,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             //MyBO.LoadDefaultClassDef();
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
-            IReadOnlyGrid readOnlyGrid = readOnlyGridControl.Grid;
+            IReadOnlyGrid readOnlyGrid = (IReadOnlyGrid) readOnlyGridControl.Grid;
 
             //---------------Execute Test ----------------------
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
@@ -473,47 +473,6 @@ namespace Habanero.Test.UI.Base
                             "There should be 1 ID column and 2 defined columns in the defaultDef");
         }
 
-        [Test]
-        public void TestInitGrid_WithInvalidUIDef()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
-            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-
-            //---------------Execute Test ----------------------
-            try
-            {
-                grid.Initialise(classDef, "NonExistantUIDef");
-                Assert.Fail("Should raise an error if the class def does not the UIDef");
-                //---------------Test Result -----------------------
-            }
-            catch (ArgumentException ex)
-            {
-                StringAssert.Contains(" does not contain a definition for UIDef ", ex.Message);
-            }
-            //---------------Tear Down -------------------------          
-        }
-
-        [Test]
-        public void TestInitGrid_With_NoGridDef()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef classDef = LoadMyBoDefaultClassDef();
-            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            //---------------Execute Test ----------------------
-            try
-            {
-                grid.Initialise(classDef, "AlternateNoGrid");
-                Assert.Fail("Should raise an error if the class def does not the GridDef");
-                //---------------Test Result -----------------------
-            }
-            catch (ArgumentException ex)
-            {
-                StringAssert.Contains(
-                    " does not contain a grid definition for UIDef AlternateNoGrid for the class def ", ex.Message);
-            }
-            //---------------Tear Down -------------------------          
-        }
 
         [Test]
         public void Test_AddInvalidColumn()
@@ -630,7 +589,7 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
 
             AddControlToForm(readOnlyGridControl);
-            IReadOnlyGrid readOnlyGrid = readOnlyGridControl.Grid;
+            IReadOnlyGrid readOnlyGrid = (IReadOnlyGrid) readOnlyGridControl.Grid;
 
             readOnlyGrid.Columns.Add("TestProp", "TestProp");
             //---------------Execute Test ----------------------
@@ -1233,7 +1192,7 @@ namespace Habanero.Test.UI.Base
             return readOnlyGridControl;
         }
 
-        private static void SetupGridColumnsForMyBo(IReadOnlyGrid gridBase)
+        private static void SetupGridColumnsForMyBo(IGridBase gridBase)
         {
             gridBase.Columns.Add("TestProp", "TestProp");
         }

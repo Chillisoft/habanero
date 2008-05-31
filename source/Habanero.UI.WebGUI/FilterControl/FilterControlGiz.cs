@@ -164,9 +164,12 @@ namespace Habanero.UI.WebGUI
             if (_filterMode == FilterModes.Filter)
             {
                 _filterButton.Text = "Filter";
+                _gbox.Text = "Filter the Grid";
+
             } else
             {
                 _filterButton.Text = "Search";
+                _gbox.Text = "Search the Grid";
             }
         }
         }

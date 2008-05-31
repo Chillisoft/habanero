@@ -28,20 +28,8 @@ namespace Habanero.UI.Base
     /// You can assign a non-default object editor or creator for the buttons,
     /// using *.Buttons.BusinessObjectEditor and *.Buttons.BusinessObjectCreator.
     /// </summary>
-    public interface IReadOnlyGridControl : IControlChilli
+    public interface IReadOnlyGridControl : IGridControl 
     {
-        /// <summary>
-        /// initiliase the grid to the with the 'default' UIdef.
-        /// </summary>
-        void Initialise(ClassDef classDef);
-
-        /// <summary>
-        /// Returns the grid object held. This property can be used to
-        /// access a range of functionality for the grid
-        /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
-        /// </summary>    
-        IReadOnlyGrid Grid { get; }
-
         BusinessObject SelectedBusinessObject { get; set; }
 
         /// <summary>
@@ -56,10 +44,6 @@ namespace Habanero.UI.Base
         IBusinessObjectCreator BusinessObjectCreator { get; set; }
 
         IBusinessObjectDeletor BusinessObjectDeletor { get; set; }
-
-        string UiDefName { get; set; }
-
-        ClassDef ClassDef { get; set; }
 
         IFilterControl FilterControl { get; }
 
@@ -77,6 +61,5 @@ namespace Habanero.UI.Base
         /// to be shown in the grid</param>
         void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
 
-        void Initialise(ClassDef def, string uiDefName);
     }
 }

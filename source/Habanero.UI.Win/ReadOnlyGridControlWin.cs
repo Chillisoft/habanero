@@ -38,7 +38,7 @@ namespace Habanero.UI.Win
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
         }
 
-        public IReadOnlyGrid Grid
+        public IGridBase Grid
         {
             get { return _grid; }
         }

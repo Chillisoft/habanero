@@ -5,9 +5,10 @@ namespace Habanero.UI.Base
 {
     public class GridInitialiser
     {
-        private readonly IReadOnlyGridControl _gridControl;
+        private readonly IGridControl _gridControl;
+        private bool _isInitialised = false;
 
-        public GridInitialiser(IReadOnlyGridControl gridControl)
+        public GridInitialiser(IGridControl gridControl)
         {
             _gridControl = gridControl;
         }
@@ -19,10 +20,14 @@ namespace Habanero.UI.Base
 
         public void InitialiseGrid(ClassDef classDef, string uiDefName)
         {
+            if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
+
             UIGrid gridDef = GetGridDef(classDef, uiDefName);
             SetUpGridColumns(classDef, gridDef);
             _gridControl.UiDefName = uiDefName;
             _gridControl.ClassDef = classDef;
+
+            _isInitialised = true;
            
         }
 

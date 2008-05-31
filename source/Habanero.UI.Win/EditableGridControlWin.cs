@@ -17,7 +17,7 @@ namespace Habanero.UI.Win
             _grid = _controlFactory.CreateEditableGrid();
         }
 
-        public IEditableGrid Grid
+        public IGridBase Grid
         {
             get { return _grid; }
         }
@@ -36,6 +36,19 @@ namespace Habanero.UI.Win
         public void Initialise(ClassDef classDef, string uiDefName)
         {
             _editableGridManager.Initialise(classDef, uiDefName);
+        }
+
+
+        public string UiDefName
+        {
+            get { return _editableGridManager.UiDefName; }
+            set { _editableGridManager.UiDefName = value; }
+        }
+
+        public ClassDef ClassDef
+        {
+            get { return _editableGridManager.ClassDef; }
+            set { _editableGridManager.ClassDef = value; }
         }
     }
 }

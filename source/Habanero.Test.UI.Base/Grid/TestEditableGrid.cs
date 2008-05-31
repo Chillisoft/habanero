@@ -175,6 +175,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(typeof(IDataGridViewTextBoxColumn), grid.Columns[0].GetType());
             //---------------Tear Down -------------------------          
         }
+
         private static BusinessObjectCollection<BusinessObject> GetCol_BO_2Items(ClassDef classDef)
         {
             BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);

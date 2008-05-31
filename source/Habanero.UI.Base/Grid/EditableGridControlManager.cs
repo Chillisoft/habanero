@@ -8,44 +8,37 @@ namespace Habanero.UI.Base.Grid
     public class EditableGridControlManager
     {
         private readonly IEditableGridControl _gridControl;
+        private string _uiDefName;
+        private ClassDef _classDef;
+        private GridInitialiser _gridInitialiser;
+
 
         public EditableGridControlManager(IEditableGridControl gridControl)
         {
             _gridControl = gridControl;
+            _gridInitialiser = new GridInitialiser(gridControl);
         }
 
-        public void SetUpGridColumns(UIGrid gridDef)
+        public string UiDefName
         {
-            foreach (UIGridColumn gridColDef in gridDef)
-            {
-                int colIndex = _gridControl.Grid.Columns.Add(gridColDef.PropertyName, gridColDef.GetHeading());
+            get { return _uiDefName; }
+            set { _uiDefName = value; }
+        }
 
-                //IDataGridViewColumn col = CreateColumn(gridColDef.PropertyName, gridColDef.GetHeading());
-                //col.ReadOnly = true;
-                //col.HeaderText = gridColDef.GetHeading();
-                //col.Name = gridColDef.PropertyName;
-                //col.DataPropertyName = gridColDef.PropertyName;
-                //col.Visible = true;
-                //col.Width = gridColDef.Width;
-                //((DataGridViewColumn)col).SortMode = DataGridViewColumnSortMode.Automatic;
-                //PropDef propDef = GetPropDef(gridColDef);
-                //if (propDef != null) col.ValueType = propDef.PropertyType;
-                ////this._grid.Columns.Add(col);
-
-            }
+        public ClassDef ClassDef
+        {
+            get { return _classDef; }
+            set { _classDef = value; }
         }
 
         public void Initialise(ClassDef classDef)
         {
-            UIGrid uiGrid = classDef.UIDefCol["default"].UIGrid;
-            SetUpGridColumns(uiGrid);
+            _gridInitialiser.InitialiseGrid(classDef);
         }
 
-        public void Initialise(ClassDef classDef, string name)
+        public void Initialise(ClassDef classDef, string uiDefName)
         {
-            UIGrid uiGrid = classDef.UIDefCol[name].UIGrid;
-            SetUpGridColumns(uiGrid);
-            
+            _gridInitialiser.InitialiseGrid(classDef, uiDefName);
         }
     }
 }

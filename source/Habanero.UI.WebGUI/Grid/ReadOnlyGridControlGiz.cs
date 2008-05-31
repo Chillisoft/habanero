@@ -83,13 +83,14 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public void Initialise(ClassDef classDef)
         {
+            
             _gridInitialiser.InitialiseGrid(classDef);
+            _isInitialised = true;
            
         }
 
         public void Initialise(ClassDef classDef, string uiDefName)
         {
-            if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
             if (classDef == null) throw new ArgumentNullException("classDef");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
 
@@ -98,8 +99,8 @@ namespace Habanero.UI.WebGUI
             _uiDefName = uiDefName;
 
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
-
             _isInitialised = true;
+
         }
 
         
@@ -173,7 +174,7 @@ namespace Habanero.UI.WebGUI
         /// access a range of functionality for the grid
         /// (eg. myGridWithButtons.Grid.AddBusinessObject(...)).
         /// </summary>
-        public IReadOnlyGrid Grid
+        public IGridBase Grid
         {
             get { return _grid; }
         }
