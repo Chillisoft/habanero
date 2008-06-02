@@ -296,6 +296,37 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
         [Test]
+        public void TestGetTextBoxFilterClause_EqualsWinForms()
+        {
+            TestGetTextBoxFilterClause_Equals(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestGetTextBoxFilterClause_EqualsGiz()
+        {
+            TestGetTextBoxFilterClause_Equals(new ControlFactoryGizmox());
+        }
+
+        public void TestGetTextBoxFilterClause_Equals(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+            IFilterClauseFactory itsFilterClauseFactory = new DataViewFilterClauseFactory();
+            IFilterControl filterControl = factory.CreateFilterControl();
+            ITextBox tb = filterControl.AddStringFilterTextBox("Test:", "TestColumn", FilterClauseOperator.OpEquals);
+
+            //---------------Execute Test ----------------------
+            tb.Text = "testvalue";
+            string filterClauseString = filterControl.GetFilterClause().GetFilterClauseString();
+
+            //---------------Test Result -----------------------
+            IFilterClause clause =
+                itsFilterClauseFactory.CreateStringFilterClause("TestColumn", FilterClauseOperator.OpEquals, "testvalue");
+            Assert.AreEqual(clause.GetFilterClauseString(), filterClauseString);
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void TestTwoStringTextBoxFilterWinForms()
         {
             TestTwoStringTextBoxFilter(new ControlFactoryWin());

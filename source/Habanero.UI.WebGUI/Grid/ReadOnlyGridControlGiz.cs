@@ -18,8 +18,8 @@ namespace Habanero.UI.WebGUI
         private string _uiDefName = "";
         private ClassDef _classDef;
         private readonly IFilterControl _filterControl;
-        private bool _isInitialised = false;
-        private readonly GridInitialiser _gridInitialiser;
+//        private bool _isInitialised = false;
+        private readonly IGridInitialiser _gridInitialiser;
 
         //private IBusinessObjectCollection _collection;
 
@@ -35,7 +35,6 @@ namespace Habanero.UI.WebGUI
             _grid = new ReadOnlyGridGiz();
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();
             _gridInitialiser = new GridInitialiser(this);
-            //InitialiseGrid();
             InitialiseButtons();
             InitialiseFilterControl();
 
@@ -85,7 +84,6 @@ namespace Habanero.UI.WebGUI
         {
             
             _gridInitialiser.InitialiseGrid(classDef);
-            _isInitialised = true;
            
         }
 
@@ -99,7 +97,6 @@ namespace Habanero.UI.WebGUI
             _uiDefName = uiDefName;
 
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
-            _isInitialised = true;
 
         }
 
@@ -164,7 +161,7 @@ namespace Habanero.UI.WebGUI
             if (_businessObjectEditor != null && newBo != null)
             {
                 _businessObjectEditor.EditObject(newBo, _uiDefName, delegate(IBusinessObject bo) 
-                    { this.Grid.SelectedBusinessObject= (BusinessObject) bo; });
+                    { this.Grid.SelectedBusinessObject= bo; });
             }
         }
 
@@ -183,7 +180,7 @@ namespace Habanero.UI.WebGUI
         /// Gets or sets the single selected business object (null if none are selected)
         /// denoted by where the current selected cell is
         /// </summary>
-        public BusinessObject SelectedBusinessObject
+        public IBusinessObject SelectedBusinessObject
         {
             get { return _grid.SelectedBusinessObject; }
             set { _grid.SelectedBusinessObject = value; }
@@ -236,7 +233,7 @@ namespace Habanero.UI.WebGUI
 
         public bool IsInitialised
         {
-            get { return _isInitialised; }
+            get { return _gridInitialiser.IsInitialised; }
         }
 
         public FilterModes FilterMode
@@ -278,6 +275,19 @@ namespace Habanero.UI.WebGUI
 
             this.Buttons.Enabled = true;
             this.FilterControl.Enabled = true;
+        }
+
+        /// <summary>
+        /// Initialises the grid based with no classDef. This is used where the columns are set up manually.
+        /// A typical case of when you would want to set the columns manually would be when the grid
+        ///  requires alternate columns e.g. images to indicate the state of the object or buttons/links.
+        /// The grid must already have at least one column added. At least one column must be a column with the name
+        /// "ID" This column is used to synchronise the grid with the business objects.
+        /// </summary>
+        /// <exception cref="GridBaseInitialiseException"> in the case where the columns have not already been defined for the grid</exception>
+        public void Initialise()
+        {
+            _gridInitialiser.InitialiseGrid();
         }
 
         ///<summary>

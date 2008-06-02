@@ -32,7 +32,7 @@ namespace Habanero.UI.Win
         {
             if (this.BusinessObjectSelected != null)
             {
-                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
+                this.BusinessObjectSelected(this, new BOEventArgs((BusinessObject) this.SelectedBusinessObject));
             }
         }
 
@@ -56,7 +56,7 @@ namespace Habanero.UI.Win
         /// <param name="row">The row number in question</param>
         /// <returns>Returns the busines object at that row, or null
         /// if none is found</returns>
-        public BusinessObject GetBusinessObjectAtRow(int row)
+        public IBusinessObject GetBusinessObjectAtRow(int row)
         {
             return _mngr.GetBusinessObjectAtRow(row);
         }
@@ -99,7 +99,7 @@ namespace Habanero.UI.Win
             }
         }
 
-        public BusinessObject SelectedBusinessObject
+        public IBusinessObject SelectedBusinessObject
         {
             get { return _mngr.SelectedBusinessObject; }
             set { _mngr.SelectedBusinessObject = value; }
@@ -137,6 +137,12 @@ namespace Habanero.UI.Win
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
+        }
+
+        public GridLoaderDelegate GridLoader
+        {
+            get { return _mngr.GridLoader; }
+            set { _mngr.GridLoader = value; }
         }
 
         public void SelectedBusinessObjectEdited(BusinessObject bo)
@@ -235,6 +241,51 @@ namespace Habanero.UI.Win
             {
 
                 get { return new DataGridViewRowWin(_rows[index]); }
+            }
+
+            /// <summary>Adds a new row to the collection, and populates the cells with the specified objects.</summary>
+            /// <returns>The index of the new row.</returns>
+            /// <param name="values">A variable number of objects that populate the cells of the new <see cref="IDataGridViewRow"></see>.</param>
+            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is 
+            /// performing one of the 
+            /// following actions that temporarily prevents new rows from being added:Selecting all cells in the control. 
+            /// Clearing the selection.-or-This method is being called from a handler for one of the following 
+            /// <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating">
+            /// </see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see>
+            /// <see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see>
+            /// -or-The <see cref="IDataGridView.VirtualMode"></see> property of the <see cref="IDataGridView"></see> is set to true.- or 
+            /// -The <see cref="IDataGridView.DataSource"></see> property of the <see cref="IDataGridView"></see> is not null.
+            /// -or-The <see cref="IDataGridView"></see> has no columns. -or-The row returned by the <see cref="IDataGridView.RowTemplate"></see>
+            ///  property has more cells than there are columns in the control.-or-This operation would add a frozen row after unfrozen rows.</exception>
+            /// <exception cref="T:System.ArgumentNullException">values is null.</exception>
+            /// <filterpriority>1</filterpriority>
+            public int Add(params object[] values)
+            {
+                return _rows.Add(values);
+            }
+
+            /// <summary>Clears the collection. </summary>
+            /// <exception cref="T:System.InvalidOperationException">The collection is data bound and the underlying data source does not support clearing the row data.-or-The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see></exception>
+            /// <filterpriority>1</filterpriority>
+            public void Clear()
+            {
+                _rows.Clear();
+            }
+
+            ///<summary>
+            ///Returns an enumerator that iterates through a collection.
+            ///</summary>
+            ///
+            ///<returns>
+            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+            ///</returns>
+            ///<filterpriority>2</filterpriority>
+            public IEnumerator GetEnumerator()
+            {
+                foreach (DataGridViewRow row in _rows)
+                {
+                    yield return new DataGridViewRowWin(row);
+                }
             }
         }
 

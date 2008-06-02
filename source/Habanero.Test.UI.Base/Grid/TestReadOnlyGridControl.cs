@@ -453,8 +453,25 @@ namespace Habanero.Test.UI.Base
                 StringAssert.Contains("You cannot initialise the grid more than once", ex.Message);
             }
         }
+        public void TestInitGrid_AddColumnsManually_And_NullInitialise()
+        {
+            //---------------Set up test pack-------------------
 
-        public void TestInitGrid_AddColumnsManually_And_Initialise()
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            //---------------Assert Preconditions---------------
+            Assert.IsFalse(grid.IsInitialised);
+            //---------------Execute Test ----------------------
+            grid.Grid.Columns.Add("ManualColumn", "mm");
+            grid.Grid.Columns.Add("ID", "ID");
+            grid.Initialise();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, grid.Grid.Columns.Count,
+                            "There should be the two manually added columns");
+            Assert.IsTrue(grid.IsInitialised);
+           
+        }
+        public void TestInitGrid_AddColumnsManually_And_Initialise_WithClassDef()
         {
             //---------------Set up test pack-------------------
 
@@ -470,7 +487,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
-                            "There should be 1 ID column and 2 defined columns in the defaultDef");
+                            "There should be 1 ID column and 2 defined columns in the defaultDef the manually added column should b removed");
         }
 
 

@@ -90,7 +90,7 @@ namespace Habanero.UI.WebGUI
             _panelFactoryInfo = factory.CreatePanel();
             _boPanel = _panelFactoryInfo.Panel;
             _buttons = new ButtonGroupControlGiz(new ControlFactoryGizmox());
-            IButton cancelButton = _buttons.AddButton("&Cancel", CancelButtonHandler);
+            _buttons.AddButton("&Cancel", CancelButtonHandler);
             IButton okbutton = _buttons.AddButton("&OK", OKButtonHandler);
             okbutton.NotifyDefault(true);
             this.AcceptButton = (ButtonGiz)okbutton;

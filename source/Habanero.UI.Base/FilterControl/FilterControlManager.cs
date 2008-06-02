@@ -61,7 +61,25 @@ namespace Habanero.UI.Base.FilterControl
             _filterControls.Add(new FilterUIString(_clauseFactory, propertyName, textBox));
             return textBox;
         }
-
+        /// <summary>
+        /// Adds a TextBox filter in which users can specify text that
+        /// a string-value column will be filtered on.
+        /// </summary>
+        /// <param name="labelText">The label to appear before the TextBox</param>
+        /// <param name="propertyName">The column of data on which to do the
+        /// filtering</param>
+        /// <returns>Returns the new TextBox added</returns>
+        /// <param name="filterClauseOperator">Operator To Use For the filter clause</param>
+        public ITextBox AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator)
+        {
+            ILabel label = _controlFactory.CreateLabel(labelText);
+            ITextBox textBox = _controlFactory.CreateTextBox();
+            _flowLayoutManager.AddControl(label);
+            _flowLayoutManager.AddGlue();
+            _flowLayoutManager.AddControl(textBox);
+            _filterControls.Add(new FilterUIString(_clauseFactory, propertyName, textBox, filterClauseOperator));
+            return textBox;
+        }
         public IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch)
         {
 
@@ -227,11 +245,20 @@ namespace Habanero.UI.Base.FilterControl
         private class FilterUIString : FilterUI
         {
             private readonly ITextBox _textBox;
+            private readonly FilterClauseOperator _filterClauseOperator;
 
-            public FilterUIString(IFilterClauseFactory clauseFactory, string columnName, ITextBox textBox)
-                : base(clauseFactory, columnName)
+            public FilterUIString(IFilterClauseFactory clauseFactory, string propertyName, ITextBox textBox)
+                : this(clauseFactory, propertyName, textBox, FilterClauseOperator.OpLike)
+                
+            {
+                
+            }
+
+            public FilterUIString(IFilterClauseFactory clauseFactory, string propertyName, ITextBox textBox, FilterClauseOperator filterClauseOperator)
+                : base(clauseFactory, propertyName)
             {
                 _textBox = textBox;
+                _filterClauseOperator = filterClauseOperator;
             }
 
             public override IControlChilli FilterControl
@@ -244,7 +271,7 @@ namespace Habanero.UI.Base.FilterControl
                 if (_textBox.Text.Length > 0)
                 {
                     return
-                        _clauseFactory.CreateStringFilterClause(_columnName, FilterClauseOperator.OpLike,
+                        _clauseFactory.CreateStringFilterClause(_columnName, _filterClauseOperator,
                                                                 _textBox.Text);
                 }
                 else
@@ -252,19 +279,6 @@ namespace Habanero.UI.Base.FilterControl
                     return _clauseFactory.CreateNullFilterClause();
                 }
             }
-            //public override IFilterClause GetFilterClause(string stringLikeDelimiter, string dateTimeDelimiter)
-            //{
-            //    if (_textBox.Text.Length > 0)
-            //    {
-            //        return
-            //            _clauseFactory.CreateStringFilterClause(_columnName, FilterClauseOperator.OpLike,
-            //                                                    _textBox.Text);
-            //    }
-            //    else
-            //    {
-            //        return _clauseFactory.CreateNullFilterClause();
-            //    }
-            //}
             public override void Clear()
             {
                 _textBox.Text = "";
@@ -418,5 +432,6 @@ namespace Habanero.UI.Base.FilterControl
                 throw new NotImplementedException();
             }
         }
+
     }
 }

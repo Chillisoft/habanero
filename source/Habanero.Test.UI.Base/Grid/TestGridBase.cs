@@ -352,6 +352,53 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(2, gridBase.CurrentPage);
                 //---------------Tear Down -------------------------
             }
+            //TODO: Implement in win _Port
+            [Test]
+            public void Test_AddImageColumn()
+            {
+                //---------------Set up test pack-------------------
+                IGridBase gridBase = CreateGridBaseStub();
+                //--------------Assert PreConditions----------------            
+
+                //---------------Execute Test ----------------------
+                IDataGridViewImageColumn imgColumn = GetControlFactory().CreateDataGridViewImageColumn();
+                gridBase.Columns.Add(imgColumn);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(1, gridBase.Columns.Count);
+                //---------------Tear Down -------------------------          
+            }
+            [Test]
+            public void Test_IndexerReturnsImageColumn()
+            {
+                //---------------Set up test pack-------------------
+                IGridBase gridBase = CreateGridBaseStub();
+                IDataGridViewImageColumn imgColumn = GetControlFactory().CreateDataGridViewImageColumn();
+                gridBase.Columns.Add(imgColumn);
+                //--------------Assert PreConditions----------------            
+                Assert.AreEqual(1, gridBase.Columns.Count);
+                //---------------Execute Test ----------------------
+                IDataGridViewColumn col = gridBase.Columns[0];
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), col);
+                //---------------Tear Down -------------------------          
+            }
+            [Test]
+            public void Test_StringIndexerReturnsImageColumn()
+            {
+                //---------------Set up test pack-------------------
+                IGridBase gridBase = CreateGridBaseStub();
+                IDataGridViewImageColumn imgColumn = GetControlFactory().CreateDataGridViewImageColumn();
+                string columnName = "Name";
+                imgColumn.Name = columnName;
+                gridBase.Columns.Add(imgColumn);
+                //--------------Assert PreConditions----------------            
+                Assert.AreEqual(1, gridBase.Columns.Count);
+                //---------------Execute Test ----------------------
+                IDataGridViewColumn col = gridBase.Columns[columnName];
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(IDataGridViewImageColumn), col);
+                //---------------Tear Down -------------------------          
+            }
         }
 
         [Test]
@@ -642,6 +689,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------
         }
 
+
         [Test]
         public void TestSetCollectionNoColumnsAddedShouldReturnError()
         {
@@ -664,6 +712,81 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void Test_SetCollection_NonDefaultGridLoader()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            gridBase.GridLoader = GridLoaderDelegateStub;
+            gridBase.SetBusinessObjectCollection(col);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, gridBase.Rows.Count);
+            //---------------Tear Down -------------------------          
+        }
+        public void GridLoaderDelegateStub(IGridBase grid, IBusinessObjectCollection col)
+        {
+            MyBO cp = new MyBO();
+            cp.TestProp = "b";
+            grid.Rows.Add(cp.ID,cp.TestProp);
+        }
+        public void GridLoaderDelegateStub_LoadAllItems(IGridBase grid, IBusinessObjectCollection col)
+        {
+            if (col == null)
+            {
+                grid.Rows.Clear();
+                return;
+            }
+            foreach (IBusinessObject businessObject in col)
+            {
+                MyBO cp = (MyBO) businessObject;
+                grid.Rows.Add(cp.ID, cp.TestProp);               
+            }
+        }
+        [Test]
+        public void Test_SetBusinessObject_NonDefaultGridLoader()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            gridBase.Columns.Add("ID", "ID");
+            gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            MyBO cp = col[2];
+            gridBase.GridLoader = GridLoaderDelegateStub_LoadAllItems;
+            gridBase.SetBusinessObjectCollection(col);
+            gridBase.SelectedBusinessObject = cp;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(cp, gridBase.SelectedBusinessObject);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_ClearGrid_NonDefaultGridLoader()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            gridBase.Columns.Add("ID", "ID");
+            gridBase.Columns.Add(Guid.NewGuid().ToString("N"), "");
+            gridBase.GridLoader = GridLoaderDelegateStub_LoadAllItems;
+            gridBase.SetBusinessObjectCollection(col);
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(4, gridBase.Rows.Count);
+            //---------------Execute Test ----------------------
+            gridBase.Clear();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, gridBase.Rows.Count);
+        }
         [Test]
         public void TestAddItemToCollectionAddsItemToGrid()
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
@@ -12,6 +13,9 @@ namespace Habanero.UI.WebGUI
     {
         public event EventHandler<BOEventArgs> BusinessObjectSelected;
 
+        /// <summary>
+        /// event fired when the collection is changed (i.e. a new collection is loaded into the grid
+        /// </summary>
         public event EventHandler CollectionChanged;
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace Habanero.UI.WebGUI
         {
             if (this.BusinessObjectSelected != null)
             {
-                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
+                this.BusinessObjectSelected(this, new BOEventArgs((BusinessObject) this.SelectedBusinessObject));
             }
         }
 
@@ -47,21 +51,30 @@ namespace Habanero.UI.WebGUI
         public void ChangeToPageOfRow(int rowNum)
         {
             if (ItemsPerPage > 0)
-                this.CurrentPage = (rowNum / this.ItemsPerPage) + 1;
+                this.CurrentPage = (rowNum/this.ItemsPerPage) + 1;
             else this.CurrentPage = 1;
         }
 
+        /// <summary>
+        /// reloads the grid based on the grid returned by GetBusinessObjectCollection
+        /// </summary>
         public void RefreshGrid()
         {
             _mngr.RefreshGrid();
         }
 
+        /// <summary>
+        /// Clears the grid of all its data.
+        /// </summary>
         public void Clear()
         {
             _mngr.Clear();
         }
 
-
+        /// <summary>
+        /// sets the collection to be loaded by the grid.
+        /// </summary>
+        /// <param name="col"></param>
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
             _mngr.SetBusinessObjectCollection(col);
@@ -94,7 +107,7 @@ namespace Habanero.UI.WebGUI
             get { return new DataGridViewColumnCollectionGiz(base.Columns); }
         }
 
-        public BusinessObject SelectedBusinessObject
+        public IBusinessObject SelectedBusinessObject
         {
             get { return _mngr.SelectedBusinessObject; }
             set
@@ -120,7 +133,7 @@ namespace Habanero.UI.WebGUI
         /// <param name="row">The row number in question</param>
         /// <returns>Returns the busines object at that row, or null
         /// if none is found</returns>
-        public BusinessObject GetBusinessObjectAtRow(int row)
+        public IBusinessObject GetBusinessObjectAtRow(int row)
         {
             return _mngr.GetBusinessObjectAtRow(row);
         }
@@ -147,6 +160,12 @@ namespace Habanero.UI.WebGUI
         public void ApplyFilter(IFilterClause filterClause)
         {
             _mngr.ApplyFilter(filterClause);
+        }
+
+        public GridLoaderDelegate GridLoader
+        {
+            get { return _mngr.GridLoader; }
+            set { _mngr.GridLoader = value; }
         }
 
         public void SelectedBusinessObjectEdited(BusinessObject bo)
@@ -194,6 +213,41 @@ namespace Habanero.UI.WebGUI
             public IDataGridViewRow this[int index]
             {
                 get { return new DataGridViewRowGiz(_rows[index]); }
+            }
+
+            /// <summary>Adds a new row to the collection, and populates the cells with the specified objects.</summary>
+            /// <returns>The index of the new row.</returns>
+            /// <param name="values">A variable number of objects that populate the cells of the new <see cref="IDataGridViewRow"></see>.</param>
+            /// <exception cref="T:System.InvalidOperationException">The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> events:<see cref="E:Gizmox.WebGUI.Forms.DataGridView.CellEnter"></see><see cref="E:Gizmox.WebGUI.Forms.DataGridView.CellLeave"></see><see cref="E:Gizmox.WebGUI.Forms.DataGridView.CellValidating"></see><see cref="E:Gizmox.WebGUI.Forms.DataGridView.CellValidated"></see><see cref="E:Gizmox.WebGUI.Forms.DataGridView.RowEnter"></see><see cref="E:Gizmox.WebGUI.Forms.DataGridView.RowLeave"></see><see cref="E:Gizmox.WebGUI.Forms.DataGridView.RowValidated"></see><see cref="E:Gizmox.WebGUI.Forms.DataGridView.RowValidating"></see>-or-The <see cref="P:Gizmox.WebGUI.Forms.DataGridView.VirtualMode"></see> property of the <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> is set to true.- or -The <see cref="P:Gizmox.WebGUI.Forms.DataGridView.DataSource"></see> property of the <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> is not null.-or-The <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> has no columns. -or-The row returned by the <see cref="P:Gizmox.WebGUI.Forms.DataGridView.RowTemplate"></see> property has more cells than there are columns in the control.-or-This operation would add a frozen row after unfrozen rows.</exception>
+            /// <exception cref="T:System.ArgumentNullException">values is null.</exception>
+            /// <filterpriority>1</filterpriority>
+            public int Add(params object[] values)
+            {
+                return _rows.Add(values);
+            }
+
+            /// <summary>Clears the collection. </summary>
+            /// <exception cref="T:System.InvalidOperationException">The collection is data bound and the underlying data source does not support clearing the row data.-or-The associated <see cref="IDataGridView"></see> control is performing one of the following actions that temporarily prevents new rows from being added:Selecting all cells in the control.Clearing the selection.-or-This method is being called from a handler for one of the following <see cref="IDataGridView"></see> events:<see cref="IDataGridView.CellEnter"></see><see cref="IDataGridView.CellLeave"></see><see cref="IDataGridView.CellValidating"></see><see cref="IDataGridView.CellValidated"></see><see cref="IDataGridView.RowEnter"></see><see cref="IDataGridView.RowLeave"></see><see cref="IDataGridView.RowValidated"></see><see cref="IDataGridView.RowValidating"></see></exception>
+            /// <filterpriority>1</filterpriority>
+            public void Clear()
+            {
+                _rows.Clear();
+            }
+
+            ///<summary>
+            ///Returns an enumerator that iterates through a collection.
+            ///</summary>
+            ///
+            ///<returns>
+            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+            ///</returns>
+            ///<filterpriority>2</filterpriority>
+            public IEnumerator GetEnumerator()
+            {
+                foreach (DataGridViewRow row in _rows)
+                {
+                    yield return new DataGridViewRowGiz(row);
+                }
             }
         }
 
@@ -290,6 +344,57 @@ namespace Habanero.UI.WebGUI
             }
         }
 
+        public class DataGridViewImageColumnGiz : DataGridViewColumnGiz, IDataGridViewImageColumn
+        {
+            private readonly DataGridViewImageColumn _dataGridViewColumn;
+
+            public DataGridViewImageColumnGiz(DataGridViewImageColumn dataGridViewColumn) : base(dataGridViewColumn)
+            {
+                _dataGridViewColumn = dataGridViewColumn;
+            }
+
+            //public DataGridViewColumn DataGridViewColumn
+            //{
+            //    get { return this.DataGridViewColumn; }
+            //}
+
+            /// <summary>Gets or sets a string that describes the column's image. </summary>
+            /// <returns>The textual description of the column image. The default is <see cref="F:System.String.Empty"></see>.</returns>
+            /// <exception cref="T:System.InvalidOperationException">The value of the <see cref="IDataGridViewImageColumn.CellTemplate"></see> property is null.</exception>
+            /// <filterpriority>1</filterpriority>
+            public string Description
+            {
+                get { return this._dataGridViewColumn.Description; }
+                set { this._dataGridViewColumn.Description = value; }
+            }
+
+            /// <summary>Gets or sets the icon displayed in the cells of this column when the cell's <see cref="IDataGridViewImageColumn.Value"></see> property is not set and the cell's <see cref="P:Gizmox.WebGUI.Forms.DataGridViewImageCell.ValueIsIcon"></see> property is set to true.</summary>
+            /// <returns>The <see cref="T:System.Drawing.Icon"></see> to display. The default is null.</returns>
+            public Icon Icon
+            {
+                get { return this._dataGridViewColumn.Icon; }
+                set { this._dataGridViewColumn.Icon = value; }
+            }
+
+            /// <summary>Gets or sets the image displayed in the cells of this column when the cell's <see cref="IDataGridViewImageColumn.Value"></see> property is not set and the cell's <see cref="P:Gizmox.WebGUI.Forms.DataGridViewImageCell.ValueIsIcon"></see> property is set to false.</summary>
+            /// <returns>The <see cref="T:System.Drawing.Image"></see> to display. The default is null.</returns>
+            /// <filterpriority>1</filterpriority>
+            public Image Image
+            {
+                get { return this._dataGridViewColumn.Image; }
+                set { this._dataGridViewColumn.Image = value; }
+            }
+
+            /// <summary>Gets or sets a value indicating whether cells in this column display <see cref="T:System.Drawing.Icon"></see> values.</summary>
+            /// <returns>true if cells display values of type <see cref="T:System.Drawing.Icon"></see>; false if cells display values of type <see cref="T:System.Drawing.Image"></see>. The default is false.</returns>
+            /// <exception cref="T:System.InvalidOperationException">The value of the <see cref="IDataGridViewImageColumn.CellTemplate"></see> property is null.</exception>
+            public bool ValuesAreIcons
+            {
+                get { return this._dataGridViewColumn.ValuesAreIcons; }
+                set { this._dataGridViewColumn.ValuesAreIcons = value; }
+            }
+        }
+
         protected class DataGridViewColumnCollectionGiz : IDataGridViewColumnCollection
         {
             private readonly DataGridViewColumnCollection _columns;
@@ -327,12 +432,29 @@ namespace Habanero.UI.WebGUI
 
             public IDataGridViewColumn this[int index]
             {
-                get { return new DataGridViewColumnGiz(_columns[index]); }
+                get
+                {
+                    DataGridViewColumn column = _columns[index];
+                    return GetAppropriateColumnType(column);
+                }
             }
 
             public IDataGridViewColumn this[string name]
             {
-                get { return new DataGridViewColumnGiz(_columns[name]); }
+                get
+                {
+                    DataGridViewColumn column = _columns[name];
+                    return GetAppropriateColumnType(column);
+                }
+            }
+
+            private static IDataGridViewColumn GetAppropriateColumnType(DataGridViewColumn column)
+            {
+                if (column is DataGridViewImageColumn)
+                {
+                    return new DataGridViewImageColumnGiz((DataGridViewImageColumn) column);
+                }
+                return new DataGridViewColumnGiz(column);
             }
 
             #endregion
@@ -427,10 +549,10 @@ namespace Habanero.UI.WebGUI
                 _cells = cells;
             }
 
-            public int Count
-            {
-                get { return _cells.Count; }
-            }
+            //public int Count
+            //{
+            //    get { return _cells.Count; }
+            //}
 
             /// <summary>Adds a cell to the collection.</summary>
             /// <returns>The position in which to insert the new element.</returns>
@@ -523,21 +645,21 @@ namespace Habanero.UI.WebGUI
                 get { return new DataGridViewCellGiz(_cells[columnName]); }
             }
 
-            ///<summary>
-            ///Returns an enumerator that iterates through a collection.
-            ///</summary>
-            ///
-            ///<returns>
-            ///An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
-            ///</returns>
-            ///<filterpriority>2</filterpriority>
-            public IEnumerator GetEnumerator()
-            {
-                foreach (DataGridViewRow row in _cells)
-                {
-                    yield return new DataGridViewRowGiz(row);
-                }
-            }
+            /////<summary>
+            /////Returns an enumerator that iterates through a collection.
+            /////</summary>
+            /////
+            /////<returns>
+            /////An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.
+            /////</returns>
+            /////<filterpriority>2</filterpriority>
+            //public IEnumerator GetEnumerator()
+            //{
+            //    foreach (DataGridViewRow row in _cells)
+            //    {
+            //        yield return new DataGridViewRowGiz(row);
+            //    }
+            //}
         }
 
         private class DataGridViewSelectedRowCollectionGiz : IDataGridViewSelectedRowCollection

@@ -205,8 +205,22 @@ namespace Habanero.UI.Base
         /// <param name="numLines"></param>
         ITextBox CreateTextBoxMultiLine(int numLines);
 
+        /// <summary>
+        /// Creates a control that can be places on a form or a panel to to implement a wizard user interface.
+        /// The wizard control will have a next and previous button and a panel to place the wizard step on.
+        /// </summary>
+        /// <param name="wizardController"></param>
+        /// <returns></returns>
         IWizardControl CreateWizardControl(IWizardController wizardController);
-        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name, PostObjectPersistingDelegate action);
+        /// <summary>
+        /// Returns a BOEditor form. This is a form that the business object can be edited in.
+        /// </summary>
+        /// <param name="bo"></param>
+        /// <param name="uiDefName"></param>
+        /// <param name="action">Action to be performed when the editing is complete. Typically used if you want to update
+        ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
+        /// <returns></returns>
+        IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action);
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo);
         IListView CreateListView();
 
@@ -225,6 +239,8 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns></returns>
         IControlMapperStrategy CreateControlMapperStrategy();
+
+        IDataGridViewImageColumn CreateDataGridViewImageColumn();
     }
 
     public interface IControlMapperStrategy

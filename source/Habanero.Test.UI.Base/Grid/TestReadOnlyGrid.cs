@@ -24,7 +24,7 @@ using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Grid
+namespace Habanero.Test.UI.Base
 {
     /// <summary>
     /// Summary description for TestReadOnlyGrid.

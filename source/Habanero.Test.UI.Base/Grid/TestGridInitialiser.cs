@@ -5,7 +5,7 @@ using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Base.Grid
+namespace Habanero.Test.UI.Base
 {
     public abstract class TestGridInitialiser
     {
@@ -52,6 +52,78 @@ namespace Habanero.Test.UI.Base.Grid
             }
         }
 
+        [Test]
+        public void Test_InitialiseGrid_NoClassDef_NoColumnsDefined()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid);
+            //--------------Assert PreConditions----------------            
+            Assert.IsFalse(grid.IsInitialised);
+           
+            //---------------Execute Test ----------------------
+            try
+            {
+                grid.Initialise();
+                Assert.Fail("Should raise error");
+            }
+            catch (GridBaseInitialiseException ex)
+            {
+                 StringAssert.Contains("You cannot call initialise with no classdef since the ID column has not been added to the grid", ex.Message);
+            }
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_InitialiseGrid_NoClassDef_IDColumnNotDefined()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid);
+            //--------------Assert PreConditions----------------            
+            Assert.IsFalse(grid.IsInitialised);
+            Assert.AreEqual(0, grid.Grid.Columns.Count);
+            //---------------Execute Test ----------------------
+            try
+            {
+                grid.Grid.Columns.Add("new col", "col");
+                grid.Initialise();
+                Assert.Fail("Should raise error");
+            }
+            catch (GridBaseInitialiseException ex)
+            {
+                 StringAssert.Contains("You cannot call initialise with no classdef since the ID column has not been added to the grid", ex.Message);
+            }
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_InitialiseGrid_NoClassDef_Twice()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid);
+            grid.Grid.Columns.Add("ID", "ID");
+            //--------------Assert PreConditions----------------            
+            Assert.IsFalse(grid.IsInitialised);
+           
+            //---------------Execute Test ----------------------
+            try
+            {
+                grid.Initialise();
+                grid.Initialise();
+                Assert.Fail("Should raise error");
+            }
+            catch (GridBaseSetUpException ex)
+            {
+                StringAssert.Contains("You cannot initialise the grid more than once", ex.Message);
+            }
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------          
+        }
 
         [Test]
         public void TestInitialiseGrid()
@@ -60,7 +132,7 @@ namespace Habanero.Test.UI.Base.Grid
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            GridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid);
             UIDef uiDef = classDef.UIDefCol["default"];
             UIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
@@ -75,6 +147,9 @@ namespace Habanero.Test.UI.Base.Grid
             Assert.AreEqual(classDef, grid.ClassDef);
             Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
                             "There should be 1 ID column and 2 defined columns in the defaultDef");
+            Assert.IsTrue(initialiser.IsInitialised);
+            Assert.AreSame(grid, initialiser.Grid);
+//            Assert.IsTrue(grid.IsInitialised);
             //---------------Tear Down -------------------------          
         
         }
@@ -85,7 +160,7 @@ namespace Habanero.Test.UI.Base.Grid
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            GridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid);
             UIDef uiDef = classDef.UIDefCol["default"];
             UIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
@@ -117,7 +192,7 @@ namespace Habanero.Test.UI.Base.Grid
             ClassDef classDef = LoadMyBoDefaultClassDef();
             string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            GridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid);
             UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
             UIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
@@ -140,7 +215,7 @@ namespace Habanero.Test.UI.Base.Grid
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            GridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid);
             ClassDef classDef = LoadMyBoDefaultClassDef();
             //---------------Assert Preconditions---------------
             //---------------Execute Test ----------------------
@@ -163,7 +238,7 @@ namespace Habanero.Test.UI.Base.Grid
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            GridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid);
 
             //---------------Execute Test ----------------------
             try
@@ -185,7 +260,7 @@ namespace Habanero.Test.UI.Base.Grid
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            GridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid);
             //---------------Execute Test ----------------------
             try
             {

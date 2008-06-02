@@ -31,6 +31,20 @@ namespace Habanero.UI.Win
             return textBox;
         }
 
+        /// <summary>
+        /// Adds a TextBox filter in which users can specify text that
+        /// a string-value column will be filtered on.
+        /// </summary>
+        /// <param name="labelText">The label to appear before the TextBox</param>
+        /// <param name="propertyName">The column of data on which to do the
+        /// filtering</param>
+        /// <returns>Returns the new TextBox added</returns>
+        /// <param name="filterClauseOperator">Operator To Use For the filter clause</param>
+        public ITextBox AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator)
+        {
+            return _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator); ;
+        }
+
         public IFilterClause GetFilterClause()
         {
             return _filterControlManager.GetFilterClause();

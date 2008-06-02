@@ -3,7 +3,7 @@ using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
 {
-    public class GridInitialiser
+    public class GridInitialiser : IGridInitialiser
     {
         private readonly IGridControl _gridControl;
         private bool _isInitialised = false;
@@ -13,9 +13,35 @@ namespace Habanero.UI.Base
             _gridControl = gridControl;
         }
 
+        /// <summary>
+        /// Initialises the grid based with no classDef. This is used where the columns are set up manually.
+        /// A typical case of when you would want to set the columns manually would be when the grid
+        ///  requires alternate columns e.g. images to indicate the state of the object or buttons/links.
+        /// The grid must already have at least one column added. At least one column must be a column with the name
+        /// "ID" This column is used to synchronise the grid with the business objects.
+        /// </summary>
+        /// <exception cref="GridBaseInitialiseException"> in the case where the columns have not already been defined for the grid</exception>
+        /// <exception cref="GridBaseSetUpException">in the case where the grid has already been initialised</exception>
+        public void InitialiseGrid()
+        {
+            if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
+            if (_gridControl.Grid.Columns.Count == 0) throw new GridBaseInitialiseException("You cannot call initialise with no classdef since the ID column has not been added to the grid");
+            try
+            {
+                IDataGridViewColumn column = _gridControl.Grid.Columns["ID"];
+                string text = column.HeaderText;
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new GridBaseInitialiseException(
+                    "You cannot call initialise with no classdef since the ID column has not been added to the grid");
+            }
+            _isInitialised = true;
+        }
+
         public void InitialiseGrid(ClassDef classDef)
         {
-            _gridControl.Initialise(classDef, "default");
+            InitialiseGrid(classDef, "default");
         }
 
         public void InitialiseGrid(ClassDef classDef, string uiDefName)
@@ -29,6 +55,19 @@ namespace Habanero.UI.Base
 
             _isInitialised = true;
            
+        }
+
+        public bool IsInitialised
+        {
+            get { return _isInitialised; }
+        }
+
+        /// <summary>
+        /// returns the grid that this initialiser is initialising
+        /// </summary>
+        public IGridControl Grid
+        {
+            get { return _gridControl; }
         }
 
         private UIGrid GetGridDef(ClassDef classDef, string uiDefName)

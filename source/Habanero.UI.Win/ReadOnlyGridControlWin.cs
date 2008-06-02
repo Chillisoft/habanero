@@ -15,7 +15,7 @@ namespace Habanero.UI.Win
         private IFilterControl _filterControl;
         private string _uiDefName = "";
         private readonly ReadOnlyGridWin _grid;
-        private readonly GridInitialiser _gridInitialiser;
+        private readonly IGridInitialiser _gridInitialiser;
 
 
         public ReadOnlyGridControlWin()
@@ -43,7 +43,7 @@ namespace Habanero.UI.Win
             get { return _grid; }
         }
 
-        public BusinessObject SelectedBusinessObject
+        public IBusinessObject SelectedBusinessObject
         {
             get { throw new System.NotImplementedException(); }
             set { throw new System.NotImplementedException(); }
@@ -111,7 +111,19 @@ namespace Habanero.UI.Win
             throw new System.NotImplementedException();
         }
 
-       
+        /// <summary>
+        /// Initialises the grid based with no classDef. This is used where the columns are set up manually.
+        /// A typical case of when you would want to set the columns manually would be when the grid
+        ///  requires alternate columns e.g. images to indicate the state of the object or buttons/links.
+        /// The grid must already have at least one column added. At least one column must be a column with the name
+        /// "ID" This column is used to synchronise the grid with the business objects.
+        /// </summary>
+        /// <exception cref="GridBaseInitialiseException"> in the case where the columns have not already been defined for the grid</exception>
+        public void Initialise()
+        {
+            _gridInitialiser.InitialiseGrid();
+        }
+
 
         IControlCollection IControlChilli.Controls
         {

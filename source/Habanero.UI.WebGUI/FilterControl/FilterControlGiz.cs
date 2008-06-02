@@ -105,6 +105,22 @@ namespace Habanero.UI.WebGUI
             return textBox;
         }
 
+        /// <summary>
+        /// Adds a TextBox filter in which users can specify text that
+        /// a string-value column will be filtered on.  This uses a "like"
+        /// operator and accepts any strings that contain the provided clause.
+        /// </summary>
+        /// <param name="labelText">The label to appear before the TextBox</param>
+        /// <param name="propertyName">The column of data on which to do the
+        /// filtering</param>
+        /// <returns>Returns the new TextBox added</returns>
+        /// <param name="filterClauseOperator">Operator To Use For the filter clause</param>
+        public ITextBox AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator)
+        {
+            ;
+            return _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator);
+        }
+
         public IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options,
                                                  bool strictMatch)
         {

@@ -301,6 +301,11 @@ namespace Habanero.UI.Win
             return new ControlMapperStrategyWin();
         }
 
+        public IDataGridViewImageColumn CreateDataGridViewImageColumn()
+        {
+            return null; //TODO port : return somethind
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();

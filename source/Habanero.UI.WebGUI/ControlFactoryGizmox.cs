@@ -431,6 +431,14 @@ namespace Habanero.UI.WebGUI
         {
             return new DefaultBOEditorFormGiz(bo, uiDefName, this);
         }
+        /// <summary>
+        /// Returns a BOEditor form. This is a form that the business object can be edited in.
+        /// </summary>
+        /// <param name="bo"></param>
+        /// <param name="uiDefName"></param>
+        /// <param name="action">Action to be performed when the editing is complete. Typically used if you want to update
+        ///   a grid, list etc in an asynchronous environment.</param>
+        /// <returns></returns>
         public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action)
         {
             return new DefaultBOEditorFormGiz(bo, uiDefName, this, action);
@@ -479,6 +487,11 @@ namespace Habanero.UI.WebGUI
         public IControlMapperStrategy CreateControlMapperStrategy()
         {
             return new ControlMapperStrategyGiz();
+        }
+
+        public IDataGridViewImageColumn CreateDataGridViewImageColumn()
+        {
+            return new GridBaseGiz.DataGridViewImageColumnGiz( new DataGridViewImageColumn());
         }
 
         public ITabControl CreateTabControl()

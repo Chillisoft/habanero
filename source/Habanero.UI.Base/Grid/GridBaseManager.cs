@@ -11,8 +11,6 @@ namespace Habanero.UI.Base
 {
     public class GridBaseManager
     {
-
-
         private readonly IGridBase _gridBase;
 
         private BOCollectionDataSetProvider _dataSetProvider;
@@ -22,12 +20,14 @@ namespace Habanero.UI.Base
         private DataView _dataTableDefaultView;
 
         public event EventHandler CollectionChanged;
+        private GridLoaderDelegate _gridLoader;
 
         public GridBaseManager(IGridBase gridBase, string uiDefName)
         {
             _gridBase = gridBase;
             _uiDefName = uiDefName;
             _gridBase.AutoGenerateColumns = false;
+            _gridLoader = DefaultGridLoader;
         }
 
         public GridBaseManager(IGridBase gridBase) : this(gridBase, "default")
@@ -49,15 +49,15 @@ namespace Habanero.UI.Base
             if (_boCol == null)
             {
                 SelectedBusinessObject = null;
-                _gridBase.DataSource = null;
+                _gridLoader(_gridBase, null);
                 FireCollectionChanged();
                 return;
             }
             //Hack: this is to overcome abug in Gizmox where the grid was freezing after delete
-            // but should not cause a problem with win
+            // but should not cause a problem with win since it removed the currently selected item which is the deleted item
             col.BusinessObjectRemoved += delegate { SelectedBusinessObject = null; };
 
-            _gridBase.DataSource = GetDataTable();
+            _gridLoader(_gridBase, _boCol);
 
             _gridBase.AllowUserToAddRows = false;
 
@@ -69,9 +69,19 @@ namespace Habanero.UI.Base
             FireCollectionChanged();
         }
 
-        protected DataView GetDataTable()
+        public void DefaultGridLoader(IGridBase gridBase, IBusinessObjectCollection boCol)
         {
-            _dataSetProvider = new BOCollectionReadOnlyDataSetProvider(this._boCol);
+            if (boCol == null)
+            {
+                gridBase.DataSource = null;
+                return;
+            }
+            gridBase.DataSource = GetDataTable(boCol);
+        }
+
+        protected DataView GetDataTable(IBusinessObjectCollection boCol)
+        {
+            _dataSetProvider = new BOCollectionReadOnlyDataSetProvider(boCol);
             ClassDef classDef = _boCol.ClassDef;
             UIDef uiDef = classDef.GetUIDef(_uiDefName);
             if (uiDef == null)
@@ -86,7 +96,7 @@ namespace Habanero.UI.Base
             return this._dataTableDefaultView;
         }
 
-        public BusinessObject SelectedBusinessObject
+        public IBusinessObject SelectedBusinessObject
         {
             get
             {
@@ -107,10 +117,11 @@ namespace Habanero.UI.Base
                 IDataGridViewRowCollection gridRows = _gridBase.Rows;
                 ClearAllSelectedRows(gridRows);
                 if (value == null) return;
+                BusinessObject bo = (BusinessObject) value;
                 int rowNum = 0;
-                foreach (DataRowView dataRowView in _dataTableDefaultView)
+                foreach (IDataGridViewRow row in gridRows)
                 {
-                    if ((string) dataRowView.Row["ID"] == value.ID.ToString())
+                    if (row.Cells["ID"].Value.ToString() == bo.ID.ToString())
                     {
                         gridRows[rowNum].Selected = true;
                         _gridBase.ChangeToPageOfRow(rowNum);
@@ -158,11 +169,17 @@ namespace Habanero.UI.Base
                     new BusinessObjectCollection<BusinessObject>(_boCol.ClassDef);
                 foreach (IDataGridViewRow row in _gridBase.SelectedRows)
                 {
-                    BusinessObject businessObject = GetBusinessObjectAtRow(row.Index);
+                    BusinessObject businessObject = (BusinessObject) GetBusinessObjectAtRow(row.Index);
                     busObjects.Add(businessObject);
                 }
                 return busObjects;
             }
+        }
+
+        public GridLoaderDelegate GridLoader
+        {
+            get { return this._gridLoader; }
+            set { this._gridLoader = value; }
         }
 
         private void FireCollectionChanged()
@@ -185,18 +202,43 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Returns the business object at the row specified
         /// </summary>
-        /// <param name="row">The row number in question</param>
+        /// <param name="rowIndex">The row Index in question</param>
         /// <returns>Returns the busines object at that row, or null
         /// if none is found</returns>
-        public BusinessObject GetBusinessObjectAtRow(int row)
+        public IBusinessObject GetBusinessObjectAtRow(int rowIndex)
         {
             int i = 0;
-            foreach (DataRowView dataRowView in _dataTableDefaultView)
+
+            if (_gridBase.DataSource is DataView)
             {
-                if (i++ == row)
+                foreach (DataRowView dataRowView in _dataTableDefaultView)
                 {
-                    return this._dataSetProvider.Find((string) dataRowView.Row["ID"]);
+                    if (i++ == rowIndex)
+                    {
+                        return this._dataSetProvider.Find((string) dataRowView.Row["ID"]);
+                    }
                 }
+            }else
+            {
+                IDataGridViewRow findRow =_gridBase.Rows[rowIndex];
+                return this._boCol.Find(findRow.Cells["ID"].Value.ToString());
+                //foreach (IDataGridViewRow findRow in _gridBase.Rows)
+                //{
+                //    if (rowIndex == value.ID.ToString())
+                //    {
+                //        gridRows[rowNum].Selected = true;
+                //        _gridBase.ChangeToPageOfRow(rowNum);
+                //        break;
+                //    }
+                //    rowNum++;
+                //}
+                //foreach (DataRowView dataRowView in _dataTableDefaultView)
+                //{
+                //    if (i++ == rowIndex)
+                //    {
+                //        return this._dataSetProvider.Find((string)dataRowView.Row["ID"]);
+                //    }
+                //}
             }
             return null;
         }
@@ -239,7 +281,8 @@ namespace Habanero.UI.Base
         {
             if (_dataTableDefaultView == null)
             {
-                throw new GridBaseInitialiseException("You cannot apply filters as the collection for the grid has not been set");
+                throw new GridBaseInitialiseException(
+                    "You cannot apply filters as the collection for the grid has not been set");
             }
             if (filterClause != null)
             {
@@ -250,11 +293,13 @@ namespace Habanero.UI.Base
                 _dataTableDefaultView.RowFilter = null;
             }
         }
-
+        /// <summary>
+        /// refreshes the grid with the collection returned by the associated grid.GetBusinessObjectCollection
+        /// </summary>
         public void RefreshGrid()
         {
             IBusinessObjectCollection col = this._gridBase.GetBusinessObjectCollection();
-            BusinessObject bo = this._gridBase.SelectedBusinessObject;
+            IBusinessObject bo = this._gridBase.SelectedBusinessObject;
             SetBusinessObjectCollection(null);
             SetBusinessObjectCollection(col);
             SelectedBusinessObject = bo;
@@ -263,7 +308,6 @@ namespace Habanero.UI.Base
 
     public class GridBaseSetUpException : Exception
     {
-
         public GridBaseSetUpException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
@@ -280,6 +324,7 @@ namespace Habanero.UI.Base
         {
         }
     }
+
     public class GridDeveloperException : HabaneroDeveloperException
     {
         public GridDeveloperException(string message) : base(message)
@@ -302,7 +347,6 @@ namespace Habanero.UI.Base
 
     public class GridBaseInitialiseException : HabaneroDeveloperException
     {
-
         public GridBaseInitialiseException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

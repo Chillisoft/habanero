@@ -54,9 +54,11 @@
     <Compile Include="ControlMappers\CollectionTabControlMapper.cs" />
     <Compile Include="ControlMappers\ComboBoxCollectionController.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
+    <Compile Include="Grid\IDataGridViewImageColumn.cs" />
     <Compile Include="Grid\IDataGridViewTextBoxColumn.cs" />
     <Compile Include="ControlInterfaces\IBoTabColControl.cs" />
     <Compile Include="Grid\IGridControl.cs" />
+    <Compile Include="Grid\IGridInitialiser.cs" />
     <Compile Include="ICollectionTabControlMapper.cs" />
     <Compile Include="Grid\EditableGridControlManager.cs" />
     <Compile Include="Grid\GridInitialiser.cs" />

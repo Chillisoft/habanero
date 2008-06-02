@@ -5,6 +5,16 @@ using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>
+    /// The filter modes that can be set up for the readonly grid.
+    /// FilteModes.Filter is a mode used where the grid is provided with a collection of all the 
+    /// business objects and the user can limit this grid by entering one or more filter criteria. 
+    /// This is very interactive and converts the collection provided to the grid into a <see cref="System.Data.DataView"/>.
+    /// The FilterModes.Search is a mode where the grid reloads the collection of business objects 
+    /// based on the criteria entered by the user. This is typically used where the number of items that could be 
+    /// loaded is large and for performance reasons you want to only load the collection with the items matching the 
+    /// search criteria (this can also be used where a custome load delegate implements an alternate loading mechanism <see cref="GridLoaderDelegate"/>
+    /// </summary>
     public enum FilterModes
     {
         Filter,
@@ -30,7 +40,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IReadOnlyGridControl : IGridControl 
     {
-        BusinessObject SelectedBusinessObject { get; set; }
+        IBusinessObject SelectedBusinessObject { get; set; }
 
         /// <summary>
         /// Returns the button control held. This property can be used
@@ -45,10 +55,19 @@ namespace Habanero.UI.Base
 
         IBusinessObjectDeletor BusinessObjectDeletor { get; set; }
 
+        /// <summary>
+        /// returns the filter control for the readonly grid
+        /// </summary>
         IFilterControl FilterControl { get; }
 
+        /// <summary>
+        /// has one of the overloaded initialise methods been called for the grid.
+        /// </summary>
         bool IsInitialised { get; }
 
+        /// <summary>
+        /// gets and sets the filter modes for the grid i.e. Filter or search <see cref="FilterModes"/>
+        /// </summary>
         FilterModes FilterMode { get; set; }
 
         /// <summary>
@@ -61,5 +80,14 @@ namespace Habanero.UI.Base
         /// to be shown in the grid</param>
         void SetBusinessObjectCollection(IBusinessObjectCollection boCollection);
 
+        /// <summary>
+        /// Initialises the grid based with no classDef. This is used where the columns are set up manually.
+        /// A typical case of when you would want to set the columns manually would be when the grid
+        ///  requires alternate columns e.g. images to indicate the state of the object or buttons/links.
+        /// The grid must already have at least one column added. At least one column must be a column with the name
+        /// "ID" This column is used to synchronise the grid with the business objects.
+        /// </summary>
+        /// <exception cref="GridBaseInitialiseException"> in the case where the columns have not already been defined for the grid</exception>
+        void Initialise();
     }
 }

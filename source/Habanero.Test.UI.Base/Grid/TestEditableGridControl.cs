@@ -4,7 +4,7 @@ using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Base.Grid
+namespace Habanero.Test.UI.Base
 {
     public  abstract class TestEditableGridControl
     {
