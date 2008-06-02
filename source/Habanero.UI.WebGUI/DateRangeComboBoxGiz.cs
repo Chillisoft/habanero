@@ -128,9 +128,9 @@ namespace Habanero.UI.WebGUI
         /// Populates the ComboBox with all available DateOptions, since
         /// the default constructor only provides a standardised collection
         /// </summary>
-        public void UseAllDateOptions()
+        public void UseAllDateRangeOptions()
         {
-            _manager.UseAllDateOptions();
+            _manager.UseAllDateRangeOptions();
         }
 
         /// <summary>

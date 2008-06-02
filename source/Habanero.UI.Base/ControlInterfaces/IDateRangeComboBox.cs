@@ -122,7 +122,7 @@ namespace Habanero.UI.Base
         /// Populates the ComboBox with all available DateOptions, since
         /// the default constructor only provides a standardised collection
         /// </summary>
-        void UseAllDateOptions();
+        void UseAllDateRangeOptions();
 
         /// <summary>
         /// Sets the item in the ComboBox that first appears to the user
