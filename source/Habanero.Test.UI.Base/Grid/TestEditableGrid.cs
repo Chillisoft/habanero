@@ -146,7 +146,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             editableGrid.SetBusinessObjectCollection(col);
             //---------------Test Result -----------------------
-            Assert.AreEqual(4, editableGrid.Rows.Count);
+            Assert.AreEqual(col.Count + 1, editableGrid.Rows.Count, "should be 4 item 4 adding item");
             //---------------Tear Down -------------------------    
         }
 

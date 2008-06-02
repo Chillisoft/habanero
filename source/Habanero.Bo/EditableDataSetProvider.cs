@@ -29,10 +29,10 @@ namespace Habanero.BO
     /// <summary>
     /// Provides an editable data-set for business objects
     /// </summary>
-    public class BOCollectionEditableDataSetProvider : BOCollectionDataSetProvider
+    public class EditableDataSetProvider : DataSetProvider
     {
         private static readonly ILog log =
-            LogManager.GetLogger("Habanero.BO.BOCollectionEditableDataSetProvider");
+            LogManager.GetLogger("Habanero.BO.EditableDataSetProvider");
 
         private Hashtable _rowStates;
         private Hashtable _rowIDs;
@@ -55,7 +55,7 @@ namespace Habanero.BO
         /// collection provided
         /// </summary>
         /// <param name="col">The business object collection</param>
-		public BOCollectionEditableDataSetProvider(IBusinessObjectCollection col)
+		public EditableDataSetProvider(IBusinessObjectCollection col)
             : base(col)
         {
         }
@@ -275,14 +275,8 @@ namespace Habanero.BO
                 //log.Debug("Row Added");
                 _isBeingAdded = true;
                 BusinessObject newBo;
-                if (_connection != null)
-                {
-                    newBo = _collection.ClassDef.CreateNewBusinessObject(_connection);
-                }
-                else
-                {
-                    newBo = _collection.ClassDef.CreateNewBusinessObject();
-                }
+                newBo = (BusinessObject) _collection.CreateBusinessObject();
+
                 //log.Debug("Initialising obj");
                 if (this._objectInitialiser != null)
                 {
@@ -305,7 +299,7 @@ namespace Habanero.BO
                     }
                 }
 
-                AddNewRowToCollection(newBo);
+                //AddNewRowToCollection(newBo);
                 //log.Debug(newBo.GetDebugOutput()) ;
                 e.Row["ID"] = newBo.ID.ToString();
                 if (!_rowIDs.ContainsKey(e.Row))

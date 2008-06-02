@@ -68,8 +68,8 @@ namespace Habanero.UI.Grid
             _deleteKeyBehaviour = DeleteKeyBehaviours.DeleteRow;
             CompulsoryColumnsBold = true;
 
-            UserDeletingRow += new DataGridViewRowCancelEventHandler(ConfirmRowDeletion);
-            CellClick += new DataGridViewCellEventHandler(CellClickHandler);
+            UserDeletingRow += ConfirmRowDeletion;
+            CellClick += CellClickHandler;
         }
 
         /// <summary>
@@ -156,10 +156,10 @@ namespace Habanero.UI.Grid
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <returns>Returns a new data set provider</returns>
-        protected override BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
+        protected override DataSetProvider CreateBusinessObjectCollectionDataSetProvider(
 			IBusinessObjectCollection col)
         {
-            return new BOCollectionEditableDataSetProvider(col);
+            return new EditableDataSetProvider(col);
         }
 
         /// <summary>

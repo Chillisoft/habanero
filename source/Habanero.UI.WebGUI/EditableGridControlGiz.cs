@@ -1,3 +1,4 @@
+using Gizmox.WebGUI.Forms;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Base.Grid;
@@ -15,6 +16,9 @@ namespace Habanero.UI.WebGUI
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this);
             _grid = _controlFactory.CreateEditableGrid();
+//            this.Controls.Add((Control) _grid);
+            BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
+            manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
         }
 
         public IGridBase Grid
@@ -46,5 +50,9 @@ namespace Habanero.UI.WebGUI
             set { _editableGridManager.ClassDef = value; }
         }
 
+        public void ApplyChangesToBusinessObject()
+        {
+            
+        }
     }
 }

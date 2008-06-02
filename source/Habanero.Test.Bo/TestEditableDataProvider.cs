@@ -25,14 +25,14 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     /// <summary>
-    /// Summary description for TestBOCollectionEditableDataProvider.
+    /// Summary description for TestEditableDataProvider.
     /// </summary>
     [TestFixture]
-    public class TestBOCollectionEditableDataProvider : TestBOCollectionDataProvider
+    public class TestEditableDataProvider : TestDataSetProvider
     {
         protected override IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col)
         {
-            return new BOCollectionEditableDataSetProvider(itsCollection);
+            return new EditableDataSetProvider(itsCollection);
         }
 		
         [Test]
@@ -51,10 +51,34 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestAddRowAddsBusinessObjectToCol()
+        public void TestAddRowCreatesBusinessObjectThroughCollection()
         {
-            itsTable.Rows.Add(new object[] {null, "bo3prop1", "bo3prop2"});
-            Assert.AreEqual(3, itsCollection.Count, "Adding a row to the table should add a bo to the collection");
+            //---------------Set up test pack-------------------
+            BusinessObjectCollection<MyBO> boCollection = new BusinessObjectCollection<MyBO>();
+            MyBO bo = new MyBO();
+            bo.SetPropertyValue("TestProp", "bo1prop1");
+            bo.SetPropertyValue("TestProp2", "s1");
+            boCollection.Add(bo);
+
+            MyBO bo2 = new MyBO();
+            bo2.SetPropertyValue("TestProp", "bo2prop1");
+            bo2.SetPropertyValue("TestProp2", "s2");
+            boCollection.Add(bo2);
+
+            itsProvider = new EditableDataSetProvider(boCollection);
+            BOMapper mapper = new BOMapper((BusinessObject)boCollection.SampleBo);
+            itsTable = itsProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(2, boCollection.Count);
+            Assert.AreEqual(0, boCollection.CreatedBusinessObjects.Count, "Should be no created items to start");
+
+            //---------------Execute Test ----------------------
+            itsTable.Rows.Add(new object[] { null, "bo3prop1", "bo3prop2" });
+            
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, boCollection.CreatedBusinessObjects.Count, "Adding a row to the table should use the collection to create the object");
+            Assert.AreEqual(2, boCollection.Count, "Adding a row to the table should not add a bo to the main collection");
         }
 
         [Test]
@@ -77,7 +101,7 @@ namespace Habanero.Test.BO
         public void TestAcceptChangesSavesNewBusinessObjects()
         {
         	SetupSaveExpectation();
-        	((BOCollectionEditableDataSetProvider) itsProvider).Connection = itsConnection;
+        	((EditableDataSetProvider) itsProvider).Connection = itsConnection;
             itsTable.Rows.Add(new object[] {null, "bo3prop1", "bo3prop2"});
             itsTable.AcceptChanges();
         }
@@ -133,17 +157,17 @@ namespace Habanero.Test.BO
         [Test]
         public void TestFind()
         {
-            IBusinessObject bo = ((BOCollectionEditableDataSetProvider) itsProvider).Find(0);
+            IBusinessObject bo = ((EditableDataSetProvider) itsProvider).Find(0);
             Assert.AreEqual(itsCollection[0], bo);
 
             MyBO unlistedBO = new MyBO();
-            Assert.AreEqual(-1, ((BOCollectionEditableDataSetProvider) itsProvider).FindRow(unlistedBO));
+            Assert.AreEqual(-1, ((EditableDataSetProvider) itsProvider).FindRow(unlistedBO));
         }
 
         [Test]
         public void TestGetConnection()
         {
-            Assert.IsNull(((BOCollectionEditableDataSetProvider) itsProvider).Connection);
+            Assert.IsNull(((EditableDataSetProvider) itsProvider).Connection);
         }
     }
 }

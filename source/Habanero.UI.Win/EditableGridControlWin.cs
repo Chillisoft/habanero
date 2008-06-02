@@ -50,5 +50,10 @@ namespace Habanero.UI.Win
             get { return _editableGridManager.ClassDef; }
             set { _editableGridManager.ClassDef = value; }
         }
+
+        public void ApplyChangesToBusinessObject()
+        {
+            
+        }
     }
 }

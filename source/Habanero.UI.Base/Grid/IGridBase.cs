@@ -144,6 +144,8 @@ namespace Habanero.UI.Base
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         GridLoaderDelegate GridLoader { get; set; }
 
+        IDataSetProvider DataSetProvider { get; }
+
 
         void SelectedBusinessObjectEdited(BusinessObject bo);
 
@@ -167,7 +169,12 @@ namespace Habanero.UI.Base
         /// of 25 will set the page to page 2 since row 25 is on page 2.</param>
         void ChangeToPageOfRow(int rowNum);
 
-
-
+        /// <summary>
+        /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
+        /// return a read only datasetprovider, while an editable grid would return an editable one.
+        /// </summary>
+        /// <param name="col">The collection to create the datasetprovider for</param>
+        /// <returns></returns>
+        IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
     }
 }

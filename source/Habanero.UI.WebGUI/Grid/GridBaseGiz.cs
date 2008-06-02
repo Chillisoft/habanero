@@ -24,14 +24,17 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public event EventHandler<BOEventArgs> BusinessObjectEdited;
 
-        private readonly GridBaseManager _mngr;
+        private readonly GridBaseManager _manager;
 
         public GridBaseGiz()
         {
-            _mngr = new GridBaseManager(this);
+            _manager = new GridBaseManager(this);
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
-            _mngr.CollectionChanged += delegate { FireCollectionChanged(); };
+            _manager.CollectionChanged += delegate { FireCollectionChanged(); };
+           
         }
+
+        public abstract IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
 
         private void FireBusinessObjectSelected()
         {
@@ -60,7 +63,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public void RefreshGrid()
         {
-            _mngr.RefreshGrid();
+            _manager.RefreshGrid();
         }
 
         /// <summary>
@@ -68,7 +71,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public void Clear()
         {
-            _mngr.Clear();
+            _manager.Clear();
         }
 
         /// <summary>
@@ -77,7 +80,7 @@ namespace Habanero.UI.WebGUI
         /// <param name="col"></param>
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
-            _mngr.SetBusinessObjectCollection(col);
+            _manager.SetBusinessObjectCollection(col);
         }
 
         /// <summary>
@@ -86,7 +89,7 @@ namespace Habanero.UI.WebGUI
         /// <returns>Returns a business collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            return _mngr.GetBusinessObjectCollection();
+            return _manager.GetBusinessObjectCollection();
         }
 
         private void FireCollectionChanged()
@@ -109,17 +112,17 @@ namespace Habanero.UI.WebGUI
 
         public IBusinessObject SelectedBusinessObject
         {
-            get { return _mngr.SelectedBusinessObject; }
+            get { return _manager.SelectedBusinessObject; }
             set
             {
-                _mngr.SelectedBusinessObject = value;
+                _manager.SelectedBusinessObject = value;
                 this.FireBusinessObjectSelected();
             }
         }
 
         public IList<BusinessObject> SelectedBusinessObjects
         {
-            get { return _mngr.SelectedBusinessObjects; }
+            get { return _manager.SelectedBusinessObjects; }
         }
 
         IControlCollection IControlChilli.Controls
@@ -135,7 +138,7 @@ namespace Habanero.UI.WebGUI
         /// if none is found</returns>
         public IBusinessObject GetBusinessObjectAtRow(int row)
         {
-            return _mngr.GetBusinessObjectAtRow(row);
+            return _manager.GetBusinessObjectAtRow(row);
         }
 
         /// <summary>
@@ -148,7 +151,7 @@ namespace Habanero.UI.WebGUI
         /// order ("false" sets it to descending order)</param>
         public void Sort(string columnName, bool ascending)
         {
-            _mngr.SetSortColumn(columnName, ascending);
+            _manager.SetSortColumn(columnName, ascending);
         }
 
         /// <summary>
@@ -159,13 +162,18 @@ namespace Habanero.UI.WebGUI
         /// <param name="filterClause">The filter clause</param>
         public void ApplyFilter(IFilterClause filterClause)
         {
-            _mngr.ApplyFilter(filterClause);
+            _manager.ApplyFilter(filterClause);
         }
 
         public GridLoaderDelegate GridLoader
         {
-            get { return _mngr.GridLoader; }
-            set { _mngr.GridLoader = value; }
+            get { return _manager.GridLoader; }
+            set { _manager.GridLoader = value; }
+        }
+
+        public IDataSetProvider DataSetProvider
+        {
+            get { return _manager.DataSetProvider; }
         }
 
         public void SelectedBusinessObjectEdited(BusinessObject bo)

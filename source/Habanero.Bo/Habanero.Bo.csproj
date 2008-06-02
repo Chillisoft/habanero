@@ -161,17 +161,17 @@
     <Compile Include="BusinessObject.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BOCollectionDataSetProvider.cs">
+    <Compile Include="DataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BOCollectionEditableDataSetProvider.cs">
+    <Compile Include="EditableDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClassDefinition\SuperClassDef.cs" />
     <Compile Include="IBusinessObjectCollectionLoader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BOCollectionReadOnlyDataSetProvider.cs">
+    <Compile Include="ReadOnlyDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BOEventArgs.cs">

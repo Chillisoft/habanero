@@ -13,13 +13,16 @@ namespace Habanero.UI.Base
     {
         private readonly IGridBase _gridBase;
 
-        private BOCollectionDataSetProvider _dataSetProvider;
+        private IDataSetProvider _dataSetProvider;
 
         private IBusinessObjectCollection _boCol;
+
         private readonly string _uiDefName;
+
         private DataView _dataTableDefaultView;
 
         public event EventHandler CollectionChanged;
+
         private GridLoaderDelegate _gridLoader;
 
         public GridBaseManager(IGridBase gridBase, string uiDefName)
@@ -28,6 +31,7 @@ namespace Habanero.UI.Base
             _uiDefName = uiDefName;
             _gridBase.AutoGenerateColumns = false;
             _gridLoader = DefaultGridLoader;
+            _gridBase.AllowUserToAddRows = false;
         }
 
         public GridBaseManager(IGridBase gridBase) : this(gridBase, "default")
@@ -59,7 +63,7 @@ namespace Habanero.UI.Base
 
             _gridLoader(_gridBase, _boCol);
 
-            _gridBase.AllowUserToAddRows = false;
+//            _gridBase.AllowUserToAddRows = false;
 
             if (_gridBase.Rows.Count > 0)
             {
@@ -67,6 +71,11 @@ namespace Habanero.UI.Base
                 _gridBase.Rows[0].Selected = true;
             }
             FireCollectionChanged();
+        }
+
+        public IDataSetProvider DataSetProvider
+        {
+            get { return _dataSetProvider; }
         }
 
         public void DefaultGridLoader(IGridBase gridBase, IBusinessObjectCollection boCol)
@@ -81,7 +90,7 @@ namespace Habanero.UI.Base
 
         protected DataView GetDataTable(IBusinessObjectCollection boCol)
         {
-            _dataSetProvider = new BOCollectionReadOnlyDataSetProvider(boCol);
+            _dataSetProvider = _gridBase.CreateDataSetProvider(boCol);
             ClassDef classDef = _boCol.ClassDef;
             UIDef uiDef = classDef.GetUIDef(_uiDefName);
             if (uiDef == null)
@@ -222,23 +231,6 @@ namespace Habanero.UI.Base
             {
                 IDataGridViewRow findRow =_gridBase.Rows[rowIndex];
                 return this._boCol.Find(findRow.Cells["ID"].Value.ToString());
-                //foreach (IDataGridViewRow findRow in _gridBase.Rows)
-                //{
-                //    if (rowIndex == value.ID.ToString())
-                //    {
-                //        gridRows[rowNum].Selected = true;
-                //        _gridBase.ChangeToPageOfRow(rowNum);
-                //        break;
-                //    }
-                //    rowNum++;
-                //}
-                //foreach (DataRowView dataRowView in _dataTableDefaultView)
-                //{
-                //    if (i++ == rowIndex)
-                //    {
-                //        return this._dataSetProvider.Find((string)dataRowView.Row["ID"]);
-                //    }
-                //}
             }
             return null;
         }

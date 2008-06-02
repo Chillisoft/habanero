@@ -1098,11 +1098,24 @@ namespace Habanero.Test.UI.Base
 
         internal class GridBaseGizStub : GridBaseGiz
         {
-
+            public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
+            {
+                return new ReadOnlyDataSetProvider(col);
+            }
         }
 
         internal class GridBaseWinStub : GridBaseWin
         {
+            /// <summary>
+            /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
+            /// return a read only datasetprovider, while an editable grid would return an editable one.
+            /// </summary>
+            /// <param name="col">The collection to create the datasetprovider for</param>
+            /// <returns></returns>
+            public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
+            {
+                return new ReadOnlyDataSetProvider(col);
+            }
         }
 
         #endregion

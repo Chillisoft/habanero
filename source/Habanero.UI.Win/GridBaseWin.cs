@@ -14,20 +14,24 @@ namespace Habanero.UI.Win
         public event EventHandler CollectionChanged;
         public event EventHandler FilterUpdated;
 
-        public void Clear()
-        {
-            _mngr.Clear();
-        }
-
-        private readonly GridBaseManager _mngr;
+        private readonly GridBaseManager _manager;
 
         public GridBaseWin()
         {
-            _mngr = new GridBaseManager(this);
+            _manager = new GridBaseManager(this);
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
-            _mngr.CollectionChanged += delegate{ FireCollectionChanged(); };
+            _manager.CollectionChanged += delegate{ FireCollectionChanged(); };
         }
 
+
+        /// <summary>
+        /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
+        /// return a read only datasetprovider, while an editable grid would return an editable one.
+        /// </summary>
+        /// <param name="col">The collection to create the datasetprovider for</param>
+        /// <returns></returns>
+        public abstract IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
+    
         private void FireBusinessObjectSelected()
         {
             if (this.BusinessObjectSelected != null)
@@ -38,7 +42,7 @@ namespace Habanero.UI.Win
 
         public void SetBusinessObjectCollection(IBusinessObjectCollection col)
         {
-            _mngr.SetBusinessObjectCollection(col);
+            _manager.SetBusinessObjectCollection(col);
         }
 
         /// <summary>
@@ -47,7 +51,7 @@ namespace Habanero.UI.Win
         /// <returns>Returns a business collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCollection()
         {
-            return _mngr.GetBusinessObjectCollection();
+            return _manager.GetBusinessObjectCollection();
         }
 
         /// <summary>
@@ -58,7 +62,7 @@ namespace Habanero.UI.Win
         /// if none is found</returns>
         public IBusinessObject GetBusinessObjectAtRow(int row)
         {
-            return _mngr.GetBusinessObjectAtRow(row);
+            return _manager.GetBusinessObjectAtRow(row);
         }
 
         private void FireCollectionChanged()
@@ -76,6 +80,11 @@ namespace Habanero.UI.Win
                 
                 return new DataGridViewRowCollectionWin(base.Rows);
             }
+        }
+
+        public void Clear()
+        {
+            _manager.Clear();
         }
 
         public new IDataGridViewSelectedRowCollection SelectedRows
@@ -101,8 +110,8 @@ namespace Habanero.UI.Win
 
         public IBusinessObject SelectedBusinessObject
         {
-            get { return _mngr.SelectedBusinessObject; }
-            set { _mngr.SelectedBusinessObject = value; }
+            get { return _manager.SelectedBusinessObject; }
+            set { _manager.SelectedBusinessObject = value; }
         }
 
         public IList<BusinessObject> SelectedBusinessObjects
@@ -111,7 +120,7 @@ namespace Habanero.UI.Win
             {
                 //DataGridViewRow row = new DataGridViewRow();
                 //row.DataBoundItem
-                 return _mngr.SelectedBusinessObjects;
+                 return _manager.SelectedBusinessObjects;
             }
         }
 
@@ -141,8 +150,13 @@ namespace Habanero.UI.Win
 
         public GridLoaderDelegate GridLoader
         {
-            get { return _mngr.GridLoader; }
-            set { _mngr.GridLoader = value; }
+            get { return _manager.GridLoader; }
+            set { _manager.GridLoader = value; }
+        }
+
+        public IDataSetProvider DataSetProvider
+        {
+            get { return _manager.DataSetProvider; }
         }
 
         public void SelectedBusinessObjectEdited(BusinessObject bo)
@@ -158,7 +172,7 @@ namespace Habanero.UI.Win
 
         public void RefreshGrid()
         {
-            _mngr.RefreshGrid();
+            _manager.RefreshGrid();
         }
 
         /// <summary>
@@ -169,6 +183,7 @@ namespace Habanero.UI.Win
         {
             
         }
+
 
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
@@ -190,7 +205,7 @@ namespace Habanero.UI.Win
         /// order ("false" sets it to descending order)</param>
         public void Sort(string columnName, bool ascending)
         {
-            _mngr.SetSortColumn(columnName,  ascending);
+            _manager.SetSortColumn(columnName,  ascending);
         }
 
         /// <summary>
@@ -201,7 +216,7 @@ namespace Habanero.UI.Win
         /// <param name="filterClause">The filter clause</param>
         public void ApplyFilter(IFilterClause filterClause)
         {
-            _mngr.ApplyFilter(filterClause);
+            _manager.ApplyFilter(filterClause);
             FireFilterUpdated();
         }
 
@@ -219,7 +234,7 @@ namespace Habanero.UI.Win
 
         //public void AddColumn(IDataGridViewColumn column)
         //{
-        //    _mngr.AddColumn(column);
+        //    _manager.AddColumn(column);
         //}
 
         private class DataGridViewRowCollectionWin : IDataGridViewRowCollection

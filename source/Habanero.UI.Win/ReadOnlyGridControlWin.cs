@@ -96,7 +96,7 @@ namespace Habanero.UI.Win
 
         public bool IsInitialised
         {
-            get { throw new System.NotImplementedException(); }
+            get { return _gridInitialiser.IsInitialised; }
         }
 
         public FilterModes FilterMode

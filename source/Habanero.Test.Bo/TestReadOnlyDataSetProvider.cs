@@ -27,11 +27,11 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestBOCollectionReadOnlyDataSetProvider : TestBOCollectionDataProvider
+    public class TestReadOnlyDataSetProvider : TestDataSetProvider
     {
         protected override IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col)
         {
-            return new BOCollectionReadOnlyDataSetProvider(itsCollection);
+            return new ReadOnlyDataSetProvider(itsCollection);
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Habanero.Test.BO
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
 
-            BOCollectionReadOnlyDataSetProvider provider = new BOCollectionReadOnlyDataSetProvider(col);
+            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
             UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
             Assert.AreEqual(2, provider.GetDataTable(uiGrid).Rows.Count);
             Assert.AreEqual(0, provider.FindRow(car));
@@ -119,7 +119,7 @@ namespace Habanero.Test.BO
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
 
-            BOCollectionReadOnlyDataSetProvider provider = new BOCollectionReadOnlyDataSetProvider(col);
+            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
             UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
             DataTable table = provider.GetDataTable(uiGrid);
             Assert.AreEqual(2, table.Rows.Count);
@@ -156,7 +156,7 @@ namespace Habanero.Test.BO
             col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();
             Assert.AreEqual(2, col.Count);
-            BOCollectionReadOnlyDataSetProvider provider = new BOCollectionReadOnlyDataSetProvider(col);
+            ReadOnlyDataSetProvider provider = new ReadOnlyDataSetProvider(col);
             UIGrid uiGrid = ClassDef.ClassDefs[typeof(OrderItem)].UIDefCol["default"].UIGrid;
             DataTable table = provider.GetDataTable(uiGrid);
             Assert.AreEqual(2, table.Rows.Count);

@@ -28,9 +28,9 @@ namespace Habanero.BO
     /// <summary>
     /// Provides a super-class for data-set providers for business objects
     /// </summary>
-    public abstract class BOCollectionDataSetProvider : IDataSetProvider
+    public abstract class DataSetProvider : IDataSetProvider
     {
-		protected readonly IBusinessObjectCollection _collection;
+        protected readonly IBusinessObjectCollection _collection;
         protected ICollection _uiGridProperties;
         protected DataTable _table;
         protected IObjectInitialiser _objectInitialiser;
@@ -40,11 +40,11 @@ namespace Habanero.BO
         /// object collection
         /// </summary>
         /// <param name="collection">The business object collection</param>
-		public BOCollectionDataSetProvider(IBusinessObjectCollection collection)
+        public DataSetProvider(IBusinessObjectCollection collection)
         {
             this._collection = collection;
         }
- 
+
         /// <summary>
         /// Returns a data table with the UIGridDef provided
         /// </summary>
@@ -67,9 +67,9 @@ namespace Habanero.BO
                 if (_table.Columns.Contains(uiProperty.PropertyName))
                 {
                     throw new DuplicateNameException(String.Format(
-                        "In a grid definition, a duplicate column with " +
-                        "the name '{0}' has been detected. Only one column " +
-                        "per property can be specified.", uiProperty.PropertyName));
+                                                         "In a grid definition, a duplicate column with " +
+                                                         "the name '{0}' has been detected. Only one column " +
+                                                         "per property can be specified.", uiProperty.PropertyName));
                 }
                 column.ColumnName = uiProperty.PropertyName;
                 column.Caption = uiProperty.GetHeading(classDef);
@@ -146,9 +146,9 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="strId">The ID</param>
         /// <returns>Returns a business object</returns>
-        public BusinessObject Find(string strId)
+        public IBusinessObject Find(string strId)
         {
-            return (BusinessObject) _collection.Find(strId);
+            return _collection.Find(strId);
         }
 
         /// <summary>

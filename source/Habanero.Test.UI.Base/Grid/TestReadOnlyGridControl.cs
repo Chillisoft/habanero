@@ -293,7 +293,44 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(FilterModes.Filter, readOnlyGridControl.FilterControl.FilterMode);
             //---------------Tear Down -------------------------          
         }
+        [Test]
+        public void Test_Using_EditableDataSetProvider()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl gridControl = GetControlFactory().CreateReadOnlyGridControl();
+            MyBO.LoadDefaultClassDef();
+            ClassDef def = ClassDef.ClassDefs[typeof(MyBO)];
+            gridControl.Initialise(def);
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            //--------------Assert PreConditions----------------            
 
+            //---------------Execute Test ----------------------
+            gridControl.Grid.SetBusinessObjectCollection(col);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(ReadOnlyDataSetProvider), gridControl.Grid.DataSetProvider);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void Test_SetCollection()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl gridControl = GetControlFactory().CreateReadOnlyGridControl();
+            MyBO.LoadDefaultClassDef();
+            ClassDef def = ClassDef.ClassDefs[typeof(MyBO)];
+            gridControl.Initialise(def);
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            gridControl.Grid.SetBusinessObjectCollection(col);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(gridControl.Grid.ReadOnly);
+            Assert.IsFalse(gridControl.Grid.AllowUserToAddRows);
+            Assert.IsFalse(gridControl.Grid.AllowUserToDeleteRows);
+
+            Assert.AreEqual(0, gridControl.Grid.Rows.Count);
+            //---------------Tear Down -------------------------          
+        }
         [Test]
         public void Test_ReadOnlyGrid_SetToSearchSetsToSearchMode()
         {

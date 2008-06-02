@@ -196,9 +196,9 @@
     <Compile Include="Loaders\TestXmlUIFormTabLoader.cs" />
     <Compile Include="SqlGeneration\TestInsertStatementGenerator.cs" />
     <Compile Include="SqlGeneration\TestSelectStatementGenerator.cs" />
-    <Compile Include="TestBOCollectionDataProvider.cs" />
-    <Compile Include="TestBOCollectionEditableDataProvider.cs" />
-    <Compile Include="TestBOCollectionReadOnlyDataSetProvider.cs" />
+    <Compile Include="TestDataSetProvider.cs" />
+    <Compile Include="TestEditableDataProvider.cs" />
+    <Compile Include="TestReadOnlyDataSetProvider.cs" />
     <Compile Include="TestBoKey.cs" />
     <Compile Include="TestBOLoader.cs" />
     <Compile Include="TestBoMapper.cs">

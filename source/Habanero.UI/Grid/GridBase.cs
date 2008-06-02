@@ -45,7 +45,7 @@ namespace Habanero.UI.Grid
 
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Grid.GridBase");
         protected DataTable _dataTable;
-        protected BOCollectionDataSetProvider _dataSetProvider;
+        protected DataSetProvider _dataSetProvider;
 		protected IBusinessObjectCollection _collection;
         private IObjectInitialiser _objectInitialiser;
         protected DataView _dataTableDefaultView;
@@ -393,7 +393,7 @@ namespace Habanero.UI.Grid
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <returns>Returns the new provider</returns>
-        protected abstract BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
+        protected abstract DataSetProvider CreateBusinessObjectCollectionDataSetProvider(
 			IBusinessObjectCollection col);
 
         /// <summary>
@@ -512,7 +512,7 @@ namespace Habanero.UI.Grid
             BusinessObjectCollection<BusinessObject> busObjects = new BusinessObjectCollection<BusinessObject>(_collection.ClassDef);
             foreach (DataGridViewRow row in this.SelectedRows)
             {
-                busObjects.Add(this._dataSetProvider.Find((string) row.Cells["ID"].Value));
+                busObjects.Add((BusinessObject) this._dataSetProvider.Find((string) row.Cells["ID"].Value));
             }
             return busObjects;
         }
@@ -551,7 +551,7 @@ namespace Habanero.UI.Grid
             {
                 if (i++ == row)
                 {
-                    return this._dataSetProvider.Find((string)dataRowView.Row["ID"]);
+                    return (BusinessObject) this._dataSetProvider.Find((string)dataRowView.Row["ID"]);
                 }
             }
             return null;

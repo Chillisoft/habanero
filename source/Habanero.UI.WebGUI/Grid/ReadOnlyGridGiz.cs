@@ -1,3 +1,5 @@
+using Habanero.Base;
+using Habanero.BO;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
@@ -13,5 +15,9 @@ namespace Habanero.UI.WebGUI
             this.SelectionMode = Gizmox.WebGUI.Forms.DataGridViewSelectionMode.FullRowSelect;
         }
 
+        public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
+        {
+            return new ReadOnlyDataSetProvider(col);
+        }
     }
 }

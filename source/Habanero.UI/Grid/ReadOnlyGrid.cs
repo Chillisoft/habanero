@@ -135,10 +135,10 @@ namespace Habanero.UI.Grid
         /// </summary>
         /// <param name="col">The business object collection</param>
         /// <returns>Returns a new data set provider</returns>
-        protected override BOCollectionDataSetProvider CreateBusinessObjectCollectionDataSetProvider(
+        protected override DataSetProvider CreateBusinessObjectCollectionDataSetProvider(
 			IBusinessObjectCollection col)
         {
-            return new BOCollectionReadOnlyDataSetProvider(col);
+            return new ReadOnlyDataSetProvider(col);
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace Habanero.UI.Grid
                 List<BusinessObject> filteredBos = new List<BusinessObject>(_collection.Count);
                 foreach (DataRowView dataRowView in _dataTableDefaultView)
                 {
-                    filteredBos.Add(this._dataSetProvider.Find((string) dataRowView.Row["ID"]));
+                    filteredBos.Add((BusinessObject) this._dataSetProvider.Find((string) dataRowView.Row["ID"]));
                 }
                 return filteredBos;
             }

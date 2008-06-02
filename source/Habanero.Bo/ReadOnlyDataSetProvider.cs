@@ -24,14 +24,14 @@ namespace Habanero.BO
     /// <summary>
     /// Provides a read-only data-set for business objects
     /// </summary>
-    public class BOCollectionReadOnlyDataSetProvider : BOCollectionDataSetProvider
+    public class ReadOnlyDataSetProvider : DataSetProvider
     {
         /// <summary>
         /// Constructor to initialise a new provider with the business object
         /// collection provided
         /// </summary>
         /// <param name="collection">The business object collection</param>
-		public BOCollectionReadOnlyDataSetProvider(IBusinessObjectCollection collection)
+		public ReadOnlyDataSetProvider(IBusinessObjectCollection collection)
             : base(collection)
         {
         }
@@ -43,10 +43,10 @@ namespace Habanero.BO
         {
             foreach (BusinessObject businessObject in _collection)
             {
-                businessObject.Updated += new EventHandler<BOEventArgs>(UpdatedHandler);
+                businessObject.Updated += UpdatedHandler;
             }
-            _collection.BusinessObjectAdded += new EventHandler<BOEventArgs>(AddedHandler);
-            _collection.BusinessObjectRemoved += new EventHandler<BOEventArgs>(RemovedHandler);
+            _collection.BusinessObjectAdded += AddedHandler;
+            _collection.BusinessObjectRemoved += RemovedHandler;
         }
 
         /// <summary>
