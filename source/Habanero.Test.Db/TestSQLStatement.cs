@@ -195,7 +195,7 @@ namespace Habanero.Test.DB
         {
             SqlStatement sql = new SqlStatement(_connection, "select * from bob");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
-            Assert.AreEqual("select DISTINCT * from (bob) LEFT JOIN [bobby] ON bobs = bobbys", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys", sql.Statement.ToString());
         }
 
         [Test]
@@ -203,7 +203,7 @@ namespace Habanero.Test.DB
         {
             SqlStatement sql = new SqlStatement(_connection, "select * from bob");
             sql.AddJoin("inner join", "bobby", "bobs = bobbys");
-            Assert.AreEqual("select * from (bob) INNER JOIN [bobby] ON bobs = bobbys", sql.Statement.ToString());
+            Assert.AreEqual("select * from bob INNER JOIN [bobby] ON bobs = bobbys", sql.Statement.ToString());
         }
 
         [Test]
@@ -212,7 +212,7 @@ namespace Habanero.Test.DB
             SqlStatement sql = new SqlStatement(_connection, "select * from bob");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select DISTINCT * from (bob) LEFT JOIN [bobby] ON bobs = bobbys WHERE this = that", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE this = that", sql.Statement.ToString());
         }
 
         [Test]
@@ -221,7 +221,7 @@ namespace Habanero.Test.DB
             SqlStatement sql = new SqlStatement(_connection, "select * from bob");
             sql.AppendCriteria("this = that");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
-            Assert.AreEqual("select DISTINCT * from (bob) LEFT JOIN [bobby] ON bobs = bobbys WHERE this = that", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE this = that", sql.Statement.ToString());
         }
 
         [Test]
@@ -229,7 +229,7 @@ namespace Habanero.Test.DB
         {
             SqlStatement sql = new SqlStatement(_connection, "select * from bob WHERE that = this");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
-            Assert.AreEqual("select DISTINCT * from (bob) LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this", sql.Statement.ToString());
         }
 
         [Test]
@@ -238,7 +238,18 @@ namespace Habanero.Test.DB
             SqlStatement sql = new SqlStatement(_connection, "select * from bob WHERE that = this");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select DISTINCT * from (bob) LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this AND this = that", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT * from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this AND this = that", sql.Statement.ToString());
+        }
+
+        [Test]
+        public void AddJoin_WithWhere_AlsoAddWhere_AddAnotherJoin()
+        {
+            SqlStatement sql = new SqlStatement(_connection, "select * from bob WHERE that = this");
+            sql.AddJoin("left join", "bobby", "bobs = bobbys");
+            sql.AppendCriteria("this = that");
+            sql.AddJoin("left join", "bobbin", "bobbys = bobbins");
+            Assert.AreEqual("select DISTINCT * from (bob LEFT JOIN [bobby] ON bobs = bobbys) "+
+                "LEFT JOIN [bobbin] ON bobbys = bobbins WHERE that = this AND this = that", sql.Statement.ToString());
         }
 
         [Test]
@@ -247,7 +258,7 @@ namespace Habanero.Test.DB
             SqlStatement sql = new SqlStatement(_connection, "select [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from bob WHERE that = this");
             sql.AddJoin("left join", "bobby", "bobs = bobbys");
             sql.AppendCriteria("this = that");
-            Assert.AreEqual("select DISTINCT [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from (bob) LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this AND this = that", sql.Statement.ToString());
+            Assert.AreEqual("select DISTINCT [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from bob LEFT JOIN [bobby] ON bobs = bobbys WHERE that = this AND this = that", sql.Statement.ToString());
         }
 
         #endregion //Test AddJoin
