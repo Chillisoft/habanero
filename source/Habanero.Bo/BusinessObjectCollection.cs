@@ -268,8 +268,8 @@ namespace Habanero.BO
             Clear();
             IDatabaseConnection boDatabaseConnection = _sampleBo.GetDatabaseConnection();
             ISqlStatement refreshSql = CreateLoadSqlStatement(_sampleBo, _boClassDef,
-                                                              _criteriaExpression, _limit, _extraSearchCriteriaLiteral);
-            using (IDataReader dr = boDatabaseConnection.LoadDataReader(refreshSql, _orderByClause))
+                _criteriaExpression, _limit, _extraSearchCriteriaLiteral, _orderByClause);
+            using (IDataReader dr = boDatabaseConnection.LoadDataReader(refreshSql))
             {
                 try
                 {
@@ -302,110 +302,97 @@ namespace Habanero.BO
 
         internal static ISqlStatement CreateLoadSqlStatement(BusinessObject businessObject, ClassDef classDef,
                                                              IExpression criteriaExpression, int limit,
-                                                             string extraSearchCriteriaLiteral)
+                                                             string extraSearchCriteriaLiteral, string orderByClause)
         {
             IDatabaseConnection boDatabaseConnection = businessObject.GetDatabaseConnection();
-            ISqlStatement refreshSql = new SqlStatement(boDatabaseConnection);
-            refreshSql.Statement.Append(businessObject.GetSelectSql(limit));
+            ISqlStatement loadSqlStatement = new SqlStatement(boDatabaseConnection);
+            loadSqlStatement.Statement.Append(businessObject.GetSelectSql(limit));
             if (criteriaExpression != null)
             {
                 IExpression loadCriteria = criteriaExpression.Clone();
-                DetermineJoins(classDef, boDatabaseConnection, refreshSql, loadCriteria);
-                refreshSql.AppendWhere();
+                DetermineJoins(loadSqlStatement, classDef, loadCriteria, ref orderByClause, boDatabaseConnection);
+                loadSqlStatement.AppendWhere();
                 SqlCriteriaCreator creator = new SqlCriteriaCreator(loadCriteria, classDef, boDatabaseConnection);
-                creator.AppendCriteriaToStatement(refreshSql);
+                creator.AppendCriteriaToStatement(loadSqlStatement);
+            } else
+            {
+                DetermineJoins(loadSqlStatement, classDef, null, ref orderByClause, boDatabaseConnection);
             }
             if (!String.IsNullOrEmpty(extraSearchCriteriaLiteral))
             {
-                refreshSql.AppendWhere();
-                refreshSql.Statement.Append(extraSearchCriteriaLiteral);
+                loadSqlStatement.AppendWhere();
+                loadSqlStatement.Statement.Append(extraSearchCriteriaLiteral);
             }
 
             if (limit > 0)
             {
                 string limitClause = boDatabaseConnection.GetLimitClauseForEnd(limit);
-                if (!String.IsNullOrEmpty(limitClause)) refreshSql.Statement.Append(" " + limitClause);
+                if (!String.IsNullOrEmpty(limitClause)) loadSqlStatement.Statement.Append(" " + limitClause);
             }
-            return refreshSql;
+            loadSqlStatement.AppendOrderBy(orderByClause);
+            return loadSqlStatement;
         }
 
-        private static void DetermineJoins(ClassDef classDef, IDatabaseConnection databaseConnection,
-                                           ISqlStatement sqlStatement, IExpression criteriaExpression)
+        private static void DetermineJoins(ISqlStatement sqlStatement, ClassDef classDef, IExpression criteriaExpression, 
+            ref string orderByClause, IDatabaseConnection databaseConnection)
         {
-            List<Parameter> relationshipParameters = new List<Parameter>();
-            AnalyzeExpression(criteriaExpression, ref relationshipParameters);
             List<string> joinedRelationshipTables = new List<string>();
+            DetermineCriteriaParameterJoins(sqlStatement, classDef, databaseConnection, criteriaExpression, joinedRelationshipTables);
+            DetermineOrderByParameterJoins(sqlStatement, classDef, databaseConnection, ref orderByClause, joinedRelationshipTables);
+        }
+
+        private static void DetermineOrderByParameterJoins(ISqlStatement sqlStatement, ClassDef classDef, 
+            IDatabaseConnection databaseConnection, ref string orderByClause, List<string> joinedRelationshipTables)
+        {
+            if (String.IsNullOrEmpty(orderByClause)) return;
+            if (orderByClause.IndexOf(".") == -1) return;
+            string[] orderByParameters = orderByClause.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
+            List<string> reconstructedParameters = new List<string>();
+            foreach (string thisOrderByParameter in orderByParameters)
+            {
+                string orderByParameter = thisOrderByParameter.Trim();
+                if (IsRelationshipParameter(orderByParameter))
+                {
+                    string[] parts = orderByParameter.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length > 0)
+                    {
+                        string parameterName = parts[0];
+                        string fullTableName;
+                        PropDef propDef;
+                        InsertJoinsForRelatedProperty(sqlStatement, classDef, parameterName, databaseConnection,
+                                                      ref joinedRelationshipTables, out fullTableName, out propDef);
+                        string newParameterName = fullTableName + "." + propDef.DatabaseFieldName;
+                        parts[0] = newParameterName;
+                        orderByParameter = String.Join(" ", parts);
+                    }
+                }
+                reconstructedParameters.Add(orderByParameter);
+            }
+
+            orderByClause = String.Join(", ", reconstructedParameters.ToArray());
+            return;
+        }
+
+        private static void DetermineCriteriaParameterJoins(ISqlStatement sqlStatement, ClassDef classDef, IDatabaseConnection databaseConnection, IExpression criteriaExpression, List<string> joinedRelationshipTables)
+        {
+            if (criteriaExpression == null) return;
+            List<Parameter> relationshipParameters = new List<Parameter>();
+            AnalyzeExpressionForRelationshipParameters(criteriaExpression, ref relationshipParameters);
             Dictionary<string, IParameterSqlInfo> relationshipParameterInformation =
                 new Dictionary<string, IParameterSqlInfo>();
             foreach (Parameter parameter in relationshipParameters)
             {
                 string parameterName = parameter.ParameterName;
-                string[] parts = parameterName.Split('.');
-                string propertyName = parts[parts.Length - 1];
-                ClassDef currentClassDef = classDef;
-                string fullTableName = currentClassDef.InheritedTableName;
-                for (int i = 0; i < parts.Length - 1; i++)
+                string fullTableName;
+                PropDef propDef;
+                InsertJoinsForRelatedProperty(sqlStatement, classDef, parameterName, databaseConnection,
+                                              ref joinedRelationshipTables, out fullTableName, out propDef);
+
+                if (propDef != null && !relationshipParameterInformation.ContainsKey(parameterName))
                 {
-                    string relationshipName = parts[i];
-                    string previousFullTableName = fullTableName;
-                    fullTableName += relationshipName;
-                    RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
-                    if (relationshipDef != null)
-                    {
-                        if (relationshipDef.RelatedObjectClassDef == null)
-                        {
-                            throw new SqlStatementException(String.Format(
-                                                                "The relationship '{0}' of the class '{1}' referred to in " +
-                                                                "the Business Object Collection load criteria in the parameter " +
-                                                                "'{2}' refers to the class '{3}' from the assembly '{4}'. " +
-                                                                "This related class is not found in the loaded class definitions.",
-                                                                relationshipName, currentClassDef.ClassName,
-                                                                parameterName,
-                                                                relationshipDef.RelatedObjectClassName,
-                                                                relationshipDef.RelatedObjectAssemblyName));
-                        }
-                        currentClassDef = relationshipDef.RelatedObjectClassDef;
-                    }
-                    else
-                    {
-                        throw new SqlStatementException(String.Format("The relationship '{0}' of the class '{1}'" +
-                                                                      " referred to in the Business Object Collection load criteria in the parameter '{2}' does not exist.",
-                                                                      relationshipName, currentClassDef.ClassName,
-                                                                      parameterName));
-                    }
-                    if (joinedRelationshipTables.Contains(fullTableName))
-                    {
-                        //Dont add join
-                    }
-                    else
-                    {
-                        //Add join
-                        string joinTableAs =
-                            SqlFormattingHelper.FormatTableName(currentClassDef.InheritedTableName, databaseConnection);
-                        joinTableAs += " AS ";
-                        joinTableAs += SqlFormattingHelper.FormatTableName(fullTableName, databaseConnection);
-                        string joinCriteria = "";
-                        foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
-                        {
-                            joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
-                                previousFullTableName, relPropDef.OwnerPropertyName, databaseConnection);
-                            joinCriteria += " = ";
-                            joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
-                                fullTableName, relPropDef.RelatedClassPropName, databaseConnection);
-                        }
-                        sqlStatement.AddJoin("LEFT JOIN", joinTableAs, joinCriteria);
-                        joinedRelationshipTables.Add(fullTableName);
-                    }
-                }
-                if (!relationshipParameterInformation.ContainsKey(parameterName))
-                {
-                    PropDef propDef = currentClassDef.GetPropDef(propertyName, false);
-                    if (propDef != null)
-                    {
-                        PropDefParameterSQLInfo parameterSQLInfo = new PropDefParameterSQLInfo(
-                            parameterName, propDef, fullTableName);
-                        relationshipParameterInformation.Add(parameterName, parameterSQLInfo);
-                    }
+                    PropDefParameterSQLInfo parameterSQLInfo = new PropDefParameterSQLInfo(
+                        parameterName, propDef, fullTableName);
+                    relationshipParameterInformation.Add(parameterName, parameterSQLInfo);
                 }
             }
             foreach (KeyValuePair<string, IParameterSqlInfo> keyValuePair in relationshipParameterInformation)
@@ -414,7 +401,88 @@ namespace Habanero.BO
             }
         }
 
-        private static void AnalyzeExpression(IExpression criteriaExpression, ref List<Parameter> parameters)
+        /// <summary>
+        /// This method adds the necessary joins to a sql statement for a Related Property for the specified class.
+        /// For example: If the class is 'Invoice' and the "Parameter Name" is 'Order.Customer.Name' then joins 
+        /// will be added to the sql statement from the 'Invoice' table to the 'Order' table to the 'Customer' table 
+        /// so that the 'Name' field can be used.
+        /// </summary>
+        /// <param name="sqlStatement">The SQL Statement to be updated with the joins if necessary.</param>
+        /// <param name="classDef">The classDef for which the SQL Statement is being built.</param>
+        /// <param name="parameterName">The parameter that is being used</param>
+        /// <param name="databaseConnection">The database connection to use to format the SQL.</param>
+        /// <param name="alreadyJoinedRelationshipTables">A List of full table names that have already 
+        /// been joined for this SQL Statement (This is used to avoid adding a duplicate join).</param>
+        /// <param name="fullTableName">A return parameter to get the constructed Alias for this joined table.</param>
+        /// <param name="propDef">A return parameter to get the propDef that represents the related property.</param>
+        private static void InsertJoinsForRelatedProperty(ISqlStatement sqlStatement, ClassDef classDef, string parameterName, 
+            IDatabaseConnection databaseConnection, ref List<string> alreadyJoinedRelationshipTables, out string fullTableName, out PropDef propDef)
+        {
+            string[] parts = parameterName.Split('.');
+            string propertyName = parts[parts.Length - 1];
+            ClassDef currentClassDef = classDef;
+            fullTableName = currentClassDef.InheritedTableName;
+            for (int i = 0; i < parts.Length - 1; i++)
+            {
+                string relationshipName = parts[i];
+                string previousFullTableName = fullTableName;
+                fullTableName += relationshipName;
+                RelationshipDef relationshipDef = currentClassDef.GetRelationship(relationshipName);
+                if (relationshipDef != null)
+                {
+                    if (relationshipDef.RelatedObjectClassDef == null)
+                    {
+                        throw new SqlStatementException(String.Format(
+                                                            "The relationship '{0}' of the class '{1}' referred to in " +
+                                                            "the Business Object Collection load criteria in the parameter " +
+                                                            "'{2}' refers to the class '{3}' from the assembly '{4}'. " +
+                                                            "This related class is not found in the loaded class definitions.",
+                                                            relationshipName, currentClassDef.ClassName,
+                                                            parameterName,
+                                                            relationshipDef.RelatedObjectClassName,
+                                                            relationshipDef.RelatedObjectAssemblyName));
+                    }
+                    currentClassDef = relationshipDef.RelatedObjectClassDef;
+                }
+                else
+                {
+                    throw new SqlStatementException(String.Format("The relationship '{0}' of the class '{1}'" +
+                                                                  " referred to in the Business Object Collection load criteria in the parameter '{2}' does not exist.",
+                                                                  relationshipName, currentClassDef.ClassName,
+                                                                  parameterName));
+                }
+                if (alreadyJoinedRelationshipTables.Contains(fullTableName))
+                {
+                    //Dont add join
+                }
+                else
+                {
+                    //Add join
+                    string joinTableAs =
+                        SqlFormattingHelper.FormatTableName(currentClassDef.InheritedTableName, databaseConnection);
+                    joinTableAs += " AS ";
+                    joinTableAs += SqlFormattingHelper.FormatTableName(fullTableName, databaseConnection);
+                    string joinCriteria = "";
+                    foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+                    {
+                        joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
+                            previousFullTableName, relPropDef.OwnerPropertyName, databaseConnection);
+                        joinCriteria += " = ";
+                        joinCriteria += SqlFormattingHelper.FormatTableAndFieldName(
+                            fullTableName, relPropDef.RelatedClassPropName, databaseConnection);
+                    }
+                    sqlStatement.AddJoin("LEFT JOIN", joinTableAs, joinCriteria);
+                    alreadyJoinedRelationshipTables.Add(fullTableName);
+                }
+            }
+            propDef = null;
+            if (currentClassDef != null)
+            {
+                propDef = currentClassDef.GetPropDef(propertyName, false);
+            }
+        }
+
+        private static void AnalyzeExpressionForRelationshipParameters(IExpression criteriaExpression, ref List<Parameter> parameters)
         {
             if (criteriaExpression is Expression)
             {
@@ -440,13 +508,19 @@ namespace Habanero.BO
             }
             else
             {
-                AnalyzeExpression(expression, ref parameters);
+                AnalyzeExpressionForRelationshipParameters(expression, ref parameters);
             }
         }
 
         private static bool IsRelationshipParameter(Parameter parameter)
         {
-            return parameter.ParameterName.Contains(".");
+            string parameterName = parameter.ParameterName;
+            return IsRelationshipParameter(parameterName);
+        }
+
+        private static bool IsRelationshipParameter(string parameterName)
+        {
+            return parameterName.Contains(".");
         }
 
         #endregion //Create Load Statement

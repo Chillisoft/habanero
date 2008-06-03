@@ -141,7 +141,8 @@ namespace Habanero.Test.BO
         public void TestCreateLoadSqlStatement_LimitClauseAtEnd()
         {
             MyBO bo1 = new MyBO();
-            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof (MyBO)], null, 10, null);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof (MyBO)], null, 10, null, null);
             Assert.AreEqual("SELECT `MyBO`.`MyBoID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` FROM `MyBO` limit 10", statement.Statement.ToString());
         }
 
@@ -150,7 +151,8 @@ namespace Habanero.Test.BO
         {
             MyBO bo1 = new MyBO();
             bo1.SetDatabaseConnection(new MyDatabaseConnection());
-            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], null, 10, null);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], null, 10, null, null);
             Assert.AreEqual("SELECT TOP 10 MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statement.Statement.ToString());
         }
 
@@ -163,7 +165,7 @@ namespace Habanero.Test.BO
             string criteria = "TestProp = ''";
             IExpression expression = Expression.CreateExpression(criteria);
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
-                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, null);
             Assert.AreEqual(@"SELECT `MyBO`.`MyBoID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
                 "FROM `MyBO` " +
                 "WHERE (`MyBO`.`TestProp` = ?Param0)",
@@ -185,7 +187,7 @@ namespace Habanero.Test.BO
             string criteria = "TestProp = 'Test' and MyUnknownRelationship.MyRelatedTestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
             BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
-                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, null);
         }
 
         [Test, ExpectedException(typeof(SqlStatementException),
@@ -201,7 +203,7 @@ namespace Habanero.Test.BO
             string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
             BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
-                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, null);
         }
 
         [Test]
@@ -213,11 +215,124 @@ namespace Habanero.Test.BO
             MyBO bo1 = new MyBO();
             string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
-            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, null);
             Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
                 "FROM (`MyBO`) LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
                 "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationship`.`MyRelatedTestProp` = ?Param1)",
+                statement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestCreateLoadSqlStatement_RelatedObjectPropertiesInOrderBy()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = new MyBO();
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], null, -1, null, "MyRelationship.MyRelatedTestProp");
+            //-------------Test Result ----------------------
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+                "FROM (`MyBO`) LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
+                "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
+                "ORDER BY MyBOMyRelationship.MyRelatedTestProp",
+                statement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestCreateLoadSqlStatement_RelatedObjectPropertiesInOrderBy_ManyLevelsDeep()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDefWithRelationshipBackToMyBo();
+            MyBO bo1 = new MyBO();
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            string orderByClause = "MyRelationship.MyRelationshipToMyBo.MyRelationship.MyRelationshipToMyBo.TestProp";
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], null, -1, null, orderByClause);
+            //-------------Test Result ----------------------
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+                "FROM ((((`MyBO`) LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
+                "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID`) " +
+                "LEFT JOIN `MyBO` AS `MyBOMyRelationshipMyRelationshipToMyBo` " +
+                "ON `MyBOMyRelationship`.`MyBoID` = `MyBOMyRelationshipMyRelationshipToMyBo`.`MyBoID`) " +
+                "LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationshipMyRelationshipToMyBoMyRelationship` " +
+                "ON `MyBOMyRelationshipMyRelationshipToMyBo`.`RelatedID` = " +
+                "`MyBOMyRelationshipMyRelationshipToMyBoMyRelationship`.`MyRelatedBoID`) " +
+                "LEFT JOIN `MyBO` AS `MyBOMyRelationshipMyRelationshipToMyBoMyRelationshipMyRelationshipToMyBo` " +
+                "ON `MyBOMyRelationshipMyRelationshipToMyBoMyRelationship`.`MyBoID` " +
+                "= `MyBOMyRelationshipMyRelationshipToMyBoMyRelationshipMyRelationshipToMyBo`.`MyBoID` " +
+                "ORDER BY MyBOMyRelationshipMyRelationshipToMyBoMyRelationshipMyRelationshipToMyBo.TestProp",
+                statement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestCreateLoadSqlStatement_RelatedObjectPropertiesInOrderBy_WithNormalOrderByAsWell()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = new MyBO();
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], null, -1, null, "MyRelationship.MyRelatedTestProp, TestProp");
+            //-------------Test Result ----------------------
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+                "FROM (`MyBO`) LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
+                "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
+                "ORDER BY MyBOMyRelationship.MyRelatedTestProp, TestProp",
+                statement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestCreateLoadSqlStatement_RelatedObjectPropertiesInOrderBy_TwoRelatedProps()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = new MyBO();
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], null, -1, null, "MyRelationship.MyRelatedTestProp, MyRelationship.MyRelatedBoID");
+            //-------------Test Result ----------------------
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+                "FROM (`MyBO`) LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
+                "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
+                "ORDER BY MyBOMyRelationship.MyRelatedTestProp, MyBOMyRelationship.MyRelatedBoID",
+                statement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestCreateLoadSqlStatement_RelatedObjectPropertiesInOrderBy_WithCriteria()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            MyBO bo1 = new MyBO();
+            string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
+            IExpression expression = Expression.CreateExpression(criteria);
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, "MyRelationship.MyRelatedTestProp");
+            //-------------Test Result ----------------------
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+                "FROM (`MyBO`) LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
+                "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
+                "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationship`.`MyRelatedTestProp` = ?Param1) " +
+                "ORDER BY MyBOMyRelationship.MyRelatedTestProp",
                 statement.Statement.ToString());
         }
 
@@ -230,7 +345,8 @@ namespace Habanero.Test.BO
             MyBO bo1 = new MyBO();
             string criteria = "TestProp = 'Test' and MyRelationship.MyRelationshipToMyBo.TestProp2 = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
-            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, null);
             Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
                 "FROM ((`MyBO`) LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID`) " +
@@ -249,7 +365,8 @@ namespace Habanero.Test.BO
             MyBO bo1 = new MyBO();
             string criteria = "TestProp = 'Test' and MyRelationship.MyRelatedTestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
-            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, null);
             Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
                 "FROM (`MyBO`) LEFT JOIN `MyBO` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
@@ -266,7 +383,8 @@ namespace Habanero.Test.BO
             MyBO bo1 = new MyBO();
             string criteria = "TestProp = 'Test' and MyRelationship.TestProp = 'TestValue'";
             IExpression expression = Expression.CreateExpression(criteria);
-            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null);
+            ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
+                bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, null);
             Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
                 "FROM (`MyBO`) LEFT JOIN `MyBO` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
