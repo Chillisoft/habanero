@@ -121,7 +121,7 @@ namespace Habanero.UI.Base
             foreach (UIGridColumn gridColDef in gridDef)
             {
                 IDataGridViewColumn col = CreateColumn(gridColDef.PropertyName, gridColDef.GetHeading());
-                col.ReadOnly = true;
+                //col.ReadOnly = true;
                 col.HeaderText = gridColDef.GetHeading();
                 col.Name = gridColDef.PropertyName;
                 col.DataPropertyName = gridColDef.PropertyName;

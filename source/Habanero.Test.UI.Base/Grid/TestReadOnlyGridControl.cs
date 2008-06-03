@@ -11,7 +11,6 @@ namespace Habanero.Test.UI.Base
 {
     public abstract class TestReadonlyGridControl : TestUsingDatabase
     {
-        //TODO: Move dataView Logic out of GridBase
         //TODO: Tests that if init not called throws sensible errors
         //TODO: Date searchby
         [SetUp]

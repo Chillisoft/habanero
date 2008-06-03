@@ -60,16 +60,21 @@ namespace Habanero.Test.BO
             Assert.IsTrue(address.State.IsNew);
             Assert.AreEqual(1, contactPersonTestBO.Addresses.CreatedBusinessObjects.Count);
         }
+
         [Test]
         public void TestPersistOfCreatedBusinessObjects()
         {
-
+            //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
             BusinessObjectCollection<ContactPersonTestBO> cpCol = new BusinessObjectCollection<ContactPersonTestBO>();
             ContactPersonTestBO newCP = cpCol.CreateBusinessObject();
             newCP.Surname = Guid.NewGuid().ToString();
             newCP.FirstName = Guid.NewGuid().ToString();
+
+            //---------------Execute Test ----------------------
             cpCol.SaveAll();
+
+            //---------------Test Result -----------------------
             Assert.AreEqual(1, cpCol.Count);
             Assert.AreEqual(0, cpCol.CreatedBusinessObjects.Count);
         }

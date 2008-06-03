@@ -15,16 +15,13 @@ namespace Habanero.UI.Win
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this);
             _grid = _controlFactory.CreateEditableGrid();
+            BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
+            manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
         }
 
         public IGridBase Grid
         {
             get { return _grid; }
-        }
-
-        IControlCollection IControlChilli.Controls
-        {
-            get { throw new System.NotImplementedException(); }
         }
 
         public void Initialise(ClassDef classDef)
@@ -49,11 +46,6 @@ namespace Habanero.UI.Win
         {
             get { return _editableGridManager.ClassDef; }
             set { _editableGridManager.ClassDef = value; }
-        }
-
-        public void ApplyChangesToBusinessObject()
-        {
-            
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Habanero.UI.WebGUI
         public EditableGridGiz()
         {
             this.AllowUserToAddRows = true;
+            this.SelectionMode = DataGridViewSelectionMode.CellSelect;
         }
 
         public override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)

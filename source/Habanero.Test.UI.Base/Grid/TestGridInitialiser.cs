@@ -304,7 +304,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(columnDef1.PropertyName, dataColumn1.Name);
             Assert.AreEqual(columnDef1.GetHeading(), dataColumn1.HeaderText);
             Assert.IsTrue(dataColumn1.Visible);
-            Assert.IsTrue(dataColumn1.ReadOnly);
+//            Assert.IsTrue(dataColumn1.ReadOnly); TODO: put this test into the readonlygridinitialiser
             Assert.AreEqual(columnDef1.Width, dataColumn1.Width);
             PropDef propDef = GetPropDef(classDef, columnDef1);
             Assert.AreEqual(propDef.PropertyType, dataColumn1.ValueType);

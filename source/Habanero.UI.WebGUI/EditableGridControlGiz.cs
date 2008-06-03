@@ -16,7 +16,6 @@ namespace Habanero.UI.WebGUI
             _controlFactory = controlFactory;
             _editableGridManager = new EditableGridControlManager(this);
             _grid = _controlFactory.CreateEditableGrid();
-//            this.Controls.Add((Control) _grid);
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);
         }
@@ -48,11 +47,6 @@ namespace Habanero.UI.WebGUI
         {
             get { return _editableGridManager.ClassDef; }
             set { _editableGridManager.ClassDef = value; }
-        }
-
-        public void ApplyChangesToBusinessObject()
-        {
-            
         }
     }
 }

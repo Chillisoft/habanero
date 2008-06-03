@@ -35,39 +35,40 @@ namespace Habanero.Test.UI.Base
 
 
 
-        //[TestFixture]
-        //public class TestEditableGridControlWin : TestEditableGridControl
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new ControlFactoryWin();
-        //    }
+        [TestFixture]
+        public class TestEditableGridControlWin : TestEditableGridControl
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
 
-        //    //protected override IGridBase CreateGridBaseStub()
-        //    //{
-        //    //    GridBaseWinStub gridBase = new GridBaseWinStub();
-        //    //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-        //    //    frm.Controls.Add(gridBase);
-        //    //    return gridBase;
-        //    //}
+            //protected override IGridBase CreateGridBaseStub()
+            //{
+            //    GridBaseWinStub gridBase = new GridBaseWinStub();
+            //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+            //    frm.Controls.Add(gridBase);
+            //    return gridBase;
+            //}
 
-        //    //private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
-        //    //                                                             IGridBase gridBase)
-        //    //{
-        //    //    System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView) gridBase;
-        //    //    System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
-        //    //    return row.Cells[propName];
-        //    //}
+            //private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
+            //                                                             IGridBase gridBase)
+            //{
+            //    System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView) gridBase;
+            //    System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
+            //    return row.Cells[propName];
+            //}
 
-        //    //protected override void AddControlToForm(IGridBase gridBase)
-        //    //{
-        //    //    throw new NotImplementedException();
-        //    //}
-        //    protected override void AddControlToForm(IControlChilli cntrl)
-        //    {
-        //        throw new System.NotImplementedException();
-        //    }
-        //}
+            //protected override void AddControlToForm(IGridBase gridBase)
+            //{
+            //    throw new NotImplementedException();
+            //}
+            protected override void AddControlToForm(IControlChilli cntrl)
+            {
+                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+                frm.Controls.Add((System.Windows.Forms.Control)cntrl);
+            }
+        }
 
         [TestFixture]
         public class TestEditableGridControlGiz : TestEditableGridControl
@@ -83,12 +84,6 @@ namespace Habanero.Test.UI.Base
             //    Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
             //    frm.Controls.Add(gridBase);
             //    return gridBase;
-            //}
-
-            //protected override void AddControlToForm(IGridBase gridBase)
-            //{
-            //    Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-            //    frm.Controls.Add((Gizmox.WebGUI.Forms.Control) gridBase);
             //}
 
             //private static Gizmox.WebGUI.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
@@ -111,6 +106,20 @@ namespace Habanero.Test.UI.Base
                 frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
             }
 
+            [Test]
+            public void TestGizInitialise_SelectionEditMode()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+                MyBO.LoadDefaultClassDef();
+                ClassDef def = ClassDef.ClassDefs[typeof(MyBO)];
+                //---------------Execute Test ----------------------
+                gridControl.Initialise(def);
+                //---------------Test Result -----------------------
+                Assert.AreEqual(Gizmox.WebGUI.Forms.DataGridViewSelectionMode.CellSelect, ((Gizmox.WebGUI.Forms.DataGridView) gridControl.Grid).SelectionMode);
+                Assert.AreEqual(Gizmox.WebGUI.Forms.DataGridViewEditMode.EditOnKeystrokeOrF2, ((Gizmox.WebGUI.Forms.DataGridView)gridControl.Grid).EditMode);
+                //---------------Tear Down -------------------------
+            }
             
         }
 
@@ -194,8 +203,8 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("working on this")]
-        public void Test_EditInTextbox()
+        [Test, Ignore("Cannot get this to work need to look at firing the events")]
+        public void Test_EditInTextbox_FirstRow()
         {
             //---------------Set up test pack-------------------
             IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
@@ -209,12 +218,43 @@ namespace Habanero.Test.UI.Base
             grid.Grid.SetBusinessObjectCollection(col);
             string testvalue = "testvalue";
             grid.Grid.Rows[0].Cells[1].Value = testvalue;
-            grid.ApplyChangesToBusinessObject();
+//            grid.ApplyChangesToBusinessObject();
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.CreatedBusinessObjects.Count);
             MyBO newBo = col.CreatedBusinessObjects[0];
             Assert.AreEqual(testvalue, newBo.TestProp);
         }
+
+        [Test, Ignore("Cannot get this to work need to look at firing the events")]
+        public void Test_EditInTextbox_ExistingObject()
+        {
+            //---------------Set up test pack-------------------
+            IEditableGridControl grid = GetControlFactory().CreateEditableGridControl();
+            AddControlToForm(grid);
+            MyBO.LoadDefaultClassDef();
+            ClassDef def = ClassDef.ClassDefs[typeof(MyBO)];
+            grid.Initialise(def);
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO bo = new MyBO();
+            bo.TestProp = "testPropValue";
+            col.Add(bo);
+            grid.Grid.SetBusinessObjectCollection(col);
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(2, grid.Grid.Rows.Count, "Editable auto adds adding row");
+
+            //---------------Execute Test ----------------------
+            
+            
+            string testvalue = "new test value";
+            grid.Grid.Rows[0].Cells[1].Value = testvalue;
+            grid.Grid.Rows[1].Selected = true;
+//            grid.ApplyChangesToBusinessObject();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(testvalue, bo.TestProp);
+        }
+
+
 
     }
 }

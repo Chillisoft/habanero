@@ -1,12 +1,18 @@
+using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
     public class EditableGridWin : GridBaseWin, IEditableGrid
     {
+        public EditableGridWin()
+        {
+            this.AllowUserToAddRows = true;
+            this.SelectionMode = DataGridViewSelectionMode.CellSelect;
+        }
+
         /// <summary>
         /// Creates a dataset provider that is applicable to this grid. For example, a readonly grid would
         /// return a read only datasetprovider, while an editable grid would return an editable one.
