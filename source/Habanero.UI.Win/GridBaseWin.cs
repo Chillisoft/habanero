@@ -445,12 +445,22 @@ namespace Habanero.UI.Win
 
             public IDataGridViewColumn this[int index]
             {
-                get { return new DataGridViewColumnWin(_columns[index]); }
+                get
+                {
+                    DataGridViewColumn column = _columns[index];
+                    if (column == null) return null;
+                    return new DataGridViewColumnWin(column);
+                }
             }
 
             public IDataGridViewColumn this[string name]
             {
-                get { return new DataGridViewColumnWin(_columns[name]); }
+                get
+                {
+                    DataGridViewColumn column = _columns[name];
+                    if (column == null) return null;
+                    return new DataGridViewColumnWin(column);
+                }
             }
 
             #endregion

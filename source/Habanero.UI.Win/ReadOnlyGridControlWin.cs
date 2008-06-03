@@ -17,13 +17,15 @@ namespace Habanero.UI.Win
         private readonly ReadOnlyGridWin _grid;
         private readonly IGridInitialiser _gridInitialiser;
         private string _orderBy;
+        private IControlFactory _controlFactory;
 
 
         public ReadOnlyGridControlWin()
         {
+            _controlFactory = new ControlFactoryWin();
             _grid = new ReadOnlyGridWin();
             _grid.Name = "GridControl";
-            _gridInitialiser = new GridInitialiser(this);
+            _gridInitialiser = new GridInitialiser(this, _controlFactory);
         }
 
         /// <summary>

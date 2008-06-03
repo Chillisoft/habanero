@@ -13,7 +13,7 @@ namespace Habanero.UI.Win
         public EditableGridControlWin(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
-            _editableGridManager = new EditableGridControlManager(this);
+            _editableGridManager = new EditableGridControlManager(this, controlFactory);
             _grid = _controlFactory.CreateEditableGrid();
             BorderLayoutManager manager = controlFactory.CreateBorderLayoutManager(this);
             manager.AddControl(_grid, BorderLayoutManager.Position.Centre);

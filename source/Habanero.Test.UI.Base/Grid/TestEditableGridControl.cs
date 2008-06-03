@@ -120,7 +120,24 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(Gizmox.WebGUI.Forms.DataGridViewEditMode.EditOnKeystrokeOrF2, ((Gizmox.WebGUI.Forms.DataGridView)gridControl.Grid).EditMode);
                 //---------------Tear Down -------------------------
             }
-            
+
+            [Test, Ignore("Currently working on this")]
+            public void TestGiz_CheckBoxUIGridDef_Creates_CheckBoxColumn()
+            {
+                //---------------Set up test pack-------------------
+                IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+                MyBO.LoadClassDefWithBoolean();
+                ClassDef def = ClassDef.ClassDefs[typeof(MyBO)];
+                //--------------Assert PreConditions----------------            
+
+                //---------------Execute Test ----------------------
+                gridControl.Initialise(def);
+                //---------------Test Result -----------------------
+                IDataGridViewColumn column = gridControl.Grid.Columns["TestBoolean"];
+                Assert.IsNotNull(column);
+                Assert.IsInstanceOfType(typeof(DataGridViewCheckBoxColumnGiz), column);
+                //---------------Tear Down -------------------------          
+            }
         }
 
         [Test]

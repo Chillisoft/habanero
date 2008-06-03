@@ -13,10 +13,10 @@ namespace Habanero.UI.Base.Grid
         private IGridInitialiser _gridInitialiser;
 
 
-        public EditableGridControlManager(IEditableGridControl gridControl)
+        public EditableGridControlManager(IEditableGridControl gridControl, IControlFactory controlFactory)
         {
             _gridControl = gridControl;
-            _gridInitialiser = new GridInitialiser(gridControl);
+            _gridInitialiser = new GridInitialiser(gridControl, controlFactory);
         }
 
         public string UiDefName

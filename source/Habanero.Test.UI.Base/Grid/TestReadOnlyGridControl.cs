@@ -262,15 +262,19 @@ namespace Habanero.Test.UI.Base
             ITextBox txtbox = readOnlyGridControl.FilterControl.AddStringFilterTextBox("Surname", "Surname");
             readOnlyGridControl.Initialise(classDef);
             readOnlyGridControl.FilterMode = FilterModes.Search;
+
             //--------------Assert PreConditions----------------            
             //No items in the grid
             Assert.AreEqual(0, readOnlyGridControl.Grid.Rows.Count);
+
             //---------------Execute Test ----------------------
             //set data in grid to a value that should return 2 people
             string filterByValue = "SSSSS";
             txtbox.Text = filterByValue;
             //grid.filtercontrols.searchbutton.click
+            readOnlyGridControl.OrderBy = "Surname";
             readOnlyGridControl.FilterControl.ApplyFilter();
+
             //---------------Test Result -----------------------
             StringAssert.Contains(filterByValue,
                                   readOnlyGridControl.FilterControl.GetFilterClause().GetFilterClauseString());

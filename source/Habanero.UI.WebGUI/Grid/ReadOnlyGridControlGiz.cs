@@ -32,7 +32,7 @@ namespace Habanero.UI.WebGUI
             _filterControl = new FilterControlGiz(_controlFactory);
             _grid = new ReadOnlyGridGiz();
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();
-            _gridInitialiser = new GridInitialiser(this);
+            _gridInitialiser = new GridInitialiser(this, _controlFactory);
             InitialiseButtons();
             InitialiseFilterControl();
 

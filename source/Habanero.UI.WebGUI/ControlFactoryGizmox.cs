@@ -9,6 +9,7 @@ using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.Base.FilterControl;
 using Habanero.Util.File;
+using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.WebGUI
 {
@@ -494,6 +495,15 @@ namespace Habanero.UI.WebGUI
             return new GridBaseGiz.DataGridViewImageColumnGiz( new DataGridViewImageColumn());
         }
 
+        /// <summary>
+        /// Creates a DataGridViewCheckBoxColumn for the appropriate userinterface framework
+        /// </summary>
+        /// <returns></returns>
+        public IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()
+        {
+            return new DataGridViewCheckBoxColumnGiz( new DataGridViewCheckBoxColumn());
+        }
+
         public ITabControl CreateTabControl()
         {
             return new TabControlGiz();
@@ -518,8 +528,6 @@ namespace Habanero.UI.WebGUI
         {
             return new WizardControlGiz(wizardController, this);
         }
-
-
     }
 
     internal class ControlMapperStrategyGiz  : IControlMapperStrategy

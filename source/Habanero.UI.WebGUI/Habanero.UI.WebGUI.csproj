@@ -69,6 +69,7 @@
     <Compile Include="ControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DataGridViewCheckBoxColumnGiz.cs" />
     <Compile Include="DateRangeComboBoxGiz.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -86,6 +87,7 @@
     </Compile>
     <Compile Include="FormExceptionNotifier.cs">
     </Compile>
+    <Compile Include="Grid\DataGridViewColumnGiz.cs" />
     <Compile Include="GroupBoxGiz.cs">
       <SubType>Component</SubType>
     </Compile>

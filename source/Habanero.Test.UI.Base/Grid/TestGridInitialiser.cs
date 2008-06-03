@@ -57,7 +57,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(grid.IsInitialised);
            
@@ -80,7 +80,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(grid.IsInitialised);
             Assert.AreEqual(0, grid.Grid.Columns.Count);
@@ -104,7 +104,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             grid.Grid.Columns.Add("ID", "ID");
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(grid.IsInitialised);
@@ -132,7 +132,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             UIDef uiDef = classDef.UIDefCol["default"];
             UIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
@@ -160,7 +160,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             UIDef uiDef = classDef.UIDefCol["default"];
             UIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
@@ -192,7 +192,7 @@ namespace Habanero.Test.UI.Base
             ClassDef classDef = LoadMyBoDefaultClassDef();
             string alternateUIDefName = "Alternate";
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
             UIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
@@ -215,7 +215,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             ClassDef classDef = LoadMyBoDefaultClassDef();
             //---------------Assert Preconditions---------------
             //---------------Execute Test ----------------------
@@ -238,7 +238,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
 
             //---------------Execute Test ----------------------
             try
@@ -260,7 +260,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid);
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             //---------------Execute Test ----------------------
             try
             {

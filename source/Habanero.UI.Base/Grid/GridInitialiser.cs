@@ -6,11 +6,13 @@ namespace Habanero.UI.Base
     public class GridInitialiser : IGridInitialiser
     {
         private readonly IGridControl _gridControl;
+        private readonly IControlFactory _controlFactory;
         private bool _isInitialised = false;
 
-        public GridInitialiser(IGridControl gridControl)
+        public GridInitialiser(IGridControl gridControl, IControlFactory controlFactory)
         {
             _gridControl = gridControl;
+            _controlFactory = controlFactory;
         }
 
         /// <summary>
@@ -118,21 +120,34 @@ namespace Habanero.UI.Base
 
         private void CreateColumnForUIDef(ClassDef classDef, UIGrid gridDef)
         {
+            //foreach (UIGridColumn gridColDef in gridDef)
+            //{
+            //    IDataGridViewColumn col = CreateColumn(gridColDef.PropertyName, gridColDef.GetHeading());
+            //    //col.ReadOnly = true;
+            //    col.HeaderText = gridColDef.GetHeading();
+            //    col.Name = gridColDef.PropertyName;
+            //    col.DataPropertyName = gridColDef.PropertyName;
+            //    col.Visible = true;
+            //    col.Width = gridColDef.Width;
+            //    col.SortMode = DataGridViewColumnSortMode.Automatic;
+            //    PropDef propDef = GetPropDef(classDef, gridColDef);
+            //    if (propDef != null) col.ValueType = propDef.PropertyType;
+            //    //this._grid.Columns.Add(col);
+            //}
             foreach (UIGridColumn gridColDef in gridDef)
             {
                 IDataGridViewColumn col = CreateColumn(gridColDef.PropertyName, gridColDef.GetHeading());
+//                IDataGridViewColumn col = _controlFactory.CreateDataGridViewCheckBoxColumn();
                 //col.ReadOnly = true;
                 col.HeaderText = gridColDef.GetHeading();
                 col.Name = gridColDef.PropertyName;
                 col.DataPropertyName = gridColDef.PropertyName;
                 col.Visible = true;
                 col.Width = gridColDef.Width;
-                //TODO - do sorting
-                //((DataGridViewColumn)col).SortMode = DataGridViewColumnSortMode.Automatic;
+                col.SortMode = DataGridViewColumnSortMode.Automatic;
                 PropDef propDef = GetPropDef(classDef, gridColDef);
                 if (propDef != null) col.ValueType = propDef.PropertyType;
-                //this._grid.Columns.Add(col);
-
+//                this._gridControl.Grid.Columns.Add(col);
             }
         }
 

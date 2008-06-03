@@ -306,6 +306,16 @@ namespace Habanero.UI.Win
             return null; //TODO port : return somethind
         }
 
+        /// <summary>
+        /// Creates a DataGridViewCheckBoxColumn for the appropriate userinterface framework
+        /// </summary>
+        /// <returns></returns>
+        public IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()
+        {
+//            return new DataGridViewCheckBoxColumnWin();
+            return null;
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();

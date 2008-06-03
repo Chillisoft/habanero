@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base.ControlInterfaces;
@@ -239,9 +240,18 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns></returns>
         IControlMapperStrategy CreateControlMapperStrategy();
-
+        /// <summary>
+        /// Creates a DataGridViewImageColumn for the appropriate userinterface framework
+        /// </summary>
+        /// <returns></returns>
         IDataGridViewImageColumn CreateDataGridViewImageColumn();
+        /// <summary>
+        /// Creates a DataGridViewCheckBoxColumn for the appropriate userinterface framework
+        /// </summary>
+        /// <returns></returns>
+        IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn();
     }
+
 
     public interface IControlMapperStrategy
     {

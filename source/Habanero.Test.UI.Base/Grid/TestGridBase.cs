@@ -461,6 +461,22 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_TryReturnAColumnThatDoesNotExist_ReturnsNull()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            BusinessObjectCollection<MyBO> col = CreateCollectionWith_4_Objects();
+            IGridBase gridBase = CreateGridBaseStub();
+            SetupGridColumnsForMyBo(gridBase);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            IDataGridViewColumn column = gridBase.Columns["NonExistant"];
+            //---------------Test Result -----------------------
+            Assert.IsNull(column);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
         public void Test_SelectedBusinessObject_FirstRowIsSelected()
         {
             //---------------Set up test pack-------------------
