@@ -18,18 +18,16 @@ namespace Habanero.UI.WebGUI
         private string _uiDefName = "";
         private ClassDef _classDef;
         private readonly IFilterControl _filterControl;
-//        private bool _isInitialised = false;
         private readonly IGridInitialiser _gridInitialiser;
+        private string _orderBy;
 
-        //private IBusinessObjectCollection _collection;
+        public delegate void RefreshGridDelegate();
 
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
         public ReadOnlyGridControlGiz()
         {
-      
-
             _controlFactory = new ControlFactoryGizmox();
             _filterControl = new FilterControlGiz(_controlFactory);
             _grid = new ReadOnlyGridGiz();
@@ -44,7 +42,6 @@ namespace Habanero.UI.WebGUI
             borderLayoutManager.AddControl(_filterControl, BorderLayoutManager.Position.North);
             FilterMode = FilterModes.Filter;
             _grid.Name = "GridControl";
-
         }
 
         private void InitialiseFilterControl()
@@ -58,7 +55,7 @@ namespace Habanero.UI.WebGUI
             if (FilterMode == FilterModes.Search)
             {
                 BusinessObjectCollection<BusinessObject> collection = new BusinessObjectCollection<BusinessObject>(this.ClassDef);
-                collection.Load(_filterControl.GetFilterClause().GetFilterClauseString("%", "'"), "");
+                collection.Load(_filterControl.GetFilterClause().GetFilterClauseString("%", "'"), OrderBy);
                 SetBusinessObjectCollection(collection);
             }
             else
@@ -69,12 +66,10 @@ namespace Habanero.UI.WebGUI
 
         private void InitialiseButtons()
         {
-            
             _buttons.AddClicked += Buttons_AddClicked;
             _buttons.EditClicked += Buttons_EditClicked;
             _buttons.DeleteClicked += Buttons_DeleteClicked;
             _buttons.Name = "ButtonControl";
-
         }
 
         /// <summary>
@@ -82,9 +77,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public void Initialise(ClassDef classDef)
         {
-            
             _gridInitialiser.InitialiseGrid(classDef);
-           
         }
 
         public void Initialise(ClassDef classDef, string uiDefName)
@@ -97,13 +90,7 @@ namespace Habanero.UI.WebGUI
             _uiDefName = uiDefName;
 
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
-
         }
-
-        
-
-
-
 
         private void Buttons_DeleteClicked(object sender, EventArgs e)
         {
@@ -126,7 +113,7 @@ namespace Habanero.UI.WebGUI
                 }
             }
         }
-        public delegate void RefreshGridDelegate();
+
         private void Buttons_EditClicked(object sender, EventArgs e)
         {
             if (this.Grid.GetBusinessObjectCollection() == null)
@@ -139,9 +126,9 @@ namespace Habanero.UI.WebGUI
                 if (_businessObjectEditor != null)
                 {
                     _businessObjectEditor.EditObject(selectedBo, _uiDefName, delegate
-                                                                                 {
-                                                                                     this.Grid.RefreshGrid();
-                                                                                 });
+                                                     {
+                                                         this.Grid.RefreshGrid();
+                                                     });
                 }
             }
         }
@@ -240,6 +227,16 @@ namespace Habanero.UI.WebGUI
         {
             get { return this._filterControl.FilterMode; }
             set { this._filterControl.FilterMode = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the default order by clause used for loading the grid when the <see cref="IReadOnlyGridControl.FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>
+        /// </summary>
+        public string OrderBy
+        {
+            get { return _orderBy; }
+            set { _orderBy = value; }
         }
 
 

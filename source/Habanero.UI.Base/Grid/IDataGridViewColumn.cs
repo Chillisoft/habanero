@@ -3,6 +3,15 @@ using System.Drawing.Design;
 
 namespace Habanero.UI.Base
 {
+    /// <summary>Defines how a <see cref="IDataGridView"></see> column can be sorted by the user.</summary>
+    /// <filterpriority>2</filterpriority>
+    //[Serializable()]
+    public enum DataGridViewColumnSortMode
+    {
+        NotSortable,
+        Automatic,
+        Programmatic
+    }
     public interface IDataGridViewColumn
     {
         /// <summary>Gets or sets the name of the data source property or database column to which the <see cref="IDataGridViewColumn"></see> is bound.</summary>
@@ -33,15 +42,14 @@ namespace Habanero.UI.Base
         /// <returns>true if the user cannot edit the column's cells; otherwise, false.</returns>
         /// <exception cref="T:System.InvalidOperationException">This property is set to false for a column that is bound to a read-only data source. </exception>
         /// <filterpriority>1</filterpriority>
-
         bool ReadOnly { get; set; }
 
-        ///// <summary>Gets or sets the sort mode for the column.</summary>
-        ///// <returns>A <see cref="IDataGridViewColumnSortMode"></see> that specifies the criteria used to order the rows based on the cell values in a column.</returns>
-        ///// <exception cref="T:System.InvalidOperationException">The value assigned to the property conflicts with <see cref="P:Gizmox.WebGUI.Forms.DataGridView.SelectionMode"></see>. </exception>
-        ///// <filterpriority>1</filterpriority>
-        //[DefaultValue(0)]
-        //DataGridViewColumnSortMode SortMode { get; set; }
+        /// <summary>Gets or sets the sort mode for the column.</summary>
+        /// <returns>A <see cref="DataGridViewColumnSortMode"></see> that specifies the criteria used to order the rows based on the cell values in a column.</returns>
+        /// <exception cref="System.InvalidOperationException">The value assigned to the property conflicts with <see cref="IDataGridView.SelectionMode"></see>. </exception>
+        /// <filterpriority>1</filterpriority>
+        [DefaultValue(0)]
+        DataGridViewColumnSortMode SortMode { get; set; }
 
         /// <summary>Gets or sets the text used for ToolTips.</summary>
         /// <returns>The text to display as a ToolTip for the column.</returns>
@@ -62,6 +70,8 @@ namespace Habanero.UI.Base
         [RefreshProperties(RefreshProperties.Repaint), Localizable(true)]
         int Width { get; set; }
 
+        /// <summary>Gets or sets a value indicating whether the column is visible.</summary>
+        /// <returns>true if the column is visible; otherwise, false.</returns>
         bool Visible { get; set; }
     }
 }

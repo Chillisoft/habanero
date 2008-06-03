@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
+using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.Win
 {
@@ -361,6 +362,16 @@ namespace Habanero.UI.Win
             {
                 get { return _dataGridViewColumn.ReadOnly; }
                 set { _dataGridViewColumn.ReadOnly = value; }
+            }
+
+            /// <summary>Gets or sets the sort mode for the column.</summary>
+            /// <returns>A <see cref="DataGridViewColumnSortMode"></see> that specifies the criteria used to order the rows based on the cell values in a column.</returns>
+            /// <exception cref="System.InvalidOperationException">The value assigned to the property conflicts with <see cref="SelectionMode"></see>. </exception>
+            /// <filterpriority>1</filterpriority>
+            public DataGridViewColumnSortMode SortMode
+            {
+                get { return (DataGridViewColumnSortMode) _dataGridViewColumn.SortMode; }
+                set { _dataGridViewColumn.SortMode = (System.Windows.Forms.DataGridViewColumnSortMode) value; }
             }
 
             /// <summary>Gets or sets the text used for ToolTips.</summary>

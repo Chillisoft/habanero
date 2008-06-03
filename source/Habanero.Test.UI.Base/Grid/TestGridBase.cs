@@ -432,6 +432,20 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_SortMode()
+        {
+            //---------------Set up test pack-------------------
+            IGridBase gridBase = CreateGridBaseStub();
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            gridBase.Columns.Add("TestProp", "TestProp");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(DataGridViewColumnSortMode.Automatic , gridBase.Columns[0].SortMode);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
         public void TestSetCollectionOnGrid_NoOfRows()
         {
             //---------------Set up test pack-------------------
@@ -1175,6 +1189,16 @@ namespace Habanero.Test.UI.Base
         {
             get { return _readOnly; }
             set { _readOnly = value; }
+        }
+
+        /// <summary>Gets or sets the sort mode for the column.</summary>
+        /// <returns>A <see cref="DataGridViewColumnSortMode"></see> that specifies the criteria used to order the rows based on the cell values in a column.</returns>
+        /// <exception cref="System.InvalidOperationException">The value assigned to the property conflicts with IDataGridView.SelectionMode. </exception>
+        /// <filterpriority>1</filterpriority>
+        public DataGridViewColumnSortMode SortMode
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         /// <summary>Gets or sets the text used for ToolTips.</summary>

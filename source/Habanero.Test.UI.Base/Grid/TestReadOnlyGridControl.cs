@@ -13,6 +13,7 @@ namespace Habanero.Test.UI.Base
     {
         //TODO: Tests that if init not called throws sensible errors
         //TODO: Date searchby
+
         [SetUp]
         public void SetupTest()
         {
@@ -275,6 +276,16 @@ namespace Habanero.Test.UI.Base
                                   readOnlyGridControl.FilterControl.GetFilterClause().GetFilterClauseString());
             //verify that there are 2 people in the grid.
             Assert.AreEqual(2, readOnlyGridControl.Grid.Rows.Count);
+
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.Load("Surname like %" + filterByValue + "%", "Surname");
+            Assert.AreEqual(col.Count, readOnlyGridControl.Grid.Rows.Count);
+            int rowNum=0;
+            foreach (ContactPersonTestBO person in col)
+            {
+                object rowID = readOnlyGridControl.Grid.Rows[rowNum++].Cells["ID"].Value;
+                Assert.AreEqual(person.ID.ToString(), rowID.ToString());
+            }
             //---------------Tear Down -------------------------          
         }
 
@@ -884,20 +895,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame("default", objectEditor.DefName);
         }
 
-        private ClassDef LoadMyBoDefaultClassDef()
-        {
-            ClassDef classDef;
-            if (GetControlFactory() is ControlFactoryGizmox)
-            {
-                classDef = MyBO.LoadDefaultClassDefGizmox();
-            }
-            else
-            {
-                classDef = MyBO.LoadDefaultClassDef();
-            }
-            return classDef;
-        }
-
         [Test]
         public void TestEditButtonClickUsingAlternateUIDef()
         {
@@ -961,6 +958,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             grid.Buttons["Add"].PerformClick();
+
             //---------------Test Result -----------------------
             Assert.IsTrue(objectCreator.HasBeenCalled);
             Assert.IsTrue(objectEditor.HasBeenCalled);
@@ -986,6 +984,39 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(col[2], objectDeletor.Bo);
             //---------------Tear Down -------------------------          
         }
+
+        [Test]
+        public void Test_OrderByClause()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl grid =  CreateReadOnlyGridControl();
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            string orderByClause = "MyField";
+            grid.OrderBy = orderByClause;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(orderByClause, grid.OrderBy);
+            //---------------Tear Down -------------------------          
+        }
+        //[Test]
+        //public void TestDeleteButton_CallsObjectDeletor_DelegateLoadedGrid()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    BusinessObjectCollection<MyBO> col;
+        //    IReadOnlyGridControl grid = GetGridWith_4_Rows(out col);
+        //    grid.Buttons.ShowDefaultDeleteButton = true;
+        //    grid.SelectedBusinessObject = col[2];
+        //    ObjectDeletorStub objectDeletor = new ObjectDeletorStub();
+        //    grid.BusinessObjectDeletor = objectDeletor;
+        //    //---------------Execute Test ----------------------
+        //    grid.Buttons["Delete"].PerformClick();
+        //    //---------------Test Result -----------------------
+
+        //    Assert.IsTrue(objectDeletor.HasBeenCalled);
+        //    Assert.AreSame(col[2], objectDeletor.Bo);
+        //    //---------------Tear Down -------------------------          
+        //}
 
         [Test]
         public void TestDeleteButtonWithNothingSelected_DoesNothing()
@@ -1077,6 +1108,20 @@ namespace Habanero.Test.UI.Base
             }
 
             //---------------Tear Down -------------------------          
+        }
+
+        private ClassDef LoadMyBoDefaultClassDef()
+        {
+            ClassDef classDef;
+            if (GetControlFactory() is ControlFactoryGizmox)
+            {
+                classDef = MyBO.LoadDefaultClassDefGizmox();
+            }
+            else
+            {
+                classDef = MyBO.LoadDefaultClassDef();
+            }
+            return classDef;
         }
 
         #region stubs
@@ -1206,8 +1251,6 @@ namespace Habanero.Test.UI.Base
 
         #region Utility Methods
 
-
-
         private static PropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
         {
             PropDef propDef = null;
@@ -1218,7 +1261,6 @@ namespace Habanero.Test.UI.Base
             return propDef;
         }
 
-   
 
         private static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
         {

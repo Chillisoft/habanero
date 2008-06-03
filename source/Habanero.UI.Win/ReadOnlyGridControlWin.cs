@@ -16,6 +16,7 @@ namespace Habanero.UI.Win
         private string _uiDefName = "";
         private readonly ReadOnlyGridWin _grid;
         private readonly IGridInitialiser _gridInitialiser;
+        private string _orderBy;
 
 
         public ReadOnlyGridControlWin()
@@ -103,6 +104,16 @@ namespace Habanero.UI.Win
         {
             get { throw new System.NotImplementedException(); }
             set { throw new System.NotImplementedException(); }
+        }
+
+        /// <summary>
+        /// Gets and sets the default order by clause used for loading the grid when the <see cref="IReadOnlyGridControl.FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>
+        /// </summary>
+        public string OrderBy
+        {
+            get { return _orderBy; }
+            set { _orderBy = value; }
         }
 
 
