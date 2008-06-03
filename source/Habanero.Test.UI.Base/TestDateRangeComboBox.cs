@@ -1422,294 +1422,425 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
         }
 
-        //    [Test]
-        //    public void TestLastYear()
-        //    {
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousYear);
+        [Test]
+        public void TestLastYear()
+        {
+            //---------------Set up test pack-------------------
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2006, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousYear);
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2006, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 1, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 1, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 2, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 1, 1, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 1, 1, 0, 0, 0), _comboBox.EndDate);
+        [Test]
+        public void TestLastYear_WithMidnightOffset()
+        {
+            //---------------Set up test pack-------------------
 
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 1, 0, 30, 0, 0);
-        //        Assert.AreEqual(new DateTime(2005, 1, 1, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2006, 1, 1, 1, 0, 0, 0), _comboBox.EndDate);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousYear);
+            //---------------Test Result -----------------------
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 2, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 1, 1, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 1, 1, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 3, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2005, 12, 31, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2006, 12, 31, 23, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 1, 0, 30, 0, 0);
+            Assert.AreEqual(new DateTime(2005, 1, 1, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2006, 1, 1, 1, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2006, 12, 31, 23, 30, 0, 0);
-        //        Assert.AreEqual(new DateTime(2005, 12, 31, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2006, 12, 31, 23, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 3, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2005, 12, 31, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2006, 12, 31, 23, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 0, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2006, 1, 2, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 2, 0, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2006, 12, 31, 23, 30, 0, 0);
+            Assert.AreEqual(new DateTime(2005, 12, 31, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2006, 12, 31, 23, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 0, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 2, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 1, 2, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 2, 0, 0, 0, 0), _comboBox.EndDate);
+        [Test]
+        public void TestLastYear_WithMonthOffset()
+        {
+            //---------------Set up test pack-------------------
 
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 3, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 1, 2, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 2, 1, 0, 0, 0), _comboBox.EndDate);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousYear);
+            //---------------Test Result -----------------------
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2006, 1, 2, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 2, 0, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 2, 0, 30, 0, 0);
-        //        Assert.AreEqual(new DateTime(2005, 1, 2, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2006, 1, 2, 1, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 2, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 1, 2, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 2, 0, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 3, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 1, 1, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 1, 23, 0, 0, 0), _comboBox.EndDate);
+        [Test]
+        public void TestLastYear_WithMonthOffset_MidnightOffset()
+        {
+            //---------------Set up test pack-------------------
 
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 1, 23, 30, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 1, 1, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 1, 23, 0, 0, 0), _comboBox.EndDate);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousYear);
+            //---------------Test Result -----------------------
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 3, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 1, 2, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 2, 1, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 0;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 0, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2006, 2, 1, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 2, 1, 0, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 2, 0, 30, 0, 0);
+            Assert.AreEqual(new DateTime(2005, 1, 2, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2006, 1, 2, 1, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 0;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 0, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 2, 1, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 2, 1, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 2, 1, 0, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 3, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 1, 1, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 1, 23, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 0;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 2, 2, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 2, 1, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 2, 1, 1, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 1, 23, 30, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 1, 1, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 1, 23, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 0;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 2, 1, 0, 30, 0, 0);
-        //        Assert.AreEqual(new DateTime(2005, 2, 1, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2006, 2, 1, 1, 0, 0, 0), _comboBox.EndDate);
+        [Test]
+        public void TestLastYear_YearOffset()
+        {
+            //---------------Set up test pack-------------------
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 2, 3, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 1, 31, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 31, 23, 0, 0, 0), _comboBox.EndDate);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousYear);
+            //---------------Test Result -----------------------
+            _comboBox.YearStartOffset = 1;
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2006, 2, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 2, 1, 0, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 0;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 1, 31, 23, 30, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 1, 31, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 31, 23, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.YearStartOffset = 1;
+            _comboBox.FixedNowDate = new DateTime(2007, 2, 1, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 2, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 2, 1, 0, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 0, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2006, 2, 2, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 2, 2, 0, 0, 0, 0), _comboBox.EndDate);
+        [Test]
+        public void TestLastYear_YearOffset_MidnightOffset()
+        {
+            //---------------Set up test pack-------------------
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 0, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 2, 2, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 2, 2, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 2, 2, 0, 0, 0, 0), _comboBox.EndDate);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousYear);
+            //---------------Test Result -----------------------
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 2, 2, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 2, 1, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 2, 1, 1, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 2, 3, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 2, 2, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 2, 2, 1, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 2, 1, 0, 30, 0, 0);
+            Assert.AreEqual(new DateTime(2005, 2, 1, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2006, 2, 1, 1, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 2, 2, 0, 30, 0, 0);
-        //        Assert.AreEqual(new DateTime(2005, 2, 2, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2006, 2, 2, 1, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 2, 3, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 1, 31, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 31, 23, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 2, 3, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 2, 1, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 2, 1, 23, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 1, 31, 23, 30, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 1, 31, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 31, 23, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.YearStartOffset = 1;
-        //        _comboBox.MonthStartOffset = 1;
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 2, 1, 23, 30, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 2, 1, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 2, 1, 23, 0, 0, 0), _comboBox.EndDate);
-        //    }
+        [Test]
+        public void TestLastYear_WithYearOffset_MonthOffset()
+        {
+            //---------------Set up test pack-------------------
 
-        //    [Test]
-        //    public void TestPrevious365Days()
-        //    {
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous365Days);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousYear);
+            //---------------Test Result -----------------------
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2006, 2, 2, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 2, 2, 0, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2006, 11, 13, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.FixedNowDate = new DateTime(2007, 2, 2, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 2, 2, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 2, 2, 0, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 11, 13, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+        [Test]
+        public void TestLastYear_WithYearOffset_MonthOffset_MidnightOffset()
+        {
+            //---------------Set up test pack-------------------
 
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 11, 12, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 12, 1, 0, 0, 0), _comboBox.EndDate);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.PreviousYear);
+            //---------------Test Result -----------------------
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 2, 3, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 2, 2, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 2, 2, 1, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 0, 0, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 11, 12, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 12, 23, 0, 0, 0), _comboBox.EndDate);
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 2, 2, 0, 30, 0, 0);
+            Assert.AreEqual(new DateTime(2005, 2, 2, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2006, 2, 2, 1, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 12, 23, 30, 0, 0);
-        //        Assert.AreEqual(new DateTime(2006, 11, 12, 23, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 12, 23, 0, 0, 0), _comboBox.EndDate);
-        //    }
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 2, 3, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 2, 1, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 2, 1, 23, 0, 0, 0), _comboBox.EndDate);
 
-        //    [Test]
-        //    public void TestCurrent2Years()
-        //    {
-        //        _comboBox.AddDateOption(DateRangeOptions.Current2Years);
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Current2Years);
+            _comboBox.YearStartOffset = 1;
+            _comboBox.MonthStartOffset = 1;
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 2, 1, 23, 30, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 2, 1, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 2, 1, 23, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2005, 11, 13, 20, 38, 12, 10), _comboBox.StartDate);
-        //        Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
-        //    }
+        [Test]
+        public void TestPrevious365Days()
+        {
+            //---------------Set up test pack-------------------
 
-        //    [Test]
-        //    public void TestCurrent3Years()
-        //    {
-        //        _comboBox.AddDateOption(DateRangeOptions.Current3Years);
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Current3Years);
+            //---------------Execute Test ----------------------
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2004, 11, 13, 20, 38, 12, 10), _comboBox.StartDate);
-        //        Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
-        //    }
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous365Days);
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2006, 11, 13, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
 
-        //    [Test]
-        //    public void TestCurrent5Years()
-        //    {
-        //        _comboBox.AddDateOption(DateRangeOptions.Current5Years);
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Current5Years);
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 11, 13, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2002, 11, 13, 20, 38, 12, 10), _comboBox.StartDate);
-        //        Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
-        //    }
+        [Test]
+        public void TestPrevious365Days_WithMidnightOffset()
+        {
+            //---------------Set up test pack-------------------
 
-        //    [Test]
-        //    public void TestPrevious2Years()
-        //    {
-        //        _comboBox.AddDateOption(DateRangeOptions.Previous2Years);
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous2Years);
+            //---------------Execute Test ----------------------
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2005, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
-        //    }
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous365Days);
 
-        //    [Test]
-        //    public void TestPrevious3Years()
-        //    {
-        //        _comboBox.AddDateOption(DateRangeOptions.Previous3Years);
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous3Years);
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 11, 12, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 12, 1, 0, 0, 0), _comboBox.EndDate);
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2004, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
-        //    }
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 0, 0, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 11, 12, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 12, 23, 0, 0, 0), _comboBox.EndDate);
 
-        //    [Test]
-        //    public void TestPrevious5Years()
-        //    {
-        //        _comboBox.AddDateOption(DateRangeOptions.Previous5Years);
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous5Years);
+            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 12, 23, 30, 0, 0);
+            Assert.AreEqual(new DateTime(2006, 11, 12, 23, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 12, 23, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
-        //        Assert.AreEqual(new DateTime(2002, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
-        //    }
+        [Test]
+        public void TestCurrent2Years()
+        {
+            //---------------Set up test pack-------------------
+
+            _comboBox.AddDateOption(DateRangeOptions.Current2Years);
+
+            //---------------Execute Test ----------------------
+
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Current2Years);
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2005, 11, 13, 20, 38, 12, 10), _comboBox.StartDate);
+            Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
+        }
+
+        [Test]
+        public void TestCurrent3Years()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.AddDateOption(DateRangeOptions.Current3Years);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Current3Years);
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2004, 11, 13, 20, 38, 12, 10), _comboBox.StartDate);
+            Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
+        }
+
+        [Test]
+        public void TestCurrent5Years()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.AddDateOption(DateRangeOptions.Current5Years);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Current5Years);
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2002, 11, 13, 20, 38, 12, 10), _comboBox.StartDate);
+            Assert.AreEqual(_comboBox.FixedNowDate, _comboBox.EndDate);
+        }
+
+        [Test]
+        public void TestPrevious2Years()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.AddDateOption(DateRangeOptions.Previous2Years);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous2Years);
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2005, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
+        }
+
+        [Test]
+        public void TestPrevious3Years()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.AddDateOption(DateRangeOptions.Previous3Years);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous3Years);
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2004, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
+        }
+
+        [Test]
+        public void TestPrevious5Years()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.AddDateOption(DateRangeOptions.Previous5Years);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Previous5Years);
+            //---------------Test Result -----------------------
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            Assert.AreEqual(new DateTime(2002, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.EndDate);
+        }
 
 
-        //    [Test]
-        //    public void TestRealNow()
-        //    {
-        //        _comboBox.UseFixedNowDate = false;
-        //        DateTime now = DateTime.Now;
-        //        DateTime yest = now.AddDays(-1);
+        [Test]
+        public void TestRealNow()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.UseFixedNowDate = false;
+            DateTime now = DateTime.Now;
+            DateTime yest = now.AddDays(-1);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Yesterday);
 
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Yesterday);
-        //        Assert.AreEqual(new DateTime(yest.Year, yest.Month, yest.Day, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, 0), _comboBox.EndDate);
-        //    }
+            //---------------Test Result -----------------------
+            Assert.AreEqual(new DateTime(yest.Year, yest.Month, yest.Day, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //    [Test]
-        //    public void TestIgnoreTime()
-        //    {
-        //        _comboBox.IgnoreTime = true;
-        //        _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+        [Test]
+        public void TestIgnoreTime_Today()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.IgnoreTime = true;
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Today);
 
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Today);
-        //        Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
-        //        Assert.AreEqual(new DateTime(2007, 11, 12, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+        [Test]
+        public void TestIgnoreTime_ThisWeek()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.IgnoreTime = true;
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek);
+            //---------------Test Result -----------------------
 
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisMonth);
-        //        Assert.AreEqual(new DateTime(2007, 11, 1, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+            Assert.AreEqual(new DateTime(2007, 11, 12, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+        }
 
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
-        //        Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+        [Test]
+        public void TestIgnoreTime_ThisMonth()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.IgnoreTime = true;
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisMonth);
+            //---------------Test Result -----------------------
 
-        //        _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
-        //        _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Today);
-        //        Assert.AreEqual(new DateTime(2007, 11, 12, 1, 0, 0, 0), _comboBox.StartDate);
-        //        Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
-        //    }
-        //}
+            Assert.AreEqual(new DateTime(2007, 11, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+        }
+
+        [Test]
+        public void TestIgnoreTime_ThisYear()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.IgnoreTime = true;
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            //---------------Execute Test ----------------------
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.ThisYear);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(new DateTime(2007, 1, 1, 0, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+        }
+
+        //This test works but does not make any sense because you should not be using MidnightOffset if using IgnoreTime
+        [Test]
+        public void TestIgnoreTime_Today_MidnightOffset()
+        {
+            //---------------Set up test pack-------------------
+            _comboBox.IgnoreTime = true;
+            _comboBox.FixedNowDate = new DateTime(2007, 11, 13, 20, 38, 12, 10);
+            //---------------Execute Test ----------------------
+
+            _comboBox.MidnightOffset = new TimeSpan(0, 1, 0, 0, 0);
+            _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Today);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(new DateTime(2007, 11, 12, 1, 0, 0, 0), _comboBox.StartDate);
+            Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
+        }
     }
 }

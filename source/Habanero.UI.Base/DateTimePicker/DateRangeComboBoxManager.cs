@@ -489,60 +489,60 @@ namespace Habanero.UI.Base
                         _endDate = Now;
                         break;
                     }
-            //    case DateRangeOptions.PreviousYear:
-            //        {
-            //            _startDate = YearStart(Now).AddYears(-1);
-            //            _endDate = YearStart(Now);
-            //            break;
-            //        }
-            //    case DateRangeOptions.Previous365Days:
-            //        {
-            //            _startDate = DayStart(Now).AddDays(-365);
-            //            _endDate = DayStart(Now);
-            //            break;
-            //        }
-            //    case DateRangeOptions.Current2Years:
-            //        {
-            //            _startDate = Now.AddYears(-2);
-            //            _endDate = Now;
-            //            break;
-            //        }
-            //    case DateRangeOptions.Current3Years:
-            //        {
-            //            _startDate = Now.AddYears(-3);
-            //            _endDate = Now;
-            //            break;
-            //        }
-            //    case DateRangeOptions.Current5Years:
-            //        {
-            //            _startDate = Now.AddYears(-5);
-            //            _endDate = Now;
-            //            break;
-            //        }
-            //    case DateRangeOptions.Previous2Years:
-            //        {
-            //            _startDate = YearStart(Now).AddYears(-2);
-            //            _endDate = YearStart(Now);
-            //            break;
-            //        }
-            //    case DateRangeOptions.Previous3Years:
-            //        {
-            //            _startDate = YearStart(Now).AddYears(-3);
-            //            _endDate = YearStart(Now);
-            //            break;
-            //        }
-            //    case DateRangeOptions.Previous5Years:
-            //        {
-            //            _startDate = YearStart(Now).AddYears(-5);
-            //            _endDate = YearStart(Now);
-            //            break;
-            //        }
-            //    default:
-            //        {
-            //            _startDate = DateTime.MinValue;
-            //            _endDate = DateTime.MaxValue;
-            //            break;
-            //        }
+                case DateRangeOptions.PreviousYear:
+                    {
+                        _startDate = YearStart(Now).AddYears(-1);
+                        _endDate = YearStart(Now);
+                        break;
+                    }
+                case DateRangeOptions.Previous365Days:
+                    {
+                        _startDate = DayStart(Now).AddDays(-365);
+                        _endDate = DayStart(Now);
+                        break;
+                    }
+                case DateRangeOptions.Current2Years:
+                    {
+                        _startDate = Now.AddYears(-2);
+                        _endDate = Now;
+                        break;
+                    }
+                case DateRangeOptions.Current3Years:
+                    {
+                        _startDate = Now.AddYears(-3);
+                        _endDate = Now;
+                        break;
+                    }
+                case DateRangeOptions.Current5Years:
+                    {
+                        _startDate = Now.AddYears(-5);
+                        _endDate = Now;
+                        break;
+                    }
+                case DateRangeOptions.Previous2Years:
+                    {
+                        _startDate = YearStart(Now).AddYears(-2);
+                        _endDate = YearStart(Now);
+                        break;
+                    }
+                case DateRangeOptions.Previous3Years:
+                    {
+                        _startDate = YearStart(Now).AddYears(-3);
+                        _endDate = YearStart(Now);
+                        break;
+                    }
+                case DateRangeOptions.Previous5Years:
+                    {
+                        _startDate = YearStart(Now).AddYears(-5);
+                        _endDate = YearStart(Now);
+                        break;
+                    }
+                default:
+                    {
+                        _startDate = DateTime.MinValue;
+                        _endDate = DateTime.MaxValue;
+                        break;
+                    }
             }
         }
 
