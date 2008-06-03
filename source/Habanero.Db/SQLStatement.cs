@@ -249,8 +249,18 @@ namespace Habanero.DB
             joinType = joinType.Trim().ToUpper();
             string joinClause = " " + joinType + " " + SqlFormattingHelper.FormatTableName(joinTable, _connection) +
                 JOIN_ON_TOKEN + joinCriteria;
-            _statement.Insert(posWhere, ")" + joinClause);
-            _statement.Insert(posFrom + FROM_CLAUSE_TOKEN.Length, "(");
+            int posExistingJoin = FindStatementClauseToken(" JOIN ");
+            string closingBracket = ")";
+            string openingBracket = "(";
+            if (posExistingJoin == -1)
+            {
+                //Do not need brackets if there is not already a join.
+                // Note: This also prevents problems where SQL Server does not like brackets around just a table name.
+                openingBracket = "";
+                closingBracket = "";
+            }
+            _statement.Insert(posWhere, closingBracket + joinClause);
+            _statement.Insert(posFrom + FROM_CLAUSE_TOKEN.Length, openingBracket);
             if (joinType != "INNER JOIN")
             {
                 AddDistinct();
