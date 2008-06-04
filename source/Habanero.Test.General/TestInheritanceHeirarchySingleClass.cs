@@ -304,34 +304,41 @@ namespace Habanero.Test.General
         public void TestLoadCreatedShapes_ShapeAndCircleAndFilledCircle()
         {
             //-------------Setup Test Pack ------------------
-            Shape shape = CreateSavedShape();
-            CircleNoPrimaryKey circle = CreateSavedCircle();
-            FilledCircleInheritsCircleNoPK filledCircle = CreateSavedFilledCircle();
+            CreateSavedShape();
+            CreateSavedCircle();
+            CreateSavedFilledCircle();
 
             //-------------Execute test ---------------------
             BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
-            shapes.LoadAll();
+            shapes.LoadAll("ShapeName");
             BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
-            circles.LoadAll();
+            circles.LoadAll("ShapeName");
             BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles = new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
             filledCircles.LoadAll();
 
             //-------------Test Result ----------------------
             Assert.AreEqual(3, shapes.Count);
-            Assert.AreEqual("MyShape", shapes[0].ShapeName);
-            Assert.AreEqual("Circle", shapes[1].ShapeName);
-            Assert.AreEqual("FilledCircle", shapes[2].ShapeName);
+
+            Assert.AreEqual("Circle", shapes[0].ShapeName);
+            Assert.AreEqual("FilledCircle", shapes[1].ShapeName);
+            Assert.AreEqual("MyShape", shapes[2].ShapeName);
+
+            Shape circleShape = shapes[0];
+            Shape filledCircleShape = shapes[1];
+            Shape myShape = shapes[2];
 
             Assert.AreEqual(2, circles.Count);
-            Assert.AreEqual(circles[1].ShapeID, shapes[2].ShapeID);
-            Assert.AreEqual(7, circles[1].Radius);
             Assert.AreEqual("FilledCircle", circles[1].ShapeName);
+            CircleNoPrimaryKey filledCircleCircle = circles[1];
+            Assert.AreEqual(filledCircleShape.ShapeID, filledCircleCircle.ShapeID);
+            Assert.AreEqual(7, filledCircleCircle.Radius);
 
             Assert.AreEqual(1, filledCircles.Count);
-            Assert.AreEqual(filledCircles[0].ShapeID, shapes[2].ShapeID);
-            Assert.AreEqual(7, filledCircles[0].Radius);
-            Assert.AreEqual("FilledCircle", filledCircles[0].ShapeName);
-            Assert.AreEqual(3, filledCircles[0].Colour);
+            Assert.AreEqual(filledCircles[0].ShapeID, filledCircleShape.ShapeID);
+            FilledCircleInheritsCircleNoPK filledCircle = filledCircles[0];
+            Assert.AreEqual(7, filledCircle.Radius);
+            Assert.AreEqual("FilledCircle", filledCircle.ShapeName);
+            Assert.AreEqual(3, filledCircle.Colour);
         }
 
         [Test]

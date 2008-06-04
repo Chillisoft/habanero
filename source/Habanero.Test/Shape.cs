@@ -76,6 +76,39 @@ namespace Habanero.Test
             return lClassDef;
         }
 
+        public static ClassDef CreateTestMapperClassDef()
+        {
+            PropDefCol lPropDefCol = new PropDefCol();
+            PropDef propDef =
+                new PropDef("ShapeName", typeof(String), PropReadWriteRule.ReadWrite, "ShapeName", null);
+            lPropDefCol.Add(propDef);
+            propDef = new PropDef("ShapeID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
+            lPropDefCol.Add(propDef);
+            propDef = new PropDef("ShapeValue", typeof(Int32), PropReadWriteRule.ReadWrite, null);
+            lPropDefCol.Add(propDef);
+            // propDef = new PropDef("MyID", typeof(Guid), PropReadWriteRule.WriteOnce, null);
+            // lPropDefCol.Add(propDef);
+            PrimaryKeyDef primaryKey = new PrimaryKeyDef();
+            primaryKey.IsObjectID = true;
+            primaryKey.Add(lPropDefCol["ShapeID"]);
+            KeyDefCol keysCol = new KeyDefCol();
+            KeyDef lKeyDef = new KeyDef();
+            lKeyDef.Add(lPropDefCol["ShapeName"]);
+            keysCol.Add(lKeyDef);
+            RelKeyDef relKeyDef = new RelKeyDef();
+
+            //RelPropDef lRelPropDef = new RelPropDef(propDef, "OwnerID");
+            //relKeyDef.Add(lRelPropDef);
+            //RelationshipDef relDef = new MultipleRelationshipDef("Owner", typeof (Shape),
+            //                                                      relKeyDef, false, "", DeleteParentAction.DereferenceRelated);
+            RelationshipDefCol relDefCol = new RelationshipDefCol();
+            //relDefCol.Add(relDef);
+
+            ClassDef lClassDef = new ClassDef(typeof(Shape), primaryKey, lPropDefCol, keysCol, relDefCol);
+            ClassDef.ClassDefs.Add(lClassDef);
+            return lClassDef;
+        }
+
         public Guid? ShapeID
         {
             get { return (Guid?)GetPropertyValue("ShapeID"); }

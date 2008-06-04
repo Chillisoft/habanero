@@ -18,8 +18,8 @@
 //---------------------------------------------------------------------------------
 
 
-using System.Windows.Forms;
-using Habanero.Test.UI.Base;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -41,24 +41,8 @@ namespace Habanero.Test.UI.Base
             {
                 return new Habanero.UI.Win.ControlFactoryWin();
             }
-            [Test]
-            public void TestValueWhenUpdatingBOValue()
-            {
-                sh.ShapeName = "TestShapeName";
-                mapper.BusinessObject = sh;
-                sh.ShapeName = "TestShapeName2";
-                mapper.UpdateControlValueFromBusinessObject();
-                Assert.AreEqual("TestShapeName2", tb.Text, "Text property of textbox is not working.");
-            }
-            [Test]
-            public void TestSettingTextBoxValueUpdatesBO()
-            {
-                sh.ShapeName = "TestShapeName";
-                mapper.BusinessObject = sh;
-                tb.Text = "Changed";
-                mapper.ApplyChangesToBusinessObject();
-                Assert.AreEqual("Changed", sh.ShapeName, "BO property value isn't changed when textbox text is changed.");
-            }
+
+
         }
 
         [TestFixture]
@@ -69,39 +53,39 @@ namespace Habanero.Test.UI.Base
                 return new Habanero.UI.WebGUI.ControlFactoryGizmox();
             }
         }
-        private ITextBox tb;
-        private TextBoxMapper mapper;
-        private Shape sh;
+        private ITextBox _tb;
+        private TextBoxMapper _mapper;
+        private Shape _shape;
 
 
         [SetUp]
         public void SetupTest()
         {
-            tb = GetControlFactory().CreateTextBox();
-            mapper = new TextBoxMapper(tb,  "ShapeName", false, GetControlFactory());
-            sh = new Shape();
+            _tb = GetControlFactory().CreateTextBox();
+            _mapper = new TextBoxMapper(_tb,  "ShapeName", false, GetControlFactory());
+            _shape = new Shape();
         }
 
         [Test]
         public void TestConstructor()
         {
-            Assert.AreSame(tb, mapper.Control);
-            Assert.AreSame("ShapeName", mapper.PropertyName);
+            Assert.AreSame(_tb, _mapper.Control);
+            Assert.AreSame("ShapeName", _mapper.PropertyName);
         }
 
         [Test]
         public void TestBusinessObject()
         {
-            mapper.BusinessObject = sh;
-            Assert.AreSame(sh, mapper.BusinessObject);
+            _mapper.BusinessObject = _shape;
+            Assert.AreSame(_shape, _mapper.BusinessObject);
         }
 
         [Test]
         public void TestValueWhenSettingBO()
         {
-            sh.ShapeName = "TestShapeName";
-            mapper.BusinessObject = sh;
-            Assert.AreEqual("TestShapeName", tb.Text, "TextBox value is not set when bo is set.");
+            _shape.ShapeName = "TestShapeName";
+            _mapper.BusinessObject = _shape;
+            Assert.AreEqual("TestShapeName", _tb.Text, "TextBox value is not set when bo is set.");
         }
 
 
@@ -110,14 +94,14 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestSettingToAnotherBusinessObject()
         {
-            sh.ShapeName = "TestShapeName";
-            mapper.BusinessObject = sh;
+            _shape.ShapeName = "TestShapeName";
+            _mapper.BusinessObject = _shape;
             Shape sh2 = new Shape();
             sh2.ShapeName = "Different";
-            mapper.BusinessObject = sh2;
-            Assert.AreEqual("Different", tb.Text, "Setting to another bo doesn't work.");
-            sh.ShapeName = "TestShapeName2";
-            Assert.AreEqual("Different", tb.Text,
+            _mapper.BusinessObject = sh2;
+            Assert.AreEqual("Different", _tb.Text, "Setting to another bo doesn't work.");
+            _shape.ShapeName = "TestShapeName2";
+            Assert.AreEqual("Different", _tb.Text,
                             "Setting to another bo doesn't remove the property updating event handler of the first.");
         }
 
@@ -126,20 +110,62 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestSettingTextBoxValueWhenBOIsNotSet()
         {
-            sh.ShapeName = "TestShapeName";
-            tb.Text = "Changed";
-            Assert.AreEqual("TestShapeName", sh.ShapeName,
+            _shape.ShapeName = "TestShapeName";
+            _tb.Text = "Changed";
+            Assert.AreEqual("TestShapeName", _shape.ShapeName,
                             "BO property value shouldn't change since bo of mapper wasn't set.");
-            Assert.AreEqual("Changed", tb.Text, "Textbox value shouldn't change.");
+            Assert.AreEqual("Changed", _tb.Text, "Textbox value shouldn't change.");
         }
 
         [Test]
         public void TestDisplayingRelatedProperty()
         {
             SetupClassDefs("MyValue");
-            mapper = new TextBoxMapper(tb, "MyRelationship.MyRelatedTestProp", true, GetControlFactory());
-            mapper.BusinessObject = itsMyBo;
-            Assert.AreEqual("MyValue", tb.Text);
+            _mapper = new TextBoxMapper(_tb, "MyRelationship.MyRelatedTestProp", true, GetControlFactory());
+            _mapper.BusinessObject = itsMyBo;
+            Assert.AreEqual("MyValue", _tb.Text);
+        }
+
+        [Test]
+        public void TestValueWhenUpdatingBOValue()
+        {
+            _shape.ShapeName = "TestShapeName";
+            _mapper.BusinessObject = _shape;
+            _shape.ShapeName = "TestShapeName2";
+            _mapper.UpdateControlValueFromBusinessObject();
+            Assert.AreEqual("TestShapeName2", _tb.Text, "Text property of textbox is not working.");
+        }
+        [Test]
+        public void TestSettingTextBoxValueUpdatesBO()
+        {
+            _shape.ShapeName = "TestShapeName";
+            _mapper.BusinessObject = _shape;
+            _tb.Text = "Changed";
+            _mapper.ApplyChangesToBusinessObject();
+            Assert.AreEqual("Changed", _shape.ShapeName, "BO property value isn't changed when textbox text is changed.");
+        }
+        [Test]
+        public void TestSettingTextBox_InvalidDataType_RaisesError()
+        {
+            ClassDef.ClassDefs.Clear();
+            Shape.CreateTestMapperClassDef();
+            Shape newShape = new Shape();
+            ITextBox tbShapeValue = GetControlFactory().CreateTextBox();
+            TextBoxMapper mapperShapeValue = new TextBoxMapper(tbShapeValue, "ShapeValue", false, GetControlFactory());
+            newShape.SetPropertyValue("ShapeValue", "111");
+            mapperShapeValue.BusinessObject = newShape;
+            tbShapeValue.Text = "Changed";
+            try
+            {
+                mapperShapeValue.ApplyChangesToBusinessObject();
+                ClassDef.ClassDefs.Clear();
+                Assert.Fail("should raise error");
+            }
+            catch (BusObjectInAnInvalidStateException ex)
+            {
+                ClassDef.ClassDefs.Clear();
+                StringAssert.Contains("could not be updated since the value 'Changed' is not valid for the property 'ShapeValue'", ex.Message);
+            }
         }
     }
 }

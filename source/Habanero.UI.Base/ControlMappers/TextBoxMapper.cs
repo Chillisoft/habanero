@@ -19,6 +19,7 @@
 
 
 using System;
+using Habanero.BO;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
@@ -176,6 +177,8 @@ namespace Habanero.UI.Base
             catch (FormatException)
             {
                 _textBox.Text = _oldText;
+                throw new BusObjectInAnInvalidStateException("The business object '" + this._businessObject.ClassDef.ClassName + "' - '" + this._businessObject +
+                        "' could not be updated since the value '" + value + "' is not valid for the property '" + _propertyName + "'");
             }
             _oldText = _textBox.Text;
         }
