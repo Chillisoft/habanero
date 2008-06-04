@@ -49,10 +49,22 @@ namespace Habanero.UI.Base
         /// </summary>
         IReadOnlyGridButtonsControl Buttons { get; }
 
+        /// <summary>
+        /// Gets and sets the business object editor used to edit the object when the edit button is clicked
+        /// If no editor is set then the <see cref="DefaultBOEditor"/> is used.
+        /// </summary>
         IBusinessObjectEditor BusinessObjectEditor { get; set; }
 
+        /// <summary>
+        /// Gets and sets the business object creator used to create the object when the add button is clicked.
+        /// If no creator is set then the <see cref="DefaultBOCreator"/> is used.
+        /// </summary>
         IBusinessObjectCreator BusinessObjectCreator { get; set; }
 
+        /// <summary>
+        /// Gets and sets the business object deletor used to delete the object when the delete button is clicked
+        /// If no deletor is set then the <see cref="DefaultBODeletor"/> is used.
+        /// </summary>
         IBusinessObjectDeletor BusinessObjectDeletor { get; set; }
 
         /// <summary>

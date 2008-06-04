@@ -32,9 +32,14 @@ namespace Habanero.UI.WebGUI
             _manager = new GridBaseManager(this);
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
             _manager.CollectionChanged += delegate { FireCollectionChanged(); };
-           
         }
 
+        /// <summary>
+        /// Creates the appropriate dataSetProvider depending on the grid type e.g. editable grid should return a
+        /// <see cref="EditableDataSetProvider"/> and a readonly grid should return a <see cref="ReadOnlyDataSetProvider"/>
+        /// </summary>
+        /// <param name="col">The column that the dataset provider is being created for</param>
+        /// <returns>The created dataset provider</returns>
         public abstract IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
 
         private void FireBusinessObjectSelected()
@@ -101,16 +106,25 @@ namespace Habanero.UI.WebGUI
             }
         }
 
+        /// <summary>
+        /// The collection of rows for the grid.
+        /// </summary>
         public new IDataGridViewRowCollection Rows
         {
             get { return new DataGridViewRowCollectionGiz(base.Rows); }
         }
 
+        /// <summary>
+        /// The collection of columns for the grid
+        /// </summary>
         public new IDataGridViewColumnCollection Columns
         {
             get { return new DataGridViewColumnCollectionGiz(base.Columns); }
         }
 
+        /// <summary>
+        /// Gets and sets the selected business object.
+        /// </summary>
         public IBusinessObject SelectedBusinessObject
         {
             get { return _manager.SelectedBusinessObject; }
@@ -121,6 +135,9 @@ namespace Habanero.UI.WebGUI
             }
         }
 
+        /// <summary>
+        /// The List of selected business objects.
+        /// </summary>
         public IList<BusinessObject> SelectedBusinessObjects
         {
             get { return _manager.SelectedBusinessObjects; }
@@ -166,6 +183,10 @@ namespace Habanero.UI.WebGUI
             _manager.ApplyFilter(filterClause);
         }
 
+        /// <summary>
+        /// The delegated grid loader to be used for loading the grid. If not delegated loader is set then
+        /// a default grid loader will be used.
+        /// </summary>
         public GridLoaderDelegate GridLoader
         {
             get { return _manager.GridLoader; }
