@@ -18,7 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using Habanero.Base;
@@ -34,12 +34,15 @@ namespace Habanero.Util
         //private readonly string _attachmentPath;
         private readonly string _content;
         private readonly string _subject;
-        private readonly IList _toAddresses = new ArrayList(1);
-        private readonly IList _ccAddresses = new ArrayList(1);
-        private readonly IList _bccAddresses = new ArrayList(1);
-        private readonly IList _attachmentPaths = new ArrayList(1);
+        private readonly List<string> _toAddresses = new List<string>(1);
+        private readonly List<string> _ccAddresses = new List<string>(1);
+        private readonly List<string> _bccAddresses = new List<string>(1);
+        private readonly List<string> _attachmentPaths = new List<string>(1);
         private string _smtpServerHost;
         private int _smtpServerPort;
+        private bool _enableSSL;
+
+        #region Constructors
 
         /// <summary>
         /// Constructor to initialise a new sender
@@ -49,20 +52,103 @@ namespace Habanero.Util
         /// <param name="subject">The email subject</param>
         /// <param name="content">The email content</param>
         /// <param name="attachmentPath">The attachment path</param>
-        /// TODO ERIC - cater for multiple attachments using a list
-        public EmailSender(IList emailAddresses, string fromAddress, string subject, string content,
+        public EmailSender(IList<string> emailAddresses, string fromAddress, string subject, string content,
                            string attachmentPath)
+            : this(emailAddresses, fromAddress, subject, content, CreateListWithItem(attachmentPath) )
         {
-            _toAddresses = emailAddresses;
+        }
+               
+
+        /// <summary>
+        /// Constructor to initialise a new sender
+        /// </summary>
+        /// <param name="emailAddresses">The email addresses to send to</param>
+        /// <param name="fromAddress">The "from" address</param>
+        /// <param name="subject">The email subject</param>
+        /// <param name="content">The email content</param>
+        /// <param name="attachmentPaths">The attachment paths</param>
+        public EmailSender(IList<string> emailAddresses, string fromAddress, string subject, string content,
+                           IList<string> attachmentPaths)
+            : this(emailAddresses, new List<string>(), new List<string>(), fromAddress, 
+                    subject, content, attachmentPaths)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise a new sender
+        /// </summary>
+        /// <param name="toAddresses">The email addresses to send to</param>
+        /// <param name="ccAddresses">The email addresses to carbon copy</param>
+        /// <param name="bccAddresses">The email addresses to blind carbon copy</param>
+        /// <param name="fromAddress">The "from" address</param>
+        /// <param name="subject">The email subject</param>
+        /// <param name="content">The email content</param>
+        /// <param name="attachmentPaths">The attachment paths</param>
+        public EmailSender(IList<string> toAddresses, IList<string> ccAddresses, IList<string> bccAddresses, 
+            string fromAddress, string subject, string content, IList<string> attachmentPaths)
+        {
+            _toAddresses = new List<string>(toAddresses);
+            _ccAddresses = new List<string>(ccAddresses);
+            _bccAddresses = new List<string>(bccAddresses);
             _subject = subject;
             _content = content;
+            _attachmentPaths = new List<string>(attachmentPaths);
             //_attachmentPath = attachmentPath;
-            if (attachmentPath != null && attachmentPath.Length > 0)
-                _attachmentPaths.Add(attachmentPath);
+            
             _fromAddress = fromAddress;
             if (GlobalRegistry.Settings != null)
-                _smtpServerHost = GlobalRegistry.Settings.GetString("SmtpServer");
+            {
+                try
+                {
+                    _smtpServerHost = GlobalRegistry.Settings.GetString("SMTP_SERVER");
+                } catch
+                {
+                }
+            }
             _smtpServerPort = 25;
+            _enableSSL = false;
+        }
+
+
+        private static List<string> CreateListWithItem(string item)
+        {
+            List<string> list = new List<string>();
+            if (!String.IsNullOrEmpty(item))
+            {
+                list.Add(item);
+
+            }
+            return list;
+        }
+
+        #endregion //Constructors
+
+        #region Properties
+
+        ///<summary>
+        /// Gets the List of Email Addresses used for SMTP Transactions.
+        ///</summary>
+        public List<string> ToAddresses
+        {
+            get { return _toAddresses; }
+        }
+        ///<summary>
+        /// Gets the List of Subject associated with the Email.
+        ///</summary>
+        public string Subject
+        {
+            get { return _subject; }
+        }
+
+        ///<summary>
+        /// Gets the File Attachment Path used for SMTP Transactions.
+        ///</summary>
+        public List<string> Attachment
+        {
+            get
+            {
+                return _attachmentPaths;
+            }
         }
 
         ///<summary>
@@ -84,38 +170,15 @@ namespace Habanero.Util
         }
 
         ///<summary>
-        /// Gets the List of Email Addresses used for SMTP Transactions.
+        /// Gets or sets whether the SMTP server uses SSL or not.
         ///</summary>
-        public IList toAddresses
+        public bool EnableSSL
         {
-            get { return _toAddresses; }
-        }
-        ///<summary>
-        /// Gets the List of Subject associated with the Email.
-        ///</summary>
-        public string Subject
-        {
-            get { return _subject; }
+            get { return _enableSSL; }
+            set { _enableSSL = value; }
         }
 
-        ///<summary>
-        /// Gets the File Attachment Path used for SMTP Transactions.
-        ///</summary>
-        //TODO: cater for multiple attachments currently it does not make 
-        //      sense to return an IList of the Attachment paths as there 
-        //      can only be one attachment, however this will change when 
-        //      the system caters for multiple attachments
-        public string Attachment
-        {
-            get
-            {
-                if (_attachmentPaths.Count != 0)
-                {
-                    return _attachmentPaths[0] as string;
-                }
-                return "";
-            }
-        }
+        #endregion //Properties
 
         /// <summary>
         /// Sends the email message using the "SmtpServer" setting in the
@@ -151,20 +214,6 @@ namespace Habanero.Util
 
         private void DoSend(string authUsername, string authPassword, string authDomain)
         {
-            //EmailMessage message =
-            //    new EmailMessage((string) itsEmailAddresses[0], _fromAddress, _subject, _content,
-            //                     BodyPartFormat.Plain);
-            //for (int i = 1; i < itsEmailAddresses.Count; i++)
-            //{
-            //    message.Recipients.Add((string) itsEmailAddresses[i]);
-            //}
-            //if (_attachmentPath != null && _attachmentPath.Length > 0)
-            //{
-            //    message.Attachments.Add(_attachmentPath);
-            //}
-            //SMTP server = new SMTP(GlobalRegistry.Settings.GetString("SmtpServer"));
-            //server.Send(message);
-
             if (_smtpServerHost == null)
             {
                 throw new Exception("Please specify the SMTP Host Name before attempting to send.");
@@ -188,6 +237,7 @@ namespace Habanero.Util
             SmtpClient smtpServer = new SmtpClient();
             smtpServer.Host = _smtpServerHost;
             smtpServer.Port = _smtpServerPort;
+            smtpServer.EnableSsl = _enableSSL;
             if (authUsername != null && authPassword != null)
             {
                 NetworkCredential auth = new NetworkCredential(authUsername, authPassword);
@@ -204,13 +254,13 @@ namespace Habanero.Util
             smtpServer.Send(message);
         }
 
-        private static void addAddresses(MailAddressCollection addToCol, IList addressList)
+        private static void addAddresses(MailAddressCollection addToCol, List<string> addressList)
         {
-            foreach (object toAddress in addressList)
+            foreach (string address in addressList)
             {
-                if (toAddress != null)
+                if (address != null)
                 {
-                    addToCol.Add(new MailAddress(toAddress.ToString()));
+                    addToCol.Add(new MailAddress(address.ToString()));
                 }
             }
         }
