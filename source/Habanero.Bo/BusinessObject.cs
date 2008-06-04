@@ -34,8 +34,6 @@ using log4net;
 
 namespace Habanero.BO
 {
-
-
     //public delegate void BusinessObjectUpdatedHandler(Object sender, BOEventArgs e);
 
     /// <summary>
@@ -44,7 +42,6 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObject : IBusinessObject
     {
-
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         public event EventHandler<BOEventArgs> Updated;
@@ -54,7 +51,8 @@ namespace Habanero.BO
 
         #region Fields
 
-        private static readonly Dictionary<string, WeakReference> _allLoadedBusinessObjects = new Dictionary<string, WeakReference>();
+        private static readonly Dictionary<string, WeakReference> _allLoadedBusinessObjects =
+            new Dictionary<string, WeakReference>();
 
         //set object as new by default.
         private BOState _boState;
@@ -68,6 +66,7 @@ namespace Habanero.BO
         private ITransactional _transactionLog;
         protected IDatabaseConnection _connection;
         //private bool _hasAutoIncrementingField;
+
         #endregion //Fields
 
         #region Constructors
@@ -75,7 +74,7 @@ namespace Habanero.BO
         /// <summary>
         /// Constructor to initialise a new business object
         /// </summary>
-        public  BusinessObject() : this((IDatabaseConnection)null)
+        public BusinessObject() : this((IDatabaseConnection) null)
         {
         }
 
@@ -115,7 +114,7 @@ namespace Habanero.BO
                 while (currentClassDef.IsUsingClassTableInheritance())
                 {
                     while (currentClassDef.SuperClassClassDef != null &&
-                            currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
+                           currentClassDef.SuperClassClassDef.PrimaryKeyDef == null)
                     {
                         currentClassDef = currentClassDef.SuperClassClassDef;
                     }
@@ -200,8 +199,8 @@ namespace Habanero.BO
                 if (this.ClassDef == null) return;
                 if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
                 if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
-                if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
-                if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
+                    if (AllLoadedBusinessObjects().ContainsKey(_primaryKey.GetOrigObjectID()))
+                        if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
                 if (_primaryKey != null && _primaryKey.GetOrigObjectID().Length > 0)
                 {
                     AllLoadedBusinessObjects().Remove(_primaryKey.GetOrigObjectID());
@@ -212,10 +211,11 @@ namespace Habanero.BO
                 }
                 ReleaseWriteLocks();
 //               ReleaseReadLocks();
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 log.Error("Error disposing BusinessObject.", ex);
-             }
+            }
             ReleaseWriteLocks();
 //-            ReleaseReadLocks();
             //if (this.ID != null) AllLoadedBusinessObjects().Remove(this.ID.ToString());
@@ -280,10 +280,10 @@ namespace Habanero.BO
             if (_classDef == null)
             {
                 throw new NullReferenceException(String.Format(
-                    "An error occurred while loading the class definitions for " +
-                    "'{0}'. Check that the class exists in that " +
-                    "namespace and assembly and that there are corresponding " +
-                    "class definitions for this class.", GetType()));
+                                                     "An error occurred while loading the class definitions for " +
+                                                     "'{0}'. Check that the class exists in that " +
+                                                     "namespace and assembly and that there are corresponding " +
+                                                     "class definitions for this class.", GetType()));
             }
             _boPropCol = _classDef.createBOPropertyCol(newObject);
             _keysCol = _classDef.createBOKeyCol(_boPropCol);
@@ -308,7 +308,7 @@ namespace Habanero.BO
                 if (classDefToUseForPrimaryKey.PrimaryKeyDef != null)
                 {
                     _primaryKey = (BOPrimaryKey)
-                        classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
+                                  classDefToUseForPrimaryKey.SuperClassClassDef.PrimaryKeyDef.CreateBOKey(_boPropCol);
                 }
             }
             _relationshipCol = _classDef.CreateRelationshipCol(_boPropCol, this);
@@ -324,7 +324,6 @@ namespace Habanero.BO
                 return ClassDef.ClassDefs[this.GetType()];
             else
                 return null;
-
         }
 
         /// <summary>
@@ -363,10 +362,10 @@ namespace Habanero.BO
                     if (this.ClassDef == null)
                     {
                         throw new NullReferenceException(String.Format(
-                            "An error occurred while retrieving the class definitions for " +
-                            "'{0}'. Check that the class exists in that " +
-                            "namespace and assembly and that there are corresponding " +
-                            "class definitions for this class.", GetType()));
+                                                             "An error occurred while retrieving the class definitions for " +
+                                                             "'{0}'. Check that the class exists in that " +
+                                                             "namespace and assembly and that there are corresponding " +
+                                                             "class definitions for this class.", GetType()));
                     }
                     PrimaryKeyDef primaryKeyDef = this.ClassDef.GetPrimaryKeyDef();
                     if (primaryKeyDef != null)
@@ -486,7 +485,7 @@ namespace Habanero.BO
             output += "Type: " + this.GetType().Name + Environment.NewLine;
             foreach (DictionaryEntry entry in _boPropCol)
             {
-                BOProp prop = (BOProp)entry.Value;
+                BOProp prop = (BOProp) entry.Value;
                 output += prop.PropertyName + " - " + prop.PropertyValueString + Environment.NewLine;
             }
             return output;
@@ -508,7 +507,7 @@ namespace Habanero.BO
         public virtual bool IsEditable(out string message)
         {
             message = "";
-            return true; 
+            return true;
         }
 
         ///<summary>
@@ -522,7 +521,7 @@ namespace Habanero.BO
         public virtual bool IsDeletable(out string message)
         {
             message = "";
-            return true; 
+            return true;
         }
 
         /// <summary>
@@ -545,7 +544,7 @@ namespace Habanero.BO
             string message;
             if (!this.IsEditable(out message) && !delete)
             {
-                throw new BusObjEditableException(this,message);             
+                throw new BusObjEditableException(this, message);
             }
             CheckNotEditing();
             CheckConcurrencyBeforeBeginEditing();
@@ -576,7 +575,8 @@ namespace Habanero.BO
             if (Props.Contains(propName))
                 return Props[propName].Value;
             else
-                throw new InvalidPropertyNameException("Property '" + propName + "' does not exist on a business object of type '" +
+                throw new InvalidPropertyNameException("Property '" + propName +
+                                                       "' does not exist on a business object of type '" +
                                                        this.GetType().Name + "'");
         }
 
@@ -599,21 +599,20 @@ namespace Habanero.BO
         internal object GetPropertyValueToDisplay(string propName)
         {
             object propertyValue = GetPropertyValue(propName);
-            
-            if (Props[propName].PropertyType == typeof(Guid) && this.GetPropertyValue(propName) != null &&
+
+            if (Props[propName].PropertyType == typeof (Guid) && this.GetPropertyValue(propName) != null &&
                 !this.ID.Contains(propName))
             {
-                Guid myGuid = (Guid)propertyValue;
+                Guid myGuid = (Guid) propertyValue;
                 ILookupList lookupList = this.ClassDef.GetLookupList(propName);
                 Dictionary<string, object> list = lookupList.GetLookupList();
 
                 foreach (KeyValuePair<string, object> pair in list)
                 {
-
                     if (pair.Value == null) continue;
                     if (pair.Value is IBusinessObject)
                     {
-                        BusinessObject bo = (BusinessObject)pair.Value;
+                        BusinessObject bo = (BusinessObject) pair.Value;
                         if (bo._primaryKey.GetGuid().Equals(myGuid))
                         {
                             return pair.Key;
@@ -654,7 +653,7 @@ namespace Habanero.BO
                         }
                     }
                 }
-                
+
                 return myGuid;
             }
             else if (ClassDef.GetPropDef(propName).HasLookupList())
@@ -662,7 +661,6 @@ namespace Habanero.BO
                 Dictionary<string, object> lookupList = this.ClassDef.GetLookupList(propName).GetLookupList();
                 foreach (KeyValuePair<string, object> pair in lookupList)
                 {
-                    
                     if (pair.Value == null) continue;
                     if (pair.Value is string && pair.Value.Equals(Convert.ToString(propertyValue)))
                     {
@@ -674,17 +672,17 @@ namespace Habanero.BO
                     }
                     else if (pair.Value is IBusinessObject)
                     {
-                        BusinessObject bo = (BusinessObject)pair.Value;
+                        BusinessObject bo = (BusinessObject) pair.Value;
                         if (String.Compare(bo.ID.ToString(), GetPropertyValueString(propName)) == 0)
-                        {    return pair.Value.ToString();
+                        {
+                            return pair.Value.ToString();
                         }
                         else if (bo.ID[0].Value != null &&
-                            String.Compare(bo.ID[0].Value.ToString(), GetPropertyValueString(propName)) == 0)
+                                 String.Compare(bo.ID[0].Value.ToString(), GetPropertyValueString(propName)) == 0)
                         {
                             return pair.Value.ToString();
                         }
                     }
-
                 }
                 return propertyValue;
             }
@@ -724,38 +722,44 @@ namespace Habanero.BO
             if (prop == null)
             {
                 throw new InvalidPropertyNameException(String.Format(
-                    "The given property name '{0}' does not exist in the " +
-                    "collection of properties for the class '{1}'.",
-                    propName, ClassName));
+                                                           "The given property name '{0}' does not exist in the " +
+                                                           "collection of properties for the class '{1}'.",
+                                                           propName, ClassName));
             }
 
             if (!(newPropValue is Guid))
             {
-                if (newPropValue is string && prop.PropertyType == typeof(Guid))
+                if (newPropValue is string && prop.PropertyType == typeof (Guid))
                 {
-                	Guid guidValue;
-					if (StringUtilities.GuidTryParse((string) newPropValue, out guidValue))
-					{
-						newPropValue = guidValue;
-					} else 
-					{
-                        if (this.ClassDef.GetPropDef(propName).HasLookupList()) {
-                            Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
+                    Guid guidValue;
+                    if (StringUtilities.GuidTryParse((string) newPropValue, out guidValue))
+                    {
+                        newPropValue = guidValue;
+                    }
+                    else
+                    {
+                        if (this.ClassDef.GetPropDef(propName).HasLookupList())
+                        {
+                            Dictionary<string, object> lookupList =
+                                this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
                             try
                             {
-                                newPropValue = lookupList[(string)newPropValue];
+                                newPropValue = lookupList[(string) newPropValue];
                             }
                             catch (KeyNotFoundException ex)
                             {
-                                throw new HabaneroApplicationException("You are trying to set the value for a lookup property " + propName + " to '" + newPropValue + "' this value does not exist in the lookup list", ex);
+                                throw new HabaneroApplicationException(
+                                    "You are trying to set the value for a lookup property " + propName + " to '" +
+                                    newPropValue + "' this value does not exist in the lookup list", ex);
                             }
-                            if (newPropValue is IBusinessObject) {
+                            if (newPropValue is IBusinessObject)
+                            {
                                 newPropValue = ((BusinessObject) (newPropValue))._primaryKey.GetGuid();
                             }
                         }
                     }
                 }
-                if (newPropValue != null && newPropValue.Equals(DBNull.Value) && prop.PropertyType == typeof(bool))
+                if (newPropValue != null && newPropValue.Equals(DBNull.Value) && prop.PropertyType == typeof (bool))
                 {
                     newPropValue = false;
                 }
@@ -773,19 +777,20 @@ namespace Habanero.BO
             }
             if (newPropValue is IBusinessObject)
             {
-                if (prop.PropertyType == typeof(Guid))
-                    newPropValue = ((BusinessObject)newPropValue)._primaryKey.GetGuid();
-                else newPropValue = ((BusinessObject)newPropValue).ID[0].Value.ToString();
-            } else if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList()) {
-
+                if (prop.PropertyType == typeof (Guid))
+                    newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetGuid();
+                else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
+            }
+            else if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList())
+            {
                 Dictionary<string, object> lookupList = this.ClassDef.GetPropDef(propName).LookupList.GetLookupList();
-                if (lookupList.ContainsKey((string)newPropValue))
-                    newPropValue = lookupList[(string)newPropValue];
+                if (lookupList.ContainsKey((string) newPropValue))
+                    newPropValue = lookupList[(string) newPropValue];
                 if (newPropValue is IBusinessObject)
                 {
-                   if (prop.PropertyType == typeof(Guid))
-                    newPropValue = ((BusinessObject)newPropValue)._primaryKey.GetGuid();
-                else newPropValue = ((BusinessObject)newPropValue).ID[0].Value.ToString();
+                    if (prop.PropertyType == typeof (Guid))
+                        newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetGuid();
+                    else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
                 }
             }
             // If the property will be changed by this set then
@@ -805,7 +810,6 @@ namespace Habanero.BO
         }
 
 
-
         internal static bool PropValueHasChanged(object propValue, object newPropValue)
         {
             if (propValue == newPropValue) return false;
@@ -818,10 +822,7 @@ namespace Habanero.BO
         /// </summary>
         public BOPropCol Props
         {
-            get
-            {
-                return _boPropCol;
-            }
+            get { return _boPropCol; }
         }
 
         /// <summary>
@@ -871,10 +872,7 @@ namespace Habanero.BO
         /// </summary>
         public BOState State
         {
-            get
-            {
-                return _boState;
-            }
+            get { return _boState; }
         }
 
 
@@ -998,7 +996,8 @@ namespace Habanero.BO
                 {
                     AllLoadedBusinessObjects().Add(this.ID.GetObjectId(),
                                                    new WeakReference(this));
-                }catch (IndexOutOfRangeException)
+                }
+                catch (IndexOutOfRangeException)
                 {
                     //Hack some arbitary errro from generic.Dictionary
                 }
@@ -1080,7 +1079,7 @@ namespace Habanero.BO
             string errMsg;
             if (!IsDeletable(out errMsg))
             {
-                throw new BusObjDeleteException(this,errMsg);
+                throw new BusObjDeleteException(this, errMsg);
             }
         }
 
@@ -1091,6 +1090,7 @@ namespace Habanero.BO
                 this.Updated(this, new BOEventArgs(this));
             }
         }
+
         private void FireRestoredEvent()
         {
             if (this.Restored != null)
@@ -1098,6 +1098,7 @@ namespace Habanero.BO
                 this.Restored(this, new BOEventArgs(this));
             }
         }
+
         private void FireSaved()
         {
             if (this.Saved != null)
@@ -1127,7 +1128,7 @@ namespace Habanero.BO
         }
 
         #endregion //Persistance
-		
+
         #region Concurrency
 
         /// <summary>
@@ -1177,9 +1178,9 @@ namespace Habanero.BO
 
         #endregion //Concurrency
 
-    	#region Sql Statements
+        #region Sql Statements
 
-		/// <summary>
+        /// <summary>
         /// Parses the parameter sql information into the given search
         /// expression
         /// </summary>
@@ -1198,7 +1199,7 @@ namespace Habanero.BO
         private static ClassDef GetCorrespondingClassDef(PropDef propDef, ClassDef classDef)
         {
             ClassDef currentClassDef = classDef;
-            while(!currentClassDef.PropDefcol.Contains(propDef))
+            while (!currentClassDef.PropDefcol.Contains(propDef))
             {
                 currentClassDef = currentClassDef.SuperClassClassDef;
                 if (currentClassDef == null)
@@ -1240,7 +1241,7 @@ namespace Habanero.BO
         /// <param name="selectSql">The sql statement used to generate and track
         /// parameters</param>
         /// <returns>Returns a string</returns>
-        protected internal  virtual string SelectSqlStatement(SqlStatement selectSql)
+        protected internal virtual string SelectSqlStatement(SqlStatement selectSql)
         {
             string statement = SelectSqlWithNoSearchClauseIncludingWhere();
             statement += WhereClause(selectSql);
@@ -1256,7 +1257,7 @@ namespace Habanero.BO
         {
             return new SelectStatementGenerator(this, this._connection).Generate(-1);
         }
-        
+
         /// <summary>
         /// Returns a sql statement with no search clause but including a
         /// "where " (or "and " where appropriate) statement.  Uses SelectSqlWithNoSearchClause() and appends
@@ -1287,7 +1288,7 @@ namespace Habanero.BO
         {
             return new SelectStatementGenerator(this, this._connection).Generate(limit);
         }
-        
+
         /// <summary>
         /// Returns a "select" sql statement string that is used to load this
         /// object from the database
@@ -1311,13 +1312,13 @@ namespace Habanero.BO
                 _concurrencyControl.UpdateAsTransactionRolledBack();
             }
         }
+
         /// <summary>
         /// Called by the business object when the transaction has been successfully committed
         /// to the database. Called in cases of insert, delete and update.
         /// </summary>
         protected internal virtual void AfterSave()
         {
-            
         }
     }
 }
