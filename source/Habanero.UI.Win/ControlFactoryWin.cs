@@ -14,6 +14,10 @@ namespace Habanero.UI.Win
 {
     public class ControlFactoryWin : IControlFactory
     {
+        /// <summary>
+        /// Creates a filter control with the default layout manager
+        /// </summary>
+        /// <returns></returns>
         public IFilterControl CreateFilterControl()
         {
             return new FilterControlWin(this);

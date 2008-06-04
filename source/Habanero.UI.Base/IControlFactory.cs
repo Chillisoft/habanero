@@ -10,6 +10,11 @@ namespace Habanero.UI.Base
 {
     public interface IControlFactory
     {
+
+        /// <summary>
+        /// Creates a filter control with the default layout manager
+        /// </summary>
+        /// <returns></returns>
         IFilterControl CreateFilterControl();
 
         /// <summary>

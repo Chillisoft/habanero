@@ -29,7 +29,7 @@ namespace Habanero.UI.WebGUI
         public ReadOnlyGridControlGiz()
         {
             _controlFactory = new ControlFactoryGizmox();
-            _filterControl = new FilterControlGiz(_controlFactory);
+            _filterControl = _controlFactory.CreateFilterControl();
             _grid = new ReadOnlyGridGiz();
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();
             _gridInitialiser = new GridInitialiser(this, _controlFactory);

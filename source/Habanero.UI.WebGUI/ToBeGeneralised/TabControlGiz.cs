@@ -13,11 +13,6 @@ namespace Habanero.UI.WebGUI
         }
        
         //TODO: Convert dockstyles between Giz windows etc
-        public new IDockStyle Dock
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
 
         public new ITabPageCollection TabPages
         {

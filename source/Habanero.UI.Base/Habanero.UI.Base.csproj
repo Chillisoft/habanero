@@ -99,7 +99,6 @@
     <Compile Include="ControlMappers\LookupComboBoxMapper.cs" />
     <Compile Include="ControlMappers\TextBoxMapper.cs" />
     <Compile Include="DefaultBOCreator.cs" />
-    <Compile Include="ControlInterfaces\IDockStyle.cs" />
     <Compile Include="ControlInterfaces\IFormChilli.cs" />
     <Compile Include="ControlInterfaces\IGroupBox.cs" />
     <Compile Include="ControlInterfaces\IListView.cs" />

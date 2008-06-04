@@ -43,6 +43,7 @@ namespace Habanero.UI.Base
         /// Constructor to initialise a new grid layout
         /// </summary>
         /// <param name="managedControl">The control to manage</param>
+        /// <param name="controlFactory">The control factory used to create any controls</param>
         public GridLayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
             : base(managedControl, controlFactory)
         {

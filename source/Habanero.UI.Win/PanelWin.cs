@@ -10,11 +10,5 @@ namespace Habanero.UI.Win
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
-
-        public IDockStyle Dock
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
     }
 }

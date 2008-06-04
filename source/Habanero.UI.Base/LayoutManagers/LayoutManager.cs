@@ -29,7 +29,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public abstract class LayoutManager : MarshalByRefObject
     {
-        private readonly IControlChilli _managedControl;
+        private IControlChilli _managedControl;
         protected readonly IControlFactory _controlFactory;
         private int _borderSize = 5;
         private int _gapSize = 2;
@@ -38,6 +38,7 @@ namespace Habanero.UI.Base
         /// Constructor to initialise a new layout manager
         /// </summary>
         /// <param name="managedControl">The control to manage</param>
+        /// <param name="controlFactory">control factory used to create any child controls</param>
         public LayoutManager(IControlChilli managedControl, IControlFactory controlFactory)
         {
             if (managedControl == null)
@@ -48,17 +49,23 @@ namespace Habanero.UI.Base
             {
                 throw new LayoutManagerException("You cannot initialise the layout manager with a control that already contains controls");
             }
-            _managedControl = managedControl;
             _controlFactory = controlFactory;
+            SetManagedControl(managedControl);
+        }
+
+        private void SetManagedControl(IControlChilli managedControl)
+        {
+            _managedControl = managedControl;
             _managedControl.Resize += this.ManagedControlResizeHandler;
         }
 
         /// <summary>
-        /// Returns the managed control
+        /// gets and sets the managed control
         /// </summary>
         public IControlChilli ManagedControl
         {
             get { return _managedControl; }
+            set { SetManagedControl(value); }
         }
 
         /// <summary>

@@ -11,12 +11,12 @@ namespace Habanero.UI.Base.FilterControl
         private readonly IControlFactory _controlFactory;
         private readonly IFilterClauseFactory _clauseFactory;
         private readonly List<FilterUI> _filterControls = new List<FilterUI>();
-        private readonly FlowLayoutManager _flowLayoutManager;
+        private LayoutManager _layoutManager;
 
-        public FilterControlManager(IControlFactory controlFactory, FlowLayoutManager flowLayoutManager )
+        public FilterControlManager(IControlFactory controlFactory, LayoutManager layoutManager)
         {
             _controlFactory = controlFactory;
-            _flowLayoutManager = flowLayoutManager;
+            _layoutManager = layoutManager;
             _clauseFactory = new DataViewFilterClauseFactory();
         }
 
@@ -28,6 +28,12 @@ namespace Habanero.UI.Base.FilterControl
         public IList FilterControls
         {
             get { return _filterControls; }
+        }
+
+        public LayoutManager LayoutManager
+        {
+            get { return _layoutManager; }
+            set { _layoutManager = value; }
         }
 
 
@@ -55,12 +61,21 @@ namespace Habanero.UI.Base.FilterControl
         {
             ILabel label = _controlFactory.CreateLabel(labelText);
             ITextBox textBox = _controlFactory.CreateTextBox();
-            _flowLayoutManager.AddControl(label);
-            _flowLayoutManager.AddGlue();
-            _flowLayoutManager.AddControl(textBox);
+            AddControlToLayoutManager(label, textBox);
             _filterControls.Add(new FilterUIString(_clauseFactory, propertyName, textBox));
             return textBox;
         }
+
+        private void AddControlToLayoutManager(ILabel label, IControlChilli entryControl)
+        {
+            _layoutManager.AddControl(label);
+            if (_layoutManager is FlowLayoutManager)
+            {
+                ((FlowLayoutManager)_layoutManager).AddGlue();                
+            }
+            _layoutManager.AddControl(entryControl);
+        }
+
         /// <summary>
         /// Adds a TextBox filter in which users can specify text that
         /// a string-value column will be filtered on.
@@ -74,9 +89,7 @@ namespace Habanero.UI.Base.FilterControl
         {
             ILabel label = _controlFactory.CreateLabel(labelText);
             ITextBox textBox = _controlFactory.CreateTextBox();
-            _flowLayoutManager.AddControl(label);
-            _flowLayoutManager.AddGlue();
-            _flowLayoutManager.AddControl(textBox);
+            AddControlToLayoutManager(label, textBox);
             _filterControls.Add(new FilterUIString(_clauseFactory, propertyName, textBox, filterClauseOperator));
             return textBox;
         }
@@ -85,9 +98,7 @@ namespace Habanero.UI.Base.FilterControl
 
             IComboBox cb = _controlFactory.CreateComboBox();
             ILabel label = _controlFactory.CreateLabel(labelText);
-            _flowLayoutManager.AddControl(label);
-            _flowLayoutManager.AddGlue();
-            _flowLayoutManager.AddControl(cb);
+            AddControlToLayoutManager(label, cb);
             _filterControls.Add(new FilterUIStringOptions(_clauseFactory, columnName, cb, options, strictMatch));
 
             //TODO: Port for windows
@@ -112,7 +123,7 @@ namespace Habanero.UI.Base.FilterControl
         public ICheckBox AddBooleanFilterCheckBox(string labelText, string propertyName, bool isChecked)
         {
             ICheckBox cb = _controlFactory.CreateCheckBox();
-            _flowLayoutManager.AddControl(cb);
+            _layoutManager.AddControl(cb);
             _filterControls.Add(new FilterUICheckBox(_clauseFactory, propertyName, cb, labelText, isChecked));
             //TODO: Port for windows
             //cb.CheckedChanged += FilterControlValueChangedHandler;

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
@@ -9,18 +8,17 @@ using Habanero.UI.Base.FilterControl;
 namespace Habanero.UI.Win
 {
     // TODO: move this into FilterControl directory like Giz version
-    public class FilterControlWin : Panel, IFilterControl
+    public class FilterControlWin : Panel, IFilterControl, IPanel
     {
         public event EventHandler Filter;
         private readonly FilterControlManager _filterControlManager;
-        private FilterModes _filterModes;
         private FilterModes _filterMode;
         //private readonly FlowLayoutManager _flowLayoutManager;
 
         public FilterControlWin(IControlFactory controlFactory)
         {
-            FlowLayoutManager flowLayoutManager = new FlowLayoutManager(this, controlFactory);
-            _filterControlManager = new FilterControlManager(controlFactory, flowLayoutManager);
+            FlowLayoutManager layoutManager = new FlowLayoutManager(this, controlFactory);
+            _filterControlManager = new FilterControlManager(controlFactory, layoutManager);
 
             this.Height = 40;
         }
@@ -42,7 +40,7 @@ namespace Habanero.UI.Win
         /// <param name="filterClauseOperator">Operator To Use For the filter clause</param>
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName, FilterClauseOperator filterClauseOperator)
         {
-            return _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator); ;
+            return _filterControlManager.AddStringFilterTextBox(labelText, propertyName, filterClauseOperator);
         }
 
         public IFilterClause GetFilterClause()
@@ -55,11 +53,11 @@ namespace Habanero.UI.Win
             get { return new ControlCollectionWin(base.Controls); }
         }
 
-        public IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options,
+        public IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options,
                                                  bool strictMatch)
         {
             IComboBox comboBox =
-                _filterControlManager.AddStringFilterComboBox(labelText, columnName, options, strictMatch);
+                _filterControlManager.AddStringFilterComboBox(labelText, propertyName, options, strictMatch);
             return comboBox;
         }
 
@@ -142,6 +140,21 @@ namespace Habanero.UI.Win
         public void ClearFilters()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// returns the layout manager used to lay the controls out on the filter control panel.
+        /// The default layout manager is the FlowLayoutManager.
+        /// </summary>
+        public LayoutManager LayoutManager
+        {
+            get { return _filterControlManager.LayoutManager; }
+            set { _filterControlManager.LayoutManager = value; }
+        }
+
+        public IPanel FilterPanel
+        {
+            get { return this; }
         }
     }
 }

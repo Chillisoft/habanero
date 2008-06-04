@@ -27,7 +27,7 @@ namespace Habanero.Test.UI.Base
   
     public abstract class TestLayoutManager
     {
-        private MockLayoutManager manager;
+        private LayoutManagerStub _ManagerStub;
         private IControlChilli managedControl;
 
         protected abstract IControlFactory GetControlFactory();
@@ -55,13 +55,13 @@ namespace Habanero.Test.UI.Base
             managedControl = GetControlFactory().CreateControl();
             managedControl.Width = 100;
             managedControl.Height = 100;
-            manager = new MockLayoutManager(managedControl);
+            _ManagerStub = new LayoutManagerStub(managedControl);
         }
 
         [Test]
         public void TestManagedControl()
         {
-            Assert.AreSame(managedControl, manager.ManagedControl);
+            Assert.AreSame(managedControl, _ManagerStub.ManagedControl);
         }
         //TODO: Peter what must I do with these
         //		[Test]
@@ -79,10 +79,29 @@ namespace Habanero.Test.UI.Base
         //		}
 
         [Test]
+        public void Test_ResetTheManagedControl()
+        {
+            //---------------Set up test pack-------------------
+            IControlChilli control = GetControlFactory().CreatePanel();
+            LayoutManagerStub managerStub = new LayoutManagerStub(control);
+
+            //---------------Assert Precondition----------------
+
+            Assert.AreSame(control, managerStub.ManagedControl);
+            //---------------Execute Test ----------------------
+            IControlChilli control2 = GetControlFactory().CreatePanel();
+            managerStub.ManagedControl = control2;
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(control2, managerStub.ManagedControl);
+
+        }
+
+        [Test]
         public void TestRefreshOnResize()
         {
             managedControl.Width = 150;
-            Assert.IsTrue(manager.IsRefreshed, "Refresh should happen when control size changes.");
+            Assert.IsTrue(_ManagerStub.IsRefreshed, "Refresh should happen when control size changes.");
         }
 
         [Test]
@@ -94,7 +113,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             try
             {
-                new MockLayoutManager(controlChilli);
+                new LayoutManagerStub(controlChilli);
                 Assert.Fail("Should raise an error");
             }
             //---------------Test Result -----------------------
@@ -111,7 +130,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             try
             {
-                new MockLayoutManager(null);
+                new LayoutManagerStub(null);
                 Assert.Fail("Should raise an error");
             }
             //---------------Test Result -----------------------
@@ -121,7 +140,7 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        private class MockLayoutManager : Habanero.UI.Base.LayoutManager
+        private class LayoutManagerStub : LayoutManager
         {
             private bool mRefreshed;
 
@@ -130,7 +149,7 @@ namespace Habanero.Test.UI.Base
                 get { return mRefreshed; }
             }
 
-            public MockLayoutManager(IControlChilli managedControl) : base(managedControl, null)
+            public LayoutManagerStub(IControlChilli managedControl) : base(managedControl, null)
             {
             }
 

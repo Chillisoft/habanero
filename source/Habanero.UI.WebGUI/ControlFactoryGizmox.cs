@@ -9,13 +9,18 @@ using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.Base.FilterControl;
 using Habanero.Util.File;
-using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.WebGUI
 {
     public class ControlFactoryGizmox : IControlFactory
     {
         public const int TEXTBOX_HEIGHT = 20;
+
+
+        /// <summary>
+        /// Creates a filter control with the default layout manager
+        /// </summary>
+        /// <returns></returns>
         public IFilterControl CreateFilterControl()
         {
             return new FilterControlGiz(this);

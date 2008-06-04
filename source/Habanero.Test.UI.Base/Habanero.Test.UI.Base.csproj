@@ -122,7 +122,6 @@
     <Compile Include="PanelFactory\TestPanelFactory.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />
     <Compile Include="Wizard\TestWizardController.cs" />
-    <Compile Include="Wizard\TestWizardForm.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">

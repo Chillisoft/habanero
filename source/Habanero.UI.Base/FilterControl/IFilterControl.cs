@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Habanero.Base;
 
 namespace Habanero.UI.Base.FilterControl
@@ -35,7 +34,15 @@ namespace Habanero.UI.Base.FilterControl
         /// <returns>Returns the filter clause</returns>
         IFilterClause GetFilterClause();
 
-        IComboBox AddStringFilterComboBox(string labelText, string columnName, ICollection options, bool strictMatch);
+        /// <summary>
+        /// Adds a combo box filter control.
+        /// </summary>
+        /// <param name="labelText"></param>
+        /// <param name="propertyName">The property of the business object being filtered</param>
+        /// <param name="options">The collection of items used to fill the combo box.</param>
+        /// <param name="strictMatch"></param>
+        /// <returns></returns>
+        IComboBox AddStringFilterComboBox(string labelText, string propertyName, ICollection options, bool strictMatch);
 
         /// <summary>
         /// Adds a CheckBox filter that displays only rows whose boolean value
@@ -79,18 +86,52 @@ namespace Habanero.UI.Base.FilterControl
         /// </summary>
         void ApplyFilter();
 
+        /// <summary>
+        /// The header text that will be set above the filter defaults to 'Filter'
+        /// </summary>
         string HeaderText { get; set;}
 
+        /// <summary>
+        /// The number of controls used for filtering that are on the filter control. <see cref="FilterControls"/>
+        /// </summary>
         int CountOfFilters { get; }
 
+        /// <summary>
+        /// Returns the filter button (this is the button that when clicked applies the filter.
+        /// </summary>
         IButton FilterButton { get; }
 
+        /// <summary>
+        /// gets and sets the FilterMode <see cref="FilterModes"/>
+        /// </summary>
         FilterModes FilterMode { get; set; }
 
+        /// <summary>
+        /// returns a collection of the controls used for filtering i.e. the textbox, combobox. This list excludes the labels etc.
+        /// </summary>
         IList FilterControls { get; }
+
+        /// <summary>
+        /// returns the control used for filtering i.e. the textbox, combobox.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         IControlChilli GetChildControl(string propertyName);
 
-
+        /// <summary>
+        /// Clears all the values from the filter and calls <see cref="ApplyFilter"/>
+        /// </summary>
         void ClearFilters();
+
+        /// <summary>
+        /// returns the layout manager used to lay the controls out on the filter control panel.
+        /// The default layout manager is the FlowLayoutManager.
+        /// </summary>
+        LayoutManager LayoutManager { get; set; }
+
+        /// <summary>
+        /// returns the panel onto which the controls that will be used for filtering will be placed.
+        /// </summary>
+        IPanel FilterPanel { get; }
     }
 }
