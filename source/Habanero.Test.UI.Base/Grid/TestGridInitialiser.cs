@@ -1,4 +1,5 @@
 using System;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
@@ -29,7 +30,7 @@ namespace Habanero.Test.UI.Base
         }
 
         protected abstract IControlFactory GetControlFactory();
-
+        protected abstract void AddControlToForm(IControlChilli cntrl);
 
 
         [TestFixture]
@@ -40,7 +41,11 @@ namespace Habanero.Test.UI.Base
                 return new ControlFactoryWin();
             }
 
-
+            protected override void AddControlToForm(IControlChilli cntrl)
+            {
+                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+                frm.Controls.Add((System.Windows.Forms.Control)cntrl);
+            }
         }
 
         [TestFixture]
@@ -49,6 +54,11 @@ namespace Habanero.Test.UI.Base
             protected override IControlFactory GetControlFactory()
             {
                 return new ControlFactoryGizmox();
+            }
+            protected override void AddControlToForm(IControlChilli cntrl)
+            {
+                Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
+                frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
             }
         }
 
@@ -181,6 +191,46 @@ namespace Habanero.Test.UI.Base
 
             IDataGridViewColumn dataColumn2 = grid.Grid.Columns[2];
             AssertThatDataColumnSetupCorrectly(classDef, columnDef2, dataColumn2);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test, Ignore("Currently working on this")]
+        public void TestInitGrid_UIDef_DateFormat_FormatsDateColumn()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWithDateTimeParameterFormat();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+            UIDef uiDef = classDef.UIDefCol["default"];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            AddControlToForm(grid);
+
+            //--------------Assert PreConditions----------------            
+            string formattedPropertyName = "TestDateTimeFormat";
+            Assert.IsNotNull(uiGridDef[formattedPropertyName]);
+            Assert.IsNotNull(uiGridDef["TestDateTimeNoFormat"]);
+            Assert.IsNotNull(uiGridDef["TestDateTime"]);
+
+            Assert.IsNull(uiGridDef["TestDateTimeNoFormat"].GetParameterValue("dateFormat"));
+            Assert.IsNull(uiGridDef["TestDateTime"].GetParameterValue("dateFormat"));
+            object dateFormatObject = uiGridDef[formattedPropertyName].GetParameterValue("dateFormat");
+            string dateFormatParameter = dateFormatObject.ToString();
+            Assert.AreEqual("dd.MMM.yyyy", dateFormatParameter);
+
+            MyBO myBo = new MyBO();
+            DateTime currentDateTime = DateTime.Now;
+            myBo.SetPropertyValue(formattedPropertyName, currentDateTime);
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            col.Add(myBo);
+            //---------------Execute Test ----------------------
+            initialiser.InitialiseGrid(classDef);
+            grid.SetBusinessObjectCollection(col);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.AreEqual(1, grid.Grid.Rows.Count);
+            Assert.AreEqual(currentDateTime.ToString("dd.MMM.yyyy") ,grid.Grid.Rows[0].Cells[formattedPropertyName].Value);
+
             //---------------Tear Down -------------------------          
         }
 

@@ -221,6 +221,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="parameterName">The parameter name</param>
         /// <returns>Returns the parameter value or null if not found</returns>
+        /// TODO this should return a string
         public object GetParameterValue(string parameterName)
         {
             if (_parameters.ContainsKey(parameterName))

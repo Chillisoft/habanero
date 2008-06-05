@@ -104,8 +104,7 @@ namespace Habanero.Test.UI.Base
                 Assert.IsTrue(readOnlyGrid.ReadOnly);
                 Assert.IsFalse(readOnlyGrid.AllowUserToAddRows);
                 Assert.IsFalse(readOnlyGrid.AllowUserToDeleteRows);
-                Assert.IsTrue(readOnlyGrid.SelectionMode == Gizmox.WebGUI.Forms.DataGridViewSelectionMode.FullRowSelect);
-                //---------------Tear Down -------------------------   
+                Assert.IsTrue(readOnlyGrid.SelectionMode == Gizmox.WebGUI.Forms.DataGridViewSelectionMode.FullRowSelect);                
             }
         }
 

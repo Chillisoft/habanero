@@ -361,7 +361,50 @@ namespace Habanero.Test
 						<grid>
 							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
 							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
-							<column heading=""Test Boolean"" property=""TestDateTime"" type=""DataGridDateTimeBoxColumn"" />
+							<column heading=""Test DateTime"" property=""TestDateTime"" type=""DataGridViewDateTimeColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Test Prop"" property=""TestProp"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Prop 2"" property=""TestProp2"" type=""TextBox"" mapperType=""TextBoxMapper"" />
+									<field label=""Test Boolean"" property=""TestDateTime"" type=""DateTimePicker"" mapperType=""DateTimePickerMapper"" />
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+				</class>
+				
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWithDateTimeParameterFormat()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<property  name=""TestDateTime"" type=""DateTime"" />
+                    <property  name=""TestDateTimeNoFormat"" type=""DateTime"" />					
+                    <property  name=""TestDateTimeFormat"" type=""DateTime"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewTextBoxColumn"" />
+							<column heading=""Test Prop 2"" property=""TestProp2"" type=""DataGridViewTextBoxColumn"" />
+                            <column heading=""Test DateTime"" property=""TestDateTime"" type=""DataGridViewDateTimeColumn"" />
+							<column heading=""Test DateTime"" property=""TestDateTimeNoFormat"" />
+							<column heading=""Test DateTime"" property=""TestDateTimeFormat"" >
+                                <parameter name=""dateFormat"" value=""dd.MMM.yyyy"" />
+                            </column>
 						</grid>
 						<form>
 							<tab name=""Tab1"">

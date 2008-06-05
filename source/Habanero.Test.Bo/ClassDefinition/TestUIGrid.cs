@@ -369,5 +369,41 @@ namespace Habanero.Test.BO.ClassDefinition
         //    Assert.IsTrue(methodEquals);
         //    //---------------Tear Down -------------------------          
         //}
+
+        [Test]
+        public void Test_Indexer_FindBy_PropertyName()
+        {
+            //---------------Set up test pack-------------------
+            UIGrid uiGrid = new UIGrid();
+            UIGridColumn uiGridColumn = GetUiGridColumn();
+            uiGrid.Add(uiGridColumn);
+            UIGridColumn uiGridColumn2 = GetUiGridColumn("Diff Prop Name");
+            uiGrid.Add(uiGridColumn2);
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(2, uiGrid.Count);
+            //---------------Execute Test ----------------------
+            UIGridColumn column = uiGrid[uiGridColumn2.PropertyName];
+            //---------------Test Result -----------------------
+            Assert.AreEqual(uiGridColumn2, column);
+        }
+
+        [Test]
+        public void Test_Indexer_FindBy_PropertyName_DoesntExistReturnsNull()
+        {
+            //---------------Set up test pack-------------------
+            UIGrid uiGrid = new UIGrid();
+            UIGridColumn uiGridColumn = GetUiGridColumn();
+            uiGrid.Add(uiGridColumn);
+            UIGridColumn uiGridColumn2 = GetUiGridColumn("Diff Prop Name");
+            uiGrid.Add(uiGridColumn2);
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(2, uiGrid.Count);
+            //---------------Execute Test ----------------------
+            UIGridColumn column = uiGrid["nonexistent property"];
+            //---------------Test Result -----------------------
+            Assert.IsNull(column);
+        }
     }
 }

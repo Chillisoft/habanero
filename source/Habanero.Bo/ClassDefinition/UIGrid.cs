@@ -28,7 +28,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class UIGrid : ICollection
     {
-        private IList _list;
+        private ArrayList _list;
         private string _sortColumn;
 
         /// <summary>
@@ -76,6 +76,27 @@ namespace Habanero.BO.ClassDefinition
         public UIGridColumn this[int index]
         {
             get { return (UIGridColumn)_list[index]; }
+        }		
+        /// <summary>
+        /// Provides an indexing facility so that the contents of the definition
+        /// collection can be accessed with square brackets like an array
+        /// </summary>
+        /// <param name="propName">The index position to access</param>
+        /// <returns>Returns the property definition at the index position
+        /// specified</returns>
+        public UIGridColumn this[string propName]
+        {
+            get
+            {
+                foreach (UIGridColumn column in _list)
+                {
+                    if (column.PropertyName == propName)
+                    {
+                        return column;
+                    }
+                }
+                return null;
+            }
         }
 
         /// <summary>
