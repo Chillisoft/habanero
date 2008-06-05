@@ -541,5 +541,10 @@ namespace Habanero.UI.WebGUI
         {
 
         }
+
+        public void RemoveCurrentBOPropHandlers(ControlMapper mapper, BOProp prop)
+        {
+            
+        }
     }
 }

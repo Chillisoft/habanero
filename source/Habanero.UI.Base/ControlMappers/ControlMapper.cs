@@ -210,6 +210,8 @@ namespace Habanero.UI.Base
             set
             {
                 //TODO PORT FOR WIN: RemoveCurrentBOPropHandlers();
+                
+                RemoveCurrentBOPropHandlers();
                 _businessObject = value;
                 OnBusinessObjectChanged();
                 UpdateIsEditable();
@@ -217,6 +219,13 @@ namespace Habanero.UI.Base
                 AddCurrentBOPropHandlers();
             }
         }
+
+        private void RemoveCurrentBOPropHandlers()
+        {
+            IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
+            mapperStrategy.RemoveCurrentBOPropHandlers(this, CurrentBOProp());
+        }
+
 
         public abstract void ApplyChangesToBusinessObject();
 

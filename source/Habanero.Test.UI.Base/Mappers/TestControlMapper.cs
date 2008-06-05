@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 
+using System.Windows.Forms;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -60,27 +61,32 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual("TestShapeName2", _txtNormal.Text);
             }
 
-            [Test, Ignore("To implement RemoveCurrentBOPropHandlers")]
+            [Test]
             public void TestEditsToOrigionalBusinessObjectDoesNotUpdateControlValue()
             {
                 //---------------Set up test pack-------------------
                 ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
                 mapperStub.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtNormal.Text);
-                _shape.ShapeName = "TestShapeName";
+                //_shape.ShapeName = "TestShapeName";
 
                 Shape shape2 = new Shape();
                 shape2.ShapeName = "Shape 2 Name";
 
-                _normalMapper.BusinessObject = shape2;
+                mapperStub.BusinessObject = shape2;
                 //--------------Assert PreConditions----------------            
                 Assert.AreEqual(shape2.ShapeName, _txtNormal.Text);
 
                 //---------------Execute Test ----------------------
-
-                _shape.ShapeName = "New shape 1 name";
+                bool controlUpdatedFromBusinessObject=false;
+                mapperStub.OnUpdateControlValueFromBusinessObject+=delegate
+               {
+                   controlUpdatedFromBusinessObject = true;
+               };
+                _shape.ShapeName = "New original shape name";
 
                 //---------------Test Result -----------------------
+                Assert.IsFalse(controlUpdatedFromBusinessObject,"Control Should not have been updated when the original prop was changed.");
                 Assert.AreEqual(shape2.ShapeName, _txtNormal.Text);
 
 
@@ -384,6 +390,24 @@ namespace Habanero.Test.UI.Base
         public ControlMapperStub(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {
+        }
+
+        private MethodInvoker _onUpdateControlValueFromBusinessObject;
+
+
+        public MethodInvoker OnUpdateControlValueFromBusinessObject
+        {
+            get { return _onUpdateControlValueFromBusinessObject; }
+            set { _onUpdateControlValueFromBusinessObject = value; }
+        }
+
+        public override void UpdateControlValueFromBusinessObject()
+        {
+            if (_onUpdateControlValueFromBusinessObject != null)
+            {
+                _onUpdateControlValueFromBusinessObject();
+            }
+            base.UpdateControlValueFromBusinessObject();
         }
 
         public override void ApplyChangesToBusinessObject()

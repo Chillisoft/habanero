@@ -492,5 +492,12 @@ namespace Habanero.UI.Win
             }
         }
 
+        public void RemoveCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp)
+        {
+            if(boProp!=null)
+            {
+                boProp.Updated -= mapper.BOPropValueUpdatedHandler;
+            }
+        }
     }
 }
