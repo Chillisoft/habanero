@@ -47,7 +47,7 @@ namespace Habanero.UI.Grid
         protected DataTable _dataTable;
         protected DataSetProvider _dataSetProvider;
 		protected IBusinessObjectCollection _collection;
-        private IObjectInitialiser _objectInitialiser;
+        private IBusinessObjectInitialiser _objectInitialiser;
         protected DataView _dataTableDefaultView;
         private SetCollectionDelegate _setCollection;
         private SetSortColumnDelegate _setSortColumn;
@@ -399,7 +399,7 @@ namespace Habanero.UI.Grid
         /// <summary>
         /// Sets the object initialiser
         /// </summary>
-        public virtual IObjectInitialiser ObjectInitialiser
+        public virtual IBusinessObjectInitialiser ObjectInitialiser
         {
             set { _objectInitialiser = value;
                 if (_dataSetProvider != null)

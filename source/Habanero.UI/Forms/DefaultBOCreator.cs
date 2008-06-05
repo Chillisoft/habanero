@@ -67,7 +67,7 @@ namespace Habanero.UI.Forms
         ///// used to design the edit form. Setting this to an empty string
         ///// will use a ui definition with no name attribute specified.</param>
         ///// <returns>Returns the business object created</returns>
-        //public Object CreateBusinessObject(IBusinessObjectEditor editor, IObjectInitialiser initialiser, string uiDefName)
+        //public Object CreateBusinessObject(IBusinessObjectEditor editor, IBusinessObjectInitialiser initialiser, string uiDefName)
         //{
         //    IBusinessObject newBo = (BusinessObject) CreateBusinessObject();
         //    if (initialiser != null)

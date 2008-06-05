@@ -48,7 +48,7 @@ namespace Habanero.UI.Forms
         private string _uiDefName;
         private IBusinessObjectCreator _BusinessObjectCreator;
         private IBusinessObjectEditor _BusinessObjectEditor;
-        private IObjectInitialiser _objectInitialiser;
+        private IBusinessObjectInitialiser _objectInitialiser;
 
         ///<summary>
         /// Creates a new combo box right-click controller, which pops up a screen for the user 
@@ -103,7 +103,7 @@ namespace Habanero.UI.Forms
         /// <summary>
         /// The Object Initialiser used to initialise the object when it is being created
         /// </summary>
-        public IObjectInitialiser ObjectInitialiser
+        public IBusinessObjectInitialiser ObjectInitialiser
         {
             get { return _objectInitialiser; }
             set { _objectInitialiser = value; }

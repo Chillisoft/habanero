@@ -42,7 +42,7 @@ namespace Habanero.UI.Forms
 
         private IBusinessObjectEditor _businessObjectEditor;
         private IBusinessObjectCreator _BusinessObjectCreator;
-        private IObjectInitialiser _objectInitialiser;
+        private IBusinessObjectInitialiser _objectInitialiser;
         private RowDoubleClickedHandler _doubleClickedDelegate;
         private Button _deleteButton;
         private bool _confirmDeletion;
@@ -206,7 +206,7 @@ namespace Habanero.UI.Forms
         /// Sets the object initialiser, which is used to initialise a business
         /// object when it is created
         /// </summary>
-        public IObjectInitialiser ObjectInitialiser
+        public IBusinessObjectInitialiser ObjectInitialiser
         {
             get { return _objectInitialiser; }
             set { _objectInitialiser = value; }

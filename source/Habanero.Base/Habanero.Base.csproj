@@ -163,7 +163,7 @@
     <Compile Include="IBusinessObjectEditor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IObjectInitialiser.cs">
+    <Compile Include="IBusinessObjectInitialiser.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IParameterNameGenerator.cs">

@@ -25,10 +25,10 @@ using Habanero.BO;
 namespace Habanero.UI.Forms
 {
     ///<summary>
-    /// An implememtation of the IObjectInitialiser interface where both of the Initialise methods
+    /// An implememtation of the IBusinessObjectInitialiser interface where both of the Initialise methods
     /// execute the corresponding supplied delegate.
     ///</summary>
-    public class DelegatedObjectInitialiser<T> : IObjectInitialiser
+    public class DelegatedObjectInitialiser<T> : IBusinessObjectInitialiser
         where T : BusinessObject
     {
         /// <summary>
@@ -79,7 +79,7 @@ namespace Habanero.UI.Forms
         /// Initialises the given object
         /// </summary>
         /// <param name="objToInitialise">The object to initialise</param>
-        public void InitialiseObject(object objToInitialise)
+        public void InitialiseObject(IBusinessObject objToInitialise)
         {
             T businessObject = objToInitialise as T;
             if (businessObject != null && _initialiseObjectDelegate != null)

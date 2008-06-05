@@ -22,15 +22,17 @@ using System.Data;
 namespace Habanero.Base
 {
     /// <summary>
-    /// An interface to model an object initialiser
+    /// An interface to model a business object initialiser: A business object initialiser is used by the Habanero framework's standard forms
+    ///  and grids to initialise a new object with data. There are default object initialisers that will be used in the case where
+    ///  a custom initialiser is not specified. 
     /// </summary>
-    public interface IObjectInitialiser
+    public interface IBusinessObjectInitialiser
     {
         /// <summary>
         /// Initialises the given object
         /// </summary>
         /// <param name="objToInitialise">The object to initialise</param>
-        void InitialiseObject(object objToInitialise);
+        void InitialiseObject(IBusinessObject objToInitialise);
 
         /// <summary>
         /// Initialises a DataRow object
@@ -40,9 +42,11 @@ namespace Habanero.Base
     }
 
     /// <summary>
-    /// An interface to model an object initialiser
+    /// An interface to model a business object initialiser: A business object initialiser is used by the Habanero framework's standard forms
+    ///  and grids to initialise a new object with data. There are default object initialisers that will be used in the case where
+    ///  a custom initialiser is not specified. 
     /// </summary>
-    public interface IObjectInitialiser<T> : IObjectInitialiser
+    public interface IBusinessObjectInitialiser<T> : IBusinessObjectInitialiser where T : IBusinessObject
     {
         /// <summary>
         /// Initialises the given object

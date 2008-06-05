@@ -27,7 +27,7 @@ namespace Habanero.BO
     /// <summary>
     /// Initialises a relationship object
     /// </summary>
-    public class RelationshipObjectInitialiser : IObjectInitialiser
+    public class RelationshipObjectInitialiser : IBusinessObjectInitialiser
     {
         private readonly string _correspondingRelationshipName;
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipObjectInitialiser");
@@ -41,7 +41,6 @@ namespace Habanero.BO
         /// <param name="relationship">The relationship object</param>
         /// <param name="correspondingRelationshipName">The corresponding
         /// relationship name</param>
-        /// TODO ERIC - corresponding?
         public RelationshipObjectInitialiser(IBusinessObject parentObject, RelationshipDef relationship,
                                              string correspondingRelationshipName)
         {
@@ -54,7 +53,7 @@ namespace Habanero.BO
         /// Initialises the given object
         /// </summary>
         /// <param name="objToInitialise">The object to initialise</param>
-        public void InitialiseObject(object objToInitialise)
+        public void InitialiseObject(IBusinessObject objToInitialise)
         {
             //log.Debug("Entered initialiseobject.") ;
             //log.Debug(objToInitialise.GetType().Name);

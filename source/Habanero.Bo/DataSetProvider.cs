@@ -33,7 +33,7 @@ namespace Habanero.BO
         protected readonly IBusinessObjectCollection _collection;
         protected ICollection _uiGridProperties;
         protected DataTable _table;
-        protected IObjectInitialiser _objectInitialiser;
+        protected IBusinessObjectInitialiser _objectInitialiser;
 
         /// <summary>
         /// Constructor to initialise a provider with a specified business
@@ -177,7 +177,7 @@ namespace Habanero.BO
         /// <summary>
         /// Sets the object initialiser
         /// </summary>
-        public IObjectInitialiser ObjectInitialiser
+        public IBusinessObjectInitialiser ObjectInitialiser
         {
             set { _objectInitialiser = value; }
         }
