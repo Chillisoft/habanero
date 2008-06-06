@@ -5,8 +5,6 @@
         <assembly assemblyPath=".\Build\Habanero.Db.dll" xmlCommentsPath=".\Build\Habanero.Db.xml" commentsOnly="False" />
         <assembly assemblyPath=".\Build\Habanero.dll" xmlCommentsPath=".\Build\Habanero.xml" commentsOnly="False" />
         <assembly assemblyPath=".\Build\Habanero.UI.dll" xmlCommentsPath=".\Build\Habanero.UI.xml" commentsOnly="False" />
-        <assembly assemblyPath=".\Build\Habanero.UI.Pro.dll" xmlCommentsPath=".\Build\Habanero.UI.Pro.xml" commentsOnly="False" />
-        <assembly assemblyPath=".\Build\Habanero.UI.Std.dll" xmlCommentsPath=".\Build\Habanero.UI.Std.xml" commentsOnly="False" />
         <assembly assemblyPath=".\Build\Habanero.Util.dll" xmlCommentsPath=".\Build\Habanero.Util.xml" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
@@ -65,11 +63,11 @@
     <Preliminary>False</Preliminary>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <RootNamespaceTitle />
-    <HelpTitle>Habanero v1.1.2</HelpTitle>
+    <HelpTitle>Habanero v1.4.1</HelpTitle>
     <HtmlHelpName>HabaneroDocumentation</HtmlHelpName>
     <Language>en-ZA</Language>
     <CopyrightHref>http://www.chillisoft.co.za/habanero/privacy_policy</CopyrightHref>
-    <CopyrightText>Copyright 2007. Chillisoft Solutions. All rights reserved.</CopyrightText>
+    <CopyrightText>Copyright 2008. Chillisoft Solutions. All rights reserved.</CopyrightText>
     <FeedbackEMailAddress>habanero@chillisoft.co.za</FeedbackEMailAddress>
     <HeaderText />
     <FooterText />
