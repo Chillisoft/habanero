@@ -22,7 +22,11 @@ using System.Runtime.Serialization;
 
 namespace Habanero.Base.Exceptions
 {
-
+    /// <summary>
+    /// Provides an Exception class which is raised in the Habanero Architecture when a developer uses 
+    /// the architecture or a method in the architecture incorrectly e.g. if a method is called with invalid 
+    /// paramaters.
+    /// </summary>
     public class HabaneroDeveloperException:Exception
     {
                 /// <summary>
@@ -64,7 +68,7 @@ namespace Habanero.Base.Exceptions
     /// <summary>
     /// Provides a generalised application exception to throw
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class HabaneroApplicationException : HabaneroDeveloperException
     {
         /// <summary>
@@ -108,7 +112,7 @@ namespace Habanero.Base.Exceptions
     /// Provides an exception to throw in the case where a user action
     /// has resulted in some kind of malfunction
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class UserException : Exception
     {
         /// <summary>

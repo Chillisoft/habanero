@@ -17,6 +17,8 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
+
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
@@ -24,7 +26,7 @@ namespace Habanero.BO.ClassDefinition
     /// interface, as specified in the class definitions xml file.
     /// This consists of definitions for a grid display and an editing form.
     /// </summary>
-    public class UIDef
+    public class UIDef : IEquatable<UIDef>
     {
         private string _name;
         private UIForm _uiForm;
@@ -89,26 +91,6 @@ namespace Habanero.BO.ClassDefinition
             return this.UIGrid;
         }
 
-        ///<summary>
-        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
-        ///</summary>
-        ///
-        ///<returns>
-        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
-        ///</returns>
-        ///
-        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
-        public override bool Equals(object obj)
-        {
-            if (obj == null) return false;
-
-            UIDef otherUIDef = obj as UIDef;
-            if (otherUIDef == null) return false;
-            if (this.Name != otherUIDef.Name) return false;
-            if (this.UIForm != otherUIDef.UIForm) return false;
-            if (this.UIGrid != otherUIDef.UIGrid) return false;
-            return true;
-        }
 
         ///<summary>
         /// overloads the operator == 
@@ -119,7 +101,7 @@ namespace Habanero.BO.ClassDefinition
         public static bool operator ==(UIDef a, UIDef b)
         {
             // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
             {
                 return true;
             }
@@ -155,6 +137,37 @@ namespace Habanero.BO.ClassDefinition
             UIGrid clonedGrid = this.UIGrid != null ? this.UIGrid.Clone() : null;
             UIDef newUIForm = new UIDef(this.Name, clonedForm, clonedGrid);
             return newUIForm;
+        }
+
+        public bool Equals(UIDef otherUIDef)
+        {
+            if (otherUIDef == null) return false;
+            if (this.Name != otherUIDef.Name) return false;
+            if (this.UIForm != otherUIDef.UIForm) return false;
+            if (this.UIGrid != otherUIDef.UIGrid) return false;
+            return true;
+        }
+        ///<summary>
+        ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as UIDef);
+        }
+
+        public override int GetHashCode()
+        {
+            int result = _name != null ? _name.GetHashCode() : 0;
+            result = 29*result + (_uiForm != null ? _uiForm.GetHashCode() : 0);
+            result = 29*result + (_uiGrid != null ? _uiGrid.GetHashCode() : 0);
+            return result;
         }
     }
 }

@@ -161,12 +161,12 @@ namespace Habanero.BO
             for (int i = 0; i < _table.Rows.Count; i++)
             {
                 string gridIDValue = _table.Rows[i][0].ToString();
-                string ValuePers = bo.ID.PersistedValueString();
-                string ValueBLE = bo.ID.PropertyValueStringBeforeLastEdit();
-                string ValueCur = bo.ID.ToString();
-                if (gridIDValue == bo.ID.PropertyValueStringBeforeLastEdit() ||
-                    gridIDValue == bo.ID.PersistedValueString() ||
-                    gridIDValue == bo.ID.ToString())
+                string valuePersisted = bo.ID.PersistedValueString();
+                string valueBeforeLastEdit = bo.ID.PropertyValueStringBeforeLastEdit();
+                string currentValue = bo.ID.ToString();
+                if (gridIDValue == valueBeforeLastEdit ||
+                    gridIDValue == valuePersisted ||
+                    gridIDValue == currentValue)
                 {
                     return i;
                 }

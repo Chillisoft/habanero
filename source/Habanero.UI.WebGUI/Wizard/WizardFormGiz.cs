@@ -33,13 +33,6 @@ namespace Habanero.UI.WebGUI
         private readonly WizardControlGiz _uxWizardControl;
         private readonly IControlFactory _controlFactory;
         private string _wizardText;
-        ///// <summary>
-        ///// Initialises the WizardForm
-        ///// </summary>
-        //public WizardFormGiz()
-        //{
-        //    InitializeComponent();
-        //}
 
         /// <summary>
         /// Initialises the WizardForm, sets the controller and starts the wizard.
@@ -82,7 +75,7 @@ namespace Habanero.UI.WebGUI
         {
             get { return _uxWizardControl; }
         }
-
+        
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }

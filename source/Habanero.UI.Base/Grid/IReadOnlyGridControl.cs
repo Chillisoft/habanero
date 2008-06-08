@@ -89,6 +89,13 @@ namespace Habanero.UI.Base
         string OrderBy { get; set; }
 
         /// <summary>
+        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>. This search criteria will be And (ed) to any search criteria returned
+        /// by the FilterControl.
+        /// </summary>
+        string AdditionalSearchCriteria { get; set; }
+
+        /// <summary>
         /// Sets the business object collection to display.  Loading of
         /// the collection needs to be done before it is assigned to the
         /// grid.  This method assumes a default ui definition is to be

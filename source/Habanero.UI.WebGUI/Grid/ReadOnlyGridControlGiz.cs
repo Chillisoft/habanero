@@ -20,6 +20,7 @@ namespace Habanero.UI.WebGUI
         private readonly IFilterControl _filterControl;
         private readonly IGridInitialiser _gridInitialiser;
         private string _orderBy;
+        private string _additionalSearchCriteria;
 
         public delegate void RefreshGridDelegate();
 
@@ -55,7 +56,16 @@ namespace Habanero.UI.WebGUI
             if (FilterMode == FilterModes.Search)
             {
                 BusinessObjectCollection<BusinessObject> collection = new BusinessObjectCollection<BusinessObject>(this.ClassDef);
-                collection.Load(_filterControl.GetFilterClause().GetFilterClauseString("%", "'"), OrderBy);
+                string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
+                if (!string.IsNullOrEmpty(AdditionalSearchCriteria ))
+                {
+                    if (!string.IsNullOrEmpty(searchClause))
+                    {
+                        searchClause += " AND ";
+                    }
+                    searchClause += AdditionalSearchCriteria;
+                }
+                collection.Load(searchClause, OrderBy);
                 SetBusinessObjectCollection(collection);
             }
             else
@@ -237,6 +247,17 @@ namespace Habanero.UI.WebGUI
         {
             get { return _orderBy; }
             set { _orderBy = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="IReadOnlyGridControl.FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>. This search criteria will be And (ed) to any search criteria returned
+        /// by the FilterControl.
+        /// </summary>
+        public string AdditionalSearchCriteria
+        {
+            get { return _additionalSearchCriteria; }
+            set { _additionalSearchCriteria = value; }
         }
 
 

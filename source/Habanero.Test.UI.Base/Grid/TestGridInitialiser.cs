@@ -67,7 +67,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+//            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(grid.IsInitialised);
            
@@ -90,7 +90,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+//            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(grid.IsInitialised);
             Assert.AreEqual(0, grid.Grid.Columns.Count);
@@ -114,7 +114,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
+//            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             grid.Grid.Columns.Add("ID", "ID");
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(grid.IsInitialised);

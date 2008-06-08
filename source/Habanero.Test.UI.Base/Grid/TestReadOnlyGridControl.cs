@@ -1003,25 +1003,87 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(orderByClause, grid.OrderBy);
             //---------------Tear Down -------------------------          
         }
-        //[Test]
-        //public void TestDeleteButton_CallsObjectDeletor_DelegateLoadedGrid()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    BusinessObjectCollection<MyBO> col;
-        //    IReadOnlyGridControl grid = GetGridWith_4_Rows(out col);
-        //    grid.Buttons.ShowDefaultDeleteButton = true;
-        //    grid.SelectedBusinessObject = col[2];
-        //    ObjectDeletorStub objectDeletor = new ObjectDeletorStub();
-        //    grid.BusinessObjectDeletor = objectDeletor;
-        //    //---------------Execute Test ----------------------
-        //    grid.Buttons["Delete"].PerformClick();
-        //    //---------------Test Result -----------------------
 
-        //    Assert.IsTrue(objectDeletor.HasBeenCalled);
-        //    Assert.AreSame(col[2], objectDeletor.Bo);
-        //    //---------------Tear Down -------------------------          
-        //}
+        [Test]
+        public void Test_SetSearchCriteria()
+        {
+            //---------------Set up test pack-------------------
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            //--------------Assert PreConditions----------------            
+            Assert.IsTrue(string.IsNullOrEmpty(grid.AdditionalSearchCriteria));
+            //---------------Execute Test ----------------------
+            string searchByClause = "MyField <> 'my value'";
+            grid.AdditionalSearchCriteria = searchByClause;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(searchByClause, grid.AdditionalSearchCriteria);
+            //---------------Tear Down -------------------------          
+        }
 
+        [Test]
+        public void Test_SearchGrid_AppliesAdditionalSearchCriteria_NoFilterCriteria()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+
+            ContactPersonTestBO boExclude = new ContactPersonTestBO();
+            boExclude.Surname = "Excude this one.";
+            AddObjectToDelete(boExclude);
+            boExclude.Save(); 
+
+            ContactPersonTestBO boInclude = new ContactPersonTestBO();
+            boInclude.Surname = "Include this one.";
+            AddObjectToDelete(boInclude);
+            boInclude.Save();
+
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            grid.AdditionalSearchCriteria = "ContactPersonID <> " + boExclude.ContactPersonID.ToString("B");
+            grid.Initialise(classDef);
+            grid.FilterMode = FilterModes.Search;
+
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            col.LoadAll();
+
+            //---------------Execute Test ----------------------
+            grid.FilterControl.FilterButton.PerformClick();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(col.Count - 1, grid.Grid.Rows.Count, "The additional filter should exclude " + boExclude.ID);  
+        }
+
+        [Test]
+        public void Test_SearchGrid_AppliesAdditionalSearchCriteria()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDefWithUIDef();
+
+            ContactPersonTestBO boExclude = new ContactPersonTestBO();
+            boExclude.Surname = "Excude this one.";
+            AddObjectToDelete(boExclude);
+            boExclude.Save();
+
+            ContactPersonTestBO boInclude = new ContactPersonTestBO();
+            boInclude.Surname = "Include this one.";
+            AddObjectToDelete(boInclude);
+            boInclude.Save();
+
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            grid.AdditionalSearchCriteria = "ContactPersonID <> " + boExclude.ContactPersonID.ToString("B");
+            grid.Initialise(classDef);
+            grid.FilterMode = FilterModes.Search;
+
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            string surnameFilterText = "this one";
+            col.Load("Surname like %" + surnameFilterText + "%", "");
+
+            //---------------Execute Test ----------------------
+            ITextBox surnameFilterTextbox = grid.FilterControl.AddStringFilterTextBox("label", "Surname");
+
+            surnameFilterTextbox.Text = surnameFilterText;
+            grid.FilterControl.FilterButton.PerformClick();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(col.Count - 1, grid.Grid.Rows.Count, "The additional filter should exclude " + boExclude.ID);
+        }
         [Test]
         public void TestDeleteButtonWithNothingSelected_DoesNothing()
         {

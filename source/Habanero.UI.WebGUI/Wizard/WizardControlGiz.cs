@@ -43,7 +43,6 @@ namespace Habanero.UI.WebGUI
             _wizardController = wizardController;
             _controlFactory = controlFactory;
 
-            //TODO: The layout manager code is not NUnit tested 
             IPanel buttonPanel = CreateButtonPanel(controlFactory);
 
             _wizardStepPanel = controlFactory.CreatePanel();

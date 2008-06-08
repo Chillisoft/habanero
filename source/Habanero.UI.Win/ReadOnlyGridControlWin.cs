@@ -17,7 +17,8 @@ namespace Habanero.UI.Win
         private readonly ReadOnlyGridWin _grid;
         private readonly IGridInitialiser _gridInitialiser;
         private string _orderBy;
-        private IControlFactory _controlFactory;
+        private readonly IControlFactory _controlFactory;
+        private string _additionalSearchCriteria;
 
 
         public ReadOnlyGridControlWin()
@@ -116,6 +117,17 @@ namespace Habanero.UI.Win
         {
             get { return _orderBy; }
             set { _orderBy = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the standard search criteria used for loading the grid when the <see cref="IReadOnlyGridControl.FilterMode"/>
+        /// is Search see <see cref="FilterModes"/>. This search criteria will be And (ed) to any search criteria returned
+        /// by the FilterControl.
+        /// </summary>
+        public string AdditionalSearchCriteria
+        {
+            get { return _additionalSearchCriteria; }
+            set { _additionalSearchCriteria = value; }
         }
 
 
