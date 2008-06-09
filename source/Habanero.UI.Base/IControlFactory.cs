@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Habanero.Base;
 using Habanero.BO;
@@ -255,6 +256,13 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns></returns>
         IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn();
+
+
+        /// <summary>
+        /// Constructor that provides a specific list of optionsToDisplay to display
+        /// </summary>
+        /// <param name="optionsToDisplay">A list of date range optionsToDisplay</param>
+        IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay);
     }
 
 

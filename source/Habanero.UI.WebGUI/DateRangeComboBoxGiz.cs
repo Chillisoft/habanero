@@ -18,6 +18,13 @@ namespace Habanero.UI.WebGUI
             _manager = new DateRangeComboBoxManager(this);
         }
 
+        public DateRangeComboBoxGiz(List<DateRangeOptions> optionsToDisplay)
+        {
+            _manager = new DateRangeComboBoxManager(this);
+            _manager.OptionsToDisplay = optionsToDisplay;
+            _manager.InitialiseValues();
+        }
+
         /// <summary>
         /// Gets and sets whether the date used to calculate date ranges
         /// should be DateTime.Now or a fixed date that is specified.

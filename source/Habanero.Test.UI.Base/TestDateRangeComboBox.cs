@@ -1679,7 +1679,6 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             _comboBox.AddDateOption(DateRangeOptions.Current2Years);
-
             //---------------Execute Test ----------------------
 
             _comboBox.SelectedItem = _comboBox.GetDateRangeString(DateRangeOptions.Current2Years);
@@ -1842,5 +1841,8 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(new DateTime(2007, 11, 12, 1, 0, 0, 0), _comboBox.StartDate);
             Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
         }
+
+
+
     }
 }

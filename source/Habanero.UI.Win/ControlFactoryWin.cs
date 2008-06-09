@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -318,6 +319,15 @@ namespace Habanero.UI.Win
         {
 //            return new DataGridViewCheckBoxColumnWin();
             return null;
+        }
+
+        /// <summary>
+        /// Constructor that provides a specific list of optionsToDisplay to display
+        /// </summary>
+        /// <param name="optionsToDisplay">A list of date range optionsToDisplay</param>
+        public IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay)
+        {
+            return new DateRangeComboBoxWin(optionsToDisplay);
         }
 
         public IComboBox CreateComboBox()

@@ -330,7 +330,6 @@ namespace Habanero.UI.Grid
         /// <returns>Returns the new DateRangeComboBox added</returns>
         public DateRangeComboBox AddDateRangeFilterComboBox(string columnName, List<DateRangeComboBox.DateOptions> options, bool includeStartDate, bool includeEndDate)
         {
-            //ComboBox cb = ControlFactory.CreateComboBox(); // Std v Pro conflict
             DateRangeComboBox cb = new DateRangeComboBox(options);
             return ConfigureDateRangeComboBox(columnName, cb, includeStartDate, includeEndDate);
         }
@@ -350,7 +349,6 @@ namespace Habanero.UI.Grid
         /// <returns>Returns the new DateRangeComboBox added</returns>
         public DateRangeComboBox AddDateRangeFilterComboBox(string columnName, bool includeStartDate, bool includeEndDate)
         {
-            //ComboBox cb = ControlFactory.CreateComboBox();
             DateRangeComboBox cb = new DateRangeComboBox();
             return ConfigureDateRangeComboBox(columnName, cb, includeStartDate, includeEndDate);
         }

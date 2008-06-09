@@ -51,7 +51,7 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Initialises the ComboBox with a list of values to display
         /// </summary>
-        private void InitialiseValues()
+        public void InitialiseValues()
         {
             SetDateRangePairs();
             BuildComboBoxList();

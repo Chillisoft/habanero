@@ -306,5 +306,30 @@ namespace Habanero.UI.WebGUI
         {
             get { return _controlPanel; }
         }
+
+        /// <summary>
+        /// Adds a ComboBox filter from which the user can choose an option, so that
+        /// only rows with that option in the specified column will be shown
+        /// </summary>
+        /// <param name="labelText">The label to appear before the ComboBox</param>
+        /// <param name="columnName">The column of data on which to do the
+        /// filtering</param>
+        /// <param name="includeStartDate">Includes all dates that match the start
+        /// date exactly</param>
+        /// <param name="includeEndDate">Includes all dates that match the end
+        /// date exactly</param>
+        /// <returns>Returns the new ComboBox added</returns>
+        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, bool includeStartDate, bool includeEndDate)
+        {
+            return _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, includeStartDate, includeEndDate);
+
+        }
+
+        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
+        {
+            return
+                _filterControlManager.AddDateRangeFilterComboBox(labelText, columnName, options, includeStartDate,
+                                                                 includeEndDate);
+        }
     }
 }

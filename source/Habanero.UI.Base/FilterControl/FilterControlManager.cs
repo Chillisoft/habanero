@@ -59,6 +59,7 @@ namespace Habanero.UI.Base.FilterControl
 
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
+
             ILabel label = _controlFactory.CreateLabel(labelText);
             ITextBox textBox = _controlFactory.CreateTextBox();
             AddControlToLayoutManager(label, textBox);
@@ -209,6 +210,40 @@ namespace Habanero.UI.Base.FilterControl
             }
             return null;
         }
+
+
+        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, bool includeStartDate, bool includeEndDate)
+        {
+
+            IDateRangeComboBox dateRangeComboBox = _controlFactory.CreateDateRangeComboBox();
+            ConfigureDateRangeComboBox(labelText, columnName, dateRangeComboBox, includeStartDate, includeEndDate);
+            return dateRangeComboBox;
+
+        }
+
+
+        public IDateRangeComboBox AddDateRangeFilterComboBox(string labelText, string columnName, List<DateRangeOptions> options, bool includeStartDate, bool includeEndDate)
+        {
+            IDateRangeComboBox dateRangeComboBox = _controlFactory.CreateDateRangeComboBox(options);
+            return ConfigureDateRangeComboBox(labelText, columnName, dateRangeComboBox, includeStartDate, includeEndDate);
+        }
+
+        /// <summary>
+        /// Configures the given DateRangeComboBox and sets up the filter control
+        /// </summary>
+        private IDateRangeComboBox ConfigureDateRangeComboBox(string labelText, string columnName, IDateRangeComboBox dateRangeComboBox, bool includeStartDate, bool includeEndDate)
+        {
+            //dateRangeComboBox.Width = _filterWidth;
+            ILabel label = _controlFactory.CreateLabel(labelText);
+            AddControlToLayoutManager(label, dateRangeComboBox);
+            _filterControls.Add(new FilterUIDateRangeString(_clauseFactory, columnName, dateRangeComboBox, includeStartDate, includeEndDate));
+
+            //TODO: Port for windows
+            //dateRangeComboBox.SelectedIndexChanged += FilterControlValueChangedHandler;
+            //dateRangeComboBox.TextChanged += FilterControlValueChangedHandler;
+            //FireFilterClauseChanged(dateRangeComboBox);
+            return dateRangeComboBox;
+        } 
 
         /// <summary>
         /// A super-class for user interface elements that provide filter clauses
@@ -444,5 +479,73 @@ namespace Habanero.UI.Base.FilterControl
             }
         }
 
+        /// <summary>
+        /// Manages a Date-Time Picker through which the user can select a date
+        /// to serve as either a greater-than or less-than watershed, depending
+        /// on the boolean set in the constructor
+        /// </summary>
+        private class FilterUIDateRangeString : FilterUI
+        {
+            private readonly IDateRangeComboBox _dateRangeComboBox;
+            private readonly bool _filterIncludeStart;
+            private readonly bool _filterIncludeEnd;
+
+            public FilterUIDateRangeString(IFilterClauseFactory clauseFactory, string columnName, IDateRangeComboBox dateRangeComboBox,
+                                      bool filterIncludeStart, bool filterIncludeEnd)
+                : base(clauseFactory, columnName)
+            {
+                _dateRangeComboBox = dateRangeComboBox;
+                _filterIncludeStart = filterIncludeStart;
+                _filterIncludeEnd = filterIncludeEnd;
+            }
+
+            public override IFilterClause GetFilterClause()
+            {
+                if (_dateRangeComboBox.SelectedIndex > 0)
+                {
+                    FilterClauseOperator op;
+                    if (_filterIncludeStart)
+                    {
+                        op = FilterClauseOperator.OpGreaterThanOrEqualTo;
+                    }
+                    else
+                    {
+                        op = FilterClauseOperator.OpGreaterThan;
+                    }
+                    IFilterClause startClause = _clauseFactory.CreateDateFilterClause(_columnName, op, _dateRangeComboBox.StartDate);
+                    if (_filterIncludeEnd)
+                    {
+                        op = FilterClauseOperator.OpLessThanOrEqualTo;
+                    }
+                    else
+                    {
+                        op = FilterClauseOperator.OpLessThan;
+                    }
+                    IFilterClause endClause = _clauseFactory.CreateDateFilterClause(_columnName, op, _dateRangeComboBox.EndDate);
+
+                    return
+                        _clauseFactory.CreateCompositeFilterClause(startClause, FilterClauseCompositeOperator.OpAnd,
+                                                                   endClause);
+                }
+                else
+                {
+                    return _clauseFactory.CreateNullFilterClause();
+                }
+            }
+
+            public override IControlChilli FilterControl
+            {
+                get { return _dateRangeComboBox; }
+            }
+
+            public override void Clear()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
     }
+
+
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
@@ -34,7 +35,6 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void Test_GizOnly_SetFilterModeSearchSetsText()
         {
-            
             //---------------Set up test pack-------------------
             IControlFactory factory = new ControlFactoryGizmox();
             IFilterControl ctl = factory.CreateFilterControl();
@@ -46,6 +46,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual("Search", ctl.FilterButton.Text);
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void Test_GizOnly_SetFilterModeFilterSetsText()
         {
@@ -58,7 +59,7 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Execute Test ----------------------
             ctl.FilterMode = FilterModes.Filter;
             //---------------Test Result -----------------------
-            Assert.AreEqual("Filter", ctl.FilterButton.Text);        
+            Assert.AreEqual("Filter", ctl.FilterButton.Text);
         }
 
         [Test]
@@ -66,6 +67,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestSetLayoutManager(new ControlFactoryWin());
         }
+
         [Test]
         public void TestSetLayoutManagerGiz()
         {
@@ -100,6 +102,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
         //    //---------------Tear Down -------------------------          
         //}
+
         #region TextBoxFilter
 
         #region TestAddTextBox
@@ -114,8 +117,7 @@ namespace Habanero.Test.UI.Base.FilterController
 //            IControlChilli control = factory.CreatePanel();
             IFilterControl ctl = factory.CreateFilterControl();
             //---------------Test Result -----------------------
-            Assert.IsInstanceOfType(typeof(FlowLayoutManager), ctl.LayoutManager);
-
+            Assert.IsInstanceOfType(typeof (FlowLayoutManager), ctl.LayoutManager);
         }
 
         [Test]
@@ -143,6 +145,7 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void Test_SetFilterHeaderGizmox()
         {
@@ -168,7 +171,6 @@ namespace Habanero.Test.UI.Base.FilterController
 
             //---------------Tear Down -------------------------          
         }
-
 
         #endregion
 
@@ -199,6 +201,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual(1, filterControl.FilterControls.Count);
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestAdd_TwoStringFilterTextBoxWin()
         {
@@ -210,6 +213,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestAdd_TwoStringFilterTextBox(new ControlFactoryGizmox());
         }
+
         public void TestAdd_TwoStringFilterTextBox(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
@@ -221,6 +225,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual(2, filterControl.FilterControls.Count);
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestAdd_TwoStringFilterTextBox_GetControlWin()
         {
@@ -232,6 +237,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryGizmox());
         }
+
         public void TestAdd_TwoStringFilterTextBox_GetControl(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
@@ -244,6 +250,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreSame(tbExpected, tbReturned);
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestAdd_TwoStringFilterTextBox_Combo_GetControlWin()
         {
@@ -255,6 +262,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryGizmox());
         }
+
         public void TestAdd_TwoStringFilterTextBox_Combo_GetControl(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
@@ -262,7 +270,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IComboBox tbExpected = filterControl.AddStringFilterComboBox("Test:", "TestColumn", null, false);
             filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
             //---------------Execute Test ----------------------
-            IComboBox tbReturned = (IComboBox)filterControl.GetChildControl("TestColumn");
+            IComboBox tbReturned = (IComboBox) filterControl.GetChildControl("TestColumn");
             //---------------Test Result -----------------------
             Assert.AreSame(tbExpected, tbReturned);
             //---------------Tear Down -------------------------          
@@ -279,14 +287,17 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryGizmox());
         }
+
         public void TestAdd_TwoStringFilterTextBox_DateTime__GetControl(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
             IFilterControl filterControl = factory.CreateFilterControl();
-            IDateTimePicker tbExpected = filterControl.AddDateFilterDateTimePicker("Test:", "TestColumn",DateTime.Now,FilterClauseOperator.OpEquals,false);
+            IDateTimePicker tbExpected =
+                filterControl.AddDateFilterDateTimePicker("Test:", "TestColumn", DateTime.Now,
+                                                          FilterClauseOperator.OpEquals, false);
             filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
             //---------------Execute Test ----------------------
-            IDateTimePicker tbReturned = (IDateTimePicker)filterControl.GetChildControl("TestColumn");
+            IDateTimePicker tbReturned = (IDateTimePicker) filterControl.GetChildControl("TestColumn");
             //---------------Test Result -----------------------
             Assert.AreSame(tbExpected, tbReturned);
             //---------------Tear Down -------------------------          
@@ -303,6 +314,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestAdd_TwoStringFilterTextBox_GetControl(new ControlFactoryGizmox());
         }
+
         public void TestAdd_TwoStringFilterTextBox_CheckBox__GetControl(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
@@ -310,14 +322,14 @@ namespace Habanero.Test.UI.Base.FilterController
             ICheckBox tbExpected = filterControl.AddBooleanFilterCheckBox("Test:", "TestColumn", false);
             filterControl.AddStringFilterTextBox("Test2:", "TestColumn2");
             //---------------Execute Test ----------------------
-            ICheckBox tbReturned = (ICheckBox)filterControl.GetChildControl("TestColumn");
+            ICheckBox tbReturned = (ICheckBox) filterControl.GetChildControl("TestColumn");
             //---------------Test Result -----------------------
             Assert.AreSame(tbExpected, tbReturned);
             //---------------Tear Down -------------------------          
         }
 
 
-                [Test]
+        [Test]
         public void TestAdd_TwoStringFilterTextBox_CheckBoxWin()
         {
             TestAdd_TwoStringFilterTextBox_CheckBox(new ControlFactoryWin());
@@ -328,6 +340,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestAdd_TwoStringFilterTextBox_CheckBox(new ControlFactoryGizmox());
         }
+
         public void TestAdd_TwoStringFilterTextBox_CheckBox(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
@@ -343,7 +356,6 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
         #endregion
-
 
         [Test]
         public void TestGetTextBoxFilterClauseWinForms()
@@ -445,12 +457,12 @@ namespace Habanero.Test.UI.Base.FilterController
         }
 
 
-
         [Test]
         public void TestLabelAndTextBoxAreOnPanelWinForms()
         {
             TestLabelAndTextBoxAreOnPanel(new ControlFactoryWin());
         }
+
         [Test]
         public void TestLabelAndTextBoxAreOnPanelGiz()
         {
@@ -478,8 +490,8 @@ namespace Habanero.Test.UI.Base.FilterController
 
         #endregion
 
-
         #region ComboBoxFilter
+
         //------------------------COMBO BOX----------------------------------------------------------
 
         [Test]
@@ -514,11 +526,13 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestAddStringFilterComboBox(new ControlFactoryGizmox());
         }
+
         [Test]
         public void TestAddStringFilterComboBoxWinForms()
         {
             TestAddStringFilterComboBox(new ControlFactoryWin());
         }
+
         public void TestAddStringFilterComboBox(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
@@ -537,10 +551,12 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestGetComboBoxAddSelectedItems(new ControlFactoryGizmox());
         }
+
         public void TestGetComboBoxAddSelectedItemsWin()
         {
             TestGetComboBoxAddSelectedItems(new ControlFactoryWin());
         }
+
         public void TestGetComboBoxAddSelectedItems(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
@@ -552,7 +568,7 @@ namespace Habanero.Test.UI.Base.FilterController
             IComboBox comboBox = filterControl.AddStringFilterComboBox("Test:", "TestColumn", options, true);
             //---------------Test Result -----------------------
             int numOfItemsInCollection = 2;
-            int numItemsExpectedInComboBox = numOfItemsInCollection + 1;//one extra for the null selected item
+            int numItemsExpectedInComboBox = numOfItemsInCollection + 1; //one extra for the null selected item
             Assert.AreEqual(numItemsExpectedInComboBox, comboBox.Items.Count);
         }
 
@@ -561,6 +577,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestSelectItem(new ControlFactoryWin());
         }
+
         [Test]
         public void TestSelectItemGiz()
         {
@@ -581,6 +598,7 @@ namespace Habanero.Test.UI.Base.FilterController
             Assert.AreEqual("1", comboBox.SelectedItem.ToString());
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestGetComboBoxFilterClauseWinForms()
         {
@@ -617,6 +635,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestGetComboBoxFilterClauseNoSelection(new ControlFactoryWin());
         }
+
         [Test]
         public void TestGetComboBoxFilterClauseNoSelectionGiz()
         {
@@ -643,6 +662,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             TestGetComboBoxFilterClause_SelectDeselect(new ControlFactoryWin());
         }
+
         [Test]
         public void TestGetComboBoxFilterClause_SelectDeselectGiz()
         {
@@ -672,6 +692,7 @@ namespace Habanero.Test.UI.Base.FilterController
         {
             MultipleFilters(new ControlFactoryWin());
         }
+
         [Test]
         public void TestMultipleFiltersGiz()
         {
@@ -699,11 +720,147 @@ namespace Habanero.Test.UI.Base.FilterController
 
             IFilterClause compositeClause =
                 filterClauseFactory.CreateCompositeFilterClause(clause, FilterClauseCompositeOperator.OpAnd, clause2);
-            
+
             Assert.AreEqual(compositeClause.GetFilterClauseString(),
                             filterClause);
             //---------------Tear Down ------------------------- 
         }
+
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxInclusiveWinForms()
+        {
+            TestAdd_DateRangeFilterComboBoxInclusive(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxInclusiveGiz()
+        {
+            TestAdd_DateRangeFilterComboBoxInclusive(new ControlFactoryGizmox());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxWinForms()
+        {
+            TestAdd_DateRangeFilterComboBox(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxGiz()
+        {
+            TestAdd_DateRangeFilterComboBox(new ControlFactoryGizmox());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBox(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = factory.CreateFilterControl();
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", true, true);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, filterControl.CountOfFilters);
+            Assert.IsTrue(filterControl.FilterPanel.Controls.Contains(dr1));
+        }
+
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxInclusive(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = factory.CreateFilterControl();
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            DateTime testDate = new DateTime(2007, 1, 2, 3, 4, 5, 6);
+
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", true, true);
+            dr1.UseFixedNowDate = true;
+            dr1.FixedNowDate = testDate;
+            dr1.SelectedItem = "Today";
+            IFilterClause clause1 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpGreaterThanOrEqualTo,
+                                                           new DateTime(2007, 1, 2, 0, 0, 0));
+            IFilterClause clause2 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpLessThanOrEqualTo,
+                                                           new DateTime(2007, 1, 2, 3, 4, 5));
+            IFilterClause compClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxExclusiveWinForms()
+        {
+            TestAdd_DateRangeFilterComboBoxExclusive(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxExclusiveGiz()
+        {
+            TestAdd_DateRangeFilterComboBoxExclusive(new ControlFactoryGizmox());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxExclusive(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = factory.CreateFilterControl();
+            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+            DateTime testDate = new DateTime(2007, 1, 2, 3, 4, 5, 6);
+
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox dr1 = filterControl.AddDateRangeFilterComboBox("test", "test", false, false);
+            dr1.UseFixedNowDate = true;
+            dr1.FixedNowDate = testDate;
+            dr1.SelectedItem = "Today";
+            IFilterClause clause1 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpGreaterThan,
+                                                           new DateTime(2007, 1, 2, 0, 0, 0));
+            IFilterClause clause2 =
+                filterClauseFactory.CreateDateFilterClause("test", FilterClauseOperator.OpLessThan,
+                                                           new DateTime(2007, 1, 2, 3, 4, 5));
+            IFilterClause compClause =
+                filterClauseFactory.CreateCompositeFilterClause(clause1, FilterClauseCompositeOperator.OpAnd, clause2);
+            //---------------Test Result -----------------------
+
+            Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxOverloadWinForms()
+        {
+            TestAdd_DateRangeFilterComboBoxOverload(new ControlFactoryWin());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxOverloadGiz()
+        {
+            TestAdd_DateRangeFilterComboBoxOverload(new ControlFactoryGizmox());
+        }
+
+        [Test]
+        public void TestAdd_DateRangeFilterComboBoxOverload(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = factory.CreateFilterControl();
+            List<DateRangeOptions> options = new List<DateRangeOptions>();
+            options.Add(DateRangeOptions.Today);
+            options.Add(DateRangeOptions.Yesterday);
+
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox dateRangeCombo = filterControl.AddDateRangeFilterComboBox("test", "test", options, true, false);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, dateRangeCombo.Items.Count);
+        }
+
+
 
         private static IComboBox GetFilterComboBox_2Items(IFilterControl filterControl)
         {
@@ -778,6 +935,5 @@ namespace Habanero.Test.UI.Base.FilterController
 //            Assert.AreEqual(compClause.GetFilterClauseString(), filterControl.GetFilterClause().GetFilterClauseString());
 //        }
 //
-
     }
 }

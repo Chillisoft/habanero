@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
     public class DateRangeComboBoxWin : ComboBoxWin, IDateRangeComboBox
     {
-        private List<DateRangeOptions> optionsToDisplay;
         private DateRangeComboBoxManager _manager;
 
         /// <summary>
@@ -19,6 +16,15 @@ namespace Habanero.UI.Win
         {
             _manager = new DateRangeComboBoxManager(this);
         }
+
+        public DateRangeComboBoxWin(List<DateRangeOptions> optionsToDisplay)
+        {
+            _manager = new DateRangeComboBoxManager(this);
+            _manager.OptionsToDisplay = optionsToDisplay;
+            _manager.InitialiseValues();
+           
+        }
+
 
         /// <summary>
         /// Gets and sets whether the date used to calculate date ranges
@@ -53,8 +59,8 @@ namespace Habanero.UI.Win
         /// </summary>
         public List<DateRangeOptions> OptionsToDisplay
         {
-            get { return optionsToDisplay; }
-            set { optionsToDisplay = value; }
+            get { return _manager.OptionsToDisplay; }
+            set { _manager.OptionsToDisplay = value; }
         }
 
         /// <summary>

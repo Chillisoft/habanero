@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using Gizmox.WebGUI.Forms;
@@ -299,6 +300,11 @@ namespace Habanero.UI.WebGUI
             return new DateRangeComboBoxGiz();
         }
 
+        public IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay)
+        {
+            return new DateRangeComboBoxGiz(optionsToDisplay);
+        }
+
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years
@@ -508,6 +514,9 @@ namespace Habanero.UI.WebGUI
         {
             return new DataGridViewCheckBoxColumnGiz( new DataGridViewCheckBoxColumn());
         }
+
+        
+
 
         public ITabControl CreateTabControl()
         {

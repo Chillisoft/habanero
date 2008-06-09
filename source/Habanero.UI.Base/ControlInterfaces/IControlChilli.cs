@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Drawing;
-using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {

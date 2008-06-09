@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
@@ -433,6 +434,40 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
 
             //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCreateDateRangeComboBox()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox comboBox = GetControlFactory().CreateDateRangeComboBox();
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(comboBox);
+            Assert.AreEqual(12, comboBox.Items.Count);       // Includes blank option in the list
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestCreateDateRangeComboBoxOverload()
+        {
+            //---------------Set up test pack-------------------
+            List<DateRangeOptions> options = new List<DateRangeOptions>();
+            options.Add(DateRangeOptions.Today);
+            options.Add(DateRangeOptions.Yesterday);
+
+            //---------------Execute Test ----------------------
+            IDateRangeComboBox comboBox = GetControlFactory().CreateDateRangeComboBox(options);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(comboBox);
+            Assert.IsFalse(comboBox.IgnoreTime);
+            Assert.IsFalse(comboBox.UseFixedNowDate);
+            Assert.AreEqual(0, comboBox.WeekStartOffset);
+            Assert.AreEqual(0, comboBox.MonthStartOffset);
+            Assert.AreEqual(0, comboBox.YearStartOffset);
+            Assert.AreEqual(3, comboBox.Items.Count);          // Includes blank option in the list
+            //---------------Tear Down -------------------------
         }
     }
 

@@ -227,9 +227,9 @@ namespace Habanero.UI.Grid
         public DateRangeComboBox AddDateRangeFilterComboBox(string label, string columnName, bool includeStartDate, bool includeEndDate)
         {
             _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
-            DateRangeComboBox cb = _filterInputBoxCollection.AddDateRangeFilterComboBox(columnName, includeStartDate, includeEndDate);
-            _layoutManager.AddControl(cb);
-            return cb;
+            DateRangeComboBox dateRangeComboBox = _filterInputBoxCollection.AddDateRangeFilterComboBox(columnName, includeStartDate, includeEndDate);
+            _layoutManager.AddControl(dateRangeComboBox);
+            return dateRangeComboBox;
         }
 
         /// <summary>
@@ -249,9 +249,9 @@ namespace Habanero.UI.Grid
         public DateRangeComboBox AddDateRangeFilterComboBox(string label, string columnName, List<DateRangeComboBox.DateOptions> options, bool includeStartDate, bool includeEndDate)
         {
             _layoutManager.AddControl(_filterInputBoxCollection.AddLabel(label));
-            DateRangeComboBox cb = _filterInputBoxCollection.AddDateRangeFilterComboBox(columnName, options, includeStartDate, includeEndDate);
-            _layoutManager.AddControl(cb);
-            return cb;
+            DateRangeComboBox dateRangeComboBox = _filterInputBoxCollection.AddDateRangeFilterComboBox(columnName, options, includeStartDate, includeEndDate);
+            _layoutManager.AddControl(dateRangeComboBox);
+            return dateRangeComboBox;
         }
 
         /// <summary>
