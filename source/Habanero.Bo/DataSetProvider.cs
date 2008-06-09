@@ -114,34 +114,8 @@ namespace Habanero.BO
             foreach (UIGridColumn gridProperty in _uiGridProperties)
             {
                 object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
-                // object val = businessObject.GetPropertyValue(gridProperty.PropertyName);
-                //TODO: Do for derived properties and refactor
-                PropDef propDef = businessObject.ClassDef.GetPropDef(gridProperty.PropertyName);
-                if (propDef != null)
-                {
-                    if (!(propDef.PropertyType == typeof(DateTime)))
-                    {
-                        //                    val = ((DateTime)val).ToString("yyyy/MM/dd HH:mm:ss");
-                        if (val == null)
-                        {
-                            val = "";
-                        }
-                    }
-                    //if (val != null && val is DateTime)
-                    //{
-                    //}
-                    //else if (val == null)
-                    //{
-                    //    val = "";
-                    //}
-                    if ((propDef.PropertyType == typeof(Guid)) && (val != null))
-                    {
-                        if ((propDef.LookupList is NullLookupList))
-                        {
-                            val = ((Guid)val).ToString("B");
-                        }
-                    }
-                }
+                ////TODO: Do for derived properties may need some logic for setting val
+                /// see previous code for this method
                 values[i++] = val;
             }
             return values;
