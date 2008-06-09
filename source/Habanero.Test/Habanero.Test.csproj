@@ -98,6 +98,7 @@
     <Compile Include="Util\TestSerialisationUtilities.cs" />
     <Compile Include="Util\TestSortedStringCollection.cs" />
     <Compile Include="Util\TestStringUtilities.cs" />
+    <Compile Include="Util\TestTypeUtilities.cs" />
     <Compile Include="Util\TestXmlDocumentValidator.cs" />
   </ItemGroup>
   <ItemGroup>

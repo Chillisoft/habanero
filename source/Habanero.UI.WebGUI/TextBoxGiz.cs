@@ -1,6 +1,7 @@
 using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using KeyPressEventHandler=Habanero.UI.Base.ControlInterfaces.KeyPressEventHandler;
 
 namespace Habanero.UI.WebGUI
 {
@@ -10,7 +11,6 @@ namespace Habanero.UI.WebGUI
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
-
     }
 
 }

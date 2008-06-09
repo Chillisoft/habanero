@@ -101,17 +101,17 @@ namespace Habanero.UI.Base
         //    Type propertyType = GetPropertyType();
         //    if (propertyType == null) return false;
         //    return
-        //        (propertyType == typeof (int) || propertyType == typeof (long) ||
-        //         propertyType == typeof (short) || propertyType == typeof (uint) ||
-        //         propertyType == typeof (byte) || propertyType == typeof (ulong)
-        //         || propertyType == typeof (ushort) || propertyType == typeof(sbyte));
+        //        (propertyType == typeof(int) || propertyType == typeof(long) ||
+        //         propertyType == typeof(short) || propertyType == typeof(uint) ||
+        //         propertyType == typeof(byte) || propertyType == typeof(ulong)
+        //         || propertyType == typeof(ushort) || propertyType == typeof(sbyte));
         //}
 
         //private Type GetPropertyType()
         //{
         //    if (_businessObject == null || !_businessObject.Props.Contains(_propertyName))
         //    {
-        //         return null;
+        //        return null;
         //    }
         //    return _businessObject.Props[_propertyName].PropertyType;
         //}

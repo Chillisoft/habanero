@@ -18,9 +18,12 @@
 //---------------------------------------------------------------------------------
 
 
+using System;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
+using Habanero.UI.WebGUI;
+using Habanero.UI.Win;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -42,7 +45,103 @@ namespace Habanero.Test.UI.Base
                 return new Habanero.UI.Win.ControlFactoryWin();
             }
 
+            [Test]
+            public void TestIsValidChar_ReturnsTrueIfBOPropNotSet()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
 
+                //---------------Assert pre-condition---------------
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(strategy.IsValidCharacter('a'));
+                Assert.IsTrue(strategy.IsValidCharacter(' '));
+                Assert.IsTrue(strategy.IsValidCharacter('.'));
+                Assert.IsTrue(strategy.IsValidCharacter('-'));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithString_ReturnsTrueForNonNumericTypes()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof (string));
+                strategy.AddKeyPressEvents(_mapper, boProp);
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(strategy.IsValidCharacter('a'));
+                Assert.IsTrue(strategy.IsValidCharacter(' '));
+                Assert.IsTrue(strategy.IsValidCharacter('.'));
+                Assert.IsTrue(strategy.IsValidCharacter('-'));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithInt_ReturnsTrueForNumber()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(int));
+                strategy.AddKeyPressEvents(_mapper, boProp);
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(strategy.IsValidCharacter('0'));
+                Assert.IsTrue(strategy.IsValidCharacter('9'));
+                Assert.IsTrue(strategy.IsValidCharacter('-'));
+                Assert.IsTrue(strategy.IsValidCharacter(Convert.ToChar(8)));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithInt_ReturnsFalseForNonNumber()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(int));
+                strategy.AddKeyPressEvents(_mapper, boProp);
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(strategy.IsValidCharacter('a'));
+                Assert.IsFalse(strategy.IsValidCharacter('A'));
+                Assert.IsFalse(strategy.IsValidCharacter('+'));
+                Assert.IsFalse(strategy.IsValidCharacter(Convert.ToChar(7)));
+                //---------------Tear down -------------------------
+            }
+
+            [Test, Ignore("Need to do the negative sign test. Negative not allowed when selection start > 0.  Need to finish this true case where allowed, then do false case where inserted at selection start > 0.")]
+            public void TestIsValidChar_WithInt_ReturnsTrueForNegativeAtStart()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(int));
+                strategy.AddKeyPressEvents(_mapper, boProp);
+                _mapper.Control.Text = "123";
+                ((TextBoxWin) _mapper.Control).SelectionStart = 0;
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(strategy.IsValidCharacter('-'));
+                //---------------Tear down -------------------------
+            }
+
+            //TODO test decimals now
+            //TODO then look at the value changed stuff (see original texboxmapper)
+
+            private static BOProp CreateBOPropForType(Type type)
+            {
+                PropDef propDef = new PropDef("Prop", type, PropReadWriteRule.ReadWrite, null);
+                return new BOProp(propDef);
+            }
         }
 
         [TestFixture]
@@ -53,10 +152,10 @@ namespace Habanero.Test.UI.Base
                 return new Habanero.UI.WebGUI.ControlFactoryGizmox();
             }
         }
+
         private ITextBox _tb;
         private TextBoxMapper _mapper;
         private Shape _shape;
-
 
         [SetUp]
         public void SetupTest()

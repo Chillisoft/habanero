@@ -501,6 +501,15 @@ namespace Habanero.UI.WebGUI
             return new ControlMapperStrategyGiz();
         }
 
+        /// <summary>
+        /// Returns a textbox mapper strategy that can be applied to a textbox
+        /// </summary>
+        /// <returns>Returns a strategy</returns>
+        public ITextBoxMapperStrategy CreateTextBoxMapperStrategy()
+        {
+            return new TextBoxMapperStrategyGiz();
+        }
+
         public IDataGridViewImageColumn CreateDataGridViewImageColumn()
         {
             return new GridBaseGiz.DataGridViewImageColumnGiz( new DataGridViewImageColumn());
@@ -544,6 +553,9 @@ namespace Habanero.UI.WebGUI
         }
     }
 
+    /// <summary>
+    /// Provides a set of strategies that can be applied to a control
+    /// </summary>
     internal class ControlMapperStrategyGiz  : IControlMapperStrategy
     {
         public void AddCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp)
@@ -554,6 +566,24 @@ namespace Habanero.UI.WebGUI
         public void RemoveCurrentBOPropHandlers(ControlMapper mapper, BOProp prop)
         {
             
+        }
+    }
+
+    /// <summary>
+    /// Provides a set of strategies that can be applied to a textbox
+    /// </summary>
+    internal class TextBoxMapperStrategyGiz : ITextBoxMapperStrategy
+    {
+        /// <summary>
+        /// Adds key press event handlers that carry out actions like
+        /// limiting the characters input, depending on the type of the
+        /// property
+        /// </summary>
+        /// <param name="mapper">The textbox mapper</param>
+        /// <param name="boProp">The property being mapped</param>
+        public void AddKeyPressEvents(TextBoxMapper mapper, BOProp boProp)
+        {
+            //Would require heavy event handling, so unsuitable for WebGUI at the moment
         }
     }
 }

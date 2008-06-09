@@ -33,3 +33,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: InternalsVisibleTo("Habanero.Test.UI.Base, PublicKeyToken=11b2ace2749e3f86, PublicKey=0024000004800000940000000602000000240000525341310004000001000100f7bd2b74d2adfba6d24e09cfac2b4e4d6ab3692fbdedc39e33e9d4c35a54cd5dc89e0adccd93d91f3e21eaac1ad78a12df78d1350593c28d161f155e703d887bb9208d813dc9d8d8b235caea8524fe189f625c620b4962cd33e79420a37ef23d2b0d0094e764b38247380e5b6ac490efb1d59b5a9051cc22d59de463418428f6")]

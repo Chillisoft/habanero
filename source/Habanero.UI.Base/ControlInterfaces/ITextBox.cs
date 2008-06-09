@@ -1,4 +1,5 @@
 using System;
+using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {

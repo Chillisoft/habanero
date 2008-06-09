@@ -246,6 +246,13 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns></returns>
         IControlMapperStrategy CreateControlMapperStrategy();
+
+        /// <summary>
+        /// Returns a textbox mapper strategy that can be applied to a textbox
+        /// </summary>
+        /// <returns>Returns a strategy</returns>
+        ITextBoxMapperStrategy CreateTextBoxMapperStrategy();
+
         /// <summary>
         /// Creates a DataGridViewImageColumn for the appropriate userinterface framework
         /// </summary>
@@ -265,11 +272,30 @@ namespace Habanero.UI.Base
         IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay);
     }
 
-
+    /// <summary>
+    /// Provides a set of strategies that can be applied to a control
+    /// depending on the environment
+    /// </summary>
     public interface IControlMapperStrategy
     {
         void AddCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp);
-
+       
         void RemoveCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp);
+    }
+
+    /// <summary>
+    /// Provides a set of strategies that can be applied to a textbox
+    /// depending on the environment
+    /// </summary>
+    public interface ITextBoxMapperStrategy
+    {
+        /// <summary>
+        /// Adds key press event handlers that carry out actions like
+        /// limiting the characters input, depending on the type of the
+        /// property
+        /// </summary>
+        /// <param name="mapper">The textbox mapper</param>
+        /// <param name="boProp">The property being mapped</param>
+         void AddKeyPressEvents(TextBoxMapper mapper, BOProp boProp);
     }
 }

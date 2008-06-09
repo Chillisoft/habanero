@@ -9,7 +9,9 @@ using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.Base.FilterControl;
+using Habanero.Util;
 using Habanero.Util.File;
+using KeyPressEventArgs=Habanero.UI.Base.ControlInterfaces.KeyPressEventArgs;
 
 namespace Habanero.UI.Win
 {
@@ -24,7 +26,24 @@ namespace Habanero.UI.Win
             return new FilterControlWin(this);
         }
 
+
+        /// <summary>
+        /// Creates a TextBox with no filtering of characters. 
+        /// If the type of the property is known, rather use the overloaded version of this method.
+        /// </summary>
+        /// <returns>Returns a new ITextBox object.</returns>
         public ITextBox CreateTextBox()
+        {
+            return new TextBoxWin();
+        }
+
+
+        /// <summary>
+        /// Creates a TextBox that provides filtering of characters depending on the property type.
+        /// </summary>
+        /// <param name="propertyType">Type property being edited.</param>
+        /// <returns>Returns a new ITextBox object.</returns>
+        public ITextBox CreateTextBox(Type propertyType)
         {
             return new TextBoxWin();
         }
@@ -33,7 +52,7 @@ namespace Habanero.UI.Win
         /// Creates a new empty TreeView
         /// </summary>
         /// <param name="name">The name of the view</param>
-        /// <returns>Returns a new TreeView object</returns>
+        /// <returns>Returns a new ITreeView object</returns>
         public ITreeView CreateTreeView(string name)
         {
             throw new NotImplementedException();
@@ -306,6 +325,15 @@ namespace Habanero.UI.Win
             return new ControlMapperStrategyWin();
         }
 
+        /// <summary>
+        /// Returns a textbox mapper strategy that can be applied to a textbox
+        /// </summary>
+        /// <returns>Returns a strategy</returns>
+        public ITextBoxMapperStrategy CreateTextBoxMapperStrategy()
+        {
+            return new TextBoxMapperStrategyWin();
+        }
+
         public IDataGridViewImageColumn CreateDataGridViewImageColumn()
         {
             return null; //TODO port : return somethind
@@ -490,8 +518,12 @@ namespace Habanero.UI.Win
         }
     }
 
+    /// <summary>
+    /// Provides a set of strategies that can be applied to a control
+    /// </summary>
     public class ControlMapperStrategyWin : IControlMapperStrategy
     {
+        
 
         public void AddCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp)
         {
@@ -508,6 +540,94 @@ namespace Habanero.UI.Win
             {
                 boProp.Updated -= mapper.BOPropValueUpdatedHandler;
             }
+        }
+    }
+
+    /// <summary>
+    /// Provides a set of strategies that can be applied to a textbox
+    /// </summary>
+    internal class TextBoxMapperStrategyWin: ITextBoxMapperStrategy
+    {
+        // Assumes that one strategy is created for each control.
+        // This field exists so that the IsValidCharacter method knows
+        //   which prop it is dealing with
+        private BOProp _boProp;
+
+        /// <summary>
+        /// Adds key press event handlers that carry out actions like
+        /// limiting the characters input, depending on the type of the
+        /// property
+        /// </summary>
+        /// <param name="mapper">The textbox mapper</param>
+        /// <param name="boProp">The property being mapped</param>
+        public void AddKeyPressEvents(TextBoxMapper mapper, BOProp boProp)
+        {
+            _boProp = boProp;
+
+            if(mapper.Control is ITextBox)
+            {
+                TextBoxWin tb = (TextBoxWin)mapper.Control;
+                tb.KeyPress += KeyPressEventHandler;
+            }
+        }
+
+        private void KeyPressEventHandler(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            if (!IsValidCharacter(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Indicates if the given character being typed is valid, based on the
+        /// text already entered in the textbox.  For instance, if the property
+        /// type is an integer, this method will return false for a non-numeric
+        /// character (apart from a negative sign).
+        /// </summary>
+        /// <param name="character">The character being input</param>
+        /// <returns>Returns true if valid</returns>
+        internal bool IsValidCharacter(char character)
+        {
+            if (_boProp == null) return true;
+
+            if (TypeUtilities.IsInteger(_boProp.PropertyType))
+            {
+                if ((character < '0' || character > '9') && character != 8 && character != '-')
+                {
+                    return false;
+                }
+                //if (character == '-' && _textBox.SelectionStart != 0)
+                //{
+                //    return false;
+                //}
+            }
+            else if (TypeUtilities.IsDecimal(_boProp.PropertyType))
+            {
+                //                                 if ((e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != '.' && e.KeyChar != 8 && e.KeyChar != '-')
+                //                                 {
+                //                                     e.Handled = true;
+                //                                 }
+                //
+                //                                 if (e.KeyChar == '.' && _textBox.Text.Contains("."))
+                //                                 {
+                //                                     e.Handled = true;
+                //                                 }
+                //                                 if (e.KeyChar == '.' && _textBox.SelectionStart == 0)
+                //                                 {
+                //                                     _textBox.Text = "0." + _textBox.Text;
+                //                                     e.Handled = true;
+                //                                     _textBox.SelectionStart = 2;
+                //                                     _textBox.SelectionLength = 0;
+                //                                 }
+                //                                 if (e.KeyChar == '-' && _textBox.SelectionStart != 0)
+                //                                 {
+                //                                     e.Handled = true;
+                //                                 }
+                //                             }
+                return false;
+            }
+            return true;
         }
     }
 }
