@@ -76,7 +76,7 @@ namespace Habanero.BO
             BusinessObject businessObject = e.BusinessObject;
             object[] values = GetValues(businessObject);
             _table.LoadDataRow(values, true);
-            businessObject.Updated += new EventHandler<BOEventArgs>(UpdatedHandler);
+            businessObject.Updated += UpdatedHandler;
         }
 
         /// <summary>

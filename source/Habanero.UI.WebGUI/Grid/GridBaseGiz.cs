@@ -637,13 +637,18 @@ namespace Habanero.UI.WebGUI
         }
     }
 
-    internal class DataGridViewCellGiz : IDataGridViewCell
+    public class DataGridViewCellGiz : IDataGridViewCell
     {
-        private readonly DataGridViewCell _cell;
+        private readonly DataGridViewCell _dataGridViewCell;
 
         public DataGridViewCellGiz(DataGridViewCell cell)
         {
-            _cell = cell;
+            _dataGridViewCell = cell;
+        }
+        
+        public DataGridViewCell DataGridViewCell
+        {
+            get { return _dataGridViewCell; }
         }
 
         /// <summary>Gets the column index for this cell. </summary>
@@ -651,14 +656,14 @@ namespace Habanero.UI.WebGUI
         /// <filterpriority>1</filterpriority>
         public int ColumnIndex
         {
-            get { return _cell.ColumnIndex; }
+            get { return _dataGridViewCell.ColumnIndex; }
         }
 
         /// <summary>Gets a value that indicates whether the cell is currently displayed on-screen. </summary>
         /// <returns>true if the cell is on-screen or partially on-screen; otherwise, false.</returns>
         public bool Displayed
         {
-            get { return _cell.Displayed; }
+            get { return _dataGridViewCell.Displayed; }
         }
 
         /// <summary>Gets a value indicating whether the cell is frozen. </summary>
@@ -666,7 +671,18 @@ namespace Habanero.UI.WebGUI
         /// <filterpriority>1</filterpriority>
         public bool Frozen
         {
-            get { return _cell.Frozen; }
+            get { return _dataGridViewCell.Frozen; }
+        }
+
+        /// <summary>Gets the value of the cell as formatted for display.</summary>
+        /// <returns>The formatted value of the cell or null if the cell does not belong to a <see cref="IDataGridView"></see> control.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The row containing the cell is a shared row.-or-The cell is a column header cell.</exception>
+        /// <exception cref="T:System.Exception">Formatting failed and either there is no handler for the <see cref="IDataGridView.DataError"></see> event of the <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control or the handler set the <see cref="P:Gizmox.WebGUI.Forms.DataGridViewDataErrorEventArgs.ThrowException"></see> property to true. The exception object can typically be cast to type <see cref="T:System.FormatException"></see>.</exception>
+        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
+        /// <filterpriority>1</filterpriority>
+        public object FormattedValue
+        {
+            get { return _dataGridViewCell.FormattedValue; }
         }
 
         /// <summary>Gets a value indicating whether this cell is currently being edited.</summary>
@@ -674,7 +690,7 @@ namespace Habanero.UI.WebGUI
         /// <exception cref="T:System.InvalidOperationException">The row containing the cell is a shared row.</exception>
         public bool IsInEditMode
         {
-            get { return _cell.IsInEditMode; }
+            get { return _dataGridViewCell.IsInEditMode; }
         }
 
         /// <summary>Gets or sets a value indicating whether the cell's data can be edited. </summary>
@@ -683,8 +699,8 @@ namespace Habanero.UI.WebGUI
         /// <filterpriority>1</filterpriority>
         public bool ReadOnly
         {
-            get { return _cell.ReadOnly; }
-            set { _cell.ReadOnly = value; }
+            get { return _dataGridViewCell.ReadOnly; }
+            set { _dataGridViewCell.ReadOnly = value; }
         }
 
         /// <summary>Gets the index of the cell's parent row. </summary>
@@ -692,7 +708,7 @@ namespace Habanero.UI.WebGUI
         /// <filterpriority>1</filterpriority>
         public int RowIndex
         {
-            get { return _cell.RowIndex; }
+            get { return _dataGridViewCell.RowIndex; }
         }
 
         /// <summary>Gets or sets a value indicating whether the cell has been selected. </summary>
@@ -701,8 +717,8 @@ namespace Habanero.UI.WebGUI
         /// <filterpriority>1</filterpriority>
         public bool Selected
         {
-            get { return _cell.Selected; }
-            set { _cell.Selected = value; }
+            get { return _dataGridViewCell.Selected; }
+            set { _dataGridViewCell.Selected = value; }
         }
 
         /// <summary>Gets or sets the value associated with this cell. </summary>
@@ -712,8 +728,8 @@ namespace Habanero.UI.WebGUI
         /// <filterpriority>1</filterpriority>
         public object Value
         {
-            get { return _cell.Value; }
-            set { _cell.Value = value; }
+            get { return _dataGridViewCell.Value; }
+            set { _dataGridViewCell.Value = value; }
         }
 
         /// <summary>Gets or sets the data type of the values in the cell. </summary>
@@ -721,8 +737,8 @@ namespace Habanero.UI.WebGUI
         /// <filterpriority>1</filterpriority>
         public Type ValueType
         {
-            get { return _cell.ValueType; }
-            set { _cell.ValueType = value; }
+            get { return _dataGridViewCell.ValueType; }
+            set { _dataGridViewCell.ValueType = value; }
         }
 
         /// <summary>Gets a value indicating whether the cell is in a row or column that has been hidden. </summary>
@@ -730,7 +746,7 @@ namespace Habanero.UI.WebGUI
         /// <filterpriority>1</filterpriority>
         public bool Visible
         {
-            get { return _cell.Visible; }
+            get { return _dataGridViewCell.Visible; }
         }
     }
 }

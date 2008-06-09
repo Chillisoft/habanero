@@ -54,6 +54,7 @@
     <Compile Include="ControlMappers\CollectionTabControlMapper.cs" />
     <Compile Include="ControlMappers\ComboBoxCollectionController.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
+    <Compile Include="Grid\IDataGridViewCellStyle.cs" />
     <Compile Include="Grid\IDataGridViewCheckBoxColumn.cs" />
     <Compile Include="Grid\IDataGridViewImageColumn.cs" />
     <Compile Include="Grid\IDataGridViewTextBoxColumn.cs" />

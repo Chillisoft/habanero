@@ -71,6 +71,7 @@
     <Compile Include="FilterController\TestDataViewNullFilterClause.cs" />
     <Compile Include="FilterController\TestFilterControlDate.cs" />
     <Compile Include="FilterController\TestFilterInputBoxCollection.cs" />
+    <Compile Include="Grid\TestDataGridViewColumn.cs" />
     <Compile Include="Grid\TestEditableGridControl.cs" />
     <Compile Include="Grid\TestGridInitialiser.cs" />
     <Compile Include="Grid\TestReadOnlyGrid.cs" />

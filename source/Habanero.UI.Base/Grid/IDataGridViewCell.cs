@@ -21,6 +21,15 @@ namespace Habanero.UI.Base
         [Browsable(false)]
         bool Frozen { get; }
 
+                /// <summary>Gets the value of the cell as formatted for display.</summary>
+        /// <returns>The formatted value of the cell or null if the cell does not belong to a <see cref="IDataGridView"></see> control.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The row containing the cell is a shared row.-or-The cell is a column header cell.</exception>
+        /// <exception cref="T:System.Exception">Formatting failed and either there is no handler for the <see cref="IDataGridView.DataError"></see> event of the <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control or the handler set the <see cref="P:Gizmox.WebGUI.Forms.DataGridViewDataErrorEventArgs.ThrowException"></see> property to true. The exception object can typically be cast to type <see cref="T:System.FormatException"></see>.</exception>
+        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
+        /// <filterpriority>1</filterpriority>
+        [Browsable(false)]
+        object FormattedValue { get; }
+
         /// <summary>Gets a value indicating whether this cell is currently being edited.</summary>
         /// <returns>true if the cell is in edit mode; otherwise, false.</returns>
         /// <exception cref="T:System.InvalidOperationException">The row containing the cell is a shared row.</exception>
@@ -49,8 +58,8 @@ namespace Habanero.UI.Base
 
         /// <summary>Gets or sets the value associated with this cell. </summary>
         /// <returns>Gets or sets the data to be displayed by the cell. The default is null.</returns>
-        /// <exception cref="T:System.InvalidOperationException"><see cref="P:Gizmox.WebGUI.Forms.DataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException"><see cref="P:Gizmox.WebGUI.Forms.DataGridViewCell.RowIndex"></see> is outside the valid range of 0 to the number of rows in the control minus 1.</exception>
+        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><see cref="IDataGridViewCell.RowIndex"></see> is outside the valid range of 0 to the number of rows in the control minus 1.</exception>
         /// <filterpriority>1</filterpriority>
         [Browsable(false)]
         object Value { get; set; }

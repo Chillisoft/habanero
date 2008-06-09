@@ -160,7 +160,7 @@ namespace Habanero.Test.UI.Base
         //[Test]
         //public void TestAddBoToCollection()
         //{
-        //    itsCollection.Add(new Sample());
+        //    _collection.Add(new Sample());
         //    Assert.AreEqual(4, itsListView .Items.Count);
         //}
 

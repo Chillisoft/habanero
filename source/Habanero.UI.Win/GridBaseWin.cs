@@ -407,6 +407,15 @@ namespace Habanero.UI.Win
                 get { return _dataGridViewColumn.Visible; }
                 set { _dataGridViewColumn.Visible = value; }
             }
+
+            /// <summary>Gets or sets the column's default cell style.</summary>
+            /// <returns>A <see cref="IDataGridViewCellStyle"></see> that represents the default style of the cells in the column.</returns>
+            /// <filterpriority>1</filterpriority>
+            public IDataGridViewCellStyle DefaultCellStyle
+            {
+                get { return new DataGridViewCellStyleWin(_dataGridViewColumn.DefaultCellStyle); }
+                set { throw new NotImplementedException(); }
+            }
         }
 
         private class DataGridViewColumnCollectionWin : IDataGridViewColumnCollection
@@ -707,6 +716,46 @@ namespace Habanero.UI.Win
         }
     }
 
+    internal class DataGridViewCellStyleWin : IDataGridViewCellStyle
+    {
+        private readonly DataGridViewCellStyle _dataGridViewCellStyle;
+
+        public DataGridViewCellStyleWin(DataGridViewCellStyle dataGridViewCellStyle)
+        {
+            _dataGridViewCellStyle = dataGridViewCellStyle;
+        }
+
+        public DataGridViewCellStyle DataGridViewCellStyle
+        {
+            get { return _dataGridViewCellStyle; }
+        }
+
+        /// <summary>Applies the specified <see cref="IDataGridViewCellStyle"></see> to the current <see cref="IDataGridViewCellStyle"></see>.</summary>
+        /// <param name="dataGridViewCellStyle">The <see cref="IDataGridViewCellStyle"></see> to apply to the current <see cref="IDataGridViewCellStyle"></see>.</param>
+        /// <exception cref="T:System.ArgumentNullException">dataGridViewCellStyle is null.</exception>
+        /// <filterpriority>1</filterpriority>
+        public void ApplyStyle(IDataGridViewCellStyle dataGridViewCellStyle)
+        {
+            _dataGridViewCellStyle.ApplyStyle(((DataGridViewCellStyleWin)dataGridViewCellStyle).DataGridViewCellStyle);
+        }
+
+        /// <summary>Creates an exact copy of this <see cref="IDataGridViewCellStyle"></see>.</summary>
+        /// <returns>A <see cref="IDataGridViewCellStyle"></see> that represents an exact copy of this cell style.</returns>
+        public IDataGridViewCellStyle Clone()
+        {
+            return new DataGridViewCellStyleWin(_dataGridViewCellStyle.Clone());
+        }
+
+        /// <summary>Gets or sets the format string applied to the textual content of a <see cref="IDataGridView"></see> cell.</summary>
+        /// <returns>A string that indicates the format of the cell value. The default is <see cref="F:System.String.Empty"></see>.</returns>
+        /// <filterpriority>1</filterpriority>
+        public string Format
+        {
+            get { return _dataGridViewCellStyle.Format;  }
+            set { _dataGridViewCellStyle.Format = value; }
+        }
+    }
+
     internal class DataGridViewCellWin : IDataGridViewCell
     {
         private readonly DataGridViewCell _cell;
@@ -737,6 +786,17 @@ namespace Habanero.UI.Win
         public bool Frozen
         {
             get { return _cell.Frozen; }
+        }
+
+        /// <summary>Gets the value of the cell as formatted for display.</summary>
+        /// <returns>The formatted value of the cell or null if the cell does not belong to a <see cref="IDataGridView"></see> control.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The row containing the cell is a shared row.-or-The cell is a column header cell.</exception>
+        /// <exception cref="T:System.Exception">Formatting failed and either there is no handler for the <see cref="IDataGridView.DataError"></see> event of the <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control or the handler set the <see cref="P:Gizmox.WebGUI.Forms.DataGridViewDataErrorEventArgs.ThrowException"></see> property to true. The exception object can typically be cast to type <see cref="T:System.FormatException"></see>.</exception>
+        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
+        /// <filterpriority>1</filterpriority>
+        public object FormattedValue
+        {
+            get { return _cell.FormattedValue; }
         }
 
         /// <summary>Gets a value indicating whether this cell is currently being edited.</summary>

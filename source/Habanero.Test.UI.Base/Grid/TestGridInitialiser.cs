@@ -33,20 +33,20 @@ namespace Habanero.Test.UI.Base
         protected abstract void AddControlToForm(IControlChilli cntrl);
 
 
-        [TestFixture]
-        public class TestGridInitialiserWin : TestGridInitialiser
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
+        //[TestFixture]
+        //public class TestGridInitialiserWin : TestGridInitialiser
+        //{
+        //    protected override IControlFactory GetControlFactory()
+        //    {
+        //        return new ControlFactoryWin();
+        //    }
 
-            protected override void AddControlToForm(IControlChilli cntrl)
-            {
-                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-                frm.Controls.Add((System.Windows.Forms.Control)cntrl);
-            }
-        }
+        //    protected override void AddControlToForm(IControlChilli cntrl)
+        //    {
+        //        System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+        //        frm.Controls.Add((System.Windows.Forms.Control)cntrl);
+        //    }
+        //}
 
         [TestFixture]
         public class TestGridInitialiserGiz : TestGridInitialiser
@@ -194,7 +194,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("Currently working on this")]
+        [Test, Ignore("Working on this")]
         public void TestInitGrid_UIDef_DateFormat_FormatsDateColumn()
         {
             //---------------Set up test pack-------------------
@@ -222,6 +222,7 @@ namespace Habanero.Test.UI.Base
             myBo.SetPropertyValue(formattedPropertyName, currentDateTime);
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             col.Add(myBo);
+
             //---------------Execute Test ----------------------
             initialiser.InitialiseGrid(classDef);
             grid.SetBusinessObjectCollection(col);
@@ -229,7 +230,10 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             Assert.AreEqual(1, grid.Grid.Rows.Count);
-            Assert.AreEqual(currentDateTime.ToString("dd.MMM.yyyy") ,grid.Grid.Rows[0].Cells[formattedPropertyName].Value);
+            IDataGridViewCell dataGridViewCell = grid.Grid.Rows[0].Cells[formattedPropertyName];
+            //((DataGridViewCellGiz) dataGridViewCell).DataGridViewCell.HasStyle = false;
+            Assert.AreEqual(currentDateTime.ToString("dd.MMM.yyyy"), dataGridViewCell.FormattedValue);
+//            Assert.AreEqual(currentDateTime.ToString("dd.MMM.yyyy") ,grid.Grid.Rows[0].Cells[formattedPropertyName].Value);
 
             //---------------Tear Down -------------------------          
         }

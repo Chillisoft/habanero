@@ -1,6 +1,8 @@
 using System;
+using System.Drawing;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using Habanero.UI.WebGUI.Grid;
 using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.WebGUI
@@ -106,5 +108,16 @@ namespace Habanero.UI.WebGUI
             get { return _dataGridViewColumn.Visible; }
             set { _dataGridViewColumn.Visible = value; }
         }
+
+        /// <summary>Gets or sets the column's default cell style.</summary>
+        /// <returns>A <see cref="IDataGridViewCellStyle"></see> that represents the default style of the cells in the column.</returns>
+        /// <filterpriority>1</filterpriority>
+        public IDataGridViewCellStyle DefaultCellStyle
+        {
+            get { return new DataGridViewCellStyleGiz( _dataGridViewColumn.DefaultCellStyle); }
+            set { _dataGridViewColumn.DefaultCellStyle = ((DataGridViewCellStyleGiz)value).DataGridViewCellStyle; }
+        }
     }
+
+    
 }

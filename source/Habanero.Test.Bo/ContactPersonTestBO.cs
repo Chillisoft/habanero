@@ -91,8 +91,8 @@ namespace Habanero.Test.BO
 			");
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
-//            XmlClassLoader itsLoader = new XmlClassLoader();
-//            ClassDef itsClassDef =
+//            XmlClassLoader _loader = new XmlClassLoader();
+//            ClassDef _classDef =
 //                itsLoader.LoadClass(
 //                    @"
 //				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
@@ -119,8 +119,8 @@ namespace Habanero.Test.BO
 //					</ui>
 //			    </class>
 //			");
-//            ClassDef.ClassDefs.Add(itsClassDef);
-//            return itsClassDef;
+//            ClassDef.ClassDefs.Add(_classDef);
+//            return _classDef;
         }
 
         

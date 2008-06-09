@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="FormExceptionNotifier.cs">
     </Compile>
+    <Compile Include="Grid\DataGridViewCellStyleGiz.cs" />
     <Compile Include="Grid\DataGridViewColumnGiz.cs" />
     <Compile Include="GroupBoxGiz.cs">
       <SubType>Component</SubType>

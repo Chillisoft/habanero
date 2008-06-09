@@ -63,20 +63,7 @@ namespace Habanero.BO
             ClassDef classDef = _collection.ClassDef;
             foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
-                column = _table.Columns.Add();
-                if (_table.Columns.Contains(uiProperty.PropertyName))
-                {
-                    throw new DuplicateNameException(String.Format(
-                                                         "In a grid definition, a duplicate column with " +
-                                                         "the name '{0}' has been detected. Only one column " +
-                                                         "per property can be specified.", uiProperty.PropertyName));
-                }
-                column.ColumnName = uiProperty.PropertyName;
-                column.Caption = uiProperty.GetHeading(classDef);
-                column.ReadOnly = !uiProperty.Editable;
-                column.ExtendedProperties.Add("LookupList", classDef.GetLookupList(uiProperty.PropertyName));
-                column.ExtendedProperties.Add("Width", uiProperty.Width);
-                column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
+                AddColumn(uiProperty, classDef);
             }
             foreach (BusinessObject businessObjectBase in _collection)
             {
@@ -87,34 +74,73 @@ namespace Habanero.BO
             return _table;
         }
 
+        private void AddColumn(UIGridColumn uiProperty, ClassDef classDef)
+        {
+            DataColumn column;
+            column = _table.Columns.Add();
+            if (_table.Columns.Contains(uiProperty.PropertyName))
+            {
+                throw new DuplicateNameException(String.Format(
+                    "In a grid definition, a duplicate column with " +
+                    "the name '{0}' has been detected. Only one column " +
+                    "per property can be specified.", uiProperty.PropertyName));
+            }
+            //TODO : Generalise this for properties that do not have PropDefs
+            PropDef propDef = classDef.GetPropDef(uiProperty.PropertyName);
+            if (propDef.LookupList is NullLookupList)
+            {
+                column.DataType = propDef.PropertyType;
+            }
+            column.ColumnName = uiProperty.PropertyName;
+            column.Caption = uiProperty.GetHeading(classDef);
+            column.ReadOnly = !uiProperty.Editable;
+            column.ExtendedProperties.Add("LookupList", classDef.GetLookupList(uiProperty.PropertyName));
+            column.ExtendedProperties.Add("Width", uiProperty.Width);
+            column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
+        }
+
         /// <summary>
         /// Gets a list of the property values to display to the user
         /// </summary>
-        /// <param name="businessObjectBase">The business object whose
+        /// <param name="businessObject">The business object whose
         /// properties are to be displayed</param>
         /// <returns>Returns an array of values</returns>
-        protected object[] GetValues(BusinessObject businessObjectBase)
+        protected object[] GetValues(BusinessObject businessObject)
         {
             object[] values = new object[_uiGridProperties.Count + 1];
-            values[0] = businessObjectBase.ID.ToString();
+            values[0] = businessObject.ID.ToString();
             int i = 1;
-            BOMapper mapper = new BOMapper(businessObjectBase);
+            BOMapper mapper = new BOMapper(businessObject);
             foreach (UIGridColumn gridProperty in _uiGridProperties)
             {
                 object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
-                // object val = businessObjectBase.GetPropertyValue(gridProperty.PropertyName);
-
-                if (val != null && val is DateTime)
+                // object val = businessObject.GetPropertyValue(gridProperty.PropertyName);
+                //TODO: Do for derived properties and refactor
+                PropDef propDef = businessObject.ClassDef.GetPropDef(gridProperty.PropertyName);
+                if (propDef != null)
                 {
-                    val = ((DateTime) val).ToString("yyyy/MM/dd HH:mm:ss");
-                }
-                else if (val == null)
-                {
-                    val = "";
-                }
-                else if (val is Guid)
-                {
-                    val = ((Guid) val).ToString("B");
+                    if (!(propDef.PropertyType == typeof(DateTime)))
+                    {
+                        //                    val = ((DateTime)val).ToString("yyyy/MM/dd HH:mm:ss");
+                        if (val == null)
+                        {
+                            val = "";
+                        }
+                    }
+                    //if (val != null && val is DateTime)
+                    //{
+                    //}
+                    //else if (val == null)
+                    //{
+                    //    val = "";
+                    //}
+                    if ((propDef.PropertyType == typeof(Guid)) && (val != null))
+                    {
+                        if ((propDef.LookupList is NullLookupList))
+                        {
+                            val = ((Guid)val).ToString("B");
+                        }
+                    }
                 }
                 values[i++] = val;
             }

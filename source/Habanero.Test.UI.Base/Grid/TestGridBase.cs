@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -1070,8 +1071,112 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(null, gridBase.SelectedBusinessObject);
             //---------------Tear Down -------------------------
         }
+                
+        [Test]
+        public void Test_SetColumnWithCustomDateFormat()
+        {
+            //---------------Set up test pack-------------------
+            IGridBase gridBase = CreateGridBaseStub();
+            gridBase.Columns.Add("TestPropDate", "TestPropDate");
+            IDataGridViewColumn col = gridBase.Columns[0];
+            string requiredFormat = "dd.MMM.yyyy";
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            col.DefaultCellStyle.Format = requiredFormat;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(requiredFormat, col.DefaultCellStyle.Format);         
+        }
+
+        [Test]
+        public void Test_SetDateToGridWithCustomDateFormat()
+        {
+            //---------------Set up test pack-------------------
+            IDataGridViewColumn col;
+            string requiredFormat = "dd.MMM.yyyy";
+            IGridBase gridBase = CreateGridBaseWithDateCustomFormatCol(out col,  requiredFormat);
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(requiredFormat, col.DefaultCellStyle.Format);  
+
+            //---------------Execute Test ----------------------
+            DateTime expectedDate = DateTime.Now;
+            gridBase.Rows.Add(expectedDate);
+
+            //---------------Test Result -----------------------
+            IDataGridViewCell dataGridViewCell = gridBase.Rows[0].Cells[0];
+            //((DataGridViewCellGiz) dataGridViewCell).DataGridViewCell.HasStyle = false;
+
+            Assert.AreEqual(expectedDate.ToString(requiredFormat), dataGridViewCell.FormattedValue);
+//            Assert.AreEqual(currentDateTime.ToString("dd.MMM.yyyy") ,grid.Grid.Rows[0].Cells[formattedPropertyName].Value);
+        }
+
+
+        [Test]
+        public void Test_SetDateToGridCustomFormat_LoadViaCollection()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithDateTime();
+            IDataGridViewColumn column;
+            string requiredFormat = "dd.MMM.yyyy";
+            IGridBase gridBase = CreateGridBaseWithDateCustomFormatCol(out column, requiredFormat);
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO bo = new MyBO();
+            string dateTimeProp = "TestDateTime";
+            DateTime expectedDate = DateTime.Now;
+            bo.SetPropertyValue(dateTimeProp, expectedDate);
+            col.Add(bo);
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            gridBase.SetBusinessObjectCollection(col);
+
+            //---------------Test Result -----------------------
+
+            IDataGridViewCell dataGridViewCell = gridBase.Rows[0].Cells[0];
+            Assert.AreEqual(expectedDate.ToString(requiredFormat), dataGridViewCell.FormattedValue);
+
+        }
+
+        [Test]
+        public void Test_SetDateToGridCustomFormat_LoadViaDataTable()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithDateTime();
+            IDataGridViewColumn column;
+            string requiredFormat = "dd.MMM.yyyy";
+            IGridBase gridBase = CreateGridBaseWithDateCustomFormatCol(out column, requiredFormat);
+            DataTable dataTable = new DataTable();
+            string dateTimeProp = "TestDateTime";
+            dataTable.Columns.Add(dateTimeProp, typeof (DateTime));
+            DateTime expectedDate = DateTime.Now;
+            dataTable.Rows.Add(expectedDate);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            gridBase.DataSource = dataTable.DefaultView;
+
+            //---------------Test Result -----------------------
+
+            IDataGridViewCell dataGridViewCell = gridBase.Rows[0].Cells[0];
+            Assert.AreEqual(expectedDate.ToString(requiredFormat), dataGridViewCell.FormattedValue);
+
+        }
+
 
         #region Utility Methods 
+        
+        private IGridBase CreateGridBaseWithDateCustomFormatCol(out IDataGridViewColumn col, string requiredFormat)
+        {
+            IGridBase gridBase = CreateGridBaseStub();
+            gridBase.Columns.Add("TestDateTime", "TestDateTime");
+            col = gridBase.Columns[0];
+            col.DefaultCellStyle.Format = requiredFormat;
+            return gridBase;
+        }
         private static void AddColumnsForContactPerson(BusinessObjectCollection<ContactPersonTestBO> businessObjectCollection, IGridBase gridBase, string propName)
         {
             gridBase.Columns.Add("ID", "ID");
@@ -1249,6 +1354,15 @@ namespace Habanero.Test.UI.Base
         {
             get { return false; }
             set { }
+        }
+
+        /// <summary>Gets or sets the column's default cell style.</summary>
+        /// <returns>A <see cref="IDataGridViewCellStyle"></see> that represents the default style of the cells in the column.</returns>
+        /// <filterpriority>1</filterpriority>
+        public IDataGridViewCellStyle DefaultCellStyle
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public object DataGridViewColumn

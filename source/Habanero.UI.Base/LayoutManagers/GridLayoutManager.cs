@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.UI.Base
 {
@@ -173,6 +174,13 @@ namespace Habanero.UI.Base
             }
             int currentColNum = (this._controls.Count)%ColumnCount;
             int currentRowNum = (this._controls.Count)/ColumnCount;
+            if (currentRowNum >= _rowHeights.Length)
+            {
+                throw new HabaneroDeveloperException(
+                    string.Format("You cannot add a control to the grid layout manager since it exceeds the grids size of '{0}' row and '{1}' column", 
+                    _rowHeights.Length, 
+                    _columnWidths.Length));
+            }
             if (_fixedColumnsBasedOnContents[currentColNum])
             {
                 if (control.Width > _columnWidths[currentColNum])

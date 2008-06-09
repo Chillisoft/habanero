@@ -34,14 +34,14 @@ namespace Habanero.Test.BO
     //[TestFixture] 
     public abstract class TestDataSetProvider : TestUsingDatabase
     {
-        protected XmlClassLoader itsLoader;
-        protected ClassDef itsClassDef;
-        protected BusinessObjectCollection<BusinessObject> itsCollection;
+        protected XmlClassLoader _loader;
+        protected ClassDef _classDef;
+        protected BusinessObjectCollection<BusinessObject> _collection;
         protected DataTable itsTable;
         protected BusinessObject itsBo1;
         protected BusinessObject itsBo2;
         protected IBusinessObject itsRelatedBo;
-        protected IDataSetProvider itsProvider;
+        protected IDataSetProvider _dataSetProvider;
 
         protected Mock itsDatabaseConnectionMockControl;
         protected IDatabaseConnection itsConnection;
@@ -50,12 +50,7 @@ namespace Habanero.Test.BO
         public void SetupTestFixture()
         {
             this.SetupDBConnection();
-            ClassDef.ClassDefs.Clear();
-            itsLoader = new XmlClassLoader();
-            itsClassDef = MyBO.LoadClassDefWithLookup();
-
             OrderItem.CreateTable();
-            OrderItem.LoadDefaultClassDef();
         }
 
         [TestFixtureTearDown]
@@ -64,39 +59,44 @@ namespace Habanero.Test.BO
             OrderItem.DropTable();
         }
 
-        [SetUp]
+        
         public void SetupTest()
         {
+            ClassDef.ClassDefs.Clear();
+            _loader = new XmlClassLoader();
+            _classDef = MyBO.LoadClassDefWithLookup();
+            OrderItem.LoadDefaultClassDef();
+
             TransactionCommitterStub committer = new TransactionCommitterStub();
 			itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
 			itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
-            itsCollection = new BusinessObjectCollection<BusinessObject>(itsClassDef);
-            itsBo1 = itsClassDef.CreateNewBusinessObject(itsConnection);
+            _collection = new BusinessObjectCollection<BusinessObject>(_classDef);
+            itsBo1 = _classDef.CreateNewBusinessObject(itsConnection);
             itsBo1.SetPropertyValue("TestProp", "bo1prop1");
             itsBo1.SetPropertyValue("TestProp2", "s1");
-            itsCollection.Add(itsBo1);
-            itsBo2 = itsClassDef.CreateNewBusinessObject(itsConnection);
+            _collection.Add(itsBo1);
+            itsBo2 = _classDef.CreateNewBusinessObject(itsConnection);
             itsBo2.SetPropertyValue("TestProp", "bo2prop1");
             itsBo2.SetPropertyValue("TestProp2", "s2");
-            itsCollection.Add(itsBo2);
+            _collection.Add(itsBo2);
         	SetupSaveExpectation();
             committer.AddBusinessObject(itsBo1);
             committer.CommitTransaction();
             //itsBo1.Save();
             //itsBo1.Save();
-            itsProvider = CreateDataSetProvider(itsCollection);
-            BOMapper mapper = new BOMapper((BusinessObject) itsCollection.SampleBo);
-            itsTable = itsProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
+            _dataSetProvider = CreateDataSetProvider(_collection);
+            BOMapper mapper = new BOMapper((BusinessObject) _collection.SampleBo);
+            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
             itsDatabaseConnectionMockControl.Verify();
         }
 
         [TearDown]
         public void TearDown()
         {
-            OrderItem.ClearTable();
+//            OrderItem.ClearTable();
         }
 
-        protected abstract IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col);
+        protected abstract IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col);
 
 		protected void SetupSaveExpectation()
 		{
@@ -113,18 +113,21 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCorrectNumberOfRows()
         {
+            SetupTest();
             Assert.AreEqual(2, itsTable.Rows.Count);
         }
 
         [Test]
         public void TestCorrectNumberOfColumns()
         {
+            SetupTest();
             Assert.AreEqual(3, itsTable.Columns.Count);
         }
 
         [Test]
         public void TestCorrectColumnNames()
         {
+            SetupTest();
             Assert.AreEqual("ID", itsTable.Columns[0].Caption);
             Assert.AreEqual("ID", itsTable.Columns[0].ColumnName);
 
@@ -137,6 +140,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCorrectRowValues()
         {
+            SetupTest();
             DataRow row1 = itsTable.Rows[0];
             DataRow row2 = itsTable.Rows[1];
             Assert.AreEqual("bo1prop1", row1["TestProp"]);
@@ -149,10 +153,36 @@ namespace Habanero.Test.BO
         [Test]
         public void TestLookupListPopulated()
         {
+            SetupTest();
             Object prop = itsTable.Columns["TestProp2"].ExtendedProperties["LookupList"];
             Assert.AreSame(typeof (SimpleLookupList), prop.GetType());
         }
 
+        [Test]
+        public void TestDateTimeColumnType()
+        {
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+//            IDataGridViewColumn column;
+//            string requiredFormat = "dd.MMM.yyyy";
+//            IGridBase gridBase = CreateGridBaseWithDateCustomFormatCol(out column, requiredFormat);
+            BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            MyBO bo = new MyBO();
+            string dateTimeProp = "TestDateTime";
+            DateTime expectedDate = DateTime.Now;
+            bo.SetPropertyValue(dateTimeProp, expectedDate);
+
+            col.Add(bo);
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(col);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            DataTable dataTable = dataSetProvider.GetDataTable(bo.ClassDef.GetUIDef("default").UIGrid);
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(DateTime), dataTable.Columns[dateTimeProp].DataType);
+            Assert.IsInstanceOfType(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
+            //---------------Tear Down -------------------------          
+        }
 
         //		[Test]
         //		public void TestUpdateBusinessObjectUpdatesRow() {

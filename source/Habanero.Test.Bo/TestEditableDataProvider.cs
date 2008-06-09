@@ -20,6 +20,7 @@
 using System.Data;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -30,14 +31,15 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestEditableDataProvider : TestDataSetProvider
     {
-        protected override IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col)
+        protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
-            return new EditableDataSetProvider(itsCollection);
+            return new EditableDataSetProvider(col);
         }
 		
         [Test]
         public void TestUpdateRowUpdatesBusinessObject()
         {
+            SetupTest();
             itsTable.Rows[0]["TestProp"] = "bo1prop1updated";
             Assert.AreEqual("bo1prop1updated", itsBo1.GetPropertyValue("TestProp"));
         }
@@ -45,6 +47,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAcceptChangesSavesBusinessObjects()
         {
+            SetupTest();
         	SetupSaveExpectation();
 			itsTable.Rows[0]["TestProp"] = "bo1prop1updated";
             itsTable.AcceptChanges();
@@ -53,6 +56,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAddRowCreatesBusinessObjectThroughCollection()
         {
+            SetupTest();
             //---------------Set up test pack-------------------
             BusinessObjectCollection<MyBO> boCollection = new BusinessObjectCollection<MyBO>();
             MyBO bo = new MyBO();
@@ -65,9 +69,9 @@ namespace Habanero.Test.BO
             bo2.SetPropertyValue("TestProp2", "s2");
             boCollection.Add(bo2);
 
-            itsProvider = new EditableDataSetProvider(boCollection);
+            _dataSetProvider = new EditableDataSetProvider(boCollection);
             BOMapper mapper = new BOMapper((BusinessObject)boCollection.SampleBo);
-            itsTable = itsProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
+            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().GetUIGridProperties());
 
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(2, boCollection.Count);
@@ -84,10 +88,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestDeleteRowMarksBOAsDeleted()
         {
+            SetupTest();
             itsTable.Rows[0].Delete();
-            Assert.AreEqual(2, itsCollection.Count, "Deleting a row shouldn't remove any Bo's from the collection.");
+            Assert.AreEqual(2, _collection.Count, "Deleting a row shouldn't remove any Bo's from the collection.");
             int numDeleted = 0;
-            foreach (BusinessObject businessObjectBase in itsCollection)
+            foreach (BusinessObject businessObjectBase in _collection)
             {
                 if (businessObjectBase.State.IsDeleted)
                 {
@@ -100,8 +105,9 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAcceptChangesSavesNewBusinessObjects()
         {
+            SetupTest();
         	SetupSaveExpectation();
-        	((EditableDataSetProvider) itsProvider).Connection = itsConnection;
+        	((EditableDataSetProvider) _dataSetProvider).Connection = itsConnection;
             itsTable.Rows.Add(new object[] {null, "bo3prop1", "bo3prop2"});
             itsTable.AcceptChanges();
         }
@@ -110,6 +116,7 @@ namespace Habanero.Test.BO
     	[Test]
         public void TestDeleteRowDeletesBOOnSave()
         {
+            SetupTest();
 			SetupSaveExpectation();
 
             itsTable.AcceptChanges();
@@ -120,6 +127,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestRevertChangesRevertsBoValues()
         {
+            SetupTest();
             itsTable.Rows[0]["TestProp"] = "bo1prop1updated";
             itsTable.RejectChanges();
             Assert.AreEqual("bo1prop1", itsBo1.GetPropertyValue("TestProp"));
@@ -133,41 +141,46 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAddBOToCollectionAddsRow()
         {
-            BusinessObject newBo = itsClassDef.CreateNewBusinessObject(itsConnection);
-            itsCollection.Add(newBo);
+            SetupTest();
+            BusinessObject newBo = _classDef.CreateNewBusinessObject(itsConnection);
+            _collection.Add(newBo);
             Assert.AreEqual(3, itsTable.Rows.Count);
         }
 
         [Test]
         public void TestAddBOToCollectionAddsCorrectValues()
         {
-            BusinessObject newBo = itsClassDef.CreateNewBusinessObject(itsConnection);
+            SetupTest();
+            BusinessObject newBo = _classDef.CreateNewBusinessObject(itsConnection);
             newBo.SetPropertyValue("TestProp", "TestVal");
-            itsCollection.Add(newBo);
+            _collection.Add(newBo);
             Assert.AreEqual("TestVal", itsTable.Rows[2][1]);
         }
 
         [Test, ExpectedException(typeof(DuplicateNameException))]
         public void TestDuplicateColumnNames()
         {
-            BOMapper mapper = new BOMapper((BusinessObject) itsCollection.SampleBo);
-            itsTable = itsProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").GetUIGridProperties());
+            SetupTest();
+            BOMapper mapper = new BOMapper((BusinessObject) _collection.SampleBo);
+            itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef("duplicateColumns").GetUIGridProperties());
         }
 
         [Test]
         public void TestFind()
         {
-            IBusinessObject bo = ((EditableDataSetProvider) itsProvider).Find(0);
-            Assert.AreEqual(itsCollection[0], bo);
+            SetupTest();
+            IBusinessObject bo = ((EditableDataSetProvider) _dataSetProvider).Find(0);
+            Assert.AreEqual(_collection[0], bo);
 
             MyBO unlistedBO = new MyBO();
-            Assert.AreEqual(-1, ((EditableDataSetProvider) itsProvider).FindRow(unlistedBO));
+            Assert.AreEqual(-1, ((EditableDataSetProvider) _dataSetProvider).FindRow(unlistedBO));
         }
 
         [Test]
         public void TestGetConnection()
         {
-            Assert.IsNull(((EditableDataSetProvider) itsProvider).Connection);
+            SetupTest();
+            Assert.IsNull(((EditableDataSetProvider) _dataSetProvider).Connection);
         }
     }
 }

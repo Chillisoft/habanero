@@ -144,7 +144,8 @@ namespace Habanero.UI.Base
                 col.DataPropertyName = gridColDef.PropertyName;
                 col.Visible = true;
                 col.Width = gridColDef.Width;
-                
+//
+//                col.DefaultCellStyle.Format = "dd.MMM.yyyy";
                 col.SortMode = DataGridViewColumnSortMode.Automatic;
                 PropDef propDef = GetPropDef(classDef, gridColDef);
                 if (propDef != null) col.ValueType = propDef.PropertyType;

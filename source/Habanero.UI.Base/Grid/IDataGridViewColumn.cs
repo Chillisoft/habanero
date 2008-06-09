@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Drawing.Design;
+using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.Base
 {
@@ -17,13 +18,7 @@ namespace Habanero.UI.Base
         /// <summary>Gets or sets the name of the data source property or database column to which the <see cref="IDataGridViewColumn"></see> is bound.</summary>
         /// <returns>The name of the property or database column associated with the <see cref="IDataGridViewColumn"></see>.</returns>
         /// <filterpriority>1</filterpriority>
-        //Editor(
-        //    "Gizmox.WebGUI.Forms.Design.DataGridViewColumnDataPropertyNameEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-        //    , typeof (UITypeEditor)), Gizmox.WebGUI.Forms.SRDescription("DataGridView_ColumnDataPropertyNameDescr"),
-        //DefaultValue(""),
-        //TypeConverter(
-        //    "IForms.Design.DataMemberFieldConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-        //    ), Browsable(true)]
+        [DefaultValue(""),TypeConverter("IForms.Design.DataMemberFieldConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), Browsable(true)]
         string DataPropertyName { get; set; }
 
         /// <summary>Gets or sets the caption text on the column's header cell.</summary>
@@ -73,5 +68,11 @@ namespace Habanero.UI.Base
         /// <summary>Gets or sets a value indicating whether the column is visible.</summary>
         /// <returns>true if the column is visible; otherwise, false.</returns>
         bool Visible { get; set; }
+
+        /// <summary>Gets or sets the column's default cell style.</summary>
+        /// <returns>A <see cref="IDataGridViewCellStyle"></see> that represents the default style of the cells in the column.</returns>
+        /// <filterpriority>1</filterpriority>
+        [Browsable(true)]
+        IDataGridViewCellStyle DefaultCellStyle { get; set; }
     }
 }

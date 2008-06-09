@@ -409,7 +409,8 @@ namespace Habanero.UI.Base
         {
             if (field.GetParameterValue("alignment") != null)
             {
-                //TODO_Port
+                //TODO_Port needs to be tested.
+
                 //string alignmentParam = field.GetParameterValue("alignment").ToString().ToLower().Trim();
                 //Gizmox.WebGUI.Forms.HorizontalAlignment alignment;
                 //if (alignmentParam == "left") alignment = Gizmox.WebGUI.Forms.HorizontalAlignment.Left;

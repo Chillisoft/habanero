@@ -29,14 +29,15 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestReadOnlyDataSetProvider : TestDataSetProvider
     {
-        protected override IDataSetProvider CreateDataSetProvider(BusinessObjectCollection<BusinessObject> col)
+        protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
         {
-            return new ReadOnlyDataSetProvider(itsCollection);
+            return new ReadOnlyDataSetProvider(col);
         }
 
         [Test]
         public void TestUpdateBusinessObjectUpdatesRow()
         {
+            SetupTest();
             itsBo1.SetPropertyValue("TestProp", "UpdatedValue");
             Assert.AreEqual("UpdatedValue", itsTable.Rows[0][1]);
         }
@@ -44,10 +45,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAddBusinessObjectAddsRow()
         {
-            BusinessObject bo3 = itsClassDef.CreateNewBusinessObject(itsConnection);
+            SetupTest();
+            BusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
             bo3.SetPropertyValue("TestProp2", "s1");
-            itsCollection.Add(bo3);
+            _collection.Add(bo3);
             Assert.AreEqual(3, itsTable.Rows.Count);
             Assert.AreEqual("bo3prop1", itsTable.Rows[2][1]);
         }
@@ -55,10 +57,11 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAddBusinessObjectAndUpdateUpdatesNewRow()
         {
-            BusinessObject bo3 = itsClassDef.CreateNewBusinessObject(itsConnection);
+            SetupTest();
+            BusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
             bo3.SetPropertyValue("TestProp2", "s2");
-            itsCollection.Add(bo3);
+            _collection.Add(bo3);
             bo3.SetPropertyValue("TestProp", "UpdatedValue");
             Assert.AreEqual("UpdatedValue", itsTable.Rows[2][1]);
         }
@@ -66,13 +69,15 @@ namespace Habanero.Test.BO
         [Test]
         public void TestRemoveBusinessObjectRemovesRow()
         {
-            itsCollection.Remove(itsBo1);
+            SetupTest();
+            _collection.Remove(itsBo1);
             Assert.AreEqual(1, itsTable.Rows.Count);
         }
 
         [Test]
         public void TestOrderItemAddAndFindBO()
         {
+            SetupTest();
             OrderItem car = OrderItem.AddOrder1Car();
             OrderItem chair = OrderItem.AddOrder2Chair();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
@@ -114,6 +119,8 @@ namespace Habanero.Test.BO
         [Test]
         public void TestOrderItemRemove()
         {
+            SetupTest();
+            OrderItem.ClearTable();
             OrderItem.AddOrder1Car();
             OrderItem chair = OrderItem.AddOrder2Chair();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
@@ -144,6 +151,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestOrderItemChangeItemAndFind()
         {
+            SetupTest();
             BOLoader.Instance.ClearLoadedBusinessObjects();
             OrderItem.ClearLoadedBusinessObjectBaseCol();
             OrderItem.ClearTable();

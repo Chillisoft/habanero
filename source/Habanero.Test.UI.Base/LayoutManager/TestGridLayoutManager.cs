@@ -17,7 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using System.Collections;
+using Habanero.Base.Exceptions;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
@@ -28,7 +30,7 @@ namespace Habanero.Test.UI.Base
     public abstract class TestGridLayoutManager
     {
         private IControlChilli _ctl;
-        private GridLayoutManager manager;
+        private GridLayoutManager _manager;
 
         protected abstract IControlFactory GetControlFactory();
 
@@ -61,15 +63,15 @@ namespace Habanero.Test.UI.Base
             _ctl = GetControlFactory().CreateControl();
             _ctl.Width = 74;
             _ctl.Height = 72;
-            manager = new GridLayoutManager(_ctl, GetControlFactory());
-            manager.SetGridSize(2, 3);
-            manager.GapSize = 2;
+            _manager = new GridLayoutManager(_ctl, GetControlFactory());
+            _manager.SetGridSize(2, 3);
+            _manager.GapSize = 2;
         }
 
         [Test]
         public void TestAddNullControl()
         {
-            manager.AddControl(null);
+            _manager.AddControl(null);
         }
 
         [Test]
@@ -80,7 +82,7 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
 
             //---------------Test Result -----------------------
-            Assert.AreSame(_ctl, manager.ManagedControl, "ManagedControl should return same object.");
+            Assert.AreSame(_ctl, _manager.ManagedControl, "ManagedControl should return same object.");
         }
 
         [Test]
@@ -91,8 +93,8 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
 
             //---------------Test Result -----------------------
-            Assert.AreEqual(2, manager.Rows.Count, "count of rows should be two after setting grid size");
-            Assert.AreEqual(3, manager.Columns.Count, "count of cols should be 3 after setting grid size");
+            Assert.AreEqual(2, _manager.Rows.Count, "count of rows should be two after setting grid size");
+            Assert.AreEqual(3, _manager.Columns.Count, "count of cols should be 3 after setting grid size");
         }
 
         [Test]
@@ -102,11 +104,11 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
+            _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
-            Assert.AreSame(ctl1, ((IList) manager.Rows[0])[0],
+            Assert.AreSame(ctl1, ((IList) _manager.Rows[0])[0],
                            "Control at position zero of row zero should be same as one first added");
-            Assert.AreSame(ctl1, ((IList)manager.Columns[0])[0],
+            Assert.AreSame(ctl1, ((IList)_manager.Columns[0])[0],
                            "Control at position zero of column zero should be same as one first added");
         }
 
@@ -118,18 +120,18 @@ namespace Habanero.Test.UI.Base
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             IControlChilli ctl2 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(GetControlFactory().CreateControl());
-            manager.AddControl(GetControlFactory().CreateControl());
-            manager.AddControl(ctl1);
-            manager.AddControl(ctl2);
+            _manager.AddControl(GetControlFactory().CreateControl());
+            _manager.AddControl(GetControlFactory().CreateControl());
+            _manager.AddControl(ctl1);
+            _manager.AddControl(ctl2);
             //---------------Test Result -----------------------
-            Assert.AreSame(ctl1, ((IList)manager.Rows[0])[2],
+            Assert.AreSame(ctl1, ((IList)_manager.Rows[0])[2],
                            "Control at position 2 of row 0 should be third control added.");
-            Assert.AreSame(ctl2, ((IList)manager.Rows[1])[0],
+            Assert.AreSame(ctl2, ((IList)_manager.Rows[1])[0],
                            "Control at pos 0 of row 1 should be fourth control added.");
-            Assert.AreSame(ctl1, ((IList)manager.Columns[2])[0],
+            Assert.AreSame(ctl1, ((IList)_manager.Columns[2])[0],
                            "Control at pos 0 of col 2 should be third control added.");
-            Assert.AreSame(ctl2, ((IList)manager.Columns[0])[1],
+            Assert.AreSame(ctl2, ((IList)_manager.Columns[0])[1],
                            "Control as pos 1 of col 0 should be fourth control added.");
         }
 
@@ -140,7 +142,7 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
+            _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
             Assert.AreEqual(5, ctl1.Left, "Left of control should be 5 due to default border.");
             Assert.AreEqual(5, ctl1.Top, "Top of control should be 5 due to default border");
@@ -156,8 +158,8 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(GetControlFactory().CreateControl());
-            manager.AddControl(ctl1);
+            _manager.AddControl(GetControlFactory().CreateControl());
+            _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
             Assert.AreEqual(27, ctl1.Left, "Left of control should be 27 : border + 1 control width + gap.");
         }
@@ -167,10 +169,10 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            manager.ManagedControl.Width = 104;
+            _manager.ManagedControl.Width = 104;
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
+            _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
             Assert.AreEqual(30, ctl1.Width,
                             "Width of control should be 30 (parent control width - (2*border) - (2*gap) / 3");
@@ -181,10 +183,10 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            manager.ManagedControl.Height = 42;
+            _manager.ManagedControl.Height = 42;
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
+            _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
             Assert.AreEqual(15, ctl1.Height,
                             "Height of control should be 15 (parent control height - (2*border) - (gap)) / 2");
@@ -195,10 +197,10 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             SetupControlAndGridLayout();
-            manager.SetGridSize(3, 2);
+            _manager.SetGridSize(3, 2);
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
+            _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
             Assert.AreEqual(19, ctl1.Height, "Height of control should depend on number of rows in grid.");
             Assert.AreEqual(31, ctl1.Width, "Width of control should depend on number of cols in grid.");
@@ -211,11 +213,11 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(GetControlFactory().CreateControl());
-            manager.AddControl(GetControlFactory().CreateControl());
-            manager.AddControl(GetControlFactory().CreateControl());
+            _manager.AddControl(GetControlFactory().CreateControl());
+            _manager.AddControl(GetControlFactory().CreateControl());
+            _manager.AddControl(GetControlFactory().CreateControl());
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
+            _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
             Assert.AreEqual(37, ctl1.Top,
                             "Control should be in second row.  Top should be 37 : border + 1 control height + gap.");
@@ -230,9 +232,9 @@ namespace Habanero.Test.UI.Base
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             IControlChilli ctl2 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.FixColumn(1, 30);
-            manager.AddControl(ctl1);
-            manager.AddControl(ctl2);
+            _manager.FixColumn(1, 30);
+            _manager.AddControl(ctl1);
+            _manager.AddControl(ctl2);
             //---------------Test Result -----------------------
             Assert.AreEqual(30, ctl2.Width, "Column is fixed at 30.");
             Assert.AreEqual(15, ctl1.Width, "Fixed column should change the size of the other columns.");
@@ -246,11 +248,11 @@ namespace Habanero.Test.UI.Base
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             IControlChilli ctl2 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.FixRow(1, 20);
-            manager.AddControl(ctl1);
-            manager.AddControl(GetControlFactory().CreateControl());
-            manager.AddControl(GetControlFactory().CreateControl());
-            manager.AddControl(ctl2);
+            _manager.FixRow(1, 20);
+            _manager.AddControl(ctl1);
+            _manager.AddControl(GetControlFactory().CreateControl());
+            _manager.AddControl(GetControlFactory().CreateControl());
+            _manager.AddControl(ctl2);
             //---------------Test Result -----------------------
             Assert.AreEqual(20, ctl2.Height, "Row is Fixed at 20");
             Assert.AreEqual(40, ctl1.Height, "Fixed row should change the size of other rows");
@@ -263,8 +265,8 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.GapSize = 3;
-            manager.AddControl(ctl1);
+            _manager.GapSize = 3;
+            _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
             Assert.AreEqual(19, ctl1.Width, "Gap size should affect size of controls.");
         }
@@ -276,8 +278,8 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
-            manager.GapSize = 3;
+            _manager.AddControl(ctl1);
+            _manager.GapSize = 3;
             //---------------Test Result -----------------------
             Assert.AreEqual(19, ctl1.Width, "Setting Gap size should refresh controls.");
         }
@@ -289,8 +291,8 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.BorderSize = 8;
-            manager.AddControl(ctl1);
+            _manager.BorderSize = 8;
+            _manager.AddControl(ctl1);
             //---------------Test Result -----------------------
             Assert.AreEqual(18, ctl1.Width, "Border size should affect size of controls.");
         }
@@ -302,8 +304,8 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
-            manager.BorderSize = 8;
+            _manager.AddControl(ctl1);
+            _manager.BorderSize = 8;
             //---------------Test Result -----------------------
             Assert.AreEqual(18, ctl1.Width, "Setting border size should refresh controls.");
         }
@@ -315,7 +317,7 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
+            _manager.AddControl(ctl1);
             _ctl.Width = 104;
             //---------------Test Result -----------------------
             Assert.AreEqual(30, ctl1.Width, "Changing size of managed control should cause refresh.");
@@ -328,9 +330,9 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(GetControlFactory().CreateControl());
-            manager.AddControl(ctl1);
-            manager.FixColumn(1, 25);
+            _manager.AddControl(GetControlFactory().CreateControl());
+            _manager.AddControl(ctl1);
+            _manager.FixColumn(1, 25);
             //---------------Test Result -----------------------
             Assert.AreEqual(25, ctl1.Width, "FixColumn should cause refresh.");
         }
@@ -342,8 +344,8 @@ namespace Habanero.Test.UI.Base
             SetupControlAndGridLayout();
             IControlChilli ctl1 = GetControlFactory().CreateControl();
             //---------------Execute Test ----------------------
-            manager.AddControl(ctl1);
-            manager.FixRow(0, 10);
+            _manager.AddControl(ctl1);
+            _manager.FixRow(0, 10);
             //---------------Test Result -----------------------
             Assert.AreEqual(10, ctl1.Height, "FixRow should cause refresh.");
         }
@@ -353,17 +355,17 @@ namespace Habanero.Test.UI.Base
         {
             //----------------------Setup ------------------------------
             ILabel myLabel = GetControlFactory().CreateLabel("test", false);
-            manager.FixColumnBasedOnContents(0);
+            _manager.FixColumnBasedOnContents(0);
             ILabel myLongLabel = GetControlFactory().CreateLabel("This is a long label", false);
             //--------------------- verify setup -----------------------
             Assert.AreEqual(myLabel.PreferredWidth, myLabel.Width);
             Assert.AreEqual(myLongLabel.PreferredWidth, myLongLabel.Width);
 
             //--------------------- Execute Tests-----------------------
-            manager.AddControl(myLabel);
-            manager.AddControl(null);
-            manager.AddControl(null);
-            manager.AddControl(myLongLabel);
+            _manager.AddControl(myLabel);
+            _manager.AddControl(null);
+            _manager.AddControl(null);
+            _manager.AddControl(myLongLabel);
             //--------------------- Verify results-----------------------
             Assert.AreEqual(myLongLabel.PreferredWidth, myLabel.Width,
                             "Width of column should be preferred width (or width) of largest control");
@@ -383,12 +385,12 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(control2Height, ctl2.Height);
 
             //--------------------- Execute Tests-----------------------
-            manager.FixAllRowsBasedOnContents();
-            manager.AddControl(ctl1);
-            manager.AddControl(null);
-            manager.AddControl(null);
-            manager.AddControl(null);
-            manager.AddControl(ctl2);
+            _manager.FixAllRowsBasedOnContents();
+            _manager.AddControl(ctl1);
+            _manager.AddControl(null);
+            _manager.AddControl(null);
+            _manager.AddControl(null);
+            _manager.AddControl(ctl2);
             //--------------------- Verify results-----------------------
             Assert.AreEqual(control1Height, ctl1.Height, "Height should remain the same if we FixRowsBasedOnContents");
             Assert.AreEqual(control2Height, ctl2.Height, "Height should remain the same if we FixRowsBasedOnContents");
@@ -404,8 +406,8 @@ namespace Habanero.Test.UI.Base
             ctl1.Height = 30;
             IControlChilli ctl2 = GetControlFactory().CreateControl();
             //--------------------- Execute Tests-----------------------
-            manager.AddControl(ctl1, 1, 2);
-            manager.AddControl(ctl2);
+            _manager.AddControl(ctl1, 1, 2);
+            _manager.AddControl(ctl2);
             //--------------------- Verify results-----------------------
             Assert.AreEqual(5, ctl1.Left);
             Assert.AreEqual(42, ctl1.Width);
@@ -421,8 +423,8 @@ namespace Habanero.Test.UI.Base
             ctl1.Height = 30;
             IControlChilli ctl2 = GetControlFactory().CreateControl();
             //--------------------- Execute Tests-----------------------
-            manager.AddControl(ctl1);
-            manager.AddControl(ctl2, 1, 2);
+            _manager.AddControl(ctl1);
+            _manager.AddControl(ctl2, 1, 2);
             //--------------------- Verify results-----------------------
             Assert.AreEqual(5, ctl1.Left);
             Assert.AreEqual(20, ctl1.Width);
@@ -443,7 +445,7 @@ namespace Habanero.Test.UI.Base
             AssertControlsDimensions(control1Height, controlInitialWidth, controlInitialLeft, ctl1);
             //--------------------- Execute Tests-----------------------
 
-            manager.AddControl(ctl1, 1, 3);
+            _manager.AddControl(ctl1, 1, 3);
             //--------------------- Verify results-----------------------
             int borderWidth = 5;
             Assert.AreEqual(borderWidth, ctl1.Left);
@@ -455,7 +457,7 @@ namespace Habanero.Test.UI.Base
         {
             IControlChilli ctl1 = CreateControl(10, 11, -5);
 
-            manager.AddControl(ctl1, 2, 1);
+            _manager.AddControl(ctl1, 2, 1);
 
             Assert.AreEqual(5, ctl1.Top);
             Assert.AreEqual(62, ctl1.Height);
@@ -472,12 +474,62 @@ namespace Habanero.Test.UI.Base
         {
             IControlChilli ctl1 = CreateControl(10, 11, -5,-5);
 
-            manager.AddControl(ctl1, 2, 3);
+            _manager.AddControl(ctl1, 2, 3);
 
             Assert.AreEqual(5, ctl1.Top);
             Assert.AreEqual(62, ctl1.Height);
             Assert.AreEqual(5, ctl1.Left);
             Assert.AreEqual(64, ctl1.Width);
+        }
+
+        [Test]
+        public void TestTooManyRows()
+        {
+            //---------------Set up test pack-------------------
+            IControlChilli ctl1 = CreateControl(10, 11, -5, -5);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ctl1, GetControlFactory());
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            gridLayoutManager.SetGridSize(1, 1);
+            gridLayoutManager.AddControl(GetControlFactory().CreateTextBox());
+            try
+            {
+                gridLayoutManager.AddControl(GetControlFactory().CreateTextBox());
+                Assert.Fail("err expected");
+            }
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("You cannot add a control to the grid layout manager since it exceeds the grids size of '1' row and '1' column", ex.Message);
+            }
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestTooManyRows_2Rows()
+        {
+            //---------------Set up test pack-------------------
+            IControlChilli ctl1 = CreateControl(10, 11, -5, -5);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ctl1, GetControlFactory());
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            gridLayoutManager.SetGridSize(2, 1);
+            gridLayoutManager.AddControl(GetControlFactory().CreateTextBox());
+            gridLayoutManager.AddControl(GetControlFactory().CreateTextBox());
+            try
+            {
+                gridLayoutManager.AddControl(GetControlFactory().CreateTextBox());
+                Assert.Fail("err expected");
+            }
+            catch (HabaneroDeveloperException ex)
+            {
+                StringAssert.Contains("You cannot add a control to the grid layout manager since it exceeds the grids size of '2' row and '1' column", ex.Message);
+            }
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------          
         }
 
         private IControlChilli CreateControl(int height)
