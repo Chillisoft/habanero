@@ -20,22 +20,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Provides a collection of property definitions.
     /// </summary>
-    public class PropDefCol : IEnumerable<PropDef>
+    public class PropDefCol : IEnumerable<IPropDef>
     {
-        private Dictionary<string, PropDef> _propDefs;
+        private Dictionary<string, IPropDef> _propDefs;
 
         /// <summary>
         /// A constructor to create a new empty collection
         /// </summary>
         public PropDefCol()
         {
-            _propDefs = new Dictionary<string, PropDef>();
+            _propDefs = new Dictionary<string, IPropDef>();
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace Habanero.BO.ClassDefinition
         /// <exception cref="ArgumentException">Thrown if the propertyName is not
         /// found. If you are checking for the existence of a propertyName, use the
         /// Contains() method.</exception>
-        public PropDef this[string propertyName]
+        public IPropDef this[string propertyName]
         {
             get
             {
@@ -150,7 +151,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="propDef">The Property definition to search for</param>
         /// <returns>Returns true if found, false if not</returns>
-        public bool Contains(PropDef propDef)
+        public bool Contains(IPropDef propDef)
         {
             return (_propDefs.ContainsValue(propDef));
         }
@@ -219,7 +220,7 @@ namespace Habanero.BO.ClassDefinition
 
 		#region IEnumerable<PropDef> Members
 
-		IEnumerator<PropDef> IEnumerable<PropDef>.GetEnumerator()
+		IEnumerator<IPropDef> IEnumerable<IPropDef>.GetEnumerator()
 		{
 			return _propDefs.Values.GetEnumerator();
 		}

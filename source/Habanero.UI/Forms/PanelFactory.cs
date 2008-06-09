@@ -195,7 +195,7 @@ namespace Habanero.UI.Forms
                     bool isCompulsory = false;
                     ClassDef classDef = _currentBusinessObject.ClassDef;
                     //PropDef propDef = classDef.GetPropDef(field.PropertyName, false);
-                    PropDef propDef = field.GetPropDefIfExists(classDef);
+                    IPropDef propDef = field.GetPropDefIfExists(classDef);
                     if (propDef != null)
                     {
                         isCompulsory = propDef.Compulsory;
@@ -208,7 +208,7 @@ namespace Habanero.UI.Forms
                     BOPropCol boPropCol = _currentBusinessObject.Props;
                     if (boPropCol.Contains(field.PropertyName))
                     {
-                        BOProp boProp = boPropCol[field.PropertyName];
+                        IBOProp boProp = boPropCol[field.PropertyName];
                         if (!boProp.HasDisplayName())
                         {
                             boProp.DisplayName = labelCaption;

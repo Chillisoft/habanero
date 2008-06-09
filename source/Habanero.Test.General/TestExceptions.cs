@@ -60,13 +60,15 @@ namespace Habanero.Test.General
                     "InvalidXmlDefinitionException",
                     "UserException",
                     "CannotSaveException",
-                    "UnknownTypeNameException"
+                    "UnknownTypeNameException",
+                    "InvalidPropertyException",
+                     "InvalidPropertyNameException"
                 };
 
             string[] boExceptions =
                 {
-                    "InvalidPropertyException",
-                    "InvalidPropertyNameException",
+                    
+                   
                     "InvalidPropertyValueException",
                     "InvalidRelationshipAccessException",
                     "RelationshipNotFoundException",

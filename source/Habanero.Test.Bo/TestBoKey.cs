@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -72,7 +73,7 @@ namespace Habanero.Test.BO
         {
             //Set values for Key1
             BOKey lBOKey1 = _keyDef1.CreateBOKey(_boPropCol1);
-            BOProp lProp = _boPropCol1["PropName"];
+            IBOProp lProp = _boPropCol1["PropName"];
             lProp.Value = "Prop Value";
 
             lProp = _boPropCol1["PropName1"];
@@ -96,7 +97,7 @@ namespace Habanero.Test.BO
         public void TestSortedValues()
         {
             BOKey lBOKey1 = _keyDef1.CreateBOKey(_boPropCol2);
-            BOProp lProp = _boPropCol2["PropName"];
+            IBOProp lProp = _boPropCol2["PropName"];
             Assert.AreSame(lProp, lBOKey1.SortedValues[0]);
         }
 
@@ -104,14 +105,14 @@ namespace Habanero.Test.BO
         public void TestIndexerPropertyNotFound()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
-            BOProp prop = boKey["invalidpropname"];
+            IBOProp prop = boKey["invalidpropname"];
         }
 
         [Test, ExpectedException(typeof(IndexOutOfRangeException))]
         public void TestIndexerIntegerOutOfRange()
         {
             BOKey boKey = _keyDef1.CreateBOKey(_boPropCol1);
-            BOProp prop = boKey[2];
+            IBOProp prop = boKey[2];
         }
 
         [Test, ExpectedException(typeof(HabaneroArgumentException))]

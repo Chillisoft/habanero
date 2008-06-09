@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -32,7 +33,7 @@ namespace Habanero.BO
     /// </summary>
     public class BOObjectID : BOPrimaryKey
     {
-        protected BOProp _objectIDProp;
+        protected IBOProp _objectIDProp;
 
         /// <summary>
         /// Constructor to initialise a new ObjectID
@@ -51,7 +52,7 @@ namespace Habanero.BO
         /// Adds a property to the key
         /// </summary>
         /// <param name="BOProp">The property to add</param>
-        internal override void Add(BOProp BOProp)
+        internal override void Add(IBOProp BOProp)
         {
             if (Count > 0)
             {
@@ -71,7 +72,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the objectID's property
         /// </summary>
-        protected BOProp ObjectIDProp
+        protected IBOProp ObjectIDProp
         {
             get
             {
@@ -91,7 +92,7 @@ namespace Habanero.BO
         /// Sets the objectID
         /// </summary>
         /// <param name="id">The Guid ID to set to</param>
-        internal override void SetObjectID(Guid id)
+        public override void SetObjectID(Guid id)
         {
             //If the object id is not already set then set it.
             if (ObjectIDProp != null)
@@ -134,7 +135,7 @@ namespace Habanero.BO
         /// Returns an empty string
         /// </summary>
         /// <returns>Returns an empty string</returns>
-        internal override string GetOrigObjectID()
+        public override string GetOrigObjectID()
         {
             return "";
         }

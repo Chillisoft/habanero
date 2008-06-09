@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -50,7 +51,7 @@ namespace Habanero.Test.BO
             _propDefCol = _mockBo.PropDefCol;
 
             _RelKeyDef = new RelKeyDef();
-            PropDef propDef = _propDefCol["MockBOID"];
+            IPropDef propDef = _propDefCol["MockBOID"];
 
             RelPropDef relPropDef = new RelPropDef(propDef, "MockBOProp1");
             _RelKeyDef.Add(relPropDef);

@@ -60,7 +60,7 @@ namespace Habanero.BO
         protected ClassDef _classDef;
         protected BOPropCol _boPropCol;
         protected BOKeyCol _keysCol;
-        protected BOPrimaryKey _primaryKey;
+        protected IPrimaryKey _primaryKey;
         protected IRelationshipCol _relationshipCol;
         protected IConcurrencyControl _concurrencyControl;
         private ITransactional _transactionLog;
@@ -134,7 +134,7 @@ namespace Habanero.BO
         /// Constructor that specifies a primary key ID
         /// </summary>
         /// <param name="id">The primary key ID</param>
-        protected BusinessObject(BOPrimaryKey id) : this(id, null)
+        protected BusinessObject(IPrimaryKey id) : this(id, null)
         {
         }
 
@@ -143,7 +143,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id">The primary key ID</param>
         /// <param name="conn">A database connection</param>
-        protected BusinessObject(BOPrimaryKey id, IDatabaseConnection conn)
+        protected BusinessObject(IPrimaryKey id, IDatabaseConnection conn)
         {
             //todo: Check if not already loaded in object manager if already loaded raise error
             //TODO: think about moving these to after load
@@ -353,7 +353,7 @@ namespace Habanero.BO
         /// with the values held for that key in this object.  This is a possible situation
         /// in some forms of inheritance.
         /// </summary>
-        public BOPrimaryKey ID
+        public IPrimaryKey ID
         {
             get
             {
@@ -613,7 +613,7 @@ namespace Habanero.BO
                     if (pair.Value is IBusinessObject)
                     {
                         BusinessObject bo = (BusinessObject) pair.Value;
-                        if (bo._primaryKey.GetGuid().Equals(myGuid))
+                        if (bo._primaryKey.GetAsGuid().Equals(myGuid))
                         {
                             return pair.Key;
                         }
@@ -718,7 +718,7 @@ namespace Habanero.BO
         /// <param name="newPropValue">The new value to set to</param>
         public void SetPropertyValue(string propName, object newPropValue)
         {
-            BOProp prop = Props[propName];
+            IBOProp prop = Props[propName];
             if (prop == null)
             {
                 throw new InvalidPropertyNameException(String.Format(
@@ -754,7 +754,7 @@ namespace Habanero.BO
                             }
                             if (newPropValue is IBusinessObject)
                             {
-                                newPropValue = ((BusinessObject) (newPropValue))._primaryKey.GetGuid();
+                                newPropValue = ((BusinessObject)(newPropValue))._primaryKey.GetAsGuid();
                             }
                         }
                     }
@@ -778,7 +778,7 @@ namespace Habanero.BO
             if (newPropValue is IBusinessObject)
             {
                 if (prop.PropertyType == typeof (Guid))
-                    newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetGuid();
+                    newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetAsGuid();
                 else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
             }
             else if (newPropValue is string && ClassDef.GetPropDef(propName).HasLookupList())
@@ -789,7 +789,7 @@ namespace Habanero.BO
                 if (newPropValue is IBusinessObject)
                 {
                     if (prop.PropertyType == typeof (Guid))
-                        newPropValue = ((BusinessObject) newPropValue)._primaryKey.GetGuid();
+                        newPropValue = ((BusinessObject)newPropValue)._primaryKey.GetAsGuid();
                     else newPropValue = ((BusinessObject) newPropValue).ID[0].Value.ToString();
                 }
             }
@@ -832,7 +832,7 @@ namespace Habanero.BO
         /// <param name="propValue">The value to initialise to</param>
         private void InitialisePropertyValue(string propName, object propValue)
         {
-            BOProp prop = Props[propName];
+            IBOProp prop = Props[propName];
             prop.Value = propValue;
         }
 
@@ -876,7 +876,7 @@ namespace Habanero.BO
         }
 
 
-        internal BOPrimaryKey PrimaryKey
+        public IPrimaryKey PrimaryKey
         {
             get { return _primaryKey; }
             set { _primaryKey = value; }
@@ -1189,14 +1189,14 @@ namespace Habanero.BO
         {
             foreach (BOProp prop in _boPropCol)
             {
-                PropDef propDef = prop.PropDef;
+                IPropDef propDef = prop.PropDef;
                 ClassDef classDef = GetCorrespondingClassDef(propDef, _classDef);
                 PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef, classDef);
                 searchExpression.SetParameterSqlInfo(propDefParameterSQLInfo);
             }
         }
 
-        private static ClassDef GetCorrespondingClassDef(PropDef propDef, ClassDef classDef)
+        private static ClassDef GetCorrespondingClassDef(IPropDef propDef, ClassDef classDef)
         {
             ClassDef currentClassDef = classDef;
             while (!currentClassDef.PropDefcol.Contains(propDef))

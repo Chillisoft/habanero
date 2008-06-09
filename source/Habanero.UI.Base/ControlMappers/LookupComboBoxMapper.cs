@@ -107,7 +107,7 @@ namespace Habanero.UI.Base
                     {
                         BusinessObject pairValueBo = (BusinessObject)pair.Value;
                         if (pairValueBo.ClassDef.PrimaryKeyDef.IsObjectID
-                            && pairValueBo.ID.GetGuid().Equals(boPropertyValue))
+                            && pairValueBo.ID.GetAsGuid().Equals(boPropertyValue))
                         {
                             _comboBox.SelectedItem = pair.Key;
                             break;

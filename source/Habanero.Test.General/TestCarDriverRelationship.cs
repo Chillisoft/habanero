@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 using NUnit.Framework;
 
@@ -60,8 +61,8 @@ namespace Habanero.Test.General
             car.SetPropertyValue("CarRegNo", "NP32459");
             car.SetPropertyValue("DriverFK1", person.GetPropertyValue("PK1Prop1"));
             car.SetPropertyValue("DriverFK2", person.GetPropertyValue("PK1Prop2"));
-            BOPrimaryKey bob = car.GetDriver().ID;
-            BOPrimaryKey bo2 = person.ID;
+            IPrimaryKey bob = car.GetDriver().ID;
+            IPrimaryKey bo2 = person.ID;
             Assert.IsTrue(bob.Equals(bo2));
             Assert.AreEqual(bob, bo2);
             //Assert.AreEqual(car.GetDriver().ID, person.ID);

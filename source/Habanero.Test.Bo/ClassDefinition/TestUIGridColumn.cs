@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 

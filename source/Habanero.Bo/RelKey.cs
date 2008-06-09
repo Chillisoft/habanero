@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 

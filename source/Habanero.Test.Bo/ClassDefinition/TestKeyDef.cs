@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -49,7 +50,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestContainsPropDef()
         {
             Assert.IsTrue(mKeyDef.Contains("PropName"));
-            PropDef lPropDef = mKeyDef["PropName"];
+            IPropDef lPropDef = mKeyDef["PropName"];
             Assert.AreEqual("PropName", lPropDef.PropertyName);
             Assert.IsTrue(mKeyDef.IgnoreIfNull);
         }
@@ -58,7 +59,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestThisInvalidPropertyNameException()
         {
             KeyDef keyDef = new KeyDef();
-            PropDef propDef = keyDef["wrongprop"];
+            IPropDef propDef = keyDef["wrongprop"];
         }
 
         [Test, ExpectedException(typeof(HabaneroArgumentException))]

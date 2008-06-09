@@ -35,7 +35,7 @@ namespace Habanero.Test.General
 			ClassDef classDef = Shape.GetClassDef();
 
 			RelKeyDef relKeyDef;
-			PropDef propDef;
+			IPropDef propDef;
 			RelPropDef lRelPropDef;
 			RelationshipDef relDef;
 

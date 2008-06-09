@@ -19,6 +19,7 @@
 
 // Static Model
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.ConcurrencyControl;
@@ -31,10 +32,10 @@ namespace Habanero.Test
     {
         #region Fields
 
-        protected BOProp mPropDateLastUpdated = null;
-        protected BOProp mPropUserLastUpdated = null;
-        protected BOProp mPropMachineLastUpdated = null;
-        protected BOProp mPropVersionNumber = null;
+        protected IBOProp mPropDateLastUpdated = null;
+        protected IBOProp mPropUserLastUpdated = null;
+        protected IBOProp mPropMachineLastUpdated = null;
+        protected IBOProp mPropVersionNumber = null;
 
         #endregion
 
@@ -45,7 +46,7 @@ namespace Habanero.Test
             SetPropertyValue("PK3Prop", this.ID.GetObjectId());
         }
 
-        internal ContactPerson(BOPrimaryKey id) : base(id)
+        internal ContactPerson(IPrimaryKey id) : base(id)
         {
         }
 
@@ -137,7 +138,7 @@ namespace Habanero.Test
 
             //Define Owner Relationships
             RelKeyDef relKeyDef;
-            PropDef propDef;
+            IPropDef propDef;
             RelPropDef lRelPropDef;
             RelationshipDef relDef;
             relKeyDef = new RelKeyDef();
@@ -213,7 +214,7 @@ namespace Habanero.Test
         /// <returns>The loaded business object</returns>
         /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
-        public static ContactPerson GetContactPerson(BOPrimaryKey id)
+        public static ContactPerson GetContactPerson(IPrimaryKey id)
         {
             ContactPerson myContactPerson = (ContactPerson)BOLoader.Instance.GetLoadedBusinessObject(id);
             if (myContactPerson == null)

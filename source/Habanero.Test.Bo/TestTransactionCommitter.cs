@@ -706,7 +706,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             committer.CommitTransaction();
             //---------------Test Result -----------------------
-            BOPrimaryKey objectID = contactPersonCompositeKey.ID;
+            IPrimaryKey objectID = contactPersonCompositeKey.ID;
             Assert.AreEqual(objectID.GetOrigObjectID(), objectID.GetObjectId());
             Assert.IsNotNull(ContactPersonTestBO.AllLoadedBusinessObjects()[objectID.GetOrigObjectID()]);
             Assert.IsFalse(ContactPersonTestBO.AllLoadedBusinessObjects().ContainsKey(oldID));

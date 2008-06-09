@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 

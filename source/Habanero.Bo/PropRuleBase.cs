@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 
 namespace Habanero.BO
 {
@@ -26,13 +27,13 @@ namespace Habanero.BO
     /// Provides a super-class for property rules that test the validity of
     /// a property value.  If you would like to implement your own property
     /// rule checker, inherit from this class, override the
-    /// isPropValueValid method and add a constructor with the same arguments
+    /// IsPropValueValid method and add a constructor with the same arguments
     /// as this one and pass back these arguments to base().
     /// In the class definitions, in the 'rule'
     /// element under the relevant 'property', specify the class and assembly
     /// of your newly implemented class.
     /// </summary>
-    public abstract class PropRuleBase
+    public abstract class PropRuleBase : IPropRule
     {
 		private string _name;
         private string _message;
@@ -59,7 +60,7 @@ namespace Habanero.BO
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal virtual bool isPropValueValid(string displayName, Object propValue,
+        public virtual bool IsPropValueValid(string displayName, Object propValue,
                                                          ref string errorMessage)
         {
             errorMessage = "";
@@ -118,7 +119,7 @@ namespace Habanero.BO
         public string Name
         {
             get { return _name; }
-			protected set { _name = value; }
+			set { _name = value; }
         }
 
         /// <summary>
@@ -126,7 +127,7 @@ namespace Habanero.BO
         /// </summary>
         public string  Message {
 			get { return _message; }
-			protected set { _message = value; }
+			set { _message = value; }
         }
 
 		private static Dictionary<string, object> FillParameters(List<string> availableParams, Dictionary<string, object> currentCollection)

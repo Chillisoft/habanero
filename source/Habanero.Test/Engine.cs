@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -80,7 +81,7 @@ namespace Habanero.Test
 
             //Define Engine Relationships
             RelKeyDef relKeyDef = new RelKeyDef();
-            PropDef propDef = lPropDefCol["CarID"];
+            IPropDef propDef = lPropDefCol["CarID"];
 
             RelPropDef lRelPropDef = new RelPropDef(propDef, "CarID");
             relKeyDef.Add(lRelPropDef);

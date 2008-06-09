@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
@@ -27,7 +28,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class RelPropDef
     {
-        private PropDef _ownerPropDef;
+        private IPropDef _ownerPropDef;
 		private string _relatedClassPropName;
 
 		/// <summary>
@@ -37,7 +38,7 @@ namespace Habanero.BO.ClassDefinition
         /// owner object</param>
         /// <param name="relatedObjectPropName">The property name of the 
         /// related object</param>
-        public RelPropDef(PropDef ownerClassPropDef,
+        public RelPropDef(IPropDef ownerClassPropDef,
                           string relatedObjectPropName)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(ownerClassPropDef, "ownerClassPropDef");
@@ -48,7 +49,7 @@ namespace Habanero.BO.ClassDefinition
     	///<summary>
     	/// Gets or sets the property definition for the relationship owner
     	///</summary>
-    	protected PropDef OwnerProperty
+    	protected IPropDef OwnerProperty
     	{
 			get { return _ownerPropDef; }
 			set
@@ -82,7 +83,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>The newly created RelProp object</returns>
         protected internal RelProp CreateRelProp(BOPropCol boPropCol)
 		{
-		    BOProp boProp = boPropCol[OwnerPropertyName];
+		    IBOProp boProp = boPropCol[OwnerPropertyName];
 		    return new RelProp(this, boProp);
 		}
     }

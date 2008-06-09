@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using NUnit.Framework;
 
@@ -78,7 +79,7 @@ namespace Habanero.Test.General
             p.FirstName = "a";
             p.Surname = "bb";
             p.Save();
-            BOPrimaryKey pKey = p.ID;
+            IPrimaryKey pKey = p.ID;
             ContactPerson.ClearContactPersonCol();
             p = ContactPerson.GetContactPerson(pKey);
             myCol = ContactPerson.LoadBusinessObjCol();
@@ -96,7 +97,7 @@ namespace Habanero.Test.General
             p.FirstName = "a";
             p.Surname = "bb";
             p.Save();
-            BOPrimaryKey pKey = p.ID;
+            IPrimaryKey pKey = p.ID;
             p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";
@@ -118,7 +119,7 @@ namespace Habanero.Test.General
             p.FirstName = "a";
             p.Surname = "bb";
             p.Save();
-            BOPrimaryKey pKey = p.ID;
+            IPrimaryKey pKey = p.ID;
             p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";
@@ -140,7 +141,7 @@ namespace Habanero.Test.General
             p.FirstName = "a";
             p.Surname = "bb";
             p.Save();
-            BOPrimaryKey pKey = p.ID;
+            IPrimaryKey pKey = p.ID;
             p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";
@@ -163,7 +164,7 @@ namespace Habanero.Test.General
             contactPerson.FirstName = "a";
             contactPerson.Surname = "bb";
             contactPerson.Save();
-            BOPrimaryKey contactPersonKey = contactPerson.ID;
+            IPrimaryKey contactPersonKey = contactPerson.ID;
             
             Address address = new Address();
             address.AddressLine1 = "Chillisoft";
@@ -266,7 +267,7 @@ namespace Habanero.Test.General
             p.FirstName = "a";
             p.Surname = "bb";
             p.Save();
-            BOPrimaryKey pKey = p.ID;
+            IPrimaryKey pKey = p.ID;
             p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";
@@ -296,7 +297,7 @@ namespace Habanero.Test.General
             p.FirstName = "a";
             p.Surname = "bb";
             p.Save();
-            BOPrimaryKey pKey = p.ID;
+            IPrimaryKey pKey = p.ID;
             p = new ContactPerson();
             p.FirstName = "aa";
             p.Surname = "abc";

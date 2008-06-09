@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
 
@@ -27,7 +28,7 @@ namespace Habanero.BO
     /// </summary>
     public class RelProp
     {
-        private BOProp _boProp;
+        private IBOProp _boProp;
         private RelPropDef _relPropDef;
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="mRelPropDef">The relationship property definition</param>
         /// <param name="lBoProp">The property</param>
-        internal RelProp(RelPropDef mRelPropDef, BOProp lBoProp)
+        internal RelProp(RelPropDef mRelPropDef, IBOProp lBoProp)
         {
             this._relPropDef = mRelPropDef;
             _boProp = lBoProp;

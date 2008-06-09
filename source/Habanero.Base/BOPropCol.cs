@@ -21,29 +21,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base.Exceptions;
 
-namespace Habanero.BO
+namespace Habanero.Base
 {
     /// <summary>
     /// Manages a collection of BOProp objects
     /// </summary>
     public class BOPropCol 
     {
-        private Dictionary<string, BOProp> _boProps;
+        private Dictionary<string, IBOProp> _boProps;
 
         /// <summary>
         /// Constructor to initialise a new empty collection
         /// </summary>
-        internal BOPropCol() : base()
+        public BOPropCol() : base()
         {
-            _boProps = new Dictionary<string, BOProp>();
+            _boProps = new Dictionary<string, IBOProp>();
         }
 
         /// <summary>
         /// Adds a property to the collection
         /// </summary>
         /// <param name="prop">The property to add</param>
-        public void Add(BOProp prop)
+        public void Add(IBOProp prop)
         {
             if (Contains(prop.PropertyName.ToUpper()))
             {
@@ -61,9 +62,9 @@ namespace Habanero.BO
         /// Copies the properties from another collection into this one
         /// </summary>
         /// <param name="propCol">A collection of properties</param>
-        internal void Add(BOPropCol propCol)
+        public void Add(BOPropCol propCol)
         {
-            foreach (BOProp prop in propCol.Values)
+            foreach (IBOProp prop in propCol.Values)
             {
                 this.Add(prop);
             }
@@ -73,7 +74,7 @@ namespace Habanero.BO
         /// Remove a specified property from the collection
         /// </summary>
         /// <param name="propName">The property name</param>
-        internal void Remove(string propName)
+        public void Remove(string propName)
         {
             _boProps.Remove(propName.ToUpper());
         }
@@ -94,7 +95,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propName">The name of the property to access</param>
         /// <returns>Returns the property if found, or null if not</returns>
-        public BOProp this[string propName]
+        public IBOProp this[string propName]
         {
             get
             {
@@ -112,12 +113,12 @@ namespace Habanero.BO
         /// Returns an xml string containing the properties whose values
         /// have changed, along with their old and new values
         /// </summary>
-        internal string DirtyXml
+        public string DirtyXml
         {
             get
             {
                 string dirtlyXml = "<Properties>";
-                foreach (BOProp prop in this.SortedValues )
+                foreach (IBOProp prop in this.SortedValues )
                 {
                     if (prop.IsDirty)
                     {
@@ -131,9 +132,9 @@ namespace Habanero.BO
         /// <summary>
         /// Restores each of the property values to their PersistedValue
         /// </summary>
-        internal void RestorePropertyValues()
+        public void RestorePropertyValues()
         {
-            foreach (BOProp prop in this)
+            foreach (IBOProp prop in this)
             {
                 prop.RestorePropValue();
             }
@@ -143,9 +144,9 @@ namespace Habanero.BO
         /// Copies across each of the properties' current values to their
         /// persisted values
         /// </summary>
-        internal void BackupPropertyValues()
+        public void BackupPropertyValues()
         {
-            foreach (BOProp prop in this)
+            foreach (IBOProp prop in this)
             {
                 prop.BackupPropValue();
             }
@@ -158,11 +159,11 @@ namespace Habanero.BO
         /// property values are invalid</param>
         /// <returns>Returns true if all the property values are valid, false
         /// if any one is invalid</returns>
-        internal bool IsValid(out string invalidReason)
+        public bool IsValid(out string invalidReason)
         {
             bool propsValid = true;
             StringBuilder reason = new StringBuilder();
-            foreach (BOProp prop in this)
+            foreach (IBOProp prop in this)
             {
                 if (!prop.IsValid)
                 {
@@ -178,9 +179,9 @@ namespace Habanero.BO
         /// Sets the IsObjectNew setting in each property to that specified
         /// </summary>
         /// <param name="bValue">Whether the object is set as new</param>
-        internal void SetIsObjectNew(bool bValue)
+        public void SetIsObjectNew(bool bValue)
         {
-            foreach (BOProp prop in this)
+            foreach (IBOProp prop in this)
             {
                 prop.IsObjectNew = bValue;
             }
@@ -222,7 +223,7 @@ namespace Habanero.BO
         {
             get
             {
-                foreach (KeyValuePair<string, BOProp> pair in _boProps)
+                foreach (KeyValuePair<string, IBOProp> pair in _boProps)
                 {
                     if (pair.Value.PropDef.AutoIncrementing) return true;
                 }

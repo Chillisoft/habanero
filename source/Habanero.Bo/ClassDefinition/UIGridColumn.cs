@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using Habanero.Base;
 using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
@@ -201,7 +202,7 @@ namespace Habanero.BO.ClassDefinition
                 return _heading;
             }
             string heading = null;
-            PropDef propDef = ClassDefHelper.GetPropDefByPropName(classDef, PropertyName);
+            IPropDef propDef = ClassDefHelper.GetPropDefByPropName(classDef, PropertyName);
             if (propDef != null)
             {
                 heading = propDef.DisplayName;

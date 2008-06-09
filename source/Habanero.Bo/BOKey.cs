@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -33,9 +34,9 @@ namespace Habanero.BO
     /// that behave together in some way (e.g. for a composite alternate
     /// key, the combination of properties is required to be unique).
     /// </summary>
-    public class BOKey
+    public class BOKey : IBOKey
     {
-        private Dictionary<string, BOProp> _props;
+        private Dictionary<string, IBOProp> _props;
         private KeyDef _keyDef;
 
         /// <summary>
@@ -52,13 +53,13 @@ namespace Habanero.BO
         {
             ArgumentValidationHelper.CheckArgumentNotNull(lKeyDef, "lKeyDef");
             _keyDef = lKeyDef;
-            _props = new Dictionary<string, BOProp>();
+            _props = new Dictionary<string, IBOProp>();
         }
 
         /// <summary>
         /// Gets the key definition for this key
         /// </summary>
-        public KeyDef KeyDef
+        public IKeyDef KeyDef
         {
             get { return _keyDef; }
         }
@@ -70,7 +71,7 @@ namespace Habanero.BO
         /// <param name="propName">The property name</param>
         /// <returns>Returns the matching BOProp object or null if not found
         /// </returns>
-        public BOProp this[string propName]
+        public IBOProp this[string propName]
         {
             get
             {
@@ -92,7 +93,7 @@ namespace Habanero.BO
         /// <param name="index">The index position of the item to retrieve</param>
         /// <returns>Returns the matching BOProp object or null if not found
         /// </returns>
-        public BOProp this[int index]
+        public IBOProp this[int index]
         {
             get
             {
@@ -106,7 +107,7 @@ namespace Habanero.BO
 
                 string propName = "";
                 int count = 0;
-                foreach (KeyValuePair<string, BOProp> pair in _props)
+                foreach (KeyValuePair<string, IBOProp> pair in _props)
                 {
                     if (count == index)
                     {
@@ -123,7 +124,7 @@ namespace Habanero.BO
         /// Adds a BOProp object to the key
         /// </summary>
         /// <param name="boProp">The BOProp to add</param>
-        internal virtual void Add(BOProp boProp)
+        internal virtual void Add(IBOProp boProp)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(boProp, "bOProp");
             if (_props.ContainsKey(boProp.PropertyName))
@@ -169,19 +170,7 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// Returns a copy of the collection of properties in the key
-        /// </summary>
-        /// <returns>Returns a new BOProp collection</returns>
-        internal BOPropCol GetBOPropCol()
-        {
-            BOPropCol col = new BOPropCol();
-            foreach (BOProp boProp in _props.Values)
-            {
-                col.Add(boProp);
-            }
-            return col;
-        }
+   
 
         //      /// <summary>
         //      /// is valid if more the BOKey contains 1 or more properties.
@@ -290,15 +279,15 @@ namespace Habanero.BO
         /// <summary>
         /// Returns a sorted list of the property values
         /// </summary>
-        public List<BOProp> SortedValues
+        public List<IBOProp> SortedValues
         {
             get
             {
-                List<BOProp> props = new List<BOProp>();
-                foreach (KeyValuePair<string, BOProp> prop in _props) {
+                List<IBOProp> props = new List<IBOProp>();
+                foreach (KeyValuePair<string, IBOProp> prop in _props) {
                     props.Add(prop.Value);
                 }
-                props.Sort(delegate(BOProp x, BOProp y) { return String.Compare(x.PropertyName, y.PropertyName); });
+                props.Sort(delegate(IBOProp x, IBOProp y) { return String.Compare(x.PropertyName, y.PropertyName); });
                 return props;
             }
         }
@@ -366,7 +355,7 @@ namespace Habanero.BO
         /// <param name="sql">The sql statement used to generate and track
         /// parameters</param>
         /// <returns>Returns a string</returns>
-        protected internal virtual string PersistedDatabaseWhereClause(SqlStatement sql)
+        public virtual string PersistedDatabaseWhereClause(ISqlStatement sql)
         {
             StringBuilder whereClause = new StringBuilder(_props.Count*30);
             foreach (BOProp prop in SortedValues) {
@@ -376,14 +365,28 @@ namespace Habanero.BO
                 }
                 if (prop.PersistedPropertyValue == null)
                 {
-                    whereClause.Append(prop.DatabaseNameFieldNameValuePair(sql));
+                    whereClause.Append(prop.DatabaseNameFieldNameValuePair((SqlStatement) sql));
                 }
                 else
                 {
-                    whereClause.Append(prop.PersistedDatabaseNameFieldNameValuePair(sql));
+                    whereClause.Append(prop.PersistedDatabaseNameFieldNameValuePair((SqlStatement) sql));
                 }
             }
             return whereClause.ToString();
+        }
+
+        /// <summary>
+        /// Returns a copy of the collection of properties in the key
+        /// </summary>
+        /// <returns>Returns a new BOProp collection</returns>
+        public BOPropCol GetBOPropCol()
+        {
+            BOPropCol col = new BOPropCol();
+            foreach (BOProp boProp in _props.Values)
+            {
+                col.Add(boProp);
+            }
+            return col;
         }
 
         /// <summary>
@@ -434,7 +437,7 @@ namespace Habanero.BO
             {
                 if (rhs.Contains(prop.PropertyName))
                 {
-                    BOProp rhsProp = rhs[prop.PropertyName];
+                    IBOProp rhsProp = rhs[prop.PropertyName];
                     if (prop.Value != rhsProp.Value)
                     {
                         if (prop.Value != null && rhsProp.Value != null)

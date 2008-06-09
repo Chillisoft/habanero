@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -28,7 +29,7 @@ namespace Habanero.BO
     /// holding runtime values.  The description of the primary key structure is held
     /// in PrimaryKeyDef.
     /// </summary>
-    public class BOPrimaryKey : BOKey
+    public class BOPrimaryKey : BOKey, IPrimaryKey
     {
         //		BusinessObjectBase mBO;
         private Guid _newObjectID = Guid.Empty;
@@ -46,7 +47,7 @@ namespace Habanero.BO
         /// Sets the object's ID
         /// </summary>
         /// <param name="id">The ID to set to</param>
-        internal virtual void SetObjectID(Guid id)
+        public virtual void SetObjectID(Guid id)
         {
             //TODO_Err:	check that id is not empty (Eric: is this done below?)
 
@@ -102,7 +103,7 @@ namespace Habanero.BO
         /// Get the original ObjectID
         /// </summary>
         /// <returns>Returns a string</returns>
-        internal virtual string GetOrigObjectID()
+        public  virtual string GetOrigObjectID()
         {
             if (this.IsObjectNew && _newObjectID == Guid.Empty)
             {
@@ -166,7 +167,7 @@ namespace Habanero.BO
         /// Returns the ID as a Guid
         /// </summary>
         /// <returns>Returns a Guid</returns>
-        public Guid GetGuid()
+        public Guid GetAsGuid()
         {
             string objectId = this.GetObjectId();
             objectId = objectId.TrimEnd('\'','}');

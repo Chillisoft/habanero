@@ -558,12 +558,12 @@ namespace Habanero.UI.WebGUI
     /// </summary>
     internal class ControlMapperStrategyGiz  : IControlMapperStrategy
     {
-        public void AddCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp)
+        public void AddCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
         {
 
         }
 
-        public void RemoveCurrentBOPropHandlers(ControlMapper mapper, BOProp prop)
+        public void RemoveCurrentBOPropHandlers(ControlMapper mapper, IBOProp prop)
         {
             
         }

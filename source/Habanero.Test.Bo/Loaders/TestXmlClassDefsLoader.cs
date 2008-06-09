@@ -19,6 +19,7 @@
 
 using System;
 using System.Xml;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -129,12 +130,12 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
             Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClassInherited"), "Class 'TestClassInherited' should have been loaded.");
             ClassDef classDefTestClass = classDefList["Habanero.Test.BO.Loaders", "TestClass"];
-            PropDef propDef = classDefTestClass.PropDefcol["TestClassName"];
+            IPropDef propDef = classDefTestClass.PropDefcol["TestClassName"];
             ClassDef classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
             Assert.IsNotNull(classDefInherited.SuperClassDef);
             Assert.AreEqual(1, classDefInherited.KeysCol.Count);
             KeyDef keyDef = classDefInherited.KeysCol.GetKeyDefAtIndex(0);
-            PropDef keyDefPropDef = keyDef["TestClassName"];
+            IPropDef keyDefPropDef = keyDef["TestClassName"];
             Assert.AreSame(propDef, keyDefPropDef, "The key's property should have been resolved to be the property of the superclass by the loader.");
         }
 

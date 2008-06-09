@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
@@ -32,9 +33,9 @@ namespace Habanero.BO.ClassDefinition
     /// together in some way (e.g. for a composite alternate 
     /// key, the combination of properties is required to be unique).
     /// </summary>
-    public class KeyDef : IEnumerable<PropDef>
+    public class KeyDef : IKeyDef
     {
-        private Dictionary<string, PropDef> _propDefs;
+        private Dictionary<string, IPropDef> _propDefs;
         protected bool _ignoreIfNull = false;
         protected string _keyName = "";
         protected string _keyNameBuilt = "";
@@ -68,7 +69,7 @@ namespace Habanero.BO.ClassDefinition
         public KeyDef(string keyName)
         {
             //TODO_Err check that keyName is valid. Eric: what is a valid keyname?
-            _propDefs = new Dictionary<string, PropDef>();
+            _propDefs = new Dictionary<string, IPropDef>();
             KeyName = keyName;
         }
 
@@ -105,7 +106,7 @@ namespace Habanero.BO.ClassDefinition
 			        return _keyName;
 			    }
 			}
-			protected internal set
+			 set
 			{
 				_keyName = value;
 			    KeyNameForDisplay = value;
@@ -128,7 +129,7 @@ namespace Habanero.BO.ClassDefinition
                 {
                     propNames.Add(_keyName);
                 }
-                foreach (KeyValuePair<string, PropDef> propDef in _propDefs)
+                foreach (KeyValuePair<string, IPropDef> propDef in _propDefs)
                 {
                     propNames.Add(propDef.Value.PropertyName);
                 }
@@ -146,7 +147,7 @@ namespace Habanero.BO.ClassDefinition
         public string KeyNameForDisplay
         {
             get { return _keyNameForDisplay; }
-            protected internal set { _keyNameForDisplay = value; }
+            set { _keyNameForDisplay = value; }
         }
 
         /// <summary>
@@ -171,7 +172,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the property stored under that property name</returns>
-        internal PropDef this[string propName]
+        internal IPropDef this[string propName]
         {
             get
             {
@@ -194,7 +195,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="propDef">The PropDef object to add</param>
         /// <exeption cref="HabaneroArgumentException">Will throw an exception
         /// if the argument is null</exeption>
-        public virtual void Add(PropDef propDef)
+        public virtual void Add(IPropDef propDef)
         {
             if (propDef == null)
             {
@@ -227,7 +228,7 @@ namespace Habanero.BO.ClassDefinition
 		/// </summary>
 		/// <param name="propDef">The Property definition to search for</param>
 		/// <returns>Returns true if found, false if not</returns>
-		protected bool Contains(PropDef propDef)
+		protected bool Contains(IPropDef propDef)
 		{
 			return (_propDefs.ContainsKey(propDef.PropertyName));
 		}
@@ -281,7 +282,7 @@ namespace Habanero.BO.ClassDefinition
         public virtual BOKey CreateBOKey(BOPropCol lBOPropCol)
         {
             BOKey lBOKey = new BOKey(this);
-            foreach (PropDef lPropDef in _propDefs.Values)
+            foreach (IPropDef lPropDef in _propDefs.Values)
             {
                 lBOKey.Add(lBOPropCol[lPropDef.PropertyName]);
             }
@@ -296,7 +297,7 @@ namespace Habanero.BO.ClassDefinition
 
 		#region IEnumerable<PropDef> Members
 
-		IEnumerator<PropDef> IEnumerable<PropDef>.GetEnumerator()
+		IEnumerator<IPropDef> IEnumerable<IPropDef>.GetEnumerator()
 		{
 			return _propDefs.Values.GetEnumerator();
 		}

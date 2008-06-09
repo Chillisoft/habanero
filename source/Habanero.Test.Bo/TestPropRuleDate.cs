@@ -36,25 +36,25 @@ namespace Habanero.Test.BO
             string errorMessage = "";
 
             //Test less than max length
-            Assert.IsFalse(rule.isPropValueValid("Propname", new DateTime(1891, 01, 14), ref errorMessage));
+            Assert.IsFalse(rule.IsPropValueValid("Propname", new DateTime(1891, 01, 14), ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
             //Test valid data
-            Assert.IsTrue(rule.isPropValueValid("Propname", new DateTime(1991, 01, 14), ref errorMessage));
+            Assert.IsTrue(rule.IsPropValueValid("Propname", new DateTime(1991, 01, 14), ref errorMessage));
             Assert.IsFalse(errorMessage.Length > 0);
             //test greater than max length
-            Assert.IsFalse(rule.isPropValueValid("Propname", new DateTime(2091, 01, 14), ref errorMessage));
+            Assert.IsFalse(rule.IsPropValueValid("Propname", new DateTime(2091, 01, 14), ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
 
 
             rule = new PropRuleDate("BirthDate", "Test");
             errorMessage = "";
 
-            Assert.IsTrue(rule.isPropValueValid("Propname", null, ref errorMessage));
+            Assert.IsTrue(rule.IsPropValueValid("Propname", null, ref errorMessage));
             Assert.IsTrue(errorMessage.Length == 0);
             errorMessage = "";
 
             //Test valid data
-            Assert.IsTrue(rule.isPropValueValid("Propname", new DateTime(1991, 01, 14), ref errorMessage));
+            Assert.IsTrue(rule.IsPropValueValid("Propname", new DateTime(1991, 01, 14), ref errorMessage));
             Assert.IsFalse(errorMessage.Length > 0);
         }
     }

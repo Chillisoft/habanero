@@ -29,27 +29,6 @@ namespace Habanero.BO.ClassDefinition
 {
 
     /// <summary>
-    /// An enumeration used to specify different file access modes.
-    /// </summary>
-    public enum PropReadWriteRule
-    {
-        /// <summary>Full access</summary>
-        ReadWrite,
-        /// <summary>Read but not write/edit</summary>
-        ReadOnly,
-        /// <summary>Can only be edited it if was never edited before 
-        /// (regardless of whether the object is new or not)</summary>
-        WriteOnce,
-        /// <summary>Can only be edited if the object is not new. 
-        /// I.e. the property can only be updated but never created in a new object that is being inserted</summary>
-        WriteNotNew,
-        /// <summary>Can only be edited if the object is new. 
-        /// I.e. the property can only be inserted and can never be updated after that</summary>
-        WriteNew
-    }
-
-    
-    /// <summary>
     /// A PropDef contains a Business Object property definition, with
     /// the property name and information such as the 
     /// access rules for the property (i.e. write-once, read-many or 
@@ -62,7 +41,7 @@ namespace Habanero.BO.ClassDefinition
     /// <li>Lazy initialisation of properties.</li>
     /// </ul>
     /// </futureEnhancements>
-    public class PropDef
+    public class PropDef : IPropDef
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
         private string _propertyName;
@@ -81,7 +60,7 @@ namespace Habanero.BO.ClassDefinition
 		private object _defaultValue = null;
     	private string _defaultValueString;
     	private bool _hasDefaultValueBeenValidated;
-        private PropRuleBase _propRule;
+        private IPropRule _propRule;
         private ILookupList _lookupList = new NullLookupList();
     	private bool _compulsory = false;
         private bool _autoIncrementing = false;
@@ -468,7 +447,7 @@ namespace Habanero.BO.ClassDefinition
         public string PropertyName
         {
             get { return _propertyName; }
-			protected set{ _propertyName = value;}
+			set{ _propertyName = value;}
         }
 
         ///<summary>
@@ -477,7 +456,7 @@ namespace Habanero.BO.ClassDefinition
         public string DisplayName
         {
             get { return _displayName; }
-            protected set { _displayName = value; }
+            set { _displayName = value; }
         }
 
         ///<summary>
@@ -486,7 +465,7 @@ namespace Habanero.BO.ClassDefinition
         public string Description
         {
             get { return _description; }
-            protected set { _description = value; }
+            set { _description = value; }
         }
 		
 		/// <summary>
@@ -495,7 +474,7 @@ namespace Habanero.BO.ClassDefinition
 		public string PropertyTypeAssemblyName
 		{
 			get { return _propTypeAssemblyName; }
-			protected set
+			set
 			{
 				if (_propTypeAssemblyName != value)
 				{
@@ -512,7 +491,7 @@ namespace Habanero.BO.ClassDefinition
 		public string PropertyTypeName
 		{
 			get { return _propTypeName; }
-			protected set
+			set
 			{
 				if (_propTypeName != value)
 				{
@@ -528,13 +507,13 @@ namespace Habanero.BO.ClassDefinition
         public Type PropertyType
         {
 			get { return MyPropertyType; }
-			protected set { MyPropertyType = value; }
+			set { MyPropertyType = value; }
         }
 
         /// <summary>
         /// Gets and sets the property rule relevant to this definition
         /// </summary>
-        public virtual PropRuleBase PropRule
+        public virtual IPropRule PropRule
         {
             get { return _propRule; }
 			set { _propRule = value; }
@@ -549,7 +528,7 @@ namespace Habanero.BO.ClassDefinition
         public string DatabaseFieldName
         {
             get { return _databaseFieldName; }
-			protected set{ _databaseFieldName = value;}
+			set{ _databaseFieldName = value;}
         }
 
         /// <summary>
@@ -558,7 +537,7 @@ namespace Habanero.BO.ClassDefinition
         public object DefaultValue
         {
             get { return MyDefaultValue; }
-			protected set{ MyDefaultValue = value;}
+			set{ MyDefaultValue = value;}
         }
 
 		/// <summary>
@@ -567,7 +546,7 @@ namespace Habanero.BO.ClassDefinition
 		public string DefaultValueString
 		{
 			get { return _defaultValueString; }
-			protected set
+			set
 			{
 				if (_defaultValueString != value)
 				{
@@ -604,7 +583,7 @@ namespace Habanero.BO.ClassDefinition
 		public PropReadWriteRule ReadWriteRule
 		{
 			get { return _propRWStatus; }
-			protected set { _propRWStatus = value; }
+			set { _propRWStatus = value; }
 		}
 
 		/// <summary>
@@ -690,7 +669,7 @@ namespace Habanero.BO.ClassDefinition
             errorMessage = "";
             if (_propRule != null)
             {
-                return _propRule.isPropValueValid(displayName, propValue, ref errorMessage);
+                return _propRule.IsPropValueValid(displayName, propValue, ref errorMessage);
             }
             else
             {

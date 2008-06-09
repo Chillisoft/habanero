@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 

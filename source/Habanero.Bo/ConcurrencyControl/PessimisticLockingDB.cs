@@ -18,11 +18,11 @@ namespace Habanero.BO.ConcurrencyControl
 
         private readonly BusinessObject _busObj;
         private readonly int _lockDurationInMinutes;
-        private readonly BOProp _boPropDateLocked;
-        private readonly BOProp _boPropUserLocked;
-        private readonly BOProp _boPropMachineLocked;
-        private readonly BOProp _boPropOperatingSystemUser;
-        private readonly BOProp _boPropLocked;
+        private readonly IBOProp _boPropDateLocked;
+        private readonly IBOProp _boPropUserLocked;
+        private readonly IBOProp _boPropMachineLocked;
+        private readonly IBOProp _boPropOperatingSystemUser;
+        private readonly IBOProp _boPropLocked;
 
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Habanero.BO.ConcurrencyControl
         /// <param name="boPropMachineLocked">The machine name on which the object was last updated</param>
         /// <param name="boPropOperatingSystemUser">The Windows logged on user who locked the object</param>
         /// <param name="boPropLocked">The property that determines whether the object is locked or not</param>
-        public PessimisticLockingDB(BusinessObject busObj, int lockDurationInMinutes, BOProp boPropDateTimeLocked, BOProp boPropUserLocked, BOProp boPropMachineLocked, BOProp boPropOperatingSystemUser, BOProp boPropLocked)
+        public PessimisticLockingDB(BusinessObject busObj, int lockDurationInMinutes, IBOProp boPropDateTimeLocked, IBOProp boPropUserLocked, IBOProp boPropMachineLocked, IBOProp boPropOperatingSystemUser, IBOProp boPropLocked)
         {
             _busObj = busObj;
             _lockDurationInMinutes = lockDurationInMinutes;

@@ -23,6 +23,7 @@ using System.Collections;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -219,7 +220,7 @@ namespace Habanero.UI.Forms
 
         private void AddCurrentBOPropHandlers()
         {
-            BOProp boProp = CurrentBOProp();
+            IBOProp boProp = CurrentBOProp();
             if (boProp != null)
             {
                 //Add needed handlers
@@ -229,7 +230,7 @@ namespace Habanero.UI.Forms
 
         private void RemoveCurrentBOPropHandlers()
         {
-            BOProp boProp = CurrentBOProp();
+            IBOProp boProp = CurrentBOProp();
             if (boProp != null)
             {
                 //Remove existing handlers
@@ -237,7 +238,7 @@ namespace Habanero.UI.Forms
             }
         }
 
-        protected BOProp CurrentBOProp()
+        protected IBOProp CurrentBOProp()
         {
 			if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
 			{
@@ -274,8 +275,8 @@ namespace Habanero.UI.Forms
             {
                 if (_businessObject.ClassDef.PropDefColIncludingInheritance.Contains(_propertyName))
                 {
-                    PropDef propDef = _businessObject.ClassDef.PropDefColIncludingInheritance[_propertyName];
-                    BOProp boProp = CurrentBOProp();
+                    IPropDef propDef = _businessObject.ClassDef.PropDefColIncludingInheritance[_propertyName];
+                    IBOProp boProp = CurrentBOProp();
                     switch (propDef.ReadWriteRule)
                     {
                         case PropReadWriteRule.ReadOnly:

@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.ConcurrencyControl;
@@ -198,10 +199,10 @@ namespace Habanero.Test.BO
             //SetConcurrencyControl(new PessimisticLockingDB(this,propDateLocked,
             //                                                           propUserLocked, propMachineLocked,
             //                                                           propOperatingSystemUserLocked,propLocked));
-            BOProp propDateLastUpdated = _boPropCol["DateLastUpdated"];
-            BOProp propUserLastUpdated = _boPropCol["UserLastUpdated"];
-            BOProp propMachineLastUpdated = _boPropCol["MachineLastUpdated"];
-            BOProp propVersionNumber = _boPropCol["VersionNumber"];
+            IBOProp propDateLastUpdated = _boPropCol["DateLastUpdated"];
+            IBOProp propUserLastUpdated = _boPropCol["UserLastUpdated"];
+            IBOProp propMachineLastUpdated = _boPropCol["MachineLastUpdated"];
+            IBOProp propVersionNumber = _boPropCol["VersionNumber"];
             SetConcurrencyControl(new OptimisticLockingVersionNumberDB(this, propDateLastUpdated,
                                                                        propUserLastUpdated, propMachineLastUpdated,
                                                                        propVersionNumber));

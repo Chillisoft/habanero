@@ -53,5 +53,11 @@ namespace Habanero.Base
         /// then carry out the deletion from the database.
         /// </summary>
         void Delete();
+
+        /// <summary>
+        /// The primary key for this busines object 
+        /// </summary>
+        IPrimaryKey PrimaryKey { get; set; }
+
     }
 }

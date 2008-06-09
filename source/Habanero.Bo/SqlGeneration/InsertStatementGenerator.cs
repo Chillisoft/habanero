@@ -154,7 +154,7 @@ namespace Habanero.BO.SqlGeneration
                 }
                 if (propsToInclude.Contains(discriminator) && _bo.Props.Contains(discriminator))
                 {
-                    BOProp boProp = _bo.Props[discriminator];
+                    IBOProp boProp = _bo.Props[discriminator];
                     boProp.Value = _bo.ClassDef.ClassName;
                 } else 
                 {
@@ -240,7 +240,7 @@ namespace Habanero.BO.SqlGeneration
                         "allow composite primary keys where the child's copies have the same " +
                         "field name as the parent.");
                 }
-                BOProp parentProp = parentID.CreateBOKey(_bo.Props).GetBOPropCol()[parentID.KeyName];
+                IBOProp parentProp = parentID.CreateBOKey(_bo.Props).GetBOPropCol()[parentID.KeyName];
                 PropDef profDef = new PropDef(parentIDCopyFieldName, parentProp.PropertyType, PropReadWriteRule.ReadWrite, null);
                 BOProp newProp = new BOProp(profDef);
                 newProp.Value = parentProp.Value;

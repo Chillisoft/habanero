@@ -158,7 +158,7 @@ namespace Habanero.UI.Grid
             {
                 SetGridColumnType(gridColumn);
                 dataColumn = _dataTable.Columns[colNum];
-                PropDef propDef = null;
+                IPropDef propDef = null;
                 if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
                 {
                     propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];

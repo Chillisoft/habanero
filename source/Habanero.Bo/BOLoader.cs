@@ -424,7 +424,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="id">The ID</param>
         /// <returns>Returns a business object</returns>
-        internal IBusinessObject GetLoadedBusinessObject(BOPrimaryKey id)
+        internal IBusinessObject GetLoadedBusinessObject(IPrimaryKey id)
         {
             return GetLoadedBusinessObject(id.GetObjectId());
         }
@@ -755,7 +755,7 @@ namespace Habanero.BO
         /// <param name="primaryKey">The primary key object that contains the specific search values</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
-        public T GetBusinessObjectByID<T>(BOPrimaryKey primaryKey)
+        public T GetBusinessObjectByID<T>(IPrimaryKey primaryKey)
             where T : BusinessObject
         {
             return GetBusinessObjectByID<T>(null, primaryKey);
@@ -899,7 +899,7 @@ namespace Habanero.BO
             return GetBusinessObject<T>(classDef, criteria);
         }
 
-        private T GetBusinessObjectByID<T>(ClassDef classDef, BOKey key)
+        private T GetBusinessObjectByID<T>(ClassDef classDef, IBOKey key)
             where T : BusinessObject
         {
             if (classDef == null)
@@ -907,7 +907,7 @@ namespace Habanero.BO
                 classDef = ClassDef.ClassDefs[typeof (T)];
             }
             string criteria = "";
-            foreach (BOProp boProp in key.GetBOPropCol().Values)
+            foreach (IBOProp boProp in key.GetBOPropCol().Values)
             {
                 if (criteria.Length > 0) criteria += " AND ";
                 string propValue = boProp.Value.ToString();

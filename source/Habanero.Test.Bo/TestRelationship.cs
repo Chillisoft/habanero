@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -46,7 +47,7 @@ namespace Habanero.Test.BO
             mPropDefCol = mMockBo.PropDefCol;
 
             mRelKeyDef = new RelKeyDef();
-            PropDef propDef = mPropDefCol["MockBOProp1"];
+            IPropDef propDef = mPropDefCol["MockBOProp1"];
 
             RelPropDef lRelPropDef = new RelPropDef(propDef, "MockBOID");
             mRelKeyDef.Add(lRelPropDef);

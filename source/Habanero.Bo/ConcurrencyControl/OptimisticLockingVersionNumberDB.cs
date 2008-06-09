@@ -47,11 +47,11 @@ namespace Habanero.BO.ConcurrencyControl
         }
 
         private readonly BusinessObject _busObj;
-        private readonly BOProp _dateLastUpdated;
-        private readonly BOProp _userLastUpdated;
-        private readonly BOProp _machineLastUpdated;
-        private readonly BOProp _versionNumber;
-        private readonly BOProp _operatingSystemUser;
+        private readonly IBOProp _dateLastUpdated;
+        private readonly IBOProp _userLastUpdated;
+        private readonly IBOProp _machineLastUpdated;
+        private readonly IBOProp _versionNumber;
+        private readonly IBOProp _operatingSystemUser;
 
         /// <summary>
         /// Constructor to initialise a new instance with details of the last
@@ -66,10 +66,10 @@ namespace Habanero.BO.ConcurrencyControl
         /// object was last updated</param>
         /// <param name="versionNumber">The version number</param>
         public OptimisticLockingVersionNumberDB(BusinessObject busObj,
-                                                BOProp dateLastUpdated,
-                                                BOProp userLastUpdated,
-                                                BOProp machineLastUpdated,
-                                                BOProp versionNumber)
+                                                IBOProp dateLastUpdated,
+                                                IBOProp userLastUpdated,
+                                                IBOProp machineLastUpdated,
+                                                IBOProp versionNumber)
         {
             _busObj = busObj;
             _dateLastUpdated = dateLastUpdated;

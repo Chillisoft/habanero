@@ -111,7 +111,7 @@ namespace Habanero.BO
             if (this.BusinessObject.GetBOKeyCol() == null) return false;
             if (this.BusinessObject.State.IsDeleted) return false;
 
-            List<BOKey> allKeys = new List<BOKey>();
+            List<IBOKey> allKeys = new List<IBOKey>();
             if (this.BusinessObject.PrimaryKey != null) allKeys.Add(this.BusinessObject.PrimaryKey);
             foreach (BOKey key in this.BusinessObject.GetBOKeyCol())
             {

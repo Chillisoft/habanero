@@ -278,9 +278,9 @@ namespace Habanero.UI.Base
     /// </summary>
     public interface IControlMapperStrategy
     {
-        void AddCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp);
+        void AddCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp);
        
-        void RemoveCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp);
+        void RemoveCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp);
     }
 
     /// <summary>

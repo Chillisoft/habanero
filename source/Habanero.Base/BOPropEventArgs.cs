@@ -18,22 +18,23 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
-namespace Habanero.BO
+namespace Habanero.Base
 {
     /// <summary>
     /// Provides BOProp related arguments to an event
     /// </summary>
     public class BOPropEventArgs: EventArgs
     {
-        private readonly BOProp _prop;
+        private readonly IBOProp _prop;
 
         /// <summary>
         /// Constructor to initialise a new event argument
         /// with the affected BOProp
         /// </summary>
         /// <param name="prop">The affected BOProp</param>
-        public BOPropEventArgs(BOProp prop)
+        public BOPropEventArgs(IBOProp prop)
         {
             _prop = prop;
         }
@@ -41,7 +42,7 @@ namespace Habanero.BO
         /// <summary>
         /// Gets the BOProp affected in the event
         /// </summary>
-        public BOProp Prop
+        public IBOProp Prop
         {
             get { return _prop; }
         }

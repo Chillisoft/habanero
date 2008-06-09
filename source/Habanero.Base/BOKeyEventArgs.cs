@@ -18,22 +18,23 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
-namespace Habanero.BO
+namespace Habanero.Base
 {
     /// <summary>
     /// Provides BOKey related arguments to an event
     /// </summary>
     public class BOKeyEventArgs: EventArgs
     {
-        private readonly BOKey _boKey;
+        private readonly IBOKey _boKey;
 
         /// <summary>
         /// Constructor to initialise a new event argument
         /// with the affected BOKey
         /// </summary>
         /// <param name="boKey">The affected BOKey</param>
-        public BOKeyEventArgs(BOKey boKey)
+        public BOKeyEventArgs(IBOKey boKey)
         {
             _boKey = boKey;
         }
@@ -41,7 +42,7 @@ namespace Habanero.BO
         /// <summary>
         /// Gets the BOKey affected in the event
         /// </summary>
-        public BOKey BOKey
+        public IBOKey BOKey
         {
             get { return _boKey; }
         }

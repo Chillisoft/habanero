@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
@@ -34,8 +35,8 @@ namespace Habanero.Test.General
     [TestFixture]
     public class Tester : TestUsingDatabase
     {
-        private BOPrimaryKey deleteContactPersonID;
-        private BOPrimaryKey updateContactPersonID;
+        private IPrimaryKey deleteContactPersonID;
+        private IPrimaryKey updateContactPersonID;
         private ContactPerson mContactPersonUpdateConcurrency;
         private ContactPerson mContactPBeginEditsConcurrency;
         private ContactPerson mCotanctPTestRefreshFromObjMan;
@@ -150,7 +151,7 @@ namespace Habanero.Test.General
             Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is saved and thus no longer
             // new
 
-            BOPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
+            IPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, mContactPTestSave.ID);
 
             ContactPerson mySecondContactPerson = ContactPerson.GetContactPerson(id);
@@ -181,7 +182,7 @@ namespace Habanero.Test.General
             // new
             Assert.IsFalse(myContact.State.IsDeleted);
 
-            BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
+            IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
             //Put a loop in to take up some time due to MSAccess 
             myContact.Delete();
@@ -208,7 +209,7 @@ namespace Habanero.Test.General
 
             myContact.Save(); //save the object to the DB
 
-            BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
+            IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
 
             ContactPerson mySecondContactPerson = ContactPerson.GetContactPerson(id);
@@ -229,7 +230,7 @@ namespace Habanero.Test.General
         public void TestObjectBeingRemovedFromCollection()
         {
             ContactPerson myContact = new ContactPerson();
-            BOPrimaryKey id = myContact.ID;
+            IPrimaryKey id = myContact.ID;
 #pragma warning disable RedundantAssignment
             myContact = null; // clear the person s.t. the GC can collect
 #pragma warning restore RedundantAssignment

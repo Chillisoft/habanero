@@ -17,6 +17,9 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
+using Habanero.Base.Exceptions;
+
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
@@ -38,7 +41,7 @@ namespace Habanero.BO.ClassDefinition
         /// Adds a property definition to this key
         /// </summary>
         /// <param name="propDef">The property definition to add</param>
-        public override void Add(PropDef propDef)
+        public override void Add(IPropDef propDef)
         {
             if (Count > 0 && mIsObjectID)
             {

@@ -167,7 +167,7 @@ namespace Habanero.Test.UI.Base
             ContactPersonTestBO bo = new ContactPersonTestBO();
             bo.Surname = "please delete me.";
             bo.Save();
-            BOPrimaryKey contactPersonPK = bo.ID;
+            IPrimaryKey contactPersonPK = bo.ID;
 
             BusinessObjectCollection<ContactPersonTestBO> boCol = new BusinessObjectCollection<ContactPersonTestBO>();
             boCol.Add(bo);
@@ -194,7 +194,7 @@ namespace Habanero.Test.UI.Base
             person.Surname = "please delete me" + Guid.NewGuid().ToString("N");
             person.FirstName = "fjdal;fjasdf";
             person.Save();
-            BOPrimaryKey contactPersonPK = person.ID;
+            IPrimaryKey contactPersonPK = person.ID;
 
             Address address = person.Addresses.CreateBusinessObject();
             address.Save();
@@ -1317,9 +1317,9 @@ namespace Habanero.Test.UI.Base
 
         #region Utility Methods
 
-        private static PropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
+        private static IPropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
         {
-            PropDef propDef = null;
+            IPropDef propDef = null;
             if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
             {
                 propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];

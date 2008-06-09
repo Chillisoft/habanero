@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -83,7 +84,7 @@ namespace Habanero.BO.ClassDefinition
 
 		RelationshipDefCol CreateRelationshipDefCol();
 
-		RelPropDef CreateRelPropDef(PropDef propDef, string relPropName);
+		RelPropDef CreateRelPropDef(IPropDef propDef, string relPropName);
 
 		RelKeyDef CreateRelKeyDef();
 

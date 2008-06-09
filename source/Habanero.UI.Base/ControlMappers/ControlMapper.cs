@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Drawing;
 using System.Reflection;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -254,7 +255,7 @@ namespace Habanero.UI.Base
         //    }
         //}
 
-        public BOProp CurrentBOProp()
+        public IBOProp CurrentBOProp()
         {
             if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
             {
@@ -292,8 +293,8 @@ namespace Habanero.UI.Base
             {
                 if (_businessObject.ClassDef.PropDefColIncludingInheritance.Contains(_propertyName))
                 {
-                    PropDef propDef = _businessObject.ClassDef.PropDefColIncludingInheritance[_propertyName];
-                    BOProp boProp = CurrentBOProp();
+                    IPropDef propDef = _businessObject.ClassDef.PropDefColIncludingInheritance[_propertyName];
+                    IBOProp boProp = CurrentBOProp();
                     switch (propDef.ReadWriteRule)
                     {
                         case PropReadWriteRule.ReadOnly:

@@ -525,7 +525,7 @@ namespace Habanero.UI.Win
     {
         
 
-        public void AddCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp)
+        public void AddCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
         {
             if (boProp != null)
             {
@@ -534,7 +534,7 @@ namespace Habanero.UI.Win
             }
         }
 
-        public void RemoveCurrentBOPropHandlers(ControlMapper mapper, BOProp boProp)
+        public void RemoveCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
         {
             if(boProp!=null)
             {

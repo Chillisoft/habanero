@@ -96,7 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOLoader.cs" />
-    <Compile Include="BOPropEventArgs.cs" />
     <Compile Include="BOState.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />
@@ -119,7 +118,6 @@
     <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
-    <Compile Include="BOKeyEventArgs.cs" />
     <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
     <Compile Include="CriteriaManager\SQLCriteriaCreator.cs" />
     <Compile Include="DeleteHelper.cs" />
@@ -147,9 +145,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BOProp.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BOPropCol.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Broker.cs">

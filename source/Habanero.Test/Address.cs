@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -82,7 +83,7 @@ namespace Habanero.Test
 
             //Define Relationships
             RelKeyDef relKeyDef = new RelKeyDef();
-            PropDef propDef = lPropDefCol["ContactPersonID"];
+            IPropDef propDef = lPropDefCol["ContactPersonID"];
 
             RelPropDef relPropDef = new RelPropDef(propDef, "ContactPersonID");
             relKeyDef.Add(relPropDef);

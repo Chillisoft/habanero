@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.DB;
 using NUnit.Framework;
@@ -32,7 +33,7 @@ namespace Habanero.Test.General
     {
         private ContactPersonCompositeKey mContactPTestSave;
         private ContactPersonCompositeKey mContactPDeleted;
-        private BOPrimaryKey updateContactPersonID;
+        private IPrimaryKey updateContactPersonID;
 
         public static void RunTest()
         {
@@ -119,7 +120,7 @@ namespace Habanero.Test.General
             Assert.IsFalse(mContactPTestSave.State.IsNew); // this object is saved and thus no longer
             // new
 
-            BOPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
+            IPrimaryKey id = mContactPTestSave.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, mContactPTestSave.ID);
 
             ContactPersonCompositeKey mySecondContactPerson = ContactPersonCompositeKey.GetContactPersonCompositeKey(id);
@@ -171,7 +172,7 @@ namespace Habanero.Test.General
             // new
             Assert.IsFalse(myContact.State.IsDeleted);
 
-            BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
+            IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
             //Put a loop in to take up some time due to MSAccess 
             myContact.Delete();
@@ -198,7 +199,7 @@ namespace Habanero.Test.General
             myContact.SetPropertyValue("Surname", "Vincent");
             myContact.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
-            BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
+            IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             myContact.Save(); //save the object to the DB
 
             //			BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
@@ -229,7 +230,7 @@ namespace Habanero.Test.General
             myContact.SetPropertyValue("Surname", "Vincent");
             myContact.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
-            BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
+            IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             myContact.Save(); //save the object to the DB
 
             //			BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
@@ -270,7 +271,7 @@ namespace Habanero.Test.General
             myContact.SetPropertyValue("Surname", "Vincent");
             myContact.SetPropertyValue("PK1Prop1", Guid.NewGuid());
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
-            BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
+            IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             myContact.Save(); //save the object to the DB
 
             //			BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database

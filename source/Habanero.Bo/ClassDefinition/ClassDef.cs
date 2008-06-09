@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.Loaders;
 using Habanero.Util;
 using Habanero.Util.File;
@@ -892,7 +893,7 @@ namespace Habanero.BO.ClassDefinition
         /// throws an error if not</returns>
         /// <exception cref="InvalidPropertyNameException">
         /// This exception is thrown if the property is not found</exception>
-        public PropDef GetPropDef(string propertyName)
+        public IPropDef GetPropDef(string propertyName)
         {
             return GetPropDef(propertyName, true);
         }
@@ -928,9 +929,9 @@ namespace Habanero.BO.ClassDefinition
         /// <exception cref="InvalidPropertyNameException">
         /// This exception is thrown if the property is not found and 
         /// <paramref name="throwError"/> is true</exception>
-        public PropDef GetPropDef(string propertyName, bool throwError)
+        public IPropDef GetPropDef(string propertyName, bool throwError)
         {
-            PropDef foundPropDef = null;
+            IPropDef foundPropDef = null;
             ClassDef currentClassDef = this;
             while (currentClassDef != null)
             {

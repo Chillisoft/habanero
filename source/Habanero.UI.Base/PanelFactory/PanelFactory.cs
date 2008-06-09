@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -216,7 +217,7 @@ namespace Habanero.UI.Base
                 {
                     bool isCompulsory;
                     ClassDef classDef = _currentBusinessObject.ClassDef;
-                    PropDef propDef = field.GetPropDefIfExists(classDef);
+                    IPropDef propDef = field.GetPropDefIfExists(classDef);
                     if (propDef != null)
                     {
                         isCompulsory = propDef.Compulsory;
@@ -229,7 +230,7 @@ namespace Habanero.UI.Base
                     BOPropCol boPropCol = _currentBusinessObject.Props;
                     if (boPropCol.Contains(field.PropertyName))
                     {
-                        BOProp boProp = boPropCol[field.PropertyName];
+                        IBOProp boProp = boPropCol[field.PropertyName];
                         if (!boProp.HasDisplayName())
                         {
                             boProp.DisplayName = labelCaption;

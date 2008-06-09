@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -40,7 +41,7 @@ namespace Habanero.Test
         {
         }
 
-        public ContactPersonCompositeKey(BOPrimaryKey id) : base(id)
+        public ContactPersonCompositeKey(IPrimaryKey id) : base(id)
         {
         }
 
@@ -91,7 +92,7 @@ namespace Habanero.Test
 
             //Define Driver Relationships
             RelKeyDef relKeyDef = new RelKeyDef();
-            PropDef propDef = lPropDefCol[PK1_PROP1_NAME];
+            IPropDef propDef = lPropDefCol[PK1_PROP1_NAME];
 
             RelPropDef lRelPropDef = new RelPropDef(propDef, "DriverFK1");
             relKeyDef.Add(lRelPropDef);
@@ -163,7 +164,7 @@ namespace Habanero.Test
         /// <returns>The loaded business object</returns>
         /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
-        public static ContactPersonCompositeKey GetContactPersonCompositeKey(BOPrimaryKey id)
+        public static ContactPersonCompositeKey GetContactPersonCompositeKey(IPrimaryKey id)
         {
             ContactPersonCompositeKey myContactPerson =
                 (ContactPersonCompositeKey)BOLoader.Instance.GetLoadedBusinessObject(id);

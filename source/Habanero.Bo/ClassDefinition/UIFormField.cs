@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using Habanero.Base;
 using Habanero.Util;
 using Habanero.Util.File;
 
@@ -233,7 +234,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         ///<param name="classDef">The class definition that this field is for.</param>
         ///<returns>The property definition that is refered to, otherwise null. </returns>
-        public PropDef GetPropDefIfExists(ClassDef classDef)
+        public IPropDef GetPropDefIfExists(ClassDef classDef)
         {
             return ClassDefHelper.GetPropDefByPropName(classDef, PropertyName);
         }
@@ -259,7 +260,7 @@ namespace Habanero.BO.ClassDefinition
                 return _toolTipText;
             }
             string toolTipText = null;
-            PropDef propDef = GetPropDefIfExists(classDef);
+            IPropDef propDef = GetPropDefIfExists(classDef);
             if (propDef != null)
             {
                 toolTipText = propDef.Description;
@@ -292,7 +293,7 @@ namespace Habanero.BO.ClassDefinition
                 return _label;
             }
             string label = null;
-            PropDef propDef = GetPropDefIfExists(classDef);
+            IPropDef propDef = GetPropDefIfExists(classDef);
             if (propDef != null)
             {
                 label = propDef.DisplayName + LabelSuffix;

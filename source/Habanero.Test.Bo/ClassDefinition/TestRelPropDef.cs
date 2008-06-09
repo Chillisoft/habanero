@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -109,7 +110,7 @@ namespace Habanero.Test.BO.ClassDefinition
             public RelPropDefInheritor(PropDef propDef) : base(propDef, "relprop")
             {}
 
-            public PropDef GetSetOwnerProperty
+            public IPropDef GetSetOwnerProperty
             {
                 get { return OwnerProperty; }
                 set { OwnerProperty = value;}

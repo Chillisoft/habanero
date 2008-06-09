@@ -19,6 +19,7 @@
 
 // Static Model
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -82,7 +83,7 @@ namespace Habanero.Test
 
             //Define Owner Relationships
             RelKeyDef relKeyDef = new RelKeyDef();
-            PropDef propDef = lPropDefCol["OwnerId"];
+            IPropDef propDef = lPropDefCol["OwnerId"];
 
             RelPropDef lRelPropDef = new RelPropDef(propDef, "ContactPersonID");
             relKeyDef.Add(lRelPropDef);

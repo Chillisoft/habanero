@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -360,13 +361,13 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(dataColumn1.Visible);
 //            Assert.IsTrue(dataColumn1.ReadOnly); TODO: put this test into the readonlygridinitialiser
             Assert.AreEqual(columnDef1.Width, dataColumn1.Width);
-            PropDef propDef = GetPropDef(classDef, columnDef1);
+            IPropDef propDef = GetPropDef(classDef, columnDef1);
             Assert.AreEqual(propDef.PropertyType, dataColumn1.ValueType);
         }
 
-        private static PropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
+        private static IPropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
         {
-            PropDef propDef = null;
+            IPropDef propDef = null;
             if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
             {
                 propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];

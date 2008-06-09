@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using Habanero.Util.File;
@@ -53,7 +54,7 @@ namespace Habanero.BO
         /// not available</returns>
         public Dictionary<string, object> GetLookupList(string propertyName)
         {
-            PropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName, false);
+            IPropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName, false);
             //return def.GetLookupList(_businessObject.GetDatabaseConnection());
             if (propDef != null && propDef.LookupList != null)
             {
@@ -189,7 +190,7 @@ namespace Habanero.BO
         public ClassDef GetLookupListClassDef(string propertyName)
         {
             ClassDef classDef = _businessObject.ClassDef;
-            PropDef propDef = classDef.GetPropDef(propertyName, false);
+            IPropDef propDef = classDef.GetPropDef(propertyName, false);
 
             if (propDef != null && propDef.LookupList != null) {
                 if (propDef.LookupList is DatabaseLookupList)

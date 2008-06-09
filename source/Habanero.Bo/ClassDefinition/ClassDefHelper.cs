@@ -20,12 +20,13 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
     internal class ClassDefHelper
     {
-        public static PropDef GetPropDefByPropName(ClassDef classDef, string propertyName)
+        public static IPropDef GetPropDefByPropName(ClassDef classDef, string propertyName)
         {
             if (classDef == null || propertyName.IndexOf("-") != -1)
             {
@@ -38,7 +39,7 @@ namespace Habanero.BO.ClassDefinition
                 List<string> relNames = new List<string>();
                 relNames.AddRange(relationshipName.Split(new string[]{"|"}, StringSplitOptions.RemoveEmptyEntries));
                 RelationshipDefCol relationshipDefCol = classDef.RelationshipDefCol;
-                PropDef propDef = null;
+                IPropDef propDef = null;
                 foreach (string relName in relNames)
                 {
                     if (relationshipDefCol.Contains(relName))

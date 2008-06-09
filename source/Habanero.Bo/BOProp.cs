@@ -33,7 +33,7 @@ namespace Habanero.BO
     /// <summary>
     /// Stores the object's property value at any given point in time
     /// </summary>
-    public class BOProp
+    public class BOProp : IBOProp
     {
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
         protected object _currentValue = null;
@@ -77,7 +77,7 @@ namespace Habanero.BO
         ///<summary>
         /// The property definition of the property that this BOProp represents.
         ///</summary>
-        public PropDef PropDef
+        public IPropDef PropDef
         {
             get { return _propDef; }
         }
@@ -85,7 +85,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the property name
         /// </summary>
-        internal string PropertyName
+        public string PropertyName
         {
             get { return _propDef.PropertyName; }
         }
@@ -93,7 +93,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the database field name
         /// </summary>
-        internal string DatabaseFieldName
+        public string DatabaseFieldName
         {
             get { return _propDef.DatabaseFieldName; }
         }
@@ -103,7 +103,7 @@ namespace Habanero.BO
         /// Initialises the property with the specified value
         /// </summary>
         /// <param name="propValue">The value to assign</param>
-        protected internal void InitialiseProp(object propValue)
+        public void InitialiseProp(object propValue)
         {
             InitialiseProp(propValue, false);
         }
@@ -114,7 +114,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propValue">The value to assign</param>
         /// <param name="isObjectNew">Whether the object is new or not</param>
-        private void InitialiseProp(object propValue, bool isObjectNew)
+        public void InitialiseProp(object propValue, bool isObjectNew)
         {
             if (propValue == DBNull.Value)
             {
@@ -220,7 +220,7 @@ namespace Habanero.BO
         /// <summary>
         /// Restores the property's original value as defined in PersistedValue
         /// </summary>
-        protected internal void RestorePropValue()
+        public void RestorePropValue()
         {
             _isValid = _origValueIsValid;
             _invalidReason = _origInvalidReason;
@@ -235,7 +235,7 @@ namespace Habanero.BO
         /// This is usually called when the object is persisted
         /// to the database.
         /// </summary>
-        protected internal void BackupPropValue()
+        public void BackupPropValue()
         {
             _persistedValue = _currentValue;
             _valueBeforeLastEdit = _currentValue;
@@ -352,7 +352,7 @@ namespace Habanero.BO
         /// Returns the persisted property value as a string (the value 
         /// assigned at the last backup or database committal)
         /// </summary>
-        internal string PersistedPropertyValueString
+        public string PersistedPropertyValueString
         {
             get
             {
@@ -390,7 +390,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the property value as a string
         /// </summary>
-        internal string PropertyValueString
+        public string PropertyValueString
         {
             get
             {
@@ -479,7 +479,7 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates whether the object is new
         /// </summary>
-        internal bool IsObjectNew
+        public bool IsObjectNew
         {
             get { return _isObjectNew; }
             set { _isObjectNew = value; }
@@ -568,7 +568,7 @@ namespace Habanero.BO
         /// value and the persisted value.  It consists of an element with the 
         /// property name, containing "PreviousValue" and "NewValue" elements
         /// </summary>
-        internal string DirtyXml
+        public string DirtyXml
         {
             get
             {

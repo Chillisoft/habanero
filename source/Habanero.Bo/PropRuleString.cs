@@ -173,7 +173,7 @@ namespace Habanero.BO
         /// <param name="errorMessage">A string to amend with an error
         /// message indicating why the value might have been invalid</param>
         /// <returns>Returns true if valid</returns>
-        protected internal override bool isPropValueValid(string displayName, Object propValue,
+        public override bool IsPropValueValid(string displayName, Object propValue,
                                                           ref string errorMessage)
         {
             errorMessage = "";
@@ -188,7 +188,7 @@ namespace Habanero.BO
                         + "It is not a type of string.";
                 return false;
             }
-            if (!base.isPropValueValid(displayName, propValue, ref errorMessage))
+            if (!base.IsPropValueValid(displayName, propValue, ref errorMessage))
             {
                 return false;
             }

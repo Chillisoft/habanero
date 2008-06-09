@@ -231,7 +231,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-            BOPrimaryKey id = cp.ID;
+            IPrimaryKey id = cp.ID;
             //---------------Execute Test ----------------------
 
             cp.Surname = Guid.NewGuid().ToString();
@@ -256,7 +256,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
             cp.Surname = Guid.NewGuid().ToString();
-            BOProp propDateTimeLocked = cp.Props["DateTimeLocked"];
+            IBOProp propDateTimeLocked = cp.Props["DateTimeLocked"];
             int lockDuration = 15;
             //---------------Execute Test ----------------------
             propDateTimeLocked.Value = DateTime.Now.AddMinutes(-1*lockDuration - 1);
@@ -342,14 +342,14 @@ namespace Habanero.Test.BO
 
     internal class ContactPersonPessimisticLockingDB : BusinessObject
     {
-        private readonly BOProp _boPropLocked;
+        private readonly IBOProp _boPropLocked;
 
         public ContactPersonPessimisticLockingDB()
         {
-            BOProp propDateLocked = _boPropCol["DateTimeLocked"];
-            BOProp propUserLocked = _boPropCol["UserLocked"];
-            BOProp propMachineLocked = _boPropCol["MachineLocked"];
-            BOProp propOperatingSystemUserLocked = _boPropCol["OperatingSystemUserLocked"];
+            IBOProp propDateLocked = _boPropCol["DateTimeLocked"];
+            IBOProp propUserLocked = _boPropCol["UserLocked"];
+            IBOProp propMachineLocked = _boPropCol["MachineLocked"];
+            IBOProp propOperatingSystemUserLocked = _boPropCol["OperatingSystemUserLocked"];
             _boPropLocked = _boPropCol["Locked"];
 
             SetConcurrencyControl(new PessimisticLockingDB(this, 15, propDateLocked,
@@ -398,7 +398,7 @@ namespace Habanero.Test.BO
             return Surname;
         }
 
-        public BOProp BoPropLocked
+        public IBOProp BoPropLocked
         {
             get { return _boPropLocked; }
         }

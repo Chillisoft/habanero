@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -246,7 +247,7 @@ namespace Habanero.BO.Loaders
                     string propertyName = propDef.PropertyName;
                     if (allProps.Contains(propertyName))
                     {
-                        PropDef keyPropDef = allProps[propertyName];
+                        IPropDef keyPropDef = allProps[propertyName];
                         keyDef.Add(keyPropDef);
                     }
                     else 

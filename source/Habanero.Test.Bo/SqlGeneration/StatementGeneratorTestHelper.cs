@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO.ClassDefinition;
 

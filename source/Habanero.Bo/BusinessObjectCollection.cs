@@ -373,7 +373,7 @@ namespace Habanero.BO
                     {
                         string parameterName = parts[0];
                         string fullTableName;
-                        PropDef propDef;
+                        IPropDef propDef;
                         InsertJoinsForRelatedProperty(sqlStatement, classDef, parameterName, databaseConnection,
                                                       ref joinedRelationshipTables, out fullTableName, out propDef);
                         string newParameterName = fullTableName + "." + propDef.DatabaseFieldName;
@@ -399,7 +399,7 @@ namespace Habanero.BO
             {
                 string parameterName = parameter.ParameterName;
                 string fullTableName;
-                PropDef propDef;
+                IPropDef propDef;
                 InsertJoinsForRelatedProperty(sqlStatement, classDef, parameterName, databaseConnection,
                                               ref joinedRelationshipTables, out fullTableName, out propDef);
 
@@ -431,7 +431,7 @@ namespace Habanero.BO
         /// <param name="fullTableName">A return parameter to get the constructed Alias for this joined table.</param>
         /// <param name="propDef">A return parameter to get the propDef that represents the related property.</param>
         private static void InsertJoinsForRelatedProperty(ISqlStatement sqlStatement, ClassDef classDef, string parameterName, 
-            IDatabaseConnection databaseConnection, ref List<string> alreadyJoinedRelationshipTables, out string fullTableName, out PropDef propDef)
+            IDatabaseConnection databaseConnection, ref List<string> alreadyJoinedRelationshipTables, out string fullTableName, out IPropDef propDef)
         {
             string[] parts = parameterName.Split('.');
             string propertyName = parts[parts.Length - 1];

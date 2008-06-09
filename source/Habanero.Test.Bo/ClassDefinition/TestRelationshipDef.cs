@@ -43,7 +43,7 @@ namespace Habanero.Test.BO.ClassDefinition
             mPropDefCol = mMockBo.PropDefCol;
 
             mRelKeyDef = new RelKeyDef();
-            PropDef propDef = mPropDefCol["MockBOProp1"];
+            IPropDef propDef = mPropDefCol["MockBOProp1"];
 
             RelPropDef lRelPropDef = new RelPropDef(propDef, "MockBOID");
             mRelKeyDef.Add(lRelPropDef);

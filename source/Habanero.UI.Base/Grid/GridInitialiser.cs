@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
@@ -147,16 +148,16 @@ namespace Habanero.UI.Base
 //
 //                col.DefaultCellStyle.Format = "dd.MMM.yyyy";
                 col.SortMode = DataGridViewColumnSortMode.Automatic;
-                PropDef propDef = GetPropDef(classDef, gridColDef);
+                IPropDef propDef = GetPropDef(classDef, gridColDef);
                 if (propDef != null) col.ValueType = propDef.PropertyType;
 //                this._gridControl.Grid.Columns.Add(col);
             }
         }
 
 
-        private PropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
+        private IPropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
         {
-            PropDef propDef = null;
+            IPropDef propDef = null;
             if (classDef.PropDefColIncludingInheritance.Contains(gridColumn.PropertyName))
             {
                 propDef = classDef.PropDefColIncludingInheritance[gridColumn.PropertyName];

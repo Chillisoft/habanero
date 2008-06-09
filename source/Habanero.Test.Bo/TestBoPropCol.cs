@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -30,7 +31,7 @@ namespace Habanero.Test.BO
     public class TestBoPropCol
     {
         private PropDef mPropDef;
-        private BOProp mProp;
+        private IBOProp mProp;
         private BOPropCol mBOPropCol;
 
         [SetUp]
