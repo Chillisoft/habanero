@@ -58,9 +58,9 @@ namespace Habanero.BO
         /// Constructor to initialise a new property
         /// </summary>
         /// <param name="propDef">The property definition</param>
-        public BOProp(PropDef propDef)
+        public BOProp(IPropDef propDef)
         {
-            _propDef = propDef;
+            _propDef = (PropDef) propDef;
             _displayName = propDef.DisplayName;
         }
 
@@ -69,7 +69,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propDef">The property definition</param>
         /// <param name="propValue">The initial value</param>
-        internal BOProp(PropDef propDef, object propValue) : this(propDef)
+        internal BOProp(IPropDef propDef, object propValue) : this(propDef)
         {
             InitialiseProp(propValue, true);
         }
