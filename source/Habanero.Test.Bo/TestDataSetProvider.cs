@@ -101,13 +101,13 @@ namespace Habanero.Test.BO
 		protected void SetupSaveExpectation()
 		{
 //            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                DatabaseConnection.CurrentConnection.GetConnection());
+//                  DatabaseConnection.CurrentConnection.GetConnection());
 //            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//                DatabaseConnection.CurrentConnection.GetConnection());
+//                  DatabaseConnection.CurrentConnection.GetConnection());
 //            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//    DatabaseConnection.CurrentConnection.GetConnection());
+//                  DatabaseConnection.CurrentConnection.GetConnection());
 //            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-//DatabaseConnection.CurrentConnection.GetConnection());
+//                  DatabaseConnection.CurrentConnection.GetConnection());
 		}
 
         [Test]
@@ -164,9 +164,6 @@ namespace Habanero.Test.BO
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithDateTime();
-//            IDataGridViewColumn column;
-//            string requiredFormat = "dd.MMM.yyyy";
-//            IGridBase gridBase = CreateGridBaseWithDateCustomFormatCol(out column, requiredFormat);
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
             MyBO bo = new MyBO();
             string dateTimeProp = "TestDateTime";
@@ -183,6 +180,32 @@ namespace Habanero.Test.BO
             Assert.AreSame(typeof(DateTime), dataTable.Columns[dateTimeProp].DataType);
             Assert.IsInstanceOfType(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
             //---------------Tear Down -------------------------          
+        }
+
+        [Test, Ignore("Not yet implemented critical to implement immediately")]
+        public void Test_CustomDefined_Property()
+        {
+            Assert.Fail("Not yet implemented");
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            //ClassDef.ClassDefs.Clear();
+            //MyBO.LoadClassDefWithDateTime();
+            //BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO>();
+            //MyBO bo = new MyBO();
+            //string dateTimeProp = "TestDateTime";
+            //DateTime expectedDate = DateTime.Now;
+            //bo.SetPropertyValue(dateTimeProp, expectedDate);
+
+            //col.Add(bo);
+            //IDataSetProvider dataSetProvider = CreateDataSetProvider(col);
+            ////--------------Assert PreConditions----------------            
+
+            ////---------------Execute Test ----------------------
+            //DataTable dataTable = dataSetProvider.GetDataTable(bo.ClassDef.GetUIDef("default").UIGrid);
+            ////---------------Test Result -----------------------
+            //Assert.AreSame(typeof(DateTime), dataTable.Columns[dateTimeProp].DataType);
+            //Assert.IsInstanceOfType(typeof(DateTime), dataTable.Rows[0][dateTimeProp]);
+            ////---------------Tear Down -------------------------          
         }
 
         //		[Test]

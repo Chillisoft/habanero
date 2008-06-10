@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {
@@ -9,10 +10,19 @@ namespace Habanero.UI.Base
         /// Occurs on clicking the button etc.
         /// </summary>
         event EventHandler Click;
-        ///// <summary>
-        ///// Occurs on key press.
-        ///// </summary>
+
+        /////// <summary>
+        /////// Occurs on key press.
+        /////// </summary>
         //event KeyPressEventHandler KeyPress;
+        /////// <summary>
+        /////// Occurs on key Up.
+        /////// </summary>
+        //event KeyPressEventHandler KeyUp;
+        /////// <summary>
+        /////// Occurs on key Down.
+        /////// </summary>
+        //event KeyPressEventHandler KeyDown;
 
         /// <summary>
         /// Occurs when the control is double clicked.

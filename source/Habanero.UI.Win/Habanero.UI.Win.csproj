@@ -54,6 +54,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ControlCollectionWin.cs" />
+    <Compile Include="ControlMapperStrategyWin.cs" />
     <Compile Include="ControlWin.cs">
       <SubType>Component</SubType>
     </Compile>

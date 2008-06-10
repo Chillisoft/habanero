@@ -12,6 +12,6 @@ namespace Habanero.UI.Base
         char PasswordChar { get; set; }
 
         //TODO_Port:ScrollBars ScrollBars { get; set; }
-        event EventHandler DoubleClick;
+//        event EventHandler DoubleClick;
     }
 }

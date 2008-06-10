@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 
+using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
 using NUnit.Framework;
@@ -47,7 +48,6 @@ namespace Habanero.Test.UI.Base
                 mapperStub.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtNormal.Text);
                 _shape.ShapeName = "TestShapeName2";
-//                _normalMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("TestShapeName2", _txtNormal.Text);
             }
             [Test]
@@ -57,7 +57,6 @@ namespace Habanero.Test.UI.Base
                 mapperStub.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtNormal.Text);
                 _shape.ShapeName = "TestShapeName2";
-                //                _normalMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("TestShapeName2", _txtNormal.Text);
             }
 
@@ -103,7 +102,6 @@ namespace Habanero.Test.UI.Base
                 _normalMapper.BusinessObject = shape2;
                 Assert.AreEqual("Different", _txtNormal.Text);
                 shape2.ShapeName = "Different2";
-                //_normalMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("Different2", _txtNormal.Text);
             }
             [Test]
@@ -116,7 +114,7 @@ namespace Habanero.Test.UI.Base
                 _normalMapper.BusinessObject = shape2;
                 Assert.AreEqual("Different", _txtNormal.Text);
                 shape2.ShapeName = "Different2";
-                _normalMapper.UpdateControlValueFromBusinessObject();
+//                _normalMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("Different2", _txtNormal.Text);
             }
             [Test]
@@ -125,7 +123,7 @@ namespace Habanero.Test.UI.Base
                 _readOnlyMapper.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtReadonly.Text);
                 _shape.ShapeName = "TestShapeName2";
-                _readOnlyMapper.UpdateControlValueFromBusinessObject();
+//                _readOnlyMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
             [Test]
@@ -138,8 +136,22 @@ namespace Habanero.Test.UI.Base
                 _readOnlyMapper.BusinessObject = sh2;
                 Assert.AreEqual("Different", _txtReadonly.Text);
                 sh2.ShapeName = "Different2";
-                _readOnlyMapper.UpdateControlValueFromBusinessObject();
+//                _readOnlyMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("Different2", _txtReadonly.Text);
+            }
+
+            [Test]
+            public void Test_CanPressKey()
+            {
+                //---------------Set up test pack-------------------
+                System.Windows.Forms.TextBox tb = new System.Windows.Forms.TextBox();
+                //--------------Assert PreConditions----------------            
+                tb.KeyPress +=delegate(object sender, KeyPressEventArgs e) {  };
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+
+                //---------------Tear Down -------------------------          
             }
         }
 
@@ -197,7 +209,7 @@ namespace Habanero.Test.UI.Base
                 _normalMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("Different2", _txtNormal.Text);
             }
-            //TODO: All these have to follow pattern above
+
             [Test]
             public void TestReadOnlyChangeValue()
             {
@@ -294,9 +306,6 @@ namespace Habanero.Test.UI.Base
         }
 
 
-
-
-
         #endregion
 
         #region Tests for read-only mapper
@@ -308,9 +317,6 @@ namespace Habanero.Test.UI.Base
             _readOnlyMapper.BusinessObject = _shape;
             Assert.IsFalse(_txtReadonly.Enabled, "A read-only control should be disabled once it has an object");
         }
-
-
-		
 
 
         #endregion

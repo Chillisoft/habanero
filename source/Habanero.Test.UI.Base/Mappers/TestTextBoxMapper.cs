@@ -71,7 +71,7 @@ namespace Habanero.Test.UI.Base
                 TextBoxMapperStrategyWin strategy =
                     (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
                 BOProp boProp = CreateBOPropForType(typeof (string));
-                strategy.AddKeyPressEvents(_mapper, boProp);
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
                 //---------------Execute Test ----------------------
 
                 //---------------Test Result -----------------------
@@ -89,7 +89,7 @@ namespace Habanero.Test.UI.Base
                 TextBoxMapperStrategyWin strategy =
                     (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
                 BOProp boProp = CreateBOPropForType(typeof(int));
-                strategy.AddKeyPressEvents(_mapper, boProp);
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
                 //---------------Execute Test ----------------------
 
                 //---------------Test Result -----------------------
@@ -107,7 +107,7 @@ namespace Habanero.Test.UI.Base
                 TextBoxMapperStrategyWin strategy =
                     (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
                 BOProp boProp = CreateBOPropForType(typeof(int));
-                strategy.AddKeyPressEvents(_mapper, boProp);
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
                 //---------------Execute Test ----------------------
 
                 //---------------Test Result -----------------------
@@ -125,7 +125,7 @@ namespace Habanero.Test.UI.Base
                 TextBoxMapperStrategyWin strategy =
                     (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
                 BOProp boProp = CreateBOPropForType(typeof(int));
-                strategy.AddKeyPressEvents(_mapper, boProp);
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
                 _mapper.Control.Text = "123";
                 ((TextBoxWin) _mapper.Control).SelectionStart = 0;
                 //---------------Execute Test ----------------------

@@ -64,119 +64,28 @@ namespace Habanero.UI.Base
             _propertyName = propName;
             _isReadOnly = isReadOnly;
             _factory = factory;
-            //if (!_isReadOnly)
-            //{
-            //    _control.KeyUp += CtlKeyUpHandler;
-            //    _control.KeyDown += CtlKeyDownHandler;
-            //    _control.KeyPress += CtlKeyPressHandler;
-            //}
+            if (!_isReadOnly)
+            {
+                AddKeyPressHandlers();
+            }
             UpdateIsEditable();
         }
 
+        private void AddKeyPressHandlers()
+        {
+            IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
+            mapperStrategy.AddKeyPressEventHandler(_control);
+        }
+
         #region Key Press Event Handlers
-
-        ///// <summary>
-        ///// A handler to deal with the case where a key has been pressed.
-        ///// </summary>
-        ///// <param name="sender">The object that notified of the event</param>
-        ///// <param name="e">Attached arguments regarding the event</param>
-        //private void CtlKeyPressHandler(object sender, KeyPressEventArgs e)
-        //{
-        //    if (e.KeyChar == 0x013)//Should be a Keys.Enter
-        //    {
-        //        e.Handled = true;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// A handler to deal with the case where a key is down.
-        ///// </summary>
-        ///// <param name="sender">The object that notified of the event</param>
-        ///// <param name="e">Attached arguments regarding the event</param>
-        //private void CtlKeyDownHandler(object sender, KeyEventArgs e)
-        //{
-        //    if (e.KeyCode == Keys.Enter)
-        //    {
-        //        e.Handled = true;
-        //    }
-        //}
-
-//        /// <summary>
-//        /// A handler to deal with the case where a key has been released.
-//        /// If the key is an Enter key, focus moves to the next item in the
-//        /// tab order.
-//        /// </summary>
-//        /// <param name="sender">The object that notified of the event</param>
-//        /// <param name="e">Attached arguments regarding the event</param>
-//        private void CtlKeyUpHandler(object sender, KeyEventArgs e)
-//        {
-////            if (e.KeyCode == Keys.Enter)
-////            {
-////                e.Handled = true;
-////
-////                if (_control is TextBox && ((TextBox)_control).Multiline)
-////                {
-////                    return;
-////                }
-////
-////                Control nextControl = GetNextControlInTabOrder(_control.Parent, _control);
-////                //_control.FindForm().GetNextControl(_control, true) ;
-////
-////                if (nextControl != null)
-////                {
-////                    nextControl.Focus();
-////                }
-////            }
-//        }
+ 
 
         #endregion
 
         #region Control Order Methods
 
-        ///// <summary>
-        ///// Provides the next item in the tab order on a control
-        ///// </summary>
-        ///// <param name="parentControl">The parent of the controls in question</param>
-        ///// <param name="control">The current control</param>
-        ///// <returns>Returns the next control in the tab order</returns>
-        //private static Control GetNextControlInTabOrder(Control parentControl, Control control)
-        //{
-        //    Control nextControl = parentControl.GetNextControl(control, true);
-        //    if (nextControl == null)
-        //    {
-        //        return GetFirstControl(parentControl, control);
-        //    }
-        //    if (!nextControl.TabStop)
-        //    {
-        //        return GetNextControlInTabOrder(parentControl, nextControl);
-        //    }
-        //    return nextControl;
-        //}
 
-        ///// <summary>
-        ///// Provides the first control in the tab order on a control
-        ///// </summary>
-        ///// <param name="parentControl">The parent of the controls in question</param>
-        ///// <param name="control">The current control</param>
-        ///// <returns>Returns the first control in the tab order</returns>
-        //private static Control GetFirstControl(Control parentControl, Control control)
-        //{
-        //    Control lastTabStopControl = control;
-        //    Control currentControl = control;
-        //    do
-        //    {
-        //        Control prevControl = parentControl.GetNextControl(currentControl, false);
-        //        if (prevControl == null)
-        //        {
-        //            return lastTabStopControl;
-        //        }
-        //        if (prevControl.TabStop)
-        //        {
-        //            lastTabStopControl = prevControl;
-        //        }
-        //        currentControl = prevControl;
-        //    } while (true);
-        //}
+
 
         #endregion
 
@@ -244,16 +153,6 @@ namespace Habanero.UI.Base
             IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
             mapperStrategy.AddCurrentBOPropHandlers(this,CurrentBOProp());
         }
-
-        //private void RemoveCurrentBOPropHandlers()
-        //{
-        //    BOProp boProp = CurrentBOProp();
-        //    if (boProp != null)
-        //    {
-        //        //Remove existing handlers
-        //        boProp.Updated -= this.BOPropValueUpdatedHandler;
-        //    }
-        //}
 
         public IBOProp CurrentBOProp()
         {

@@ -519,31 +519,6 @@ namespace Habanero.UI.Win
     }
 
     /// <summary>
-    /// Provides a set of strategies that can be applied to a control
-    /// </summary>
-    public class ControlMapperStrategyWin : IControlMapperStrategy
-    {
-        
-
-        public void AddCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
-        {
-            if (boProp != null)
-            {
-//                Add needed handlers
-                boProp.Updated += mapper.BOPropValueUpdatedHandler;
-            }
-        }
-
-        public void RemoveCurrentBOPropHandlers(ControlMapper mapper, IBOProp boProp)
-        {
-            if(boProp!=null)
-            {
-                boProp.Updated -= mapper.BOPropValueUpdatedHandler;
-            }
-        }
-    }
-
-    /// <summary>
     /// Provides a set of strategies that can be applied to a textbox
     /// </summary>
     internal class TextBoxMapperStrategyWin: ITextBoxMapperStrategy
@@ -560,7 +535,7 @@ namespace Habanero.UI.Win
         /// </summary>
         /// <param name="mapper">The textbox mapper</param>
         /// <param name="boProp">The property being mapped</param>
-        public void AddKeyPressEvents(TextBoxMapper mapper, BOProp boProp)
+        public void AddKeyPressEventHandler(TextBoxMapper mapper, BOProp boProp)
         {
             _boProp = boProp;
 
