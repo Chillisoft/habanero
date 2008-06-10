@@ -42,7 +42,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
-        public void TestLoadWithPrimaryKey()
+        public void TestGetBusinessObjectWithPrimaryKey()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -56,9 +56,26 @@ namespace Habanero.Test.BO
             //--------------Assert PreConditions----------------            
 
             //---------------Execute Test ----------------------
-            ContactPersonTestBO loadedCP = loader.GetBusinessObject(cp.PrimaryKey) as ContactPersonTestBO;
+            ContactPersonTestBO loadedCP = loader.GetBusinessObject<ContactPersonTestBO>(cp.PrimaryKey);
             //---------------Test Result -----------------------
             Assert.AreSame(cp, loadedCP);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestGetBusinessObjectWhenNotExists()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectLoaderInMemory loader = new BusinessObjectLoaderInMemory(dataStore);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCP = loader.GetBusinessObject<ContactPersonTestBO>(new ContactPersonTestBO().PrimaryKey) ;
+            //---------------Test Result -----------------------
+            Assert.IsNull(loadedCP);
             //---------------Tear Down -------------------------          
         }
     }
@@ -72,20 +89,18 @@ namespace Habanero.Test.BO
             _dataStore = dataStore;
         }
 
-        public IBusinessObject GetBusinessObject(IPrimaryKey key) 
+        public T GetBusinessObject<T>(IPrimaryKey key) where T : class, IBusinessObject
         {
-            foreach (IBusinessObject ibo in _dataStore.AllObjects)
-            {
-                if (ibo.PrimaryKey == key)
-                    return ibo;
-            }
-            return null;
+            if (_dataStore.AllObjects.ContainsKey(key))
+                return (T)_dataStore.AllObjects[key];
+            else
+                return null;
         }
     }
 
     internal class DataStoreInMemory 
     {
-        private List<IBusinessObject> _objects = new List<IBusinessObject>();
+        private Dictionary<IPrimaryKey, IBusinessObject> _objects = new Dictionary<IPrimaryKey, IBusinessObject>();
         public int Count
         {
             get { return _objects.Count; }
@@ -93,10 +108,10 @@ namespace Habanero.Test.BO
 
         public void Add(IBusinessObject businessObject)
         {
-            _objects.Add(businessObject);
+            _objects.Add(businessObject.PrimaryKey, businessObject);
         }
 
-        public List<IBusinessObject> AllObjects
+        public Dictionary<IPrimaryKey, IBusinessObject> AllObjects
         {
             get { return _objects; }
         }

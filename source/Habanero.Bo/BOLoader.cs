@@ -812,7 +812,7 @@ namespace Habanero.BO
         /// <param name="primaryKey">The primary key object that contains the specific search values</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
-        public IBusinessObject GetBusinessObjectByID(Type boType, BOPrimaryKey primaryKey)
+        public IBusinessObject GetBusinessObjectByID(Type boType, IPrimaryKey primaryKey)
         {
             return GetBusinessObjectByID<BusinessObject>(ClassDef.ClassDefs[boType], primaryKey);
         }

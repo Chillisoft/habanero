@@ -38,7 +38,8 @@ namespace Habanero.Base
         public static ISettings Settings
         {
             get { return _settings; }
-            set { _settings = value; }
+            set { _settings = value;
+            }
         }
 
         /// <summary>
