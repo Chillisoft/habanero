@@ -161,6 +161,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestDateTimeColumnType()
         {
+            //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithDateTime();
 //            IDataGridViewColumn column;
@@ -189,5 +190,161 @@ namespace Habanero.Test.BO
         //			 itsBo1.SetPropertyValue("TestProp", "bo1prop1updated");
         //			Assert.AreEqual("bo1prop1updated", _table.Rows[0]["TestProp"]);
         //		}
+
+        [Test, Ignore("This is the current test being developed")]
+        public void TestRelatedPropColumn()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyContactPerson.LoadClassDef();
+            string columnName = "Father.DateOfBirth";
+            UIGrid uiGrid = CreateUiGridWithColumn(classDef, columnName);
+            
+            MyContactPerson myContactPerson = new MyContactPerson();
+            MyContactPerson myFather = new MyContactPerson();
+            myContactPerson.Father = myFather;
+            string fatherFirstName = "Father John";
+            myFather.FirstName = fatherFirstName;
+            DateTime fatherDOB = DateTime.Now;
+            myFather.DateOfBirth = fatherDOB;
+            BusinessObjectCollection<ContactPerson> contactPersons = new BusinessObjectCollection<ContactPerson>();
+            contactPersons.Add(myContactPerson);
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(contactPersons);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            DataTable dataTable = dataSetProvider.GetDataTable(uiGrid);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(dataTable.Columns.Contains(columnName), "DataTable should have the related property column");
+            DataColumn dataColumn = dataTable.Columns[columnName];
+            Assert.AreSame(typeof(DateTime), dataColumn.DataType);
+            Assert.AreEqual(1, dataTable.Rows.Count);
+            DataRow dataRow = dataTable.Rows[0];
+            object value = dataRow[columnName];
+            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.AreEqual(myFather.DateOfBirth, value);
+        }
+
+        [Test]
+        public void TestVirtualPropColumn()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            DateTime startDate = DateTime.Now;
+            ClassDef classDef = MyContactPerson.LoadClassDef();
+            string columnName = "-DateProperty-";
+            UIGrid uiGrid = CreateUiGridWithColumn(classDef, columnName);
+            BusinessObjectCollection<ContactPerson> contactPersons = new BusinessObjectCollection<ContactPerson>();
+            MyContactPerson bo = new MyContactPerson();
+            contactPersons.Add(bo);
+            IDataSetProvider dataSetProvider = CreateDataSetProvider(contactPersons);
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            DataTable dataTable = dataSetProvider.GetDataTable(uiGrid);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(dataTable.Columns.Contains(columnName), "DataTable should have the virtual column");
+            DataColumn dataColumn = dataTable.Columns[columnName];
+            Assert.AreSame(typeof(object), dataColumn.DataType);
+            Assert.AreEqual(1, dataTable.Rows.Count);
+            DataRow dataRow = dataTable.Rows[0];
+            object value = dataRow[columnName];
+            Assert.IsInstanceOfType(typeof(DateTime), value);
+            Assert.AreEqual(bo.DateProperty, value);
+        }
+
+        private static UIGrid CreateUiGridWithColumn(ClassDef classDef, string columnName)
+        {
+            UIGrid uiGrid = new UIGrid();
+            UIGridColumn dateTimeUiGridColumn = new UIGridColumn(columnName, columnName, null, null, false, 100, UIGridColumn.PropAlignment.right, null);
+            uiGrid.Add(dateTimeUiGridColumn);
+            UIDef uiDef = new UIDef("TestUiDef", new UIForm(), uiGrid);
+            classDef.UIDefCol.Add(uiDef);
+            return uiGrid;
+        }
+
+        #region Internal Classes
+
+        private class MyContactPerson : ContactPerson
+        {
+            private DateTime _dateTime = DateTime.Now;
+            private static string fatherRelationshipName = "Father";
+
+            public MyContactPerson() : base(LoadClassDef())
+            {
+                
+            }
+
+            public DateTime DateProperty
+            {
+                get { return _dateTime; }
+            }
+
+            public MyContactPerson Father
+            {
+                get { return Relationships.GetRelatedObject<MyContactPerson>(fatherRelationshipName); }
+                set { Relationships.SetRelatedObject(fatherRelationshipName, value); }
+            }
+
+            public static ClassDef LoadClassDef()
+            {
+                ClassDef classDef = ContactPerson.GetClassDef();
+                if (!classDef.RelationshipDefCol.Contains(fatherRelationshipName))
+                {
+                    RelKeyDef relKeyDef = new RelKeyDef();
+                    IPropDef idPropDef = classDef.GetPropDef("ContactPersonID");
+                    relKeyDef.Add(new RelPropDef(idPropDef, "ContactPersonID"));
+                    MySingleRelationshipDef singleRelationshipDef = new MySingleRelationshipDef(
+                        fatherRelationshipName, typeof (MyContactPerson), relKeyDef, true, DeleteParentAction.DoNothing);
+                    classDef.RelationshipDefCol.Add(singleRelationshipDef);
+                }
+                return classDef;
+            }
+
+            private class MySingleRelationshipDef: SingleRelationshipDef
+            {
+                public MySingleRelationshipDef(string relationshipName, Type relatedObjectClassType, RelKeyDef relKeyDef, bool keepReferenceToRelatedObject, DeleteParentAction deleteParentAction) : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
+                {
+                }
+
+                public override Relationship CreateRelationship(IBusinessObject owningBo, BOPropCol lBOPropCol)
+                {
+                    return new MySingleRelationship(owningBo, this, lBOPropCol);
+                }
+            }
+
+            public class MySingleRelationship : SingleRelationship
+            {
+                private MyContactPerson _myContactPerson;
+
+                public MySingleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol) : base(owningBo, lRelDef, lBOPropCol)
+                {
+                }
+
+
+                /// <summary>
+                /// Returns the related object 
+                /// </summary>
+                /// <returns>Returns the related business object</returns>
+                public override T GetRelatedObject<T>()
+                {
+                    return _myContactPerson as T;
+                }
+
+                /// <summary>
+                /// Sets the related object to that provided
+                /// </summary>
+                /// <param name="relatedObject">The object to relate to</param>
+                public override void SetRelatedObject(IBusinessObject relatedObject)
+                {
+                    _myContactPerson = relatedObject as MyContactPerson;
+                }
+            }
+        }
+
+        #endregion //Internal Classes
+
+
     }
 }

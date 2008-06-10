@@ -71,7 +71,7 @@ namespace Habanero.BO
         /// Returns the related object 
         /// </summary>
         /// <returns>Returns the related business object</returns>
-        public T GetRelatedObject<T>()
+        public virtual T GetRelatedObject<T>()
 			where T : BusinessObject
         {
             IExpression newRelationshipExpression = _relKey.RelationshipExpression();
@@ -112,7 +112,7 @@ namespace Habanero.BO
         /// Sets the related object to that provided
         /// </summary>
         /// <param name="relatedObject">The object to relate to</param>
-        public void SetRelatedObject(IBusinessObject relatedObject)
+        public virtual void SetRelatedObject(IBusinessObject relatedObject)
         {
             _relatedBo = relatedObject;
             foreach (RelProp relProp in _relKey)
