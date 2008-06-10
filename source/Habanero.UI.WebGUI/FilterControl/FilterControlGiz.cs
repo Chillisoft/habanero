@@ -273,6 +273,9 @@ namespace Habanero.UI.WebGUI
             return this._filterControlManager.GetChildControl(propertyName);
         }
 
+        /// <summary>
+        /// Returns the clear button (this is the button that when clicked clears the filter.
+        /// </summary>
         public IButton ClearButton
         {
             get { return _clearButton; }

@@ -103,6 +103,14 @@ namespace Habanero.UI.Base.FilterControl
         IButton FilterButton { get; }
 
         /// <summary>
+        /// Returns the clear button (this is the button that when clicked clears the filter.
+        /// </summary>
+        IButton ClearButton
+        {
+            get;
+        }
+
+        /// <summary>
         /// gets and sets the FilterMode <see cref="FilterModes"/>
         /// </summary>
         FilterModes FilterMode { get; set; }
@@ -111,6 +119,7 @@ namespace Habanero.UI.Base.FilterControl
         /// returns a collection of the controls used for filtering i.e. the textbox, combobox. This list excludes the labels etc.
         /// </summary>
         IList FilterControls { get; }
+
 
         /// <summary>
         /// returns the control used for filtering i.e. the textbox, combobox.
@@ -134,6 +143,9 @@ namespace Habanero.UI.Base.FilterControl
         /// returns the panel onto which the controls that will be used for filtering will be placed.
         /// </summary>
         IPanel FilterPanel { get; }
+
+
+
 
         /// <summary>
         /// Adds a ComboBox filter from which the user can choose an option, so that

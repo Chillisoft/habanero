@@ -103,6 +103,110 @@ namespace Habanero.Test.UI.Base.FilterController
         //    //---------------Tear Down -------------------------          
         //}
 
+        [Test]
+        public void TestFilterButtonAccessorGizmox()
+        {
+            TestFilterButtonAccessor(new ControlFactoryGizmox());
+        }
+
+        [Test]
+        public void TestFilterButtonAccessorWinForms()
+        {
+            try
+            {
+                TestFilterButtonAccessor(new ControlFactoryWin());
+            }
+            catch (NotImplementedException ex)
+            {
+                StringAssert.Contains("not implemented on win", ex.Message);
+            }
+        }
+
+        public void TestFilterButtonAccessor(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            IFilterControl filterControl = factory.CreateFilterControl();
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(filterControl.FilterButton);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestClearButtonAccessorGizmox()
+        {
+            TestClearButtonAccessor(new ControlFactoryGizmox());
+        }
+
+        [Test]
+        public void TestClearButtonAccessorWinForms()
+        {
+            try
+            {
+                TestClearButtonAccessor(new ControlFactoryWin());
+            }
+            catch (NotImplementedException ex)
+            {
+                StringAssert.Contains("not implemented on win", ex.Message);
+            }
+        }
+
+        public void TestClearButtonAccessor(IControlFactory factory)
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            IFilterControl filterControl = factory.CreateFilterControl();
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(filterControl.ClearButton);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestApplyFilterWin()
+        {
+            //---------------Set up test pack-------------------
+            
+            IFilterControl filterControl = new ControlFactoryWin().CreateFilterControl();
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                filterControl.ApplyFilter();    
+            }
+            
+            //---------------Test Result -----------------------
+            catch (NotImplementedException ex)
+            {
+                StringAssert.Contains("not implemented on win", ex.Message);
+            }
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestClearFiltersWin()
+        {
+            //---------------Set up test pack-------------------
+
+            IFilterControl filterControl = new ControlFactoryWin().CreateFilterControl();
+
+            //---------------Execute Test ----------------------
+            try
+            {
+                filterControl.ClearFilters();
+            }
+
+            //---------------Test Result -----------------------
+            catch (NotImplementedException ex)
+            {
+                StringAssert.Contains("not implemented on win", ex.Message);
+            }
+            //---------------Tear Down -------------------------
+        }
+
         #region TextBoxFilter
 
         #region TestAddTextBox
@@ -149,15 +253,24 @@ namespace Habanero.Test.UI.Base.FilterController
         [Test]
         public void Test_SetFilterHeaderGizmox()
         {
-            Test_SetFilterHeaderGizmox(new ControlFactoryGizmox());
+            Test_SetFilterHeader(new ControlFactoryGizmox());
         }
 
-        //[Test]
-        //public void Test_SetFilterHeaderGizmoxWinForms()
-        //{
-        //    Test_SetFilterHeaderGizmox(new ControlFactoryWin());
-        //} TODO: Implement for win
-        public void Test_SetFilterHeaderGizmox(IControlFactory factory)
+        [Test]
+        public void Test_SetFilterHeaderWinForms()
+        {
+            try
+            {
+                Test_SetFilterHeader(new ControlFactoryWin());
+                Assert.Fail("Should throw a not implemented exception");
+            }
+            catch (NotImplementedException ex)
+            {
+                StringAssert.Contains("not implemented on win", ex.Message);
+            }
+        }
+
+        public void Test_SetFilterHeader(IControlFactory factory)
         {
             //---------------Set up test pack-------------------
             IFilterControl ctl = factory.CreateFilterControl();
@@ -855,11 +968,11 @@ namespace Habanero.Test.UI.Base.FilterController
             options.Add(DateRangeOptions.Yesterday);
 
             //---------------Execute Test ----------------------
-            IDateRangeComboBox dateRangeCombo = filterControl.AddDateRangeFilterComboBox("test", "test", options, true, false);
+            IDateRangeComboBox dateRangeCombo =
+                filterControl.AddDateRangeFilterComboBox("test", "test", options, true, false);
             //---------------Test Result -----------------------
             Assert.AreEqual(3, dateRangeCombo.Items.Count);
         }
-
 
 
         private static IComboBox GetFilterComboBox_2Items(IFilterControl filterControl)

@@ -108,8 +108,8 @@ namespace Habanero.UI.Win
 
         public string HeaderText
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { throw new NotImplementedException("not implemented on win"); }
+            set { throw new NotImplementedException("not implemented on win"); }
         }
 
         public int CountOfFilters
@@ -119,7 +119,15 @@ namespace Habanero.UI.Win
 
         public IButton FilterButton
         {
-            get { throw new NotImplementedException(); }
+            get { throw new NotImplementedException("not implemented on win"); }
+        }
+
+        /// <summary>
+        /// Returns the clear button (this is the button that when clicked clears the filter.
+        /// </summary>
+        public IButton ClearButton
+        {
+            get { throw new NotImplementedException("not implemented on win"); }
         }
 
         public FilterModes FilterMode
@@ -140,7 +148,7 @@ namespace Habanero.UI.Win
 
         public void ClearFilters()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("not implemented on win");
         }
 
         /// <summary>
