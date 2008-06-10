@@ -21,6 +21,7 @@ using System;
 using System.Collections;
 using System.Data;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -85,11 +86,21 @@ namespace Habanero.BO
                     "the name '{0}' has been detected. Only one column " +
                     "per property can be specified.", uiProperty.PropertyName));
             }
+
             //TODO : Generalise this for properties that do not have PropDefs
-            IPropDef propDef = classDef.GetPropDef(uiProperty.PropertyName);
-            if (propDef.LookupList is NullLookupList)
+            //NNB write tests and generalise this s.t. the -propname- ane relationship.Prop
+            // type stuff works
+            try
             {
-                column.DataType = propDef.PropertyType;
+                PropDef propDef = (PropDef) classDef.GetPropDef(uiProperty.PropertyName);
+                if (propDef.LookupList is NullLookupList)
+                {
+                    column.DataType = propDef.PropertyType;
+                }
+            }
+            catch (InvalidPropertyNameException)
+            {
+                //Do nothing
             }
             column.ColumnName = uiProperty.PropertyName;
             column.Caption = uiProperty.GetHeading(classDef);
