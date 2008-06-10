@@ -86,7 +86,7 @@ namespace Habanero.BO
                     "per property can be specified.", uiProperty.PropertyName));
             }
             //TODO : Generalise this for properties that do not have PropDefs
-            PropDef propDef = classDef.GetPropDef(uiProperty.PropertyName);
+            IPropDef propDef = classDef.GetPropDef(uiProperty.PropertyName);
             if (propDef.LookupList is NullLookupList)
             {
                 column.DataType = propDef.PropertyType;
