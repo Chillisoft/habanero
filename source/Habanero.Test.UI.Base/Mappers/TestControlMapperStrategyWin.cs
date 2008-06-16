@@ -31,7 +31,7 @@ namespace Habanero.Test.UI.Base
             //base.TearDownTest();
         }
 
-        [Test]
+        [Test, Ignore("currently working on")]
         public void Test_CreateControlMapperStrategy()
         {
             //---------------Set up test pack-------------------
