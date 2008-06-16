@@ -148,7 +148,8 @@ namespace Habanero.UI.Base
         /// This method is called by SetupLookupList() and populates the
         /// ComboBox with the collection of items provided
         /// </summary>
-        /// <param name="col">The items used to populate the list</param>
-        public abstract void SetLookupList(Dictionary<string, object> col);
+        /// <param name="value">The items used to populate the list</param>
+        public abstract Dictionary<string, object> LookupList { set; get;}
+
     }
 }

@@ -254,6 +254,7 @@ namespace Habanero.UI.WebGUI
                 if (controlType == typeof (TextBox)) return CreateTextBox();
                 if (controlType == typeof (ListBox)) return CreateListBox();
                 if (controlType == typeof (DateTimePicker)) return CreateDateTimePicker();
+                if (controlType == typeof (NumericUpDown)) return CreateNumericUpDown();
                 try
                 {
                     ctl = (IControlChilli) Activator.CreateInstance(controlType);
@@ -277,6 +278,8 @@ namespace Habanero.UI.WebGUI
             }
             return ctl;
         }
+
+
 
 
         /// <summary>
@@ -325,14 +328,26 @@ namespace Habanero.UI.WebGUI
             return editor;
         }
 
+
         /// <summary>
-        /// Creates a new numeric up-down control that is formatted with
-        /// zero decimal places for integer use
+        /// Creates a new numeric up-down control
         /// </summary>
         /// <returns>Returns a new NumericUpDown object</returns>
+        private INumericUpDown CreateNumericUpDown()
+        {
+            INumericUpDown ctl = new NumericUpDownGiz();
+            ctl.Height = GetStandardHeight();// set the NumericUpDown to the default height of a text box on this machine.
+            return ctl;
+        }
+
+        private static int GetStandardHeight()
+        {
+            return TEXTBOX_HEIGHT;
+        }
+
         public INumericUpDown CreateNumericUpDownInteger()
         {
-            NumericUpDownGiz ctl = new NumericUpDownGiz();
+            INumericUpDown ctl = CreateNumericUpDown();
             ctl.DecimalPlaces = 0;
             ctl.Maximum = Int32.MaxValue;
             ctl.Minimum = Int32.MinValue;
@@ -346,7 +361,7 @@ namespace Habanero.UI.WebGUI
         /// <returns></returns>
         public INumericUpDown CreateNumericUpDownCurrency()
         {
-            NumericUpDownGiz ctl = new NumericUpDownGiz();
+            INumericUpDown ctl = CreateNumericUpDown();
             ctl.DecimalPlaces = 2;
             ctl.Maximum = Int32.MaxValue;
             ctl.Minimum = Int32.MinValue;

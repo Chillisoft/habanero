@@ -103,6 +103,21 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(typeof(Habanero.UI.WebGUI.DateTimePickerGiz), controlChilli.GetType());
                 //---------------Tear Down -------------------------   
             }
+
+            [Test]
+            public void TestCreateControl_ViaType_NumericUpDown()
+            {
+                //---------------Set up test pack-------------------
+                //---------------Verify test pack-------------------
+                //---------------Execute Test ----------------------
+                IControlChilli controlChilli = _factory.CreateControl(typeof(Gizmox.WebGUI.Forms.NumericUpDown));
+                //---------------Verify Result -----------------------
+                Assert.IsNotNull(controlChilli);
+                Assert.AreEqual(typeof(Habanero.UI.WebGUI.NumericUpDownGiz), controlChilli.GetType());
+                Assert.AreEqual(_factory.CreateTextBox().Height, controlChilli.Height);
+                //---------------Tear Down -------------------------   
+            }
+
             [Test]
             public void TestLoadWithIncorrectControlLibrary_RaisesAppropriateError()
             {

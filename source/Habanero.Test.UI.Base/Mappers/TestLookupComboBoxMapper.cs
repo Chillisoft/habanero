@@ -28,7 +28,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 string propName = "SampleLookupID";
                 LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
                 Sample s = new Sample();
-                mapper.SetLookupList(Sample.LookupCollection);
+                mapper.LookupList = Sample.LookupCollection;
                 s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
                 mapper.BusinessObject = s;
                 //---------------Execute Test ----------------------
@@ -56,7 +56,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 string propName = "SampleLookupID";
                 LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
                 Sample s = new Sample();
-                mapper.SetLookupList(Sample.LookupCollection);
+                mapper.LookupList = Sample.LookupCollection;
                 s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
                 mapper.BusinessObject = s;     
                 //---------------Execute Test ----------------------
@@ -78,7 +78,7 @@ namespace Habanero.Test.UI.Base.Mappers
                 string propName = "SampleLookupID";
                 LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
                 Sample s = new Sample();
-                mapper.SetLookupList(Sample.LookupCollection);
+                mapper.LookupList = Sample.LookupCollection;
                 s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
                 mapper.BusinessObject = s;
                 //---------------Execute Test ----------------------
@@ -115,7 +115,7 @@ namespace Habanero.Test.UI.Base.Mappers
             LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
             new Sample();
             //---------------Execute Test ----------------------
-            mapper.SetLookupList(Sample.LookupCollection);
+            mapper.LookupList = Sample.LookupCollection;
 
             //---------------Test Result -----------------------
             Assert.AreEqual(4, cmbox.Items.Count);
@@ -133,7 +133,7 @@ namespace Habanero.Test.UI.Base.Mappers
             string propName = "SampleLookupID";
             LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
             Sample s = new Sample();
-            mapper.SetLookupList(Sample.LookupCollection);
+            mapper.LookupList = Sample.LookupCollection;
             s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
             //---------------Execute Test ----------------------
             mapper.BusinessObject = s;
@@ -152,7 +152,7 @@ namespace Habanero.Test.UI.Base.Mappers
             string propName = "SampleLookupID";
             LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
             Sample s = new Sample();
-            mapper.SetLookupList(Sample.LookupCollection);
+            mapper.LookupList = Sample.LookupCollection;
             s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
             mapper.BusinessObject = s;
             //---------------Execute Test ----------------------
@@ -197,7 +197,7 @@ namespace Habanero.Test.UI.Base.Mappers
             sample.SetPropertyValue(propName, sampleToSelect);
                         
             //---------------Execute Test ----------------------
-            mapper.SetLookupList(Sample.BOLookupCollection);
+            mapper.LookupList = Sample.BOLookupCollection;
             mapper.BusinessObject = sample;
             
             //---------------Test Result -----------------------
@@ -220,7 +220,7 @@ namespace Habanero.Test.UI.Base.Mappers
             sample.SetPropertyValue(propName, sampleToSelect);
             
             //---------------Execute Test ----------------------
-            mapper.SetLookupList(Sample.BOLookupCollection);
+            mapper.LookupList = Sample.BOLookupCollection;
             mapper.BusinessObject = sample;
 
             //---------------Test Result -----------------------
