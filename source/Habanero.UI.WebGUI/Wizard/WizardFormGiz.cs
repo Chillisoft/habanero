@@ -37,20 +37,34 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// Initialises the WizardForm, sets the controller and starts the wizard.
         /// </summary>
-        /// <param name="controller"></param>
-        /// <param name="controlFactory"></param>
+        /// <param name="controller">the wizrd controller that controls moving the wizard steps and the </param>
+        /// <param name="controlFactory">The control factory to use for creating any controls</param>
         public WizardFormGiz(IWizardController controller, IControlFactory controlFactory)
         {
             _wizardController = controller;
 
             _controlFactory = controlFactory;
-            _uxWizardControl = new WizardControlGiz(controller, _controlFactory);
+//            _uxWizardControl = new WizardControlGiz(controller, _controlFactory);
+            _uxWizardControl = (WizardControlGiz) controlFactory.CreateWizardControl(controller);
             this._uxWizardControl.MessagePosted += _uxWizardControl_MessagePosted;
             this._uxWizardControl.Finished += this._uxWizardControl_Finished;
             this._uxWizardControl.StepChanged += this._uxWizardControl_StepChanged;
+            this._uxWizardControl.CancelButton.Click += CancelButton_OnClick;
             InitializeComponent();
             WizardControl.WizardController = _wizardController;
             DialogResult = DialogResult.Cancel;
+            this.Closing += WizardFormGiz_Closing;
+        }
+
+        void WizardFormGiz_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //TODO: should follow pattern of checking dirty status and if dirty ask user
+            this._wizardController.CancelWizard();
+        }
+
+        private void CancelButton_OnClick(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void _uxWizardControl_StepChanged(string headingText)

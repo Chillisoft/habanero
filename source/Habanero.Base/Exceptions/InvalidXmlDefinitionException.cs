@@ -26,7 +26,7 @@ namespace Habanero.Base.Exceptions
     /// Provides an exception to throw when the xml being
     /// examined is invalid or not well-formed
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class InvalidXmlDefinitionException : HabaneroDeveloperException
     {
         /// <summary>
@@ -41,7 +41,7 @@ namespace Habanero.Base.Exceptions
         /// to display
         /// </summary>
         /// <param name="message">The error message</param>
-        public InvalidXmlDefinitionException(string message) : base(message)
+        public InvalidXmlDefinitionException(string message) : base(message, "")
         {
         }
 
@@ -51,7 +51,7 @@ namespace Habanero.Base.Exceptions
         /// </summary>
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
-        public InvalidXmlDefinitionException(string message, Exception inner) : base(message, inner)
+        public InvalidXmlDefinitionException(string message, Exception inner) : base(message, "", inner)
         {
         }
 

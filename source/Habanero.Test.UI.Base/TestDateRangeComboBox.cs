@@ -65,10 +65,11 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(0, comboBox.YearStartOffset);
 
             Assert.AreEqual(comboBox.OptionsToDisplay.Count + 1, comboBox.Items.Count,
-                            "There should b an extra item in the combo box for the user hint");
+                "There should b an extra item in the combo box for the user hint");
             Assert.AreEqual("(Date Ranges)", _comboBox.Items[0], "The user hint should be set as the first item");
             Assert.AreEqual("Today", _comboBox.Items[1].ToString(), "First selectable item");
-            //---------------Tear Down -------------------------          
+            ITextBox stdTextBox = GetControlFactory().CreateTextBox();
+            Assert.AreEqual(stdTextBox.Height, comboBox.Height);
         }
 
         [Test]
@@ -83,7 +84,6 @@ namespace Habanero.Test.UI.Base
             _comboBox.UseAllDateRangeOptions();
             //---------------Test Result -----------------------
             Assert.AreEqual(_numAllOptions, _comboBox.OptionsToDisplay.Count);
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -111,7 +111,6 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             Assert.AreEqual("This Week", dateRangeString);
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -129,7 +128,6 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDateRangeString, _comboBox.GetDateRangeString(DateRangeOptions.ThisWeek));
             Assert.IsTrue(_comboBox.Items.Contains(expectedDateRangeString));
-            //---------------Tear Down -------------------------          
         }
 
         [Test, ExpectedException(typeof (ArgumentException))]
@@ -142,7 +140,6 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             _comboBox.SetDateRangeString(DateRangeOptions.ThisWeek, "Previous Week");
             //---------------Test Result -----------------------
-            //EpectedException
         }
 
         [Test, ExpectedException(typeof (ArgumentException))]
@@ -155,8 +152,6 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             _comboBox.SetDateRangeString(DateRangeOptions.Current60Minutes, "Last Hour");
             //---------------Test Result -----------------------
-
-            //---------------Tear Down -------------------------          
         }
 
         [Test, ExpectedException(typeof (ArgumentException))]
@@ -169,8 +164,6 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             _comboBox.SetDateRangeString(DateRangeOptions.ThisWeek, "This Hour");
             //---------------Test Result -----------------------
-
-            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -459,9 +452,9 @@ namespace Habanero.Test.UI.Base
             double startDifference = (nowDate.AddHours(-24) - _comboBox.StartDate).TotalMilliseconds;
             double endDifference = (nowDate - _comboBox.EndDate).TotalMilliseconds;
             Assert.IsTrue(Math.Abs(startDifference) < 1000,
-                          "Despite execution time gap, results should be almost identical");
+                "Despite execution time gap, results should be almost identical");
             Assert.IsTrue(Math.Abs(endDifference) < 1000,
-                          "Despite execution time gap, results should be almost identical");
+                "Despite execution time gap, results should be almost identical");
         }
 
         [Test]
@@ -1841,8 +1834,5 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(new DateTime(2007, 11, 12, 1, 0, 0, 0), _comboBox.StartDate);
             Assert.AreEqual(new DateTime(2007, 11, 13, 0, 0, 0, 0), _comboBox.EndDate);
         }
-
-
-
     }
 }

@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 
+using System;
 using System.Collections.Generic;
 
 namespace Habanero.UI.Base
@@ -31,6 +32,7 @@ namespace Habanero.UI.Base
     {
         private List<IWizardStep> _wizardSteps;
         private int _currentStep = -1;
+        public event EventHandler WizardFinished;
 
         /// <summary>
         /// Initiliases the Wizard. When the Wizard is created there is no current step, the first call to GetNextStep() will move to the first step.
@@ -142,6 +144,15 @@ namespace Habanero.UI.Base
         public virtual void Finish()
         {
             if (!IsLastStep()) throw new WizardStepException("Invalid call to Finish(), not at last step");
+            FireWizardFinishedEvent();
+        }
+
+        private void FireWizardFinishedEvent()
+        {
+            if (WizardFinished != null)
+            {
+                WizardFinished(this, new EventArgs());
+            }
         }
 
 
@@ -176,6 +187,20 @@ namespace Habanero.UI.Base
             } else
             {
                 return _wizardSteps[_currentStep];
+            }
+        }
+
+        /// <summary>
+        /// This provides a method which is called when the wizard is cancelled. The wizard controller can 
+        /// undo any changes that have occured up until that point so as to ensure that the objects are returned
+        /// to their original state.
+        /// </summary>
+        public virtual void CancelWizard()
+        {
+            //TODO: Test and implement
+            foreach (IWizardStep step in _wizardSteps)
+            {
+                step.CancelStep();
             }
         }
     }

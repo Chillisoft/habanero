@@ -96,7 +96,6 @@ namespace Habanero.UI.WebGUI
             if (classDef == null) throw new ArgumentNullException("classDef");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
 
-
             _classDef = classDef;
             _uiDefName = uiDefName;
 

@@ -26,7 +26,7 @@ namespace Habanero.Base.Exceptions
     /// Provides an exception to throw when an invalid object ID is
     /// encountered
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class InvalidObjectIdException : HabaneroDeveloperException
     {
         /// <summary>
@@ -41,7 +41,7 @@ namespace Habanero.Base.Exceptions
         /// to display
         /// </summary>
         /// <param name="message">The error message</param>
-        public InvalidObjectIdException(string message) : base(message)
+        public InvalidObjectIdException(string message) : base(message, "")
         {
         }
 
@@ -51,7 +51,7 @@ namespace Habanero.Base.Exceptions
         /// </summary>
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
-        public InvalidObjectIdException(string message, Exception inner) : base(message, inner)
+        public InvalidObjectIdException(string message, Exception inner) : base(message, "", inner)
         {
         }
 

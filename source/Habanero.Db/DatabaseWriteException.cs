@@ -19,6 +19,7 @@
 
 using System;
 using System.Runtime.Serialization;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.DB
 {
@@ -26,8 +27,8 @@ namespace Habanero.DB
     /// An exception thrown when an error occurred while attempting to
     /// write to a database
     /// </summary>
-    [Serializable()]
-    public class DatabaseWriteException : Exception
+    [Serializable]
+    public class DatabaseWriteException : HabaneroDeveloperException
     {
         private string _sqlStatement;
         private string _connectString;
@@ -41,7 +42,8 @@ namespace Habanero.DB
         /// <param name="sqlStatement">The sql statement that was used</param>
         /// <param name="connectString">The connection string that was used</param>
         public DatabaseWriteException(string userMessage, string developerMessage,
-                                      string sqlStatement, string connectString) : base(userMessage)
+                                      string sqlStatement, string connectString)
+            : base(userMessage, developerMessage + Environment.NewLine + sqlStatement)
         {
             _sqlStatement = sqlStatement;
             _connectString = connectString;
@@ -57,7 +59,8 @@ namespace Habanero.DB
         /// <param name="sqlStatement">The sql statement that was used</param>
         /// <param name="connectString">The connection string that was used</param>
         public DatabaseWriteException(string userMessage, string developerMessage, Exception inner,
-                                      string sqlStatement, string connectString) : base(userMessage, inner)
+                                      string sqlStatement, string connectString)
+            : base(userMessage, developerMessage + Environment.NewLine + sqlStatement, inner)
         {
             _sqlStatement = sqlStatement;
             _connectString = connectString;
@@ -75,7 +78,7 @@ namespace Habanero.DB
         /// Constructor to initialise a new exception
         /// </summary>
         /// <param name="message">The message to display</param>
-        public DatabaseWriteException(string message) : base(message)
+        public DatabaseWriteException(string message) : base(message, "")
         {
         }
 
@@ -84,7 +87,7 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="message">The message to display</param>
         /// <param name="inner">The inner exception</param>
-        public DatabaseWriteException(string message, Exception inner) : base(message, inner)
+        public DatabaseWriteException(string message, Exception inner) : base(message, "", inner)
         {
         }
 
@@ -113,13 +116,13 @@ namespace Habanero.DB
             get { return _connectString; }
         }
 
-        /// <summary>
-        /// Returns the message for developers
-        /// </summary>
-        public string DeveloperMessage
-        {
-            get { return _developerMessage; }
-        }
+        ///// <summary>
+        ///// Returns the message for developers
+        ///// </summary>
+        //public string DeveloperMessage
+        //{
+        //    get { return _developerMessage; }
+        //}
 
         /// <summary>
         /// Required for ISerializable.

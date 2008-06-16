@@ -31,8 +31,8 @@ namespace Habanero.UI.Base
     /// </summary>
     public class GridLayoutManager : LayoutManager
     {
-        private List<IControlChilli> _controls;
-        private Hashtable _controlInfoTable;
+        private readonly List<IControlChilli> _controls;
+        private readonly Hashtable _controlInfoTable;
         private Point _currentPos;
         private int[] _columnWidths;
         private int[] _rowHeights;
@@ -176,10 +176,10 @@ namespace Habanero.UI.Base
             int currentRowNum = (this._controls.Count)/ColumnCount;
             if (currentRowNum >= _rowHeights.Length)
             {
+                string errorMessage = string.Format("You cannot add a control to the grid layout manager since it exceeds the grids size of '{0}' row and '{1}' column", 
+                        _rowHeights.Length, _columnWidths.Length);
                 throw new HabaneroDeveloperException(
-                    string.Format("You cannot add a control to the grid layout manager since it exceeds the grids size of '{0}' row and '{1}' column", 
-                    _rowHeights.Length, 
-                    _columnWidths.Length));
+                    "There is a serious application error. Please contact your system administrator" + Environment.NewLine + errorMessage, errorMessage);
             }
             if (_fixedColumnsBasedOnContents[currentColNum])
             {

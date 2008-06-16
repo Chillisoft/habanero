@@ -77,18 +77,6 @@ namespace Habanero.UI.Base
             mapperStrategy.AddKeyPressEventHandler(_control);
         }
 
-        #region Key Press Event Handlers
- 
-
-        #endregion
-
-        #region Control Order Methods
-
-
-
-
-        #endregion
-
         /// <summary>
         /// Returns the control being mapped
         /// </summary>

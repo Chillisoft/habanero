@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.BO;
+using Habanero.BO.Loaders;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -56,6 +57,74 @@ namespace Habanero.Test.BO
             //Test valid data
             Assert.IsTrue(rule.IsPropValueValid("Propname", new DateTime(1991, 01, 14), ref errorMessage));
             Assert.IsFalse(errorMessage.Length > 0);
+        }
+
+        [Test]
+        public void TestPropRuleDate_MaxValue_Today()
+        {
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(DateTime).Name,
+                @"<rule name=""TestDate""  >
+                            <add key=""min"" value=""01 Feb 2004"" />
+                            <add key=""max"" value=""Today"" />
+                        </rule>                          
+");
+            //-----------------Assert Preconditions ---------------------------
+            Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
+            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MaxValue.Date);
+
+            //---------------Execute ------------------------------------------
+            string errorMessage = "";
+            bool isValid = rule.IsPropValueValid("Propname", DateTime.Today.AddDays(-1), ref errorMessage);
+
+            //--------------Verify Result -------------------------------------
+            Assert.IsTrue( isValid);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
+        }
+
+        [Test]
+        public void TestPropRuleDate_MaxValue_Today_ActualValueToday()
+        {
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(DateTime).Name,
+                @"<rule name=""TestDate""  >
+                            <add key=""min"" value=""01 Feb 2004"" />
+                            <add key=""max"" value=""Today"" />
+                        </rule>                          
+");
+            //-----------------Assert Preconditions ---------------------------
+            Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
+            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MaxValue.Date);
+
+            //---------------Execute ------------------------------------------
+            string errorMessage = "";
+            bool isValid = rule.IsPropValueValid("Propname", DateTime.Today, ref errorMessage);
+
+            //--------------Verify Result -------------------------------------
+            Assert.IsTrue(isValid);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
+        }
+        [Test]
+        public void TestPropRuleDate_MaxValue_Today_ActualValueGTToday()
+        {
+            XmlRuleLoader loader = new XmlRuleLoader();
+            PropRuleBase rule = loader.LoadRule(typeof(DateTime).Name,
+                @"<rule name=""TestDate""  >
+                            <add key=""min"" value=""01 Feb 2004"" />
+                            <add key=""max"" value=""Today"" />
+                        </rule>                          
+");
+            //-----------------Assert Preconditions ---------------------------
+            Assert.AreEqual(new DateTime(2004, 02, 01), ((PropRuleDate)rule).MinValue);
+            Assert.AreEqual(DateTime.Today, ((PropRuleDate)rule).MaxValue.Date);
+
+            //---------------Execute ------------------------------------------
+            string errorMessage = "";
+            bool isValid = rule.IsPropValueValid("Propname", DateTime.Today.AddDays(1), ref errorMessage);
+
+            //--------------Verify Result -------------------------------------
+            Assert.IsFalse(isValid);
+            Assert.IsFalse(string.IsNullOrEmpty(errorMessage));
         }
     }
 

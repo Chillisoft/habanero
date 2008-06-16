@@ -957,7 +957,10 @@ namespace Habanero.Test.BO
             Assert.IsFalse(mockBo.State.IsDirty);
             Assert.IsFalse(mockBo.State.IsDeleted);
             Assert.IsFalse(mockBo.State.IsEditing);
-            Assert.IsTrue(mockBo.State.IsValid);
+            Assert.IsTrue(mockBo.State.IsValid());
+            string message;
+            Assert.IsTrue(mockBo.State.IsValid(out message));
+            Assert.AreEqual("", message );
         }
 
         internal class MockBOWithCustomRule : MockBO

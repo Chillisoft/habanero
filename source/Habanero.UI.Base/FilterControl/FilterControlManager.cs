@@ -36,7 +36,6 @@ namespace Habanero.UI.Base.FilterControl
             set { _layoutManager = value; }
         }
 
-
         public IFilterClause GetFilterClause()
         {
             if (_filterControls.Count == 0) return _clauseFactory.CreateNullFilterClause();
@@ -51,11 +50,6 @@ namespace Habanero.UI.Base.FilterControl
             }
             return clause;
         }
-        //public IFilterClause GetFilterClause()
-        //{
-        //    return GetFilterClause("*", "#");
-
-        //}
 
         public ITextBox AddStringFilterTextBox(string labelText, string propertyName)
         {
@@ -475,6 +469,7 @@ namespace Habanero.UI.Base.FilterControl
 
             public override void Clear()
             {
+                //TODO Critical Urgent NNB FIx :
                 throw new NotImplementedException();
             }
         }
@@ -540,6 +535,7 @@ namespace Habanero.UI.Base.FilterControl
 
             public override void Clear()
             {
+                //TODO Critical Urgent NNB FIx :
                 throw new NotImplementedException();
             }
         }

@@ -41,7 +41,7 @@ namespace Habanero.Base.Exceptions
         /// to display
         /// </summary>
         /// <param name="message">The error message</param>
-        public UnknownTypeNameException(string message) : base(message)
+        public UnknownTypeNameException(string message) : base(message, "")
         {
         }
 
@@ -51,7 +51,7 @@ namespace Habanero.Base.Exceptions
         /// </summary>
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
-        public UnknownTypeNameException(string message, Exception inner) : base(message, inner)
+        public UnknownTypeNameException(string message, Exception inner) : base(message, "", inner)
         {
         }
 

@@ -30,7 +30,8 @@ namespace Habanero.BO
     {
         private DateTime _minValue = DateTime.MinValue;
 		private DateTime _maxValue = DateTime.MaxValue;
-
+        private string _minValueExpression;
+        private string _maxValueExpression;
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
@@ -89,11 +90,25 @@ namespace Habanero.BO
 						switch (key)
 						{
 							case "min":
-								_minValue = Convert.ToDateTime(value);
-								break;
+                                if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
+                                {
+                                    _minValueExpression = Convert.ToString(value);
+                                }
+                                else
+                                {
+                                    _minValue = Convert.ToDateTime(value);
+                                }
+						        break;
 							case "max":
-								_maxValue = Convert.ToDateTime(value);
-								break;
+                                if (Convert.ToString(value) == "Today" || Convert.ToString(value) == "Now")
+                                {
+                                    _maxValueExpression = Convert.ToString(value);
+                                }
+                                else
+                                {
+                                    _maxValue = Convert.ToDateTime(value);
+                                }
+						        break;
 							default:
 								throw new InvalidXmlDefinitionException(String.Format(
                                 	"The rule type '{0}' for dates does not exist. " +
@@ -137,7 +152,7 @@ namespace Habanero.BO
             {
                 return true;
             }
-            if ((DateTime) propValue < _minValue)
+            if ((DateTime) propValue < MinValue)
             {
                 errorMessage = GetBaseErrorMessage(propValue, displayName);
                 if (!String.IsNullOrEmpty(Message))
@@ -146,11 +161,11 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    errorMessage += "The date cannot be before " + _minValue + ".";
+                    errorMessage += "The date cannot be before " + MinValue + ".";
                 }
                 return false;
             }
-            if ((DateTime) propValue > _maxValue)
+            if ((DateTime) propValue > MaxValue)
             {
                 errorMessage = GetBaseErrorMessage(propValue, displayName);
                 if (!String.IsNullOrEmpty(Message))
@@ -159,7 +174,7 @@ namespace Habanero.BO
                 }
                 else
                 {
-                    errorMessage += "The date cannot be after " + _maxValue + ".";
+                    errorMessage += "The date cannot be after " + MaxValue + ".";
                 }
                 return false;
             }
@@ -184,7 +199,20 @@ namespace Habanero.BO
         /// </summary>
         public DateTime MinValue
         {
-            get { return _minValue; }
+            get
+            {
+                if (_minValueExpression == "Today")
+                {
+                    return DateTime.Today;
+                }
+                if (_minValueExpression == "Now")
+                {
+                    return DateTime.Now;
+                }
+                return _minValue;                    
+
+
+            }
 			protected set { _minValue = value; }
 		}
 
@@ -193,7 +221,18 @@ namespace Habanero.BO
         /// </summary>
         public DateTime MaxValue
         {
-            get { return _maxValue; }
+            get
+            {
+                if (_maxValueExpression == "Today")
+                {
+                    return DateTime.Today;
+                }
+                if (_maxValueExpression == "Now")
+                {
+                    return DateTime.Now;
+                }
+                return _maxValue;
+            }
 			protected set { _maxValue = value; }
         }
     }

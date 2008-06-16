@@ -21,6 +21,8 @@
 using System;
 using System.Windows.Forms;
 using Habanero.UI.Base;
+using Habanero.UI.Win;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -30,7 +32,6 @@ namespace Habanero.Test.UI.Base
     /// </summary>
     public abstract class TestControlMapper : TestUsingDatabase
     {
-
         protected abstract IControlFactory GetControlFactory();
 
         [TestFixture]
@@ -44,16 +45,19 @@ namespace Habanero.Test.UI.Base
             [Test]
             public void TestNormalChangeValue_DoesUpdateWithoutCallingUpdate()
             {
-                ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
+                ControlMapperStub mapperStub =
+                    new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
                 mapperStub.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtNormal.Text);
                 _shape.ShapeName = "TestShapeName2";
                 Assert.AreEqual("TestShapeName2", _txtNormal.Text);
             }
+
             [Test]
             public void TestNormalChangeValue()
             {
-                ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
+                ControlMapperStub mapperStub =
+                    new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
                 mapperStub.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtNormal.Text);
                 _shape.ShapeName = "TestShapeName2";
@@ -64,7 +68,8 @@ namespace Habanero.Test.UI.Base
             public void TestEditsToOrigionalBusinessObjectDoesNotUpdateControlValue()
             {
                 //---------------Set up test pack-------------------
-                ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
+                ControlMapperStub mapperStub =
+                    new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
                 mapperStub.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtNormal.Text);
                 //_shape.ShapeName = "TestShapeName";
@@ -77,21 +82,17 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual(shape2.ShapeName, _txtNormal.Text);
 
                 //---------------Execute Test ----------------------
-                bool controlUpdatedFromBusinessObject=false;
-                mapperStub.OnUpdateControlValueFromBusinessObject+=delegate
-               {
-                   controlUpdatedFromBusinessObject = true;
-               };
+                bool controlUpdatedFromBusinessObject = false;
+                mapperStub.OnUpdateControlValueFromBusinessObject +=
+                    delegate { controlUpdatedFromBusinessObject = true; };
                 _shape.ShapeName = "New original shape name";
 
                 //---------------Test Result -----------------------
-                Assert.IsFalse(controlUpdatedFromBusinessObject,"Control Should not have been updated when the original prop was changed.");
+                Assert.IsFalse(controlUpdatedFromBusinessObject,
+                    "Control Should not have been updated when the original prop was changed.");
                 Assert.AreEqual(shape2.ShapeName, _txtNormal.Text);
-
-
-                //---------------Tear Down -------------------------          
             }
-                            
+
             [Test]
             public void TestNormalChangeBO_DoesUpdateWithoutCallingUpdate()
             {
@@ -104,6 +105,7 @@ namespace Habanero.Test.UI.Base
                 shape2.ShapeName = "Different2";
                 Assert.AreEqual("Different2", _txtNormal.Text);
             }
+
             [Test]
             public void TestNormalChangeBO()
             {
@@ -117,6 +119,7 @@ namespace Habanero.Test.UI.Base
 //                _normalMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("Different2", _txtNormal.Text);
             }
+
             [Test]
             public void TestReadOnlyChangeValue()
             {
@@ -126,6 +129,7 @@ namespace Habanero.Test.UI.Base
 //                _readOnlyMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
+
             [Test]
             public void TestReadOnlyChangeBO()
             {
@@ -140,18 +144,83 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual("Different2", _txtReadonly.Text);
             }
 
-            [Test]
-            public void Test_CanPressKey()
+            [Test, Ignore("messin around with NUnit.Forms")]
+            public void TestWin_CanPressKey()
             {
                 //---------------Set up test pack-------------------
                 System.Windows.Forms.TextBox tb = new System.Windows.Forms.TextBox();
+                tb.Name = "TestTextBox";
+                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+                frm.Controls.Add(tb);
+                bool pressed = false;
+                tb.KeyPress += delegate { pressed = true; };
                 //--------------Assert PreConditions----------------            
-                tb.KeyPress +=delegate(object sender, KeyPressEventArgs e) {  };
+                Assert.IsFalse(pressed);
+
                 //---------------Execute Test ----------------------
+                frm.Show();
+                TextBoxTester box = new TextBoxTester("TestTextBox");
+                Char pressChar = (char) 0x013;
+                KeyPressEventArgs eveArgs = new KeyPressEventArgs(pressChar);
+                box.FireEvent("KeyPress", eveArgs);
+//                box.FireEvent("Click");
 
                 //---------------Test Result -----------------------
+                Assert.IsTrue(pressed);
+            }
 
-                //---------------Tear Down -------------------------          
+
+            [Test, Ignore("messin around with NUnit.Forms")]
+            public void TestWin_EnterKeyGetsNextControl()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxWin tb = new TextBoxWin();
+                ControlMapper mapper = new ControlMapperStub(tb, "name", false, GetControlFactory());
+                tb.Name = "TestTextBox";
+                tb.TabIndex = 0;
+                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+                frm.Controls.Add(tb);
+                System.Windows.Forms.TextBox tb2 = new System.Windows.Forms.TextBox();
+                tb2.Name = "TestTextBox2";
+                tb2.TabIndex = 2;
+                frm.Controls.Add(tb2);
+                System.Windows.Forms.TextBox tb3 = new System.Windows.Forms.TextBox();
+                tb3.Name = "TestTextBox3";
+                tb3.TabIndex = 1;
+                Button btn = new Button();
+                btn.Name = "button1";
+                btn.NotifyDefault(true);
+
+                frm.Controls.Add( btn);
+                bool pressed = false;
+                tb.KeyPress += delegate { pressed = true; };
+                tb.KeyUp +=delegate(object sender, KeyEventArgs e) {  };
+//                tb.KeyPress += CtlKeyPressHandler;
+                bool gotFocusTb2 = false;
+                bool gotFocusTb3 = false;
+                tb2.GotFocus += delegate { gotFocusTb2 = true; };
+                tb3.GotFocus += delegate { gotFocusTb3 = true; };
+
+                //--------------Assert PreConditions----------------            
+                Assert.IsFalse(pressed);
+                Assert.IsFalse(gotFocusTb2);
+                Assert.IsFalse(gotFocusTb3);
+                
+                //---------------Execute Test ----------------------
+                frm.Show();
+                TextBoxTester box = new TextBoxTester("TestTextBox");
+                Char pressChar = (char)0x013;
+
+                KeyPressEventArgs eveArgs = new KeyPressEventArgs(pressChar);
+                box.FireEvent("KeyPress", eveArgs);
+                KeyEventArgs eveArgsenter = new KeyEventArgs(Keys.Enter);
+                box.FireEvent("KeyUp", eveArgsenter);
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(pressed);
+//                Assert.IsTrue(gotFocusTb2);
+                Assert.IsTrue(gotFocusTb3);
+
             }
         }
 
@@ -166,7 +235,8 @@ namespace Habanero.Test.UI.Base
             [Test]
             public void TestNormalChangeValue_DoesNotUpdateWithoutCallingMethod()
             {
-                ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
+                ControlMapperStub mapperStub =
+                    new ControlMapperStub(_txtNormal, "ShapeName", false, GetControlFactory());
                 mapperStub.BusinessObject = _shape;
                 Assert.AreEqual("TestShapeName", _txtNormal.Text);
                 _shape.ShapeName = "TestShapeName2";
@@ -196,6 +266,7 @@ namespace Habanero.Test.UI.Base
                 shape2.ShapeName = "Different2";
                 Assert.AreEqual("Different", _txtNormal.Text);
             }
+
             [Test]
             public void TestNormalChangeBO()
             {
@@ -219,6 +290,7 @@ namespace Habanero.Test.UI.Base
                 _readOnlyMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
+
             [Test]
             public void TestReadOnlyChangeBO()
             {
@@ -233,13 +305,14 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual("Different2", _txtReadonly.Text);
             }
         }
-        ITextBox _txtNormal;
-        ITextBox _txtReadonly;
-        ITextBox _txtReflectedProperty;
-        Shape _shape;
-        TextBoxMapper _normalMapper;
-        TextBoxMapper _readOnlyMapper;
-        TextBoxMapper _reflectedPropertyMapper;
+
+        private ITextBox _txtNormal;
+        private ITextBox _txtReadonly;
+        private ITextBox _txtReflectedProperty;
+        private Shape _shape;
+        private TextBoxMapper _normalMapper;
+        private TextBoxMapper _readOnlyMapper;
+        private TextBoxMapper _reflectedPropertyMapper;
 
         #region Setup for Tests
 
@@ -255,7 +328,8 @@ namespace Habanero.Test.UI.Base
             _txtReadonly = GetControlFactory().CreateTextBox();
             _readOnlyMapper = new TextBoxMapper(_txtReadonly, "ShapeName", true, GetControlFactory());
             _txtReflectedProperty = GetControlFactory().CreateTextBox();
-            _reflectedPropertyMapper = new TextBoxMapper(_txtReflectedProperty, "-ShapeNameGetOnly-", false, GetControlFactory());
+            _reflectedPropertyMapper =
+                new TextBoxMapper(_txtReflectedProperty, "-ShapeNameGetOnly-", false, GetControlFactory());
             _txtNormal = GetControlFactory().CreateTextBox();
             _normalMapper = new TextBoxMapper(_txtNormal, "ShapeName", false, GetControlFactory());
             _shape = new Shape();
@@ -263,7 +337,7 @@ namespace Habanero.Test.UI.Base
         }
 
         #endregion //Setup for Tests
-		
+
         #region Test Mapper Creation
 
         [Test]
@@ -279,8 +353,10 @@ namespace Habanero.Test.UI.Base
         public void TestCreateMapperWithAssembly()
         {
             ITextBox b = GetControlFactory().CreateTextBox();
-            IControlMapper mapper = ControlMapper.Create("Habanero.UI.Base.TextBoxMapper", "Habanero.UI.Base", b, "Test", false, GetControlFactory());
-            Assert.AreSame(typeof(TextBoxMapper), mapper.GetType());
+            IControlMapper mapper =
+                ControlMapper.Create("Habanero.UI.Base.TextBoxMapper", "Habanero.UI.Base", b, "Test", false,
+                    GetControlFactory());
+            Assert.AreSame(typeof (TextBoxMapper), mapper.GetType());
             Assert.AreSame(b, mapper.Control);
         }
 
@@ -289,7 +365,7 @@ namespace Habanero.Test.UI.Base
         {
             ITextBox b = GetControlFactory().CreateTextBox();
             IControlMapper mapper = ControlMapper.Create(null, null, b, "Test", false, GetControlFactory());
-            Assert.AreSame(typeof(TextBoxMapper), mapper.GetType());
+            Assert.AreSame(typeof (TextBoxMapper), mapper.GetType());
             Assert.AreSame(b, mapper.Control);
         }
 
@@ -305,7 +381,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(_txtNormal.Enabled, "A normal control should be editable once it has an object");
         }
 
-
         #endregion
 
         #region Tests for read-only mapper
@@ -318,7 +393,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsFalse(_txtReadonly.Enabled, "A read-only control should be disabled once it has an object");
         }
 
-
         #endregion
 
         #region Test Reflected Property Mapper
@@ -327,22 +401,23 @@ namespace Habanero.Test.UI.Base
         public void TestReflectedWithNoSetDisablesControl()
         {
             Assert.IsFalse(_txtReflectedProperty.Enabled,
-                           "A reflected property control should be disabled before it gets an object");
+                "A reflected property control should be disabled before it gets an object");
             _reflectedPropertyMapper.BusinessObject = _shape;
             Assert.IsFalse(_txtReflectedProperty.Enabled,
-                           "A reflected property control should be disabled once it has an object");
+                "A reflected property control should be disabled once it has an object");
         }
 
         [Test]
         public void TestReflectedWithSetEnablesControl()
         {
             ITextBox txtReflectedPropertyWithSet = GetControlFactory().CreateTextBox();
-            TextBoxMapper reflectedPropertyWithSetMapper = new TextBoxMapper(txtReflectedPropertyWithSet, "-ShapeName-", false, GetControlFactory());
+            TextBoxMapper reflectedPropertyWithSetMapper =
+                new TextBoxMapper(txtReflectedPropertyWithSet, "-ShapeName-", false, GetControlFactory());
             Assert.IsFalse(txtReflectedPropertyWithSet.Enabled,
-                           "A reflected property control should be disabled before it gets an object");
+                "A reflected property control should be disabled before it gets an object");
             reflectedPropertyWithSetMapper.BusinessObject = _shape;
             Assert.IsTrue(txtReflectedPropertyWithSet.Enabled,
-                           "A reflected property control should be enabled once it has an object if the reflected property has a set");
+                "A reflected property control should be enabled once it has an object if the reflected property has a set");
         }
 
         [Test]
@@ -351,8 +426,8 @@ namespace Habanero.Test.UI.Base
             _reflectedPropertyMapper.BusinessObject = _shape;
             Assert.AreEqual("TestShapeName", _txtReflectedProperty.Text);
             _shape.ShapeName = "TestShapeName2";
-            Assert.AreEqual("TestShapeName", _txtReflectedProperty.Text, 
-                            "A Reflected property will not be able to pick up changes to the property.");
+            Assert.AreEqual("TestShapeName", _txtReflectedProperty.Text,
+                "A Reflected property will not be able to pick up changes to the property.");
         }
 
         [Test]
@@ -363,8 +438,8 @@ namespace Habanero.Test.UI.Base
             Shape sh2 = new Shape();
             sh2.ShapeName = "Different";
             _reflectedPropertyMapper.BusinessObject = sh2;
-            Assert.AreEqual("Different", _txtReflectedProperty.Text, 
-                            "A Reflected property should refresh the value when a new BO is loaded");
+            Assert.AreEqual("Different", _txtReflectedProperty.Text,
+                "A Reflected property should refresh the value when a new BO is loaded");
             sh2.ShapeName = "Different2";
             Assert.AreEqual("Different", _txtReflectedProperty.Text);
         }
@@ -378,21 +453,20 @@ namespace Habanero.Test.UI.Base
         {
             _normalMapper.BusinessObject = null;
             Assert.IsFalse(_txtNormal.Enabled,
-                           "A control representing a null BO cannot be edited, so it should disable the control");
+                "A control representing a null BO cannot be edited, so it should disable the control");
             _normalMapper.BusinessObject = _shape;
             Assert.IsTrue(_txtNormal.Enabled,
-                          "A non read-only control representing a BO can be edited, so it should enable the control");
+                "A non read-only control representing a BO can be edited, so it should enable the control");
             _normalMapper.BusinessObject = null;
             Assert.IsFalse(_txtNormal.Enabled,
-                           "A control changed to a null BO cannot be edited, so it should disable the control");
+                "A control changed to a null BO cannot be edited, so it should disable the control");
         }
 
         #endregion //Test Null BO
     }
 
-    internal class ControlMapperStub:ControlMapper
+    internal class ControlMapperStub : ControlMapper
     {
-
         public ControlMapperStub(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {

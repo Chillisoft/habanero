@@ -319,11 +319,11 @@ namespace Habanero.UI.Base
 
     public class GridDeveloperException : HabaneroDeveloperException
     {
-        public GridDeveloperException(string message) : base(message)
+        public GridDeveloperException(string message) : base(message, "")
         {
         }
 
-        public GridDeveloperException(string message, Exception inner) : base(message, inner)
+        public GridDeveloperException(string message, Exception inner) : base(message, "", inner)
         {
         }
 
@@ -343,11 +343,11 @@ namespace Habanero.UI.Base
         {
         }
 
-        public GridBaseInitialiseException(string message, Exception inner) : base(message, inner)
+        public GridBaseInitialiseException(string message, Exception inner) : base(message, "", inner)
         {
         }
 
-        public GridBaseInitialiseException(string message) : base(message)
+        public GridBaseInitialiseException(string message) : base(message, "")
         {
         }
 

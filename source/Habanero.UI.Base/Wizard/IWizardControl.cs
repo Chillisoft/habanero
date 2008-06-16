@@ -50,6 +50,11 @@ namespace Habanero.UI.Base
         {
             get;
         }
+        /// <summary>
+        /// Gets the Cancel Button so that it can be programmatically interacted with.
+        /// </summary>
+        IButton CancelButton { get; }
+
         ///// <summary>
         ///// The label that is displayed at the top of the wizard control for each step.
         ///// </summary>

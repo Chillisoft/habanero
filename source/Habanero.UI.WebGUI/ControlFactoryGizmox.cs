@@ -297,9 +297,16 @@ namespace Habanero.UI.WebGUI
         /// <returns>Returns a new DateRangeComboBox object</returns>
         public IDateRangeComboBox CreateDateRangeComboBox()
         {
-            return new DateRangeComboBoxGiz();
+            DateRangeComboBoxGiz dateRangeCombo = new DateRangeComboBoxGiz();
+            dateRangeCombo.Height = CreateTextBox().Height;
+            return dateRangeCombo;
         }
 
+        /// <summary>
+        /// Creates a new DateRangeComboBox with a specified list of options
+        /// </summary>
+        /// <param name="optionsToDisplay">The list of options to be displayed</param>
+        /// <returns>Returns a new DateRangeComboBox object</returns>
         public IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay)
         {
             return new DateRangeComboBoxGiz(optionsToDisplay);
@@ -345,7 +352,10 @@ namespace Habanero.UI.WebGUI
             ctl.Minimum = Int32.MinValue;
             return ctl;
         }
-
+        /// <summary>
+        /// Creates a new CheckBox
+        /// </summary>
+        /// <returns>Returns a new CheckBox object</returns>
         public ICheckBox CreateCheckBox()
         {
             return CreateCheckBox(false);
@@ -525,8 +535,6 @@ namespace Habanero.UI.WebGUI
         }
 
         
-
-
         public ITabControl CreateTabControl()
         {
             return new TabControlGiz();

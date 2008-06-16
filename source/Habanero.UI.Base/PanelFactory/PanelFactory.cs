@@ -39,7 +39,7 @@ namespace Habanero.UI.Base
         private readonly UIForm _uiForm;
         private IControlChilli _firstControl;
         private readonly IControlFactory _controlFactory;
-        private string _uiDefName;
+        private readonly string _uiDefName;
         //TODO Port:        private EventHandler _emailTextBoxDoubleClickedHandler;
 
         /// <summary>
@@ -79,14 +79,17 @@ namespace Habanero.UI.Base
             UIDef uiDef = mapper.GetUIDef(uiDefName);
             if (uiDef == null)
             {
-                throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName +
-                                                     "' since the classdefs do not contain a uiDef '" + uiDefName + "'");
+                string errMessage = "Cannot create a panel factory for '" + bo.ClassDef.ClassName +
+                                    "' since the classdefs do not contain a uiDef '" + uiDefName + "'";
+                throw new HabaneroDeveloperException("There is a serious application error please contact your system administrator" + Environment.NewLine + errMessage, errMessage);
             }
             _uiForm = uiDef.GetUIFormProperties();
             if (_uiForm == null)
             {
-                throw new HabaneroDeveloperException("Cannot create a panel factory for '" + bo.ClassDef.ClassName +
-                                                     "' since the classdefs do not contain a form def for uidef '" + uiDefName + "'");
+                string errMsg = "Cannot create a panel factory for '" + bo.ClassDef.ClassName +
+                                "' since the classdefs do not contain a form def for uidef '" + uiDefName + "'";
+                throw new HabaneroDeveloperException("There is a serious application error please contact your system administrator" + Environment.NewLine + errMsg,
+                            errMsg);
             }
             InitialiseFactory(bo);
         }

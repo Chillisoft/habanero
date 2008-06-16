@@ -25,7 +25,7 @@ namespace Habanero.Base.Exceptions
     /// <summary>
     /// Provides an exception to throw for an invalid argument
     /// </summary>
-    [Serializable()]
+    [Serializable]
     public class HabaneroArgumentException : HabaneroDeveloperException
     {
         /// <summary>
@@ -39,7 +39,7 @@ namespace Habanero.Base.Exceptions
         /// Constructor to initialise a new exception with the parameter name
         /// </summary>
         /// <param name="parameterName">The parameter name</param>
-        public HabaneroArgumentException(string parameterName) : base("The argument '" + parameterName + "' is not valid. ")
+        public HabaneroArgumentException(string parameterName) : base("The argument '" + parameterName + "' is not valid. ", "")
         {
         }
 
@@ -53,7 +53,7 @@ namespace Habanero.Base.Exceptions
         public HabaneroArgumentException(string parameterName,
                                          string message,
                                          Exception inner)
-            : base("The argument '" + parameterName + "' is not valid. " + message, inner)
+            : base("The argument '" + parameterName + "' is not valid. " + message, "", inner)
         {
         }
 
@@ -65,7 +65,7 @@ namespace Habanero.Base.Exceptions
         /// <param name="inner">The inner exception</param>
         public HabaneroArgumentException(string parameterName
                                          , Exception inner)
-            : base("The argument '" + parameterName + "' is not valid. ", inner)
+            : base("The argument '" + parameterName + "' is not valid. ", "", inner)
         {
         }
 
@@ -77,7 +77,7 @@ namespace Habanero.Base.Exceptions
         /// <param name="message">The error message to display</param>
         public HabaneroArgumentException(string parameterName,
                                          string message)
-            : base("The argument '" + parameterName + "' is not valid. " + message)
+            : base("The argument '" + parameterName + "' is not valid. " + message, "")
         {
         }
 

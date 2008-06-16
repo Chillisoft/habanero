@@ -117,7 +117,7 @@ namespace Habanero.UI.Base
     public class LayoutManagerException : HabaneroDeveloperException
     {
         public LayoutManagerException(string message)
-            : base(message)
+            : base(message, "")
         {
         }
 
@@ -127,7 +127,7 @@ namespace Habanero.UI.Base
         }
 
         public LayoutManagerException(string message, Exception inner)
-            : base(message, inner)
+            : base(message, "", inner)
         {
         }
 

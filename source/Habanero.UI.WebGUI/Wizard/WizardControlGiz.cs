@@ -14,6 +14,7 @@ namespace Habanero.UI.WebGUI
         private IWizardController _wizardController;
         private readonly IControlFactory _controlFactory;
         private readonly IPanel _wizardStepPanel;
+        private IButton _cancelButton;
 
         public event EventHandler Finished;
         public event Action<string> MessagePosted;
@@ -23,6 +24,14 @@ namespace Habanero.UI.WebGUI
         public IPanel WizardStepPanel
         {
             get { return _wizardStepPanel; }
+        }
+
+        /// <summary>
+        /// Gets the Cancel Button so that it can be programmatically interacted with.
+        /// </summary>
+        public IButton CancelButton
+        {
+            get { return _cancelButton; }
         }
 
         ///// <summary>
@@ -79,6 +88,12 @@ namespace Habanero.UI.WebGUI
             FlowLayoutManager layoutManager = new FlowLayoutManager(buttonPanel, _controlFactory);
             layoutManager.Alignment= FlowLayoutManager.Alignments.Right;
 
+            _cancelButton = _controlFactory.CreateButton("Cancel");
+            _cancelButton.Click += this.uxCancelButton_Click;
+            _cancelButton.Size = new Size(75, 38);
+            _cancelButton.TabIndex = 0;
+            layoutManager.AddControl(_cancelButton);
+
             _nextButton = _controlFactory.CreateButton("Next");
             _nextButton.Click += this.uxNextButton_Click;
             _nextButton.Size = new Size(75, 38);
@@ -90,6 +105,8 @@ namespace Habanero.UI.WebGUI
             _previousButton.Size = new Size(75, 38);
             _previousButton.TabIndex = 0;
             layoutManager.AddControl(_previousButton);
+
+
             return buttonPanel;
         }
 
@@ -101,7 +118,6 @@ namespace Habanero.UI.WebGUI
             get { return _currentControl;
             }
         }
-
 
         /// <summary>
         /// Gets the Next Button so that it can be programmatically interacted with.
@@ -213,6 +229,11 @@ namespace Habanero.UI.WebGUI
             }
         }
 
+
+        private void uxCancelButton_Click(object sender, EventArgs e)
+        {
+            _wizardController.CancelWizard();
+        }
 
         private void uxNextButton_Click(object sender, EventArgs e)
         {

@@ -49,5 +49,12 @@ namespace Habanero.UI.Base
         /// The text that you want displayed at the top of the wizard control when this step is active.
         /// </summary>
         string HeaderText { get; }
+
+        /// <summary>
+        /// Provides an interface for the developer to implement functionality to cancel any edits made as part of this
+        /// wizard step. The default wizard controller functionality is to call all wizard steps cancelStep methods when
+        /// its Cancel method is called.
+        /// </summary>
+        void CancelStep();
     }
 }

@@ -97,10 +97,20 @@ namespace Habanero.BO
         /// <summary>
         /// Indicates whether all of the property values of the object are valid
         /// </summary>
+        /// <param name="message">If the object is not valid then this returns the reason for it being invalid/param>
         /// <returns>Returns true if all are valid</returns>
-        public bool IsValid
+        public bool IsValid(out string message)
         {
-            get { return _bo.IsValid();  }
+                return _bo.IsValid(out message);
+        }
+
+        /// <summary>
+        /// Indicates whether all of the property values of the object are valid
+        /// </summary>
+        /// <returns>Returns true if all are valid</returns>
+        public bool IsValid()
+        {
+            return _bo.IsValid();
         }
 
         ///<summary>

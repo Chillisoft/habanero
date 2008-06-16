@@ -70,5 +70,15 @@ namespace Habanero.UI.WebGUI
         {
             return true;
         }
+
+        /// <summary>
+        /// Provides an interface for the developer to implement functionality to cancel any edits made as part of this
+        /// wizard step. The default wizard controller functionality is to call all wizard steps cancelStep methods when
+        /// its Cancel method is called.
+        /// </summary>
+        public void CancelStep()
+        {
+            
+        }
     }
 }
