@@ -113,20 +113,16 @@ namespace Habanero.UI.WebGUI
 
             if (selectedBo != null)
             {
-                MessageBox.Show("Are you sure you want to delete this object '" + selectedBo.ToString() + "'","Delete", MessageBoxButtons.OKCancel,
-                    delegate(object sender1, EventArgs e1)
-                    {
-                        _grid.SelectedBusinessObject = null;
-                        try
-                        {
-                            _businessObjectDeletor.DeleteBusinessObject(selectedBo);
-                        }
-                        catch (Exception ex)
-                        {
-                            GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting",
-                                "Problem Deleting");
-                        }
-                    });
+                try
+                {
+                    _grid.SelectedBusinessObject = null;
+                    _businessObjectDeletor.DeleteBusinessObject(selectedBo);
+                }
+                catch (Exception ex)
+                {
+                    GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting",
+                        "Problem Deleting");
+                }
             }
         }
 

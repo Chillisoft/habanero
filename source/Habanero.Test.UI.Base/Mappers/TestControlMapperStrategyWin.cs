@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
 using NUnit.Extensions.Forms;
@@ -40,6 +41,7 @@ namespace Habanero.Test.UI.Base
         public void Test_ControlMapperStrategy_AddBOPropHandlers()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             ControlMapperStrategyWin strategyWin = new ControlMapperStrategyWin();
             ControlFactoryWin factory = new Habanero.UI.Win.ControlFactoryWin();
@@ -70,6 +72,7 @@ namespace Habanero.Test.UI.Base
         public void Test_ControlMapperStrategy_RemoveBOPropHandlers()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             ControlMapperStrategyWin strategyWin = new ControlMapperStrategyWin();
             ITextBox tb = _factory.CreateTextBox();
@@ -339,6 +342,7 @@ namespace Habanero.Test.UI.Base
             TextBox tb = new TextBox();
             tb.Name = "TestTextBox";
             Form frm = new Form();
+            frm.Controls.Clear();
             frm.Controls.Add(tb);
             bool pressed = false;
             tb.KeyPress += delegate { pressed = true; };
@@ -360,6 +364,7 @@ namespace Habanero.Test.UI.Base
         private Form AddControlToForm(IControlChilli parentControl)
         {
             Form frm = new Form();
+            frm.Controls.Clear();
             frm.Controls.Add((Control) parentControl);
             return frm;
         }
