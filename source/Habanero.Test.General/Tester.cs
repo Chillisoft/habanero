@@ -463,33 +463,33 @@ namespace Habanero.Test.General
     /// <summary>
     /// This is used only for testing reading transactions
     /// </summary>
-    public class TransactionLog : BusinessObject
+    public class TransactionLogStub : BusinessObject
     {
         #region Constructors
 
-        public TransactionLog()
+        public TransactionLogStub()
         {
         }
 
-        internal TransactionLog(BOPrimaryKey id)
+        internal TransactionLogStub(BOPrimaryKey id)
             : base(id)
         {
         }
 
-        public TransactionLog(ClassDef def)
+        public TransactionLogStub(ClassDef def)
             : base(def)
         {
         }
 
         private static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (TransactionLog)))
+            if (!ClassDef.IsDefined(typeof (TransactionLogStub)))
             {
                 return CreateClassDef();
             }
             else
             {
-                return ClassDef.ClassDefs[typeof (TransactionLog)];
+                return ClassDef.ClassDefs[typeof (TransactionLogStub)];
             }
         }
 
@@ -502,7 +502,7 @@ namespace Habanero.Test.General
         //protected override void ConstructFromClassDef(bool newObject)
         //{
         //    base.ConstructFromClassDef(newObject);
-        //    //SetTransactionLog(new TransactionLogTable("TransactionLog",
+        //    //SetTransactionLog(new TransactionLogTable("TransactionLogStub",
         //    //                                          "DateTimeUpdated",
         //    //                                          "WindowsUser",
         //    //                                          "LogonUser",
@@ -521,7 +521,7 @@ namespace Habanero.Test.General
             PrimaryKeyDef primaryKey = new PrimaryKeyDef();
             primaryKey.IsObjectID = true;
             primaryKey.Add(lPropDefCol["TransactionSequenceNo"]);
-            ClassDef lClassDef = new ClassDef(typeof (TransactionLog), primaryKey, lPropDefCol, keysCol, null);
+            ClassDef lClassDef = new ClassDef(typeof (TransactionLogStub), primaryKey, lPropDefCol, keysCol, null);
 			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }
@@ -557,7 +557,7 @@ namespace Habanero.Test.General
         }
 
         /// <summary>
-        /// returns the TransactionLog identified by id.
+        /// returns the TransactionLogStub identified by id.
         /// </summary>
         /// <remarks>
         /// If the Contact person is already leaded then an identical copy of it will be returned.
@@ -566,14 +566,14 @@ namespace Habanero.Test.General
         /// <returns>The loaded business object</returns>
         /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
-        public static TransactionLog GetTransactionLog(BOPrimaryKey id)
+        public static TransactionLogStub GetTransactionLog(BOPrimaryKey id)
         {
-            TransactionLog myTransactionLog = (TransactionLog)BOLoader.Instance.GetLoadedBusinessObject(id);
-            if (myTransactionLog == null)
+            TransactionLogStub myTransactionLogStub = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(id);
+            if (myTransactionLogStub == null)
             {
-                myTransactionLog = new TransactionLog(id);
+                myTransactionLogStub = new TransactionLogStub(id);
             }
-            return myTransactionLog;
+            return myTransactionLogStub;
         }
 
         #endregion //Constructors
@@ -587,7 +587,7 @@ namespace Habanero.Test.General
 
         internal static void DeleteAllTransactionLogs()
         {
-            string sql = "DELETE FROM TransactionLog";
+            string sql = "DELETE FROM TransactionLogStub";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
@@ -609,27 +609,27 @@ namespace Habanero.Test.General
         protected internal static BusinessObjectCollection<BusinessObject> LoadBusinessObjCol(string searchCriteria,
                                                                                   string orderByClause)
         {
-            TransactionLog lTransactionLog = new TransactionLog();
+            TransactionLogStub lTransactionLogStub = new TransactionLogStub();
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
-            statement.Statement.Append(lTransactionLog.SelectSqlWithNoSearchClause());
+            statement.Statement.Append(lTransactionLogStub.SelectSqlWithNoSearchClause());
             if (searchCriteria.Length > 0)
             {
                 statement.AppendCriteria("");
                 SqlCriteriaCreator creator =
-                    new SqlCriteriaCreator(Expression.CreateExpression(searchCriteria), lTransactionLog);
+                    new SqlCriteriaCreator(Expression.CreateExpression(searchCriteria), lTransactionLogStub);
                 creator.AppendCriteriaToStatement(statement);
             }
-            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(lTransactionLog.ClassDef);
+            BusinessObjectCollection<BusinessObject> bOCol = new BusinessObjectCollection<BusinessObject>(lTransactionLogStub.ClassDef);
             using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(statement, orderByClause))
             {
                 while (dr.Read())
                 {
-                    BOLoader.Instance.LoadProperties(lTransactionLog, dr);
-                    TransactionLog lTempPerson2;
-                    lTempPerson2 = (TransactionLog)BOLoader.Instance.GetLoadedBusinessObject(lTransactionLog.GetObjectNewID());
+                    BOLoader.Instance.LoadProperties(lTransactionLogStub, dr);
+                    TransactionLogStub lTempPerson2;
+                    lTempPerson2 = (TransactionLogStub)BOLoader.Instance.GetLoadedBusinessObject(lTransactionLogStub.GetObjectNewID());
                     if (lTempPerson2 == null)
                     {
-                        bOCol.Add(lTransactionLog);
+                        bOCol.Add(lTransactionLogStub);
                     }
                     else
                     {

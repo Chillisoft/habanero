@@ -51,6 +51,25 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_CannotAddSameTransactionToCommitter()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitterDB committerDB = new TransactionCommitterDB();
+            StubSuccessfullTransaction transaction = new StubSuccessfullTransaction();
+            committerDB.AddTransaction(transaction);
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(1, committerDB.OriginalTransactions.Count);
+
+            //---------------Execute Test ----------------------
+            committerDB.AddTransaction(transaction);            
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, committerDB.OriginalTransactions.Count);
+     
+        }
+
+        [Test]
         public void TestCommitAddedTransactions()
         {
             //---------------Set up test pack-------------------

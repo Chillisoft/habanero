@@ -62,6 +62,13 @@ namespace Habanero.BO
         ///<param name="transaction"></param>
         public void AddTransaction(ITransactional transaction)
         {
+            ITransactional foundTransactional = _originalTransactions.Find(delegate(ITransactional obj)
+                       {
+                           return obj.TransactionID() ==
+                                  transaction.TransactionID();
+                       });
+            if (foundTransactional != null) return;
+
             _originalTransactions.Add(transaction);
         }
 
@@ -302,7 +309,7 @@ namespace Habanero.BO
         ///<param name="bo"></param>
         public virtual void AddBusinessObject(BusinessObject bo)
         {
-            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(bo); 
+            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(bo);
             this.AddTransaction(transaction);
             if (_runningUpdatingBeforePersisting)
             {
@@ -317,6 +324,5 @@ namespace Habanero.BO
         /// <param name="businessObject">The business object to decorate</param>
         /// <returns>A decorated Business object (TransactionalBusinessObject)</returns>
         protected abstract TransactionalBusinessObject CreateTransactionalBusinessObject(BusinessObject businessObject);
-
     }
 }

@@ -57,6 +57,17 @@ namespace Habanero.BO
         }
 
         ///<summary>
+        ///</summary>
+        ///<returns>The ID that uniquelty identifies this item of the transaction. In the case of business objects the object Id.
+        /// for non business objects that no natural id exists for the particular transactional item a guid that uniquely identifies 
+        /// transactional item should be generated. This is used by the transaction committer to ensure that the transactional item
+        /// is not added twice in error.</returns>
+        public string TransactionID()
+        {
+            return this.BusinessObject.ID.GetObjectId();
+        }
+
+        ///<summary>
         /// Updates the business object as committed
         ///</summary>
         public virtual void UpdateStateAsCommitted()

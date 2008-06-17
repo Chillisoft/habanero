@@ -52,6 +52,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, tc.ExecutedTransactions.Count);
             ITransactional trlogBO = tc.ExecutedTransactions[1];
             Assert.IsTrue(trlogBO is TransactionLogTable);
+            Assert.IsNotNull(trlogBO.TransactionID());
         }
 
         private static ContactPersonTransactionLogging CreateUnsavedContactPersonTransactionLogging()
