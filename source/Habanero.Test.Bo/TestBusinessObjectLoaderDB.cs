@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using Habanero.Base;
 using Habanero.BO;
@@ -81,7 +82,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             //TODO: assert are same
-            //Assert.AreEqual(cp.ID, loadedCP.ID);
+           // Assert.AreEqual(cp.ID, loadedCP.ID);
             //---------------Tear Down -------------------------          
         }
 
@@ -114,6 +115,44 @@ namespace Habanero.Test.BO
         //}
 
 
-     
+        //public T GetBusinessObjectByDatabaseCriteria<T>(string databaseCriteria) where T : BusinessObject, new()
+        //{
+        //    QueryDB selectQuery = new QueryFactoryDB().CreateSelectQuery<T>();
+        //    selectQuery.DatabaseCriteria = databaseCriteria;
+        //    ISqlStatement statement = selectQuery.CreateSqlStatement();
+        //    T loadedObject = new T();
+        //    using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+        //    {
+        //        try
+        //        {
+        //            if (dr.Read())
+        //            {
+        //                int i = 0;
+        //                foreach (BOProp prop in loadedObject.Props.SortedValues)
+        //                {
+        //                    if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
+        //                    try
+        //                    {
+        //                        prop.InitialiseProp(dr[i++]);
+        //                    }
+        //                    catch (IndexOutOfRangeException)
+        //                    {
+        //                    }
+        //                }
+        //                return loadedObject;
+        //            } else
+        //            {
+        //                return null;
+        //            }
+        //        }
+        //        finally
+        //        {
+        //            if (dr != null && !dr.IsClosed)
+        //            {
+        //                dr.Close();
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

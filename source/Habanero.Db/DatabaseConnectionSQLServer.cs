@@ -35,6 +35,8 @@ namespace Habanero.DB
         /// <param name="className">The class name</param>
         public DatabaseConnectionSqlServer(string assemblyName, string className) : base(assemblyName, className)
         {
+            
+            
         }
 
         /// <summary>

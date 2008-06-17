@@ -43,6 +43,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         protected override void SetupDatabaseConnection()
         {
+            if (DatabaseConnection.CurrentConnection != null) return;
             if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
             if (_privateKey != null) _databaseConfig.SetPrivateKey(_privateKey);
             DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
