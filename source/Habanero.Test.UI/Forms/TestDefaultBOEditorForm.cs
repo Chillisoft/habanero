@@ -38,7 +38,7 @@ namespace Habanero.Test.UI.Forms
     public class TestDefaultBOEditorForm : TestUsingDatabase
     {
         private ClassDef _classDefMyBo;
-        private BusinessObject _bo;
+        private IBusinessObject _bo;
         private DefaultBOEditorForm _defaultBOEditorForm;
         private Mock _databaseConnectionMockControl;
 
@@ -57,7 +57,7 @@ namespace Habanero.Test.UI.Forms
             _databaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
             IDatabaseConnection conn = (IDatabaseConnection) _databaseConnectionMockControl.MockInstance;
             _bo = _classDefMyBo.CreateNewBusinessObject(conn);
-            _defaultBOEditorForm = new DefaultBOEditorForm(_bo);
+            _defaultBOEditorForm = new DefaultBOEditorForm((BusinessObject) _bo);
         }
 
         #region Utility Methods

@@ -3,9 +3,24 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
+using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+    internal class TransactionCommitterTestHelper
+    {
+        public static void AssertBOStateIsValidAfterInsert_Updated(BusinessObject businessObject)
+        {
+            Assert.IsFalse(businessObject.State.IsNew);
+            Assert.IsFalse(businessObject.State.IsDirty);
+            Assert.IsFalse(businessObject.State.IsDeleted);
+            Assert.IsFalse(businessObject.State.IsEditing);
+            Assert.IsTrue(businessObject.State.IsValid());
+            string message;
+            Assert.IsTrue(businessObject.State.IsValid(out message));
+            Assert.AreEqual("", message);
+        }
+    }
     internal class StubDatabaseFailureTransaction : TransactionalBusinessObjectDB
     {
         private bool _committed;
@@ -304,7 +319,7 @@ namespace Habanero.Test.BO
         {
         }
 
-        protected override TransactionalBusinessObject CreateTransactionalBusinessObject(BusinessObject businessObject)
+        protected override TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject)
         {
             
                 return new TransactionalBusinessObject(businessObject);

@@ -89,10 +89,10 @@ namespace Habanero.BO.SqlGeneration
         /// <summary>
         /// Returns the table name
         /// </summary>
-        /// <param name="prop">The property</param>
+        /// <param name="propName">The name of the property</param>
         /// <param name="classDefs">The class definitions</param>
         /// <returns>Returns a string</returns>
-        private string GetTableName(BOProp prop, IList<ClassDef> classDefs)
+        private string GetTableName(string propName, IList<ClassDef> classDefs)
         {
             int i = 0;
             bool isSingleTableInheritance = false;
@@ -103,7 +103,7 @@ namespace Habanero.BO.SqlGeneration
                 {
                     return classDef.TableName;
                 }
-                else if (classDef.PropDefcol.Contains(prop.PropertyName))
+                else if (classDef.PropDefcol.Contains(propName))
                 {
                     if (classDef.SuperClassClassDef == null || classDef.IsUsingClassTableInheritance())
                     {
@@ -285,7 +285,7 @@ namespace Habanero.BO.SqlGeneration
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
                 if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
-                string tableName = GetTableName(prop, classDefs);
+                string tableName = GetTableName(prop.PropertyName, classDefs);
 
                 statement += SqlFormattingHelper.FormatTableAndFieldName(tableName, prop.DatabaseFieldName, _connection);
                 statement += ", ";

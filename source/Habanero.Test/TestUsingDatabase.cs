@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.DB;
 
@@ -42,6 +43,7 @@ namespace Habanero.Test
                     MyDBConnection.GetDatabaseConfig().GetConnectionString();
                 DatabaseConnection.CurrentConnection.GetConnection();
             }
+            GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryDB();
         }
 
         public void SetupDBOracleConnection()
@@ -60,6 +62,7 @@ namespace Habanero.Test
                 DatabaseConnection.CurrentConnection.ConnectionString = connStr;
                 DatabaseConnection.CurrentConnection.GetConnection();
             }
+            GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryDB();
         }
 
         public static void DeleteObjects()
@@ -116,4 +119,5 @@ namespace Habanero.Test
             _objectsToDelete.Add(bo);
         }
     }
+
 }

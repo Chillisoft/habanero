@@ -142,7 +142,7 @@ namespace Habanero.Test.BO
         public void TestAddBOToCollectionAddsRow()
         {
             SetupTest();
-            BusinessObject newBo = _classDef.CreateNewBusinessObject(itsConnection);
+            IBusinessObject newBo = _classDef.CreateNewBusinessObject(itsConnection);
             _collection.Add(newBo);
             Assert.AreEqual(3, itsTable.Rows.Count);
         }
@@ -151,7 +151,7 @@ namespace Habanero.Test.BO
         public void TestAddBOToCollectionAddsCorrectValues()
         {
             SetupTest();
-            BusinessObject newBo = _classDef.CreateNewBusinessObject(itsConnection);
+            IBusinessObject newBo = _classDef.CreateNewBusinessObject(itsConnection);
             newBo.SetPropertyValue("TestProp", "TestVal");
             _collection.Add(newBo);
             Assert.AreEqual("TestVal", itsTable.Rows[2][1]);

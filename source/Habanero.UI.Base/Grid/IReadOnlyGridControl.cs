@@ -1,6 +1,4 @@
 using Habanero.Base;
-using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base.FilterControl;
 
 namespace Habanero.UI.Base

@@ -33,7 +33,7 @@ namespace Habanero.BO
     {
       //  private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipCol");
         private IBusinessObject _bo;
-        private Dictionary<string, Relationship> _relationships;
+        private Dictionary<string, IRelationship> _relationships;
 
         /// <summary>
         /// Constructor to initialise a new relationship, specifying the
@@ -43,7 +43,7 @@ namespace Habanero.BO
         public RelationshipCol(IBusinessObject bo)
         {
             _bo = bo;
-            _relationships = new Dictionary<string, Relationship>();
+            _relationships = new Dictionary<string, IRelationship>();
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Habanero.BO
         /// </summary>
         /// <exception cref="RelationshipNotFoundException">Thrown
         /// if a relationship with the given name is not found</exception>
-        public Relationship this[string relationshipName]
+        public IRelationship this[string relationshipName]
         {
             get
             {
@@ -108,7 +108,7 @@ namespace Habanero.BO
         /// <exception cref="InvalidRelationshipAccessException">Thrown if
         /// the relationship specified is a multiple relationship, when a
         /// single one was expected</exception>
-        public BusinessObject GetRelatedObject(string relationshipName)
+        public IBusinessObject GetRelatedObject(string relationshipName)
         {
 			return GetRelatedObject<BusinessObject>(relationshipName);
         }
@@ -125,10 +125,10 @@ namespace Habanero.BO
 		/// <exception cref="InvalidRelationshipAccessException">Thrown if
 		/// the relationship specified is a multiple relationship, when a
 		/// single one was expected</exception>
-    	public T GetRelatedObject<T>(string relationshipName) where T : BusinessObject
+    	public T GetRelatedObject<T>(string relationshipName) where T : class, IBusinessObject
     	{
 			ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
-			Relationship relationship = this[relationshipName];
+			IRelationship relationship = this[relationshipName];
 			if (relationship is MultipleRelationship)
 			{
 				throw new InvalidRelationshipAccessException("The 'multiple' relationship " + relationshipName +
@@ -188,7 +188,7 @@ namespace Habanero.BO
         private MultipleRelationship GetMultipleRelationship(string relationshipName)
         {
             ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
-            Relationship relationship = this[relationshipName];
+            IRelationship relationship = this[relationshipName];
             if (relationship is SingleRelationship)
             {
                 throw new InvalidRelationshipAccessException("The 'single' relationship " + relationshipName +
@@ -209,7 +209,7 @@ namespace Habanero.BO
         /// single one</exception>
         public void SetRelatedObject(string relationshipName, IBusinessObject relatedObject)
         {
-            Relationship relationship = this[relationshipName];
+            IRelationship relationship = this[relationshipName];
             if (relationship is MultipleRelationship)
             {
                 throw new InvalidRelationshipAccessException("SetRelatedObject() was passed a relationship (" +
@@ -222,7 +222,7 @@ namespace Habanero.BO
         ///<summary>
         /// Returns an Iterator that iterates through the RelationshipCol
         ///</summary>
-        public IEnumerator<Relationship> GetEnumerator()
+        public IEnumerator<IRelationship> GetEnumerator()
         {
             return _relationships.Values.GetEnumerator();
         }

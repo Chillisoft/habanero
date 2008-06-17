@@ -1,3 +1,4 @@
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Base.Grid;
@@ -24,13 +25,13 @@ namespace Habanero.UI.Win
             get { return _grid; }
         }
 
-        public void Initialise(ClassDef classDef)
+        public void Initialise(IClassDef classDef)
         {
             _editableGridManager.Initialise(classDef);
             
         }
 
-        public void Initialise(ClassDef classDef, string uiDefName)
+        public void Initialise(IClassDef classDef, string uiDefName)
         {
             _editableGridManager.Initialise(classDef, uiDefName);
         }
@@ -42,7 +43,7 @@ namespace Habanero.UI.Win
             set { _editableGridManager.UiDefName = value; }
         }
 
-        public ClassDef ClassDef
+        public IClassDef ClassDef
         {
             get { return _editableGridManager.ClassDef; }
             set { _editableGridManager.ClassDef = value; }

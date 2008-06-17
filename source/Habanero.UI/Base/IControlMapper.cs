@@ -19,6 +19,7 @@
 
 
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI
@@ -45,6 +46,6 @@ namespace Habanero.UI
         /// altered, the ValueUpdated() method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
-        BusinessObject BusinessObject { get; set; }
+        IBusinessObject BusinessObject { get; set; }
     }
 }

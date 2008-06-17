@@ -172,7 +172,7 @@ namespace Habanero.Test.Util
         public void TestPersistSqlParameterValue()
         {
             base.SetupDBOracleConnection();
-            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
             ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo).GetPersistSql();
             ISqlStatement sqlStatement = sqlCol[0];

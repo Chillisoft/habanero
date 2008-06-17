@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -389,7 +390,7 @@ namespace Habanero.Test.BO
         /// <remarks> Recursive call to UpdateObjectBeforePersisting will not be done i.e. it is the bo developers responsibility to implement</remarks>
         ///</summary>
         ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
-        protected internal override void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
+        protected internal override void UpdateObjectBeforePersisting(ITransactionCommitter transactionCommitter)
         {
             base.UpdateObjectBeforePersisting(transactionCommitter);
             INumberGenerator numGen = new NumberGenerator("GeneratedNumber");

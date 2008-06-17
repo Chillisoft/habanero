@@ -206,8 +206,6 @@ namespace Habanero.Test.UI.Forms
             itsControl.SelectedBusinessObject.SetPropertyValue("TestProp", "qwe");
             itsControl.SelectedBusinessObject.SetPropertyValue("TestProp2", "rty");
 
-            SetupSaveExpectation();
-
             itsControl.Buttons.ClickButton("Save");
             Assert.IsFalse(itsControl.SelectedBusinessObject.State.IsNew);
             Assert.IsTrue(itsControl.Buttons["Add"].Enabled);

@@ -45,6 +45,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
             ContactPersonTestBO.CreateSampleData();
             ContactPersonTestBO.LoadDefaultClassDef();
+            BOLoader.Instance.ClearLoadedBusinessObjects();
         }
 
         [TestFixtureTearDown]

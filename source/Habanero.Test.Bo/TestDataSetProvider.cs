@@ -36,10 +36,10 @@ namespace Habanero.Test.BO
     {
         protected XmlClassLoader _loader;
         protected ClassDef _classDef;
-        protected BusinessObjectCollection<BusinessObject> _collection;
+        protected IBusinessObjectCollection _collection;
         protected DataTable itsTable;
-        protected BusinessObject itsBo1;
-        protected BusinessObject itsBo2;
+        protected IBusinessObject itsBo1;
+        protected IBusinessObject itsBo2;
         protected IBusinessObject itsRelatedBo;
         protected IDataSetProvider _dataSetProvider;
 
@@ -62,6 +62,7 @@ namespace Habanero.Test.BO
         
         public void SetupTest()
         {
+            GC.Collect();
             ClassDef.ClassDefs.Clear();
             _loader = new XmlClassLoader();
             _classDef = MyBO.LoadClassDefWithLookup();
@@ -350,7 +351,7 @@ namespace Habanero.Test.BO
                 /// Returns the related object 
                 /// </summary>
                 /// <returns>Returns the related business object</returns>
-                public override T GetRelatedObject<T>()
+                public override T GetRelatedObject<T>() 
                 {
                     return _myContactPerson as T;
                 }

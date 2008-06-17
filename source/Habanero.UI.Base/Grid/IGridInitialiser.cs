@@ -1,3 +1,4 @@
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
@@ -18,7 +19,7 @@ namespace Habanero.UI.Base
         /// identified by classDef <see cref="InitialiseGrid(ClassDef, string)"/>
         /// </summary>
         /// <param name="classDef">The classdef to initialise the grid to</param>
-        void InitialiseGrid(ClassDef classDef);
+        void InitialiseGrid(IClassDef classDef);
         /// <summary>
         /// initialises the grid set in the objects constructor with an alternate ui def for the class
         /// identified by classDef. The initialisation involves setting up the appropriate columns 
@@ -26,7 +27,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="classDef">The classdef to initialise the grid to</param>
         /// <param name="uiDefName">initialiss the grid with an alternate ui definition</param>
-        void InitialiseGrid(ClassDef classDef, string uiDefName);
+        void InitialiseGrid(IClassDef classDef, string uiDefName);
 
         bool IsInitialised { get; }
 

@@ -104,9 +104,10 @@ namespace Habanero.UI.Forms
 
             _comboBoxMapper.SetCollection(_collection, true);
 
-            UIDef uiDef = _collection.ClassDef.GetUIDef(uiName);
+		    ClassDef classDef = (ClassDef) _collection.ClassDef;
+		    UIDef uiDef = classDef.GetUIDef(uiName);
 		    PanelFactory panelFactory =
-                new PanelFactory(_collection.ClassDef.CreateNewBusinessObject(), uiDef.UIForm);
+                new PanelFactory(classDef.CreateNewBusinessObject(), uiDef.UIForm);
             _panelFactoryInfo = panelFactory.CreatePanel();
             _panelFactoryInfo.Panel.Enabled = false;
 
@@ -163,7 +164,7 @@ namespace Habanero.UI.Forms
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddButtonClickHandler(object sender, EventArgs e)
         {
-            _panelFactoryInfo.ControlMappers.BusinessObject = _collection.ClassDef.CreateNewBusinessObject(_databaseConnection);
+            _panelFactoryInfo.ControlMappers.BusinessObject = _collection.ClassDef.CreateNewBusinessObject();
             _collectionComboBox.SelectedIndex = -1;
             _collectionComboBox.Enabled = false;
             _buttons["Add"].Enabled = false;
@@ -289,7 +290,7 @@ namespace Habanero.UI.Forms
         /// </summary>
         public BusinessObject SelectedBusinessObject
         {
-            get { return _panelFactoryInfo.ControlMappers.BusinessObject; }
+            get { return (BusinessObject) _panelFactoryInfo.ControlMappers.BusinessObject; }
         }
 
         public IDatabaseConnection DatabaseConnection

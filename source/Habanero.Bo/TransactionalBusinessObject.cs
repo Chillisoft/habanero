@@ -15,11 +15,11 @@ namespace Habanero.BO
         ///<summary>
         ///</summary>
         ///<param name="businessObject"></param>
-        protected internal TransactionalBusinessObject(BusinessObject businessObject)
+        protected internal TransactionalBusinessObject(IBusinessObject businessObject)
         {
             if (businessObject == null) throw new ArgumentNullException("businessObject");
 
-            _businessObject = businessObject;
+            _businessObject = (BusinessObject) businessObject;
         }
 
         ///<summary>
@@ -112,9 +112,9 @@ namespace Habanero.BO
         /// to the transaction committer.
         ///</summary>
         ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
-        protected internal virtual void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
+        protected internal virtual void UpdateObjectBeforePersisting(ITransactionCommitter transactionCommitter)
         {
-            this.BusinessObject.UpdateObjectBeforePersisting(transactionCommitter);
+            _businessObject.UpdateObjectBeforePersisting(transactionCommitter);
         }
 
         ///<summary>
@@ -123,7 +123,7 @@ namespace Habanero.BO
         ///</summary>
         protected internal virtual void CheckForConcurrencyErrors()
         {
-            this.BusinessObject.CheckConcurrencyBeforePersisting();
+            _businessObject.CheckConcurrencyBeforePersisting();
         }
 
         ///<summary>
@@ -143,7 +143,7 @@ namespace Habanero.BO
         ///</summary>
         public virtual void UpdateAsRolledBack()
         {
-            this.BusinessObject.UpdateAsTransactionRolledBack();
+            _businessObject.UpdateAsTransactionRolledBack();
         }
 
         protected internal bool CheckCanDelete(out string errMsg)

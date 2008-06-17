@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
@@ -160,7 +161,7 @@ namespace Habanero.Test.UI.Base
 
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadClassDefWith_Grid_1TextboxColumn();
-            BusinessObjectCollection<BusinessObject> colBOs = GetCol_BO_2Items(classDef);
+            IBusinessObjectCollection colBOs = GetCol_BO_2Items(classDef);
             IEditableGrid grid = GetControlFactory().CreateEditableGrid();
             SetupGridColumnsForMyBo(grid);
             //--------------Assert PreConditions----------------            
@@ -176,13 +177,13 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        private static BusinessObjectCollection<BusinessObject> GetCol_BO_2Items(ClassDef classDef)
+        private static IBusinessObjectCollection GetCol_BO_2Items(ClassDef classDef)
         {
-            BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-            BusinessObject bo1 = classDef.CreateNewBusinessObject();
+            IBusinessObjectCollection col = new BusinessObjectCollection<BusinessObject>(classDef);
+            IBusinessObject bo1 = classDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp", "Value1");
             bo1.SetPropertyValue("TestProp2", "Value2");
-            BusinessObject bo2 = classDef.CreateNewBusinessObject();
+            IBusinessObject bo2 = classDef.CreateNewBusinessObject();
             bo2.SetPropertyValue("TestProp", "2Value1");
             bo2.SetPropertyValue("TestProp2", "2Value2");
             col.Add(bo1);

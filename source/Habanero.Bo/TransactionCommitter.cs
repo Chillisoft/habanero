@@ -11,7 +11,7 @@ namespace Habanero.BO
     /// The sub classes of this class implement a specific strategy e.g. Committing to a 
     /// database.
     /// </summary>
-    public abstract class TransactionCommitter
+    public abstract class TransactionCommitter : ITransactionCommitter
     {
         private readonly List<ITransactional> _originalTransactions = new List<ITransactional>();
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitter");
@@ -277,7 +277,7 @@ namespace Habanero.BO
         /// <summary>
         /// Marks all the ITransactional objects as committed.
         /// </summary>
-        private void UpdateTransactionsAsCommited()
+        protected void UpdateTransactionsAsCommited()
         {
             foreach (ITransactional transaction in _executedTransactions)
             {
@@ -307,7 +307,7 @@ namespace Habanero.BO
         /// appropriate Transactional Business Object
         ///</summary>
         ///<param name="bo"></param>
-        public virtual void AddBusinessObject(BusinessObject bo)
+        public virtual void AddBusinessObject(IBusinessObject bo)
         {
             TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(bo);
             this.AddTransaction(transaction);
@@ -323,6 +323,6 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="businessObject">The business object to decorate</param>
         /// <returns>A decorated Business object (TransactionalBusinessObject)</returns>
-        protected abstract TransactionalBusinessObject CreateTransactionalBusinessObject(BusinessObject businessObject);
+        protected abstract TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject);
     }
 }

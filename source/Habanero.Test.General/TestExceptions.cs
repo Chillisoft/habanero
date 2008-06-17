@@ -62,7 +62,8 @@ namespace Habanero.Test.General
                     "CannotSaveException",
                     "UnknownTypeNameException",
                     "InvalidPropertyException",
-                     "InvalidPropertyNameException"
+                     "InvalidPropertyNameException",
+                    "InvalidRelationshipAccessException"
                 };
 
             string[] boExceptions =
@@ -70,7 +71,7 @@ namespace Habanero.Test.General
                     
                    
                     "InvalidPropertyValueException",
-                    "InvalidRelationshipAccessException",
+                    
                     "RelationshipNotFoundException",
                     "BusinessObjectNotFoundException",
                     "InvalidKeyException",

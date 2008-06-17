@@ -67,7 +67,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithLookup();
-            BusinessObject bo = classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "s1");
             Assert.AreEqual("s1", bo.GetPropertyValueToDisplay("TestProp2"));
             Assert.AreEqual(new Guid("{E6E8DC44-59EA-4e24-8D53-4A43DC2F25E7}"), bo.GetPropertyValue("TestProp2"));
@@ -79,7 +79,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyBO.LoadClassDefWithStringLookup();
-            BusinessObject bo = classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "Started");
             Assert.AreEqual("S", bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("Started", bo.GetPropertyValueToDisplay("TestProp2"));
@@ -96,7 +96,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
 
             ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-            BusinessObject bo = classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);
             Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
@@ -112,7 +112,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
 
             ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-            BusinessObject bo = classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", "abc");
             Assert.AreEqual(cp.ContactPersonID.ToString(), bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
@@ -127,7 +127,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
 
             BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-            BusinessObject bo = classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", null);
             Assert.AreEqual(null, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual(null, bo.GetPropertyValueToDisplay("TestProp2"));
@@ -144,7 +144,7 @@ namespace Habanero.Test.BO
             string errorMessage = "";
             Assert.IsTrue(propDef.PropRule.IsPropValueValid("TestProp", "abcde", ref errorMessage), "Property value of length 5 must pass");
             Assert.IsFalse(propDef.PropRule.IsPropValueValid("TestProp", "abcdef", ref errorMessage), "Property value of length 6 must not pass");
-            BusinessObject bo = classDef.CreateNewBusinessObject();
+            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "abcde");
             Assert.IsTrue(bo.IsValid(), "BO should be valid with a TestProp value of 'abcde'");
             bo.SetPropertyValue("TestProp", "abcdef");
@@ -372,6 +372,27 @@ namespace Habanero.Test.BO
             Assert.IsTrue(BusinessObject.PropValueHasChanged(x, null));
             x = null;
             Assert.IsTrue(BusinessObject.PropValueHasChanged(x, y));
+        }
+
+        [Test]
+        public void TestSaveUsesFactoryGeneratedTransactionCommitter()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            IBusinessObjectLoader loader = new BusinessObjectLoaderInMemory(dataStore);
+            GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryInMemory(dataStore);
+            //---------------Execute Test ----------------------
+            cp.Save();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, dataStore.Count);
+            Assert.IsNotNull(loader.GetBusinessObject<ContactPersonTestBO>(cp.PrimaryKey));
+            Assert.AreSame(cp, loader.GetBusinessObject<ContactPersonTestBO>(cp.PrimaryKey));
+            //---------------Tear Down -------------------------
         }
     }
 }

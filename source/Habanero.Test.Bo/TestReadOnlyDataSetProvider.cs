@@ -46,7 +46,7 @@ namespace Habanero.Test.BO
         public void TestAddBusinessObjectAddsRow()
         {
             SetupTest();
-            BusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
+            IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
             bo3.SetPropertyValue("TestProp2", "s1");
             _collection.Add(bo3);
@@ -58,7 +58,7 @@ namespace Habanero.Test.BO
         public void TestAddBusinessObjectAndUpdateUpdatesNewRow()
         {
             SetupTest();
-            BusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
+            IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
             bo3.SetPropertyValue("TestProp2", "s2");
             _collection.Add(bo3);

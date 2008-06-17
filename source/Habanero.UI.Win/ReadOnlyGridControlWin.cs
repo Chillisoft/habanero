@@ -86,18 +86,18 @@ namespace Habanero.UI.Win
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
         /// </summary>
-        public void Initialise(ClassDef classDef)
+        public void Initialise(IClassDef classDef)
         {
             _gridInitialiser.InitialiseGrid(classDef);
         }
 
-        public void Initialise(ClassDef classDef, string uiDefName)
+        public void Initialise(IClassDef classDef, string uiDefName)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
 
 
-            _classDef = classDef;
+            _classDef = (ClassDef) classDef;
             _uiDefName = uiDefName;
 
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
@@ -218,10 +218,10 @@ namespace Habanero.UI.Win
             set { _uiDefName = value; }
         }
 
-        public ClassDef ClassDef
+        public IClassDef ClassDef
         {
             get { return _classDef; }
-            set { _classDef = value; }
+            set { _classDef = (ClassDef) value; }
         }
 
         public IFilterControl FilterControl

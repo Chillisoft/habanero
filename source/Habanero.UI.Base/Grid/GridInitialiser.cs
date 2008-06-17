@@ -42,17 +42,17 @@ namespace Habanero.UI.Base
             _isInitialised = true;
         }
 
-        public void InitialiseGrid(ClassDef classDef)
+        public void InitialiseGrid(IClassDef classDef)
         {
             InitialiseGrid(classDef, "default");
         }
 
-        public void InitialiseGrid(ClassDef classDef, string uiDefName)
+        public void InitialiseGrid(IClassDef classDef, string uiDefName)
         {
             if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
 
-            UIGrid gridDef = GetGridDef(classDef, uiDefName);
-            SetUpGridColumns(classDef, gridDef);
+            UIGrid gridDef = GetGridDef((ClassDef) classDef, uiDefName);
+            SetUpGridColumns((ClassDef) classDef, gridDef);
             _gridControl.UiDefName = uiDefName;
             _gridControl.ClassDef = classDef;
 

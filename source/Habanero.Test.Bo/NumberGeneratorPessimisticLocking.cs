@@ -1,4 +1,5 @@
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.ConcurrencyControl;
@@ -65,7 +66,7 @@ namespace Habanero.Test.BO
             return _boSequenceNumber;
         }
 
-        public void AddToTransaction(TransactionCommitter transactionCommitter)
+        public void AddToTransaction(ITransactionCommitter transactionCommitter)
         {
             BusinessObject busObject = this.GetTransactionalBO();
             busObject.UpdateObjectBeforePersisting(transactionCommitter);

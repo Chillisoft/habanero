@@ -87,20 +87,20 @@ namespace Habanero.UI.WebGUI
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
         /// </summary>
-        public void Initialise(ClassDef classDef)
+        public void Initialise(IClassDef classDef)
         {
-            _gridInitialiser.InitialiseGrid(classDef);
+            _gridInitialiser.InitialiseGrid((ClassDef) classDef);
         }
 
-        public void Initialise(ClassDef classDef, string uiDefName)
+        public void Initialise(IClassDef classDef, string uiDefName)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
 
-            _classDef = classDef;
+            _classDef = (ClassDef) classDef;
             _uiDefName = uiDefName;
 
-            _gridInitialiser.InitialiseGrid(classDef, uiDefName);
+            _gridInitialiser.InitialiseGrid(_classDef, uiDefName);
         }
 
         private void Buttons_DeleteClicked(object sender, EventArgs e)
@@ -217,10 +217,10 @@ namespace Habanero.UI.WebGUI
             set { _uiDefName = value; }
         }
 
-        public ClassDef ClassDef
+        public IClassDef ClassDef
         {
             get { return _classDef; }
-            set { _classDef = value; }
+            set { _classDef = (ClassDef) value; }
         }
 
         public IFilterControl FilterControl

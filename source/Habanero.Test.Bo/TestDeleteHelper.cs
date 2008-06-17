@@ -115,7 +115,7 @@ namespace Habanero.Test.BO
 			TestBO1 testBO1;
 			testBO1 = new TestBO1();
 			testBO1.MyBoID = "1";
-			testBO1.State.IsNew = false;
+		    testBO1.SetState(BOState.States.isNew, false);
 			children = AddRelatedObjects<TestBO2>(testBO1, "MyBO2", 3);
 			AddRelatedObjects<TestBO3>((TestBO)children[0], "MyBO3", 2);
 			AddRelatedObjects<TestBO3>((TestBO)children[0], "MyPreventBO3", 1);
@@ -189,7 +189,7 @@ namespace Habanero.Test.BO
 			{
 				T testBO2;
 				testBO2 = new T();
-				testBO2.State.IsNew = isNew;
+                testBO2.SetState(BOState.States.isNew, isNew);
 				testBO2.MyBoID = "2." + count;
 				testBO2.MyParentBoID = testBO.MyParentBoID;
 				children.Add(testBO2);

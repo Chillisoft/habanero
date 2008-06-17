@@ -77,7 +77,7 @@ namespace Habanero.Test.UI.Base
         }
 
         private ClassDef _classDefMyBo;
-        private BusinessObject _bo;
+        private IBusinessObject _bo;
         private IDefaultBOEditorForm _defaultBOEditorForm;
         private Mock _databaseConnectionMockControl;
 
@@ -104,7 +104,7 @@ namespace Habanero.Test.UI.Base
             
             _conn = (IDatabaseConnection) _databaseConnectionMockControl.MockInstance;
             _bo = _classDefMyBo.CreateNewBusinessObject(_conn);
-            _defaultBOEditorForm = GetControlFactory().CreateBOEditorForm(_bo);
+            _defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject) _bo);
         }
 
         #region Utility Methods
@@ -159,10 +159,10 @@ namespace Habanero.Test.UI.Base
         public void TestSuccessFullEditCallsDelegate()
         {
             //---------------Set up test pack-------------------
-            BusinessObject bo = _classDefMyBo.CreateNewBusinessObject(_conn);
+            IBusinessObject bo = _classDefMyBo.CreateNewBusinessObject(_conn);
             bool delegateCalled = false;
             IDefaultBOEditorForm boEditorForm =
-                GetControlFactory().CreateBOEditorForm(bo, "default",
+                GetControlFactory().CreateBOEditorForm((BusinessObject) bo, "default",
                                                        delegate { delegateCalled = true; });
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(delegateCalled);

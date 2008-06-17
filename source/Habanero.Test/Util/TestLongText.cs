@@ -136,7 +136,7 @@ namespace Habanero.Test.Util
         public void TestPersistSqlParameterType()
         {
             base.SetupDBOracleConnection();
-            BusinessObject bo = itsClassDef.CreateNewBusinessObject();
+            IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append('*', 2500);
             string value = stringBuilder.ToString();

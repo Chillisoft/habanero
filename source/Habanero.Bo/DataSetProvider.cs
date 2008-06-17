@@ -61,10 +61,10 @@ namespace Habanero.BO
             DataColumn column = _table.Columns.Add();
             column.Caption = "ID";
             column.ColumnName = "ID";
-            ClassDef classDef = _collection.ClassDef;
+            IClassDef classDef = _collection.ClassDef;
             foreach (UIGridColumn uiProperty in _uiGridProperties)
             {
-                AddColumn(uiProperty, classDef);
+                AddColumn(uiProperty, (ClassDef)classDef);
             }
             foreach (BusinessObject businessObjectBase in _collection)
             {
@@ -104,12 +104,12 @@ namespace Habanero.BO
         /// <param name="businessObject">The business object whose
         /// properties are to be displayed</param>
         /// <returns>Returns an array of values</returns>
-        protected object[] GetValues(BusinessObject businessObject)
+        protected object[] GetValues(IBusinessObject businessObject)
         {
             object[] values = new object[_uiGridProperties.Count + 1];
             values[0] = businessObject.ID.ToString();
             int i = 1;
-            BOMapper mapper = new BOMapper(businessObject);
+            BOMapper mapper = new BOMapper((BusinessObject) businessObject);
             foreach (UIGridColumn gridProperty in _uiGridProperties)
             {
                 object val = mapper.GetPropertyValueToDisplay(gridProperty.PropertyName);
@@ -155,7 +155,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="bo">The business object to search for</param>
         /// <returns>Returns the row number if found, or -1 if not found</returns>
-        public int FindRow(BusinessObject bo)
+        public int FindRow(IBusinessObject bo)
         {
             for (int i = 0; i < _table.Rows.Count; i++)
             {

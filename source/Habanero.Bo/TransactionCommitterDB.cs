@@ -159,7 +159,7 @@ namespace Habanero.BO
         /// <param name="businessObject">The business object to decorate in a TransactionalBusinessObjectDB</param>
         /// <returns>The decorated TransactionalBusinessObjectDB</returns>
         protected override TransactionalBusinessObject CreateTransactionalBusinessObject(
-            BusinessObject businessObject)
+            IBusinessObject businessObject)
         {
             return new TransactionalBusinessObjectDB(businessObject);
         }

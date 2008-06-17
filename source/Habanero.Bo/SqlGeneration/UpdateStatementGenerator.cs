@@ -40,9 +40,9 @@ namespace Habanero.BO.SqlGeneration
         /// <param name="bo">The business object whose properties are to
         /// be updated</param>
         /// <param name="connection">A database connection</param>
-        public UpdateStatementGenerator(BusinessObject bo, IDatabaseConnection connection)
+        public UpdateStatementGenerator(IBusinessObject bo, IDatabaseConnection connection)
         {
-            _bo = bo;
+            _bo = (BusinessObject) bo;
             _connection = connection;
         }
 
@@ -56,7 +56,7 @@ namespace Habanero.BO.SqlGeneration
             _statementCollection = new SqlStatementCollection();
             BOPropCol propsToInclude;
             string tableName;
-            ClassDef currentClassDef = _bo.ClassDef;
+            ClassDef currentClassDef = (ClassDef) _bo.ClassDef;
 
             while (currentClassDef.IsUsingClassTableInheritance())
             {
@@ -68,9 +68,9 @@ namespace Habanero.BO.SqlGeneration
                 }
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
-            propsToInclude = GetPropsToInclude(_bo.ClassDef);
+            propsToInclude = GetPropsToInclude((ClassDef) _bo.ClassDef);
             tableName = _bo.TableName;
-            GenerateSingleUpdateStatement(tableName, propsToInclude, false, _bo.ClassDef);
+            GenerateSingleUpdateStatement(tableName, propsToInclude, false, (ClassDef) _bo.ClassDef);
             return _statementCollection;
         }
 
@@ -94,7 +94,7 @@ namespace Habanero.BO.SqlGeneration
             {
                 if (propsToInclude.Contains(prop.PropertyName))
                 {
-                    PrimaryKeyDef primaryKeyDef = _bo.ClassDef.GetPrimaryKeyDef();
+                    PrimaryKeyDef primaryKeyDef = ((ClassDef)_bo.ClassDef).GetPrimaryKeyDef();
                     if (primaryKeyDef == null) primaryKeyDef = (PrimaryKeyDef) _bo.ID.KeyDef;
                     if (prop.IsDirty &&
                         ((primaryKeyDef.IsObjectID && !primaryKeyDef.Contains(prop.PropertyName)) ||

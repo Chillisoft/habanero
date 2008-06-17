@@ -300,7 +300,7 @@ namespace Habanero.Test
 
         public BusinessObjectCollection<Address> Addresses
         {
-            get { return Relationships.GetRelatedCollection<Address>("Addresses"); }
+            get { return ((RelationshipCol)this.Relationships).GetRelatedCollection<Address>("Addresses"); }
         }
 
         #endregion //Relationships

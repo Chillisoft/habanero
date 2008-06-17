@@ -133,7 +133,7 @@ namespace Habanero.UI.Grid
             _dataSetProvider = CreateBusinessObjectCollectionDataSetProvider(_collection);
             _dataSetProvider.ObjectInitialiser = _objectInitialiser;
             _uiName = uiName;
-            ClassDef classDef = collection.ClassDef;
+            ClassDef classDef = (ClassDef) collection.ClassDef;
             UIDef uiDef = classDef.GetUIDef(uiName);
             UIGrid uiGrid = uiDef.UIGrid;
             _dataTable = _dataSetProvider.GetDataTable(uiGrid);
@@ -509,7 +509,7 @@ namespace Habanero.UI.Grid
         /// <returns>Returns an IList object</returns>
         protected virtual BusinessObjectCollection<BusinessObject> GetSelectedBusinessObjects()
         {
-            BusinessObjectCollection<BusinessObject> busObjects = new BusinessObjectCollection<BusinessObject>(_collection.ClassDef);
+            BusinessObjectCollection<BusinessObject> busObjects = new BusinessObjectCollection<BusinessObject>((ClassDef) _collection.ClassDef);
             foreach (DataGridViewRow row in this.SelectedRows)
             {
                 busObjects.Add((BusinessObject) this._dataSetProvider.Find((string) row.Cells["ID"].Value));

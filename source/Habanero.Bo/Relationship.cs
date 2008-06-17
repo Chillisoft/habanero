@@ -27,7 +27,7 @@ namespace Habanero.BO
     /// <summary>
     /// Provides a super-class for relationships between business objects
     /// </summary>
-    public abstract class Relationship
+    public abstract class Relationship : IRelationship
     {
         protected RelationshipDef _relDef;
         protected readonly IBusinessObject _owningBo;

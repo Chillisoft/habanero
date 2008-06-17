@@ -347,7 +347,7 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void BusinessObjectAddedToCollectionHandler(object sender, BOEventArgs e)
         {
-            BusinessObject businessObject = e.BusinessObject;
+            IBusinessObject businessObject = e.BusinessObject;
             //log.Debug("BO Added to collection " + e.BusinessObject.ID);
             _table.RowChanged -= RowChangedHandler;
             _table.NewRow();

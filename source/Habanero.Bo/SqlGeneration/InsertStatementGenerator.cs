@@ -48,9 +48,9 @@ namespace Habanero.BO.SqlGeneration
         /// <param name="bo">The business object whose properties are to
         /// be inserted</param>
         /// <param name="connection">A database connection</param>
-        public InsertStatementGenerator(BusinessObject bo, IDatabaseConnection connection)
+        public InsertStatementGenerator(IBusinessObject bo, IDatabaseConnection connection)
         {
-            _bo = bo;
+            _bo = (BusinessObject) bo;
             _connection = connection;
         }
 

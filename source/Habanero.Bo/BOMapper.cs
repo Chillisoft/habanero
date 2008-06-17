@@ -98,7 +98,7 @@ namespace Habanero.BO
             if (propertyName.IndexOf(".") != -1)
             {
                 
-                BusinessObject relatedBo = this._businessObject;
+                IBusinessObject relatedBo = this._businessObject;
                 //Get the first property name
                 string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
                 propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
@@ -118,7 +118,7 @@ namespace Habanero.BO
                     //    relationshipName = relationshipName.Remove(0, relationshipName.IndexOf("|") + 1);
                     //}
                     //relNames.Add(relationshipName);
-                    BusinessObject oldBo = relatedBo;
+                    IBusinessObject oldBo = relatedBo;
                     int i = 0;
                     do
                     {
@@ -134,7 +134,7 @@ namespace Habanero.BO
                     return null;
                     //throw new HabaneroApplicationException("Unable to retrieve property " + propertyName + " from a business object of type " + this._businessObject.GetType().Name);
                 }
-                BOMapper relatedBoMapper = new BOMapper(relatedBo);
+                BOMapper relatedBoMapper = new BOMapper((BusinessObject) relatedBo);
                 return relatedBoMapper.GetPropertyValueToDisplay(propertyName);
             }
             else if (propertyName.IndexOf("-") != -1)

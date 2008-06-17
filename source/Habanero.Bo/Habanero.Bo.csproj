@@ -97,6 +97,8 @@
   <ItemGroup>
     <Compile Include="BOLoader.cs" />
     <Compile Include="BOState.cs" />
+    <Compile Include="BusinessObjectLoaderDB.cs" />
+    <Compile Include="BusinessObjectLoaderInMemory.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />
     <Compile Include="ClassDefinition\Trigger.cs" />
@@ -118,10 +120,13 @@
     <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
+    <Compile Include="Criteria.cs" />
+    <Compile Include="CriteriaManager\IExpression.cs" />
     <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
     <Compile Include="CriteriaManager\SQLCriteriaCreator.cs" />
+    <Compile Include="DataStoreInMemory.cs" />
     <Compile Include="DeleteHelper.cs" />
-    <Compile Include="IBusinessObjectCollection.cs" />
+    <Compile Include="IBusinessObjectLoader.cs" />
     <Compile Include="IDataSetProvider.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
@@ -167,9 +172,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ReadOnlyDataSetProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BOEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessObjectLookupList.cs">
@@ -228,9 +230,6 @@
     <Compile Include="CriteriaManager\Expression.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CriteriaManager\IExpression.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CriteriaManager\IParameterSQLInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -241,12 +240,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DatabaseLookupList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InvalidRelationshipAccessException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IRelationshipCol.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Loaders\DtdLoader.cs" />
@@ -338,6 +331,9 @@
     <Compile Include="TransactionalBusinessObjectDB.cs" />
     <Compile Include="TransactionCommitterDB.cs" />
     <Compile Include="TransactionCommitter.cs" />
+    <Compile Include="TransactionCommitterFactoryDB.cs" />
+    <Compile Include="TransactionCommitterFactoryInMemory.cs" />
+    <Compile Include="TransactionCommitterInMemory.cs" />
     <Compile Include="TransactionLogTable.cs">
       <SubType>Code</SubType>
     </Compile>

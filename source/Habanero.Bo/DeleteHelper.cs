@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -27,17 +28,17 @@ namespace Habanero.BO
 	internal class DeleteHelper
 	{
 
-		public static bool CheckCanDelete(BusinessObject bo, out string reason)
+		public static bool CheckCanDelete(IBusinessObject bo, out string reason)
 		{
 		    if (bo == null) throw new ArgumentNullException("bo");
 		    reason = "";
 
-		    ClassDef classDef = bo.ClassDef;
+		    ClassDef classDef = (ClassDef) bo.ClassDef;
 			RelationshipDefCol relationshipDefCol;
 			relationshipDefCol = classDef.RelationshipDefCol;
 			MatchList listOfPaths = FindPreventDeleteRelationships(relationshipDefCol);
 			Dictionary<string, int> results = new Dictionary<string, int>();
-			CheckCanDeleteSafe(bo, new List<BusinessObject>(), listOfPaths, "", ref results);
+			CheckCanDeleteSafe(bo, new List<IBusinessObject>(), listOfPaths, "", ref results);
 			foreach (KeyValuePair<string, int> pair in results)
 			{
 				reason += Environment.NewLine + String.Format(
@@ -58,7 +59,7 @@ namespace Habanero.BO
 			return String.IsNullOrEmpty(reason);
 		}
 
-		private static void CheckCanDeleteSafe(BusinessObject bo, List<BusinessObject> alreadyChecked, 
+		private static void CheckCanDeleteSafe(IBusinessObject bo, List<IBusinessObject> alreadyChecked, 
 			MatchList matchList, string currentRelationshipPath, ref Dictionary<string, int> results)
 		{
 			if (alreadyChecked.Contains(bo)) return;

@@ -30,6 +30,7 @@ namespace Habanero.Base
         private static string _applicationName;
         private static string _applicationVersion;
         private static int _databaseVersion;
+        private static ITransactionCommitterFactory _transactionCommitterFactory;
 
         /// <summary>
         /// Gets and sets the application's settings storer, which stores
@@ -94,6 +95,17 @@ namespace Habanero.Base
         {
             get { return _databaseVersion; }
             set { _databaseVersion = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the ITransactionCommitterFactory to be used. This determines the location your
+        /// BusinessObjects will persist to (eg a TransactionCommitterFactoryDB would make the BusinessObjects
+        /// persist to the database).
+        /// </summary>
+        public static ITransactionCommitterFactory TransactionCommitterFactory
+        {
+            get { return _transactionCommitterFactory; }
+            set { _transactionCommitterFactory = value; }
         }
     }
 }

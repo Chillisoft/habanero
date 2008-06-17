@@ -18,20 +18,21 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
 namespace Habanero.BO
 {
     ///<summary>
     /// The current state of a business object.
     ///</summary>
-    public class BOState
+    public class BOState : IBOState
     {
-        private readonly BusinessObject _bo;
+        private readonly IBusinessObject _bo;
 
         ///<summary>
         ///</summary>
         ///<param name="bo"></param>
-        public BOState(BusinessObject bo)
+        public BOState(IBusinessObject bo)
         {
             _bo = bo;
         }
@@ -40,7 +41,7 @@ namespace Habanero.BO
         /// An enumeration that describes the object's state
         /// </summary>
         [Flags]
-        private enum States
+        internal enum States
         {
             /// <summary>The object is new</summary>
             isNew = 1,
@@ -59,6 +60,7 @@ namespace Habanero.BO
         public bool IsNew
         {
             get { return GetBOFlagValue(States.isNew); }
+            
             internal set
             {
                 SetBOFlagValue(States.isNew, value);
@@ -101,7 +103,7 @@ namespace Habanero.BO
         /// <returns>Returns true if all are valid</returns>
         public bool IsValid(out string message)
         {
-                return _bo.IsValid(out message);
+            return _bo.IsValid(out message);
         }
 
         /// <summary>
@@ -144,7 +146,7 @@ namespace Habanero.BO
         /// <param name="flag">The flag value to set. See the States
         /// enumeration for more detail.</param>
         /// <param name="bValue">The value to set to</param>
-        private void SetBOFlagValue(States flag, bool bValue)
+        internal void SetBOFlagValue(States flag, bool bValue)
         {
             if (bValue)
             {

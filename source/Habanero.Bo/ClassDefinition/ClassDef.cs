@@ -65,7 +65,7 @@ namespace Habanero.BO.ClassDefinition
     ///  which should warn but not prevent.</li>
     /// </ul>
     /// </futureEnhancements>
-    public class ClassDef
+    public class ClassDef : IClassDef
     {
         protected static ClassDefCol _classDefCol;
         private string _assemblyName;
@@ -619,7 +619,7 @@ namespace Habanero.BO.ClassDefinition
         /// Creates a new business object using this class definition
         /// </summary>
         /// <returns>Returns the new object</returns>
-        public BusinessObject CreateNewBusinessObject()
+        public IBusinessObject CreateNewBusinessObject()
         {
             return InstantiateBusinessObject(); //this.InstantiateBusinessObjectWithClassDef();
         }
@@ -630,7 +630,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <param name="conn">A database connection</param>
         /// <returns>Returns the new object</returns>
-        public BusinessObject CreateNewBusinessObject(IDatabaseConnection conn)
+        public IBusinessObject CreateNewBusinessObject(IDatabaseConnection conn)
         {
             BusinessObject newObj = InstantiateBusinessObject(); //this.InstantiateBusinessObjectWithClassDef();
             newObj.SetDatabaseConnection(conn);

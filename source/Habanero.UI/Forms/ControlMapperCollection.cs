@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.UI.Forms
@@ -30,7 +31,7 @@ namespace Habanero.UI.Forms
     public class ControlMapperCollection : ICollection
     {
         private IList _collection;
-        private BusinessObject _businessObject;
+        private IBusinessObject _businessObject;
 
         /// <summary>
         /// Contructor to initialise an empty collection
@@ -134,7 +135,7 @@ namespace Habanero.UI.Forms
         /// object represented by this collection and to each BO within the
         /// collection.
         /// </summary>
-        public BusinessObject BusinessObject
+        public IBusinessObject BusinessObject
         {
             get { return _businessObject; }
             set

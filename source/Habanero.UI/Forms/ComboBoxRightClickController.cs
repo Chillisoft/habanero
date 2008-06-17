@@ -56,9 +56,9 @@ namespace Habanero.UI.Forms
         ///</summary>
         ///<param name="comboBox">The combo box for which to enable this feature</param>
         ///<param name="lookupTypeClassDef">The class definition of the class that the combo box represents</param>
-        public ComboBoxRightClickController(ComboBox comboBox, ClassDef lookupTypeClassDef)
+        public ComboBoxRightClickController(ComboBox comboBox, IClassDef lookupTypeClassDef)
         {
-            _lookupTypeClassDef = lookupTypeClassDef;
+            _lookupTypeClassDef = (ClassDef) lookupTypeClassDef;
             _comboBox = comboBox;
             if (_lookupTypeClassDef != null)
             {
@@ -194,7 +194,7 @@ namespace Habanero.UI.Forms
                 }
                 else
                 {
-                    newBo = _lookupTypeClassDef.CreateNewBusinessObject();
+                    newBo = (BusinessObject) _lookupTypeClassDef.CreateNewBusinessObject();
                     BoPanelControl boCtl = new BoPanelControl(newBo, GetUiDefName());
                     UIDef uiDef = _lookupTypeClassDef.GetUIDef(GetUiDefName());
                     UIForm uiForm = uiDef.UIForm;

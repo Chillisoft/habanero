@@ -67,7 +67,7 @@ namespace Habanero.UI.Forms
         /// A constructor to initialise a new instance, with a UIForm object 
         /// specified
         /// </summary>
-        public PanelFactory(BusinessObject bo, UIForm uiForm)
+        public PanelFactory(IBusinessObject bo, UIForm uiForm)
         {
             _uiForm = uiForm;
             InitialiseFactory(bo);
@@ -76,9 +76,9 @@ namespace Habanero.UI.Forms
         /// <summary>
         /// A constructor as before, but with a UIDefName specified
         /// </summary>
-        public PanelFactory(BusinessObject bo, string uiDefName)
+        public PanelFactory(IBusinessObject bo, string uiDefName)
         {
-            BOMapper mapper = new BOMapper(bo);
+            BOMapper mapper = new BOMapper((BusinessObject) bo);
             _uiForm = mapper.GetUIDef(uiDefName).GetUIFormProperties();
             InitialiseFactory(bo);
         }
@@ -86,9 +86,9 @@ namespace Habanero.UI.Forms
         /// <summary>
         /// Initialises factory components
         /// </summary>
-        private void InitialiseFactory(BusinessObject bo)
+        private void InitialiseFactory(IBusinessObject bo)
         {
-            _currentBusinessObject = bo;
+            _currentBusinessObject = (BusinessObject) bo;
             _emailTextBoxDoubleClickedHandler = new EventHandler(EmailTextBoxDoubleClickedHandler);
         }
 

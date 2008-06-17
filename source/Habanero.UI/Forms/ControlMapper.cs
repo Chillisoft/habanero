@@ -202,13 +202,13 @@ namespace Habanero.UI.Forms
         /// altered, the ValueUpdated() method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
-        public BusinessObject BusinessObject
+        public IBusinessObject BusinessObject
         {
             get { return _businessObject; }
             set
             {
                 RemoveCurrentBOPropHandlers();
-                _businessObject = value;
+                _businessObject = (BusinessObject) value;
                 OnBusinessObjectChanged();
             	UpdateIsEditable();
                 ValueUpdated();

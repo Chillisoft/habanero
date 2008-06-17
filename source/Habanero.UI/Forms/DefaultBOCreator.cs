@@ -33,14 +33,14 @@ namespace Habanero.UI.Forms
     /// </summary>
     public class DefaultBOCreator : IBusinessObjectCreator
     {
-        private readonly ClassDef _classDef;
+        private readonly IClassDef _classDef;
 
         /// <summary>
         /// Constructor to initialise a new object creator
         /// </summary> 
         /// 
         /// <param name="classDef">The class definition</param>
-        public DefaultBOCreator(ClassDef classDef)
+        public DefaultBOCreator(IClassDef classDef)
         {
             _classDef = classDef;
         }

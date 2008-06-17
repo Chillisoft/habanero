@@ -19,6 +19,7 @@
 
 
 using System.Windows.Forms;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Grid;
@@ -51,17 +52,17 @@ namespace Habanero.Test.UI.Grid
             Assert.AreEqual(2, grid.DataTable.Rows.Count);
         }
 
-        private void SetupGrid(ClassDef classDef)
+        private void SetupGrid(IClassDef classDef)
         {
             BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-            BusinessObject bo1 = classDef.CreateNewBusinessObject();
+            IBusinessObject bo1 = classDef.CreateNewBusinessObject();
             bo1.SetPropertyValue("TestProp", "Value1");
             bo1.SetPropertyValue("TestProp2", "Value2");
-            BusinessObject bo2 = classDef.CreateNewBusinessObject();
+            IBusinessObject bo2 = classDef.CreateNewBusinessObject();
             bo2.SetPropertyValue("TestProp", "2Value1");
             bo2.SetPropertyValue("TestProp2", "2Value2");
-            col.Add(bo1);
-            col.Add(bo2);
+            col.Add((BusinessObject) bo1);
+            col.Add((BusinessObject) bo2);
             grid.SetCollection(col);
             
         }

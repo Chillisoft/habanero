@@ -362,7 +362,7 @@ namespace Habanero.Test.BO
 
         public RelatedBusinessObjectCollection<Address> Addresses
         {
-            get { return (RelatedBusinessObjectCollection<Address>)this.Relationships.GetRelatedCollection<Address>("Addresses"); }
+            get { return (RelatedBusinessObjectCollection<Address>)((RelationshipCol)this.Relationships).GetRelatedCollection<Address>("Addresses"); }
         }
 
         public bool AfterLoadCalled

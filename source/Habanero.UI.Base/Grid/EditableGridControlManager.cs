@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base.Grid
@@ -9,7 +10,7 @@ namespace Habanero.UI.Base.Grid
     {
         private readonly IEditableGridControl _gridControl;
         private string _uiDefName;
-        private ClassDef _classDef;
+        private IClassDef _classDef;
         private IGridInitialiser _gridInitialiser;
 
 
@@ -25,18 +26,18 @@ namespace Habanero.UI.Base.Grid
             set { _uiDefName = value; }
         }
 
-        public ClassDef ClassDef
+        public IClassDef ClassDef
         {
             get { return _classDef; }
             set { _classDef = value; }
         }
 
-        public void Initialise(ClassDef classDef)
+        public void Initialise(IClassDef classDef)
         {
             _gridInitialiser.InitialiseGrid(classDef);
         }
 
-        public void Initialise(ClassDef classDef, string uiDefName)
+        public void Initialise(IClassDef classDef, string uiDefName)
         {
             _gridInitialiser.InitialiseGrid(classDef, uiDefName);
         }

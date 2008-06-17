@@ -91,7 +91,7 @@ namespace Habanero.UI.Base
         protected DataView GetDataTable(IBusinessObjectCollection boCol)
         {
             _dataSetProvider = _gridBase.CreateDataSetProvider(boCol);
-            ClassDef classDef = _boCol.ClassDef;
+            ClassDef classDef = (ClassDef) _boCol.ClassDef;
             UIDef uiDef = classDef.GetUIDef(_uiDefName);
             if (uiDef == null)
             {
@@ -175,7 +175,7 @@ namespace Habanero.UI.Base
             {
                 if (_boCol == null) return new List<BusinessObject>();
                 BusinessObjectCollection<BusinessObject> busObjects =
-                    new BusinessObjectCollection<BusinessObject>(_boCol.ClassDef);
+                    new BusinessObjectCollection<BusinessObject>((ClassDef) _boCol.ClassDef);
                 foreach (IDataGridViewRow row in _gridBase.SelectedRows)
                 {
                     BusinessObject businessObject = (BusinessObject) GetBusinessObjectAtRow(row.Index);

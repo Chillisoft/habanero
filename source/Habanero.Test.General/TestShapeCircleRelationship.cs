@@ -54,7 +54,7 @@ namespace Habanero.Test.General
 			Circle circle = new Circle();
 			circle.Radius = 10;
 			shape = circle;
-			Relationship circleRelationship = shape.Relationships["Circle"];
+			Relationship circleRelationship = (Relationship) shape.Relationships["Circle"];
 			RelKey relKey = circleRelationship._relKey;
 			ISqlStatement sqlStatement = BusinessObjectCollection<Circle>.CreateLoadSqlStatement(
                 circle, Circle.GetClassDef(), relKey.RelationshipExpression(), -1, "", null);

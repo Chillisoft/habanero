@@ -38,9 +38,9 @@ namespace Habanero.BO.SqlGeneration
         /// </summary>
         /// <param name="bo">The business object to be deleted</param>
         /// <param name="connection">The database connection</param>
-        public DeleteStatementGenerator(BusinessObject bo, IDatabaseConnection connection)
+        public DeleteStatementGenerator(IBusinessObject bo, IDatabaseConnection connection)
         {
-            _bo = bo;
+            _bo = (BusinessObject) bo;
             _connection = connection;
         }
 
@@ -61,7 +61,7 @@ namespace Habanero.BO.SqlGeneration
                 @"DELETE FROM " + SqlFormattingHelper.FormatTableName(_bo.TableName, _connection) +
                                                     " WHERE " + _bo.WhereClause(deleteSql));
             statementCollection.Add(deleteSql);
-            ClassDef currentClassDef = _bo.ClassDef;
+            ClassDef currentClassDef = (ClassDef) _bo.ClassDef;
             while (currentClassDef.IsUsingClassTableInheritance())
             {
                 while (currentClassDef.SuperClassClassDef.SuperClassDef != null &&

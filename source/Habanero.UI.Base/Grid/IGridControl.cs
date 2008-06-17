@@ -1,3 +1,4 @@
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.UI.Base
@@ -7,13 +8,13 @@ namespace Habanero.UI.Base
         /// <summary>
         /// initiliase the grid to the with the 'default' UIdef.
         /// </summary>
-        void Initialise(ClassDef classDef);
+        void Initialise(IClassDef classDef);
 
-        void Initialise(ClassDef classDef, string uiDefName);
+        void Initialise(IClassDef classDef, string uiDefName);
 
         string UiDefName { get; set; }
 
-        ClassDef ClassDef { get; set; }
+        IClassDef ClassDef { get; set; }
 
         /// <summary>
         /// Returns the grid object held. This property can be used to

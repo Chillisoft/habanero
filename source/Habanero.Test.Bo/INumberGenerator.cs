@@ -1,3 +1,4 @@
+using Habanero.Base;
 using Habanero.BO;
 
 namespace Habanero.Test.BO
@@ -6,6 +7,6 @@ namespace Habanero.Test.BO
     {
         int NextNumber();
         void SetSequenceNumber(int newSequenceNumber);
-        void AddToTransaction(TransactionCommitter transactionCommitter);
+        void AddToTransaction(ITransactionCommitter transactionCommitter);
     }
 }

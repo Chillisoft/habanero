@@ -22,7 +22,7 @@ namespace Habanero.BO
         ///<summary>
         ///</summary>
         ///<param name="businessObject"></param>
-        protected internal TransactionalBusinessObjectDB(BusinessObject businessObject) : base(businessObject)
+        protected internal TransactionalBusinessObjectDB(IBusinessObject businessObject) : base(businessObject)
         {
         }
         ///<summary>

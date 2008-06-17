@@ -43,16 +43,17 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObjectCollection<TBusinessObject>
         : List<TBusinessObject>, IBusinessObjectCollection
-        where TBusinessObject : BusinessObject
+        where TBusinessObject : class, IBusinessObject
     {
         private readonly ClassDef _boClassDef;
         private IExpression _criteriaExpression;
         private string _orderByClause;
-        private readonly BusinessObject _sampleBo;
+        private readonly IBusinessObject _sampleBo;
         private string _extraSearchCriteriaLiteral = "";
         private int _limit = -1;
         private readonly Hashtable _lookupTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
+        private Criteria _criteria;
 
         /// <summary>
         /// Default constructor. 
@@ -68,7 +69,7 @@ namespace Habanero.BO
         /// and the objects in the collection will be determined from the classDef passed in.
         /// </summary>
         /// <param name="classDef">The classdef of the objects to be contained in this collection</param>
-        public BusinessObjectCollection(ClassDef classDef)
+        public BusinessObjectCollection(IClassDef classDef)
             : this(classDef, null)
         {
         }
@@ -84,33 +85,33 @@ namespace Habanero.BO
         {
         }
 
-        /// <summary>
-        /// Constructor to initialise a new collection with a specified Database Connection.
-        /// This Database Connection will be used to load the collection.
-        /// </summary>
-        /// <param name="databaseConnection">The Database Connection to used to load the collection</param>
-        public BusinessObjectCollection(IDatabaseConnection databaseConnection)
-            : this(null, null)
-        {
-            _sampleBo.SetDatabaseConnection(databaseConnection);
-        }
+        ///// <summary>
+        ///// Constructor to initialise a new collection with a specified Database Connection.
+        ///// This Database Connection will be used to load the collection.
+        ///// </summary>
+        ///// <param name="databaseConnection">The Database Connection to used to load the collection</param>
+        //public BusinessObjectCollection(IDatabaseConnection databaseConnection)
+        //    : this(null, null)
+        //{
+        //    _sampleBo.SetDatabaseConnection(databaseConnection);
+        //}
 
-        private BusinessObjectCollection(ClassDef classDef, TBusinessObject sampleBo)
+        private BusinessObjectCollection(IClassDef classDef, TBusinessObject sampleBo)
         {
             if (classDef == null)
             {
                 if (sampleBo == null)
                 {
-                    _boClassDef = ClassDef.ClassDefs[typeof (TBusinessObject)];
+                    _boClassDef = ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)];
                 }
                 else
                 {
-                    _boClassDef = sampleBo.ClassDef;
+                    _boClassDef = (ClassDef) sampleBo.ClassDef;
                 }
             }
             else
             {
-                _boClassDef = classDef;
+                _boClassDef = (ClassDef) classDef;
             }
             if (sampleBo != null)
             {
@@ -192,7 +193,7 @@ namespace Habanero.BO
             this.FireBusinessObjectAdded(bo);
         }
 
-        private void AddInternal(TBusinessObject bo)
+        internal void AddInternal(TBusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
         
@@ -283,8 +284,8 @@ namespace Habanero.BO
         {
             BusinessObjectCollection<TBusinessObject> oldCol = this.Clone();
             Clear();
-            IDatabaseConnection boDatabaseConnection = _sampleBo.GetDatabaseConnection();
-            ISqlStatement refreshSql = CreateLoadSqlStatement(_sampleBo, _boClassDef,
+            IDatabaseConnection boDatabaseConnection = DatabaseConnection.CurrentConnection;
+            ISqlStatement refreshSql = CreateLoadSqlStatement((BusinessObject) _sampleBo, _boClassDef,
                 _criteriaExpression, _limit, _extraSearchCriteriaLiteral, _orderByClause);
             using (IDataReader dr = boDatabaseConnection.LoadDataReader(refreshSql))
             {
@@ -797,6 +798,13 @@ namespace Habanero.BO
             return true;
         }
 
+
+        public Criteria Criteria
+        {
+            get { return _criteria; }
+            set { _criteria = value; }
+        }
+
         /// <summary>
         /// Finds a business object that has the key string specified.<br/>
         /// Note: the format of the search term is strict, so that a Guid ID
@@ -858,7 +866,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the class definition of the collection
         /// </summary>
-        public ClassDef ClassDef
+        public IClassDef ClassDef
         {
             get { return _boClassDef; }
         }
@@ -1237,6 +1245,7 @@ namespace Habanero.BO
         {
             get { return _createdBusinessObjects; }
         }
+
 
         #endregion
 

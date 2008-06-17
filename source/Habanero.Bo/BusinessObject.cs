@@ -108,7 +108,7 @@ namespace Habanero.BO
             {
                 _primaryKey.SetObjectID(myID);
             }
-            ClassDef currentClassDef = this.ClassDef;
+            ClassDef currentClassDef = (ClassDef) this.ClassDef;
             if (currentClassDef != null)
             {
                 while (currentClassDef.IsUsingClassTableInheritance())
@@ -176,10 +176,10 @@ namespace Habanero.BO
         {
             //todo: Check if not already loaded in object manager if already loaded raise error
             InitialiseDatabaseConnection(conn);
-            State.IsNew = false;
-            State.IsDeleted = false;
-            State.IsDirty = false;
-            State.IsEditing = false;
+            _boState.IsNew = false;
+            _boState.IsDeleted = false;
+            _boState.IsDirty = false;
+            _boState.IsEditing = false;
 
             ConstructFromClassDef(false);
             if (!BOLoader.Instance.Load(this, searchExpression))
@@ -238,10 +238,10 @@ namespace Habanero.BO
         private void Initialise(IDatabaseConnection conn, ClassDef def)
         {
             _boState = new BOState(this);
-            State.IsDeleted = false;
-            State.IsDirty = false;
-            State.IsEditing = false;
-            State.IsNew = true;
+            _boState.IsDeleted = false;
+            _boState.IsDirty = false;
+            _boState.IsEditing = false;
+            _boState.IsNew = true;
             InitialiseDatabaseConnection(conn);
             if (def != null)
             {
@@ -249,7 +249,7 @@ namespace Habanero.BO
             }
             else
             {
-                _classDef = ClassDef.ClassDefs[this.GetType()];
+                _classDef = ClassDefinition.ClassDef.ClassDefs[this.GetType()];
             }
             ConstructFromClassDef(true);
         }
@@ -320,8 +320,8 @@ namespace Habanero.BO
         /// <returns>Returns a class definition</returns>
         protected virtual ClassDef ConstructClassDef()
         {
-            if (ClassDef.ClassDefs.Contains(this.GetType()))
-                return ClassDef.ClassDefs[this.GetType()];
+            if (ClassDefinition.ClassDef.ClassDefs.Contains(this.GetType()))
+                return ClassDefinition.ClassDef.ClassDefs[this.GetType()];
             else
                 return null;
         }
@@ -367,7 +367,7 @@ namespace Habanero.BO
                                                              "namespace and assembly and that there are corresponding " +
                                                              "class definitions for this class.", GetType()));
                     }
-                    PrimaryKeyDef primaryKeyDef = this.ClassDef.GetPrimaryKeyDef();
+                    PrimaryKeyDef primaryKeyDef = ((ClassDef )this.ClassDef).GetPrimaryKeyDef();
                     if (primaryKeyDef != null)
                     {
                         BOPrimaryKey parentPrimaryKey = new BOPrimaryKey(primaryKeyDef);
@@ -423,6 +423,16 @@ namespace Habanero.BO
             get { return _relationshipCol; }
             set { _relationshipCol = value; }
         }
+
+        /// <summary>
+        /// Returns or sets the class definition. Setting the classdef is not recommended
+        /// </summary>
+        IClassDef IBusinessObject.ClassDef
+        {
+            get { return _classDef; }
+            set { _classDef = (ClassDef) value; }
+        }
+
 
         /// <summary>
         /// Returns or sets the class definition. Setting the classdef is not recommended
@@ -548,7 +558,7 @@ namespace Habanero.BO
             }
             CheckNotEditing();
             CheckConcurrencyBeforeBeginEditing();
-            State.IsEditing = true;
+            _boState.IsEditing = true;
         }
 
         /// <summary>
@@ -572,6 +582,8 @@ namespace Habanero.BO
         /// <returns>Returns the value if found</returns>
         public object GetPropertyValue(string propName)
         {
+            if (propName == null) throw new ArgumentNullException("propName");
+
             if (Props.Contains(propName))
                 return Props[propName].Value;
             else
@@ -803,7 +815,7 @@ namespace Habanero.BO
                 {
                     BeginEdit();
                 }
-                State.IsDirty = true;
+                _boState.IsDirty = true;
                 prop.Value = newPropValue;
                 FireUpdatedEvent();
             }
@@ -842,7 +854,7 @@ namespace Habanero.BO
         /// <param name="invalidReason">A string to modify with a reason
         /// for any invalid values</param>
         /// <returns>Returns true if all are valid</returns>
-        protected internal bool IsValid(out string invalidReason)
+        public bool IsValid(out string invalidReason)
         {
             invalidReason = "";
             if (this.State.IsDeleted) return true;
@@ -861,7 +873,7 @@ namespace Habanero.BO
         /// Indicates whether all of the property values are valid
         /// </summary>
         /// <returns>Returns true if all are valid</returns>
-        protected internal bool IsValid()
+        public bool IsValid()
         {
             string invalidReason;
             return IsValid(out invalidReason);
@@ -870,7 +882,7 @@ namespace Habanero.BO
         /// <summary>
         /// The BOState object for this BusinessObject, which records the state information of the object
         /// </summary>
-        public BOState State
+        public IBOState State
         {
             get { return _boState; }
         }
@@ -951,7 +963,7 @@ namespace Habanero.BO
         /// </summary>
         public void Save()
         {
-            TransactionCommitter committer = new TransactionCommitterDB();
+            ITransactionCommitter committer = GlobalRegistry.TransactionCommitterFactory.CreateTransactionCommitter();
             committer.AddBusinessObject(this);
             committer.CommitTransaction();
         }
@@ -1006,22 +1018,22 @@ namespace Habanero.BO
 
         private void SetStateAsUpdated()
         {
-            State.IsNew = false;
+            _boState.IsNew = false;
             if (!(_boPropCol == null))
             {
                 _boPropCol.SetIsObjectNew(false);
             }
-            State.IsDeleted = false;
-            State.IsDirty = false;
-            State.IsEditing = false;
+            _boState.IsDeleted = false;
+            _boState.IsDirty = false;
+            _boState.IsEditing = false;
         }
 
         private void SetStateAsPermanentlyDeleted()
         {
-            State.IsNew = true;
-            State.IsDeleted = true;
-            State.IsDirty = false;
-            State.IsEditing = false;
+            _boState.IsNew = true;
+            _boState.IsDeleted = true;
+            _boState.IsDirty = false;
+            _boState.IsEditing = false;
         }
 
         ///<summary>
@@ -1031,7 +1043,7 @@ namespace Habanero.BO
         /// <remarks> Recursive call to UpdateObjectBeforePersisting will not be done i.e. it is the bo developers responsibility to implement</remarks>
         ///</summary>
         ///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
-        protected internal virtual void UpdateObjectBeforePersisting(TransactionCommitter transactionCommitter)
+        protected internal virtual void UpdateObjectBeforePersisting(ITransactionCommitter transactionCommitter)
         {
             if (_transactionLog != null)
             {
@@ -1051,9 +1063,9 @@ namespace Habanero.BO
         public void Restore()
         {
             _boPropCol.RestorePropertyValues();
-            State.IsDeleted = false;
-            State.IsEditing = false;
-            State.IsDirty = false;
+            _boState.IsDeleted = false;
+            _boState.IsEditing = false;
+            _boState.IsDirty = false;
             ReleaseWriteLocks();
             FireUpdatedEvent();
             FireRestoredEvent();
@@ -1070,8 +1082,8 @@ namespace Habanero.BO
             {
                 BeginEdit(true);
             }
-            State.IsDirty = true;
-            State.IsDeleted = true;
+            _boState.IsDirty = true;
+            _boState.IsDeleted = true;
         }
 
         private void CheckIsDeletable()
@@ -1319,6 +1331,11 @@ namespace Habanero.BO
         /// </summary>
         protected internal virtual void AfterSave()
         {
+        }
+
+        internal void SetState(BOState.States state, bool value)
+        {
+           _boState.SetBOFlagValue(state, value);
         }
     }
 }

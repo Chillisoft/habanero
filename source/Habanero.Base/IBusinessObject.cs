@@ -1,3 +1,5 @@
+using System;
+
 namespace Habanero.Base
 {
     public interface IBusinessObject
@@ -59,5 +61,60 @@ namespace Habanero.Base
         /// </summary>
         IPrimaryKey PrimaryKey { get; set; }
 
+        /// <summary>
+        /// Returns the primary key ID of this object.  If there is no primary key on this
+        /// class, the primary key of the nearest suitable parent is found and populated
+        /// with the values held for that key in this object.  This is a possible situation
+        /// in some forms of inheritance.
+        /// </summary>
+        IPrimaryKey ID
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Returns or sets the class definition. Setting the classdef is not recommended
+        /// </summary>
+        IClassDef ClassDef
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets and sets the collection of relationships
+        /// </summary>
+        IRelationshipCol Relationships
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The BOState object for this BusinessObject, which records the state information of the object
+        /// </summary>
+        IBOState State
+        {
+            get;
+        }
+
+        event EventHandler<BOEventArgs> Updated;
+        event EventHandler<BOEventArgs> Saved;
+        event EventHandler<BOEventArgs> Deleted;
+        event EventHandler<BOEventArgs> Restored;
+
+        /// <summary>
+        /// Indicates whether all of the property values are valid
+        /// </summary>
+        /// <param name="invalidReason">A string to modify with a reason
+        /// for any invalid values</param>
+        /// <returns>Returns true if all are valid</returns>
+        bool IsValid(out string invalidReason);
+
+        /// <summary>
+        /// Indicates whether all of the property values are valid
+        /// </summary>
+        /// <returns>Returns true if all are valid</returns>
+        bool IsValid();
     }
 }

@@ -45,6 +45,7 @@ namespace Habanero.Test.BO
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
+            GC.Collect();
             MyBO.LoadDefaultClassDef();
         }
 
@@ -60,6 +61,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp1 = CreateContactPersonTestBO();
             ContactPersonTestBO cp2 = CreateContactPersonTestBO();
             ContactPersonTestBO cp3 = CreateContactPersonTestBO();
+            //--------------------------------------------------
 
             col.LoadAll();
             string newSurname = Guid.NewGuid().ToString();

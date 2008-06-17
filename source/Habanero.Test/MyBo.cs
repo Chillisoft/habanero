@@ -71,7 +71,7 @@ namespace Habanero.Test
         {
             get
             {
-                return this.Relationships.GetRelatedCollection<MyRelatedBo>("MyMultipleRelationship");
+                return ((RelationshipCol)this.Relationships).GetRelatedCollection<MyRelatedBo>("MyMultipleRelationship");
             }
         }
 

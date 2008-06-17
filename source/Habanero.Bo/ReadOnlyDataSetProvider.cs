@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 
 namespace Habanero.BO
 {
@@ -73,7 +74,7 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void AddedHandler(object sender, BOEventArgs e)
         {
-            BusinessObject businessObject = e.BusinessObject;
+            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
             object[] values = GetValues(businessObject);
             _table.LoadDataRow(values, true);
             businessObject.Updated += UpdatedHandler;
@@ -86,7 +87,7 @@ namespace Habanero.BO
         /// <param name="e">Attached arguments regarding the event</param>
         private void UpdatedHandler(object sender, BOEventArgs e)
         {
-            BusinessObject businessObject = e.BusinessObject;
+            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
             int rowNum = this.FindRow(businessObject);
             if (rowNum == -1)
             {
