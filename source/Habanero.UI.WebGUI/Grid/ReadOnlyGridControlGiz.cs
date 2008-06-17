@@ -48,7 +48,7 @@ namespace Habanero.UI.WebGUI
 
         private void InitialiseFilterControl()
         {
-            _filterControl.Filter +=_filterControl_OnFilter;
+            _filterControl.Filter += _filterControl_OnFilter;
         }
 
         private void _filterControl_OnFilter(object sender, EventArgs e)
@@ -56,9 +56,10 @@ namespace Habanero.UI.WebGUI
             this.Grid.CurrentPage = 1;
             if (FilterMode == FilterModes.Search)
             {
-                BusinessObjectCollection<BusinessObject> collection = new BusinessObjectCollection<BusinessObject>(this.ClassDef);
+                BusinessObjectCollection<BusinessObject> collection =
+                    new BusinessObjectCollection<BusinessObject>(this.ClassDef);
                 string searchClause = _filterControl.GetFilterClause().GetFilterClauseString("%", "'");
-                if (!string.IsNullOrEmpty(AdditionalSearchCriteria ))
+                if (!string.IsNullOrEmpty(AdditionalSearchCriteria))
                 {
                     if (!string.IsNullOrEmpty(searchClause))
                     {
@@ -112,15 +113,20 @@ namespace Habanero.UI.WebGUI
 
             if (selectedBo != null)
             {
-                _grid.SelectedBusinessObject = null;
-                try
-                {
-                    _businessObjectDeletor.DeleteBusinessObject(selectedBo);
-                }
-                catch (Exception ex)
-                {
-                    GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting", "Problem Deleting");
-                }
+                MessageBox.Show("Are you sure you want to delete this object '" + selectedBo.ToString() + "'","Delete", MessageBoxButtons.OKCancel,
+                    delegate(object sender1, EventArgs e1)
+                    {
+                        _grid.SelectedBusinessObject = null;
+                        try
+                        {
+                            _businessObjectDeletor.DeleteBusinessObject(selectedBo);
+                        }
+                        catch (Exception ex)
+                        {
+                            GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting",
+                                "Problem Deleting");
+                        }
+                    });
             }
         }
 
@@ -135,10 +141,7 @@ namespace Habanero.UI.WebGUI
             {
                 if (_businessObjectEditor != null)
                 {
-                    _businessObjectEditor.EditObject(selectedBo, _uiDefName, delegate
-                                                     {
-                                                         this.Grid.RefreshGrid();
-                                                     });
+                    _businessObjectEditor.EditObject(selectedBo, _uiDefName, delegate { this.Grid.RefreshGrid(); });
                 }
             }
         }
@@ -152,13 +155,14 @@ namespace Habanero.UI.WebGUI
             IBusinessObject newBo;
             if (_businessObjectCreator == null)
             {
-                throw new GridDeveloperException("You cannot call add as there is no business object creator set up for the grid");
+                throw new GridDeveloperException(
+                    "You cannot call add as there is no business object creator set up for the grid");
             }
             newBo = _businessObjectCreator.CreateBusinessObject();
             if (_businessObjectEditor != null && newBo != null)
             {
-                _businessObjectEditor.EditObject(newBo, _uiDefName, delegate(IBusinessObject bo) 
-                    { this.Grid.SelectedBusinessObject= bo; });
+                _businessObjectEditor.EditObject(newBo, _uiDefName,
+                    delegate(IBusinessObject bo) { this.Grid.SelectedBusinessObject = bo; });
             }
         }
 
@@ -263,7 +267,7 @@ namespace Habanero.UI.WebGUI
 
         public void SetBusinessObjectCollection(IBusinessObjectCollection boCollection)
         {
-            if (boCollection == null )
+            if (boCollection == null)
             {
                 _grid.SetBusinessObjectCollection(null);
                 this.Buttons.Enabled = false;
@@ -273,7 +277,8 @@ namespace Habanero.UI.WebGUI
             if (_classDef == null)
             {
                 Initialise(boCollection.ClassDef);
-            }else
+            }
+            else
             {
                 if (_classDef != boCollection.ClassDef)
                 {
@@ -281,12 +286,12 @@ namespace Habanero.UI.WebGUI
                         "You cannot call set collection for a collection that has a different class def than is initialised");
                 }
             }
-            if (this.BusinessObjectCreator  is DefaultBOCreator )
+            if (this.BusinessObjectCreator is DefaultBOCreator)
             {
                 this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
             }
             if (this.BusinessObjectCreator == null) this.BusinessObjectCreator = new DefaultBOCreator(boCollection);
-            if (this.BusinessObjectEditor == null ) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
+            if (this.BusinessObjectEditor == null) this.BusinessObjectEditor = new DefaultBOEditor(_controlFactory);
             if (this.BusinessObjectDeletor == null) this.BusinessObjectDeletor = new DefaultBODeletor();
 
             _grid.SetBusinessObjectCollection(boCollection);
@@ -314,7 +319,7 @@ namespace Habanero.UI.WebGUI
         ///
         public void BeginInit()
         {
-            ((System.ComponentModel.ISupportInitialize)this.Grid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) this.Grid).BeginInit();
         }
 
         ///<summary>
@@ -323,7 +328,7 @@ namespace Habanero.UI.WebGUI
         ///
         public void EndInit()
         {
-            ((System.ComponentModel.ISupportInitialize)this.Grid).EndInit();
+            ((System.ComponentModel.ISupportInitialize) this.Grid).EndInit();
         }
     }
 }

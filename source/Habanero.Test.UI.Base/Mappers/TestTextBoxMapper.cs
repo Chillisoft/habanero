@@ -23,7 +23,6 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
-using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
 using NUnit.Framework;
 
@@ -43,7 +42,7 @@ namespace Habanero.Test.UI.Base
         {
             protected override IControlFactory GetControlFactory()
             {
-                return new Habanero.UI.Win.ControlFactoryWin();
+                return new ControlFactoryWin();
             }
 
             [Test]

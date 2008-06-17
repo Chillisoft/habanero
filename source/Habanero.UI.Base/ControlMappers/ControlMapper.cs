@@ -25,7 +25,6 @@ using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
@@ -107,8 +106,6 @@ namespace Habanero.UI.Base
             get { return _businessObject; }
             set
             {
-                //TODO PORT FOR WIN: RemoveCurrentBOPropHandlers();
-                
                 RemoveCurrentBOPropHandlers();
                 _businessObject = value;
                 OnBusinessObjectChanged();
@@ -134,12 +131,14 @@ namespace Habanero.UI.Base
 
         protected abstract void InternalUpdateControlValueFromBo();
 
-        protected virtual void OnBusinessObjectChanged() { }
+        protected virtual void OnBusinessObjectChanged()
+        {
+        }
 
         private void AddCurrentBOPropHandlers()
         {
             IControlMapperStrategy mapperStrategy = _factory.CreateControlMapperStrategy();
-            mapperStrategy.AddCurrentBOPropHandlers(this,CurrentBOProp());
+            mapperStrategy.AddCurrentBOPropHandlers(this, CurrentBOProp());
         }
 
         public IBOProp CurrentBOProp()
@@ -147,7 +146,8 @@ namespace Habanero.UI.Base
             if (_businessObject != null && _businessObject.Props.Contains(_propertyName))
             {
                 return _businessObject.Props[_propertyName];
-            } else
+            }
+            else
             {
                 return null;
             }
@@ -164,7 +164,8 @@ namespace Habanero.UI.Base
             if (_businessObject != null && _propertyName.IndexOf(".") == -1 && _propertyName.IndexOf("-") != -1)
             {
                 string virtualPropName = _propertyName.Substring(1, _propertyName.Length - 2);
-                PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
+                PropertyInfo propertyInfo =
+                    ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
                 virtualPropertySetExists = propertyInfo != null && propertyInfo.CanWrite;
             }
             _isEditable = !_isReadOnly && _businessObject != null
@@ -192,7 +193,8 @@ namespace Habanero.UI.Base
                             if (persistedPropertyValue is string)
                             {
                                 _isEditable = String.IsNullOrEmpty(persistedPropertyValue as string);
-                            } else
+                            }
+                            else
                             {
                                 _isEditable = persistedPropertyValue == null;
                             }
@@ -211,7 +213,8 @@ namespace Habanero.UI.Base
                 _control.ForeColor = Color.Black;
                 if (_control is ICheckBox) _control.BackColor = SystemColors.Control;
                 else _control.BackColor = Color.White;
-            } else
+            }
+            else
             {
                 _control.ForeColor = Color.Black;
                 _control.BackColor = Color.Beige;
@@ -250,7 +253,8 @@ namespace Habanero.UI.Base
         /// thrown if the mapperTypeName does not provide a type that is
         /// a subclass of the ControlMapper class.</exception>
         /// <param name="controlFactory">The control factory</param>
-        public static IControlMapper Create(string mapperTypeName, string mapperAssembly, IControlChilli ctl, string propertyName, bool isReadOnly, IControlFactory controlFactory)
+        public static IControlMapper Create(string mapperTypeName, string mapperAssembly, IControlChilli ctl,
+                                            string propertyName, bool isReadOnly, IControlFactory controlFactory)
         {
             if (string.IsNullOrEmpty(mapperTypeName)) mapperTypeName = "TextBoxMapper";
 
@@ -265,22 +269,28 @@ namespace Habanero.UI.Base
                 else
                 {
                     throw new InvalidXmlDefinitionException(String.Format(
-                                                                "No suitable 'mapperType' has been provided in the class " +
-                                                                "definitions for the form control '{0}'.  Either add the " +
-                                                                "'mapperType' attribute or check that spelling and " +
-                                                                "capitalisation are correct.", ctl.Name));
+                        "No suitable 'mapperType' has been provided in the class " +
+                        "definitions for the form control '{0}'.  Either add the " +
+                        "'mapperType' attribute or check that spelling and " +
+                        "capitalisation are correct.", ctl.Name));
                 }
             }
 
             Type mapperType;
-            if (String.IsNullOrEmpty(mapperAssembly)) {
+            if (String.IsNullOrEmpty(mapperAssembly))
+            {
                 string nspace = typeof (ControlMapper).Namespace;
                 mapperType = Type.GetType(nspace + "." + mapperTypeName);
-            } else {
+            }
+            else
+            {
                 mapperType = TypeLoader.LoadType(mapperAssembly, mapperTypeName);
             }
             IControlMapper controlMapper;
-            if (mapperType != null && mapperType.FindInterfaces(delegate (Type type, Object filterCriteria) { return type == typeof(IControlMapper); }, "").Length > 0)
+            if (mapperType != null &&
+                mapperType.FindInterfaces(
+                    delegate(Type type, Object filterCriteria) { return type == typeof (IControlMapper); }, "").Length >
+                0)
             {
                 try
                 {
@@ -290,13 +300,13 @@ namespace Habanero.UI.Base
                 } 
                     //TODO - lookupcomboboxmapper has a slightly different constructor- perhaps all control mappers
                     // should have a constructor that takes an IcontrolFactory ?
-                catch (MissingMethodException )
+                catch (MissingMethodException)
                 {
                     controlMapper =
                         (IControlMapper)
-                        Activator.CreateInstance(mapperType, new object[] { ctl, propertyName, isReadOnly, controlFactory });
+                        Activator.CreateInstance(mapperType,
+                            new object[] {ctl, propertyName, isReadOnly, controlFactory});
                 }
-
             }
             else
             {
@@ -317,7 +327,8 @@ namespace Habanero.UI.Base
             {
                 BOMapper boMapper = new BOMapper(_businessObject);
                 return boMapper.GetPropertyValueToDisplay(_propertyName);
-            } else
+            }
+            else
             {
                 return null;
             }
