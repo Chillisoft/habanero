@@ -214,7 +214,7 @@ namespace Habanero.Test.BO
         //			Assert.AreEqual("bo1prop1updated", _table.Rows[0]["TestProp"]);
         //		}
 
-        [Test, Ignore("This is the current test being developed")]
+        [Test]
         public void TestRelatedPropColumn()
         {
             //-------------Setup Test Pack ------------------
@@ -304,9 +304,9 @@ namespace Habanero.Test.BO
                 get { return _dateTime; }
             }
 
-            public MyContactPerson Father
+            public ContactPerson Father
             {
-                get { return Relationships.GetRelatedObject<MyContactPerson>(fatherRelationshipName); }
+                get { return Relationships.GetRelatedObject<ContactPerson>(fatherRelationshipName); }
                 set { Relationships.SetRelatedObject(fatherRelationshipName, value); }
             }
 
@@ -319,7 +319,7 @@ namespace Habanero.Test.BO
                     IPropDef idPropDef = classDef.GetPropDef("ContactPersonID");
                     relKeyDef.Add(new RelPropDef(idPropDef, "ContactPersonID"));
                     MySingleRelationshipDef singleRelationshipDef = new MySingleRelationshipDef(
-                        fatherRelationshipName, typeof (MyContactPerson), relKeyDef, true, DeleteParentAction.DoNothing);
+                        fatherRelationshipName, typeof (ContactPerson), relKeyDef, true, DeleteParentAction.DoNothing);
                     classDef.RelationshipDefCol.Add(singleRelationshipDef);
                 }
                 return classDef;

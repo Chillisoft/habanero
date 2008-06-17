@@ -584,5 +584,56 @@ namespace Habanero.Test.BO.ClassDefinition
 			");
             return def;
         }
+
+        #region Test GetPropertyType
+
+        [Test]
+        public void TestGetPropertyType_Simple()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = LoadClassDef();
+            string dateTimeProp = "TestDateTime";
+            string intProp = "TestInt";
+            string booleanProp = "TestBoolean";
+            PropDef propDef;
+            propDef = new PropDef(dateTimeProp, typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            classDef.PropDefcol.Add(propDef);
+            propDef = new PropDef(intProp, typeof(int), PropReadWriteRule.ReadWrite, null);
+            classDef.PropDefcol.Add(propDef);
+            propDef = new PropDef(booleanProp, typeof(bool), PropReadWriteRule.ReadWrite, null);
+            classDef.PropDefcol.Add(propDef);
+            ClassDef.ClassDefs.Add(classDef);
+            //---------------Execute Test ----------------------
+            Type dateTimePropertyType = classDef.GetPropertyType(dateTimeProp);
+            Type intPropertyType = classDef.GetPropertyType(intProp);
+            Type booleanPropertyType = classDef.GetPropertyType(booleanProp);
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(DateTime), dateTimePropertyType);
+            Assert.AreSame(typeof(int), intPropertyType);
+            Assert.AreSame(typeof(bool), booleanPropertyType);
+            //---------------Tear down -------------------------
+        }
+
+        [Test]
+        public void TestGetPropertyType_RelatedProperty()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef relatedClassDef = MyRelatedBo.LoadClassDef();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            string dateTimeProp = "TestDateTime";
+            PropDef propDef;
+            propDef = new PropDef(dateTimeProp, typeof(DateTime), PropReadWriteRule.ReadWrite, null);
+            relatedClassDef.PropDefcol.Add(propDef);
+            //---------------Execute Test ----------------------
+            Type dateTimePropertyType = classDef.GetPropertyType("MyRelationship." + dateTimeProp);
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(DateTime), dateTimePropertyType);
+            //---------------Tear down -------------------------
+        }
+
+        #endregion //Test GetPropertyType
+
     }
 }

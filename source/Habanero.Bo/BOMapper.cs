@@ -97,27 +97,32 @@ namespace Habanero.BO
         {
             if (propertyName.IndexOf(".") != -1)
             {
-                //log.Debug("Prop with . found : " + propertyName);
+                
                 BusinessObject relatedBo = this._businessObject;
+                //Get the first property name
                 string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
                 propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
+                //If there are some alternative relationships to traverse through then
+                //  go through each alternative and check if there is a related object and return the first one
+                // else get the related object
                 if (relationshipName.IndexOf("|") != -1)
                 {
-                    //log.Debug("| found in relationship name :" + relationshipName);
-                    ArrayList relNames = new ArrayList();
-                    while (relationshipName.IndexOf("|") != -1)
-                    {
-                        string relName = relationshipName.Substring(0, relationshipName.IndexOf("|"));
-                        relNames.Add(relName);
-                        //log.Debug("Relationship name found : " + relName);
-                        relationshipName = relationshipName.Remove(0, relationshipName.IndexOf("|") + 1);
-                    }
-                    relNames.Add(relationshipName);
+                    string[] parts = relationshipName.Split(new char[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
+                    List<string> relNames = new List<string>(parts);
+                    //ArrayList relNames = new ArrayList();
+                    //while (relationshipName.IndexOf("|") != -1)
+                    //{
+                    //    string relName = relationshipName.Substring(0, relationshipName.IndexOf("|"));
+                    //    relNames.Add(relName);
+                    //    //log.Debug("Relationship name found : " + relName);
+                    //    relationshipName = relationshipName.Remove(0, relationshipName.IndexOf("|") + 1);
+                    //}
+                    //relNames.Add(relationshipName);
                     BusinessObject oldBo = relatedBo;
                     int i = 0;
                     do
                     {
-                        relatedBo = oldBo.Relationships.GetRelatedObject((String) relNames[i++]);
+                        relatedBo = oldBo.Relationships.GetRelatedObject(relNames[i++]);
                     } while (relatedBo == null && i < relNames.Count);
                 }
                 else

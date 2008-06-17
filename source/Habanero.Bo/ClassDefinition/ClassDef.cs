@@ -1041,5 +1041,76 @@ namespace Habanero.BO.ClassDefinition
             }
             return currentClassDef;
         }
+
+        public Type GetPropertyType(string propertyName)
+        {
+            //TODO : Generalise this for properties that do not have PropDefs
+
+            if (propertyName.IndexOf(".") != -1)
+            {
+                //Get the first property name
+                string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
+                propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
+                //If there are some alternative relationships to traverse through then
+                //  go through each alternative and check if there is a related object and return the first one
+                // else get the related object
+                
+                string[] parts = relationshipName.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                List<string> relNames = new List<string>(parts);
+                List<Type> relatedPropertyTypes = new List<Type>();
+                relNames.ForEach(delegate(string relationship)
+                {
+                    if(RelationshipDefCol.Contains(relationship))
+                    {
+                        RelationshipDef relationshipDef = RelationshipDefCol[relationship];
+                        ClassDef relatedObjectClassDef = relationshipDef.RelatedObjectClassDef;
+                        if (relatedObjectClassDef != null)
+                        {
+                            Type propertyType = relatedObjectClassDef.GetPropertyType(propertyName);
+                            relatedPropertyTypes.Add(propertyType);
+                        }
+                    }
+                });
+                Type currentPropertyType = null;
+                relatedPropertyTypes.ForEach(delegate(Type propertyType)
+                {
+                    if(currentPropertyType==null)
+                    {
+                        currentPropertyType = propertyType;
+                    }
+                    else if(currentPropertyType != propertyType)
+                    {
+                        currentPropertyType = typeof(object);
+                    }
+                });
+
+                if (currentPropertyType != null)
+                {
+                    return currentPropertyType;
+                }
+                else
+                {
+                    return typeof (object);
+                }
+            }
+            else if (propertyName.IndexOf("-") != -1)
+            {
+                return typeof(object);
+            }
+            else
+            {
+                IPropDef propDef = this.GetPropDef(propertyName, false);
+                if (propDef != null && propDef.LookupList is NullLookupList)
+                {
+                    return propDef.PropertyType;
+                }
+                else
+                {
+                    return typeof(object);
+                }
+            }
+        }
+
+
     }
 }

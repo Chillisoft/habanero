@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
@@ -85,15 +86,8 @@ namespace Habanero.BO
                     "the name '{0}' has been detected. Only one column " +
                     "per property can be specified.", uiProperty.PropertyName));
             }
-            //TODO : Generalise this for properties that do not have PropDefs
-            IPropDef propDef = classDef.GetPropDef(uiProperty.PropertyName, false);
-            if (propDef != null && propDef.LookupList is NullLookupList)
-            {
-                column.DataType = propDef.PropertyType;
-            } else
-            {
-                column.DataType = typeof(object);
-            }
+            Type columnPropertyType = classDef.GetPropertyType(uiProperty.PropertyName);
+            column.DataType = columnPropertyType;
             column.ColumnName = uiProperty.PropertyName;
             column.Caption = uiProperty.GetHeading(classDef);
             column.ReadOnly = !uiProperty.Editable;
@@ -101,6 +95,8 @@ namespace Habanero.BO
             column.ExtendedProperties.Add("Width", uiProperty.Width);
             column.ExtendedProperties.Add("Alignment", uiProperty.Alignment);
         }
+
+        
 
         /// <summary>
         /// Gets a list of the property values to display to the user
