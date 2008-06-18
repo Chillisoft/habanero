@@ -1008,6 +1008,47 @@ namespace Habanero.BO.ClassDefinition
             return newClassDef;
         }
 
-        
+
+        /// <summary>
+        /// Returns the table name for this class
+        /// </summary>
+        /// <returns>Returns the table name of first real table for this class.</returns>
+        public string GetTableName()
+        {
+            if (IsUsingSingleTableInheritance())
+            {
+                ClassDef superClassClassDef = SuperClassClassDef;
+                if (superClassClassDef != null)
+                {
+                    return superClassClassDef.GetTableName();
+                }
+            }
+            return TableName;
+        }
+
+        /// <summary>
+        /// Returns the table name of the specified property
+        /// </summary>
+        /// <param name="propDef">The property to fine the table name for</param>
+        /// <returns>Returns the table name of the table that the specified property belongs to</returns>
+        public string GetTableName(PropDef propDef)
+        {
+            if (IsUsingConcreteTableInheritance())
+            {
+                return TableName;
+            }
+            if (PropDefcol.Contains(propDef.PropertyName))
+            {
+                return GetTableName();
+            }
+            ClassDef superClassClassDef = SuperClassClassDef;
+            if (superClassClassDef != null)
+            {
+                return superClassClassDef.GetTableName(propDef);
+            } else
+            {
+                return "";
+            }
+        }
     }
 }

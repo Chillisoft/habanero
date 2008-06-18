@@ -164,6 +164,7 @@ namespace Habanero.BO.SqlGeneration
         /// <returns>Returns a string</returns>
         private string GetTableName(BOProp prop, IList classDefs)
         {
+            // TODO: This function could conceivably use the GetTableName function on ClassDef, but this needs to be investigated further.
             int i = 0;
             bool isSingleTableInheritance = false;
             do

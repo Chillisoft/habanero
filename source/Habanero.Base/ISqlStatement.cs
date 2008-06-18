@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
@@ -85,5 +86,11 @@ namespace Habanero.Base
         /// Appends a where statement to the sql statement
         /// </summary>
         void AppendWhere();
+
+        /// <summary>
+        /// Adds more fields to the select fields list in the statement.
+        /// </summary>
+        /// <param name="fields">The list of fields to add to the select statement</param>
+        void AddSelectFields(List<string> fields);
     }
 }

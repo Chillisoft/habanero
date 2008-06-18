@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using Habanero.Base;
@@ -262,6 +263,28 @@ namespace Habanero.Test.DB
         }
 
         #endregion //Test AddJoin
+
+        #region Test AddSelectFields
+
+        [Test]
+        public void TestAddSelectFields()
+        {
+            //-------------Setup Test Pack ------------------
+            SqlStatement sql = new SqlStatement(_connection, "select [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE] from bob WHERE that = this");
+            List<string> fields = new List<string>();
+            fields.Add("myField1");
+            fields.Add("myField2");
+
+            //-------------Test Pre-conditions --------------
+
+            //-------------Execute test ---------------------
+            sql.AddSelectFields(fields);
+
+            //-------------Test Result ----------------------
+            Assert.AreEqual("select [FALSE FROM CLAUSE], [FALSE WHERE CLAUSE], [myField1], [myField2] from bob WHERE that = this", sql.Statement.ToString());
+        }           
+
+        #endregion //Test AddSelectFields
 
         //[Test]
         //public void TestOracleClobField()

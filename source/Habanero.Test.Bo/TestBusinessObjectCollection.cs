@@ -237,10 +237,11 @@ namespace Habanero.Test.BO
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
                 bo1, ClassDef.ClassDefs[typeof(MyBO)], null, -1, null, "MyRelationship.MyRelatedTestProp");
             //-------------Test Result ----------------------
-            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2`, " +
+                "`MyBOMyRelationship`.`MyRelatedTestProp` " +
                 "FROM `MyBO` LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
-                "ORDER BY MyBOMyRelationship.MyRelatedTestProp",
+                "ORDER BY `MyBOMyRelationship`.`MyRelatedTestProp`",
                 statement.Statement.ToString());
         }
 
@@ -258,7 +259,8 @@ namespace Habanero.Test.BO
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
                 bo1, ClassDef.ClassDefs[typeof(MyBO)], null, -1, null, orderByClause);
             //-------------Test Result ----------------------
-            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2`, " +
+                "`MyBOMyRelationshipMyRelationshipToMyBoMyRelationshipMyRelationshipToMyBo`.`TestProp` " +
                 "FROM (((`MyBO` LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID`) " +
                 "LEFT JOIN `MyBO` AS `MyBOMyRelationshipMyRelationshipToMyBo` " +
@@ -269,7 +271,7 @@ namespace Habanero.Test.BO
                 "LEFT JOIN `MyBO` AS `MyBOMyRelationshipMyRelationshipToMyBoMyRelationshipMyRelationshipToMyBo` " +
                 "ON `MyBOMyRelationshipMyRelationshipToMyBoMyRelationship`.`MyBoID` " +
                 "= `MyBOMyRelationshipMyRelationshipToMyBoMyRelationshipMyRelationshipToMyBo`.`MyBoID` " +
-                "ORDER BY MyBOMyRelationshipMyRelationshipToMyBoMyRelationshipMyRelationshipToMyBo.TestProp",
+                "ORDER BY `MyBOMyRelationshipMyRelationshipToMyBoMyRelationshipMyRelationshipToMyBo`.`TestProp`",
                 statement.Statement.ToString());
         }
 
@@ -286,10 +288,11 @@ namespace Habanero.Test.BO
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
                 bo1, ClassDef.ClassDefs[typeof(MyBO)], null, -1, null, "MyRelationship.MyRelatedTestProp, TestProp");
             //-------------Test Result ----------------------
-            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2`, " +
+                "`MyBOMyRelationship`.`MyRelatedTestProp` " +
                 "FROM `MyBO` LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
-                "ORDER BY MyBOMyRelationship.MyRelatedTestProp, TestProp",
+                "ORDER BY `MyBOMyRelationship`.`MyRelatedTestProp`, `MyBO`.`TestProp`",
                 statement.Statement.ToString());
         }
 
@@ -306,10 +309,11 @@ namespace Habanero.Test.BO
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
                 bo1, ClassDef.ClassDefs[typeof(MyBO)], null, -1, null, "MyRelationship.MyRelatedTestProp, MyRelationship.MyRelatedBoID");
             //-------------Test Result ----------------------
-            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2`, " +
+                "`MyBOMyRelationship`.`MyRelatedTestProp`, `MyBOMyRelationship`.`MyRelatedBoID` " +
                 "FROM `MyBO` LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
-                "ORDER BY MyBOMyRelationship.MyRelatedTestProp, MyBOMyRelationship.MyRelatedBoID",
+                "ORDER BY `MyBOMyRelationship`.`MyRelatedTestProp`, `MyBOMyRelationship`.`MyRelatedBoID`",
                 statement.Statement.ToString());
         }
 
@@ -328,11 +332,12 @@ namespace Habanero.Test.BO
             ISqlStatement statement = BusinessObjectCollection<BusinessObject>.CreateLoadSqlStatement(
                 bo1, ClassDef.ClassDefs[typeof(MyBO)], expression, -1, null, "MyRelationship.MyRelatedTestProp");
             //-------------Test Result ----------------------
-            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` " +
+            Assert.AreEqual(@"SELECT DISTINCT `MyBO`.`MyBoID`, `MyBO`.`RelatedID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2`, " +
+                "`MyBOMyRelationship`.`MyRelatedTestProp` " +
                 "FROM `MyBO` LEFT JOIN `MyRelatedBo` AS `MyBOMyRelationship` " +
                 "ON `MyBO`.`RelatedID` = `MyBOMyRelationship`.`MyRelatedBoID` " +
                 "WHERE (`MyBO`.`TestProp` = ?Param0 AND `MyBOMyRelationship`.`MyRelatedTestProp` = ?Param1) " +
-                "ORDER BY MyBOMyRelationship.MyRelatedTestProp",
+                "ORDER BY `MyBOMyRelationship`.`MyRelatedTestProp`",
                 statement.Statement.ToString());
         }
 

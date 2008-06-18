@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -772,6 +773,162 @@ namespace Habanero.Test.BO
         }
 
         #endregion //Tests for Enum type Bo Props
+
+        #region Tests for CustomProperty type Bo Props
+
+        //private static PropDef CreateCustomPropertyPropDef(object intialValue)
+        //{
+        //    return new PropDef("CustomPropertyProp", typeof(MyCustomProperty),
+        //                       PropReadWriteRule.ReadWrite, intialValue);
+        //}
+
+        //private class MyCustomProperty : CustomProperty
+        //{
+        //    private object _value;
+
+        //    public MyCustomProperty(object value, bool isLoading)
+        //        : base(value, isLoading)
+        //    {
+        //        _value = value;
+        //    }
+
+        //    public override object GetPersistValue()
+        //    {
+        //        return _value;
+        //    }
+        //}
+
+        //[Test]
+        //public void TestCustomPropertyBoProp_Create_New_WithNullDefault()
+        //{
+        //    //-------------Setup Test Pack ------------------
+        //    object intialValue = null;
+        //    PropDef propDef = CreateCustomPropertyPropDef(intialValue);
+
+        //    //-------------Test Pre-conditions --------------
+
+        //    //-------------Execute test ---------------------
+        //    //Create the property for a new object (default will be set)
+        //    BOProp boProp = propDef.CreateBOProp(true);
+
+        //    //-------------Test Result ----------------------
+        //    Assert.IsInstanceOfType(typeof(MyCustomProperty), boProp.Value);
+        //    MyCustomProperty myCustomProperty = (MyCustomProperty)boProp.Value;
+        //    Assert.AreEqual(intialValue, myCustomProperty.GetPersistValue());
+        //}
+
+        //[Test]
+        //public void TestCustomPropertyBoProp_Create_New_WithDefault()
+        //{
+        //    //-------------Setup Test Pack ------------------
+        //    object intialValue = "TestValue";
+        //    PropDef propDef = CreateCustomPropertyPropDef(intialValue);
+
+        //    //-------------Test Pre-conditions --------------
+
+        //    //-------------Execute test ---------------------
+        //    //Create the property for a new object (default will be set)
+        //    BOProp boProp = propDef.CreateBOProp(true);
+
+        //    //-------------Test Result ----------------------
+        //    Assert.IsInstanceOfType(typeof(MyCustomProperty), boProp.Value);
+        //    MyCustomProperty myCustomProperty = (MyCustomProperty)boProp.Value;
+        //    Assert.AreEqual(intialValue, myCustomProperty.GetPersistValue());
+        //}
+
+        //[Test]
+        //public void TestCustomPropertyBoProp_Create_Existing()
+        //{
+        //    //-------------Setup Test Pack ------------------
+        //    object intialValue = "TestValue";
+        //    PropDef propDef = CreateCustomPropertyPropDef(intialValue);
+
+        //    //-------------Test Pre-conditions --------------
+
+        //    //-------------Execute test ---------------------
+        //    //Create the property for an existing object (default will not be set)
+        //    BOProp boProp = propDef.CreateBOProp(false);
+
+        //    //-------------Test Result ----------------------
+        //    Assert.IsNull(boProp.Value);
+        //    Assert.AreEqual("", boProp.PropertyValueString);
+        //}
+
+        //[Test]
+        //public void TestCustomProperty_ValueChange()
+        //{
+        //    //-------------Setup Test Pack ------------------
+        //    PropDef propDef = CreateCustomPropertyPropDef(null);
+        //    //Create the property for an existing object (default will not be set)
+        //    BOProp boProp = propDef.CreateBOProp(false);
+        //    string testvalue = "TestValue";
+        //    boProp.InitialiseProp(testvalue);
+        //    MyCustomProperty myNewCustomProperty = new MyCustomProperty(null, false);
+
+        //    //-------------Test Pre-conditions --------------
+        //    Assert.IsFalse(boProp.IsDirty);
+        //    Assert.IsInstanceOfType(typeof(MyCustomProperty), boProp.Value);
+        //    MyCustomProperty myCustomProperty = (MyCustomProperty)boProp.Value;
+        //    Assert.AreEqual(testvalue, myCustomProperty.GetPersistValue());
+
+        //    //-------------Execute test ---------------------
+
+
+        //    //-------------Test Result ----------------------
+        //}
+
+        //[Test]
+        //public void TestBoPropWithCustomProperty_ValueChange()
+        //{
+        //    Assert.AreEqual(ContactPersonTestBO.ContactType.Business, boProp.Value);
+        //    Assert.AreEqual("Business", boProp.PropertyValueString);
+        //    boProp.Value = ContactPersonTestBO.ContactType.Friend;
+        //    Assert.IsTrue(boProp.IsDirty);
+        //    Assert.AreEqual(ContactPersonTestBO.ContactType.Friend, boProp.Value);
+        //    Assert.AreEqual("Friend", boProp.PropertyValueString);
+        //    boProp.RestorePropValue();
+        //    Assert.IsFalse(boProp.IsDirty);
+        //    Assert.AreEqual(ContactPersonTestBO.ContactType.Business, boProp.Value);
+        //    Assert.AreEqual("Business", boProp.PropertyValueString);
+        //}
+
+        //[Test]
+        //public void TestBoPropWithCustomProperty_PersistValue()
+        //{
+        //    PropDef propDef = new PropDef("EnumProp", typeof(ContactPersonTestBO.ContactType), PropReadWriteRule.ReadWrite, ContactPersonTestBO.ContactType.Family);
+        //    //Create the property for anexisting object (default will not be set)
+        //    BOProp boProp = propDef.CreateBOProp(false);
+        //    Assert.AreEqual(null, boProp.Value);
+        //    Assert.AreEqual(null, boProp.PersistedPropertyValue);
+        //    Assert.AreEqual("", boProp.PropertyValueString);
+        //    Assert.AreEqual("", boProp.PersistedPropertyValueString);
+        //    boProp.InitialiseProp(ContactPersonTestBO.ContactType.Business);
+        //    Assert.IsFalse(boProp.IsDirty);
+        //    Assert.AreEqual(ContactPersonTestBO.ContactType.Business, boProp.Value);
+        //    Assert.AreEqual(ContactPersonTestBO.ContactType.Business, boProp.PersistedPropertyValue);
+        //    Assert.AreEqual("Business", boProp.PersistedPropertyValueString);
+        //    Assert.AreEqual("Business", boProp.PropertyValueString);
+        //}
+
+        //[Test]
+        //public void TestBoPropWithCustomProperty_PersistValueFromString()
+        //{
+        //    PropDef propDef = new PropDef("EnumProp", typeof(ContactPersonTestBO.ContactType), PropReadWriteRule.ReadWrite, ContactPersonTestBO.ContactType.Family);
+        //    //Create the property for anexisting object (default will not be set)
+        //    BOProp boProp = propDef.CreateBOProp(false);
+        //    Assert.AreEqual(null, boProp.Value);
+        //    Assert.AreEqual(null, boProp.PersistedPropertyValue);
+        //    Assert.AreEqual("", boProp.PropertyValueString);
+        //    Assert.AreEqual("", boProp.PersistedPropertyValueString);
+        //    boProp.InitialiseProp("Business");
+        //    Assert.IsFalse(boProp.IsDirty);
+        //    Assert.AreEqual(ContactPersonTestBO.ContactType.Business, boProp.Value);
+        //    Assert.AreEqual(ContactPersonTestBO.ContactType.Business, boProp.PersistedPropertyValue);
+        //    Assert.AreEqual("Business", boProp.PersistedPropertyValueString);
+        //    Assert.AreEqual("Business", boProp.PropertyValueString);
+        //}
+
+        #endregion //Tests for CustomProperty type Bo Props
     }
 
 }
