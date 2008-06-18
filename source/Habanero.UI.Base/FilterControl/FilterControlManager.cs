@@ -536,7 +536,8 @@ namespace Habanero.UI.Base.FilterControl
             public override void Clear()
             {
                 //TODO Critical Urgent NNB FIx :
-                throw new NotImplementedException();
+               // throw new NotImplementedException();
+                _dateRangeComboBox.SelectedIndex = -1;
             }
         }
 
