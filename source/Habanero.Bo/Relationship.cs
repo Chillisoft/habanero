@@ -108,13 +108,14 @@ namespace Habanero.BO
         /// </summary>
         /// <returns>Returns a collection of business objects</returns>
         public virtual BusinessObjectCollection<TBusinessObject> GetRelatedBusinessObjectCol<TBusinessObject>()
-            where TBusinessObject : BusinessObject
+            where TBusinessObject : BusinessObject, new() 
         {
             IBusinessObjectCollection boCol = GetRelatedBusinessObjectColInternal<TBusinessObject>();
             return (BusinessObjectCollection<TBusinessObject>)boCol;
         }
 
-        protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>() where TBusinessObject : BusinessObject;
+        protected abstract IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
+            where TBusinessObject : BusinessObject, new() ;
 
         protected virtual IBusinessObjectCollection GetRelatedBusinessObjectColInternal()
         {
@@ -149,5 +150,9 @@ namespace Habanero.BO
         }
 
 
+        public IRelKey RelKey
+        {
+            get { return _relKey; }
+        }
     }
 }

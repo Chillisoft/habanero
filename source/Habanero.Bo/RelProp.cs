@@ -26,7 +26,7 @@ namespace Habanero.BO
     /// <summary>
     /// Represents the property on which two objects match up in a relationship
     /// </summary>
-    public class RelProp
+    public class RelProp : IRelProp
     {
         private IBOProp _boProp;
         private RelPropDef _relPropDef;
@@ -45,7 +45,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the property name of the relationship owner
         /// </summary>
-        internal string OwnerPropertyName
+        public string OwnerPropertyName
         {
             get { return _relPropDef.OwnerPropertyName; }
         }
@@ -53,7 +53,7 @@ namespace Habanero.BO
         /// <summary>
         /// Returns the property name of the related object
         /// </summary>
-        internal string RelatedClassPropName
+        public string RelatedClassPropName
         {
             get { return _relPropDef.RelatedClassPropName; }
         }
@@ -77,6 +77,14 @@ namespace Habanero.BO
                 return new Parameter(_relPropDef.RelatedClassPropName, "IS", "NULL");
             }
             return new Parameter(_relPropDef.RelatedClassPropName, "=", _boProp.PropertyValueString);
+        }
+
+        /// <summary>
+        /// The BoProp this RelProp requires to generate its search expression
+        /// </summary>
+        public IBOProp BOProp
+        {
+            get { return _boProp; }
         }
     }
 

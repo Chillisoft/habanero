@@ -4,6 +4,7 @@ using System.Text;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -37,7 +38,8 @@ namespace Habanero.Test.BO
             SelectQuery<MyBO> query = new SelectQuery<MyBO>();
             //---------------Test Result -----------------------
             Assert.AreEqual(3, query.Fields.Count);
-            Assert.AreEqual("MyBO.MyBoID", query.Fields[0]);
+            Assert.AreEqual("MyBoID", query.Fields["MyBoID"].PropertyName);
+            Assert.AreEqual("MyBO.MyBoID", query.Fields["MyBoID"].FieldName);
             //---------------Tear Down -------------------------
         }
 
@@ -52,51 +54,40 @@ namespace Habanero.Test.BO
             Assert.AreEqual("MyBO", query.Source);
             //---------------Tear Down -------------------------
         }
-    }
 
-    internal class SelectQuery<T> where T:class, IBusinessObject
-    {
-        private readonly Criteria _criteria;
-        private readonly List<string> _fields = new List<string>( 5);
-        private string _source;
-
-        public SelectQuery()
+        [Test]
+        public void TestCreateSqlStatement_NoCriteria()
         {
-            InitFields();
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            SelectQueryDB<MyBO> query = new SelectQueryDB<MyBO>();
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statementString);
+            //---------------Tear Down -------------------------          
         }
 
-        private void InitFields()
+        [Test]
+        public void TestCreateSqlStatement_WithCriteria()
         {
-            ClassDef classDef = ClassDef.ClassDefs[typeof (T)];
-            foreach (IPropDef propDef in classDef.PropDefcol)
-            {
-                _fields.Add(classDef.TableName + "." + propDef.DatabaseFieldName);
-            }
-            _source = classDef.TableName;
-        }
-
-        public SelectQuery(Criteria criteria)
-        {
-            _criteria = criteria;
-        }
-
-
-        public Criteria Criteria
-        {
-            get { return _criteria; }
-        }
-
-        public List<string> Fields
-        {
-            get { return _fields; }
-        }
-
-        /// <summary>
-        /// The source of the data. In a database query this would be the first table listed in the FROM clause.
-        /// </summary>
-        public string Source
-        {
-            get { return _source; }
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, "test");
+            SelectQueryDB<MyBO> query = new SelectQueryDB<MyBO>(criteria);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("WHERE MyBO.TestProp = 'test'", statementString);
+            //---------------Tear Down -------------------------          
         }
     }
+
+
+
+    
 }

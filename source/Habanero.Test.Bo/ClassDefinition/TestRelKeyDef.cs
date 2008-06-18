@@ -72,7 +72,7 @@ namespace Habanero.Test.BO.ClassDefinition
             RelKey relKey = mRelKeyDef.CreateRelKey(propCol);
             Assert.IsTrue(relKey.Contains("Prop"));
             Assert.IsTrue(relKey.Contains("Prop2"));
-            RelProp relProp = relKey["Prop"];
+            IRelProp relProp = relKey["Prop"];
             Assert.AreEqual("Prop", relProp.OwnerPropertyName);
             Assert.AreEqual("PropName", relProp.RelatedClassPropName);
             relProp = relKey["Prop2"];

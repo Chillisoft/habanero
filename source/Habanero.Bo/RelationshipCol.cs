@@ -179,7 +179,7 @@ namespace Habanero.BO
         /// the relationship specified is a single relationship, when a
         /// multiple one was expected</exception>
         public BusinessObjectCollection<T> GetRelatedCollection<T>(string relationshipName)
-			where T : BusinessObject
+			where T : BusinessObject, new()
 		{
     	    MultipleRelationship multipleRelationship = GetMultipleRelationship(relationshipName);
     	    return multipleRelationship.GetRelatedBusinessObjectCol<T>();

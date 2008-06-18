@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
@@ -34,7 +35,7 @@ namespace Habanero.BO
     /// that behave together in some way (e.g. for a composite alternate
     /// key, the combination of properties is required to be unique).
     /// </summary>
-    public class BOKey : IBOKey
+    public class BOKey : IBOKey, IEnumerable<IBOProp>
     {
         private Dictionary<string, IBOProp> _props;
         private KeyDef _keyDef;
@@ -491,6 +492,16 @@ namespace Habanero.BO
         public override int GetHashCode()
         {
             return PersistedDatabaseWhereClause(null).GetHashCode();
+        }
+
+        IEnumerator<IBOProp> IEnumerable<IBOProp>.GetEnumerator()
+        {
+            return _props.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _props.Values.GetEnumerator();
         }
     }
 }

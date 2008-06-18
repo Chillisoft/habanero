@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
@@ -9,8 +10,8 @@ namespace Habanero.BO
     /// RelatedBusinessObjectCollection
     ///</summary>
     ///<typeparam name="TBusinessObject"></typeparam>
-    public class RelatedBusinessObjectCollection<TBusinessObject> : BusinessObjectCollection<TBusinessObject> 
-        where TBusinessObject : BusinessObject
+    public class RelatedBusinessObjectCollection<TBusinessObject> : BusinessObjectCollection<TBusinessObject>
+        where TBusinessObject : class, IBusinessObject
     {
         //private BusinessObject _parentBusinessObject;
         //private readonly string _relationshipName;
@@ -22,9 +23,9 @@ namespace Habanero.BO
         /// relationship as well the relationship name.
         ///</summary>
         ///<param name="relationship"></param>
-        public RelatedBusinessObjectCollection(Relationship relationship)
+        public RelatedBusinessObjectCollection(IRelationship relationship)
         {
-            _relationship = relationship;
+            _relationship = (Relationship) relationship;
         }
 
         /// <summary>

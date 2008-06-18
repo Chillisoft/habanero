@@ -18,7 +18,9 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.CriteriaManager;
@@ -29,10 +31,10 @@ namespace Habanero.BO
     /// Holds a collection of properties on which two classes in a relationship
     /// are matching
     /// </summary>
-    public class RelKey 
+    public class RelKey : IRelKey
     {
         private RelKeyDef _relKeyDef;
-        private Dictionary<string, RelProp> _relProps;
+        private Dictionary<string, IRelProp> _relProps;
 
         /// <summary>
         /// Constructor to initialise a new instance
@@ -41,7 +43,7 @@ namespace Habanero.BO
         public RelKey(RelKeyDef lRelKeyDef)
         {
             _relKeyDef = lRelKeyDef;
-            _relProps = new Dictionary<string, RelProp>();
+            _relProps = new Dictionary<string, IRelProp>();
         }
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="propName">The property name</param>
         /// <returns>Returns the RelProp object found with that name</returns>
-        internal RelProp this[string propName]
+        internal IRelProp this[string propName]
         {
             get
             {
@@ -62,6 +64,24 @@ namespace Habanero.BO
                         "the relationship's collection.", propName));
                 }
                 return (_relProps[propName]);
+            }
+        }
+
+        /// <summary>
+        /// Indexes the array of relprops this relkey contains.
+        /// </summary>
+        /// <param name="index">The position of the relprop to get</param>
+        /// <returns>Returns the RelProp object found with that name</returns>
+        public IRelProp this[int index]
+        {
+            get
+            {
+                int i = 0;
+                foreach (KeyValuePair<string, IRelProp> prop in _relProps)
+                {
+                    if (i++ == index) return prop.Value;
+                }
+                throw new IndexOutOfRangeException("This RelKey does not contain a RelProp at index " + index);
             }
         }
 
@@ -138,9 +158,19 @@ namespace Habanero.BO
         /// Returns an enumrated for theis RelKey to iterate through its RelProps
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<RelProp> GetEnumerator()
+        public IEnumerator<IRelProp> GetEnumerator()
         {
             return _relProps.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _relProps.Values.GetEnumerator();
+        }
+
+        public int Count
+        {
+            get { return _relProps.Count; }
         }
     }
 }

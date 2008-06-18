@@ -333,8 +333,27 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
-        
 
+        public static ClassDef LoadClassDefWithImageProperty()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""Image"" type=""System.Drawing.Bitmap"" assembly=""System.Drawing"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         #region Properties
 
         public Guid ContactPersonID

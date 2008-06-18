@@ -68,6 +68,7 @@ namespace Habanero.BO.ClassDefinition
         private string _displayName;
         private bool _keepValuePrivate = false;
         private bool _persistable = true;
+        private ClassDef _classDef;
 
         #region Constuctor and destructors
 
@@ -624,6 +625,36 @@ namespace Habanero.BO.ClassDefinition
             get { return _keepValuePrivate; }
         }
 
+        /// <summary>
+        /// Gets the name of the table this prop def is mapped to. This takes into account
+        /// inheritance structures.
+        /// </summary>
+        public string GetTableName(IClassDef childClassDef)
+        {
+            ClassDef currentClassDef = (ClassDef) childClassDef;
+            if (currentClassDef != null && currentClassDef.IsUsingConcreteTableInheritance())
+            {
+                while (!currentClassDef.IsUsingConcreteTableInheritance())
+                    currentClassDef = currentClassDef.SuperClassClassDef;
+                return currentClassDef.TableName;
+            }
+            currentClassDef = _classDef.GetBaseClassOfSingleTableHierarchy();
+            return currentClassDef.TableName;
+        }
+
+        public IClassDef ClassDef
+        {
+            get
+            {
+                return _classDef;
+            }
+            set
+            {
+                _classDef = (ClassDef) value;
+            }
+        }
+
+
 		#endregion
 
         
@@ -856,11 +887,7 @@ namespace Habanero.BO.ClassDefinition
 			}
 		}
 
-        internal string TableName
-        {
-            get { return ""; }
-        }
-
+  
         ///<summary>
         /// Cdfdasfkl;
         ///</summary>

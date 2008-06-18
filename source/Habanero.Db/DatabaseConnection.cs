@@ -388,7 +388,7 @@ namespace Habanero.DB
                 IDbCommand cmd = con.CreateCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = selectSql;
-                cmd.Transaction = con.BeginTransaction(IsolationLevel.ReadUncommitted);
+                cmd.Transaction = con.BeginTransaction(IsolationLevel.RepeatableRead);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)
@@ -426,7 +426,7 @@ namespace Habanero.DB
                 //log.Debug("LoadDataReader with sql statement: " + selectSql.ToString() ) ;
                 //cmd.CommandText = selectSql;
                 //_currentDbConnection = null;
-                cmd.Transaction = con.BeginTransaction(IsolationLevel.ReadUncommitted);
+                cmd.Transaction = con.BeginTransaction(IsolationLevel.RepeatableRead);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)

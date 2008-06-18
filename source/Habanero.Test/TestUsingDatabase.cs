@@ -44,6 +44,7 @@ namespace Habanero.Test
                 DatabaseConnection.CurrentConnection.GetConnection();
             }
             GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryDB();
+            BORegistry.BusinessObjectLoader = new BusinessObjectLoaderDB(DatabaseConnection.CurrentConnection);
         }
 
         public void SetupDBOracleConnection()

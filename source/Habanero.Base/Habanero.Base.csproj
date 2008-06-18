@@ -115,6 +115,8 @@
     <Compile Include="IPropRule.cs" />
     <Compile Include="IRelationship.cs" />
     <Compile Include="IRelationshipCol.cs" />
+    <Compile Include="IRelKey.cs" />
+    <Compile Include="IRelProp.cs" />
     <Compile Include="ISupportsAutoIncrementingField.cs" />
     <Compile Include="ITransactional.cs" />
     <Compile Include="ITransactionalDB.cs" />

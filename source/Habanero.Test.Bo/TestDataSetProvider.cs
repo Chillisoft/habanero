@@ -62,7 +62,7 @@ namespace Habanero.Test.BO
         
         public void SetupTest()
         {
-            GC.Collect();
+            
             ClassDef.ClassDefs.Clear();
             _loader = new XmlClassLoader();
             _classDef = MyBO.LoadClassDefWithLookup();

@@ -100,7 +100,27 @@ namespace Habanero.BO
 
             }
 
+            object leftValue = businessObject.GetPropertyValue(_propName);
+            if (leftValue == null)
+            {
+                switch (_op)
+                {
+                    case Op.Equals:
+                        return _value == null;
+                    case Op.GreaterThan:
+                        return false;
+                    case Op.LessThan:
+                        return _value != null;
+                    default:
+                        return false;
+                } 
+            }
+
             IComparable x = businessObject.GetPropertyValue(_propName) as IComparable;
+            if (x == null)
+            {
+                throw new InvalidOperationException(string.Format("Property '{0}' on class '{1}' does not implement IComparable and cannot be matched.", _propName, businessObject.GetType().FullName));
+            }
             IComparable y = _value as IComparable;
             switch (_op)
             {
@@ -125,6 +145,13 @@ namespace Habanero.BO
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
+            return ToString(delegate(string propName) { return propName; });
+        }
+
+        public delegate string PropNameConverterDelegate(string propName);
+
+        public string ToString(PropNameConverterDelegate convertToFieldName)
+        {
             if (IsComposite())
             {
                 return string.Format("({0}) {1} ({2})", _leftCriteria, LogicalOps[(int)_logicalOp], _rightCriteria);
@@ -133,12 +160,16 @@ namespace Habanero.BO
             if (_value is DateTime)
             {
                 valueString = ((DateTime)_value).ToString(DATE_FORMAT);
+            } else if (_value is Guid)
+            {
+                valueString = ((Guid) _value).ToString("B");
             }
             else
             {
                 valueString = _value.ToString();
             }
-            return string.Format("{0} {1} '{2}'", _propName, Ops[(int)_op], valueString);
+            return string.Format("{0} {1} '{2}'", convertToFieldName(_propName), Ops[(int)_op], valueString);
+
         }
 
 
@@ -190,6 +221,43 @@ namespace Habanero.BO
         public bool IsComposite()
         {
             return _leftCriteria != null;
+        }
+
+        public static Criteria FromPrimaryKey(IPrimaryKey key)
+        {
+            if (key.Count == 1)
+            {
+                return new Criteria(key[0].PropertyName, Op.Equals, key[0].Value);
+            } else
+            {
+                Criteria lastCriteria = null;
+                foreach (IBOProp prop in key)
+                {
+                    Criteria propCriteria = new Criteria(prop.PropertyName, Op.Equals, prop.Value);
+                    if (lastCriteria == null) lastCriteria = propCriteria;
+                    else lastCriteria = new Criteria(lastCriteria, LogicalOp.And, propCriteria);
+                }
+                return lastCriteria;
+            }
+        }
+
+        public static Criteria FromRelationship(IRelationship relationship)
+        {
+            if (relationship.RelKey.Count == 1)
+            {
+                IRelProp relProp = relationship.RelKey[0];
+                return new Criteria(relProp.RelatedClassPropName, Op.Equals, relProp.BOProp.Value);
+            } else
+            {
+                Criteria lastCriteria = null;
+                foreach (IRelProp relProp in relationship.RelKey)
+                {
+                    Criteria propCriteria = new Criteria(relProp.RelatedClassPropName, Op.Equals, relProp.BOProp.Value);
+                    if (lastCriteria == null) lastCriteria = propCriteria;
+                    else lastCriteria = new Criteria(lastCriteria, LogicalOp.And, propCriteria);
+                }
+                return lastCriteria;
+            }
         }
     }
 }

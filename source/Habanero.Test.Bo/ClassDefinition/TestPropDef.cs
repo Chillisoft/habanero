@@ -45,27 +45,27 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual("PropName", _propDef.PropertyName);
             Assert.AreEqual("PropName", _propDef.DatabaseFieldName);
             Assert.AreEqual(typeof(string), _propDef.PropType);
-            PropDef lPropDef = new PropDef("prop", typeof(int), PropReadWriteRule.ReadWrite, 1);
+            new PropDef("prop", typeof(int), PropReadWriteRule.ReadWrite, 1);
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void TestCreatePropDefInvalidDefault()
         {
-            PropDef lPropDef = new PropDef("prop", typeof(int), PropReadWriteRule.ReadWrite, "");
+            new PropDef("prop", typeof(int), PropReadWriteRule.ReadWrite, "");
         }
 
         [Test]
         public void TestCreateLatePropDefInvalidTypeNotAccessed()
         {
-            PropDef lPropDef = new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadWrite, null, "", false, false);
+            new PropDef("prop", "NonExistentAssembly", "NonExistentType", PropReadWriteRule.ReadWrite, null, "", false, false);
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void TestCreatePropDefInvalidDefault2()
         {
-            PropDef lPropDef = new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, 1);
+            new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, 1);
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCreateLatePropDefInvalidDefaultNotAccessed()
         {
-            PropDef lPropDef = new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false, false);
+            new PropDef("prop", "System", "Int32", PropReadWriteRule.ReadWrite, null, "", false, false);
             //No error
         }
 
@@ -93,22 +93,22 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.Fail("This line should not be reached because the previous line should have failed.");
         }
 
-        [Test, ExpectedException(typeof(ArgumentException), "A property name cannot contain any of the following characters: [.-|]  Invalid property name This.That")]
+        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage= "A property name cannot contain any of the following characters: [.-|]  Invalid property name This.That")]
         public void TestDotIsNotAllowedInName()
         {
-            PropDef def = new PropDef("This.That", typeof(string), PropReadWriteRule.ReadWrite, "");
+            new PropDef("This.That", typeof(string), PropReadWriteRule.ReadWrite, "");
         }
 
-        [Test, ExpectedException(typeof(ArgumentException), "A property name cannot contain any of the following characters: [.-|]  Invalid property name This-That")]
+        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "A property name cannot contain any of the following characters: [.-|]  Invalid property name This-That")]
         public void TestDashIsNotAllowedInName()
         {
-            PropDef def = new PropDef("This-That", typeof(string), PropReadWriteRule.ReadWrite, "");
+            new PropDef("This-That", typeof(string), PropReadWriteRule.ReadWrite, "");
         }
 
-        [Test, ExpectedException(typeof(ArgumentException), "A property name cannot contain any of the following characters: [.-|]  Invalid property name This|That")]
+        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "A property name cannot contain any of the following characters: [.-|]  Invalid property name This|That")]
         public void TestPipeIsNotAllowedInName()
         {
-            PropDef def = new PropDef("This|That", typeof(string), PropReadWriteRule.ReadWrite, "");
+            new PropDef("This|That", typeof(string), PropReadWriteRule.ReadWrite, "");
         }
 
         [Test]
@@ -147,6 +147,143 @@ namespace Habanero.Test.BO.ClassDefinition
             PropDef propDef = new PropDef("prop", typeof(string), PropReadWriteRule.ReadWrite, null);
             Assert.AreEqual("PropertyComparer`2", propDef.GetPropertyComparer<MyBO>().GetType().Name);
         }
+
+        [Test]
+        public void TestTableName()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            IPropDef testPropPropDef = ClassDef.ClassDefs[typeof (MyBO)].PropDefcol["TestProp"];
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Assert.AreEqual("MyBO", testPropPropDef.GetTableName(null));
+            //---------------Test Result -----------------------
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestTableName_SingleTableInheritance()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef =
+                new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
+            IPropDef radiusPropDef = CircleNoPrimaryKey.GetClassDef().PropDefcol["Radius"];         
+            //---------------Execute Test ----------------------
+            string tableName = radiusPropDef.GetTableName(null);
+
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("shape", tableName);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestTableName_ClassTableInheritance()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
+            IPropDef radiusPropDef = CircleNoPrimaryKey.GetClassDef().PropDefcol["Radius"];
+            IPropDef shapeNamePropDef = Shape.GetClassDef().PropDefcol["ShapeName"];         
+            //---------------Execute Test ----------------------
+            string radiusTableName = radiusPropDef.GetTableName(null);
+            string shapeNameTableName = shapeNamePropDef.GetTableName(null);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("circle", radiusTableName);
+            StringAssert.AreEqualIgnoringCase("shape", shapeNameTableName);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestTableName_ConcreteTableInheritance()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ConcreteTableInheritance);
+            IPropDef radiusPropDef = CircleNoPrimaryKey.GetClassDef().PropDefcol["Radius"];
+            IPropDef shapeNamePropDef = Shape.GetClassDef().PropDefcol["ShapeName"];
+            //---------------Execute Test ----------------------
+            string radiusTableName = radiusPropDef.GetTableName(CircleNoPrimaryKey.GetClassDef());
+            string shapeNameTableName = shapeNamePropDef.GetTableName(CircleNoPrimaryKey.GetClassDef());
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("circle", radiusTableName);
+            StringAssert.AreEqualIgnoringCase("circle", shapeNameTableName);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestTableName_ConcreteTableInheritance_NullChildClassDef()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ConcreteTableInheritance);
+            IPropDef radiusPropDef = CircleNoPrimaryKey.GetClassDef().PropDefcol["Radius"];
+            IPropDef shapeNamePropDef = Shape.GetClassDef().PropDefcol["ShapeName"];
+            //---------------Execute Test ----------------------
+            string radiusTableName = radiusPropDef.GetTableName(null);
+            string shapeNameTableName = shapeNamePropDef.GetTableName(null);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("circle", radiusTableName);
+            StringAssert.AreEqualIgnoringCase("shape", shapeNameTableName);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestTableName_SingleTableInheritance_Heirarchy()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.SingleTableInheritance);
+            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.SingleTableInheritance);
+            IPropDef colourPropDef = FilledCircleNoPrimaryKey.GetClassDef().PropDefcol["Colour"];
+            IPropDef radiusPropDef = CircleNoPrimaryKey.GetClassDef().PropDefcol["Radius"];
+            IPropDef shapeNamePropDef = Shape.GetClassDef().PropDefcol["ShapeName"];
+            //---------------Execute Test ----------------------
+            string colourTableName = colourPropDef.GetTableName(null);
+            string radiusTableName = radiusPropDef.GetTableName(null);
+            string shapeNameTableName = shapeNamePropDef.GetTableName(null);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("shape", colourTableName);
+            StringAssert.AreEqualIgnoringCase("shape", radiusTableName);
+            StringAssert.AreEqualIgnoringCase("shape", shapeNameTableName);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestTableName_ClassTableInheritance_Heirarchy()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
+            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.ClassTableInheritance);
+            IPropDef colourPropDef = FilledCircleNoPrimaryKey.GetClassDef().PropDefcol["Colour"];
+            IPropDef radiusPropDef = CircleNoPrimaryKey.GetClassDef().PropDefcol["Radius"];
+            IPropDef shapeNamePropDef = Shape.GetClassDef().PropDefcol["ShapeName"];
+            //---------------Execute Test ----------------------
+            string colourTableName = colourPropDef.GetTableName(null);
+            string radiusTableName = radiusPropDef.GetTableName(null);
+            string shapeNameTableName = shapeNamePropDef.GetTableName(null);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("filledcircle", colourTableName);
+            StringAssert.AreEqualIgnoringCase("circle", radiusTableName);
+            StringAssert.AreEqualIgnoringCase("shape", shapeNameTableName);
+            //---------------Tear Down -------------------------          
+        }
+        [Test]
+        public void TestTableName_ConcreteTableInheritance_Heirarchy()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ConcreteTableInheritance);
+            FilledCircleNoPrimaryKey.GetClassDef().SuperClassDef = new SuperClassDef(CircleNoPrimaryKey.GetClassDef(), ORMapping.ConcreteTableInheritance);
+            IPropDef colourPropDef = FilledCircleNoPrimaryKey.GetClassDef().PropDefcol["Colour"];
+            IPropDef radiusPropDef = CircleNoPrimaryKey.GetClassDef().PropDefcol["Radius"];
+            IPropDef shapeNamePropDef = Shape.GetClassDef().PropDefcol["ShapeName"];
+            //---------------Execute Test ----------------------
+            string colourTableName = colourPropDef.GetTableName(FilledCircleNoPrimaryKey.GetClassDef());
+            string radiusTableName = radiusPropDef.GetTableName(FilledCircleNoPrimaryKey.GetClassDef());
+            string shapeNameTableName = shapeNamePropDef.GetTableName(FilledCircleNoPrimaryKey.GetClassDef());
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("filledcircle", colourTableName);
+            StringAssert.AreEqualIgnoringCase("filledcircle", radiusTableName);
+            StringAssert.AreEqualIgnoringCase("filledcircle", shapeNameTableName);
+            //---------------Tear Down -------------------------          
+        }
+
 
         [Test]
         public void TestProtectedSets()
@@ -200,7 +337,6 @@ namespace Habanero.Test.BO.ClassDefinition
 
             PropDefParameterSQLInfo propDefParameterSQLInfo = new PropDefParameterSQLInfo(propDef);
             Assert.AreEqual(ParameterType.Date, propDefParameterSQLInfo.ParameterType);
-            Assert.IsEmpty(propDef.TableName);
         }
 
         // Used to access protected properties
@@ -265,6 +401,8 @@ namespace Habanero.Test.BO.ClassDefinition
                 PropType = type;
             }
         }
+
+
     }
 
 }

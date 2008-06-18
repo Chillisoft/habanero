@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 
@@ -98,21 +99,25 @@ namespace Habanero.BO.Loaders
         /// <returns>Returns a class definition</returns>
         protected override object Create()
         {
-            ClassDef def = _defClassFactory.CreateClassDef(_assemblyName, _className, _displayName, _primaryKeyDef, _propDefCol, 
+            ClassDef classDef = _defClassFactory.CreateClassDef(_assemblyName, _className, _displayName, _primaryKeyDef, _propDefCol, 
 							 _keyDefCol, _relationshipDefCol, _uiDefCol);
 			//ClassDef def =
 			//    new ClassDef(_assemblyName,_className, _primaryKeyDef, _propDefCol, 
 			//                 _keyDefCol, _relationshipDefCol, _uiDefCol);
 			if (_superClassDef != null)
             {
-                def.SuperClassDef = _superClassDef;
+                classDef.SuperClassDef = _superClassDef;
             }
             if (_tableName != null && _tableName.Length > 0)
             {
-                def.TableName = _tableName;
+                classDef.TableName = _tableName;
+            }
+            foreach (PropDef propDef in classDef.PropDefcol)
+            {
+                propDef.ClassDef = classDef;
             }
             //def.SupportsSynchronising = _SupportsSynchronising;
-            return def;
+            return classDef;
         }
 
         /// <summary>
@@ -274,17 +279,12 @@ namespace Habanero.BO.Loaders
                     "properties in the class that is being mapped to.", _className));
             }
 			_propDefCol = _defClassFactory.CreatePropDefCol();
-            //_propDefCol = new PropDefCol();
             foreach (string propDefXml in xmlDefs)
             {
                 XmlPropertyLoader propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);
-                _propDefCol.Add(propLoader.LoadProperty(propDefXml));
+                PropDef propDef = propLoader.LoadProperty(propDefXml);
+                _propDefCol.Add(propDef);
             }
-            //			XmlNodeList xmlPropDefs = _lassElement.GetElementsByTagName("propertyDef");
-            //			XmlPropertyLoader propLoader = new XmlPropertyLoader(_dtdPath);
-            //			foreach (XmlNode xmlPropDef in xmlPropDefs) {
-            //				_propDefCol.Add(propLoader.LoadProperty(xmlPropDef.OuterXml));
-            //			}
         }
 
         /// <summary>

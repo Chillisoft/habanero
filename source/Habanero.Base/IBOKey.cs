@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
-    public interface IBOKey
+    public interface IBOKey : IEnumerable<IBOProp>
     {
         /// <summary>
         /// Indicates that the value held by one of the properties in the

@@ -209,6 +209,10 @@ namespace Habanero.Test.BO.ClassDefinition
             primaryKey.Add(lPropDefCol["MockBOID"]);
             ClassDef lClassDef = new ClassDef(typeof(MockBO), primaryKey, lPropDefCol, keysCol, new RelationshipDefCol());
             ClassDef.ClassDefs.Add(lClassDef);
+            foreach (PropDef propDef in lPropDefCol)
+            {
+                propDef.ClassDef = lClassDef;
+            }
             return lClassDef;
         }
 

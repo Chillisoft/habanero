@@ -61,6 +61,7 @@
     <Compile Include="Base\TestFlowLayoutManager.cs" />
     <Compile Include="Base\TestGlobalUIRegistry.cs" />
     <Compile Include="Base\TestGridLayoutManager.cs" />
+    <Compile Include="Base\TestHabaneroAppForm.cs" />
     <Compile Include="Base\TestLayoutManager.cs" />
     <Compile Include="Forms\TestBoTabColControl.cs" />
     <Compile Include="Forms\TestButtonControl.cs" />

@@ -1,0 +1,10 @@
+<TemplatesExport>
+  <Folder name="File 'resharpertemplates'">
+    <Template uid="eb494bff-2f01-4a97-9b94-dd3485010464" text="        [Test]&#xD;&#xA;        public void Test$Method$()&#xD;&#xA;        {&#xD;&#xA;            //---------------Set up test pack-------------------&#xD;&#xA;            $END$&#xD;&#xA;            //---------------Assert PreConditions---------------            &#xD;&#xA;            //---------------Execute Test ----------------------&#xD;&#xA;            //---------------Test Result -----------------------&#xD;&#xA;            //---------------Tear Down -------------------------          &#xD;&#xA;        }" shortcut="tm" description="" reformat="true" shortenQualifiedReferences="true">
+      <Variables>
+        <Variable name="Method" expression="" initialRange="0" />
+      </Variables>
+      <CustomProperties />
+    </Template>
+  </Folder>
+</TemplatesExport>

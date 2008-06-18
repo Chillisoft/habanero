@@ -39,8 +39,7 @@ namespace Habanero.Base
         public static ISettings Settings
         {
             get { return _settings; }
-            set { _settings = value;
-            }
+            set { _settings = value; }
         }
 
         /// <summary>
@@ -69,7 +68,7 @@ namespace Habanero.Base
         //    }
         //    set { _synchronisationController = value; }
         //}
-        
+
         /// <summary>
         /// Gets and sets the application name
         /// </summary>
@@ -86,8 +85,8 @@ namespace Habanero.Base
         {
             get { return _applicationVersion; }
             set { _applicationVersion = value; }
-        }        
-        
+        }
+
         /// <summary>
         /// Gets and sets the database version as an integer
         /// </summary>
@@ -107,5 +106,6 @@ namespace Habanero.Base
             get { return _transactionCommitterFactory; }
             set { _transactionCommitterFactory = value; }
         }
+
     }
 }

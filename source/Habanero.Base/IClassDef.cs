@@ -31,5 +31,10 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns the new object</returns>
         IBusinessObject CreateNewBusinessObject();
+
+        /// <summary>
+        /// The table this classdef maps to, if applicable.
+        /// </summary>
+        string TableName { get; }
     }
 }

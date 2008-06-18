@@ -8,5 +8,10 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns a collection of business objects</returns>
         IBusinessObjectCollection GetRelatedBusinessObjectCol();
+
+        IRelKey RelKey
+        {
+            get;
+        }
     }
 }

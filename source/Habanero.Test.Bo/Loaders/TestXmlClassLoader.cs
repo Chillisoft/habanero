@@ -48,25 +48,6 @@ namespace Habanero.Test.BO.Loaders
             loader.LoadClass("<class1 name=\"TestClass\" assembly=\"Habanero.Test.BO.Loaders\" />");
         }
 
-        //[
-        //    Test,
-        //        ExpectedException(typeof (UnknownTypeNameException),
-        //            "The type TestClassNoExist does not exist in assembly Habanero.Test.BO.Loaders")]
-        //public void TestLoadingNonExistantClass()
-        //{
-        //    ClassDef def = loader.LoadClass("<classDef name=\"TestClassNoExist\" assembly=\"Habanero.Test.BO.Loaders\" />");
-        //    Assert.IsNull( def.)
-        //}
-
-        //[
-        //    Test,
-        //        ExpectedException(typeof (UnknownTypeNameException),
-        //            "The assembly Habanero.Test.BO.NoExist could not be found")]
-        //public void TestLoadingNonExistantAssembly()
-        //{
-        //    loader.LoadClass("<classDef name=\"TestClass\" assembly=\"Habanero.Test.BO.NoExist\" />");
-        //}
-
         [Test, ExpectedException(typeof(XmlException))]
         public void TestClassWithNoAssembly()
         {
@@ -107,6 +88,7 @@ namespace Habanero.Test.BO.Loaders
 				</class>
 			");
             Assert.AreEqual("TestClass", def.TableName);
+
         }
 
         [Test]
@@ -125,6 +107,26 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual("myTable", def.TableName);
         }
 
+        [Test]
+        public void TestPropDefClassDefIsSet()
+        {
+            //---------------Set up test pack-------------------
+            string classDefXml =
+                @"
+				<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" table=""myTable"">
+                    <property  name=""TestProp"" />
+                    <primaryKey>
+                        <prop name=""TestProp""/>
+                    </primaryKey>
+				</class>
+			";
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ClassDef def = loader.LoadClass(classDefXml);
+            //---------------Test Result -----------------------
+            Assert.AreSame(def, def.PropDefcol["TestProp"].ClassDef);
+            //---------------Tear Down -------------------------          
+        }
         [Test]
         public void TestAutoDisplayName()
         {

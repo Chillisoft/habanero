@@ -46,11 +46,13 @@ namespace Habanero.BO
         {
         }
 
-        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>() 
+        protected override IBusinessObjectCollection GetRelatedBusinessObjectColInternal<TBusinessObject>()
+            
         {
             if(_boCol != null)
             {
-                BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
+                BORegistry.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>)_boCol);
+                //BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
                 return _boCol;
             }
 
@@ -80,7 +82,9 @@ namespace Habanero.BO
                                                         type, typeof(TBusinessObject)));
             }
             IBusinessObjectCollection boCol;
-            boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
+
+            boCol =
+                BORegistry.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);// BOLoader.Instance.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
 
             if (_relDef.KeepReferenceToRelatedObject)
             {

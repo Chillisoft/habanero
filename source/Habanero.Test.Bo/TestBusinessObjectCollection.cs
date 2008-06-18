@@ -45,7 +45,6 @@ namespace Habanero.Test.BO
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            GC.Collect();
             MyBO.LoadDefaultClassDef();
         }
 

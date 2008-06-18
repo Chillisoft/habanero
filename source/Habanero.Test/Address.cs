@@ -73,6 +73,10 @@ namespace Habanero.Test
 
 
             ClassDef classDef = new ClassDef(typeof (Address),  primaryKey, "contact_person_address", propDefCol, keysCol, relDefCol);
+            foreach (PropDef def in propDefCol)
+            {
+                def.ClassDef = classDef;
+            }
             ClassDef.ClassDefs.Add(classDef);
             return classDef;
         }

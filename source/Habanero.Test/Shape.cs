@@ -73,6 +73,10 @@ namespace Habanero.Test
             //relDefCol.Add(relDef);
 			
             ClassDef lClassDef = new ClassDef(typeof (Shape), primaryKey, lPropDefCol, keysCol, relDefCol);
+            foreach (PropDef def in lPropDefCol)
+            {
+                def.ClassDef = lClassDef;
+            }
 			ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }

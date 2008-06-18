@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -10,6 +11,11 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestCriteria
     {
+        [SetUp]
+        public void SetupTest()
+        {
+            ClassDef.ClassDefs.Clear();
+        }
         [Test]
         public void TestCriteria_IsMatch_OneProp_Equals_NoMatch()
         {
@@ -191,6 +197,100 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestIsMatch_NullValue_Equals_Fail()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.Equals, "surname");
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should be not a match since it does not match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestIsMatch_NullValue_Equals()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.Equals, null);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestIsMatch_NullValue_GreaterThan()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.GreaterThan, "bob");
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should be not a match since it does not match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestIsMatch_NullValue_LessThan()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = null;
+            Criteria nameCriteria = new Criteria("Surname", Criteria.Op.LessThan, "bob");
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            bool isMatch = nameCriteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void TestIsMatch_LessThan_Incomparable()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefWithImageProperty();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
+            Criteria nameCriteria = new Criteria("Image", Criteria.Op.LessThan, new System.Drawing.Bitmap(20, 20));
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            try
+            {
+                nameCriteria.IsMatch(cp);
+                Assert.Fail("expected InvalidOperationException because you Bitmap does not implement IComparable");
+  
+            //---------------Test Result -----------------------
+                } catch (InvalidOperationException ex) 
+                {
+                    StringAssert.Contains("does not implement IComparable and cannot be matched", ex.Message);
+                    throw;
+                }
+            //---------------Tear Down -------------------------          
+        }
+
+
+        [Test]
         public void TestToString_LeafCriteria_String_Equals()
         {
             //---------------Set up test pack-------------------
@@ -239,6 +339,22 @@ namespace Habanero.Test.BO
             StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
 
             //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestToString_Guid()
+        {
+            //---------------Set up test pack-------------------
+            Guid guidValue = Guid.NewGuid();
+            Criteria guidCriteria = new Criteria("MyID", Criteria.Op.Equals, guidValue);
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            string criteriaAsString = guidCriteria.ToString();
+            //---------------Test Result -----------------------
+            string expectedString = string.Format("MyID = '{0}'", guidValue.ToString("B"));
+            StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
+            //---------------Tear Down -------------------------          
         }
 
         [Test]
@@ -341,6 +457,88 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void TestFromIPrimaryKey_SingleProp()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            MyBO myBO = new MyBO();
+            IPrimaryKey primaryKey = myBO.PrimaryKey;
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = Criteria.FromPrimaryKey(primaryKey);
+            //---------------Test Result -----------------------
+            StringAssert.AreEqualIgnoringCase("MyBOID = '" + myBO.MyBoID.ToString("B") + "'", criteria.ToString());
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestFromIPrimaryKey_MultipleProp()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            string surnameValue = Guid.NewGuid().ToString();
+            cp.Surname = surnameValue;
+            string firstNameValue = Guid.NewGuid().ToString();
+            cp.FirstName = firstNameValue;
+            IPrimaryKey primaryKey = cp.PrimaryKey;
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = Criteria.FromPrimaryKey(primaryKey);
+            //---------------Test Result -----------------------
+            string expectedString = string.Format("(Surname = '{0}') AND (FirstName = '{1}')", surnameValue, firstNameValue);
+            StringAssert.AreEqualIgnoringCase(expectedString, criteria.ToString());
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestFromIRelationship()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            IRelationship relationship = cp.Relationships["Addresses"];
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = Criteria.FromRelationship(relationship);
+            //---------------Test Result -----------------------
+            string expectedString = string.Format("ContactPersonID = '{0}'", cp.ContactPersonID.ToString("B"));
+            StringAssert.AreEqualIgnoringCase(expectedString, criteria.ToString());
+
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestFromIRelationship_MultipleProps()
+        {
+            //---------------Set up test pack-------------------
+            RelKeyDef relKeyDef = new RelKeyDef();
+            string propValue1 = "bob1";
+            PropDef boPropDef1 = new PropDef("Prop1", typeof(String), PropReadWriteRule.ReadWrite, propValue1);
+            relKeyDef.Add(new RelPropDef(boPropDef1, "RelatedProp1"));
+            string propValue2 = "bob2";
+            PropDef boPropDef2 = new PropDef("Prop2", typeof(String), PropReadWriteRule.ReadWrite, propValue2);
+            relKeyDef.Add(new RelPropDef(boPropDef2, "RelatedProp2"));
+            RelationshipDef reldef =
+                new MultipleRelationshipDef("bob", "bob", "bob", relKeyDef, false, "", DeleteParentAction.DoNothing);
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            BOPropCol col = new BOPropCol();
+            col.Add(boPropDef1.CreateBOProp(true));
+            col.Add(boPropDef2.CreateBOProp(true));
+            IRelationship relationship = reldef.CreateRelationship(cp, col);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = Criteria.FromRelationship(relationship);
+            //---------------Test Result -----------------------
+            string expectedString = string.Format("(RelatedProp1 = '{0}') AND (RelatedProp2 = '{1}')", propValue1, propValue2);
+            StringAssert.AreEqualIgnoringCase(expectedString, criteria.ToString());
+
+            //---------------Tear Down -------------------------          
+        }
 
     }
 }

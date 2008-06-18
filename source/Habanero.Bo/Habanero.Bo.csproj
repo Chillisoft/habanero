@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOLoader.cs" />
+    <Compile Include="BORegistry.cs" />
     <Compile Include="BOState.cs" />
     <Compile Include="BusinessObjectLoaderDB.cs" />
     <Compile Include="BusinessObjectLoaderInMemory.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="IBusinessObjectCollectionLoader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="QueryField.cs" />
     <Compile Include="ReadOnlyDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -318,6 +320,8 @@
     <Compile Include="RelProp.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SelectQuery.cs" />
+    <Compile Include="SelectQueryDB.cs" />
     <Compile Include="SimpleLookupList.cs" />
     <Compile Include="SingleRelationship.cs">
       <SubType>Code</SubType>
