@@ -418,7 +418,16 @@ namespace Habanero.BO
         /// <summary>
         /// Gets and sets the collection of relationships
         /// </summary>
-        public IRelationshipCol Relationships
+        public RelationshipCol Relationships
+        {
+            get { return (RelationshipCol)_relationshipCol; }
+            set { _relationshipCol = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the collection of relationships
+        /// </summary>
+        IRelationshipCol IBusinessObject.Relationships
         {
             get { return _relationshipCol; }
             set { _relationshipCol = value; }

@@ -59,7 +59,7 @@ namespace Habanero.Test.UI.Forms
             Guid myRelatedBoGuid = relatedBo.ID.GetAsGuid();
             itsMyBo.SetPropertyValue("RelatedID", myRelatedBoGuid);
             relatedBo.SetPropertyValue("MyRelatedTestProp", propValue);
-            itsMyBo.Relationships = mockRelCol;
+            ((IBusinessObject)itsMyBo).Relationships = mockRelCol;
 
             //relColControl.ExpectAndReturn("GetRelatedObject", relatedBo, new object[] {"MyRelationship"});
             Expect.Call(mockRelCol.GetRelatedObject("MyRelationship")).Return(relatedBo).Repeat.Any();

@@ -141,7 +141,7 @@ namespace Habanero.Test.BO
 			bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
 			relatedBo.SetPropertyValue("MyRelatedTestProp", "MyValue");
 			BOMapper mapper = new BOMapper(bo1);
-			bo1.Relationships = mockRelCol;
+            ((IBusinessObject)bo1).Relationships = mockRelCol;
 
 			//relColControl.ExpectAndReturn("GetRelatedObject", relatedBo, new object[] { "MyRelationship" });
 			//Expect.AtLeastOnce.On(mockRelCol).Method("GetRelatedObject").With("MyRelationship").Will(Return.Value(relatedBo));
@@ -214,7 +214,7 @@ namespace Habanero.Test.BO
 			//			bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
 			relatedBo.SetPropertyValue("MyRelatedTestProp", "MyValue");
 			BOMapper mapper = new BOMapper(bo1);
-			bo1.Relationships = mockRelCol;
+            ((IBusinessObject)bo1).Relationships = mockRelCol;
 
 			//relColControl.ExpectAndReturn("GetRelatedObject", null, new object[] { "MyRelationship" });
 			Expect.Call(mockRelCol.GetRelatedObject("MyRelationship")).Return(null);
