@@ -43,7 +43,7 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObjectCollection<TBusinessObject>
         : List<TBusinessObject>, IBusinessObjectCollection
-        where TBusinessObject : class, IBusinessObject
+        where TBusinessObject : class, IBusinessObject, new()
     {
         private readonly ClassDef _boClassDef;
         private IExpression _criteriaExpression;
@@ -946,7 +946,7 @@ namespace Habanero.BO
         /// </summary>
         /// <returns>Returns the cloned copy</returns>
         public BusinessObjectCollection<DestType> Clone<DestType>()
-            where DestType : BusinessObject
+            where DestType : BusinessObject, new()
         {
             BusinessObjectCollection<DestType> clonedCol = new BusinessObjectCollection<DestType>(_boClassDef);
             if (!typeof (DestType).IsSubclassOf(typeof (TBusinessObject)) &&
@@ -1284,6 +1284,11 @@ namespace Habanero.BO
             return CreateBusinessObject();
         }
 
-        
+
+        public void LoadAll_Loader()
+        {
+            this.Criteria = null;
+            BORegistry.BusinessObjectLoader.Refresh(this);
+        }
     }
 }

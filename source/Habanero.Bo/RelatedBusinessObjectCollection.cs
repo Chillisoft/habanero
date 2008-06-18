@@ -11,7 +11,7 @@ namespace Habanero.BO
     ///</summary>
     ///<typeparam name="TBusinessObject"></typeparam>
     public class RelatedBusinessObjectCollection<TBusinessObject> : BusinessObjectCollection<TBusinessObject>
-        where TBusinessObject : class, IBusinessObject
+        where TBusinessObject : class, IBusinessObject, new()
     {
         //private BusinessObject _parentBusinessObject;
         //private readonly string _relationshipName;

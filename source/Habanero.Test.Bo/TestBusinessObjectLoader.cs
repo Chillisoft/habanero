@@ -230,20 +230,49 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        //[Test]
-        //public void TestLoadThroughRelationship()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    SetupLoader();
-        //    Address address;
-        //    ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
-        //    //---------------Assert PreConditions---------------            
-        //    //---------------Execute Test ----------------------
-        //    RelatedBusinessObjectCollection<Address> addresses = cp.Addresses;
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(1, addresses.Count);
-        //    Assert.Contains(address, addresses);
-        //    //---------------Tear Down -------------------------          
-        //}
+        [Test]
+        public void TestLoadThroughRelationship()
+        {
+            //---------------Set up test pack-------------------
+            SetupLoader();
+            Address address;
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            RelatedBusinessObjectCollection<Address> addresses = cp.Addresses;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, addresses.Count);
+            Assert.Contains(address, addresses);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestLoadWithOrderBy()
+        {
+            //---------------Set up test pack-------------------
+            SetupLoader();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.Surname = "eeeee";
+            cp1.Save();
+
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.Surname = "ggggg";
+            cp2.Save();
+
+            ContactPersonTestBO cp3 = new ContactPersonTestBO();
+            cp3.Surname = "bbbbb";
+            cp3.Save();
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(null, new OrderCriteria("Surname"));
+
+
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------
+        }
     }
+
+
 }

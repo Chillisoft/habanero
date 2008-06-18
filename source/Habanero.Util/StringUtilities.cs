@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Text;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
 
@@ -249,5 +250,33 @@ namespace Habanero.Util
             origMessage += messageToAppend;
             return origMessage;        
         }
-    }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="origString"></param>
+        /// <param name="appendedString"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+	    public static string AppendMessage(string origString, string appendedString, string separator)
+	    {
+            if (!String.IsNullOrEmpty(origString)) origString += separator;
+            return origString + appendedString;     
+	    }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="origStringBuilder"></param>
+        /// <param name="appendedString"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+	    public static StringBuilder AppendMessage(StringBuilder origStringBuilder, string appendedString, string separator)
+	    {
+            if (origStringBuilder.Length != 0)
+	            origStringBuilder.Append(separator);
+	        origStringBuilder.Append(appendedString);
+	        return origStringBuilder;
+	    }
+	}
 }

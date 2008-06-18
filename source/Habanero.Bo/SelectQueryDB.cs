@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Habanero.Base;
 using Habanero.DB;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -33,6 +34,16 @@ namespace Habanero.BO
             {
                 builder.Append(" WHERE ");
                 builder.Append(this.Criteria.ToString(delegate(string propName) { return Fields[propName].FieldName; }));
+            }
+            if (this.OrderCriteria != null)
+            {
+                builder.Append(" ORDER BY ");
+                StringBuilder orderByClause = new StringBuilder();
+                foreach (string orderField in this.OrderCriteria.Fields)
+                {
+                    StringUtilities.AppendMessage(orderByClause, Fields[orderField].FieldName, ", ");
+                }
+                builder.Append(orderByClause.ToString());
             }
             return statement;
         }

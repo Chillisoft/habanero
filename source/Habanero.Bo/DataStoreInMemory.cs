@@ -47,14 +47,14 @@ namespace Habanero.BO
             _objects.Remove(businessObject.PrimaryKey);
         }
 
-        public BusinessObjectCollection<T> FindAll<T>(Criteria criteria) where T : class, IBusinessObject
+        public BusinessObjectCollection<T> FindAll<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
             foreach (IBusinessObject bo in _objects.Values)
             {
                 T boAsT = bo as T;
                 if (boAsT == null) continue; ;
-                if (criteria.IsMatch(boAsT)) col.Add(boAsT);
+                if (criteria == null || criteria.IsMatch(boAsT)) col.Add(boAsT);
             }
             col.Criteria = criteria;
             return col;

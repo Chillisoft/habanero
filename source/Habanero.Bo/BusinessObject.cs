@@ -42,6 +42,7 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObject : IBusinessObject
     {
+
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObject");
 
         public event EventHandler<BOEventArgs> Updated;

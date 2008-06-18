@@ -28,7 +28,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(criteria, query.Criteria);
             //---------------Tear Down -------------------------
         }
-
+        //TODO: make the fields and order fields case insensitive
         [Test]
         public void TestFields()
         {
@@ -56,38 +56,50 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestCreateSqlStatement_NoCriteria()
+        public void TestOrderCriteria()
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            SelectQueryDB<MyBO> query = new SelectQueryDB<MyBO>();
+            SelectQuery<MyBO> query = new SelectQuery<MyBO>();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            ISqlStatement statement = query.CreateSqlStatement();
+            query.OrderCriteria = new OrderCriteria("TestProp");
             //---------------Test Result -----------------------
-            string statementString = statement.Statement.ToString();
-            StringAssert.AreEqualIgnoringCase("SELECT MyBO.MyBoID, MyBO.TestProp, MyBO.TestProp2 FROM MyBO", statementString);
-            //---------------Tear Down -------------------------          
+            Assert.AreEqual(1, query.OrderCriteria.Count);
+            Assert.IsTrue(query.OrderCriteria.Fields.Contains("TestProp"));
+            //---------------Tear Down -------------------------
         }
 
         [Test]
-        public void TestCreateSqlStatement_WithCriteria()
+        public void TestOrderCriteria_Multiple()
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, "test");
-            SelectQueryDB<MyBO> query = new SelectQueryDB<MyBO>(criteria);
+            SelectQuery<MyBO> query = new SelectQuery<MyBO>();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            ISqlStatement statement = query.CreateSqlStatement();
+            query.OrderCriteria = new OrderCriteria("TestProp");
+            query.OrderCriteria.Add("TestProp2");
             //---------------Test Result -----------------------
-            string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("WHERE MyBO.TestProp = 'test'", statementString);
-            //---------------Tear Down -------------------------          
+            Assert.AreEqual(2, query.OrderCriteria.Count);
+            Assert.IsTrue(query.OrderCriteria.Fields.Contains("TestProp"));
+            Assert.IsTrue(query.OrderCriteria.Fields.Contains("TestProp2"));
+            //---------------Tear Down -------------------------
         }
+
+        [Test]
+        public void TestOrderCriteria_Compare()
+        {
+            //---------------Set up test pack-------------------
+            OrderCriteria orderCriteria = new OrderCriteria("TestProp");
+            orderCriteria.Add("TestProp2");
+            //---------------Execute Test ----------------------
+
+            //---------------Test Result -----------------------
+
+            //---------------Tear Down -------------------------
+        }
+
+
     }
-
-
-
-    
 }

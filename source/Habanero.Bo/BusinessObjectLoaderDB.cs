@@ -10,25 +10,25 @@ namespace Habanero.BO
 {
     public class BusinessObjectLoaderDB : IBusinessObjectLoader
     {
-        private readonly DataStoreInMemory _loadedBusinessObjects;
+        private readonly DataStoreInMemory _dataStoreInMemory;
         private readonly IDatabaseConnection _databaseConnection;
 
         public BusinessObjectLoaderDB(IDatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
-            _loadedBusinessObjects = new DataStoreInMemory();
+            _dataStoreInMemory = new DataStoreInMemory();
         }
 
         public T GetBusinessObject<T>(IPrimaryKey key) where T : class, IBusinessObject, new()
         {
-            T foundBO = _loadedBusinessObjects.Find<T>(key);
+            T foundBO = _dataStoreInMemory.Find<T>(key);
             if (foundBO != null) return foundBO;
             return GetBusinessObject<T>(Criteria.FromPrimaryKey(key));
         }
 
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            T foundBO = _loadedBusinessObjects.Find<T>(criteria);
+            T foundBO = _dataStoreInMemory.Find<T>(criteria);
             if (foundBO != null) return foundBO;
             SelectQueryDB<T> selectQuery = new SelectQueryDB<T>(criteria);
             ISqlStatement statement = selectQuery.CreateSqlStatement();
@@ -97,7 +97,7 @@ namespace Habanero.BO
         }
 
 
-        private T LoadBOFromReader<T>(IDataReader dr, SelectQueryDB<T> selectQuery)
+        private T LoadBOFromReader<T>(IDataRecord dr, SelectQuery<T> selectQuery)
             where T : class, IBusinessObject, new()
         {
             IBusinessObject ibo = new T();
@@ -107,14 +107,18 @@ namespace Habanero.BO
             {
                 bo.Props[field.PropertyName].InitialiseProp(dr[i++]);
             }
-            T loadedBo = _loadedBusinessObjects.Find<T>(bo.PrimaryKey);
+            T loadedBo = _dataStoreInMemory.Find<T>(bo.PrimaryKey);
             if (loadedBo == null)
             {
                 if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(bo.PrimaryKey.GetObjectId()))
                     ibo = (T) BusinessObject.AllLoadedBusinessObjects()[bo.PrimaryKey.GetObjectId()].Target;
-                _loadedBusinessObjects.Add(ibo);
+                else
+                {
+                    //todo: add ibo to the allloadedbusinessobjectscol.
+                }
+                _dataStoreInMemory.Add(ibo);
                 loadedBo = (T) ibo;
-            }
+            } 
             return loadedBo;
         }
     }

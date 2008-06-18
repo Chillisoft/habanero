@@ -349,7 +349,7 @@ namespace Habanero.BO
         /// <param name="criteria">The search criteria</param>
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
-        public T GetBusinessObject<T>(string criteria) where T : class, IBusinessObject
+        public T GetBusinessObject<T>(string criteria) where T : class, IBusinessObject, new()
         {
             return GetBusinessObject<T>(null, criteria);
         }
@@ -382,7 +382,7 @@ namespace Habanero.BO
             return GetBusinessObject<BusinessObject>(classDef, criteria);
         }
 
-        private T GetBusinessObject<T>(ClassDef classDef, string criteria) where T : class, IBusinessObject
+        private T GetBusinessObject<T>(ClassDef classDef, string criteria) where T : class, IBusinessObject, new()
 
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>(classDef);
@@ -487,7 +487,7 @@ namespace Habanero.BO
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
         public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, string orderByClause)
-            where T : class, IBusinessObject
+            where T : class, IBusinessObject, new()
         {
             return GetBusinessObjectCollection<T>(null, searchCriteria, orderByClause);
         }
@@ -527,7 +527,7 @@ namespace Habanero.BO
         /// <param name="orderByClause">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
         public BusinessObjectCollection<T> GetBusinessObjectCol<T>(IExpression searchExpression, string orderByClause)
-            where T : BusinessObject
+            where T : BusinessObject, new()
         {
             return GetBusinessObjectCollection<T>(searchExpression, null, orderByClause);
         }
@@ -563,7 +563,7 @@ namespace Habanero.BO
         private BusinessObjectCollection<T> GetBusinessObjectCollection<T>(IExpression searchExpression,
                                                                            string searchCriteria,
                                                                            string orderByClause)
-            where T : class, IBusinessObject
+            where T : class, IBusinessObject, new()
         {
             BusinessObjectCollection<T> businessObjectCollection = new BusinessObjectCollection<T>();
             LoadBusinessObjectCollection(searchExpression, businessObjectCollection, orderByClause, searchCriteria);
@@ -597,7 +597,7 @@ namespace Habanero.BO
         //TODO: Change to use relationship
         internal IBusinessObjectCollection GetRelatedBusinessObjectCollection<T>(
             MultipleRelationship relationship)
-            where T : BusinessObject
+            where T : BusinessObject, new()
         {
             IBusinessObjectCollection businessObjectCollection = new RelatedBusinessObjectCollection<T>(relationship);
             LoadBusinessObjectCollection(relationship._relKey.RelationshipExpression(), businessObjectCollection,
@@ -717,7 +717,7 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
         public T GetBusinessObjectByID<T>(Guid id)
-            where T : BusinessObject
+            where T : BusinessObject, new()
         {
             return GetBusinessObjectByID<T>(id.ToString("B"));
         }
@@ -730,7 +730,7 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
         public T GetBusinessObjectByID<T>(int id)
-            where T : BusinessObject
+            where T : BusinessObject, new()
         {
             return GetBusinessObjectByID<T>(id.ToString());
         }
@@ -743,7 +743,7 @@ namespace Habanero.BO
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         /// <exception cref="InvalidPropertyException">Thrown if there is a multiple primary key</exception>
         public T GetBusinessObjectByID<T>(string id)
-            where T : BusinessObject
+            where T : BusinessObject, new()
         {
             return GetBusinessObjectByID<T>(null, id);
         }
@@ -756,7 +756,7 @@ namespace Habanero.BO
         /// <returns>Returns the business object found</returns>
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObjectByID<T>(IPrimaryKey primaryKey)
-            where T : BusinessObject
+            where T : BusinessObject, new()
         {
             return GetBusinessObjectByID<T>(null, primaryKey);
         }
@@ -878,7 +878,7 @@ namespace Habanero.BO
         #region Private Methods
 
         private T GetBusinessObjectByID<T>(ClassDef classDef, string id)
-            where T : BusinessObject
+            where T : BusinessObject, new()
         {
             if (classDef == null)
             {
@@ -900,7 +900,7 @@ namespace Habanero.BO
         }
 
         private T GetBusinessObjectByID<T>(ClassDef classDef, IBOKey key)
-            where T : BusinessObject
+            where T : BusinessObject, new()
         {
             if (classDef == null)
             {

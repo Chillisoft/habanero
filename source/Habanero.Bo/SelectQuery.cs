@@ -9,6 +9,8 @@ namespace Habanero.BO
         private readonly Criteria _criteria;
         private readonly Dictionary<string, QueryField> _fields = new Dictionary<string, QueryField>(5);
         private string _source;
+        private List<string> _orderFields = new List<string>();
+        private OrderCriteria _orderCriteria;
 
         public SelectQuery()
         {
@@ -48,6 +50,12 @@ namespace Habanero.BO
         public string Source
         {
             get { return _source; }
+        }
+
+        public OrderCriteria OrderCriteria
+        {
+            get { return _orderCriteria; }
+            set { _orderCriteria = value; }
         }
     }
 }

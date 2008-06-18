@@ -117,5 +117,26 @@ namespace Habanero.Test.BO
             Assert.AreEqual(criteria, col.Criteria);
             //---------------Tear Down -------------------------
         }
+
+        [Test]
+        public void TestFindAll_NullCriteria()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now;
+            dataStore.Add(cp1);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col = dataStore.FindAll<ContactPersonTestBO>(null);
+            
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(cp1, col);
+            Assert.IsNull(col.Criteria);
+            //---------------Tear Down -------------------------
+        }
     }
 }

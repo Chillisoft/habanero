@@ -165,6 +165,7 @@
     <Compile Include="TestDataStoreInMemory.cs" />
     <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestSelectQuery.cs" />
+    <Compile Include="TestSelectQueryDB.cs" />
     <Compile Include="TestTransactionCommitter.cs" />
     <Compile Include="TestMultipleRelationship.cs" />
     <Compile Include="TestRelatedBusinessObjectCollection.cs" />
