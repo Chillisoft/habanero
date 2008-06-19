@@ -121,7 +121,6 @@
     <Compile Include="ITransactional.cs" />
     <Compile Include="ITransactionalDB.cs" />
     <Compile Include="ITransactionCommitter.cs" />
-    <Compile Include="ITransactionCommitterFactory.cs" />
     <Compile Include="ITransactionLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
