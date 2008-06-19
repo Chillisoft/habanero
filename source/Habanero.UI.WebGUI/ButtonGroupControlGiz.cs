@@ -64,6 +64,7 @@ namespace Habanero.UI.WebGUI
             IButton button = this.AddButton(buttonName);
             button.Name = buttonName;
             button.Text = buttonText;
+            RecalcButtonSizes();
             button.Click += clickHandler;
             return button;
         }
