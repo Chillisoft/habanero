@@ -28,9 +28,9 @@ namespace Habanero.UI.Win
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
-        public ReadOnlyGridControlWin()
+        public ReadOnlyGridControlWin(IControlFactory controlFactory)
         {
-            _controlFactory = new ControlFactoryWin();
+            _controlFactory = controlFactory;
             _filterControl = _controlFactory.CreateFilterControl();
             _grid = new ReadOnlyGridWin();
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();

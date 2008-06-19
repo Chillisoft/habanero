@@ -66,9 +66,9 @@ namespace Habanero.UI.WebGUI
             layoutManager.AddControl(_clearButton);
         }
 
-        private ButtonGiz CreateClearButton(int buttonWidth, int buttonHeight)
+        private IButton CreateClearButton(int buttonWidth, int buttonHeight)
         {
-            ButtonGiz clearButton = new ButtonGiz();
+            IButton clearButton = _controlFactory.CreateButton();
             clearButton.Width = buttonWidth;
             clearButton.Height = buttonHeight;
             clearButton.Top = _filterButton.Height + 2;
@@ -77,9 +77,9 @@ namespace Habanero.UI.WebGUI
             return clearButton;
         }
 
-        private ButtonGiz CreateFilterButton(int buttonWidth, int buttonHeight)
+        private IButton CreateFilterButton(int buttonWidth, int buttonHeight)
         {
-            ButtonGiz filterButton = new ButtonGiz();
+            IButton filterButton = _controlFactory.CreateButton();
             filterButton.Width = buttonWidth;
             filterButton.Height = buttonHeight;
             filterButton.Top = 0;

@@ -467,7 +467,7 @@ namespace Habanero.UI.Win
 
         public IReadOnlyGridControl CreateReadOnlyGridControl()
         {
-            return  new ReadOnlyGridControlWin();
+            return  new ReadOnlyGridControlWin(this);
         }
 
         public IButtonGroupControl CreateButtonGroupControl()

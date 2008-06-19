@@ -25,12 +25,17 @@ namespace Habanero.UI.WebGUI
 
         public delegate void RefreshGridDelegate();
 
+
+        public ReadOnlyGridControlGiz() : this(GlobalUIRegistry.ControlFactory)
+        {
+        }
+
         /// <summary>
         /// Constructor to initialise a new grid
         /// </summary>
-        public ReadOnlyGridControlGiz()
+        public ReadOnlyGridControlGiz(IControlFactory controlFactory)
         {
-            _controlFactory = new ControlFactoryGizmox();
+            _controlFactory = controlFactory;
             _filterControl = _controlFactory.CreateFilterControl();
             _grid = new ReadOnlyGridGiz();
             _buttons = _controlFactory.CreateReadOnlyGridButtonsControl();

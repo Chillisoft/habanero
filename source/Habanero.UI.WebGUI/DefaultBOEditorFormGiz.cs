@@ -86,10 +86,10 @@ namespace Habanero.UI.WebGUI
                                                  "'form' section for the class.");
             }
 
-            IPanelFactory factory = new PanelFactory(_bo, def, new ControlFactoryGizmox());
+            IPanelFactory factory = new PanelFactory(_bo, def, _controlFactory);
             _panelFactoryInfo = factory.CreatePanel();
             _boPanel = _panelFactoryInfo.Panel;
-            _buttons = new ButtonGroupControlGiz(new ControlFactoryGizmox());
+            _buttons = _controlFactory.CreateButtonGroupControl();
             _buttons.AddButton("&Cancel", CancelButtonHandler);
             IButton okbutton = _buttons.AddButton("&OK", OKButtonHandler);
             okbutton.NotifyDefault(true);

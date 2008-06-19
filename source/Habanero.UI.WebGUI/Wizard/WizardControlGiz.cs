@@ -52,9 +52,9 @@ namespace Habanero.UI.WebGUI
             _wizardController = wizardController;
             _controlFactory = controlFactory;
 
-            IPanel buttonPanel = CreateButtonPanel(controlFactory);
+            IPanel buttonPanel = CreateButtonPanel();
 
-            _wizardStepPanel = controlFactory.CreatePanel();
+            _wizardStepPanel = _controlFactory.CreatePanel();
             
   
             //IGroupBox headerLabelGroupBox = CreateHeaderLabel(controlFactory);
@@ -82,9 +82,9 @@ namespace Habanero.UI.WebGUI
         //    return headerLabelGroupBox;
         //}
 
-        private IPanel CreateButtonPanel(IControlFactory controlFactory)
+        private IPanel CreateButtonPanel()
         {
-            IPanel buttonPanel = controlFactory.CreatePanel();
+            IPanel buttonPanel = _controlFactory.CreatePanel();
             FlowLayoutManager layoutManager = new FlowLayoutManager(buttonPanel, _controlFactory);
             layoutManager.Alignment= FlowLayoutManager.Alignments.Right;
 

@@ -82,8 +82,8 @@ namespace Habanero.UI.WebGUI
                 summaryManager.AddControl(messageLabel, BorderLayoutManager.Position.North);
                 summaryManager.AddControl(messageTextBox, BorderLayoutManager.Position.Centre);
 
-                IButtonGroupControl buttonsOK = new ButtonGroupControlGiz(GlobalUIRegistry.ControlFactory);
-                IButtonGroupControl buttonsDetail = new ButtonGroupControlGiz(GlobalUIRegistry.ControlFactory);
+                IButtonGroupControl buttonsOK = GlobalUIRegistry.ControlFactory.CreateButtonGroupControl();
+                IButtonGroupControl buttonsDetail = GlobalUIRegistry.ControlFactory.CreateButtonGroupControl();
                 buttonsOK.AddButton("&OK", OKButtonClickHandler);
                 _moreDetailButton = buttonsDetail.AddButton("More Detail...", MoreDetailClickHandler);
                 buttonsOK.Height = BUTTONS_HEIGHT;
