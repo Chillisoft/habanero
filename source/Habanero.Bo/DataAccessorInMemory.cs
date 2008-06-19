@@ -4,8 +4,8 @@ namespace Habanero.BO
 {
     public class DataAccessorInMemory : IDataAccessor
     {
+        private readonly DataStoreInMemory _dataStore;
         private IBusinessObjectLoader _businessObjectLoader;
-        private ITransactionCommitterFactory _transactionCommiterFactory;
 
         public DataAccessorInMemory() : this(new DataStoreInMemory())
         {
@@ -13,22 +13,22 @@ namespace Habanero.BO
         }
         internal DataAccessorInMemory(DataStoreInMemory dataStore)
         {
-            _businessObjectLoader = new BusinessObjectLoaderInMemory(dataStore);
-            _transactionCommiterFactory = new TransactionCommitterFactoryInMemory(dataStore);
+            _dataStore = dataStore;
+
+            _businessObjectLoader = new BusinessObjectLoaderInMemory(_dataStore);
         }
 
-        #region IDataAccessor Members
 
         public IBusinessObjectLoader BusinessObjectLoader
         {
             get { return _businessObjectLoader; }
         }
 
-        public ITransactionCommitterFactory TransactionCommiterFactory
+        public ITransactionCommitter CreateTransactionCommitter()
         {
-            get { return _transactionCommiterFactory; }
+            return new TransactionCommitterInMemory(_dataStore);
         }
 
-        #endregion
+
     }
 }

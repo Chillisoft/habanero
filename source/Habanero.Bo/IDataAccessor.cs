@@ -6,6 +6,6 @@ namespace Habanero.BO
     {
         IBusinessObjectLoader BusinessObjectLoader { get; }
 
-        ITransactionCommitterFactory TransactionCommiterFactory { get; }
+        ITransactionCommitter CreateTransactionCommitter();
     }
 }

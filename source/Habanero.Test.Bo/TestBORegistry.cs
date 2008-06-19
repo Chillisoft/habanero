@@ -49,8 +49,18 @@ namespace Habanero.Test.BO
             IDataAccessor dataAccessor = new DataAccessorDB();
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(BusinessObjectLoaderDB), dataAccessor.BusinessObjectLoader);
-            Assert.IsInstanceOfType(typeof(TransactionCommitterFactoryDB), dataAccessor.TransactionCommiterFactory);
+            //---------------Tear Down -------------------------
+        }
 
+        [Test]
+        public void TestDataAccessorDB_CreateTransactionCommitter()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Execute Test ----------------------
+            IDataAccessor dataAccessor = new DataAccessorDB();
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(TransactionCommitterDB), dataAccessor.CreateTransactionCommitter());
             //---------------Tear Down -------------------------
         }
 
@@ -64,11 +74,21 @@ namespace Habanero.Test.BO
             IDataAccessor dataAccessor = new DataAccessorInMemory();
             //---------------Test Result -----------------------
             Assert.IsInstanceOfType(typeof(BusinessObjectLoaderInMemory), dataAccessor.BusinessObjectLoader);
-            Assert.IsInstanceOfType(typeof(TransactionCommitterFactoryInMemory), dataAccessor.TransactionCommiterFactory);
             //---------------Tear Down -------------------------
         }
 
 
+        [Test]
+        public void TestDataAccessorInMemory_CreateTransactionCommitter()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Execute Test ----------------------
+            IDataAccessor dataAccessor = new DataAccessorInMemory();
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOfType(typeof(TransactionCommitterInMemory), dataAccessor.CreateTransactionCommitter());
+            //---------------Tear Down -------------------------
+        }
         
     }
 

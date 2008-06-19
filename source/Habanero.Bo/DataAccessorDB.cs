@@ -6,13 +6,11 @@ namespace Habanero.BO
     public class DataAccessorDB : IDataAccessor
     {
         private IBusinessObjectLoader _businessObjectLoader;
-        private ITransactionCommitterFactory _transactionCommiterFactory;
 
 
         public DataAccessorDB()
         {
             _businessObjectLoader = new BusinessObjectLoaderDB(DatabaseConnection.CurrentConnection);
-            _transactionCommiterFactory = new TransactionCommitterFactoryDB();
         }
 
         public IBusinessObjectLoader BusinessObjectLoader
@@ -20,9 +18,11 @@ namespace Habanero.BO
             get { return _businessObjectLoader; }
         }
 
-        public ITransactionCommitterFactory TransactionCommiterFactory
+        public ITransactionCommitter CreateTransactionCommitter()
         {
-            get { return _transactionCommiterFactory; }
+            return new TransactionCommitterDB();
         }
+
+  
     }
 }

@@ -974,7 +974,7 @@ namespace Habanero.BO
         public void Save()
         {
             ITransactionCommitter committer =
-                BORegistry.DataAccessor.TransactionCommiterFactory.CreateTransactionCommitter();
+                BORegistry.DataAccessor.CreateTransactionCommitter();
             committer.AddBusinessObject(this);
             committer.CommitTransaction();
         }

@@ -342,8 +342,6 @@
     <Compile Include="TransactionalBusinessObjectDB.cs" />
     <Compile Include="TransactionCommitterDB.cs" />
     <Compile Include="TransactionCommitter.cs" />
-    <Compile Include="TransactionCommitterFactoryDB.cs" />
-    <Compile Include="TransactionCommitterFactoryInMemory.cs" />
     <Compile Include="TransactionCommitterInMemory.cs" />
     <Compile Include="TransactionLogTable.cs">
       <SubType>Code</SubType>
