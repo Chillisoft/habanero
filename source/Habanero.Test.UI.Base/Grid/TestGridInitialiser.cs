@@ -195,7 +195,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("Working on this")]
+        [Test]
         public void TestInitGrid_UIDef_DateFormat_FormatsDateColumn()
         {
             //---------------Set up test pack-------------------
@@ -216,7 +216,8 @@ namespace Habanero.Test.UI.Base
             Assert.IsNull(uiGridDef["TestDateTime"].GetParameterValue("dateFormat"));
             object dateFormatObject = uiGridDef[formattedPropertyName].GetParameterValue("dateFormat");
             string dateFormatParameter = dateFormatObject.ToString();
-            Assert.AreEqual("dd.MMM.yyyy", dateFormatParameter);
+            string expectedFormat = "dd.MMM.yyyy";
+            Assert.AreEqual(expectedFormat, dateFormatParameter);
 
             MyBO myBo = new MyBO();
             DateTime currentDateTime = DateTime.Now;
@@ -233,8 +234,8 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, grid.Grid.Rows.Count);
             IDataGridViewCell dataGridViewCell = grid.Grid.Rows[0].Cells[formattedPropertyName];
             //((DataGridViewCellGiz) dataGridViewCell).DataGridViewCell.HasStyle = false;
-            Assert.AreEqual(currentDateTime.ToString("dd.MMM.yyyy"), dataGridViewCell.FormattedValue);
-//            Assert.AreEqual(currentDateTime.ToString("dd.MMM.yyyy") ,grid.Grid.Rows[0].Cells[formattedPropertyName].Value);
+            Assert.AreSame(typeof(DateTime), dataGridViewCell.ValueType);
+            Assert.AreEqual(currentDateTime.ToString(expectedFormat), dataGridViewCell.FormattedValue);
 
             //---------------Tear Down -------------------------          
         }

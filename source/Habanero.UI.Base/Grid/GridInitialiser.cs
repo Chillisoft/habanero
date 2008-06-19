@@ -145,15 +145,27 @@ namespace Habanero.UI.Base
                 col.DataPropertyName = gridColDef.PropertyName;
                 col.Visible = true;
                 col.Width = gridColDef.Width;
-//
-//                col.DefaultCellStyle.Format = "dd.MMM.yyyy";
                 col.SortMode = DataGridViewColumnSortMode.Automatic;
-                IPropDef propDef = GetPropDef(classDef, gridColDef);
-                if (propDef != null) col.ValueType = propDef.PropertyType;
+                //IPropDef propDef = GetPropDef(classDef, gridColDef);
+                //if (propDef != null) col.ValueType = propDef.PropertyType;
+                Type propertyType = classDef.GetPropertyType(gridColDef.PropertyName);
+                if (propertyType != typeof(object))
+                {
+                    col.ValueType = propertyType;
+                }
+                SetupColumnWithDefParameters(col, gridColDef);
 //                this._gridControl.Grid.Columns.Add(col);
             }
         }
 
+        private static void SetupColumnWithDefParameters(IDataGridViewColumn col, UIGridColumn gridColDef)
+        {
+            string dateFormat = gridColDef.GetParameterValue("dateFormat") as string;
+            if (dateFormat != null)
+            {
+                col.DefaultCellStyle.Format = dateFormat;
+            }
+        }
 
         private IPropDef GetPropDef(ClassDef classDef, UIGridColumn gridColumn)
         {

@@ -45,6 +45,17 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestParameters_Null()
+        {
+            Hashtable parameters = new Hashtable();
+
+            UIGridColumn column = new UIGridColumn("heading", null, null, null, true, 100,
+                                                   UIGridColumn.PropAlignment.left, null);
+
+            Assert.IsNull(column.GetParameterValue("somename"));
+        }
+
+        [Test]
         public void TestFieldDefaultLabel()
         {
             UIGridColumn uiGridColumn;

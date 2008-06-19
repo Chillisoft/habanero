@@ -1049,6 +1049,13 @@ namespace Habanero.BO.ClassDefinition
             return currentClassDef;
         }
 
+        ///<summary>
+        /// Gets the type of the specified property for this classDef.
+        /// The specified property can also have a format like the custom properties for a UiGridColumn or UiFormField def.
+        /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name
+        ///</summary>
+        ///<param name="propertyName">The property to get the type for.</param>
+        ///<returns>The type of the specified property</returns>
         public Type GetPropertyType(string propertyName)
         {
             //TODO : Generalise this for properties that do not have PropDefs

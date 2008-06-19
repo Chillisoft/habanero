@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -33,6 +34,7 @@ namespace Habanero.Test.UI.Base
         }
 
         protected abstract IControlFactory GetControlFactory();
+        protected abstract void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AddControlToForm(IGridBase cntrl);
 
 
@@ -69,9 +71,18 @@ namespace Habanero.Test.UI.Base
         [TestFixture]
         public class TestEditableGridGiz : TestEditableGrid
         {
+            
             protected override IControlFactory GetControlFactory()
             {
                 return new ControlFactoryGizmox();
+            }
+
+
+            protected override void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn)
+            {
+                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz) dataGridViewColumn;
+                Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewTextBoxColumn), 
+                    dataGridViewColumnGiz.DataGridViewColumn);
             }
 
             //protected override IGridBase CreateGridBaseStub()
@@ -151,20 +162,16 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------    
         }
 
-        [Test, Ignore("Currently working on this")]
+        [Test]
         public void TestSetupColumnAsTextBoxType()
         {
-//            ClassDef classDef = MyBO.LoadClassDefWithBoolean();
-//            GetCol_BO_2Items(classDef);
-//
-//            Assert.AreSame(typeof (DataGridViewTextBoxColumn), grid.Columns[0].GetType());
-
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadClassDefWith_Grid_1TextboxColumn();
             IBusinessObjectCollection colBOs = GetCol_BO_2Items(classDef);
             IEditableGrid grid = GetControlFactory().CreateEditableGrid();
             SetupGridColumnsForMyBo(grid);
             //--------------Assert PreConditions----------------            
+            Assert.AreEqual(1, grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
             UIGrid uiGridDef = classDef.UIDefCol["default"].UIGrid;
             Assert.IsNotNull(uiGridDef);
@@ -173,9 +180,12 @@ namespace Habanero.Test.UI.Base
             //---------------Execute Test ----------------------
             grid.SetBusinessObjectCollection(colBOs);
             //---------------Test Result -----------------------
-            Assert.AreSame(typeof(IDataGridViewTextBoxColumn), grid.Columns[0].GetType());
+            IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
+            AssertIsTextBoxColumnType(dataGridViewColumn);
             //---------------Tear Down -------------------------          
         }
+
+
 
         private static IBusinessObjectCollection GetCol_BO_2Items(ClassDef classDef)
         {

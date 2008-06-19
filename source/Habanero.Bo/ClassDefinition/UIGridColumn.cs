@@ -73,6 +73,10 @@ namespace Habanero.BO.ClassDefinition
             _width = width;
             _alignment = alignment;
             _parameters = parameters;
+            if (_parameters == null)
+            {
+                _parameters = new Hashtable();
+            }
         }
 
         /// <summary>
