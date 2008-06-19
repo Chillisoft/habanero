@@ -105,6 +105,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
     <Compile Include="ByteString.cs" />
     <Compile Include="ConfigFileSettings.cs">
       <SubType>Code</SubType>

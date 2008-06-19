@@ -53,6 +53,13 @@ namespace Habanero.DB
         /// <returns>Returns the formatted string</returns>
         public static string FormatFieldName(string fieldName, IDatabaseConnection connection)
         {
+            if (connection == null) throw new ArgumentNullException("connection");
+
+            if ((connection.LeftFieldDelimiter != null && fieldName.StartsWith(connection.LeftFieldDelimiter)) &&
+                (connection.RightFieldDelimiter != null && fieldName.EndsWith(connection.RightFieldDelimiter)))
+            {
+                return fieldName;
+            }
             return connection.LeftFieldDelimiter + fieldName + connection.RightFieldDelimiter;
         }
 

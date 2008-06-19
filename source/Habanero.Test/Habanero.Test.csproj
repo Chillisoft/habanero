@@ -75,6 +75,9 @@
     <Compile Include="MyBo.cs" />
     <Compile Include="MyDBConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
     <Compile Include="Sample.cs" />
     <Compile Include="Shape.cs" />
     <Compile Include="TestAutoInc.cs" />

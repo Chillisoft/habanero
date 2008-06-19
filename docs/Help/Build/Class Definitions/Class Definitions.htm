@@ -106,7 +106,7 @@ Definitions</a></font></b></font></td>
 
 
 
-<p><b>Class definitions for: Habanero v1.1.2</b></p>
+<p><b>Class definitions for: Habanero v1.4.1</b></p>
 <p>This section covers a list of explanations, possible options and 
 limitations for all class definitions as listed in the class definitions XML 
 file (usually called &quot;classdefs.xml&quot;).&nbsp; The class definitions are 
@@ -126,7 +126,7 @@ specifications further along for specific options and limitations.</p>
   &lt;superClass class=&quot;class_inherited_from&quot; assembly=&quot;its_assembly&quot; /&gt;
 
   &lt;property name=&quot;property_name&quot; /&gt;
-  &lt;property name=&quot;property_name&quot; type=&quot;Guid&quot; isCompulsory=&quot;true&quot;&gt;
+  &lt;property name=&quot;property_name&quot; type=&quot;Guid&quot; compulsory=&quot;true&quot;&gt;
     &lt;rule name=&quot;rule name&quot; message=&quot;message for user if rule broken&quot; /&gt;
       &lt;add key=&quot;min&quot; value=&quot;0&quot; /&gt;
       &lt;add key=&quot;max&quot; value=&quot;300&quot; /&gt;
@@ -143,7 +143,7 @@ specifications further along for specific options and limitations.</p>
   &lt;/primaryKey&gt;
 
   &lt;relationship name=&quot;rel_name&quot; type=&quot;multiple&quot; relatedClass=&quot;class&quot; relatedAssembly=&quot;assembly&quot;&gt;
-    &lt;relatedProperty name=&quot;related_prop_name&quot; relatedProperty=&quot;related_prop_name&quot; /&gt;
+    &lt;relatedProperty property=&quot;related_prop_name&quot; relatedProperty=&quot;related_prop_name&quot; /&gt;
   &lt;/relationship&gt;
 
   &lt;ui&gt;
@@ -159,6 +159,7 @@ specifications further along for specific options and limitations.</p>
         &lt;columnLayout&gt;
           &lt;field label=&quot;label&quot; property=&quot;prop_name&quot; type=&quot;ComboBox&quot; mapperType=&quot;ListComboBoxMapper&quot;&gt;
             &lt;parameter name=&quot;options&quot; value=&quot;F|M&quot; /&gt;
+            &lt;trigger target=&quot;prop_name&quot; conditionValue=&quot;value&quot; action=&quot;enable&quot; value=&quot;false&quot; &gt;
           &lt;/field&gt;
         &lt;/columnLayout&gt;
       &lt;/tab&gt;
@@ -235,6 +236,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         <a href="#simpleLookupList">simpleLookupList</a><br>
         <a href="#superClass">superClass</a></font><font size="2"><br>
         <a href="#tab">tab</a><br>
+        <a href="#trigger">trigger</a><br>
         </font><font size="2" face="Verdana,Arial,Helvetica">
         <a href="#ui">ui</a></font></td>
       </tr>
@@ -672,13 +674,12 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td width=170 class="specname">Description:</td>
         <td class="specvalue">Provides a list of potential values for the property, using 
-        the objects loaded from a particular business object type.&nbsp; This 
-        function will only work if the primary key of the class is of a Guid 
-        type.&nbsp; The Guid value will be the actual value stored, while the 
+        the objects loaded from a particular business object type.  The primary key value
+        will be the actual value stored, while the 
         value displayed to the user (eg. in the ComboBox or grid) will be that 
         obtained from the object's ToString() method. You can also set criteria 
-        to limit which objects are loaded.&nbsp; This list is sorted by default 
-        - if you want greater control over sort order, use databaseLookupList.</td>
+        to limit which objects are loaded.&nbsp; This list is sorted by default, but you
+        can specify an alternative sort column or direction with the sort attribute.</td>
       </tr>
       <tr>
         <td class="specname">Comes under:</td>
@@ -701,7 +702,10 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
         <td class="specvaluebottom"><b>criteria</b> (a sql segment to be attached to a 
-        where-clause that limits which objects are loaded)</td>
+        where-clause that limits which objects are loaded)<br>
+        <b>sort</b> (which property of the business object to sort on, format is: 
+        "property", "property asc", "property desc")
+        </td>
       </tr>
     </table>
     </font>
@@ -996,7 +1000,8 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       </tr>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
-        <td class="specvaluebottom">-</td>
+        <td class="specvaluebottom"><b>sortColumn</b> (the column on which the grid is sorted, use
+        "PropertyName" or "PropertyName asc" or "PropertyName desc")</td>
       </tr>
     </table>
     </font>
@@ -1024,7 +1029,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       </tr>
       <tr>
         <td class="specname">Can contain:</td>
-        <td class="specvalue">-</td>
+        <td class="specvalue">parameter (1..*)</td>
       </tr>
       <tr>
         <td class="specname">Compulsory attribs:</td>
@@ -1181,8 +1186,9 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td width=170 class="specname">Description:</td>
         <td class="specvalue">Defines a control to edit a field/property in an editing form.&nbsp; 
-        &quot;parameter&quot; elements can be used to add further specifications for the 
-        control.</td>
+        "parameter" elements can be used to add further specifications for the 
+        control, and "trigger" elements can trigger a range of events (list all parameter elements
+        before triggers).</td>
       </tr>
       <tr>
         <td class="specname">Comes under:</td>
@@ -1194,7 +1200,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       </tr>
       <tr>
         <td class="specname">Can contain:</td>
-        <td class="specvalue">parameter (1..*)</td>
+        <td class="specvalue">parameter (1..*), trigger (1..*)</td>
       </tr>
       <tr>
         <td class="specname">Compulsory attribs:</td>
@@ -1232,13 +1238,15 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td width=170 class="specname">Description:</td>
         <td class="specvalue">Adds additional definitions for a control being 
-        displayed in an editing form, such as a list of items to display in a 
-        ComboBox.&nbsp; There is no error-checking on unsupported types, so 
-        ensure correct usage.</td>
+        displayed in a form or grid, such as the number of decimal places to show.
+        There is no error-checking on unsupported types, so this is a fully
+        flexible system that can be used for any purpose you wish - simply use the
+        GetParameterValue method on UIFormField or UIGridColumn to access the value.
+        Parameter names are case-sensitive.</td>
       </tr>
       <tr>
         <td class="specname">Comes under:</td>
-        <td class="specvalue">field</td>
+        <td class="specvalue">field, column</td>
       </tr>
       <tr>
         <td class="specname">Must contain:</td>
@@ -1254,7 +1262,7 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
         for examples)<br>
         <b>value</b> (the values to apply to the above setting - see below)<br>
         <br>
-        The following options are available:<br>
+        The following options are available for a form field element:<br>
         <font size="2">
         <table border="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#C0C0C0" width="100%" id="AutoNumber7" class="options">
           <tr>
@@ -1266,6 +1274,11 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
           <tr>
             <td class="options">numLines</td>
             <td class="options">number of lines in a TextBox</td>
+          </tr>
+          <tr>
+            <td class="options">alignment</td>
+            <td class="options">text alignment, only applies to TextBox and NumericUpDown, options
+            are: left, right, center and centre</td>
           </tr>
           <tr>
             <td class="options">isEmail</td>
@@ -1287,6 +1300,31 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
             <td class="options">the number of decimals to allow when 
             NumericUpDownMoneyMapper is used</td>
           </tr>
+          <tr>
+            <td class="options">rightClickEnabled</td>
+            <td class="options">whether a user can right-click on the ComboBox
+            to add additional options</td>
+          </tr>
+          <tr>
+            <td width="100" class="options">dateFormat</td>
+            <td class="options">the format of date displays, in the style of
+            DateTime.ToString() (eg. "dd MM yy"), including shortcuts, such as
+            "d", which uses the short date format of the culture of the user's
+            machine</td>
+          </tr>
+        </table>
+        </font>
+        <br/>
+        The following options are available for a grid column element:<br>
+        <font size="2">
+        <table border="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#C0C0C0" width="100%" id="AutoNumber7" class="options">
+          <tr>
+            <td width="100" class="options">dateFormat</td>
+            <td class="options">the format of date displays, in the style of
+            DateTime.ToString() (eg. "dd MM yy"), including shortcuts, such as
+            "d", which uses the short date format of the culture of the user's
+            machine</td>
+          </tr>
         </table>
         </font>
         </td>
@@ -1294,6 +1332,103 @@ in italics.&nbsp; Keep in mind that XML elements are case-sensitive.</p>
       <tr>
         <td class="specnamebottom">Optional attribs:</td>
         <td class="specvaluebottom">-</td>
+      </tr>
+    </table>
+    </font>
+    </td>
+  </tr>
+  
+  <tr>
+  	<td class="specclass">
+    <b>
+    <a name="trigger" class="specclasslink">trigger</a></b></b></td>
+    <td width="83%" valign="top">
+    <font size="2">
+    <table border="0" cellpadding="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber6" class="spec">
+      <tr>
+        <td width=170 class="specname">Description:</td>
+        <td class="specvalue">Carries out some action when a field control has its value changed.  For instance,
+        a trigger could cause a method to be executed or another field to be disabled.  A trigger usually has a
+        source control (triggeredBy) that fires the trigger when its value changes and a target control that is
+        affected by the change.  The trigger can be declared either on the source or the target and multiple
+        triggers are also permitted.</td>
+      </tr>
+      <tr>
+        <td class="specname">Comes under:</td>
+        <td class="specvalue">field</td>
+      </tr>
+      <tr>
+        <td class="specname">Must contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Can contain:</td>
+        <td class="specvalue">-</td>
+      </tr>
+      <tr>
+        <td class="specname">Compulsory attribs:</td>
+        <td class="specvalue"><b>action</b> (the type of action to carry out when the trigger fires)<br>
+        <br>
+        The following actions are available for a form field element:<br>
+        <font size="2">
+        <table border="1" cellspacing="0" style="border-collapse: collapse" bordercolor="#C0C0C0" width="100%" id="AutoNumber7" class="options">
+          <tr>
+            <td width="100" class="options">assignLiteral</td>
+            <td class="options">Assign the given literal in "value" to the target property.  The value
+            will be converted to the type of the property.</td>
+          </tr>
+          <tr>
+            <td class="options">assignProperty</td>
+            <td class="options">Assign the value returned by a property to the target field.
+            The property must be listed in the class of the general BusinessObject being displayed
+            on the form.  List the name of the property in the "value" attribute.</td>
+          </tr>
+          <tr>
+            <td class="options">execute</td>
+            <td class="options">Execute a parameterless method found on the class of the general
+            BusinessObject being displayed on the form.  No target field required.</td>
+          </tr>
+          <tr>
+            <td class="options">filter</td>
+            <td class="options">As an example, if you have a Country ComboBox as your source
+            and a City ComboBox as your target, selecting the Country will filter City, showing
+            only those Cities with a CountryID matching the CountryID of the selected Country.
+            The target must use a BusinessObjectLookupList and must have a property with the
+            same name as the source's ID.</td>
+          </tr>
+          <tr>
+            <td class="options">filterReverse</td>
+            <td class="options">As with "filter", but with Country as the target - if you select
+            a City, the specific Country for that City will be selected.  Both source and 
+            target properties must use a BusinessObjectLookupList and the source must have a
+            property with the same name as the target's ID.</td>
+          </tr>
+          <tr>
+            <td class="options">enable</td>
+            <td class="options">Enables or disables the target property - the "value" attribute
+            must be "true" or "false" respectively.</td>
+          </tr>
+          <tr>
+            <td class="options">enableOnce</td>
+            <td class="options">As with "enable", but will only carry out the enabling or
+            disabling once, regardless of any further value changes in the source.</td>
+          </tr>
+        </table>
+        </font>
+        </td>
+      </tr>
+      <tr>
+        <td class="specnamebottom">Optional attribs:</td>
+        <td class="specvaluebottom">
+        	<b>triggeredBy</b> (the property name of the field that causes the trigger when its value
+        	changes, don't specify this if you are listing the trigger under the source field)<br>
+        	<b>target</b> (the property name of the field that is affected by a fired trigger, not
+        	required if you are listing the trigger under the target field or for actions like "execute")<br>
+        	<b>conditionValue</b> (a string literal value that the source control must have in order
+        	for the trigger to fire, the value will be converted to the type of the field's property,
+        	in the case of ComboBoxes this must be the string value as shown in the drop-down)<br>
+        	<b>value</b> (a field used by "action", see "action" above for further information)<br>
+        </td>
       </tr>
     </table>
     </font>

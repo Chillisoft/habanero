@@ -210,30 +210,11 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestImmediateChildren()
         {
             ClassDef.ClassDefs.Clear();
-            XmlClassLoader loader = new XmlClassLoader();
-            ClassDef parentClassDef = loader.LoadClass(
-                @"<class name=""Parent"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" type=""Guid"" />
-					<primaryKey>
-						<prop name=""MyBoID"" />
-					</primaryKey>
-				</class>
-			");
-            ClassDef childClassDef = loader.LoadClass(
-                @"<class name=""Child"" assembly=""Habanero.Test"">
-					<superClass class=""Parent"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""blah"" />
-                    <property  name=""Prop1"" />
-				</class>
-			");
-            ClassDef grandchildClassDef = loader.LoadClass(
-                @"<class name=""Grandchild"" assembly=""Habanero.Test"">
-					<superClass class=""Child"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""blah"" />
-                    <property  name=""Prop2"" />
-				</class>
-			");
-            ClassDef.ClassDefs.Add(parentClassDef);
-            ClassDef.ClassDefs.Add(childClassDef);
-            ClassDef.ClassDefs.Add(grandchildClassDef);
+            ClassDef parentClassDef;
+            ClassDef childClassDef;
+            ClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
+
 
             ClassDefCol children = parentClassDef.ImmediateChildren;
             Assert.AreEqual(1, children.Count);
@@ -262,30 +243,10 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestPropDefColIncludingInheritance()
         {
             ClassDef.ClassDefs.Clear();
-            XmlClassLoader loader = new XmlClassLoader();
-            ClassDef parentClassDef = loader.LoadClass(
-                @"<class name=""Parent"" assembly=""Habanero.Test"">
-					<property  name=""MyBoID"" type=""Guid"" />
-					<primaryKey>
-						<prop name=""MyBoID"" />
-					</primaryKey>
-				</class>
-			");
-            ClassDef childClassDef = loader.LoadClass(
-                @"<class name=""Child"" assembly=""Habanero.Test"">
-					<superClass class=""Parent"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""blah"" />
-                    <property  name=""Prop1"" />
-				</class>
-			");
-            ClassDef grandchildClassDef = loader.LoadClass(
-                @"<class name=""Grandchild"" assembly=""Habanero.Test"">
-					<superClass class=""Child"" assembly=""Habanero.Test"" orMapping=""SingleTableInheritance"" discriminator=""blah"" />
-                    <property  name=""Prop2"" />
-				</class>
-			");
-            ClassDef.ClassDefs.Add(parentClassDef);
-            ClassDef.ClassDefs.Add(childClassDef);
-            ClassDef.ClassDefs.Add(grandchildClassDef);
+            ClassDef parentClassDef;
+            ClassDef childClassDef;
+            ClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
 
             Assert.AreEqual(1, parentClassDef.PropDefColIncludingInheritance.Count);
             Assert.AreEqual(2, childClassDef.PropDefColIncludingInheritance.Count);
@@ -294,6 +255,46 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(1, parentClassDef.PropDefcol.Count);
             Assert.AreEqual(1, childClassDef.PropDefcol.Count);
             Assert.AreEqual(1, grandchildClassDef.PropDefcol.Count);
+        }
+
+        private static void LoadInheritedClassdefStructure(out ClassDef parentClassDef, out ClassDef childClassDef, out ClassDef grandchildClassDef)
+        {
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef, ORMapping.SingleTableInheritance);
+        }
+
+        private static void LoadInheritedClassdefStructure(out ClassDef parentClassDef, out ClassDef childClassDef, 
+            out ClassDef grandchildClassDef, ORMapping orMappingType)
+        {
+            string inheritanceType = orMappingType.ToString();
+            string discriminator = "";
+            if (orMappingType == ORMapping.SingleTableInheritance)
+            {
+                discriminator = @"discriminator=""blah""";
+            }
+            XmlClassLoader loader = new XmlClassLoader();
+            parentClassDef = loader.LoadClass(
+                @"<class name=""Parent"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            childClassDef = loader.LoadClass(String.Format(
+                @"<class name=""Child"" assembly=""Habanero.Test"">
+					<superClass class=""Parent"" assembly=""Habanero.Test"" orMapping=""{0}"" {1} />
+                    <property  name=""Prop1"" />
+				</class>
+			", inheritanceType, discriminator));
+            grandchildClassDef = loader.LoadClass(String.Format(
+                @"<class name=""Grandchild"" assembly=""Habanero.Test"">
+					<superClass class=""Child"" assembly=""Habanero.Test"" orMapping=""{0}"" {1} />
+                    <property  name=""Prop2"" />
+				</class>
+			", inheritanceType, discriminator));
+            ClassDef.ClassDefs.Add(parentClassDef);
+            ClassDef.ClassDefs.Add(childClassDef);
+            ClassDef.ClassDefs.Add(grandchildClassDef);
         }
 
         // Trying to get a MissingMethodException here, not sure what to do
@@ -351,6 +352,145 @@ namespace Habanero.Test.BO.ClassDefinition
             parentClassDef.RelationshipDefCol.Add(relDef);
             Assert.AreEqual(relDef, childClassDef.GetRelationship("rel"));
         }
+
+        #region Test GetTableName
+
+
+        [Test]
+        public void TestGetTableName_SingleInheritance()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef parentClassDef;
+            ClassDef childClassDef;
+            ClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, 
+                out grandchildClassDef, ORMapping.SingleTableInheritance);
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            string parentPropTableName = parentClassDef.GetTableName();
+            string childPropTableName = childClassDef.GetTableName();
+            string grandchildPropTableName = grandchildClassDef.GetTableName();
+            //-------------Test Result ----------------------
+            Assert.AreEqual(parentClassDef.TableName, parentPropTableName);
+            Assert.AreEqual(parentClassDef.TableName, childPropTableName);
+            Assert.AreEqual(parentClassDef.TableName, grandchildPropTableName);
+        }
+
+        [Test]
+        public void TestGetTableName_ClassInheritance()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef parentClassDef;
+            ClassDef childClassDef;
+            ClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef,
+                out grandchildClassDef, ORMapping.ClassTableInheritance);
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            string parentPropTableName = parentClassDef.GetTableName();
+            string childPropTableName = childClassDef.GetTableName();
+            string grandchildPropTableName = grandchildClassDef.GetTableName();
+            //-------------Test Result ----------------------
+            Assert.AreEqual(parentClassDef.TableName, parentPropTableName);
+            Assert.AreEqual(childClassDef.TableName, childPropTableName);
+            Assert.AreEqual(grandchildClassDef.TableName, grandchildPropTableName);
+        }
+
+        [Test]
+        public void TestGetTableName_ConcreteInheritance()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef parentClassDef;
+            ClassDef childClassDef;
+            ClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, 
+                out grandchildClassDef, ORMapping.ConcreteTableInheritance);
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            string parentPropTableName = parentClassDef.GetTableName();
+            string childPropTableName = childClassDef.GetTableName();
+            string grandchildPropTableName = grandchildClassDef.GetTableName();
+            //-------------Test Result ----------------------
+            Assert.AreEqual(parentClassDef.TableName, parentPropTableName);
+            Assert.AreEqual(childClassDef.TableName, childPropTableName);
+            Assert.AreEqual(grandchildClassDef.TableName, grandchildPropTableName);
+        }
+
+        [Test]
+        public void TestGetTableName_SingleInheritance_WithPropDef()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef parentClassDef;
+            ClassDef childClassDef;
+            ClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
+            IPropDef parentPropDef = parentClassDef.GetPropDef("MyBoID");
+            IPropDef childPropDef = childClassDef.GetPropDef("Prop1");
+            IPropDef grandchildPropDef = grandchildClassDef.GetPropDef("Prop2");
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            string parentPropTableName = grandchildClassDef.GetTableName(parentPropDef);
+            string childPropTableName = grandchildClassDef.GetTableName(childPropDef);
+            string grandchildPropTableName = grandchildClassDef.GetTableName(grandchildPropDef);
+            //-------------Test Result ----------------------
+            Assert.AreEqual(parentClassDef.TableName, parentPropTableName);
+            Assert.AreEqual(parentClassDef.TableName, childPropTableName);
+            Assert.AreEqual(parentClassDef.TableName, grandchildPropTableName);
+        }
+
+        [Test]
+        public void TestGetTableName_ClassInheritance_WithPropDef()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef parentClassDef;
+            ClassDef childClassDef;
+            ClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, 
+                out grandchildClassDef, ORMapping.ClassTableInheritance);
+            IPropDef parentPropDef = parentClassDef.GetPropDef("MyBoID");
+            IPropDef childPropDef = childClassDef.GetPropDef("Prop1");
+            IPropDef grandchildPropDef = grandchildClassDef.GetPropDef("Prop2");
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            string parentPropTableName = grandchildClassDef.GetTableName(parentPropDef);
+            string childPropTableName = grandchildClassDef.GetTableName(childPropDef);
+            string grandchildPropTableName = grandchildClassDef.GetTableName(grandchildPropDef);
+            //-------------Test Result ----------------------
+            Assert.AreEqual(parentClassDef.TableName, parentPropTableName);
+            Assert.AreEqual(childClassDef.TableName, childPropTableName);
+            Assert.AreEqual(grandchildClassDef.TableName, grandchildPropTableName);
+        }
+
+        [Test]
+        public void TestGetTableName_ConcreteInheritance_WithPropDef()
+        {
+            //-------------Setup Test Pack ------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef parentClassDef;
+            ClassDef childClassDef;
+            ClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, 
+                out grandchildClassDef, ORMapping.ConcreteTableInheritance);
+            IPropDef parentPropDef = parentClassDef.GetPropDef("MyBoID");
+            IPropDef childPropDef = childClassDef.GetPropDef("Prop1");
+            IPropDef grandchildPropDef = grandchildClassDef.GetPropDef("Prop2");
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            string parentPropTableName = grandchildClassDef.GetTableName(parentPropDef);
+            string childPropTableName = grandchildClassDef.GetTableName(childPropDef);
+            string grandchildPropTableName = grandchildClassDef.GetTableName(grandchildPropDef);
+            //-------------Test Result ----------------------
+            Assert.AreEqual(grandchildClassDef.TableName, parentPropTableName);
+            Assert.AreEqual(grandchildClassDef.TableName, childPropTableName);
+            Assert.AreEqual(grandchildClassDef.TableName, grandchildPropTableName);
+        }
+
+        #endregion //Test GetTableName
 
         [Test]
         public void TestGetMissingPropDefReturnsNull()

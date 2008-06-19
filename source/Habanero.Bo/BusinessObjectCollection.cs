@@ -294,13 +294,16 @@ namespace Habanero.BO
                     while (dr.Read())
                     {
                         TBusinessObject bo = (TBusinessObject)BOLoader.Instance.GetBusinessObject(_sampleBo, dr);
-                        if (oldCol.Contains(bo))
+                        if (!Contains(bo))
                         {
-                            AddInternal(bo);
-                        }
-                        else
-                        {
-                            Add(bo);
+                            if (oldCol.Contains(bo))
+                            {
+                                AddInternal(bo);
+                            }
+                            else
+                            {
+                                Add(bo);
+                            }
                         }
                     }
                 }
@@ -361,34 +364,54 @@ namespace Habanero.BO
             IDatabaseConnection databaseConnection, ref string orderByClause, List<string> joinedRelationshipTables)
         {
             if (String.IsNullOrEmpty(orderByClause)) return;
-            if (orderByClause.IndexOf(".") == -1) return;
+            //if (orderByClause.IndexOf(".") == -1) return;
             string[] orderByParameters = orderByClause.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
             List<string> reconstructedParameters = new List<string>();
+            List<string> orderByColumns = new List<string>();
             foreach (string thisOrderByParameter in orderByParameters)
             {
                 string orderByParameter = thisOrderByParameter.Trim();
-                if (IsRelationshipParameter(orderByParameter))
+                bool isRelationshipParameter = IsRelationshipParameter(orderByParameter);
+                string[] parts = orderByParameter.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length > 0)
                 {
-                    string[] parts = orderByParameter.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length > 0)
+                    string parameterName = parts[0];
+                    if (isRelationshipParameter)
                     {
-                        string parameterName = parts[0];
                         string fullTableName;
                         IPropDef propDef;
                         InsertJoinsForRelatedProperty(sqlStatement, classDef, parameterName, databaseConnection,
                                                       ref joinedRelationshipTables, out fullTableName, out propDef);
-                        string newParameterName = fullTableName + "." + propDef.DatabaseFieldName;
+                        string newParameterName = SqlFormattingHelper.FormatTableAndFieldName(
+                            fullTableName, propDef.DatabaseFieldName, databaseConnection);
+                        //string newParameterName = fullTableName + "." + propDef.DatabaseFieldName;
                         parts[0] = newParameterName;
                         orderByParameter = String.Join(" ", parts);
+                    } else
+                    {
+                        IPropDef propDef = classDef.GetPropDef(parameterName, false);
+                        if (propDef != null)
+                        {
+                            string fullTableName = classDef.GetTableName(propDef);
+                            string newParameterName = SqlFormattingHelper.FormatTableAndFieldName(
+                                fullTableName, propDef.DatabaseFieldName, databaseConnection);
+                            parts[0] = newParameterName;
+                            orderByParameter = String.Join(" ", parts);
+                        }
                     }
+                    orderByColumns.Add(parts[0]);
                 }
                 reconstructedParameters.Add(orderByParameter);
             }
-
             orderByClause = String.Join(", ", reconstructedParameters.ToArray());
+            if (orderByColumns.Count > 0)
+            {
+                //This code adds the order by fields to the select statement, this is specifically required by SQL Server
+                sqlStatement.AddSelectFields(orderByColumns);
+            }
             return;
         }
-
+        
         private static void DetermineCriteriaParameterJoins(ISqlStatement sqlStatement, ClassDef classDef, IDatabaseConnection databaseConnection, IExpression criteriaExpression, List<string> joinedRelationshipTables)
         {
             if (criteriaExpression == null) return;

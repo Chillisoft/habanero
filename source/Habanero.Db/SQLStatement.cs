@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Text;
@@ -327,6 +328,32 @@ namespace Habanero.DB
             {
                 this.Statement.Append(WHERE_CLAUSE_TOKEN);
             }
+        }
+
+        /// <summary>
+        /// Adds more fields to the select fields list in the statement.
+        /// </summary>
+        /// <param name="fields">The list of fields to add to the select statement</param>
+        public void AddSelectFields(List<string> fields)
+        {
+            if (fields.Count == 0) return;
+            int posFrom = FindStatementClauseToken(FROM_CLAUSE_TOKEN);
+            if (posFrom == -1) return;
+            int posSelectStart = FindStatementClauseToken(SELECT_CLAUSE_TOKEN);
+            if (posSelectStart == -1) return;
+            posSelectStart += SELECT_CLAUSE_TOKEN.Length;
+            string currentSelectFields = _statement.ToString(posSelectStart, posFrom - posSelectStart);
+            string fieldList = "";
+            foreach (string field in fields)
+            {
+                string formattedField = SqlFormattingHelper.FormatFieldName(field, _connection);
+                if (currentSelectFields.IndexOf(formattedField) == -1)
+                {
+                    fieldList += ", " + formattedField;
+                    currentSelectFields += ", " + formattedField;
+                }
+            }
+            _statement.Insert(posFrom, fieldList);
         }
 
         /// <summary>

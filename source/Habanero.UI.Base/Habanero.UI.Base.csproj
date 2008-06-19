@@ -164,6 +164,9 @@
     <Compile Include="Wizard\IWizardStep.cs" />
     <Compile Include="Wizard\WizardController.cs" />
     <Compile Include="Wizard\WizardStepException.cs" />
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
