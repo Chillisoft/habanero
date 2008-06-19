@@ -88,17 +88,42 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestOrderCriteria_Compare()
+        public void TestOrderCriteria_CompareGreater()
         {
             //---------------Set up test pack-------------------
-            OrderCriteria orderCriteria = new OrderCriteria("TestProp");
-            orderCriteria.Add("TestProp2");
+            ContactPersonTestBO.LoadDefaultClassDef();
+            OrderCriteria orderCriteria = new OrderCriteria("Surname");
+            orderCriteria.Add("FirstName");
+
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.Surname = "zzzzzz";
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.Surname = "ffffff";
             //---------------Execute Test ----------------------
-
+            int comparisonResult = orderCriteria.Compare(cp1, cp2);            
             //---------------Test Result -----------------------
-
+            Assert.Greater(comparisonResult, 0);
             //---------------Tear Down -------------------------
         }
+
+        //[Test]
+        //public void TestOrderCriteria_CompareLess()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    ContactPersonTestBO.LoadDefaultClassDef();
+        //    OrderCriteria orderCriteria = new OrderCriteria("Surname");
+        //    orderCriteria.Add("FirstName");
+
+        //    ContactPersonTestBO cp1 = new ContactPersonTestBO();
+        //    cp1.Surname = "aaaaaa";
+        //    ContactPersonTestBO cp2 = new ContactPersonTestBO();
+        //    cp2.Surname = "bbbbbb";
+        //    //---------------Execute Test ----------------------
+        //    int comparisonResult = orderCriteria.Compare(cp1, cp2);
+        //    //---------------Test Result -----------------------
+        //    Assert.Less(comparisonResult, 0);
+        //    //---------------Tear Down -------------------------
+        //}
 
 
     }

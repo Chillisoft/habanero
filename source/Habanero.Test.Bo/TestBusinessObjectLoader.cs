@@ -246,6 +246,27 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
+
+        [Test]
+        public void TestLoadAll_Loader()
+        {
+            //---------------Set up test pack-------------------
+            SetupLoader();
+            BOLoader.Instance.ClearLoadedBusinessObjects();
+            ContactPersonTestBO.LoadDefaultClassDef();
+
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Save();
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+
+            col.LoadAll_Loader();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(cp, col);
+            //---------------Tear Down -------------------------
+        }
+
         [Test]
         public void TestLoadWithOrderBy()
         {
@@ -272,6 +293,7 @@ namespace Habanero.Test.BO
 
             //---------------Tear Down -------------------------
         }
+
     }
 
 

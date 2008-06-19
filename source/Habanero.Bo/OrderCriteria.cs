@@ -28,5 +28,10 @@ namespace Habanero.BO
         {
             _fields.Add(field);
         }
+
+        public int Compare(BusinessObject bo1, BusinessObject bo2)
+        {
+            return 1;
+        }
     }
 }

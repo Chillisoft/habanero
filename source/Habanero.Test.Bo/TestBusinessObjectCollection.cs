@@ -547,26 +547,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
-        public void TestLoadAll_Loader()
-        {
-            //---------------Set up test pack-------------------
-            DataStoreInMemory dataStore = new DataStoreInMemory();
-            BORegistry.BusinessObjectLoader = new BusinessObjectLoaderInMemory(dataStore);
-            BOLoader.Instance.ClearLoadedBusinessObjects();
-            ContactPersonTestBO.LoadDefaultClassDef();
 
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            dataStore.Add(cp);
-            //---------------Execute Test ----------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-
-            col.LoadAll_Loader();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, col.Count);
-            Assert.Contains(cp, col);
-            //---------------Tear Down -------------------------
-        }
 
 
 

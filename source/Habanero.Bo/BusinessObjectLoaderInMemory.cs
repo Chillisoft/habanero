@@ -51,7 +51,7 @@ namespace Habanero.BO
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new()
         {
             BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(criteria);
-            col.Sort(delegate(T x, T y) { return orderCriteria.Compare<T>(x, y); });
+            //col.Sort(delegate(T x, T y) { return orderCriteria.Compare<T>(x, y); });
             return col;
         }
     }

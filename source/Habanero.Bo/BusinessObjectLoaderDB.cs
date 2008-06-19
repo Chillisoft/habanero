@@ -96,6 +96,11 @@ namespace Habanero.BO
             return relatedCol;
         }
 
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new()
+        {
+            throw new NotImplementedException();
+        }
+
 
         private T LoadBOFromReader<T>(IDataRecord dr, SelectQuery<T> selectQuery)
             where T : class, IBusinessObject, new()
