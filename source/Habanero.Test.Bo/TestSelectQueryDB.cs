@@ -16,14 +16,18 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
         }
+
+
+
         [Test]
         public void TestCreateSqlStatement_NoCriteria()
         {
             //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
-            SelectQueryDB<MyBO> query = new SelectQueryDB<MyBO>();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
@@ -35,9 +39,10 @@ namespace Habanero.Test.BO
         public void TestCreateSqlStatement_WithCriteria()
         {
             //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, "test");
-            SelectQueryDB<MyBO> query = new SelectQueryDB<MyBO>(criteria);
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();
@@ -51,10 +56,11 @@ namespace Habanero.Test.BO
         public void TestCreateSqlStatement_WithOrderFields()
         {
             //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
-            SelectQueryDB<MyBO> query = new SelectQueryDB<MyBO>();
-            query.OrderCriteria = new OrderCriteria("MyBoID");
-            query.OrderCriteria.Add("TestProp");
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.OrderCriteria = new OrderCriteria("MyBoID");
+            selectQuery.OrderCriteria.Add("TestProp");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();

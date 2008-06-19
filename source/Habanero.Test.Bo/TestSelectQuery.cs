@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -22,26 +18,40 @@ namespace Habanero.Test.BO
         public void TestConstruct()
         {
             //---------------Set up test pack-------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, DateTime.Now);
+            
             //---------------Execute Test ----------------------
-            SelectQuery<MyBO> query = new SelectQuery<MyBO>(criteria);
+            SelectQuery selectQuery = new SelectQuery();
             //---------------Test Result -----------------------
-            Assert.AreEqual(criteria, query.Criteria);
+            Assert.IsNull(selectQuery.Criteria);
+            Assert.AreEqual(0, selectQuery.Fields.Count);
+            Assert.IsNull(selectQuery.OrderCriteria);
+            Assert.IsTrue(String.IsNullOrEmpty(selectQuery.Source));
             //---------------Tear Down -------------------------
         }
 
-        //TODO: make the fields and order fields case insensitive
         [Test]
-        public void TestFields()
+        public void TestCriteria()
         {
             //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
+            SelectQuery selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
-            SelectQuery<MyBO> query = new SelectQuery<MyBO>();
+            Criteria criteria = new Criteria("test", Criteria.Op.Equals, "testValue");
+            selectQuery.Criteria = criteria;
             //---------------Test Result -----------------------
-            Assert.AreEqual(3, query.Fields.Count);
-            Assert.AreEqual("MyBoID", query.Fields["MyBoID"].PropertyName);
-            Assert.AreEqual("MyBO.MyBoID", query.Fields["MyBoID"].FieldName);
+            Assert.AreSame(criteria, selectQuery.Criteria);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestOrderCriteria()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            //---------------Execute Test ----------------------
+            OrderCriteria orderCriteria = new OrderCriteria("testfield");
+            selectQuery.OrderCriteria = orderCriteria;
+            //---------------Test Result -----------------------
+            Assert.AreSame(orderCriteria, selectQuery.OrderCriteria);
             //---------------Tear Down -------------------------
         }
 
@@ -49,11 +59,12 @@ namespace Habanero.Test.BO
         public void TestSource()
         {
             //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
+            SelectQuery selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
-            SelectQuery<MyBO> query = new SelectQuery<MyBO>();
+            string source = "testsource";
+            selectQuery.Source = source;
             //---------------Test Result -----------------------
-            Assert.AreEqual("MyBO", query.Source);
+            Assert.AreSame(source, selectQuery.Source);
             //---------------Tear Down -------------------------
         }
     }

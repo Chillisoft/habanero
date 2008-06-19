@@ -30,15 +30,16 @@ namespace Habanero.BO
         {
             T foundBO = _dataStoreInMemory.Find<T>(criteria);
             if (foundBO != null) return foundBO;
-            SelectQueryDB<T> selectQuery = new SelectQueryDB<T>(criteria);
-            ISqlStatement statement = selectQuery.CreateSqlStatement();
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(ClassDef.ClassDefs[typeof (T)]);
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            ISqlStatement statement = selectQueryDB.CreateSqlStatement();
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
                 try
                 {
                     if (dr.Read())
                     {
-                        return LoadBOFromReader(dr, selectQuery);
+                        return LoadBOFromReader<T>(dr, selectQueryDB);
                     }
                 }
                 finally
@@ -63,7 +64,7 @@ namespace Habanero.BO
 
         public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
-            SelectQueryDB<T> selectQuery = (SelectQueryDB<T>) collection.SelectQuery;
+            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
             ISqlStatement statement = selectQuery.CreateSqlStatement();
             BusinessObjectCollection<T> oldCol = collection.Clone();
             collection.Clear();
@@ -73,7 +74,7 @@ namespace Habanero.BO
                 {
                     while (dr.Read())
                     {
-                        T loadedBo = LoadBOFromReader(dr, selectQuery);
+                        T loadedBo = LoadBOFromReader<T>(dr, selectQuery);
                         if (oldCol.Contains(loadedBo)) collection.AddInternal(loadedBo);
                         else collection.Add(loadedBo);
                     }
@@ -98,15 +99,14 @@ namespace Habanero.BO
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : BusinessObject, new()
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
-            SelectQueryDB<T> selectQuery = new SelectQueryDB<T>(criteria);
-            selectQuery.OrderCriteria = orderCriteria;
-            col.SelectQuery = selectQuery;
+            col.SelectQuery.Criteria = criteria;
+            col.SelectQuery.OrderCriteria = orderCriteria;
             Refresh(col);
             return col;
         }
 
 
-        private T LoadBOFromReader<T>(IDataRecord dr, SelectQuery<T> selectQuery)
+        private T LoadBOFromReader<T>(IDataRecord dr, ISelectQuery selectQuery)
             where T : class, IBusinessObject, new()
         {
             IBusinessObject ibo = new T();

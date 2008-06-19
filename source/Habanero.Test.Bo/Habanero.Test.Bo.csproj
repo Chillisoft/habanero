@@ -170,6 +170,7 @@
     <Compile Include="TestDataStoreInMemory.cs" />
     <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestOrderCriteria.cs" />
+    <Compile Include="TestQueryBuilder.cs" />
     <Compile Include="TestSelectQuery.cs" />
     <Compile Include="TestSelectQueryDB.cs" />
     <Compile Include="TestTransactionCommitter.cs" />

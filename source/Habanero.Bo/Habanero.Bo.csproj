@@ -132,6 +132,7 @@
     <Compile Include="IBusinessObjectLoader.cs" />
     <Compile Include="IDataAccessor.cs" />
     <Compile Include="IDataSetProvider.cs" />
+    <Compile Include="ISelectQuery.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="ConcurrencyControl\PessimisticLockingDB.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="IBusinessObjectCollectionLoader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="QueryBuilder.cs" />
     <Compile Include="QueryField.cs" />
     <Compile Include="ReadOnlyDataSetProvider.cs">
       <SubType>Code</SubType>

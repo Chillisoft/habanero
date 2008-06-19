@@ -20,14 +20,13 @@ namespace Habanero.Test.BO
         public void TestCreate()
         {
             //---------------Set up test pack-------------------
-            MyBO.LoadDefaultClassDef();
-            SelectQuery<MyBO> query = new SelectQuery<MyBO>();
+ 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            query.OrderCriteria = new OrderCriteria("TestProp");
+            OrderCriteria orderCriteria = new OrderCriteria("TestProp");
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, query.OrderCriteria.Count);
-            Assert.IsTrue(query.OrderCriteria.Fields.Contains("TestProp"));
+            Assert.AreEqual(1, orderCriteria.Count);
+            Assert.IsTrue(orderCriteria.Fields.Contains("TestProp"));
             //---------------Tear Down -------------------------
         }
 
@@ -36,15 +35,15 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            SelectQuery<MyBO> query = new SelectQuery<MyBO>();
+  
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            query.OrderCriteria = new OrderCriteria("TestProp");
-            query.OrderCriteria.Add("TestProp2");
+            OrderCriteria orderCriteria = new OrderCriteria("TestProp");
+            orderCriteria.Add("TestProp2");
             //---------------Test Result -----------------------
-            Assert.AreEqual(2, query.OrderCriteria.Count);
-            Assert.IsTrue(query.OrderCriteria.Fields.Contains("TestProp"));
-            Assert.IsTrue(query.OrderCriteria.Fields.Contains("TestProp2"));
+            Assert.AreEqual(2, orderCriteria.Count);
+            Assert.IsTrue(orderCriteria.Fields.Contains("TestProp"));
+            Assert.IsTrue(orderCriteria.Fields.Contains("TestProp2"));
             //---------------Tear Down -------------------------
         }
 
