@@ -15,14 +15,14 @@
 
 
 --
--- Create schema habanero_test_trunk
+-- Create schema habanero_test_branch_1_5
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ habanero_test_trunk;
-USE habanero_test_trunk;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ habanero_test_branch_1_5;
+USE habanero_test_branch_1_5;
 
 --
--- Table structure for table `habanero_test_trunk`.`car`
+-- Table structure for table `habanero_test_branch_1_5`.`car`
 --
 
 DROP TABLE IF EXISTS `car`;
@@ -35,7 +35,7 @@ CREATE TABLE `car` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`car`
+-- Dumping data for table `habanero_test_branch_1_5`.`car`
 --
 
 /*!40000 ALTER TABLE `car` DISABLE KEYS */;
@@ -43,7 +43,7 @@ CREATE TABLE `car` (
 
 
 --
--- Table structure for table `habanero_test_trunk`.`circle`
+-- Table structure for table `habanero_test_branch_1_5`.`circle`
 --
 
 DROP TABLE IF EXISTS `circle`;
@@ -55,7 +55,7 @@ CREATE TABLE `circle` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`circle`
+-- Dumping data for table `habanero_test_branch_1_5`.`circle`
 --
 
 /*!40000 ALTER TABLE `circle` DISABLE KEYS */;
@@ -63,7 +63,7 @@ CREATE TABLE `circle` (
 
 
 --
--- Table structure for table `habanero_test_trunk`.`contact_person`
+-- Table structure for table `habanero_test_branch_1_5`.`contact_person`
 --
 
 DROP TABLE IF EXISTS `contact_person`;
@@ -95,7 +95,7 @@ CREATE TABLE `contact_person` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`contact_person`
+-- Dumping data for table `habanero_test_branch_1_5`.`contact_person`
 --
 
 /*!40000 ALTER TABLE `contact_person` DISABLE KEYS */;
@@ -115,7 +115,7 @@ INSERT INTO `contact_person` (`ContactPersonID`,`Surname`,`FirstName`,`EmailAddr
 
 
 --
--- Table structure for table `habanero_test_trunk`.`contact_person_address`
+-- Table structure for table `habanero_test_branch_1_5`.`contact_person_address`
 --
 
 DROP TABLE IF EXISTS `contact_person_address`;
@@ -133,7 +133,7 @@ CREATE TABLE `contact_person_address` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`contact_person_address`
+-- Dumping data for table `habanero_test_branch_1_5`.`contact_person_address`
 --
 
 /*!40000 ALTER TABLE `contact_person_address` DISABLE KEYS */;
@@ -143,7 +143,7 @@ INSERT INTO `contact_person_address` (`AddressID`,`ContactPersonID`,`AddressLine
 
 
 --
--- Table structure for table `habanero_test_trunk`.`contactpersoncompositekey`
+-- Table structure for table `habanero_test_branch_1_5`.`contactpersoncompositekey`
 --
 
 DROP TABLE IF EXISTS `contactpersoncompositekey`;
@@ -160,7 +160,7 @@ CREATE TABLE `contactpersoncompositekey` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`contactpersoncompositekey`
+-- Dumping data for table `habanero_test_branch_1_5`.`contactpersoncompositekey`
 --
 
 /*!40000 ALTER TABLE `contactpersoncompositekey` DISABLE KEYS */;
@@ -176,7 +176,7 @@ INSERT INTO `contactpersoncompositekey` (`PK1_Prop1`,`PK1_Prop2`,`Surname`,`Firs
 
 
 --
--- Table structure for table `habanero_test_trunk`.`filledcircle`
+-- Table structure for table `habanero_test_branch_1_5`.`filledcircle`
 --
 
 DROP TABLE IF EXISTS `filledcircle`;
@@ -188,7 +188,7 @@ CREATE TABLE `filledcircle` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`filledcircle`
+-- Dumping data for table `habanero_test_branch_1_5`.`filledcircle`
 --
 
 /*!40000 ALTER TABLE `filledcircle` DISABLE KEYS */;
@@ -196,7 +196,7 @@ CREATE TABLE `filledcircle` (
 
 
 --
--- Table structure for table `habanero_test_trunk`.`mockbo`
+-- Table structure for table `habanero_test_branch_1_5`.`mockbo`
 --
 
 DROP TABLE IF EXISTS `mockbo`;
@@ -207,7 +207,7 @@ CREATE TABLE `mockbo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`mockbo`
+-- Dumping data for table `habanero_test_branch_1_5`.`mockbo`
 --
 
 /*!40000 ALTER TABLE `mockbo` DISABLE KEYS */;
@@ -220,7 +220,7 @@ INSERT INTO `mockbo` (`MockBOID`,`MockBOProp1`,`MockBOProp2`) VALUES
 
 
 --
--- Table structure for table `habanero_test_trunk`.`mybo`
+-- Table structure for table `habanero_test_branch_1_5`.`mybo`
 --
 
 DROP TABLE IF EXISTS `mybo`;
@@ -233,7 +233,7 @@ CREATE TABLE `mybo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`mybo`
+-- Dumping data for table `habanero_test_branch_1_5`.`mybo`
 --
 
 /*!40000 ALTER TABLE `mybo` DISABLE KEYS */;
@@ -245,7 +245,7 @@ INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`,`ShapeID`) VALUES
 
 
 --
--- Table structure for table `habanero_test_trunk`.`numbergenerator`
+-- Table structure for table `habanero_test_branch_1_5`.`numbergenerator`
 --
 
 DROP TABLE IF EXISTS `numbergenerator`;
@@ -261,7 +261,7 @@ CREATE TABLE `numbergenerator` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`numbergenerator`
+-- Dumping data for table `habanero_test_branch_1_5`.`numbergenerator`
 --
 
 /*!40000 ALTER TABLE `numbergenerator` DISABLE KEYS */;
@@ -272,7 +272,7 @@ INSERT INTO `numbergenerator` (`SequenceNumber`,`NumberType`,`UserLocked`,`Locke
 
 
 --
--- Table structure for table `habanero_test_trunk`.`organisation`
+-- Table structure for table `habanero_test_branch_1_5`.`organisation`
 --
 
 DROP TABLE IF EXISTS `organisation`;
@@ -282,7 +282,7 @@ CREATE TABLE `organisation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`organisation`
+-- Dumping data for table `habanero_test_branch_1_5`.`organisation`
 --
 
 /*!40000 ALTER TABLE `organisation` DISABLE KEYS */;
@@ -309,7 +309,7 @@ INSERT INTO `organisation` (`OrganisationID`) VALUES
 
 
 --
--- Table structure for table `habanero_test_trunk`.`shape`
+-- Table structure for table `habanero_test_branch_1_5`.`shape`
 --
 
 DROP TABLE IF EXISTS `shape`;
@@ -322,7 +322,7 @@ CREATE TABLE `shape` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`shape`
+-- Dumping data for table `habanero_test_branch_1_5`.`shape`
 --
 
 /*!40000 ALTER TABLE `shape` DISABLE KEYS */;
@@ -330,7 +330,7 @@ CREATE TABLE `shape` (
 
 
 --
--- Table structure for table `habanero_test_trunk`.`stubdatabasetransaction`
+-- Table structure for table `habanero_test_branch_1_5`.`stubdatabasetransaction`
 --
 
 DROP TABLE IF EXISTS `stubdatabasetransaction`;
@@ -340,7 +340,7 @@ CREATE TABLE `stubdatabasetransaction` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`stubdatabasetransaction`
+-- Dumping data for table `habanero_test_branch_1_5`.`stubdatabasetransaction`
 --
 
 /*!40000 ALTER TABLE `stubdatabasetransaction` DISABLE KEYS */;
@@ -348,7 +348,7 @@ CREATE TABLE `stubdatabasetransaction` (
 
 
 --
--- Table structure for table `habanero_test_trunk`.`table_engine`
+-- Table structure for table `habanero_test_branch_1_5`.`table_engine`
 --
 
 DROP TABLE IF EXISTS `table_engine`;
@@ -359,7 +359,7 @@ CREATE TABLE `table_engine` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`table_engine`
+-- Dumping data for table `habanero_test_branch_1_5`.`table_engine`
 --
 
 /*!40000 ALTER TABLE `table_engine` DISABLE KEYS */;
@@ -367,7 +367,7 @@ CREATE TABLE `table_engine` (
 
 
 --
--- Table structure for table `habanero_test_trunk`.`testautoinc`
+-- Table structure for table `habanero_test_branch_1_5`.`testautoinc`
 --
 
 DROP TABLE IF EXISTS `testautoinc`;
@@ -378,7 +378,7 @@ CREATE TABLE `testautoinc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=468 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`testautoinc`
+-- Dumping data for table `habanero_test_branch_1_5`.`testautoinc`
 --
 
 /*!40000 ALTER TABLE `testautoinc` DISABLE KEYS */;
@@ -389,7 +389,7 @@ INSERT INTO `testautoinc` (`testautoincid`,`testfield`) VALUES
 
 
 --
--- Table structure for table `habanero_test_trunk`.`testtableread`
+-- Table structure for table `habanero_test_branch_1_5`.`testtableread`
 --
 
 DROP TABLE IF EXISTS `testtableread`;
@@ -400,7 +400,7 @@ CREATE TABLE `testtableread` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`testtableread`
+-- Dumping data for table `habanero_test_branch_1_5`.`testtableread`
 --
 
 /*!40000 ALTER TABLE `testtableread` DISABLE KEYS */;
@@ -411,7 +411,7 @@ INSERT INTO `testtableread` (`TestTableReadData`,`TestTableReadID`) VALUES
 
 
 --
--- Table structure for table `habanero_test_trunk`.`transactionlog`
+-- Table structure for table `habanero_test_branch_1_5`.`transactionlog`
 --
 
 DROP TABLE IF EXISTS `transactionlog`;
@@ -428,7 +428,7 @@ CREATE TABLE `transactionlog` (
 ) ENGINE=InnoDB AUTO_INCREMENT=860 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `habanero_test_trunk`.`transactionlog`
+-- Dumping data for table `habanero_test_branch_1_5`.`transactionlog`
 --
 
 /*!40000 ALTER TABLE `transactionlog` DISABLE KEYS */;
