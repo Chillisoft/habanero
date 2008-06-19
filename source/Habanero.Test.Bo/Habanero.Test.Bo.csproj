@@ -184,6 +184,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
     <Compile Include="Loaders\TestDtdLoader.cs" />
     <Compile Include="Loaders\TestXmlClassDefsLoader.cs" />
     <Compile Include="Loaders\TestXmlClassLoader.cs" />

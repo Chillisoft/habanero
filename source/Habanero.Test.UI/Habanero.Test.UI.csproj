@@ -93,6 +93,9 @@
     <Compile Include="Grid\TestReadOnlyGrid.cs" />
     <Compile Include="Grid\TestReadOnlyGridWithButtons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
     <Compile Include="Wizard\TestWizardControl.cs" />
     <Compile Include="Wizard\TestWizardController.cs" />
     <Compile Include="Wizard\TestWizardForm.cs" />

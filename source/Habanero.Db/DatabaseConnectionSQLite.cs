@@ -68,13 +68,13 @@ namespace Habanero.DB
             try
             {
                 using (
-                    IDataReader reader =
-                        LoadDataReader(String.Format("Select seq from SQLITE_SEQUENCE where Upper(name) = Upper('{0}')", tableName)))
+                    IDataReader reader = LoadDataReader(String.Format("Select max(ROWID) from {0}", tableName), tran))
+                    //IDataReader reader =
+                    //    LoadDataReader(String.Format("Select seq from SQLITE_SEQUENCE where Upper(name) = Upper('{0}')", tableName), tran))
                 {
                     if (reader.Read())
                     {
                         id = Convert.ToInt64(reader.GetValue(0));
-                        id += 1;
                     }
                 }
             } catch(Exception ex)

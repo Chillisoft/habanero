@@ -98,6 +98,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
     <Compile Include="Exceptions\ArgumentValidationHelper.cs" />
     <Compile Include="Exceptions\CannotSaveException.cs">
       <SubType>Code</SubType>

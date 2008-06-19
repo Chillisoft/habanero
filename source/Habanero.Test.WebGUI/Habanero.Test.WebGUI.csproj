@@ -58,6 +58,9 @@
     <Compile Include="TestControlMapperCollection.cs" />
     <Compile Include="TestCheckBoxMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
     <Compile Include="TestLookupComboBoxMapper.cs" />
     <Compile Include="TestReadonlyGridWithButtons.cs" />
     <Compile Include="TestTextBoxMapper.cs" />

@@ -402,6 +402,38 @@ namespace Habanero.DB
         }
 
         /// <summary>
+        /// Loads a data reader with the given raw sql select statement for the specified transaction
+        /// </summary>
+        /// <param name="selectSql">The sql statement as a string</param>
+        /// <param name="transaction">Thransaction that gives the context within which the sql statement should be executed</param>
+        /// <returns>Returns an IDataReader object with the results of the query</returns>
+        /// <exception cref="DatabaseReadException">Thrown when an error
+        /// occurred while setting up the data reader.  Also sends error
+        /// output to the log.</exception>        
+        public IDataReader LoadDataReader(string selectSql, IDbTransaction transaction)
+        {
+            if (selectSql == null) throw new ArgumentNullException("selectSql");
+            try
+            {
+                IDbConnection con = transaction.Connection;
+                IDbCommand cmd = con.CreateCommand();
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = selectSql;
+                return cmd.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error reading from database : " + Environment.NewLine +
+                          ExceptionUtilities.GetExceptionString(ex, 10, true));
+                log.Error("Sql: " + selectSql);
+                throw new DatabaseReadException(
+                    "There was an error reading the database. Please contact your system administrator.",
+                    "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
+            }
+        }
+
+        /// <summary>
         /// Loads a data reader
         /// </summary>
         /// <param name="selectSql">The sql statement object</param>
