@@ -34,10 +34,16 @@ namespace Habanero.Test.BO
             return new ReadOnlyDataSetProvider(col);
         }
 
+        [SetUp]
+        public void DoSetupTest()
+        {
+            BORegistry.DataAccessor = new DataAccessorDB();
+        }
+
         [Test]
         public void TestUpdateBusinessObjectUpdatesRow()
         {
-            SetupTest();
+            SetupTestData();
             itsBo1.SetPropertyValue("TestProp", "UpdatedValue");
             Assert.AreEqual("UpdatedValue", itsTable.Rows[0][1]);
         }
@@ -45,7 +51,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAddBusinessObjectAddsRow()
         {
-            SetupTest();
+            SetupTestData();
             IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
             bo3.SetPropertyValue("TestProp2", "s1");
@@ -57,7 +63,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestAddBusinessObjectAndUpdateUpdatesNewRow()
         {
-            SetupTest();
+            SetupTestData();
             IBusinessObject bo3 = _classDef.CreateNewBusinessObject(itsConnection);
             bo3.SetPropertyValue("TestProp", "bo3prop1");
             bo3.SetPropertyValue("TestProp2", "s2");
@@ -69,7 +75,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestRemoveBusinessObjectRemovesRow()
         {
-            SetupTest();
+            SetupTestData();
             _collection.Remove(itsBo1);
             Assert.AreEqual(1, itsTable.Rows.Count);
         }
@@ -77,7 +83,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestOrderItemAddAndFindBO()
         {
-            SetupTest();
+            SetupTestData();
             OrderItem car = OrderItem.AddOrder1Car();
             OrderItem chair = OrderItem.AddOrder2Chair();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
@@ -119,7 +125,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestOrderItemRemove()
         {
-            SetupTest();
+            SetupTestData();
             OrderItem.ClearTable();
             OrderItem.AddOrder1Car();
             OrderItem chair = OrderItem.AddOrder2Chair();
@@ -151,7 +157,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestOrderItemChangeItemAndFind()
         {
-            SetupTest();
+            SetupTestData();
             BOLoader.Instance.ClearLoadedBusinessObjects();
             OrderItem.ClearLoadedBusinessObjectBaseCol();
             OrderItem.ClearTable();

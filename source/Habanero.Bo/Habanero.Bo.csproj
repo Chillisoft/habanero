@@ -125,9 +125,12 @@
     <Compile Include="CriteriaManager\IExpression.cs" />
     <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
     <Compile Include="CriteriaManager\SQLCriteriaCreator.cs" />
+    <Compile Include="DataAccessorDB.cs" />
+    <Compile Include="DataAccessorInMemory.cs" />
     <Compile Include="DataStoreInMemory.cs" />
     <Compile Include="DeleteHelper.cs" />
     <Compile Include="IBusinessObjectLoader.cs" />
+    <Compile Include="IDataAccessor.cs" />
     <Compile Include="IDataSetProvider.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />

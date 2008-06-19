@@ -45,6 +45,12 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.DeleteAllContactPeople();
         }
 
+        [SetUp]
+        public void SetupTest()
+        {
+            BORegistry.DataAccessor = new DataAccessorDB();
+        }
+
         [Test]
         public void TestInstantiate()
         {
@@ -383,16 +389,15 @@ namespace Habanero.Test.BO
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
 
-            DataStoreInMemory dataStore = new DataStoreInMemory();
-            IBusinessObjectLoader loader = new BusinessObjectLoaderInMemory(dataStore);
-            GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryInMemory(dataStore);
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             //---------------Execute Test ----------------------
-            cp.Save();
+            cp.Save(); 
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, dataStore.Count);
-            Assert.IsNotNull(loader.GetBusinessObject<ContactPersonTestBO>(cp.PrimaryKey));
-            Assert.AreSame(cp, loader.GetBusinessObject<ContactPersonTestBO>(cp.PrimaryKey));
+            ContactPersonTestBO loadedCP = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.PrimaryKey);
+            Assert.IsNotNull(loadedCP);
+            Assert.AreSame(cp, loadedCP);
             //---------------Tear Down -------------------------
         }
     }
+
 }

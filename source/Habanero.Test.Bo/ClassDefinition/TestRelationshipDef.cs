@@ -39,6 +39,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void init()
         {
             this.SetupDBConnection();
+           
             mMockBo = new MockBO();
             mPropDefCol = mMockBo.PropDefCol;
 
@@ -50,6 +51,12 @@ namespace Habanero.Test.BO.ClassDefinition
 
             mRelationshipDef = new SingleRelationshipDef("Relation1", typeof(MockBO), mRelKeyDef, false, DeleteParentAction.Prevent);
             //DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetConnectionString();
+        }
+
+        [SetUp]
+        public void SetupTest()
+        {
+            BORegistry.DataAccessor = new DataAccessorDB();
         }
 
         [Test]

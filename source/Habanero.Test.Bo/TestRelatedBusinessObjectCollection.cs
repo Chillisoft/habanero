@@ -13,6 +13,7 @@ namespace Habanero.Test.BO
         {
             //Code that is run before every single test
             ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorDB();
         }
         [TestFixtureSetUp]
         public void TestFixtureSetup()

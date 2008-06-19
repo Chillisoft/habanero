@@ -102,13 +102,11 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
 
-            DataStoreInMemory dataStore = new DataStoreInMemory();
-            GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryInMemory(dataStore);
             Address address;
             ContactPersonTestBO contactPersonTestBO =
                 ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
             contactPersonTestBO.Delete();
-            ITransactionCommitter committer = new TransactionCommitterInMemory(dataStore);
+            ITransactionCommitter committer = new TransactionCommitterInMemory(new DataStoreInMemory());
             committer.AddBusinessObject(contactPersonTestBO);
             //---------------Execute Test ----------------------
             committer.CommitTransaction();

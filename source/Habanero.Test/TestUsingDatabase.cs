@@ -44,8 +44,8 @@ namespace Habanero.Test
                     MyDBConnection.GetDatabaseConfig().GetConnectionString();
                 DatabaseConnection.CurrentConnection.GetConnection();
             }
-            GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryDB();
-            BORegistry.BusinessObjectLoader = new BusinessObjectLoaderDB(DatabaseConnection.CurrentConnection);
+
+            BORegistry.DataAccessor = new DataAccessorDB();
         }
 
         public void SetupDBOracleConnection()
@@ -64,7 +64,7 @@ namespace Habanero.Test
                 DatabaseConnection.CurrentConnection.ConnectionString = connStr;
                 DatabaseConnection.CurrentConnection.GetConnection();
             }
-            GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryDB();
+            BORegistry.DataAccessor = new DataAccessorDB();
         }
 
         public static void DeleteObjects()

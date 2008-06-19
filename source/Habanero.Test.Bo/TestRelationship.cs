@@ -42,7 +42,7 @@ namespace Habanero.Test.BO
         [SetUp]
         public void init()
         {
-
+            BORegistry.DataAccessor = new DataAccessorDB();
             mMockBo = new MockBO();
             mPropDefCol = mMockBo.PropDefCol;
 

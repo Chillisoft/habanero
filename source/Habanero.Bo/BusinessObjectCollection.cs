@@ -1312,7 +1312,7 @@ namespace Habanero.BO
         public void LoadAll_Loader()
         {
             this.SelectQuery.Criteria = null;
-            BORegistry.BusinessObjectLoader.Refresh(this);
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Habanero.Test.BO
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
+            BORegistry.DataAccessor = new DataAccessorDB();
         }
 
         [TestFixtureSetUp]

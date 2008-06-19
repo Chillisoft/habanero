@@ -527,8 +527,7 @@ namespace Habanero.Test.BO
         public void TestRefreshCollectionDoesNotRefreshDirtyOject()
         {
             //---------------Set up test pack-------------------
-            GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryDB();
-            BORegistry.BusinessObjectLoader = new BusinessObjectLoaderDB(DatabaseConnection.CurrentConnection);
+            BORegistry.DataAccessor = new DataAccessorDB();
             ContactPersonTestBO.DeleteAllContactPeople();
             ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
 

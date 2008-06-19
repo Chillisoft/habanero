@@ -20,6 +20,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             CleanStubDatabaseTransactionTable();
             ContactPersonTestBO.DeleteAllContactPeople();
+            BORegistry.DataAccessor = new DataAccessorDB();
         }
 
         [TestFixtureSetUp]

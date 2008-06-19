@@ -41,11 +41,14 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetupTest()
         {
+            BORegistry.DataAccessor = new DataAccessorDB();
             ContactPersonTestBO.DeleteAllContactPeople();
             ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
             ContactPersonTestBO.CreateSampleData();
             ContactPersonTestBO.LoadDefaultClassDef();
             BOLoader.Instance.ClearLoadedBusinessObjects();
+
+           
         }
 
         [TestFixtureTearDown]

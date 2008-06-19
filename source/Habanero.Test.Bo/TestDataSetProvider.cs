@@ -60,7 +60,7 @@ namespace Habanero.Test.BO
         }
 
         
-        public void SetupTest()
+        public virtual void SetupTestData()
         {
             
             ClassDef.ClassDefs.Clear();
@@ -114,21 +114,21 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCorrectNumberOfRows()
         {
-            SetupTest();
+            SetupTestData();
             Assert.AreEqual(2, itsTable.Rows.Count);
         }
 
         [Test]
         public void TestCorrectNumberOfColumns()
         {
-            SetupTest();
+            SetupTestData();
             Assert.AreEqual(3, itsTable.Columns.Count);
         }
 
         [Test]
         public void TestCorrectColumnNames()
         {
-            SetupTest();
+            SetupTestData();
             Assert.AreEqual("ID", itsTable.Columns[0].Caption);
             Assert.AreEqual("ID", itsTable.Columns[0].ColumnName);
 
@@ -141,7 +141,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestCorrectRowValues()
         {
-            SetupTest();
+            SetupTestData();
             DataRow row1 = itsTable.Rows[0];
             DataRow row2 = itsTable.Rows[1];
             Assert.AreEqual("bo1prop1", row1["TestProp"]);
@@ -154,7 +154,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestLookupListPopulated()
         {
-            SetupTest();
+            SetupTestData();
             Object prop = itsTable.Columns["TestProp2"].ExtendedProperties["LookupList"];
             Assert.AreSame(typeof (SimpleLookupList), prop.GetType());
         }
