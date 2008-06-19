@@ -7,7 +7,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
     public abstract class TestDateRangeComboBox
     {
         protected abstract IControlFactory GetControlFactory();

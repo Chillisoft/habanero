@@ -24,7 +24,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Wizard
 {
-    [TestFixture]
+  
     public abstract class TestWizardControl
     {
         protected abstract IControlFactory GetControlFactory();

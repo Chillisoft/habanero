@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.FilterController
 {
-    [TestFixture]
     public abstract class TestFilterControlDate //:TestBase
     {
 		protected abstract IControlFactory GetControlFactory();
