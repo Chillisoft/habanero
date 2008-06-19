@@ -255,7 +255,7 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            DateTime startDate = DateTime.Now;
+//            DateTime startDate = DateTime.Now;
             ClassDef classDef = MyContactPerson.LoadClassDef();
             string columnName = "-DateProperty-";
             UIGrid uiGrid = CreateUiGridWithColumn(classDef, columnName);
@@ -307,13 +307,13 @@ namespace Habanero.Test.BO
 
             public ContactPerson Father
             {
-                get { return Relationships.GetRelatedObject<ContactPerson>(fatherRelationshipName); }
+//                get { return Relationships.GetRelatedObject<ContactPerson>(fatherRelationshipName); }
                 set { Relationships.SetRelatedObject(fatherRelationshipName, value); }
             }
 
             public static ClassDef LoadClassDef()
             {
-                ClassDef classDef = ContactPerson.GetClassDef();
+                ClassDef classDef = GetClassDef();
                 if (!classDef.RelationshipDefCol.Contains(fatherRelationshipName))
                 {
                     RelKeyDef relKeyDef = new RelKeyDef();

@@ -56,15 +56,14 @@ namespace Habanero.BO
             where T : class, IBusinessObject, new()
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
-            BOLoader.Instance.GetBusinessObjectCol<T>(criteria.ToString(), "");
-            col.Criteria = criteria;
+            col.SelectQuery.Criteria = criteria;
             Refresh(col);
             return col;
         }
 
         public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
-            SelectQueryDB<T> selectQuery = new SelectQueryDB<T>(collection.Criteria);
+            SelectQueryDB<T> selectQuery = (SelectQueryDB<T>) collection.SelectQuery;
             ISqlStatement statement = selectQuery.CreateSqlStatement();
             BusinessObjectCollection<T> oldCol = collection.Clone();
             collection.Clear();
@@ -92,13 +91,18 @@ namespace Habanero.BO
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
             GetBusinessObjectCollection<T>(relationshipCriteria).ForEach(delegate(T obj) { relatedCol.Add(obj); });
-            relatedCol.Criteria = relationshipCriteria;
+            relatedCol.SelectQuery.Criteria = relationshipCriteria;
             return relatedCol;
         }
 
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : BusinessObject, new()
         {
-            throw new NotImplementedException();
+            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
+            SelectQueryDB<T> selectQuery = new SelectQueryDB<T>(criteria);
+            selectQuery.OrderCriteria = orderCriteria;
+            col.SelectQuery = selectQuery;
+            Refresh(col);
+            return col;
         }
 
 

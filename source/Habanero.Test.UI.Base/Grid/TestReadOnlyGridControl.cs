@@ -126,6 +126,80 @@ namespace Habanero.Test.UI.Base
         //        BOLoader.Instance.GetBusinessObjectByID<ContactPersonTestBO>(contactPersonPK);
         //    Assert.IsNotNull(contactPerson);
         //}
+
+
+//        [Test]
+//        public void TestClickAddWhenNoCollectionSet()
+//        {
+//            //---------------Set up test pack-------------------
+//            LoadMyBoDefaultClassDef();
+//            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+//            grid.Initialise(new MyBO().ClassDef);
+//            //--------------Assert PreConditions----------------            
+//            //---------------Execute Test ----------------------
+//
+//            try
+//            {
+//                grid.Buttons["Add"].PerformClick();
+//                Assert.Fail("Error should b raised");
+//            }
+//            //---------------Test Result -----------------------
+//            catch (GridDeveloperException ex)
+//            {
+//                StringAssert.Contains("You cannot call add since the grid has not been set up", ex.Message);
+//            }
+//
+//            //---------------Tear Down -------------------------          
+//        }
+//
+//        [Test]
+//        public void TestClickEditWhenNoCollectionSet()
+//        {
+//            //---------------Set up test pack-------------------
+//            LoadMyBoDefaultClassDef();
+//            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+//            grid.Initialise(new MyBO().ClassDef);
+//
+//            //--------------Assert PreConditions----------------            
+//            //---------------Execute Test ----------------------
+//
+//            try
+//            {
+//                grid.Buttons["Edit"].PerformClick();
+//                Assert.Fail("Error should b raised");
+//            }
+//            //---------------Test Result -----------------------
+//            catch (GridDeveloperException ex)
+//            {
+//                StringAssert.Contains("You cannot call edit since the grid has not been set up", ex.Message);
+//            }
+//
+//            //---------------Tear Down -------------------------          
+//        }
+//
+//        [Test]
+//        public void TestClickDeleteWhenNoCollectionSet()
+//        {
+//            //---------------Set up test pack-------------------
+//            LoadMyBoDefaultClassDef();
+//            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+//            grid.Initialise(new MyBO().ClassDef);
+//            //--------------Assert PreConditions----------------            
+//            //---------------Execute Test ----------------------
+//
+//            try
+//            {
+//                grid.Buttons["Delete"].PerformClick();
+//                Assert.Fail("Error should b raised");
+//            }
+//            //---------------Test Result -----------------------
+//            catch (GridDeveloperException ex)
+//            {
+//                StringAssert.Contains("You cannot call delete since the grid has not been set up", ex.Message);
+//            }
+//
+//            //---------------Tear Down -------------------------          
+//        }
         //}
         [TestFixture]
         public class TestreadOnlyGridControlGiz : TestReadonlyGridControl
@@ -972,7 +1046,7 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
+        [Test, Ignore("Custom delete should not pop up messagebox by default")]
         public void TestDeleteButton_CallsObjectDeletor()
         {
             //---------------Set up test pack-------------------
@@ -1105,78 +1179,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
-        public void TestClickAddWhenNoCollectionSet()
-        {
-            //---------------Set up test pack-------------------
-            LoadMyBoDefaultClassDef();
-            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            grid.Initialise(new MyBO().ClassDef);
-            //--------------Assert PreConditions----------------            
-            //---------------Execute Test ----------------------
-
-            try
-            {
-                grid.Buttons["Add"].PerformClick();
-                Assert.Fail("Error should b raised");
-            }
-                //---------------Test Result -----------------------
-            catch (GridDeveloperException ex)
-            {
-                StringAssert.Contains("You cannot call add since the grid has not been set up", ex.Message);
-            }
-
-            //---------------Tear Down -------------------------          
-        }
-
-        [Test]
-        public void TestClickEditWhenNoCollectionSet()
-        {
-            //---------------Set up test pack-------------------
-            LoadMyBoDefaultClassDef();
-            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            grid.Initialise(new MyBO().ClassDef);
-
-            //--------------Assert PreConditions----------------            
-            //---------------Execute Test ----------------------
-
-            try
-            {
-                grid.Buttons["Edit"].PerformClick();
-                Assert.Fail("Error should b raised");
-            }
-                //---------------Test Result -----------------------
-            catch (GridDeveloperException ex)
-            {
-                StringAssert.Contains("You cannot call edit since the grid has not been set up", ex.Message);
-            }
-
-            //---------------Tear Down -------------------------          
-        }
-
-        [Test]
-        public void TestClickDeleteWhenNoCollectionSet()
-        {
-            //---------------Set up test pack-------------------
-            LoadMyBoDefaultClassDef();
-            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-            grid.Initialise(new MyBO().ClassDef);
-            //--------------Assert PreConditions----------------            
-            //---------------Execute Test ----------------------
-
-            try
-            {
-                grid.Buttons["Delete"].PerformClick();
-                Assert.Fail("Error should b raised");
-            }
-                //---------------Test Result -----------------------
-            catch (GridDeveloperException ex)
-            {
-                StringAssert.Contains("You cannot call delete since the grid has not been set up", ex.Message);
-            }
-
-            //---------------Tear Down -------------------------          
-        }
 
         private ClassDef LoadMyBoDefaultClassDef()
         {

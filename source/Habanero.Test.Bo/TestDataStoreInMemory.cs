@@ -114,7 +114,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, col.Count);
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
-            Assert.AreEqual(criteria, col.Criteria);
+            Assert.AreEqual(criteria, col.SelectQuery.Criteria);
             //---------------Tear Down -------------------------
         }
 
@@ -135,7 +135,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             Assert.Contains(cp1, col);
-            Assert.IsNull(col.Criteria);
+            Assert.IsNull(col.SelectQuery.Criteria);
             //---------------Tear Down -------------------------
         }
     }

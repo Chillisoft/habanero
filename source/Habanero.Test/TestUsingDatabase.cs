@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.DB;
@@ -118,6 +119,10 @@ namespace Habanero.Test
         protected static void AddObjectToDelete(BusinessObject bo)
         {
             _objectsToDelete.Add(bo);
+        }
+        protected static void WaitForDB()
+        {
+            Thread.Sleep(10000);
         }
     }
 

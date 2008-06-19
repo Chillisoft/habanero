@@ -112,10 +112,6 @@ namespace Habanero.BO.Loaders
             {
                 classDef.TableName = _tableName;
             }
-            foreach (PropDef propDef in classDef.PropDefcol)
-            {
-                propDef.ClassDef = classDef;
-            }
             //def.SupportsSynchronising = _SupportsSynchronising;
             return classDef;
         }

@@ -36,5 +36,13 @@ namespace Habanero.Base
         /// The table this classdef maps to, if applicable.
         /// </summary>
         string TableName { get; }
+
+        /// <summary>
+        /// Returns the name of the table that applies to the propdef given, taking into allowance
+        /// any inheritance structure.
+        /// </summary>
+        /// <param name="propDef">The propdef to map to a table name. This propdef must be part of this classdef heirarchy</param>
+        /// <returns></returns>
+        string GetTableName(IPropDef propDef);
     }
 }

@@ -239,17 +239,14 @@ namespace Habanero.Test.BO
             cp = null;//so that garbage collector can work
 #pragma warning restore RedundantAssignment
             GC.Collect(); //Force the GC to collect
-            waitForGC();
+            WaitForDB();
             //---------------Test Result -----------------------
             BOLoader.Instance.ClearLoadedBusinessObjects();
             ContactPersonPessimisticLockingDB cp2 =
                 BOLoader.Instance.GetBusinessObjectByID<ContactPersonPessimisticLockingDB>(id);
             AssertIsNotLocked(cp2);
         }
-        private static void waitForGC()
-        {
-            Thread.Sleep(100);
-        }
+
         [Test]
         public void Test_IfThisThreadLocksAndTimesOutBeforePersistingThenThrowErrorWhenPersisting()
         {

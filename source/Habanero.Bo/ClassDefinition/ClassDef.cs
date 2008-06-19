@@ -237,6 +237,13 @@ namespace Habanero.BO.ClassDefinition
                 _tableName = tableName;
             _primaryKeyDef = primaryKeyDef;
             _propDefCol = propDefCol;
+            if (_propDefCol != null)
+            {
+                foreach (PropDef def in _propDefCol)
+                {
+                    def.ClassDef = this;
+                }
+            }
             _keysCol = keyDefCol;
             _relationshipDefCol = relationshipDefCol;
             if (uiDefCol != null)

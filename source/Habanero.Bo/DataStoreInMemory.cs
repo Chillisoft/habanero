@@ -56,7 +56,7 @@ namespace Habanero.BO
                 if (boAsT == null) continue; ;
                 if (criteria == null || criteria.IsMatch(boAsT)) col.Add(boAsT);
             }
-            col.Criteria = criteria;
+            col.SelectQuery.Criteria = criteria;
             return col;
         }
     }

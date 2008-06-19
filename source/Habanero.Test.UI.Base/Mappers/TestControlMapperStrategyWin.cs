@@ -335,31 +335,31 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(gotFocus);
         }
 
-        [Test]
-        public void TestWin_CanPressKey()
-        {
-            //---------------Set up test pack-------------------
-            TextBox tb = new TextBox();
-            tb.Name = "TestTextBox";
-            Form frm = new Form();
-            frm.Controls.Clear();
-            frm.Controls.Add(tb);
-            bool pressed = false;
-            tb.KeyPress += delegate { pressed = true; };
-            //--------------Assert PreConditions----------------            
-            Assert.IsFalse(pressed);
+        //[Test]
+        //public void TestWin_CanPressKey()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    TextBox tb = new TextBox();
+        //    tb.Name = "TestTextBox";
+        //    Form frm = new Form();
+        //    frm.Controls.Clear();
+        //    frm.Controls.Add(tb);
+        //    bool pressed = false;
+        //    tb.KeyPress += delegate { pressed = true; };
+        //    //--------------Assert PreConditions----------------            
+        //    Assert.IsFalse(pressed);
 
-            //---------------Execute Test ----------------------
-            frm.Show();
-            TextBoxTester box = new TextBoxTester("TestTextBox");
-            Char pressChar = (char)0x013;
-            KeyPressEventArgs eveArgs = new KeyPressEventArgs(pressChar);
-            box.FireEvent("KeyPress", eveArgs);
-            //                box.FireEvent("Click");
+        //    //---------------Execute Test ----------------------
+        //    frm.Show();
+        //    TextBoxTester box = new TextBoxTester("TestTextBox");
+        //    Char pressChar = (char)0x013;
+        //    KeyPressEventArgs eveArgs = new KeyPressEventArgs(pressChar);
+        //    box.FireEvent("KeyPress", eveArgs);
+        //    //                box.FireEvent("Click");
 
-            //---------------Test Result -----------------------
-            Assert.IsTrue(pressed);
-        }
+        //    //---------------Test Result -----------------------
+        //    Assert.IsTrue(pressed);
+        //}
 
         private Form AddControlToForm(IControlChilli parentControl)
         {

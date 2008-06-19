@@ -625,22 +625,6 @@ namespace Habanero.BO.ClassDefinition
             get { return _keepValuePrivate; }
         }
 
-        /// <summary>
-        /// Gets the name of the table this prop def is mapped to. This takes into account
-        /// inheritance structures.
-        /// </summary>
-        public string GetTableName(IClassDef childClassDef)
-        {
-            ClassDef currentClassDef = (ClassDef) childClassDef;
-            if (currentClassDef != null && currentClassDef.IsUsingConcreteTableInheritance())
-            {
-                while (!currentClassDef.IsUsingConcreteTableInheritance())
-                    currentClassDef = currentClassDef.SuperClassClassDef;
-                return currentClassDef.TableName;
-            }
-            currentClassDef = _classDef.GetBaseClassOfSingleTableHierarchy();
-            return currentClassDef.TableName;
-        }
 
         public IClassDef ClassDef
         {
@@ -648,7 +632,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 return _classDef;
             }
-            set
+            internal set
             {
                 _classDef = (ClassDef) value;
             }

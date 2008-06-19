@@ -55,10 +55,6 @@ namespace Habanero.Test
             //ClassDef lClassDef = new ClassDef(typeof(CircleNoPrimaryKey), null, lPropDefCol, keysCol, relDefCol);
             
             lClassDef.SuperClassDef = new SuperClassDef(Shape.GetClassDef(), ORMapping.ClassTableInheritance);
-            foreach (PropDef def in lPropDefCol)
-            {
-                def.ClassDef = lClassDef;
-            }
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }

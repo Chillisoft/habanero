@@ -48,32 +48,6 @@ namespace Habanero.Test.BO
             MyBO.LoadDefaultClassDef();
         }
 
-        [Test]
-        public void TestRefreshCollectionDoesNotRefreshDirtyOject()
-        {
-            //---------------Set up test pack-------------------
-            ContactPersonTestBO.DeleteAllContactPeople();
-            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
-            
-            ContactPersonTestBO cp1 = CreateContactPersonTestBO();
-            ContactPersonTestBO cp2 = CreateContactPersonTestBO();
-            ContactPersonTestBO cp3 = CreateContactPersonTestBO();
-            //--------------------------------------------------
-
-            col.LoadAll();
-            string newSurname = Guid.NewGuid().ToString();
-            //---------------Execute Test ----------------------
-            cp1.Surname = newSurname;
-            col.Refresh();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(3, col.Count);
-            Assert.AreEqual(newSurname, cp1.Surname);
-            Assert.IsTrue(cp1.State.IsDirty);
-            //---------------Tear Down -------------------------          
-        }
-
         private static ContactPersonTestBO CreateContactPersonTestBO()
         {
             ContactPersonTestBO bo = new ContactPersonTestBO();
@@ -206,7 +180,6 @@ namespace Habanero.Test.BO
                 "WHERE (`MyBO`.`TestProp` = ?Param0)",
                 statement.Statement.ToString());
         }
-
 
         #region Test Related Object Properties in Criteria
 
@@ -502,9 +475,6 @@ namespace Habanero.Test.BO
         }
 
 
-
-
-
         //TODO: From Brett Restore a parent object should remove all created objects on its relationships
         //  for later when we have these??
 
@@ -553,12 +523,36 @@ namespace Habanero.Test.BO
         }
 
 
+        [Test]
+        public void TestRefreshCollectionDoesNotRefreshDirtyOject()
+        {
+            //---------------Set up test pack-------------------
+            GlobalRegistry.TransactionCommitterFactory = new TransactionCommitterFactoryDB();
+            BORegistry.BusinessObjectLoader = new BusinessObjectLoaderDB(DatabaseConnection.CurrentConnection);
+            ContactPersonTestBO.DeleteAllContactPeople();
+            ContactPersonTestBO.ClearLoadedBusinessObjectBaseCol();
 
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            
+            ContactPersonTestBO cp1 = CreateContactPersonTestBO();
+            CreateContactPersonTestBO();
+            CreateContactPersonTestBO();
+            col.LoadAll();
+            string newSurname = Guid.NewGuid().ToString();  
 
+            //--------------------Assert Preconditions----------
+            Assert.AreEqual(3, col.Count);
 
+            //---------------Execute Test ----------------------
+            cp1.Surname = newSurname;
+            col.Refresh();
 
-
-
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, col.Count);
+            Assert.AreEqual(newSurname, cp1.Surname);
+            Assert.IsTrue(cp1.State.IsDirty);
+        }
 
         public class MyDatabaseConnection : DatabaseConnection
         {
@@ -579,6 +573,5 @@ namespace Habanero.Test.BO
                 get { return ""; }
             }
         }
-
     }
 }

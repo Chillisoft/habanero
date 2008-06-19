@@ -32,7 +32,7 @@ namespace Habanero.BO
 
         public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
-            BusinessObjectCollection<T> updatedCol = GetBusinessObjectCollection<T>(collection.Criteria);
+            BusinessObjectCollection<T> updatedCol = GetBusinessObjectCollection<T>(collection.SelectQuery.Criteria);
             collection.ForEach(delegate(T obj) { if (!updatedCol.Contains(obj)) collection.Remove(obj); });
             updatedCol.ForEach(delegate(T obj) { if (!collection.Contains(obj)) collection.Add(obj);});
             
@@ -44,14 +44,14 @@ namespace Habanero.BO
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
             GetBusinessObjectCollection<T>(relationshipCriteria).ForEach(delegate(T obj) { relatedCol.Add(obj); });
-            relatedCol.Criteria = relationshipCriteria;
+            relatedCol.SelectQuery.Criteria = relationshipCriteria;
             return relatedCol;
         }
 
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : BusinessObject, new()
         {
             BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(criteria);
-            //col.Sort(delegate(T x, T y) { return orderCriteria.Compare<T>(x, y); });
+            col.Sort(delegate(T x, T y) { return orderCriteria.Compare(x, y); });
             return col;
         }
     }

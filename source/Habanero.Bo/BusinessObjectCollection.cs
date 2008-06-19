@@ -53,7 +53,7 @@ namespace Habanero.BO
         private int _limit = -1;
         private readonly Hashtable _lookupTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
-        private Criteria _criteria;
+        private SelectQuery<TBusinessObject> _selectQuery;
 
         /// <summary>
         /// Default constructor. 
@@ -129,6 +129,7 @@ namespace Habanero.BO
                 BusinessObject.AllLoadedBusinessObjects().Remove(_sampleBo.ID.GetObjectId());
             }
             _lookupTable = new Hashtable();
+            _selectQuery = new SelectQueryDB<TBusinessObject>();
         }
 
         /// <summary>
@@ -822,10 +823,10 @@ namespace Habanero.BO
         }
 
 
-        public Criteria Criteria
+        public SelectQuery<TBusinessObject> SelectQuery
         {
-            get { return _criteria; }
-            set { _criteria = value; }
+            get { return _selectQuery; }
+            set { _selectQuery = value; }
         }
 
         /// <summary>
@@ -1310,7 +1311,7 @@ namespace Habanero.BO
 
         public void LoadAll_Loader()
         {
-            this.Criteria = null;
+            this.SelectQuery.Criteria = null;
             BORegistry.BusinessObjectLoader.Refresh(this);
         }
     }

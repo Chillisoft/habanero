@@ -189,7 +189,7 @@ namespace Habanero.BO
                             log.Error(
                                 string.Format("Problem in InitialiseProp(): Can't convert value of type {0} to {1}",
                                               propValue.GetType().FullName, this.PropertyType.FullName));
-                            log.Error(string.Format("Value: {0}, Property: {1}, Field: {2}, Table: {3}", propValue, this._propDef.PropertyName, this._propDef.DatabaseFieldName, this._propDef.GetTableName(null)));
+                            log.Error(string.Format("Value: {0}, Property: {1}, Field: {2}, Table: {3}", propValue, this._propDef.PropertyName, this._propDef.DatabaseFieldName, this._propDef.ClassDef.GetTableName(_propDef)));
                             throw;
                         }
                     }

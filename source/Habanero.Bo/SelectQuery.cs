@@ -6,10 +6,10 @@ namespace Habanero.BO
 {
     public class SelectQuery<T> where T : class, IBusinessObject
     {
-        private readonly Criteria _criteria;
+        private Criteria _criteria;
         private readonly Dictionary<string, QueryField> _fields = new Dictionary<string, QueryField>(5);
         private string _source;
-        private List<string> _orderFields = new List<string>();
+//        private List<string> _orderFields = new List<string>();
         private OrderCriteria _orderCriteria;
 
         public SelectQuery()
@@ -23,7 +23,7 @@ namespace Habanero.BO
             if (classDef == null) return;
             foreach (IPropDef propDef in classDef.PropDefcol)
             {
-                _fields.Add(propDef.PropertyName, new QueryField(propDef.PropertyName, propDef.GetTableName(classDef) + "." + propDef.DatabaseFieldName));
+                _fields.Add(propDef.PropertyName, new QueryField(propDef.PropertyName, classDef.GetTableName(propDef) + "." + propDef.DatabaseFieldName));
             }
             _source = classDef.TableName;
         }
@@ -37,6 +37,7 @@ namespace Habanero.BO
         public Criteria Criteria
         {
             get { return _criteria; }
+            set { _criteria = value; }
         }
 
         public Dictionary<string, QueryField> Fields

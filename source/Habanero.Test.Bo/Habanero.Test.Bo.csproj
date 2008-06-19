@@ -119,6 +119,10 @@
       <Project>{B965CBBC-48BE-4761-9AB8-8F1AD17B8537}</Project>
       <Name>Habanero.Test</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.UI\Habanero.UI.csproj">
+      <Project>{021389A1-76C4-4DD0-AD09-A13EB5C237E7}</Project>
+      <Name>Habanero.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.Util\Habanero.Util.csproj">
       <Project>{D3B50C81-590B-429F-9761-3B676D607DFF}</Project>
       <Name>Habanero.Util</Name>
@@ -164,6 +168,7 @@
     <Compile Include="TestCriteria.cs" />
     <Compile Include="TestDataStoreInMemory.cs" />
     <Compile Include="TestNumberGenerator.cs" />
+    <Compile Include="TestOrderCriteria.cs" />
     <Compile Include="TestSelectQuery.cs" />
     <Compile Include="TestSelectQueryDB.cs" />
     <Compile Include="TestTransactionCommitter.cs" />

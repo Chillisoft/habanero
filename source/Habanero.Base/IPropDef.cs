@@ -122,12 +122,6 @@ namespace Habanero.Base
             set;
         }
 
-        /// <summary>
-        /// Gets the name of the table this prop def is mapped to. This takes into account
-        /// inheritance structures.
-        /// </summary>
-        string GetTableName(IClassDef childClassDef);
-
-        IClassDef ClassDef { get; }
+        IClassDef ClassDef { get;  }
     }
 }
