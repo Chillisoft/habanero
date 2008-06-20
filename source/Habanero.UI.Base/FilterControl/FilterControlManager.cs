@@ -396,6 +396,7 @@ namespace Habanero.UI.Base.FilterControl
                 _isChecked = isChecked;
                 _checkBox.Checked = isChecked;
                 _checkBox.Text = text;
+                _checkBox.Width = _checkBox.Width + text.Length*6;
             }
 
             public override IControlChilli FilterControl
