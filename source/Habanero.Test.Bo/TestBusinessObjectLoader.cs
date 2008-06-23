@@ -293,13 +293,16 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("working on this")]
+        [Test]
         public void TestLoadThroughRelationship()
         {
             //---------------Set up test pack-------------------
             SetupDataAccessor();
-            Address address;
-            ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+            Address address = new Address();
+            address.ContactPersonID = cp.ContactPersonID;
+            address.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             RelatedBusinessObjectCollection<Address> addresses = cp.Addresses;
