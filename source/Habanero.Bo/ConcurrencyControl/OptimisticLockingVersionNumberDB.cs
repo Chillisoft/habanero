@@ -89,8 +89,7 @@ namespace Habanero.BO.ConcurrencyControl
                                                 BOProp machineLastUpdated,
                                                 BOProp versionNumber,
                                                 BOProp operatingSystemUser)
-            : this(busObj, dateLastUpdated, userLastUpdated,
-                   machineLastUpdated, versionNumber)
+            : this(busObj, dateLastUpdated, userLastUpdated, machineLastUpdated, versionNumber)
         {
             _operatingSystemUser = operatingSystemUser;
         }

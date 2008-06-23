@@ -109,7 +109,7 @@ namespace Habanero.BO
             {
                 _primaryKey.SetObjectID(myID);
             }
-            ClassDef currentClassDef = (ClassDef) this.ClassDef;
+            ClassDef currentClassDef = this.ClassDef;
             if (currentClassDef != null)
             {
                 while (currentClassDef.IsUsingClassTableInheritance())
@@ -368,7 +368,7 @@ namespace Habanero.BO
                                                              "namespace and assembly and that there are corresponding " +
                                                              "class definitions for this class.", GetType()));
                     }
-                    PrimaryKeyDef primaryKeyDef = ((ClassDef )this.ClassDef).GetPrimaryKeyDef();
+                    PrimaryKeyDef primaryKeyDef = this.ClassDef.GetPrimaryKeyDef();
                     if (primaryKeyDef != null)
                     {
                         BOPrimaryKey parentPrimaryKey = new BOPrimaryKey(primaryKeyDef);

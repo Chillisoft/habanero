@@ -19,5 +19,6 @@ namespace Habanero.BO
             get { return _dataAccessor; }
             set { _dataAccessor = value; }
         }
+
     }
 }
