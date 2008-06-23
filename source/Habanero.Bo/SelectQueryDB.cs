@@ -52,15 +52,21 @@ namespace Habanero.BO
             StringBuilder builder = statement.Statement.Append("SELECT ");
             foreach (QueryField field in _selectQuery.Fields.Values)
             {
-                builder.Append(field.FieldName + ", ");
+                builder.Append(GetFieldNameWithDelimiters(field.SourceName, field.FieldName) + ", ");
             }
             builder.Remove(builder.Length - 2, 2);
             builder.Append(" FROM ");
-            builder.Append(_selectQuery.Source);
+            builder.Append(GetFieldNameWithDelimiters(_selectQuery.Source));
             if (_selectQuery.Criteria != null)
             {
                 builder.Append(" WHERE ");
-                builder.Append(_selectQuery.Criteria.ToString(delegate(string propName) { return _selectQuery.Fields[propName].FieldName; }));
+                string whereClause =
+                    _selectQuery.Criteria.ToString(delegate(string propName)
+                    {
+                        QueryField queryField = _selectQuery.Fields[propName];
+                        return GetFieldNameWithDelimiters(queryField.SourceName, queryField.FieldName);
+                    });
+                builder.Append(whereClause);
             }
             if (_selectQuery.OrderCriteria != null)
             {
@@ -71,12 +77,27 @@ namespace Habanero.BO
                     string direction = orderField.SortDirection == OrderCriteria.SortDirection.Ascending
                                            ? "ASC"
                                            : "DESC";
-                    StringUtilities.AppendMessage(orderByClause, _selectQuery.Fields[orderField.Name].FieldName + " " + direction, ", ");
+                    QueryField queryField = _selectQuery.Fields[orderField.Name];
+                    StringUtilities.AppendMessage(orderByClause, GetFieldNameWithDelimiters(queryField.SourceName, queryField.FieldName) + " " + direction, ", ");
                 }
            
                 builder.Append(orderByClause.ToString());
             }
             return statement;
+        }
+
+        private string GetFieldNameWithDelimiters(string sourceName, string fieldName)
+        {
+            if (string.IsNullOrEmpty(sourceName)) return GetFieldNameWithDelimiters(fieldName);
+            return GetFieldNameWithDelimiters(sourceName) + "." + GetFieldNameWithDelimiters(fieldName);
+        }
+
+        protected virtual string GetFieldNameWithDelimiters(string fieldName)
+        {
+            return
+                DatabaseConnection.CurrentConnection.LeftFieldDelimiter + fieldName +
+                DatabaseConnection.CurrentConnection.RightFieldDelimiter;
+            
         }
     }
 }

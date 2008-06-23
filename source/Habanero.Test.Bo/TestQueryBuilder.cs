@@ -30,7 +30,8 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(3, query.Fields.Count);
             Assert.AreEqual("MyBoID", query.Fields["MyBoID"].PropertyName);
-            Assert.AreEqual("MyBO.MyBoID", query.Fields["MyBoID"].FieldName);
+            Assert.AreEqual("MyBoID", query.Fields["MyBoID"].FieldName);
+            Assert.AreEqual("MyBO", query.Fields["MyBoID"].SourceName);
             //---------------Tear Down -------------------------
         }
 

@@ -98,8 +98,8 @@ namespace Habanero.Test.BO
 
 
                 SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-                query.Fields.Add("Surname", new QueryField("Surname", "Surname"));
-                query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID"));
+                query.Fields.Add("Surname", new QueryField("Surname", "Surname", ""));
+                query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
                 query.Source = cp.ClassDef.TableName;
 
                 //---------------Execute Test ----------------------
@@ -142,8 +142,8 @@ namespace Habanero.Test.BO
             cp.Surname = Guid.NewGuid().ToString("N");
             cp.Save();
             SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
-            query.Fields.Add("Surname", new QueryField("Surname", "Surname"));
-            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID"));
+            query.Fields.Add("Surname", new QueryField("Surname", "Surname", ""));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
             query.Source = cp.ClassDef.TableName;
 
             //---------------Execute Test ----------------------
@@ -211,8 +211,8 @@ namespace Habanero.Test.BO
             cp2.Save();
 
             SelectQuery query = new SelectQuery(new Criteria("DateOfBirth", Criteria.Op.GreaterThan, now));
-            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth"));
-            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID"));
+            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", ""));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
             query.Source = cp1.ClassDef.TableName;
             query.OrderCriteria = new OrderCriteria().Add("DateOfBirth");
 

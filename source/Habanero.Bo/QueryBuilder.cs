@@ -16,7 +16,7 @@ namespace Habanero.BO
             SelectQuery selectQuery = new SelectQuery();
             foreach (IPropDef propDef in classDef.PropDefcol)
             {
-                selectQuery.Fields.Add(propDef.PropertyName, new QueryField(propDef.PropertyName, classDef.GetTableName(propDef) + "." + propDef.DatabaseFieldName));
+                selectQuery.Fields.Add(propDef.PropertyName, new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, classDef.GetTableName(propDef)));
             }
             selectQuery.Source = classDef.TableName;
             selectQuery.Criteria = criteria;
