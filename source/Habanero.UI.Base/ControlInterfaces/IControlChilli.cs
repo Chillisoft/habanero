@@ -4,6 +4,22 @@ using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {
+
+    ///// <summary>
+    ///// Border style types
+    ///// </summary>
+    //public enum ControlBorderStyle
+    //{
+    //    Clear,
+    //    FixedSingle,
+    //    Dashed,
+    //    Dotted,
+    //    Inset,
+    //    Outset,
+    //    Fixed3D,
+    //    None
+    //}
+
     public interface IControlChilli 
     {
         /// <summary>
@@ -171,10 +187,30 @@ namespace Habanero.UI.Base
         ///// <value></value>
         //[System.ComponentModel.DefaultValue(1)]
         //int BorderWidth { get; set; }
+
+        /// <summary>
+        /// Suspends the layout.
+        /// </summary>
         void SuspendLayout();
+
+        /// <summary>
+        /// Resumes the layout.
+        /// </summary>
         void ResumeLayout(bool performLayout);
+
+        /// <summary>Invalidates the entire surface of the control and causes the control to be redrawn.</summary>
         void Invalidate();
+        
+        /// <summary>
+        /// Gets or sets the control location.
+        /// </summary>
+        /// <value></value>
+        Point Location{ get; set; }
 
-
+        ///// <summary>
+        ///// Gets or sets the border style.
+        ///// </summary>
+        ///// <value></value>
+        //ControlBorderStyle BorderStyle { get; set; }
     }
 }

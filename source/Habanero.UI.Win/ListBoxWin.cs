@@ -5,7 +5,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
-    public partial class ListBoxWin : ListBox,IListBox
+    public partial class ListBoxWin : ListBox, IListBox
     {
         private readonly ListBoxSelectedObjectCollectionWin _selectedObjectCollection;
         private readonly ListBoxObjectCollectionWin _objectCollection;

@@ -121,6 +121,7 @@
     <Compile Include="TestControlFactory.cs" />
     <Compile Include="Mappers\TestControlMapperCollection.cs" />
     <Compile Include="TestDateRangeComboBox.cs" />
+    <Compile Include="TestDateTimePicker.cs" />
     <Compile Include="TestDateTimePickerController.cs" />
     <Compile Include="TestDefaultBOCreator.cs" />
     <Compile Include="TestDefaultBOEditorForm.cs" />

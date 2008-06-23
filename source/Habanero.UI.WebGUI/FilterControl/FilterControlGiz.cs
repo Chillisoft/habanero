@@ -211,8 +211,8 @@ namespace Habanero.UI.WebGUI
                                                            FilterClauseOperator filterClauseOperator, bool nullable)
         {
             IDateTimePicker dtPicker =
-                _filterControlManager.AddDateFilterDateTimePicker(propertyName, defaultValue, filterClauseOperator,
-                                                                  nullable);
+                _filterControlManager.AddDateFilterDateTimePicker(propertyName, filterClauseOperator, nullable,
+                                                                  defaultValue);
             return dtPicker;
         }
 

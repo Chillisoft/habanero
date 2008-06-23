@@ -104,7 +104,7 @@ namespace Habanero.UI.WebGUI
 
         public virtual IDateTimePicker CreateDateTimePicker()
         {
-            DateTimePickerGiz dtp = new DateTimePickerGiz();
+            DateTimePickerGiz dtp = new DateTimePickerGiz(this);
             dtp.Height = TEXTBOX_HEIGHT;
             dtp.Format = DateTimePickerFormat.Custom;
             dtp.CustomFormat = "dd MMM yyyy";

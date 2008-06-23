@@ -465,6 +465,13 @@ namespace Habanero.Test.UI.Base.Wizard
         {
             throw new NotImplementedException();
         }
+
+        public Point Location
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         #endregion
     }
 }

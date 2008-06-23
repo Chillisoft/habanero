@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using Habanero.UI.Base;
 using Habanero.UI.Win.Util;
 
 namespace Habanero.UI.Win
@@ -27,6 +28,7 @@ namespace Habanero.UI.Win
 		///<param name="dateTimePicker">The DateTimePicker control(can be any implementation)</param>
 		public DateTimePickerControllerWin(Control dateTimePicker)
 		{
+            
 			_dateTimePicker = dateTimePicker;
 			_dateTimePicker.KeyDown += DateTimePicker_KeyDown;
 			DateTimePickerUtilWinTemp.AddValueChangedHandler(_dateTimePicker, DateTimePicker_ValueChanged);

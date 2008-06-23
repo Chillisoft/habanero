@@ -92,7 +92,7 @@ namespace Habanero.UI.Win
             //    _filterInputBoxCollection.AddDateFilterDateTimePicker(columnName, defaultValue, filterClauseOperator, ignoreTime, nullable);
             //_layoutManager.AddControl(picker);
             //return picker;
-            IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName, defaultValue, filterClauseOperator, nullable);
+            IDateTimePicker dtPicker = _filterControlManager.AddDateFilterDateTimePicker(propertyName, filterClauseOperator, nullable, defaultValue);
             return dtPicker;
         }
 

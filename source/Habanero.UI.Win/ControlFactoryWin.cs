@@ -454,7 +454,7 @@ namespace Habanero.UI.Win
 
         public IDateTimePicker CreateDateTimePicker()
         {
-            return new  DateTimePickerWin();
+            return new  DateTimePickerWin(this);
         }
 
         public BorderLayoutManager CreateBorderLayoutManager(IControlChilli control)

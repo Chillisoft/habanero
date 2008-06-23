@@ -144,7 +144,7 @@ namespace Habanero.UI.Base.FilterControl
         /// <returns>Returns the new DateTimePicker object added</returns>
         /// <remarks>A future improvement could provide another overload where you can
         /// supply a timespan argument that is added onto any date taken from the picker.</remarks>
-        public IDateTimePicker AddDateFilterDateTimePicker(string columnName, DateTime defaultDate, FilterClauseOperator filterClauseOperator, bool nullable)
+        public IDateTimePicker AddDateFilterDateTimePicker(string columnName, FilterClauseOperator filterClauseOperator, bool nullable, DateTime defaultDate)
         {
             IDateTimePicker dtPicker = _controlFactory.CreateDateTimePicker();
             _filterControls.Add(new FilterUIDate(_clauseFactory, columnName, dtPicker, filterClauseOperator));
