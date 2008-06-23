@@ -57,7 +57,7 @@ namespace Habanero.DB
         /// <summary>
         /// Constructor that initialises a new set of null connections
         /// </summary>
-        private DatabaseConnection()
+        protected DatabaseConnection()
         {
             _connections = new ArrayList(5);
         }

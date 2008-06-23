@@ -44,30 +44,70 @@ namespace Habanero.BO
             set { _selectQuery.OrderCriteria = value; }
         }
 
+        public int Limit
+        {
+            get { return _selectQuery.Limit;  }
+            set { _selectQuery.Limit = value; }
+        }
+
         #endregion
 
         public ISqlStatement CreateSqlStatement()
         {
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             StringBuilder builder = statement.Statement.Append("SELECT ");
+            AppendLimitClauseAtBeginning(builder);
+            AppendFields(builder);
+            AppendFrom(builder);
+            AppendWhereClause(builder, statement);
+            AppendOrderByClause(builder);
+            AppendLimitClauseAtEnd(builder);
+            return statement;
+        }
+
+        private void AppendFrom(StringBuilder builder)
+        {
+            builder.Append(" FROM ");
+            builder.Append(SqlFormattingHelper.FormatTableName(_selectQuery.Source, DatabaseConnection.CurrentConnection));
+        }
+
+        private void AppendFields(StringBuilder builder)
+        {
             foreach (QueryField field in _selectQuery.Fields.Values)
             {
                 builder.Append(GetFieldNameWithDelimiters(field.SourceName, field.FieldName) + ", ");
             }
             builder.Remove(builder.Length - 2, 2);
-            builder.Append(" FROM ");
-            builder.Append(GetFieldNameWithDelimiters(_selectQuery.Source));
-            if (_selectQuery.Criteria != null)
+        }
+
+        private void AppendLimitClauseAtBeginning(StringBuilder builder)
+        {
+            if (_selectQuery.Limit > 0)
             {
-                builder.Append(" WHERE ");
-                string whereClause =
-                    _selectQuery.Criteria.ToString(delegate(string propName)
-                    {
-                        QueryField queryField = _selectQuery.Fields[propName];
-                        return GetFieldNameWithDelimiters(queryField.SourceName, queryField.FieldName);
-                    });
-                builder.Append(whereClause);
+                string limitClauseAtBeginning =
+                    DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
+                if (!String.IsNullOrEmpty(limitClauseAtBeginning))
+                {
+                    builder.Append(limitClauseAtBeginning + " ");
+                }
             }
+        }
+
+        private void AppendLimitClauseAtEnd(StringBuilder builder)
+        {
+            if (_selectQuery.Limit > 0)
+            {
+                string limitClauseAtEnd =
+                    DatabaseConnection.CurrentConnection.GetLimitClauseForEnd(_selectQuery.Limit);
+                if (!String.IsNullOrEmpty(limitClauseAtEnd))
+                {
+                    builder.Append(" " + limitClauseAtEnd);
+                }
+            }
+        }
+
+        private void AppendOrderByClause(StringBuilder builder)
+        {
             if (_selectQuery.OrderCriteria != null)
             {
                 builder.Append(" ORDER BY ");
@@ -83,21 +123,35 @@ namespace Habanero.BO
            
                 builder.Append(orderByClause.ToString());
             }
-            return statement;
+        }
+
+        private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
+        {
+            if (_selectQuery.Criteria != null)
+            {
+                builder.Append(" WHERE ");
+                string whereClause =
+                    _selectQuery.Criteria.ToString(delegate(string propName)
+                    {
+                        QueryField queryField = _selectQuery.Fields[propName];
+                        return GetFieldNameWithDelimiters(queryField.SourceName, queryField.FieldName);
+                    }, delegate(object value)
+                    {
+                        string paramName = statement.ParameterNameGenerator.GetNextParameterName();
+                        statement.AddParameter(paramName, value);
+                        return paramName;
+                        
+                    });
+                builder.Append(whereClause);
+            }
         }
 
         private string GetFieldNameWithDelimiters(string sourceName, string fieldName)
         {
-            if (string.IsNullOrEmpty(sourceName)) return GetFieldNameWithDelimiters(fieldName);
-            return GetFieldNameWithDelimiters(sourceName) + "." + GetFieldNameWithDelimiters(fieldName);
+
+            if (string.IsNullOrEmpty(sourceName)) return SqlFormattingHelper.FormatFieldName(fieldName, DatabaseConnection.CurrentConnection);
+            return SqlFormattingHelper.FormatTableAndFieldName(sourceName, fieldName, DatabaseConnection.CurrentConnection);
         }
 
-        protected virtual string GetFieldNameWithDelimiters(string fieldName)
-        {
-            return
-                DatabaseConnection.CurrentConnection.LeftFieldDelimiter + fieldName +
-                DatabaseConnection.CurrentConnection.RightFieldDelimiter;
-            
-        }
     }
 }

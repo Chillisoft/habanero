@@ -67,5 +67,18 @@ namespace Habanero.Test.BO
             Assert.AreSame(source, selectQuery.Source);
             //---------------Tear Down -------------------------
         }
+
+        [Test]
+        public void TestLimit()
+        {
+            //---------------Set up test pack-------------------
+            SelectQuery selectQuery = new SelectQuery();
+            //---------------Execute Test ----------------------
+            int limit = 40;
+            selectQuery.Limit = limit;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(limit, selectQuery.Limit);
+            //---------------Tear Down -------------------------
+        }
     }
 }

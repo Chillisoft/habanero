@@ -14,5 +14,11 @@ namespace Habanero.BO
         string Source { get; set; }
 
         OrderCriteria OrderCriteria { get; set; }
+
+        int Limit
+        {
+            get;
+            set;
+        }
     }
 }

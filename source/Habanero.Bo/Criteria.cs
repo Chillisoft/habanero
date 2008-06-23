@@ -22,6 +22,9 @@ namespace Habanero.BO
         private readonly string[] Ops = { "=", ">", "<" } ;
         private readonly string[] LogicalOps = {"AND", "OR"};
 
+        public delegate string PropNameConverterDelegate(string propName);
+        public delegate string AddParameterDelegate(object parameterValue);
+
         ///<summary>
         /// A logical operator used to conjoin two criteria trees.
         ///</summary>
@@ -145,30 +148,34 @@ namespace Habanero.BO
         ///<filterpriority>2</filterpriority>
         public override string ToString()
         {
-            return ToString(delegate(string propName) { return propName; });
+            return ToString(delegate(string propName) { return propName; }, delegate(object value)
+            {
+                string valueString;
+                if (value is DateTime)
+                {
+                    valueString = ((DateTime)value).ToString(DATE_FORMAT);
+                }
+                else if (value is Guid)
+                {
+                    valueString = ((Guid)value).ToString("B");
+                }
+                else
+                {
+                    valueString = value.ToString();
+                }
+                return "'" + valueString + "'";
+            });
         }
 
-        public delegate string PropNameConverterDelegate(string propName);
 
-        public string ToString(PropNameConverterDelegate convertToFieldName)
+        public string ToString(PropNameConverterDelegate convertToFieldName, AddParameterDelegate addParameter)
         {
             if (IsComposite())
             {
                 return string.Format("({0}) {1} ({2})", _leftCriteria, LogicalOps[(int)_logicalOp], _rightCriteria);
             }
-            string valueString;
-            if (_value is DateTime)
-            {
-                valueString = ((DateTime)_value).ToString(DATE_FORMAT);
-            } else if (_value is Guid)
-            {
-                valueString = ((Guid) _value).ToString("B");
-            }
-            else
-            {
-                valueString = _value.ToString();
-            }
-            return string.Format("{0} {1} '{2}'", convertToFieldName(_propName), Ops[(int)_op], valueString);
+            string valueString = addParameter(_value);
+            return string.Format("{0} {1} {2}", convertToFieldName(_propName), Ops[(int)_op], valueString);
 
         }
 

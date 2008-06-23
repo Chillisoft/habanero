@@ -48,7 +48,7 @@ namespace Habanero.Base
         /// <summary>
         /// Returns the list of parameters
         /// </summary>
-        IList Parameters { get; }
+        List<IDbDataParameter> Parameters { get; }
 
         /// <summary>
         /// Sets up the IDbCommand object

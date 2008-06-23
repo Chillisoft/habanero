@@ -42,7 +42,7 @@ namespace Habanero.DB
         private const string ORDER_BY_CLAUSE_TOKEN = " ORDER BY ";
         private StringBuilder _statement;
         private IDatabaseConnection _connection;
-        private IList _parameters;
+        private List<IDbDataParameter> _parameters;
         private IDbCommand _sampleCommand;
         private ParameterNameGenerator _gen;
         private IDbConnection _idbConnection;
@@ -55,7 +55,7 @@ namespace Habanero.DB
         /// <param name="connection">A database connection</param>
         public SqlStatement(IDatabaseConnection connection)
         {
-            _parameters = new ArrayList();
+            _parameters = new List<IDbDataParameter>();
             _connection = connection;
             if (_connection != null)
             {
@@ -173,7 +173,7 @@ namespace Habanero.DB
         /// <summary>
         /// Returns a list of parameters
         /// </summary>
-        public IList Parameters
+        public List<IDbDataParameter> Parameters
         {
             get { return _parameters; }
         }

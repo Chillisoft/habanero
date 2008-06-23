@@ -4,25 +4,49 @@ using System.Text;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestSelectQueryDB : TestUsingDatabase
+    public class TestSelectQueryDB 
     {
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            this.SetupDBConnection();
+            
         }
         [SetUp]
         public void SetupTest()
         {
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
             ClassDef.ClassDefs.Clear();
         }
 
+        public class DatabaseConnectionStub : DatabaseConnection
+        {
+            public DatabaseConnectionStub()
+                : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection")
+            {
+            }
 
+            /// <summary>
+            /// Returns a left square bracket
+            /// </summary>
+            public override string LeftFieldDelimiter
+            {
+                get { return "["; }
+            }
+
+            /// <summary>
+            /// Returns a right square bracket
+            /// </summary>
+            public override string RightFieldDelimiter
+            {
+                get { return "]"; }
+            }
+        }
 
         [Test]
         public void TestCreateSqlStatement_NoCriteria()
@@ -36,7 +60,7 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.AreEqualIgnoringCase("SELECT `MyBO`.`MyBoID`, `MyBO`.`TestProp`, `MyBO`.`TestProp2` FROM `MyBO`", statementString);
+            StringAssert.AreEqualIgnoringCase("SELECT [MyBO].[MyBoID], [MyBO].[TestProp], [MyBO].[TestProp2] FROM [MyBO]", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -55,7 +79,7 @@ namespace Habanero.Test.BO
 
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.AreEqualIgnoringCase("SELECT `Surname`, `ContactPersonID` FROM `bob`", statementString);
+            StringAssert.AreEqualIgnoringCase("SELECT [Surname], [ContactPersonID] FROM [bob]", statementString);
 
             //---------------Tear Down -------------------------
         }
@@ -73,9 +97,12 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("WHERE `MyBO`.`TestProp` = 'test'", statementString);
+            StringAssert.EndsWith("WHERE [MyBO].[TestProp] = ?Param0", statementString);
+            Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
+            Assert.AreEqual( "test", statement.Parameters[0].Value);
             //---------------Tear Down -------------------------          
         }
+
 
         [Test]
         public void TestCreateSqlStatement_WithOrderFields()
@@ -90,7 +117,7 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("ORDER BY `MyBO`.`MyBoID` ASC, `MyBO`.`TestProp` ASC", statementString);
+            StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] ASC, [MyBO].[TestProp] ASC", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -108,7 +135,7 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("ORDER BY `MyBO`.`MyBoID` DESC, `MyBO`.`TestProp` DESC", statementString);
+            StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] DESC, [MyBO].[TestProp] DESC", statementString);
             //---------------Tear Down -------------------------          
         }
 
@@ -127,10 +154,110 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("ORDER BY `MyBO`.`MyBoID` DESC, `MyBO`.`TestProp` ASC", statementString);
+            StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] DESC, [MyBO].[TestProp] ASC", statementString);
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestCreateSqlStatement_WithLimit_AtBeginning()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtBeginning();
+            SelectQuery selectQuery = new SelectQuery();
+            selectQuery.Limit = 10;
+            string fieldName = "Field1";
+            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, ""));
+            selectQuery.Source = "Table1";
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.StartsWith("SELECT TOP 10 ", statementString);
+            //---------------Tear Down -------------------------
+        }
 
+        [Test]
+        public void TestCreateSqlStatement_WithNoLimit_AtBeginning()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtBeginning();
+            SelectQuery selectQuery = new SelectQuery();
+            selectQuery.Limit = 0;
+            string fieldName = "Field1";
+            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, ""));
+            selectQuery.Source = "Table1";
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.StartsWith("SELECT [Field1]", statementString);
+            //---------------Tear Down -------------------------
+        }
+
+        public class DatabaseConnectionStub_LimitClauseAtBeginning : DatabaseConnection
+        {
+            public DatabaseConnectionStub_LimitClauseAtBeginning()
+                : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection")
+            {
+            }
+
+            public override string GetLimitClauseForBeginning(int limit)
+            {
+                return "TOP " + limit;
+            }
+        }
+
+        [Test]
+        public void TestCreateSqlStatement_WithLimit_AtEnd()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
+            SelectQuery selectQuery = new SelectQuery();
+            selectQuery.Limit = 10;
+            string fieldName = "Field1";
+            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, ""));
+            selectQuery.Source = "Table1";
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith(" LIMIT 10", statementString);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestCreateSqlStatement_WithNoLimit_AtEnd()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
+            SelectQuery selectQuery = new SelectQuery();
+            selectQuery.Limit = 0;
+            string fieldName = "Field1";
+            selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, ""));
+            selectQuery.Source = "Table1";
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("FROM [Table1]", statementString);
+            //---------------Tear Down -------------------------
+        }
+
+        public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnection
+        {
+            public DatabaseConnectionStub_LimitClauseAtEnd()
+                : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection")
+            {
+            }
+
+            public override string GetLimitClauseForEnd(int limit)
+            {
+                return "LIMIT " + limit;
+            }
+        }
     }
 }
