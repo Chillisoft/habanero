@@ -48,7 +48,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             SelectQuery selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
-            OrderCriteria orderCriteria = new OrderCriteria("testfield");
+            OrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
             selectQuery.OrderCriteria = orderCriteria;
             //---------------Test Result -----------------------
             Assert.AreSame(orderCriteria, selectQuery.OrderCriteria);

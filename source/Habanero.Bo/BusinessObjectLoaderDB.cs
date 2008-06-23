@@ -111,6 +111,14 @@ namespace Habanero.BO
             return col;
         }
 
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : BusinessObject, new()
+        {
+             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
+            col.SelectQuery = selectQuery;
+            Refresh(col);
+            return col;
+        }
+
 
         private T LoadBOFromReader<T>(IDataRecord dr, ISelectQuery selectQuery)
             where T : class, IBusinessObject, new()

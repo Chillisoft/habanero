@@ -53,7 +53,7 @@ namespace Habanero.BO
         private int _limit = -1;
         private readonly Hashtable _lookupTable;
         private readonly List<TBusinessObject> _createdBusinessObjects = new List<TBusinessObject>();
-        private SelectQuery _selectQuery;
+        private ISelectQuery _selectQuery;
 
         /// <summary>
         /// Default constructor. 
@@ -827,7 +827,7 @@ namespace Habanero.BO
         }
 
 
-        public SelectQuery SelectQuery
+        public ISelectQuery SelectQuery
         {
             get { return _selectQuery; }
             set { _selectQuery = value; }

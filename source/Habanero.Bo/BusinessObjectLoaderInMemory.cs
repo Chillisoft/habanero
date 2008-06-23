@@ -59,5 +59,10 @@ namespace Habanero.BO
             col.Sort(delegate(T x, T y) { return orderCriteria.Compare(x, y); });
             return col;
         }
+
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : BusinessObject, new()
+        {
+            return GetBusinessObjectCollection<T> (selectQuery.Criteria, selectQuery.OrderCriteria);
+        }
     }
 }

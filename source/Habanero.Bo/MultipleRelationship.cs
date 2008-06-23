@@ -40,7 +40,6 @@ namespace Habanero.BO
         /// <param name="lRelDef">The relationship definition</param>
         /// <param name="lBOPropCol">The set of properties used to
         /// initialise the RelKey object</param>
-        // Note: Mark - I Changed this to public from internal TODO - investigate if there was a good reason to have it internal
         public MultipleRelationship(IBusinessObject owningBo, RelationshipDef lRelDef, BOPropCol lBOPropCol)
             : base(owningBo, lRelDef, lBOPropCol)
         {

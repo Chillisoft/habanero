@@ -11,5 +11,6 @@ namespace Habanero.BO
         void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new();
         RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship) where T : class, IBusinessObject, new();
         BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : BusinessObject, new();
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : BusinessObject, new();
     }
 }

@@ -66,10 +66,14 @@ namespace Habanero.BO
             {
                 builder.Append(" ORDER BY ");
                 StringBuilder orderByClause = new StringBuilder();
-                foreach (string orderField in _selectQuery.OrderCriteria.Fields)
+                foreach (OrderCriteria.Field orderField in _selectQuery.OrderCriteria.Fields)
                 {
-                    StringUtilities.AppendMessage(orderByClause, _selectQuery.Fields[orderField].FieldName, ", ");
+                    string direction = orderField.SortDirection == OrderCriteria.SortDirection.Ascending
+                                           ? "ASC"
+                                           : "DESC";
+                    StringUtilities.AppendMessage(orderByClause, _selectQuery.Fields[orderField.Name].FieldName + " " + direction, ", ");
                 }
+           
                 builder.Append(orderByClause.ToString());
             }
             return statement;

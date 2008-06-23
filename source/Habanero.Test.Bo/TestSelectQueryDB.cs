@@ -58,16 +58,54 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
-            selectQuery.OrderCriteria = new OrderCriteria("MyBoID");
-            selectQuery.OrderCriteria.Add("TestProp");
+            selectQuery.OrderCriteria = new OrderCriteria().Add("MyBoID").Add("TestProp");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.EndsWith("ORDER BY MyBO.MyBoID, MyBO.TestProp", statementString);
+            StringAssert.EndsWith("ORDER BY MyBO.MyBoID ASC, MyBO.TestProp ASC", statementString);
             //---------------Tear Down -------------------------          
         }
+
+        [Test]
+        public void TestCreateSqlStatement_WithOrderFields_Descending()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.OrderCriteria = new OrderCriteria("MyBoID", OrderCriteria.SortDirection.Descending);
+            selectQuery.OrderCriteria.Add("TestProp", OrderCriteria.SortDirection.Descending);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("ORDER BY MyBO.MyBoID DESC, MyBO.TestProp DESC", statementString);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestCreateSqlStatement_WithOrderFields_MixedOrder()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.OrderCriteria = new OrderCriteria();
+            selectQuery.OrderCriteria.Add("MyBoID", OrderCriteria.SortDirection.Descending);
+            selectQuery.OrderCriteria.Add("TestProp", OrderCriteria.SortDirection.Ascending);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("ORDER BY MyBO.MyBoID DESC, MyBO.TestProp ASC", statementString);
+            //---------------Tear Down -------------------------          
+        }
+
+
     }
 }
