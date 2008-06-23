@@ -77,6 +77,7 @@
     <Compile Include="DateTimePicker\DateTimePickerUtil.cs" />
     <Compile Include="DefaultBODeletor.cs" />
     <Compile Include="Grid\IDataGridViewColumn.cs" />
+    <Compile Include="Grid\IDataGridViewComboBoxColumn.cs" />
     <Compile Include="IListView.cs" />
     <Compile Include="LayoutManagers\ColumnLayoutManager.cs" />
     <Compile Include="IListViewItem.cs" />

@@ -6,6 +6,7 @@ using Habanero.BO;
 using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.Base.FilterControl;
 using Habanero.UI.Base;
+using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.Base
 {
@@ -263,13 +264,17 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <returns></returns>
         IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn();
-
-
+        /// <summary>
+        /// Creates a DataGridViewComboBoxColumn for the appropriate userinterface framework
+        /// </summary>
+        /// <returns></returns>
+        IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn();
         /// <summary>
         /// Constructor that provides a specific list of optionsToDisplay to display
         /// </summary>
         /// <param name="optionsToDisplay">A list of date range optionsToDisplay</param>
         IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay);
+
     }
 
     /// <summary>

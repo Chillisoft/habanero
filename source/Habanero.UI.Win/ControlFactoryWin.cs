@@ -9,6 +9,7 @@ using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.Base.FilterControl;
+using Habanero.UI.Base.Grid;
 using Habanero.Util;
 using Habanero.Util.File;
 using KeyPressEventArgs=Habanero.UI.Base.ControlInterfaces.KeyPressEventArgs;
@@ -345,7 +346,13 @@ namespace Habanero.UI.Win
         /// <returns></returns>
         public IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()
         {
-//            return new DataGridViewCheckBoxColumnWin();
+ //           return new DataGridViewCheckBoxColumnWin();
+            return null;
+        }
+
+        public IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn()
+        {
+ //           return new DataGridViewComboBoxColumn();
             return null;
         }
 

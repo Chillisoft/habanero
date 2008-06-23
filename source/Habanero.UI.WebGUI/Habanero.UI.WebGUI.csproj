@@ -70,6 +70,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGridViewCheckBoxColumnGiz.cs" />
+    <Compile Include="DataGridViewComboBoxColumnGiz.cs" />
     <Compile Include="DateRangeComboBoxGiz.cs">
       <SubType>Component</SubType>
     </Compile>

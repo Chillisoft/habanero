@@ -9,7 +9,9 @@ using Habanero.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Base.ControlInterfaces;
 using Habanero.UI.Base.FilterControl;
+using Habanero.UI.Base.Grid;
 using Habanero.Util.File;
+using DataGridViewColumnSortMode=Habanero.UI.Base.DataGridViewColumnSortMode;
 
 namespace Habanero.UI.WebGUI
 {
@@ -547,6 +549,16 @@ namespace Habanero.UI.WebGUI
         public virtual IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()
         {
             return new DataGridViewCheckBoxColumnGiz( new DataGridViewCheckBoxColumn());
+        }
+
+        public virtual IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn()
+        {
+            return new DataGridViewComboBoxColumnGiz(new DataGridViewComboBoxColumn());
+        }
+
+        public IDataGridViewColumn CreateDataGridViewTextBoxColumn()
+        {
+            return new DataGridViewTextBoxColumn() as IDataGridViewColumn;
         }
 
 

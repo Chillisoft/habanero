@@ -343,6 +343,80 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        public static ClassDef LoadClassDefWith_Grid_1DateTimeColumn()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" />
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewDateTimeColumn"" />
+						</grid>
+					</ui>
+				</class>
+				
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+        public static ClassDef LoadClassDefWith_Grid_1CheckBoxColumn()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  />
+					<property  name=""TestProp"" type=""Boolean""/>
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Test Prop"" property=""TestProp"" type=""DataGridViewCheckBoxColumn"" />
+						</grid>
+					</ui>
+				</class>
+				
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
+        public static ClassDef LoadClassDefWith_Grid_1ComboBoxColumn()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  />
+					<property  name=""RelatedID"" type=""Guid""/>
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+                    <relationship name=""MyRelationship"" type=""single"" relatedClass=""MyRelatedBo"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""RelatedID"" relatedProperty=""MyRelatedBoID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""Related"" property=""RelatedID"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+					</ui>
+				</class>
+				
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static ClassDef LoadClassDefWithDateTime()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -959,6 +1033,8 @@ namespace Habanero.Test
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
+
     }
 
     public class MyRelatedBo : BusinessObject

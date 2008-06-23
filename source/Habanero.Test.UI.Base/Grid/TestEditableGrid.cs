@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -35,6 +35,9 @@ namespace Habanero.Test.UI.Base
 
         protected abstract IControlFactory GetControlFactory();
         protected abstract void AssertIsTextBoxColumnType(IDataGridViewColumn dataGridViewColumn);
+        protected abstract void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn);
+        protected abstract void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn);
+        //protected abstract void AssertIsDateTimeColumnType(IDataGridViewColumn dataGridViewColumn);
         protected abstract void AddControlToForm(IGridBase cntrl);
 
 
@@ -84,7 +87,25 @@ namespace Habanero.Test.UI.Base
                 Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewTextBoxColumn), 
                     dataGridViewColumnGiz.DataGridViewColumn);
             }
+            protected override void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn)
+            {
+                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz)dataGridViewColumn;
+                Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewCheckBoxColumn),
+                    dataGridViewColumnGiz.DataGridViewColumn);
+            }
+            protected override void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn)
+            {
+                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz)dataGridViewColumn;
+                Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewComboBoxColumn),
+                    dataGridViewColumnGiz.DataGridViewColumn);
+            }
 
+//            protected override void AssertIsDateTimeColumnType(IDataGridViewColumn dataGridViewColumn)
+//            {
+//                DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz) dataGridViewColumn;
+//                Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridView,
+//                    dataGridViewColumnGiz.DataGridViewColumn);
+//            }
             //protected override IGridBase CreateGridBaseStub()
             //{
             //    GridBaseGizStub gridBase = new GridBaseGizStub();
@@ -185,7 +206,74 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
+        [Test]
+        public void TestSetupColumnAsCheckBoxType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
+            IBusinessObjectCollection colBOs = GetCol_BO_1CheckboxItem(classDef);
+            IEditableGrid grid = GetControlFactory().CreateEditableGrid();
+            IDataGridViewColumn dataGridViewColumnSetup = GetControlFactory().CreateDataGridViewCheckBoxColumn();
+            SetupGridColumnsForMyBo(grid,dataGridViewColumnSetup);
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(1, grid.Columns.Count);
+            Assert.AreEqual(1, classDef.UIDefCol.Count);
+            UIGrid uiGridDef = classDef.UIDefCol["default"].UIGrid;
+            Assert.IsNotNull(uiGridDef);
+            Assert.AreEqual(1, uiGridDef.Count);
 
+            //---------------Execute Test ----------------------
+            grid.SetBusinessObjectCollection(colBOs);
+            //---------------Test Result -----------------------
+            IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
+            AssertIsCheckBoxColumnType(dataGridViewColumn);
+            //---------------Tear Down -------------------------        
+        }
+
+        [Test]
+        public void TestSetupComboBoxType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
+            IBusinessObjectCollection colBOs = GetCol_BO_1ComboBoxItem(classDef);
+            IEditableGrid grid = GetControlFactory().CreateEditableGrid();
+            IDataGridViewColumn dataGridViewColumnSetup = GetControlFactory().CreateDataGridViewComboBoxColumn();
+            SetupGridColumnsForMyBo(grid, dataGridViewColumnSetup);
+            
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(1, grid.Columns.Count);
+            Assert.AreEqual(1, classDef.UIDefCol.Count);
+            UIGrid uiGridDef = classDef.UIDefCol["default"].UIGrid;
+            Assert.IsNotNull(uiGridDef);
+            Assert.AreEqual(1, uiGridDef.Count);
+            //---------------Execute Test ----------------------
+            grid.SetBusinessObjectCollection(colBOs);
+            //---------------Test Result -----------------------
+            IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
+            AssertIsComboBoxColumnType(dataGridViewColumn);
+            //---------------Tear Down -------------------------        
+        }
+
+
+        private IBusinessObjectCollection GetCol_BO_1ComboBoxItem(ClassDef classDef)
+        {
+            IBusinessObjectCollection col = new BusinessObjectCollection<BusinessObject>(classDef);
+            IBusinessObject bo1 = classDef.CreateNewBusinessObject();
+            bo1.SetPropertyValue("RelatedID",Guid.NewGuid());
+            col.Add(bo1);
+            return col;
+        }
+
+
+        private static IBusinessObjectCollection GetCol_BO_1CheckboxItem(ClassDef classDef)
+        {
+            IBusinessObjectCollection col = new BusinessObjectCollection<BusinessObject>(classDef);
+            IBusinessObject bo1 = classDef.CreateNewBusinessObject();
+            bo1.SetPropertyValue("TestProp", true);
+            col.Add(bo1);
+            return col;
+
+        }
 
         private static IBusinessObjectCollection GetCol_BO_2Items(ClassDef classDef)
         {
@@ -215,10 +303,14 @@ namespace Habanero.Test.UI.Base
             col.Add(cp, cp2, cp3, cp4);
             return col;
         }
-
-        private static void SetupGridColumnsForMyBo(IEditableGrid readOnlyGrid)
+        private static void SetupGridColumnsForMyBo(IEditableGrid editableGrid, IDataGridViewColumn dataGridViewColumn)
         {
-            readOnlyGrid.Columns.Add("TestProp", "TestProp");
+            editableGrid.Columns.Add(dataGridViewColumn);
+        }
+
+        private static void SetupGridColumnsForMyBo(IEditableGrid editableGrid)
+        {
+            editableGrid.Columns.Add("TestProp","TestProp");
         }
     }
 }
