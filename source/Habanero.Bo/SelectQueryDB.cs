@@ -9,9 +9,9 @@ namespace Habanero.BO
 {
     public class SelectQueryDB : ISelectQuery
     {
-        private readonly SelectQuery _selectQuery;
+        private readonly ISelectQuery _selectQuery;
 
-        public SelectQueryDB(SelectQuery selectQuery) 
+        public SelectQueryDB(ISelectQuery selectQuery) 
         {
             _selectQuery = selectQuery;
         }

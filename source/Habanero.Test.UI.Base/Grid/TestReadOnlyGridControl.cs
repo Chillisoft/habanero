@@ -67,7 +67,8 @@ namespace Habanero.Test.UI.Base
 //            Assert.IsTrue(readOnlyGridControlGiz.IsInitialised);
 //            //---------------Tear Down -------------------------          
 //        }
-//        this can be tested in windows with NUnitForms.
+//        this can be tested in windows with NUnitForms. Removed from Giz because there's
+        // no way to handle a popup messagebox in a test environment.
         //[Test]
         //public void TestAcceptance_DeleteButtonClickSuccessfulDelete()
         //{

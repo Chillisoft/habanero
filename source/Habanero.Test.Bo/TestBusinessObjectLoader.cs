@@ -9,7 +9,8 @@ namespace Habanero.Test.BO
 {
     public abstract class TestBusinessObjectLoader
     {
-        protected abstract void SetupLoader();
+        protected abstract void SetupDataAccessor();
+
         [SetUp]
         public virtual void SetupTest()
         {
@@ -26,10 +27,11 @@ namespace Habanero.Test.BO
         [TestFixture]
         public class TestBusinessObjectLoaderInMemory : TestBusinessObjectLoader
         {
-            protected override void SetupLoader()
+            private DataStoreInMemory _dataStore;
+            protected override void SetupDataAccessor()
             {
-                DataStoreInMemory dataStore = new DataStoreInMemory();
-                BORegistry.DataAccessor = new DataAccessorInMemory(dataStore);
+                _dataStore = new DataStoreInMemory();
+                BORegistry.DataAccessor = new DataAccessorInMemory(_dataStore);
             }
 
             [Test]
@@ -76,17 +78,48 @@ namespace Habanero.Test.BO
                 new TestUsingDatabase().SetupDBConnection();
             }
 
-            protected override void SetupLoader()
+            protected override void SetupDataAccessor()
             {
                 BORegistry.DataAccessor = new DataAccessorDB();
             }
+
+         
+            [Test]
+            public void TestGetBusinessObject_SelectQuery_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();
+                ContactPersonTestBO.LoadDefaultClassDef();
+                ContactPersonTestBO cp = new ContactPersonTestBO();
+                cp.Surname = Guid.NewGuid().ToString("N");
+                cp.FirstName = Guid.NewGuid().ToString("N");
+                cp.Save();
+                BusinessObject.AllLoadedBusinessObjects().Clear();
+
+
+                SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
+                query.Fields.Add("Surname", new QueryField("Surname", "Surname"));
+                query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID"));
+                query.Source = cp.ClassDef.TableName;
+
+                //---------------Execute Test ----------------------
+                ContactPersonTestBO loadedCp =
+                    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(query);
+                //---------------Test Result -----------------------
+                Assert.AreNotSame(loadedCp, cp);
+                Assert.AreEqual(cp.ContactPersonID, loadedCp.ContactPersonID);
+                Assert.AreEqual(cp.Surname, loadedCp.Surname);
+                Assert.IsTrue(String.IsNullOrEmpty(loadedCp.FirstName), "Firstname is not being loaded"); // not being loaded
+                //---------------Tear Down -------------------------
+            }
+
         }
 
         [Test]
         public void TestGetBusinessObjectWhenNotExists()
         {
             //---------------Set up test pack-------------------
-            SetupLoader();
+            SetupDataAccessor();
             ContactPersonTestBO.LoadDefaultClassDef();
             //--------------Assert PreConditions----------------            
 
@@ -98,11 +131,34 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
+
+        [Test]
+        public void TestGetBusinessObject_SelectQuery()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            cp.Save();
+            SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
+            query.Fields.Add("Surname", new QueryField("Surname", "Surname"));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID"));
+            query.Source = cp.ClassDef.TableName;
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCp =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(query);
+            //---------------Test Result -----------------------
+            Assert.AreSame(loadedCp, cp);
+            //---------------Tear Down -------------------------
+        }
+
         [Test]
         public void TestGetBusinessObject_PrimaryKey()
         {
             //---------------Set up test pack-------------------
-            SetupLoader();
+            SetupDataAccessor();
 
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
@@ -122,7 +178,7 @@ namespace Habanero.Test.BO
         public void TestGetBusinessObject_CriteriaObject()
         {
             //---------------Set up test pack-------------------
-            SetupLoader();
+            SetupDataAccessor();
 
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
@@ -142,7 +198,7 @@ namespace Habanero.Test.BO
         public void TestGetBusinessObjectCollection_CriteriaObject()
         {
             //---------------Set up test pack-------------------
-            SetupLoader();
+            SetupDataAccessor();
 
             ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
@@ -170,7 +226,7 @@ namespace Habanero.Test.BO
         public void TestCriteriaSetUponLoadingCollection()
         {
             //---------------Set up test pack-------------------
-            SetupLoader();
+            SetupDataAccessor();
             ContactPersonTestBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, DateTime.Now);
 
@@ -185,7 +241,7 @@ namespace Habanero.Test.BO
         public void TestRefreshLoadedCollection()
         {
             //---------------Set up test pack-------------------
-            SetupLoader();
+            SetupDataAccessor();
             ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
@@ -213,19 +269,24 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-        [Test, Ignore("working on this")]
+        [Test]
         public void TestGetRelatedBusinessObjectCollection()
         {
             //---------------Set up test pack-------------------
-            SetupLoader();
-            Address address;
-            ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
+            SetupDataAccessor();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing();
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+            Address address = new Address();
+            address.ContactPersonID = cp.ContactPersonID;
+            address.Save();
+
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria relationshipCriteria = Criteria.FromRelationship(cp.Relationships["Addresses"]);
+           
             RelatedBusinessObjectCollection<Address> addresses =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<Address>(cp.Relationships["Addresses"]);
             //---------------Test Result -----------------------
+            Criteria relationshipCriteria = Criteria.FromRelationship(cp.Relationships["Addresses"]);
             Assert.AreEqual(relationshipCriteria, addresses.SelectQuery.Criteria);
             Assert.AreEqual(1, addresses.Count);
             Assert.Contains(address, addresses);
@@ -236,7 +297,7 @@ namespace Habanero.Test.BO
         public void TestLoadThroughRelationship()
         {
             //---------------Set up test pack-------------------
-            SetupLoader();
+            SetupDataAccessor();
             Address address;
             ContactPersonTestBO cp = ContactPersonTestBO.CreateContactPersonWithOneAddress_DeleteDoNothing(out address);
             //---------------Assert PreConditions---------------            
@@ -252,7 +313,7 @@ namespace Habanero.Test.BO
         //public void TestLoadAll_Loader()
         //{
         //    //---------------Set up test pack-------------------
-        //    SetupLoader();
+        //    SetupDataAccessor();
         //    BOLoader.Instance.ClearLoadedBusinessObjects();
         //    ContactPersonTestBO.LoadDefaultClassDef();
 
@@ -272,7 +333,7 @@ namespace Habanero.Test.BO
         public void TestLoadWithOrderBy()
         {
             //---------------Set up test pack-------------------
-            SetupLoader();
+            SetupDataAccessor();
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp1 = new ContactPersonTestBO();
             cp1.Surname = "eeeee";
@@ -295,6 +356,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(cp2, col[2]);
             //---------------Tear Down -------------------------
         }
+
 
     }
 

@@ -25,6 +25,11 @@ namespace Habanero.BO
             return _dataStore.Find<T>(criteria);
         }
 
+        public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
+        {
+            return _dataStore.Find<T>(selectQuery.Criteria);
+        }
+
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             return _dataStore.FindAll<T>(criteria);
