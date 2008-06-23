@@ -443,6 +443,7 @@ namespace Habanero.UI.Base
         /// <returns>Returns true if editable</returns>
         private bool CheckIfEditable(UIFormField field, IControlChilli ctl)
         {
+            
             bool editable = field.Editable;
             if (editable)
             {
@@ -450,6 +451,11 @@ namespace Habanero.UI.Base
                 {
                     _firstControl = ctl;
                 }
+            }
+            if (editable)
+            {
+                object parameterValue = field.GetParameterValue("editable");
+                if(parameterValue != null) editable = Convert.ToBoolean(parameterValue);
             }
             return editable;
         }

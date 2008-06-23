@@ -69,12 +69,12 @@ namespace Habanero.Util
             if (_timer != null)
             {
                 _timer.Stop();
-                _timer.Elapsed -= new ElapsedEventHandler(TimerElapsedHandler);
+                _timer.Elapsed -= TimerElapsedHandler;
             }
             _methodToCall = methodToCall;
             _timer = new Timer(_delayInMilliseconds);
             _timer.AutoReset = false;
-            _timer.Elapsed += new ElapsedEventHandler(TimerElapsedHandler);
+            _timer.Elapsed += TimerElapsedHandler;
             _timer.Start();
         }
     }

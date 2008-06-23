@@ -458,10 +458,10 @@ namespace Habanero.Test.UI.Base
 
             //---------------Execute Test ----------------------
             IReadOnlyGridControl readOnlyGridControl = CreateReadOnlyGridControl();
+
             //---------------Test Result -----------------------
             Assert.AreEqual(FilterModes.Filter, readOnlyGridControl.FilterMode);
             Assert.AreEqual(FilterModes.Filter, readOnlyGridControl.FilterControl.FilterMode);
-            //---------------Tear Down -------------------------          
         }
         [Test]
         public void Test_Using_EditableDataSetProvider()
@@ -546,7 +546,7 @@ namespace Habanero.Test.UI.Base
             IReadOnlyGridControl readOnlyGrid = (IReadOnlyGridControl) grid;
             Assert.IsNotNull(readOnlyGrid.Grid);
             Assert.IsNotNull(readOnlyGrid.Buttons);
-            Assert.AreEqual("", readOnlyGrid.UiDefName);
+            Assert.AreEqual("default", readOnlyGrid.UiDefName);
             Assert.IsNull(readOnlyGrid.ClassDef);
             Assert.IsTrue(readOnlyGrid.Grid.ReadOnly);
         }
@@ -565,28 +565,28 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, readOnlyGrid.Columns.Count);
         }
 
-        //[Test]
-        //public void TestInitGrid_DefaultUIDef()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ClassDef classDef = LoadMyBoDefaultClassDef();
-        //    IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-        //    UIDef uiDef = classDef.UIDefCol["default"];
-        //    UIGrid uiGridDef = uiDef.UIGrid;
-        //    //---------------Assert Preconditions---------------
-        //    Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
-        //    Assert.AreEqual("", grid.UiDefName);
-        //    Assert.IsNull(grid.ClassDef);
-        //    //---------------Execute Test ----------------------
-        //    grid.Initialise(classDef);
+        [Test]
+        public void TestInitGrid_DefaultUIDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = LoadMyBoDefaultClassDef();
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            UIDef uiDef = classDef.UIDefCol["default"];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
+            Assert.AreEqual("default", grid.UiDefName);
+            Assert.IsNull(grid.ClassDef);
+            //---------------Execute Test ----------------------
+            grid.Initialise(classDef);
 
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual("default", grid.UiDefName);
-        //    Assert.AreEqual(classDef, grid.ClassDef);
-        //    Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
-        //                    "There should be 1 ID column and 2 defined columns in the defaultDef");
-        //    //---------------Tear Down -------------------------          
-        //}
+            //---------------Test Result -----------------------
+            Assert.AreEqual("default", grid.UiDefName);
+            Assert.AreEqual(classDef, grid.ClassDef);
+            Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
+                            "There should be 1 ID column and 2 defined columns in the defaultDef");
+            //---------------Tear Down -------------------------          
+        }
 
         //[Test]
         //public void TestInitGrid_DefaultUIDef_VerifyColumnsSetupCorrectly()
@@ -617,27 +617,28 @@ namespace Habanero.Test.UI.Base
         //    //---------------Tear Down -------------------------          
         //}
 
-        //[Test]
-        //public void TestInitGrid_WithNonDefaultUIDef()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ClassDef classDef = LoadMyBoDefaultClassDef();
-        //    string alternateUIDefName = "Alternate";
-        //    IReadOnlyGridControl grid = CreateReadOnlyGridControl();
-        //    UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
-        //    UIGrid uiGridDef = uiDef.UIGrid;
-        //    //---------------Assert Preconditions---------------
-        //    Assert.AreEqual(1, uiGridDef.Count, "1 defined column in the alternateUIDef");
-        //    //---------------Execute Test ----------------------
-        //    grid.Initialise(classDef, alternateUIDefName);
+        [Test]
+        public void TestInitGrid_WithNonDefaultUIDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = LoadMyBoDefaultClassDef();
+            string alternateUIDefName = "Alternate";
+            IReadOnlyGridControl grid = CreateReadOnlyGridControl();
+            UIDef uiDef = classDef.UIDefCol[alternateUIDefName];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(1, uiGridDef.Count, "1 defined column in the alternateUIDef");
+            //---------------Execute Test ----------------------
+            grid.Initialise(classDef, alternateUIDefName);
 
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(alternateUIDefName, grid.UiDefName);
-        //    Assert.AreEqual(classDef, grid.ClassDef);
-        //    Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
-        //                    "There should be 1 ID column and 1 defined column in the alternateUIDef");
-        //    //---------------Tear Down -------------------------          
-        //}
+            //---------------Test Result -----------------------
+            Assert.AreEqual(alternateUIDefName, grid.UiDefName);
+            Assert.AreEqual(alternateUIDefName, ((ReadOnlyGridGiz)grid.Grid).GridBaseManager.UiDefName);
+            Assert.AreEqual(classDef, grid.ClassDef);
+            Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
+                            "There should be 1 ID column and 1 defined column in the alternateUIDef");
+            //---------------Tear Down -------------------------          
+        }
 
         //Note: this can be changed to allow the grid to reinitialise everything if initialise called a second time.
         // this may be necessary e.g. to use the same grid but swap out uidefs etc.

@@ -11,11 +11,14 @@ namespace Habanero.UI.Base
         void Initialise(IClassDef classDef);
 
         void Initialise(IClassDef classDef, string uiDefName);
-
+        /// <summary>
+        /// gets and sets the user interface defiition that will load the grid and will be used by the grid add and edit buttons.
+        /// </summary>
         string UiDefName { get; set; }
-
-        IClassDef ClassDef { get; set; }
-
+        /// <summary>
+        /// gets and sets the class definition that will load the grid and will be used by the grid add and edit buttons.
+        /// </summary>
+        IClassDef ClassDef { get; set;}
         /// <summary>
         /// Returns the grid object held. This property can be used to
         /// access a range of functionality for the grid

@@ -46,6 +46,7 @@ namespace Habanero.Util
             int lastDayOfMonth = DateTime.DaysInMonth(dte.Year, dte.Month);
             return new DateTime(dte.Year, dte.Month, lastDayOfMonth);
         }
+
         /// <summary>
         /// returns the first day of the current month
         /// </summary>
@@ -54,6 +55,7 @@ namespace Habanero.Util
         {
             return FirstDayOfMonth(DateTime.Today);
         }
+
         /// <summary>
         /// returns the first day of the month specified by dte
         /// </summary>
@@ -62,6 +64,44 @@ namespace Habanero.Util
         public static DateTime FirstDayOfMonth(DateTime dte)
         {
             return new DateTime(dte.Year, dte.Month, 1);
+        }
+
+        /// <summary>
+        /// Returns the first day of the current financial year.
+        /// If the financial year starts in march then monthFinancialYearStarts = 3.
+        /// If the current date is before 01 March e.g. 12 Feb 2007 then the the current financial year starts on the 01 March 2006.
+        /// Then the current date is after 01 March e.g. 21 August 2007 then the current financial year starts on the 01 March 2007. 
+        /// </summary>
+        /// <param name="monthFinancialYearStarts">the month that the financial year starts usually march in south africa</param>
+        /// <returns></returns>
+        public static DateTime FirstDayOFinancialYear(int monthFinancialYearStarts)
+        {
+            return FirstDayOFinancialYear(monthFinancialYearStarts, DateTime.Today);
+        }
+
+        /// <summary>
+        /// Returns the first day of the current financial year.
+        /// If the financial year starts in march then monthFinancialYearStarts = 3.
+        /// If the current date is before 01 March e.g. 12 Feb 2007 then the the current financial year starts on the 01 March 2006.
+        /// Then the current date is after 01 March e.g. 21 August 2007 then the current financial year starts on the 01 March 2007. 
+        /// </summary>
+        /// <param name="currentDate">The date for which you wish to calculate the first day of the financial year</param>
+        /// <param name="monthFinancialYearStarts">the month that the financial year starts usually march in south africa</param>
+        /// <returns></returns>
+        public static DateTime FirstDayOFinancialYear(int monthFinancialYearStarts, DateTime currentDate)
+        {
+            DateTime firstday;
+            int currentYear = currentDate.Year;
+            int currentMonth = currentDate.Month;
+            if (currentMonth >= monthFinancialYearStarts)
+            {
+                firstday = new DateTime(currentYear, monthFinancialYearStarts, 1);
+            }
+            else
+            {
+                firstday = new DateTime(currentYear - 1, monthFinancialYearStarts, 1);
+            }
+            return firstday;
         }
     }
 }

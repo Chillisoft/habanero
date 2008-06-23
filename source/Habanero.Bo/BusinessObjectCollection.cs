@@ -383,6 +383,10 @@ namespace Habanero.BO
                         IPropDef propDef;
                         InsertJoinsForRelatedProperty(sqlStatement, classDef, parameterName, databaseConnection,
                                                       ref joinedRelationshipTables, out fullTableName, out propDef);
+                        if (propDef == null)
+                        {
+                            throw new HabaneroDeveloperException("An application error has occured please contact your system administrator", "The prop def for '" + parameterName + "' is null");
+                        }
                         string newParameterName = SqlFormattingHelper.FormatTableAndFieldName(
                             fullTableName, propDef.DatabaseFieldName, databaseConnection);
                         //string newParameterName = fullTableName + "." + propDef.DatabaseFieldName;

@@ -16,15 +16,12 @@ namespace Habanero.UI.WebGUI
         private IBusinessObjectEditor _businessObjectEditor;
         private IBusinessObjectCreator _businessObjectCreator;
         private IBusinessObjectDeletor _businessObjectDeletor;
-        private string _uiDefName = "";
-        private ClassDef _classDef;
         private readonly IFilterControl _filterControl;
         private readonly IGridInitialiser _gridInitialiser;
         private string _orderBy;
         private string _additionalSearchCriteria;
 
         public delegate void RefreshGridDelegate();
-
 
         public ReadOnlyGridControlGiz() : this(GlobalUIRegistry.ControlFactory)
         {
@@ -94,7 +91,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public void Initialise(IClassDef classDef)
         {
-            _gridInitialiser.InitialiseGrid((ClassDef) classDef);
+            _gridInitialiser.InitialiseGrid(classDef);
         }
 
         public void Initialise(IClassDef classDef, string uiDefName)
@@ -102,10 +99,10 @@ namespace Habanero.UI.WebGUI
             if (classDef == null) throw new ArgumentNullException("classDef");
             if (uiDefName == null) throw new ArgumentNullException("uiDefName");
 
-            _classDef = (ClassDef) classDef;
-            _uiDefName = uiDefName;
+            this.ClassDef = classDef;
+            this.UiDefName = uiDefName;
 
-            _gridInitialiser.InitialiseGrid(_classDef, uiDefName);
+            _gridInitialiser.InitialiseGrid(this.ClassDef, uiDefName);
         }
 
         private void Buttons_DeleteClicked(object sender, EventArgs e)
@@ -122,16 +119,14 @@ namespace Habanero.UI.WebGUI
                 if (selectedBo != null)
                 {
                     MessageBox.Show("Are you certain you want to delete the object '" + selectedBo + "'",
-                        "Delete Object", MessageBoxButtons.YesNo, delegate(object msgBoxSender, EventArgs e1)
-                                                                  {
-                                                                      if (((Form) msgBoxSender).DialogResult ==
-                                                                          DialogResult.Yes)
-                                                                      {
-                                                                          _grid.SelectedBusinessObject = null;
-                                                                          _businessObjectDeletor.DeleteBusinessObject(
-                                                                              selectedBo);
-                                                                      }
-                                                                  });
+                            "Delete Object", MessageBoxButtons.YesNo, delegate(object msgBoxSender, EventArgs e1)
+                                  {
+                                      if (((Form) msgBoxSender).DialogResult == DialogResult.Yes)
+                                      {
+                                          _grid.SelectedBusinessObject = null;
+                                          _businessObjectDeletor.DeleteBusinessObject(selectedBo);
+                                      }
+                                  });
                 }
             }
             catch (Exception ex)
@@ -153,7 +148,7 @@ namespace Habanero.UI.WebGUI
                 {
                     if (_businessObjectEditor != null)
                     {
-                        _businessObjectEditor.EditObject(selectedBo, _uiDefName, delegate { this.Grid.RefreshGrid(); });
+                        _businessObjectEditor.EditObject(selectedBo, this.UiDefName, delegate { this.Grid.RefreshGrid(); });
                     }
                 }
             }
@@ -180,7 +175,7 @@ namespace Habanero.UI.WebGUI
                 newBo = _businessObjectCreator.CreateBusinessObject();
                 if (_businessObjectEditor != null && newBo != null)
                 {
-                    _businessObjectEditor.EditObject(newBo, _uiDefName,
+                    _businessObjectEditor.EditObject(newBo, this.UiDefName,
                         delegate(IBusinessObject bo) { this.Grid.SelectedBusinessObject = bo; });
                 }
             }
@@ -241,16 +236,15 @@ namespace Habanero.UI.WebGUI
 
         public string UiDefName
         {
-            get { return _uiDefName; }
-            set { _uiDefName = value; }
+            get { return _grid.GridBaseManager.UiDefName; }
+            set { _grid.GridBaseManager.UiDefName = value; }
         }
 
         public IClassDef ClassDef
         {
-            get { return _classDef; }
-            set { _classDef = (ClassDef) value; }
+            get { return _grid.GridBaseManager.ClassDef; }
+            set { _grid.GridBaseManager.ClassDef = value; }
         }
-
         public IFilterControl FilterControl
         {
             get { return _filterControl; }
@@ -298,13 +292,13 @@ namespace Habanero.UI.WebGUI
                 this.FilterControl.Enabled = false;
                 return;
             }
-            if (_classDef == null)
+            if (this.ClassDef == null)
             {
                 Initialise(boCollection.ClassDef);
             }
             else
             {
-                if (_classDef != boCollection.ClassDef)
+                if (this.ClassDef != boCollection.ClassDef)
                 {
                     throw new ArgumentException(
                         "You cannot call set collection for a collection that has a different class def than is initialised");

@@ -139,7 +139,6 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestInitialiseGrid()
         {
-    
             //---------------Set up test pack-------------------
             ClassDef classDef = LoadMyBoDefaultClassDef();
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
@@ -148,7 +147,7 @@ namespace Habanero.Test.UI.Base
             UIGrid uiGridDef = uiDef.UIGrid;
             //---------------Assert Preconditions---------------
             Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
-            Assert.AreEqual("", grid.UiDefName);
+//            Assert.AreEqual("", grid.UiDefName);
             Assert.IsNull(grid.ClassDef);
             //---------------Execute Test ----------------------
             initialiser.InitialiseGrid(classDef);
@@ -161,8 +160,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(initialiser.IsInitialised);
             Assert.AreSame(grid, initialiser.Grid);
 //            Assert.IsTrue(grid.IsInitialised);
-            //---------------Tear Down -------------------------          
-        
         }
 
         [Test]

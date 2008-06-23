@@ -33,6 +33,13 @@ namespace Habanero.UI.WebGUI
             this.SelectionChanged += delegate { FireBusinessObjectSelected(); };
             _manager.CollectionChanged += delegate { FireCollectionChanged(); };
         }
+        /// <summary>
+        /// Returns the grid base manager for this grid
+        /// </summary>
+        public GridBaseManager GridBaseManager
+        {
+            get { return _manager; }
+        }
 
         /// <summary>
         /// Creates the appropriate dataSetProvider depending on the grid type e.g. editable grid should return a
@@ -645,7 +652,7 @@ namespace Habanero.UI.WebGUI
         {
             _dataGridViewCell = cell;
         }
-        
+
         public DataGridViewCell DataGridViewCell
         {
             get { return _dataGridViewCell; }

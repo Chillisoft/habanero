@@ -17,13 +17,14 @@ namespace Habanero.UI.Base
 
         private IBusinessObjectCollection _boCol;
 
-        private readonly string _uiDefName;
+        private string _uiDefName;
 
         private DataView _dataTableDefaultView;
 
         public event EventHandler CollectionChanged;
 
         private GridLoaderDelegate _gridLoader;
+        private IClassDef _classDef;
 
         public GridBaseManager(IGridBase gridBase, string uiDefName)
         {
@@ -91,14 +92,17 @@ namespace Habanero.UI.Base
         protected DataView GetDataTable(IBusinessObjectCollection boCol)
         {
             _dataSetProvider = _gridBase.CreateDataSetProvider(boCol);
-            ClassDef classDef = (ClassDef) _boCol.ClassDef;
-            UIDef uiDef = classDef.GetUIDef(_uiDefName);
+            if (this.ClassDef == null)
+            {
+                this.ClassDef = _boCol.ClassDef;
+            }  
+            UIDef uiDef = ((ClassDef)this.ClassDef).GetUIDef(UiDefName);
             if (uiDef == null)
             {
                 throw new ArgumentException(
                     String.Format(
                         "You cannot Get the data for the grid {0} since the uiDef {1} cannot be found for the classDef {2}",
-                        this._gridBase.Name, _uiDefName, classDef.ClassName));
+                        this._gridBase.Name, UiDefName, ((ClassDef)this.ClassDef).ClassName));
             }
             DataTable dataTable = _dataSetProvider.GetDataTable(uiDef.UIGrid);
             _dataTableDefaultView = dataTable.DefaultView;
@@ -175,7 +179,7 @@ namespace Habanero.UI.Base
             {
                 if (_boCol == null) return new List<BusinessObject>();
                 BusinessObjectCollection<BusinessObject> busObjects =
-                    new BusinessObjectCollection<BusinessObject>((ClassDef) _boCol.ClassDef);
+                    new BusinessObjectCollection<BusinessObject>(this.ClassDef);
                 foreach (IDataGridViewRow row in _gridBase.SelectedRows)
                 {
                     BusinessObject businessObject = (BusinessObject) GetBusinessObjectAtRow(row.Index);
@@ -189,6 +193,18 @@ namespace Habanero.UI.Base
         {
             get { return this._gridLoader; }
             set { this._gridLoader = value; }
+        }
+
+        public string UiDefName
+        {
+            get { return _uiDefName; }
+            set { _uiDefName = value; }
+        }
+
+        public IClassDef ClassDef
+        {
+            get { return _classDef; }
+            set { _classDef = value; }
         }
 
         private void FireCollectionChanged()
