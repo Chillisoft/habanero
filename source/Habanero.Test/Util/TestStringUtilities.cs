@@ -76,7 +76,7 @@ namespace Habanero.Test.Util
         [Test]
         public void TestIdNumberUtilities()
         {
-            IdNumberUtilities idUtil = new IdNumberUtilities();
+            new IdNumberUtilities();
             DateTime testDate = new DateTime(2007,1,1);
             Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("070101"));
         }
