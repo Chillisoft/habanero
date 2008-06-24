@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -41,13 +40,11 @@ namespace Habanero.DB
         private const string AND_TOKEN = " AND ";
         private const string ORDER_BY_CLAUSE_TOKEN = " ORDER BY ";
         private StringBuilder _statement;
-        private IDatabaseConnection _connection;
-        private List<IDbDataParameter> _parameters;
-        private IDbCommand _sampleCommand;
-        private ParameterNameGenerator _gen;
-        private IDbConnection _idbConnection;
-        
-
+        private readonly IDatabaseConnection _connection;
+        private readonly List<IDbDataParameter> _parameters;
+        private readonly IDbCommand _sampleCommand;
+        private readonly ParameterNameGenerator _gen;
+        private readonly IDbConnection _idbConnection;
 
         /// <summary>
         /// Constructor to initialise a new sql statement
@@ -302,14 +299,6 @@ namespace Habanero.DB
             {
                 AppendWhere();
                 this.Statement.Append(criteria);
-                //if (this.Statement.ToString().IndexOf(" WHERE ") != -1)
-                //{
-                //    this.Statement.Append(" AND " + criteria);
-                //}
-                //else
-                //{
-                //    this.Statement.Append(" WHERE " + criteria);
-                //}
             }
         }
 
@@ -408,8 +397,8 @@ namespace Habanero.DB
                 }
                 for (int i = 0; i < _parameters.Count; i++)
                 {
-                    IDbDataParameter myParam = (IDbDataParameter)_parameters[i];
-                    IDbDataParameter theirParam = (IDbDataParameter)statement.Parameters[i];
+                    IDbDataParameter myParam = _parameters[i];
+                    IDbDataParameter theirParam = statement.Parameters[i];
                     if (!myParam.GetType().Equals(theirParam.GetType()) ||
                         !myParam.ParameterName.Equals(theirParam.ParameterName) ||
                         !myParam.Value.Equals(theirParam.Value))

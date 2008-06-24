@@ -70,6 +70,17 @@ namespace Habanero.Base
         IDataReader LoadDataReader(string selectSql);
 
         /// <summary>
+        /// Loads a data reader with the given raw sql select statement for the specified transaction
+        /// </summary>
+        /// <param name="selectSql">The sql statement as a string</param>
+        /// <param name="transaction">Thransaction that gives the context within which the sql statement should be executed</param>
+        /// <returns>Returns an IDataReader object with the results of the query</returns>
+        /// <exception cref="Habanero.DB.DatabaseReadException">Thrown when an error
+        /// occurred while setting up the data reader.  Also sends error
+        /// output to the log.</exception>        
+        IDataReader LoadDataReader(string selectSql, IDbTransaction transaction);
+
+        /// <summary>
         /// Loads data from the database into a DataTable object, using the
         /// sql statement object provided
         /// </summary>
@@ -155,5 +166,6 @@ namespace Habanero.Base
         
         //string RightDateDelimiter { get; }
         //string LeftDateDelimiter { get; }
+
     }
 }

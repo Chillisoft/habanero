@@ -17,7 +17,6 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -35,15 +34,18 @@ namespace Habanero.Base
         StringBuilder Statement { get; set; }
 
         /// <summary>
-        /// Adds a parameter value
+        /// Adds a parameter value without appending the name of the parameter to the statement.
         /// </summary>
         /// <param name="paramName">The parameter name</param>
         /// <param name="paramValue">The value to assign</param>
         /// <returns>Returns a IDbDataParameter object</returns>
-        /// TODO ERIC - how does this compare with the similarly-worded
-        /// AddParameterToStatement()? If it's behaviour (to assign a value?)
-        /// is different, it should be named differently too
         IDbDataParameter AddParameter(string paramName, object paramValue);
+
+        /// <summary>
+        /// Adds a parameter to the sql statement, creating the parameter name and appending it to the statement
+        /// </summary>
+        /// <param name="obj">The parameter to add</param>
+        void AddParameterToStatement(object obj);
 
         /// <summary>
         /// Returns the list of parameters
@@ -55,12 +57,6 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="command">The command</param>
         void SetupCommand(IDbCommand command);
-
-        /// <summary>
-        /// Adds a parameter to the sql statement
-        /// </summary>
-        /// <param name="obj">The parameter to add</param>
-        void AddParameterToStatement(object obj);
 
         ///<summary>
         /// Adds a join clause to the sql statement

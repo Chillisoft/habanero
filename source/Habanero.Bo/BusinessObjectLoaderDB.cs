@@ -1,29 +1,36 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    ///For details of what this class does, see <see cref="IBusinessObjectLoader"/>.
+    ///
+    /// All queries (including custom SelectQuery objects) run by this loader will be done using parametrized sql for 
+    /// improved type safety and performance.
+    /// 
+    ///</summary>
     public class BusinessObjectLoaderDB : IBusinessObjectLoader
     {
         //private readonly DataStoreInMemory _dataStoreInMemory;
         private readonly IDatabaseConnection _databaseConnection;
 
+        ///<summary>Creates a BusinessObjectLoaderDB. Because this is a loader the loads data from a Database, this constructor
+        /// requires an IDatabaseConnection object to be passed to it.  This connection will be used for all loading.
+        ///</summary>
+        ///<param name="databaseConnection"></param>
         public BusinessObjectLoaderDB(IDatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
             //_dataStoreInMemory = new DataStoreInMemory();
         }
 
-        public T GetBusinessObject<T>(IPrimaryKey key) where T : class, IBusinessObject, new()
+        public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
-            //T foundBO = _dataStoreInMemory.Find<T>(key);
+            //T foundBO = _dataStoreInMemory.Find<T>(primaryKey);
             //if (foundBO != null) return foundBO;
-            return GetBusinessObject<T>(Criteria.FromPrimaryKey(key));
+            return GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
         }
 
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()

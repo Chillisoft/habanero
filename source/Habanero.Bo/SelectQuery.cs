@@ -12,11 +12,21 @@ namespace Habanero.BO
         private OrderCriteria _orderCriteria;
         private int _limit;
 
+        ///<summary>
+        /// Creates a SelectQuery with no Criteria and no fields.  In order to use the SelectQuery at least on field must be added
+        /// to the <see cref="Fields"/>, and a <see cref="Source"/> must be specified.
+        ///</summary>
         public SelectQuery()
         {
             
         }
 
+
+        ///<summary>
+        /// Creates a SelectQuery with a Critiria and no fields.  In order to use the SelectQuery at least on field must be added
+        /// to the <see cref="Fields"/>, and a <see cref="Source"/> must be specified.
+        ///</summary>
+        /// <param name="criteria">The Criteria to initialise this SelectQuery with.</param>
         public SelectQuery(Criteria criteria) : this()
         {
             _criteria = criteria;
@@ -34,9 +44,6 @@ namespace Habanero.BO
             get { return _fields; }
         }
 
-        /// <summary>
-        /// The source of the data. In a database query this would be the first table listed in the FROM clause.
-        /// </summary>
         public string Source
         {
             get { return _source; }

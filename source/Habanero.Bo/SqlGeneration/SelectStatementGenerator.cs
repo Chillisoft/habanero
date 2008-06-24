@@ -86,47 +86,6 @@ namespace Habanero.BO.SqlGeneration
             return where;
         }
 
-        /// <summary>
-        /// Returns the table name
-        /// </summary>
-        /// <param name="propName">The name of the property</param>
-        /// <param name="classDefs">The class definitions</param>
-        /// <returns>Returns a string</returns>
-        private string GetTableName(string propName, IList<ClassDef> classDefs)
-        {
-            // TODO: This function could conceivably use the GetTableName function on ClassDef, but this needs to be investigated further.
-            int i = 0;
-            bool isSingleTableInheritance = false;
-            do
-            {
-                ClassDef classDef = (ClassDef) classDefs[i];
-                if (classDef.IsUsingConcreteTableInheritance())
-                {
-                    return classDef.TableName;
-                }
-                else if (classDef.PropDefcol.Contains(propName))
-                {
-                    if (classDef.SuperClassClassDef == null || classDef.IsUsingClassTableInheritance())
-                    {
-                        return classDef.TableName;
-                    }
-                    else if (classDef.IsUsingSingleTableInheritance())
-                    {
-                        isSingleTableInheritance = true;
-                    }
-                }
-                else if (classDef.IsUsingSingleTableInheritance())
-                {
-                    isSingleTableInheritance = true;
-                }
-                else if (isSingleTableInheritance)
-                {
-                    return classDef.TableName;
-                }
-                i++;
-            } while (i < classDefs.Count);
-            return "";
-        }
 
         /// <summary>
         /// Creates the where clause which determines how the parent
@@ -286,7 +245,7 @@ namespace Habanero.BO.SqlGeneration
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
                 if (!prop.PropDef.Persistable) continue; //BRETT/PETER TODO: to be changed
-                string tableName = GetTableName(prop.PropertyName, classDefs);
+                string tableName = _bo.ClassDef.GetTableName(prop.PropDef);
 
                 statement += SqlFormattingHelper.FormatTableAndFieldName(tableName, prop.DatabaseFieldName, _connection);
                 statement += ", ";

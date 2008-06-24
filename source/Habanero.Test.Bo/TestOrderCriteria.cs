@@ -25,7 +25,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             OrderCriteria orderCriteria = new OrderCriteria().Add("TestProp");
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, orderCriteria.Count);
+            Assert.AreEqual(1, orderCriteria.Fields.Count);
             Assert.Contains(new OrderCriteria.Field("TestProp", OrderCriteria.SortDirection.Ascending), orderCriteria.Fields);
             //---------------Tear Down -------------------------
         }
@@ -41,7 +41,7 @@ namespace Habanero.Test.BO
 
             orderCriteria.Add("TestProp2", OrderCriteria.SortDirection.Descending);
             //---------------Test Result -----------------------
-            Assert.AreEqual(2, orderCriteria.Count);
+            Assert.AreEqual(2, orderCriteria.Fields.Count);
             Assert.Contains(new OrderCriteria.Field("TestProp2", OrderCriteria.SortDirection.Descending), orderCriteria.Fields);
             //---------------Tear Down -------------------------
         }
