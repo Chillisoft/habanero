@@ -11,13 +11,33 @@ namespace Habanero.UI.WebGUI
 
         public DateTimePickerGiz(IControlFactory controlFactory)
         {
-            _manager = new DateTimePickerManager(controlFactory, this);
+            DateTimePickerManager.ValueGetter valueGetter = delegate()
+            {
+                return base.Value;
+            };
+            DateTimePickerManager.ValueSetter valueSetter = delegate(DateTime value)
+            {
+                base.Value = value;
+            };
+            _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter);
         }
 
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
+
+        DateTime IDateTimePicker.Value
+        {
+            get { return _manager.Value; }
+            set { _manager.Value = value; }
+        }
+
+        //protected override void OnValueChanged(EventArgs eventargs)
+        //{
+        //    _manager.OnValueChanged(eventargs);
+        //    base.OnValueChanged(eventargs);
+        //}
 
         public DateTime? ValueOrNull
         {
@@ -27,8 +47,8 @@ namespace Habanero.UI.WebGUI
 
         public bool ShowUpDown
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
     }
 }

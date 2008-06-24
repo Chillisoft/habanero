@@ -9,20 +9,30 @@ namespace Habanero.UI.Base
     {
         private readonly IControlFactory _controlFactory;
         private readonly IDateTimePicker _dateTimePicker;
+        private readonly ValueGetter _valueGetter;
+        private readonly ValueSetter _valueSetter;
 
+        public delegate DateTime ValueGetter();
+        public delegate void ValueSetter(DateTime value);
 
         //State Variables
         private bool _isNull;
-        private IPanel _displayBox;
-        private ILabel _displayText;
+        //private IPanel _displayBox;
+        //private ILabel _displayText;
 
         //private event EventHandler _valueChanged;
 
-        public DateTimePickerManager(IControlFactory controlFactory, IDateTimePicker dateTimePicker)
+        public DateTimePickerManager(IControlFactory controlFactory, IDateTimePicker dateTimePicker,
+            ValueGetter valueGetter, ValueSetter valueSetter)
         {
+            if (valueGetter == null) throw new ArgumentNullException("valueGetter");
+            if (valueSetter == null) throw new ArgumentNullException("valueSetter");
             _controlFactory = controlFactory;
             _dateTimePicker = dateTimePicker;
-            SetupDisplayBox();
+            _valueGetter = valueGetter;
+            _valueSetter = valueSetter;
+            ApplyBlankFormat();
+            //SetupDisplayBox();
         }
 
         //#region Setup Controller
@@ -75,35 +85,35 @@ namespace Habanero.UI.Base
         //        //                                            });
         //        _dateTimePicker = null;
         //    }
-        private void SetupDisplayBox()
-        {
-            //ControlsHelper.SafeGui(_dateTimePicker, delegate()
-            //{
-            _displayBox = _controlFactory.CreatePanel();
-            //_displayBox.BorderStyle = BorderStyle.None;
-            _displayBox.Location = new Point(2, 2);
-            ResizeDisplayBox();
-            _displayBox.BackColor = _dateTimePicker.BackColor;
-            _displayBox.ForeColor = _dateTimePicker.ForeColor;
-            //_displayBox.MouseUp += DateTimePicker_MouseUp;
-            //_displayBox.KeyDown += DateTimePicker_KeyDown;
-            _displayText = _controlFactory.CreateLabel();
-            _displayText.Location = new Point(0, 0);
-            _displayText.AutoSize = true;
-            _displayText.Text = "";
-            //_displayText.MouseUp += DateTimePicker_MouseUp;
-            //_displayText.KeyDown += DateTimePicker_KeyDown;
-            //_displayBox.Controls.Add(_displayText);
-            //_dateTimePicker.Controls.Add(_displayBox);
-            _displayBox.Visible = false;
-            //});
-        }
+        //private void SetupDisplayBox()
+        //{
+        //    //ControlsHelper.SafeGui(_dateTimePicker, delegate()
+        //    //{
+        //    _displayBox = _controlFactory.CreatePanel();
+        //    //_displayBox.BorderStyle = BorderStyle.None;
+        //    _displayBox.Location = new Point(2, 2);
+        //    ResizeDisplayBox();
+        //    _displayBox.BackColor = _dateTimePicker.BackColor;
+        //    _displayBox.ForeColor = _dateTimePicker.ForeColor;
+        //    //_displayBox.MouseUp += DateTimePicker_MouseUp;
+        //    //_displayBox.KeyDown += DateTimePicker_KeyDown;
+        //    _displayText = _controlFactory.CreateLabel();
+        //    _displayText.Location = new Point(0, 0);
+        //    _displayText.AutoSize = true;
+        //    _displayText.Text = "";
+        //    //_displayText.MouseUp += DateTimePicker_MouseUp;
+        //    //_displayText.KeyDown += DateTimePicker_KeyDown;
+        //    //_displayBox.Controls.Add(_displayText);
+        //    //_dateTimePicker.Controls.Add(_displayBox);
+        //    _displayBox.Visible = false;
+        //    //});
+        //}
 
-        private void ResizeDisplayBox()
-        {
-            _displayBox.Width = _dateTimePicker.Width - 22 - 2;
-            _displayBox.Height = _dateTimePicker.Height - 7;
-        }
+        //private void ResizeDisplayBox()
+        //{
+        //    _displayBox.Width = _dateTimePicker.Width - 22 - 2;
+        //    _displayBox.Height = _dateTimePicker.Height - 7;
+        //}
 
         //    private void UpdateFocusState()
         //    {
@@ -148,7 +158,7 @@ namespace Habanero.UI.Base
             {
                 if (!IsNull())
                 {
-                    return (DateTime)_dateTimePicker.Value;
+                    return GetDateTimePickerValue();
                 }
                 else
                 {
@@ -160,7 +170,7 @@ namespace Habanero.UI.Base
                 if (ValueOrNull == value) return;
                 if (value != null)
                 {
-                    _dateTimePicker.Value = (DateTime)value;
+                    SetDateTimePickerValue((DateTime)value);
                     ApplyValueFormat();
                 }
                 else
@@ -178,15 +188,32 @@ namespace Habanero.UI.Base
         {
             get
             {
-                return _dateTimePicker.Value;
+                return GetDateTimePickerValue();
             }
             set
             {
                 if (ValueOrNull == value) return;
-                _dateTimePicker.Value = value;
+                SetDateTimePickerValue(value);
+
+                //if (!CheckBoxVisible)
+                    //    {
+                    //        ApplyValueFormat();
+                    //    }
+                    //    FireValueChanged();
+
                 ApplyValueFormat();
                 FireValueChanged();
             }
+        }
+
+        private void SetDateTimePickerValue(DateTime value)
+        {
+            _valueSetter(value);
+        }
+
+        private DateTime GetDateTimePickerValue()
+        {
+            return _valueGetter();
         }
 
         ///// <summary>
@@ -216,7 +243,7 @@ namespace Habanero.UI.Base
 
         private bool ApplyValueFormat()
         {
-            _displayBox.Visible = false;
+            //_displayBox.Visible = false;
             if (!IsNull()) return false;
             if (CheckBoxVisible)
             {
@@ -231,11 +258,11 @@ namespace Habanero.UI.Base
             if (IsNull()) return false;
             if (!CheckBoxVisible)
             {
-                _displayBox.Visible = true;
+                //_displayBox.Visible = true;
             }
             else
             {
-                _displayBox.Visible = false;
+                //_displayBox.Visible = false;
                 CheckBoxChecked = false;
             }
             _isNull = true;
@@ -343,5 +370,14 @@ namespace Habanero.UI.Base
         //}
 
         #endregion //Control Events
+
+        public void OnValueChanged(EventArgs eventArgs)
+        {
+            if (!CheckBoxVisible)
+            {
+                ApplyValueFormat();
+            }
+            FireValueChanged();
+        }
     }
 }

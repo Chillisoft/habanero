@@ -11,13 +11,33 @@ namespace Habanero.UI.Win
 
         public DateTimePickerWin(IControlFactory controlFactory)
         {
-            _manager = new DateTimePickerManager(controlFactory, this);
+            DateTimePickerManager.ValueGetter valueGetter = delegate()
+            {
+                return base.Value;
+            };
+            DateTimePickerManager.ValueSetter valueSetter = delegate(DateTime value)
+            {
+                base.Value = value;
+            };
+            _manager = new DateTimePickerManager(controlFactory, this, valueGetter, valueSetter);
         }
         
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
+
+        DateTime IDateTimePicker.Value
+        {
+            get { return _manager.Value; }
+            set { _manager.Value = value; }
+        }
+
+        //protected override void OnValueChanged(EventArgs eventargs)
+        //{
+        //    _manager.OnValueChanged(eventargs);
+        //    base.OnValueChanged(eventargs);
+        //}
 
         public DateTime? ValueOrNull
         {
