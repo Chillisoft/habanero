@@ -50,7 +50,8 @@ namespace Habanero.BO
         {
             if(_boCol != null)
             {
-                BORegistry.DataAccessor.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>)_boCol);
+                //BORegistry.BusinessObjectLoader.Refresh((BusinessObjectCollection<TBusinessObject>)_boCol);
+                BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
                 return _boCol;
             }
 
@@ -81,7 +82,8 @@ namespace Habanero.BO
             }
             IBusinessObjectCollection boCol;
 
-            boCol = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
+            //boCol = BORegistry.BusinessObjectLoader.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
+            boCol = BOLoader.Instance.GetRelatedBusinessObjectCollection<TBusinessObject>(this);
 
             if (_relDef.KeepReferenceToRelatedObject)
             {
