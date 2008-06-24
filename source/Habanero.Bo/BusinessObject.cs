@@ -64,8 +64,9 @@ namespace Habanero.BO
         protected BOPrimaryKey _primaryKey;
         protected IRelationshipCol _relationshipCol;
         protected IConcurrencyControl _concurrencyControl;
-        private ITransactional _transactionLog;
+        private ITransactionLog _transactionLog;
         protected IDatabaseConnection _connection;
+        protected IBusinessObjectUpdateLog _businessObjectUpdateLog;
         //private bool _hasAutoIncrementingField;
         #endregion //Fields
 
@@ -411,9 +412,18 @@ namespace Habanero.BO
         /// Sets the transaction log to that specified
         /// </summary>
         /// <param name="transactionLog">A transaction log</param>
-        protected void SetTransactionLog(ITransactional transactionLog)
+        protected void SetTransactionLog(ITransactionLog transactionLog)
         {
             _transactionLog = transactionLog;
+        }
+
+        /// <summary>
+        /// Sets the business object update log to the one specified
+        /// </summary>
+        /// <param name="businessObjectUpdateLog">A businessObject update log object</param>
+        protected void SetBusinessObjectUpdateLog(IBusinessObjectUpdateLog businessObjectUpdateLog)
+        {
+            _businessObjectUpdateLog = businessObjectUpdateLog;
         }
 
         /// <summary>
@@ -1024,6 +1034,10 @@ namespace Habanero.BO
             if (_transactionLog != null)
             {
                 transactionCommitter.AddTransaction(_transactionLog);
+            }
+            if (_businessObjectUpdateLog != null && (State.IsNew || (State.IsDirty && !State.IsDeleted)))
+            {
+                _businessObjectUpdateLog.Update();
             }
         }
 

@@ -163,6 +163,8 @@
     <Compile Include="SqlGeneration\StatementGeneratorTestHelper.cs" />
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
+    <Compile Include="TestBusinessObjectLastUpdatePropertiesLog.cs" />
+    <Compile Include="TestBusinessObjectUpdateLog.cs" />
     <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestTransactionCommitter.cs" />
     <Compile Include="TestMultipleRelationship.cs" />
@@ -232,6 +234,7 @@
     <Compile Include="TestTransactionCommitterHelper.cs" />
     <Compile Include="TestTransactionLogger.cs" />
     <Compile Include="TestUnrefRelationshipDef.cs" />
+    <Compile Include="TransactionCommitterStub.cs" />
     <Compile Include="TransactionLogBusObj.cs">
       <SubType>Code</SubType>
     </Compile>
