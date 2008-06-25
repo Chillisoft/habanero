@@ -63,7 +63,7 @@ namespace Habanero.BO
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : BusinessObject, new();
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
@@ -74,7 +74,7 @@ namespace Habanero.BO
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="selectQuery">The select query to use to load from the data source</param>
         /// <returns>The loaded collection</returns>
-        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : BusinessObject, new();
+        BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
@@ -96,5 +96,7 @@ namespace Habanero.BO
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship) where T : class, IBusinessObject, new();
+
+        T GetRelatedBusinessObject<T>(IRelationship relationship) where T : class, IBusinessObject, new();
     }
 }

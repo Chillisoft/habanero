@@ -108,7 +108,7 @@ namespace Habanero.BO
 
         private void AppendOrderByClause(StringBuilder builder)
         {
-            if (_selectQuery.OrderCriteria != null)
+            if (_selectQuery.OrderCriteria != null && _selectQuery.OrderCriteria.Fields.Count > 0)
             {
                 builder.Append(" ORDER BY ");
                 StringBuilder orderByClause = new StringBuilder();

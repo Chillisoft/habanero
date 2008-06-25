@@ -106,7 +106,7 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns an IComparer object, or null if the property
         /// type is not one of those mentioned above</returns>
-        IComparer<T> GetPropertyComparer<T>() where T : IBusinessObject;
+        IPropertyComparer<T> GetPropertyComparer<T>() where T : IBusinessObject;
 
         ///<summary>
         /// Cdfdasfkl;

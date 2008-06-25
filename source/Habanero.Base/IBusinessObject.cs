@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
@@ -31,6 +32,14 @@ namespace Habanero.Base
         /// <param name="propName">The property name</param>
         /// <returns>Returns the value if found</returns>
         object GetPropertyValue(string propName);
+
+        /// <summary>
+        /// Returns the value under the property name specified, accessing it through the 'source'
+        /// </summary>
+        /// <param name="source">The source of the property ie - the relationship or C# property this property is on</param>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns the value if found</returns>
+        object GetPropertyValue(string source, string propName);
 
         /// <summary>
         /// Sets a property value to a new value
@@ -94,6 +103,14 @@ namespace Habanero.Base
         /// The BOState object for this BusinessObject, which records the state information of the object
         /// </summary>
         IBOState State
+        {
+            get;
+        }
+
+        /// <summary>
+        /// The BOProps in this business object
+        /// </summary>
+        BOPropCol Props
         {
             get;
         }

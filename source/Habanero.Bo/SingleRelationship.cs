@@ -64,7 +64,7 @@ namespace Habanero.BO
         /// <returns>Returns the related business object</returns>
         public IBusinessObject GetRelatedObject(IDatabaseConnection connection)
         {
-        	return GetRelatedObject<IBusinessObject>();
+        	return GetRelatedObject<BusinessObject>();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Habanero.BO
         /// </summary>
         /// <returns>Returns the related business object</returns>
         public virtual T GetRelatedObject<T>()
-			where T : class, IBusinessObject
+			where T : class, IBusinessObject, new()
         {
             IExpression newRelationshipExpression = _relKey.RelationshipExpression();
             if (_relatedBo == null ||
@@ -82,9 +82,9 @@ namespace Habanero.BO
                 if (HasRelationship())
                 {
                     //log.Debug("HasRelationship returned true, loading object.") ;
+                   // Peter-Working: IBusinessObject busObj = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject<T>(this);
                     IBusinessObject busObj =
                         (BusinessObject)Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
-
                     busObj = BOLoader.Instance.GetBusinessObject(busObj, newRelationshipExpression);
                     if (_relDef.KeepReferenceToRelatedObject)
                     {

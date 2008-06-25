@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -30,9 +31,9 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             MultipleRelationshipDefInheritor relDef = new MultipleRelationshipDefInheritor();
 
-            Assert.AreEqual("acolumn", relDef.OrderBy);
-            relDef.SetOrderBy("somecolumn");
-            Assert.AreEqual("somecolumn", relDef.OrderBy);
+            Assert.AreEqual("acolumn ASC", relDef.OrderCriteria.ToString());
+            relDef.SetOrderBy(new OrderCriteria().Add("somecolumn"));
+            Assert.AreEqual("somecolumn ASC", relDef.OrderCriteria.ToString());
 
             Assert.AreEqual(DeleteParentAction.Prevent, relDef.DeleteParentAction);
             relDef.SetDeleteParentAction(DeleteParentAction.DeleteRelated);
@@ -44,9 +45,9 @@ namespace Habanero.Test.BO.ClassDefinition
             public MultipleRelationshipDefInheritor() : base("relName", typeof(MyRelatedBo),
                 new RelKeyDef(), true, "acolumn", DeleteParentAction.Prevent) {}
 
-            public void SetOrderBy(string orderBy)
+            public void SetOrderBy(OrderCriteria orderCriteria)
             {
-                OrderBy = orderBy;
+                this.OrderCriteria = orderCriteria;
             }
 
             public void SetDeleteParentAction(DeleteParentAction deleteParentAction)

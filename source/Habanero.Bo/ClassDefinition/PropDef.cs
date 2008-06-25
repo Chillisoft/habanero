@@ -755,11 +755,11 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <returns>Returns an IComparer object, or null if the property
         /// type is not one of those mentioned above</returns>
-        public IComparer<T> GetPropertyComparer<T>() where T:IBusinessObject
+        public IPropertyComparer<T> GetPropertyComparer<T>() where T:IBusinessObject
         {
         	Type comparerType = typeof(PropertyComparer<, >);
         	comparerType = comparerType.MakeGenericType(typeof (T), PropertyType);
-			IComparer<T> comparer = (IComparer<T>)Activator.CreateInstance(comparerType, this.PropertyName);
+            IPropertyComparer<T> comparer = (IPropertyComparer<T>)Activator.CreateInstance(comparerType, this.PropertyName);
         	return comparer;
 			//if (this.PropertyType.Equals(typeof (string)))
 			//{

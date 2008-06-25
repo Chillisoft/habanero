@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Habanero.Base;
 
 namespace Habanero.BO.Comparer
 {
@@ -26,11 +27,12 @@ namespace Habanero.BO.Comparer
     /// Compares two business objects on the property specified 
     /// in the constructor using the specified generic type
     /// </summary>
-    public class PropertyComparer<TBusinessObject, TPropType> : IComparer<TBusinessObject> 
-		where TBusinessObject : BusinessObject
+    public class PropertyComparer<TBusinessObject, TPropType> : IPropertyComparer<TBusinessObject>
+		where TBusinessObject : IBusinessObject
 		where TPropType : IComparable
     {
-        private readonly string _propName;
+        private  string _propertyName;
+	    private  string _source;
 
         /// <summary>
         /// Constructor to initialise a comparer, specifying the property
@@ -41,10 +43,29 @@ namespace Habanero.BO.Comparer
         /// business objects will be compared</param>
 		public PropertyComparer(string propName)
         {
-            _propName = propName;
+            _propertyName = propName;
+            _source = "";
         }
 
-        /// <summary>
+
+	    public string PropertyName
+	    {
+	        get { return _propertyName; }
+            set { _propertyName = value; }
+	    }
+
+	    public string Source
+	    {
+	        get { return _source; }
+            set { _source = value;}
+	    }
+
+	    public Type PropertyType
+	    {
+            get { return typeof (TPropType); }
+	    }
+
+	    /// <summary>
         /// Compares two business objects on the property specified in 
         /// the constructor
         /// </summary>
@@ -55,8 +76,8 @@ namespace Habanero.BO.Comparer
         /// than the second</returns>
         public int Compare(TBusinessObject x, TBusinessObject y)
         {
-        	object left = x.GetPropertyValue(_propName);
-			object right = y.GetPropertyValue(_propName);
+        	object left = x.GetPropertyValue(_source, _propertyName);
+			object right = y.GetPropertyValue(_source, _propertyName);
         	return CompareValues(left, right);
         }
 
@@ -80,4 +101,6 @@ namespace Habanero.BO.Comparer
 			return leftValue.CompareTo(rightValue);
 		}
     }
+
+    
 }

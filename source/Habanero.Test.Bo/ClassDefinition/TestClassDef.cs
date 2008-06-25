@@ -775,5 +775,18 @@ namespace Habanero.Test.BO.ClassDefinition
 
         #endregion //Test GetPropertyType
 
+        [Test]
+        public void TestCreatePropertyComparer()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ClassDef classDef = MyBO.LoadClassDefWithRelationship();
+            //---------------Execute Test ----------------------
+            IPropertyComparer<MyBO> propertyComparer = classDef.CreatePropertyComparer<MyBO>("TestProp");
+            //---------------Test Result -----------------------
+            Assert.AreSame(typeof(string), propertyComparer.PropertyType);
+            //---------------Tear down -------------------------
+        }
+
     }
 }

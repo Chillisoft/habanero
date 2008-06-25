@@ -82,17 +82,18 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
 
-            BusinessObjectCollection<ContactPersonTestBO> col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aa", "Surname");
+            OrderCriteria orderBySurname = OrderCriteria.FromString("Surname");
+            BusinessObjectCollection<ContactPersonTestBO> col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aa", orderBySurname);
             Assert.AreEqual(2, col.Count);
             Assert.AreEqual("abc", col[0].Surname);
             Assert.AreEqual("abcd", col[1].Surname);
 
-            IBusinessObjectCollection col2 = BOLoader.Instance.GetBusinessObjectCol(typeof(ContactPersonTestBO), "FirstName = aa", "Surname");
+            IBusinessObjectCollection col2 = BOLoader.Instance.GetBusinessObjectCol(typeof(ContactPersonTestBO), "FirstName = aa", orderBySurname);
             Assert.AreEqual(2, col.Count);
             Assert.AreEqual("abc", ((ContactPersonTestBO)col2[0]).Surname);
             Assert.AreEqual("abcd", ((ContactPersonTestBO)col2[1]).Surname);
 
-            col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aaaa", "Surname");
+            col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aaaa", orderBySurname);
             Assert.AreEqual(0, col.Count);
         }
 
@@ -208,8 +209,9 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             //--------SetUp testpack --------------------------
             ContactPersonTestBO.LoadDefaultClassDef();
+            OrderCriteria orderBySurname = OrderCriteria.FromString("Surname");
             //----Execute Test---------------------------------
-            BusinessObjectCollection<ContactPersonTestBO> col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aa", "Surname");
+            BusinessObjectCollection<ContactPersonTestBO> col = BOLoader.Instance.GetBusinessObjectCol<ContactPersonTestBO>("FirstName = aa", orderBySurname);
             //----Test Result----------------------------------
             Assert.AreEqual(2, col.Count);
             ContactPersonTestBO bo = col[0];

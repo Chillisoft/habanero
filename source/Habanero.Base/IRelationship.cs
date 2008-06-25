@@ -13,5 +13,13 @@ namespace Habanero.Base
         {
             get;
         }
+
+        ///<summary>
+        /// 
+        ///</summary>
+        OrderCriteria OrderCriteria
+        {
+            get;
+        }
     }
 }

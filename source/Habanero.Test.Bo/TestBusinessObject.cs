@@ -48,6 +48,7 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetupTest()
         {
+            SetupDBConnection();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
 
@@ -397,6 +398,46 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(loadedCP);
             Assert.AreSame(cp, loadedCP);
             //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestGetPropertyValue_NullSource()
+        {
+            //---------------Set up test pack-------------------
+            Engine engine1 = new Engine();
+            engine1.EngineNo = "20";
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            object engineNo = engine1.GetPropertyValue("", "EngineNo");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(engine1.EngineNo, engineNo);
+            //---------------Tear Down -------------------------     
+        }
+
+        [Test]
+        public void TestGetPropertyValue_ThroughRelationship()
+        {
+            //---------------Set up test pack-------------------
+            Car car1 = new Car();
+            car1.CarRegNo = "5";
+
+            Engine engine1 = new Engine();
+            engine1.CarID = car1.CarID;
+            engine1.EngineNo = "20";
+
+
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(car1);
+            committer.AddBusinessObject(engine1);
+            committer.CommitTransaction();
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            object carregno = engine1.GetPropertyValue("Car", "CarRegNo");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(car1.CarRegNo, carregno);
+            //---------------Tear Down -------------------------     
         }
     }
 

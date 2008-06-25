@@ -1,3 +1,4 @@
+using System;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
@@ -44,5 +45,23 @@ namespace Habanero.Base
         /// <param name="propDef">The propdef to map to a table name. This propdef must be part of this classdef heirarchy</param>
         /// <returns></returns>
         string GetTableName(IPropDef propDef);
+
+        ///<summary>
+        /// Gets the type of the specified property for this classDef.
+        /// The specified property can also have a format like the custom properties for a UiGridColumn or UiFormField def.
+        /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name
+        ///</summary>
+        ///<param name="propertyName">The property to get the type for.</param>
+        ///<returns>The type of the specified property</returns>
+        Type GetPropertyType(string propertyName);
+
+        ///<summary>
+        /// Creates a property comparer for the given property
+        /// The specified property can also have a format like the custom properties for a UiGridColumn or UiFormField def.
+        /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name
+        ///</summary>
+        ///<param name="propertyName">The property to get the type for.</param>
+        ///<returns>The type of the specified property</returns>
+        IPropertyComparer<T> CreatePropertyComparer<T>(string propertyName) where T:IBusinessObject;
     }
 }

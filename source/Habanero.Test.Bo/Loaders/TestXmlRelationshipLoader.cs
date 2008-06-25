@@ -91,7 +91,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(typeof (MultipleRelationshipDef), relDef.GetType(),
                             "The relationship should be of type MultipleRelationshipDef");
             MultipleRelationshipDef multipleRelDef = (MultipleRelationshipDef) relDef;
-            Assert.AreEqual("TestOrder", multipleRelDef.OrderBy);
+            Assert.AreEqual("TestOrder ASC", multipleRelDef.OrderCriteria.ToString());
             //Assert.AreEqual(0, multipleRelDef.MinNoOfRelatedObjects);
             //Assert.AreEqual(-1, multipleRelDef.MaxNoOfRelatedObjects);
             Assert.AreEqual(DeleteParentAction.Prevent, multipleRelDef.DeleteParentAction,

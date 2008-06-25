@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.Comparer;
 using Habanero.BO.Loaders;
 using Habanero.Util;
 using Habanero.Util.File;
@@ -1125,6 +1126,21 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        ///<summary>
+        /// Creates a property comparer for the given property
+        /// The specified property can also have a format like the custom properties for a UiGridColumn or UiFormField def.
+        /// eg: MyRelatedBo.MyFurtherRelatedBo|MyAlternateRelatedBo.Name
+        ///</summary>
+        ///<param name="propertyName">The property to get the type for.</param>
+        ///<returns>The type of the specified property</returns>
+        public IPropertyComparer<T> CreatePropertyComparer<T>(string propertyName) where T:IBusinessObject
+        {
+            Type comparerType = typeof(PropertyComparer<,>);
+            comparerType = comparerType.MakeGenericType(typeof(T), GetPropertyType(propertyName));
+            IPropertyComparer<T> comparer = (IPropertyComparer<T>)Activator.CreateInstance(comparerType, propertyName);
+            return comparer;
+        }
+
         /// <summary>
         /// Returns the table name for this class
         /// </summary>
@@ -1166,5 +1182,7 @@ namespace Habanero.BO.ClassDefinition
                 return "";
             }
         }
+
+    
     }
 }

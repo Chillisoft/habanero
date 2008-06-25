@@ -484,12 +484,12 @@ namespace Habanero.BO
         /// given search criteria, ordered as specified
         /// </summary>
         /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="orderCriteria">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, string orderByClause)
+        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(string searchCriteria, OrderCriteria orderCriteria)
             where T : class, IBusinessObject, new()
         {
-            return GetBusinessObjectCollection<T>(null, searchCriteria, orderByClause);
+            return GetBusinessObjectCollection<T>(null, searchCriteria, orderCriteria);
         }
 
         /// <summary>
@@ -498,11 +498,11 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="boType">The type of the business objects to be loaded</param>
         /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="orderCriteria">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public IBusinessObjectCollection GetBusinessObjectCol(Type boType, string searchCriteria, string orderByClause)
+        public IBusinessObjectCollection GetBusinessObjectCol(Type boType, string searchCriteria, OrderCriteria orderCriteria)
         {
-            return GetBusinessObjectCol(ClassDef.ClassDefs[boType], searchCriteria, orderByClause);
+            return GetBusinessObjectCol(ClassDef.ClassDefs[boType], searchCriteria, orderCriteria);
         }
 
         /// <summary>
@@ -511,12 +511,12 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The class definition for the business objects to be loaded</param>
         /// <param name="searchCriteria">The search criteria</param>
-        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="orderCriteria">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCol(ClassDef classDef, string searchCriteria,
-                                                              string orderByClause)
+                                                              OrderCriteria orderCriteria)
         {
-            return GetBusinessObjectCollection(classDef, null, searchCriteria, orderByClause);
+            return GetBusinessObjectCollection(classDef, null, searchCriteria, orderCriteria);
         }
 
         /// <summary>
@@ -524,12 +524,12 @@ namespace Habanero.BO
         /// given search expression, ordered as specified
         /// </summary>
         /// <param name="searchExpression">The search expression</param>
-        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="orderCriteria">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(IExpression searchExpression, string orderByClause)
+        public BusinessObjectCollection<T> GetBusinessObjectCol<T>(IExpression searchExpression, OrderCriteria orderCriteria)
             where T : BusinessObject, new()
         {
-            return GetBusinessObjectCollection<T>(searchExpression, null, orderByClause);
+            return GetBusinessObjectCollection<T>(searchExpression, null, orderCriteria);
         }
 
         /// <summary>
@@ -538,12 +538,12 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="boType">The type of the business objects to be loaded</param>
         /// <param name="searchExpression">The search expression</param>
-        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="orderCriteria">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCol(Type boType, IExpression searchExpression,
-                                                              string orderByClause)
+                                                              OrderCriteria orderCriteria)
         {
-            return GetBusinessObjectCol(ClassDef.ClassDefs[boType], searchExpression, orderByClause);
+            return GetBusinessObjectCol(ClassDef.ClassDefs[boType], searchExpression, orderCriteria);
         }
 
         /// <summary>
@@ -552,45 +552,46 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The class definition for the business objects to be loaded</param>
         /// <param name="searchExpression">The search expression</param>
-        /// <param name="orderByClause">The order-by clause</param>
+        /// <param name="orderCriteria">The order-by clause</param>
         /// <returns>Returns a business object collection</returns>
         public IBusinessObjectCollection GetBusinessObjectCol(ClassDef classDef, IExpression searchExpression,
-                                                              string orderByClause)
+                                                              OrderCriteria orderCriteria)
         {
-            return GetBusinessObjectCollection(classDef, searchExpression, null, orderByClause);
+            return GetBusinessObjectCollection(classDef, searchExpression, null, orderCriteria);
         }
 
         private BusinessObjectCollection<T> GetBusinessObjectCollection<T>(IExpression searchExpression,
                                                                            string searchCriteria,
-                                                                           string orderByClause)
+                                                                           OrderCriteria orderCriteria)
             where T : class, IBusinessObject, new()
         {
             BusinessObjectCollection<T> businessObjectCollection = new BusinessObjectCollection<T>();
-            LoadBusinessObjectCollection(searchExpression, businessObjectCollection, orderByClause, searchCriteria);
+            LoadBusinessObjectCollection(searchExpression, businessObjectCollection, orderCriteria, searchCriteria);
             return businessObjectCollection;
         }
 
         internal void LoadBusinessObjectCollection(IExpression searchExpression,
                                                    IBusinessObjectCollection businessObjectCollection,
-                                                   string orderByClause, string searchCriteria)
+                                                   OrderCriteria orderCriteria, string searchCriteria)
         {
+            string orderCriteriaString = orderCriteria != null ? orderCriteria.ToString() : "";
             if (searchExpression != null)
             {
-                businessObjectCollection.Load(searchExpression.ExpressionString(), orderByClause);
+                businessObjectCollection.Load(searchExpression.ExpressionString(), orderCriteriaString);
             }
             else
             {
-                businessObjectCollection.Load(searchCriteria, orderByClause);
+                businessObjectCollection.Load(searchCriteria, orderCriteriaString);
             }
         }
 
         private IBusinessObjectCollection GetBusinessObjectCollection(ClassDef classDef,
                                                                       IExpression searchExpression,
-                                                                      string searchCriteria, string orderByClause)
+                                                                      string searchCriteria, OrderCriteria orderCriteria)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             IBusinessObjectCollection businessObjectCollection = CreateBusinessObjectCollection(classDef);
-            LoadBusinessObjectCollection(searchExpression, businessObjectCollection, orderByClause, searchCriteria);
+            LoadBusinessObjectCollection(searchExpression, businessObjectCollection, orderCriteria, searchCriteria);
             return businessObjectCollection;
         }
 
@@ -601,7 +602,7 @@ namespace Habanero.BO
         {
             IBusinessObjectCollection businessObjectCollection = new RelatedBusinessObjectCollection<T>(relationship);
             LoadBusinessObjectCollection(relationship._relKey.RelationshipExpression(), businessObjectCollection,
-                                         relationship.OrderBy, "");
+                                         relationship.OrderCriteria, "");
             return businessObjectCollection;
         }
 
@@ -611,7 +612,7 @@ namespace Habanero.BO
             IBusinessObjectCollection businessObjectCollection =
                 CreateRelatedBusinessObjectCollection(boType, relationship);
             LoadBusinessObjectCollection(relationship._relKey.RelationshipExpression(), businessObjectCollection,
-                                         relationship.OrderBy, "");
+                                         relationship.OrderCriteria, "");
             return businessObjectCollection;
         }
 

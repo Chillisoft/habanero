@@ -125,7 +125,7 @@ namespace Habanero.BO
 		/// <exception cref="InvalidRelationshipAccessException">Thrown if
 		/// the relationship specified is a multiple relationship, when a
 		/// single one was expected</exception>
-    	public T GetRelatedObject<T>(string relationshipName) where T : class, IBusinessObject
+    	public T GetRelatedObject<T>(string relationshipName) where T : class, IBusinessObject, new()
     	{
 			ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
 			IRelationship relationship = this[relationshipName];

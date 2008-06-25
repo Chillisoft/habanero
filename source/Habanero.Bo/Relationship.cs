@@ -77,9 +77,9 @@ namespace Habanero.BO
         ///<summary>
         /// 
         ///</summary>
-        public string OrderBy
+        public OrderCriteria OrderCriteria
         {
-            get { return _relDef.OrderBy; }
+            get { return _relDef.OrderCriteria; }
         }
 
         ///<summary>
@@ -121,7 +121,7 @@ namespace Habanero.BO
         {
             if (_boCol != null)
             {
-                BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderBy, "");
+                BOLoader.Instance.LoadBusinessObjectCollection(this._relKey.RelationshipExpression(), _boCol, this.OrderCriteria, "");
                 return _boCol;
             }
 

@@ -112,6 +112,7 @@
     <Compile Include="InvalidRelationshipAccessException.cs" />
     <Compile Include="IPrimaryKey.cs" />
     <Compile Include="IPropDef.cs" />
+    <Compile Include="IPropertyComparer.cs" />
     <Compile Include="IPropRule.cs" />
     <Compile Include="IRelationship.cs" />
     <Compile Include="IRelationshipCol.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="ITransactionalDB.cs" />
     <Compile Include="ITransactionCommitter.cs" />
     <Compile Include="ITransactionLog.cs" />
+    <Compile Include="OrderCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -603,6 +603,19 @@ namespace Habanero.BO
         }
 
         /// <summary>
+        /// Returns the value under the property name specified, accessing it through the 'source'
+        /// </summary>
+        /// <param name="source">The source of the property ie - the relationship or C# property this property is on</param>
+        /// <param name="propName">The property name</param>
+        /// <returns>Returns the value if found</returns>
+        public object GetPropertyValue(string source, string propName)
+        {
+            if (String.IsNullOrEmpty(source)) return GetPropertyValue(propName);
+            return this.Relationships.GetRelatedObject(source).GetPropertyValue(propName);
+        }
+
+
+        /// <summary>
         /// Returns the value under the property name specified
         /// </summary>
         /// <param name="propName">The property name</param>

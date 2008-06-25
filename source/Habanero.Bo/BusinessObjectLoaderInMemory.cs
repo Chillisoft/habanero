@@ -91,9 +91,14 @@ namespace Habanero.BO
         {
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-            GetBusinessObjectCollection<T>(relationshipCriteria).ForEach(delegate(T obj) { relatedCol.Add(obj); });
+            GetBusinessObjectCollection<T>(relationshipCriteria, relationship.OrderCriteria).ForEach(delegate(T obj) { relatedCol.Add(obj); });
             relatedCol.SelectQuery.Criteria = relationshipCriteria;
             return relatedCol;
+        }
+
+        public T GetRelatedBusinessObject<T>(IRelationship relationship) where T : class, IBusinessObject, new()
+        {
+            return GetBusinessObject<T>(Criteria.FromRelationship(relationship));
         }
 
         /// <summary>
@@ -103,7 +108,7 @@ namespace Habanero.BO
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : BusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new()
         {
             BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(criteria);
             col.Sort(delegate(T x, T y) { return orderCriteria.Compare(x, y); });
@@ -119,7 +124,7 @@ namespace Habanero.BO
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="selectQuery">The select query to use to load from the data source</param>
         /// <returns>The loaded collection</returns>
-        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : BusinessObject, new()
+        public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
             return GetBusinessObjectCollection<T> (selectQuery.Criteria, selectQuery.OrderCriteria);
         }

@@ -255,7 +255,7 @@ namespace Habanero.Test.General
         {
             TransactionCommitterDB committer = new TransactionCommitterDB();
             BusinessObjectCollection<Shape> shapes = BOLoader.Instance.GetBusinessObjectCol<Shape>(
-                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'", "");
+                "ShapeName = 'MyShape' OR ShapeName = 'MyShapeChanged'", null);
             foreach (Shape shape in shapes)
             {
                 shape.Delete();
@@ -264,7 +264,7 @@ namespace Habanero.Test.General
             }
            
           BusinessObjectCollection<CircleNoPrimaryKey> circles = BOLoader.Instance.GetBusinessObjectCol<CircleNoPrimaryKey>(
-                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'", "");
+                "ShapeName = 'Circle' OR ShapeName = 'CircleChanged'", null);
           foreach (CircleNoPrimaryKey circle in circles)
 
             {

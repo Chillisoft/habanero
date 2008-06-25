@@ -303,6 +303,30 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestGetRelatedBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            Car car = new Car();
+            car.CarRegNo = "5";
+            Engine engine = new Engine();
+            engine.CarID = car.CarID;
+            engine.EngineNo = "20";
+
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(car);
+            committer.AddBusinessObject(engine);
+            committer.CommitTransaction();
+            //---------------Execute Test ----------------------
+            Car loadedCar = BORegistry.DataAccessor.BusinessObjectLoader.
+                GetRelatedBusinessObject<Car>(engine.Relationships["Car"]);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(car, loadedCar);
+
+            //---------------Tear Down -------------------------
+        }
+        [Test]
         public void TestGetRelatedBusinessObjectCollection()
         {
             //---------------Set up test pack-------------------
@@ -326,8 +350,80 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("this test cannot be used for memory untill loading with order by from related objects is working")]
-        public void TestLoadThroughRelationship()
+        [Test]
+        public void TestGetRelatedBusinessObjectCollection_SortOrder()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1();
+            ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
+            Address address1 = new Address();
+            address1.ContactPersonID = cp.ContactPersonID;
+            address1.AddressLine1 = "ffff";
+            address1.Save();
+            Address address2 = new Address();
+            address2.ContactPersonID = cp.ContactPersonID;
+            address2.AddressLine1 = "bbbb";
+            address2.Save();
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+
+            RelatedBusinessObjectCollection<Address> addresses =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObjectCollection<Address>(cp.Relationships["Addresses"]);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, addresses.Count);
+            Assert.AreSame(address1, addresses[1]);
+            Assert.AreSame(address2, addresses[0]);
+            //---------------Tear Down -------------------------     
+        }
+
+        [Test, Ignore("Peter-Working on this")]
+        public void TestGetBusinessObjectCollection_SortOrder_ThroughRelationship()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            Car car1 = new Car();
+            car1.CarRegNo = "5";
+            Car car2 = new Car();
+            car2.CarRegNo = "2";
+
+            Engine car1engine1 = new Engine();
+            car1engine1.CarID = car1.CarID;
+            car1engine1.EngineNo = "20";
+
+            Engine car1engine2 = new Engine();
+            car1engine2.CarID = car1.CarID;
+            car1engine2.EngineNo = "10";
+
+            Engine car2engine1 = new Engine();
+            car2engine1.CarID = car2.CarID;
+            car2engine1.EngineNo = "50";
+
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(car1);
+            committer.AddBusinessObject(car2);
+            committer.AddBusinessObject(car1engine1);
+            committer.AddBusinessObject(car1engine2);
+            committer.AddBusinessObject(car2engine1);
+            committer.CommitTransaction();
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+
+            OrderCriteria orderCriteria = OrderCriteria.FromString("Car.CarRegNo, EngineNo");
+            BusinessObjectCollection<Engine> engines =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(null, orderCriteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, engines.Count);
+            Assert.AreSame(car2engine1, engines[0]);
+            Assert.AreSame(car1engine2, engines[1]);
+            Assert.AreSame(car1engine1, engines[2]);
+            //---------------Tear Down -------------------------     
+        }
+
+        [Test, Ignore("Peter-Working on this")]
+        public void TestLoadThroughRelationship_Multiple()
         {
             //---------------Set up test pack-------------------
             SetupDataAccessor();
@@ -344,6 +440,31 @@ namespace Habanero.Test.BO
             Assert.Contains(address, addresses);
             //---------------Tear Down -------------------------          
         }
+
+        [Test, Ignore("Peter-Working on this")]
+        public void TestLoadThroughRelationship_Single()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            Car car = new Car();
+            car.CarRegNo = "5";
+            Engine engine = new Engine();
+            engine.CarID = car.CarID;
+            engine.EngineNo = "20";
+
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(car);
+            committer.AddBusinessObject(engine);
+            committer.CommitTransaction();
+            //---------------Execute Test ----------------------
+            Car loadedCar = engine.GetCar();
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(car, loadedCar);
+            //---------------Tear Down -------------------------          
+        }
+
+        
 
         [Test]
         public void TestLoadAll_Loader()

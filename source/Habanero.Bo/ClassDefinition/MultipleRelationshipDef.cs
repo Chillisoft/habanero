@@ -73,7 +73,7 @@ namespace Habanero.BO.ClassDefinition
             : base(relationshipName, relatedObjectClassType, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
-            _orderBy = orderBy;
+            _orderCriteria = OrderCriteria.FromString( orderBy);
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             // _maxNoOfRelatedObjects = maxNoOfRelatedObjects;
 
@@ -100,7 +100,7 @@ namespace Habanero.BO.ClassDefinition
     		: base(relationshipName, relatedObjectAssemblyName, relatedObjectClassName, relKeyDef, keepReferenceToRelatedObject, deleteParentAction)
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
-    	    _orderBy = orderBy;
+    	    _orderCriteria = OrderCriteria.FromString(orderBy);
 			//_minNoOfRelatedObjects = minNoOfRelatedObjects;
 			//_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
 
@@ -110,14 +110,14 @@ namespace Habanero.BO.ClassDefinition
 
 		#region Properties
 
-		/// <summary>
-        /// Returns the sql order-by clause
-        /// </summary>
-        public string OrderBy
-        {
-            get { return _orderBy; }
-			protected set { _orderBy = value; }
-        }
+        ///// <summary>
+        ///// Returns the sql order-by clause
+        ///// </summary>
+        //public string OrderBy
+        //{
+        //    get { return _orderCriteria; }
+        //    protected set { _orderCriteria = value; }
+        //}
 
         ///// <summary>
         ///// Indicates the minimum number of related objects that the owner

@@ -36,7 +36,7 @@ namespace Habanero.BO.ClassDefinition
 		private string _relationshipName;
 		private bool _keepReferenceToRelatedObject;
         private DeleteParentAction _deleteParentAction;
-        protected string _orderBy;
+        protected OrderCriteria _orderCriteria;
 
 		#region Constructors
 
@@ -215,9 +215,10 @@ namespace Habanero.BO.ClassDefinition
         /// The order by clause that the related object will be sorted by.
         /// In the case of a single relationship this will return a null string
         ///</summary>
-        public string OrderBy
+        public OrderCriteria OrderCriteria
         {
-            get { return _orderBy; }
+            get { return _orderCriteria; }
+            protected set { _orderCriteria = value; }
         }
 
         #endregion Type Initialisation

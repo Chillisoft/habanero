@@ -234,7 +234,7 @@ namespace Habanero.BO
             else
             {
                 ClassDef classDef = LookupBoClassDef;
-                IBusinessObjectCollection col = BOLoader.Instance.GetBusinessObjectCol(classDef, _criteria ?? "", _sort);
+                IBusinessObjectCollection col = BOLoader.Instance.GetBusinessObjectCol(classDef, _criteria ?? "", OrderCriteria.FromString(_sort));
                 //BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
                 //if (_criteria != null)
                 //{

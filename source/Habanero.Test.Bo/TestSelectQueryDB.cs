@@ -121,6 +121,24 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
+
+        [Test]
+        public void TestCreateSqlStatement_WithEmptyOrderCriteria()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadDefaultClassDef();
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.OrderCriteria = new OrderCriteria();
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("FROM [MyBO]", statementString, "An empty OrderCriteria should be ignored");
+            //---------------Tear Down -------------------------          
+        }
+
         [Test]
         public void TestCreateSqlStatement_WithOrderFields_Descending()
         {
@@ -156,6 +174,25 @@ namespace Habanero.Test.BO
             string statementString = statement.Statement.ToString();
             StringAssert.EndsWith("ORDER BY [MyBO].[MyBoID] DESC, [MyBO].[TestProp] ASC", statementString);
             //---------------Tear Down -------------------------          
+        }
+
+        [Test, Ignore("Peter-Working on this")]
+        public void TestCreateSqlStatement_WithOrder_IncludingSource()
+        {
+            //---------------Set up test pack-------------------
+            new ContactPerson();
+            
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
+            selectQuery.OrderCriteria = OrderCriteria.FromString("ContactPerson.Surname");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.Contains("JOIN [ContactPerson] ON [Address].[ContactPersonID] = [ContactPerson].[ContactPersonID]", statementString);
+            StringAssert.EndsWith("ORDER BY [ContactPerson].[Surname] ASC", statementString);
+
         }
 
         [Test]

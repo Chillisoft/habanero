@@ -167,6 +167,17 @@ namespace Habanero.Test
 
         #region Properties
 
+        public string CarRegNo
+        {
+            get { return (string)GetPropertyValue("CarRegNo"); }
+            set { SetPropertyValue("CarRegNo", value); }
+        }
+
+        public Guid CarID
+        {
+            get { return (Guid)GetPropertyValue("CarID"); }
+           
+        }
         #endregion //Properties
 
         #region Relationships

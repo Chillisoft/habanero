@@ -109,7 +109,7 @@ namespace Habanero.BO.Loaders
 				return _defClassFactory.CreateMultipleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
 					_relKeyDef, _keepReferenceToRelatedObject, _orderBy, _deleteParentAction);
 				//return new MultipleRelationshipDef(_name, _relatedAssemblyName, _relatedClassName, 
-				//    _relKeyDef, _keepReferenceToRelatedObject, _orderBy, _minNoOfRelatedObjects,
+				//    _relKeyDef, _keepReferenceToRelatedObject, _orderCriteria, _minNoOfRelatedObjects,
 				//    _maxNoOfRelatedObjects, _deleteParentAction);
 				//return
 				//    new MultipleRelationshipDef(_name, _relatedClassType, _relKeyDef,

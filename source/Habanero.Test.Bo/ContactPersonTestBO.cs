@@ -334,6 +334,31 @@ namespace Habanero.Test.BO
             return itsClassDef;
         }
 
+
+        public static ClassDef LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""Address"" relatedAssembly=""Habanero.Test"" deleteAction=""DoNothing"" orderBy=""AddressLine1"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadClassDefWithImageProperty()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();
@@ -488,5 +513,6 @@ namespace Habanero.Test.BO
             LoadClassDefWithAddressesRelationship_DeleteDoNothing();
             return CreateContactPerson(out address);
         }
+
     }
 }

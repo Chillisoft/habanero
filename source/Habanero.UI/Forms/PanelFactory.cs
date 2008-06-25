@@ -798,7 +798,7 @@ namespace Habanero.UI.Forms
 
                             Type sourceType = TypeLoader.LoadType(sourceLookup.AssemblyName, sourceLookup.ClassName);
                             IBusinessObjectCollection sourceCol =
-                                BOLoader.Instance.GetBusinessObjectCol(sourceType, sourceCriteria, "");
+                                BOLoader.Instance.GetBusinessObjectCol(sourceType, sourceCriteria, null);
 
                             if (sourceCol.Count > 0)
                             {
@@ -812,7 +812,7 @@ namespace Habanero.UI.Forms
 
                                     Type targetType = TypeLoader.LoadType(targetLookup.AssemblyName, targetLookup.ClassName);
                                     IBusinessObjectCollection targetCol =
-                                        BOLoader.Instance.GetBusinessObjectCol(targetType, targetCriteria, "");
+                                        BOLoader.Instance.GetBusinessObjectCol(targetType, targetCriteria, null);
 
                                     if (targetCol.Count > 0)
                                     {

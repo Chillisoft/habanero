@@ -54,7 +54,7 @@ namespace Habanero.Base
         /// the relationship specified is a multiple relationship, when a
         /// single one was expected</exception>
         T GetRelatedObject<T>(string relationshipName)
-            where T : class, IBusinessObject;
+            where T : class, IBusinessObject, new();
 
         /// <summary>
         /// Returns a collection of business objects that are connected to

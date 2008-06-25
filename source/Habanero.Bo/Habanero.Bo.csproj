@@ -136,7 +136,6 @@
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="ConcurrencyControl\PessimisticLockingDB.cs" />
-    <Compile Include="OrderCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
