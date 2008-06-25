@@ -103,5 +103,22 @@ namespace Habanero.Util
             }
             return firstday;
         }
+
+        /// <summary>
+        /// Returns the last day of the current financial year (the current financial year is determined by the current date).
+        /// If the financial year starts in march then monthFinancialYearStarts = 3.
+        /// If the current date is before 01 March e.g. 12 Feb 2007 then the the current financial year starts on the 01 March 2006
+        ///  and ends on the 28 Feb 2007.
+        /// If the current date is after 01 March e.g. 21 August 2007 then the current financial year starts on the 01 March 2007
+        /// and ends on the 29 Feb 2008. 
+        /// </summary>
+        /// <param name="currentDate">The date for which you wish to calculate the last day of the financial year</param>
+        /// <param name="monthFinancialYearStarts">the month that the financial year starts usually march in south africa</param>
+        /// <returns></returns>
+        public static DateTime LastDayOfFinancialYear(int monthFinancialYearStarts, DateTime currentDate)
+        {
+            DateTime firstDayOFinancialYear = FirstDayOFinancialYear(monthFinancialYearStarts, currentDate);
+            return firstDayOFinancialYear.AddYears(1).AddDays(-1);
+        }
     }
 }

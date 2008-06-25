@@ -105,7 +105,7 @@ namespace Habanero.Test.Util
             //---------------Execute Test ----------------------
             try
             {
-                DateTime firstDay = DateTimeUtilities.FirstDayOFinancialYear(13, new DateTime(2007, 12, 12));
+                DateTimeUtilities.FirstDayOFinancialYear(13, new DateTime(2007, 12, 12));
                 Assert.Fail("expected Err");
             }
                 //---------------Test Result -----------------------
@@ -113,6 +113,68 @@ namespace Habanero.Test.Util
             {
                 StringAssert.Contains("Year, Month, and Day parameters describe an un-representable DateTime", ex.Message);
             }
+        }
+
+        [Test]
+        public void Test_LastDayOfFinYear()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime firstDay = DateTimeUtilities.LastDayOfFinancialYear(1, new DateTime(2007, 12, 11));
+            
+            //---------------Test Result -----------------------
+            Assert.AreEqual(12, firstDay.Month);
+            Assert.AreEqual(31, firstDay.Day);
+            Assert.AreEqual(2007, firstDay.Year);
+        }
+        [Test]
+        public void Test_LastDayOfFinYear_MonthGTStartDecember()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime firstDay = DateTimeUtilities.LastDayOfFinancialYear(12, new DateTime(2007, 12, 12));
+            ;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(11, firstDay.Month);
+            Assert.AreEqual(30, firstDay.Day);
+            Assert.AreEqual(2008, firstDay.Year);
+        }
+
+        [Test]
+        public void Test_LastDayOfFinYear_currentDateOnStartDate()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime firstDay = DateTimeUtilities.LastDayOfFinancialYear(1, new DateTime(2007, 01, 01));
+            ;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(12, firstDay.Month);
+            Assert.AreEqual(31, firstDay.Day);
+            Assert.AreEqual(2007, firstDay.Year);
+        }
+        [Test]
+        public void Test_LastDayOfFinYear_currentDateOnLastDay()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime firstDay = DateTimeUtilities.LastDayOfFinancialYear(1, new DateTime(2007, 12, 31));
+            ;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(12, firstDay.Month);
+            Assert.AreEqual(31, firstDay.Day);
+            Assert.AreEqual(2007, firstDay.Year);
         }
     }
 }
