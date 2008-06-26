@@ -21,13 +21,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.BO.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
     /// <summary>
     /// Provides a collection of property definitions.
     /// </summary>
-    public class PropDefCol : IEnumerable<IPropDef>
+    public class PropDefCol : IPropDefCol
     {
         private Dictionary<string, IPropDef> _propDefs;
 
@@ -70,7 +71,7 @@ namespace Habanero.BO.ClassDefinition
         /// Add an existing property definition to the collection
         /// </summary>
         /// <param name="propDef">The existing property definition</param>
-        public void Add(PropDef propDef)
+        public void Add(IPropDef propDef)
         {
             CheckPropNotAlreadyAdded(propDef.PropertyName);
             _propDefs.Add(propDef.PropertyName.ToUpper(), propDef);
@@ -81,7 +82,7 @@ namespace Habanero.BO.ClassDefinition
         /// into this one.
         /// </summary>
         /// <param name="propDefCol">The collection of property definitions</param>
-        public void Add(PropDefCol propDefCol)
+        public void Add(IPropDefCol propDefCol)
         {
             foreach (PropDef def in propDefCol)
             {
@@ -180,12 +181,9 @@ namespace Habanero.BO.ClassDefinition
         public BOPropCol CreateBOPropertyCol(bool newObject)
         {
             BOPropCol lBOPropertyCol = new BOPropCol();
-            foreach (PropDef lPropDef in this)
+            foreach (IPropDef lPropDef in this)
             {
                 lBOPropertyCol.Add(lPropDef.CreateBOProp(newObject));
-//                if (lPropDef.AutoIncrementing) {
-//                    lBOPropertyCol.AutoIncrementingPropertyName = lPropDef.PropertyName;
-//                }
             }
             return lBOPropertyCol;
         }
@@ -258,7 +256,7 @@ namespace Habanero.BO.ClassDefinition
         /// Clones the propdefcol.  The new propdefcol has the same propdefs in it.
         ///</summary>
         ///<returns></returns>
-        public PropDefCol Clone()
+        public IPropDefCol Clone()
         {
             PropDefCol newPropDefCol = new PropDefCol();
             foreach (PropDef def in this)

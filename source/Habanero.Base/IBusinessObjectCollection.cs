@@ -73,7 +73,13 @@ namespace Habanero.Base
 			get;
 		}
 
-		/// <summary>
+        ISelectQuery SelectQuery
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
 		/// Finds a business object that has the key string specified.<br/>
 		/// Note: the format of the search term is strict, so that a Guid ID
 		/// may be stored as "boIDname=########-####-####-####-############".
@@ -198,6 +204,9 @@ namespace Habanero.Base
         /// <param name="isAscending">Whether to sort in ascending order, set
         /// false for descending order</param>
         void Sort(string propertyName, bool isBoProperty, bool isAscending);
+
+        void Sort(IComparer comparer);
+
 
         /// <summary>
         /// Loads business objects that match the search criteria provided,

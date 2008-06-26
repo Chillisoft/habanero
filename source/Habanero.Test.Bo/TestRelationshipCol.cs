@@ -50,7 +50,7 @@ namespace Habanero.Test.BO
         public void TestMissingRelationshipErrorMessageSingle()
         {
             MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
-            bo1.Relationships.GetRelatedObject("WrongRelationshipName");
+            bo1.Relationships.GetRelatedObject<MyBO>("WrongRelationshipName");
         }
 
         [
@@ -83,7 +83,7 @@ namespace Habanero.Test.BO
         public void TestInvalidRelationshipAccessMultiple()
         {
             MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
-            bo1.Relationships.GetRelatedObject("MyMultipleRelationship");
+            bo1.Relationships.GetRelatedObject<MyBO>("MyMultipleRelationship");
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace Habanero.Test.BO
             MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
             bo1.Relationships.SetRelatedObject("MyRelationship", relatedBo1);
-            Assert.AreSame(relatedBo1, bo1.Relationships.GetRelatedObject("MyRelationship"));
+            Assert.AreSame(relatedBo1, bo1.Relationships.GetRelatedObject<MyRelatedBo>("MyRelationship"));
             Assert.AreSame(bo1.GetPropertyValue("RelatedID"), relatedBo1.GetPropertyValue("MyRelatedBoID"));
         }
 

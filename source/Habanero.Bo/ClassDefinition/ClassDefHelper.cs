@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.BO.Base;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -57,7 +58,7 @@ namespace Habanero.BO.ClassDefinition
             }
             else
             {
-                PropDefCol propDefCol = classDef.PropDefColIncludingInheritance;
+                IPropDefCol propDefCol = classDef.PropDefColIncludingInheritance;
                 if (propDefCol.Contains(propertyName))
                 {
                     return propDefCol[propertyName];

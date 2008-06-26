@@ -123,5 +123,14 @@ namespace Habanero.Base
         }
 
         IClassDef ClassDef { get;  }
+
+        /// <summary>
+        /// Creates a new Business Object property (BOProp)
+        /// </summary>
+        /// <param name="assignDefaultValue">Whether to initialise the property 
+        /// with the default value.
+        /// </param>
+        /// <returns>The newly created BO property</returns>
+        IBOProp CreateBOProp(bool assignDefaultValue);
     }
 }

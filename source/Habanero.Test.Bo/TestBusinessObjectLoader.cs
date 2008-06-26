@@ -155,6 +155,28 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestGetBusinessObject_SelectQuery_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            cp.Save();
+            SelectQuery query = new SelectQuery(new Criteria("Surname", Criteria.Op.Equals, cp.Surname));
+            query.Fields.Add("Surname", new QueryField("Surname", "Surname", ""));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
+            query.Source = cp.ClassDef.TableName;
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCp =
+                (ContactPersonTestBO) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, query);
+            //---------------Test Result -----------------------
+            Assert.AreSame(loadedCp, cp);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
         public void TestGetBusinessObject_PrimaryKey()
         {
             //---------------Set up test pack-------------------
@@ -175,6 +197,27 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestGetBusinessObject_PrimaryKey_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            cp.Save();
+
+            //--------------Assert PreConditions----------------            
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCP = (ContactPersonTestBO)
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, cp.PrimaryKey);
+            //---------------Test Result -----------------------
+            Assert.AreSame(cp, loadedCP);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void TestGetBusinessObject_CriteriaObject()
         {
             //---------------Set up test pack-------------------
@@ -188,6 +231,27 @@ namespace Habanero.Test.BO
             Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
             //---------------Execute Test ----------------------
             ContactPersonTestBO loadedCP = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(cp.ID, loadedCP.ID);
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestGetBusinessObject_CriteriaObject_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            cp.Save();
+
+            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCP = (ContactPersonTestBO)
+                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteria);
 
             //---------------Test Result -----------------------
             Assert.AreSame(cp.ID, loadedCP.ID);
@@ -226,6 +290,38 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void TestGetBusinessObjectCollection_SelectQuery_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now.AddDays(1);
+            cp1.Surname = Guid.NewGuid().ToString("N");
+            cp1.Save();
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.DateOfBirth = now.AddMinutes(1);
+            cp2.Surname = Guid.NewGuid().ToString("N");
+            cp2.Save();
+
+            SelectQuery query = new SelectQuery(new Criteria("DateOfBirth", Criteria.Op.GreaterThan, now));
+            query.Fields.Add("DateOfBirth", new QueryField("DateOfBirth", "DateOfBirth", ""));
+            query.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
+            query.Source = cp1.ClassDef.TableName;
+            query.OrderCriteria = new OrderCriteria().Add("DateOfBirth");
+
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, query);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp2, col[0]);
+            Assert.AreSame(cp1, col[1]);
+            //---------------Tear Down -------------------------
+        }
+
 
         [Test]
         public void TestGetBusinessObjectCollection_CriteriaObject()
@@ -252,6 +348,93 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, col.Count);
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
+            //---------------Tear Down -------------------------
+        }
+
+
+        [Test]
+        public void TestGetBusinessObjectCollection_CriteriaObject_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now;
+            cp1.Surname = Guid.NewGuid().ToString("N");
+            cp1.Save();
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.DateOfBirth = now;
+            cp2.Surname = Guid.NewGuid().ToString("N");
+            cp2.Save();
+
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.Contains(cp1, col);
+            Assert.Contains(cp2, col);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestGetBusinessObjectCollection_CriteriaObject_WithOrder()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+
+            ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now;
+            cp1.Surname = "zzzz";
+            cp1.Save();
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.DateOfBirth = now;
+            cp2.Surname = "aaaa";
+            cp2.Save();
+
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
+            OrderCriteria orderCriteria = OrderCriteria.FromString("Surname");
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<ContactPersonTestBO> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria, orderCriteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp2, col[0]);
+            Assert.AreSame(cp1, col[1]);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestGetBusinessObjectCollection_CriteriaObject_WithOrder_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now;
+            cp1.Surname = "zzzz";
+            cp1.Save();
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.DateOfBirth = now;
+            cp2.Surname = "aaaa";
+            cp2.Save();
+
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
+            OrderCriteria orderCriteria = OrderCriteria.FromString("Surname");
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria, orderCriteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.AreSame(cp2, col[0]);
+            Assert.AreSame(cp1, col[1]);
             //---------------Tear Down -------------------------
         }
 
@@ -303,6 +486,38 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestRefreshLoadedCollection_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            ClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now;
+            cp1.Surname = Guid.NewGuid().ToString("N");
+            cp1.Save();
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.DateOfBirth = now;
+            cp2.Surname = Guid.NewGuid().ToString("N");
+            cp2.Save();
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
+            IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, criteria);
+
+            ContactPersonTestBO cp3 = new ContactPersonTestBO();
+            cp3.DateOfBirth = now;
+            cp3.Surname = Guid.NewGuid().ToString("N");
+            cp3.Save();
+            //---------------Execute Test ----------------------
+            BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, col.Count);
+            Assert.Contains(cp1, col);
+            Assert.Contains(cp2, col);
+            Assert.Contains(cp3, col);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
         public void TestGetRelatedBusinessObject()
         {
             //---------------Set up test pack-------------------
@@ -319,13 +534,38 @@ namespace Habanero.Test.BO
             committer.CommitTransaction();
             //---------------Execute Test ----------------------
             Car loadedCar = BORegistry.DataAccessor.BusinessObjectLoader.
-                GetRelatedBusinessObject<Car>(engine.Relationships["Car"]);
+                GetRelatedBusinessObject<Car>((SingleRelationship) engine.Relationships["Car"]);
 
             //---------------Test Result -----------------------
             Assert.AreSame(car, loadedCar);
 
             //---------------Tear Down -------------------------
         }
+
+        [Test]
+        public void TestGetRelatedBusinessObject_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            SetupDataAccessor();
+            Car car = new Car();
+            car.CarRegNo = "5";
+            Engine engine = new Engine();
+            engine.CarID = car.CarID;
+            engine.EngineNo = "20";
+
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(car);
+            committer.AddBusinessObject(engine);
+            committer.CommitTransaction();
+            //---------------Execute Test ----------------------
+            Car loadedCar = (Car) BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject((SingleRelationship) engine.Relationships["Car"]);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(car, loadedCar);
+
+            //---------------Tear Down -------------------------
+        }
+
         [Test]
         public void TestGetRelatedBusinessObjectCollection()
         {

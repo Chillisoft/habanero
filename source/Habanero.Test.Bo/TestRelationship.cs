@@ -19,6 +19,7 @@
 
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
@@ -31,7 +32,7 @@ namespace Habanero.Test.BO
     {
         private RelationshipDef mRelationshipDef;
         private RelKeyDef mRelKeyDef;
-        private PropDefCol mPropDefCol;
+        private IPropDefCol mPropDefCol;
         private MockBO mMockBo;
 
         [TestFixtureSetUp]

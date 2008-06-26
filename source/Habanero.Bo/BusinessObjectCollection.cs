@@ -1026,6 +1026,28 @@ namespace Habanero.BO
             }
         }
 
+        void IBusinessObjectCollection.Sort(IComparer comparer)
+        {
+            this.Sort(new StronglyTypedComperer<TBusinessObject>(comparer));
+        }
+
+        #region StronglyTypedComperer 
+        private class StronglyTypedComperer<T> : IComparer<T>
+        {
+            private readonly IComparer _comparer;
+
+            public StronglyTypedComperer(IComparer comparer)
+            {
+                _comparer = comparer;
+            }
+
+            public int Compare(T x, T y)
+            {
+                return _comparer.Compare(x, y);
+            }
+        }
+        #endregion
+
         /// <summary>
         /// Returns a list containing all the objects sorted by the property
         /// name and in the order specified
@@ -1318,5 +1340,6 @@ namespace Habanero.BO
             this.SelectQuery.Criteria = null;
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(this);
         }
+
     }
 }

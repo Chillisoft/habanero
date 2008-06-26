@@ -121,7 +121,6 @@
     <Compile Include="Comparer\SingleComparer.cs" />
     <Compile Include="Comparer\StringComparer.cs" />
     <Compile Include="Comparer\TimeSpanComparer.cs" />
-    <Compile Include="Criteria.cs" />
     <Compile Include="CriteriaManager\IExpression.cs" />
     <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
     <Compile Include="CriteriaManager\SQLCriteriaCreator.cs" />
@@ -132,7 +131,6 @@
     <Compile Include="IBusinessObjectLoader.cs" />
     <Compile Include="IDataAccessor.cs" />
     <Compile Include="IDataSetProvider.cs" />
-    <Compile Include="ISelectQuery.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
     <Compile Include="Loaders\XmlUIFormGridLoader.cs" />
     <Compile Include="ConcurrencyControl\PessimisticLockingDB.cs" />
@@ -180,7 +178,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QueryBuilder.cs" />
-    <Compile Include="QueryField.cs" />
     <Compile Include="ReadOnlyDataSetProvider.cs">
       <SubType>Code</SubType>
     </Compile>

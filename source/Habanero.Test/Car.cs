@@ -184,7 +184,7 @@ namespace Habanero.Test
 
         public ContactPerson GetOwner()
         {
-            return (ContactPerson) Relationships.GetRelatedObject("Owner");
+            return Relationships.GetRelatedObject<ContactPerson>("Owner");
         }
 
         public ContactPersonCompositeKey GetDriver()
@@ -194,7 +194,7 @@ namespace Habanero.Test
 
         public Engine GetEngine()
         {
-            return (Engine) Relationships.GetRelatedObject("Engine");
+            return Relationships.GetRelatedObject<Engine>("Engine");
         }
 
         #endregion //Relationships

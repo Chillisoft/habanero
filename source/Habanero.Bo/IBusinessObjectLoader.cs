@@ -1,4 +1,5 @@
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
@@ -31,12 +32,28 @@ namespace Habanero.BO
         T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new();
 
         /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the Primary key given as the criteria
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="primaryKey">The primary key to use to load the business object</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey);
+
+        /// <summary>
         /// Loads a business object of type T, using the criteria given
         /// </summary>
         /// <typeparam name="T">The type of object to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="criteria">The criteria to use to load the business object</param>
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
         T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the criteria given
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="criteria">The criteria to use to load the business object</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria);
 
         /// <summary>
         /// Loads a business object of type T, using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
@@ -49,12 +66,48 @@ namespace Habanero.BO
         T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new();
 
         /// <summary>
+        /// Loads a business object of the type identified by a <see cref="ClassDef"/>, 
+        /// using the SelectQuery given. It's important to make sure that the ClassDef parameter given
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a business object
+        /// </summary>
+        /// <param name="classDef">The ClassDef of the object to load.</param>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The business object that was found. If none was found, null is returned. If more than one is found, the first is returned</returns>
+        IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery);
+
+        /// <summary>
+        /// Loads a business object of type T using the relationship given. The relationship will be converted into a
+        /// Criteria object that defines the relationship and this will be used to load the related object.
+        /// </summary>
+        /// <typeparam name="T">The type of the business object to load</typeparam>
+        /// <param name="relationship">The relationship to use to load the object</param>
+        /// <returns>An object of type T if one was found, otherwise null</returns>
+        T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads a business object using the relationship given. The relationship will be converted into a
+        /// Criteria object that defines the relationship and this will be used to load the related object.
+        /// </summary>
+        /// <param name="relationship">The relationship to use to load the object</param>
+        /// <returns>An object of the type defined by the relationship if one was found, otherwise null</returns>
+        IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship);
+
+        /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given. 
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="criteria">The criteria to use to load the business object collection</param>
         /// <returns>The loaded collection</returns>
         BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given. 
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria);
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
@@ -64,6 +117,15 @@ namespace Habanero.BO
         /// <returns>The loaded collection</returns>
         /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
         BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Loads a BusinessObjectCollection using the criteria given, applying the order criteria to order the collection that is returned. 
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="criteria">The criteria to use to load the business object collection</param>
+        /// <returns>The loaded collection</returns>
+        /// <param name="orderCriteria">The order criteria to use (ie what fields to order the collection on)</param>
+        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria);
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
@@ -77,6 +139,17 @@ namespace Habanero.BO
         BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new();
 
         /// <summary>
+        /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that the ClassDef given
+        /// has the properties defined in the fields of the select query.  
+        /// This method allows you to define a custom query to load a businessobjectcollection so that you can perhaps load from multiple
+        /// tables using a join (if loading from a database source).
+        /// </summary>
+        /// <param name="classDef">The ClassDef for the collection to load</param>
+        /// <param name="selectQuery">The select query to use to load from the data source</param>
+        /// <returns>The loaded collection</returns>
+        IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery);
+
+        /// <summary>
         /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
         /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
         /// only fire for the new objects added to the collection, not for the ones that already existed).
@@ -84,6 +157,14 @@ namespace Habanero.BO
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="collection">The collection to refresh</param>
         void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new();
+
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        /// <param name="collection">The collection to refresh</param>
+        void Refresh(IBusinessObjectCollection collection);
 
         /// <summary>
         /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
@@ -96,7 +177,5 @@ namespace Habanero.BO
         /// PersonID</param>
         /// <returns>The loaded RelatedBusinessObjectCollection</returns>
         RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship) where T : class, IBusinessObject, new();
-
-        T GetRelatedBusinessObject<T>(IRelationship relationship) where T : class, IBusinessObject, new();
     }
 }

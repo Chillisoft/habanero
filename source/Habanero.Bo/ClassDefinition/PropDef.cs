@@ -700,15 +700,15 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// Creates a new Business Object property (BOProp)
         /// </summary>
-        /// <param name="isNewObject">Whether the Business Object this
+        /// <param name="assignDefaultValue">Whether the Business Object this
         /// property is being created for is a new object or is being 
         /// loaded from the DB. If it is new, then the property is
         /// initialised with the default value.
         /// </param>
         /// <returns>The newly created BO property</returns>
-        protected internal BOProp CreateBOProp(bool isNewObject)
+        public IBOProp CreateBOProp(bool assignDefaultValue)
         {
-            if (isNewObject)
+            if (assignDefaultValue)
             {
                 object defaultValue = MyDefaultValue;
                 if (defaultValue != null)

@@ -46,7 +46,7 @@ namespace Habanero.Test.BO
             MyBO bo1 = (MyBO) itsClassDef.CreateNewBusinessObject();
             MyRelatedBo relatedBo1 = (MyRelatedBo) itsRelatedClassDef.CreateNewBusinessObject();
             ((SingleRelationship) bo1.Relationships["MyRelationship"]).SetRelatedObject(relatedBo1);
-            Assert.AreSame(relatedBo1, bo1.Relationships.GetRelatedObject("MyRelationship"));
+            Assert.AreSame(relatedBo1, bo1.Relationships.GetRelatedObject<MyRelatedBo>("MyRelationship"));
             Assert.AreSame(bo1.GetPropertyValue("RelatedID"), relatedBo1.GetPropertyValue("MyRelatedBoID"));
         }
     }

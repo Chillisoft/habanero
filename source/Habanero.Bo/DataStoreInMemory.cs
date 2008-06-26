@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Habanero.Base;
 
@@ -33,6 +34,15 @@ namespace Habanero.BO
             return null;
         }
 
+        public IBusinessObject Find(Type BOType, Criteria criteria)
+        {
+            foreach (IBusinessObject bo in _objects.Values)
+            {
+                if (BOType.IsInstanceOfType(bo) && criteria.IsMatch(bo)) return bo;
+            }
+            return null;
+        }
+
         public T Find<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject
         {
             foreach (IBusinessObject bo in _objects.Values)
@@ -55,6 +65,22 @@ namespace Habanero.BO
                 T boAsT = bo as T;
                 if (boAsT == null) continue; ;
                 if (criteria == null || criteria.IsMatch(boAsT)) col.Add(boAsT);
+            }
+            col.SelectQuery.Criteria = criteria;
+            return col;
+        }
+
+        public IBusinessObjectCollection FindAll(Type BOType, Criteria criteria) 
+        {
+            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(BOType);
+            IBusinessObjectCollection col = (IBusinessObjectCollection) Activator.CreateInstance(boColType);
+            foreach (IBusinessObject bo in _objects.Values)
+            {
+
+                if (BOType.IsInstanceOfType(bo))
+                {
+                    if (criteria == null || criteria.IsMatch(bo)) col.Add(bo);
+                }
             }
             col.SelectQuery.Criteria = criteria;
             return col;

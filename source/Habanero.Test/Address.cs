@@ -189,7 +189,7 @@ namespace Habanero.Test
 
         public ContactPerson GetContactPerson()
         {
-            return (ContactPerson)Relationships.GetRelatedObject("ContactPerson");
+            return Relationships.GetRelatedObject<ContactPerson>("ContactPerson");
         }
 
         #endregion //Relationships

@@ -59,6 +59,11 @@ namespace Habanero.Test.BO
             OrderItem.DropTable();
         }
 
+        [SetUp]
+        public void SetupTest()
+        {
+            this.SetupDBConnection();
+        }
         
         public virtual void SetupTestData()
         {
@@ -219,6 +224,7 @@ namespace Habanero.Test.BO
         public void TestRelatedPropColumn()
         {
             //-------------Setup Test Pack ------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             ClassDef classDef = MyContactPerson.LoadClassDef();
             string columnName = "Father.DateOfBirth";
@@ -290,7 +296,7 @@ namespace Habanero.Test.BO
 
         #region Internal Classes
 
-        private class MyContactPerson : ContactPerson
+        public class MyContactPerson : ContactPerson
         {
             private DateTime _dateTime = DateTime.Now;
             private static string fatherRelationshipName = "Father";
@@ -356,6 +362,14 @@ namespace Habanero.Test.BO
                     return _myContactPerson as T;
                 }
 
+                /// <summary>
+                /// Returns the related object 
+                /// </summary>
+                /// <returns>Returns the related business object</returns>
+                public override IBusinessObject GetRelatedObject()
+                {
+                    return _myContactPerson;
+                }
                 /// <summary>
                 /// Sets the related object to that provided
                 /// </summary>

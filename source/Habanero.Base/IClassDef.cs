@@ -1,5 +1,6 @@
 using System;
 using Habanero.Base.Exceptions;
+using Habanero.BO.Base;
 
 namespace Habanero.Base
 {
@@ -37,6 +38,24 @@ namespace Habanero.Base
         /// The table this classdef maps to, if applicable.
         /// </summary>
         string TableName { get; }
+
+        /// <summary>
+        /// The type of the class definition
+        /// </summary>
+        Type ClassType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The collection of property definitions
+        /// </summary>
+        IPropDefCol PropDefcol
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance

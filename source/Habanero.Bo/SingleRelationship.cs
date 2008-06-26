@@ -67,12 +67,7 @@ namespace Habanero.BO
         	return GetRelatedObject<BusinessObject>();
         }
 
-        /// <summary>
-        /// Returns the related object 
-        /// </summary>
-        /// <returns>Returns the related business object</returns>
-        public virtual T GetRelatedObject<T>()
-			where T : class, IBusinessObject, new()
+        public virtual IBusinessObject GetRelatedObject()
         {
             IExpression newRelationshipExpression = _relKey.RelationshipExpression();
             if (_relatedBo == null ||
@@ -82,9 +77,9 @@ namespace Habanero.BO
                 if (HasRelationship())
                 {
                     //log.Debug("HasRelationship returned true, loading object.") ;
-                   // Peter-Working: IBusinessObject busObj = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject<T>(this);
-                    IBusinessObject busObj =
-                        (BusinessObject)Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
+                    // Peter-Working: IBusinessObject busObj = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(this);
+                     IBusinessObject busObj =
+                            (BusinessObject)Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
                     busObj = BOLoader.Instance.GetBusinessObject(busObj, newRelationshipExpression);
                     if (_relDef.KeepReferenceToRelatedObject)
                     {
@@ -93,9 +88,10 @@ namespace Habanero.BO
                     }
                     else
                     {
-                        return (T)busObj;
+                        return busObj;
                     }
-                } else
+                }
+                else
                 {
                     _relatedBo = null;
                     _storedRelationshipExpression = newRelationshipExpression.ExpressionString();
@@ -105,7 +101,18 @@ namespace Habanero.BO
             {
                 //log.Debug("Related Object is already loaded, returning cached one.") ;
             }
-            return (T)_relatedBo;
+            return _relatedBo;
+        }
+
+
+        /// <summary>
+        /// Returns the related object 
+        /// </summary>
+        /// <returns>Returns the related business object</returns>
+        public virtual T GetRelatedObject<T>()
+			where T : class, IBusinessObject, new()
+        {
+            return (T) GetRelatedObject();
         }
 
         /// <summary>

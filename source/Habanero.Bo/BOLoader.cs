@@ -145,7 +145,7 @@ namespace Habanero.BO
 
             foreach (PropDef propDef in primaryKeyDef)
             {
-                BOProp prop = propDef.CreateBOProp(false);
+                IBOProp prop = propDef.CreateBOProp(false);
                 prop.InitialiseProp(dr[prop.DatabaseFieldName]);
                 propCol.Add(prop);
                 //obj.PrimaryKey = (BOPrimaryKey)obj.ClassDef.PrimaryKeyDef.CreateBOKey(obj.Props);

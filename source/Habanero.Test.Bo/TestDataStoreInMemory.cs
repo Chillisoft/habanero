@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -74,6 +73,27 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestFind_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            dataStore.Add(cp);
+            Criteria criteria = new Criteria("Surname", Criteria.Op.Equals, cp.Surname);
+
+            //---------------Execute Test ----------------------
+            ContactPersonTestBO loadedCP = (ContactPersonTestBO) dataStore.Find(typeof(ContactPersonTestBO), criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(cp.ID, loadedCP.ID);
+            //---------------Tear Down -------------------------      
+        }
+
+
+        [Test]
         public void TestFind_PrimaryKey()
         {
             //---------------Set up test pack-------------------
@@ -115,6 +135,32 @@ namespace Habanero.Test.BO
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
             Assert.AreEqual(criteria, col.SelectQuery.Criteria);
+            //---------------Tear Down -------------------------
+        }
+
+
+        [Test]
+        public void TestFindAll_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            DataStoreInMemory dataStore = new DataStoreInMemory();
+            DateTime now = DateTime.Now;
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now;
+            dataStore.Add(cp1);
+            ContactPersonTestBO cp2 = new ContactPersonTestBO();
+            cp2.DateOfBirth = now;
+            dataStore.Add(cp2);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, now);
+
+            //---------------Execute Test ----------------------
+            IBusinessObjectCollection col = dataStore.FindAll(typeof(ContactPersonTestBO), criteria);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, col.Count);
+            Assert.Contains(cp1, col);
+            Assert.Contains(cp2, col);
             //---------------Tear Down -------------------------
         }
 

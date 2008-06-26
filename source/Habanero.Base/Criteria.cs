@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Habanero.Base;
 
-namespace Habanero.BO
+namespace Habanero.Base
 {
     /// <summary>
     /// A criteria expression that can be used to build up a criteria tree. The IsMatch method can then be
@@ -203,7 +203,9 @@ namespace Habanero.BO
         {
             if (IsComposite())
             {
-                return string.Format("({0}) {1} ({2})", _leftCriteria, LogicalOps[(int)_logicalOp], _rightCriteria);
+                string leftCriteriaAsString = _leftCriteria.ToString(convertToFieldName, addParameter);
+                string rightCriteriaAsString = _rightCriteria.ToString(convertToFieldName, addParameter);
+                return string.Format("({0}) {1} ({2})", leftCriteriaAsString, LogicalOps[(int)_logicalOp], rightCriteriaAsString);
             }
             string valueString = addParameter(_value);
             return string.Format("{0} {1} {2}", convertToFieldName(_propName), Ops[(int)_op], valueString);

@@ -136,7 +136,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestCreateBOProp()
         {
-            BOProp prop = _propDef.CreateBOProp(false);
+            IBOProp prop = _propDef.CreateBOProp(false);
             Assert.AreEqual("PropName", prop.PropertyName);
             Assert.AreEqual("PropName", prop.DatabaseFieldName);
         }

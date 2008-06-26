@@ -19,6 +19,7 @@
 
 using System;
 using Habanero.Base;
+using Habanero.BO.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
@@ -79,7 +80,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void TestClonePropDefCol()
         {
             ClassDef originalClassDef = LoadClassDef();
-            PropDefCol newPropDefCol = originalClassDef.PropDefcol.Clone();
+            IPropDefCol newPropDefCol = originalClassDef.PropDefcol.Clone();
             Assert.AreNotSame(newPropDefCol, originalClassDef.PropDefcol);
             Assert.AreEqual(newPropDefCol, originalClassDef.PropDefcol);
         }

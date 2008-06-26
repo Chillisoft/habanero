@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -336,6 +335,29 @@ namespace Habanero.Test.BO
             string criteriaAsString = andCriteria.ToString();
             //---------------Test Result -----------------------
             string expectedString = string.Format("(Surname = '{0}') AND (DateTime > '{1}')", surnameValue, dateTimeValue.ToString(Criteria.DATE_FORMAT));
+            StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
+
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestToString_UsingDelegates()
+        {
+            //---------------Set up test pack-------------------
+            string surnameValue = Guid.NewGuid().ToString("N");
+            string surname = "Surname";
+            Criteria surnameCriteria = new Criteria(surname, Criteria.Op.Equals, surnameValue);
+            DateTime dateTimeValue = DateTime.Now;
+            string datetimePropName = "DateTime";
+            Criteria dateTimeCriteria = new Criteria(datetimePropName, Criteria.Op.GreaterThan, dateTimeValue);
+
+            Criteria andCriteria = new Criteria(surnameCriteria, Criteria.LogicalOp.And, dateTimeCriteria);
+
+            //---------------Execute Test ----------------------
+            string criteriaAsString = andCriteria.ToString(delegate(string propName) { return propName + "1"; }, delegate { return "param"; });
+
+            //---------------Test Result -----------------------
+            string expectedString = "(Surname1 = param) AND (DateTime1 > param)";
             StringAssert.AreEqualIgnoringCase(expectedString, criteriaAsString);
 
             //---------------Tear Down -------------------------

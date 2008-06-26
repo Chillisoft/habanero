@@ -1,6 +1,5 @@
-namespace Habanero.BO
+namespace Habanero.Base
 {
-
     /// <summary>
     /// Represents a field used in a query. In a database context, this represents a field listed 
     /// in the SELECT clause of a sql statement

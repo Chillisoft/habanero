@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using Habanero.Base;
 
-namespace Habanero.BO
+namespace Habanero.Base
 {
-
     /// <summary>
     /// A model of a Select Query that can be used to load data from a data store.  This includes the Fields to load, the source to load from
     /// (such as the database table name), the OrderCriteria to use (what fields must be sorted on), the Criteria to use (only objects that

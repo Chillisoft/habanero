@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.Base;
 using Habanero.BO.Comparer;
 using Habanero.BO.Loaders;
 using Habanero.Util;
@@ -79,7 +80,7 @@ namespace Habanero.BO.ClassDefinition
         private string _displayName = "";
 
         private PrimaryKeyDef _primaryKeyDef;
-        private PropDefCol _propDefCol;
+        private IPropDefCol _propDefCol;
         private KeyDefCol _keysCol;
         private RelationshipDefCol _relationshipDefCol;
 
@@ -189,13 +190,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// As before, but excludes the table name
         /// </summary>
-        public ClassDef(string assemblyName,
-                        string className,
-                        PrimaryKeyDef primaryKeyDef,
-                        PropDefCol propDefCol,
-                        KeyDefCol keyDefCol,
-                        RelationshipDefCol relationshipDefCol,
-                        UIDefCol uiDefCol)
+        public ClassDef(string assemblyName, string className, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(assemblyName, className, null, primaryKeyDef, propDefCol, keyDefCol, relationshipDefCol, uiDefCol)
         {
         }
@@ -203,23 +198,14 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// As before, but excludes the table name
         /// </summary>
-        public ClassDef(string assemblyName,
-                        string className,
-                        string displayName,
-                        PrimaryKeyDef primaryKeyDef,
-                        PropDefCol propDefCol,
-                        KeyDefCol keyDefCol,
-                        RelationshipDefCol relationshipDefCol,
-                        UIDefCol uiDefCol)
+        public ClassDef(string assemblyName, string className, string displayName, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
             : this(
                 null, assemblyName, className, null, displayName, primaryKeyDef, propDefCol, keyDefCol,
                 relationshipDefCol, uiDefCol)
         {
         }
 
-        private ClassDef(Type classType, string assemblyName, string className, string tableName, string displayName,
-                         PrimaryKeyDef primaryKeyDef, PropDefCol propDefCol, KeyDefCol keyDefCol,
-                         RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
+        private ClassDef(Type classType, string assemblyName, string className, string tableName, string displayName, PrimaryKeyDef primaryKeyDef, IPropDefCol propDefCol, KeyDefCol keyDefCol, RelationshipDefCol relationshipDefCol, UIDefCol uiDefCol)
         {
             if (classType != null)
                 MyClassType = classType;
@@ -263,7 +249,7 @@ namespace Habanero.BO.ClassDefinition
         public string AssemblyName
         {
             get { return _assemblyName; }
-            protected set
+            set
             {
                 if (_assemblyName != value)
                 {
@@ -291,7 +277,7 @@ namespace Habanero.BO.ClassDefinition
                     return _className;
                 }
             }
-            protected set
+            set
             {
                 if (_className != value)
                     _classType = null;
@@ -321,7 +307,7 @@ namespace Habanero.BO.ClassDefinition
         public Type ClassType
         {
             get { return MyClassType; }
-            protected set { MyClassType = value; }
+            set { MyClassType = value; }
         }
 
         /// <summary>
@@ -387,17 +373,17 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// The collection of property definitions
         /// </summary>
-        public PropDefCol PropDefcol
+        public IPropDefCol PropDefcol
         {
             get { return _propDefCol; }
-            protected set { _propDefCol = value; }
+            set { _propDefCol = value; }
         }
 
         /// <summary>
         /// The collection of property definitions for this
         /// class and any properties inherited from parent classes
         /// </summary>
-        public PropDefCol PropDefColIncludingInheritance
+        public IPropDefCol PropDefColIncludingInheritance
         {
             get
             {
@@ -1008,7 +994,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public ClassDef Clone()
         {
-            PropDefCol propDefClone = this.PropDefcol != null ? this.PropDefcol.Clone() : null;
+            IPropDefCol propDefClone = this.PropDefcol != null ? this.PropDefcol.Clone() : null;
             UIDefCol uiDefClone = this.UIDefCol != null ? this.UIDefCol.Clone() : null;
             ClassDef newClassDef = new ClassDef(this.AssemblyName, this.ClassName, this.PrimaryKeyDef,
                                                 propDefClone, this.KeysCol,

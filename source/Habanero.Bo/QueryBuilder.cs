@@ -16,7 +16,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="classDef">The <see cref="ClassDef" /> to create the SelectQuery for.</param>
         /// <returns>A SelectQuery that can be used to load objects of the type the given ClassDef represents</returns>
-        public static SelectQuery CreateSelectQuery(ClassDef classDef)
+        public static SelectQuery CreateSelectQuery(IClassDef classDef)
         {
             return CreateSelectQuery(classDef, null);
         }
@@ -28,7 +28,7 @@ namespace Habanero.BO
         /// <param name="classDef">The <see cref="ClassDef" /> to create the SelectQuery for.</param>
         /// <param name="criteria">The criteria to be set on the SelectQuery</param>
         /// <returns>A SelectQuery that can be used to load objects of the type the given ClassDef represents</returns>
-        public static SelectQuery CreateSelectQuery(ClassDef classDef, Criteria criteria)
+        public static SelectQuery CreateSelectQuery(IClassDef classDef, Criteria criteria)
         {
             SelectQuery selectQuery = new SelectQuery();
             foreach (IPropDef propDef in classDef.PropDefcol)

@@ -97,7 +97,7 @@ namespace Habanero.BO
 
     	#region IRelationshipCol Members
 
-		/// <summary>
+        /// <summary>
         /// Returns the business object that is related to this object
         /// through the specified relationship (eg. would return a father
         /// if the relationship was called "father").  This method is to be
@@ -110,11 +110,12 @@ namespace Habanero.BO
         /// single one was expected</exception>
         public IBusinessObject GetRelatedObject(string relationshipName)
         {
-			return GetRelatedObject<BusinessObject>(relationshipName);
+
+            SingleRelationship relationship = FindSingleRelationship(relationshipName);
+            return relationship.GetRelatedObject();
         }
 
-    	
-    	/// <summary>
+        /// <summary>
     	/// Returns the business object that is related to this object
     	/// through the specified relationship (eg. would return a father
     	/// if the relationship was called "father").  This method is to be
@@ -128,17 +129,23 @@ namespace Habanero.BO
     	public T GetRelatedObject<T>(string relationshipName) where T : class, IBusinessObject, new()
     	{
 			ArgumentValidationHelper.CheckStringArgumentNotEmpty(relationshipName, "relationshipName");
-			IRelationship relationship = this[relationshipName];
-			if (relationship is MultipleRelationship)
-			{
-				throw new InvalidRelationshipAccessException("The 'multiple' relationship " + relationshipName +
-															 " was accessed as a 'single' relationship (using GetRelatedObject()).");
-			}
-			return ((SingleRelationship)relationship).GetRelatedObject<T>();
+            SingleRelationship relationship = FindSingleRelationship(relationshipName);
+    	    return relationship.GetRelatedObject<T>();
     	}
 
-		
-    	///<summary>
+        private SingleRelationship FindSingleRelationship(string relationshipName)
+        {
+            IRelationship relationship = this[relationshipName];
+            if (relationship is MultipleRelationship)
+            {
+                throw new InvalidRelationshipAccessException("The 'multiple' relationship " + relationshipName +
+                                                             " was accessed as a 'single' relationship (using GetRelatedObject()).");
+            }
+            return (SingleRelationship)relationship;
+        }
+
+
+        ///<summary>
     	/// Determines whether the Relationship Collections contains the specified Relationship
     	///</summary>
     	///<param name="relationshipName">The name of the relationship to search for</param>

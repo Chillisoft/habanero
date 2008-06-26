@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 
 namespace Habanero.BO
 {
@@ -26,6 +28,15 @@ namespace Habanero.BO
                 return null;
         }
 
+        public IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey)
+        {
+            if (_dataStore.AllObjects.ContainsKey(primaryKey))
+                return _dataStore.AllObjects[primaryKey];
+            else
+                return null;
+        }
+
+
         /// <summary>
         /// Loads a business object of type T, using the criteria given
         /// </summary>
@@ -35,6 +46,11 @@ namespace Habanero.BO
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             return _dataStore.Find<T>(criteria);
+        }
+
+        public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
+        {
+            return _dataStore.Find(classDef.ClassType, criteria);
         }
 
         /// <summary>
@@ -50,6 +66,13 @@ namespace Habanero.BO
             return _dataStore.Find<T>(selectQuery.Criteria);
         }
 
+        public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery)
+        {
+            return _dataStore.Find(classDef.ClassType, selectQuery.Criteria);
+        }
+
+      
+
         /// <summary>
         /// Loads a BusinessObjectCollection using the criteria given. 
         /// </summary>
@@ -59,6 +82,12 @@ namespace Habanero.BO
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             return _dataStore.FindAll<T>(criteria);
+        }
+
+
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria)
+        {
+            return _dataStore.FindAll(classDef.ClassType, criteria);
         }
 
         /// <summary>
@@ -75,6 +104,21 @@ namespace Habanero.BO
             updatedCol.ForEach(delegate(T obj) { if (!collection.Contains(obj)) collection.Add(obj);});
             
         }
+
+        public void Refresh(IBusinessObjectCollection collection)
+        {
+            IBusinessObjectCollection updatedCol = GetBusinessObjectCollection(collection.ClassDef, collection.SelectQuery.Criteria);
+            foreach (IBusinessObject obj in collection)
+            {
+                if (!updatedCol.Contains(obj)) collection.Remove(obj);
+            }
+            foreach (IBusinessObject obj in updatedCol)
+            {
+                if (!collection.Contains(obj)) collection.Add(obj);
+            }
+        }
+
+   
 
         /// <summary>
         /// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
@@ -96,9 +140,15 @@ namespace Habanero.BO
             return relatedCol;
         }
 
-        public T GetRelatedBusinessObject<T>(IRelationship relationship) where T : class, IBusinessObject, new()
+        public T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new()
         {
             return GetBusinessObject<T>(Criteria.FromRelationship(relationship));
+
+        }
+
+        public IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
+        {
+            return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef, Criteria.FromRelationship(relationship));
         }
 
         /// <summary>
@@ -115,6 +165,16 @@ namespace Habanero.BO
             return col;
         }
 
+
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria)
+        {
+            IBusinessObjectCollection col = GetBusinessObjectCollection(classDef, criteria);
+            col.Sort(orderCriteria);
+            return col;
+        }
+
+     
+
         /// <summary>
         /// Loads a BusinessObjectCollection using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
         /// has the properties defined in the fields of the select query.  
@@ -128,5 +188,12 @@ namespace Habanero.BO
         {
             return GetBusinessObjectCollection<T> (selectQuery.Criteria, selectQuery.OrderCriteria);
         }
+
+
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery)
+        {
+            return GetBusinessObjectCollection(classDef, selectQuery.Criteria, selectQuery.OrderCriteria);
+        }
+
     }
 }

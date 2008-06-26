@@ -29,7 +29,7 @@ namespace Habanero.Test.BO
     public class TestBoProp
     {
         private PropDef _propDef;
-        private BOProp _prop;
+        private IBOProp _prop;
 
         [SetUp]
         public void init()
@@ -77,7 +77,7 @@ namespace Habanero.Test.BO
             PropDef lPropDefWithRules = new PropDef("PropNameWithRules", "System", "String",
                                                     PropReadWriteRule.ReadWrite, null, null, true, false);
             lPropDefWithRules.PropRule = new PropRuleString(lPropDefWithRules.PropertyName, "", -1, -1, null);
-            BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
+            IBOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsFalse(lBOProp.IsValid);
             Assert.IsTrue(lBOProp.InvalidReason.Length > 0);
             lBOProp.Value = "New Value";
@@ -269,7 +269,7 @@ namespace Habanero.Test.BO
             PropDef lPropDefWithRules = new PropDef("PropNameWithRules", typeof(string),
                                                     PropReadWriteRule.ReadWrite, null);
             lPropDefWithRules.PropRule = new PropRuleString(lPropDefWithRules.PropertyName, "", 50, 51, null);
-            BOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
+            IBOProp lBOProp = lPropDefWithRules.CreateBOProp(true);
             Assert.IsTrue(lBOProp.IsValid);
             try
             {
@@ -321,10 +321,11 @@ namespace Habanero.Test.BO
         {
             _prop.InitialiseProp("OriginalValue");
             _prop.Value = "New Value";
+            BOProp prop = (BOProp) _prop;
             Assert.IsTrue(_prop.IsDirty);
             Assert.AreEqual("OriginalValue", _prop.PersistedPropertyValue);
-            Assert.AreEqual("PropName = 'New Value'", _prop.DatabaseNameFieldNameValuePair(null));
-            Assert.AreEqual("PropName = 'OriginalValue'", _prop.PersistedDatabaseNameFieldNameValuePair(null));
+            Assert.AreEqual("PropName = 'New Value'", prop.DatabaseNameFieldNameValuePair(null));
+            Assert.AreEqual("PropName = 'OriginalValue'", prop.PersistedDatabaseNameFieldNameValuePair(null));
         }
 
         [Test]
@@ -435,7 +436,7 @@ namespace Habanero.Test.BO
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadWrite, null, null, true, false);
-            BOProp boProp = propDef.CreateBOProp(true);
+            IBOProp boProp = propDef.CreateBOProp(true);
 
             Assert.IsFalse(boProp.InvalidReason.Contains("'TestProp'"));
             Assert.IsTrue(boProp.InvalidReason.Contains("'Test Prop'"));
@@ -451,7 +452,7 @@ namespace Habanero.Test.BO
 
         #region Shared Methods
 
-        private static void WriteTestValues(BOProp boProp)
+        private static void WriteTestValues(IBOProp boProp)
         {
             boProp.Value = "TestValue";
             Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value.");
@@ -472,7 +473,7 @@ namespace Habanero.Test.BO
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadWrite, null, null, true, false);
-            BOProp boProp = propDef.CreateBOProp(true);
+            IBOProp boProp = propDef.CreateBOProp(true);
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
             boProp.Value = "TestValue";
             Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
@@ -486,7 +487,7 @@ namespace Habanero.Test.BO
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadWrite, null, null, true, false);
-            BOProp boProp = propDef.CreateBOProp(false);
+            IBOProp boProp = propDef.CreateBOProp(false);
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
             boProp.Value = "TestValue";
             Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
@@ -504,7 +505,7 @@ namespace Habanero.Test.BO
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadOnly, null, null, true, false);
-            BOProp boProp = propDef.CreateBOProp(true);
+            IBOProp boProp = propDef.CreateBOProp(true);
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
             boProp.Value = "TestValue";
             //Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
@@ -515,7 +516,7 @@ namespace Habanero.Test.BO
         {
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                   PropReadWriteRule.ReadOnly, null, null, true, false);
-            BOProp boProp = propDef.CreateBOProp(false);
+            IBOProp boProp = propDef.CreateBOProp(false);
             Assert.AreEqual(null, boProp.Value, "BOProp value should start being null");
             boProp.Value = "TestValue";
             //Assert.AreEqual("TestValue", boProp.Value, "BOProp value should now have the given value");
@@ -525,14 +526,14 @@ namespace Habanero.Test.BO
 
         #region Test WriteOnce
 
-        private static BOProp CreateWriteOnceBoProp(bool isNew)
+        private static IBOProp CreateWriteOnceBoProp(bool isNew)
         {
             return CreateWriteOnceBoProp(isNew, null);
         }
 
-        private static BOProp CreateWriteOnceBoProp(bool isNew, object defaultValue)
+        private static IBOProp CreateWriteOnceBoProp(bool isNew, object defaultValue)
         {
-            BOProp boProp;
+            IBOProp boProp;
             PropDef propDef = new PropDef("TestProp", typeof(String),
                                           PropReadWriteRule.WriteOnce, null, defaultValue, true, false);
             boProp = propDef.CreateBOProp(isNew);
@@ -563,7 +564,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
         public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain()
         {
-            BOProp boProp = CreateWriteOnceBoProp(true);
+            IBOProp boProp = CreateWriteOnceBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
             boProp.Value = "NewValue";
@@ -572,7 +573,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestUpdateProp_WriteOnce_NewPersisted_WriteAgain_SameValue()
         {
-            BOProp boProp = CreateWriteOnceBoProp(true);
+            IBOProp boProp = CreateWriteOnceBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
             boProp.Value = "TestValue4";
@@ -587,7 +588,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
         public void TestUpdateProp_WriteOnce_Existing_WriteAgain()
         {
-            BOProp boProp = CreateWriteOnceBoProp(false);
+            IBOProp boProp = CreateWriteOnceBoProp(false);
             boProp.BackupPropValue();
             boProp.Value = "NewValue";
         }
@@ -595,7 +596,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestUpdateProp_WriteOnce_Existing_WriteAgain_SameValue()
         {
-            BOProp boProp = CreateWriteOnceBoProp(false);
+            IBOProp boProp = CreateWriteOnceBoProp(false);
             boProp.BackupPropValue();
             boProp.Value = "TestValue4";
         }
@@ -604,9 +605,9 @@ namespace Habanero.Test.BO
 
         #region Test WriteNew
 
-        private static BOProp CreateWriteNewBoProp(bool isNew)
+        private static IBOProp CreateWriteNewBoProp(bool isNew)
         {
-            BOProp boProp;
+            IBOProp boProp;
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                           PropReadWriteRule.WriteNew, null, null, true, false);
             boProp = propDef.CreateBOProp(isNew);
@@ -631,7 +632,7 @@ namespace Habanero.Test.BO
         [Test, ExpectedException(typeof(BusinessObjectReadWriteRuleException))]
         public void TestUpdateProp_WriteNew_NewPersisted_WriteAgain()
         {
-            BOProp boProp = CreateWriteNewBoProp(true);
+            IBOProp boProp = CreateWriteNewBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
             boProp.Value = "NewValue";
@@ -647,9 +648,9 @@ namespace Habanero.Test.BO
 
         #region Test WriteNotNew
 
-        private static BOProp CreateWriteNotNewBoProp(bool isNew)
+        private static IBOProp CreateWriteNotNewBoProp(bool isNew)
         {
-            BOProp boProp;
+            IBOProp boProp;
             PropDef propDef = new PropDef("TestProp", "System", "String",
                                           PropReadWriteRule.WriteNotNew, null, null, true, false);
             boProp = propDef.CreateBOProp(isNew);
@@ -657,9 +658,9 @@ namespace Habanero.Test.BO
             return boProp;
         }
 
-        private static BOProp CreateWriteNotNewBoPropWithValues(bool isNew)
+        private static IBOProp CreateWriteNotNewBoPropWithValues(bool isNew)
         {
-            BOProp boProp = CreateWriteNotNewBoProp(isNew);
+            IBOProp boProp = CreateWriteNotNewBoProp(isNew);
             WriteTestValues(boProp);
             return boProp;
         }
@@ -673,7 +674,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestUpdateProp_WriteNotNew_NewPersisted_WriteAgain()
         {
-            BOProp boProp = CreateWriteNotNewBoProp(true);
+            IBOProp boProp = CreateWriteNotNewBoProp(true);
             boProp.BackupPropValue();
             boProp.IsObjectNew = false;
             WriteTestValues(boProp);
@@ -688,7 +689,7 @@ namespace Habanero.Test.BO
         [Test]
         public void TestUpdateProp_WriteNotNew_Existing_WriteAgain()
         {
-            BOProp boProp = CreateWriteNotNewBoPropWithValues(false);
+            IBOProp boProp = CreateWriteNotNewBoPropWithValues(false);
             boProp.BackupPropValue();
             WriteTestValues(boProp);
         }
@@ -704,7 +705,7 @@ namespace Habanero.Test.BO
         {
             PropDef propDef = new PropDef("EnumProp", typeof(ContactPersonTestBO.ContactType), PropReadWriteRule.ReadWrite, ContactPersonTestBO.ContactType.Family);
             //Create the property for a new object (default will be set)
-            BOProp boProp;
+            IBOProp boProp;
             boProp = propDef.CreateBOProp(true);
             Assert.AreEqual(ContactPersonTestBO.ContactType.Family, boProp.Value);
             Assert.AreEqual("Family", boProp.PropertyValueString);
@@ -719,7 +720,7 @@ namespace Habanero.Test.BO
         {
             PropDef propDef = new PropDef("EnumProp", typeof(ContactPersonTestBO.ContactType), PropReadWriteRule.ReadWrite, ContactPersonTestBO.ContactType.Family);
             //Create the property for anexisting object (default will not be set)
-            BOProp boProp = propDef.CreateBOProp(false);
+            IBOProp boProp = propDef.CreateBOProp(false);
             Assert.AreEqual(null, boProp.Value);
             Assert.AreEqual("", boProp.PropertyValueString);
             boProp.InitialiseProp(ContactPersonTestBO.ContactType.Business);
@@ -741,7 +742,7 @@ namespace Habanero.Test.BO
         {
             PropDef propDef = new PropDef("EnumProp", typeof(ContactPersonTestBO.ContactType), PropReadWriteRule.ReadWrite, ContactPersonTestBO.ContactType.Family);
             //Create the property for anexisting object (default will not be set)
-            BOProp boProp = propDef.CreateBOProp(false);
+            IBOProp boProp = propDef.CreateBOProp(false);
             Assert.AreEqual(null, boProp.Value);
             Assert.AreEqual(null, boProp.PersistedPropertyValue);
             Assert.AreEqual("", boProp.PropertyValueString);
@@ -759,7 +760,7 @@ namespace Habanero.Test.BO
         {
             PropDef propDef = new PropDef("EnumProp", typeof(ContactPersonTestBO.ContactType), PropReadWriteRule.ReadWrite, ContactPersonTestBO.ContactType.Family);
             //Create the property for anexisting object (default will not be set)
-            BOProp boProp = propDef.CreateBOProp(false);
+            IBOProp boProp = propDef.CreateBOProp(false);
             Assert.AreEqual(null, boProp.Value);
             Assert.AreEqual(null, boProp.PersistedPropertyValue);
             Assert.AreEqual("", boProp.PropertyValueString);

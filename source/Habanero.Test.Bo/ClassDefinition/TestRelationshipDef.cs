@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
@@ -32,7 +33,7 @@ namespace Habanero.Test.BO.ClassDefinition
     {
         private RelationshipDef mRelationshipDef;
         private RelKeyDef mRelKeyDef;
-        private PropDefCol mPropDefCol;
+        private IPropDefCol mPropDefCol;
         private MockBO mMockBo;
 
         [TestFixtureSetUp]
@@ -232,7 +233,7 @@ namespace Habanero.Test.BO.ClassDefinition
 
         #region forTesting
 
-        internal PropDefCol PropDefCol
+        internal IPropDefCol PropDefCol
         {
             get { return _classDef.PropDefcol; }
         }

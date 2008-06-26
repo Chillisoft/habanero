@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
@@ -33,6 +34,12 @@ namespace Habanero.BO
             return GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
         }
 
+        public IBusinessObject GetBusinessObject(IClassDef classDef, IPrimaryKey primaryKey)
+        {
+            return GetBusinessObject(classDef, Criteria.FromPrimaryKey(primaryKey));
+        }
+
+
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
             SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(ClassDef.ClassDefs[typeof (T)]);
@@ -42,8 +49,6 @@ namespace Habanero.BO
 
         public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
-            //T foundBO = _dataStoreInMemory.Find<T>(selectQuery.Criteria);
-            //if (foundBO != null) return foundBO;
             SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
             ISqlStatement statement = selectQueryDB.CreateSqlStatement();
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
@@ -66,6 +71,38 @@ namespace Habanero.BO
             return null;
         }
 
+        public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
+        {
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.Criteria = criteria;
+            return GetBusinessObject(classDef, selectQuery);
+        }
+
+        public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery) 
+        {
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery);
+            ISqlStatement statement = selectQueryDB.CreateSqlStatement();
+            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            {
+                try
+                {
+                    if (dr.Read())
+                    {
+                        return LoadBOFromReader(classDef, dr, selectQueryDB);
+                    }
+                }
+                finally
+                {
+                    if (dr != null && !dr.IsClosed)
+                    {
+                        dr.Close();
+                    }
+                }
+            }
+            return null;
+        }
+
+   
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria)
             where T : class, IBusinessObject, new()
         {
@@ -75,12 +112,28 @@ namespace Habanero.BO
             return col;
         }
 
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria)
+        {
+            IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            col.SelectQuery.Criteria = criteria;
+            Refresh(col);
+            return col;
+        }
+
+        /// <summary>
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
+        /// </summary>
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="collection">The collection to refresh</param>
         public void Refresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new()
         {
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
             ISqlStatement statement = selectQuery.CreateSqlStatement();
-            BusinessObjectCollection<T> oldCol = collection.Clone();
-            collection.Clear();
+            BusinessObjectCollection<T> updatedCol = collection.Clone();
+            updatedCol.SelectQuery = collection.SelectQuery;
+            updatedCol.Clear();
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
                 try
@@ -88,17 +141,47 @@ namespace Habanero.BO
                     while (dr.Read())
                     {
                         T loadedBo = LoadBOFromReader<T>(dr, selectQuery);
-//                        if (loadedBo != null)
-//                        {
-                            if (oldCol.Contains(loadedBo)) collection.AddInternal(loadedBo);
-                            else collection.Add(loadedBo);
-//                        }
+                        updatedCol.Add(loadedBo);
                     }
                 }
                 finally
                 {
                     if (dr != null && !dr.IsClosed) dr.Close();
                 }
+            }
+            collection.ForEach(delegate(T obj) { if (!updatedCol.Contains(obj)) collection.Remove(obj); });
+            updatedCol.ForEach(delegate(T obj) { if (!collection.Contains(obj)) collection.Add(obj); });
+        }
+
+        public void Refresh(IBusinessObjectCollection collection)
+        {
+            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery);
+            ISqlStatement statement = selectQuery.CreateSqlStatement();
+            IBusinessObjectCollection updatedCol = collection.Clone();
+            updatedCol.SelectQuery = collection.SelectQuery;
+            updatedCol.Clear();
+            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            {
+                try
+                {
+                    while (dr.Read())
+                    {
+                        IBusinessObject loadedBo = LoadBOFromReader(collection.ClassDef, dr, selectQuery);
+                        updatedCol.Add(loadedBo);
+                    }
+                }
+                finally
+                {
+                    if (dr != null && !dr.IsClosed) dr.Close();
+                }
+            }
+            foreach (IBusinessObject obj in collection)
+            {
+                if (!updatedCol.Contains(obj)) collection.Remove(obj);
+            }
+            foreach (IBusinessObject obj in updatedCol)
+            {
+                if (!collection.Contains(obj)) collection.Add(obj);
             }
         }
 
@@ -113,10 +196,21 @@ namespace Habanero.BO
             return relatedCol;
         }
 
-        public T GetRelatedBusinessObject<T>(IRelationship relationship) where T : class, IBusinessObject, new()
+        public T GetRelatedBusinessObject<T>(SingleRelationship relationship) where T : class, IBusinessObject, new()
         {
             return GetBusinessObject<T>(Criteria.FromRelationship(relationship));
         }
+
+        public IBusinessObject GetRelatedBusinessObject(SingleRelationship relationship)
+        {
+            return GetBusinessObject(relationship.RelationshipDef.RelatedObjectClassDef, Criteria.FromRelationship(relationship));
+        }
+
+
+
+     
+
+
 
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(Criteria criteria, OrderCriteria orderCriteria)
             where T : class, IBusinessObject, new()
@@ -128,10 +222,33 @@ namespace Habanero.BO
             return col;
         }
 
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, Criteria criteria, OrderCriteria orderCriteria)
+        {
+            IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
+            col.SelectQuery.Criteria = criteria;
+            col.SelectQuery.OrderCriteria = orderCriteria;
+            Refresh(col);
+            return col;
+        }
+
         public BusinessObjectCollection<T> GetBusinessObjectCollection<T>(ISelectQuery selectQuery)
             where T : class, IBusinessObject, new()
         {
             BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
+            col.SelectQuery = selectQuery;
+            Refresh(col);
+            return col;
+        }
+
+        private IBusinessObjectCollection CreateCollectionOfType(Type BOType)
+        {
+            Type boColType = typeof(BusinessObjectCollection<>).MakeGenericType(BOType);
+            return (IBusinessObjectCollection)Activator.CreateInstance(boColType);
+        }
+
+        public IBusinessObjectCollection GetBusinessObjectCollection(IClassDef classDef, ISelectQuery selectQuery)
+        {
+            IBusinessObjectCollection col = CreateCollectionOfType(classDef.ClassType);
             col.SelectQuery = selectQuery;
             Refresh(col);
             return col;
@@ -152,6 +269,32 @@ namespace Habanero.BO
             if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(bo.PrimaryKey.GetObjectId()))
             {
                 boFromAllLoadedObjects = (T)BusinessObject.AllLoadedBusinessObjects()[bo.PrimaryKey.GetObjectId()].Target;
+                if (boFromAllLoadedObjects == null)
+                {
+                    BusinessObject.AllLoadedBusinessObjects().Remove(bo.PrimaryKey.GetObjectId());
+                }
+            }
+            else
+            {
+                //todo: add ibo to the allloadedbusinessobjectscol.
+            }
+            if (boFromAllLoadedObjects != null) return boFromAllLoadedObjects;
+            return bo;
+        }
+
+        private IBusinessObject LoadBOFromReader(IClassDef classDef, IDataReader dataReader, ISelectQuery selectQuery)
+        {
+            IBusinessObject bo = classDef.CreateNewBusinessObject();
+            int i = 0;
+            foreach (QueryField field in selectQuery.Fields.Values)
+            {
+                bo.Props[field.PropertyName].InitialiseProp(dataReader[i++]);
+            }
+
+            IBusinessObject boFromAllLoadedObjects = null;
+            if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(bo.PrimaryKey.GetObjectId()))
+            {
+                boFromAllLoadedObjects = (IBusinessObject) BusinessObject.AllLoadedBusinessObjects()[bo.PrimaryKey.GetObjectId()].Target;
                 if (boFromAllLoadedObjects == null)
                 {
                     BusinessObject.AllLoadedBusinessObjects().Remove(bo.PrimaryKey.GetObjectId());

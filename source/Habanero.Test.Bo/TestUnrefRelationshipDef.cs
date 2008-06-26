@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
@@ -34,7 +35,7 @@ namespace Habanero.Test.BO
     {
         private RelationshipDef _multipleRelationshipDef;
         private RelKeyDef _RelKeyDef;
-        private PropDefCol _propDefCol;
+        private IPropDefCol _propDefCol;
         private MockBO _mockBo;
         private SingleRelationshipDef _singleRelationshipDef;
 

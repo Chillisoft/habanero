@@ -94,6 +94,7 @@
     <Compile Include="BOKeyEventArgs.cs" />
     <Compile Include="BOPropCol.cs" />
     <Compile Include="BOPropEventArgs.cs" />
+    <Compile Include="Criteria.cs" />
     <Compile Include="Exceptions\InvalidObjectIdException.cs" />
     <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
     <Compile Include="HabaneroApp.cs" />
@@ -112,12 +113,14 @@
     <Compile Include="InvalidRelationshipAccessException.cs" />
     <Compile Include="IPrimaryKey.cs" />
     <Compile Include="IPropDef.cs" />
+    <Compile Include="IPropDefCol.cs" />
     <Compile Include="IPropertyComparer.cs" />
     <Compile Include="IPropRule.cs" />
     <Compile Include="IRelationship.cs" />
     <Compile Include="IRelationshipCol.cs" />
     <Compile Include="IRelKey.cs" />
     <Compile Include="IRelProp.cs" />
+    <Compile Include="ISelectQuery.cs" />
     <Compile Include="ISupportsAutoIncrementingField.cs" />
     <Compile Include="ITransactional.cs" />
     <Compile Include="ITransactionalDB.cs" />
@@ -218,6 +221,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PropReadWriteRule.cs" />
+    <Compile Include="QueryField.cs" />
     <Compile Include="RSAPasswordCrypter.cs" />
     <Compile Include="XMLWrapper.cs" />
   </ItemGroup>
