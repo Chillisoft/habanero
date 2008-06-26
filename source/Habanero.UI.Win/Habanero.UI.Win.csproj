@@ -72,6 +72,9 @@
     <Compile Include="EditableGridWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ErrorProviderWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FileChooserWin.cs">
       <SubType>UserControl</SubType>
     </Compile>

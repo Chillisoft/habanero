@@ -275,6 +275,12 @@ namespace Habanero.UI.Base
         /// <param name="optionsToDisplay">A list of date range optionsToDisplay</param>
         IDateRangeComboBox CreateDateRangeComboBox(List<DateRangeOptions> optionsToDisplay);
 
+        /// <summary>
+        /// Constructor that provides a specific ErrorProvider. 
+        /// </summary>
+        /// <returns></returns>
+        IErrorProvider CreateErrorProvider();
+
     }
 
     /// <summary>

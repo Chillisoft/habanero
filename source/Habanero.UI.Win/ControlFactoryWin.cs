@@ -365,6 +365,11 @@ namespace Habanero.UI.Win
             return new DateRangeComboBoxWin(optionsToDisplay);
         }
 
+        public IErrorProvider CreateErrorProvider()
+        {
+            return new ErrorProviderWin();
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();

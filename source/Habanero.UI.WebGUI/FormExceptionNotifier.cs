@@ -45,8 +45,9 @@ namespace Habanero.UI.WebGUI
                 MessageBox.Show(furtherMessage + Environment.NewLine + ex.Message, title);
 
             }
-            else {
-            new CollapsibleExceptionNotifyForm(ex, furtherMessage, title).ShowDialog();
+            else
+            {
+                new CollapsibleExceptionNotifyForm(ex, furtherMessage, title).ShowDialog();
             }
         }
 
@@ -220,8 +221,6 @@ namespace Habanero.UI.WebGUI
             {
                 get { return new ControlCollectionGiz(base.Controls); }
             }
-
-            
         }
     }
 }

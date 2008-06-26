@@ -83,6 +83,7 @@
     <Compile Include="EditableGridGiz.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ErrorProviderGiz.cs" />
     <Compile Include="FileChooserGiz.cs">
       <SubType>UserControl</SubType>
     </Compile>

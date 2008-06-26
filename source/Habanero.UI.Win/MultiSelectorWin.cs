@@ -14,6 +14,7 @@ namespace Habanero.UI.Win
             get { throw new NotImplementedException(); }
             //TODO _Port: Test and Implememt this
         }
+
         private readonly MultiSelectorManager<T> _manager;
 
         public MultiSelectorWin()

@@ -13,6 +13,8 @@ namespace Habanero.UI.Win
             get { return new ControlCollectionWin(base.Controls); }
         }
 
+        private string _errorMessage="";
+
         public TextBoxWin()
         {
             //_textBox.KeyPress += delegate(object sender, KeyPressEventArgs e)

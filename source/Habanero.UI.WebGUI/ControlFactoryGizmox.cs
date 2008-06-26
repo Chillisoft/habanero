@@ -317,6 +317,11 @@ namespace Habanero.UI.WebGUI
             return new DateRangeComboBoxGiz(optionsToDisplay);
         }
 
+        public IErrorProvider CreateErrorProvider()
+        {
+            return new ErrorProviderGiz();
+        }
+
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years

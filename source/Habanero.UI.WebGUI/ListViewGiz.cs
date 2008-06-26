@@ -99,7 +99,6 @@ namespace Habanero.UI.WebGUI
         {
             get { throw new NotImplementedException(); }
         }
-
     }
 
     internal class IColumnHeaderCollectionGiz : IColumnHeaderCollection

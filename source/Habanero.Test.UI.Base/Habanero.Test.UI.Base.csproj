@@ -69,6 +69,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -136,6 +137,8 @@
     <Compile Include="TestListView.cs" />
     <Compile Include="Mappers\TestListComboBoxMapper.cs" />
     <Compile Include="PanelFactory\TestPanelFactory.cs" />
+    <Compile Include="TestValidationProvider.cs" />
+    <Compile Include="TestValidationRule.cs" />
     <Compile Include="Wizard\TestWizardControl.cs" />
     <Compile Include="Wizard\TestWizardController.cs" />
   </ItemGroup>

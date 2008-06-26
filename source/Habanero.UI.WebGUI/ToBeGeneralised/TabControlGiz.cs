@@ -11,7 +11,7 @@ namespace Habanero.UI.WebGUI
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
-       
+
         //TODO: Convert dockstyles between Giz windows etc
 
         public new ITabPageCollection TabPages
