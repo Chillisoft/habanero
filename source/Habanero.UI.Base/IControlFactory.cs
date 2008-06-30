@@ -281,6 +281,7 @@ namespace Habanero.UI.Base
         /// <returns></returns>
         IErrorProvider CreateErrorProvider();
 
+        IFormChilli CreateForm();
     }
 
     /// <summary>

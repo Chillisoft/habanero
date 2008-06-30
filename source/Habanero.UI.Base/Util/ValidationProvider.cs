@@ -205,15 +205,19 @@ namespace Habanero.UI.Base
             {
                 if (obj != null && obj.Operator.Equals(ValidationCompareOperator.DataTypeCheck))
                 {
-                    if (obj.DataType.Equals(this._DefaultValidationRule.DataType)) returnRule=obj;
+                    if (obj.DataType.Equals(this._DefaultValidationRule.DataType))
+                    {
+                        returnRule = obj;
+                    }
+                    else
+                    {
+                        System.Web.UI.WebControls.ValidationDataType vdt =
+                            (System.Web.UI.WebControls.ValidationDataType) Enum.Parse(typeof (System.Web.UI.WebControls.
+                                                                               ValidationDataType),obj.DataType.ToString());
 
-                    System.Web.UI.WebControls.ValidationDataType vdt =
-                        (System.Web.UI.WebControls.ValidationDataType)Enum.Parse(
-                        typeof(System.Web.UI.WebControls.ValidationDataType),
-                        obj.DataType.ToString());
-
-                    obj.IsValid = ValidationUtil.CanConvert(ctrl.Text, vdt);
-                    returnRule = obj;
+                        obj.IsValid = ValidationUtil.CanConvert(ctrl.Text, vdt);
+                        returnRule = obj;
+                    }
                 }
             });
 		    return returnRule;
@@ -233,9 +237,14 @@ namespace Habanero.UI.Base
                 if (obj != null)
                 {
                     if (this._DefaultValidationRule.ValueToCompare.Equals(obj.ValueToCompare)
-                        && this._DefaultValidationRule.Operator.Equals(obj.Operator)) returnRule=obj;
-
-                    obj.IsValid = ValidationRule.Compare(ctrl.Text, obj.ValueToCompare, obj.Operator, obj);
+                        && this._DefaultValidationRule.Operator.Equals(obj.Operator))
+                    {
+                        returnRule = obj;
+                    }
+                    else
+                    {
+                        obj.IsValid = ValidationRule.Compare(ctrl.Text, obj.ValueToCompare, obj.Operator, obj);
+                    }
                 }
             });
 
@@ -278,13 +287,18 @@ namespace Habanero.UI.Base
             {
                 vr.ForEach(delegate(ValidationRule obj)
                 {
-                    if (this.IsDefaultRange(obj)) returnRule=obj;
+                    if (this.IsDefaultRange(obj))
+                    {
+                        returnRule = obj;
+                    }
+                    else
+                    {
+                        obj.IsValid =ValidationRule.Compare(ctrl.Text, obj.MinimumValue,ValidationCompareOperator.GreaterThanEqual, obj);
 
-                    obj.IsValid = ValidationRule.Compare(ctrl.Text, obj.MinimumValue, ValidationCompareOperator.GreaterThanEqual, obj);
-
-                    if (obj.IsValid)
-                        obj.IsValid = ValidationRule.Compare(ctrl.Text, obj.MaximumValue, ValidationCompareOperator.LessThanEqual, obj);
-                    returnRule = obj;
+                        if (obj.IsValid)
+                            obj.IsValid = ValidationRule.Compare(ctrl.Text, obj.MaximumValue,ValidationCompareOperator.LessThanEqual, obj);
+                        returnRule = obj;
+                    }
                 });
                 
             }

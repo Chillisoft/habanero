@@ -370,6 +370,11 @@ namespace Habanero.UI.Win
             return new ErrorProviderWin();
         }
 
+        public IFormChilli CreateForm()
+        {
+            return new FormWin();
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();

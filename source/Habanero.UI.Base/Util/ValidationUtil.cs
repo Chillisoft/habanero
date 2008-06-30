@@ -67,7 +67,11 @@ namespace Habanero.UI.Base
 				(System.Web.UI.WebControls.ValidationDataType)Enum.Parse(
 				typeof(System.Web.UI.WebControls.ValidationDataType), 
 				type.ToString());
-            
+
+            //if(rightText=="" && op==ValidationCompareOperator.Equal)
+            //{
+            //    return String.Equals("", leftText);
+            //}
 			return ValidationUtil.Compare(leftText, rightText, vco, vdt);
 		}
 

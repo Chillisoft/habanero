@@ -152,6 +152,12 @@ namespace Habanero.BO
             {
                 return true;
             }
+            if (!(propValue is DateTime))
+            {
+                errorMessage = GetBaseErrorMessage(propValue, displayName)
+                        + "It is not a type of DateTime.";
+                return false;
+            }
             if ((DateTime) propValue < MinValue)
             {
                 errorMessage = GetBaseErrorMessage(propValue, displayName);

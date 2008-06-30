@@ -25,6 +25,7 @@ using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
@@ -45,6 +46,7 @@ namespace Habanero.UI.Base
         protected bool _isEditable;
         protected BusinessObject _businessObject;
         protected Hashtable _attributes;
+        private readonly IErrorProvider _errorProvider;
 
         /// <summary>
         /// Constructor to instantiate a new instance of the class
@@ -63,6 +65,7 @@ namespace Habanero.UI.Base
             _propertyName = propName;
             _isReadOnly = isReadOnly;
             _factory = factory;
+            _errorProvider = _factory.CreateErrorProvider();
             if (!_isReadOnly)
             {
                 AddKeyPressHandlers();
@@ -84,6 +87,10 @@ namespace Habanero.UI.Base
             get { return _control; }
         }
 
+        public IErrorProvider ErrorProvider
+        {
+            get { return _errorProvider; }
+        }
         /// <summary>
         /// Returns the name of the property being edited in the control
         /// </summary>
@@ -338,7 +345,17 @@ namespace Habanero.UI.Base
         {
             if (_businessObject != null)
             {
+                //TODO: write test this
                 BOMapper boMapper = new BOMapper(_businessObject);
+                //if property is 
+                IBOProp prop = _businessObject.Props[_propertyName];
+                PropDef propDef = (PropDef)prop.PropDef;
+                string msg = "";
+                if (propDef != null)
+                    if (!propDef.isValueValid(prop.DisplayName, value, ref msg))
+                    {
+                        _errorProvider.SetError(_control, msg);
+                    }
                 boMapper.SetDisplayPropertyValue(_propertyName, value);
             }
         }

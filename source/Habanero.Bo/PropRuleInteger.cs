@@ -159,6 +159,11 @@ namespace Habanero.BO
                     }
                     valueValid = false;
                 }
+            }else
+            {
+                errorMessage = GetBaseErrorMessage(propValue, displayName)
+                         + "It is not a type of integer.";
+                return false;
             }
             return valueValid;
             

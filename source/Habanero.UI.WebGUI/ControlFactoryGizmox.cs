@@ -322,6 +322,11 @@ namespace Habanero.UI.WebGUI
             return new ErrorProviderGiz();
         }
 
+        public IFormChilli CreateForm()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years

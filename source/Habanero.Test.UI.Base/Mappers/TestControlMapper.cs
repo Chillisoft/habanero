@@ -20,6 +20,10 @@
 
 using System;
 using System.Windows.Forms;
+using Habanero.Base;
+using Habanero.BO;
+using Habanero.BO.ClassDefinition;
+using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
 using NUnit.Extensions.Forms;
@@ -143,7 +147,7 @@ namespace Habanero.Test.UI.Base
 //                _readOnlyMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("Different2", _txtReadonly.Text);
             }
-
+            //test compulsory string property, compu decimal etcetc nb combo box
         }
 
         [TestFixture]
@@ -213,19 +217,9 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
 
-            [Test]
-            public void TestReadOnlyChangeBO()
-            {
-                _readOnlyMapper.BusinessObject = _shape;
-                Assert.AreEqual("TestShapeName", _txtReadonly.Text);
-                Shape sh2 = new Shape();
-                sh2.ShapeName = "Different";
-                _readOnlyMapper.BusinessObject = sh2;
-                Assert.AreEqual("Different", _txtReadonly.Text);
-                sh2.ShapeName = "Different2";
-                _readOnlyMapper.UpdateControlValueFromBusinessObject();
-                Assert.AreEqual("Different2", _txtReadonly.Text);
-            }
+           
+
+           
         }
 
         private ITextBox _txtNormal;
@@ -385,6 +379,68 @@ namespace Habanero.Test.UI.Base
         }
 
         #endregion //Test Null BO
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForStringDataType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithStringRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(5);
+            //---------------Test Result -----------------------
+            StringAssert.Contains("It is not a type of string.", mapperStub.ErrorProvider.GetError(_txtNormal));
+            //---------------Tear down -------------------------
+        }
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithIntegerRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("a");
+            //---------------Test Result -----------------------
+            StringAssert.Contains("It is not a type of Integer.", mapperStub.ErrorProvider.GetError(_txtNormal));
+            //---------------Tear down -------------------------
+        }
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(5);
+            //---------------Test Result -----------------------
+            StringAssert.Contains("It is not a type of datetime.", mapperStub.ErrorProvider.GetError(_txtNormal));
+            //---------------Tear down -------------------------
+        }
+
+        [Test]
+        public void TestReadOnlyChangeBO()
+        {
+            _readOnlyMapper.BusinessObject = _shape;
+            Assert.AreEqual("TestShapeName", _txtReadonly.Text);
+            Shape sh2 = new Shape();
+            sh2.ShapeName = "Different";
+            _readOnlyMapper.BusinessObject = sh2;
+            Assert.AreEqual("Different", _txtReadonly.Text);
+            sh2.ShapeName = "Different2";
+            _readOnlyMapper.UpdateControlValueFromBusinessObject();
+            Assert.AreEqual("Different2", _txtReadonly.Text);
+        }
     }
 
     internal class ControlMapperStub : ControlMapper
@@ -420,6 +476,11 @@ namespace Habanero.Test.UI.Base
         protected override void InternalUpdateControlValueFromBo()
         {
             this.Control.Text = (string) this.BusinessObject.GetPropertyValue(this.PropertyName);
+        }
+
+        public void TestSetPropertyValue(object value)
+        {
+            SetPropertyValue(value);
         }
     }
 }

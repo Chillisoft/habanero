@@ -655,7 +655,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="displayName">The name of the property as presented to the user
         /// in the user interface, clarifies error messaging</param>
         /// <returns>Returns true if valid, false if not</returns>
-        protected internal bool isValueValid(string displayName, Object propValue, ref string errorMessage)
+        public bool isValueValid(string displayName, Object propValue, ref string errorMessage)
         {
             if (displayName == null)
             {
@@ -680,7 +680,6 @@ namespace Habanero.BO.ClassDefinition
                     return false;
                 }
             }
-
             errorMessage = "";
             if (_propRule != null)
             {

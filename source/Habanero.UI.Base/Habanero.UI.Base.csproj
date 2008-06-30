@@ -56,6 +56,7 @@
     <Compile Include="ControlMappers\ComboBoxCollectionController.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
+    <Compile Include="FormController.cs" />
     <Compile Include="Grid\IDataGridViewCellStyle.cs" />
     <Compile Include="Grid\IDataGridViewCheckBoxColumn.cs" />
     <Compile Include="Grid\IDataGridViewImageColumn.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="Grid\IDataGridViewColumn.cs" />
     <Compile Include="Grid\IDataGridViewComboBoxColumn.cs" />
     <Compile Include="IErrorProvider.cs" />
+    <Compile Include="IFormControl.cs" />
+    <Compile Include="IFormController.cs" />
     <Compile Include="IListView.cs" />
     <Compile Include="LayoutManagers\ColumnLayoutManager.cs" />
     <Compile Include="IListViewItem.cs" />

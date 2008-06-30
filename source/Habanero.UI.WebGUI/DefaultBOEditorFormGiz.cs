@@ -265,6 +265,16 @@ namespace Habanero.UI.WebGUI
             get { return new ControlCollectionGiz(this.Controls); }
         }
 
+        public void Refresh()
+        {
+            // do nothing
+        }
+        IFormChilli IFormChilli.MdiParent
+        {
+            get { throw new NotImplementedException(); }
+            set { this.MdiParent = (Form)value; }
+        }
+
         /// <summary>
         /// Pops the form up in a modal dialog.  If the BO is successfully edited and saved, returns true
         /// else returns false.

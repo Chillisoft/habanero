@@ -57,6 +57,11 @@ namespace Habanero.Test.BO
             //Test valid data
             Assert.IsTrue(rule.IsPropValueValid("Propname", new DateTime(1991, 01, 14), ref errorMessage));
             Assert.IsFalse(errorMessage.Length > 0);
+
+            //Test valid data
+            Assert.IsFalse(rule.IsPropValueValid("Propname","should be false", ref errorMessage),"Should get data type mismatch test");
+            Assert.IsTrue(errorMessage.Length > 0);
+            StringAssert.Contains("It is not a type of DateTime", errorMessage);
         }
 
         [Test]

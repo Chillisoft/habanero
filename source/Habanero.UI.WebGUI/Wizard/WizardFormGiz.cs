@@ -95,6 +95,17 @@ namespace Habanero.UI.WebGUI
             get { return new ControlCollectionGiz(base.Controls); }
         }
 
+        public void Refresh()
+        {
+            // do nothing
+        }
+
+        IFormChilli IFormChilli.MdiParent
+        {
+            get { throw new NotImplementedException(); }
+            set { this.MdiParent = (Form)value; }
+        }
+
         private void _uxWizardControl_Finished(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;

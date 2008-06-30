@@ -12,6 +12,7 @@ namespace Habanero.Test.UI.Base
         {
             //---------------Set up test pack-------------------
             ValidationRule testRule = new ValidationRule();
+
             //---------------Execute Test ----------------------
 
             //---------------Test Result -----------------------
@@ -20,7 +21,6 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(String.Empty,testRule.InitialValue);
             Assert.IsTrue(testRule.IsValid);
             Assert.IsFalse(testRule.IsRequired);
-            //---------------Tear down -------------------------
         }
 
         [Test]
@@ -29,16 +29,17 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             String myString = "Hello World";
             int myInt = 9;
-            ValidationRule testRule = new ValidationRule();
+
+
             //---------------Execute Test ----------------------
-            bool result1 = ValidationUtil.CompareTypes(myString, testRule.DataType);
-            bool result2 = ValidationUtil.CompareTypes(Convert.ToString(myInt), testRule.DataType);
+            bool result1 = ValidationUtil.CompareTypes(myString, ValidationDataType.String);
+            bool result2 = ValidationUtil.CompareTypes(Convert.ToString(myInt), ValidationDataType.String);
             bool falseResult = ValidationUtil.CompareTypes(myString, ValidationDataType.Integer);
+
             //---------------Test Result -----------------------
             Assert.IsTrue(result1);
             Assert.IsTrue(result2);
             Assert.IsFalse(falseResult);
-            //---------------Tear down -------------------------
         }
 
         [Test]
@@ -51,15 +52,17 @@ namespace Habanero.Test.UI.Base
             ValidationRule testRule = new ValidationRule();
             testRule.Operator = ValidationCompareOperator.Equal;
             testRule.DataType = ValidationDataType.String;
+
             //---------Assert Preconditions----------------------
             Assert.IsTrue(String.Equals(firstString, sameAsFirstString));
+
             //---------------Execute Test ----------------------
             bool result = ValidationUtil.CompareValues(firstString, sameAsFirstString, testRule.Operator, testRule.DataType);
             bool falseResult = ValidationUtil.CompareValues(firstString, myString, testRule.Operator, testRule.DataType);
+
             //---------------Test Result -----------------------
             Assert.IsTrue(result);
             Assert.IsFalse(falseResult);
-            //---------------Tear down -------------------------
         }
 
         [Test]
@@ -80,7 +83,38 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.IsTrue(result);
             Assert.IsFalse(falseResult);
-            //---------------Tear down -------------------------
+        }
+
+        //[Test]
+        //public void TestRequiredField()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    int myInt = 5;
+        //    ValidationRule testRule = new ValidationRule();
+        //    testRule.Operator = ValidationCompareOperator.Equal;
+        //    testRule.DataType = ValidationDataType.Integer;
+        //    //----------Test Precondition-------------------
+        //    //---------------Execute Test ----------------------
+        //    bool result = ValidationUtil.CompareValues(Convert.ToString(myInt), "", testRule.Operator, testRule.DataType);
+
+        //    //---------------Test Result -----------------------
+        //    Assert.IsFalse(result);
+        //}
+
+        [Test]
+        public void TestIsRequiredValdiation()
+        {
+            //---------------Set up test pack-------------------
+            string myString = "Hello";
+            ValidationRule testRule = new ValidationRule();
+            testRule.IsRequired = true;
+
+            //---------------Execute Test ----------------------
+            bool result = ValidationUtil.CompareValues(myString, "", testRule.Operator, testRule.DataType);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(result);
+
         }
     }
 }

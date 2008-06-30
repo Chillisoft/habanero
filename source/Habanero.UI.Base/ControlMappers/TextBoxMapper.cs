@@ -19,6 +19,7 @@
 
 
 using System;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.UI.Base;
 
@@ -169,6 +170,7 @@ namespace Habanero.UI.Base
             string value = _textBox.Text;
 
             if (!_isEditable) return;
+
 
             try
             {

@@ -895,6 +895,31 @@ namespace Habanero.Test
             return itsClassDef;
         }
 
+        public static ClassDef LoadClassDefWithIntegerRule()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+					<property  name=""TestProp"" type=""Int32"">
+                        <rule name=""TestProp"">
+                            <add key=""min"" value=""2"" />
+                            <add key=""max"" value=""5"" />
+                        </rule>
+                    </property>
+					<property  name=""TestProp2"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui />                    
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         public static ClassDef LoadClassDefWithRelationship()
         {
             XmlClassLoader itsLoader = new XmlClassLoader();

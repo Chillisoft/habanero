@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.BO;
 using NUnit.Framework;
 
@@ -63,11 +64,15 @@ namespace Habanero.Test.BO
             Assert.IsFalse(errorMessage.Length > 0);
 
             errorMessage = "";
-            Assert.IsTrue(rule.IsPropValueValid("Propname", "ffff", ref errorMessage)); //test zero length strings
+            Assert.IsTrue(rule.IsPropValueValid("Propname", "ffff", ref errorMessage));
             Assert.IsFalse(errorMessage.Length > 0);
 
             errorMessage = "";
-            Assert.IsFalse(rule.IsPropValueValid("Propname", 11, ref errorMessage)); //test zero length strings
+            Assert.IsFalse(rule.IsPropValueValid("Propname", 11, ref errorMessage));
+            Assert.IsTrue(errorMessage.Length > 0);
+
+            errorMessage = "";
+            Assert.IsFalse(rule.IsPropValueValid("Propname", new DateTime(2005,06,05), ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
         }
 
