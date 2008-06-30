@@ -32,8 +32,8 @@ namespace Habanero.Test
     /// </summary>
     public class ContactPersonCompositeKey : BusinessObject
     {
-        private const string PK1_PROP1_NAME = "PK1Prop1";
-        private const string PK1_PROP2_NAME = "PK1Prop2";
+        public const string PK1_PROP1_NAME = "PK1Prop1";
+        public const string PK1_PROP2_NAME = "PK1Prop2";
 
         #region Constructors
 

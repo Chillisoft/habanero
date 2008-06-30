@@ -38,5 +38,15 @@ namespace Habanero.Base
             get;
             set;
         }
+
+        /// <summary>
+        /// The classdef this select query corresponds to. This can be null if the select query is being used
+        /// without classdefs, but if it is built using the QueryBuilder 
+        /// </summary>
+        IClassDef ClassDef
+        {
+            get;
+            set;
+        }
     }
 }

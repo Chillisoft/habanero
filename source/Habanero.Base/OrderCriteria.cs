@@ -196,6 +196,14 @@ namespace Habanero.Base
                 set { _source = value; }
             }
 
+            /// <summary>
+            /// Returns the full name of the order criteria - ie "Source.Name"
+            /// </summary>
+            public string FullName
+            {
+                get { return String.IsNullOrEmpty(this.Source ) ? this.Name : this.Source + "." + this.Name; }
+            }
+
 
             ///<summary>
             ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.

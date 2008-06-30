@@ -1,5 +1,6 @@
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using Habanero.DB;
 
 namespace Habanero.BO
 {
@@ -37,7 +38,27 @@ namespace Habanero.BO
             }
             selectQuery.Source = classDef.TableName;
             selectQuery.Criteria = criteria;
+            selectQuery.ClassDef = classDef;
             return selectQuery;
+        }
+
+        /// <summary>
+        /// Goes through the OrderCritieria of a SelectQuery and adds to the query fields
+        /// any order fields that are not already included in the query fields.
+        /// </summary>
+        /// <param name="query">The query to modify - any order fields not in the query fields will be added to them</param>
+        public static void IncludeFieldsFromOrderCriteria(ISelectQuery query)
+        {
+            foreach (OrderCriteria.Field orderField in query.OrderCriteria.Fields)
+            {
+                if (query.Fields.ContainsKey(orderField.FullName)) continue;
+
+                RelationshipDef relationshipDef = ((ClassDef)query.ClassDef).GetRelationship(orderField.Source);
+                IPropDef relatedPropDef = relationshipDef.RelatedObjectClassDef.GetPropDef(orderField.Name);
+                QueryField queryField = new QueryField(orderField.Name, relatedPropDef.DatabaseFieldName, orderField.Source);
+                query.Fields.Add(orderField.FullName, queryField);
+            }
+
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;
 
@@ -11,20 +12,20 @@ namespace Habanero.BO
     {
         private readonly ISelectQuery _selectQuery;
 
-        public SelectQueryDB(ISelectQuery selectQuery) 
+        public SelectQueryDB(ISelectQuery selectQuery)
         {
             _selectQuery = selectQuery;
         }
 
         #region ISelectQuery Members
 
-        Criteria ISelectQuery.Criteria
+        public Criteria Criteria
         {
             get { return _selectQuery.Criteria; }
             set { _selectQuery.Criteria = value; }
         }
 
-        Dictionary<string, QueryField> ISelectQuery.Fields
+        public Dictionary<string, QueryField> Fields
         {
             get { return _selectQuery.Fields; }
         }
@@ -32,13 +33,13 @@ namespace Habanero.BO
         /// <summary>
         /// The source of the data. In a database query this would be the first table listed in the FROM clause.
         /// </summary>
-        string ISelectQuery.Source
+        public string Source
         {
             get { return _selectQuery.Source; }
             set { _selectQuery.Source = value; }
         }
 
-        OrderCriteria ISelectQuery.OrderCriteria
+        public OrderCriteria OrderCriteria
         {
             get { return _selectQuery.OrderCriteria; }
             set { _selectQuery.OrderCriteria = value; }
@@ -46,12 +47,23 @@ namespace Habanero.BO
 
         public int Limit
         {
-            get { return _selectQuery.Limit;  }
+            get { return _selectQuery.Limit; }
             set { _selectQuery.Limit = value; }
+        }
+
+        public IClassDef ClassDef
+        {
+            get { return _selectQuery.ClassDef; }
+            set { _selectQuery.ClassDef = value; }
         }
 
         #endregion
 
+        /// <summary>
+        /// Creates an ISqlStatement out of the SelectQuery given in the constructor, to be used to load 
+        /// from a database
+        /// </summary>
+        /// <returns>An ISqlStatement that can be executed against an IDatabaseConnection</returns>
         public ISqlStatement CreateSqlStatement()
         {
             SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
@@ -59,70 +71,124 @@ namespace Habanero.BO
             AppendLimitClauseAtBeginning(builder);
             AppendFields(builder);
             AppendFrom(builder);
+            AppendJoins(builder);
             AppendWhereClause(builder, statement);
             AppendOrderByClause(builder);
             AppendLimitClauseAtEnd(builder);
             return statement;
         }
 
+        private void AppendJoins(StringBuilder builder)
+        {
+            foreach (OrderCriteria.Field field in _selectQuery.OrderCriteria.Fields)
+            {
+                if (!string.IsNullOrEmpty(field.Source))
+                {
+                    RelationshipDef relationshipDef = ((ClassDef) this.ClassDef).GetRelationship(field.Source);
+                    string joinString = GetJoinStringForRelationship(relationshipDef);
+                    builder.Append(joinString);
+                }
+            }
+        }
+
+        private string GetJoinStringForRelationship(RelationshipDef relationshipDef)
+        {
+            string joinString = "";
+            foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
+            {
+                ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
+                string relatedTableName = DelimitTable(relatedClassDef.TableName);
+                IPropDef ownerPropDef = this.ClassDef.GetPropDef(relPropDef.OwnerPropertyName);
+                IPropDef relatedPropDef = relatedClassDef.GetPropDef(relPropDef.RelatedClassPropName);
+                if (String.IsNullOrEmpty(joinString))
+                {
+                    joinString += " JOIN " + relatedTableName + " ON ";
+                }
+                else
+                {
+                    joinString += " AND ";
+                }
+                joinString += DelimitField(this.ClassDef.TableName, ownerPropDef.DatabaseFieldName);
+                joinString += " = ";
+                joinString += DelimitField(relatedClassDef.TableName, relatedPropDef.DatabaseFieldName);
+            }
+            return joinString;
+        }
+
         private void AppendFrom(StringBuilder builder)
         {
-            builder.Append(" FROM ");
-            builder.Append(SqlFormattingHelper.FormatTableName(_selectQuery.Source, DatabaseConnection.CurrentConnection));
+            builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source));
         }
 
         private void AppendFields(StringBuilder builder)
         {
+            QueryBuilder.IncludeFieldsFromOrderCriteria(_selectQuery);
             foreach (QueryField field in _selectQuery.Fields.Values)
             {
-                builder.Append(GetFieldNameWithDelimiters(field.SourceName, field.FieldName) + ", ");
+                builder.AppendFormat("{0}, ", DelimitField(field.SourceName, field.FieldName));
             }
             builder.Remove(builder.Length - 2, 2);
         }
 
         private void AppendLimitClauseAtBeginning(StringBuilder builder)
         {
-            if (_selectQuery.Limit > 0)
+            if (_selectQuery.Limit == 0) return;
+
+            string limitClauseAtBeginning = DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
+            if (!String.IsNullOrEmpty(limitClauseAtBeginning))
             {
-                string limitClauseAtBeginning =
-                    DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
-                if (!String.IsNullOrEmpty(limitClauseAtBeginning))
-                {
-                    builder.Append(limitClauseAtBeginning + " ");
-                }
+                builder.Append(limitClauseAtBeginning + " ");
             }
         }
 
         private void AppendLimitClauseAtEnd(StringBuilder builder)
         {
-            if (_selectQuery.Limit > 0)
+            if (_selectQuery.Limit == 0) return;
+
+            string limitClauseAtEnd = DatabaseConnection.CurrentConnection.GetLimitClauseForEnd(_selectQuery.Limit);
+            if (!String.IsNullOrEmpty(limitClauseAtEnd))
             {
-                string limitClauseAtEnd =
-                    DatabaseConnection.CurrentConnection.GetLimitClauseForEnd(_selectQuery.Limit);
-                if (!String.IsNullOrEmpty(limitClauseAtEnd))
-                {
-                    builder.Append(" " + limitClauseAtEnd);
-                }
+                builder.Append(" " + limitClauseAtEnd);
             }
         }
 
         private void AppendOrderByClause(StringBuilder builder)
         {
-            if (_selectQuery.OrderCriteria != null && _selectQuery.OrderCriteria.Fields.Count > 0)
+            if (_selectQuery.OrderCriteria == null || _selectQuery.OrderCriteria.Fields.Count == 0) return;
+
+            builder.Append(" ORDER BY ");
+            StringBuilder orderByClause = new StringBuilder();
+            foreach (OrderCriteria.Field orderField in _selectQuery.OrderCriteria.Fields)
             {
-                builder.Append(" ORDER BY ");
-                StringBuilder orderByClause = new StringBuilder();
-                foreach (OrderCriteria.Field orderField in _selectQuery.OrderCriteria.Fields)
-                {
-                    string direction = orderField.SortDirection == OrderCriteria.SortDirection.Ascending
-                                           ? "ASC"
-                                           : "DESC";
-                    QueryField queryField = _selectQuery.Fields[orderField.Name];
-                    StringUtilities.AppendMessage(orderByClause, GetFieldNameWithDelimiters(queryField.SourceName, queryField.FieldName) + " " + direction, ", ");
-                }
-           
-                builder.Append(orderByClause.ToString());
+                AppendOrderByField(orderByClause, orderField);
             }
+
+            builder.Append(orderByClause.ToString());
+        }
+
+        private void AppendOrderByField(StringBuilder orderByClause, OrderCriteria.Field orderField)
+        {
+            string direction = orderField.SortDirection == OrderCriteria.SortDirection.Ascending ? "ASC" : "DESC";
+            QueryField queryField = _selectQuery.Fields[orderField.FullName];
+
+            string tableAndFieldName;
+            if (!string.IsNullOrEmpty(orderField.Source))
+            {
+                string relatedTableName = GetRelatedTableName(queryField.SourceName);
+                tableAndFieldName = DelimitField(relatedTableName, queryField.FieldName);
+            }
+            else
+            {
+                tableAndFieldName = DelimitField(queryField.SourceName, queryField.FieldName);
+            }
+            StringUtilities.AppendMessage(orderByClause, tableAndFieldName + " " + direction, ", ");
+        }
+
+        private string GetRelatedTableName(string relationshipName)
+        {
+            RelationshipDef relationshipDef = ((ClassDef) this.ClassDef).GetRelationship(relationshipName);
+            ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
+            return DelimitTable(relatedClassDef.TableName);
         }
 
         private void AppendWhereClause(StringBuilder builder, SqlStatement statement)
@@ -134,24 +200,28 @@ namespace Habanero.BO
                     _selectQuery.Criteria.ToString(delegate(string propName)
                     {
                         QueryField queryField = _selectQuery.Fields[propName];
-                        return GetFieldNameWithDelimiters(queryField.SourceName, queryField.FieldName);
+                        return DelimitField(queryField.SourceName, queryField.FieldName);
                     }, delegate(object value)
                     {
                         string paramName = statement.ParameterNameGenerator.GetNextParameterName();
                         statement.AddParameter(paramName, value);
                         return paramName;
-                        
                     });
                 builder.Append(whereClause);
             }
         }
 
-        private string GetFieldNameWithDelimiters(string sourceName, string fieldName)
+        private string DelimitField(string sourceName, string fieldName)
         {
-
-            if (string.IsNullOrEmpty(sourceName)) return SqlFormattingHelper.FormatFieldName(fieldName, DatabaseConnection.CurrentConnection);
-            return SqlFormattingHelper.FormatTableAndFieldName(sourceName, fieldName, DatabaseConnection.CurrentConnection);
+            if (string.IsNullOrEmpty(sourceName))
+                return SqlFormattingHelper.FormatFieldName(fieldName, DatabaseConnection.CurrentConnection);
+            return
+                SqlFormattingHelper.FormatTableAndFieldName(sourceName, fieldName, DatabaseConnection.CurrentConnection);
         }
 
+        private string DelimitTable(string tableName)
+        {
+            return SqlFormattingHelper.FormatTableName(tableName, DatabaseConnection.CurrentConnection);
+        }
     }
 }

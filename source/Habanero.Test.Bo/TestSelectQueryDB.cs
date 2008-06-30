@@ -176,7 +176,21 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("Peter-Working on this")]
+        //[Test]
+        //public void TestCreateJoinStatement_WithRelationship()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    new ContactPerson();
+        //    Address address = new Address();
+        //    //---------------Execute Test ----------------------
+        //    string joinStatement = SelectQueryDB.CreateJoinFromRelationship(address.Relationships["ContactPerson"]);
+        //    //---------------Test Result -----------------------
+        //    StringAssert.AreEqualIgnoringCase("JOIN [ContactPerson] ON [Address].[ContactPersonID] = [ContactPerson].[ContactPersonID]", joinStatement);
+
+        //    //---------------Tear Down -------------------------
+        //}
+
+        [Test]
         public void TestCreateSqlStatement_WithOrder_IncludingSource()
         {
             //---------------Set up test pack-------------------
@@ -190,10 +204,29 @@ namespace Habanero.Test.BO
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("JOIN [ContactPerson] ON [Address].[ContactPersonID] = [ContactPerson].[ContactPersonID]", statementString);
-            StringAssert.EndsWith("ORDER BY [ContactPerson].[Surname] ASC", statementString);
-
+            StringAssert.Contains("JOIN [contact_person] ON [contact_person_address].[ContactPersonID] = [contact_person].[ContactPersonID]", statementString);
+            StringAssert.EndsWith("ORDER BY [contact_person].[Surname] ASC", statementString);
         }
+
+        [Test]
+        public void TestCreateSqlStatement_WithOrder_IncludingSource_CompositeKey()
+        {
+            //---------------Set up test pack-------------------
+            Car car = new Car();
+            ContactPersonCompositeKey person = new ContactPersonCompositeKey();
+
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(car.ClassDef);
+            selectQuery.OrderCriteria = OrderCriteria.FromString("Driver.Surname");
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.Contains("JOIN [ContactPersonCompositeKey] ON [Car].[Driver_FK1] = [ContactPersonCompositeKey].[PK1_Prop1] AND [Car].[Driver_FK2] = [ContactPersonCompositeKey].[PK1_Prop2] ", statementString);
+            StringAssert.EndsWith("ORDER BY [ContactPersonCompositeKey].[Surname] ASC", statementString);
+        }
+
 
         [Test]
         public void TestCreateSqlStatement_WithLimit_AtBeginning()

@@ -431,6 +431,32 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void Test_Field_FullName()
+        {
+            //---------------Set up test pack-------------------
+            string orderBy = "ContactPerson.Surname";
+            OrderCriteria.Field orderCriteriaField = OrderCriteria.Field.FromString(orderBy + " ASC");
+            //---------------Execute Test ----------------------
+            string fullName = orderCriteriaField.FullName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(orderBy, fullName);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void Test_Field_FullName_NoSource()
+        {
+            //---------------Set up test pack-------------------
+            string orderBy = "Surname";
+            OrderCriteria.Field orderCriteriaField = OrderCriteria.Field.FromString(orderBy + " ASC");
+            //---------------Execute Test ----------------------
+            string fullName = orderCriteriaField.FullName;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(orderBy, fullName);
+            //---------------Tear Down -------------------------
+        }
+
      
     }
 }

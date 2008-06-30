@@ -11,6 +11,8 @@ namespace Habanero.Test.BO
     {
         protected abstract void SetupDataAccessor();
 
+        protected abstract void DeleteEnginesAndCars();
+
         [SetUp]
         public virtual void SetupTest()
         {
@@ -32,6 +34,11 @@ namespace Habanero.Test.BO
             {
                 _dataStore = new DataStoreInMemory();
                 BORegistry.DataAccessor = new DataAccessorInMemory(_dataStore);
+            }
+
+            protected override void DeleteEnginesAndCars()
+            {
+                // do nothing
             }
 
             [Test]
@@ -73,6 +80,14 @@ namespace Habanero.Test.BO
                 base.SetupTest();
                 ContactPersonTestBO.DeleteAllContactPeople();
             }
+
+            protected override void DeleteEnginesAndCars()
+            {
+                Engine.DeleteAllEngines();
+                Car.DeleteAllCars();
+
+            }
+
             public TestBusinessObjectLoaderDB()
             {
                 new TestUsingDatabase().SetupDBConnection();
@@ -623,6 +638,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             SetupDataAccessor();
+            DeleteEnginesAndCars();
             Car car1 = new Car();
             car1.CarRegNo = "5";
             Car car2 = new Car();
@@ -650,7 +666,6 @@ namespace Habanero.Test.BO
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-
             OrderCriteria orderCriteria = OrderCriteria.FromString("Car.CarRegNo, EngineNo");
             BusinessObjectCollection<Engine> engines =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(null, orderCriteria);
@@ -661,6 +676,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(car1engine1, engines[2]);
             //---------------Tear Down -------------------------     
         }
+
 
         [Test, Ignore("Peter-Working on this")]
         public void TestLoadThroughRelationship_Multiple()

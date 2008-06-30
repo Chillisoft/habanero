@@ -25,7 +25,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsNull(selectQuery.Criteria);
             Assert.AreEqual(0, selectQuery.Fields.Count);
-            Assert.IsNull(selectQuery.OrderCriteria);
+            Assert.AreEqual(0, selectQuery.OrderCriteria.Fields.Count);
             Assert.IsTrue(String.IsNullOrEmpty(selectQuery.Source));
             //---------------Tear Down -------------------------
         }

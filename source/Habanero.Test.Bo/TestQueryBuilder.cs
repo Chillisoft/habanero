@@ -62,6 +62,94 @@ namespace Habanero.Test.BO
             Assert.AreEqual("MyBO", query.Source);
             //---------------Tear Down -------------------------
         }
+
+        [Test]
+        public void TestHasClassDef()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
+            //---------------Execute Test ----------------------
+            SelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(classdef, query.ClassDef);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestIncludeFieldsFromOrderCriteria()
+        {
+            //---------------Set up test pack-------------------
+            new ContactPerson();
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
+            selectQuery.OrderCriteria = OrderCriteria.FromString("ContactPerson.Surname");
+            int startingFields = selectQuery.Fields.Count;
+            //---------------Execute Test ----------------------
+            QueryBuilder.IncludeFieldsFromOrderCriteria(selectQuery);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(startingFields + 1, selectQuery.Fields.Count);
+            Assert.IsTrue(selectQuery.Fields.ContainsKey("ContactPerson.Surname"));
+            QueryField newField = selectQuery.Fields["ContactPerson.Surname"];
+            Assert.AreEqual("ContactPerson", newField.SourceName);
+            Assert.AreEqual("Surname", newField.PropertyName);
+            Assert.AreEqual("Surname", newField.FieldName);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestIncludeFieldsFromOrderCriteria_AlreadyExisting()
+        {
+            //---------------Set up test pack-------------------
+            new ContactPerson();
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
+            selectQuery.OrderCriteria = OrderCriteria.FromString("AddressLine1");
+            int startingFields = selectQuery.Fields.Count;
+            //---------------Execute Test ----------------------
+            QueryBuilder.IncludeFieldsFromOrderCriteria(selectQuery);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(startingFields, selectQuery.Fields.Count);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestOrderCriteria_FieldNameIsMappedFromPropertyName()
+        {
+            //---------------Set up test pack-------------------
+            
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Car().ClassDef);
+            string carregno = "CarRegNo";
+            selectQuery.OrderCriteria = OrderCriteria.FromString(carregno);
+            //---------------Execute Test ----------------------
+            QueryBuilder.IncludeFieldsFromOrderCriteria(selectQuery);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(selectQuery.Fields.ContainsKey(carregno));
+            QueryField newField = selectQuery.Fields[carregno];
+            Assert.AreEqual(carregno, newField.PropertyName);
+            Assert.AreEqual("CAR_REG_NO", newField.FieldName);
+            //---------------Tear Down -------------------------
+        }
+
+
+        [Test]
+        public void TestOrderCriteria_FieldNameIsMappedFromPropertyName_OverRelationship()
+        {
+            //---------------Set up test pack-------------------
+            new Car();
+            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Engine().ClassDef);
+            string carregno = "CarRegNo";
+
+            string car_carregno = "Car." + carregno;
+            selectQuery.OrderCriteria = OrderCriteria.FromString(car_carregno);
+            //---------------Execute Test ----------------------
+            QueryBuilder.IncludeFieldsFromOrderCriteria(selectQuery);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(selectQuery.Fields.ContainsKey(car_carregno));
+            QueryField newField = selectQuery.Fields[car_carregno];
+            Assert.AreEqual(carregno, newField.PropertyName);
+            Assert.AreEqual("CAR_REG_NO", newField.FieldName);
+            //---------------Tear Down -------------------------
+        }
     }
 
 }
