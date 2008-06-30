@@ -20,13 +20,8 @@
 
 using System;
 using System.Windows.Forms;
-using Habanero.Base;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.Test.BO;
 using Habanero.UI.Base;
-using Habanero.UI.Win;
-using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -92,8 +87,9 @@ namespace Habanero.Test.UI.Base
                 _shape.ShapeName = "New original shape name";
 
                 //---------------Test Result -----------------------
-                Assert.IsFalse(controlUpdatedFromBusinessObject,
-                    "Control Should not have been updated when the original prop was changed.");
+                Assert.IsFalse
+                    (controlUpdatedFromBusinessObject,
+                     "Control Should not have been updated when the original prop was changed.");
                 Assert.AreEqual(shape2.ShapeName, _txtNormal.Text);
             }
 
@@ -134,19 +130,20 @@ namespace Habanero.Test.UI.Base
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
 
-            [Test]
-            public void TestReadOnlyChangeBO()
-            {
-                _readOnlyMapper.BusinessObject = _shape;
-                Assert.AreEqual("TestShapeName", _txtReadonly.Text);
-                Shape sh2 = new Shape();
-                sh2.ShapeName = "Different";
-                _readOnlyMapper.BusinessObject = sh2;
-                Assert.AreEqual("Different", _txtReadonly.Text);
-                sh2.ShapeName = "Different2";
-//                _readOnlyMapper.UpdateControlValueFromBusinessObject();
-                Assert.AreEqual("Different2", _txtReadonly.Text);
-            }
+//            [Test]
+//            public void TestReadOnlyChangeBO()
+//            {
+//                _readOnlyMapper.BusinessObject = _shape;
+//                Assert.AreEqual("TestShapeName", _txtReadonly.Text);
+//                Shape sh2 = new Shape();
+//                sh2.ShapeName = "Different";
+//                _readOnlyMapper.BusinessObject = sh2;
+//                Assert.AreEqual("Different", _txtReadonly.Text);
+//                sh2.ShapeName = "Different2";
+////                _readOnlyMapper.UpdateControlValueFromBusinessObject();
+//                Assert.AreEqual("Different2", _txtReadonly.Text);
+//            }
+
             //test compulsory string property, compu decimal etcetc nb combo box
         }
 
@@ -216,10 +213,6 @@ namespace Habanero.Test.UI.Base
                 _readOnlyMapper.UpdateControlValueFromBusinessObject();
                 Assert.AreEqual("TestShapeName2", _txtReadonly.Text);
             }
-
-           
-
-           
         }
 
         private ITextBox _txtNormal;
@@ -270,8 +263,8 @@ namespace Habanero.Test.UI.Base
         {
             ITextBox b = GetControlFactory().CreateTextBox();
             IControlMapper mapper =
-                ControlMapper.Create("Habanero.UI.Base.TextBoxMapper", "Habanero.UI.Base", b, "Test", false,
-                    GetControlFactory());
+                ControlMapper.Create
+                    ("Habanero.UI.Base.TextBoxMapper", "Habanero.UI.Base", b, "Test", false, GetControlFactory());
             Assert.AreSame(typeof (TextBoxMapper), mapper.GetType());
             Assert.AreSame(b, mapper.Control);
         }
@@ -316,11 +309,12 @@ namespace Habanero.Test.UI.Base
         [Test]
         public void TestReflectedWithNoSetDisablesControl()
         {
-            Assert.IsFalse(_txtReflectedProperty.Enabled,
-                "A reflected property control should be disabled before it gets an object");
+            Assert.IsFalse
+                (_txtReflectedProperty.Enabled,
+                 "A reflected property control should be disabled before it gets an object");
             _reflectedPropertyMapper.BusinessObject = _shape;
-            Assert.IsFalse(_txtReflectedProperty.Enabled,
-                "A reflected property control should be disabled once it has an object");
+            Assert.IsFalse
+                (_txtReflectedProperty.Enabled, "A reflected property control should be disabled once it has an object");
         }
 
         [Test]
@@ -329,11 +323,13 @@ namespace Habanero.Test.UI.Base
             ITextBox txtReflectedPropertyWithSet = GetControlFactory().CreateTextBox();
             TextBoxMapper reflectedPropertyWithSetMapper =
                 new TextBoxMapper(txtReflectedPropertyWithSet, "-ShapeName-", false, GetControlFactory());
-            Assert.IsFalse(txtReflectedPropertyWithSet.Enabled,
-                "A reflected property control should be disabled before it gets an object");
+            Assert.IsFalse
+                (txtReflectedPropertyWithSet.Enabled,
+                 "A reflected property control should be disabled before it gets an object");
             reflectedPropertyWithSetMapper.BusinessObject = _shape;
-            Assert.IsTrue(txtReflectedPropertyWithSet.Enabled,
-                "A reflected property control should be enabled once it has an object if the reflected property has a set");
+            Assert.IsTrue
+                (txtReflectedPropertyWithSet.Enabled,
+                 "A reflected property control should be enabled once it has an object if the reflected property has a set");
         }
 
         [Test]
@@ -342,8 +338,9 @@ namespace Habanero.Test.UI.Base
             _reflectedPropertyMapper.BusinessObject = _shape;
             Assert.AreEqual("TestShapeName", _txtReflectedProperty.Text);
             _shape.ShapeName = "TestShapeName2";
-            Assert.AreEqual("TestShapeName", _txtReflectedProperty.Text,
-                "A Reflected property will not be able to pick up changes to the property.");
+            Assert.AreEqual
+                ("TestShapeName", _txtReflectedProperty.Text,
+                 "A Reflected property will not be able to pick up changes to the property.");
         }
 
         [Test]
@@ -354,8 +351,9 @@ namespace Habanero.Test.UI.Base
             Shape sh2 = new Shape();
             sh2.ShapeName = "Different";
             _reflectedPropertyMapper.BusinessObject = sh2;
-            Assert.AreEqual("Different", _txtReflectedProperty.Text,
-                "A Reflected property should refresh the value when a new BO is loaded");
+            Assert.AreEqual
+                ("Different", _txtReflectedProperty.Text,
+                 "A Reflected property should refresh the value when a new BO is loaded");
             sh2.ShapeName = "Different2";
             Assert.AreEqual("Different", _txtReflectedProperty.Text);
         }
@@ -368,20 +366,366 @@ namespace Habanero.Test.UI.Base
         public void TestNullBoDisabled()
         {
             _normalMapper.BusinessObject = null;
-            Assert.IsFalse(_txtNormal.Enabled,
-                "A control representing a null BO cannot be edited, so it should disable the control");
+            Assert.IsFalse
+                (_txtNormal.Enabled,
+                 "A control representing a null BO cannot be edited, so it should disable the control");
             _normalMapper.BusinessObject = _shape;
-            Assert.IsTrue(_txtNormal.Enabled,
-                "A non read-only control representing a BO can be edited, so it should enable the control");
+            Assert.IsTrue
+                (_txtNormal.Enabled,
+                 "A non read-only control representing a BO can be edited, so it should enable the control");
             _normalMapper.BusinessObject = null;
-            Assert.IsFalse(_txtNormal.Enabled,
-                "A control changed to a null BO cannot be edited, so it should disable the control");
+            Assert.IsFalse
+                (_txtNormal.Enabled, "A control changed to a null BO cannot be edited, so it should disable the control");
         }
 
         #endregion //Test Null BO
 
+        #region TestIntRules
+
         [Test]
-        public void Test_ErrorProvider_HasCorrectMessage_ForStringDataType()
+        public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType_NoRule()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithIntegerRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("a");
+
+            //---------------Test Result -----------------------
+            StringAssert.Contains("It is not a type of Int32", mapperStub.ErrorProvider.GetError(_txtNormal));
+        }
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithIntegerRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("a");
+
+            //---------------Test Result -----------------------
+            StringAssert.Contains("It is not a type of Int32", mapperStub.ErrorProvider.GetError(_txtNormal));
+        }
+
+        [Test]
+        public void Test_ErrorProvider_ValidIntegerString_HasNoErrorMessage()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithIntegerRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("3");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
+        }
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForInt_LT_Min()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithIntegerRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("1");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            StringAssert.Contains("The value cannot be less than 2", errorMessage);
+        }
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForInt_GT_Max()
+        {
+            //---------------Set up test pack-------------------
+
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithIntegerRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("7");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            StringAssert.Contains("The value cannot be more than 5", errorMessage);
+        }
+
+        #endregion //TestIntRules
+
+
+        #region TestDecimalRules
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForDecimalDataType_NoRule()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDecimalRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("a");
+
+            //---------------Test Result -----------------------
+            StringAssert.Contains("It is not a type of Decimal", mapperStub.ErrorProvider.GetError(_txtNormal));
+        }
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForDecimalDataType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDecimalRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("a");
+
+            //---------------Test Result -----------------------
+            StringAssert.Contains("It is not a type of Decimal", mapperStub.ErrorProvider.GetError(_txtNormal));
+        }
+
+        [Test]
+        public void Test_ErrorProvider_ValidDecimalString_HasNoErrorMessage()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDecimalRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("3.03");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
+        }
+
+        [Test]
+        public void Test_ErrorProvider_Decimal_HasCorrectMessage_LT_Min()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDecimalRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("1.05");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            StringAssert.Contains("The value cannot be less than 2", errorMessage);
+        }
+
+        [Test]
+        public void Test_ErrorProvider_Decimal_HasCorrectMessage_GT_Max()
+        {
+            //---------------Set up test pack-------------------
+
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDecimalRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("7.02");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            StringAssert.Contains("The value cannot be more than 5", errorMessage);
+        }
+
+        #endregion //TestDecimalRules
+
+        #region TestDateTimeRules
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType_SetToString_NoRule()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("Error");
+
+            //---------------Test Result -----------------------
+            StringAssert.Contains("It is not a type of DateTime", mapperStub.ErrorProvider.GetError(_txtNormal));
+        }
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType_SetToInt_NoRule()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(5);
+
+            //---------------Test Result -----------------------
+            StringAssert.Contains("It is not a type of DateTime", mapperStub.ErrorProvider.GetError(_txtNormal));
+        }
+
+        [Test]
+        public void TestCanSetNonCompulsoryDateTime_ToNullString()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
+        }
+
+        [Test]
+        public void TestCanSetNonCompulsoryDateTime_ToNull()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(null);
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Error returned : " + errorMessage);
+        }
+       
+        [Test]
+        public void Test_DateTime_LT_CorrectErrorMessage()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("2005/05/05");
+
+            //---------------Test Result -----------------------
+            StringAssert.Contains("The date cannot be before", mapperStub.ErrorProvider.GetError(_txtNormal));
+
+        }
+
+        [Test]
+        public void Test_DateTime_NoErrorMessage_passesRules()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("2005/06/12");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Error returned : " + errorMessage);
+        }
+
+        #endregion //TestDateTime
+
+        [Test]
+        public void TestCanSetStringProp_ToGuid()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(Guid.NewGuid());
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
+        }
+
+        [Test]
+        public void TestCanSetStringProp_ToDecimal()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(10.22544m);
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
+        }
+
+        [Test]
+        public void Test_ErrorProvider_HasCorrectMessage_ForStringDataType_HasRule()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
@@ -389,44 +733,166 @@ namespace Habanero.Test.UI.Base
             MyBO testBo = new MyBO();
             ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
             mapperStub.BusinessObject = testBo;
+
             //---------------Execute Test ----------------------
             mapperStub.TestSetPropertyValue(5);
+
             //---------------Test Result -----------------------
-            StringAssert.Contains("It is not a type of string.", mapperStub.ErrorProvider.GetError(_txtNormal));
-            //---------------Tear down -------------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
         }
 
-        //[Test]
-        //public void Test_ErrorProvider_HasCorrectMessage_ForIntegerDataType()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ClassDef.ClassDefs.Clear();
-        //    MyBO.LoadClassDefWithIntegerRule();
-        //    MyBO testBo = new MyBO();
-        //    ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
-        //    mapperStub.BusinessObject = testBo;
-        //    //---------------Execute Test ----------------------
-        //    mapperStub.TestSetPropertyValue("a");
-        //    //---------------Test Result -----------------------
-        //    StringAssert.Contains("It is not a type of Integer.", mapperStub.ErrorProvider.GetError(_txtNormal));
-        //    //---------------Tear down -------------------------
-        //}
+        [Test]
+        public void TestCanSetStringProp_ToInt_NoRule()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
 
-        //[Test]
-        //public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ClassDef.ClassDefs.Clear();
-        //    MyBO.LoadClassDefWithDateTime();
-        //    MyBO testBo = new MyBO();
-        //    ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime", false, GetControlFactory());
-        //    mapperStub.BusinessObject = testBo;
-        //    //---------------Execute Test ----------------------
-        //    mapperStub.TestSetPropertyValue(5);
-        //    //---------------Test Result -----------------------
-        //    StringAssert.Contains("It is not a type of datetime.", mapperStub.ErrorProvider.GetError(_txtNormal));
-        //    //---------------Tear down -------------------------
-        //}
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(10);
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
+        }
+
+        [Test]
+        public void TestCanSetStringProp_ToDateTime()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithDateTime();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(DateTime.Now);
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
+        }
+
+        #region LookupList
+
+        [Test]
+        public void TestCanSetIntProp_ItemInList()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithSimpleIntegerLookup(); //valid values 1, 2, 3
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("1");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
+        }
+
+        [Test]
+        public void TestCanSetIntProp_NullString_Compulsory()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithSimpleIntegerLookup(); //valid values 1, 2, 3
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            StringAssert.Contains("is a compulsory field and has no value", errorMessage, "Should have no error. Error was : " + errorMessage);
+        }
+
+        [Test]
+        public void TestCanSetIntProp_Null_Compulsory()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithSimpleIntegerLookup(); //valid values 1, 2, 3
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(null);
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            StringAssert.Contains("is a compulsory field and has no value", errorMessage, "Should have no error. Error was : " + errorMessage);
+        }
+        [Test]
+        public void TestCanSetIntProp_NullString_NotCompulsory()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithSimpleIntegerLookup(); //valid values 1, 2, 3
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "SimpleLookupNotCompulsory", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
+        }
+
+        [Test]
+        public void TestCanSetIntProp_Null_NotCompulsory()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithSimpleIntegerLookup(); //valid values 1, 2, 3
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "SimpleLookupNotCompulsory", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(null);
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
+        }
+        [Test]
+        public void TestCanSetIntProp_ItemNotInList()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithSimpleIntegerLookup(); //valid values 1, 2, 3
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition---- ------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("5");
+
+            //---------------Test Result -----------------------
+            StringAssert.Contains("is not in list", mapperStub.ErrorProvider.GetError(_txtNormal));
+        }
+        #endregion //LookupList
 
         [Test]
         public void TestReadOnlyChangeBO()
@@ -470,12 +936,12 @@ namespace Habanero.Test.UI.Base
 
         public override void ApplyChangesToBusinessObject()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         protected override void InternalUpdateControlValueFromBo()
         {
-            this.Control.Text = (string) this.BusinessObject.GetPropertyValue(this.PropertyName);
+            this.Control.Text = Convert.ToString(this.BusinessObject.GetPropertyValue(this.PropertyName));
         }
 
         public void TestSetPropertyValue(object value)

@@ -1,8 +1,8 @@
 using NUnit.Framework;
 
-namespace Habanero.Test.UI.Base.Grid
+namespace Habanero.Test.UI.Base
 {
-    [TestFixture]
+//    [TestFixture]
     public class TestDataGridViewColumn//:TestBase
     {
         //[SetUp]

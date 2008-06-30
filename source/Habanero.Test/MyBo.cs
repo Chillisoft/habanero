@@ -428,6 +428,12 @@ namespace Habanero.Test
 					<property  name=""TestProp"" />
 					<property  name=""TestProp2"" />
 					<property  name=""TestDateTime"" type=""DateTime"" />
+                    <property  name=""TestDateTime2"" type=""DateTime"" >
+                           <rule name=""TestProp"">
+                            <add key=""min"" value=""2005/06/08"" />
+                            <add key=""max"" value=""2005/06/15"" />
+                        </rule>
+                    </property>
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
@@ -554,6 +560,13 @@ namespace Habanero.Test
 					<property  name=""MyBoID"" />
 					<property  name=""TestProp"" />
                     <property name=""TestProp2"" type=""Int32"" default=""1"" compulsory=""true"">
+                      <simpleLookupList>
+                        <item display=""Integer"" value=""2"" />
+                        <item display=""Selection"" value=""3"" />
+                        <item display=""Text"" value=""1"" />
+                      </simpleLookupList>
+                    </property>
+                    <property name=""SimpleLookupNotCompulsory"" type=""Int32"" default=""1"">
                       <simpleLookupList>
                         <item display=""Integer"" value=""2"" />
                         <item display=""Selection"" value=""3"" />
@@ -903,13 +916,13 @@ namespace Habanero.Test
                     @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" />
+                    <property  name=""TestProp2"" type=""Int32""/>
 					<property  name=""TestProp"" type=""Int32"">
                         <rule name=""TestProp"">
                             <add key=""min"" value=""2"" />
                             <add key=""max"" value=""5"" />
                         </rule>
                     </property>
-					<property  name=""TestProp2"" />
 					<primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
@@ -1060,6 +1073,30 @@ namespace Habanero.Test
         }
 
 
+        public static ClassDef LoadClassDefWithDecimalRule()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID"" />
+                    <property  name=""TestProp2"" type=""Decimal""/>
+					<property  name=""TestProp"" type=""Decimal"">
+                        <rule name=""TestProp"">
+                            <add key=""min"" value=""2.00"" />
+                            <add key=""max"" value=""5.02"" />
+                        </rule>
+                    </property>
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+					<ui />                    
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;    
+        }
     }
 
     public class MyRelatedBo : BusinessObject

@@ -261,37 +261,22 @@ namespace Habanero.BO
                     object newValue = null;
                     if (value != null)
                     {
-                        try
-                        {
-                            newValue = Convert.ChangeType(value, this.PropertyType);
-                        }
-                        catch (InvalidCastException)
-                        {
-                            newValue = value;
-						}
-						catch (FormatException)
-						{
-							if (value is string && String.IsNullOrEmpty((string)value))
-							{
-								newValue = null;
-							} else
-							{
-								throw;
-							}
-						}
+                        newValue = ((PropDef)this.PropDef).GetNewValue(value);
                     }
+                    
                     CheckReadWriteRule(newValue);
+                    _invalidReason = "";
                     _isValid = _propDef.isValueValid(DisplayName, newValue, ref _invalidReason);
                     _valueBeforeLastEdit = _currentValue;
                     _currentValue = newValue;
                     FireBOPropValueUpdated();
                     _isDirty = true;
-//					if (!_IsValid) {
-//						throw new InvalidPropertyValueException(_invalidReason);
-//					}
                 }
             }
         }
+
+
+
 
         private void CheckReadWriteRule(object newValue)
         {

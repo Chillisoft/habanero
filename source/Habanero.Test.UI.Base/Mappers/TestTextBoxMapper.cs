@@ -421,28 +421,28 @@ namespace Habanero.Test.UI.Base
             _mapper.ApplyChangesToBusinessObject();
             Assert.AreEqual("Changed", _shape.ShapeName, "BO property value isn't changed when textbox text is changed.");
         }
-        [Test]
-        public void TestSettingTextBox_InvalidDataType_RaisesError()
-        {
-            ClassDef.ClassDefs.Clear();
-            Shape.CreateTestMapperClassDef();
-            Shape newShape = new Shape();
-            ITextBox tbShapeValue = GetControlFactory().CreateTextBox();
-            TextBoxMapper mapperShapeValue = new TextBoxMapper(tbShapeValue, "ShapeValue", false, GetControlFactory());
-            newShape.SetPropertyValue("ShapeValue", "111");
-            mapperShapeValue.BusinessObject = newShape;
-            tbShapeValue.Text = "Changed";
-            try
-            {
-                mapperShapeValue.ApplyChangesToBusinessObject();
-                ClassDef.ClassDefs.Clear();
-                Assert.Fail("should raise error");
-            }
-            catch (BusObjectInAnInvalidStateException ex)
-            {
-                ClassDef.ClassDefs.Clear();
-                StringAssert.Contains("could not be updated since the value 'Changed' is not valid for the property 'ShapeValue'", ex.Message);
-            }
-        }
+        //[Test]
+        //public void TestSettingTextBox_InvalidDataType_RaisesError()
+        //{
+        //    ClassDef.ClassDefs.Clear();
+        //    Shape.CreateTestMapperClassDef();
+        //    Shape newShape = new Shape();
+        //    ITextBox tbShapeValue = GetControlFactory().CreateTextBox();
+        //    TextBoxMapper mapperShapeValue = new TextBoxMapper(tbShapeValue, "ShapeValue", false, GetControlFactory());
+        //    newShape.SetPropertyValue("ShapeValue", "111");
+        //    mapperShapeValue.BusinessObject = newShape;
+        //    tbShapeValue.Text = "Changed";
+        //    try
+        //    {
+        //        mapperShapeValue.ApplyChangesToBusinessObject();
+        //        ClassDef.ClassDefs.Clear();
+        //        Assert.Fail("should raise error");
+        //    }
+        //    catch (BusObjectInAnInvalidStateException ex)
+        //    {
+        //        ClassDef.ClassDefs.Clear();
+        //        StringAssert.Contains("could not be updated since the value 'Changed' is not valid for the property 'ShapeValue'", ex.Message);
+        //    }
+        //}
     }
 }

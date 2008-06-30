@@ -91,6 +91,7 @@ namespace Habanero.UI.Base
         {
             get { return _errorProvider; }
         }
+
         /// <summary>
         /// Returns the name of the property being edited in the control
         /// </summary>
@@ -260,8 +261,9 @@ namespace Habanero.UI.Base
         /// thrown if the mapperTypeName does not provide a type that is
         /// a subclass of the ControlMapper class.</exception>
         /// <param name="controlFactory">The control factory</param>
-        public static IControlMapper Create(string mapperTypeName, string mapperAssembly, IControlChilli ctl,
-                                            string propertyName, bool isReadOnly, IControlFactory controlFactory)
+        public static IControlMapper Create
+            (string mapperTypeName, string mapperAssembly, IControlChilli ctl, string propertyName, bool isReadOnly,
+             IControlFactory controlFactory)
         {
             if (string.IsNullOrEmpty(mapperTypeName)) mapperTypeName = "TextBoxMapper";
 
@@ -275,11 +277,12 @@ namespace Habanero.UI.Base
                 else if (ctl is INumericUpDown) mapperTypeName = "NumericUpDownIntegerMapper";
                 else
                 {
-                    throw new InvalidXmlDefinitionException(String.Format(
-                        "No suitable 'mapperType' has been provided in the class " +
-                        "definitions for the form control '{0}'.  Either add the " +
-                        "'mapperType' attribute or check that spelling and " +
-                        "capitalisation are correct.", ctl.Name));
+                    throw new InvalidXmlDefinitionException
+                        (String.Format
+                             ("No suitable 'mapperType' has been provided in the class "
+                              + "definitions for the form control '{0}'.  Either add the "
+                              + "'mapperType' attribute or check that spelling and " + "capitalisation are correct.",
+                              ctl.Name));
                 }
             }
 
@@ -294,10 +297,11 @@ namespace Habanero.UI.Base
                 mapperType = TypeLoader.LoadType(mapperAssembly, mapperTypeName);
             }
             IControlMapper controlMapper;
-            if (mapperType != null &&
-                mapperType.FindInterfaces(
-                    delegate(Type type, Object filterCriteria) { return type == typeof (IControlMapper); }, "").Length >
-                0)
+            if (mapperType != null
+                &&
+                mapperType.FindInterfaces
+                    (delegate(Type type, Object filterCriteria) { return type == typeof (IControlMapper); }, "").Length
+                > 0)
             {
                 try
                 {
@@ -311,15 +315,15 @@ namespace Habanero.UI.Base
                 {
                     controlMapper =
                         (IControlMapper)
-                        Activator.CreateInstance(mapperType,
-                            new object[] {ctl, propertyName, isReadOnly, controlFactory});
+                        Activator.CreateInstance
+                            (mapperType, new object[] {ctl, propertyName, isReadOnly, controlFactory});
                 }
             }
             else
             {
-                throw new UnknownTypeNameException("The control mapper " +
-                                                   "type '" + mapperTypeName + "' was not found.  All control " +
-                                                   "mappers must inherit from ControlMapper.");
+                throw new UnknownTypeNameException
+                    ("The control mapper " + "type '" + mapperTypeName + "' was not found.  All control "
+                     + "mappers must inherit from ControlMapper.");
             }
             return controlMapper;
         }
@@ -349,13 +353,15 @@ namespace Habanero.UI.Base
                 BOMapper boMapper = new BOMapper(_businessObject);
                 //if property is 
                 IBOProp prop = _businessObject.Props[_propertyName];
-                PropDef propDef = (PropDef)prop.PropDef;
+                PropDef propDef = (PropDef) prop.PropDef;
                 string msg = "";
                 if (propDef != null)
+                {
                     if (!propDef.isValueValid(prop.DisplayName, value, ref msg))
                     {
                         _errorProvider.SetError(_control, msg);
                     }
+                }
                 boMapper.SetDisplayPropertyValue(_propertyName, value);
             }
         }
