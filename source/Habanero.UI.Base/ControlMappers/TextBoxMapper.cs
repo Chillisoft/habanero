@@ -35,6 +35,19 @@ namespace Habanero.UI.Base
     {
         private ITextBox _textBox;
         private string _oldText;
+        private ValueIsInValidState _valueIsInValidStateDelegate;
+
+        /// <summary>
+        /// Provides a way to indicate whether the value is in a valid state.
+        /// An example use is where the user might be typing in a decimal and
+        /// has just pressed a dot, in which case the text as it exists would not
+        /// cast to a valid decimal.  This should prevent updating the property
+        /// value at that moment in time.
+        /// </summary>
+        /// <param name="value">The current value</param>
+        /// <param name="propertyType">The property type being represented</param>
+        /// <returns>Returns true if valid</returns>
+        public delegate bool ValueIsInValidState(object value, Type propertyType);
 
         /// <summary>
         /// Constructor to initialise a new instance of the mapper
@@ -48,74 +61,22 @@ namespace Habanero.UI.Base
         {
             _textBox = tb;
             //_textBox.Enabled = false;
-//            _textBox.KeyPress += delegate(object sender, KeyPressEventArgs e)
-//                         {
-//                             if (IsIntegerType())
-//                             {
-//                                 if ((e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != 8 && e.KeyChar != '-')
-//                                 {
-//                                     e.Handled = true;
-//                                 }
-//                                 if (e.KeyChar == '-' && _textBox.SelectionStart != 0)
-//                                 {
-//                                     e.Handled = true;
-//                                 }
-//                             }
-//                             if (IsDecimalType())
-//                             {
-//                                 if ((e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != '.' && e.KeyChar != 8 && e.KeyChar != '-')
-//                                 {
-//                                     e.Handled = true;
-//                                 }
-//
-//                                 if (e.KeyChar == '.' && _textBox.Text.Contains("."))
-//                                 {
-//                                     e.Handled = true;
-//                                 }
-//                                 if (e.KeyChar == '.' && _textBox.SelectionStart == 0)
-//                                 {
-//                                     _textBox.Text = "0." + _textBox.Text;
-//                                     e.Handled = true;
-//                                     _textBox.SelectionStart = 2;
-//                                     _textBox.SelectionLength = 0;
-//                                 }
-//                                 if (e.KeyChar == '-' && _textBox.SelectionStart != 0)
-//                                 {
-//                                     e.Handled = true;
-//                                 }
-//                             }
-//                         };
-//            _textBox.TextChanged += ValueChangedHandler;
+            //_textBox.TextChanged += ValueChangedHandler;
             _oldText = "";
         }
 
-        //private bool IsDecimalType()
-        //{
-        //    Type propertyType = GetPropertyType();
-        //    if (propertyType == null) return false;
-        //    return
-        //        (propertyType == typeof (decimal) || propertyType == typeof (double) || propertyType == typeof (float));
-        //}
-
-        //private bool IsIntegerType()
-        //{
-        //    Type propertyType = GetPropertyType();
-        //    if (propertyType == null) return false;
-        //    return
-        //        (propertyType == typeof(int) || propertyType == typeof(long) ||
-        //         propertyType == typeof(short) || propertyType == typeof(uint) ||
-        //         propertyType == typeof(byte) || propertyType == typeof(ulong)
-        //         || propertyType == typeof(ushort) || propertyType == typeof(sbyte));
-        //}
-
-        //private Type GetPropertyType()
-        //{
-        //    if (_businessObject == null || !_businessObject.Props.Contains(_propertyName))
-        //    {
-        //        return null;
-        //    }
-        //    return _businessObject.Props[_propertyName].PropertyType;
-        //}
+        /// <summary>
+        /// Provides a way to indicate whether the value is in a valid state.
+        /// An example use is where the user might be typing in a decimal and
+        /// has just pressed a dot, in which case the text as it exists would not
+        /// cast to a valid decimal.  This should prevent updating the property
+        /// value at that moment in time.
+        /// </summary>
+        public ValueIsInValidState ValueIsInValidStateDelegate
+        {
+            get { return _valueIsInValidStateDelegate; }
+            set { _valueIsInValidStateDelegate = value; }
+        }
 
         ///// <summary>
         ///// A handler to carry out changes to the business object when the

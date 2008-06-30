@@ -541,9 +541,10 @@ namespace Habanero.UI.Win
     internal class TextBoxMapperStrategyWin: ITextBoxMapperStrategy
     {
         // Assumes that one strategy is created for each control.
-        // This field exists so that the IsValidCharacter method knows
-        //   which prop it is dealing with
+        // These fields exist so that the IsValidCharacter method knows
+        //   which prop and textbox it is dealing with
         private BOProp _boProp;
+        private TextBoxWin _textBox;
 
         /// <summary>
         /// Adds key press event handlers that carry out actions like
@@ -555,11 +556,13 @@ namespace Habanero.UI.Win
         public void AddKeyPressEventHandler(TextBoxMapper mapper, BOProp boProp)
         {
             _boProp = boProp;
-
+            
             if(mapper.Control is ITextBox)
             {
                 TextBoxWin tb = (TextBoxWin)mapper.Control;
                 tb.KeyPress += KeyPressEventHandler;
+
+                _textBox = tb;
             }
         }
 
@@ -582,6 +585,7 @@ namespace Habanero.UI.Win
         internal bool IsValidCharacter(char character)
         {
             if (_boProp == null) return true;
+            if (_textBox == null) return true;
 
             if (TypeUtilities.IsInteger(_boProp.PropertyType))
             {
@@ -589,35 +593,33 @@ namespace Habanero.UI.Win
                 {
                     return false;
                 }
-                //if (character == '-' && _textBox.SelectionStart != 0)
-                //{
-                //    return false;
-                //}
+                if (character == '-' && _textBox.SelectionStart != 0)
+                {
+                    return false;
+                }
             }
             else if (TypeUtilities.IsDecimal(_boProp.PropertyType))
             {
-                //                                 if ((e.KeyChar < '0' || e.KeyChar > '9') && e.KeyChar != '.' && e.KeyChar != 8 && e.KeyChar != '-')
-                //                                 {
-                //                                     e.Handled = true;
-                //                                 }
-                //
-                //                                 if (e.KeyChar == '.' && _textBox.Text.Contains("."))
-                //                                 {
-                //                                     e.Handled = true;
-                //                                 }
-                //                                 if (e.KeyChar == '.' && _textBox.SelectionStart == 0)
-                //                                 {
-                //                                     _textBox.Text = "0." + _textBox.Text;
-                //                                     e.Handled = true;
-                //                                     _textBox.SelectionStart = 2;
-                //                                     _textBox.SelectionLength = 0;
-                //                                 }
-                //                                 if (e.KeyChar == '-' && _textBox.SelectionStart != 0)
-                //                                 {
-                //                                     e.Handled = true;
-                //                                 }
-                //                             }
-                return false;
+                if ((character < '0' || character > '9') && character != '.' && character != 8 && character != '-')
+                {
+                    return false;
+                }
+                if (character == '.' && _textBox.Text.Contains("."))
+                {
+                    return false;
+                }
+                // In fact the char is valid, but we want the event to get handled in order to prevent double dots
+                if (character == '.' && _textBox.SelectionStart == 0)
+                {
+                    _textBox.Text = "0." + _textBox.Text;
+                    _textBox.SelectionStart = 2;
+                    _textBox.SelectionLength = 0;
+                    return false;
+                }
+                if (character == '-' && _textBox.SelectionStart != 0)
+                {
+                    return false;
+                }
             }
             return true;
         }

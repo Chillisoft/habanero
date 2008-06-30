@@ -64,6 +64,24 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
+            public void TestIsValidChar_ReturnsTrueIfTextBoxNotSet()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+
+                //---------------Assert pre-condition---------------
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(strategy.IsValidCharacter('a'));
+                Assert.IsTrue(strategy.IsValidCharacter(' '));
+                Assert.IsTrue(strategy.IsValidCharacter('.'));
+                Assert.IsTrue(strategy.IsValidCharacter('-'));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
             public void TestIsValidChar_WithString_ReturnsTrueForNonNumericTypes()
             {
                 //---------------Set up test pack-------------------
@@ -113,11 +131,12 @@ namespace Habanero.Test.UI.Base
                 Assert.IsFalse(strategy.IsValidCharacter('a'));
                 Assert.IsFalse(strategy.IsValidCharacter('A'));
                 Assert.IsFalse(strategy.IsValidCharacter('+'));
+                Assert.IsFalse(strategy.IsValidCharacter('.'));
                 Assert.IsFalse(strategy.IsValidCharacter(Convert.ToChar(7)));
                 //---------------Tear down -------------------------
             }
 
-            [Test, Ignore("Need to do the negative sign test. Negative not allowed when selection start > 0.  Need to finish this true case where allowed, then do false case where inserted at selection start > 0.")]
+            [Test]
             public void TestIsValidChar_WithInt_ReturnsTrueForNegativeAtStart()
             {
                 //---------------Set up test pack-------------------
@@ -134,8 +153,167 @@ namespace Habanero.Test.UI.Base
                 //---------------Tear down -------------------------
             }
 
-            //TODO test decimals now
-            //TODO then look at the value changed stuff (see original texboxmapper)
+            [Test]
+            public void TestIsValidChar_WithInt_ReturnsFalseForNegativeAfterStart()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(int));
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
+                _mapper.Control.Text = "123";
+                ((TextBoxWin)_mapper.Control).SelectionStart = 2;
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(strategy.IsValidCharacter('-'));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithDecimal_ReturnsTrueForNumber()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(decimal));
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(strategy.IsValidCharacter('0'));
+                Assert.IsTrue(strategy.IsValidCharacter('9'));
+                Assert.IsTrue(strategy.IsValidCharacter('-'));
+                Assert.IsTrue(strategy.IsValidCharacter(Convert.ToChar(8)));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithDecimal_ReturnsFalseForNonNumber()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(decimal));
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(strategy.IsValidCharacter('a'));
+                Assert.IsFalse(strategy.IsValidCharacter('A'));
+                Assert.IsFalse(strategy.IsValidCharacter('+'));
+                Assert.IsFalse(strategy.IsValidCharacter(Convert.ToChar(7)));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithDecimal_ReturnsTrueForNegativeAtStart()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(decimal));
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
+                _mapper.Control.Text = "123";
+                ((TextBoxWin)_mapper.Control).SelectionStart = 0;
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(strategy.IsValidCharacter('-'));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithDecimal_ReturnsFalseForNegativeAfterStart()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(decimal));
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
+                _mapper.Control.Text = "123";
+                ((TextBoxWin)_mapper.Control).SelectionStart = 2;
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(strategy.IsValidCharacter('-'));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithDecimal_ReturnsTrueForDotNotAtStart()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(decimal));
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
+                _mapper.Control.Text = "123";
+                ((TextBoxWin) _mapper.Control).SelectionStart = 3;
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsTrue(strategy.IsValidCharacter('.'));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithDecimal_ReturnsFalseForMultipleDots()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(decimal));
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
+                _mapper.Control.Text = "12.3";
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(strategy.IsValidCharacter('.'));
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestIsValidChar_WithDecimal_AddsZeroForDotAtStart()
+            {
+                //---------------Set up test pack-------------------
+                TextBoxMapperStrategyWin strategy =
+                    (TextBoxMapperStrategyWin)GetControlFactory().CreateTextBoxMapperStrategy();
+                BOProp boProp = CreateBOPropForType(typeof(decimal));
+                strategy.AddKeyPressEventHandler(_mapper, boProp);
+                _mapper.Control.Text = "";
+                TextBoxWin textBox = ((TextBoxWin) _mapper.Control);
+                textBox.SelectionStart = 0;
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsFalse(strategy.IsValidCharacter('.'));
+                Assert.AreEqual("0.", textBox.Text);
+                Assert.AreEqual(2, textBox.SelectionStart);
+                Assert.AreEqual(0, textBox.SelectionLength);
+                //---------------Tear down -------------------------
+            }
+
+            [Test]
+            public void TestValueInValidState_DelegateNullByDefault()
+            {
+                //---------------Set up test pack-------------------
+                _mapper.Control.Text = "";
+                //---------------Execute Test ----------------------
+
+                //---------------Test Result -----------------------
+                Assert.IsNull(_mapper.ValueIsInValidStateDelegate);
+                //---------------Tear down -------------------------
+            }
+
+            //TODO complete value change handling
+            //  - in the textboxmapper.ApplyChangesToBusinessObject() method
+            //    need to check if delegate is not null and then call it
+            //  - if the value isn't in valid state, the setproperty must not
+            //    be called or an exception will occur
+            //    (a typical scenario is a user types . and then will type numbers
+            //    and the value is in an invalid state just after the dot)
+            //  - the strategy will need to assign the delegate
 
             private static BOProp CreateBOPropForType(Type type)
             {
