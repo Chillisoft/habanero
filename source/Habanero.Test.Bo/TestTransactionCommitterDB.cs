@@ -407,7 +407,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(contactPersonTestBO.State.IsNew);
         }
 
-        [Test]
+        [Test, Ignore("This test is being ignored due to the fact that we do not have a philosophy for compositional parents deleting their children etc")]
         public void TestDeleteRelatedWithFailure_CancelEditsOnParent()
         {
             //---------------Set up test pack-------------------

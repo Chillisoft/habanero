@@ -256,7 +256,7 @@ namespace Habanero.Test.BO.ClassDefinition
             public bool IsPropValueValid(object value)
             {
                 string errors = "";
-                return isValueValid(null, "test", ref errors);
+                return IsValueValid(null, "test", ref errors);
             }
 
             public void SetPropType(Type type)

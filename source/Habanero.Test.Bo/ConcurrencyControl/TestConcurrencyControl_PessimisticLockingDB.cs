@@ -226,7 +226,7 @@ namespace Habanero.Test.BO
 
         }
 
-        [Test, Ignore("Causes issues when run through Resharper runner")]
+        [Test]
         public void Test_WhenCleansUpObjectClearsItsLock()
         {
             //---------------Set up test pack-------------------

@@ -97,7 +97,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-        [Test, ExpectedException(typeof(BusinessObjectReferentialIntegrityException)), Ignore("This cant be done until the loader has been overhauled")]
+        [Test, ExpectedException(typeof(BusinessObjectReferentialIntegrityException)), Ignore(" new data store memory")]
         public void TestPreventDelete()
         {
             //---------------Set up test pack-------------------

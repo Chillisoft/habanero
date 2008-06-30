@@ -205,7 +205,7 @@ namespace Habanero.BO
             }
 
             _invalidReason = "";
-            _isValid = _propDef.isValueValid(DisplayName, propValue, ref _invalidReason);
+            _isValid = _propDef.IsValueValid(DisplayName, propValue, ref _invalidReason);
 
             _currentValue = propValue;
             _isObjectNew = isObjectNew;
@@ -266,7 +266,7 @@ namespace Habanero.BO
                     
                     CheckReadWriteRule(newValue);
                     _invalidReason = "";
-                    _isValid = _propDef.isValueValid(DisplayName, newValue, ref _invalidReason);
+                    _isValid = _propDef.IsValueValid(DisplayName, newValue, ref _invalidReason);
                     _valueBeforeLastEdit = _currentValue;
                     _currentValue = newValue;
                     FireBOPropValueUpdated();

@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
@@ -650,7 +649,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="displayName">The name of the property as presented to the user
         /// in the user interface, clarifies error messaging</param>
         /// <returns>Returns true if valid, false if not</returns>
-        public bool isValueValid(string displayName, Object propValue, ref string errorMessage)
+        public bool IsValueValid(string displayName, Object propValue, ref string errorMessage)
         {
             if (displayName == null)
             {
@@ -700,14 +699,15 @@ namespace Habanero.BO.ClassDefinition
             if (!this.HasLookupList()) return true;
             if (propValue == null || string.IsNullOrEmpty(Convert.ToString(propValue))) return true;
 
-            Dictionary<string, object> lookupList = this.LookupList.GetLookupList();
-            bool hasItemInList = lookupList.ContainsKey(Convert.ToString(propValue))
-                    || lookupList.ContainsValue(propValue);
-            if(!hasItemInList)
-            {
-                errorMessage += String.Format("'{0}' invalid since '{1}' is not in list.", displayName, propValue);
-                return false;
-            }
+            //TODO: Refactor SetPropertyValue
+            //Dictionary<string, object> lookupList = this.LookupList.GetLookupList();
+            //bool hasItemInList = lookupList.ContainsKey(Convert.ToString(propValue))
+            //        || lookupList.ContainsValue(propValue);
+            //if(!hasItemInList)
+            //{
+            //    errorMessage += String.Format("'{0}' invalid since '{1}' is not in list.", displayName, propValue);
+            //    return false;
+            //}
             return true;
         }
 
@@ -732,7 +732,7 @@ namespace Habanero.BO.ClassDefinition
         private static object GetNewValueOnError(object value)
         {
             object newValue;
-            if (value is string && String.IsNullOrEmpty((string)value))
+            if (value is string && String.IsNullOrEmpty((string) value))
             {
                 newValue = null;
             }
@@ -742,6 +742,7 @@ namespace Habanero.BO.ClassDefinition
             }
             return newValue;
         }
+
         private bool IsValueValidType(string displayName, Object propValue, ref string errorMessage)
         {
             if (propValue == null) return true;
@@ -753,7 +754,7 @@ namespace Habanero.BO.ClassDefinition
             }
             catch (InvalidCastException)
             {
-                if (!(propValue is Guid && this.PropertyType == typeof(string)))
+                if (!(propValue is Guid && this.PropertyType == typeof (string)))
                 {
                     errorMessage = GetErrorMessage(propValue, displayName);
                 }
@@ -887,17 +888,15 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                object defaultValue = null;
+                object defaultValue;
                 if (MyPropertyType == typeof (DateTime) && _defaultValueString != null)
                 {
                     switch (_defaultValueString.ToUpper())
                     {
                         case "TODAY":
                             return DateTime.Today;
-                            break;
                         case "NOW":
                             return DateTime.Now;
-                            break;
                     }
                 }
                 if (_defaultValue == null && _defaultValueString != null)

@@ -349,7 +349,6 @@ namespace Habanero.UI.Base
         {
             if (_businessObject != null)
             {
-                //TODO: write test this
                 BOMapper boMapper = new BOMapper(_businessObject);
                 //if property is 
                 IBOProp prop = _businessObject.Props[_propertyName];
@@ -357,7 +356,7 @@ namespace Habanero.UI.Base
                 string msg = "";
                 if (propDef != null)
                 {
-                    if (!propDef.isValueValid(prop.DisplayName, value, ref msg))
+                    if (!propDef.IsValueValid(prop.DisplayName, value, ref msg))
                     {
                         _errorProvider.SetError(_control, msg);
                     }

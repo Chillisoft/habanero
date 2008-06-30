@@ -227,7 +227,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreSame(btn, buttons[buttonText]);
         }
 
-        [Test, Ignore("This can be verified and error improved when setting button text if required")]
+        [Test, Ignore("Can be improved by having a different name for the control and the label text")]
         public void TestButtonIndexer_WithASpecialCharactersInTheName_Failing()
         {
             //---------------Set up test pack-------------------

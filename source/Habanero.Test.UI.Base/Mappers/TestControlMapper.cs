@@ -436,6 +436,44 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
+        public void Test_ErrorProvider_NoError_Null_ForInt_WithRule()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithIntegerRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue(null);
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
+        }
+
+        [Test]
+        public void Test_ErrorProvider_NoError_NullString_ForInt_WithRule()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithIntegerRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
+        }
+
+        [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForInt_LT_Min()
         {
             //---------------Set up test pack-------------------
@@ -475,7 +513,6 @@ namespace Habanero.Test.UI.Base
         }
 
         #endregion //TestIntRules
-
 
         #region TestDecimalRules
 
@@ -574,6 +611,7 @@ namespace Habanero.Test.UI.Base
         #endregion //TestDecimalRules
 
         #region TestDateTimeRules
+
         [Test]
         public void Test_ErrorProvider_HasCorrectMessage_ForDateTimeDataType_SetToString_NoRule()
         {
@@ -645,7 +683,7 @@ namespace Habanero.Test.UI.Base
             string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Error returned : " + errorMessage);
         }
-       
+
         [Test]
         public void Test_DateTime_LT_CorrectErrorMessage()
         {
@@ -653,7 +691,8 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithDateTime();
             MyBO testBo = new MyBO();
-            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime2", false, GetControlFactory());
+            ControlMapperStub mapperStub =
+                new ControlMapperStub(_txtNormal, "TestDateTime2", false, GetControlFactory());
             mapperStub.BusinessObject = testBo;
             //---------------Assert Precondition----------------
 
@@ -662,7 +701,6 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             StringAssert.Contains("The date cannot be before", mapperStub.ErrorProvider.GetError(_txtNormal));
-
         }
 
         [Test]
@@ -672,7 +710,8 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithDateTime();
             MyBO testBo = new MyBO();
-            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestDateTime2", false, GetControlFactory());
+            ControlMapperStub mapperStub =
+                new ControlMapperStub(_txtNormal, "TestDateTime2", false, GetControlFactory());
             mapperStub.BusinessObject = testBo;
             //---------------Assert Precondition----------------
 
@@ -817,7 +856,9 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
-            StringAssert.Contains("is a compulsory field and has no value", errorMessage, "Should have no error. Error was : " + errorMessage);
+            StringAssert.Contains
+                ("is a compulsory field and has no value", errorMessage,
+                 "Should have no error. Error was : " + errorMessage);
         }
 
         [Test]
@@ -836,8 +877,11 @@ namespace Habanero.Test.UI.Base
 
             //---------------Test Result -----------------------
             string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
-            StringAssert.Contains("is a compulsory field and has no value", errorMessage, "Should have no error. Error was : " + errorMessage);
+            StringAssert.Contains
+                ("is a compulsory field and has no value", errorMessage,
+                 "Should have no error. Error was : " + errorMessage);
         }
+
         [Test]
         public void TestCanSetIntProp_NullString_NotCompulsory()
         {
@@ -845,7 +889,8 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithSimpleIntegerLookup(); //valid values 1, 2, 3
             MyBO testBo = new MyBO();
-            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "SimpleLookupNotCompulsory", false, GetControlFactory());
+            ControlMapperStub mapperStub =
+                new ControlMapperStub(_txtNormal, "SimpleLookupNotCompulsory", false, GetControlFactory());
             mapperStub.BusinessObject = testBo;
             //---------------Assert Precondition---- ------------
 
@@ -864,7 +909,8 @@ namespace Habanero.Test.UI.Base
             ClassDef.ClassDefs.Clear();
             MyBO.LoadClassDefWithSimpleIntegerLookup(); //valid values 1, 2, 3
             MyBO testBo = new MyBO();
-            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "SimpleLookupNotCompulsory", false, GetControlFactory());
+            ControlMapperStub mapperStub =
+                new ControlMapperStub(_txtNormal, "SimpleLookupNotCompulsory", false, GetControlFactory());
             mapperStub.BusinessObject = testBo;
             //---------------Assert Precondition---- ------------
 
@@ -875,7 +921,8 @@ namespace Habanero.Test.UI.Base
             string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
         }
-        [Test]
+
+        [Test, Ignore("Need to move tests to include BO lookups and then refactor.")]
         public void TestCanSetIntProp_ItemNotInList()
         {
             //---------------Set up test pack-------------------
@@ -884,6 +931,7 @@ namespace Habanero.Test.UI.Base
             MyBO testBo = new MyBO();
             ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
             mapperStub.BusinessObject = testBo;
+
             //---------------Assert Precondition---- ------------
 
             //---------------Execute Test ----------------------
@@ -892,6 +940,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             StringAssert.Contains("is not in list", mapperStub.ErrorProvider.GetError(_txtNormal));
         }
+
         #endregion //LookupList
 
         [Test]
