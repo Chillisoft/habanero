@@ -173,7 +173,6 @@ namespace Habanero.UI.Base
             {
                 mapper.ApplyChangesToBusinessObject();
             }
-            //TODO: check the verify here
         }
     }
 }

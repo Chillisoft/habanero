@@ -79,17 +79,20 @@ namespace Habanero.UI.Base
             UIDef uiDef = mapper.GetUIDef(uiDefName);
             if (uiDef == null)
             {
-                string errMessage = "Cannot create a panel factory for '" + bo.ClassDef.ClassName +
-                                    "' since the classdefs do not contain a uiDef '" + uiDefName + "'";
-                throw new HabaneroDeveloperException("There is a serious application error please contact your system administrator" + Environment.NewLine + errMessage, errMessage);
+                string errMessage = "Cannot create a panel factory for '" + bo.ClassDef.ClassName
+                                    + "' since the classdefs do not contain a uiDef '" + uiDefName + "'";
+                throw new HabaneroDeveloperException
+                    ("There is a serious application error please contact your system administrator"
+                     + Environment.NewLine + errMessage, errMessage);
             }
             _uiForm = uiDef.GetUIFormProperties();
             if (_uiForm == null)
             {
-                string errMsg = "Cannot create a panel factory for '" + bo.ClassDef.ClassName +
-                                "' since the classdefs do not contain a form def for uidef '" + uiDefName + "'";
-                throw new HabaneroDeveloperException("There is a serious application error please contact your system administrator" + Environment.NewLine + errMsg,
-                            errMsg);
+                string errMsg = "Cannot create a panel factory for '" + bo.ClassDef.ClassName
+                                + "' since the classdefs do not contain a form def for uidef '" + uiDefName + "'";
+                throw new HabaneroDeveloperException
+                    ("There is a serious application error please contact your system administrator"
+                     + Environment.NewLine + errMsg, errMsg);
             }
             InitialiseFactory(bo);
         }
@@ -150,7 +153,7 @@ namespace Habanero.UI.Base
             foreach (UIFormTab formTab in _uiForm)
             {
                 IPanelFactoryInfo onePanelInfo = CreateOnePanel(formTab);
-                
+
                 panelInfoList.Add(onePanelInfo);
             }
             return panelInfoList;
@@ -197,10 +200,12 @@ namespace Habanero.UI.Base
                     rowCount = uiFormColumn.Count;
                 }
             }
-            manager.SetGridSize(rowCount, colCount*2);
+            int intNoOfLayoutGridColumnsPerPanel = 3;
+            manager.SetGridSize(rowCount, colCount * intNoOfLayoutGridColumnsPerPanel);
             for (int col = 0; col < colCount; col++)
             {
-                manager.FixColumnBasedOnContents(col*2);
+                //Fixing the labels column widths
+                manager.FixColumnBasedOnContents(col * intNoOfLayoutGridColumnsPerPanel);
             }
 
             ControlMapperCollection controlMappers = new ControlMapperCollection();
@@ -211,7 +216,8 @@ namespace Habanero.UI.Base
                 manager.FixRow(row, temptb.Height);
             }
             manager.FixAllRowsBasedOnContents();
-            GridLayoutManager.ControlInfo[,] controls = new GridLayoutManager.ControlInfo[rowCount,colCount*2];
+            GridLayoutManager.ControlInfo[,] controls =
+                new GridLayoutManager.ControlInfo[rowCount,colCount * intNoOfLayoutGridColumnsPerPanel];
             int currentColumn = 0;
             foreach (UIFormColumn uiFormColumn in uiFormTab)
             {
@@ -263,10 +269,10 @@ namespace Habanero.UI.Base
                             }
                             catch (Exception)
                             {
-                                throw new InvalidXmlDefinitionException("An error " +
-                                                                        "occurred while reading the 'numLines' parameter " +
-                                                                        "from the class definitions.  The 'value' " +
-                                                                        "attribute must be a valid integer.");
+                                throw new InvalidXmlDefinitionException
+                                    ("An error " + "occurred while reading the 'numLines' parameter "
+                                     + "from the class definitions.  The 'value' "
+                                     + "attribute must be a valid integer.");
                             }
                             if (numLines > 1)
                             {
@@ -284,10 +290,10 @@ namespace Habanero.UI.Base
                             string isEmailValue = (string) field.GetParameterValue("isEmail");
                             if (isEmailValue != "true" && isEmailValue != "false")
                             {
-                                throw new InvalidXmlDefinitionException("An error " +
-                                                                        "occurred while reading the 'isEmail' parameter " +
-                                                                        "from the class definitions.  The 'value' " +
-                                                                        "attribute must hold either 'true' or 'false'.");
+                                throw new InvalidXmlDefinitionException
+                                    ("An error " + "occurred while reading the 'isEmail' parameter "
+                                     + "from the class definitions.  The 'value' "
+                                     + "attribute must hold either 'true' or 'false'.");
                             }
 
                             //TODO: Port
@@ -315,8 +321,9 @@ namespace Habanero.UI.Base
                     CheckGeneralParameters(field, ctl);
 
                     IControlMapper ctlMapper =
-                        ControlMapper.Create(field.MapperTypeName, field.MapperAssembly, ctl, field.PropertyName,
-                                             !editable, _controlFactory);
+                        ControlMapper.Create
+                            (field.MapperTypeName, field.MapperAssembly, ctl, field.PropertyName, !editable,
+                             _controlFactory);
                     //TODO PORT: ctlMapper.SetPropertyAttributes(field.Parameters);
                     controlMappers.Add(ctlMapper);
                     ctlMapper.BusinessObject = _currentBusinessObject;
@@ -330,13 +337,12 @@ namespace Habanero.UI.Base
                         }
                         catch (Exception)
                         {
-                            throw new InvalidXmlDefinitionException("An error " +
-                                                                    "occurred while reading the 'colSpan' parameter " +
-                                                                    "from the class definitions.  The 'value' " +
-                                                                    "attribute must be a valid integer.");
+                            throw new InvalidXmlDefinitionException
+                                ("An error " + "occurred while reading the 'colSpan' parameter "
+                                 + "from the class definitions.  The 'value' " + "attribute must be a valid integer.");
                         }
                     }
-                    colSpan = (colSpan - 1)*2 + 1; // must span label columns too
+                    colSpan = (colSpan - 1) * intNoOfLayoutGridColumnsPerPanel + 1; // must span label columns too
 
                     int rowSpan = 1;
                     if (field.GetParameterValue("rowSpan") != null)
@@ -347,10 +353,9 @@ namespace Habanero.UI.Base
                         }
                         catch (Exception)
                         {
-                            throw new InvalidXmlDefinitionException("An error " +
-                                                                    "occurred while reading the 'rowSpan' parameter " +
-                                                                    "from the class definitions.  The 'value' " +
-                                                                    "attribute must be a valid integer.");
+                            throw new InvalidXmlDefinitionException
+                                ("An error " + "occurred while reading the 'rowSpan' parameter "
+                                 + "from the class definitions.  The 'value' " + "attribute must be a valid integer.");
                         }
                     }
                     if (rowSpan == 1)
@@ -373,7 +378,7 @@ namespace Habanero.UI.Base
             }
             for (int i = 0; i < rowCount; i++)
             {
-                for (int j = 0; j < colCount*2; j++)
+                for (int j = 0; j < colCount * intNoOfLayoutGridColumnsPerPanel; j++)
                 {
                     if (controls[i, j] == null)
                     {
@@ -382,7 +387,7 @@ namespace Habanero.UI.Base
                     else
                     {
                         manager.AddControl(controls[i, j].Control, controls[i, j].ColumnSpan, controls[i, j].RowSpan);
-                        controls[i, j].Control.TabIndex = rowCount*j + i;
+                        controls[i, j].Control.TabIndex = rowCount * j + i;
                     }
                 }
             }
@@ -390,8 +395,12 @@ namespace Habanero.UI.Base
             {
                 if (uiFormTab[col].Width > -1)
                 {
-                    manager.FixColumn(col*2 + 1, uiFormTab[col].Width - manager.GetFixedColumnWidth(col*2));
+                    //Fix width of the control column e.g. textbox or combobox.
+                    manager.FixColumn
+                        (col * intNoOfLayoutGridColumnsPerPanel + 1,
+                         uiFormTab[col].Width - manager.GetFixedColumnWidth(col * intNoOfLayoutGridColumnsPerPanel));
                 }
+                manager.FixColumn(col * intNoOfLayoutGridColumnsPerPanel + 2, 15);
             }
 
             panel.Height = manager.GetFixedHeightIncludingGaps();
@@ -443,7 +452,6 @@ namespace Habanero.UI.Base
         /// <returns>Returns true if editable</returns>
         private bool CheckIfEditable(UIFormField field, IControlChilli ctl)
         {
-            
             bool editable = field.Editable;
             if (editable)
             {
@@ -455,7 +463,7 @@ namespace Habanero.UI.Base
             if (editable)
             {
                 object parameterValue = field.GetParameterValue("editable");
-                if(parameterValue != null) editable = Convert.ToBoolean(parameterValue);
+                if (parameterValue != null) editable = Convert.ToBoolean(parameterValue);
             }
             return editable;
         }

@@ -350,16 +350,19 @@ namespace Habanero.UI.Base
             if (_businessObject != null)
             {
                 BOMapper boMapper = new BOMapper(_businessObject);
-                //if property is 
-                IBOProp prop = _businessObject.Props[_propertyName];
-                PropDef propDef = (PropDef) prop.PropDef;
-                string msg = "";
-                if (propDef != null)
-                {
-                    propDef.IsValueValid(prop.DisplayName, value, ref msg);
-                    _errorProvider.SetError(_control, msg);
-                }
                 boMapper.SetDisplayPropertyValue(_propertyName, value);
+                IBOProp prop = _businessObject.Props[_propertyName];
+                if (prop != null)
+                {
+                    //PropDef propDef = (PropDef)prop.PropDef;
+                    //string msg = "";
+                    //if (propDef != null)
+                    //{
+                    //    propDef.IsValueValid(prop.DisplayName, value, ref msg);
+                    //    _errorProvider.SetError(_control, msg);
+                    //}
+                    _errorProvider.SetError(_control, prop.InvalidReason);
+                }
             }
         }
 

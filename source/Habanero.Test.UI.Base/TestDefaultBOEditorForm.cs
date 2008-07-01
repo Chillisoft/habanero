@@ -69,7 +69,7 @@ namespace Habanero.Test.UI.Base
             {
                 Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
                 IControlChilli boCtl = _defaultBOEditorForm.Controls[0];
-                Assert.AreEqual(4, boCtl.Controls.Count);
+                Assert.AreEqual(6, boCtl.Controls.Count);
                 IControlChilli buttonControl = _defaultBOEditorForm.Controls[1];
                 Assert.IsTrue(buttonControl is Habanero.UI.WebGUI.ButtonGroupControlGiz);
                 Assert.AreEqual(2, buttonControl.Controls.Count);
