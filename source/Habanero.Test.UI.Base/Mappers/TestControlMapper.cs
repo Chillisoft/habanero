@@ -749,6 +749,7 @@ namespace Habanero.Test.UI.Base
 
         #endregion //TestDateTime
 
+        #region TestString
         [Test]
         public void TestCanSetStringProp_ToGuid()
         {
@@ -842,7 +843,7 @@ namespace Habanero.Test.UI.Base
             string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
         }
-
+        #endregion //TestString
         #region LookupList
 
         [Test]
@@ -965,6 +966,45 @@ namespace Habanero.Test.UI.Base
             StringAssert.Contains("is not in list", mapperStub.ErrorProvider.GetError(_txtNormal));
         }
 
+        [Test]
+        public void Test_CanSetGuidToStringLookupValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithLookup(); //Guid Lookup valid s1 and s2
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("s1");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
+        }
+
+        [Test, Ignore("Need to move tests to include BO lookups and then refactor.")]
+        public void Test_NotCanSetGuidToStringLookupValue_InvalidValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithLookup(); //Guid Lookup valid s1 and s2
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("invalid");
+
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            StringAssert.Contains("is not in list", errorMessage);
+        }
         #endregion //LookupList
 
         [Test]

@@ -747,6 +747,7 @@ namespace Habanero.BO.ClassDefinition
         {
             if (propValue == null) return true;
             if (propValue is string && string.IsNullOrEmpty((string) propValue)) return true;
+            if (this.HasLookupList()) return true;
 
             try
             {
