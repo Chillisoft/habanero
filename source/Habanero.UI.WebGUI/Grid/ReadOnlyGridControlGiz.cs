@@ -130,6 +130,13 @@ namespace Habanero.UI.WebGUI
                                           }
                                           catch (Exception ex)
                                           {
+                                              try{
+                                                  selectedBo.Restore();
+                                                  _grid.SelectedBusinessObject = selectedBo;
+                                              }catch(Exception)
+                                              {
+                                                  //Do nothing
+                                              }
                                               GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting", "Problem Deleting");
                                           }
                                       }

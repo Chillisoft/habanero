@@ -229,7 +229,15 @@ namespace Habanero.UI.Base
         ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
         /// <returns></returns>
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string uiDefName, PostObjectPersistingDelegate action);
+
+        /// <summary>
+        /// Returns a BOEditor form. This is a form that the business object can be edited in.
+        /// </summary>
+        /// <param name="bo"></param>
+        ///   a grid, list etc in an asynchronous environment. E.g. to select the recently edited item in the grid</param>
+        /// <returns></returns>
         IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo);
+
         IListView CreateListView();
 
 

@@ -840,7 +840,9 @@ namespace Habanero.BO
                 }
                 _boState.IsDirty = true;
                 prop.Value = newPropValue;
-                FireUpdatedEvent();
+                if(prop.IsValid){
+                    FireUpdatedEvent();
+                }
             }
         }
 

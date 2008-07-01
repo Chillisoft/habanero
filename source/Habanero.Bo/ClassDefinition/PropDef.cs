@@ -713,7 +713,7 @@ namespace Habanero.BO.ClassDefinition
 
         internal object GetNewValue(object value)
         {
-            object newValue;
+            object newValue = null;
             try
             {
                 newValue = Convert.ChangeType(value, this.PropertyType);
