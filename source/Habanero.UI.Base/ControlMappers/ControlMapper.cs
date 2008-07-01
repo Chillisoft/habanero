@@ -356,10 +356,8 @@ namespace Habanero.UI.Base
                 string msg = "";
                 if (propDef != null)
                 {
-                    if (!propDef.IsValueValid(prop.DisplayName, value, ref msg))
-                    {
-                        _errorProvider.SetError(_control, msg);
-                    }
+                    propDef.IsValueValid(prop.DisplayName, value, ref msg);
+                    _errorProvider.SetError(_control, msg);
                 }
                 boMapper.SetDisplayPropertyValue(_propertyName, value);
             }

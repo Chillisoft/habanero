@@ -512,6 +512,30 @@ namespace Habanero.Test.UI.Base
             StringAssert.Contains("The value cannot be more than 5", errorMessage);
         }
 
+        [Test]
+        public void Test_ErrorProvider_ClearsErrorMessage_AfterValidValueIsSet()
+        {
+            //---------------Set up test pack-------------------
+
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithIntegerRule();
+            MyBO testBo = new MyBO();
+            ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
+            mapperStub.BusinessObject = testBo;
+
+            //---------------Assert Precondition----------------
+            mapperStub.TestSetPropertyValue("7");
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            StringAssert.Contains("The value cannot be more than 5", errorMessage);
+
+            //---------------Execute Test ----------------------
+            mapperStub.TestSetPropertyValue("3");
+
+            //---------------Test Result -----------------------
+            errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            Assert.IsTrue(string.IsNullOrEmpty(errorMessage),errorMessage);
+        }
+
         #endregion //TestIntRules
 
         #region TestDecimalRules
