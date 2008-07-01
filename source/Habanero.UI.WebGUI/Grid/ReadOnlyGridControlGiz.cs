@@ -123,8 +123,15 @@ namespace Habanero.UI.WebGUI
                                   {
                                       if (((Form) msgBoxSender).DialogResult == DialogResult.Yes)
                                       {
-                                          _grid.SelectedBusinessObject = null;
-                                          _businessObjectDeletor.DeleteBusinessObject(selectedBo);
+                                          try
+                                          {
+                                              _grid.SelectedBusinessObject = null;
+                                              _businessObjectDeletor.DeleteBusinessObject(selectedBo);
+                                          }
+                                          catch (Exception ex)
+                                          {
+                                              GlobalRegistry.UIExceptionNotifier.Notify(ex, "There was a problem deleting", "Problem Deleting");
+                                          }
                                       }
                                   });
                 }
