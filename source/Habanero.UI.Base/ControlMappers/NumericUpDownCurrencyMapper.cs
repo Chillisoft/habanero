@@ -12,6 +12,9 @@ namespace Habanero.UI.Base
         public NumericUpDownCurrencyMapper(IControlChilli numericUpDownControl, string propName, bool isReadOnly, IControlFactory factory)
             : base(numericUpDownControl, propName, isReadOnly, factory)
         {
+            _numericUpDown.DecimalPlaces = 2;
+            _numericUpDown.Maximum = decimal.MaxValue;
+            _numericUpDown.Minimum = decimal.MinValue;
         }
 
         public override void ApplyChangesToBusinessObject()

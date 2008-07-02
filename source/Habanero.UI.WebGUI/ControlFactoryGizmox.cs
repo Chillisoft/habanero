@@ -375,8 +375,8 @@ namespace Habanero.UI.WebGUI
         {
             INumericUpDown ctl = CreateNumericUpDown();
             ctl.DecimalPlaces = 2;
-            ctl.Maximum = Int32.MaxValue;
-            ctl.Minimum = Int32.MinValue;
+            ctl.Maximum = decimal.MaxValue;
+            ctl.Minimum = decimal.MinValue;
             return ctl;
         }
         /// <summary>

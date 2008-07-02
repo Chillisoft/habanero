@@ -376,8 +376,8 @@ namespace Habanero.Test.UI.Base
             //---------------Verify Result -----------------------
             Assert.IsNotNull(upDown);
             Assert.AreEqual(2, upDown.DecimalPlaces);
-            Assert.AreEqual(Int32.MinValue, upDown.Minimum);
-            Assert.AreEqual(Int32.MaxValue, upDown.Maximum);
+            Assert.AreEqual(decimal.MinValue, upDown.Minimum);
+            Assert.AreEqual(decimal.MaxValue, upDown.Maximum);
             //---------------Tear Down -------------------------   
         }
 

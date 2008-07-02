@@ -134,22 +134,22 @@ namespace Habanero.Test.UI.Base.FilterController
             //---------------Tear Down -------------------------          
         }
         
-        [Test, Ignore()] //No label is being created
-        public void TestAddDateFilterDateTimePicker_LabelTextCorrect()
-        {
-            //---------------Set up test pack-------------------
-            IControlFactory factory = GetControlFactory();
-            IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
-            IFilterControl filterControl = factory.CreateFilterControl();
-            IDateTimePicker dtePicker = filterControl.AddDateFilterDateTimePicker("test:", "TestColumn", DateTime.Now, FilterClauseOperator.OpGreaterThan, false);
-            //---------------Execute Test ----------------------
-            string expectedFilterClause = filterControl.GetFilterClause().GetFilterClauseString();
-            //---------------Test Result -----------------------
-            Assert.IsTrue(filterControl.Controls[0] is ILabel);
-            Assert.AreEqual("test:", ((ILabel)filterControl.Controls[0]).Text);
-            //---------------Tear Down -------------------------          
-            TestAddDatePicker();
-        }
+        //[Test] //No label is being created
+        //public void TestAddDateFilterDateTimePicker_LabelTextCorrect()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    IControlFactory factory = GetControlFactory();
+        //    IFilterClauseFactory filterClauseFactory = new DataViewFilterClauseFactory();
+        //    IFilterControl filterControl = factory.CreateFilterControl();
+        //    IDateTimePicker dtePicker = filterControl.AddDateFilterDateTimePicker("test:", "TestColumn", DateTime.Now, FilterClauseOperator.OpGreaterThan, false);
+        //    //---------------Execute Test ----------------------
+        //    string expectedFilterClause = filterControl.GetFilterClause().GetFilterClauseString();
+        //    //---------------Test Result -----------------------
+        //    Assert.IsTrue(filterControl.Controls[0] is ILabel);
+        //    Assert.AreEqual("test:", ((ILabel)filterControl.Controls[0]).Text);
+        //    //---------------Tear Down -------------------------          
+        //    TestAddDatePicker();
+        //}
 
         [Test]
         public void TestAddDateFilterDateTimePicker_EqualOperator()

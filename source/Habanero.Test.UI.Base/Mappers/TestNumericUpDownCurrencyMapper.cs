@@ -40,8 +40,8 @@ namespace Habanero.Test.UI.Base.Mappers
             Assert.AreSame(numUpDown, mapper.Control);
             Assert.AreSame(CURRENCY_PROP_NAME, mapper.PropertyName);
             Assert.AreEqual(2, numUpDown.DecimalPlaces);
-            Assert.AreEqual(int.MinValue, numUpDown.Minimum);
-            Assert.AreEqual(int.MaxValue, numUpDown.Maximum);
+            Assert.AreEqual(decimal.MinValue, numUpDown.Minimum);
+            Assert.AreEqual(decimal.MaxValue, numUpDown.Maximum);
 
             //---------------Tear Down -------------------------
         }
