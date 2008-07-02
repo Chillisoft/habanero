@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
@@ -699,11 +700,11 @@ namespace Habanero.BO.ClassDefinition
             if (!this.HasLookupList()) return true;
             if (propValue == null || string.IsNullOrEmpty(Convert.ToString(propValue))) return true;
 
-            //TODO: Refactor SetPropertyValue
             //Dictionary<string, object> lookupList = this.LookupList.GetLookupList();
             //bool hasItemInList = lookupList.ContainsKey(Convert.ToString(propValue))
+            //        || lookupList.ContainsValue(Convert.ToString(propValue))
             //        || lookupList.ContainsValue(propValue);
-            //if(!hasItemInList)
+            //if (!hasItemInList)
             //{
             //    errorMessage += String.Format("'{0}' invalid since '{1}' is not in list.", displayName, propValue);
             //    return false;

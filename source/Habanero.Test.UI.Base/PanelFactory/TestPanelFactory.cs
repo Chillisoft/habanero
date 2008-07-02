@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.BO;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -480,5 +481,42 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(pnl.Width, panelInfo.MinumumPanelWidth);
             //---------------Tear Down -------------------------          
         }
+
+        [Test]
+        public void Test_ReadWriteRule_ReadOnly()
+        {
+            //---------------Set up test pack-------------------
+
+            Sample s = new Sample();
+            //---------------Execute Test ----------------------
+            IPanelFactory panelFactory = new PanelFactory(s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterface_ReadWriteRule(), GetControlFactory());
+            IPanelFactoryInfo  panelFactoryInfo = panelFactory.CreatePanel();
+            //---------------Test Result -----------------------
+            IControlMapperCollection mappers = panelFactoryInfo.ControlMappers;
+
+            
+            Assert.IsFalse(mappers["SampleText"].Control.Enabled);
+            Assert.IsTrue(mappers["SampleText2"].Control.Enabled);
+        }
+
+
+        [Test]
+        public void Test_ReadWriteRule_WriteNew_StateNew()
+        {
+            //---------------Set up test pack-------------------
+
+            Sample s = new Sample();
+            //---------------Execute Test ----------------------
+            IPanelFactory panelFactory = new PanelFactory(s, Sample.SampleUserInterfaceMapperGiz.SampleUserInterface_WriteNewRule(), GetControlFactory());
+            IPanelFactoryInfo panelFactoryInfo = panelFactory.CreatePanel();
+            //---------------Test Result -----------------------
+            IControlMapperCollection mappers = panelFactoryInfo.ControlMappers;
+
+
+            Assert.IsTrue(mappers["SampleText"].Control.Enabled);
+            Assert.IsTrue(mappers["SampleText2"].Control.Enabled);
+        }
+
+
     }
 }

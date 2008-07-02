@@ -354,13 +354,6 @@ namespace Habanero.UI.Base
                 IBOProp prop = _businessObject.Props[_propertyName];
                 if (prop != null)
                 {
-                    //PropDef propDef = (PropDef)prop.PropDef;
-                    //string msg = "";
-                    //if (propDef != null)
-                    //{
-                    //    propDef.IsValueValid(prop.DisplayName, value, ref msg);
-                    //    _errorProvider.SetError(_control, msg);
-                    //}
                     _errorProvider.SetError(_control, prop.InvalidReason);
                 }
             }

@@ -484,6 +484,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(3, comboBox.Items.Count);          // Includes blank option in the list
             //---------------Tear Down -------------------------
         }
+
     }
 
 

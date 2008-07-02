@@ -379,6 +379,44 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
+        public static ClassDef LoadDefaultClassDefWithUIDef_ReadWriteRule()
+        {
+            XmlClassLoader itsLoader = new XmlClassLoader();
+            ClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" compulsory=""true"" />
+                    <property  name=""FirstName"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<ui>
+						<grid>
+							<column heading=""Surname"" property=""Surname"" type=""DataGridViewTextBoxColumn"" />
+						</grid>
+						<form>
+							<tab name=""Tab1"">
+								<columnLayout>
+									<field label=""Surname"" property=""Surname"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""readWriteRule"" value=""WriteNew"" />
+                                     </field>
+									<field label=""First Name"" property=""FirstName"" type=""TextBox"" mapperType=""TextBoxMapper"" >
+                                        <parameter name=""readWriteRule"" value=""WriteNotNew"" />
+                                     </field>
+								</columnLayout>
+							</tab>
+						</form>
+					</ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
         #region Properties
 
         public Guid ContactPersonID

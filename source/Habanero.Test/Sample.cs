@@ -528,6 +528,45 @@ namespace Habanero.Test
                 def.Add(tab);
                 return def;
             }
+
+            public static UIForm SampleUserInterface_ReadWriteRule()
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                UIFormColumn col = new UIFormColumn(100);
+                Hashtable propertyAttributes = new Hashtable();
+                propertyAttributes.Add("readWriteRule", "ReadOnly");
+                col.Add(
+                    new UIFormField("Text:", "SampleText", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, propertyAttributes, null));
+                col.Add(
+                    new UIFormField("Text2:", "SampleText2", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, new Hashtable(), null));
+                tab.Add(col);
+                def.Add(tab);
+
+                return def;
+            }
+
+            public static UIForm SampleUserInterface_WriteNewRule()
+            {
+                UIForm def = new UIForm();
+                def.Height = 300;
+                def.Width = 350;
+                UIFormTab tab = new UIFormTab();
+                UIFormColumn col = new UIFormColumn(100);
+                Hashtable propertyAttributes = new Hashtable();
+                propertyAttributes.Add("readWriteRule", "WriteNew");
+                col.Add(
+                    new UIFormField("Text:", "SampleText", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, propertyAttributes, null));
+                col.Add(
+                    new UIFormField("Text2:", "SampleText2", "TextBoxGiz", "Habanero.UI.WebGUI", "TextBoxMapper", "", true, null, new Hashtable(), null));
+                tab.Add(col);
+                def.Add(tab);
+       
+
+                return def;
+            }
         }
 
         public decimal SampleMoney

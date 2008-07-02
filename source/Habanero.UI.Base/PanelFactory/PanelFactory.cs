@@ -464,6 +464,32 @@ namespace Habanero.UI.Base
             {
                 object parameterValue = field.GetParameterValue("editable");
                 if (parameterValue != null) editable = Convert.ToBoolean(parameterValue);
+
+                parameterValue = field.GetParameterValue("readWriteRule");
+                string writeRule = "";
+                if (parameterValue != null) writeRule = Convert.ToString(parameterValue);
+                if (writeRule.Length > 0)
+                {
+                    if (writeRule == "ReadOnly") editable = false;
+                    if (writeRule == "WriteNew")
+                    {
+                        if (_currentBusinessObject.State.IsNew)
+                        {
+                            editable = true;
+                        }
+                        else editable = false;
+
+                    }
+                    if (writeRule == "WriteNotNew")
+                    {
+                        if (_currentBusinessObject.State.IsNew)
+                        {
+                            editable = false;
+                        }
+                        else editable = true;
+
+                    }
+                }
             }
             return editable;
         }
