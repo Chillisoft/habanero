@@ -44,12 +44,34 @@ namespace Habanero.BO
         private readonly string _dirtyXmlFieldName;
         private Guid _ID;
 
+        /////<summary>
+        ///// Constructs the new transactionlogTable with default table name and logging fields.
+        /////</summary>
+        /////<param name="busObjToLog"></param>
+        //public TransactionLogTable(BusinessObject busObjToLog)
+        //    : this(busObjToLog, "transactionLog", "DateTimeUpdated",
+        //        "WindowsUser", "LogonUser", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
+        //{
+
+        //}
+
         ///<summary>
         /// Constructs the new transactionlogTable with default table name and logging fields.
         ///</summary>
         ///<param name="busObjToLog"></param>
         public TransactionLogTable(BusinessObject busObjToLog)
-            : this(busObjToLog, "transactionLog", "DateTimeUpdated",
+            : this(busObjToLog, "transactionLog")
+        {
+
+        }
+
+        ///<summary>
+        /// Constructs the new transactionlogTable with specified table name and the defaultlogging fields.
+        ///</summary>
+        ///<param name="busObjToLog">the business object for which the transaction log is being created</param>
+        ///<param name="transactionLogTable">The log table name</param>
+        public TransactionLogTable(BusinessObject busObjToLog, string transactionLogTable)
+            : this(busObjToLog, transactionLogTable, "DateTimeUpdated",
                 "WindowsUser", "LogonUser", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
         {
 
