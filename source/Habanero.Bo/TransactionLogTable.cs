@@ -154,15 +154,24 @@ namespace Habanero.BO
                          this._machineUpdateName + ", " +
                          this._businessObjectTypeNameFieldName + ", " +
                          this._crudActionFieldName + ", " +
-                         this._dirtyXmlFieldName + ") VALUES ( '" +
-                         DatabaseUtil.FormatDatabaseDateTime(DateTime.Now) + "', '" +
-                         GetLogonUserName() + "', '" +
-                         WindowsIdentity.GetCurrent().Name + "', '" +
-                         Environment.MachineName + "', '" +
-                         _buObjToLog.ClassName + "', '" +
-                         GetCrudAction(_buObjToLog) + "', '" +
-                         _buObjToLog.DirtyXML + "' )";
+                         this._dirtyXmlFieldName + ") VALUES ( ";
+
             tranSql.Statement.Append(sql);
+            tranSql.AddParameterToStatement(DateTime.Now);
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(GetLogonUserName());
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(WindowsIdentity.GetCurrent().Name);
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(Environment.MachineName);
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(_buObjToLog.ClassDef.ClassName);
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(GetCrudAction(_buObjToLog));
+            tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(_buObjToLog.DirtyXML);
+            tranSql.Statement.Append(")");
+
             SqlStatementCollection sqlStatements = new SqlStatementCollection(tranSql);
             return sqlStatements;
         }
