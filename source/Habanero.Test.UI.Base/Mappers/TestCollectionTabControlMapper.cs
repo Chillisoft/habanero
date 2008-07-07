@@ -1,3 +1,4 @@
+//TODO: delete sometime in the next 10 years
 ////using Habanero.Base;
 ////using Habanero.BO;
 ////using Habanero.BO.ClassDefinition;
@@ -52,7 +53,7 @@
 ////            //---------------Set up test pack-------------------
 ////            ITabControl tabControl = GetControlFactory().CreateTabControl();
 ////            //---------------Execute Test ----------------------
-////            BOTabControlManager colTabCtlMapper = new BOTabControlManager(tabControl, GetControlFactory());
+////            BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
 ////            //---------------Test Result -----------------------
 ////            Assert.IsNotNull(colTabCtlMapper);
 ////            Assert.IsNotNull(colTabCtlMapper.PageBoTable);
@@ -66,7 +67,7 @@
 ////        {
 ////            //---------------Set up test pack-------------------
 ////            ITabControl tabControl = GetControlFactory().CreateTabControl();
-////            BOTabControlManager colTabCtlMapper = new BOTabControlManager(tabControl, GetControlFactory());
+////            BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
 ////            //---------------Execute Test ----------------------
 ////            IBusinessObjectControl busControl = new IBusinessObjectControlGiz();
 ////            colTabCtlMapper.BusinessObjectControl = busControl;
@@ -83,7 +84,7 @@
 
 ////            MyBO.LoadDefaultClassDef();
 ////            ITabControl tabControl = GetControlFactory().CreateTabControl();
-////            BOTabControlManager colTabCtlMapper = new BOTabControlManager(tabControl, GetControlFactory());
+////            BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
 ////            IBusinessObjectControl busControl = new IBusinessObjectControlGiz();
 ////            colTabCtlMapper.BusinessObjectControl = busControl;
 ////            //---------------Execute Test ----------------------
@@ -105,7 +106,7 @@
 
 ////            MyBO.LoadDefaultClassDef();
 ////            ITabControl tabControl = GetControlFactory().CreateTabControl();
-////            BOTabControlManager colTabCtlMapper = new BOTabControlManager(tabControl, GetControlFactory());
+////            BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
 ////            IBusinessObjectControl busControl = new IBusinessObjectControlGiz();
 ////            colTabCtlMapper.BusinessObjectControl = busControl;
 ////            //---------------Execute Test ----------------------
@@ -126,7 +127,7 @@
 
 ////            MyBO.LoadDefaultClassDef();
 ////            ITabControl tabControl = GetControlFactory().CreateTabControl();
-////            BOTabControlManager colTabCtlMapper = new BOTabControlManager(tabControl, GetControlFactory());
+////            BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
 ////            IBusinessObjectControl busControl = new IBusinessObjectControlGiz();
 ////            colTabCtlMapper.BusinessObjectControl = busControl;
 ////            //---------------Execute Test ----------------------

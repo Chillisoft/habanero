@@ -108,7 +108,7 @@
     <Compile Include="Mappers\TestNumericUpDownIntegerMapper.cs" />
     <Compile Include="Mappers\TestTextBoxMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestBOTabControl.cs">
+    <Compile Include="TestBOColTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TestControlCollection.cs" />

@@ -26,11 +26,11 @@ namespace Habanero.UI.WebGUI
     /// <summary>
     /// Manages a collection of tab pages that hold business object controls
     /// </summary>
-    public class BOTabControlGiz : UserControlGiz, IBOTabControl
+    public class BOTabControlGiz : UserControlGiz, IBOColTabControl
     {
         private readonly IControlFactory _controlFactory;
         private readonly ITabControl _tabControl;
-        private readonly BOTabControlManager _boTabControlManager;
+        private readonly BOColTabControlManager _boColTabControlManager;
 
         /// <summary>
         /// Constructor to initialise a new tab control
@@ -41,7 +41,7 @@ namespace Habanero.UI.WebGUI
             BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(this);
             _tabControl = _controlFactory.CreateTabControl();
             manager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
-            _boTabControlManager = new BOTabControlManager(_tabControl, _controlFactory);
+            _boColTabControlManager = new BOColTabControlManager(_tabControl, _controlFactory);
         }
 
         /// <summary>
@@ -52,8 +52,8 @@ namespace Habanero.UI.WebGUI
         /// displaying the business object information in the tab page</param>
         public IBusinessObjectControl BusinessObjectControl
         {
-            get { return _boTabControlManager.BusinessObjectControl; }
-            set { BOTabControlManager.BusinessObjectControl = value; }
+            get { return _boColTabControlManager.BusinessObjectControl; }
+            set { BOColTabControlManager.BusinessObjectControl = value; }
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace Habanero.UI.WebGUI
         /// for</param>
         public IBusinessObjectCollection BusinessObjectCollection
         {
-            get { return BOTabControlManager.BusinessObjectCollection; }
-            set { BOTabControlManager.BusinessObjectCollection = value; }
+            get { return BOColTabControlManager.BusinessObjectCollection; }
+            set { BOColTabControlManager.BusinessObjectCollection = value; }
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Habanero.UI.WebGUI
         /// </returns>
         public IBusinessObject GetBo(ITabPage tabPage)
         {
-            return BOTabControlManager.GetBo(tabPage);
+            return BOColTabControlManager.GetBo(tabPage);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Habanero.UI.WebGUI
         /// <returns>Returns the TabPage object, or null if not found</returns>
         public ITabPage GetTabPage(IBusinessObject bo)
         {
-            return BOTabControlManager.GetTabPage(bo);
+            return BOColTabControlManager.GetTabPage(bo);
         }
 
         /// <summary>
@@ -104,13 +104,13 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public IBusinessObject CurrentBusinessObject
         {
-            get { return BOTabControlManager.CurrentBusinessObject; }
-            set { BOTabControlManager.CurrentBusinessObject = value; }
+            get { return BOColTabControlManager.CurrentBusinessObject; }
+            set { BOColTabControlManager.CurrentBusinessObject = value; }
         }
 
-        private BOTabControlManager BOTabControlManager
+        private BOColTabControlManager BOColTabControlManager
         {
-            get { return _boTabControlManager; }
+            get { return _boColTabControlManager; }
         }
 
     }

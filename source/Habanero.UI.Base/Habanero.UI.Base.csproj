@@ -45,10 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BOTabControlManager.cs" />
+    <Compile Include="BOColTabControlManager.cs" />
     <Compile Include="ComboBoxManager.cs" />
     <Compile Include="ControlInterfaces\Events.cs" />
-    <Compile Include="ControlInterfaces\IBOTabControl.cs" />
+    <Compile Include="ControlInterfaces\IBOColTabControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />
     <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
     <Compile Include="ControlInterfaces\IFileChooser.cs" />

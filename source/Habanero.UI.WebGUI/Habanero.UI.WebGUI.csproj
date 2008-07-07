@@ -49,10 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BorderLayoutManagerGiz.cs" />
-    <Compile Include="BoTabControlGiz.cs">
+    <Compile Include="BOColTabControlGiz.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="BorderLayoutManagerGiz.cs" />
     <Compile Include="ButtonGroupControlGiz.cs">
       <SubType>Component</SubType>
     </Compile>

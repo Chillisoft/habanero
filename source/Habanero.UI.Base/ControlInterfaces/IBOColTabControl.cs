@@ -2,7 +2,7 @@ using Habanero.Base;
 
 namespace Habanero.UI.Base
 {
-    public interface IBOTabControl
+    public interface IBOColTabControl
     {
         /// <summary>
         /// Sets the boControl that will be displayed on each tab page.  This must be called

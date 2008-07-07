@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
 {
-    public abstract class TestBOTabControl : TestMapperBase
+    public abstract class TestBOColTabControl : TestMapperBase
     {
         protected abstract IControlFactory GetControlFactory();
 
@@ -31,7 +31,7 @@ namespace Habanero.Test.UI.Base
         }
 
         [TestFixture]
-        public class TestBOTabControlGiz : TestBOTabControl
+        public class TestBOColTabControlGiz : TestBOColTabControl
         {
             protected override IControlFactory GetControlFactory()
             {
@@ -46,11 +46,11 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            IBOTabControl iboTabControl = GetControlFactory().CreateBOTabControl();
+            IBOColTabControl iboColTabControl = GetControlFactory().CreateBOColTabControl();
             
             //---------------Test Result -----------------------
-            Assert.IsNotNull(iboTabControl.TabControl);
-            //Assert.IsNotNull(iboTabControl.BOTabControlManager);
+            Assert.IsNotNull(iboColTabControl.TabControl);
+            //Assert.IsNotNull(iboColTabControl.BOColTabControlManager);
             //---------------Tear down -------------------------
         }
 
@@ -61,7 +61,7 @@ namespace Habanero.Test.UI.Base
         //    //---------------Set up test pack-------------------
         //    ITabControl tabControl = GetControlFactory().CreateTabControl();
         //    //---------------Execute Test ----------------------
-        //    BOTabControlManager colTabCtlMapper = new BOTabControlManager(tabControl, GetControlFactory());
+        //    BOColTabControlManager colTabCtlMapper = new BOColTabControlManager(tabControl, GetControlFactory());
         //    //---------------Test Result -----------------------
         //    Assert.IsNotNull(colTabCtlMapper);
         //    Assert.IsNotNull(colTabCtlMapper.PageBoTable);
@@ -76,14 +76,14 @@ namespace Habanero.Test.UI.Base
         public void TestSetBusinessObjectControl()
         {
             //---------------Set up test pack-------------------
-            IBOTabControl boTabControl = GetControlFactory().CreateBOTabControl();
+            IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
 
             //---------------Execute Test ----------------------
             IBusinessObjectControl busControl = new BusinessObjectControlGiz();
-            boTabControl.BusinessObjectControl = busControl;
+            boColTabControl.BusinessObjectControl = busControl;
 
             //---------------Test Result -----------------------
-            Assert.AreSame(busControl, boTabControl.BusinessObjectControl);
+            Assert.AreSame(busControl, boColTabControl.BusinessObjectControl);
             //---------------Tear down -------------------------
         }
 
@@ -93,20 +93,20 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             MyBO.LoadDefaultClassDef();
-            IBOTabControl boTabControl = GetControlFactory().CreateBOTabControl();
+            IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
             IBusinessObjectControl busControl = new BusinessObjectControlGiz();
-            boTabControl.BusinessObjectControl = busControl;
+            boColTabControl.BusinessObjectControl = busControl;
             BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
             myBoCol.Add(new MyBO());
             myBoCol.Add(new MyBO());
             myBoCol.Add(new MyBO());
             //---------------Execute Test ----------------------
 
-            boTabControl.BusinessObjectCollection = myBoCol;
+            boColTabControl.BusinessObjectCollection = myBoCol;
             //---------------Test Result -----------------------
 
-            Assert.AreSame(myBoCol, boTabControl.BusinessObjectCollection);
-            Assert.AreEqual(3, boTabControl.TabControl.TabPages.Count);
+            Assert.AreSame(myBoCol, boColTabControl.BusinessObjectCollection);
+            Assert.AreEqual(3, boColTabControl.TabControl.TabPages.Count);
             //---------------Tear down -------------------------
         }
 
@@ -116,9 +116,9 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
 
             MyBO.LoadDefaultClassDef();
-            IBOTabControl boTabControl = GetControlFactory().CreateBOTabControl();
+            IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
             IBusinessObjectControl busControl = new BusinessObjectControlGiz();
-            boTabControl.BusinessObjectControl = busControl;
+            boColTabControl.BusinessObjectControl = busControl;
             BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
             MyBO testBo = new MyBO();
             myBoCol.Add(new MyBO());
@@ -126,9 +126,9 @@ namespace Habanero.Test.UI.Base
             myBoCol.Add(new MyBO());
             //---------------Execute Test ----------------------
 
-            boTabControl.BusinessObjectCollection= myBoCol;
+            boColTabControl.BusinessObjectCollection= myBoCol;
             //---------------Test Result -----------------------
-            Assert.AreSame(testBo, boTabControl.GetBo(boTabControl.TabControl.TabPages[1]));
+            Assert.AreSame(testBo, boColTabControl.GetBo(boColTabControl.TabControl.TabPages[1]));
             //---------------Tear down -------------------------
         }
 
@@ -138,9 +138,9 @@ namespace Habanero.Test.UI.Base
 
 
             MyBO.LoadDefaultClassDef();
-            IBOTabControl boTabControl = GetControlFactory().CreateBOTabControl();
+            IBOColTabControl boColTabControl = GetControlFactory().CreateBOColTabControl();
             IBusinessObjectControl busControl = new BusinessObjectControlGiz();
-            boTabControl.BusinessObjectControl = busControl;
+            boColTabControl.BusinessObjectControl = busControl;
             BusinessObjectCollection<MyBO> myBoCol = new BusinessObjectCollection<MyBO>();
             MyBO testBo = new MyBO();
             myBoCol.Add(new MyBO());
@@ -148,9 +148,9 @@ namespace Habanero.Test.UI.Base
             myBoCol.Add(testBo);
             //---------------Execute Test ----------------------
 
-            boTabControl.BusinessObjectCollection = myBoCol;
+            boColTabControl.BusinessObjectCollection = myBoCol;
             //---------------Test Result -----------------------
-            Assert.AreSame(boTabControl.TabControl.TabPages[2], boTabControl.GetTabPage(testBo));
+            Assert.AreSame(boColTabControl.TabControl.TabPages[2], boColTabControl.GetTabPage(testBo));
             //---------------Tear down -------------------------
         }
     }

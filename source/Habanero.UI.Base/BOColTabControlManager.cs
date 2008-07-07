@@ -5,7 +5,7 @@ using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
-    public class BOTabControlManager
+    public class BOColTabControlManager
     {
         private ITabControl _tabControl;
         private readonly IControlFactory _controlFactory;
@@ -15,7 +15,7 @@ namespace Habanero.UI.Base
         private IBusinessObjectControl _boControl;
         private IBusinessObjectCollection _businessObjectCollection;
 
-        public BOTabControlManager(ITabControl tabControl, IControlFactory controlFactory)
+        public BOColTabControlManager(ITabControl tabControl, IControlFactory controlFactory)
         {
                  //BorderLayoutManager manager = new BorderLayoutManager(this);
             _tabControl = tabControl;

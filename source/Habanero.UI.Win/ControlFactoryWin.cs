@@ -307,7 +307,7 @@ namespace Habanero.UI.Win
             return new FileChooserWin(this);
         }
 
-        public IBOTabControl CreateBOTabControl()
+        public IBOColTabControl CreateBOColTabControl()
         {
             throw new NotImplementedException();
         }
