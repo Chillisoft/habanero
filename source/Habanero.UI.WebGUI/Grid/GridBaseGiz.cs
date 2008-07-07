@@ -687,7 +687,7 @@ namespace Habanero.UI.WebGUI
         /// <exception cref="T:System.Exception">Formatting failed and either there is no handler for the <see cref="IDataGridView.DataError"></see> event of the <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control or the handler set the <see cref="P:Gizmox.WebGUI.Forms.DataGridViewDataErrorEventArgs.ThrowException"></see> property to true. The exception object can typically be cast to type <see cref="T:System.FormatException"></see>.</exception>
         /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
         /// <filterpriority>1</filterpriority>
-        public object FormattedValue
+        public virtual object FormattedValue
         {
             get { return _dataGridViewCell.FormattedValue; }
         }
@@ -742,7 +742,7 @@ namespace Habanero.UI.WebGUI
         /// <summary>Gets or sets the data type of the values in the cell. </summary>
         /// <returns>A <see cref="T:System.Type"></see> representing the data type of the value in the cell.</returns>
         /// <filterpriority>1</filterpriority>
-        public Type ValueType
+        public virtual Type ValueType
         {
             get { return _dataGridViewCell.ValueType; }
             set { _dataGridViewCell.ValueType = value; }
@@ -754,6 +754,23 @@ namespace Habanero.UI.WebGUI
         public bool Visible
         {
             get { return _dataGridViewCell.Visible; }
+        }
+
+        /// <summary>Gets the type of the cell's hosted editing control. </summary>
+        /// <returns>A <see cref="T:System.Type"></see> representing the 
+        /// DataGridViewTextBoxEditingControl type.</returns>
+        /// <filterpriority>1</filterpriority>
+        public virtual Type EditType
+        {
+            get { return _dataGridViewCell.EditType; }
+        }
+
+        /// <summary>Gets the default value for a cell in the row for new records.</summary>
+        /// <returns>An <see cref="T:System.Object"></see> representing the default value.</returns>
+        /// <filterpriority>1</filterpriority>
+        public virtual object DefaultNewRowValue
+        {
+            get { return _dataGridViewCell.DefaultNewRowValue; }
         }
     }
 }

@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Data;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using Habanero.UI.Base.Grid;
 
 namespace Habanero.UI.Base
 {
@@ -31,6 +34,9 @@ namespace Habanero.UI.Base
             if (_gridControl.Grid.Columns.Count == 0) throw new GridBaseInitialiseException("You cannot call initialise with no classdef since the ID column has not been added to the grid");
             try
             {
+                //Try to get the id column from the grid. If there is no id column or if the id column
+                // is not set up with a header then an error should be thrown. This looks like checking if 
+                // column is null and throwing the error would achieve this objective.
                 IDataGridViewColumn column = _gridControl.Grid.Columns["ID"];
                 string text = column.HeaderText;
             }
@@ -137,7 +143,40 @@ namespace Habanero.UI.Base
             //}
             foreach (UIGridColumn gridColDef in gridDef)
             {
-                IDataGridViewColumn col = CreateColumn(gridColDef.PropertyName, gridColDef.GetHeading());
+                IDataGridViewColumn col;
+                if (gridColDef.GridControlTypeName == "DataGridViewComboBoxColumn")
+                {
+                    col = _controlFactory.CreateDataGridViewComboBoxColumn();
+                    this._gridControl.Grid.Columns.Add(col);
+                    //ILookupList source =
+                    //    (ILookupList)_dataTable.Columns[colNum].ExtendedProperties["LookupList"];
+                    //if (source != null)
+                    //{
+                    //    DataTable table = new DataTable();
+                    //    table.Columns.Add("id");
+                    //    table.Columns.Add("str");
+
+                    //    table.LoadDataRow(new object[] { "", "" }, true);
+                    //    foreach (KeyValuePair<string, object> pair in source.GetLookupList())
+                    //    {
+                    //        table.LoadDataRow(new object[] { pair.Value, pair.Key }, true);
+                    //    }
+                    //    comboBoxCol.DataSource = table;
+                    //    comboBoxCol.ValueMember = "str";
+                    //    comboBoxCol.DisplayMember = "str";
+                    //                    }
+                    //comboBoxCol.DataPropertyName = dataColumn.ColumnName;
+                    //col = comboBoxCol;
+                }
+                else if (gridColDef.GridControlTypeName == "DataGridViewCheckBoxColumn")
+                {
+                    col = _controlFactory.CreateDataGridViewCheckBoxColumn();
+                    this._gridControl.Grid.Columns.Add(col);
+                }
+                else
+                {
+                    col = CreateColumn(gridColDef.PropertyName, gridColDef.GetHeading());
+                }
 //                IDataGridViewColumn col = _controlFactory.CreateDataGridViewCheckBoxColumn();
                 //col.ReadOnly = true;
                 col.HeaderText = gridColDef.GetHeading();

@@ -250,7 +250,81 @@ namespace Habanero.Test.UI.Base
             grid.SetBusinessObjectCollection(colBOs);
             //---------------Test Result -----------------------
             IDataGridViewColumn dataGridViewColumn = grid.Columns[0];
+            AssertIsComboBoxColumnType(dataGridViewColumn);    
+        }
+
+        [Test]
+        public void TestSetupComboBoxFromClassDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+            GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(0, gridControl.Grid.Columns.Count);
+            Assert.AreEqual(1, classDef.UIDefCol.Count);
+            string uiDefName = "default";
+            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
+            Assert.IsNotNull(uiGridDef);
+            Assert.AreEqual(1, uiGridDef.Count);
+            
+            //---------------Execute Test ----------------------
+            gridInitialiser.InitialiseGrid(classDef, uiDefName);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, gridControl.Grid.Columns.Count, "Should have ID column and should have comboBoxColumn");
+            IDataGridViewColumn dataGridViewColumn = gridControl.Grid.Columns[1];
             AssertIsComboBoxColumnType(dataGridViewColumn);
+        }
+        //TODO: Combo Fill with items as per classdef.
+        [Test]
+        public void TestSetupColumnAsTextBoxType_FromClassDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1TextboxColumn();
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+            GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(0, gridControl.Grid.Columns.Count);
+            Assert.AreEqual(1, classDef.UIDefCol.Count);
+            string uiDefName = "default";
+            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
+            Assert.IsNotNull(uiGridDef);
+            Assert.AreEqual(1, uiGridDef.Count);
+
+            //---------------Execute Test ----------------------
+            gridInitialiser.InitialiseGrid(classDef, uiDefName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, gridControl.Grid.Columns.Count, "Should have ID column and should have textBoxColumn");
+            IDataGridViewColumn dataGridViewColumn = gridControl.Grid.Columns[1];
+            AssertIsTextBoxColumnType(dataGridViewColumn);
+            //---------------Tear Down -------------------------        
+        }
+
+        [Test]
+        public void TestSetupColumnAsCheckBoxType_FromClassDef()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
+            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
+            GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
+
+            //--------------Assert PreConditions----------------            
+            Assert.AreEqual(0, gridControl.Grid.Columns.Count);
+            Assert.AreEqual(1, classDef.UIDefCol.Count);
+            string uiDefName = "default";
+            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
+            Assert.IsNotNull(uiGridDef);
+            Assert.AreEqual(1, uiGridDef.Count);
+
+            //---------------Execute Test ----------------------
+            gridInitialiser.InitialiseGrid(classDef, uiDefName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, gridControl.Grid.Columns.Count, "Should have ID column and should have checkBoxColumn");
+            IDataGridViewColumn dataGridViewColumn = gridControl.Grid.Columns[1];
+            AssertIsCheckBoxColumnType(dataGridViewColumn);
             //---------------Tear Down -------------------------        
         }
 

@@ -31,7 +31,6 @@ namespace Habanero.UI.Grid
         /// Constructor to initialise a new cell, using the short date format
         /// </summary>
         public CalendarCell()
-            : base()
         {
             // Use the short date format.
             this.Style.Format = "d";

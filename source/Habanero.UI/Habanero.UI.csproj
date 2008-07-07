@@ -142,6 +142,7 @@
     <Compile Include="Forms\PictureControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Grid\ICalendarCell.cs" />
     <Compile Include="Grid\ReadOnlyGridButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

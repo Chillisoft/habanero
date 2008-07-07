@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
@@ -310,18 +309,18 @@ namespace Habanero.BO.ClassDefinition
 
         #region Progressive Private Constructors
 
-        private PropDef
-            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus)
-            : this(propertyName, propType, assemblyName, typeName, propRWStatus, null)
-        {
-        }
+        //private PropDef
+        //    (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus)
+        //    : this(propertyName, propType, assemblyName, typeName, propRWStatus, null)
+        //{
+        //}
 
-        private PropDef
-            (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
-             string databaseFieldName)
-            : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, null, null)
-        {
-        }
+        //private PropDef
+        //    (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+        //     string databaseFieldName)
+        //    : this(propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, null, null)
+        //{
+        //}
 
         private PropDef
             (string propertyName, Type propType, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
@@ -629,6 +628,9 @@ namespace Habanero.BO.ClassDefinition
         }
 
 
+        ///<summary>
+        /// Gets and sets the class def that this propDef is part of.
+        ///</summary>
         public IClassDef ClassDef
         {
             get { return _classDef; }
@@ -714,7 +716,7 @@ namespace Habanero.BO.ClassDefinition
 
         internal object GetNewValue(object value)
         {
-            object newValue = null;
+            object newValue;
             try
             {
                 newValue = Convert.ChangeType(value, this.PropertyType);

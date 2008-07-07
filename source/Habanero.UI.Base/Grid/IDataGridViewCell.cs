@@ -21,11 +21,17 @@ namespace Habanero.UI.Base
         [Browsable(false)]
         bool Frozen { get; }
 
-                /// <summary>Gets the value of the cell as formatted for display.</summary>
-        /// <returns>The formatted value of the cell or null if the cell does not belong to a <see cref="IDataGridView"></see> control.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">The row containing the cell is a shared row.-or-The cell is a column header cell.</exception>
-        /// <exception cref="T:System.Exception">Formatting failed and either there is no handler for the <see cref="IDataGridView.DataError"></see> event of the <see cref="T:Gizmox.WebGUI.Forms.DataGridView"></see> control or the handler set the <see cref="P:Gizmox.WebGUI.Forms.DataGridViewDataErrorEventArgs.ThrowException"></see> property to true. The exception object can typically be cast to type <see cref="T:System.FormatException"></see>.</exception>
-        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> is less than 0, indicating that the cell is a row header cell.</exception>
+        /// <summary>Gets the value of the cell as formatted for display.</summary>
+        /// <returns>The formatted value of the cell or null if the cell does not belong to a <see cref="IDataGridView"></see> 
+        ///     control.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The row containing the cell is a shared row.
+        /// -or-The cell is a column header cell.</exception>
+        /// <exception cref="T:System.Exception">Formatting failed and either there is no handler for the 
+        /// IDataGridView.DataError" event of the <see cref="IDataGridView"></see> control or the handler 
+        /// set the DataGridViewDataErrorEventArgs.ThrowException" property to true. The exception object can typically be cast 
+        /// to type <see cref="T:System.FormatException"></see>.</exception>
+        /// <exception cref="T:System.InvalidOperationException"><see cref="IDataGridViewCell.ColumnIndex"></see> 
+        /// is less than 0, indicating that the cell is a row header cell.</exception>
         /// <filterpriority>1</filterpriority>
         [Browsable(false)]
         object FormattedValue { get; }
@@ -75,5 +81,18 @@ namespace Habanero.UI.Base
         /// <filterpriority>1</filterpriority>
         [Browsable(false)]
         bool Visible { get; }
+
+        /// <summary>Gets the type of the cell's hosted editing control. </summary>
+        /// <returns>A <see cref="T:System.Type"></see> representing the 
+        /// DataGridViewTextBoxEditingControl type.</returns>
+        /// <filterpriority>1</filterpriority>
+        [EditorBrowsable(EditorBrowsableState.Advanced), Browsable(false)]
+        Type EditType { get;}
+
+        /// <summary>Gets the default value for a cell in the row for new records.</summary>
+        /// <returns>An <see cref="T:System.Object"></see> representing the default value.</returns>
+        /// <filterpriority>1</filterpriority>
+        [Browsable(false)]
+        object DefaultNewRowValue { get; }
     }
 }

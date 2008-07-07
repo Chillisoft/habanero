@@ -37,7 +37,7 @@ namespace Habanero.UI.Win
         {
             if (this.BusinessObjectSelected != null)
             {
-                this.BusinessObjectSelected(this, new BOEventArgs((BusinessObject) this.SelectedBusinessObject));
+                this.BusinessObjectSelected(this, new BOEventArgs(this.SelectedBusinessObject));
             }
         }
 
@@ -186,13 +186,13 @@ namespace Habanero.UI.Win
         }
 
 
-        /// <summary>
-        /// initiliase the grid to the with the 'default' UIdef.
-        /// </summary>
-        public void Initialise()
-        {
-            throw new NotImplementedException();
-        }
+        ///// <summary>
+        ///// initiliase the grid with the 'default' UIdef.
+        ///// </summary>
+        //public void Initialise()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         #endregion
 
@@ -861,6 +861,23 @@ namespace Habanero.UI.Win
         public bool Visible
         {
             get { return _cell.Visible; }
+        }
+
+        /// <summary>Gets the type of the cell's hosted editing control. </summary>
+        /// <returns>A <see cref="T:System.Type"></see> representing the 
+        /// DataGridViewTextBoxEditingControl type.</returns>
+        /// <filterpriority>1</filterpriority>
+        public Type EditType
+        {
+            get { return _cell.EditType; }
+        }
+
+        /// <summary>Gets the default value for a cell in the row for new records.</summary>
+        /// <returns>An <see cref="T:System.Object"></see> representing the default value.</returns>
+        /// <filterpriority>1</filterpriority>
+        public object DefaultNewRowValue
+        {
+            get { return _cell.DefaultNewRowValue; }
         }
     }
     

@@ -35,40 +35,40 @@ namespace Habanero.Test.UI.Base
 
 
 
-        [TestFixture]
-        public class TestEditableGridControlWin : TestEditableGridControl
-        {
-            protected override IControlFactory GetControlFactory()
-            {
-                return new ControlFactoryWin();
-            }
+        //[TestFixture]
+        //public class TestEditableGridControlWin : TestEditableGridControl
+        //{
+        //    protected override IControlFactory GetControlFactory()
+        //    {
+        //        return new ControlFactoryWin();
+        //    }
 
-            //protected override IGridBase CreateGridBaseStub()
-            //{
-            //    GridBaseWinStub gridBase = new GridBaseWinStub();
-            //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-            //    frm.Controls.Add(gridBase);
-            //    return gridBase;
-            //}
+        //    //protected override IGridBase CreateGridBaseStub()
+        //    //{
+        //    //    GridBaseWinStub gridBase = new GridBaseWinStub();
+        //    //    System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+        //    //    frm.Controls.Add(gridBase);
+        //    //    return gridBase;
+        //    //}
 
-            //private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
-            //                                                             IGridBase gridBase)
-            //{
-            //    System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView) gridBase;
-            //    System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
-            //    return row.Cells[propName];
-            //}
+        //    //private static System.Windows.Forms.DataGridViewCell GetCell(int rowIndex, string propName,
+        //    //                                                             IGridBase gridBase)
+        //    //{
+        //    //    System.Windows.Forms.DataGridView dgv = (System.Windows.Forms.DataGridView) gridBase;
+        //    //    System.Windows.Forms.DataGridViewRow row = dgv.Rows[rowIndex];
+        //    //    return row.Cells[propName];
+        //    //}
 
-            //protected override void AddControlToForm(IGridBase gridBase)
-            //{
-            //    throw new NotImplementedException();
-            //}
-            protected override void AddControlToForm(IControlChilli cntrl)
-            {
-                System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
-                frm.Controls.Add((System.Windows.Forms.Control)cntrl);
-            }
-        }
+        //    //protected override void AddControlToForm(IGridBase gridBase)
+        //    //{
+        //    //    throw new NotImplementedException();
+        //    //}
+        //    protected override void AddControlToForm(IControlChilli cntrl)
+        //    {
+        //        System.Windows.Forms.Form frm = new System.Windows.Forms.Form();
+        //        frm.Controls.Add((System.Windows.Forms.Control)cntrl);
+        //    }
+        //}
 
         [TestFixture]
         public class TestEditableGridControlGiz : TestEditableGridControl
@@ -270,6 +270,7 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(testvalue, bo.TestProp);
         }
+
 
 
 
