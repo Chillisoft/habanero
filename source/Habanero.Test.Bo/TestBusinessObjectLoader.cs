@@ -788,6 +788,23 @@ namespace Habanero.Test.BO
             Assert.AreSame(loadedCircle, circle);
         }
 
+        [Test]
+        public void TestLoadWithClassTableInheritance()
+        {
+            //---------------Set up test pack-------------------
+            Circle.GetClassDef();
+            Circle circle = new Circle();
+            circle.Radius = 10;
+            circle.ShapeName = Guid.NewGuid().ToString();
+            circle.Save();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(loadedCircle, circle);
+        }
 
     }
 

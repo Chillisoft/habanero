@@ -135,6 +135,40 @@ namespace Habanero.Test.BO.ClassDefinition
             }
         }
 
+        [Test]
+        public void TestIndexer_Int()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
+            KeyDef keyDef = new KeyDef("bob");
+            keyDef.Add(propDef1);
+            keyDef.Add(propDef2);
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            IPropDef keyDef0 = keyDef[0];
+            IPropDef keyDef1 = keyDef[1];
+            //------------Test Result ----------------------
+            Assert.AreSame(propDef1, keyDef0);
+            Assert.AreSame(propDef2, keyDef1);
+        }
+
+
+        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestIndexer_Int_OutOfRange()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef1 = new PropDef("prop1", typeof(String), PropReadWriteRule.ReadWrite, null);
+            PropDef propDef2 = new PropDef("prop2", typeof(String), PropReadWriteRule.ReadWrite, null);
+            KeyDef keyDef = new KeyDef("bob");
+            keyDef.Add(propDef1);
+            keyDef.Add(propDef2);
+            //-------------Test Pre-conditions --------------
+            //-------------Execute test ---------------------
+            IPropDef keyDef0 = keyDef[2];
+            //------------Test Result ----------------------
+
+        }
     }
 
 }

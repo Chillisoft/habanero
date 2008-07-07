@@ -67,6 +67,24 @@ namespace Habanero.Base
         }
 
         /// <summary>
+        /// The name of the assembly for the class definition
+        /// </summary>
+        string AssemblyName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The possibly full name of the class type for the class definition
+        /// </summary>
+        string ClassNameFull
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance
         /// any inheritance structure.
         /// </summary>
@@ -97,5 +115,13 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>Returns the table name of first real table for this class.</returns>
         string GetTableName();
+
+        /// <summary>
+        /// Indicates whether ClassTableInheritance is being used. See
+        /// the ORMapping enumeration for more detail.
+        /// </summary>
+        /// <returns>Returns true if so, or false if there is no
+        /// super class or another type of inheritance is being used</returns>
+        bool IsUsingClassTableInheritance();
     }
 }

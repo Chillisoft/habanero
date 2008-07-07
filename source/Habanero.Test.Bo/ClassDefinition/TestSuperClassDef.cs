@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -60,7 +61,7 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             SuperClassDef superClassDef =
                 new SuperClassDef("ass", "class", ORMapping.ClassTableInheritance, null, null);
-            ClassDef classDef = superClassDef.SuperClassClassDef;
+            IClassDef classDef = superClassDef.SuperClassClassDef;
         }
 
         [Test]

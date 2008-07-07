@@ -289,7 +289,7 @@ namespace Habanero.BO.ClassDefinition
         /// <summary>
         /// The possibly full name of the class type for the class definition
         /// </summary>
-        internal string ClassNameFull
+        public string ClassNameFull
         {
             get { return _classNameFull; }
             set
@@ -503,7 +503,7 @@ namespace Habanero.BO.ClassDefinition
             BOPropCol propCol = _propDefCol.CreateBOPropertyCol(newObject);
             if (this.SuperClassDef != null)
             {
-                ClassDef superClassDef = SuperClassDef.SuperClassClassDef;
+                ClassDef superClassDef = (ClassDef) SuperClassDef.SuperClassClassDef;
                 propCol.Add(superClassDef.createBOPropertyCol(newObject));
                 if (this.SuperClassDef.ORMapping == ORMapping.ConcreteTableInheritance)
                 {
@@ -589,7 +589,8 @@ namespace Habanero.BO.ClassDefinition
             relCol = _relationshipDefCol.CreateRelationshipCol(propCol, bo);
             if (this.SuperClassClassDef != null)
             {
-                relCol.Add(this.SuperClassDef.SuperClassClassDef.CreateRelationshipCol(propCol, bo));
+                ClassDef superClassClassDef = (ClassDef) this.SuperClassDef.SuperClassClassDef;
+                relCol.Add(superClassClassDef.CreateRelationshipCol(propCol, bo));
             }
             return relCol;
         }
@@ -604,7 +605,9 @@ namespace Habanero.BO.ClassDefinition
             BOKeyCol keyCol = _keysCol.CreateBOKeyCol(col);
             if (this.SuperClassClassDef != null)
             {
-                keyCol.Add(SuperClassDef.SuperClassClassDef.createBOKeyCol(col));
+                ClassDef superClassClassDef = (ClassDef)this.SuperClassDef.SuperClassClassDef;
+
+                keyCol.Add(superClassClassDef.createBOKeyCol(col));
             }
             return keyCol;
         }
@@ -689,7 +692,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (this.SuperClassDef != null)
                 {
-                    return this.SuperClassDef.SuperClassClassDef;
+                    return (ClassDef)this.SuperClassDef.SuperClassClassDef;
                 }
                 else
                 {
@@ -704,7 +707,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         /// <returns>Returns true if so, or false if there is no
         /// super class or another type of inheritance is being used</returns>
-        protected internal bool IsUsingClassTableInheritance()
+        public bool IsUsingClassTableInheritance()
         {
             return (this.SuperClassDef != null) && (this.SuperClassDef.ORMapping == ORMapping.ClassTableInheritance);
         }

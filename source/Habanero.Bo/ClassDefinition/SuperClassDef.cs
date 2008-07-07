@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO.ClassDefinition
@@ -28,7 +29,7 @@ namespace Habanero.BO.ClassDefinition
 	public class SuperClassDef
 	{
 		private ORMapping _orMapping;
-		private ClassDef _superClassClassDef;
+		private IClassDef _superClassClassDef;
 		private string _className;
 		private string _assemblyName;
 	    private string _id;
@@ -42,7 +43,7 @@ namespace Habanero.BO.ClassDefinition
 		/// <param name="superClassDef">The class definition</param>
 		/// <param name="mapping">The type of OR-Mapping to use. See
 		/// the ORMapping enumeration for more detail.</param>
-		public SuperClassDef(ClassDef superClassDef, ORMapping mapping)
+		public SuperClassDef(IClassDef superClassDef, ORMapping mapping)
 		{
 			_orMapping = mapping;
 			MySuperClassDef = superClassDef;
@@ -162,7 +163,7 @@ namespace Habanero.BO.ClassDefinition
 		/// <summary>
 		/// Returns the class definition for this super-class
 		/// </summary>
-		public ClassDef SuperClassClassDef
+		public IClassDef SuperClassClassDef
 		{
 			get { return MySuperClassDef; }
 			protected set { MySuperClassDef = value; }
@@ -172,7 +173,7 @@ namespace Habanero.BO.ClassDefinition
 
 		#region SuperClassDef Methods
 
-		private ClassDef MySuperClassDef
+		private IClassDef MySuperClassDef
 		{
 			get
 			{

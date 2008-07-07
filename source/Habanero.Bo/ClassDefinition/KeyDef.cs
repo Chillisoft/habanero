@@ -186,6 +186,29 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+
+        /// <summary>
+        /// Provides an indexing facility for the collection of property
+        /// definitions that belong to the key, so that items
+        /// in the collection can be accessed like an array. The order is
+        /// always the same, but not determinable
+        /// </summary>
+        /// <param name="index">The index of the property</param>
+        /// <returns>Returns the property stored under that index</returns>
+        internal IPropDef this[int index]
+        {
+            get
+            {
+                int i = 0;
+                foreach (KeyValuePair<string, IPropDef> propDef in _propDefs)
+                {
+                    if (i == index) return propDef.Value;
+                    i++;
+                }
+                throw new ArgumentOutOfRangeException("index", index, "index out of range");
+            }
+        }
+
         /// <summary>
         /// Adds a property definition to the collection of definitions.
         /// The object to be added cannot be null.  If a key name was not

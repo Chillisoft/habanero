@@ -8,10 +8,17 @@ using Habanero.Util;
 
 namespace Habanero.BO
 {
+    ///<summary>
+    /// A class representing a Database SelectQuery.  Wraps an ISelectQuery (Decorator pattern)
+    ///</summary>
     public class SelectQueryDB : ISelectQuery
     {
         private readonly ISelectQuery _selectQuery;
 
+        ///<summary>
+        /// Creates a SelectQueryDB, wrapping an ISelectQuery (Decorator pattern)
+        ///</summary>
+        ///<param name="selectQuery"></param>
         public SelectQueryDB(ISelectQuery selectQuery)
         {
             _selectQuery = selectQuery;
@@ -97,28 +104,50 @@ namespace Habanero.BO
             foreach (RelPropDef relPropDef in relationshipDef.RelKeyDef)
             {
                 ClassDef relatedClassDef = relationshipDef.RelatedObjectClassDef;
-                string relatedTableName = DelimitTable(relatedClassDef.TableName);
                 IPropDef ownerPropDef = this.ClassDef.GetPropDef(relPropDef.OwnerPropertyName);
                 IPropDef relatedPropDef = relatedClassDef.GetPropDef(relPropDef.RelatedClassPropName);
-                if (String.IsNullOrEmpty(joinString))
-                {
-                    joinString += " JOIN " + relatedTableName + " ON ";
-                }
-                else
-                {
-                    joinString += " AND ";
-                }
-                joinString += DelimitField(this.ClassDef.TableName, ownerPropDef.DatabaseFieldName);
-                joinString += " = ";
-                joinString += DelimitField(relatedClassDef.TableName, relatedPropDef.DatabaseFieldName);
+                joinString +=
+                    GetJoinString(joinString, this.ClassDef.TableName, ownerPropDef.DatabaseFieldName,
+                        relatedClassDef.TableName, relatedPropDef.DatabaseFieldName);
             }
             return joinString;
         }
 
+        private string GetJoinString(string currentJointString, string joinFromTableName, string joinFromFieldName,
+            string joinToTableName, string joinToFieldName)
+        {
+            string firstBit = "";
+            if (String.IsNullOrEmpty(currentJointString))
+            {
+                firstBit += " JOIN " + DelimitTable(joinToTableName) + " ON";
+            }
+            else
+            {
+                firstBit += " AND";
+            }
+            string joinString = String.Format("{0} {1} = {2}",
+                firstBit,
+                DelimitField(joinFromTableName, joinFromFieldName),
+                DelimitField(joinToTableName, joinToFieldName));
+            return joinString;
+        }
+
+
         private void AppendFrom(StringBuilder builder)
         {
             builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source));
+            ClassDef classDef = (ClassDef) _selectQuery.ClassDef;
+            if (classDef != null && classDef.IsUsingClassTableInheritance())
+            {
+                ClassDef superClassClassDef = classDef.SuperClassClassDef;
+                IPropDef superClassPropDef = superClassClassDef.GetPrimaryKeyDef()[0];
+                IPropDef thisClassPropDef = classDef.GetPrimaryKeyDef()[0];
+                builder.Append(
+                    GetJoinString("", classDef.GetTableName(), thisClassPropDef.DatabaseFieldName,
+                        superClassClassDef.GetTableName(), superClassPropDef.DatabaseFieldName));
+            }
         }
+
 
         private void AppendFields(StringBuilder builder)
         {
@@ -134,7 +163,8 @@ namespace Habanero.BO
         {
             if (_selectQuery.Limit == 0) return;
 
-            string limitClauseAtBeginning = DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
+            string limitClauseAtBeginning =
+                DatabaseConnection.CurrentConnection.GetLimitClauseForBeginning(_selectQuery.Limit);
             if (!String.IsNullOrEmpty(limitClauseAtBeginning))
             {
                 builder.Append(limitClauseAtBeginning + " ");

@@ -19,6 +19,7 @@
 
 using System;
 using System.Xml;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -262,7 +263,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsNotNull(def.SuperClassDef);
             //ClassDef parentDef = ClassDef.ClassDefs[typeof(TestClass)];
             ClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
-            ClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
+            IClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
             Assert.AreSame(parentDef, superClassDef);
 
         }
@@ -428,8 +429,8 @@ namespace Habanero.Test.BO.Loaders
 			");
             Assert.IsNotNull(def.SuperClassDef);
             //ClassDef parentDef = ClassDef.ClassDefs[typeof(TestClass)];
-            ClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
-            ClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
+            IClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
+            IClassDef superClassDef = def.SuperClassDef.SuperClassClassDef;
             Assert.AreSame(parentDef, superClassDef);
         }
 

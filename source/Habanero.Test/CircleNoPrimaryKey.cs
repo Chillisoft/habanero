@@ -72,5 +72,6 @@ namespace Habanero.Test
             circleClassDef.SuperClassDef.Discriminator = "ShapeType";
             return circleClassDef;
         }
+
     }
 }

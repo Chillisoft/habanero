@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -67,7 +68,7 @@ namespace Habanero.Test.BO.Loaders
             Assert.AreEqual(ORMapping.ClassTableInheritance, def.ORMapping);
             //ClassDef parentDef = ClassDef.ClassDefs[typeof(TestClass)];
             ClassDef parentDef = ClassDef.ClassDefs["Habanero.Test.BO.Loaders", "TestClass"];
-            ClassDef superClassDef = def.SuperClassClassDef;
+            IClassDef superClassDef = def.SuperClassClassDef;
             Assert.AreSame(parentDef, superClassDef);
             Assert.IsNull(def.Discriminator);
         }
