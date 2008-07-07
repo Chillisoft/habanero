@@ -5,24 +5,24 @@ using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
-    public class BOTabControlMapper
+    public class BOTabControlManager
     {
         private ITabControl _tabControl;
         private readonly IControlFactory _controlFactory;
         private IBusinessObject _currentBusinessObject;
-        private Dictionary<ITabPage, BusinessObject> _pageBoTable;
-        private Dictionary<BusinessObject, ITabPage> _boPageTable;
+        private Dictionary<ITabPage, IBusinessObject> _pageBoTable;
+        private Dictionary<IBusinessObject, ITabPage> _boPageTable;
         private IBusinessObjectControl _boControl;
         private IBusinessObjectCollection _businessObjectCollection;
 
-        public BOTabControlMapper(ITabControl tabControl, IControlFactory controlFactory)
+        public BOTabControlManager(ITabControl tabControl, IControlFactory controlFactory)
         {
                  //BorderLayoutManager manager = new BorderLayoutManager(this);
             _tabControl = tabControl;
             _controlFactory = controlFactory;
             //manager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
-            _pageBoTable = new Dictionary<ITabPage, BusinessObject>();
-            _boPageTable = new Dictionary<BusinessObject, ITabPage>();
+            _pageBoTable = new Dictionary<ITabPage, IBusinessObject>();
+            _boPageTable = new Dictionary<IBusinessObject, ITabPage>();
         }
 
          //<summary>
@@ -31,30 +31,39 @@ namespace Habanero.UI.Base
          //</summary>
          //<param name="boControl">The business object control that is
          //displaying the business object information in the tab page</param>
-        public void SetBusinessObjectControl(IBusinessObjectControl boControl)
+
+        public IBusinessObjectControl BusinessObjectControl
         {
-            _boControl = boControl;
-            if (boControl is IControlChilli)
+            set
             {
-                BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(TabControl);
-                manager.AddControl(boControl, BorderLayoutManager.Position.Centre);
+                _boControl = value;
+                if (value is IControlChilli)
+                {
+                    BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(TabControl);
+                    manager.AddControl(value, BorderLayoutManager.Position.Centre);
+                }
+                else
+                {
+                    throw new ArgumentException("boControl must be of type Control or one of its subtypes.");
+                }
             }
-            else
-            {
-                throw new ArgumentException("boControl must be of type Control or one of its subtypes.");
-            }
+            get { return _boControl; }
         }
 
         /// <summary>
         /// Sets the collection of tab pages for the collection of business
         /// objects provided
         /// </summary>
-        /// <param name="businessObjectCollection">The business object collection to create tab pages
+        /// <param name="value">The business object collection to create tab pages
         /// for</param>
-        public void SetCollection(IBusinessObjectCollection businessObjectCollection)
+        public IBusinessObjectCollection BusinessObjectCollection
         {
-            _businessObjectCollection = businessObjectCollection;
-            ReloadCurrentCollection();
+            set
+            {
+                _businessObjectCollection = value;
+                ReloadCurrentCollection();
+            }
+            get { return _businessObjectCollection; }
         }
 
         private void ReloadCurrentCollection()
@@ -107,7 +116,7 @@ namespace Habanero.UI.Base
                 if (_tabControl.SelectedTab != null)
                 {
                     _tabControl.SelectedTab.Controls.Clear();
-                    _tabControl.SelectedTab.Controls.Add((IControlChilli)_boControl);
+                    _tabControl.SelectedTab.Controls.Add(_boControl);
                     _boControl.SetBusinessObject(GetBo(_tabControl.SelectedTab));
                 }
 
@@ -147,17 +156,6 @@ namespace Habanero.UI.Base
         }
 
         /// <summary>
-        /// Returns the TabPage object that is representing the given
-        /// business object
-        /// </summary>
-        /// <param name="bo">The business object being represented</param>
-        /// <returns>Returns the TabPage object, or null if not found</returns>
-        public ITabPage GetTabPage(IBusinessObject bo)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Returns the business object represented in the currently
         /// selected tab page
         /// </summary>
@@ -167,24 +165,14 @@ namespace Habanero.UI.Base
             set { _currentBusinessObject = value; }
         }
 
-        public Dictionary<ITabPage, BusinessObject> PageBoTable
+        public Dictionary<ITabPage, IBusinessObject> PageBoTable
         {
             get { return _pageBoTable; }
         }
 
-        public Dictionary<BusinessObject, ITabPage> BoPageTable
+        public Dictionary<IBusinessObject, ITabPage> BoPageTable
         {
             get { return _boPageTable; }
-        }
-
-        public IBusinessObjectControl BoControl
-        {
-            get { return _boControl; }
-        }
-
-        public IBusinessObjectCollection BusinessObjectCollection
-        {
-            get { return _businessObjectCollection; }
         }
 
         /// <summary>
@@ -192,7 +180,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="page">The TabPage object to add</param>
         /// <param name="bo">The business ojbect to represent</param>
-        protected virtual void AddTabPage(ITabPage page, BusinessObject bo)
+        protected virtual void AddTabPage(ITabPage page, IBusinessObject bo)
         {
             AddTabPageToEnd(page);
             AddBoPageIndexing(bo, page);
@@ -203,7 +191,7 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="bo">The Business Object related to the Tab Page</param>
         /// <param name="page">The Tab Page related to the Business Object</param>
-        protected virtual void AddBoPageIndexing(BusinessObject bo, ITabPage page)
+        protected virtual void AddBoPageIndexing(IBusinessObject bo, ITabPage page)
         {
             _pageBoTable.Add(page, bo);
             _boPageTable.Add(bo, page);
@@ -224,11 +212,11 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="bo">The business object being represented</param>
         /// <returns>Returns the TabPage object, or null if not found</returns>
-        public virtual ITabPage GetTabPage(BusinessObject bo)
+        public virtual ITabPage GetTabPage(IBusinessObject bo)
         {
             if (_boPageTable.ContainsKey(bo))
             {
-                return (ITabPage)_boPageTable[bo];
+                return _boPageTable[bo];
             }
             else
             {

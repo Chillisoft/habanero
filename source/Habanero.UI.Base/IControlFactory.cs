@@ -244,7 +244,7 @@ namespace Habanero.UI.Base
         IEditableGrid CreateEditableGrid();
         IEditableGridControl CreateEditableGridControl();
         IFileChooser CreateFileChooser();
-        IBoTabColControl CreateBOTabColControl();
+        IBOTabControl CreateBOTabControl();
         /// <summary>
         /// returns a control mapper strategy for the management of how
         /// business objects properties and their related controls update each other.

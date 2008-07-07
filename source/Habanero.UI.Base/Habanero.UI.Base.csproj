@@ -45,14 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BOTabControlManager.cs" />
     <Compile Include="ComboBoxManager.cs" />
     <Compile Include="ControlInterfaces\Events.cs" />
+    <Compile Include="ControlInterfaces\IBOTabControl.cs" />
     <Compile Include="ControlInterfaces\IBusinessObjectControl.cs" />
     <Compile Include="ControlInterfaces\IDateRangeComboBox.cs" />
     <Compile Include="ControlInterfaces\IFileChooser.cs" />
     <Compile Include="ControlInterfaces\IListControl.cs" />
     <Compile Include="ControlInterfaces\IUserControlChilli.cs" />
-    <Compile Include="ControlMappers\CollectionTabControlMapper.cs" />
     <Compile Include="ControlMappers\ComboBoxCollectionController.cs" />
     <Compile Include="ControlMappers\DateTimePickerMapper.cs" />
     <Compile Include="DateTimePicker\DateTimePickerManager.cs" />
@@ -61,7 +62,6 @@
     <Compile Include="Grid\IDataGridViewCheckBoxColumn.cs" />
     <Compile Include="Grid\IDataGridViewImageColumn.cs" />
     <Compile Include="Grid\IDataGridViewTextBoxColumn.cs" />
-    <Compile Include="ControlInterfaces\IBoTabColControl.cs" />
     <Compile Include="Grid\IGridControl.cs" />
     <Compile Include="Grid\IGridInitialiser.cs" />
     <Compile Include="ICollectionTabControlMapper.cs" />

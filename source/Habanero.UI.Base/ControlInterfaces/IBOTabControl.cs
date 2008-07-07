@@ -1,26 +1,24 @@
 using Habanero.Base;
-using Habanero.BO;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
-    public interface IBoTabColControl
+    public interface IBOTabControl
     {
         /// <summary>
         /// Sets the boControl that will be displayed on each tab page.  This must be called
         /// before the BoTabColControl can be used.
         /// </summary>
-        /// <param name="boControl">The business object control that is
+        /// <param name="value">The business object control that is
         /// displaying the business object information in the tab page</param>
-        void SetBusinessObjectControl(IBusinessObjectControl boControl);
+        IBusinessObjectControl BusinessObjectControl { set; get;}
 
         /// <summary>
         /// Sets the collection of tab pages for the collection of business
         /// objects provided
         /// </summary>
-        /// <param name="businessObjectCollection">The business object collection to create tab pages
+        /// <param name="value">The business object collection to create tab pages
         /// for</param>
-        void SetCollection(IBusinessObjectCollection businessObjectCollection);
+        IBusinessObjectCollection BusinessObjectCollection { set; get; }
 
         /// <summary>
         /// Returns the TabControl object
@@ -49,7 +47,5 @@ namespace Habanero.UI.Base
         /// </summary>
         IBusinessObject CurrentBusinessObject { get; set; }
 
-        //TODO: Document
-        CollectionTabControlMapper CollectionTabControlMapper { get; }
     }
 }

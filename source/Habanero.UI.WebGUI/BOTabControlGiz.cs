@@ -19,7 +19,6 @@
 
 
 using Habanero.Base;
-using Habanero.BO;
 using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
@@ -27,44 +26,46 @@ namespace Habanero.UI.WebGUI
     /// <summary>
     /// Manages a collection of tab pages that hold business object controls
     /// </summary>
-    public class BoTabColControlGiz : UserControlGiz, IBoTabColControl
+    public class BOTabControlGiz : UserControlGiz, IBOTabControl
     {
         private readonly IControlFactory _controlFactory;
         private readonly ITabControl _tabControl;
-        private readonly CollectionTabControlMapper _collectionTabControlMapper;
+        private readonly BOTabControlManager _boTabControlManager;
 
         /// <summary>
         /// Constructor to initialise a new tab control
         /// </summary>
-        public BoTabColControlGiz(IControlFactory controlFactory)
+        public BOTabControlGiz(IControlFactory controlFactory)
         {
             _controlFactory = controlFactory;
             BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(this);
             _tabControl = _controlFactory.CreateTabControl();
             manager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
-            _collectionTabControlMapper = new CollectionTabControlMapper(_tabControl, _controlFactory);
+            _boTabControlManager = new BOTabControlManager(_tabControl, _controlFactory);
         }
 
         /// <summary>
         /// Sets the boControl that will be displayed on each tab page.  This must be called
         /// before the BoTabColControl can be used.
         /// </summary>
-        /// <param name="boControl">The business object control that is
+        /// <param name="value">The business object control that is
         /// displaying the business object information in the tab page</param>
-        public void SetBusinessObjectControl(IBusinessObjectControl boControl)
+        public IBusinessObjectControl BusinessObjectControl
         {
-            CollectionTabControlMapper.SetBusinessObjectControl(boControl);
+            get { return _boTabControlManager.BusinessObjectControl; }
+            set { BOTabControlManager.BusinessObjectControl = value; }
         }
 
         /// <summary>
         /// Sets the collection of tab pages for the collection of business
         /// objects provided
         /// </summary>
-        /// <param name="businessObjectCollection">The business object collection to create tab pages
+        /// <param name="value">The business object collection to create tab pages
         /// for</param>
-        public void SetCollection(IBusinessObjectCollection businessObjectCollection)
+        public IBusinessObjectCollection BusinessObjectCollection
         {
-            CollectionTabControlMapper.SetCollection(businessObjectCollection);
+            get { return BOTabControlManager.BusinessObjectCollection; }
+            set { BOTabControlManager.BusinessObjectCollection = value; }
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace Habanero.UI.WebGUI
         /// </returns>
         public IBusinessObject GetBo(ITabPage tabPage)
         {
-            return CollectionTabControlMapper.GetBo(tabPage);
+            return BOTabControlManager.GetBo(tabPage);
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace Habanero.UI.WebGUI
         /// <returns>Returns the TabPage object, or null if not found</returns>
         public ITabPage GetTabPage(IBusinessObject bo)
         {
-            return CollectionTabControlMapper.GetTabPage(bo);
+            return BOTabControlManager.GetTabPage(bo);
         }
 
         /// <summary>
@@ -103,13 +104,13 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         public IBusinessObject CurrentBusinessObject
         {
-            get { return CollectionTabControlMapper.CurrentBusinessObject; }
-            set { CollectionTabControlMapper.CurrentBusinessObject = value; }
+            get { return BOTabControlManager.CurrentBusinessObject; }
+            set { BOTabControlManager.CurrentBusinessObject = value; }
         }
 
-        public CollectionTabControlMapper CollectionTabControlMapper
+        private BOTabControlManager BOTabControlManager
         {
-            get { return _collectionTabControlMapper; }
+            get { return _boTabControlManager; }
         }
 
     }

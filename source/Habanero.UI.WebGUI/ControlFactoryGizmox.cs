@@ -519,9 +519,9 @@ namespace Habanero.UI.WebGUI
             return new FileChooserGiz(this);
         }
 
-        public virtual IBoTabColControl CreateBOTabColControl()
+        public virtual IBOTabControl CreateBOTabControl()
         {
-            return new BoTabColControlGiz(this);
+            return new BOTabControlGiz(this);
         }
 
         /// <summary>

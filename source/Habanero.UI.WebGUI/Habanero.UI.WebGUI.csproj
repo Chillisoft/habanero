@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BorderLayoutManagerGiz.cs" />
-    <Compile Include="BoTabColControlGiz.cs">
+    <Compile Include="BoTabControlGiz.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ButtonGroupControlGiz.cs">
