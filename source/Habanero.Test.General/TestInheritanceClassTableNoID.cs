@@ -199,14 +199,14 @@ namespace Habanero.Test.General
             circle.ShapeName = "Circle";
             circle.Save();
 
-            shapes.LoadAll();
+            shapes.LoadAll("ShapeName");
             Assert.AreEqual(2, shapes.Count);
-            Assert.AreEqual("MyShape", shapes[0].ShapeName);
-            Assert.AreEqual("Circle", shapes[1].ShapeName);
+            Assert.AreEqual("Circle", shapes[0].ShapeName);
+            Assert.AreEqual("MyShape", shapes[1].ShapeName);
 
             circles.LoadAll();
             Assert.AreEqual(1, circles.Count);
-            Assert.AreEqual(circles[0].ShapeID, shapes[1].ShapeID);
+            Assert.AreEqual(circles[0].ShapeID, shapes[0].ShapeID);
             Assert.IsFalse(circles[0].Props.Contains("CircleID"));
             Assert.AreEqual(5, circles[0].Radius);
             Assert.AreEqual("Circle", circles[0].ShapeName);
@@ -218,9 +218,9 @@ namespace Habanero.Test.General
             circle.Radius = 10;
             circle.Save();
 
-            shapes.LoadAll();
-            Assert.AreEqual("MyShapeChanged", shapes[0].ShapeName);
-            Assert.AreEqual("CircleChanged", shapes[1].ShapeName);
+            shapes.LoadAll("ShapeName");
+            Assert.AreEqual("CircleChanged", shapes[0].ShapeName);
+            Assert.AreEqual("MyShapeChanged", shapes[1].ShapeName);
             circles.LoadAll();
             Assert.AreEqual(10, circles[0].Radius);
             Assert.AreEqual("CircleChanged", circles[0].ShapeName);

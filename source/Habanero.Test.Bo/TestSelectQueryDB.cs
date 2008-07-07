@@ -316,7 +316,6 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
-
         [Test]
         public void TestClassTableInheritance_Join()
         {

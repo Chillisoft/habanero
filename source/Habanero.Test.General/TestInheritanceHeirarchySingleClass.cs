@@ -362,14 +362,14 @@ namespace Habanero.Test.General
             BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
             BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
             BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles = new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
-            shapes.LoadAll();
-            circles.LoadAll();
-            filledCircles.LoadAll();
+            shapes.LoadAll("ShapeName");
+            circles.LoadAll("ShapeName");
+            filledCircles.LoadAll("ShapeName");
 
             //-------------Test Result ----------------------
-            Assert.AreEqual("MyShapeChanged", shapes[0].ShapeName);
-            Assert.AreEqual("CircleChanged", shapes[1].ShapeName);
-            Assert.AreEqual("FilledCircleChanged", shapes[2].ShapeName);
+            Assert.AreEqual("CircleChanged", shapes[0].ShapeName);
+            Assert.AreEqual("FilledCircleChanged", shapes[1].ShapeName);
+            Assert.AreEqual("MyShapeChanged", shapes[2].ShapeName);
             
             Assert.AreEqual(10, circles[0].Radius);
             Assert.AreEqual(12, circles[1].Radius);
@@ -411,11 +411,12 @@ namespace Habanero.Test.General
             filledCircle.Colour = 4;
             filledCircle.Save();
 
-            shapes.LoadAll();
-            Assert.AreEqual("MyShapeChanged", shapes[0].ShapeName);
-            Assert.AreEqual("CircleChanged", shapes[1].ShapeName);
-            Assert.AreEqual("FilledCircleChanged", shapes[2].ShapeName);
-            circles.LoadAll();
+            shapes.LoadAll("ShapeName");
+            Assert.AreEqual("CircleChanged", shapes[0].ShapeName);
+            Assert.AreEqual("FilledCircleChanged", shapes[1].ShapeName); 
+            Assert.AreEqual("MyShapeChanged", shapes[2].ShapeName);
+
+            circles.LoadAll("ShapeName");
             filledCircles.LoadAll();
             Assert.AreEqual(10, circles[0].Radius);
             Assert.AreEqual(12, circles[1].Radius);
