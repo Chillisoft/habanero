@@ -94,18 +94,18 @@ namespace Habanero.Test.UI.Forms
                                                              DatabaseConnection.CurrentConnection.GetConnection());
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
-            //itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-            //                                                 DatabaseConnection.CurrentConnection.GetConnection());
-            //itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
+            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                             DatabaseConnection.CurrentConnection.GetConnection());
+            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] { null, null });
         }
 
         private void SetupSaveExpectationGetConnectionTwice()
         {
             itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
                                                              DatabaseConnection.CurrentConnection.GetConnection());
-            //itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
-             //                                                DatabaseConnection.CurrentConnection.GetConnection());
-            //itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] { null, null });
+            itsDatabaseConnectionMockControl.ExpectAndReturn("GetConnection",
+                                                             DatabaseConnection.CurrentConnection.GetConnection());
+            itsDatabaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] { null, null });
         }
 
         [TearDown]

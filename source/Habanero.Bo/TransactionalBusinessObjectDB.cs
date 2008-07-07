@@ -78,7 +78,8 @@ namespace Habanero.BO
         private bool HasDuplicateObjectInDatabase(BOKey boKey, ISqlStatement checkDuplicateSql, out string errMsg)
         {
             errMsg = "";
-            using (IDataReader dr = DatabaseConnection.CurrentConnection.LoadDataReader(checkDuplicateSql))
+            IDatabaseConnection databaseConnection = BusinessObject.GetDatabaseConnection();
+            using (IDataReader dr = databaseConnection.LoadDataReader(checkDuplicateSql))
             {
                 if (dr.Read()) //Database object with these criteria already exists
                 {
@@ -122,8 +123,8 @@ namespace Habanero.BO
                 if (!boKey.IsDirtyOrNew()) continue;
                 if (boKey is BOPrimaryKey && (this.BusinessObject.ClassDef.HasObjectID)) continue;
 
-                SqlStatement checkDuplicateSql =
-                    new SqlStatement(DatabaseConnection.CurrentConnection);
+                IDatabaseConnection databaseConnection = BusinessObject.GetDatabaseConnection();
+                SqlStatement checkDuplicateSql = new SqlStatement(databaseConnection);
                 checkDuplicateSql.Statement.Append(this.BusinessObject.GetSelectSql());
 
                 // Special case where super class and subclass have same ID name causes ambiguous field name

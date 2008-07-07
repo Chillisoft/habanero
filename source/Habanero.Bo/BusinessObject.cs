@@ -956,7 +956,7 @@ namespace Habanero.BO
         /// </summary>
         public void Save()
         {
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            TransactionCommitterDB committer = new TransactionCommitterDB(GetDatabaseConnection());
             committer.AddBusinessObject(this);
             committer.CommitTransaction();
         }

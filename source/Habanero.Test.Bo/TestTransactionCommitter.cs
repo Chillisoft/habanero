@@ -1,9 +1,12 @@
 using System;
+using System.Data;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
@@ -191,6 +194,53 @@ namespace Habanero.Test.BO
                 BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + mockBo.MockBOID.ToString("B") + "'");
             Assert.AreSame(mockBo, savedMockBO);
         }
+
+        [Test]
+        public void TestPersistSimpleBO_Insert_ToDifferentDb()
+        {
+            //---------------Set up test pack-------------------
+            MockBO mockBo = new MockBO();
+            MockRepository mock = new MockRepository();
+            IDatabaseConnection mockDatabaseConnection = GetMockDatabaseConnectionWithExpectations(mock);
+            mock.ReplayAll();
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(mockDatabaseConnection);
+            committerDB.AddTransaction(new TransactionalBusinessObjectDB(mockBo));
+            //---------------Test Preconditions ----------------
+            
+            //---------------Execute Test ----------------------
+            committerDB.CommitTransaction();
+
+            //---------------Test Result -----------------------
+            mock.VerifyAll();
+            AssertBOStateIsValidAfterInsert_Updated(mockBo);
+            //BOLoader.Instance.Refresh(mockBo);
+            //MockBO savedMockBO =
+            //    BOLoader.Instance.GetBusinessObject<MockBO>("MockBOID = '" + mockBo.MockBOID.ToString("B") + "'");
+            //Assert.AreSame(mockBo, savedMockBO);
+        }
+
+        public static IDatabaseConnection GetMockDatabaseConnectionWithExpectations(MockRepository mock)
+        {
+            IDatabaseConnection mockDatabaseConnection;
+            mockDatabaseConnection = mock.CreateMock<IDatabaseConnection>();
+            IDbConnection dbConnection = mock.CreateMock<IDbConnection>();
+            IDbTransaction dbTransaction = mock.CreateMock<IDbTransaction>();
+            IDbCommand dbCommand = mock.CreateMock<IDbCommand>();
+            IDbDataParameter dbDataParameter = mock.DynamicMock<IDbDataParameter>();
+            dbTransaction.Commit();
+            dbConnection.Open();
+            dbConnection.Close();
+            Expect.Call(dbConnection.CreateCommand()).Return(dbCommand).Repeat.Any();
+            Expect.Call(dbCommand.CreateParameter()).Return(dbDataParameter).Repeat.Any();
+            Expect.Call(dbConnection.State).Return(ConnectionState.Open);
+            Expect.Call(dbConnection.BeginTransaction(IsolationLevel.ReadCommitted)).IgnoreArguments().Return(dbTransaction);
+            Expect.Call(mockDatabaseConnection.GetConnection()).Return(dbConnection).Repeat.AtLeastOnce();
+            Expect.Call(mockDatabaseConnection.ExecuteSql(null,null)).IgnoreArguments().Return(1).Repeat.AtLeastOnce();
+            Expect.Call(mockDatabaseConnection.LeftFieldDelimiter).Return("").Repeat.Any();
+            Expect.Call(mockDatabaseConnection.RightFieldDelimiter).Return("").Repeat.Any();
+            return mockDatabaseConnection;
+        }
+
 
         [Test]
         public void TestPersistSimpleBO_Update()
@@ -892,6 +942,8 @@ namespace Habanero.Test.BO
             _rollBackExecuted = true;
         }
     }
+
+
     internal class MockBOWithBeforeSaveUpdatesCompulsoryField : MockBO
     {
         private bool _updateBeforePersistingExecuted = false;
