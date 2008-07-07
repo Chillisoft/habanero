@@ -26,7 +26,7 @@ namespace Habanero.Test.BO
             MyBO.LoadDefaultClassDef();
             ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
-            SelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
+            ISelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
             //---------------Test Result -----------------------
             Assert.AreEqual(3, query.Fields.Count);
             Assert.AreEqual("MyBoID", query.Fields["MyBoID"].PropertyName);
@@ -43,7 +43,7 @@ namespace Habanero.Test.BO
             ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             Criteria criteria = new Criteria("DateOfBirth", Criteria.Op.Equals, DateTime.Now);
             //---------------Execute Test ----------------------
-            SelectQuery query = QueryBuilder.CreateSelectQuery(classdef, criteria);
+            ISelectQuery query = QueryBuilder.CreateSelectQuery(classdef, criteria);
             //---------------Test Result -----------------------
             Assert.AreEqual(criteria, query.Criteria);
             //---------------Tear Down -------------------------
@@ -57,7 +57,7 @@ namespace Habanero.Test.BO
             MyBO.LoadDefaultClassDef();
             ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
-            SelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
+            ISelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
             //---------------Test Result -----------------------
             Assert.AreEqual("MyBO", query.Source);
             //---------------Tear Down -------------------------
@@ -70,7 +70,7 @@ namespace Habanero.Test.BO
             MyBO.LoadDefaultClassDef();
             ClassDef classdef = ClassDef.ClassDefs[typeof(MyBO)];
             //---------------Execute Test ----------------------
-            SelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
+            ISelectQuery query = QueryBuilder.CreateSelectQuery(classdef);
 
             //---------------Test Result -----------------------
             Assert.AreSame(classdef, query.ClassDef);
@@ -82,7 +82,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             new ContactPerson();
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
             selectQuery.OrderCriteria = OrderCriteria.FromString("ContactPerson.Surname");
             int startingFields = selectQuery.Fields.Count;
             //---------------Execute Test ----------------------
@@ -102,7 +102,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             new ContactPerson();
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
             selectQuery.OrderCriteria = OrderCriteria.FromString("AddressLine1");
             int startingFields = selectQuery.Fields.Count;
             //---------------Execute Test ----------------------
@@ -117,7 +117,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Car().ClassDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Car().ClassDef);
             string carregno = "CarRegNo";
             selectQuery.OrderCriteria = OrderCriteria.FromString(carregno);
             //---------------Execute Test ----------------------
@@ -136,7 +136,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             new Car();
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Engine().ClassDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Engine().ClassDef);
             string carregno = "CarRegNo";
 
             string car_carregno = "Car." + carregno;
@@ -150,6 +150,23 @@ namespace Habanero.Test.BO
             Assert.AreEqual("CAR_REG_NO", newField.FieldName);
             //---------------Tear Down -------------------------
         }
+
+        [Test]
+        public void TestSingleTableInheritance_Fields()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(circleClassDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, selectQuery.Fields.Count);
+            Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeID"));
+            Assert.AreEqual("Shape", selectQuery.Source);
+        }
+
+
     }
 
 }

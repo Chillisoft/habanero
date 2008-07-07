@@ -53,7 +53,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -69,7 +69,7 @@ namespace Habanero.Test.BO
         public void TestCreateSqlStatement_NoSourceNameInQueryFields()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
+            ISelectQuery selectQuery = new SelectQuery();
             selectQuery.Fields.Add("Surname", new QueryField("Surname", "Surname", ""));
             selectQuery.Fields.Add("ContactPersonID", new QueryField("ContactPersonID", "ContactPersonID", ""));
             selectQuery.Source = "bob";
@@ -90,7 +90,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
             Criteria criteria = new Criteria("TestProp", Criteria.Op.Equals, "test");
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -109,8 +109,8 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
-            selectQuery.OrderCriteria = new OrderCriteria().Add("MyBoID").Add("TestProp");
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.OrderCriteria = OrderCriteria.FromString("MyBoID, TestProp");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
@@ -127,7 +127,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = new OrderCriteria();
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
@@ -144,7 +144,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = new OrderCriteria().Add("MyBoID", OrderCriteria.SortDirection.Descending);
             selectQuery.OrderCriteria.Add("TestProp", OrderCriteria.SortDirection.Descending);
             SelectQueryDB query = new SelectQueryDB(selectQuery);
@@ -162,7 +162,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = MyBO.LoadDefaultClassDef();
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.OrderCriteria = new OrderCriteria();
             selectQuery.OrderCriteria.Add("MyBoID", OrderCriteria.SortDirection.Descending);
             selectQuery.OrderCriteria.Add("TestProp", OrderCriteria.SortDirection.Ascending);
@@ -196,7 +196,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             new ContactPerson();
             
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(new Address().ClassDef);
             selectQuery.OrderCriteria = OrderCriteria.FromString("ContactPerson.Surname");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
@@ -215,7 +215,7 @@ namespace Habanero.Test.BO
             Car car = new Car();
             ContactPersonCompositeKey person = new ContactPersonCompositeKey();
 
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(car.ClassDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(car.ClassDef);
             selectQuery.OrderCriteria = OrderCriteria.FromString("Driver.Surname");
             SelectQueryDB query = new SelectQueryDB(selectQuery);
             //---------------Assert PreConditions---------------            
@@ -226,7 +226,6 @@ namespace Habanero.Test.BO
             StringAssert.Contains("JOIN [ContactPersonCompositeKey] ON [Car].[Driver_FK1] = [ContactPersonCompositeKey].[PK1_Prop1] AND [Car].[Driver_FK2] = [ContactPersonCompositeKey].[PK1_Prop2] ", statementString);
             StringAssert.EndsWith("ORDER BY [ContactPersonCompositeKey].[Surname] ASC", statementString);
         }
-
 
         [Test]
         public void TestCreateSqlStatement_WithLimit_AtBeginning()

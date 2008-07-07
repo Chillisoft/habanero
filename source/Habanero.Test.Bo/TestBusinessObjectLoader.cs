@@ -17,7 +17,7 @@ namespace Habanero.Test.BO
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-
+            SetupDataAccessor();
         }
 
         [TearDown]
@@ -769,6 +769,23 @@ namespace Habanero.Test.BO
             Assert.AreSame(cp1, col[1]);
             Assert.AreSame(cp2, col[2]);
             //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void TestLoadWithSingleTableInheritance()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+            circle.Radius = 10;
+            circle.ShapeName = Guid.NewGuid().ToString();
+            circle.Save();
+
+            //---------------Execute Test ----------------------
+            CircleNoPrimaryKey loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(circle.ID);
+            //---------------Test Result -----------------------
+
+            Assert.AreSame(loadedCircle, circle);
         }
 
 

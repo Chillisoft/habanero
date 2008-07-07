@@ -58,6 +58,15 @@ namespace Habanero.Base
         }
 
         /// <summary>
+        /// The collection of property definitions for this
+        /// class and any properties inherited from parent classes
+        /// </summary>
+        IPropDefCol PropDefColIncludingInheritance
+        {
+            get;
+        }
+
+        /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance
         /// any inheritance structure.
         /// </summary>
@@ -82,5 +91,11 @@ namespace Habanero.Base
         ///<param name="propertyName">The property to get the type for.</param>
         ///<returns>The type of the specified property</returns>
         IPropertyComparer<T> CreatePropertyComparer<T>(string propertyName) where T:IBusinessObject;
+
+        /// <summary>
+        /// Returns the table name for this class
+        /// </summary>
+        /// <returns>Returns the table name of first real table for this class.</returns>
+        string GetTableName();
     }
 }

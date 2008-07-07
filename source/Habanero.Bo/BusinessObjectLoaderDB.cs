@@ -42,7 +42,7 @@ namespace Habanero.BO
 
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(ClassDef.ClassDefs[typeof (T)]);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(ClassDef.ClassDefs[typeof (T)]);
             selectQuery.Criteria = criteria;
             return GetBusinessObject<T>(selectQuery);
         }
@@ -73,7 +73,7 @@ namespace Habanero.BO
 
         public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
         {
-            SelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             selectQuery.Criteria = criteria;
             return GetBusinessObject(classDef, selectQuery);
         }

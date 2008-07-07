@@ -64,5 +64,13 @@ namespace Habanero.Test
             get { return (int)GetPropertyValue("Radius"); }
             set { SetPropertyValue("Radius", value); }
         }
+        public static ClassDef GetClassDefWithSingleInheritance()
+        {
+            ClassDef shapeClassDef = Shape.GetClassDef();
+            ClassDef circleClassDef = GetClassDef();
+            circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.SingleTableInheritance);
+            circleClassDef.SuperClassDef.Discriminator = "ShapeType";
+            return circleClassDef;
+        }
     }
 }
