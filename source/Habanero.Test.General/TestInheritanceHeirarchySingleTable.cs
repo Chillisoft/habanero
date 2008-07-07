@@ -183,14 +183,14 @@ namespace Habanero.Test.General
             circle.ShapeName = "Circle";
             circle.Save();
 
-            shapes.LoadAll();
+            shapes.LoadAll("ShapeName");
             Assert.AreEqual(2, shapes.Count);
-            Assert.AreEqual("MyShape", shapes[0].ShapeName);
-            Assert.AreEqual("Circle", shapes[1].ShapeName);
+            Assert.AreEqual("Circle", shapes[0].ShapeName);
+            Assert.AreEqual("MyShape", shapes[1].ShapeName);
 
             circles.LoadAll();
             Assert.AreEqual(1, circles.Count);
-            Assert.AreEqual(circles[0].ShapeID, shapes[1].ShapeID);
+            Assert.AreEqual(circles[0].ShapeID, shapes[0].ShapeID);
             Assert.AreEqual(5, circles[0].Radius);
             Assert.AreEqual("Circle", circles[0].ShapeName);
 
@@ -200,21 +200,21 @@ namespace Habanero.Test.General
             filledCircle.ShapeName = "FilledCircle";
             filledCircle.Save();
 
-            shapes.LoadAll();
+            shapes.LoadAll("ShapeName");
             Assert.AreEqual(3, shapes.Count);
-            Assert.AreEqual("MyShape", shapes[0].ShapeName);
-            Assert.AreEqual("Circle", shapes[1].ShapeName);
-            Assert.AreEqual("FilledCircle", shapes[2].ShapeName);
+            Assert.AreEqual("Circle", shapes[0].ShapeName);
+            Assert.AreEqual("FilledCircle", shapes[1].ShapeName);
+            Assert.AreEqual("MyShape", shapes[2].ShapeName);
 
-            circles.LoadAll();
+            circles.LoadAll("ShapeName");
             Assert.AreEqual(2, circles.Count);
-            Assert.AreEqual(circles[1].ShapeID, shapes[2].ShapeID);
+            Assert.AreEqual(circles[1].ShapeID, shapes[1].ShapeID);
             Assert.AreEqual(7, circles[1].Radius);
             Assert.AreEqual("FilledCircle", circles[1].ShapeName);
 
             filledCircles.LoadAll();
             Assert.AreEqual(1, filledCircles.Count);
-            Assert.AreEqual(filledCircles[0].ShapeID, shapes[2].ShapeID);
+            Assert.AreEqual(filledCircles[0].ShapeID, shapes[1].ShapeID);
             Assert.AreEqual(7, filledCircles[0].Radius);
             Assert.AreEqual("FilledCircle", filledCircles[0].ShapeName);
             Assert.AreEqual(3, filledCircles[0].Colour);
@@ -230,11 +230,11 @@ namespace Habanero.Test.General
             filledCircle.Colour = 4;
             filledCircle.Save();
 
-            shapes.LoadAll();
-            Assert.AreEqual("MyShapeChanged", shapes[0].ShapeName);
-            Assert.AreEqual("CircleChanged", shapes[1].ShapeName);
-            Assert.AreEqual("FilledCircleChanged", shapes[2].ShapeName);
-            circles.LoadAll();
+            shapes.LoadAll("ShapeName");
+            Assert.AreEqual("CircleChanged", shapes[0].ShapeName);
+            Assert.AreEqual("FilledCircleChanged", shapes[1].ShapeName);
+            Assert.AreEqual("MyShapeChanged", shapes[2].ShapeName);
+            circles.LoadAll("ShapeName");
             Assert.AreEqual(10, circles[0].Radius);
             Assert.AreEqual(12, circles[1].Radius);
             Assert.AreEqual("CircleChanged", circles[0].ShapeName);
