@@ -18,7 +18,10 @@
 //---------------------------------------------------------------------------------
 
 
+using System.Windows.Forms;
 using Habanero.UI.Base;
+using Habanero.UI.Win;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -61,6 +64,41 @@ namespace Habanero.Test.UI.Base
                 _cb.Checked = true;
                 _mapper.ApplyChangesToBusinessObject();
                 Assert.IsTrue(_sampleBusinessObject.SampleBoolean);
+            }
+
+            [Test]
+            public void TestCheckBoxHasCorrectStrategy()
+            {
+                //---------------Test Result -----------------------
+                Assert.AreSame(typeof(CheckBoxStrategyWin),_mapper.GetStrategy().GetType());
+            }
+
+
+            //TODO: Check the strategy is correct and how to test using NUnit Forms
+            [Test]
+            public void TestClickingOfCheckBoxUpdatesBO()
+            {
+                //---------------Set up test pack-------------------
+                _cb.Name = "TestCheckBox";
+                _cb.Checked = false;
+                _sampleBusinessObject.SampleBoolean = false;
+                _mapper.BusinessObject = _sampleBusinessObject;
+                Form frm = AddControlToForm(_cb);
+                //---------------Execute Test ----------------------
+                frm.Show();
+                CheckBoxTester box = new CheckBoxTester("TestCheckBox");
+                box.Check();
+                //---------------Test Result -----------------------
+                Assert.IsTrue(_cb.Checked);
+              //  Assert.IsTrue(_sampleBusinessObject.SampleBoolean);
+                //---------------Tear down -------------------------
+            }
+            private Form AddControlToForm(IControlChilli parentControl)
+            {
+                Form frm = new Form();
+                frm.Controls.Clear();
+                frm.Controls.Add((Control)parentControl);
+                return frm;
             }
         }
 

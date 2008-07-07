@@ -109,7 +109,7 @@ namespace Habanero.UI.Base
         /// altered, the UpdateControlValueFromBo() method is automatically called here to 
         /// implement the changes in the control itself.
         /// </summary>
-        public BusinessObject BusinessObject
+        public virtual BusinessObject BusinessObject
         {
             get { return _businessObject; }
             set

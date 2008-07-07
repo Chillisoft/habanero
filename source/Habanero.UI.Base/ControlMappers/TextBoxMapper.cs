@@ -19,9 +19,7 @@
 
 
 using System;
-using Habanero.Base;
 using Habanero.BO;
-using Habanero.UI.Base;
 
 namespace Habanero.UI.Base
 {
@@ -33,50 +31,43 @@ namespace Habanero.UI.Base
     /// </summary>
     public class TextBoxMapper : ControlMapper
     {
-        private ITextBox _textBox;
-        private string _oldText;
-        private ValueIsInValidState _valueIsInValidStateDelegate;
+        public override BusinessObject BusinessObject
+        {
+            get { return base.BusinessObject; }
+            set
+            {
+                base.BusinessObject = value;
+                TextBoxMapperStrategy.AddKeyPressEventHandler(this, base.CurrentBOProp());
+            }
+        }
 
-        /// <summary>
-        /// Provides a way to indicate whether the value is in a valid state.
-        /// An example use is where the user might be typing in a decimal and
-        /// has just pressed a dot, in which case the text as it exists would not
-        /// cast to a valid decimal.  This should prevent updating the property
-        /// value at that moment in time.
-        /// </summary>
-        /// <param name="value">The current value</param>
-        /// <param name="propertyType">The property type being represented</param>
-        /// <returns>Returns true if valid</returns>
-        public delegate bool ValueIsInValidState(object value, Type propertyType);
+        private readonly ITextBox _textBox;
+        private string _oldText;
+        private readonly ITextBoxMapperStrategy _textBoxMapperStrategy;
 
         /// <summary>
         /// Constructor to initialise a new instance of the mapper
         /// </summary>
         /// <param name="tb">The TextBox to map</param>
         /// <param name="propName">The property name</param>
-		/// <param name="isReadOnly">Whether this control is read only</param>
+        /// <param name="isReadOnly">Whether this control is read only</param>
         /// <param name="factory">the control factory to be used when creating the controlMapperStrategy</param>
         public TextBoxMapper(ITextBox tb, string propName, bool isReadOnly, IControlFactory factory)
             : base(tb, propName, isReadOnly, factory)
         {
             _textBox = tb;
+            _textBoxMapperStrategy = factory.CreateTextBoxMapperStrategy();
+
             //_textBox.Enabled = false;
             //_textBox.TextChanged += ValueChangedHandler;
             _oldText = "";
         }
 
-        /// <summary>
-        /// Provides a way to indicate whether the value is in a valid state.
-        /// An example use is where the user might be typing in a decimal and
-        /// has just pressed a dot, in which case the text as it exists would not
-        /// cast to a valid decimal.  This should prevent updating the property
-        /// value at that moment in time.
-        /// </summary>
-        public ValueIsInValidState ValueIsInValidStateDelegate
+        public ITextBoxMapperStrategy TextBoxMapperStrategy
         {
-            get { return _valueIsInValidStateDelegate; }
-            set { _valueIsInValidStateDelegate = value; }
+            get { return _textBoxMapperStrategy; }
         }
+
 
         ///// <summary>
         ///// A handler to carry out changes to the business object when the
@@ -117,11 +108,11 @@ namespace Habanero.UI.Base
         //    _oldText = _textBox.Text;
         //}
 
-    	/// <summary>
+        /// <summary>
         /// Updates the interface when the value has been changed in the
         /// object being represented
         /// </summary>
-    	protected  override void InternalUpdateControlValueFromBo()
+        protected override void InternalUpdateControlValueFromBo()
         {
             _textBox.Text = Convert.ToString(GetPropertyValue());
         }
@@ -132,7 +123,6 @@ namespace Habanero.UI.Base
 
             if (!_isEditable) return;
 
-
             try
             {
                 SetPropertyValue(value);
@@ -140,8 +130,11 @@ namespace Habanero.UI.Base
             catch (FormatException)
             {
                 _textBox.Text = _oldText;
-                throw new BusObjectInAnInvalidStateException("The business object '" + this._businessObject.ClassDef.ClassName + "' - '" + this._businessObject +
-                        "' could not be updated since the value '" + value + "' is not valid for the property '" + _propertyName + "'");
+                throw new BusObjectInAnInvalidStateException("The business object '" +
+                                                             this._businessObject.ClassDef.ClassName + "' - '" +
+                                                             this._businessObject +
+                                                             "' could not be updated since the value '" + value +
+                                                             "' is not valid for the property '" + _propertyName + "'");
             }
             _oldText = _textBox.Text;
         }

@@ -327,6 +327,11 @@ namespace Habanero.UI.WebGUI
             throw new NotImplementedException();
         }
 
+        public ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy()
+        {
+            return new CheckBoxMapperStrategyGiz();
+        }
+
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years
@@ -598,6 +603,14 @@ namespace Habanero.UI.WebGUI
         }
     }
 
+    internal class CheckBoxMapperStrategyGiz : ICheckBoxMapperStrategy
+    {
+        public void AddClickEventHandler(CheckBoxMapper mapper)
+        {
+            
+        }
+    }
+
     /// <summary>
     /// Provides a set of strategies that can be applied to a control
     /// </summary>
@@ -655,7 +668,7 @@ namespace Habanero.UI.WebGUI
         /// </summary>
         /// <param name="mapper">The textbox mapper</param>
         /// <param name="boProp">The property being mapped</param>
-        public virtual void AddKeyPressEventHandler(TextBoxMapper mapper, BOProp boProp)
+        public virtual void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp)
         {
             //Would require heavy event handling, so unsuitable for WebGUI at the moment
         }

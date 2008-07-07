@@ -290,6 +290,7 @@ namespace Habanero.UI.Base
         IErrorProvider CreateErrorProvider();
 
         IFormChilli CreateForm();
+        ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy();
     }
 
     /// <summary>
@@ -339,6 +340,18 @@ namespace Habanero.UI.Base
         /// </summary>
         /// <param name="mapper">The textbox mapper</param>
         /// <param name="boProp">The property being mapped</param>
-         void AddKeyPressEventHandler(TextBoxMapper mapper, BOProp boProp);
+         void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp);
+    }
+
+    /// <summary>
+    /// Provides a set of strategies that can be applied to a checkbox
+    /// depending on the environment
+    /// </summary>
+    public interface ICheckBoxMapperStrategy
+    {
+        /// <summary>
+        /// Adds click event handler.
+        /// <param name="mapper">The checkbox mapper</param>
+        void AddClickEventHandler(CheckBoxMapper mapper);
     }
 }

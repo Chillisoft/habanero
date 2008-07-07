@@ -28,6 +28,7 @@ namespace Habanero.UI.Base
     public class CheckBoxMapper : ControlMapper
     {
         private readonly ICheckBox _checkBox;
+        private ICheckBoxMapperStrategy _strategy;
 
         /// <summary>
         /// Constructor to create a new CheckBox mapper object
@@ -40,6 +41,8 @@ namespace Habanero.UI.Base
             : base(cb, propName, isReadOnly, factory)
         {
             _checkBox = cb;
+            _strategy = factory.CreateCheckBoxMapperStrategy();
+            _strategy.AddClickEventHandler(this);
         }
 
         /// <summary>
@@ -94,6 +97,11 @@ namespace Habanero.UI.Base
         public void ApplyChanges()
         {
             InternalUpdateControlValueFromBo();
+        }
+
+        public ICheckBoxMapperStrategy GetStrategy()
+        {
+            return _strategy;
         }
     }
 }

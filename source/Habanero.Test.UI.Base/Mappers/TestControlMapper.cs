@@ -20,9 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using Habanero.Test.BO;
 using Habanero.UI.Base;
 using NUnit.Framework;
 
@@ -524,9 +522,9 @@ namespace Habanero.Test.UI.Base
             MyBO testBo = new MyBO();
             ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp", false, GetControlFactory());
             mapperStub.BusinessObject = testBo;
+            mapperStub.TestSetPropertyValue("7");
 
             //---------------Assert Precondition----------------
-            mapperStub.TestSetPropertyValue("7");
             string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
             StringAssert.Contains("The value cannot be more than 5", errorMessage);
 
@@ -846,7 +844,6 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
         }
         #endregion //TestString
-
         #region LookupList
 
         [Test]
@@ -861,7 +858,7 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition---- ------------
 
             //---------------Execute Test ----------------------
-            mapperStub.TestSetPropertyValue("Text");
+            mapperStub.TestSetPropertyValue("1");
 
             //---------------Test Result -----------------------
             string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
@@ -869,23 +866,24 @@ namespace Habanero.Test.UI.Base
         }
 
         [Test]
-        public void TestCanSetIntProp_ValueItemInList()
+        public void TestCanSetGuidProp_ItemInList()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefWithSimpleIntegerLookup(); //valid values 1, 2, 3
+            MyBO.LoadClassDefWithLookup(); //valid values s1, s2
             MyBO testBo = new MyBO();
             ControlMapperStub mapperStub = new ControlMapperStub(_txtNormal, "TestProp2", false, GetControlFactory());
             mapperStub.BusinessObject = testBo;
             //---------------Assert Precondition---- ------------
 
             //---------------Execute Test ----------------------
-            mapperStub.TestSetPropertyValue("2");
+            mapperStub.TestSetPropertyValue("s1");
 
             //---------------Test Result -----------------------
             string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
         }
+
         [Test]
         public void TestCanSetIntProp_NullString_Compulsory()
         {
@@ -968,7 +966,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
         }
 
-        [Test, Ignore("To work on this")]
+        [Test, Ignore("Need to move tests to include BO lookups and then refactor.")]
         public void TestCanSetIntProp_ItemNotInList()
         {
             //---------------Set up test pack-------------------
@@ -1007,7 +1005,7 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage), "Should have no error. Error was : " + errorMessage);
         }
 
-        [Test]
+        [Test, Ignore("Need to move tests to include BO lookups and then refactor.")]
         public void Test_NotCanSetGuidToStringLookupValue_InvalidValue()
         {
             //---------------Set up test pack-------------------
@@ -1020,17 +1018,11 @@ namespace Habanero.Test.UI.Base
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            try
-            {
-                mapperStub.TestSetPropertyValue("invalid");
-                Assert.Fail("expected Err");
-            }
-                //---------------Test Result -----------------------
-            catch (HabaneroApplicationException ex)
-            {
-                StringAssert.Contains("this value does not exist in the lookup list", ex.Message);
-            }
+            mapperStub.TestSetPropertyValue("invalid");
 
+            //---------------Test Result -----------------------
+            string errorMessage = mapperStub.ErrorProvider.GetError(_txtNormal);
+            StringAssert.Contains("is not in list", errorMessage);
         }
         #endregion //LookupList
 
@@ -1046,50 +1038,6 @@ namespace Habanero.Test.UI.Base
             sh2.ShapeName = "Different2";
             _readOnlyMapper.UpdateControlValueFromBusinessObject();
             Assert.AreEqual("Different2", _txtReadonly.Text);
-        }
-
-        [Test]
-        public void Test_ReadWriteRule_WriteNew_StateNew()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDefWithUIDef_ReadWriteRule();
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            //---------------Execute Test ----------------------
-
-
-            //---------------Execute Test ----------------------
-            IPanelFactory panelFactory = new PanelFactory(cp, GetControlFactory());
-            IPanelFactoryInfo panelFactoryInfo = panelFactory.CreatePanel();
-            //---------------Test Result -----------------------
-            IControlMapperCollection mappers = panelFactoryInfo.ControlMappers;
-
-
-            Assert.IsTrue(mappers["Surname"].Control.Enabled);
-            Assert.IsFalse(mappers["FirstName"].Control.Enabled);
-        }
-
-        [Test]
-        public void Test_ReadWriteRule_WriteNew_StateNotNew()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDefWithUIDef_ReadWriteRule();
-            ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.Surname = Guid.NewGuid().ToString("N");
-            cp.Save();
-            //---------------Execute Test ----------------------
-
-
-            //---------------Execute Test ----------------------
-            IPanelFactory panelFactory = new PanelFactory(cp, GetControlFactory());
-            IPanelFactoryInfo panelFactoryInfo = panelFactory.CreatePanel();
-            //---------------Test Result -----------------------
-            IControlMapperCollection mappers = panelFactoryInfo.ControlMappers;
-
-
-            Assert.IsFalse(mappers["Surname"].Control.Enabled);
-            Assert.IsTrue(mappers["FirstName"].Control.Enabled);
         }
     }
 

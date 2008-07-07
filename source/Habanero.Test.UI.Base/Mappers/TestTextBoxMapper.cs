@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------
 // Copyright (C) 2007 Chillisoft Solutions
 // 
 // This file is part of the Habanero framework.
@@ -19,11 +19,13 @@
 
 
 using System;
+using System.Windows.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.UI.Base;
 using Habanero.UI.Win;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base
@@ -295,31 +297,52 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
-            public void TestValueInValidState_DelegateNullByDefault()
+            public void Test_TextBoxHasMapperStrategy()
             {
-                //---------------Set up test pack-------------------
-                _mapper.Control.Text = "";
-                //---------------Execute Test ----------------------
-
                 //---------------Test Result -----------------------
-                Assert.IsNull(_mapper.ValueIsInValidStateDelegate);
+                Assert.IsNotNull(_mapper.TextBoxMapperStrategy);
+            }
+
+            [Test]
+            public void Test_CorrectTextBoxMapperStrategy()
+            {
+                //---------------Execute Test ----------------------
+                ITextBoxMapperStrategy strategy = _mapper.TextBoxMapperStrategy;
+                //---------------Test Result -----------------------
+                Assert.AreSame(typeof(TextBoxMapperStrategyWin),strategy.GetType());
                 //---------------Tear down -------------------------
             }
 
-            //TODO complete value change handling
-            //  - in the textboxmapper.ApplyChangesToBusinessObject() method
-            //    need to check if delegate is not null and then call it
-            //  - if the value isn't in valid state, the setproperty must not
-            //    be called or an exception will occur
-            //    (a typical scenario is a user types . and then will type numbers
-            //    and the value is in an invalid state just after the dot)
-            //  - the strategy will need to assign the delegate
+            [Test]
+            public void Test_MapperStrategy_Returns_Correct_BoProp_WhenChangingBOs()
+            {
+                //---------------Set up test pack-------------------
+                ClassDef.ClassDefs.Clear();
+                MyBO.LoadClassDefWithIntegerRule();
+                MyBO myBo = new MyBO();
+                _mapper = new TextBoxMapper(_textBox, "TestProp2", false, GetControlFactory());
+                _mapper.BusinessObject = myBo;
+                _textBox.Name = "TestTextBox";
+                //---------------Assert pre-conditions--------------
+                Assert.AreEqual(_mapper.CurrentBOProp(), ((TextBoxMapperStrategyWin)_mapper.TextBoxMapperStrategy).BoProp);
+                Assert.AreEqual(_mapper.Control, ((TextBoxMapperStrategyWin)_mapper.TextBoxMapperStrategy).TextBoxControl);
+                //---------------Execute Test ----------------------
+                ClassDef.ClassDefs.Clear();
+                MyBO.LoadDefaultClassDef();
+                MyBO myNewBo = new MyBO();
+                _mapper.BusinessObject = myNewBo;
+                //---------------Test Result -----------------------
+                Assert.AreEqual(_mapper.CurrentBOProp(), ((TextBoxMapperStrategyWin)_mapper.TextBoxMapperStrategy).BoProp);
+                //---------------Tear down -------------------------
+            }
 
             private static BOProp CreateBOPropForType(Type type)
             {
                 PropDef propDef = new PropDef("Prop", type, PropReadWriteRule.ReadWrite, null);
                 return new BOProp(propDef);
             }
+
+           
         }
 
         [TestFixture]
@@ -331,22 +354,22 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-        private ITextBox _tb;
+        private ITextBox _textBox;
         private TextBoxMapper _mapper;
         private Shape _shape;
 
         [SetUp]
         public void SetupTest()
         {
-            _tb = GetControlFactory().CreateTextBox();
-            _mapper = new TextBoxMapper(_tb,  "ShapeName", false, GetControlFactory());
+            _textBox = GetControlFactory().CreateTextBox();
+            _mapper = new TextBoxMapper(_textBox,  "ShapeName", false, GetControlFactory());
             _shape = new Shape();
         }
 
         [Test]
         public void TestConstructor()
         {
-            Assert.AreSame(_tb, _mapper.Control);
+            Assert.AreSame(_textBox, _mapper.Control);
             Assert.AreSame("ShapeName", _mapper.PropertyName);
         }
 
@@ -362,7 +385,7 @@ namespace Habanero.Test.UI.Base
         {
             _shape.ShapeName = "TestShapeName";
             _mapper.BusinessObject = _shape;
-            Assert.AreEqual("TestShapeName", _tb.Text, "TextBox value is not set when bo is set.");
+            Assert.AreEqual("TestShapeName", _textBox.Text, "TextBox value is not set when bo is set.");
         }
 
 
@@ -376,9 +399,9 @@ namespace Habanero.Test.UI.Base
             Shape sh2 = new Shape();
             sh2.ShapeName = "Different";
             _mapper.BusinessObject = sh2;
-            Assert.AreEqual("Different", _tb.Text, "Setting to another bo doesn't work.");
+            Assert.AreEqual("Different", _textBox.Text, "Setting to another bo doesn't work.");
             _shape.ShapeName = "TestShapeName2";
-            Assert.AreEqual("Different", _tb.Text,
+            Assert.AreEqual("Different", _textBox.Text,
                             "Setting to another bo doesn't remove the property updating event handler of the first.");
         }
 
@@ -388,19 +411,19 @@ namespace Habanero.Test.UI.Base
         public void TestSettingTextBoxValueWhenBOIsNotSet()
         {
             _shape.ShapeName = "TestShapeName";
-            _tb.Text = "Changed";
+            _textBox.Text = "Changed";
             Assert.AreEqual("TestShapeName", _shape.ShapeName,
                             "BO property value shouldn't change since bo of mapper wasn't set.");
-            Assert.AreEqual("Changed", _tb.Text, "Textbox value shouldn't change.");
+            Assert.AreEqual("Changed", _textBox.Text, "Textbox value shouldn't change.");
         }
 
         [Test]
         public void TestDisplayingRelatedProperty()
         {
             SetupClassDefs("MyValue");
-            _mapper = new TextBoxMapper(_tb, "MyRelationship.MyRelatedTestProp", true, GetControlFactory());
+            _mapper = new TextBoxMapper(_textBox, "MyRelationship.MyRelatedTestProp", true, GetControlFactory());
             _mapper.BusinessObject = itsMyBo;
-            Assert.AreEqual("MyValue", _tb.Text);
+            Assert.AreEqual("MyValue", _textBox.Text);
         }
 
         [Test]
@@ -410,14 +433,14 @@ namespace Habanero.Test.UI.Base
             _mapper.BusinessObject = _shape;
             _shape.ShapeName = "TestShapeName2";
             _mapper.UpdateControlValueFromBusinessObject();
-            Assert.AreEqual("TestShapeName2", _tb.Text, "Text property of textbox is not working.");
+            Assert.AreEqual("TestShapeName2", _textBox.Text, "Text property of textbox is not working.");
         }
         [Test]
         public void TestSettingTextBoxValueUpdatesBO()
         {
             _shape.ShapeName = "TestShapeName";
             _mapper.BusinessObject = _shape;
-            _tb.Text = "Changed";
+            _textBox.Text = "Changed";
             _mapper.ApplyChangesToBusinessObject();
             Assert.AreEqual("Changed", _shape.ShapeName, "BO property value isn't changed when textbox text is changed.");
         }
