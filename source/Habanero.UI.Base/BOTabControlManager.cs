@@ -39,10 +39,8 @@ namespace Habanero.UI.Base
                 _boControl = value;
                 if (value is IControlChilli)
                 {
-                    //BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(TabControl);
-                    //manager.AddControl(value, BorderLayoutManager.Position.Centre);
-                    //((Control)_boControl).Dock = DockStyle.Fill;
-
+                    BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(TabControl);
+                    manager.AddControl(value, BorderLayoutManager.Position.Centre);
                 }
                 else
                 {

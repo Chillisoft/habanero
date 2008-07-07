@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BOColTabControlWin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="BorderLayoutManagerWin.cs" />
     <Compile Include="ButtonGroupControlWin.cs">
       <SubType>Component</SubType>
@@ -121,6 +124,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SplitterWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TabControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TextBoxWin.cs">

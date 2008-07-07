@@ -251,7 +251,7 @@ namespace Habanero.UI.Win
 
         public ITabControl CreateTabControl()
         {
-            throw new NotImplementedException();
+            return  new TabControlWin();
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace Habanero.UI.Win
 
         public IBOColTabControl CreateBOColTabControl()
         {
-            throw new NotImplementedException();
+            return new BOTabControlWin(this);
         }
 
         /// <summary>

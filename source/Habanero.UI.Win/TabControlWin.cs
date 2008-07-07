@@ -1,40 +1,40 @@
-using Gizmox.WebGUI.Forms;
+using System.Windows.Forms;
 using Habanero.UI.Base;
 
-namespace Habanero.UI.WebGUI
+namespace Habanero.UI.Win
 {
-    public class TabControlGiz : TabControl, ITabControl
+    public class TabControlWin : TabControl, ITabControl
     {
         IControlCollection IControlChilli.Controls
         {
-            get { return new ControlCollectionGiz(base.Controls); }
+            get { return new ControlCollectionWin(base.Controls); }
         }
 
         //TODO: Convert dockstyles between Giz windows etc
 
         public new ITabPageCollection TabPages
         {
-            get { return new TabPageCollectionGiz(base.TabPages); }
+            get { return new TabPageCollectionWin(base.TabPages); }
         }
 
         public ITabPage SelectedTab
         {
-            get { return  (ITabPage) TabPages[base.SelectedIndex]; }
+            get { return (ITabPage)TabPages[base.SelectedIndex]; }
         }
     }
 
-    internal class TabPageCollectionGiz : ITabPageCollection
+    internal class TabPageCollectionWin : ITabPageCollection
     {
-        private readonly TabPageCollection _tabPages;
+        private readonly TabControl.TabPageCollection _tabPages;
 
-        public TabPageCollectionGiz(TabPageCollection tabPages)
+        public TabPageCollectionWin(TabControl.TabPageCollection tabPages)
         {
             _tabPages = tabPages;
         }
 
         public void Add(ITabPage page)
         {
-            _tabPages.Add((TabPage) page);
+            _tabPages.Add((TabPage)page);
         }
 
         public ITabPage this[int i]
