@@ -58,7 +58,7 @@ namespace Habanero.BO
         /// This method adds an ITransactional to the list of transactions.
         ///</summary>
         ///<param name="transaction"></param>
-        protected internal void AddTransaction(ITransactional transaction)
+        public void AddTransaction(ITransactional transaction)
         {
             _originalTransactions.Add(transaction);
         }
