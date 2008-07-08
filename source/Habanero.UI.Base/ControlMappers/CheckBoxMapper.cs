@@ -28,7 +28,7 @@ namespace Habanero.UI.Base
     public class CheckBoxMapper : ControlMapper
     {
         private readonly ICheckBox _checkBox;
-        private ICheckBoxMapperStrategy _strategy;
+        private readonly ICheckBoxMapperStrategy _strategy;
 
         /// <summary>
         /// Constructor to create a new CheckBox mapper object
