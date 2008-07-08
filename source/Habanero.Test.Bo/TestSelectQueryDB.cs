@@ -331,6 +331,22 @@ namespace Habanero.Test.BO
             StringAssert.Contains("JOIN [Shape] ON [Circle].[CircleID] = [Shape].[ShapeID]", statement.Statement.ToString());
         }
 
+        [Test]
+        public void TestClassTableInheritanceHierarchy_Join()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef filledCircleClassDef = FilledCircle.GetClassDefWithClassInheritanceHierarchy();
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(filledCircleClassDef);
+            SelectQueryDB query = new SelectQueryDB(selectQuery);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            ISqlStatement statement = query.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            StringAssert.Contains("JOIN [Circle] ON [FilledCircle].[FilledCircleID] = [Circle].[CircleID]" + 
+                " JOIN [Shape] ON [Circle].[CircleID] = [Shape].[ShapeID]", statement.Statement.ToString());
+        }
+
         public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnection
         {
             public DatabaseConnectionStub_LimitClauseAtEnd()

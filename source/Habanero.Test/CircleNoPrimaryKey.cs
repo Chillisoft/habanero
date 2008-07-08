@@ -17,6 +17,7 @@
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
 
+using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 
@@ -73,5 +74,13 @@ namespace Habanero.Test
             return circleClassDef;
         }
 
+        public static CircleNoPrimaryKey CreateSavedCircle()
+        {
+            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+            circle.Radius = 10;
+            circle.ShapeName = Guid.NewGuid().ToString();
+            circle.Save();
+            return circle;
+        }
     }
 }

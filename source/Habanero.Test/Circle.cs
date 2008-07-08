@@ -86,5 +86,14 @@ namespace Habanero.Test
             return circleClassDef;
         
         }
+
+        public static Circle CreateSavedCircle()
+        {
+            Circle circle = new Circle();
+            circle.Radius = 10;
+            circle.ShapeName = Guid.NewGuid().ToString();
+            circle.Save();
+            return circle;
+        }
     }
 }

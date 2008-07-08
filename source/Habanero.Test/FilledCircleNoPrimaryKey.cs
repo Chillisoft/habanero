@@ -31,13 +31,13 @@ namespace Habanero.Test
 
         public static ClassDef GetClassDef()
         {
-            if (!ClassDef.IsDefined(typeof (FilledCircleNoPrimaryKey)))
+            if (!ClassDef.IsDefined(typeof(FilledCircleNoPrimaryKey)))
             {
                 return CreateClassDef();
             }
             else
             {
-                return ClassDef.ClassDefs[typeof (FilledCircleNoPrimaryKey)];
+                return ClassDef.ClassDefs[typeof(FilledCircleNoPrimaryKey)];
             }
         }
 
@@ -51,7 +51,7 @@ namespace Habanero.Test
         {
             PropDefCol lPropDefCol = new PropDefCol();
             PropDef propDef =
-                new PropDef("Colour", typeof (int), PropReadWriteRule.ReadWrite, "Colour", null);
+                new PropDef("Colour", typeof(int), PropReadWriteRule.ReadWrite, "Colour", null);
             lPropDefCol.Add(propDef);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
@@ -67,5 +67,31 @@ namespace Habanero.Test
             get { return (Int32?)GetPropertyValue("Colour"); }
             set { SetPropertyValue("Colour", value); }
         }
+
+        public static ClassDef GetClassDefWithSingleInheritanceHierarchy()
+        {
+            ClassDef shapeClassDef = Shape.GetClassDef();
+            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDef();
+            circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.SingleTableInheritance);
+            circleClassDef.SuperClassDef.Discriminator = "ShapeType";
+            ClassDef filledCircleClassDef = GetClassDef();
+            filledCircleClassDef.SuperClassDef = new SuperClassDef(circleClassDef, ORMapping.SingleTableInheritance);
+            filledCircleClassDef.SuperClassDef.Discriminator = "ShapeType";
+            return filledCircleClassDef;
+        }
+
+        public static FilledCircleNoPrimaryKey CreateSavedFilledCircle()
+        {
+
+            FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey();
+            filledCircle.ShapeName = Guid.NewGuid().ToString();
+            filledCircle.Colour = 1;
+            filledCircle.Radius = 10;
+            filledCircle.Save();
+            return filledCircle;
+
+        }
+
+
     }
 }

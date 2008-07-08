@@ -128,6 +128,46 @@ namespace Habanero.Test.BO
                 //---------------Tear Down -------------------------
             }
 
+
+            [Test]
+            public void TestLoadWithSingleTableInheritance_NotInAllLoaded()
+            {
+                //---------------Set up test pack-------------------
+                CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+                circle.Radius = 10;
+                circle.ShapeName = Guid.NewGuid().ToString();
+                circle.Save();
+                BusinessObject.AllLoadedBusinessObjects().Clear();
+                //---------------Execute Test ----------------------
+                CircleNoPrimaryKey loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(circle.ID);
+                //---------------Test Result -----------------------
+
+                Assert.AreNotSame(loadedCircle, circle);
+                Assert.AreEqual(loadedCircle.Radius, circle.Radius);
+                Assert.AreEqual(loadedCircle.ShapeName, circle.ShapeName);
+            }
+
+
+
+            [Test]
+            public void TestLoadWithClassTableInheritance_NotInAllLoaded()
+            {
+                //---------------Set up test pack-------------------
+                Circle.GetClassDef();
+                Circle circle = new Circle();
+                circle.Radius = 10;
+                circle.ShapeName = Guid.NewGuid().ToString();
+                circle.Save();
+                BusinessObject.AllLoadedBusinessObjects().Clear();
+                //---------------Execute Test ----------------------
+                Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
+
+                //---------------Test Result -----------------------
+                Assert.AreNotSame(loadedCircle, circle);
+                Assert.AreEqual(loadedCircle.Radius, circle.Radius);
+                Assert.AreEqual(loadedCircle.ShapeName, circle.ShapeName);
+            }
         }
 
         [Test]
@@ -772,14 +812,11 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestLoadWithSingleTableInheritance()
+        public void TestLoadWithSingleTableInheritance_InAllLoaded()
         {
             //---------------Set up test pack-------------------
             CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
-            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
-            circle.Radius = 10;
-            circle.ShapeName = Guid.NewGuid().ToString();
-            circle.Save();
+            CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
 
             //---------------Execute Test ----------------------
             CircleNoPrimaryKey loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(circle.ID);
@@ -788,16 +825,56 @@ namespace Habanero.Test.BO
             Assert.AreSame(loadedCircle, circle);
         }
 
+ 
+
         [Test]
-        public void TestLoadWithClassTableInheritance()
+        public void TestLoadWithSingleTableInheritanceHierarchy()
+        {
+            //---------------Set up test pack-------------------
+            FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
+            FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
+            //---------------Execute Test ----------------------
+            FilledCircleNoPrimaryKey loadedFilledCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircleNoPrimaryKey>(filledCircle.ID);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(loadedFilledCircle, filledCircle);
+            //---------------Tear Down -------------------------
+        }
+
+   
+
+        [Test]
+        public void TestLoadWithClassTableInheritance_InAllLoaded()
         {
             //---------------Set up test pack-------------------
             Circle.GetClassDef();
-            Circle circle = new Circle();
-            circle.Radius = 10;
-            circle.ShapeName = Guid.NewGuid().ToString();
-            circle.Save();
-            //---------------Assert Precondition----------------
+            Circle circle = Circle.CreateSavedCircle();
+            //---------------Execute Test ----------------------
+            Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(loadedCircle, circle);
+        }
+
+        [Test]
+        public void TestLoadWithClassTableInheritanceHierarchy()
+        {
+            //---------------Set up test pack-------------------
+            FilledCircle.GetClassDefWithClassInheritanceHierarchy();
+            FilledCircle filledCircle = FilledCircle.CreateSavedFilledCircle();
+            //---------------Execute Test ----------------------
+            FilledCircle loadedFilledCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircle>(filledCircle.ID);
+
+            //---------------Test Result -----------------------
+            Assert.AreSame(loadedFilledCircle, filledCircle);
+        }
+        
+        [Test]
+        public void TestLoadWithConcreteTableInheritance()
+        {
+            //---------------Set up test pack-------------------
+            Circle.GetClassDefWithConcreteTableInheritance();
+            Circle circle = Circle.CreateSavedCircle();
 
             //---------------Execute Test ----------------------
             Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
@@ -807,21 +884,16 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void TestLoadWithConcreteTableInheritance()
+        public void TestLoadWithConcreteTableInheritanceHierarchy()
         {
             //---------------Set up test pack-------------------
-            Circle.GetClassDefWithConcreteTableInheritance();
-            Circle circle = new Circle();
-            circle.Radius = 10;
-            circle.ShapeName = Guid.NewGuid().ToString();
-            circle.Save();
-            //---------------Assert Precondition----------------
-
+            FilledCircle.GetClassDefWithConcreteInheritanceHierarchy();
+            FilledCircle filledCircle = FilledCircle.CreateSavedFilledCircle();
             //---------------Execute Test ----------------------
-            Circle loadedCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
+            FilledCircle loadedFilledCircle = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<FilledCircle>(filledCircle.ID);
 
             //---------------Test Result -----------------------
-            Assert.AreSame(loadedCircle, circle);
+            Assert.AreSame(loadedFilledCircle, filledCircle);
         }
     }
 

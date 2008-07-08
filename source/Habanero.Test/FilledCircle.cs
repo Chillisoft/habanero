@@ -76,5 +76,36 @@ namespace Habanero.Test
             get { return (Int32?)GetPropertyValue("Colour"); }
             set { SetPropertyValue("Colour", value); }
         }
+
+        public static ClassDef GetClassDefWithClassInheritanceHierarchy()
+        {
+            ClassDef shapeClassDef = Shape.GetClassDef();
+            ClassDef circleClassDef = Circle.GetClassDef();
+            circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.ClassTableInheritance);
+            ClassDef filledCircleClassDef = GetClassDef();
+            filledCircleClassDef.SuperClassDef = new SuperClassDef(circleClassDef, ORMapping.ClassTableInheritance);
+            return filledCircleClassDef;
+        }
+
+        public static FilledCircle CreateSavedFilledCircle()
+        {
+
+            FilledCircle filledCircle = new FilledCircle();
+            filledCircle.ShapeName = Guid.NewGuid().ToString();
+            filledCircle.Colour = 1;
+            filledCircle.Radius = 10;
+            filledCircle.Save();
+            return filledCircle;
+
+        }
+
+        public static ClassDef GetClassDefWithConcreteInheritanceHierarchy()
+        {
+            ClassDef circleClassDef = Circle.GetClassDefWithConcreteTableInheritance();
+            ClassDef filledCircleClassDef = GetClassDef();
+            filledCircleClassDef.TableName = "filledcircle_concrete";
+            filledCircleClassDef.SuperClassDef = new SuperClassDef(circleClassDef, ORMapping.ConcreteTableInheritance);
+            return filledCircleClassDef;
+        }
     }
 }

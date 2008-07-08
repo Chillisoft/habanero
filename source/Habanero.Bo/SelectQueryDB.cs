@@ -136,15 +136,16 @@ namespace Habanero.BO
         private void AppendFrom(StringBuilder builder)
         {
             builder.AppendFormat(" FROM {0}", DelimitTable(_selectQuery.Source));
-            ClassDef classDef = (ClassDef) _selectQuery.ClassDef;
-            if (classDef != null && classDef.IsUsingClassTableInheritance())
+            ClassDef currentClassDef = (ClassDef) _selectQuery.ClassDef;
+            while (currentClassDef != null && currentClassDef.IsUsingClassTableInheritance())
             {
-                ClassDef superClassClassDef = classDef.SuperClassClassDef;
+                ClassDef superClassClassDef = currentClassDef.SuperClassClassDef;
                 IPropDef superClassPropDef = superClassClassDef.GetPrimaryKeyDef()[0];
-                IPropDef thisClassPropDef = classDef.GetPrimaryKeyDef()[0];
+                IPropDef thisClassPropDef = currentClassDef.GetPrimaryKeyDef()[0];
                 builder.Append(
-                    GetJoinString("", classDef.GetTableName(), thisClassPropDef.DatabaseFieldName,
+                    GetJoinString("", currentClassDef.GetTableName(), thisClassPropDef.DatabaseFieldName,
                         superClassClassDef.GetTableName(), superClassPropDef.DatabaseFieldName));
+                currentClassDef = currentClassDef.SuperClassClassDef;
             }
         }
 
