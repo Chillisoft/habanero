@@ -262,7 +262,8 @@ namespace Habanero.BO
             int i = 0;
             foreach (QueryField field in selectQuery.Fields.Values)
             {
-                if (bo1.Props.Contains(field.PropertyName)) bo1.Props[field.PropertyName].InitialiseProp(dr[i++]);
+                if (bo1.Props.Contains(field.PropertyName)) bo1.Props[field.PropertyName].InitialiseProp(dr[i]);
+                i++;
             }
    
             T boFromAllLoadedObjects = null;
