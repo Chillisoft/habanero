@@ -34,7 +34,7 @@ namespace Habanero.UI.Base
         private readonly IComboBox _comboBox;
         private readonly IControlFactory _controlFactory;
         private IBusinessObjectCollection _collection;
-        //TODO _Port: private ComboBoxRightClickController _comboBoxRightClickController;
+        //private ComboBoxRightClickController _comboBoxRightClickController;
 
 
         /// <summary>

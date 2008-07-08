@@ -31,15 +31,7 @@ namespace Habanero.UI.Base
     /// </summary>
     public class TextBoxMapper : ControlMapper
     {
-        public override BusinessObject BusinessObject
-        {
-            get { return base.BusinessObject; }
-            set
-            {
-                base.BusinessObject = value;
-                TextBoxMapperStrategy.AddKeyPressEventHandler(this, base.CurrentBOProp());
-            }
-        }
+      
 
         private readonly ITextBox _textBox;
         private string _oldText;
@@ -68,6 +60,15 @@ namespace Habanero.UI.Base
             get { return _textBoxMapperStrategy; }
         }
 
+        public override BusinessObject BusinessObject
+        {
+            get { return base.BusinessObject; }
+            set
+            {
+                base.BusinessObject = value;
+                TextBoxMapperStrategy.AddKeyPressEventHandler(this, base.CurrentBOProp());
+            }
+        }
 
         ///// <summary>
         ///// A handler to carry out changes to the business object when the

@@ -87,10 +87,11 @@ namespace Habanero.Test.UI.Base
                 //---------------Execute Test ----------------------
                 frm.Show();
                 CheckBoxTester box = new CheckBoxTester("TestCheckBox");
+                box.Click();
                 box.Check();
                 //---------------Test Result -----------------------
                 Assert.IsTrue(_cb.Checked);
-              //  Assert.IsTrue(_sampleBusinessObject.SampleBoolean);
+                Assert.IsTrue(_sampleBusinessObject.SampleBoolean);
                 //---------------Tear down -------------------------
             }
             private Form AddControlToForm(IControlChilli parentControl)

@@ -291,6 +291,7 @@ namespace Habanero.UI.Base
 
         IFormChilli CreateForm();
         ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy();
+        IListComboBoxMapperStrategy CreateListComboBoxMapperStrategy();
     }
 
     /// <summary>
@@ -352,6 +353,16 @@ namespace Habanero.UI.Base
         /// <summary>
         /// Adds click event handler.
         /// <param name="mapper">The checkbox mapper</param>
+        /// </summary>
         void AddClickEventHandler(CheckBoxMapper mapper);
+    }
+
+    public interface IListComboBoxMapperStrategy
+    {
+        /// <summary>
+        /// Adds Item selected event handler. For Windows we want the Business to be updated immediately, however
+        /// for Web environment with low bandwidth we may choose to only update when the user saves.
+        ///</summary>
+        void AddItemSelectedEventHandler(ListComboBoxMapper mapper);
     }
 }

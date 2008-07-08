@@ -380,6 +380,11 @@ namespace Habanero.UI.Win
             return new CheckBoxStrategyWin();
         }
 
+        public IListComboBoxMapperStrategy CreateListComboBoxMapperStrategy()
+        {
+            return new ListComboBoxMapperStrategyWin();
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();
@@ -540,6 +545,23 @@ namespace Habanero.UI.Win
         }
     }
 
+    internal class ListComboBoxMapperStrategyWin : IListComboBoxMapperStrategy
+    {
+        public void AddItemSelectedEventHandler(ListComboBoxMapper mapper)
+        {
+            IControlChilli control = mapper.Control;
+            if(control is IComboBox)
+            {
+                ComboBoxWin comboBoxWin = (ComboBoxWin) control;
+                comboBoxWin.SelectedIndexChanged+=delegate(object sender, EventArgs e)
+                {
+                    mapper.ApplyChangesToBusinessObject();
+                    mapper.UpdateControlValueFromBusinessObject();
+                };
+            }
+        }
+    }
+
     /// <summary>
     /// Provides a set of strategies that can be applied to a textbox
     /// </summary>
@@ -647,8 +669,8 @@ namespace Habanero.UI.Win
                 CheckBoxWin checkBox = (CheckBoxWin)mapper.Control;
                 checkBox.Click+=delegate(object sender, EventArgs e)
                 {
-                    mapper.ApplyChanges();
                     mapper.ApplyChangesToBusinessObject();
+                    mapper.ApplyChanges();
                 };
 
             }

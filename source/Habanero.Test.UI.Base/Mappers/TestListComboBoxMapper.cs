@@ -21,55 +21,56 @@ namespace Habanero.Test.UI.Base
             }
         }
 
-    [TestFixture]
-    public class TestListComboBoxMapperWin : TestListComboBoxMapper
-    {
-        protected override IControlFactory GetControlFactory()
+        [TestFixture]
+        public class TestListComboBoxMapperWin : TestListComboBoxMapper
         {
-            return new ControlFactoryWin();
+            //TODO : Write Tests For the Strategy. Only windows Strategy.
+            protected override IControlFactory GetControlFactory()
+            {
+                return new ControlFactoryWin();
+            }
+
+            [Test]
+            public void TestChangeBusinessObjectUpdatesComboBox()
+            {
+                //---------------Set up test pack-------------------
+                IComboBox cbx = GetControlFactory().CreateComboBox();
+                string propName = "SampleText";
+                ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
+                mapper.SetList("One|Two|Three|Four");
+                Sample s = new Sample();
+                s.SampleText = "Three";
+                mapper.BusinessObject = s;
+                //---------------Execute Test ----------------------
+                s.SampleText = "Four";
+                mapper.UpdateControlValueFromBusinessObject();
+                //---------------Test Result -----------------------
+                Assert.AreEqual("Four", cbx.SelectedItem, "Value is not set.");
+                //---------------Tear Down -------------------------
+            }
+
+            [Test]
+            public void TestSetComboBoxUpdatesBO()
+            {
+                //---------------Set up test pack-------------------
+                IComboBox cbx = GetControlFactory().CreateComboBox();
+                string propName = "SampleText";
+                ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
+                mapper.SetList("One|Two|Three|Four");
+                Sample s = new Sample();
+                s.SampleText = "Three";
+                mapper.BusinessObject = s;
+                //---------------Execute Test ----------------------
+                cbx.SelectedIndex = 0;
+                mapper.ApplyChangesToBusinessObject();
+                //---------------Test Result -----------------------
+                Assert.AreEqual(cbx.SelectedItem, s.SampleText,
+                    "BO property value isn't changed when control value is changed.");
+
+                //---------------Tear Down -------------------------
+            }
         }
-        [Test]
-        public void TestChangeBusinessObjectUpdatesComboBox()
-        {
-            //---------------Set up test pack-------------------
-            IComboBox cbx = GetControlFactory().CreateComboBox();
-            string propName = "SampleText";
-            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
-            mapper.SetList("One|Two|Three|Four");
-            Sample s = new Sample();
-            s.SampleText = "Three";
-            mapper.BusinessObject = s;
-            //---------------Execute Test ----------------------
-            s.SampleText = "Four";
-            mapper.UpdateControlValueFromBusinessObject();
-            //---------------Test Result -----------------------
-            Assert.AreEqual("Four", cbx.SelectedItem, "Value is not set.");
-            //---------------Tear Down -------------------------
-        }
 
-        [Test]
-        public void TestSetComboBoxUpdatesBO()
-        {
-            //---------------Set up test pack-------------------
-            IComboBox cbx = GetControlFactory().CreateComboBox();
-            string propName = "SampleText";
-            ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
-            mapper.SetList("One|Two|Three|Four");
-            Sample s = new Sample();
-            s.SampleText = "Three";
-            mapper.BusinessObject = s;
-            //---------------Execute Test ----------------------
-            cbx.SelectedIndex = 0;
-            mapper.ApplyChangesToBusinessObject();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(cbx.SelectedItem, s.SampleText, "BO property value isn't changed when control value is changed.");
-
-            //---------------Tear Down -------------------------
-        }
-    }
-
-
-       
 
         [Test]
         public void TestConstructor()
@@ -99,7 +100,7 @@ namespace Habanero.Test.UI.Base
             mapper.SetList("One|Two|Three|Four");
             //---------------Test Result -----------------------
             Assert.AreEqual(4, cbx.Items.Count);
-            Assert.AreSame(typeof(string), cbx.Items[0].GetType());
+            Assert.AreSame(typeof (string), cbx.Items[0].GetType());
             Assert.IsTrue(cbx.Items.Contains("Two"));
             //---------------Tear Down -------------------------
         }
@@ -118,7 +119,7 @@ namespace Habanero.Test.UI.Base
             mapper.BusinessObject = s;
             //---------------Test Result -----------------------
             Assert.AreEqual("Three", cbx.SelectedItem, "Value is not set.");
-           
+
             //---------------Tear Down -------------------------
         }
 
@@ -137,11 +138,10 @@ namespace Habanero.Test.UI.Base
             cbx.SelectedIndex = 0;
             mapper.ApplyChangesToBusinessObject();
             //---------------Test Result -----------------------
-            Assert.AreEqual(cbx.SelectedItem, s.SampleText, "BO property value isn't changed when control value is changed.");
+            Assert.AreEqual(cbx.SelectedItem, s.SampleText,
+                "BO property value isn't changed when control value is changed.");
 
             //---------------Tear Down -------------------------
         }
-
- 
     }
 }

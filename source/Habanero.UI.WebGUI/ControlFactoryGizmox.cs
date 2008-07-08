@@ -332,6 +332,11 @@ namespace Habanero.UI.WebGUI
             return new CheckBoxMapperStrategyGiz();
         }
 
+        public IListComboBoxMapperStrategy CreateListComboBoxMapperStrategy()
+        {
+            return new ListComboBoxMapperStrategyGiz();
+        }
+
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years
@@ -600,6 +605,13 @@ namespace Habanero.UI.WebGUI
         public virtual IWizardControl CreateWizardControl(IWizardController wizardController)
         {
             return new WizardControlGiz(wizardController, this);
+        }
+    }
+
+    internal class ListComboBoxMapperStrategyGiz : IListComboBoxMapperStrategy
+    {
+        public void AddItemSelectedEventHandler(ListComboBoxMapper mapper)
+        {
         }
     }
 
