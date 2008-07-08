@@ -374,9 +374,6 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-
-
-        
         [Test]
         public void TestFixBug_SearchGridSearchesTheGrid_DoesNotCallFilterOnGridbase()
         {
@@ -1257,10 +1254,10 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
 
             Assert.IsFalse(objectDeletor.HasBeenCalled);
-
-            //---------------Tear Down -------------------------          
+      
         }
 
+        //These cannot be tested in Giz since they are now raising messages to test in windows using NUnitForms
 //        [Test]
 //        public void TestClickAddWhenNoCollectionSet()
 //        {

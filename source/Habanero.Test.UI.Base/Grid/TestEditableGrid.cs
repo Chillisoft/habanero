@@ -5,6 +5,7 @@ using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Test.BO;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
@@ -87,12 +88,14 @@ namespace Habanero.Test.UI.Base
                 Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewTextBoxColumn), 
                     dataGridViewColumnGiz.DataGridViewColumn);
             }
+
             protected override void AssertIsCheckBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz)dataGridViewColumn;
                 Assert.IsInstanceOfType(typeof(Gizmox.WebGUI.Forms.DataGridViewCheckBoxColumn),
                     dataGridViewColumnGiz.DataGridViewColumn);
             }
+
             protected override void AssertIsComboBoxColumnType(IDataGridViewColumn dataGridViewColumn)
             {
                 DataGridViewColumnGiz dataGridViewColumnGiz = (DataGridViewColumnGiz)dataGridViewColumn;
@@ -215,6 +218,7 @@ namespace Habanero.Test.UI.Base
             IEditableGrid grid = GetControlFactory().CreateEditableGrid();
             IDataGridViewColumn dataGridViewColumnSetup = GetControlFactory().CreateDataGridViewCheckBoxColumn();
             SetupGridColumnsForMyBo(grid,dataGridViewColumnSetup);
+
             //--------------Assert PreConditions----------------            
             Assert.AreEqual(1, grid.Columns.Count);
             Assert.AreEqual(1, classDef.UIDefCol.Count);
@@ -253,83 +257,7 @@ namespace Habanero.Test.UI.Base
             AssertIsComboBoxColumnType(dataGridViewColumn);    
         }
 
-        [Test]
-        public void TestSetupComboBoxFromClassDef()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1ComboBoxColumn();
-            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
-            GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
-
-            //--------------Assert PreConditions----------------            
-            Assert.AreEqual(0, gridControl.Grid.Columns.Count);
-            Assert.AreEqual(1, classDef.UIDefCol.Count);
-            string uiDefName = "default";
-            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
-            Assert.IsNotNull(uiGridDef);
-            Assert.AreEqual(1, uiGridDef.Count);
-            
-            //---------------Execute Test ----------------------
-            gridInitialiser.InitialiseGrid(classDef, uiDefName);
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, gridControl.Grid.Columns.Count, "Should have ID column and should have comboBoxColumn");
-            IDataGridViewColumn dataGridViewColumn = gridControl.Grid.Columns[1];
-            AssertIsComboBoxColumnType(dataGridViewColumn);
-        }
-        //TODO: Combo Fill with items as per classdef.
-        [Test]
-        public void TestSetupColumnAsTextBoxType_FromClassDef()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1TextboxColumn();
-            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
-            GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
-
-            //--------------Assert PreConditions----------------            
-            Assert.AreEqual(0, gridControl.Grid.Columns.Count);
-            Assert.AreEqual(1, classDef.UIDefCol.Count);
-            string uiDefName = "default";
-            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
-            Assert.IsNotNull(uiGridDef);
-            Assert.AreEqual(1, uiGridDef.Count);
-
-            //---------------Execute Test ----------------------
-            gridInitialiser.InitialiseGrid(classDef, uiDefName);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, gridControl.Grid.Columns.Count, "Should have ID column and should have textBoxColumn");
-            IDataGridViewColumn dataGridViewColumn = gridControl.Grid.Columns[1];
-            AssertIsTextBoxColumnType(dataGridViewColumn);
-            //---------------Tear Down -------------------------        
-        }
-
-        [Test]
-        public void TestSetupColumnAsCheckBoxType_FromClassDef()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef classDef = MyBO.LoadClassDefWith_Grid_1CheckBoxColumn();
-            IEditableGridControl gridControl = GetControlFactory().CreateEditableGridControl();
-            GridInitialiser gridInitialiser = new GridInitialiser(gridControl, GetControlFactory());
-
-            //--------------Assert PreConditions----------------            
-            Assert.AreEqual(0, gridControl.Grid.Columns.Count);
-            Assert.AreEqual(1, classDef.UIDefCol.Count);
-            string uiDefName = "default";
-            UIGrid uiGridDef = classDef.UIDefCol[uiDefName].UIGrid;
-            Assert.IsNotNull(uiGridDef);
-            Assert.AreEqual(1, uiGridDef.Count);
-
-            //---------------Execute Test ----------------------
-            gridInitialiser.InitialiseGrid(classDef, uiDefName);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, gridControl.Grid.Columns.Count, "Should have ID column and should have checkBoxColumn");
-            IDataGridViewColumn dataGridViewColumn = gridControl.Grid.Columns[1];
-            AssertIsCheckBoxColumnType(dataGridViewColumn);
-            //---------------Tear Down -------------------------        
-        }
-
-
-        private IBusinessObjectCollection GetCol_BO_1ComboBoxItem(ClassDef classDef)
+        private static IBusinessObjectCollection GetCol_BO_1ComboBoxItem(ClassDef classDef)
         {
             IBusinessObjectCollection col = new BusinessObjectCollection<BusinessObject>(classDef);
             IBusinessObject bo1 = classDef.CreateNewBusinessObject();
