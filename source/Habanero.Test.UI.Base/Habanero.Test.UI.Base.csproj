@@ -96,7 +96,6 @@
     <Compile Include="LayoutManager\TestColumnLayoutManager.cs" />
     <Compile Include="LayoutManager\TestGridLayoutManager.cs" />
     <Compile Include="Mappers\TestCollectionTabControlMapper.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Mappers\TestComboBoxCollectionController.cs" />
     <Compile Include="Mappers\TestControlMapperStrategyWin.cs" />

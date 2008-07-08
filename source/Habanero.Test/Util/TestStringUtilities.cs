@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Specialized;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 using NUnit.Framework;
@@ -77,11 +78,11 @@ namespace Habanero.Test.Util
         public void TestIdNumberUtilities()
         {
             new IdNumberUtilities();
-            DateTime testDate = new DateTime(2007,1,1);
+            DateTime testDate = new DateTime(2007, 1, 1);
             Assert.AreEqual(testDate, IdNumberUtilities.GetDateOfBirth("070101"));
         }
 
-        [Test, ExpectedException(typeof(FormatException))]
+        [Test, ExpectedException(typeof (FormatException))]
         public void TestIdNumberUtilitiesException()
         {
             DateTime testDate = new DateTime(2007, 1, 1);
@@ -104,9 +105,10 @@ namespace Habanero.Test.Util
             GuidTryParseExpectation("(CA761232-ED42-11CE-BACD-00AA0057B223)", true);
 
             // {0xdddddddd, 0xdddd, 0xdddd,{0xdd,0xdd,0xdd,0xdd,0xdd,0xdd,0xdd,0xdd}}
-            GuidTryParseExpectation("{0xCA761232, 0xED42, 0x11CE, {0xBA, 0xCD, 0x00, 0xAA, 0x00, 0x57, 0xB2, 0x23}}", true);
+            GuidTryParseExpectation
+                ("{0xCA761232, 0xED42, 0x11CE, {0xBA, 0xCD, 0x00, 0xAA, 0x00, 0x57, 0xB2, 0x23}}", true);
             GuidTryParseExpectation("{0xA,0xA,0xA,{0xA,0xA,0xA,0xA,0xA,0xA,0xA,0xA}}", true);
-			
+
             // Expecting Failure
             GuidTryParseExpectation("testfail", false);
             GuidTryParseExpectation("123456", false);
@@ -124,7 +126,8 @@ namespace Habanero.Test.Util
             GuidTryParseExpectation("CA761232-ED42-11CE-BACD-00AA0057B22Z", false);
             GuidTryParseExpectation("{CA761232-ED42-11CE-BACD-00AA0057B22Z}", false);
             GuidTryParseExpectation("(CA761232-ED42-11CE-BACD-00AA0057B22Z)", false);
-            GuidTryParseExpectation("{0xCA761232, 0xED42, 0x11CE, {0xBA, 0xCD, 0x00, 0xAA, 0x00, 0x57, 0xB2, 0x2Z}}", false);
+            GuidTryParseExpectation
+                ("{0xCA761232, 0xED42, 0x11CE, {0xBA, 0xCD, 0x00, 0xAA, 0x00, 0x57, 0xB2, 0x2Z}}", false);
             GuidTryParseExpectation("{0xA,0xA,0xA,{0xA,0xA,0xA,0xA,0xA,0xA,0xA,0xZ}}", false);
         }
 
@@ -138,11 +141,12 @@ namespace Habanero.Test.Util
                 Assert.IsTrue(isValid, "Parsing should succeed");
             else
                 Assert.IsFalse(isValid, "Parsing should fail");
-            try 
+            try
             {
                 resultValue = new Guid(testString);
                 Assert.IsTrue(expectingSuccess, "Conversion using constructor should succeed");
-            } catch(Exception)
+            }
+            catch (Exception)
             {
                 Assert.IsFalse(expectingSuccess, "Conversion using constructor should fail");
                 resultValue = Guid.Empty;
@@ -177,7 +181,7 @@ namespace Habanero.Test.Util
             Assert.AreEqual("", StringUtilities.GetLeftSection(test, "abcdef"));
         }
 
-        [Test, ExpectedException(typeof(UserException))]
+        [Test, ExpectedException(typeof (UserException))]
         public void TestGetLeftSectionException()
         {
             string test = "abcdef";
@@ -194,7 +198,7 @@ namespace Habanero.Test.Util
             Assert.AreEqual("", StringUtilities.GetRightSection(test, "abcdef"));
         }
 
-        [Test, ExpectedException(typeof(UserException))]
+        [Test, ExpectedException(typeof (UserException))]
         public void TestGetRightSectionException()
         {
             string test = "abcdef";
@@ -222,6 +226,95 @@ namespace Habanero.Test.Util
             Assert.AreEqual(2, StringUtilities.CountOccurrences(test, "'"));
             Assert.AreEqual(1, StringUtilities.CountOccurrences(test, "?"));
             Assert.AreEqual(0, StringUtilities.CountOccurrences(test, "#"));
+        }
+
+        [Test]
+        public void Test_TestGetUserID()
+        {
+            //---------------Set up test pack-------------------
+            string strCookieString =
+                "FullName=Super User&UserID=3&DepartmentID=2&StakeholderID=5&StakeholderPrefix=No St";
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string userIDStr = StringUtilities.GetValueString(strCookieString, "UserID");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("3", userIDStr);
+        }
+
+        [Test]
+        public void Test_TestGetUserID_DiffUserId()
+        {
+            //---------------Set up test pack-------------------
+            string strCookieString =
+                "FullName=Super User&UserID=5&DepartmentID=2&StakeholderID=5&StakeholderPrefix=No St";
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string userIDStr = StringUtilities.GetValueString(strCookieString, "UserID");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("5", userIDStr);
+        }
+
+        [Test]
+        public void Test_TestGetStakeholderID()
+        {
+            //---------------Set up test pack-------------------
+            string strCookieString =
+                "FullName=Super User&UserID=3&DepartmentID=2&StakeholderID=3&StakeholderPrefix=No St";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string stakeholderIDStr = StringUtilities.GetValueString(strCookieString, "StakeholderID");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("3", stakeholderIDStr);
+        }
+
+        [Test]
+        public void Test_TestGetStakeholderID_DiffStakeholderID()
+        {
+            //---------------Set up test pack-------------------
+            string strCookieString =
+                "FullName=Super User&UserID=5&DepartmentID=2&StakeholderID=5&StakeholderPrefix=No St";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            string stakeholderIDStr = StringUtilities.GetValueString(strCookieString, "StakeholderID");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("5", stakeholderIDStr);
+        }
+
+        [Test]
+        public void Test_GetNameValuePairCollection()
+        {
+            //---------------Set up test pack-------------------
+            string strCookieString =
+                "FullName=Super User&UserID=5&DepartmentID=2&StakeholderID=7&StakeholderPrefix=No St";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            NameValueCollection col = StringUtilities.GetNameValueCollection(strCookieString);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(5, col.Count);
+            Assert.AreEqual("5", col["UserID"]);
+            Assert.AreEqual("7", col["StakeholderID"]);
+        }
+
+        [Test]
+        public void TestGetNameValueCollection_ZeroLengthString()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Set up test pack-------------------
+            string strCookieString = "";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            NameValueCollection col = StringUtilities.GetNameValueCollection(strCookieString);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, col.Count);
         }
     }
 }

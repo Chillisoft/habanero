@@ -18,17 +18,18 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.Util
 {
-	/// <summary>
-	/// Provides a collection of utilities for strings
-	/// </summary>
-	public class StringUtilities
-	{
+    /// <summary>
+    /// Provides a collection of utilities for strings
+    /// </summary>
+    public class StringUtilities
+    {
         /// <summary>
         /// Replaces single quotes with two single quotes in the given string
         /// </summary>
@@ -49,29 +50,29 @@ namespace Habanero.Util
             return value.Replace("\"", "\"\"");
         }
 
-		/// <summary>
-		/// Breaks up a Pascal-cased string into sections that are divided
-		/// by the given delimiter.  For instance, an input string of
-		/// "PascalCase" and a delimiter of " " will give "Pascal Case"
-		/// </summary>
-		/// <param name="inputString">The string to delimit</param>
-		/// <param name="delimiter">The delimiter to insert between
-		/// sections, such as a space or comma</param>
-		/// <returns>Returns the delimited string</returns>
-		public static string DelimitPascalCase(string inputString, string delimiter)
-		{
-			string formatted = "";
-			int counter = 0;
-			if (inputString == null) return null;
-			foreach (char c in inputString)
-			{
-				string str = c.ToString();
-			    string prevStr = "";
+        /// <summary>
+        /// Breaks up a Pascal-cased string into sections that are divided
+        /// by the given delimiter.  For instance, an input string of
+        /// "PascalCase" and a delimiter of " " will give "Pascal Case"
+        /// </summary>
+        /// <param name="inputString">The string to delimit</param>
+        /// <param name="delimiter">The delimiter to insert between
+        /// sections, such as a space or comma</param>
+        /// <returns>Returns the delimited string</returns>
+        public static string DelimitPascalCase(string inputString, string delimiter)
+        {
+            string formatted = "";
+            int counter = 0;
+            if (inputString == null) return null;
+            foreach (char c in inputString)
+            {
+                string str = c.ToString();
+                string prevStr = "";
                 if (counter > 0)
                 {
                     prevStr = inputString.Substring(counter - 1, 1);
                 }
-			    int temp;
+                int temp;
 
                 // The rules are, add space if:
                 //   - the letter is upper case
@@ -79,64 +80,64 @@ namespace Habanero.Util
                 //   - this is not a space
                 //   - there is already a space before this
                 //   - this is a number and there is no number just before
-				if (str == str.ToUpper() && counter > 0
-					&& str != " "
-					&& prevStr != " "
+                if (str == str.ToUpper() && counter > 0 && str != " " && prevStr != " "
                     && !(Int32.TryParse(str, out temp) && Int32.TryParse(prevStr, out temp)))
-				{
-					formatted += delimiter + str;
-				}
+                {
+                    formatted += delimiter + str;
+                }
                 else
-				{
-					formatted += str;
-				}
-				counter++;
-			}
-			return formatted;
-		}
+                {
+                    formatted += str;
+                }
+                counter++;
+            }
+            return formatted;
+        }
 
-		/// <summary>
-		/// Converts the string representation of a Guid to its Guid
-		/// equivalent. A return value indicates whether the operation
-		/// succeeded.
-		/// </summary>
-		/// <param name="s">A string containing a Guid to convert.</param>
-		/// <param name="result">
-		/// When this method returns, contains the Guid value equivalent to
-		/// the Guid contained in <paramref name="s"/>, if the conversion
-		/// succeeded, or <see cref="Guid.Empty"/> if the conversion failed.
-		/// The conversion fails if the <paramref name="s"/> parameter is a
-		/// <see langword="null" /> reference (<see langword="Nothing" /> in
-		/// Visual Basic), or is not of the correct format.
-		/// </param>
-		/// <value>
-		/// <see langword="true" /> if <paramref name="s"/> was converted
-		/// successfully; otherwise, <see langword="false" />.
-		/// </value>
-		/// <exception cref="ArgumentNullException">
-		///        Thrown if <pararef name="s"/> is <see langword="null"/>.
-		/// </exception>
-		public static bool GuidTryParse(string s, out Guid result)
-		{
-			if (s == null)
-				throw new ArgumentNullException("s");
+        /// <summary>
+        /// Converts the string representation of a Guid to its Guid
+        /// equivalent. A return value indicates whether the operation
+        /// succeeded.
+        /// </summary>
+        /// <param name="s">A string containing a Guid to convert.</param>
+        /// <param name="result">
+        /// When this method returns, contains the Guid value equivalent to
+        /// the Guid contained in <paramref name="s"/>, if the conversion
+        /// succeeded, or <see cref="Guid.Empty"/> if the conversion failed.
+        /// The conversion fails if the <paramref name="s"/> parameter is a
+        /// <see langword="null" /> reference (<see langword="Nothing" /> in
+        /// Visual Basic), or is not of the correct format.
+        /// </param>
+        /// <value>
+        /// <see langword="true" /> if <paramref name="s"/> was converted
+        /// successfully; otherwise, <see langword="false" />.
+        /// </value>
+        /// <exception cref="ArgumentNullException">
+        ///        Thrown if <pararef name="s"/> is <see langword="null"/>.
+        /// </exception>
+        public static bool GuidTryParse(string s, out Guid result)
+        {
+            if (s == null)
+                throw new ArgumentNullException("s");
 
-			Regex format = new Regex(
-				"^[A-Fa-f0-9]{32}$|" +
-				"^({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?$|" +
-				"^({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})$");
-			Match match = format.Match(s);
+            Regex format =
+                new Regex
+                    ("^[A-Fa-f0-9]{32}$|" + "^({|\\()?[A-Fa-f0-9]{8}-([A-Fa-f0-9]{4}-){3}[A-Fa-f0-9]{12}(}|\\))?$|"
+                     +
+                     "^({)?[0xA-Fa-f0-9]{3,10}(, {0,1}[0xA-Fa-f0-9]{3,6}){2}, {0,1}({)([0xA-Fa-f0-9]{3,4}, {0,1}){7}[0xA-Fa-f0-9]{3,4}(}})$");
+            Match match = format.Match(s);
 
-			if (match.Success)
-			{
-				result = new Guid(s);
-				return true;
-			} else
-			{
-				result = Guid.Empty;
-				return false;
-			}
-		}
+            if (match.Success)
+            {
+                result = new Guid(s);
+                return true;
+            }
+            else
+            {
+                result = Guid.Empty;
+                return false;
+            }
+        }
 
         /// <summary>
         /// Indicates the number of times a given string appears in a larger string
@@ -175,7 +176,7 @@ namespace Habanero.Util
             return CountOccurrences(fullText, token, 0, fullText.Length);
         }
 
-	    /// <summary>
+        /// <summary>
         /// Indicates the number of times a given token appears in a string
         /// </summary>
         /// <param name="fullText">The string to search within</param>
@@ -212,8 +213,9 @@ namespace Habanero.Util
             }
             else
             {
-                throw new UserException(String.Format("The given search term '{0}' " +
-                    "does not exist in the text '{1}'.", searchText, fullText));
+                throw new UserException
+                    (String.Format
+                         ("The given search term '{0}' " + "does not exist in the text '{1}'.", searchText, fullText));
             }
         }
 
@@ -234,8 +236,9 @@ namespace Habanero.Util
             }
             else
             {
-                throw new UserException(String.Format("The given search term '{0}' " +
-                    "does not exist in the text '{1}'.", searchText, fullText));
+                throw new UserException
+                    (String.Format
+                         ("The given search term '{0}' " + "does not exist in the text '{1}'.", searchText, fullText));
             }
         }
 
@@ -248,7 +251,7 @@ namespace Habanero.Util
         {
             if (!String.IsNullOrEmpty(origMessage)) origMessage += Environment.NewLine;
             origMessage += messageToAppend;
-            return origMessage;        
+            return origMessage;
         }
 
         /// <summary>
@@ -258,11 +261,11 @@ namespace Habanero.Util
         /// <param name="appendedString"></param>
         /// <param name="separator"></param>
         /// <returns></returns>
-	    public static string AppendMessage(string origString, string appendedString, string separator)
-	    {
+        public static string AppendMessage(string origString, string appendedString, string separator)
+        {
             if (!String.IsNullOrEmpty(origString)) origString += separator;
-            return origString + appendedString;     
-	    }
+            return origString + appendedString;
+        }
 
         /// <summary>
         /// 
@@ -271,12 +274,50 @@ namespace Habanero.Util
         /// <param name="appendedString"></param>
         /// <param name="separator"></param>
         /// <returns></returns>
-	    public static StringBuilder AppendMessage(StringBuilder origStringBuilder, string appendedString, string separator)
-	    {
+        public static StringBuilder AppendMessage
+            (StringBuilder origStringBuilder, string appendedString, string separator)
+        {
             if (origStringBuilder.Length != 0)
-	            origStringBuilder.Append(separator);
-	        origStringBuilder.Append(appendedString);
-	        return origStringBuilder;
-	    }
-	}
+                origStringBuilder.Append(separator);
+            origStringBuilder.Append(appendedString);
+            return origStringBuilder;
+        }
+
+        /// <summary>
+        /// for a given name value pair e.g. a query string or cookie string that is formatted
+        /// as name=value&name2=value2&name3=value3 etc this will return the value for a specified
+        /// name e.g. for nameValuePairString = "name=value&name2=value2&name3=value3" and name = "name2"
+        /// GetValueString will return value2.
+        /// </summary>
+        /// <param name="nameValuePairString">The name value pair to parse</param>
+        /// <param name="name">The name of the name value pair for which you want the value</param>
+        /// <returns></returns>
+        public static string GetValueString(string nameValuePairString, string name)
+        {
+            NameValueCollection nameValueCollection = GetNameValueCollection(nameValuePairString);
+            return nameValueCollection[name];
+        }
+
+        /// <summary>
+        /// returns a NameValueCollection of nameValue Pairs for the nameValuePairString.
+        /// e.g. nameValuePairString = "name=value&name2=value2&name3=value3" will return a 
+        /// NameValueCollection with 3 items for name, name2 and name3.
+        /// </summary>
+        /// <param name="nameValuePairString">The name value pair to split.</param>
+        /// <returns>The new collection containing the name value pair items.</returns>
+        public static NameValueCollection GetNameValueCollection(string nameValuePairString)
+        {
+            NameValueCollection nameValueCollection = new NameValueCollection();
+            if (!string.IsNullOrEmpty(nameValuePairString))
+            {
+                string[] pairs = nameValuePairString.Split(new char[] {'&'});
+                foreach (string pair in pairs)
+                {
+                    string[] values = pair.Split(new char[] {'='});
+                    nameValueCollection[values[0]] = values[1];
+                }
+            }
+            return nameValueCollection;
+        }
+    }
 }
