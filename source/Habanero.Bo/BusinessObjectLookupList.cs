@@ -233,21 +233,22 @@ namespace Habanero.BO
             }
             else
             {
-                ClassDef classDef = LookupBoClassDef;
-                IBusinessObjectCollection col = BOLoader.Instance.GetBusinessObjectCol(classDef, _criteria ?? "", OrderCriteria.FromString(_sort));
-                //BusinessObjectCollection<BusinessObject> col = new BusinessObjectCollection<BusinessObject>(classDef);
-                //if (_criteria != null)
-                //{
-                //    col.Load(_criteria, _sort);
-                //}
-                //else
-                //{
-                //    col.Load("", _sort);
-                //}
+                IBusinessObjectCollection col = GetBusinessObjectCollection();
                 _displayValueDictionary = CreateDisplayValueDictionary(col, String.IsNullOrEmpty(Sort));
                 _lastCallTime = DateTime.Now;
                 return _displayValueDictionary;
             }
+        }
+
+        ///<summary>
+        /// Returns a collection of related business objects for a particular property based on the definition of the business object lookup list.
+        /// This returns the same set of data as returned by the <see cref="GetLookupList()"/> method.
+        ///</summary>
+        ///<returns></returns>
+        public IBusinessObjectCollection GetBusinessObjectCollection()
+        {
+            ClassDef classDef = LookupBoClassDef;
+            return BOLoader.Instance.GetBusinessObjectCol(classDef, _criteria ?? "", OrderCriteria.FromString(_sort));
         }
 
         ///<summary>

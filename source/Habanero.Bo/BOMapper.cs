@@ -56,7 +56,7 @@ namespace Habanero.BO
         {
             IPropDef propDef = _businessObject.ClassDef.GetPropDef(propertyName, false);
             //return def.GetLookupList(_businessObject.GetDatabaseConnection());
-            if (propDef != null && propDef.LookupList != null)
+            if (propDef != null && propDef.LookupList != null && propDef.HasLookupList())
             {
                 return propDef.LookupList.GetLookupList(_businessObject.GetDatabaseConnection());
             }
@@ -197,7 +197,8 @@ namespace Habanero.BO
             ClassDef classDef = _businessObject.ClassDef;
             IPropDef propDef = classDef.GetPropDef(propertyName, false);
 
-            if (propDef != null && propDef.LookupList != null) {
+            if (propDef != null && propDef.LookupList != null && propDef.HasLookupList())
+            {
                 if (propDef.LookupList is DatabaseLookupList)
                 {
                     DatabaseLookupList databaseLookupList = (DatabaseLookupList) propDef.LookupList;
