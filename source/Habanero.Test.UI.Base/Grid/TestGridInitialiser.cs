@@ -56,10 +56,11 @@ namespace Habanero.Test.UI.Base
             {
                 return new ControlFactoryGizmox();
             }
+
             protected override void AddControlToForm(IControlChilli cntrl)
             {
                 Gizmox.WebGUI.Forms.Form frm = new Gizmox.WebGUI.Forms.Form();
-                frm.Controls.Add((Gizmox.WebGUI.Forms.Control)cntrl);
+                frm.Controls.Add((Gizmox.WebGUI.Forms.Control) cntrl);
             }
         }
 
@@ -71,7 +72,7 @@ namespace Habanero.Test.UI.Base
 //            IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(grid.IsInitialised);
-           
+
             //---------------Execute Test ----------------------
             try
             {
@@ -80,12 +81,15 @@ namespace Habanero.Test.UI.Base
             }
             catch (GridBaseInitialiseException ex)
             {
-                 StringAssert.Contains("You cannot call initialise with no classdef since the ID column has not been added to the grid", ex.Message);
+                StringAssert.Contains
+                    ("You cannot call initialise with no classdef since the ID column has not been added to the grid",
+                     ex.Message);
             }
             //---------------Test Result -----------------------
 
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void Test_InitialiseGrid_NoClassDef_IDColumnNotDefined()
         {
@@ -104,12 +108,15 @@ namespace Habanero.Test.UI.Base
             }
             catch (GridBaseInitialiseException ex)
             {
-                 StringAssert.Contains("You cannot call initialise with no classdef since the ID column has not been added to the grid", ex.Message);
+                StringAssert.Contains
+                    ("You cannot call initialise with no classdef since the ID column has not been added to the grid",
+                     ex.Message);
             }
             //---------------Test Result -----------------------
 
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void Test_InitialiseGrid_NoClassDef_Twice()
         {
@@ -119,7 +126,7 @@ namespace Habanero.Test.UI.Base
             grid.Grid.Columns.Add("ID", "ID");
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(grid.IsInitialised);
-           
+
             //---------------Execute Test ----------------------
             try
             {
@@ -155,8 +162,9 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual("default", grid.UiDefName);
             Assert.AreEqual(classDef, grid.ClassDef);
-            Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
-                            "There should be 1 ID column and 2 defined columns in the defaultDef");
+            Assert.AreEqual
+                (uiGridDef.Count + 1, grid.Grid.Columns.Count,
+                 "There should be 1 ID column and 2 defined columns in the defaultDef");
             Assert.IsTrue(initialiser.IsInitialised);
             Assert.AreSame(grid, initialiser.Grid);
 //            Assert.IsTrue(grid.IsInitialised);
@@ -231,7 +239,7 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(1, grid.Grid.Rows.Count);
             IDataGridViewCell dataGridViewCell = grid.Grid.Rows[0].Cells[formattedPropertyName];
             //((DataGridViewCellGiz) dataGridViewCell).DataGridViewCell.HasStyle = false;
-            Assert.AreSame(typeof(DateTime), dataGridViewCell.ValueType);
+            Assert.AreSame(typeof (DateTime), dataGridViewCell.ValueType);
             Assert.AreEqual(currentDateTime.ToString(expectedFormat), dataGridViewCell.FormattedValue);
 
             //---------------Tear Down -------------------------          
@@ -256,14 +264,12 @@ namespace Habanero.Test.UI.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(alternateUIDefName, grid.UiDefName);
             Assert.AreEqual(classDef, grid.ClassDef);
-            Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
-                            "There should be 1 ID column and 1 defined column in the alternateUIDef");
+            Assert.AreEqual
+                (uiGridDef.Count + 1, grid.Grid.Columns.Count,
+                 "There should be 1 ID column and 1 defined column in the alternateUIDef");
             //---------------Tear Down -------------------------          
         }
 
-
-        //Note: this can be changed to allow the grid to reinitialise everything if initialise called a second time.
-        // this may be necessary e.g. to use the same grid but swap out uidefs etc.
         public void TestInitGrid_Twice_Fail()
         {
             //---------------Set up test pack-------------------
@@ -271,18 +277,27 @@ namespace Habanero.Test.UI.Base
             IGridInitialiser initialiser = new GridInitialiser(grid, GetControlFactory());
             ClassDef classDef = LoadMyBoDefaultClassDef();
             //---------------Assert Preconditions---------------
+            UIDef uiDef = classDef.UIDefCol["default"];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
+            UIGridColumn columnDef1 = uiGridDef[0];
+            Assert.AreEqual("TestProp", columnDef1.PropertyName);
+            UIGridColumn columnDef2 = uiGridDef[1];
+            Assert.AreEqual("TestProp2", columnDef2.PropertyName);
             //---------------Execute Test ----------------------
             initialiser.InitialiseGrid(classDef);
-            try
-            {
-                initialiser.InitialiseGrid(classDef);
-                Assert.Fail("You should not be able to call initialise twice on a grid");
-            }
+
+            initialiser.InitialiseGrid(classDef);
             //---------------Test Result -----------------------
-            catch (GridBaseSetUpException ex)
-            {
-                StringAssert.Contains("You cannot initialise the grid more than once", ex.Message);
-            }
+            IDataGridViewColumn idColumn = grid.Grid.Columns[0];
+            AssertVerifyIDFieldSetUpCorrectly(idColumn);
+
+            IDataGridViewColumn dataColumn1 = grid.Grid.Columns[1];
+            AssertThatDataColumnSetupCorrectly(classDef, columnDef1, dataColumn1);
+
+            IDataGridViewColumn dataColumn2 = grid.Grid.Columns[2];
+            AssertThatDataColumnSetupCorrectly(classDef, columnDef2, dataColumn2);
         }
 
         [Test]
@@ -323,8 +338,8 @@ namespace Habanero.Test.UI.Base
             }
             catch (ArgumentException ex)
             {
-                StringAssert.Contains(
-                    " does not contain a grid definition for UIDef AlternateNoGrid for the class def ", ex.Message);
+                StringAssert.Contains
+                    (" does not contain a grid definition for UIDef AlternateNoGrid for the class def ", ex.Message);
             }
             //---------------Tear Down -------------------------          
         }
@@ -347,11 +362,11 @@ namespace Habanero.Test.UI.Base
             Assert.AreEqual(idPropertyName, column.DataPropertyName);
             Assert.IsTrue(column.ReadOnly);
             Assert.IsFalse(column.Visible);
-            Assert.AreEqual(typeof(string), column.ValueType);
+            Assert.AreEqual(typeof (string), column.ValueType);
         }
 
-        private static void AssertThatDataColumnSetupCorrectly(ClassDef classDef, UIGridColumn columnDef1,
-                                                       IDataGridViewColumn dataColumn1)
+        private static void AssertThatDataColumnSetupCorrectly
+            (ClassDef classDef, UIGridColumn columnDef1, IDataGridViewColumn dataColumn1)
         {
             Assert.AreEqual(columnDef1.PropertyName, dataColumn1.DataPropertyName); //Test Prop
             Assert.AreEqual(columnDef1.PropertyName, dataColumn1.Name);

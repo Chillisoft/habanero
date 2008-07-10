@@ -55,7 +55,7 @@ namespace Habanero.UI.Base
 
         public void InitialiseGrid(IClassDef classDef, string uiDefName)
         {
-            if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
+//            if (_isInitialised) throw new GridBaseSetUpException("You cannot initialise the grid more than once");
 
             UIGrid gridDef = GetGridDef((ClassDef) classDef, uiDefName);
             SetUpGridColumns((ClassDef) classDef, gridDef);
