@@ -271,7 +271,6 @@ namespace Habanero.BO.ClassDefinition
         public void Clear()
         {
             _classDefs.Clear();
-            
         }
 
 		#endregion

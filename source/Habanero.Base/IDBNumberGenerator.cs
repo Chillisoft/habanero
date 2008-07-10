@@ -16,7 +16,6 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
-
 namespace Habanero.Base
 {
     /// <summary>
@@ -26,7 +25,11 @@ namespace Habanero.Base
     /// receipt number for a retail business.  Incrementing the numbers
     /// as they are dispensed is one means of achieving uniqueness.
     /// </summary>
-    public interface INumberGenerator
+    /// TODO:
+    /// - need to apply synchronisation to ensure new number not retrieved
+    /// by another user before first user saves and updates number (could
+    /// update immediately)
+    public interface IDBNumberGenerator
     {
         /// <summary>
         /// Returns the next available unique number. One possible means
@@ -34,18 +37,14 @@ namespace Habanero.Base
         /// dispensed.
         /// </summary>
         /// <returns>Returns an integer</returns>
-        int NextNumber();
-        /// <summary>
-        /// Allows the developer to set the new Sequence number this can be used when initialy creating the numbers e.g. when 
-        /// you want to ensure that the numbers are generated starting at 10000.
-        /// </summary>
-        /// <param name="newSequenceNumber"></param>
-        void SetSequenceNumber(int newSequenceNumber);
+        int GetNextNumberInt();
 
         /// <summary>
-        /// Interface to add the number generator to a transaction via the transaction committer.
+        /// Creates a database transaction that updates the database to the
+        /// last number dispensed, so the next number dispensed will be a
+        /// fresh increment
         /// </summary>
-        /// <param name="transactionCommitter"></param>
-        void AddToTransaction(ITransactionCommitter transactionCommitter);
+        /// <returns>Returns an ITransactional object</returns>
+        ITransactional GetUpdateTransaction();
     }
 }

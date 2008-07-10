@@ -107,6 +107,7 @@
     <Compile Include="IBusinessObjectDeletor.cs" />
     <Compile Include="IClassDef.cs" />
     <Compile Include="IConcurrencyControl.cs" />
+    <Compile Include="IDBNumberGenerator.cs" />
     <Compile Include="IKeyDef.cs" />
     <Compile Include="InvalidPropertyException.cs" />
     <Compile Include="InvalidPropertyNameException.cs" />

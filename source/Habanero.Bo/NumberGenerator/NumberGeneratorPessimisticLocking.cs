@@ -1,12 +1,11 @@
 using System;
 using Habanero.Base;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.ConcurrencyControl;
 using Habanero.BO.Loaders;
 using Habanero.DB;
 
-namespace Habanero.Test.BO
+namespace Habanero.BO
 {
     /// <summary>
     /// This is a slightly more complex number generator class. This class implements a pessimistic locking strategy.
@@ -25,6 +24,10 @@ namespace Habanero.Test.BO
     {
         private readonly BOSequenceNumberLocking _boSequenceNumber;
 
+        ///<summary>
+        /// Creates a number generator with Pesssimistic locking.
+        ///</summary>
+        ///<param name="numberType"></param>
         public NumberGeneratorPessimisticLocking(string numberType)
         {
             _boSequenceNumber = LoadSequenceNumber(numberType);
@@ -73,7 +76,6 @@ namespace Habanero.Test.BO
             transactionCommitter.AddBusinessObject(busObject);
         }
     }
-
     internal class BOSequenceNumberLocking : BusinessObject
     {
         public BOSequenceNumberLocking()
@@ -92,7 +94,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-               <class name=""BOSequenceNumberLocking"" assembly=""Habanero.Test.BO"" table=""NumberGenerator"">
+               <class name=""BOSequenceNumberLocking"" assembly=""Habanero.BO"" table=""NumberGenerator"">
 					<property  name=""SequenceNumber"" type=""Int32"" />
                     <property  name=""NumberType""/>
 					<property  name=""DateTimeLocked"" type=""DateTime"" />

@@ -29,7 +29,6 @@ using log4net;
 
 namespace Habanero.BO
 {
- 
     /// <summary>
     /// Stores the object's property value at any given point in time
     /// </summary>

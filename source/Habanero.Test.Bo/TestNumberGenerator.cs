@@ -58,6 +58,26 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestAcceptance_GenerateFirstNumber_SeedZero_WithNoLoadedClassDefs()
+        {
+            //---------------Clean Up --------------------------
+            //Create an entry in the number generator table for entry type to seed.
+            string numberType = "tmp";
+            SetNumberGeneratorSeedZero(numberType);
+            //---------------Set up test pack-------------------
+            //Create an instance of the number for a specific type of number (e.g. Invoice number)
+            INumberGenerator numGen = new NumberGenerator("tmp");
+
+            //---------------Execute Test ----------------------
+            //get the next number for invoice number
+            int nextNum = numGen.NextNumber();
+
+            //---------------Test Result -----------------------
+            //test nextnumber should be one.
+            Assert.AreEqual(1, nextNum);
+            //---------------Tear Down -------------------------  
+        }
+        [Test]
         public void TestAcceptance_GenerateFirstNumber_NoSeed()
         {
             //Delete entry from database for the number type.

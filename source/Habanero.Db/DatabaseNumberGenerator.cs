@@ -29,7 +29,7 @@ namespace Habanero.DB
     /// next request.  A database update transaction can also be generated
     /// to increment the number stored in the database.
     /// </summary>
-    public class DatabaseNumberGenerator : INumberGenerator
+    public class DatabaseNumberGenerator : IDBNumberGenerator
     {
         private readonly string _settingName;
         private readonly string _tableName;
@@ -121,7 +121,7 @@ namespace Habanero.DB
         /// fresh increment
         /// </summary>
         /// <returns>Returns an ITransactional object</returns>
-        ITransactional INumberGenerator.GetUpdateTransaction()
+        ITransactional IDBNumberGenerator.GetUpdateTransaction()
         {
             throw new NotImplementedException();
         }
@@ -142,7 +142,7 @@ namespace Habanero.DB
         /// </summary>
         private class NumberUpdate : ITransactionalDB
         {
-            private int _newNumber;
+            private readonly int _newNumber;
             private readonly string _settingName;
             private readonly string _tableName;
 

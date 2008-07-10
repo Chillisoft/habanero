@@ -1,11 +1,11 @@
 using System;
 using Habanero.Base;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.ConcurrencyControl;
 using Habanero.BO.Loaders;
 using Habanero.DB;
 
-namespace Habanero.Test.BO
+namespace Habanero.BO
 {
     /// <summary>
     /// This is a simple number generator class. This class implements no locking strategy.
@@ -20,6 +20,11 @@ namespace Habanero.Test.BO
     {
         private readonly BOSequenceNumber _boSequenceNumber;
 
+        ///<summary>
+        /// Creates a number generator of the specified type. If no record is currently in the database for that type.
+        /// Then this will create an entry in the table with the seed number of zero.
+        ///</summary>
+        ///<param name="numberType">Type of number</param>
         public NumberGenerator(string numberType)
         {
             _boSequenceNumber = LoadSequenceNumber(numberType);
@@ -33,8 +38,12 @@ namespace Habanero.Test.BO
 
         private static BOSequenceNumber LoadSequenceNumber(string numberType)
         {
+            if (!ClassDef.ClassDefs.Contains(typeof(BOSequenceNumber)))
+            {
+                BOSequenceNumber.LoadNumberGenClassDef();
+            }
             BOSequenceNumber sequenceBOSequenceNumber =
-                BOLoader.Instance.GetBusinessObject<BOSequenceNumber>(string.Format("NumberType = '{0}'",numberType));
+                BOLoader.Instance.GetBusinessObject<BOSequenceNumber>(string.Format("NumberType = '{0}'", numberType));
             if (sequenceBOSequenceNumber == null)
             {
                 sequenceBOSequenceNumber = CreateSequenceForType(numberType);
@@ -52,6 +61,9 @@ namespace Habanero.Test.BO
         }
 
 
+        ///<summary>
+        /// Updates the number generator table.
+        ///</summary>
         public void Save()
         {
             _boSequenceNumber.Save();
@@ -75,7 +87,10 @@ namespace Habanero.Test.BO
             transactionCommitter.AddBusinessObject(busObject);
         }
     }
-    public class BOSequenceNumber : BusinessObject
+    ///<summary>
+    /// A simple sequential number generator business object
+    ///</summary>
+    internal class BOSequenceNumber : BusinessObject
     {
         internal static void LoadNumberGenClassDef()
         {
@@ -83,7 +98,7 @@ namespace Habanero.Test.BO
             ClassDef itsClassDef =
                 itsLoader.LoadClass(
                     @"
-               <class name=""BOSequenceNumber"" assembly=""Habanero.Test.BO"" table=""NumberGenerator"">
+               <class name=""BOSequenceNumber"" assembly=""Habanero.BO"" table=""NumberGenerator"">
 					<property  name=""SequenceNumber"" type=""Int32"" />
                     <property  name=""NumberType""/>
                     <primaryKey isObjectID=""false"">

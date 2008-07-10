@@ -1,5 +1,8 @@
 namespace Habanero.Base
 {
+    ///<summary>
+    /// The Current State of a Business Object.
+    ///</summary>
     public interface IBOState
     {
         /// <summary>
@@ -28,7 +31,7 @@ namespace Habanero.Base
         /// Indicates whether all of the property values of the object are valid
         /// </summary>
         /// <param name="message">If the object is not valid then this returns the reason for it being invalid/param>
-        /// <returns>Returns true if all are valid</returns>
+        /// <returns>Returns true if all are valid </returns>
         bool IsValid(out string message);
 
         /// <summary>
