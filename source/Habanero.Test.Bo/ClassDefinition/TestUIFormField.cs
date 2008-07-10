@@ -64,6 +64,78 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void Test_DisplaynameFull_NoPropDef_DisplayName()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = CreateTestClassDef("");
+            string testPropertyName = "TestPropertyNoDisplay";
+            PropDef propDef = new PropDef(testPropertyName, typeof(string), PropReadWriteRule.ReadWrite, null, null, false, false, 100,
+                                          "", "This is a property for testing.");
+            classDef.PropDefcol.Add(propDef);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("", propDef.DisplayName);
+
+            //---------------Execute Test ----------------------
+            string actualDisplayNameFull = propDef.DisplayNameFull;
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Test Property No Display", actualDisplayNameFull);
+        }
+
+        [Test]
+        public void Test_PropDef_NoUOM_UpdatedToDisplayNameFull()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = CreateTestClassDef("");
+            string testPropertyName = "TestProperty";
+            PropDef propDefUOM = (PropDef)classDef.PropDefcol[testPropertyName];
+            propDefUOM.UnitOfMeasure = "";
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("Tested Property", propDefUOM.DisplayName);
+            //---------------Execute Test ----------------------
+            string actualDisplayNameFull = propDefUOM.DisplayNameFull;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Tested Property", actualDisplayNameFull);
+        }
+
+        [Test]
+        public void Test_PropDefUOM_UpdatedToDisplayNameFull()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = CreateTestClassDef("");
+            string testPropertyName = "TestProperty";
+            PropDef propDefUOM = (PropDef)classDef.PropDefcol[testPropertyName];
+            propDefUOM.UnitOfMeasure = "NewUOM";
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("Tested Property", propDefUOM.DisplayName);
+            //---------------Execute Test ----------------------
+            string actualDisplayNameFull = propDefUOM.DisplayNameFull;
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Tested Property (NewUOM)", actualDisplayNameFull);
+        }
+
+
+        [Test] 
+        public void Test_PropDefUnitOfMeasure_Updates_FormFieldLabel()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef classDef = CreateTestClassDef("");
+            string testPropertyName = "TestProperty";
+            PropDef propDefUOM = (PropDef) classDef.PropDefcol[testPropertyName];
+            propDefUOM.UnitOfMeasure = "NewUOM";
+            UIFormField uiFormField = new UIFormField(null, testPropertyName, typeof(TextBox), null, null, true, null, null, null);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("Tested Property", propDefUOM.DisplayName);
+            //---------------Execute Test ----------------------
+            string labelName = uiFormField.GetLabel(classDef);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("Tested Property (NewUOM):", labelName);
+
+        }
+        [Test]
         public void TestFieldToolTip()
         {
             UIFormField uiFormField;
@@ -113,7 +185,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            UIFormFieldInheritor field = new UIFormFieldInheritor();
+            UIFormFieldInheritorStub field = new UIFormFieldInheritorStub();
             
             Assert.AreEqual("label", field.Label);
             field.SetLabel("newlabel");
@@ -198,9 +270,9 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         // Grants access to protected fields
-        private class UIFormFieldInheritor : UIFormField
+        private class UIFormFieldInheritorStub : UIFormField
         {
-            public UIFormFieldInheritor()
+            public UIFormFieldInheritorStub()
                 : base("label", "prop", "control", null, null, null, true, null, null, null)
             {}
 

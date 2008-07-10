@@ -8,7 +8,7 @@ namespace Habanero.Base
         ///<summary>
         /// The display name for the property.
         ///</summary>
-        string DisplayName { get; set; }
+        string DisplayName { get; }// set; }
 
         ///<summary>
         /// The description of the property.
@@ -122,7 +122,20 @@ namespace Habanero.Base
             set;
         }
 
+        ///<summary>
+        /// Returns the class definition that this property definition is owned by.
+        ///</summary>
         IClassDef ClassDef { get;  }
+
+        ///<summary>
+        /// Returns the full display name for a property definition.
+        /// If there is a unit of measure then it is appended to the display name in brackets e.g. DisplayName (UOM).
+        /// If there is no display name then it will return the PascalCase Delimited property Name i.e. Display Name.
+        ///</summary>
+        string DisplayNameFull
+        {
+            get;
+        }
 
         /// <summary>
         /// Creates a new Business Object property (BOProp)

@@ -21,6 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Comparer;
+using Habanero.Util;
 using Habanero.Util.File;
 using log4net;
 
@@ -67,6 +68,7 @@ namespace Habanero.BO.ClassDefinition
         private bool _keepValuePrivate = false;
         private bool _persistable = true;
         private ClassDef _classDef;
+        private string _unitOfMeasure = "";
 
         #region Constuctor and destructors
 
@@ -151,7 +153,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="compulsory">Whether this property is a required field or not.</param>
         /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
         /// <param name="length">The maximum length for a string</param>
-        public PropDef
+        internal PropDef
             (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
              string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length)
             : this(
@@ -180,15 +182,15 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="length">The maximum length for a string</param>
         /// <param name="displayName">The display name for the property</param>
         /// <param name="description">The description of the property</param>
-        public PropDef
-            (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
-             string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length,
-             string displayName, string description)
-            : this(
-                propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString,
-                compulsory, autoIncrementing, length, displayName, description)
-        {
-        }
+        //public PropDef
+        //    (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
+        //     string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length,
+        //     string displayName, string description)
+        //    : this(
+        //        propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString,
+        //        compulsory, autoIncrementing, length, displayName, description)
+        //{
+        //}
 
         /// <summary>
         /// This constructor is used to create a propdef using property type assembly and class name and other information. 
@@ -295,7 +297,7 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="displayName">The display name for the property</param>
         /// <param name="description">The description of the property</param>
         /// <param name="keepValuePrivate">Whether this property must keep its value private or not</param>
-        public PropDef
+        internal PropDef
             (string propertyName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
              object defaultValue, bool compulsory, bool autoIncrementing, int length, string displayName,
              string description, bool keepValuePrivate)
@@ -459,7 +461,7 @@ namespace Habanero.BO.ClassDefinition
         public string DisplayName
         {
             get { return _displayName; }
-            set { _displayName = value; }
+//            set { _displayName = value; }
         }
 
         ///<summary>
@@ -960,12 +962,43 @@ namespace Habanero.BO.ClassDefinition
 
 
         ///<summary>
-        /// Cdfdasfkl;
+        /// Is this property persistable or not. This is used for special properties e.g. Dynamically inserted properties
+        /// as for Asset Management System (See Intermap Asset Management) or for any reflective/calculated field that 
+        /// you would like to store propdef information for e.g. rules, Units of measure etc.
+        /// This will prevent the property from being persisted in the usual manner.
         ///</summary>
         public bool Persistable
         {
             get { return _persistable; }
             set { _persistable = value; }
+        }
+
+        ///<summary>
+        /// The unit of measure that this property is recorded in. e.g. Weight might be recorded in Kg. Capacity in Litre, m^3 etc
+        ///</summary>
+        public string UnitOfMeasure
+        {
+            get { return _unitOfMeasure; }
+            set { _unitOfMeasure = value; }
+        }
+
+        ///<summary>
+        /// Returns the full display name for a property definition.
+        /// If there is a unit of measure then it is appended to the display name in brackets e.g. DisplayName (UOM).
+        /// If there is no display name then it will return the PascalCase Delimited property Name i.e. Display Name.
+        ///</summary>
+        public string DisplayNameFull
+        {
+            get
+            {
+                string displayName = this.DisplayName;
+                if (string.IsNullOrEmpty(displayName)) displayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
+                if (!string.IsNullOrEmpty(this.UnitOfMeasure))
+                {
+                    return displayName + " (" + this.UnitOfMeasure + ")";
+                }
+                return displayName;
+            }
         }
 
 

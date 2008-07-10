@@ -28,7 +28,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void TestProtectedSets()
         {
-            UIDefInheritor uiDef = new UIDefInheritor();
+            UIDefInheritorStub uiDef = new UIDefInheritorStub();
 
             Assert.AreEqual("uidef", uiDef.Name);
             uiDef.SetName("newuidef");
@@ -44,6 +44,35 @@ namespace Habanero.Test.BO.ClassDefinition
             uiDef.SetUIGrid(uiGrid);
             Assert.AreEqual(uiGrid, uiDef.UIGrid);
         }
+
+        [Test]
+        public void Test_GetFormField()
+        {
+            //---------------Set up test pack-------------------
+            UIDefInheritorStub uiDef = new UIDefInheritorStub();
+            uiDef.SetUIForm(GetUiForm());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            UIFormField formField = uiDef.GetFormField("prop1");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("prop1", formField.PropertyName);
+        }
+
+        [Test]
+        public void Test_GetFormField_NoPropReturnsNull()
+        {
+            //---------------Set up test pack-------------------
+            UIDefInheritorStub uiDef = new UIDefInheritorStub();
+            uiDef.SetUIForm(GetUiForm());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            UIFormField formField = uiDef.GetFormField("propDoesNotExist");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(null, formField);
+        }
+
 
         [Test]
         public void TestCloneUIFormNull()
@@ -63,6 +92,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreNotSame(uiDef.UIGrid, clonedDef.UIGrid);
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestCloneUIGridNull()
         {
@@ -81,6 +111,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(null, clonedDef.UIGrid);
             //---------------Tear Down -------------------------          
         }
+
         [Test]
         public void TestCloneUIDef()
         {
@@ -96,17 +127,18 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.IsTrue(uiDef == clonedDef);
             Assert.IsTrue(uiDef.Equals(clonedDef));
-            Assert.AreNotSame(uiDef,clonedDef);
+            Assert.AreNotSame(uiDef, clonedDef);
 
             Assert.AreNotSame(uiDef.UIForm, clonedDef.UIForm);
             Assert.AreNotSame(uiDef.UIGrid, clonedDef.UIGrid);
         }
 
 
-
-        private UIGrid GetUiGrid()
+        private static UIGrid GetUiGrid()
         {
-            UIGridColumn uiGridCol = new UIGridColumn("Head", "Prop", "control", "Assembly", true, 100, UIGridColumn.PropAlignment.centre, null);
+            UIGridColumn uiGridCol =
+                new UIGridColumn
+                    ("Head", "Prop", "control", "Assembly", true, 100, UIGridColumn.PropAlignment.centre, null);
             UIGrid uiGrid = new UIGrid();
             uiGrid.SortColumn = "Prop";
             uiGrid.Add(uiGridCol);
@@ -116,7 +148,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [Test]
         public void Test_NotEqualsNull()
         {
-            UIDef uiDef = new UIDef("",null, null);
+            UIDef uiDef = new UIDef("", null, null);
             UIDef uiDef2 = null;
             Assert.IsFalse(uiDef.Equals(uiDef2));
             Assert.IsFalse(uiDef == uiDef2);
@@ -255,12 +287,13 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
 
-
         // Grants access to protected methods
-        private class UIDefInheritor : UIDef
+        private class UIDefInheritorStub : UIDef
         {
-            public UIDefInheritor() : base("uidef", null, null)
-            {}
+            public UIDefInheritorStub()
+                : base("uidef", null, null)
+            {
+            }
 
             public void SetName(string name)
             {
@@ -278,5 +311,4 @@ namespace Habanero.Test.BO.ClassDefinition
             }
         }
     }
-
 }

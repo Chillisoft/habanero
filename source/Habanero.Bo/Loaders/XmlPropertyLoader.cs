@@ -121,14 +121,11 @@ namespace Habanero.BO.Loaders
 
 			_propDef = _defClassFactory.CreatePropDef(_propertyName, _assemblyName, _typeName, _readWriteRule,
                 _databaseFieldName, _defaultValueString, _compulsory, _autoIncrementing, _length, _displayName, _description, _keepValuePrivate);
-			//_propDef = new PropDef(_propertyName, _assemblyName, _typeName, 
-			//    _readWriteRule, _databaseFieldName, _defaultValueString);
 
             if (_reader.Name == "rule")
             {
                 XmlRuleLoader loader = new XmlRuleLoader(DtdLoader, _defClassFactory);
                 loader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef);
-                //XmlPropertyRuleLoader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef, DtdLoader, _defClassFactory);
             }
             int len = "lookupList".Length;
             if (_reader.Name.Length >= len &&

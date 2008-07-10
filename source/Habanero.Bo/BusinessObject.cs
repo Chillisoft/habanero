@@ -846,12 +846,11 @@ namespace Habanero.BO
             }
         }
 
-
         internal static bool PropValueHasChanged(object propValue, object newPropValue)
         {
             if (propValue == newPropValue) return false;
             if (propValue != null) return !propValue.Equals(newPropValue);
-            else return (newPropValue != null);
+            else return (newPropValue != null && !string.IsNullOrEmpty(Convert.ToString(newPropValue)));
         }
 
         /// <summary>

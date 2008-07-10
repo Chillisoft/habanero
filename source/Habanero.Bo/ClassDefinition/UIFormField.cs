@@ -296,13 +296,13 @@ namespace Habanero.BO.ClassDefinition
             IPropDef propDef = GetPropDefIfExists(classDef);
             if (propDef != null)
             {
-                label = propDef.DisplayName + LabelSuffix;
+                label = propDef.DisplayNameFull;
             }
             if (String.IsNullOrEmpty(label))
             {
-                label = StringUtilities.DelimitPascalCase(_propertyName, " ") + LabelSuffix;
+                label = StringUtilities.DelimitPascalCase(_propertyName, " ");
             }
-            return label;
+            return label + LabelSuffix;
         }
 
         private string LabelSuffix

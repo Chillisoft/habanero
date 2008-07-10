@@ -49,6 +49,20 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void Test_SetPropDefUnitOfMeasure()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("PropName", typeof(string), PropReadWriteRule.ReadOnly, null);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("", propDef.UnitOfMeasure);
+            //---------------Execute Test ----------------------
+            string newUOM = "New UOM";
+            propDef.UnitOfMeasure = newUOM;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newUOM, propDef.UnitOfMeasure);
+
+        }
+        [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void TestCreatePropDefInvalidDefault()
         {

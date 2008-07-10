@@ -91,7 +91,31 @@ namespace Habanero.BO.ClassDefinition
             return this.UIGrid;
         }
 
+        ///<summary>
+        /// Returns the form field for this UIDefinition for the property specified.
+        /// If the form field for the property is not defined in the uidef then null is returned.
+        ///</summary>
+        ///<param name="propertyName">The property name that you want the form field for</param>
+        ///<returns>the form field or null</returns>
+        public UIFormField GetFormField(string propertyName)
+        {
+            UIForm formProperties = this.GetUIFormProperties();
 
+            foreach (UIFormTab tab in formProperties)
+            {
+                foreach (UIFormColumn column in tab)
+                {
+                    foreach (UIFormField field in column)
+                    {
+                        if (field.PropertyName == propertyName)
+                        {
+                            return field;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
         ///<summary>
         /// overloads the operator == 
         ///</summary>

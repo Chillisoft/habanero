@@ -638,26 +638,26 @@ namespace Habanero.Test.UI.Base
             //---------------Tear Down -------------------------          
         }
 
-        //Note: this can be changed to allow the grid to reinitialise everything if initialise called a second time.
-        // this may be necessary e.g. to use the same grid but swap out uidefs etc.
         public void TestInitGrid_Twice_Fail()
         {
             //---------------Set up test pack-------------------
             IReadOnlyGridControl grid = CreateReadOnlyGridControl();
             ClassDef classDef = LoadMyBoDefaultClassDef();
             //---------------Assert Preconditions---------------
+            UIDef uiDef = classDef.UIDefCol["default"];
+            UIGrid uiGridDef = uiDef.UIGrid;
+            Assert.AreEqual(2, uiGridDef.Count, "2 defined columns in the defaultDef");
+            Assert.AreEqual("default", grid.UiDefName);
+            Assert.IsNull(grid.ClassDef);
             //---------------Execute Test ----------------------
             grid.Initialise(classDef);
-            try
-            {
-                grid.Initialise(classDef);
-                Assert.Fail("You should not be able to call initialise twice on a grid");
-            }
-                //---------------Test Result -----------------------
-            catch (GridBaseSetUpException ex)
-            {
-                StringAssert.Contains("You cannot initialise the grid more than once", ex.Message);
-            }
+
+            grid.Initialise(classDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual("default", grid.UiDefName);
+            Assert.AreEqual(classDef, grid.ClassDef);
+            Assert.AreEqual(uiGridDef.Count + 1, grid.Grid.Columns.Count,
+                            "There should be 1 ID column and 2 defined columns in the defaultDef");
         }
         public void TestInitGrid_AddColumnsManually_And_NullInitialise()
         {
