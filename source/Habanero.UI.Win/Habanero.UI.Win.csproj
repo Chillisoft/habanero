@@ -129,6 +129,9 @@
     <Compile Include="TabControlWin.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TabPageWin.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TextBoxWin.cs">
       <SubType>Component</SubType>
     </Compile>

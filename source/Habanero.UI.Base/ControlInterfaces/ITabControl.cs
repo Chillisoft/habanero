@@ -8,7 +8,7 @@ namespace Habanero.UI.Base
 
         int SelectedIndex { get; set; }
 
-        ITabPage SelectedTab { get; }
+        ITabPage SelectedTab { get; set; }
 
         event EventHandler SelectedIndexChanged;
     }

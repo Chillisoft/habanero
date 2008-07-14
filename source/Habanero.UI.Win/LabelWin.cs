@@ -5,11 +5,16 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
-    internal class LabelWin : Label, ILabel
+    public class LabelWin : Label, ILabel
     {
         IControlCollection IControlChilli.Controls
         {
             get { return new ControlCollectionWin(base.Controls); }
+        }
+        Base.DockStyle IControlChilli.Dock
+        {
+            get { return (Base.DockStyle)base.Dock; }
+            set { base.Dock = (System.Windows.Forms.DockStyle)value; }
         }
     }
 }

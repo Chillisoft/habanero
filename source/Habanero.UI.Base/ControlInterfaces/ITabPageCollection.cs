@@ -9,5 +9,7 @@ namespace Habanero.UI.Base
         ITabPage this[int i] { get; }
 
         int Count { get; }
+
+        int IndexOf(ITabPage page);
     }
 }

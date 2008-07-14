@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using Habanero.Base;
+using Habanero.BO;
 
 namespace Habanero.UI.Base
 {
@@ -27,9 +28,8 @@ namespace Habanero.UI.Base
     public interface IBusinessObjectControl:IControlChilli
     {
         /// <summary>
-        /// Specifies the business object being represented
+        /// Gets or sets the business object being represented
         /// </summary>
-        /// <param name="bo">The business object</param>
-        void SetBusinessObject(IBusinessObject bo);
+        IBusinessObject BusinessObject { set; get; }
     }
 }

@@ -28,7 +28,7 @@ namespace Habanero.UI.WebGUI.Wizard
     /// A basic implementation of WizardStep that can be used for simply displaying a message.  
     /// Should a step be required that is a simple message for the user (such as at the end of a wizard), this step can be used
     /// </summary>
-    public partial class MessageWizardStepGiz : UserControl, IWizardStep
+    public partial class MessageWizardStepGiz : UserControlGiz, IWizardStep
     {
         /// <summary>
         /// Constructs the MessageWizardStep

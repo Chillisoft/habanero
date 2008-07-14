@@ -6,7 +6,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    public class WizardControlGiz : UserControl, IWizardControl
+    public class WizardControlGiz : UserControlGiz, IWizardControl
     {
         private IControlChilli _currentControl;
         private IButton _nextButton;

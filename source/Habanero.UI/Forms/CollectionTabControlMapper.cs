@@ -26,6 +26,7 @@ using Habanero.BO;
 using Habanero.UI;
 using Habanero.UI.Base;
 using Habanero.UI.Util;
+using DockStyle=System.Windows.Forms.DockStyle;
 
 namespace Habanero.UI.Forms
 {

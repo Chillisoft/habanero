@@ -55,7 +55,7 @@ namespace Habanero.UI.WebGUI
         /// Provides a form to display the exception message, using a "More Detail"
         /// button that collapses or uncollapses the error detail panel
         /// </summary>
-        private class CollapsibleExceptionNotifyForm : Form, IControlChilli
+        private class CollapsibleExceptionNotifyForm : FormGiz, IControlChilli
         {
             private Exception _exception;
             private PanelGiz _summary;

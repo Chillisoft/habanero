@@ -7,12 +7,13 @@ using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.UI.Base;
 using Habanero.UI.Base.FilterControl;
+using DockStyle=Gizmox.WebGUI.Forms.DockStyle;
 
 #endregion
 
 namespace Habanero.UI.WebGUI
 {
-    public class FilterControlGiz : Panel, IFilterControl
+    public class FilterControlGiz : PanelGiz, IFilterControl
     {
         private readonly IControlFactory _controlFactory;
         private readonly FilterControlManager _filterControlManager;

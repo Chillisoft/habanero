@@ -27,7 +27,7 @@ namespace Habanero.UI.WebGUI
     /// <summary>
     /// A form that displays a wizard.  This form simply wraps the WizardControl in a form and handles communication with the user.
     /// </summary>
-    public partial class WizardFormGiz : Form, IFormChilli
+    public partial class WizardFormGiz : FormGiz, IFormChilli
     {
         private readonly IWizardController _wizardController;
         private readonly WizardControlGiz _uxWizardControl;

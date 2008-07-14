@@ -73,12 +73,12 @@ namespace Habanero.UI.Win
 
             if (String.IsNullOrEmpty(typeName) || String.IsNullOrEmpty(assemblyName))
             {
-                controlType = typeof(TextBox);
+                controlType = typeof (TextBox);
             }
             else
             {
                 TypeLoader.LoadClassType(ref controlType, assemblyName, typeName,
-                                         "field", "field definition");
+                    "field", "field definition");
             }
 
             return CreateControl(controlType);
@@ -93,30 +93,29 @@ namespace Habanero.UI.Win
         public IControlChilli CreateControl(Type controlType)
         {
             IControlChilli ctl;
-            if (controlType.IsSubclassOf(typeof(Control)))
+            if (controlType.IsSubclassOf(typeof (Control)))
             {
-                if (controlType == typeof(ComboBox)) return CreateComboBox();
-                if (controlType == typeof(CheckBox)) return CreateCheckBox();
-                if (controlType == typeof(TextBox)) return CreateTextBox();
-                if (controlType == typeof(ListBox)) return CreateListBox();
-                if (controlType == typeof(DateTimePicker)) return CreateDateTimePicker();
+                if (controlType == typeof (ComboBox)) return CreateComboBox();
+                if (controlType == typeof (CheckBox)) return CreateCheckBox();
+                if (controlType == typeof (TextBox)) return CreateTextBox();
+                if (controlType == typeof (ListBox)) return CreateListBox();
+                if (controlType == typeof (DateTimePicker)) return CreateDateTimePicker();
 
-                ctl = (IControlChilli)Activator.CreateInstance(controlType);
+                ctl = (IControlChilli) Activator.CreateInstance(controlType);
                 PropertyInfo infoFlatStyle =
                     ctl.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
                 if (infoFlatStyle != null)
                 {
-                    infoFlatStyle.SetValue(ctl, FlatStyle.Standard, new object[] { });
+                    infoFlatStyle.SetValue(ctl, FlatStyle.Standard, new object[] {});
                 }
             }
             else
             {
                 throw new UnknownTypeNameException(
                     string.Format(
-                    "The control type name {0} does not inherit from {1}.", controlType.FullName, typeof(Control)));
+                        "The control type name {0} does not inherit from {1}.", controlType.FullName, typeof (Control)));
             }
             return ctl;
-           
         }
 
         /// <summary>
@@ -148,7 +147,7 @@ namespace Habanero.UI.Win
             throw new NotImplementedException();
         }
 
-        
+
         /// <summary>
         /// Creates a new numeric up-down control that is formatted with
         /// zero decimal places for integer use
@@ -214,7 +213,9 @@ namespace Habanero.UI.Win
         /// <returns>Returns a new TabPage object</returns>
         public ITabPage CreateTabPage(string title)
         {
-            throw new NotImplementedException();
+            TabPageWin page = new TabPageWin();
+            page.Text = title;
+            return page;
         }
 
         /// <summary>
@@ -251,7 +252,7 @@ namespace Habanero.UI.Win
 
         public ITabControl CreateTabControl()
         {
-            return  new TabControlWin();
+            return new TabControlWin();
         }
 
         /// <summary>
@@ -260,22 +261,22 @@ namespace Habanero.UI.Win
         /// <param name="numLines"></param>
         public ITextBox CreateTextBoxMultiLine(int numLines)
         {
-            TextBoxWin tb = (TextBoxWin)CreateTextBox();
+            TextBoxWin tb = (TextBoxWin) CreateTextBox();
             tb.Multiline = true;
             tb.AcceptsReturn = true;
-            tb.Height = tb.Height * numLines;
+            tb.Height = tb.Height*numLines;
             tb.ScrollBars = ScrollBars.Vertical;
             return tb;
         }
 
-      
 
         public IWizardControl CreateWizardControl(IWizardController wizardController)
         {
             throw new NotImplementedException();
         }
 
-        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name, PostObjectPersistingDelegate action)
+        public IDefaultBOEditorForm CreateBOEditorForm(BusinessObject bo, string name,
+            PostObjectPersistingDelegate action)
         {
             throw new NotImplementedException();
         }
@@ -346,13 +347,13 @@ namespace Habanero.UI.Win
         /// <returns></returns>
         public IDataGridViewCheckBoxColumn CreateDataGridViewCheckBoxColumn()
         {
- //           return new DataGridViewCheckBoxColumnWin();
+            //           return new DataGridViewCheckBoxColumnWin();
             return null;
         }
 
         public IDataGridViewComboBoxColumn CreateDataGridViewComboBoxColumn()
         {
- //           return new DataGridViewComboBoxColumn();
+            //           return new DataGridViewComboBoxColumn();
             return null;
         }
 
@@ -453,6 +454,7 @@ namespace Habanero.UI.Win
             label.Text = labelText;
             return label;
         }
+
         public ILabel CreateLabel(string labelText, bool isBold)
         {
             LabelWin label = (LabelWin) CreateLabel();
@@ -474,7 +476,7 @@ namespace Habanero.UI.Win
 
         public IDateTimePicker CreateDateTimePicker()
         {
-            return new  DateTimePickerWin(this);
+            return new DateTimePickerWin(this);
         }
 
         public BorderLayoutManager CreateBorderLayoutManager(IControlChilli control)
@@ -494,7 +496,7 @@ namespace Habanero.UI.Win
 
         public IReadOnlyGridControl CreateReadOnlyGridControl()
         {
-            return  new ReadOnlyGridControlWin(this);
+            return new ReadOnlyGridControlWin(this);
         }
 
         public IButtonGroupControl CreateButtonGroupControl()
@@ -527,7 +529,6 @@ namespace Habanero.UI.Win
             throw new System.NotImplementedException();
         }
 
-       
 
         public ITextBox CreatePasswordTextBox()
         {
@@ -550,10 +551,10 @@ namespace Habanero.UI.Win
         public void AddItemSelectedEventHandler(ListComboBoxMapper mapper)
         {
             IControlChilli control = mapper.Control;
-            if(control is IComboBox)
+            if (control is IComboBox)
             {
                 ComboBoxWin comboBoxWin = (ComboBoxWin) control;
-                comboBoxWin.SelectedIndexChanged+=delegate(object sender, EventArgs e)
+                comboBoxWin.SelectedIndexChanged += delegate(object sender, EventArgs e)
                 {
                     mapper.ApplyChangesToBusinessObject();
                     mapper.UpdateControlValueFromBusinessObject();
@@ -565,7 +566,7 @@ namespace Habanero.UI.Win
     /// <summary>
     /// Provides a set of strategies that can be applied to a textbox
     /// </summary>
-    internal class TextBoxMapperStrategyWin: ITextBoxMapperStrategy
+    internal class TextBoxMapperStrategyWin : ITextBoxMapperStrategy
     {
         // Assumes that one strategy is created for each control.
         // These fields exist so that the IsValidCharacter method knows
@@ -593,9 +594,9 @@ namespace Habanero.UI.Win
         public void AddKeyPressEventHandler(TextBoxMapper mapper, IBOProp boProp)
         {
             _boProp = boProp;
-            if(mapper.Control is ITextBox)
+            if (mapper.Control is ITextBox)
             {
-                TextBoxWin tb = (TextBoxWin)mapper.Control;
+                TextBoxWin tb = (TextBoxWin) mapper.Control;
                 tb.KeyPress += KeyPressEventHandler;
                 _textBox = tb;
             }
@@ -666,13 +667,12 @@ namespace Habanero.UI.Win
         {
             if (mapper.Control is ICheckBox)
             {
-                CheckBoxWin checkBox = (CheckBoxWin)mapper.Control;
-                checkBox.Click+=delegate(object sender, EventArgs e)
+                CheckBoxWin checkBox = (CheckBoxWin) mapper.Control;
+                checkBox.Click += delegate(object sender, EventArgs e)
                 {
                     mapper.ApplyChangesToBusinessObject();
                     mapper.ApplyChanges();
                 };
-
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Habanero.UI.Base;
+using DockStyle=System.Windows.Forms.DockStyle;
 
 namespace Habanero.UI.Win
 {

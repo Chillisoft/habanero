@@ -9,7 +9,6 @@ namespace Habanero.UI.Base
     {
         private ITabControl _tabControl;
         private readonly IControlFactory _controlFactory;
-        private IBusinessObject _currentBusinessObject;
         private Dictionary<ITabPage, IBusinessObject> _pageBoTable;
         private Dictionary<IBusinessObject, ITabPage> _boPageTable;
         private IBusinessObjectControl _boControl;
@@ -17,7 +16,7 @@ namespace Habanero.UI.Base
 
         public BOColTabControlManager(ITabControl tabControl, IControlFactory controlFactory)
         {
-                 //BorderLayoutManager manager = new BorderLayoutManager(this);
+            //BorderLayoutManager manager = new BorderLayoutManager(this);
             _tabControl = tabControl;
             _controlFactory = controlFactory;
             //manager.AddControl(_tabControl, BorderLayoutManager.Position.Centre);
@@ -25,13 +24,10 @@ namespace Habanero.UI.Base
             _boPageTable = new Dictionary<IBusinessObject, ITabPage>();
         }
 
-         //<summary>
-         //Sets the boControl that will be displayed on each tab page.  This must be called
-         //before the BoTabColControl can be used.
-         //</summary>
-         //<param name="boControl">The business object control that is
-         //displaying the business object information in the tab page</param>
-
+        /// <summary>
+        /// Gets and sets the boControl that will be displayed on each tab page.  This must be called
+        /// before the BoTabColControl can be used.
+        /// </summary>
         public IBusinessObjectControl BusinessObjectControl
         {
             set
@@ -42,7 +38,6 @@ namespace Habanero.UI.Base
                     //BorderLayoutManager manager = _controlFactory.CreateBorderLayoutManager(TabControl);
                     //manager.AddControl(value, BorderLayoutManager.Position.Centre);
                     //((Control)_boControl).Dock = DockStyle.Fill;
-
                 }
                 else
                 {
@@ -72,6 +67,13 @@ namespace Habanero.UI.Base
         {
             _tabControl.SelectedIndexChanged -= TabChangedHandler;
             ClearTabPages();
+
+            if (_businessObjectCollection == null)
+            {
+                _tabControl.SelectedIndexChanged += TabChangedHandler;
+                return;
+            }
+
             Dictionary<string, object> list = GetBusinessObjectDisplayValueDictionary();
             foreach (KeyValuePair<string, object> pair in list)
             {
@@ -113,15 +115,12 @@ namespace Habanero.UI.Base
         /// </summary>
         public virtual void TabChanged()
         {
-           
-           
-                if (_tabControl.SelectedTab != null)
-                {
-                    _tabControl.SelectedTab.Controls.Clear();
-                    _tabControl.SelectedTab.Controls.Add(_boControl);
-                    _boControl.SetBusinessObject(GetBo(_tabControl.SelectedTab));
-                }
-
+            if (_tabControl.SelectedTab != null)
+            {
+                _tabControl.SelectedTab.Controls.Clear();
+                _tabControl.SelectedTab.Controls.Add(_boControl);
+                _boControl.BusinessObject = GetBo(_tabControl.SelectedTab);
+            }
         }
 
         protected virtual Dictionary<string, object> GetBusinessObjectDisplayValueDictionary()
@@ -163,8 +162,24 @@ namespace Habanero.UI.Base
         /// </summary>
         public IBusinessObject CurrentBusinessObject
         {
-            get { return _currentBusinessObject; }
-            set { _currentBusinessObject = value; }
+            get
+            {
+                if (_businessObjectCollection == null)
+                {
+                    return null;
+                }
+                int tabIndex = TabControl.TabPages.IndexOf(TabControl.SelectedTab);
+                if (tabIndex == -1) return null;
+                else
+                {
+                    return _businessObjectCollection[tabIndex];
+                }
+            }
+            set
+            {
+                if (value == null) return;
+                TabControl.SelectedIndex = _businessObjectCollection.IndexOf(value);
+            }
         }
 
         public Dictionary<ITabPage, IBusinessObject> PageBoTable
@@ -236,6 +251,5 @@ namespace Habanero.UI.Base
             _pageBoTable.Clear();
             _boPageTable.Clear();
         }
-
     }
 }

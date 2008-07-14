@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.UI.Base;
+using Habanero.UI.WebGUI;
 using NUnit.Framework;
 
 namespace Habanero.Test.UI.Base.Wizard
@@ -562,7 +563,7 @@ namespace Habanero.Test.UI.Base.Wizard
             }
         }
 
-        internal class WizardStepStub : Gizmox.WebGUI.Forms.Control, IWizardStep
+        internal class WizardStepStub :ControlGiz, IWizardStep
         {
             private bool _allowMoveOn = true;
 

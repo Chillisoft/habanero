@@ -9,7 +9,7 @@ using Habanero.UI.Base.FilterControl;
 namespace Habanero.UI.Win
 {
     // TODO: move this into FilterControl directory like Giz version
-    public class FilterControlWin : Panel, IFilterControl, IPanel
+    public class FilterControlWin : PanelWin, IFilterControl, IPanel
     {
         public event EventHandler Filter;
         private readonly FilterControlManager _filterControlManager;

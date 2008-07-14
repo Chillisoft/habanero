@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
+using DockStyle=Gizmox.WebGUI.Forms.DockStyle;
 
 namespace Habanero.UI.WebGUI
 {

@@ -6,15 +6,8 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.Win
 {
-    public partial class MultiSelectorWin<T> : UserControl, IMultiSelector<T>
+    public partial class MultiSelectorWin<T> : UserControlWin, IMultiSelector<T>
     {
-
-        IControlCollection IControlChilli.Controls
-        {
-            get { throw new NotImplementedException(); }
-            //TODO _Port: Test and Implememt this
-        }
-
         private readonly MultiSelectorManager<T> _manager;
 
         public MultiSelectorWin()

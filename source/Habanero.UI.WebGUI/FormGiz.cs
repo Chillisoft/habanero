@@ -14,7 +14,11 @@ namespace Habanero.UI.WebGUI
         {
             get { return _controls; }
         }
-
+        Base.DockStyle IControlChilli.Dock
+        {
+            get { return (Base.DockStyle)base.Dock; }
+            set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
+        }
         
         public void Refresh()
         {

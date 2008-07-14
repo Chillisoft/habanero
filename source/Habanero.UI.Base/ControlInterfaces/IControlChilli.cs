@@ -20,6 +20,19 @@ namespace Habanero.UI.Base
     //    None
     //}
 
+    /// <summary>
+    /// The DockStyle of a control, which indicates how to dock the control within its container.
+    /// </summary>
+    public enum DockStyle
+    {
+        None = 0,
+        Fill = 1,
+        Top = 2,
+        Right = 3,
+        Bottom = 4,
+        Left = 5
+    }
+
     public interface IControlChilli 
     {
         /// <summary>
@@ -212,5 +225,13 @@ namespace Habanero.UI.Base
         ///// </summary>
         ///// <value></value>
         //ControlBorderStyle BorderStyle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the docking style of this control - this can be none, top, bottom, left, right or fill, 
+        /// depending on how you want your  control to dock inside its container control
+        /// See <see cref="DockStyle"/>
+        /// </summary>
+        DockStyle Dock { get; set; }
+        
     }
 }

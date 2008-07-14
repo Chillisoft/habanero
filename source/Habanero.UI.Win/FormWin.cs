@@ -12,6 +12,11 @@ namespace Habanero.UI.Win
         {
             get { return _controls; }
         }
+        Base.DockStyle IControlChilli.Dock
+        {
+            get { return (Base.DockStyle)base.Dock; }
+            set { base.Dock = (System.Windows.Forms.DockStyle)value; }
+        }
 
         IFormChilli IFormChilli.MdiParent
         {

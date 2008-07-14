@@ -280,6 +280,8 @@ namespace Habanero.Test.UI.Base.Wizard
         {
             get { throw new NotImplementedException(); }
         }
+        
+      
 
         /// <summary>
         /// Gets or sets the control visability.  
@@ -467,6 +469,12 @@ namespace Habanero.Test.UI.Base.Wizard
         }
 
         public Point Location
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public DockStyle Dock
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }

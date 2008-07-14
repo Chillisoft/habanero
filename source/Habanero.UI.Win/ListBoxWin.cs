@@ -44,6 +44,11 @@ namespace Habanero.UI.Win
         {
             get { return new ControlCollectionWin(base.Controls); }
         }
+        Base.DockStyle IControlChilli.Dock
+        {
+            get { return (Base.DockStyle)base.Dock; }
+            set { base.Dock = (System.Windows.Forms.DockStyle)value; }
+        }
 
         internal class ListBoxObjectCollectionWin : IListBoxObjectCollection
         {

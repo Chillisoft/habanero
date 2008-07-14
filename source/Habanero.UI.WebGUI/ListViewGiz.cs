@@ -12,7 +12,7 @@ using Habanero.UI.Base;
 
 namespace Habanero.UI.WebGUI
 {
-    public partial class ListViewGiz : ListView,IListView
+    public partial class ListViewGiz : ListView, IListView
     {
         private Hashtable _listItemsHash;
         private ListViewItemCollectionGiz _objectCollection;
@@ -98,6 +98,11 @@ namespace Habanero.UI.WebGUI
         public IControlCollection Controls
         {
             get { throw new NotImplementedException(); }
+        }
+        Base.DockStyle IControlChilli.Dock
+        {
+            get { return (Base.DockStyle)base.Dock; }
+            set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
         }
     }
 

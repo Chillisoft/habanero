@@ -19,7 +19,7 @@ namespace Habanero.UI.WebGUI
     /// need to also implement a new version of the editor (see
     /// DefaultBOEditor for more information).
     /// </summary>
-    public class DefaultBOEditorFormGiz : Form, IDefaultBOEditorForm
+    public class DefaultBOEditorFormGiz : FormGiz, IDefaultBOEditorForm
     {
         private readonly PostObjectPersistingDelegate _action;
         private static readonly ILog log = LogManager.GetLogger("Habanero.UI.Forms.DefaultBOEditorFormGiz");

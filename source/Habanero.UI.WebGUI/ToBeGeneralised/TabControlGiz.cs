@@ -9,6 +9,11 @@ namespace Habanero.UI.WebGUI
         {
             get { return new ControlCollectionGiz(base.Controls); }
         }
+        Base.DockStyle IControlChilli.Dock
+        {
+            get { return (Base.DockStyle)base.Dock; }
+            set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
+        }
 
         //TODO: Convert dockstyles between Giz windows etc
 
@@ -19,7 +24,8 @@ namespace Habanero.UI.WebGUI
 
         public ITabPage SelectedTab
         {
-            get { return  (ITabPage) TabPages[base.SelectedIndex]; }
+            get { return (ITabPage)TabPages[base.SelectedIndex]; }
+            set { base.SelectedIndex = TabPages.IndexOf(value); }
         }
     }
 
@@ -45,6 +51,18 @@ namespace Habanero.UI.WebGUI
         public int Count
         {
             get { return _tabPages.Count; }
+        }
+
+        public int IndexOf(ITabPage page)
+        {
+            for (int pagePos = 0; pagePos < _tabPages.Count; pagePos++)
+            {
+                if (page == _tabPages[pagePos])
+                {
+                    return pagePos;
+                }
+            }
+            return -1;
         }
     }
 }

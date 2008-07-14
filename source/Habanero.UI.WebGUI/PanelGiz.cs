@@ -15,5 +15,10 @@ namespace Habanero.UI.WebGUI
                 return new ControlCollectionGiz(base.Controls);
             }
         }
+        Base.DockStyle IControlChilli.Dock
+        {
+            get { return (Base.DockStyle)base.Dock; }
+            set { base.Dock = (Gizmox.WebGUI.Forms.DockStyle)value; }
+        }
     }
 }

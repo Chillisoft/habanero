@@ -29,7 +29,7 @@ namespace Habanero.UI.WebGUI
     /// Can be used as a placeholder step in a Wizard that changes depending on selections made
     /// by users.
     /// </summary>
-    public partial class NullWizardStepGiz : UserControl, IWizardStep
+    public partial class NullWizardStepGiz : UserControlGiz, IWizardStep
     {
         /// <summary>
         /// Constructs the NullWizardStep

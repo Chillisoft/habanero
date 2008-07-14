@@ -10,7 +10,7 @@ using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Win
 {
-    public partial class FileChooserWin : UserControl, IFileChooser
+    public partial class FileChooserWin : UserControlWin, IFileChooser
     {
         private readonly IControlFactory _controlFactory;
         private readonly FileChooserManager _fileChooserManager;
