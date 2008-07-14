@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Util.File;
 
@@ -395,7 +396,24 @@ namespace Habanero.BO.ClassDefinition
 
     	#endregion
 
- 
+        ///<summary>
+        /// Finds the class definition in the collection with the specified name.
+        /// Returns null if there is no class definition found with the specified name.
+        ///</summary>
+        ///<param name="className">The name of the class to find</param>
+        ///<returns>The class definition with the specified name, otherwise returns null.</returns>
+        public ClassDef FindByClassName(string className)
+        {
+            foreach (KeyValuePair<string, ClassDef> keyValuePair in _classDefs)
+            {
+                ClassDef classDef = keyValuePair.Value;
+                if (classDef.ClassName == className)
+                {
+                    return classDef;
+                }
+            }
+            return null;
+        }
     }
 
     #region "self Tests"

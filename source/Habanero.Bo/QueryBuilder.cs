@@ -1,3 +1,4 @@
+using System;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -36,10 +37,30 @@ namespace Habanero.BO
             {
                 selectQuery.Fields.Add(propDef.PropertyName, new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, classDef.GetTableName(propDef)));
             }
+            AddDiscriminatorFields(selectQuery, classDef);
             selectQuery.Source = classDef.GetTableName();
             selectQuery.Criteria = criteria;
             selectQuery.ClassDef = classDef;
             return selectQuery;
+        }
+
+        private static void AddDiscriminatorFields(ISelectQuery selectQuery, IClassDef classDef)
+        {
+            foreach (ClassDef thisClassDef in ((ClassDef)classDef).ImmediateChildren)
+            {
+                if (thisClassDef.IsUsingSingleTableInheritance())
+                {
+                    SuperClassDef superClassDef = thisClassDef.SuperClassDef;
+                    string discriminator = superClassDef.Discriminator;
+                    if (!String.IsNullOrEmpty(discriminator))
+                    {
+                        if (!selectQuery.Fields.ContainsKey(discriminator))
+                        {
+                            selectQuery.Fields.Add(discriminator, new QueryField(discriminator, discriminator, classDef.GetTableName()));
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

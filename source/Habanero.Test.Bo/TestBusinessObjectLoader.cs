@@ -130,6 +130,23 @@ namespace Habanero.Test.BO
 
 
             [Test]
+            public void TestGetBusinessObject_ReturnsSubType_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();
+
+                CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+                CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
+                BusinessObject.AllLoadedBusinessObjects().Clear();
+
+                //---------------Execute Test ----------------------
+                Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(circle.ID);
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(CircleNoPrimaryKey), loadedShape);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test]
             public void TestLoad_SingleTableInheritance_Fresh()
             {
                 //---------------Set up test pack-------------------
@@ -740,7 +757,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------     
         }
 
-        [Test, Ignore("Peter-Working on this")]
+        [Test, Ignore("Mark - working")]
         public void TestGetBusinessObjectCollection_SortOrder_ThroughRelationship()
         {
             //---------------Set up test pack-------------------
@@ -785,7 +802,7 @@ namespace Habanero.Test.BO
         }
 
 
-        [Test, Ignore("Peter-Working on this")]
+        [Test, Ignore("Mark - working")]
         public void TestLoadThroughRelationship_Multiple()
         {
             //---------------Set up test pack-------------------
@@ -804,7 +821,7 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test, Ignore("Peter-Working on this")]
+        [Test, Ignore("Mark - working")]
         public void TestLoadThroughRelationship_Single()
         {
             //---------------Set up test pack-------------------

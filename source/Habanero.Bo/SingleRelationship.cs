@@ -76,10 +76,9 @@ namespace Habanero.BO
                 //log.Debug("Retrieving related object, in relationship " + this.RelationshipName) ;
                 if (HasRelationship())
                 {
-                    //log.Debug("HasRelationship returned true, loading object.") ;
-                    // Peter-Working: IBusinessObject busObj = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(this);
-                     IBusinessObject busObj =
-                            (BusinessObject)Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
+                    //log.Debug("HasRelationship returned true, loading object.") ; 
+                    // Peter-Working:  IBusinessObject busObj = BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject(this);
+                    IBusinessObject busObj = (BusinessObject)Activator.CreateInstance(_relDef.RelatedObjectClassType, true);
                     busObj = BOLoader.Instance.GetBusinessObject(busObj, newRelationshipExpression);
                     if (_relDef.KeepReferenceToRelatedObject)
                     {

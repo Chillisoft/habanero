@@ -57,7 +57,9 @@ namespace Habanero.BO
                 {
                     if (dr.Read())
                     {
-                        return LoadBOFromReader<T>(dr, selectQueryDB);
+                        T bo = LoadBOFromReader<T>(dr, selectQueryDB);
+                        bo = GetCorrectInstanceType(bo, dr);
+                        return bo;
                     }
                 }
                 finally
@@ -88,7 +90,9 @@ namespace Habanero.BO
                 {
                     if (dr.Read())
                     {
-                        return LoadBOFromReader(classDef, dr, selectQueryDB);
+                        IBusinessObject bo = LoadBOFromReader(classDef, dr, selectQueryDB);
+                        bo = GetCorrectInstanceType(bo, dr);
+                        return bo;
                     }
                 }
                 finally
@@ -254,18 +258,13 @@ namespace Habanero.BO
             return col;
         }
 
-        private T LoadBOFromReader<T>(IDataRecord dr, ISelectQuery selectQuery)
+        private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery)
             where T : class, IBusinessObject, new()
         {
             T bo = new T();
-            BusinessObject bo1 = (BusinessObject)(IBusinessObject) bo;
-            int i = 0;
-            foreach (QueryField field in selectQuery.Fields.Values)
-            {
-                if (bo1.Props.Contains(field.PropertyName)) bo1.Props[field.PropertyName].InitialiseProp(dr[i]);
-                i++;
-            }
-   
+
+            PopulateBOFromReader(bo, dataReader, selectQuery);
+
             T boFromAllLoadedObjects = null;
             if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(bo.PrimaryKey.GetObjectId()))
             {
@@ -283,14 +282,63 @@ namespace Habanero.BO
             return bo;
         }
 
-        private IBusinessObject LoadBOFromReader(IClassDef classDef, IDataReader dataReader, ISelectQuery selectQuery)
+        private T GetCorrectInstanceType<T>(T bo, IDataReader dataReader)
+            where T : class, IBusinessObject
         {
-            IBusinessObject bo = classDef.CreateNewBusinessObject();
+            IClassDef classDef = GetCorrectSubClassDef(bo, dataReader);
+            if (classDef == null) return bo;
+            IBusinessObject businessObject = GetBusinessObject(classDef, bo.ID);
+            return (T)businessObject;
+        }
+
+        private static ClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataReader dataReader)
+        {
+            ClassDef classDef = (ClassDef)bo.ClassDef;
+            ClassDefCol subClasses = classDef.ImmediateChildren;
+            foreach (ClassDef immediateChild in subClasses)
+            {
+                if (immediateChild.IsUsingSingleTableInheritance())
+                {
+                    string discriminatorFieldName = immediateChild.SuperClassDef.Discriminator;
+                    string discriminatorValue = Convert.ToString(dataReader[discriminatorFieldName]);
+                    if (!String.IsNullOrEmpty(discriminatorValue))
+                    {
+                        ClassDef subClassDef = subClasses.FindByClassName(discriminatorValue);
+                        if (subClassDef != null)
+                        {
+                            return subClassDef;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        
+
+        private void PopulateBOFromReader(IBusinessObject bo, IDataRecord dr, ISelectQuery selectQuery)
+        {
             int i = 0;
             foreach (QueryField field in selectQuery.Fields.Values)
             {
-                bo.Props[field.PropertyName].InitialiseProp(dataReader[i++]);
+                if (bo.Props.Contains(field.PropertyName))
+                {
+                    bo.Props[field.PropertyName].InitialiseProp(dr[i]);
+                }
+                i++;
             }
+        }
+
+        private IBusinessObject LoadBOFromReader(IClassDef classDef, IDataReader dataReader, ISelectQuery selectQuery)
+        {
+            IBusinessObject bo = classDef.CreateNewBusinessObject();
+            //int i = 0;
+            //foreach (QueryField field in selectQuery.Fields.Values)
+            //{
+            //    bo.Props[field.PropertyName].InitialiseProp(dataReader[i++]);
+            //}
+
+            PopulateBOFromReader(bo, dataReader, selectQuery);
 
             IBusinessObject boFromAllLoadedObjects = null;
             if (BusinessObject.AllLoadedBusinessObjects().ContainsKey(bo.PrimaryKey.GetObjectId()))

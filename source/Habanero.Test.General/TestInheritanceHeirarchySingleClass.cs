@@ -281,7 +281,7 @@ namespace Habanero.Test.General
 
             //-------------Execute test ---------------------
             BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
-            shapes.LoadAll();
+            shapes.LoadAll("ShapeName");
             BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
             circles.LoadAll();
             BusinessObjectCollection<FilledCircleInheritsCircleNoPK> filledCircles = new BusinessObjectCollection<FilledCircleInheritsCircleNoPK>();
@@ -289,11 +289,11 @@ namespace Habanero.Test.General
 
             //-------------Test Result ----------------------
             Assert.AreEqual(2, shapes.Count);
-            Assert.AreEqual("MyShape", shapes[0].ShapeName);
-            Assert.AreEqual("Circle", shapes[1].ShapeName);
+            Assert.AreEqual("Circle", shapes[0].ShapeName);
+            Assert.AreEqual("MyShape", shapes[1].ShapeName);
 
             Assert.AreEqual(1, circles.Count);
-            Assert.AreEqual(circles[0].ShapeID, shapes[1].ShapeID);
+            Assert.AreEqual(circles[0].ShapeID, shapes[0].ShapeID);
             Assert.AreEqual(5, circles[0].Radius);
             Assert.AreEqual("Circle", circles[0].ShapeName);
 

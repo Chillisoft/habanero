@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -96,6 +97,56 @@ namespace Habanero.Test.BO.ClassDefinition
             {
                 Finalize();
             }
+        }
+
+        [Test]
+        public void TestFindByClassName_Found()
+        {
+            //---------------Set up test pack-------------------
+            ClassDefCol col = new ClassDefCol();
+            ClassDef classDef1 = new ClassDef("assembly", "class1", null, null, null, null, null);
+            ClassDef classDef2 = new ClassDef("assembly", "class2", null, null, null, null, null);
+            ClassDef classDef3 = new ClassDef("assembly", "class3", null, null, null, null, null);
+            col.Add(classDef1);
+            col.Add(classDef2);
+            col.Add(classDef3);
+            //---------------Execute Test ----------------------
+            ClassDef foundClass1 = col.FindByClassName("class1");
+            ClassDef foundClass2 = col.FindByClassName("class2");
+            ClassDef foundClass3 = col.FindByClassName("class3");
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef1, foundClass1);
+            Assert.AreSame(classDef2, foundClass2);
+            Assert.AreSame(classDef3, foundClass3);
+
+        }
+
+        [Test]
+        public void TestFindByClassName_NotFound()
+        {
+            //---------------Set up test pack-------------------
+            ClassDefCol col = new ClassDefCol();
+            ClassDef classDef1 = new ClassDef("assembly", "class1", null, null, null, null, null);
+            ClassDef classDef2 = new ClassDef("assembly", "class2", null, null, null, null, null);
+            ClassDef classDef3 = new ClassDef("assembly", "class3", null, null, null, null, null);
+            col.Add(classDef1);
+            col.Add(classDef2);
+            col.Add(classDef3);
+            //---------------Execute Test ----------------------
+            ClassDef foundClass = col.FindByClassName("DoesNotExist");
+            //---------------Test Result -----------------------
+            Assert.IsNull(foundClass);
+        }
+
+        [Test]
+        public void TestFindByClassName_NotFound_EmptyCol()
+        {
+            //---------------Set up test pack-------------------
+            ClassDefCol col = new ClassDefCol();
+            //---------------Execute Test ----------------------
+            ClassDef foundClass = col.FindByClassName("DoesNotExist");
+            //---------------Test Result -----------------------
+            Assert.IsNull(foundClass);
         }
 
 

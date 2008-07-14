@@ -166,6 +166,24 @@ namespace Habanero.Test.BO
             Assert.AreEqual("Shape", selectQuery.Source);
         }
 
+        [Test]
+        public void TestSingleTableInheritance_BaseHasDiscriminator()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            ClassDef shapeClassDef = circleClassDef.SuperClassClassDef;
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(shapeClassDef);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, selectQuery.Fields.Count);
+            Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeID"));
+            Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeName"));
+            Assert.IsTrue(selectQuery.Fields.ContainsKey("ShapeType"));
+            Assert.AreEqual("Shape", selectQuery.Source);
+        }
+
 
     }
 
