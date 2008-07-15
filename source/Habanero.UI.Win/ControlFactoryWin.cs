@@ -386,6 +386,21 @@ namespace Habanero.UI.Win
             return new ListComboBoxMapperStrategyWin();
         }
 
+        public ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
+        {
+            return new LookupComboBoxDefaultMapperStrategyWin();
+        }
+
+        public ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
+        {
+            return new LookupComboBoxKeyPressMapperStrategyWin();
+        }
+
+        public INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy()
+        {
+            return new NumericUpDownMapperStrategyWin();
+        }
+
         public IComboBox CreateComboBox()
         {
             return new ComboBoxWin();
@@ -543,6 +558,116 @@ namespace Habanero.UI.Win
         public IControlChilli CreateControl()
         {
             return new ControlWin();
+        }
+    }
+
+    internal class NumericUpDownMapperStrategyWin : INumericUpDownMapperStrategy
+    {
+        private NumericUpDownMapper _mapper;
+
+        public void ValueChanged(NumericUpDownMapper mapper)
+        {
+            _mapper = mapper;
+            NumericUpDownWin control = (NumericUpDownWin) mapper.Control;
+            control.ValueChanged += ValueChangedHandler;
+            control.Leave += ValueChangedHandler;
+        }
+
+        private void ValueChangedHandler(object sender, EventArgs e)
+        {
+            _mapper.ApplyChangesToBusinessObject();
+            _mapper.UpdateControlValueFromBusinessObject();
+        }
+    }
+
+    internal class LookupComboBoxKeyPressMapperStrategyWin : ILookupComboBoxMapperStrategy
+    {
+        private LookupComboBoxMapper _mapper;
+
+        public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
+        {
+            _mapper = mapper;
+            ComboBoxWin comboBoxWin = this.ComboBox(mapper);
+            if (comboBoxWin!=null)
+            {
+                comboBoxWin.SelectedIndexChanged -= _mapper.SelectedIndexChangedHandler;
+               
+            }
+        }
+
+        public void AddHandlers(LookupComboBoxMapper mapper)
+        {
+            ComboBoxWin comboBoxWin = this.ComboBox(mapper);
+            if (comboBoxWin != null)
+            {
+                comboBoxWin.KeyPress += delegate(object sender, System.Windows.Forms.KeyPressEventArgs e)
+                {
+                    if (e.KeyChar == 13)
+                    {
+                        mapper.ApplyChangesToBusinessObject();
+                        mapper.UpdateControlValueFromBusinessObject();
+                    }
+                };
+            }
+
+        }
+
+        private ComboBoxWin ComboBox(LookupComboBoxMapper mapper)
+        {
+            ComboBoxWin comboBoxWin = null;
+            IControlChilli control = mapper.Control;
+            if (control is IComboBox)
+            {
+                comboBoxWin = (ComboBoxWin)control;
+            }
+            return comboBoxWin;
+        }
+    }
+
+    internal class LookupComboBoxDefaultMapperStrategyWin : ILookupComboBoxMapperStrategy
+    {
+        private LookupComboBoxMapper _mapper;
+
+        public void AddItemSelectedEventHandler(LookupComboBoxMapper mapper)
+        {
+            _mapper = mapper;
+            IControlChilli control = mapper.Control;
+            if (control is IComboBox)
+            {
+                ComboBoxWin comboBoxWin = (ComboBoxWin)control;
+                comboBoxWin.SelectedIndexChanged += SelectIndexChangedHandler;
+                _mapper.SelectedIndexChangedHandler = SelectIndexChangedHandler;
+            }
+        }
+
+        private void SelectIndexChangedHandler(object sender, EventArgs e)
+        {
+            _mapper.ApplyChangesToBusinessObject();
+            _mapper.UpdateControlValueFromBusinessObject();
+        }
+
+
+        public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
+        {
+
+        }
+
+        
+
+        public void AddHandlers(LookupComboBoxMapper mapper)
+        {
+            AddItemSelectedEventHandler(mapper);
+        }
+
+                private ComboBoxWin ComboBox(LookupComboBoxMapper mapper)
+        {
+            ComboBoxWin comboBoxWin = null;
+            IControlChilli control = mapper.Control;
+            if (control is IComboBox)
+            {
+                comboBoxWin = (ComboBoxWin)control;
+            }
+            return comboBoxWin;
         }
     }
 

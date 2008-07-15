@@ -292,6 +292,9 @@ namespace Habanero.UI.Base
         IFormChilli CreateForm();
         ICheckBoxMapperStrategy CreateCheckBoxMapperStrategy();
         IListComboBoxMapperStrategy CreateListComboBoxMapperStrategy();
+        ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy();
+        ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy();
+        INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy();
     }
 
     /// <summary>
@@ -364,5 +367,21 @@ namespace Habanero.UI.Base
         /// for Web environment with low bandwidth we may choose to only update when the user saves.
         ///</summary>
         void AddItemSelectedEventHandler(ListComboBoxMapper mapper);
+    }
+
+    public interface ILookupComboBoxMapperStrategy
+    {
+        /// <summary>
+        /// Adds Item selected event handler. For Windows we want the Business to be updated immediately, however
+        /// for Web environment with low bandwidth we may choose to only update when the user saves.
+        ///</summary>
+        void RemoveCurrentHandlers(LookupComboBoxMapper mapper);
+        void AddHandlers(LookupComboBoxMapper mapper);
+    }
+
+
+    public interface INumericUpDownMapperStrategy
+    {
+        void ValueChanged(NumericUpDownMapper mapper);
     }
 }

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
+using Habanero.UI.Base.ControlInterfaces;
 
 namespace Habanero.UI.Base
 {
@@ -33,6 +34,11 @@ namespace Habanero.UI.Base
     /// </summary>
     public class LookupComboBoxMapper : ComboBoxMapper
     {
+        private ILookupComboBoxMapperStrategy _mapperStrategy;
+        private EventHandler _selectedIndexChangedHandler;
+        private EventHandler _keyPressHandler;
+
+
         //private readonly IControlFactory _controlFactory;
         //private bool _allowRightClick = true;
         //private bool _isRightClickInitialised;
@@ -49,6 +55,10 @@ namespace Habanero.UI.Base
         {
             //_controlFactory = controlFactory;
             _comboBox = cbx;
+            _mapperStrategy = factory.CreateLookupComboBoxDefaultMapperStrategy();
+            _mapperStrategy.AddHandlers(this);
+            //_mapperStrategy.AddItemSelectedEventHandler(this);
+
             ////_comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             //_comboBox.SelectedIndexChanged += ValueChangedHandler;
             //_comboBox.KeyPress += delegate(object sender, KeyPressEventArgs e)
@@ -250,6 +260,17 @@ namespace Habanero.UI.Base
             }
         }
 
+        public ILookupComboBoxMapperStrategy MapperStrategy
+        {
+            get { return _mapperStrategy; }
+            set
+            {
+                _mapperStrategy = value;
+                _mapperStrategy.RemoveCurrentHandlers(this);
+                _mapperStrategy.AddHandlers(this);
+            }
+        }
+
 
         protected override object GetPropertyValue()
         {
@@ -333,6 +354,18 @@ namespace Habanero.UI.Base
                     SetPropertyValue(null);
                 }
             }
+        }
+
+        public EventHandler KeyPressHandler
+        {
+            get { return _keyPressHandler; }
+            set { _keyPressHandler = value; }
+        }
+
+        public EventHandler SelectedIndexChangedHandler
+        {
+            get { return _selectedIndexChangedHandler; }
+            set { _selectedIndexChangedHandler = value; }
         }
     }
 }

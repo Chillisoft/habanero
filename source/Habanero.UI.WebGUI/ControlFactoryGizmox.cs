@@ -337,6 +337,21 @@ namespace Habanero.UI.WebGUI
             return new ListComboBoxMapperStrategyGiz();
         }
 
+        public ILookupComboBoxMapperStrategy CreateLookupComboBoxDefaultMapperStrategy()
+        {
+            return new LookupComboBoxMapperStrategyGiz();
+        }
+
+        public ILookupComboBoxMapperStrategy CreateLookupKeyPressMapperStrategy()
+        {
+            return new LookupComboBoxKeyPressMapperStrategyGiz();
+        }
+
+        public INumericUpDownMapperStrategy CreateNumericUpDownMapperStrategy()
+        {
+            return new NumericUpDownMapperStrategyGiz();
+        }
+
         /// <summary>
         /// Creates a new DateTimePicker that is formatted to handle months
         /// and years
@@ -605,6 +620,43 @@ namespace Habanero.UI.WebGUI
         public virtual IWizardControl CreateWizardControl(IWizardController wizardController)
         {
             return new WizardControlGiz(wizardController, this);
+        }
+    }
+
+    internal class NumericUpDownMapperStrategyGiz : INumericUpDownMapperStrategy
+    {
+        public void ValueChanged(NumericUpDownMapper mapper)
+        {
+            
+        }
+    }
+
+    internal class LookupComboBoxKeyPressMapperStrategyGiz : ILookupComboBoxMapperStrategy
+    {
+        public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddHandlers(LookupComboBoxMapper mapper)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal class LookupComboBoxMapperStrategyGiz : ILookupComboBoxMapperStrategy
+    {
+        public void AddItemSelectedEventHandler(LookupComboBoxMapper mapper)
+        {
+            
+        }
+
+        public void RemoveCurrentHandlers(LookupComboBoxMapper mapper)
+        {
+        }
+
+        public void AddHandlers(LookupComboBoxMapper mapper)
+        {
         }
     }
 

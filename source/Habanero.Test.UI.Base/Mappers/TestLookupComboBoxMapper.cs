@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using Habanero.UI.Base;
 using Habanero.UI.WebGUI;
 using Habanero.UI.Win;
@@ -70,6 +71,28 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Tear Down -------------------------
             }
 
+
+            [Test]
+            public void TestChangePropValueUpdatesBusObj_WithoutCallingUpdateControlValue()
+            {
+                //---------------Set up test pack-------------------
+                IComboBox cmbox = GetControlFactory().CreateComboBox();
+                string propName = "SampleLookupID";
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                Sample s = new Sample();
+                mapper.LookupList = Sample.LookupCollection;
+                s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
+                mapper.BusinessObject = s;
+                //---------------Execute Test ----------------------
+
+                s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_2];
+
+                //---------------Test Result -----------------------
+                Assert.AreEqual(LOOKUP_ITEM_2, cmbox.SelectedItem, "Value is not set after changing bo prop");
+
+                //---------------Tear Down -------------------------
+            }
+
             [Test]
             public void TestChangeComboBoxUpdatesBusinessObject()
             {
@@ -87,6 +110,99 @@ namespace Habanero.Test.UI.Base.Mappers
                 //---------------Test Result -----------------------
                 Assert.AreEqual((Guid)Sample.LookupCollection[LOOKUP_ITEM_2], s.SampleLookupID);
                 //---------------Tear Down -------------------------
+            }
+
+
+            [Test]
+            public void TestChangeComboBoxUpdatesBusinessObject_WithoutCallingApplyChanges()
+            {
+                //---------------Set up test pack-------------------
+                IComboBox cmbox = GetControlFactory().CreateComboBox();
+                string propName = "SampleLookupID";
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                Sample s = new Sample();
+                mapper.LookupList = Sample.LookupCollection;
+                s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
+                mapper.BusinessObject = s;
+                //---------------Execute Test ----------------------
+                cmbox.SelectedItem = LOOKUP_ITEM_2;
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(LookupComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
+                Assert.AreEqual((Guid)Sample.LookupCollection[LOOKUP_ITEM_2], s.SampleLookupID);
+                //---------------Tear Down -------------------------
+            }
+
+
+            [Test]
+            public void TestKeyPressEventUpdatesBusinessObject_WithoutCallingApplyChanges()
+            {
+                //---------------Set up test pack-------------------
+                ComboBoxWinStub cmbox = new ComboBoxWinStub();
+                string propName = "SampleLookupID";
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                Sample s = new Sample();
+                mapper.LookupList = Sample.LookupCollection;
+                s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
+                mapper.BusinessObject = s;
+                //---------------Execute Test ----------------------
+                cmbox.Text = "Test2";
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(LookupComboBoxDefaultMapperStrategyWin), mapper.MapperStrategy);
+                Assert.AreEqual((Guid)Sample.LookupCollection[LOOKUP_ITEM_2], s.SampleLookupID);
+                //---------------Tear Down -------------------------
+            }
+
+
+            [Test]
+            public void Test_KeyPressStrategy_UpdatesBusinessObject_WhenEnterKeyPressed()
+            {
+                //---------------Set up test pack-------------------
+                ComboBoxWinStub cmbox = new ComboBoxWinStub();
+                string propName = "SampleLookupID";
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                mapper.MapperStrategy = GetControlFactory().CreateLookupKeyPressMapperStrategy();
+                Sample s = new Sample();
+                mapper.LookupList = Sample.LookupCollection;
+                s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
+                mapper.BusinessObject = s;
+                //---------------Execute Test ----------------------
+                cmbox.Text = "Test2";
+                cmbox.CallSendKeyBob();
+
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+                Assert.AreEqual((Guid)Sample.LookupCollection[LOOKUP_ITEM_2], s.SampleLookupID);
+                //---------------Tear Down -------------------------
+            }
+
+
+            [Test]
+            public void Test_KeyPressStrategy_DoesNotUpdateBusinessObject_SelectedIndexChanged()
+            {
+                //---------------Set up test pack-------------------
+                ComboBoxWinStub cmbox = new ComboBoxWinStub();
+                string propName = "SampleLookupID";
+                LookupComboBoxMapper mapper = new LookupComboBoxMapper(cmbox, propName, false, GetControlFactory());
+                mapper.MapperStrategy = GetControlFactory().CreateLookupKeyPressMapperStrategy();
+                Sample s = new Sample();
+                mapper.LookupList = Sample.LookupCollection;
+                s.SampleLookupID = (Guid)Sample.LookupCollection[LOOKUP_ITEM_1];
+                mapper.BusinessObject = s;
+                //---------------Execute Test ----------------------
+                cmbox.SelectedItem = LOOKUP_ITEM_2;
+
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(LookupComboBoxKeyPressMapperStrategyWin), mapper.MapperStrategy);
+                Assert.AreEqual((Guid)Sample.LookupCollection[LOOKUP_ITEM_1], s.SampleLookupID);
+                //---------------Tear Down -------------------------
+            }
+
+            private class ComboBoxWinStub : ComboBoxWin
+            {
+                public void CallSendKeyBob()
+                {
+                    this.OnKeyPress(new KeyPressEventArgs((char)13));
+                }
             }
         }
 

@@ -5,10 +5,14 @@ namespace Habanero.UI.Base
     public class ListComboBoxMapper : ControlMapper
     {
         private IComboBox _comboBox;
+        private IListComboBoxMapperStrategy _mapperStrategy;
+
         public ListComboBoxMapper(IControlChilli ctl, string propName, bool isReadOnly, IControlFactory factory)
             : base(ctl, propName, isReadOnly, factory)
         {
             _comboBox = (IComboBox)ctl;
+            _mapperStrategy = factory.CreateListComboBoxMapperStrategy();
+            _mapperStrategy.AddItemSelectedEventHandler(this);
         }
 
         public override void ApplyChangesToBusinessObject()

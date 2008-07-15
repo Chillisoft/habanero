@@ -16,4 +16,5 @@ namespace Habanero.UI.Win
             set { base.Dock = (System.Windows.Forms.DockStyle)value; }
         }
     }
+
 }

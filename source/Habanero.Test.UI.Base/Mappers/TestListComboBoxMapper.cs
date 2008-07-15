@@ -31,6 +31,25 @@ namespace Habanero.Test.UI.Base
             }
 
             [Test]
+            public void TestChangeBusinessObjectUpdatesComboBox_WithoutCallingUpdateControlValue()
+            {
+                //---------------Set up test pack-------------------
+                IComboBox cbx = GetControlFactory().CreateComboBox();
+                string propName = "SampleText";
+                ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
+                mapper.SetList("One|Two|Three|Four");
+                Sample s = new Sample();
+                s.SampleText = "Three";
+                mapper.BusinessObject = s;
+                //---------------Execute Test ----------------------
+                s.SampleText = "Four";
+                
+                //---------------Test Result -----------------------
+                Assert.AreEqual("Four", cbx.SelectedItem, "Value is not set.");
+                //---------------Tear Down -------------------------
+            } 
+            
+            [Test]
             public void TestChangeBusinessObjectUpdatesComboBox()
             {
                 //---------------Set up test pack-------------------
@@ -69,6 +88,27 @@ namespace Habanero.Test.UI.Base
 
                 //---------------Tear Down -------------------------
             }
+
+            [Test]
+            public void TestSetComboBoxUpdatesBO_WithoutCallingApplyChanges()
+            {
+                //---------------Set up test pack-------------------
+                IComboBox cbx = GetControlFactory().CreateComboBox();
+                string propName = "SampleText";
+                ListComboBoxMapper mapper = new ListComboBoxMapper(cbx, propName, false, GetControlFactory());
+                mapper.SetList("One|Two|Three|Four");
+                Sample s = new Sample();
+                s.SampleText = "Three";
+                mapper.BusinessObject = s;
+                //---------------Execute Test ----------------------
+                cbx.SelectedIndex = 0;
+                //---------------Test Result -----------------------
+                Assert.AreEqual(cbx.SelectedItem, s.SampleText,
+                    "BO property value isn't changed when control value is changed.");
+
+                //---------------Tear Down -------------------------
+            }
+
         }
 
 
