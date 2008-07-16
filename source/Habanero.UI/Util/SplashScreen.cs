@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------
-// Copyright (C) 2007 Chillisoft Solutions
+// Copyright (C) 2008 Chillisoft Solutions
 // 
 // This file is part of the Habanero framework.
 // 
@@ -16,7 +16,6 @@
 //     You should have received a copy of the GNU Lesser General Public License
 //     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 //---------------------------------------------------------------------------------
-
 
 using System;
 using System.ComponentModel;

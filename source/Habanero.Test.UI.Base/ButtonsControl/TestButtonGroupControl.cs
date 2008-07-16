@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------
-// Copyright (C) 2007 Chillisoft Solutions
+// Copyright (C) 2008 Chillisoft Solutions
 // 
 // This file is part of the Habanero framework.
 // 
@@ -221,7 +221,7 @@ namespace Habanero.Test.UI.Base
             //---------------Set up test pack-------------------
             IButtonGroupControl buttons = GetControlFactory().CreateButtonGroupControl();
             //---------------Execute Test ----------------------
-            string buttonText = "T est%_&^ #$£<>()!:;.,?[]+-=*/'";
+            string buttonText = "T est%_&^ #$ï¿½<>()!:;.,?[]+-=*/'";
             IButton btn = buttons.AddButton(buttonText);
             //---------------Test Result -----------------------
             Assert.AreSame(btn, buttons[buttonText]);
