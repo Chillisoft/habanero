@@ -34,7 +34,6 @@ using log4net;
 
 namespace Habanero.BO
 {
-    //public delegate void BusinessObjectUpdatedHandler(Object sender, BOEventArgs e);
 
     /// <summary>
     /// Provides a super-class for business objects. This class contains all
