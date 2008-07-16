@@ -239,7 +239,8 @@ namespace Habanero.Test.BO
             cp = null;//so that garbage collector can work
 #pragma warning restore RedundantAssignment
             GC.Collect(); //Force the GC to collect
-            WaitForDB();
+            GC.WaitForPendingFinalizers();
+            //WaitForDB();
             //---------------Test Result -----------------------
             BOLoader.Instance.ClearLoadedBusinessObjects();
             ContactPersonPessimisticLockingDB cp2 =
