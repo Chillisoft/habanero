@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Habanero.DB, Version=1.5.0.0, Culture=neutral, PublicKeyToken=13cd8e0ef3c14147, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Habanero.DB.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -157,6 +153,10 @@
     <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
       <Project>{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}</Project>
       <Name>Habanero.BO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Db\Habanero.DB.csproj">
+      <Project>{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}</Project>
+      <Name>Habanero.DB</Name>
     </ProjectReference>
     <ProjectReference Include="..\Habanero.UI.Base\Habanero.UI.Base.csproj">
       <Project>{18828910-F528-48F5-B56D-7C1658D0987A}</Project>
