@@ -70,13 +70,23 @@ namespace Habanero.Test
 
         public static ClassDef GetClassDefWithSingleInheritanceHierarchy()
         {
+            return GetClassDefWithSingleInheritanceHierarchy("ShapeType");
+        }
+
+        public static ClassDef GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators()
+        {
+            return GetClassDefWithSingleInheritanceHierarchy("CircleType");
+        }
+
+        private static ClassDef GetClassDefWithSingleInheritanceHierarchy(string filledCircleDiscriminator)
+        {
             ClassDef shapeClassDef = Shape.GetClassDef();
             ClassDef circleClassDef = CircleNoPrimaryKey.GetClassDef();
             circleClassDef.SuperClassDef = new SuperClassDef(shapeClassDef, ORMapping.SingleTableInheritance);
             circleClassDef.SuperClassDef.Discriminator = "ShapeType";
             ClassDef filledCircleClassDef = GetClassDef();
             filledCircleClassDef.SuperClassDef = new SuperClassDef(circleClassDef, ORMapping.SingleTableInheritance);
-            filledCircleClassDef.SuperClassDef.Discriminator = "ShapeType";
+            filledCircleClassDef.SuperClassDef.Discriminator = filledCircleDiscriminator;
             return filledCircleClassDef;
         }
 

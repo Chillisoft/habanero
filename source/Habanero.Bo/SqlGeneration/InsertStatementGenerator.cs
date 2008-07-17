@@ -125,16 +125,32 @@ namespace Habanero.BO.SqlGeneration
 
         private void ModifyForInheritance(BOPropCol propsToInclude)
         {
-            ClassDef classDef = _currentClassDef; //rather than _bo.ClassDef
-            ClassDef classDefWithSTI = null;
-            foreach (ClassDef def in classDef.ImmediateChildren)
+            //Recursively
+            //Look at the superclass and if it is single table inheritance then 
+            // add the discriminator property to the BOPropCol if it doesnt exist 
+            // and set the value to the this super class' name
+
+            ClassDef classDef = _currentClassDef; //rather than _bo.ClassDef\
+
+            BOPropCol discriminatorProps = new BOPropCol();
+            AddDiscriminatorProperties(classDef, propsToInclude, discriminatorProps);
+            foreach (BOProp boProp in discriminatorProps)
             {
-                if (def.IsUsingSingleTableInheritance())
-                {
-                    classDefWithSTI = def;
-                    break;
-                }
+                AddPropToInsertStatement(boProp);
             }
+        }
+
+        private void AddDiscriminatorProperties(ClassDef classDef, BOPropCol propsToInclude, BOPropCol discriminatorProps)
+        {
+            ClassDef classDefWithSTI = null;
+            //foreach (ClassDef def in classDef.ImmediateChildren)
+            //{
+            //    if (def.IsUsingSingleTableInheritance())
+            //    {
+            //        classDefWithSTI = def;
+            //        break;
+            //    }
+            //}
 
             if (classDef.IsUsingSingleTableInheritance() || classDefWithSTI != null)
             {
@@ -156,12 +172,19 @@ namespace Habanero.BO.SqlGeneration
                 {
                     IBOProp boProp = _bo.Props[discriminator];
                     boProp.Value = _bo.ClassDef.ClassName;
-                } else 
+                }
+                else if (!discriminatorProps.Contains(discriminator))
                 {
                     PropDef propDef = new PropDef(discriminator, typeof (string), PropReadWriteRule.ReadWrite, null);
-                    BOProp className = new BOProp(propDef, _bo.ClassDef.ClassName);
-                    AddPropToInsertStatement(className);
+                    BOProp discriminatorProp = new BOProp(propDef, _bo.ClassDef.ClassName);
+                    discriminatorProps.Add(discriminatorProp);
                 }
+            }
+
+            if (classDef.IsUsingSingleTableInheritance())
+            {
+                ClassDef superClassClassDef = classDef.SuperClassClassDef;
+                AddDiscriminatorProperties(superClassClassDef, propsToInclude, discriminatorProps);
             }
         }
 

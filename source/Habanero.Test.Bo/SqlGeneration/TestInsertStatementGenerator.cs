@@ -29,13 +29,30 @@ namespace Habanero.Test.BO.SqlGeneration
 {
     [TestFixture]
     public class TestInsertStatementGenerator: TestUsingDatabase
-    {
+    { 
+
+        [SetUp]
+        public void SetupTest()
+        {
+            //Runs every time that any testmethod is executed
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorDB();
+        }
 
         [TestFixtureSetUp]
-        public void SetupFixture()
+        public void TestFixtureSetup()
         {
-            this.SetupDBConnection();
+            base.SetupDBConnection();
+            //Code that is executed before any test is run in this class. If multiple tests
+            // are executed then it will still only be called once.
         }
+
+        [TearDown]
+        public void TearDownTest()
+        {
+            //runs every time any testmethod is complete
+        }
+
 
         [Test]
         public void TestSqlStatementType()
@@ -107,8 +124,48 @@ namespace Habanero.Test.BO.SqlGeneration
         }
 
 
+        
+        [Test]
+        public void TestSingleTableInheritanceHeirarchy_DifferentDiscriminators()
+        {
+            //---------------Set up test pack-------------------
+            FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
+            FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey();
+            InsertStatementGenerator gen = new InsertStatementGenerator(filledCircle, DatabaseConnection.CurrentConnection);
 
 
+            //---------------Execute Test ----------------------
+            ISqlStatementCollection sqlStatementCollection = gen.Generate();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, sqlStatementCollection.Count);
+            ISqlStatement sqlStatement = sqlStatementCollection[0];
+            string sql = sqlStatement.Statement.ToString();
+            StringAssert.Contains("ShapeType", sql);
+            StringAssert.Contains("CircleType", sql);
+        }
+
+        [Test]
+        public void TestSingleTableInheritanceHeirarchy_SharedDiscriminators()
+        {
+            //---------------Set up test pack-------------------
+            FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
+            FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey();
+            InsertStatementGenerator gen = new InsertStatementGenerator(filledCircle, DatabaseConnection.CurrentConnection);
+            
+            //---------------Execute Test ----------------------
+            ISqlStatementCollection sqlStatementCollection = gen.Generate();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, sqlStatementCollection.Count);
+            ISqlStatement sqlStatement = sqlStatementCollection[0];
+            string sql = sqlStatement.Statement.ToString();
+            int index = sql.IndexOf("ShapeType");
+            Assert.IsTrue(index > 0);
+            index = sql.IndexOf("ShapeType", index + 1);
+            Assert.IsTrue(index < 0, "There were two ShapeType fields specified");
+            Assert.AreEqual("FilledCircleNoPrimaryKey", sqlStatement.Parameters[0].Value);
+        }
 
         //[Test]
         //public void TestIdAttributeWithMultiplePrimaryKey()

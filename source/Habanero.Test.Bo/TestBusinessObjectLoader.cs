@@ -165,6 +165,40 @@ namespace Habanero.Test.BO
                 //---------------Tear Down -------------------------          
             }
 
+            [Test, Ignore("Currently working on this")]
+            public void TestGetBusinessObject_ReturnsSubType_TwoLevelsDeep_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();
+
+                FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
+                FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
+                BusinessObject.AllLoadedBusinessObjects().Clear();
+
+                //---------------Execute Test ----------------------
+                Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(filledCircle.ID);
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+                //---------------Tear Down -------------------------          
+            }
+
+            [Test, Ignore("Currently working on this")]
+            public void TestGetBusinessObject_ReturnsSubType_TwoLevelsDeep_DiscriminatorShared_Fresh()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();
+
+                FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
+                FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
+                BusinessObject.AllLoadedBusinessObjects().Clear();
+
+                //---------------Execute Test ----------------------
+                Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>(filledCircle.ID);
+                //---------------Test Result -----------------------
+                Assert.IsInstanceOfType(typeof(FilledCircleNoPrimaryKey), loadedShape);
+                //---------------Tear Down -------------------------          
+            }
+
             [Test]
             public void TestLoad_SingleTableInheritance_Fresh()
             {
