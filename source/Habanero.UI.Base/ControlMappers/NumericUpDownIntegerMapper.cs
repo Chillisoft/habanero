@@ -23,7 +23,6 @@ namespace Habanero.UI.Base
 {
     public class NumericUpDownIntegerMapper : NumericUpDownMapper
     {
-        private INumericUpDownMapperStrategy _mapperStrategy;
 
         /// <summary>
         /// Constructor to initialise a new instance of the class
@@ -38,14 +37,9 @@ namespace Habanero.UI.Base
             _numericUpDown.DecimalPlaces = 0;
             _numericUpDown.Maximum = int.MaxValue;
             _numericUpDown.Minimum = int.MinValue;
-            _mapperStrategy = factory.CreateNumericUpDownMapperStrategy();
-            _mapperStrategy.ValueChanged(this);
+
         }
 
-        public INumericUpDownMapperStrategy MapperStrategy
-        {
-            get { return _mapperStrategy; }
-        }
 
         public override void ApplyChangesToBusinessObject()
         {

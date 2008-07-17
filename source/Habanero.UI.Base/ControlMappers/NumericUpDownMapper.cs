@@ -24,6 +24,7 @@ namespace Habanero.UI.Base
     public abstract class NumericUpDownMapper : ControlMapper
     {
         protected INumericUpDown _numericUpDown;
+        private INumericUpDownMapperStrategy _mapperStrategy;
 
         /// <summary>
         /// Constructor to instantiate a new instance of the class
@@ -38,10 +39,15 @@ namespace Habanero.UI.Base
             : base(ctl, propName, isReadOnly, factory)
         {
             _numericUpDown = (INumericUpDown)ctl;
+            _mapperStrategy = factory.CreateNumericUpDownMapperStrategy();
+            _mapperStrategy.ValueChanged(this);
         }
-       
 
 
+        public INumericUpDownMapperStrategy MapperStrategy
+        {
+            get { return _mapperStrategy; }
+        }
         /// <summary>
         /// Updates the value in the control from its business object.
         /// </summary>

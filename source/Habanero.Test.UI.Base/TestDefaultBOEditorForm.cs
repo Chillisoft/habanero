@@ -35,25 +35,27 @@ namespace Habanero.Test.UI.Base
     {
         protected abstract IControlFactory GetControlFactory();
         private IDatabaseConnection _conn;
-        //[TestFixture]
-        //public class TestDefaultBOEditorFormWin : TestDefaultBOEditorForm
-        //{
-        //    protected override IControlFactory GetControlFactory()
-        //    {
-        //        return new Habanero.UI.Win.ControlFactoryWin();
-        //    }
-        //Create a duplicate for win
-        //[Test]
-        //public void TestLayout()
-        //{
-        //    Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
-        //    IControlChilli boCtl = _defaultBOEditorForm.Controls[0];
-        //    Assert.AreEqual(4, boCtl.Controls.Count);
-        //    IControlChilli buttonControl = _defaultBOEditorForm.Controls[1];
-        //    Assert.IsTrue(buttonControl.GetType().IsInstanceOfType(IButtonGroupControl);
-        //    Assert.AreEqual(2, buttonControl.Controls.Count);
-        //}
-        //}
+
+        [TestFixture]
+        public class TestDefaultBOEditorFormWin : TestDefaultBOEditorForm
+        {
+            protected override IControlFactory GetControlFactory()
+            {
+                return new Habanero.UI.Win.ControlFactoryWin();
+            }
+
+            [Test, Ignore("Working on this")]
+            public void TestLayout()
+            {
+                Assert.AreEqual(2, _defaultBOEditorForm.Controls.Count);
+                IControlChilli boCtl = _defaultBOEditorForm.Controls[0];
+                Assert.AreEqual(4, boCtl.Controls.Count);
+                IControlChilli buttonControl = _defaultBOEditorForm.Controls[1];
+                Assert.IsTrue(buttonControl is Habanero.UI.Win.ButtonGroupControlWin);
+                Assert.AreEqual(2, buttonControl.Controls.Count);
+            }
+        }
+
         [TestFixture]
         public class TestDefaultBOEditorFormGiz : TestDefaultBOEditorForm
         {
@@ -100,7 +102,7 @@ namespace Habanero.Test.UI.Base
         public void SetupTest()
         {
             _databaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
-            
+
             _conn = (IDatabaseConnection) _databaseConnectionMockControl.MockInstance;
             _bo = _classDefMyBo.CreateNewBusinessObject(_conn);
             _defaultBOEditorForm = GetControlFactory().CreateBOEditorForm((BusinessObject) _bo);
@@ -111,11 +113,11 @@ namespace Habanero.Test.UI.Base
         private void PrepareMockForSave()
         {
             _databaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                           DatabaseConnection.CurrentConnection.GetConnection());
+                DatabaseConnection.CurrentConnection.GetConnection());
             _databaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                           DatabaseConnection.CurrentConnection.GetConnection());
+                DatabaseConnection.CurrentConnection.GetConnection());
             _databaseConnectionMockControl.ExpectAndReturn("GetConnection",
-                                                           DatabaseConnection.CurrentConnection.GetConnection());
+                DatabaseConnection.CurrentConnection.GetConnection());
             _databaseConnectionMockControl.ExpectAndReturn("ExecuteSql", 1, new object[] {null, null});
         }
 
@@ -162,7 +164,7 @@ namespace Habanero.Test.UI.Base
             bool delegateCalled = false;
             IDefaultBOEditorForm boEditorForm =
                 GetControlFactory().CreateBOEditorForm((BusinessObject) bo, "default",
-                                                       delegate { delegateCalled = true; });
+                    delegate { delegateCalled = true; });
             //--------------Assert PreConditions----------------            
             Assert.IsFalse(delegateCalled);
             //---------------Execute Test ----------------------
@@ -171,7 +173,5 @@ namespace Habanero.Test.UI.Base
             Assert.IsTrue(delegateCalled);
             //---------------Tear Down -------------------------          
         }
-
-
     }
 }

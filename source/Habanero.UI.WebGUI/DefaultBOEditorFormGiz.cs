@@ -19,7 +19,6 @@
 
 using System;
 using System.Reflection;
-using Gizmox.WebGUI.Common.Interfaces;
 using Gizmox.WebGUI.Forms;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -299,7 +298,8 @@ namespace Habanero.UI.WebGUI
         /// else returns false.
         /// </summary>
         /// <returns>True if the edit was a success, false if not</returns>
-         bool IDefaultBOEditorForm.ShowDialog() {
+         bool IDefaultBOEditorForm.ShowDialog() 
+         {
             if (this.ShowDialog() == DialogResult.OK)
             {
                 return true;

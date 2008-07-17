@@ -18,7 +18,6 @@
 //---------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using Gizmox.WebGUI.Forms;
 using Habanero.UI.Base;
 

@@ -226,7 +226,7 @@ namespace Habanero.UI.Forms
                 TransactionCommitter committer = CreateSaveTransaction();
                 committer.CommitTransaction();
 
-                //TODO: this is TERRIBLE!
+                //TODT
                 if (_boPanel.Controls[0] is TabControl)
                 {
                     //Console.Out.WriteLine("tabcontrol found.");
