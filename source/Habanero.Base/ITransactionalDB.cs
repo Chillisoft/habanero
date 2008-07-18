@@ -25,7 +25,7 @@ namespace Habanero.Base
     /// Interface that is to be implemented for transactional object that are being updated
     /// to the database.
     ///</summary>
-    public interface ITransactionalDB:ITransactional
+    public interface ITransactionalDB : ITransactional
     {
         ///<summary>
         /// Returns the appropriate sql statement collection depending on the state of the object.

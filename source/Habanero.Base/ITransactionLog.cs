@@ -29,7 +29,7 @@ namespace Habanero.Base
     /// constructor, methods or properties should be able to provide 
     /// all required functionality to implement the strategy chosen.
     /// </summary>
-    public interface ITransactionLog
+    public interface ITransactionLog: ITransactional
     {
         //    /// <summary>
         //    /// Record a transaction log for the business object

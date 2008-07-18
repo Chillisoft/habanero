@@ -110,7 +110,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(Environment.MachineName, trLog.MachineUpdatedName);
             //Assert.GreaterOrEqual(trLog.DateTimeUpdated, DateTime.Now.AddMinutes(-1));
             Assert.LessOrEqual(trLog.DateTimeUpdated, DateTime.Now.AddSeconds(1));
-
+            Assert.AreEqual(cp.ToString(),trLog.BusinessObjectToString);
             //---------------Tear Down -------------------------          
         }
 
@@ -269,8 +269,8 @@ namespace Habanero.Test.BO
             myContact_1.Surname = "My Surname New";
 
             Assert.AreEqual(
-                "<ContactPersonTransactionLogging ID=" + myContact_1.ID +
-                "><Properties><Surname><PreviousValue>My Surname 1</PreviousValue><NewValue>My Surname New</NewValue></Surname><ContactPersonTransactionLogging>",
+                "<ContactPersonTransactionLogging ID='" + myContact_1.ID +
+                "'><Properties><Surname><PreviousValue>My Surname 1</PreviousValue><NewValue>My Surname New</NewValue></Surname></Properties></ContactPersonTransactionLogging>",
                 myContact_1.DirtyXML);
         }
     }
@@ -314,6 +314,7 @@ namespace Habanero.Test.BO
 					<property  name=""LogonUser"" />
 					<property  name=""MachineUpdatedName"" databaseField=""MachineName""/>
 					<property  name=""BusinessObjectTypeName"" />
+                    <property  name=""BusinessObjectToString""/>
 					<property  name=""CRUDAction"" />
 					<property  name=""DirtyXMLLog"" databaseField=""DirtyXML""/>
 					<primaryKey isObjectID=""false"">

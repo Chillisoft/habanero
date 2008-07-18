@@ -32,18 +32,46 @@ namespace Habanero.BO
     /// </summary>
     public class TransactionCommitterDB : TransactionCommitter
     {
+        private readonly IDatabaseConnection _databaseConnection;
         private IDbTransaction _dbTransaction;
         private IDbConnection _dbConnection;
         private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitterDB");
+
+
+        ///<summary>
+        /// Constructs the TransactionCommitterDB
+        ///</summary>
+        public TransactionCommitterDB(): this(null)
+        {
+        }
+
+        ///<summary>
+        /// Constructs the TransactionCommitter for a specific database connection
+        ///</summary>
+        public TransactionCommitterDB(IDatabaseConnection databaseConnection)
+        {
+            _databaseConnection = databaseConnection;
+        }
 
         /// <summary>
         /// Begins the transaction on the appropriate databasource.
         /// </summary>
         protected override void BeginDataSource()
         {
-            _dbConnection = DatabaseConnection.CurrentConnection.GetConnection();
+            _dbConnection = GetDatabaseConnection().GetConnection();
             _dbConnection.Open();
             _dbTransaction = _dbConnection.BeginTransaction(IsolationLevel.RepeatableRead);
+        }
+
+        private IDatabaseConnection GetDatabaseConnection()
+        {
+            if (_databaseConnection != null)
+            {
+                return _databaseConnection;
+            } else
+            {
+                return DatabaseConnection.CurrentConnection;
+            }
         }
 
         /// <summary>
@@ -66,7 +94,8 @@ namespace Habanero.BO
 
             ISqlStatementCollection sql = transactionDB.GetPersistSql();
             if (sql == null) return;
-            DatabaseConnection.CurrentConnection.ExecuteSql(sql, _dbTransaction);
+            IDatabaseConnection databaseConnection = GetDatabaseConnection();
+            databaseConnection.ExecuteSql(sql, _dbTransaction);
             base.ExecuteTransactionToDataSource(transaction);
         }
 

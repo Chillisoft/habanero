@@ -106,6 +106,7 @@
     <Compile Include="IBusinessObjectCollection.cs" />
     <Compile Include="IBusinessObjectDeletor.cs" />
     <Compile Include="IClassDef.cs" />
+    <Compile Include="IBusinessObjectUpdateLog.cs" />
     <Compile Include="IConcurrencyControl.cs" />
     <Compile Include="IDBNumberGenerator.cs" />
     <Compile Include="IKeyDef.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="IRelKey.cs" />
     <Compile Include="IRelProp.cs" />
     <Compile Include="ISelectQuery.cs" />
+    <Compile Include="ISecurityController.cs" />
     <Compile Include="ISupportsAutoIncrementingField.cs" />
     <Compile Include="ITransactional.cs" />
     <Compile Include="ITransactionalDB.cs" />

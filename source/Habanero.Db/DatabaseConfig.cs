@@ -198,10 +198,21 @@ namespace Habanero.DB
         /// <returns>Returns a DatabaseConfig object</returns>
         public static DatabaseConfig ReadFromConfigFile()
         {
-            return new DatabaseConfig((IDictionary) ConfigurationSettings.GetConfig("DatabaseConfig"));
+            return ReadFromConfigFile("DatabaseConfig");
         }
+                
+	    ///<summary>
+        /// Creates a new configuration object by reading the "DatabaseConfig"
+        /// settings from the project's configuration settings
+	    ///</summary>
+	    ///<param name="configSectionName">The name of the Config Setting Section where the database connection settings are stored.</param>
+        ///<returns>Returns a DatabaseConfig object</returns>
+	    public static DatabaseConfig ReadFromConfigFile(string configSectionName)
+	    {
+	        return new DatabaseConfig((IDictionary) ConfigurationSettings.GetConfig(configSectionName));
+	    }
 
-        /// <summary>
+	    /// <summary>
         /// Returns a connection string tailored for the database vendor,
         /// after appending an alternate assembly name.  Rather use 
         /// GetConnectionString() if no alternate assembly name is needed.

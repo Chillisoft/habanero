@@ -31,7 +31,7 @@ namespace Habanero.BO
     /// Database Field name and the dirty XML field (shows the previously persisted state
     ///    and newly persisted state of the field.
     /// </summary>
-    public class TransactionLogTable :  ITransactionalDB
+    public class TransactionLogTable : ITransactionLog, ITransactionalDB
     {
         private readonly BusinessObject _buObjToLog;
         private readonly string _transactionLogTable;
@@ -43,6 +43,8 @@ namespace Habanero.BO
         private readonly string _crudActionFieldName;
         private readonly string _dirtyXmlFieldName;
         private Guid _ID;
+        private readonly ISecurityController _securityController;
+        private readonly string _businessObjectToStringFieldName;
 
         /////<summary>
         ///// Constructs the new transactionlogTable with default table name and logging fields.
@@ -72,9 +74,21 @@ namespace Habanero.BO
         ///<param name="transactionLogTable">The log table name</param>
         public TransactionLogTable(BusinessObject busObjToLog, string transactionLogTable)
             : this(busObjToLog, transactionLogTable, "DateTimeUpdated",
-                "WindowsUser", "LogonUser", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
+                "WindowsUser", "LogonUser","BusinessObjectToString", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
         {
 
+        }
+
+        /// <summary>
+        /// Constructs the new transactionlogTable with default table name and logging fields and a specific security controller for getting the currently logged on user.
+        /// </summary>
+        /// <param name="busObjToLog"></param>
+        /// <param name="securityController"></param>
+        public TransactionLogTable(BusinessObject busObjToLog,ISecurityController securityController)
+            : this(busObjToLog, "transactionLog", "DateTimeUpdated",
+                "WindowsUser", "LogonUser", "BusinessObjectToString", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
+        {
+            _securityController = securityController;
         }
 
         /// <summary>
@@ -90,7 +104,7 @@ namespace Habanero.BO
         /// <param name="crudActionFieldName">Crud action field name</param>
         /// <param name="dirtyXMLFieldName">Dirty xml field name</param>
         public TransactionLogTable(BusinessObject buObjToLog, string transactionLogTable, string dateTimeUpdatedFieldName,
-                                   string windowsUserFieldName, string logonUserFieldName, string machineUpdateName,
+                                   string windowsUserFieldName, string logonUserFieldName,string businessObjectToStringFieldName, string machineUpdateName,
                                    string businessObjectTypeNameFieldName, string crudActionFieldName,
                                    string dirtyXMLFieldName)
         {
@@ -99,11 +113,37 @@ namespace Habanero.BO
             this._dateTimeUpdatedFieldName = dateTimeUpdatedFieldName;
             this._windowsUserFieldName = windowsUserFieldName;
             this._logonUserFieldName = logonUserFieldName;
+            this._businessObjectToStringFieldName = businessObjectToStringFieldName;
             this._machineUpdateName = machineUpdateName;
             this._businessObjectTypeNameFieldName = businessObjectTypeNameFieldName;
             this._crudActionFieldName = crudActionFieldName;
             this._dirtyXmlFieldName = dirtyXMLFieldName;
             this._ID = Guid.NewGuid();
+        }
+
+        /// <summary>
+        /// Constructor to initialise a new log table
+        /// </summary>
+        /// <param name="buObjToLog">the business object for which the transaction log is being created</param>
+        /// <param name="transactionLogTable">The log table name</param>
+        /// <param name="dateTimeUpdatedFieldName">Time updated field name</param>
+        /// <param name="windowsUserFieldName">Windows user field name</param>
+        /// <param name="logonUserFieldName">Logon user field name</param>
+        /// <param name="businessObjectToStringFieldName"></param>
+        /// <param name="machineUpdateName">Machine update name</param>
+        /// <param name="businessObjectTypeNameFieldName">BO type field name</param>
+        /// <param name="crudActionFieldName">Crud action field name</param>
+        /// <param name="dirtyXMLFieldName">Dirty xml field name</param>
+        /// <param name="securityController"></param>
+        public TransactionLogTable(BusinessObject buObjToLog, string transactionLogTable, string dateTimeUpdatedFieldName,
+                                   string windowsUserFieldName, string logonUserFieldName,string businessObjectToStringFieldName, string machineUpdateName,
+                                   string businessObjectTypeNameFieldName, string crudActionFieldName,
+                                   string dirtyXMLFieldName,ISecurityController securityController):this(buObjToLog, transactionLogTable, dateTimeUpdatedFieldName,
+                                   windowsUserFieldName, logonUserFieldName,businessObjectToStringFieldName, machineUpdateName,
+                                   businessObjectTypeNameFieldName, crudActionFieldName,
+                                   dirtyXMLFieldName)
+        {
+            _securityController = securityController;
         }
 
         ///// <summary>
@@ -176,6 +216,7 @@ namespace Habanero.BO
                          this._machineUpdateName + ", " +
                          this._businessObjectTypeNameFieldName + ", " +
                          this._crudActionFieldName + ", " +
+                         this._businessObjectToStringFieldName + ", " +
                          this._dirtyXmlFieldName + ") VALUES ( ";
 
             tranSql.Statement.Append(sql);
@@ -191,6 +232,8 @@ namespace Habanero.BO
             tranSql.Statement.Append(", ");
             tranSql.AddParameterToStatement(GetCrudAction(_buObjToLog));
             tranSql.Statement.Append(", ");
+            tranSql.AddParameterToStatement(_buObjToLog.ToString());
+            tranSql.Statement.Append(", ");
             tranSql.AddParameterToStatement(_buObjToLog.DirtyXML);
             tranSql.Statement.Append(")");
 
@@ -200,6 +243,8 @@ namespace Habanero.BO
 
         private string GetLogonUserName()
         {
+            if (_securityController != null) return _securityController.CurrentUserName;
+            if (GlobalRegistry.SecurityController != null) return GlobalRegistry.SecurityController.CurrentUserName;
             return "";
         }
 

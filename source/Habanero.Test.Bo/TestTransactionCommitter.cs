@@ -24,6 +24,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {

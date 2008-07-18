@@ -27,7 +27,7 @@ namespace Habanero.BO
     /// This class along with the TransactionCommiter implement transactional and persistence 
     /// strategies for the business object
     ///</summary>
-    public  class TransactionalBusinessObject : ITransactional
+    public class TransactionalBusinessObject : ITransactional
     {
         private readonly BusinessObject _businessObject;
 

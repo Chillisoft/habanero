@@ -165,6 +165,8 @@
     <Compile Include="TestBusinessObjectLoader.cs" />
     <Compile Include="TestCriteria.cs" />
     <Compile Include="TestDataStoreInMemory.cs" />
+    <Compile Include="TestBusinessObjectLastUpdatePropertiesLog.cs" />
+    <Compile Include="TestBusinessObjectUpdateLog.cs" />
     <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestOrderCriteria.cs" />
     <Compile Include="TestPropertyComparer.cs" />
@@ -242,6 +244,7 @@
     <Compile Include="TestTransactionCommitterInMemory.cs" />
     <Compile Include="TestTransactionLogger.cs" />
     <Compile Include="TestUnrefRelationshipDef.cs" />
+    <Compile Include="TransactionCommitterStub.cs" />
     <Compile Include="TransactionLogBusObj.cs">
       <SubType>Code</SubType>
     </Compile>

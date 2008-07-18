@@ -1110,13 +1110,13 @@ namespace Habanero.BO
         /// </summary>
         public virtual void SaveAll()
         {
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
 
             // Transaction transaction = new Transaction(DatabaseConnection.CurrentConnection);
             SaveAllInTransaction(committer);
         }
 
-        protected virtual void SaveAllInTransaction(TransactionCommitter transaction)
+        protected virtual void SaveAllInTransaction(ITransactionCommitter transaction)
         {
             foreach (TBusinessObject bo in this)
             {

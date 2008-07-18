@@ -30,6 +30,7 @@ namespace Habanero.Base
         private static string _applicationName;
         private static string _applicationVersion;
         private static int _databaseVersion;
+        private static ISecurityController _securityController;
 
         /// <summary>
         /// Gets and sets the application's settings storer, which stores
@@ -95,7 +96,13 @@ namespace Habanero.Base
             set { _databaseVersion = value; }
         }
 
- 
-
+        ///<summary>
+        /// The security controller for the application
+        ///</summary>
+        public static ISecurityController SecurityController
+        {
+            get { return _securityController; }
+            set { _securityController = value; }
+        }
     }
 }

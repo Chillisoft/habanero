@@ -22,6 +22,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
+using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -247,6 +248,27 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual("foobar", bo.CombinedParts);
         }
+
+        //[Test]
+        //public void TestSave_ToDifferentDb()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    ClassDef.ClassDefs.Clear();
+        //    ClassDef classDef = MyBO.LoadDefaultClassDef();
+        //    MockRepository mock = new MockRepository();
+        //    IDatabaseConnection mockDatabaseConnection;
+        //    mockDatabaseConnection = TestTransactionCommitter.GetMockDatabaseConnectionWithExpectations(mock);
+        //    MyBO myBO = new MyBO(mockDatabaseConnection);
+        //    mock.ReplayAll();
+        //    //---------------Test Preconditions ----------------
+
+        //    //---------------Execute Test ----------------------
+        //    myBO.Save();
+
+        //    //---------------Test Result -----------------------
+        //    mock.VerifyAll();
+        //}
+
         [Test]
         public void TestDeleteObjce_WithAfterSaveImplemented()
         {

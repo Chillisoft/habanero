@@ -125,6 +125,7 @@ namespace Habanero.Base
                         dirtlyXml += prop.DirtyXml;
                     }
                 }
+                dirtlyXml += "</Properties>";
                 return dirtlyXml;
             }
         }

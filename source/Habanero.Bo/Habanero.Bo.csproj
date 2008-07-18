@@ -99,6 +99,7 @@
     <Compile Include="BORegistry.cs" />
     <Compile Include="BOState.cs" />
     <Compile Include="BusinessObjectLoaderDB.cs" />
+    <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="BusinessObjectLoaderInMemory.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />

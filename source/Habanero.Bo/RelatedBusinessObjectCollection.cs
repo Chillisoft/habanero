@@ -69,7 +69,7 @@ namespace Habanero.BO
         /// </summary>
         public override void SaveAll()
         {
-            TransactionCommitterDB committer = new TransactionCommitterDB();
+            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
 
             
             foreach (TBusinessObject bo in _removedBusinessObjects)
